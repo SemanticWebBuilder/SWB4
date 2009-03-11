@@ -53,6 +53,7 @@ import org.semanticwb.portlet.office.ExcelPortlet;
 import org.semanticwb.portlet.office.OfficePortlet;
 import org.semanticwb.portlet.office.PPTPortlet;
 import org.semanticwb.portlet.office.WordPortlet;
+import org.semanticwb.repository.OfficeManager;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.repository.WorkspaceNotFoudException;
 import org.semanticwb.xmlrpc.Part;
@@ -79,9 +80,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private static final String EXCEL_PORTLET_CLASS = "org.semanticwb.portal.resources.office.ExcelResource";
     private static final String EXCEL_PORTLET_TITLE = EXCEL_PORTLET_DESCRIPTION;
     private static final String CONTENT_NOT_FOUND = "El contenido no se encontró en el repositorio.";
-    private static final String JCR_CONTENT = "jcr:content";
+    public static final String JCR_CONTENT = "jcr:content";
     private static final String JCR_DATA = "jcr:data";
     private static final String JCR_LASTMODIFIED = "jcr:lastModified";
+    private static final String CM_LASTMODIFIED = "cm:lastModified";
     private static Logger log = SWBUtils.getLogger(OfficeDocument.class);
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
@@ -103,11 +105,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 contentNode.setProperty(cm_title, title);
                 String cm_type = loader.getOfficeManager(repositoryName).getPropertyType();
                 String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
-                String cm_user = loader.getOfficeManager(repositoryName).getUserType();
                 contentNode.setProperty(cm_type, type);
                 contentNode.setProperty(cm_description, description);
-                contentNode.setProperty(cm_file, file);
-                contentNode.setProperty(cm_user, this.user);
+                Calendar lastModified = Calendar.getInstance();
+                lastModified.setTimeInMillis(System.currentTimeMillis());
+                contentNode.setProperty(CM_LASTMODIFIED, lastModified);
                 if (properties != null)
                 {
                     int i = 0;
@@ -129,20 +131,22 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                             mimeType = DEFAULT_MIME_TYPE;
                         }
                     }
-                    Node resNode = contentNode.addNode(JCR_CONTENT, "nt:resource");
+                    Node resNode = contentNode.addNode(JCR_CONTENT, "cm:OfficeDocument");
+                    resNode.addMixin("mix:versionable");
                     resNode.setProperty("jcr:mimeType", mimeType);
                     resNode.setProperty("jcr:encoding", "");
+                    resNode.setProperty(cm_file, file);
+                    String cm_user = loader.getOfficeManager(repositoryName).getUserType();
+                    resNode.setProperty(cm_user, this.user);
                     InputStream in = new ByteArrayInputStream(part.getContent());
                     resNode.setProperty(JCR_DATA, in);
                     in.close();
-                    Calendar lastModified = Calendar.getInstance();
-                    lastModified.setTimeInMillis(System.currentTimeMillis());
                     resNode.setProperty(JCR_LASTMODIFIED, lastModified);
                     categoryNode.save();
+                    Version version = resNode.checkin();
+                    log.debug("Version created with number " + version.getName());
                 }
-                
-                Version version = contentNode.checkin();
-                log.debug("Version created with number " + version.getName());
+
                 return contentNode.getUUID();
             }
             catch (ItemExistsException e)
@@ -194,7 +198,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
-            VersionHistory history = nodeContent.getVersionHistory();
+            Node nodeRes = nodeContent.getNode(JCR_CONTENT);
+            VersionHistory history = nodeRes.getVersionHistory();
             // the version minus the root version
             return (int) history.getAllVersions().getSize() - 1;
         }
@@ -230,8 +235,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
+            Node resContent = nodeContent.getNode(JCR_CONTENT);
             String lastVersion = getLastVersionOfcontent(repositoryName, contentId);
-            VersionHistory history = nodeContent.getVersionHistory();
+            VersionHistory history = resContent.getVersionHistory();
             Version version = history.getVersion(versionName);
             version.remove();
             history.save();
@@ -285,73 +291,74 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
-            if (!nodeContent.isCheckedOut())
+
+            String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
+            String cm_user = loader.getOfficeManager(repositoryName).getUserType();
+            Calendar lastModified = Calendar.getInstance();
+            lastModified.setTimeInMillis(System.currentTimeMillis());
+            nodeContent.setProperty(CM_LASTMODIFIED, lastModified);
+            nodeContent.save();
+            try
             {
-                nodeContent.checkout();
-                String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
-                String cm_user = loader.getOfficeManager(repositoryName).getUserType();
-                nodeContent.setProperty(cm_file, file);
-                nodeContent.setProperty(cm_user, this.user);
-                nodeContent.save();
-                try
+                if (requestParts.size() == 0)
                 {
-                    for (Part part : requestParts)
+                    throw new Exception("The content can not be updated, The content document was not found");
+                }
+                else
+                {
+                    Part part = requestParts.iterator().next();
+                    String mimeType = DEFAULT_MIME_TYPE;
+                    if (this.config != null && this.config.getServletContext() != null)
                     {
-                        String mimeType = DEFAULT_MIME_TYPE;
-                        if (this.config != null && this.config.getServletContext() != null)
-                        {
-                            mimeType = this.config.getServletContext().getMimeType(part.getName());
-                        }
-                        if (mimeType == null)
-                        {
-                            mimeType = DEFAULT_MIME_TYPE;
-                        }
-                        Node resNode = nodeContent.getNode(JCR_CONTENT);
-                        resNode.setProperty("jcr:mimeType", mimeType);
-                        resNode.setProperty("jcr:encoding", "");
-                        InputStream in = new ByteArrayInputStream(part.getContent());
-                        resNode.getProperty(JCR_DATA).setValue(in);
-                        Calendar lastModified = Calendar.getInstance();
-                        lastModified.setTimeInMillis(System.currentTimeMillis());
-                        resNode.setProperty(JCR_LASTMODIFIED, lastModified);
+                        mimeType = this.config.getServletContext().getMimeType(part.getName());
                     }
-                    session.save();
-                }
-                catch (RepositoryException e)
-                {
-                    e.printStackTrace(System.out);
-                    throw e;
-                }
-                finally
-                {
-                    Version version = nodeContent.checkin();
-                    // actualiza version
-                    Iterator<WebSite> sites = SWBContext.listWebSites();
-                    while (sites.hasNext())
+                    if (mimeType == null)
                     {
-                        Iterator<SemanticObject> it = sites.next().getSemanticObject().getModel().listSubjects(OfficePortlet.swbrep_content, contentId);
-                        while (it.hasNext())
+                        mimeType = DEFAULT_MIME_TYPE;
+                    }
+                    Node resNode = nodeContent.getNode(JCR_CONTENT);
+                    resNode.checkout();
+                    resNode.setProperty("jcr:mimeType", mimeType);
+                    resNode.setProperty("jcr:encoding", "");
+                    resNode.setProperty(cm_file, file);
+                    resNode.setProperty(cm_user, this.user);
+                    InputStream in = new ByteArrayInputStream(part.getContent());
+                    resNode.getProperty(JCR_DATA).setValue(in);
+                    resNode.setProperty(JCR_LASTMODIFIED, lastModified);
+                    session.save();
+                    Version version = resNode.checkin();
+                    return version.getName();
+                }
+
+
+            }
+            catch (RepositoryException e)
+            {
+                e.printStackTrace(System.out);
+                throw e;
+            }
+            finally
+            {
+
+                // actualiza version
+                Iterator<WebSite> sites = SWBContext.listWebSites();
+                while (sites.hasNext())
+                {
+                    Iterator<SemanticObject> it = sites.next().getSemanticObject().getModel().listSubjects(OfficePortlet.swbrep_content, contentId);
+                    while (it.hasNext())
+                    {
+                        SemanticObject obj = it.next();
+                        if (obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
                         {
-                            SemanticObject obj = it.next();
-                            if (obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
+                            OfficePortlet officePortlet = new OfficePortlet(obj);
+                            if (officePortlet.getRepositoryName().equals(repositoryName))
                             {
-                                OfficePortlet officePortlet = new OfficePortlet(obj);
-                                if (officePortlet.getRepositoryName().equals(repositoryName))
-                                {
-                                    InputStream in = getContent(repositoryName, contentId, officePortlet.getVersionToShow());
-                                    officePortlet.loadContent(in);
-                                }
+                                InputStream in = getContent(repositoryName, contentId, officePortlet.getVersionToShow());
+                                officePortlet.loadContent(in);
                             }
                         }
                     }
-
-                    session.save();
-                    return version.getName();
                 }
-            }
-            else
-            {
-                throw new Exception("El contenido esta siendo editado, intente más tarde");
             }
         }
         catch (ItemNotFoundException infe)
@@ -461,7 +468,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         try
         {
             Node nodeContent = session.getNodeByUUID(contentId);
-            VersionIterator it = nodeContent.getVersionHistory().getAllVersions();
+            Node resContent = nodeContent.getNode(JCR_CONTENT);
+            VersionIterator it = resContent.getVersionHistory().getAllVersions();
             while (it.hasNext())
             {
                 Version version = it.nextVersion();
@@ -537,7 +545,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
-            VersionIterator it = nodeContent.getVersionHistory().getAllVersions();
+            Node resContent = nodeContent.getNode(JCR_CONTENT);
+            VersionIterator it = resContent.getVersionHistory().getAllVersions();
             while (it.hasNext())
             {
                 Version version = it.nextVersion();
@@ -618,12 +627,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node nodeContent = session.getNodeByUUID(contentID);
 
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
-            nodeContent.checkout();
+
             nodeContent.setProperty(cm_title, title);
-            Node resource = nodeContent.getNode(JCR_CONTENT);
-            resource.getProperty(JCR_LASTMODIFIED).setValue(Calendar.getInstance());
+            nodeContent.getProperty(CM_LASTMODIFIED).setValue(Calendar.getInstance());
             nodeContent.save();
-            nodeContent.checkin();
+
 
         }
         catch (ItemNotFoundException infe)
@@ -694,12 +702,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node nodeContent = session.getNodeByUUID(contentID);
 
             String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
-            nodeContent.checkout();
+
             nodeContent.setProperty(cm_description, description);
-            Node resource = nodeContent.getNode(JCR_CONTENT);
-            resource.getProperty(JCR_LASTMODIFIED).setValue(Calendar.getInstance());
+            nodeContent.getProperty(CM_LASTMODIFIED).setValue(Calendar.getInstance());
             nodeContent.save();
-            nodeContent.checkin();
+
 
 
         }
@@ -723,8 +730,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentID);
-            Node resource = nodeContent.getNode(JCR_CONTENT);
-            return resource.getProperty(JCR_LASTMODIFIED).getDate().getTime();
+            return nodeContent.getProperty(CM_LASTMODIFIED).getDate().getTime();
 
         }
         catch (ItemNotFoundException infe)
@@ -1106,10 +1112,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentId);
+            Node resContent = nodeContent.getNode(JCR_CONTENT);
             if (version.equals("*"))
             {
                 String lastVersion = getLastVersionOfcontent(repositoryName, contentId);
-                Version versionNode = nodeContent.getVersionHistory().getVersion(lastVersion);
+                Version versionNode = resContent.getVersionHistory().getVersion(lastVersion);
                 if (versionNode != null)
                 {
                     Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
@@ -1123,7 +1130,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             else
             {
-                Version versionNode = nodeContent.getVersionHistory().getVersion(version);
+                Version versionNode = resContent.getVersionHistory().getVersion(version);
                 if (versionNode != null)
                 {
                     Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
@@ -1156,10 +1163,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             Node nodeContent = session.getNodeByUUID(contentId);
             String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
+            Node resContent = nodeContent.getNode(JCR_CONTENT);
             if (version.equals("*"))
             {
                 String lastVersion = getLastVersionOfcontent(session, repositoryName, contentId);
-                Version versionNode = nodeContent.getVersionHistory().getVersion(lastVersion);
+                Version versionNode = resContent.getVersionHistory().getVersion(lastVersion);
                 if (versionNode != null)
                 {
                     Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
@@ -1173,7 +1181,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             else
             {
-                Version versionNode = nodeContent.getVersionHistory().getVersion(version);
+                Version versionNode = resContent.getVersionHistory().getVersion(version);
                 if (versionNode != null)
                 {
                     Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
@@ -1314,7 +1322,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node newCategory = session.getNodeByUUID(newCategoryId);
             session.move(nodeContent.getPath(), newCategory.getPath());
             Node resource = nodeContent.getNode(JCR_CONTENT);
-            resource.getProperty(JCR_LASTMODIFIED).setValue(Calendar.getInstance());
+            resource.getProperty(CM_LASTMODIFIED).setValue(Calendar.getInstance());
         }
         catch (ItemNotFoundException infe)
         {
@@ -1451,12 +1459,66 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         portlet.setVersionToShow(portletInfo.version);
     }
 
-    public void validateContentValues(String repositoryName, PropertyInfo[] properties, Object[] values) throws Exception
+    public void validateContentValues(String repositoryName, PropertyInfo[] properties, Object[] values, String type) throws Exception
     {
+        OfficeManager manager = loader.getOfficeManager(repositoryName);
+        manager.validateContentValues(properties, values, type);
     }
 
     public void setContentPropertyValue(String repositoryName, String contentID, PropertyInfo propertyInfo, String value) throws Exception
     {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentID);
+
+            nodeContent.setProperty(propertyInfo.id, value);
+            nodeContent.save();
+
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("El contenido no se encuentró en el repositorio.", infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+
+    public void setContentProperties(String repositoryName, String contentID, PropertyInfo[] properties, String[] values) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentID);
+
+            int i = 0;
+            for (PropertyInfo propertyInfo : properties)
+            {
+                String value = values[i];
+                nodeContent.setProperty(propertyInfo.id, value);
+                i++;
+            }
+            nodeContent.save();
+
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("El contenido no se encuentró en el repositorio.", infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
     }
 
     public String getNameOfContent(String repositoryName, String contentID) throws Exception

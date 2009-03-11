@@ -173,6 +173,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         catch (Exception e)
         {
+            log.error(e);
             throw e;
         }
         finally
@@ -546,7 +547,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node contentNode = session.getNodeByUUID(versioninfo.contentId);
-            VersionHistory history = contentNode.getVersionHistory();
+            Node resContent = contentNode.getNode(OfficeDocument.JCR_CONTENT);
+            VersionHistory history = resContent.getVersionHistory();
             Version versiontoReturn = history.getVersion(versioninfo.nameOfVersion);
             if (versiontoReturn != null)
             {
