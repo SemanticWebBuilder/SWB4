@@ -31,7 +31,7 @@ public class ContentProperties extends WizardPage
 {
 
 
-    public static final String PROPERTIES = "PROPERTIES";
+    public static final String CONTENT_PROPERTIES = "PROPERTIES";
 
     public ContentProperties()
     {
@@ -136,14 +136,14 @@ public class ContentProperties extends WizardPage
         loadProperties(repositoryName, type);
         try
         {
-            OfficeApplication.getOfficeDocumentProxy().validateContentValues(repositoryName, props, values);
+            OfficeApplication.getOfficeDocumentProxy().validateContentValues(repositoryName, props, values,type);
         }
         catch (Exception e)
         {
             JOptionPane.showMessageDialog(this, e.getMessage(), getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return WizardPanelNavResult.REMAIN_ON_PAGE;
         }
-        map.put(PROPERTIES, properties);
+        map.put(CONTENT_PROPERTIES, properties);
         return result;
     }
 

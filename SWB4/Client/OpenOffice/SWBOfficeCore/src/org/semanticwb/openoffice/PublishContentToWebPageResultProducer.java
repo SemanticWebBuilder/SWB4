@@ -66,7 +66,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                 webpage.siteID = page.getSite();
                 String version = wizardData.get(PublishVersion.VERSION).toString();
                 PortletInfo info = openOfficeDocument.publishToPortletContent(repositoryName, contentID, version, title, description, webpage);
-                HashMap<PropertyInfo, String> properties = (HashMap<PropertyInfo, String>) wizardData.get(ViewProperties.PROPERTIES);
+                HashMap<PropertyInfo, String> properties = (HashMap<PropertyInfo, String>) wizardData.get(ViewProperties.VIEW_PROPERTIES);
                 if (properties != null)
                 {
                     for (PropertyInfo prop : properties.keySet())
