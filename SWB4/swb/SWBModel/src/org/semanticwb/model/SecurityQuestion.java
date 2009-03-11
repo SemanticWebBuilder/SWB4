@@ -58,14 +58,14 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
         System.out.println("sobj:"+sobj);
         System.out.println("m_obj:"+obj.getModel().getName());
         System.out.println("prop:"+prop);
-        System.out.print("DC:"+prop.getURI());
+        System.out.println("DC:"+prop.getURI());
         if(sobj!=null)
         {
             DisplayProperty dobj=new DisplayProperty(sobj);
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
-            selectValues= //SWBContext.getUserRepository(obj.getModel().getName()).getU;
-                    dobj.getSelectValues(lang); //TODO:
+            selectValues= SWBContext.getUserRepository(obj.getModel().getName()).getUserRepSecurityQuestionList();
+                    //dobj.getSelectValues(lang); //TODO:
         }
 
         if(imsg==null)
