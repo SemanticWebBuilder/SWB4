@@ -24,7 +24,8 @@ import org.semanticwb.platform.SemanticVocabulary;
 
 public class BaseNode extends BaseNodeBase
 {
-    private static Hashtable<String, String> namespaces = new Hashtable<String, String>();        
+
+    private static Hashtable<String, String> namespaces = new Hashtable<String, String>();
     static Logger log = SWBUtils.getLogger(BaseNode.class);
     private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
     private static final String JCR_ROOTVERSION = "jcr:rootVersion";
@@ -33,6 +34,8 @@ public class BaseNode extends BaseNodeBase
     private static final String ONPARENTVERSION_VERSION = "VERSION";
     private static final String WAS_NOT_FOUND = " was not found";
     private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+
     static
     {
         namespaces.put("mix", "http://www.jcp.org/jcr/mix/1.0");
@@ -42,10 +45,11 @@ public class BaseNode extends BaseNodeBase
         namespaces.put("swbrep", "http://www.semanticwebbuilder.org/swb4/repository");
         namespaces.put("swb", "http://www.semanticwebbuilder.org/swb4/ontology");
     }
+
     public BaseNode(SemanticObject base)
     {
         super(base);
-        //addPrimaryType(getSemanticObject().getSemanticClass());
+    //addPrimaryType(getSemanticObject().getSemanticClass());
     }
 
     private BaseNode(SemanticObject base, SemanticClass clazz) throws SWBException
@@ -705,7 +709,7 @@ public class BaseNode extends BaseNodeBase
             for (SemanticObject nodeDefinition : getChildNodeDefinition(superclazz))
             {
                 String name = nodeDefinition.getProperty(ChildNodeDefinition.jcr_name);
-                if (name.equals(nodeName))
+                if (name != null && nodeName != null && name.equals(nodeName))
                 {
                     return nodeDefinition;
                 }
@@ -713,7 +717,7 @@ public class BaseNode extends BaseNodeBase
             for (SemanticObject nodeDefinition : getChildNodeDefinition(superclazz))
             {
                 String name = nodeDefinition.getProperty(ChildNodeDefinition.jcr_name);
-                if (name.equals("*"))
+                if (name != null && name.equals("*"))
                 {
                     return nodeDefinition;
                 }
@@ -837,11 +841,11 @@ public class BaseNode extends BaseNodeBase
                 superTypes.add(literal.getString());
             }
         }
-        Iterator<SemanticClass> superClasses= clazz.listSuperClasses();
-        while(superClasses.hasNext())
+        Iterator<SemanticClass> superClasses = clazz.listSuperClasses();
+        while (superClasses.hasNext())
         {
-            SemanticClass superClazz=superClasses.next();
-            if(!(superClazz.isSWBInterface() || superClazz.isSWBModel()))
+            SemanticClass superClazz = superClasses.next();
+            if (!(superClazz.isSWBInterface() || superClazz.isSWBModel()))
             {
                 superTypes.addAll(getSuperTypes(superClazz));
             }
@@ -973,8 +977,6 @@ public class BaseNode extends BaseNodeBase
         return isNodeType(FrozenNode.nt_FrozenNode);
     }
 
-    
-
     private void doCopy(BaseNode targetNode, BaseNode destNode) throws SWBException
     {
         GenericIterator<BaseNode> nodes = targetNode.listNodes();
@@ -1019,7 +1021,7 @@ public class BaseNode extends BaseNodeBase
     private void doCopyToFrozenNode(BaseNode frozenNode) throws SWBException
     {
         if (frozenNode.isFrozenNode())
-        {            
+        {
             initializeFrozenProperties(frozenNode.getSemanticObject());
             doCopy(this, frozenNode);
             Iterator<SemanticProperty> properties = this.getSemanticObject().getSemanticClass().listProperties();
@@ -1659,7 +1661,7 @@ public class BaseNode extends BaseNodeBase
                     }
                     else
                     {
-                        uri = namespace +"#"+ values[1];
+                        uri = namespace + "#" + values[1];
                     }
                 }
                 break;
@@ -1714,7 +1716,7 @@ public class BaseNode extends BaseNodeBase
 
     public static Hashtable<String, String> listUris()
     {
-        
+
         Iterator<SemanticClass> tpcit = nt_BaseNode.listSubClasses();
         while (tpcit.hasNext())
         {
@@ -1787,6 +1789,7 @@ public class BaseNode extends BaseNodeBase
     {
         return getSemanticObject().hashCode();
     }
+
     @Override
     public org.semanticwb.repository.BaseNode getParent()
     {
@@ -1794,10 +1797,10 @@ public class BaseNode extends BaseNodeBase
         {
             return super.getParent();
         }
-        catch(Throwable e)
+        catch (Throwable e)
         {
-            org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbrep_parentNode);
-            if(obj!=null)
+            org.semanticwb.platform.SemanticObject obj = getSemanticObject().getObjectProperty(swbrep_parentNode);
+            if (obj != null)
             {
                 return new BaseNode(obj);
             }
