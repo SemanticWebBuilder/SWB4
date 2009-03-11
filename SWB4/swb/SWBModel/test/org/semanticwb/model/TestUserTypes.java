@@ -104,7 +104,7 @@ public class TestUserTypes {
         }
     }
 
-    //@Test
+    @Test
     public void setValues(){
         UserRepository repository = null;
         repository = SWBContext.getDefaultRepository();

@@ -236,7 +236,7 @@ public class UserRegistration extends GenericAdmResource
             UserRepository urep = paramsRequest.getTopic().getWebSite().getUserRepository();
             Iterator<SemanticProperty> itProps = urep.listExtendedAttributes();
             HashMap<String, SemanticProperty> datos = new HashMap<String, SemanticProperty>();
-            System.out.println("Extra...");
+//            System.out.println("Extra...");
             while (itProps.hasNext())
             {
                 SemanticProperty sp = itProps.next();
@@ -245,27 +245,27 @@ public class UserRegistration extends GenericAdmResource
                     continue;
                 }
                 datos.put(sp.getName(), sp);
-                System.out.println("Adding: "+sp.getName());
+//                System.out.println("Adding: "+sp.getName());
             }
             Iterator<String> itur = urep.getUserTypes();
             while (itur.hasNext())
             {
                 String curr = itur.next();
-                System.out.println("usuario: "+curr);
+//                System.out.println("usuario: "+curr);
                 if (paramsRequest.getUser().hasUserType(curr))
                 {
-                    System.out.println("Procesando...");
+//                    System.out.println("Procesando...");
                     itProps = urep.listAttributesofUserType(curr);
                     while (itProps.hasNext())
                     {
                         SemanticProperty sp = itProps.next();
-                        System.out.println("..."+sp.getName());
+//                        System.out.println("..."+sp.getName());
                         if (null == sp.getDisplayProperty())
                         {
                             continue;
                         }
                         datos.put(sp.getName(), sp);
-                        System.out.println("Adding: "+sp.getName());
+//                        System.out.println("Adding: "+sp.getName());
                     }
 
                 }
@@ -330,6 +330,8 @@ public class UserRegistration extends GenericAdmResource
                 //TODO report Error
                 return;
             }
+//            System.out.println(">>>>>>>>>>"+user.getSemanticObject().getId());
+//            System.out.println(">>>>>>>>>>"+user.getSemanticObject().getURI());
             if (null == user.getSemanticObject().getId())
             {
                 if (null != userRep.getUserByLogin(usrLogin))
@@ -343,9 +345,11 @@ public class UserRegistration extends GenericAdmResource
                 subject.getPrincipals().add(newUser);
                 newUser.setLanguage(user.getLanguage());
                 newUser.setIp(user.getIp());
+                newUser.setActive(true);
                 newUser.setDevice(user.getDevice());
+//                System.out.println("*************** "+newUser.isActive());
                 user = newUser;
-                user.setActive(true);
+//                System.out.println("*************** "+user.isActive());
             } else
             {
                 if (!user.getUsrLogin().equalsIgnoreCase(usrLogin) && null != userRep.getUserByLogin(usrLogin))
@@ -363,8 +367,9 @@ public class UserRegistration extends GenericAdmResource
             while (itprop.hasNext())
             {
                 SemanticProperty sp = itprop.next();
+                if ("active".equals(sp.getName())) continue;
                 SemanticObject dp = sp.getDisplayProperty();
-                System.out.println("Processing... " + sp.getDisplayName());
+//                System.out.println("Processing... " + sp.getDisplayName());
                 fm.processElement(request, sp, "update");
             }
             ArrayList<String> utypessel = new ArrayList<String>();
@@ -419,7 +424,7 @@ public class UserRegistration extends GenericAdmResource
             {
                 SemanticProperty sp = itprop.next();
                 SemanticObject dp = sp.getDisplayProperty();
-                System.out.println("Processing... " + sp.getDisplayName());
+//                System.out.println("Processing... " + sp.getDisplayName());
                 fm.processElement(request, sp, "update");
             }
             Iterator<String> itur = userRep.getUserTypes();
@@ -431,7 +436,7 @@ public class UserRegistration extends GenericAdmResource
                 {
                     SemanticProperty sp = itprop.next();
                     SemanticObject dp = sp.getDisplayProperty();
-                    System.out.println("Processing... " + sp.getDisplayName());
+//                    System.out.println("Processing... " + sp.getDisplayName());
                     fm.processElement(request, sp, "update");
                 }
             }
@@ -443,5 +448,6 @@ public class UserRegistration extends GenericAdmResource
                 response.setMode(SWBResourceURL.Mode_VIEW);
             }
         }
+//        System.out.println("*************** "+user.isActive());
     }
 }

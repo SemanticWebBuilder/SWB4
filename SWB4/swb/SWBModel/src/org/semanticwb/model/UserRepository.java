@@ -445,8 +445,8 @@ public class UserRepository extends UserRepositoryBase
         while (itsp.hasNext())
         {
             SemanticProperty sp = itsp.next();
-            log.trace("Encontrada... " + sp);
-            if (null == sp.getRange() || null == sp.getDisplayProperty())
+            log.debug("Encontrada... " + sp +" - "+ sp.getURI());
+            if (null == sp.getRange() || null == sp.getDisplayProperty() || !sp.getURI().startsWith(getId()))
             {
                 continue;
             }
@@ -463,8 +463,8 @@ public class UserRepository extends UserRepositoryBase
         while (itsp.hasNext())
         {
             SemanticProperty sp = itsp.next();
-            log.trace("Encontrada... " + sp);
-            if (null == sp.getRange() || null == sp.getDisplayProperty())
+            log.debug("Encontrada... " + sp +" - "+ sp.getURI());
+            if (null == sp.getRange() || null == sp.getDisplayProperty() || !sp.getURI().startsWith(getId()))
             {
                 continue;
             }
