@@ -15,7 +15,7 @@ public interface IOfficeDocument
 {
 
     @XmlRpcMethod(methodName = "OfficeDocument.save")
-    public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file,PropertyInfo[] properties,String[] values) throws Exception;
+    public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.setTitle")
     public void setTitle(String repositoryName, String contentID, String title) throws Exception;
@@ -54,13 +54,13 @@ public interface IOfficeDocument
     public PropertyInfo[] getPortletProperties(String repositoryName, String contentID) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.getContentProperties")
-    public PropertyInfo[] getContentProperties(String repositoryName,String type) throws Exception;
+    public PropertyInfo[] getContentProperties(String repositoryName, String type) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.getViewPropertyValue")
     public String getViewPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.setViewPropertyValue")
-    public void setViewPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception;   
+    public void setViewPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.setPortletProperties")
     public void setPortletProperties(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception;
@@ -126,17 +126,19 @@ public interface IOfficeDocument
     public void validateViewValues(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.validateContentValues")
-    public void validateContentValues(String repositoryName, PropertyInfo[] properties, Object[] values) throws Exception;
+    public void validateContentValues(String repositoryName, PropertyInfo[] properties, Object[] values, String type) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.setContentPropertyValue")
-    public void setContentPropertyValue(String repositoryName, String contentID, PropertyInfo propertyInfo,String value) throws Exception;
+    public void setContentPropertyValue(String repositoryName, String contentID, PropertyInfo propertyInfo, String value) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.getNameOfContent")
     public String getNameOfContent(String repositoryName, String contentID) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.getContentProperty")
-    public String getContentProperty(PropertyInfo prop,String repositoryName,String contentID) throws Exception;
+    public String getContentProperty(PropertyInfo prop, String repositoryName, String contentID) throws Exception;
 
+    @XmlRpcMethod(methodName = "OfficeDocument.setContentProperties")
+    public void setContentProperties(String repositoryName, String contentID, PropertyInfo[] properties, String[] values) throws Exception;
 }
 
 
