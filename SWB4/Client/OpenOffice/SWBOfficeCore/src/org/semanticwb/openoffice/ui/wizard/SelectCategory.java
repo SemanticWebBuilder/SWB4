@@ -286,6 +286,7 @@ private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {
         {
             repositoryNode.removeAllChildren();
             addCategory(repositoryNode);
+            jTreeCategory.expandPath(new TreePath(repositoryNode.getPath()));
         }
     }
     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
