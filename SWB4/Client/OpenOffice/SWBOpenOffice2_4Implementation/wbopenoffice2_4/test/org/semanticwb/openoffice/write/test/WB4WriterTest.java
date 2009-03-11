@@ -48,16 +48,15 @@ public class WB4WriterTest
 
     public WB4WriterTest()
     {
-
     }
 
     @BeforeClass
     public static void setUpClass() throws Exception
-    {        
-        File home=new File(System.getProperty("user.home"));
-        System.setProperty(ConfigurationListURI.CONFIGURATION, home.getPath()+"/list.xml");
-        System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, home.getPath()+"/config.xml");
-        System.setProperty(ErrorLog.CONFIGURATION, home.getPath());       
+    {
+        File home = new File(System.getProperty("user.home"));
+        System.setProperty(ConfigurationListURI.CONFIGURATION, home.getPath() + "/list.xml");
+        System.setProperty(Configuration.CONFIGURATION_PROPERTY_NAME, home.getPath() + "/config.xml");
+        System.setProperty(ErrorLog.CONFIGURATION, home.getPath());
     }
 
     @AfterClass
@@ -76,10 +75,10 @@ public class WB4WriterTest
 
             // Obtener la ventana principal (Desktop) de OpenOffice   
             Object oRawDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", xContext);
-            oDesktop = ( XDesktop ) UnoRuntime.queryInterface(XDesktop.class, oRawDesktop);
+            oDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, oRawDesktop);
 
             // Obtener interfaz XComponentLoader del XDesktop   
-            XComponentLoader xCompLoader = ( XComponentLoader ) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
+            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, oDesktop);
 
             // Cargar el documento en una nueva ventana oculta del XDesktop   
             PropertyValue[] loadProps = new PropertyValue[0];
@@ -90,15 +89,15 @@ public class WB4WriterTest
             xCompDest = xCompLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
 
         }
-        catch ( com.sun.star.uno.Exception e )
+        catch (com.sun.star.uno.Exception e)
         {
             e.printStackTrace(System.out);
         }
-        catch ( BootstrapException be )
+        catch (BootstrapException be)
         {
             be.printStackTrace(System.out);
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             e.printStackTrace(System.out);
         }
@@ -107,7 +106,7 @@ public class WB4WriterTest
     @After
     public void tearDown()
     {
-        xCompDest.dispose();        
+        xCompDest.dispose();
         oDesktop.terminate();
         xCompDest = null;
         oDesktop = null;
@@ -118,11 +117,11 @@ public class WB4WriterTest
     public void DeleteTemporalDirectory(File dir)
     {
         File[] files = dir.listFiles();
-        if ( files != null )
+        if (files != null)
         {
-            for ( File file : files )
+            for (File file : files)
             {
-                if ( file.isFile() )
+                if (file.isFile())
                 {
                     file.delete();
                 }
@@ -147,7 +146,7 @@ public class WB4WriterTest
             File expected = sUrlDestiny;
             Assert.assertEquals(actual, expected);
         }
-        catch ( Exception wbe )
+        catch (Exception wbe)
         {
             Assert.fail(wbe.getMessage());
         }
@@ -161,13 +160,13 @@ public class WB4WriterTest
         {
             WB4Writer writer = new WB4Writer(this.xContext);
             Map<String, String> properties = writer.getCustomProperties();
-            for ( String prop : properties.keySet() )
+            for (String prop : properties.keySet())
             {
                 System.out.println(prop + "=" + properties.get(prop));
             }
             Assert.assertEquals(properties.size(), 4);
         }
-        catch ( WBException wbe )
+        catch (WBException wbe)
         {
             Assert.fail(wbe.getMessage());
         }
@@ -183,7 +182,7 @@ public class WB4WriterTest
             DocumentType actual = writer.getDocumentType();
             Assert.assertEquals(actual, DocumentType.WORD);
         }
-        catch ( WBException wbe )
+        catch (WBException wbe)
         {
             Assert.fail(wbe.getMessage());
         }
@@ -199,7 +198,7 @@ public class WB4WriterTest
             File actual = writer.saveAsHtml(tempDir);
             Assert.assertTrue(actual.exists());
         }
-        catch ( WBException wbe )
+        catch (WBException wbe)
         {
             Assert.fail(wbe.getMessage());
         }
@@ -214,7 +213,7 @@ public class WB4WriterTest
             WB4Writer writer = new WB4Writer(this.xContext);
             writer.save();
         }
-        catch ( WBException wbe )
+        catch (WBException wbe)
         {
             Assert.fail(wbe.getMessage());
         }
@@ -230,7 +229,7 @@ public class WB4WriterTest
             File actual = writer.saveAs(tempDir, SaveDocumentFormat.HTML);
             Assert.assertTrue(actual.exists());
         }
-        catch ( WBException wbe )
+        catch (WBException wbe)
         {
             Assert.fail(wbe.getMessage());
         }
@@ -248,20 +247,21 @@ public class WB4WriterTest
             properties.put("tp", "Hola");
             writer.saveCustomProperties(properties);
         }
-        catch ( WBException wbe )
+        catch (WBException wbe)
         {
             Assert.fail(wbe.getMessage());
         }
     }
 
-    @Test 
+    @Test
     @Ignore
     public void openTest()
     {
-        WB4WriterApplication writer = new WB4WriterApplication(this.xContext);        
+        WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
         writer.open(DocumentType.WORD);
 
     }
+
     @Test
     @Ignore
     public void publishTest()
@@ -271,12 +271,13 @@ public class WB4WriterTest
             WB4Writer writer = new WB4Writer(this.xContext);
             writer.publish();
         }
-        catch ( Throwable wbe )
+        catch (Throwable wbe)
         {
             Assert.fail(wbe.getMessage());
         }
     }
-    @Test  
+
+    @Test
     //@Ignore
     public void saveToSiteTest()
     {
@@ -285,7 +286,7 @@ public class WB4WriterTest
             WB4Writer writer = new WB4Writer(this.xContext);
             writer.saveToSite();
         }
-        catch ( Throwable wbe )
+        catch (Throwable wbe)
         {
             wbe.printStackTrace();
             Assert.fail(wbe.getMessage());
@@ -301,7 +302,7 @@ public class WB4WriterTest
             WB4Writer writer = new WB4Writer(this.xContext);
             writer.deleteAssociation();
         }
-        catch ( Throwable wbe )
+        catch (Throwable wbe)
         {
             Assert.fail(wbe.getMessage());
         }
@@ -316,14 +317,14 @@ public class WB4WriterTest
             WB4Writer writer = new WB4Writer(this.xContext);
             writer.delete();
         }
-        catch ( Throwable wbe )
+        catch (Throwable wbe)
         {
             Assert.fail(wbe.getMessage());
         }
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void showDocumentInfoTest()
     {
         try
@@ -331,7 +332,7 @@ public class WB4WriterTest
             WB4Writer writer = new WB4Writer(this.xContext);
             writer.showDocumentInfo();
         }
-        catch ( Throwable wbe )
+        catch (Throwable wbe)
         {
             wbe.printStackTrace();
             Assert.fail(wbe.getMessage());
@@ -346,7 +347,7 @@ public class WB4WriterTest
         {
             WB4WriterApplication.changePassword();
         }
-        catch ( Throwable wbe )
+        catch (Throwable wbe)
         {
             Assert.fail(wbe.getMessage());
         }
@@ -361,7 +362,7 @@ public class WB4WriterTest
             WB4Writer writer = new WB4Writer(this.xContext);
             writer.insertLink();
         }
-        catch ( Throwable wbe )
+        catch (Throwable wbe)
         {
             Assert.fail(wbe.getMessage());
         }
@@ -376,7 +377,7 @@ public class WB4WriterTest
             WB4WriterApplication.showAbout();
 
         }
-        catch ( Throwable wbe )
+        catch (Throwable wbe)
         {
             Assert.fail(wbe.getMessage());
         }
@@ -388,15 +389,14 @@ public class WB4WriterTest
     {
         try
         {
-           WB4WriterApplication.createPage();
+            WB4WriterApplication.createPage();
         }
-        catch ( Throwable wbe )
+        catch (Throwable wbe)
         {
             wbe.printStackTrace();
             Assert.fail(wbe.getMessage());
         }
     }
-    
 
     @Test
     @Ignore
@@ -406,12 +406,12 @@ public class WB4WriterTest
         WB4WriterApplication writer = new WB4WriterApplication(this.xContext);
         //try
         //{
-            writer.open(DocumentType.WORD);
-        //}
-        //catch ( WBException wbe )
-        //{
-        //    Assert.fail(wbe.getMessage());
-        //}
+        writer.open(DocumentType.WORD);
+    //}
+    //catch ( WBException wbe )
+    //{
+    //    Assert.fail(wbe.getMessage());
+    //}
 
     }
 
@@ -425,11 +425,11 @@ public class WB4WriterTest
             List<File> attachments = writer.getAllAttachments();
             Assert.assertEquals(attachments.size(), 2);
         }
-        catch ( WBException wbe )
+        catch (WBException wbe)
         {
             Assert.fail(wbe.getMessage());
         }
-    }    
+    }
 
     @Test(expected = WBException.class)
     @Ignore
