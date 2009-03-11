@@ -3,6 +3,7 @@ package org.semanticwb.portal.admin.resources.reports.jrresources;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -73,8 +74,12 @@ public abstract class JRResource {
     }
     
     protected void loadJasperResource() throws JRException {
+        System.out.println("\ninicio... loadJasperResource 1");
+        System.out.println("jasperResource="+jasperResource+"-----");
         InputStream is = getClass().getResourceAsStream(jasperResource);
+        System.out.println("loadJasperResource 2");
         jasperReport = (JasperReport)JRLoader.loadObject(is);
+        System.out.println("loadJasperResource 3... fin");
     }
     
     protected void fillReport()  throws JRException {

@@ -136,12 +136,11 @@ public class Poll extends GenericResource
         try 
         {
             Document dom=SWBUtils.XML.xmlToDom(base.getXml());
-            if(dom!=null) {                
+            if(dom!=null) {
                 NodeList node = dom.getElementsByTagName("option");            
-                if (!"".equals(base.getAttribute("question", "").trim()) && node.getLength() > 1)            
-                {
+                if (!"".equals(base.getAttribute("question", "").trim()) && node.getLength() > 1) {                    
                     ret.append("\n<div id=\"swb-encuesta\">");
-                    ret.append("\n<form action=\""+paramRequest.getRenderUrl()+"\" method=\"POST\" name=\"frmEncuesta\" id=\"frmEncuesta\">\n");
+                    ret.append("\n<form name=\"frmEncuesta\" id=\"frmEncuesta\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\">\n");
                     if (!"".equals(base.getAttribute("imgencuesta", "").trim()))
                     {
                         ret.append("<p>");
@@ -191,7 +190,7 @@ public class Poll extends GenericResource
                         ret.append("</form>");
                     }else {
                         ret.append("<p>");
-                        ret.append("<a href=\"javascript:;\" onmousedown=\"getHtml('"+url.toString(true)+"','"+poll+base.getId()+"');slidedown('"+poll+base.getId()+"');\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
+                        ret.append("<a href=\"javascript:;\" onmousedown=\"getHtml('"+url.toString(true)+"','"+poll+base.getId()+"'); $('#"+poll+base.getId()+"').slideDown('normal');\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
                         ret.append("<div id=\""+poll+base.getId()+"\" ");
                         ret.append("style=\"display:none; overflow:hidden; height:"+base.getAttribute("height", "350").trim()+"px; ");
                         ret.append("\">");
@@ -221,7 +220,6 @@ public class Poll extends GenericResource
                     win += ",top="+ base.getAttribute("top", "125").trim();
                     win += ",left="+ base.getAttribute("left", "220").trim();
 
-                    ret.append("\n<script type=\"text/javascript\" src=\"/swb/swbadmin/js/wb/motion/collapsibleDiv.js\"></script>");
                     ret.append("\n<script type=\"text/javascript\">");
 
                     ret.append("\nfunction buscaCookie(forma)");
@@ -282,7 +280,7 @@ public class Poll extends GenericResource
                     if(display) {
                         ret.append("  window.open(\'"+ url.toString() +"&radiobutton=\' + radiobutton,\'_newenc\',\'"+ win + "\'); ");
                     }else {
-                        ret.append("  getHtml('"+url.toString()+"&radiobutton='+radiobutton,'"+poll+base.getId()+"'); slidedown('"+poll+base.getId()+"'); ");
+                        ret.append("  getHtml('"+url.toString()+"&radiobutton='+radiobutton,'"+poll+base.getId()+"'); $('#"+poll+base.getId()+"').slideDown('normal');");
                     }
                     ret.append("    } ");
                     ret.append("    else { alert('"+ paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgAnswer") +"'); } ");
@@ -652,7 +650,7 @@ public class Poll extends GenericResource
                 if(display){
                     ret.append("<tr><td align=\"center\"><br /><a href=\"javascript:window.close();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> ");
                 }else {
-                    ret.append("<tr><td align=\"center\"><br /><a href=\"javascript:;\" onmousedown=\"slideup('"+poll+base.getId()+"');\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> ");
+                    ret.append("<tr><td align=\"center\"><br /><a href=\"javascript:;\" onmousedown=\"$('#"+poll+base.getId()+"').slideUp('normal');\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> ");
                 }
                 ret.append("</table>");
                 
