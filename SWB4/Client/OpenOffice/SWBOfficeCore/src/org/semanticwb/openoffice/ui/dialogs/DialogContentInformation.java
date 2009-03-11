@@ -91,9 +91,11 @@ public class DialogContentInformation extends javax.swing.JDialog
             public void valueChanged(ListSelectionEvent e)
             {
                 jButtonViewVersion.setEnabled(false);
+                jButtonDeleteVersion.setEnabled(false);
                 if (e.getFirstIndex() != -1)
                 {
                     jButtonViewVersion.setEnabled(true);
+                    jButtonDeleteVersion.setEnabled(true);
                 }
             }
         });
@@ -275,9 +277,9 @@ public class DialogContentInformation extends javax.swing.JDialog
             for (VersionInfo versionInfo : OfficeApplication.getOfficeDocumentProxy().getVersions(this.repository, contentId))
             {
                 String date = OfficeApplication.iso8601dateFormat.format(versionInfo.created);
-                String[] rowData =
+                Object[] rowData =
                 {
-                    versionInfo.nameOfVersion, date, versionInfo.user
+                    versionInfo.nameOfVersion, date, versionInfo.user,versionInfo.published
                 };
                 model.addRow(rowData);
             }
@@ -359,6 +361,8 @@ public class DialogContentInformation extends javax.swing.JDialog
         jButtonUpdate = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jButtonViewVersion = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        jButtonDeleteVersion = new javax.swing.JButton();
         jPanelProperties = new javax.swing.JPanel();
         panelPropertyEditor1 = new org.semanticwb.openoffice.components.PanelPropertyEditor();
 
@@ -576,14 +580,14 @@ public class DialogContentInformation extends javax.swing.JDialog
 
             },
             new String [] {
-                "Versión", "Fecha de creación", "Creador"
+                "Versión", "Fecha de creación", "Creador", "Publicada"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -634,6 +638,20 @@ public class DialogContentInformation extends javax.swing.JDialog
             }
         });
         jToolBar2.add(jButtonViewVersion);
+        jToolBar2.add(jSeparator1);
+
+        jButtonDeleteVersion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
+        jButtonDeleteVersion.setToolTipText("Borrar versión");
+        jButtonDeleteVersion.setEnabled(false);
+        jButtonDeleteVersion.setFocusable(false);
+        jButtonDeleteVersion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonDeleteVersion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonDeleteVersion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteVersionActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jButtonDeleteVersion);
 
         jPanel1.add(jToolBar2, java.awt.BorderLayout.CENTER);
 
@@ -918,10 +936,51 @@ public class DialogContentInformation extends javax.swing.JDialog
         }
     }//GEN-LAST:event_jButtonEditActionPerformed
 
+    private void jButtonDeleteVersionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonDeleteVersionActionPerformed
+    {//GEN-HEADEREND:event_jButtonDeleteVersionActionPerformed
+        if (this.jTableSummary1.getSelectedRow() != -1)
+        {
+            DefaultTableModel model = (DefaultTableModel) this.jTableSummary1.getModel();
+            String versionInfo = (String) model.getValueAt(this.jTableSummary1.getSelectedRow(), 0);
+            boolean published=(Boolean) model.getValueAt(this.jTableSummary1.getSelectedRow(), 3);
+            if(published)
+            {
+                JOptionPane.showMessageDialog(this,"¡No se puede borrar una versión que ha sido publicada.!\r\nDebe borrar primero la publicación del contenido.","Borrado de versión de contenido",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try
+            {
+                int res=JOptionPane.showConfirmDialog(this, "¿Desea borrar la versión "+ versionInfo +"?","Borrado de versión de contenido",JOptionPane.YES_NO_OPTION);
+                if(res==JOptionPane.YES_OPTION)
+                {
+                    try
+                    {
+                        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                        OfficeApplication.getOfficeDocumentProxy().deleteVersionOfContent(repository, contentId, versionInfo);
+                        loadVersions();
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    finally
+                    {
+                        this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jButtonDeleteVersionActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonDeletePage;
+    private javax.swing.JButton jButtonDeleteVersion;
     private javax.swing.JButton jButtonEdit;
     private javax.swing.JButton jButtonPublish;
     private javax.swing.JButton jButtonUpdate;
@@ -942,6 +1001,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
