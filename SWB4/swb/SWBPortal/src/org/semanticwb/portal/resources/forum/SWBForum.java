@@ -43,7 +43,7 @@ import org.semanticwb.servlet.internal.UploadFormElement;
  */
 public class SWBForum extends GenericResource {
 
-    private static Logger log = SWBUtils.getLogger(Banner.class);
+    private static Logger log = SWBUtils.getLogger(SWBForum.class);
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
