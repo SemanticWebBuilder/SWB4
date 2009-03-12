@@ -182,7 +182,7 @@ public class UserRegistration extends GenericAdmResource
                         {
                             SemanticProperty prop = it.next();
                             FormElement ele = getFormElement(prop);
-                            System.out.println("Processing..."+prop.getName());
+//                            System.out.println("Processing..." + prop.getName());
                             writt.println("                    <tr><td>" + ele.renderLabel(paramsRequest.getUser().getSemanticObject(), prop, null, null, lang) + "</td>");
                             writt.println("                    <td>" + ele.renderElement(paramsRequest.getUser().getSemanticObject(), prop, "web", "create", lang) + "</td></tr>");
                         }
@@ -240,7 +240,7 @@ public class UserRegistration extends GenericAdmResource
             while (itProps.hasNext())
             {
                 SemanticProperty sp = itProps.next();
-                if ( null == sp.getDisplayProperty())
+                if (null == sp.getDisplayProperty())
                 {
                     continue;
                 }
@@ -367,7 +367,10 @@ public class UserRegistration extends GenericAdmResource
             while (itprop.hasNext())
             {
                 SemanticProperty sp = itprop.next();
-                if ("active".equals(sp.getName())) continue;
+                if ("active".equals(sp.getName()))
+                {
+                    continue;
+                }
                 SemanticObject dp = sp.getDisplayProperty();
 //                System.out.println("Processing... " + sp.getDisplayName());
                 fm.processElement(request, sp, "update");
@@ -414,6 +417,12 @@ public class UserRegistration extends GenericAdmResource
             if ("1".equals(super.getResourceBase().getAttribute("target")))
             {
                 response.setMode(SWBResourceURL.Mode_EDIT);
+            } else if (null != super.getResourceBase().getAttribute("destiny"))
+            {
+                response.sendRedirect(super.getResourceBase().getAttribute("destiny"));
+            } else
+            {
+                response.setMode(SWBResourceURL.Mode_VIEW);
             }
         }
         if ("second".equals(request.getParameter("type")))
@@ -440,9 +449,9 @@ public class UserRegistration extends GenericAdmResource
                     fm.processElement(request, sp, "update");
                 }
             }
-            if (null != request.getParameter("destiny"))
+            if (null != super.getResourceBase().getAttribute("destiny"))
             {
-                response.sendRedirect(request.getParameter("destiny"));
+                response.sendRedirect(super.getResourceBase().getAttribute("destiny"));
             } else
             {
                 response.setMode(SWBResourceURL.Mode_VIEW);
