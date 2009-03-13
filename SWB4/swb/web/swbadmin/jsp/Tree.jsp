@@ -193,7 +193,7 @@
 
         JSONArray childs=new JSONArray();
         jobj.putOpt("children", childs);
-        Iterator<SemanticObject> it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
+        Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang),node.getPropertyFilter());
 
         //System.out.println("obj:"+obj.getId());
         //drop acceptance

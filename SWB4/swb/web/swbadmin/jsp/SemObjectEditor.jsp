@@ -81,7 +81,17 @@ try
             boolean read=obj.getBooleanProperty(Unmodifiable.swb_readOnly);
             if(read)mode=SWBFormMgr.MODE_VIEW;
         }
-        SWBFormMgr frm=new SWBFormMgr(obj, null,mode);
+
+        //TODO: revisar mejor opcion
+        String view=null;
+        if(obj.getSemanticClass().equals(Portlet.sclass))
+        {
+            int pmode=((org.semanticwb.model.Portlet)obj.createGenericInstance()).getPortletType().getPortletMode();
+            view="portletMode"+pmode;
+        }
+        System.out.println(view);
+
+        SWBFormMgr frm=new SWBFormMgr(obj, view,mode);
         frm.setLang(lang);
         if(smode!=null)
         {
