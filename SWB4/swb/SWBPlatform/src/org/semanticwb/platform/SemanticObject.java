@@ -58,6 +58,12 @@ public class SemanticObject
         //System.out.println("SemanticObject:"+res);
     }
 
+    /**
+     * Regresa instancia del SemanticObject si existe en Cache, de lo contrario
+     * regresa null
+     * @param uri
+     * @return
+     */
     public static SemanticObject getSemanticObject(String uri)
     {
         SemanticObject ret=null;
@@ -70,7 +76,12 @@ public class SemanticObject
         return getSemanticClass().newGenericInstance(this);
     }
 
-
+/**
+ * Regrea una instancia del SemanticObject en base al URI dado.
+ * Si el recurso no existe regresa null
+ * @param uri
+ * @return
+ */
     public static SemanticObject createSemanticObject(String uri)
     {
         SemanticObject ret=getSemanticObject(uri);

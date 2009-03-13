@@ -54,15 +54,12 @@ public class SWBContext extends SWBContextBase
         FormView view=null;
         if(id!=null)
         {
-            SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
-            Resource res=ont.getRDFOntModel().getResource("http://www.semanticwebbuilder.org/swb4/xforms/ontology#"+id);
-            Property type=ont.getRDFOntModel().getProperty(SemanticVocabulary.RDF_TYPE);
-            if(ont.getRDFOntModel().contains(res, type))
+            SemanticObject obj=SemanticObject.createSemanticObject(SemanticVocabulary.SWBXF_URI+id);
+            if(obj!=null)
             {
-                SemanticObject obj=SemanticObject.createSemanticObject(res);
-                //System.out.println("id:"+id+" obj:"+obj);
-                view=new FormView(obj);
+                view=(FormView)obj.createGenericInstance();
             }
+            System.out.println("id:"+id+" obj:"+obj);
         }
         return view;
     }
