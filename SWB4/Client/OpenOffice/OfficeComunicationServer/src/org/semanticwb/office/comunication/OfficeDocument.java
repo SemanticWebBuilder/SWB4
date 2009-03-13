@@ -807,7 +807,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return listPortlets.toArray(new PortletInfo[listPortlets.size()]);
     }
 
-    public PortletInfo publishToPortletContent(String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage) throws Exception
+    public PortletInfo publishToPortletContent(String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage,PropertyInfo[] properties,String[] values) throws Exception
     {
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage page = site.getWebPage(webpage.id);
@@ -876,6 +876,21 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             portlet.setVersionToShow(version);
             portlet.setCreated(new Date(System.currentTimeMillis()));
             portlet.setUpdated(new Date(System.currentTimeMillis()));
+            int i=0;
+            for(PropertyInfo prop : properties)
+            {
+                String value=values[i];
+                Iterator<SemanticProperty> semanticProperties=portlet.getSemanticObject().getSemanticClass().listProperties();
+                while(semanticProperties.hasNext())
+                {
+                    SemanticProperty semanticProperty=semanticProperties.next();
+                    if(semanticProperty.getURI().equals(prop.id))
+                    {
+                        portlet.getSemanticObject().setProperty(semanticProperty, value);
+                    }
+                }
+                i++;
+            }
             try
             {
                 page.addPortlet(portlet);
@@ -1119,9 +1134,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 Version versionNode = resContent.getVersionHistory().getVersion(lastVersion);
                 if (versionNode != null)
                 {
-                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
-                    Node resNode = frozenNode.getNode(JCR_CONTENT);
-                    return resNode.getProperty(JCR_DATA).getStream();
+                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);                    
+                    return frozenNode.getProperty(JCR_DATA).getStream();
                 }
                 else
                 {
@@ -1133,9 +1147,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 Version versionNode = resContent.getVersionHistory().getVersion(version);
                 if (versionNode != null)
                 {
-                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
-                    Node resNode = frozenNode.getNode(JCR_CONTENT);
-                    return resNode.getProperty(JCR_DATA).getStream();
+                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);                    
+                    return frozenNode.getProperty(JCR_DATA).getStream();
                 }
                 else
                 {
