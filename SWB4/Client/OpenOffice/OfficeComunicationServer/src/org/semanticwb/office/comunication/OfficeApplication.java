@@ -24,6 +24,8 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.PFlowInstance;
+import org.semanticwb.model.PFlowRef;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -685,21 +687,24 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     public FlowContentInformation[] getContentsForAuthorize() throws Exception
     {
         ArrayList<FlowContentInformation> contents = new ArrayList<FlowContentInformation>();
-        Iterator<WebSite> sites = SWBContext.listWebSites();
-        while (sites.hasNext())
+        Iterator<WebSite> sites=SWBContext.listWebSites();
+        while(sites.hasNext())
         {
-            WebSite site = sites.next();
-            Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficePortlet.swbrep_content, "1");
-            while (it.hasNext())
+            WebSite site=sites.next();
+            Iterator<PFlowRef> pflows=site.listPFlowRefs();
+            while(pflows.hasNext())
             {
-                SemanticObject obj = it.next();
-                if (obj.getSemanticClass().isSubClass(OfficePortlet.sclass) || obj.getSemanticClass().equals(OfficePortlet.sclass))
+                PFlowRef pFlowRef=pflows.next();
+
+                Iterator<PFlowInstance> instances=pFlowRef.getPflow().listPFlowInstances();
+                while(instances.hasNext())
                 {
-                    OfficePortlet officePortlet = new OfficePortlet(obj);
-                    PortletInfo portletInfo = OfficeDocument.getPortletInfo(officePortlet);
-                    FlowContentInformation flowContentInformation = new FlowContentInformation();
-                    flowContentInformation.portletInfo = portletInfo;
-                    contents.add(flowContentInformation);
+                    PFlowInstance instance=instances.next();
+                    FlowContentInformation flowContentInformation=new FlowContentInformation();
+                    flowContentInformation.id=instance.getId();
+                    flowContentInformation.step=instance.getStep();
+                    flowContentInformation.status=instance.getStatus();
+                    flowContentInformation.title=instance.getPflow().getTitle();
                 }
             }
         }
