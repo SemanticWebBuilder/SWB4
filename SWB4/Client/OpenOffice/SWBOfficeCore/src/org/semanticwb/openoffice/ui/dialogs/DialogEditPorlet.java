@@ -9,6 +9,7 @@ import java.awt.Frame;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -406,6 +407,26 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         jTextAreaDescription.requestFocus();
         return;
     }
+    // validate view properties
+    Map<PropertyInfo,String> properties=panelPropertyEditor1.getProperties();
+    PropertyInfo[] props=properties.keySet().toArray(new PropertyInfo[properties.keySet().size()]);
+    String[] values=new String[properties.keySet().size()];
+    int j=0;
+    for(PropertyInfo prop : props)
+    {
+        values[j]=properties.get(prop);
+        j++;
+    }
+    try
+    {
+        OfficeApplication.getOfficeDocumentProxy().validateViewValues(repositoryName, contentID, props, values);
+    }
+    catch(Exception e)
+    {
+        JOptionPane.showMessageDialog(this, e.getMessage(), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
     int res = JOptionPane.showConfirmDialog(this, "Se va a realizar los cambios de la información de publicación.\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
     if (res == JOptionPane.YES_OPTION)
     {
@@ -431,10 +452,9 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     OfficeApplication.getOfficeDocumentProxy().updateCalendar(pageInformation, cal);
                 }
             }
-
+            // update view properties
             for (PropertyInfo prop : this.panelPropertyEditor1.getProperties().keySet())
             {
-
                 Object obj = this.panelPropertyEditor1.getProperties().get(prop);
                 String value = null;
                 if (obj != null)
