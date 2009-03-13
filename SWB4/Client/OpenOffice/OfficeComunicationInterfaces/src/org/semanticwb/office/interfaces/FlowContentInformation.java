@@ -14,6 +14,7 @@ public class FlowContentInformation {
     public String id;
     public String title;
     public String step;
+    public int status;
 
     @Override
     public String toString()
