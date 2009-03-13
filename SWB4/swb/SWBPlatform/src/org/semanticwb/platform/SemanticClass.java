@@ -50,6 +50,9 @@ public class SemanticClass
 
     private Boolean isdragSupport=null;
 
+    private boolean dispObject=false;
+    private SemanticObject displayObject=null;
+
 
     public SemanticClass(OntClass oclass)
     {
@@ -365,10 +368,36 @@ public class SemanticClass
 
     public String getDisplayName(String lang)
     {
-        String ret=getLabel(lang);
+        String ret=null;
+        SemanticObject obj=getDisplayObject();
+        if(obj!=null)
+        {
+            if(lang!=null)
+            {
+                ret=obj.getProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDFS_LABEL),null,lang);
+            }
+            if(ret==null)ret=obj.getProperty(obj.getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL));
+        }
+        if(ret==null && lang!=null)ret=getLabel(lang);
+        if(ret==null)ret=getLabel(null);
         if(ret==null)ret=getName();
         return ret;
     }
+    
+    public SemanticObject getDisplayObject()
+    {
+        if(!dispObject)
+        {
+            Statement st=m_class.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYOBJECT));
+            if(st!=null)
+            {
+                displayObject=SemanticObject.createSemanticObject(st.getResource());
+                dispObject=true;
+            }
+        }
+        return displayObject;
+    }
+
 
 //    public boolean isSuperClass(SemanticClass cls)
 //    {
@@ -380,12 +409,12 @@ public class SemanticClass
 //        return m_class.hasSubClass(cls.getOntClass(),false);
 //    }
 
-    public Iterator listInstances()
+    public Iterator<SemanticObject> listInstances()
     {
         return listInstances(false);
     }
 
-    public Iterator listInstances(boolean direct)
+    public Iterator<SemanticObject> listInstances(boolean direct)
     {
         //return SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(this);
         if(m_ontclass!=null)
