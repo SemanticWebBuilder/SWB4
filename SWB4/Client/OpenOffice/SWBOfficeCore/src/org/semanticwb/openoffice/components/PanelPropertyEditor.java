@@ -18,7 +18,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -231,9 +230,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
         }
     }
 
-    public void loadProperties(Set<PropertyInfo> properties)
-    {
-    }
+    
 
     public Map<PropertyInfo, String> getProperties()
     {
