@@ -65,19 +65,16 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                 webpage.id = page.getID();
                 webpage.siteID = page.getSite();
                 String version = wizardData.get(PublishVersion.VERSION).toString();
-                PortletInfo info = openOfficeDocument.publishToPortletContent(repositoryName, contentID, version, title, description, webpage);
                 HashMap<PropertyInfo, String> properties = (HashMap<PropertyInfo, String>) wizardData.get(ViewProperties.VIEW_PROPERTIES);
-                if (properties != null)
+                PropertyInfo[] propertiesToSend=properties.keySet().toArray(new PropertyInfo[properties.keySet().size()]);
+                String[] values=new String[properties.keySet().size()];
+                int i=0;
+                for(PropertyInfo prop : propertiesToSend)
                 {
-                    for (PropertyInfo prop : properties.keySet())
-                    {
-                        if(prop!=null)
-                        {
-                            String value = properties.get(prop);
-                            openOfficeDocument.setViewPropertyValue(info, prop, value);
-                        }
-                    }
+                    values[i]=properties.get(prop);
+                    i++;
                 }
+                PortletInfo info = openOfficeDocument.publishToPortletContent(repositoryName, contentID, version, title, description, webpage,propertiesToSend,values);                
                 int res = JOptionPane.showConfirmDialog(null, "¿Desea activar el contenido?", "Publicación de contenido", JOptionPane.YES_NO_OPTION);
                 if (res == JOptionPane.YES_OPTION)
                 {
