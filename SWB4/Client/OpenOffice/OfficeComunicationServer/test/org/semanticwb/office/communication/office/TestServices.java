@@ -25,7 +25,6 @@ import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.ContentType;
-import org.semanticwb.office.interfaces.PortletInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
