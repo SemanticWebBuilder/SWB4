@@ -194,7 +194,7 @@ public class TestServices
             byte[] part = bin.toByteArray();
             parts.add(new Part(part, file.getName(), file.getName()));
             document.setRequestParts(parts);
-            String contentid = document.publish("contentido3", "contenido de prueba", workspaceid, categoryid, "WORD", contentType, file.getName());
+            String contentid = document.save("contentido3", "contenido de prueba", workspaceid, categoryid, "WORD", contentType, file.getName(),null,null);
             System.out.println("Contenido creado con id=" + contentid);
             //document.clearParts();
             //document.setParts(parts);
@@ -281,8 +281,8 @@ public class TestServices
             }
             WebSiteInfo site = application.getSites()[0];
             WebPageInfo home = application.getHomePage(site);
-            document.publishToPortletContent(rep, contentId,"1.0","demo","demo",home);
-            for (PortletInfo info : document.getPageInformation(rep, contentId))
+            document.publishToPortletContent(rep, contentId,"1.0","demo","demo",home,null,null);
+            /*for (PortletInfo info : document.getPageInformation(rep, contentId))
             {
                 System.out.println("id : " + info.id);
                 System.out.println("title : " + info.title);
@@ -291,7 +291,7 @@ public class TestServices
                 System.out.println("version : " + info.version);
                 System.out.println("-------------------------------------------");
                 document.deleteContentOfPage(info);
-            }
+            }*/
 
         }
         catch (Throwable e)
