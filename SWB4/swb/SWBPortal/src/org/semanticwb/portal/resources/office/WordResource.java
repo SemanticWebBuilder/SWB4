@@ -30,17 +30,17 @@ public class WordResource extends GenericAdmResource
 
     protected void beforePrintDocument(WordPortlet porlet, PrintWriter out)
     {
-        porlet.beforePrintDocument(out);
+        
     }
 
     protected void afterPrintDocument(WordPortlet porlet, PrintWriter out)
     {
-        porlet.afterPrintDocument(out);
+        
     }
 
     protected void printDocument(WordPortlet porlet, PrintWriter out, String path, String workpath,String html)
     {
-        porlet.printDocument(out, path, workpath,html);
+        out.write(html);
     }
 
     @Override
