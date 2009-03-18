@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class PortletFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable
+public class ResourceFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_xml=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xml");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
@@ -9,50 +9,50 @@ public class PortletFilterBase extends org.semanticwb.model.SWBClass implements 
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
-    public static final org.semanticwb.platform.SemanticClass swb_PortletFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletFilter");
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletFilter");
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter");
 
-    public PortletFilterBase(org.semanticwb.platform.SemanticObject base)
+    public ResourceFilterBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
-    public static org.semanticwb.model.PortletFilter getPortletFilter(String id, org.semanticwb.model.SWBModel model)
+    public static org.semanticwb.model.ResourceFilter getResourceFilter(String id, org.semanticwb.model.SWBModel model)
     {
-        return (org.semanticwb.model.PortletFilter)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        return (org.semanticwb.model.ResourceFilter)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
-    public static java.util.Iterator<org.semanticwb.model.PortletFilter> listPortletFilters(org.semanticwb.model.SWBModel model)
+    public static java.util.Iterator<org.semanticwb.model.ResourceFilter> listResourceFilters(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletFilter>(org.semanticwb.model.PortletFilter.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceFilter>(org.semanticwb.model.ResourceFilter.class, it, true);
     }
 
-    public static java.util.Iterator<org.semanticwb.model.PortletFilter> listPortletFilters()
+    public static java.util.Iterator<org.semanticwb.model.ResourceFilter> listResourceFilters()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletFilter>(org.semanticwb.model.PortletFilter.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceFilter>(org.semanticwb.model.ResourceFilter.class, it, true);
     }
 
-    public static org.semanticwb.model.PortletFilter createPortletFilter(String id, org.semanticwb.model.SWBModel model)
+    public static org.semanticwb.model.ResourceFilter createResourceFilter(String id, org.semanticwb.model.SWBModel model)
     {
-        return (org.semanticwb.model.PortletFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+        return (org.semanticwb.model.ResourceFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
-    public static org.semanticwb.model.PortletFilter createPortletFilter(org.semanticwb.model.SWBModel model)
+    public static org.semanticwb.model.ResourceFilter createResourceFilter(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
-        return org.semanticwb.model.PortletFilter.createPortletFilter(String.valueOf(id), model);
+        return org.semanticwb.model.ResourceFilter.createResourceFilter(String.valueOf(id), model);
     }
 
-    public static void removePortletFilter(String id, org.semanticwb.model.SWBModel model)
+    public static void removeResourceFilter(String id, org.semanticwb.model.SWBModel model)
     {
         model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
     }
 
-    public static boolean hasPortletFilter(String id, org.semanticwb.model.SWBModel model)
+    public static boolean hasResourceFilter(String id, org.semanticwb.model.SWBModel model)
     {
-        return (getPortletFilter(id, model)!=null);
+        return (getResourceFilter(id, model)!=null);
     }
 
     public String getXml()
