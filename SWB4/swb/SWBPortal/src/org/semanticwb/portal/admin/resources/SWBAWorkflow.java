@@ -49,7 +49,6 @@ import org.semanticwb.model.PortletType;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
-import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticOntology;
@@ -88,583 +87,10 @@ public class SWBAWorkflow extends GenericResource{
         {
             doGateway(request,response,paramRequest);
         }
-        else if(paramRequest.getMode().equals("script"))
-        {
-            doScript(request,response,paramRequest);
-        }
-        else if(paramRequest.getMode().equals("wsdl"))
-        {
-            doWSDL(request,response,paramRequest);
-        }
-        else if(paramRequest.getMode().equals("webservice"))
-        {
-            doWebService(request,response,paramRequest);
-        }  
         else super.processRequest(request,response,paramRequest);
         
     }
-    /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
-     */    
-    public void doWebService(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-    
-        
-        response.setContentType("text/xml");
-        String service=request.getParameter("service");               
-        response.setContentType("text/xml");        
-        if(service==null)
-        {
-            return;
-        }
-        else if(service.equals("mail"))
-        {
-            this.mailWebService(request, response, paramRequest);
-        }
-        else if(service.equals("authorize"))
-        {
-            this.authorizeWebService(request, response, paramRequest);
-        }
-        else if(service.equals("noauthorize"))
-        {
-            this.noauthorizeWebService(request, response, paramRequest);
-        }
-        else if(service.equals("publish"))
-        {
-            this.publishWebService(request, response, paramRequest);
-        }
-    }
-    /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
-     */    
-    public void authorizeWebService(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)  throws IOException
-    {
-        int length=request.getContentLength();
-        if(length>0)
-        {
-            InputStream in=request.getInputStream();
-            Document doc=SWBUtils.XML.xmlToDom(in);
-            if(doc.getElementsByTagName("content").getLength()>0)
-            {
-                try
-                {
-                    Element econtent=(Element)doc.getElementsByTagName("content").item(0);
-                    Text etext=(Text)econtent.getFirstChild();
-                    String content=etext.getNodeValue();
-                    Content ocontent=new Content(content);                 
-                    WebSite map=SWBContext.getWebSite(ocontent.getTopicMapID());
-                    WebPage topic=map.getWebPage(ocontent.getTopicID());
-                    
-//                    Occurrence occ=topic.getOccurrence(ocontent.getOccurrence());
-//                    occ.getDbdata().setStatus(2);
-//                    occ.getDbdata().update();
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace(System.out);
-                    log.error(e);
-                }
-            }
-        }
-        String xmlresp="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
-            "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"+
-            "<soap:Body>"+
-            "<authorizeResponse xmlns=\"http://tempuri.org/\" />"+
-            "</soap:Body>"+
-            "</soap:Envelope>";
-        PrintWriter out=response.getWriter();
-        out.write(xmlresp);
-        out.close();
-    }
-    /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
-     */    
-    public void noauthorizeWebService(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)  throws IOException
-    {
-        int length=request.getContentLength();
-        if(length>0)
-        {
-            InputStream in=request.getInputStream();
-            Document doc=SWBUtils.XML.xmlToDom(in);
-            if(doc.getElementsByTagName("content").getLength()>0)
-            {
-                try
-                {
-                    Element econtent=(Element)doc.getElementsByTagName("content").item(0);
-                    Text etext=(Text)econtent.getFirstChild();
-                    String content=etext.getNodeValue();
-                    Content ocontent=new Content(content);                 
-                    WebSite map=SWBContext.getWebSite(ocontent.getTopicMapID());
-                    WebPage topic=map.getWebPage(ocontent.getTopicID());
-//                    Occurrence occ=topic.getOccurrence(ocontent.getOccurrence());
-//                    occ.getDbdata().setStatus(3);
-//                    occ.getDbdata().update();
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace(System.out);
-                    log.error(e);
-                }
-            }
-        }
-        String xmlresp="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
-            "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"+
-            "<soap:Body>"+
-            "<authorizeResponse xmlns=\"http://tempuri.org/\" />"+
-            "</soap:Body>"+
-            "</soap:Envelope>";
-        PrintWriter out=response.getWriter();
-        out.write(xmlresp);
-        out.close();
-    }
-    /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
-     */    
-    public void publishWebService(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)  throws IOException
-    {
-        int length=request.getContentLength();
-        if(length>0)
-        {
-            InputStream in=request.getInputStream();
-            Document doc=SWBUtils.XML.xmlToDom(in);
-            if(doc.getElementsByTagName("content").getLength()>0)
-            {
-                try
-                {
-                    Element econtent=(Element)doc.getElementsByTagName("content").item(0);
-                    Text etext=(Text)econtent.getFirstChild();
-                    String content=etext.getNodeValue();
-                    Content ocontent=new Content(content);                 
-                    WebSite map=SWBContext.getWebSite(ocontent.getTopicMapID());
-                    WebPage topic=map.getWebPage(ocontent.getTopicID());
-//                    Occurrence occ=topic.getOccurrence(ocontent.getOccurrence());
-//                    occ.getDbdata().setActive(1);
-//                    occ.getDbdata().update();
-                    
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace(System.out);
-                    log.error(e);
-                }
-            }
-        }
-        String xmlresp="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
-            "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"+
-            "<soap:Body>"+
-            "<authorizeResponse xmlns=\"http://tempuri.org/\" />"+
-            "</soap:Body>"+
-            "</soap:Envelope>";
-        PrintWriter out=response.getWriter();
-        out.write(xmlresp);
-        out.close();
-    }
-    /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
-     */    
-    public void mailWebService(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)  throws IOException
-    {
-        int length=request.getContentLength();
-        if(length>0)
-        {
-            InputStream in=request.getInputStream();
-            Document doc=SWBUtils.XML.xmlToDom(in);
-            if(doc.getElementsByTagName("content").getLength()>0 && doc.getElementsByTagName("workflowId").getLength()>0 && doc.getElementsByTagName("activity").getLength()>0)
-            {
-                try
-                {
-                    Element econtent=(Element)doc.getElementsByTagName("content").item(0);
-                    Text etext=(Text)econtent.getFirstChild();
-                    String content=etext.getNodeValue();
-                    Content ocontent=new Content(content);
-                    
-                    Element eworkflow=(Element)doc.getElementsByTagName("workflowId").item(0);
-                    etext=(Text)eworkflow.getFirstChild();
-                    String workflowId=etext.getNodeValue();
-                    
-                    Element eactivity=(Element)doc.getElementsByTagName("activity").item(0);
-                    etext=(Text)eactivity.getFirstChild();
-                    String activityName=etext.getNodeValue();
-                    
-                    String prefix="";
-                    String topicmap="";
-                    int pos=workflowId.indexOf(prefix);
-                    if(pos!=-1)
-                    {
-                        workflowId=workflowId.substring(pos);
-                    }
-                    pos=workflowId.indexOf("_");
-                    if(pos!=-1)
-                    {
-                        topicmap=workflowId.substring(pos+1);
-                        workflowId=workflowId.substring(0,pos);
-                    }     
-                    String to="";
-                    WebSite map=SWBContext.getWebSite(topicmap);
-                    String id=workflowId;
-                    PFlow pflow=SWBContext.getWebSite(topicmap).getPFlow(id);
-                    Document docdef=SWBUtils.XML.xmlToDom(pflow.getXml());
-                    NodeList activities=docdef.getElementsByTagName("activity");
-                    for(int i=0;i<activities.getLength();i++)
-                    {
-                        Element activity=(Element)activities.item(i);
-                        NodeList users=activity.getElementsByTagName("user");
-                        for(int j=0;j<users.getLength();j++)
-                        {
-                            Element user=(Element)users.item(j);
-                            String userid=user.getAttribute("id");
-                            UserRepository dbuser=map.getUserRepository();
-                            User recuser =dbuser.getUser(userid);
-                            to+=recuser.getUsrEmail()+";";
-                        }
-                        NodeList roles=activity.getElementsByTagName("role");
-                        for(int j=0;j<roles.getLength();j++)
-                        {
-                            Element role=(Element)roles.item(j);
-                            String roleid=role.getAttribute("id");
-                            UserRepository dbuser=map.getUserRepository();
-                            Iterator<User> enusers=dbuser.listUsers();
-                            while(enusers.hasNext())
-                            {
-                                User user=enusers.next();
-                                Iterator<Role> itroles=user.listRoles();
-                                while(itroles.hasNext())
-                                {
-                                    //Role
-                                }
-                            }
-                            
-                        }
-                    }
-                    
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace(System.out);
-                    log.error(e);
-                }
-            }
-        }
-        String xmlresp="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
-            "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"+
-            "<soap:Body>"+
-            "<mailResponse xmlns=\"http://tempuri.org/\" />"+
-            "</soap:Body>"+
-            "</soap:Envelope>";
-        PrintWriter out=response.getWriter();
-        out.write(xmlresp);
-        out.close();
-        
-    }
-    /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
-     */    
-    public void mailWSDL(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)  throws IOException
-    {
-        SWBResourceURL urlmode=paramRequest.getRenderUrl();
-        urlmode.setMode("wsdl");
-        urlmode.setCallMethod(SWBResourceURL.Call_DIRECT);
-        PrintWriter out=response.getWriter();
-        String xmlout="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
-            "<wsdl:definitions xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\" xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\" xmlns:s=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tns=\"http://tempuri.org/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\" xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\" targetNamespace=\"http://tempuri.org/\" xmlns:wsdl=\"http://schemas.xmlsoap.org/wsdl/\">"+
-            "<wsdl:types>"+
-            "<s:schema elementFormDefault=\"qualified\" targetNamespace=\"http://tempuri.org/\">"+
-            "<s:element name=\"mail\">"+
-            "<s:complexType>"+
-            "<s:sequence>"+
-            "<s:element minOccurs=\"1\" maxOccurs=\"1\" name=\"content\" type=\"s:string\" />"+
-            "<s:element minOccurs=\"0\" maxOccurs=\"1\" name=\"workflowId\" type=\"s:string\" />"+
-            "<s:element minOccurs=\"0\" maxOccurs=\"1\" name=\"activity\" type=\"s:string\" />"+
-            "</s:sequence>"+
-            "</s:complexType>"+
-            "</s:element>"+
-            "<s:element name=\"MailResponse\">"+
-            "<s:complexType />"+
-            "</s:element>"+
-            "</s:schema>"+
-            "</wsdl:types>"+
-            "<wsdl:message name=\"MailSoapIn\">"+
-            "<wsdl:part name=\"parameters\" element=\"tns:mail\" />"+
-            "</wsdl:message>"+
-            "<wsdl:message name=\"MailSoapOut\">"+
-            "<wsdl:part name=\"parameters\" element=\"tns:MailResponse\" />"+
-            "</wsdl:message>"+
-            "<wsdl:portType name=\"mail\">"+
-            "<wsdl:operation name=\"mail\">"+
-            "<wsdl:input message=\"tns:MailSoapIn\" />"+
-            "<wsdl:output message=\"tns:MailSoapOut\" />"+
-            "</wsdl:operation>"+
-            "</wsdl:portType>"+
-            "<wsdl:binding name=\"mail\" type=\"tns:mail\">"+
-            "<soap:binding transport=\"http://schemas.xmlsoap.org/soap/http\" style=\"document\" />"+
-            "<wsdl:operation name=\"mail\">"+
-            "<soap:operation soapAction=\"http://tempuri.org/mail\" style=\"document\" />"+
-            "<wsdl:input>"+
-            "<soap:body use=\"literal\" />"+
-            "</wsdl:input>"+
-            "<wsdl:output>"+
-            "<soap:body use=\"literal\" />"+
-            "</wsdl:output>"+
-            "</wsdl:operation>"+
-            "</wsdl:binding>"+
-            "<wsdl:service name=\"mail\">"+
-            "<documentation xmlns=\"http://schemas.xmlsoap.org/wsdl/\" />"+
-            "<wsdl:port name=\"mail\" binding=\"tns:mail\">"+
-            "<soap:address location=\""+ urlmode+"?service=mail"+"\" />"+
-            "</wsdl:port>"+
-            "</wsdl:service>"+
-            "</wsdl:definitions>";
-        out.write(xmlout);
-        out.close();
-    }
-    /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
-     */    
-    public void authorizeWSDL(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)  throws IOException
-    {
-        SWBResourceURL urlmode=paramRequest.getRenderUrl();
-        urlmode.setMode("wsdl");
-        urlmode.setCallMethod(SWBResourceURL.Call_DIRECT);
-        PrintWriter out=response.getWriter();
-        String xmlout="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
-            "<wsdl:definitions xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\" xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\" xmlns:s=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tns=\"http://tempuri.org/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\" xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\" targetNamespace=\"http://tempuri.org/\" xmlns:wsdl=\"http://schemas.xmlsoap.org/wsdl/\">"+
-            "<wsdl:types>"+
-            "<s:schema elementFormDefault=\"qualified\" targetNamespace=\"http://tempuri.org/\">"+
-            "<s:element name=\"authorize\">"+
-            "<s:complexType>"+
-            "<s:sequence>"+
-            "<s:element minOccurs=\"1\" maxOccurs=\"1\" name=\"content\" type=\"s:string\" />"+
-            "</s:sequence>"+
-            "</s:complexType>"+
-            "</s:element>"+
-            "<s:element name=\"authorizeResponse\">"+
-            "<s:complexType />"+
-            "</s:element>"+
-            "</s:schema>"+
-            "</wsdl:types>"+
-            "<wsdl:message name=\"authorizeSoapIn\">"+
-            "<wsdl:part name=\"parameters\" element=\"tns:authorize\" />"+
-            "</wsdl:message>"+
-            "<wsdl:message name=\"authorizeSoapOut\">"+
-            "<wsdl:part name=\"parameters\" element=\"tns:authorizeResponse\" />"+
-            "</wsdl:message>"+
-            "<wsdl:portType name=\"authorize\">"+
-            "<wsdl:operation name=\"authorize\">"+
-            "<wsdl:input message=\"tns:authorizeSoapIn\" />"+
-            "<wsdl:output message=\"tns:authorizeSoapOut\" />"+
-            "</wsdl:operation>"+
-            "</wsdl:portType>"+
-            "<wsdl:binding name=\"authorize\" type=\"tns:authorize\">"+
-            "<soap:binding transport=\"http://schemas.xmlsoap.org/soap/http\" style=\"document\" />"+
-            "<wsdl:operation name=\"authorize\">"+
-            "<soap:operation soapAction=\"http://tempuri.org/authorize\" style=\"document\" />"+
-            "<wsdl:input>"+
-            "<soap:body use=\"literal\" />"+
-            "</wsdl:input>"+
-            "<wsdl:output>"+
-            "<soap:body use=\"literal\" />"+
-            "</wsdl:output>"+
-            "</wsdl:operation>"+
-            "</wsdl:binding>"+
-            "<wsdl:service name=\"authorize\">"+
-            "<documentation xmlns=\"http://schemas.xmlsoap.org/wsdl/\" />"+
-            "<wsdl:port name=\"authorize\" binding=\"tns:authorize\">"+
-            "<soap:address location=\""+  urlmode+"?service=authorize" +"\" />"+
-            "</wsdl:port>"+
-            "</wsdl:service>"+
-            "</wsdl:definitions>";
-        out.write(xmlout);
-        out.close();
-    }
-    /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
-     */    
-    public void noauthorizeWSDL(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)  throws IOException
-    {
-        SWBResourceURL urlmode=paramRequest.getRenderUrl();
-        urlmode.setMode("wsdl");
-        urlmode.setCallMethod(SWBResourceURL.Call_DIRECT);
-        PrintWriter out=response.getWriter();
-        String xmlout="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
-            "<wsdl:definitions xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\" xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\" xmlns:s=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tns=\"http://tempuri.org/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\" xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\" targetNamespace=\"http://tempuri.org/\" xmlns:wsdl=\"http://schemas.xmlsoap.org/wsdl/\">"+
-            "<wsdl:types>"+
-            "<s:schema elementFormDefault=\"qualified\" targetNamespace=\"http://tempuri.org/\">"+
-            "<s:element name=\"noauthorize\">"+
-            "<s:complexType>"+
-            "<s:sequence>"+
-            "<s:element minOccurs=\"1\" maxOccurs=\"1\" name=\"content\" type=\"s:string\" />"+
-            "</s:sequence>"+
-            "</s:complexType>"+
-            "</s:element>"+
-            "<s:element name=\"authorizeResponse\">"+
-            "<s:complexType />"+
-            "</s:element>"+
-            "</s:schema>"+
-            "</wsdl:types>"+
-            "<wsdl:message name=\"authorizeSoapIn\">"+
-            "<wsdl:part name=\"parameters\" element=\"tns:noauthorize\" />"+
-            "</wsdl:message>"+
-            "<wsdl:message name=\"authorizeSoapOut\">"+
-            "<wsdl:part name=\"parameters\" element=\"tns:authorizeResponse\" />"+
-            "</wsdl:message>"+
-            "<wsdl:portType name=\"noauthorize\">"+
-            "<wsdl:operation name=\"noauthorize\">"+
-            "<wsdl:input message=\"tns:authorizeSoapIn\" />"+
-            "<wsdl:output message=\"tns:authorizeSoapOut\" />"+
-            "</wsdl:operation>"+
-            "</wsdl:portType>"+
-            "<wsdl:binding name=\"noauthorize\" type=\"tns:noauthorize\">"+
-            "<soap:binding transport=\"http://schemas.xmlsoap.org/soap/http\" style=\"document\" />"+
-            "<wsdl:operation name=\"noauthorize\">"+
-            "<soap:operation soapAction=\"http://tempuri.org/noauthorize\" style=\"document\" />"+
-            "<wsdl:input>"+
-            "<soap:body use=\"literal\" />"+
-            "</wsdl:input>"+
-            "<wsdl:output>"+
-            "<soap:body use=\"literal\" />"+
-            "</wsdl:output>"+
-            "</wsdl:operation>"+
-            "</wsdl:binding>"+
-            "<wsdl:service name=\"noauthorize\">"+
-            "<documentation xmlns=\"http://schemas.xmlsoap.org/wsdl/\" />"+
-            "<wsdl:port name=\"noauthorize\" binding=\"tns:noauthorize\">"+
-            "<soap:address location=\""+  urlmode+"?service=noauthorize" +"\" />"+
-            "</wsdl:port>"+
-            "</wsdl:service>"+
-            "</wsdl:definitions>";
-        out.write(xmlout);
-        out.close();
-    }
-    /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
-     */    
-    public void publishWSDL(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)  throws IOException
-    {
-        SWBResourceURL urlmode=paramRequest.getRenderUrl();
-        urlmode.setMode("wsdl");
-        urlmode.setCallMethod(SWBResourceURL.Call_DIRECT);
-        PrintWriter out=response.getWriter();
-        String xmlout="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
-            "<wsdl:definitions xmlns:http=\"http://schemas.xmlsoap.org/wsdl/http/\" xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\" xmlns:s=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tns=\"http://tempuri.org/\" xmlns:tm=\"http://microsoft.com/wsdl/mime/textMatching/\" xmlns:mime=\"http://schemas.xmlsoap.org/wsdl/mime/\" targetNamespace=\"http://tempuri.org/\" xmlns:wsdl=\"http://schemas.xmlsoap.org/wsdl/\">"+
-            "<wsdl:types>"+
-            "<s:schema elementFormDefault=\"qualified\" targetNamespace=\"http://tempuri.org/\">"+
-            "<s:element name=\"publish\">"+
-            "<s:complexType>"+
-            "<s:sequence>"+
-            "<s:element minOccurs=\"1\" maxOccurs=\"1\" name=\"content\" type=\"s:string\" />"+
-            "</s:sequence>"+
-            "</s:complexType>"+
-            "</s:element>"+
-            "<s:element name=\"publishResponse\">"+
-            "<s:complexType />"+
-            "</s:element>"+
-            "</s:schema>"+
-            "</wsdl:types>"+
-            "<wsdl:message name=\"publishSoapIn\">"+
-            "<wsdl:part name=\"parameters\" element=\"tns:publish\" />"+
-            "</wsdl:message>"+
-            "<wsdl:message name=\"publishSoapOut\">"+
-            "<wsdl:part name=\"parameters\" element=\"tns:publishResponse\" />"+
-            "</wsdl:message>"+
-            "<wsdl:portType name=\"publish\">"+
-            "<wsdl:operation name=\"publish\">"+
-            "<wsdl:input message=\"tns:publishSoapIn\" />"+
-            "<wsdl:output message=\"tns:publishSoapOut\" />"+
-            "</wsdl:operation>"+
-            "</wsdl:portType>"+
-            "<wsdl:binding name=\"publish\" type=\"tns:publish\">"+
-            "<soap:binding transport=\"http://schemas.xmlsoap.org/soap/http\" style=\"document\" />"+
-            "<wsdl:operation name=\"publish\">"+
-            "<soap:operation soapAction=\"http://tempuri.org/publish\" style=\"document\" />"+
-            "<wsdl:input>"+
-            "<soap:body use=\"literal\" />"+
-            "</wsdl:input>"+
-            "<wsdl:output>"+
-            "<soap:body use=\"literal\" />"+
-            "</wsdl:output>"+
-            "</wsdl:operation>"+
-            "</wsdl:binding>"+
-            "<wsdl:service name=\"publish\">"+
-            "<documentation xmlns=\"http://schemas.xmlsoap.org/wsdl/\" />"+
-            "<wsdl:port name=\"publish\" binding=\"tns:publish\">"+
-            "<soap:address location=\""+  urlmode+"?service=publish" +"\" />"+
-            "</wsdl:port>"+
-            "</wsdl:service>"+
-            "</wsdl:definitions>";
-        out.write(xmlout);
-        out.close();
-    }
-    /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
-     */    
-    public void doWSDL(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        response.setContentType("text/xml");
-        String service=request.getParameter("service");        
-        if(service==null)
-        {
-            return;
-        }
-        else if(service.equals("mail"))
-        {
-            this.mailWSDL(request, response, paramRequest);
-        }
-        else if(service.equals("authorize"))
-        {
-            this.authorizeWSDL(request, response, paramRequest);
-        }
-        else if(service.equals("noauthorize"))
-        {
-            this.noauthorizeWSDL(request, response, paramRequest);
-        }
-        else if(service.equals("publish"))
-        {
-            this.publishWSDL(request, response, paramRequest);
-        }
-        
-    }
-    
+   
        
     /**
      *
@@ -706,11 +132,11 @@ public class SWBAWorkflow extends GenericResource{
      * @param tm
      */    
     public void getCatalogRoles(Element res,String tm)
-    {        
+    {
+        System.out.println("getCatalogRoles...");
         Vector roles=new Vector();
         //TODO: Cambiar en version 3.1
-        //WebSite map=TopicMgr.getInstance().getTopicMap(tm);
-        WebSite map=SWBContext.getAdminWebSite();
+        WebSite map=SWBContext.getWebSite(tm);
         
         Iterator<Role> it=map.getUserRepository().listRoles();
         while(it.hasNext())
@@ -731,36 +157,36 @@ public class SWBAWorkflow extends GenericResource{
         }
 
     }
-    /**
-     *
-     * @param res
-     * @param tm
-     * @param src
-     */    
-    public void getProcessCount(Element res,String tm,Document src)
-    {
-        if(src.getElementsByTagName("workflow").getLength()>0)
-        {
-            Element workflow=(Element)src.getElementsByTagName("workflow").item(0);
-            String workflowID=workflow.getAttribute("id");
-            String topicmap="";
-            String version=workflow.getAttribute("version");
-            try
-            {
-                //TODO:WBProxyWorkflow.getProcessList
-//                ArrayList processes=WBProxyWorkflow.getProcessList(topicmap, workflowID, version);
-//                addElement("err",String.valueOf(processes.size()), res);
-                addElement("err","1", res);
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace(System.out);
-                log.error(e);
-                addElement("err",e.getMessage(), res);
-            }
-        }
-        addElement("err","The element workflow was not found", res);
-    }
+//    /**
+//     *
+//     * @param res
+//     * @param tm
+//     * @param src
+//     */
+//    public void getProcessCount(Element res,String tm,Document src)
+//    {
+//        if(src.getElementsByTagName("workflow").getLength()>0)
+//        {
+//            Element workflow=(Element)src.getElementsByTagName("workflow").item(0);
+//            String workflowID=workflow.getAttribute("id");
+//            String topicmap="";
+//            String version=workflow.getAttribute("version");
+//            try
+//            {
+//                //TODO:WBProxyWorkflow.getProcessList
+////                ArrayList processes=WBProxyWorkflow.getProcessList(topicmap, workflowID, version);
+////                addElement("err",String.valueOf(processes.size()), res);
+//                addElement("err","1", res);
+//            }
+//            catch(Exception e)
+//            {
+//                e.printStackTrace(System.out);
+//                log.error(e);
+//                addElement("err",e.getMessage(), res);
+//            }
+//        }
+//        addElement("err","The element workflow was not found", res);
+//    }
     /**
      *
      * @param res
@@ -769,16 +195,21 @@ public class SWBAWorkflow extends GenericResource{
      */    
     public void getWorkflow(Element res,String tm,Document src)
     {
+        //System.out.println("WSID: "+tm+" XML:"+SWBUtils.XML.domToXml(src));
         if(src.getElementsByTagName("id").getLength()>0)
         {
             Element eid=(Element)src.getElementsByTagName("id").item(0);
             Text etext=(Text)eid.getFirstChild();
-            String id=etext.getNodeValue();            
+            String id=etext.getNodeValue();
+            //System.out.println("WebSite: "+tm+", ID: "+id);
+            PFlow pflow = (PFlow)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(id);
             try
             {
-                
-                PFlow pflow=SWBContext.getWebSite(tm).getPFlow(id);
+                //PFlow pflow=SWBContext.getWebSite(tm).getPFlow(id);
+                //if(pflow.getXml()==null) pflow.setXml("<workflows><workflow id=\""+pflow.getId()+"\" name=\""+pflow.getTitle()+"\" version=\"1.0\"><description>"+pflow.getDescription()!=null?pflow.getDescription():""+"</description></workflow></workflows>");
                 String xml=pflow.getXml();
+                System.out.println("XML:(1) "+pflow.getXml()+", "+pflow!=null?"true":"false");
+
                 Document doc=SWBUtils.XML.xmlToDom(xml);
                 
                 Element ele=(Element)doc.getElementsByTagName("workflow").item(0);
@@ -794,7 +225,7 @@ public class SWBAWorkflow extends GenericResource{
         }
         else
         {
-            addElement("err", java.util.ResourceBundle.getBundle("com/infotec/wb/admin/resources/WBAWorkflow").getString("err1"), res);
+            addElement("err", java.util.ResourceBundle.getBundle("org/semanticwb/portal/admin/resources/SWBAWorkflow").getString("err1"), res);
         }
     }
     /**
@@ -856,38 +287,38 @@ public class SWBAWorkflow extends GenericResource{
      * @param paramRequest
      * @param request
      */    
-    public void add(Element res,Element wf,User user,String tm,SWBParamRequest paramRequest,HttpServletRequest request)
-    {
-        //PFlowSrv srv=new PFlowSrv();
-        String name=wf.getAttribute("name");
-        String description="";
-        if(wf.getElementsByTagName("description").getLength()>0)
-        {
-            Element edesc=(Element)wf.getElementsByTagName("description").item(0);
-            Text etext=(Text)edesc.getFirstChild();
-            description=etext.getNodeValue();
-            
-        }
-        try
-        {
-            WebSite ws = SWBContext.getWebSite(tm);
-            PFlow pflow=ws.createPFlow();
-            pflow.setTitle(name);
-            pflow.setDescription(description);
-            pflow.setXml(SWBUtils.XML.domToXml(wf.getOwnerDocument()));
-            //TODO:
-            //PFlow pflow=srv.createPFlow(tm, name, description, wf.getOwnerDocument(), user.getId());
-            addElement("workflowid",  String.valueOf(pflow.getId()), res);
-            addElement("version", "1", res);
-        }
-        catch(Exception e)
-        {
-            log.error(e);
-            e.printStackTrace(System.out);
-            addElement("err", java.util.ResourceBundle.getBundle("com/infotec/wb/admin/resources/WBAWorkflow").getString("msg1"), res);
-        }
-        
-    }
+//    public void add(Element res,Element wf,User user,String tm,SWBParamRequest paramRequest,HttpServletRequest request)
+//    {
+//        //PFlowSrv srv=new PFlowSrv();
+//        String name=wf.getAttribute("name");
+//        String description="";
+//        if(wf.getElementsByTagName("description").getLength()>0)
+//        {
+//            Element edesc=(Element)wf.getElementsByTagName("description").item(0);
+//            Text etext=(Text)edesc.getFirstChild();
+//            description=etext.getNodeValue();
+//
+//        }
+//        try
+//        {
+//            WebSite ws = SWBContext.getWebSite(tm);
+//            PFlow pflow=ws.createPFlow();
+//            pflow.setTitle(name);
+//            pflow.setDescription(description);
+//            pflow.setXml(SWBUtils.XML.domToXml(wf.getOwnerDocument()));
+//            //TODO:
+//            //PFlow pflow=srv.createPFlow(tm, name, description, wf.getOwnerDocument(), user.getId());
+//            addElement("workflowid",  String.valueOf(pflow.getId()), res);
+//            addElement("version", "1", res);
+//        }
+//        catch(Exception e)
+//        {
+//            log.error(e);
+//            e.printStackTrace(System.out);
+//            addElement("err", java.util.ResourceBundle.getBundle("org/semanticwb/portal/admin/resources/SWBAWorkflow").getString("msg1"), res);
+//        }
+//
+//    }
     /**
      *
      * @param res
@@ -903,25 +334,25 @@ public class SWBAWorkflow extends GenericResource{
         {
             Element wf=(Element)src.getElementsByTagName("workflow").item(0);            
             String id=wf.getAttribute("id");            
-            if(id==null || id.trim().equals(""))
+//            if(id==null || id.trim().equals(""))
+//            {
+//                add(res,wf,user,tm,paramRequest,request);
+//            }
+//            else
             {
-                add(res,wf,user,tm,paramRequest,request);
-            }
-            else
-            {
-                int idpflow=Integer.parseInt(wf.getAttribute("id"));
+                String idpflow=wf.getAttribute("id");
 //                PFlowSrv sPFlowSrv=new PFlowSrv();
                 try
                 {
                     WorkflowResponse wresp=updatePflow(tm, src, user.getId());
-                    addElement("workflowid", String.valueOf(idpflow), res); 
+                    addElement("workflowid", idpflow, res); 
                     addElement("version", String.valueOf(wresp.getVersion()), res);
                 }
                 catch(Exception e)
                 {
                     log.error(e);
                     e.printStackTrace(System.out);
-                    addElement("err", java.util.ResourceBundle.getBundle("com/infotec/wb/admin/resources/WBAWorkflow").getString("msg1"), res);
+                    addElement("err", java.util.ResourceBundle.getBundle("org/semanticwb/portal/admin/resources/SWBAWorkflow").getString("msg1"), res);
                 }
             }
         }
@@ -929,7 +360,7 @@ public class SWBAWorkflow extends GenericResource{
         {
              log.error(e);
              e.printStackTrace(System.out);
-             addElement("err", java.util.ResourceBundle.getBundle("com/infotec/wb/admin/resources/WBAWorkflow").getString("msg1")+" error: "+e.getMessage(), res);
+             addElement("err", java.util.ResourceBundle.getBundle("org/semanticwb/portal/admin/resources/SWBAWorkflow").getString("msg1")+" error: "+e.getMessage(), res);
         }
         
     }    
@@ -940,43 +371,48 @@ public class SWBAWorkflow extends GenericResource{
      */    
     public void getResourceTypeCat(Element res,String tm)
     {
-        System.out.println("getResourceTypeCat..."+tm);
-        WebSite map = SWBContext.getWebSite(tm);
+        System.out.println("getResouceTypeCat....TM:"+tm+", res: "+res.toString());
+        WebSite map=SWBContext.getWebSite(tm);
         Iterator<PortletType> elements=map.listPortletTypes();
+        int i=0;
         while(elements.hasNext())
         {
+            i++;
+            System.out.println("Elementos PTypes----"+i);
+            //Object key=(Object)elements.nextElement();
             PortletType obj=elements.next();
-            System.out.println("PType ws:"+obj.getWebSite().getId());
-            if(obj.getWebSite().getId().equals(map.getId()))
-            {
-                if(obj.getPortletMode()==1 || obj.getPortletMode()==3)
+//            if(obj.getWebSite().getId().equals(map.getId()))
+//            {
+                //if(obj.getPortletMode()==1 || obj.getPortletMode()==3)
                 {
                     Element erole=addNode("resourceType",""+obj.getId(), obj.getTitle(), res);
                     erole.setAttribute("topicmap",map.getId());
-                    erole.setAttribute("topicmapname",map.getTitle());                
-                    this.addElement("description", obj.getDescription(), erole);
+                    erole.setAttribute("topicmapname",map.getTitle());
+                    addElement("description", obj.getDescription(), erole);
                 }
-            }
-        }   
-        if(!map.getId().equals(SWBContext.WEBSITE_GLOBAL))
-        {
-            map=SWBContext.getGlobalWebSite();
-            elements=map.listPortletTypes();
-            while(elements.hasNext())
-            {
-                PortletType obj=elements.next();
-                if(obj.getWebSite().getId().equals(map.getId()))
-                {
-                    if(obj.getPortletMode()==1 || obj.getPortletMode()==3)
-                    {
-                        Element erole=addNode("resourceType",""+obj.getId(), obj.getTitle(), res);
-                        erole.setAttribute("topicmap",map.getId());
-                        erole.setAttribute("topicmapname",map.getTitle());                
-                        this.addElement("description", obj.getDescription(), erole);
-                    }
-                }
-            }   
+//            }
         }
+//        if(!map.getId().equals(SWBContext.WEBSITE_GLOBAL))
+//        {
+//            map=SWBContext.getGlobalWebSite();
+//            elements=map.listPortletTypes();
+//            while(elements.hasNext())
+//            {
+//                PortletType obj=elements.next();
+//                if(obj.getWebSite().getId().equals(map.getId()))
+//                {
+//                    if(obj.getPortletMode()==1 || obj.getPortletMode()==3)
+//                    {
+//                        Element erole=addNode("resourceType",""+obj.getId(), obj.getTitle(), res);
+//                        erole.setAttribute("topicmap",map.getId());
+//                        erole.setAttribute("topicmapname",map.getTitle());
+//                        this.addElement("description", obj.getDescription(), erole);
+//                    }
+//                }
+//            }
+//        }
+
+
     }
     /**
      *
@@ -1004,12 +440,14 @@ public class SWBAWorkflow extends GenericResource{
             Element res = dom.createElement("res");
             dom.appendChild(res);           
 
-            if(tm==null)
-            {
-                tm = paramRequest.getTopic().getWebSiteId();
-            }
+            System.out.println("TM:"+tm);
 
+//            if(tm==null)
+//            {
+//                tm = paramRequest.getTopic().getWebSiteId();
+//            }
 
+            System.out.println("cmd: "+cmd);
             if(cmd.equals("getcatRoles"))
             {
                 getCatalogRoles(res,tm);
@@ -1017,6 +455,7 @@ public class SWBAWorkflow extends GenericResource{
             else if(cmd.equals("getResourceTypeCat"))
             {
                 getResourceTypeCat(res,tm);
+                System.out.println("sale.."+cmd);
             }
             else if(cmd.equals("getcatUsers"))
             {
@@ -1026,10 +465,10 @@ public class SWBAWorkflow extends GenericResource{
             {                
                 getWorkflow(res,tm,src);
             }
-            else if(cmd.equals("getProcessCount"))
-            {
-                getProcessCount(res,tm,src);
-            }
+//            else if(cmd.equals("getProcessCount"))
+//            {
+//                getProcessCount(res,tm,src);
+//            }
             else if(cmd.equals("update"))
             {
                 update(res,src,user,tm,paramRequest,request);
@@ -1039,6 +478,8 @@ public class SWBAWorkflow extends GenericResource{
             log.error(e);
             return getError(3);
         }
+        System.out.println(SWBUtils.XML.domToXml(dom));
+
         return dom;
     }
     
@@ -1101,10 +542,11 @@ public class SWBAWorkflow extends GenericResource{
      */    
     private Element addNode(String node, String id, String name, Element parent)
     {
+        //System.out.println("node:"+node+",id:"+id+",name:"+name);
         Element ret=addElement(node,null,parent);
         if(id!=null)ret.setAttribute("id",id);
         if(name!=null)ret.setAttribute("name",name);
-        System.out.println("res..."+ret.toString());
+        //System.out.println("res..."+ret.toString());
         return ret;
     }
 
@@ -1245,59 +687,11 @@ public class SWBAWorkflow extends GenericResource{
                 ret = SWBUtils.XML.domToXml(res, true);
         }catch(Exception e){log.error(e);}
         out.print(new String(ret.getBytes()));
-        System.out.print(new String(ret.getBytes()));
+        //System.out.print(new String(ret.getBytes()));
         
     }
     
     
-    /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
-     */    
-    public void doScript(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        PrintWriter out=response.getWriter();  
-        out.println("<LINK href=\"/work/sites/WBAdmin/templates/7/1/images/wb3.css\" rel=\"stylesheet\" type=\"text/css\" >");
-        out.println("<BODY bgcolor=\"#EDEFEC\" leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\" >");
-        out.println("<p class=\"status\">&nbsp;&nbsp;");
-        out.println("</p>");
-        out.println("</BODY>");
-        out.println("</HTML>");
-       
-        out.println("<script language=\"javascript\" >");
-        out.println("function wbTree_executeAction(action)");
-        out.println("{");
-        out.println("if(top.tree!=null)top.tree.document.applets[0].executeAction(action);");
-        out.println("}");
-        out.println("function wbTree_remove()");
-        out.println("{");
-        out.println("wbTree_executeAction('remove');");
-        out.println("}");
-        out.println("function wbTree_reload()");
-        out.println("{");
-        out.println("wbTree_executeAction('reload');");
-        out.println("}");
-        out.println("function wbStatus(msg)");
-        out.println("{");
-        out.println("top.frames[4].location='/wb/WBAdmin/WBAd_int_Status?stmsg='+msg;");	
-        out.println("}");
-        //out.println("wbStatus('');");
-        out.println("</script>");
-        
-        out.println("\r\n<script>\r\n");
-        //out.println("\r\nfunction UpdateTreeWF(){\r\n");            
-        out.println("wbTree_executeAction('gotopath."+request.getParameter("tm")+".flows');\r\n");
-        out.println("wbTree_reload();\r\n");
-        out.println("wbTree_executeAction('gotopath."+request.getParameter("tm")+".flows."+request.getParameter("id")+"');\r\n");
-        //out.println("\r\n}\r\n");            
-        out.println("</script>\r\n");
-        out.close();
-    }
-
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -1306,6 +700,25 @@ public class SWBAWorkflow extends GenericResource{
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject go = ont.getGenericObject(id);
         PFlow pfgo = (PFlow)go;
+        if(pfgo!=null&&(pfgo.getXml()==null||(pfgo.getXml()!=null&&pfgo.getXml().trim().length()==0)))
+        {
+            Document newdoc = SWBUtils.XML.getNewDocument();
+            Element wfs = newdoc.createElement("workflows");
+            Element wf = newdoc.createElement("workflow");
+            wf.setAttribute("id", id);
+            wf.setAttribute("name", pfgo.getTitle());
+            wf.setAttribute("version", "1.0");
+            wfs.appendChild(wf);
+            Element edes = newdoc.createElement("description");
+            edes.appendChild(newdoc.createTextNode(pfgo.getDescription()!=null?pfgo.getDescription():""));
+            wf.appendChild(edes);
+            newdoc.appendChild(wfs);
+            String xmlpflow = SWBUtils.XML.domToXml(newdoc);
+            //System.out.println("XML nuevo:"+xmlpflow);
+            pfgo.setXml(xmlpflow);
+        }
+           
+
         String tm=pfgo.getWebSite().getId();
         try
         {
@@ -1316,88 +729,8 @@ public class SWBAWorkflow extends GenericResource{
             {
                 act=request.getParameter("act");
             }
-            if(act.equals("remove"))
-            {
-                try
-                {
-                    if(id==null || id.equals("") || tm==null || tm.equals(""))
-                    {
-                        out.println("\r\n<script>\r\n");            
-                        out.println("wbTree_executeAction('gotopath."+tm+".flows');\r\n");
-                        out.println("wbTree_reload();\r\n");
-                        out.println("</script>\r\n");                    
-                        log.error(new Exception("The id was incorrect(remove) doview method"));
-                        return;
-                    }
-                    //String tm=request.getParameter("tm");
-                    //String id=request.getParameter("suri");
-                    PFlow pflow=pfgo;//SWBContext.getWebSite(tm).getPFlow(id);
-                    try
-                    {
-                        try
-                        {
-                            SWBContext.getWebSite(tm).removePFlow(id);
-                        }
-                        catch(Exception e)
-                        {
-                            e.printStackTrace(System.out);
-                            log.error(e);
-                        }                        
-                        pflow.remove();
-                        out.println("<script>wbTree_remove();</script>");
-                        out.println(paramRequest.getLocaleString("msgRemove"));
-                        out.println("\r\n<script>\r\n");            
-                        //out.println("wbTree_executeAction('gotopath."+request.getParameter("tm")+".flows');\r\n");
-                        //out.println("wbTree_reload();\r\n");
-                        out.println("</script>\r\n");
-                        return;
-                    }
-                    catch(Exception e)
-                    {                    
-                        out.println("\r\n<script>\r\n");            
-                        out.println("wbTree_executeAction('gotopath."+tm+".flows');\r\n");
-                        out.println("wbTree_reload();\r\n");
-                        out.println("</script>\r\n");
-                        e.printStackTrace(System.out);
-                        log.error(e);
-                        return;
-                    }
-                }
-                catch(Exception e)
-                {
-                    out.println("\r\n<script>\r\n");            
-                    out.println("wbTree_executeAction('gotopath."+tm+".flows');\r\n");
-                    out.println("wbTree_reload();\r\n");
-                    out.println("</script>\r\n");
-                    e.printStackTrace(System.out);
-                    log.error(e);
-                    return;
-                }            
-
-            }
-            else if(act.equals("add"))
-            {
-                out.println("<APPLET id=\"apptree\" name=\"editrole\" code=\"applets.workflowadmin.EditWorkflow.class\" codebase=\""+SWBPlatform.getContextPath()+"\" ARCHIVE=\"swbadmin/lib/WorkFlowAdmin.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"350\">");
-                SWBResourceURL url=paramRequest.getRenderUrl();
-                url.setMode("gateway");
-                url.setCallMethod(SWBResourceURL.Call_DIRECT);
-                out.println("<PARAM NAME =\"cgipath\" VALUE=\""+url+"\">");
-                out.println("<PARAM NAME =\"locale\" VALUE=\""+user.getLanguage()+"\">");                
-                out.println("<PARAM NAME =\"tm\" VALUE=\""+tm+"\">");
-                
-                url=paramRequest.getRenderUrl();
-                url.setMode("script");
-                url.setCallMethod(url.Call_DIRECT);                
-                out.println("<PARAM NAME =\"script\" VALUE=\""+url+"\">");
-                
-                out.println("</APPLET>");
-                
-            }      
             else if(act.equals("edit") && id!=null)
             {
-
-                if(pfgo!=null&&pfgo.getXml()!=null&&pfgo.getXml().trim().length()==0)
-                    pfgo.setXml("<workflows><workflow id=\""+id+"\" name=\""+pfgo.getTitle()+"\" version=\"1.0\"><description>"+pfgo.getDescription()+"</description></workflow></workflows>");
                 out.println("<APPLET id=\"apptree\" name=\"editrole\" code=\"applets.workflowadmin.EditWorkflow.class\" codebase=\""+SWBPlatform.getContextPath()+"\" ARCHIVE=\"swbadmin/lib/WorkFlowAdmin.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"350\">");
                 SWBResourceURL url=paramRequest.getRenderUrl();
                 url.setMode("gateway");
@@ -1406,17 +739,16 @@ public class SWBAWorkflow extends GenericResource{
                 out.println("<PARAM NAME =\"cgipath\" VALUE=\""+url+"\">");
                 out.println("<PARAM NAME =\"locale\" VALUE=\""+user.getLanguage()+"\">");
                 out.println("<PARAM NAME =\"tm\" VALUE=\""+tm+"\">");
-                url=paramRequest.getRenderUrl();
-                url.setMode("script");
-                url.setCallMethod(url.Call_DIRECT);                
-                out.println("<PARAM NAME =\"script\" VALUE=\""+url+"\">");
+//                url=paramRequest.getRenderUrl();
+//                url.setMode("script");
+//                url.setCallMethod(url.Call_DIRECT);
+//                out.println("<PARAM NAME =\"script\" VALUE=\""+url+"\">");
                 out.println("</APPLET>");               
             } 
             else if(act.equals("view") && id!=null && tm!=null)
             {
 
                 String topicmap=tm;
-                //String id=request.getParameter("id");
                 PFlow pflow=pfgo;//SWBContext.getWebSite(topicmap).getPFlow(id);
                 out.println("<html>");
 
