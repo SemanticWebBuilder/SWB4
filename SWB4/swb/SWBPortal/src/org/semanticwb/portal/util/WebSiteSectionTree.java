@@ -20,7 +20,7 @@ public class WebSiteSectionTree {
     
     protected static final String pathImages = SWBPlatform.getContextPath() + "/swbadmin/icons/";
     
-    public String render(String selectedsite, HttpServletRequest request, User user, String url) throws SWBResourceException, IOException {
+    public String renderXHTML(String selectedsite, HttpServletRequest request, User user, String url) throws SWBResourceException, IOException {
         StringBuilder sb_ret = new StringBuilder();
         StringBuilder params = new StringBuilder("&site="+selectedsite);
         String whoOpen = "";        
@@ -79,7 +79,7 @@ public class WebSiteSectionTree {
                 }
             }
             
-            sb_ret.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"/?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','slave')\""+style+">");
+            sb_ret.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','slave')\""+style+">");
             sb_ret.append("<img src=\""+pathImages+"/icon_homea.gif\" />");
             sb_ret.append(tmhome.getDisplayName());            
             sb_ret.append("</a>");
@@ -123,7 +123,7 @@ public class WebSiteSectionTree {
                             sb_ret.append("</a>");
                             
                             if(toggleopen) {
-                                sb_ret.append(getChild(request, tmit, webpage, tpid, url, params, user));
+                                sb_ret.append(addChild(request, tmit, webpage, tpid, url, params, user));
                             }
                             
                             sb_ret.append("</li>");
@@ -158,7 +158,7 @@ public class WebSiteSectionTree {
         return sb_ret.toString();
     }
 
-    protected String getChild(HttpServletRequest request,WebSite tmit, WebPage pageroot, WebPage tpid, String url, StringBuilder params, User user) {
+    protected String addChild(HttpServletRequest request,WebSite tmit, WebPage pageroot, WebPage tpid, String url, StringBuilder params, User user) {
         StringBuilder sb_ret = new StringBuilder("<ul class=\"treeres\">");
         String style;
         boolean toggleopen;
@@ -201,7 +201,7 @@ public class WebSiteSectionTree {
                     sb_ret.append("</a>");
 
                     if(toggleopen) {
-                        sb_ret.append(getChild(request, tmit, webpage, tpid, url, params, user));
+                        sb_ret.append(addChild(request, tmit, webpage, tpid, url, params, user));
                     }
 
                     sb_ret.append("</li>");
