@@ -1,6 +1,5 @@
 package org.semanticwb.portlet.office;
 
-import java.io.PrintWriter;
 import java.util.HashMap;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -19,10 +18,4 @@ public class WordPortlet extends org.semanticwb.portlet.office.base.WordPortletB
     {
     }
 
-    
-    @Override
-    public void printDocument(PrintWriter out, String path,String workpath,String html)
-    {
-        out.write(html);
-    }
 }

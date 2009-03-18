@@ -2,7 +2,6 @@ package org.semanticwb.portlet.office;
 
 import java.io.File;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.UUID;
@@ -45,8 +44,6 @@ public class OfficePortlet extends org.semanticwb.portlet.office.base.OfficePort
         }
     }
 
-
-
     public void clean()
     {
         File dir = new File(SWBPlatform.getWorkPath() + getWorkPath());
@@ -71,18 +68,6 @@ public class OfficePortlet extends org.semanticwb.portlet.office.base.OfficePort
             }
             fdir.delete();
         }
-    }
-
-    public void beforePrintDocument(PrintWriter out)
-    {
-    }
-
-    public void afterPrintDocument(PrintWriter out)
-    {
-    }
-
-    public void printDocument(PrintWriter out, String path, String workpath,String html)
-    {
     }
 
     public static void loadContent(InputStream in, String dir)
