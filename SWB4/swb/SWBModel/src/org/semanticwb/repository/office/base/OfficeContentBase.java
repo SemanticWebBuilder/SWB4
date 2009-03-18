@@ -1,9 +1,8 @@
 package org.semanticwb.repository.office.base;
 
 
-public class OfficeContentBase extends org.semanticwb.repository.File implements org.semanticwb.repository.Referenceable,org.semanticwb.repository.Traceable,org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Versionable,org.semanticwb.repository.Lockable
+public class OfficeContentBase extends org.semanticwb.repository.File implements org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Versionable,org.semanticwb.repository.Referenceable,org.semanticwb.repository.Traceable,org.semanticwb.repository.Lockable
 {
-    public static final org.semanticwb.platform.SemanticProperty cm_file=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#file");
     public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
     public static final org.semanticwb.platform.SemanticProperty cm_officetype=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#officetype");
     public static final org.semanticwb.platform.SemanticProperty jcr_lockIsDeep=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#lockIsDeep");
@@ -13,7 +12,7 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
     public static final org.semanticwb.platform.SemanticProperty jcr_baseVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#baseVersion");
     public static final org.semanticwb.platform.SemanticProperty jcr_mergeFailed=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#mergeFailed");
     public static final org.semanticwb.platform.SemanticProperty cm_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#title");
-    public static final org.semanticwb.platform.SemanticProperty cm_user=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#user");
+    public static final org.semanticwb.platform.SemanticProperty cm_lastModified=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#lastModified");
     public static final org.semanticwb.platform.SemanticProperty jcr_lockOwner=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#lockOwner");
     public static final org.semanticwb.platform.SemanticProperty jcr_isCheckedOut=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#isCheckedOut");
     public static final org.semanticwb.platform.SemanticProperty cm_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#description");
@@ -55,16 +54,6 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
     public static boolean hasOfficeContent(String id, org.semanticwb.model.SWBModel model)
     {
         return (getOfficeContent(id, model)!=null);
-    }
-
-    public String getFile()
-    {
-        return getSemanticObject().getProperty(cm_file);
-    }
-
-    public void setFile(String file)
-    {
-        getSemanticObject().setProperty(cm_file, file);
     }
 
     public String getUuid()
@@ -170,14 +159,14 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
         getSemanticObject().setProperty(cm_title, title);
     }
 
-    public String getUser()
+    public java.util.Date getLastModified()
     {
-        return getSemanticObject().getProperty(cm_user);
+        return getSemanticObject().getDateProperty(cm_lastModified);
     }
 
-    public void setUser(String user)
+    public void setLastModified(java.util.Date lastModified)
     {
-        getSemanticObject().setProperty(cm_user, user);
+        getSemanticObject().setDateProperty(cm_lastModified, lastModified);
     }
 
     public String getLockOwner()
