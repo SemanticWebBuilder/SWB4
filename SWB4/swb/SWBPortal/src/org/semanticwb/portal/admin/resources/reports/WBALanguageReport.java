@@ -42,7 +42,12 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.admin.resources.reports.beans.WBAFilterReportBean;
 import org.semanticwb.portal.admin.resources.reports.jrresources.*;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRLanguageAccessDataDetail;
+import org.semanticwb.portal.db.SWBRecHit;
 
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /** Esta clase genera el reporte de lenguajes de acceso, toma la informaci�n de los
  * objetos de WebBuilder de acuerdo con los par�metros recibidos del usuario. Este
@@ -203,7 +208,6 @@ public class WBALanguageReport extends GenericResource {
                 out.println("<script type=\"text/javascript\">");
                 
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
-                out.println("dojo.require(\"dijit.form.ComboBox\");");
                 out.println("dojo.addOnLoad(doBlockade);");
                 out.println("dojo.addOnLoad(function(){getHtml('"+url.toString()+"'+'?site="+webSiteId+"','slave')});");
                 
@@ -215,40 +219,76 @@ public class WBALanguageReport extends GenericResource {
                 out.println("       params = params + \"&wb_deletefilter=\" + document.getElementById('wb_deletefilter').value; ");
                 out.println("   } ");
                 out.println("   params = params + \"&wb_rtype=\" + document.getElementById('wb_rtype').value;");
-                out.println("   if(accion == 0) {");                    
+                out.println("   if(accion == 0) {");
                 out.println("       params = params + \"&wb_rep_type=\" + getTypeSelected();");
-                out.println("       params = params + \"&wb_fecha1=\" + document.getElementById('wb_fecha1').value; ");
-                out.println("       params = params + \"&wb_fecha11=\" + document.getElementById('wb_fecha11').value; ");
-                out.println("       params = params + \"&wb_fecha12=\" + document.getElementById('wb_fecha12').value; ");
+                out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                out.println("       if(fecha1.length>0) {");
+                out.println("           dp = fecha1.split('/');");
+                out.println("           params = params + '&wb_fecha1=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");                
+                out.println("       if(fecha2.length>0) {");
+                out.println("           dp = fecha2.split('/');");
+                out.println("           params = params + '&wb_fecha11=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");                
+                out.println("       if(fecha3.length>0) {");
+                out.println("           dp = fecha3.split('/');");
+                out.println("           params = params + '&wb_fecha12=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");
                 out.println("   }else {");
-                out.println("       params = params + \"&wb_year13=\" + document.getElementById('wb_year13').options[document.getElementById('wb_year13').selectedIndex].value;");
+                out.println("       var year = new String(dojo.byId('wb_year13').value);");
+                out.println("       params = params + '&wb_year13=' + year;");
                 out.println("   }");
                 out.println("   return params;");
                 out.println("} ");
+                
+                out.println("function validate(accion) {");
+                out.println("    if(accion=='0') {");
+                out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                out.println("       if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
+                out.println("          alert('Especifique la fecha o el rango de fechas que desea consultar');");
+                out.println("          return false;");
+                out.println("       }");
+                out.println("    }");
+                out.println("    return true;");
+                out.println("}");
 
                 out.println("function doXml(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml") + "\"+params,\"graphWindow\",size);");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml") + "\"+params,\"graphWindow\",size);");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doExcel(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel") + "\"+params,\"graphWindow\",size);");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel") + "\"+params,\"graphWindow\",size);");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doGraph(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph") + "\"+params,\"graphWindow\",size);");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph") + "\"+params,\"graphWindow\",size);");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doPdf(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf") + "\"+params,\"graphWindow\",size);");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf") + "\"+params,\"graphWindow\",size);");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doRtf(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf") + "\"+params,\"graphWindow\",size);    ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf") + "\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function getTypeSelected() { ");
@@ -262,7 +302,9 @@ public class WBALanguageReport extends GenericResource {
                 out.println("}");
 
                 out.println("function doApply() { ");
-                out.println("   window.document.frmrep.submit(); ");
+                out.println("   if(validate(dojo.byId('wb_rtype').value)) {");
+                out.println("      window.document.frmrep.submit(); ");
+                out.println("   }");
                 out.println("}");
 
                 out.println(" function doBlockade() {");
@@ -636,19 +678,50 @@ public class WBALanguageReport extends GenericResource {
      */
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/xml;charset=iso-8859-1");
+        PrintWriter out = response.getWriter();
+        
+        Document dom = SWBUtils.XML.getNewDocument();        
         Portlet base = getResourceBase();
         ArrayList idaux = new ArrayList();
-        try{            
-            int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
-            if(rtype == 0) { // by day
-                WBAFilterReportBean filter = buildFilter(request, paramsRequest);
-                System.out.println("por dia. filtro="+filter.toString());
+        try {
+            WBAFilterReportBean filter;
+            Iterator<SWBRecHit> itRecHits;
+            int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
+            int renglones = 0;
+            Element report = dom.createElement("LanguageReport");
+            dom.appendChild(report);            
+            
+            if(rtype == 0) { // REPORTE DIARIO
+                filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
-                JasperTemplate jasperTemplate = JasperTemplate.LANGUAGE_DAILY;
-                JRResource jrResource = new JRXmlResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
-                jrResource.prepareReport();
-                jrResource.exportReport(response);
-            }else { // by month                
+                JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
+                itRecHits = ds.getData().iterator();
+                while(itRecHits.hasNext()) {
+                    SWBRecHit rec = itRecHits.next();
+                    Element row = dom.createElement("row");
+                    row.appendChild(dom.createTextNode(""));
+                    row.setAttribute("id",Integer.toString(++renglones));
+                    report.appendChild(row);
+                    Element lang = dom.createElement("language");
+                    lang.appendChild(dom.createTextNode(rec.getItem()));
+                    row.appendChild(lang);
+                    Element site = dom.createElement("site");
+                    site.appendChild(dom.createTextNode(rec.getTopicmap()));
+                    row.appendChild(site);
+                    Element year = dom.createElement("year");
+                    year.appendChild(dom.createTextNode(Integer.toString(rec.getYear())));
+                    row.appendChild(year);
+                    Element month = dom.createElement("month");
+                    month.appendChild(dom.createTextNode(rec.getMonth()));
+                    row.appendChild(month);
+                    Element day = dom.createElement("day");
+                    day.appendChild(dom.createTextNode(Integer.toString(rec.getDay())));
+                    row.appendChild(day);
+                    Element pages = dom.createElement("pages");
+                    pages.appendChild(dom.createTextNode(Long.toString(rec.getHits())));
+                    row.appendChild(pages);
+                }
+            }else { // REPORTE MENSUAL
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
                 String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
                 int deleteFilter;
@@ -658,7 +731,7 @@ public class WBALanguageReport extends GenericResource {
                     deleteFilter = 0;
                 }
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                WBAFilterReportBean filter = new WBAFilterReportBean();
+                filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
                 Iterator<Language> itLanguages = paramsRequest.getTopic().getWebSite().listLanguages();
                 if(deleteFilter == 0) {                                
@@ -675,18 +748,39 @@ public class WBALanguageReport extends GenericResource {
                 }
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
-                System.out.println("por mes. filtro="+filter.toString());
-
                 JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
-                JasperTemplate jasperTemplate = JasperTemplate.LANGUAGE_MONTHLY;                        
-                JRResource jrResource = new JRXmlResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
-                jrResource.prepareReport();
-                jrResource.exportReport(response);
+                JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
+                itRecHits = ds.getData().iterator();
+                while(itRecHits.hasNext()) {
+                    SWBRecHit rec = itRecHits.next();
+                    Element row = dom.createElement("row");
+                    row.appendChild(dom.createTextNode(""));
+                    row.setAttribute("id",Integer.toString(++renglones));
+                    report.appendChild(row);
+                    Element language = dom.createElement("language");
+                    language.appendChild(dom.createTextNode(rec.getItem()));
+                    row.appendChild(language);
+                    Element site = dom.createElement("site");
+                    site.appendChild(dom.createTextNode(rec.getTopicmap()));
+                    row.appendChild(site);
+                    Element year = dom.createElement("year");
+                    year.appendChild(dom.createTextNode(Integer.toString(rec.getYear())));
+                    row.appendChild(year);
+                    Element month = dom.createElement("month");
+                    month.appendChild(dom.createTextNode(rec.getMonth()));
+                    row.appendChild(month);
+                    Element pages = dom.createElement("pages");
+                    pages.appendChild(dom.createTextNode(Long.toString(rec.getHits())));
+                    row.appendChild(pages);
+                }
             }
-        }catch (Exception e) {
-            log.error("Error on method doRepXml() resource " + strRscType + " with id " + base.getId(), e);
-            throw new SWBResourceException(e.getMessage());
+            report.setAttribute("rows",Integer.toString(renglones));
         }
+        catch (Exception e){            
+            log.error("Error on method doRepXml() resource " + strRscType + " with id " + base.getId(), e);
+        }
+        out.print(SWBUtils.XML.domToXml(dom));
+        out.flush();
     }
     
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {

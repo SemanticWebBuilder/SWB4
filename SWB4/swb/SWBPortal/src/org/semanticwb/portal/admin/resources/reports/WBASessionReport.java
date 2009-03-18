@@ -44,6 +44,9 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.admin.resources.reports.beans.WBAFilterReportBean;
 import org.semanticwb.portal.admin.resources.reports.jrresources.*;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRSessionDataDetail;
+import org.semanticwb.portal.db.SWBRecHit;
+
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -63,7 +66,6 @@ public class WBASessionReport extends GenericResource {
     private static final String S_REPORT_IDAUX = "_";
     private static final ArrayList idaux = new ArrayList(1);
     private static final int I_REPORT_TYPE = 5;
-    private static final int I_START_DAY = 1;
     
     public String strRscType;
     
@@ -190,7 +192,7 @@ public class WBASessionReport extends GenericResource {
                 
                 out.println("function getParams(accion) {");
                 out.println("   var params = '?';");
-                out.println("   params = params + 'wb_site=' + dojo.byId('wb_site').value;");
+                out.println("   params = params + 'wb_repository=' + dojo.byId('wb_repository').value;");
                 out.println("   params = params + '&wb_rtype=' + dojo.byId('wb_rtype').value;");
                 out.println("   if(accion == 0) {");
                 out.println("       params = params + '&wb_rep_type=' + getTypeSelected();");
@@ -203,29 +205,55 @@ public class WBASessionReport extends GenericResource {
                 out.println("   return params;");
                 out.println("}");
                 
+                out.println("function validate(accion) {");
+                out.println("    var fecha1 = null;");
+                out.println("    var fecha2 = null;");
+                out.println("    var fecha3 = null;");
+                out.println("    if(accion=='0') {");
+                out.println("       fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                out.println("       fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                out.println("       fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                out.println("       if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
+                out.println("          alert('Especifique la fecha o el rango de fechas que desea consultar');");
+                out.println("          return false;");
+                out.println("       }");
+                out.println("    }");
+                out.println("    return true;");
+                out.println("}");
+                
                 out.println("function doXml(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
                 out.println("}");
                 
                 out.println("function doExcel(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
                 out.println("}");
                 
                 out.println("function doGraph(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
                 out.println(" }");
                 
                 out.println("function doPdf(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
                 out.println("}");
                 
                 out.println("function doRtf(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
                 out.println("}");
                 
                 out.println(" function getTypeSelected(){");
@@ -238,8 +266,10 @@ public class WBASessionReport extends GenericResource {
                 out.println("     return strType;");
                 out.println(" }");
                 
-                out.println(" function doApply() { ");                
-                out.println("     window.document.frmrep.submit(); ");
+                out.println(" function doApply() { ");
+                out.println("   if(validate(dojo.byId('wb_rtype').value)) {");
+                out.println("      window.document.frmrep.submit(); ");
+                out.println("   }");
                 out.println(" }");                
 
                 out.println(" function doBlockade() {");
@@ -355,8 +385,6 @@ public class WBASessionReport extends GenericResource {
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
                         out.println("<tr>");
                         out.println("<td>");
-                        /*response.getWriter().print(sb_ret.toString());
-                        sb_ret.delete(0,sb_ret.length());*/                        
                         WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                         JRDataSourceable dataDetail = new JRSessionDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.SESSION_DAILY_HTML;
@@ -404,9 +432,6 @@ public class WBASessionReport extends GenericResource {
                     else{
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");
                         out.println("<tr><td>");
-                        /*response.getWriter().print(sb_ret.toString());
-                        sb_ret.delete(0,sb_ret.length());*/
-
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(repositoryName);
                         filter.setIdaux(idaux.iterator());
@@ -488,25 +513,23 @@ public class WBASessionReport extends GenericResource {
                 }
             }else {  // REPORTE MENSUAL
                 String s_year_13 = request.getParameter("wb_year_13");
-                /*if(!s_repository.equals(null)){*/
-                    s_year_13 = request.getParameter("wb_year_13");
-                    if(!s_year_13.equals(null)){
-                        WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(repositoryName);
-                        filter.setIdaux(idaux.iterator());
-                        filter. setType(I_REPORT_TYPE);
-                        filter.setYearI(Integer.parseInt(s_year_13));
-                        JRDataSourceable dataDetail = new JRSessionDataDetail(filter);
-                        JasperTemplate jasperTemplate = JasperTemplate.SESSION_MONTHLY_GRAPH;                        
-                        try {
-                            JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
-                            jrResource.prepareReport();
-                            jrResource.exportReport(response);                            
-                        }catch (Exception e) {
-                            throw new javax.servlet.ServletException(e);
-                        }
+                s_year_13 = request.getParameter("wb_year_13");
+                if(!s_year_13.equals(null)) {
+                    WBAFilterReportBean filter = new WBAFilterReportBean();
+                    filter.setSite(repositoryName);
+                    filter.setIdaux(idaux.iterator());
+                    filter. setType(I_REPORT_TYPE);
+                    filter.setYearI(Integer.parseInt(s_year_13));
+                    JRDataSourceable dataDetail = new JRSessionDataDetail(filter);
+                    JasperTemplate jasperTemplate = JasperTemplate.SESSION_MONTHLY_GRAPH;                        
+                    try {
+                        JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
+                        jrResource.prepareReport();
+                        jrResource.exportReport(response);                            
+                    }catch (Exception e) {
+                        throw new javax.servlet.ServletException(e);
                     }
-                /*}*/
+                }
             }
         }
         catch (Exception e){
@@ -546,25 +569,23 @@ public class WBASessionReport extends GenericResource {
                 }
             }else {  // REPORTE MENSUAL
                 String s_year_13 = request.getParameter("wb_year_13");
-                /*if(!s_repository.equals(null)){*/
-                    s_year_13 = request.getParameter("wb_year_13");
-                    if(!s_year_13.equals(null)){
-                        WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(repositoryName);
-                        filter.setIdaux(idaux.iterator());
-                        filter. setType(I_REPORT_TYPE);
-                        filter.setYearI(Integer.parseInt(s_year_13));
-                        JRDataSourceable dataDetail = new JRSessionDataDetail(filter);
-                        JasperTemplate jasperTemplate = JasperTemplate.SESSION_MONTHLY;                        
-                        try {
-                            JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
-                            jrResource.prepareReport();
-                            jrResource.exportReport(response);                            
-                        }catch (Exception e) {
-                            throw new javax.servlet.ServletException(e);
-                        }
+                s_year_13 = request.getParameter("wb_year_13");
+                if(!s_year_13.equals(null)){
+                    WBAFilterReportBean filter = new WBAFilterReportBean();
+                    filter.setSite(repositoryName);
+                    filter.setIdaux(idaux.iterator());
+                    filter. setType(I_REPORT_TYPE);
+                    filter.setYearI(Integer.parseInt(s_year_13));
+                    JRDataSourceable dataDetail = new JRSessionDataDetail(filter);
+                    JasperTemplate jasperTemplate = JasperTemplate.SESSION_MONTHLY;                        
+                    try {
+                        JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
+                        jrResource.prepareReport();
+                        jrResource.exportReport(response);                            
+                    }catch (Exception e) {
+                        throw new javax.servlet.ServletException(e);
                     }
-                /*}*/
+                }
             }
         }
         catch (Exception e){
@@ -581,46 +602,62 @@ public class WBASessionReport extends GenericResource {
      */
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("text/xml;charset=iso-8859-1");
-        Portlet base = getResourceBase();        
+        PrintWriter out = response.getWriter();
+        
+        Document dom = SWBUtils.XML.getNewDocument();        
+        Portlet base = getResourceBase();
         try {
+            WBAFilterReportBean filter;            
+            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
-            HashMap params = new HashMap();
-            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");            
             if(rtype == 0) { // REPORTE DIARIO
-                WBAFilterReportBean filter = buildFilter(request, paramsRequest);
-                params.put("site", filter.getSite());
-                JRDataSourceable dataDetail = new JRSessionDataDetail(filter);
-                JasperTemplate jasperTemplate = JasperTemplate.SESSION_DAILY;                
-                try {
-                    JRResource jrResource = new JRXmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
-                    jrResource.prepareReport();
-                    jrResource.exportReport(response);                            
-                }catch (Exception e) {
-                    throw new javax.servlet.ServletException(e);
-                }
+                filter = buildFilter(request, paramsRequest);                
             }else { // REPORTE MENSUAL
-                String webSite = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");                
+                String repository = request.getParameter("wb_repository");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                params.put("site", webSite);
-                WBAFilterReportBean filter = new WBAFilterReportBean();
-                filter.setSite(webSite);
+                filter = new WBAFilterReportBean();
+                filter.setSite(repository);
                 filter.setIdaux(idaux.iterator());
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
-                JRDataSourceable dataDetail = new JRSessionDataDetail(filter);
-                JasperTemplate jasperTemplate = JasperTemplate.SESSION_MONTHLY;                        
-                try {
-                    JRResource jrResource = new JRXmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
-                    jrResource.prepareReport();
-                    jrResource.exportReport(response);                            
-                }catch (Exception e) {
-                    throw new javax.servlet.ServletException(e);
-                }
             }
+            int renglones = 0;
+            Element report = dom.createElement("SessionReport");
+            dom.appendChild(report);
+            JRDataSourceable dataDetail = new JRSessionDataDetail(filter);
+            JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
+            Iterator<SWBRecHit> itRecHits = ds.getData().iterator();
+            while(itRecHits.hasNext()) {
+                SWBRecHit rec = itRecHits.next();
+
+                Element row = dom.createElement("row");
+                row.appendChild(dom.createTextNode(""));
+                row.setAttribute("id",Integer.toString(++renglones));
+                report.appendChild(row);
+
+                Element site = dom.createElement("repository");
+                site.appendChild(dom.createTextNode(rec.getTopicmap()));
+                row.appendChild(site);
+
+                Element year = dom.createElement("year");
+                year.appendChild(dom.createTextNode(Integer.toString(rec.getYear())));
+                row.appendChild(year);
+
+                Element month = dom.createElement("month");
+                month.appendChild(dom.createTextNode(rec.getMonth()));
+                row.appendChild(month);
+
+                Element pages = dom.createElement("sessions");
+                pages.appendChild(dom.createTextNode(Long.toString(rec.getHits())));
+                row.appendChild(pages);
+            }            
+            report.setAttribute("rows",Integer.toString(renglones));
         }
         catch (Exception e){            
-            log.error("Error on method doRepExcel() resource" + " " + strRscType + " " + "with id" + " " + base.getId(), e);
+            log.error("Error on method doRepXml() resource " + strRscType + " with id " + base.getId(), e);
         }
+        out.print(SWBUtils.XML.domToXml(dom));
+        out.flush();
     }
     
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
@@ -726,7 +763,7 @@ public class WBASessionReport extends GenericResource {
 
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;        
-        String repositoryName = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+        String repositoryName = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
         int groupDates;
         try {
             groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));

@@ -41,19 +41,12 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.admin.resources.reports.beans.WBAFilterReportBean;
 import org.semanticwb.portal.admin.resources.reports.jrresources.*;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRGlobalAccessDataDetail;
-    
-/** Esta clase genera el reporte global de acceso, toma la informaci�n de los
- * objetos de WebBuilder de acuerdo con los par�metros recibidos del usuario. Este
- * archivo es usado en la parte de reportes.
- *
- * This class generates the global report, takes information from
- * WebBuilder objects according with user parameters. this file is used in report
- * sections.
- *
- * WBAGlobalReport.java
- * Created on October 6th, 2004 3:30 PM
- * @author Jorge R�os - IDT
- */
+import org.semanticwb.portal.db.SWBRecHit;
+
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class WBAGlobalReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBAGlobalReport.class);
@@ -185,43 +178,80 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("dojo.addOnLoad(doBlockade);");
                 
                 out.println("function getParams(accion) {");
+                out.println("   var dp = null;");
                 out.println("   var params = '?';");
                 out.println("   params = params + 'wb_site=' + dojo.byId('wb_site').value;");
-                out.println("   params = params + '&wb_rtype=' + dojo.byId('wb_rtype').value;");
+                out.println("   params = params + '&wb_rtype=' + dojo.byId('wb_rtype').value;");                
                 out.println("   if(accion == 0) {");
                 out.println("       params = params + '&wb_rep_type=' + getTypeSelected();");
-                out.println("       params = params + '&wb_fecha1=' + dojo.byId('wb_fecha1').value;");
-                out.println("       params = params + '&wb_fecha11=' + dojo.byId('wb_fecha11').value;");
-                out.println("       params = params + '&wb_fecha12=' + dojo.byId('wb_fecha12').value;");
+                out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                out.println("       if(fecha1.length>0) {");
+                out.println("           dp = fecha1.split('/');");
+                out.println("           params = params + '&wb_fecha1=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");                
+                out.println("       if(fecha2.length>0) {");
+                out.println("           dp = fecha2.split('/');");
+                out.println("           params = params + '&wb_fecha11=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");                
+                out.println("       if(fecha3.length>0) {");
+                out.println("           dp = fecha3.split('/');");
+                out.println("           params = params + '&wb_fecha12=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");
                 out.println("   }else {");
-                out.println("       params = params + '&wb_year13=' + dojo.byId('wb_year13').options[dojo.byId('wb_year13').selectedIndex].value;");
+                out.println("       var year = new String(dojo.byId('wb_year13').value);");
+                out.println("       params = params + '&wb_year13=' + year;");
                 out.println("   }");
                 out.println("   return params;");
                 out.println("}");
                 
+                out.println("function validate(accion) {");
+                out.println("    if(accion=='0') {");
+                out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                out.println("       if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
+                out.println("          alert('Especifique la fecha o el rango de fechas que desea consultar');");
+                out.println("          return false;");
+                out.println("       }");
+                out.println("    }");
+                out.println("    return true;");
+                out.println("}");
+                
                 out.println("function doXml(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
                 out.println("}");
                 
                 out.println("function doExcel(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
                 out.println("}");
                 
                 out.println("function doGraph(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
                 out.println(" }");
                 
                 out.println("function doPdf(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
                 out.println("}");
                 
                 out.println("function doRtf(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
                 out.println("}");
                 
                 out.println(" function getTypeSelected(){");
@@ -234,8 +264,10 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("     return strType;");
                 out.println(" }");
                 
-                out.println(" function doApply() { ");                
-                out.println("     window.document.frmrep.submit(); ");
+                out.println(" function doApply() { ");
+                out.println("    if(validate(dojo.byId('wb_rtype').value)) {");
+                out.println("       window.document.frmrep.submit(); ");
+                out.println("    }");
                 out.println(" }");                
 
                 out.println(" function doBlockade() {");
@@ -299,8 +331,7 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("</td>");
                 out.println("<td>&nbsp;</td>");
                 out.println("</tr>");
-
-
+                
                 if(rtype.equals("0")) { // REPORTE DIARIO
                     out.println("<tr>");
                     out.println("<td>");
@@ -314,7 +345,7 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("</label></td>");
                     out.println("<td colspan=\"2\">");
                     
-                    out.println("<input type=\"text\" name=\"wb_fecha1\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\">");
+                    out.println("<input type=\"text\" name=\"wb_fecha1\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\">");
                     //out.println("<input type=\"text\" id=\"wb_fecha1\" name=\"wb_fecha1\" size=\"10\" maxlength=\"10\" value=\"" + fecha1 + "\" />");                        
                     
                     out.println("</td>");
@@ -335,10 +366,10 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("&nbsp;" + paramsRequest.getLocaleString("by_interval_dates"));
                     out.println("</label></td>");
                     out.println("<td>");
-                    out.println("<input type=\"text\" name=\"wb_fecha11\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\">");
+                    out.println("<input type=\"text\" name=\"wb_fecha11\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\">");
                     out.println("</td>");
                     out.println("<td>");
-                    out.println("<input type=\"text\" name=\"wb_fecha12\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\">");
+                    out.println("<input type=\"text\" name=\"wb_fecha12\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\">");
                     out.println("</td>");
                     out.println("<td>&nbsp;</td>");
                     out.println("</tr>");
@@ -560,46 +591,83 @@ public class WBAGlobalReport extends GenericResource {
      */    
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException { 
         response.setContentType("text/xml;charset=iso-8859-1");
+        PrintWriter out = response.getWriter();
+        
+        Document dom = SWBUtils.XML.getNewDocument();        
         Portlet base = getResourceBase();        
         try {
+            WBAFilterReportBean filter;            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
-            HashMap params = new HashMap();
-            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");            
+            Iterator<SWBRecHit> itRecHits;
+            int renglones = 0;
+            Element report = dom.createElement("GlobalReport");
+            dom.appendChild(report);            
+            
             if(rtype == 0) { // REPORTE DIARIO
-                WBAFilterReportBean filter = buildFilter(request, paramsRequest);
-                params.put("site", filter.getSite());
+                filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
-                JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY;                
-                try {
-                    JRResource jrResource = new JRXmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
-                    jrResource.prepareReport();
-                    jrResource.exportReport(response);                            
-                }catch (Exception e) {
-                    throw new javax.servlet.ServletException(e);
+                JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
+                itRecHits = ds.getData().iterator();
+                while(itRecHits.hasNext()) {
+                    SWBRecHit rec = itRecHits.next();
+                    Element row = dom.createElement("row");
+                    row.appendChild(dom.createTextNode(""));
+                    row.setAttribute("id",Integer.toString(++renglones));
+                    report.appendChild(row);
+                    Element site = dom.createElement("site");
+                    site.appendChild(dom.createTextNode(rec.getTopicmap()));
+                    row.appendChild(site);
+                    Element year = dom.createElement("year");
+                    year.appendChild(dom.createTextNode(Integer.toString(rec.getYear())));
+                    row.appendChild(year);
+                    Element month = dom.createElement("month");
+                    month.appendChild(dom.createTextNode(rec.getMonth()));
+                    row.appendChild(month);
+                    Element day = dom.createElement("day");
+                    day.appendChild(dom.createTextNode(Integer.toString(rec.getDay())));
+                    row.appendChild(day);
+                    Element pages = dom.createElement("pages");
+                    pages.appendChild(dom.createTextNode(Long.toString(rec.getHits())));
+                    row.appendChild(pages);
                 }
             }else { // REPORTE MENSUAL
                 String webSite = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");                
-                int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                params.put("site", webSite);
-                WBAFilterReportBean filter = new WBAFilterReportBean();
+                int year13 = Integer.parseInt(request.getParameter("wb_year13"));                
+                filter = new WBAFilterReportBean();
                 filter.setSite(webSite);
                 filter.setIdaux(idaux.iterator());
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
-                JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_MONTHLY;                        
-                try {
-                    JRResource jrResource = new JRXmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
-                    jrResource.prepareReport();
-                    jrResource.exportReport(response);                            
-                }catch (Exception e) {
-                    throw new javax.servlet.ServletException(e);
+                JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
+                itRecHits = ds.getData().iterator();
+                while(itRecHits.hasNext()) {
+                    SWBRecHit rec = itRecHits.next();
+                    Element row = dom.createElement("row");
+                    row.appendChild(dom.createTextNode(""));
+                    row.setAttribute("id",Integer.toString(++renglones));
+                    report.appendChild(row);
+                    Element site = dom.createElement("site");
+                    site.appendChild(dom.createTextNode(rec.getTopicmap()));
+                    row.appendChild(site);
+                    Element year = dom.createElement("year");
+                    year.appendChild(dom.createTextNode(Integer.toString(rec.getYear())));
+                    row.appendChild(year);
+                    Element month = dom.createElement("month");
+                    month.appendChild(dom.createTextNode(rec.getMonth()));
+                    row.appendChild(month);
+                    Element pages = dom.createElement("pages");
+                    pages.appendChild(dom.createTextNode(Long.toString(rec.getHits())));
+                    row.appendChild(pages);
                 }
             }
+            report.setAttribute("rows",Integer.toString(renglones));
         }
         catch (Exception e){            
-            log.error("Error on method doRepExcel() resource" + " " + strRscType + " " + "with id" + " " + base.getId(), e);
+            log.error("Error on method doRepXml() resource " + strRscType + " with id " + base.getId(), e);
         }
+        out.print(SWBUtils.XML.domToXml(dom));
+        out.flush();
     }
     
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
@@ -715,33 +783,30 @@ public class WBAGlobalReport extends GenericResource {
 
         try {
             if(groupDates==0) { // radio button was 0. Select only one date
-                String[] numFecha = fecha1.split("-");
+                /*String[] numFecha = fecha1.split("-");*/
                 filterReportBean = new WBAFilterReportBean();
                 filterReportBean.setSite(webSite);
                 filterReportBean.setIdaux(idaux.iterator());
                 filterReportBean.setType(I_REPORT_TYPE);
-                filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
-                filterReportBean.setMonthI(Integer.parseInt(numFecha[1]));
-                filterReportBean.setDayI(Integer.parseInt(numFecha[2]));
+                filterReportBean.setYearI(Integer.parseInt(fecha1.substring(0,4)));
+                filterReportBean.setMonthI(Integer.parseInt(fecha1.substring(5,7)));
+                filterReportBean.setDayI(Integer.parseInt(fecha1.substring(8)));
                 
             }else { // radio button was 1. Select between two dates
                 filterReportBean = new WBAFilterReportBean();
                 filterReportBean.setSite(webSite);
                 filterReportBean.setIdaux(idaux.iterator());
                 filterReportBean.setType(I_REPORT_TYPE);
-                String[] numFecha = fecha11.split("-");
                 
-                for(int i=0; i<numFecha.length; i++){System.out.println("numFecha["+i+"]="+numFecha[i]);}
-                
-                filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
-                filterReportBean.setMonthI(Integer.parseInt(numFecha[1]));
-                filterReportBean.setDayI(Integer.parseInt(numFecha[2]));
+                /*String[] numFecha = fecha11.split("-");*/                                
+                filterReportBean.setYearI(Integer.parseInt(fecha11.substring(0,4)));
+                filterReportBean.setMonthI(Integer.parseInt(fecha11.substring(5,7)));
+                filterReportBean.setDayI(Integer.parseInt(fecha11.substring(8)));
 
-                numFecha = fecha12.split("-");
-                for(int i=0; i<numFecha.length; i++){System.out.println("numFecha["+i+"]="+numFecha[i]);}
-                filterReportBean.setYearF(Integer.parseInt(numFecha[0]));
-                filterReportBean.setMonthF(Integer.parseInt(numFecha[1]));
-                filterReportBean.setDayF(Integer.parseInt(numFecha[2]));
+                /*numFecha = fecha12.split("-");*/                
+                filterReportBean.setYearF(Integer.parseInt(fecha12.substring(0,4)));
+                filterReportBean.setMonthF(Integer.parseInt(fecha12.substring(5,7)));
+                filterReportBean.setDayF(Integer.parseInt(fecha12.substring(8)));
             }
         }
         catch (Exception e){
