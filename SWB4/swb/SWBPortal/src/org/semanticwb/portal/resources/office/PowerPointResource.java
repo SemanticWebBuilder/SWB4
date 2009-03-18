@@ -30,17 +30,17 @@ public class PowerPointResource extends GenericAdmResource
 
     protected void beforePrintDocument(PPTPortlet porlet, PrintWriter out)
     {
-        porlet.beforePrintDocument(out);
+        
     }
 
     protected void afterPrintDocument(PPTPortlet porlet, PrintWriter out)
     {
-        porlet.afterPrintDocument(out);
+        
     }
 
     protected void printDocument(PPTPortlet porlet, PrintWriter out, String path,String workpath,String html)
     {
-        porlet.printDocument(out, path,workpath,html);
+        out.write("<iframe frameborder=\"0\" src=\"" + path + "\">Este navegador no soporta iframe</iframe>");
     }
 
     @Override
