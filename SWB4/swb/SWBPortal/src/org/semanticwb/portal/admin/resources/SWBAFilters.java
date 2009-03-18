@@ -31,17 +31,24 @@
 package org.semanticwb.portal.admin.resources;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import javax.servlet.http.*;
 import javax.servlet.*;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.w3c.dom.*;
 import java.util.*;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import org.json.XML;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.AdminFilter;
-import org.semanticwb.model.GenericObject;
+
 import org.semanticwb.model.HerarquicalNode;
 import org.semanticwb.model.ObjectBehavior;
 import org.semanticwb.model.Portlet;
@@ -51,7 +58,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticMgr;
+
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
@@ -64,13 +71,14 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * them, to update them or to eliminate them according to is the case.
  * @author Victor Lorenzana
  */
-public class SWBAFilters extends SWBATree{
+public class SWBAFilters extends SWBATree {
 
     private Logger log = SWBUtils.getLogger(SWBAFilters.class);
     
     static final String[] pathValids={"getGlobal","getTemplates","getServer","getPortlets","getPortletTypes","getSysResources","getTopic","getTemplateGroup","getUserRep","getRules","getPFlows","getLanguages","getDevices","getMDTables","getDnss","getTopicMap","getUserReps","getCamps","getCamp","getCntResources"};
     static final String[] namevalids={"node","config","icons","icon","res","events","willExpand","Template"};
     private HashMap hmclass = null;
+    private Document jsondom = null;
     /** Creates a new instance of WBAFilters */
     public SWBAFilters() {
     }
@@ -883,6 +891,40 @@ public class SWBAFilters extends SWBATree{
         
         WebSite map=SWBContext.getAdminWebSite();
 
+        System.out.println("Cargando Json....");
+        try
+        {
+            String urldatos = "http://localhost:8080/swb/swbadmin/jsp/Tree.jsp?childs=true";
+
+//            if(jsondom==null)
+            {
+                System.out.println("path: "+urldatos);
+
+                URL pagina = new URL(urldatos);
+                URLConnection conex = null;
+
+                try { conex=pagina.openConnection(); } catch(Exception nexc){conex=null;}
+                if(conex!=null)
+                {
+                    JSONObject obj=new JSONObject(SWBUtils.IO.readInputStream(conex.getInputStream()));
+                    String xml = "<json>"+XML.toString(obj)+"</json>";
+                    jsondom = SWBUtils.XML.xmlToDom(xml);
+                    System.out.println("XML(json): "+SWBUtils.XML.domToXml(jsondom, true));
+    //                JSONArray jarr = obj.names();
+    //                for(int i = 0; i<jarr.length(); i++)
+    //                {
+    //                    System.out.println("name("+i+") "+jarr.get(i));
+    //                }
+                }
+            }
+        }
+        catch(Exception noe)
+        {
+            System.out.println("No se pudo cargar el JSon....");
+        }
+
+
+
         User user=paramRequest.getUser();
         PrintWriter out=response.getWriter();        
         String act="view";
@@ -893,7 +935,7 @@ public class SWBAFilters extends SWBATree{
         if(act.equals("remove") && request.getParameter("id")!=null)
         {
             //  TODO:
-            // Borrar filtros aplicados a los uaurios
+            // Borrar filtros aplicados a los usuarios
             //WebSite mapadmin=SWBContext.getAdminWebSite();
 //            UserRepository repository=mapadmin.getUserRepository();
 //            Iterator<User> users=repository.listUsers();
@@ -1164,6 +1206,7 @@ public class SWBAFilters extends SWBATree{
         //addGlobal(user, root, access, isFilter);
 
         loadSemClass(user);
+
 
         //WebSites
         Iterator<WebSite> it=sortIterator(SWBContext.listWebSites());
