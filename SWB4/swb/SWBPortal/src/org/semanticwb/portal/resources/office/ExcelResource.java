@@ -40,7 +40,7 @@ public class ExcelResource extends GenericAdmResource
 
     protected void printDocument(ExcelPortlet porlet, PrintWriter out, String path,String workpath,String html)
     {
-        out.write("<iframe frameborder=\"0\" src=\"" + path + "\">Este navegador no soporta iframe</iframe>");
+        out.write("<iframe src=\"" + path + "\">Este navegador no soporta iframe</iframe>");
     }
 
     @Override
