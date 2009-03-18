@@ -26,7 +26,7 @@ public class JRUserTypesAccessDataDetail implements JRDataSourceable{
     
     public JRDataSource orderJRReport() throws IncompleteFilterException{
         List dataList = dataDetail.execute();
-        JRDataSource dataSource = null;
+        JRBeanCollectionDataSource dataSource = null;
         
         if(!dataList.isEmpty())
             dataSource = new JRBeanCollectionDataSource(dataList);

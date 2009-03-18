@@ -12,16 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.semanticwb.portal.admin.resources.reports.beans.IncompleteFilterException;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable;
-
-/*import com.infotec.wb.lib.WBResource;
-import com.infotec.wb.core.Resource;
-import com.infotec.wb.core.ResourceMgr;
-import com.infotec.wb.core.db.RecCamp;
-import com.infotec.wb.core.db.DBCatalogs;
-import com.infotec.wb.core.db.DBResource;
-import com.infotec.wb.core.db.RecResource;
-import com.infotec.wb.core.db.RecSubType;
-import com.infotec.wb.core.db.SWBAppearedHits;*/
         
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -89,7 +79,7 @@ public class JRResAppearedDataDetail implements JRDataSourceable{
 //            }
 //        }
         
-        JRDataSource dataSource = null;        
+        JRBeanCollectionDataSource dataSource = null;        
         if(!dataList.isEmpty())
             dataSource = new JRBeanCollectionDataSource(dataList);
         return dataSource;        
