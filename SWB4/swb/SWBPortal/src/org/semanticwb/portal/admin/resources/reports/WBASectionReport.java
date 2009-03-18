@@ -21,14 +21,18 @@ import org.semanticwb.portal.admin.resources.reports.beans.WBAFilterReportBean;
 import org.semanticwb.portal.admin.resources.reports.beans.IncompleteFilterException;
 import org.semanticwb.portal.admin.resources.reports.jrresources.*;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRSectionAccessDataDetail;
+import org.semanticwb.portal.db.SWBRecHit;
+
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class WBASectionReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBASectionReport.class);
 
     private final int I_REPORT_TYPE = 3;   // Type 3 of reports "Export"
     public String strRscType;
-
-    String sectionId;
     WebSiteSectionTree tree = new WebSiteSectionTree();
 
     @Override
@@ -79,17 +83,19 @@ public class WBASectionReport extends GenericResource {
         url.setCallMethod(url.Call_DIRECT);
         url.setMode("bind");
         
+        String section = request.getParameter("reptp");
+        if(section != null) {
+            out.println("<input type=\"hidden\" name=\"section\" id=\"section\" value=\""+section+"\" />");
+        }
+        
         System.out.println("\n");
         Enumeration<String> e = request.getParameterNames();
         while(e.hasMoreElements()){
             String key = e.nextElement();
             System.out.print("parametro="+key+" value="+request.getParameter(key)+", ");
-        }        
+        }
         
-        sectionId = request.getParameter("reptp");
-        System.out.println("sectionId="+sectionId);
-        
-        out.println(tree.render(webSiteId, request, paramsRequest.getUser(), url.toString()));
+        out.println(tree.renderXHTML(webSiteId, request, paramsRequest.getUser(), url.toString()));
         out.flush();
     }
 
@@ -185,45 +191,82 @@ public class WBASectionReport extends GenericResource {
                 out.println("function getParams(accion) { ");
                 out.println("   var params = \"?\";");
                 out.println("   params = params + \"wb_site=\" + window.document.frmrep.wb_site.value;");
-                out.println("   params = params + \"&wb_lang=\" + document.getElementById('wb_lang').options[document.getElementById('wb_lang').selectedIndex].value;");
+                out.println("   params = params + \"&section=\" + dojo.byId('section').value;");
                 /*out.println("   if(document.getElementById('wb_deletefilter').checked) { ");
                 out.println("       params = params + \"&wb_deletefilter=\" + document.getElementById('wb_deletefilter').value; ");
                 out.println("   } ");*/
                 out.println("   params = params + \"&wb_rtype=\" + document.getElementById('wb_rtype').value;");
                 out.println("   if(accion == 0) {");                    
                 out.println("       params = params + \"&wb_rep_type=\" + getTypeSelected();");
-                out.println("       params = params + \"&wb_fecha1=\" + document.getElementById('wb_fecha1').value; ");
-                out.println("       params = params + \"&wb_fecha11=\" + document.getElementById('wb_fecha11').value; ");
-                out.println("       params = params + \"&wb_fecha12=\" + document.getElementById('wb_fecha12').value; ");
-                out.println("   }else {");
-                out.println("       params = params + \"&wb_year13=\" + document.getElementById('wb_year13').options[document.getElementById('wb_year13').selectedIndex].value;");
+                out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                out.println("       if(fecha1.length>0) {");
+                out.println("           dp = fecha1.split('/');");
+                out.println("           params = params + '&wb_fecha1=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");                
+                out.println("       if(fecha2.length>0) {");
+                out.println("           dp = fecha2.split('/');");
+                out.println("           params = params + '&wb_fecha11=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");                
+                out.println("       if(fecha3.length>0) {");
+                out.println("           dp = fecha3.split('/');");
+                out.println("           params = params + '&wb_fecha12=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");
                 out.println("   }");
+                /*out.println("   else {");
+                out.println("       var year = new String(dojo.byId('wb_year13').value);");
+                out.println("       params = params + '&wb_year13=' + year;");
+                out.println("   }");*/
                 out.println("   return params;");
                 out.println("} ");
+                
+                out.println("function validate(accion) {");
+                out.println("    if(accion=='0') {");
+                out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                out.println("       if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
+                out.println("          alert('Especifique la fecha o el rango de fechas que desea consultar');");
+                out.println("          return false;");
+                out.println("       }");
+                out.println("    }");
+                out.println("    return true;");
+                out.println("}");
 
                 out.println("function doXml(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml") + "\"+params,\"graphWindow\",size);");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml") + "\"+params,\"graphWindow\",size);");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doExcel(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel") + "\"+params,\"graphWindow\",size);");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel") + "\"+params,\"graphWindow\",size);");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doGraph(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph") + "\"+params,\"graphWindow\",size);");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph") + "\"+params,\"graphWindow\",size);");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doPdf(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf") + "\"+params,\"graphWindow\",size);");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf") + "\"+params,\"graphWindow\",size);");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doRtf(accion, size) { ");
-                out.println("   var params = getParams(accion);");
-                out.println("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf") + "\"+params,\"graphWindow\",size);    ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf") + "\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function getTypeSelected() { ");
@@ -237,7 +280,9 @@ public class WBASectionReport extends GenericResource {
                 out.println("}");
 
                 out.println("function doApply() { ");
-                out.println("   window.document.frmrep.submit(); ");
+                out.println("   if(validate(dojo.byId('wb_rtype').value)) {");
+                out.println("      window.document.frmrep.submit(); ");
+                out.println("   }");
                 out.println("}");
 
                 out.println(" function doBlockade() {");
@@ -365,30 +410,31 @@ public class WBASectionReport extends GenericResource {
                     if(request.getParameter("wb_rtype")==null || webSiteId==null ) {
                         out.println("&nbsp;");
                     }else {
-                        out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
-                        out.println("<tr>");
-                        out.println("<td>");
-                        /*response.getWriter().print(sb_ret.toString());
-                        sb_ret.delete(0,sb_ret.length());*/
+                        System.out.println("section="+request.getParameter("section"));
+                        if(request.getParameter("section")!=null) {
+                            out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
+                            out.println("<tr>");
+                            out.println("<td>");
 
-                        WBAFilterReportBean filter = buildFilter(request, paramsRequest);
-                        JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
-                        JasperTemplate jasperTemplate = JasperTemplate.SECTION_DAILY_HTML;
-                        HashMap params = new HashMap();
-                        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
-                        params.put("site", filter.getSite());                        
-                        try {
-                            JRResource jrResource = new JRHtmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
-                            jrResource.prepareReport();
-                            jrResource.exportReport(response);
-                        }catch (Exception e) {
-                            throw new javax.servlet.ServletException(e);
+                            WBAFilterReportBean filter = buildFilter(request, paramsRequest);
+                            JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
+                            JasperTemplate jasperTemplate = JasperTemplate.SECTION_DAILY_HTML;
+                            HashMap params = new HashMap();
+                            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+                            params.put("site", filter.getSite());                        
+                            try {
+                                JRResource jrResource = new JRHtmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
+                                jrResource.prepareReport();
+                                jrResource.exportReport(response);
+                            }catch (Exception e) {
+                                throw new javax.servlet.ServletException(e);
+                            }
+
+                            out.println("</td>");
+                            out.println("</tr>");
+                            out.println("</table>");
+                            out.println("<hr size=\"1\" noshade>");
                         }
-
-                        out.println("</td>");
-                        out.println("</tr>");
-                        out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
                     }
                     out.println("</td>");
                     out.println("</tr>");
@@ -558,7 +604,55 @@ public class WBASectionReport extends GenericResource {
      */    
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("text/xml;charset=iso-8859-1");
+        PrintWriter out = response.getWriter();
+        
+        Document dom = SWBUtils.XML.getNewDocument();        
         Portlet base = getResourceBase();
+        try {
+            WBAFilterReportBean filter;            
+            int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
+            
+            if(rtype == 0) { // REPORTE DIARIO
+                filter = buildFilter(request, paramsRequest);            
+                int renglones = 0;
+                Element report = dom.createElement("GlobalReport");
+                dom.appendChild(report);
+                JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
+                JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
+                Iterator<SWBRecHit> itRecHits = ds.getData().iterator();
+                while(itRecHits.hasNext()) {
+                    SWBRecHit rec = itRecHits.next();
+                    Element row = dom.createElement("row");
+                    row.appendChild(dom.createTextNode(""));
+                    row.setAttribute("id",Integer.toString(++renglones));
+                    report.appendChild(row);
+                    Element section = dom.createElement("section");
+                    section.appendChild(dom.createTextNode(rec.getItem()));
+                    row.appendChild(section);
+                    Element site = dom.createElement("site");
+                    site.appendChild(dom.createTextNode(rec.getTopicmap()));
+                    row.appendChild(site);
+                    Element year = dom.createElement("year");
+                    year.appendChild(dom.createTextNode(Integer.toString(rec.getYear())));
+                    row.appendChild(year);
+                    Element month = dom.createElement("month");
+                    month.appendChild(dom.createTextNode(rec.getMonth()));
+                    row.appendChild(month);
+                    Element day = dom.createElement("day");
+                    day.appendChild(dom.createTextNode(Integer.toString(rec.getDay())));
+                    row.appendChild(day);
+                    Element pages = dom.createElement("pages");
+                    pages.appendChild(dom.createTextNode(Long.toString(rec.getHits())));
+                    row.appendChild(pages);
+                }            
+                report.setAttribute("rows",Integer.toString(renglones));
+            }
+        }
+        catch (Exception e){            
+            log.error("Error on method doRepXml() resource " + strRscType + " with id " + base.getId(), e);
+        }
+        out.print(SWBUtils.XML.domToXml(dom));
+        out.flush();
     }
 
     /**
@@ -638,9 +732,8 @@ public class WBASectionReport extends GenericResource {
         
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;
-        /*GregorianCalendar gc_now = new GregorianCalendar();*/
         ArrayList idaux = new ArrayList();
-        idaux.add(sectionId);
+        idaux.add(request.getParameter("reptp"));
         
         String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
         /*String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");*/

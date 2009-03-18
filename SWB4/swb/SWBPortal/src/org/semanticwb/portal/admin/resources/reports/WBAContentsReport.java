@@ -15,6 +15,7 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.portal.util.WebSiteSectionTree;
+import org.semanticwb.portal.util.SelectTree;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -27,7 +28,8 @@ public class WBAContentsReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBASectionReport.class);
     
     private String strRscType;
-    private WebSiteSectionTree tree = new WebSiteSectionTree();
+    //private WebSiteSectionTree tree = new WebSiteSectionTree();
+    private SelectTree tree = new SelectTree();
     
     private static Integer x;
     static{x=new Integer(0);}
@@ -85,8 +87,16 @@ public class WBAContentsReport extends GenericResource {
         String section = request.getParameter("reptp");
         if(section != null) {
             out.println("<input type=\"hidden\" name=\"section\" id=\"section\" value=\""+section+"\" />");
+        }
+        //out.println(tree.renderXHTML(webSiteId, request, paramsRequest.getUser(), url.toString()));
+        HashMap params = new HashMap();
+        Enumeration<String> names = request.getParameterNames();
+        while(names.hasMoreElements()) {
+            String name = names.nextElement();
+            params.put(name, request.getParameter(name));
         }        
-        out.println(tree.render(webSiteId, request, paramsRequest.getUser(), url.toString()));
+        out.println(tree.renderXHTML(webSiteId, params, url.toString()));
+        
         out.flush();
     }
     
@@ -136,6 +146,7 @@ public class WBAContentsReport extends GenericResource {
         
         json.append("],");
         json.append("source:1, rating:3 }");
+        System.out.println("\n\n"+json+"\n");
         out.print(json.toString());                
         out.flush();
     }
@@ -215,14 +226,7 @@ public class WBAContentsReport extends GenericResource {
             if(hm_sites.size() > I_ACCESS) {
                 String address = paramsRequest.getTopic().getUrl();
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                                
-                /*int deleteFilter;
-                try {
-                    deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
-                }catch(NumberFormatException e) {
-                    deleteFilter = 0;
-                }*/
-                                
+             
                 String topicId = paramsRequest.getTopic().getId();
                 if(topicId.lastIndexOf("Daily") != -1) {
                     rtype = "0";
@@ -259,16 +263,8 @@ public class WBAContentsReport extends GenericResource {
                 out.println("var gridMaster = null;");
                 out.println("var gridResources = null;");
                 
-                /*out.println("function getResources(e) {");
-                out.println("   dojo.byId('ctnerDetail').style.display = 'block';");
-                out.println("   var row = e.grid.selection.getFirstSelected();");
-                out.println("   var params = 'res='+row.contentType;");
-                out.println("   fillGrid(dijit.byId('gridResources'), '"+url.toString()+"', 'fillgriddet', params);");                
-                out.println("}");*/
-                
                 out.println("dojo.addOnLoad(function() {");
                 out.println("    dojo.byId('ctnerMaster').style.display = 'none';");
-                //out.println("    dojo.byId('ctnerDetail').style.display = 'none';");
                                 
                 out.println("   layout= [");
                 out.println("      { field:'sect', width:'100px', name:'Sección' },");        
@@ -520,28 +516,15 @@ public class WBAContentsReport extends GenericResource {
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("text/xml;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
-        Document dom = SWBUtils.XML.getNewDocument();        
-        
-        /*Element row = dom.createElement("row");
-        row.appendChild(dom.createTextNode(""));
-        row.setAttribute("id",Integer.toString(j+1));
-        report.appendChild(row);
-
-        Element site = dom.createElement("site");
-        site.appendChild(dom.createTextNode(s_site));
-        row.appendChild(site);
-
-        Element year = dom.createElement("year");
-        year.appendChild(dom.createTextNode(s_date.substring(0,4)));
-        row.appendChild(year);*/        
+        Document dom = SWBUtils.XML.getNewDocument();     
                 
         Element report = dom.createElement("ContentReport");
-        dom.appendChild(report);        
+        dom.appendChild(report);
         
         String webSiteId = request.getParameter("site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("site");
         WebSite webSite = SWBContext.getWebSite(webSiteId);
         String webPageId = request.getParameter("section");        
-        WebPage webPage = webSite.getWebPage(webPageId);        
+        WebPage webPage = webSite.getWebPage(webPageId);
         Iterator<Portlet> portlets = webPage.listPortlets();        
         while(portlets.hasNext()) {
             Portlet portlet = portlets.next();

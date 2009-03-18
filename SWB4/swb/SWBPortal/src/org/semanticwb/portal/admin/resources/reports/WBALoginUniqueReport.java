@@ -19,6 +19,12 @@ import org.semanticwb.portal.admin.resources.reports.beans.WBAFilterReportBean;
 import org.semanticwb.portal.admin.resources.reports.beans.IncompleteFilterException;
 import org.semanticwb.portal.admin.resources.reports.jrresources.*;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRLoggedUniqueDataDetail;
+import org.semanticwb.portal.db.SWBRecHit;
+
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class WBALoginUniqueReport extends GenericResource{
     private static Logger log = SWBUtils.getLogger(WBALoginUniqueReport.class);
@@ -134,7 +140,7 @@ public class WBALoginUniqueReport extends GenericResource{
                 }
 
                 // javascript
-                out.println("\n<script type=\"text/javascript\">");
+                out.println("<script type=\"text/javascript\">");
                 
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
                 out.println("dojo.addOnLoad(doBlockade);");
@@ -145,53 +151,91 @@ public class WBALoginUniqueReport extends GenericResource{
                 out.println("   params = params + '&wb_rtype=' + dojo.byId('wb_rtype').value;");
                 out.println("   if(accion == 0) {");
                 out.println("       params = params + '&wb_rep_type=' + getTypeSelected();");
-                out.println("       params = params + '&wb_fecha1=' + dojo.byId('wb_fecha1').value;");
-                out.println("       params = params + '&wb_fecha11=' + dojo.byId('wb_fecha11').value;");
-                out.println("       params = params + '&wb_fecha12=' + dojo.byId('wb_fecha12').value;");
+                out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                out.println("       if(fecha1.length>0) {");
+                out.println("           dp = fecha1.split('/');");
+                out.println("           params = params + '&wb_fecha1=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");                
+                out.println("       if(fecha2.length>0) {");
+                out.println("           dp = fecha2.split('/');");
+                out.println("           params = params + '&wb_fecha11=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");                
+                out.println("       if(fecha3.length>0) {");
+                out.println("           dp = fecha3.split('/');");
+                out.println("           params = params + '&wb_fecha12=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                out.println("       }");
                 out.println("   }else {");
-                out.println("       params = params + '&wb_year13=' + dojo.byId('wb_year13').options[dojo.byId('wb_year13').selectedIndex].value;");
+                out.println("       var year = new String(dojo.byId('wb_year13').value);");
+                out.println("       params = params + '&wb_year13=' + year;");
                 out.println("   }");
                 out.println("   return params;");
                 out.println("}");
                 
-                out.println("\nfunction doXml(accion, size) { ");
-                out.println("\n   var params = getParams(accion);");
-                out.println("\n   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);    ");
-                out.println("\n}");
+                out.println("function validate(accion) {");
+                out.println("    if(accion=='0') {");
+                out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                out.println("       if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
+                out.println("          alert('Especifique la fecha o el rango de fechas que desea consultar');");
+                out.println("          return false;");
+                out.println("       }");
+                out.println("    }");
+                out.println("    return true;");
+                out.println("}");
                 
-                out.println("\nfunction doExcel(accion, size) { ");
-                out.println("\n   var params = getParams(accion);");
-                out.println("\n   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);    ");
-                out.println("\n}");
+                out.println("function doXml(accion, size) { ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
+                out.println("}");
                 
-                out.println("\nfunction doGraph(accion, size) { ");
-                out.println("\n   var params = getParams(accion);");
-                out.println("\n   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);    ");
-                out.println("\n }");
+                out.println("function doExcel(accion, size) { ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
+                out.println("}");
                 
-                out.println("\nfunction doPdf(accion, size) { ");
-                out.println("\n   var params = getParams(accion);");
-                out.println("\n   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf")+"\"+params,\"graphWindow\",size);    ");
-                out.println("\n}");
+                out.println("function doGraph(accion, size) { ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
+                out.println(" }");
                 
-                out.println("\nfunction doRtf(accion, size) { ");
-                out.println("\n   var params = getParams(accion);");
-                out.println("\n   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf")+"\"+params,\"graphWindow\",size);    ");
-                out.println("\n}");
+                out.println("function doPdf(accion, size) { ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
+                out.println("}");
                 
-                out.println("\n function getTypeSelected(){");
-                out.println("\n     var strType = \"0\";");
-                out.println("\n     for(i=0;i<window.document.frmrep.wb_rep_type.length;i++){");
-                out.println("\n       if(window.document.frmrep.wb_rep_type[i].checked==true){");
-                out.println("\n           strType=window.document.frmrep.wb_rep_type[i].value;");
-                out.println("\n       }");
-                out.println("\n     }");
-                out.println("\n     return strType;");
-                out.println("\n }");
+                out.println("function doRtf(accion, size) { ");
+                out.println("   if(validate(accion)) {");
+                out.println("      var params = getParams(accion);");
+                out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("   }");
+                out.println("}");
                 
-                out.println("\n function doApply() { ");
-                out.println("\n     window.document.frmrep.submit(); ");
-                out.println("\n }");                
+                out.println(" function getTypeSelected(){");
+                out.println("     var strType = \"0\";");
+                out.println("     for(i=0;i<window.document.frmrep.wb_rep_type.length;i++){");
+                out.println("       if(window.document.frmrep.wb_rep_type[i].checked==true){");
+                out.println("           strType=window.document.frmrep.wb_rep_type[i].value;");
+                out.println("       }");
+                out.println("     }");
+                out.println("     return strType;");
+                out.println(" }");
+                
+                out.println(" function doApply() { ");
+                out.println("   if(validate(dojo.byId('wb_rtype').value)) {");
+                out.println("      window.document.frmrep.submit(); ");
+                out.println("   }");
+                out.println(" }");                
 
                 out.println(" function doBlockade() {");
                 out.println("     if(window.document.frmrep.wb_rep_type[0].checked){");
@@ -205,46 +249,46 @@ public class WBALoginUniqueReport extends GenericResource{
                 out.println("       dojo.byId('wb_fecha12').disabled = false;");
                 out.println("     }");
                 out.println(" }");
-                out.println("\n</script>");
+                out.println("</script>");
                 
-                out.println("\n<div id=\"swb-admin\">");
-                out.println("\n<fieldset>");
-                out.println("\n<legend>" + paramsRequest.getLocaleString("login_report") + "</legend>");
+                out.println("<div id=\"swb-admin\">");
+                out.println("<fieldset>");
+                out.println("<legend>" + paramsRequest.getLocaleString("login_report") + "</legend>");
                 
-                out.println("\n<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
-                out.println("\n<table border=\"0\" width=\"95%\" align=\"center\">");
-                out.println("\n<tr><td width=\"100\"></td><td width=\"120\"></td><td></td><td></td></tr>");
-                out.println("\n<tr>");
-                out.println("\n<td colspan=4>");
+                out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
+                out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
+                out.println("<tr><td width=\"100\"></td><td width=\"120\"></td><td></td><td></td></tr>");
+                out.println("<tr>");
+                out.println("<td colspan=4>");
                 if(rtype.equals("0")){
                     out.println(paramsRequest.getLocaleString("description_daily"));
                 }
                 else{
                     out.println(paramsRequest.getLocaleString("description_monthly"));
                 }
-                out.println("\n</td>");
-                out.println("\n</tr>");
+                out.println("</td>");
+                out.println("</tr>");
                 
-                out.println("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");                
-                out.println("\n<tr>");
-                out.println("\n <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");                
+                out.println("<tr>");
+                out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
                 out.println("   <input type=\"button\" onClick=\"doXml('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;");
                 out.println("   <input type=\"button\" onClick=\"doExcel('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"Excel\" name=\"btnExcel\" />&nbsp;");                
                 out.println("   <input type=\"button\" onClick=\"doPdf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"PDF\" name=\"btnPdf\" />&nbsp;");
                 out.println("   <input type=\"button\" onClick=\"doRtf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"RTF\" name=\"btnRtf\" />&nbsp;");                
                 out.println("   <input type=\"button\" onClick=\"doGraph('"+ rtype +"','width=600, height=550, scrollbars, resizable')\" value=\"" + paramsRequest.getLocaleString("graph") + "\" name=\"btnGraph\" />&nbsp;");
                 out.println("   <input type=\"button\" onClick=\"doApply()\" value=\"" + paramsRequest.getLocaleString("apply") + "\" name=\"btnApply\" />");
-                out.println("\n </td>");
-                out.println("\n</tr>");                
-                out.println("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println(" </td>");
+                out.println("</tr>");                
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 
-                out.println("\n<tr>");
+                out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("repository") + ":</td>");
                 out.println("<td colspan=\"2\"><select id=\"wb_repository\" name=\"wb_repository\">");
                 Iterator<String> itKeys = hm_repository.keySet().iterator();
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
-                    out.println("\n<option value=\""+ key + "\"");
+                    out.println("<option value=\""+ key + "\"");
                         if(key.equalsIgnoreCase(repositoryName)) {
                             out.println(" selected=\"selected\"");
                         }
@@ -252,12 +296,12 @@ public class WBALoginUniqueReport extends GenericResource{
                 }                
                 out.println("</select>");                
                 out.println("</td>");
-                out.println("\n<td>&nbsp;</td>");
-                out.println("\n</tr>");
+                out.println("<td>&nbsp;</td>");
+                out.println("</tr>");
 
                 if(rtype.equals("0")) { // REPORTE DIARIO
-                    out.println("\n<tr>");
-                    out.println("\n<td>");
+                    out.println("<tr>");
+                    out.println("<td>");
                     out.println("<label>");
                     out.println("<input type=\"radio\" value=\"0\" name=\"wb_rep_type\" id=\"wb_rep_type_0\" onclick=\"javascript: doBlockade();\"");
                     if(groupDates==0) {
@@ -266,42 +310,42 @@ public class WBALoginUniqueReport extends GenericResource{
                     out.println(" />");
                     out.println("&nbsp;" + paramsRequest.getLocaleString("by_day"));
                     out.println("</label></td>");
-                    out.println("\n<td colspan=\"2\">");
+                    out.println("<td colspan=\"2\">");
                     out.println("<input type=\"text\" name=\"wb_fecha1\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\">");
                     out.println("</td>");
                     out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>");
-                    out.println("\n</tr>");
-                    out.println("\n<tr>");
-                    out.println("\n<td colspan=4>&nbsp;</td>");
-                    out.println("\n</tr>");
+                    out.println("</tr>");
+                    out.println("<tr>");
+                    out.println("<td colspan=4>&nbsp;</td>");
+                    out.println("</tr>");
 
-                    out.println("\n<tr>");
-                    out.println("\n<td>");
-                    out.println("\n<label>");
-                    out.println("\n<input type=\"radio\" value=\"1\" name=\"wb_rep_type\" id=\"wb_rep_type_1\" onclick=\"javascript: doBlockade();\"");
+                    out.println("<tr>");
+                    out.println("<td>");
+                    out.println("<label>");
+                    out.println("<input type=\"radio\" value=\"1\" name=\"wb_rep_type\" id=\"wb_rep_type_1\" onclick=\"javascript: doBlockade();\"");
                     if(groupDates!=0) {
                         out.println(" checked=\"checked\"");
                     }
                     out.println(" />");
                     out.println("&nbsp;" + paramsRequest.getLocaleString("by_interval_dates"));
                     out.println("</label></td>");
-                    out.println("\n<td>");
+                    out.println("<td>");
                     out.println("<input type=\"text\" name=\"wb_fecha11\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\">");
                     out.println("</td>");
-                    out.println("\n<td>");
+                    out.println("<td>");
                     out.println("<input type=\"text\" name=\"wb_fecha12\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\">");
                     out.println("</td>");
-                    out.println("\n<td>&nbsp;</td>");
-                    out.println("\n</tr>");
+                    out.println("<td>&nbsp;</td>");
+                    out.println("</tr>");
                     
-                    out.println("\n<tr>");
+                    out.println("<tr>");
                     out.println("<td colspan=\"4\" align=\"left\">");
                     if(request.getParameter("wb_rtype")==null || repositoryName==null ) {
                         out.println("&nbsp;");
                     }else {
-                        out.println("\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
-                        out.println("\n<tr>");
-                        out.println("\n<td>");
+                        out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
+                        out.println("<tr>");
+                        out.println("<td>");
                         /*response.getWriter().print(sb_ret.toString());
                         sb_ret.delete(0,sb_ret.length());*/
                         WBAFilterReportBean filter = buildFilter(request, paramsRequest);
@@ -317,19 +361,19 @@ public class WBALoginUniqueReport extends GenericResource{
                         }catch (Exception e) {
                             throw new javax.servlet.ServletException(e);
                         }
-                        out.println("\n</td>");
-                        out.println("\n</tr>");
-                        out.println("\n</table>");
+                        out.println("</td>");
+                        out.println("</tr>");
+                        out.println("</table>");
                         out.println("<hr size=\"1\" noshade>");                      
                     }
-                    out.println("\n</td>");
-                    out.println("\n</tr>");
+                    out.println("</td>");
+                    out.println("</tr>");
                 }else { // REPORTE MENSUAL
                     GregorianCalendar gc_now = new GregorianCalendar();
                     int year13 = request.getParameter("wb_year13")==null ? gc_now.get(Calendar.YEAR):Integer.parseInt(request.getParameter("wb_year13"));
-                    out.println("\n<tr>");
-                    out.println("\n<td>" + paramsRequest.getLocaleString("year") + ":</td>");                    
-                    out.println("\n<td colspan=\"2\"><select id=\"wb_year13\" name=\"wb_year13\">");
+                    out.println("<tr>");
+                    out.println("<td>" + paramsRequest.getLocaleString("year") + ":</td>");                    
+                    out.println("<td colspan=\"2\"><select id=\"wb_year13\" name=\"wb_year13\">");
                     for (int i = 2000; i < 2021; i++) {
                         out.println("<option value=\"" + i + "\"");
                         if (year13==i) {
@@ -337,18 +381,18 @@ public class WBALoginUniqueReport extends GenericResource{
                         }
                         out.println(">" + i + "</option>");
                     }
-                    out.println("\n</select>");
-                    out.println("\n</td>");                    
-                    out.println("\n<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"1\" /></td>");                        
-                    out.println("\n</tr>");
+                    out.println("</select>");
+                    out.println("</td>");                    
+                    out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"1\" /></td>");                        
+                    out.println("</tr>");
                     
-                    out.println("\n<tr>");
+                    out.println("<tr>");
                     out.println("<td colspan=\"4\">");
                     if(request.getParameter("wb_rtype")==null || repositoryName==null ) {
                         out.println("&nbsp;");
                     }else {
-                        out.println("\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                         
-                        out.println("\n<tr><td>\n");
+                        out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                         
+                        out.println("<tr><td>\n");
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(repositoryName);
@@ -367,31 +411,31 @@ public class WBALoginUniqueReport extends GenericResource{
                         }catch (Exception e) {
                             throw new javax.servlet.ServletException(e);
                         }
-                        out.println("\n</td></tr>");                            
-                        out.println("\n</table>");
+                        out.println("</td></tr>");                            
+                        out.println("</table>");
                         out.println("<hr size=\"1\" noshade>");
                     }
-                    out.println("\n</td>");
-                    out.println("\n</tr>");
+                    out.println("</td>");
+                    out.println("</tr>");
                 }
-                out.println("\n</table></form>");
-                out.println("\n</fieldset></div>");
+                out.println("</table></form>");
+                out.println("</fieldset></div>");
             }
             else {   // There are not sites and displays a message
-                out.println("\n<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
-                out.println("\n<table border=0 width=\"100%\">");
-                out.println("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("\n<tr>");
-                out.println("\n<td>&nbsp;</td>");
-                out.println("\n<td colspan=\"2\" align=\"center\">" + paramsRequest.getLocaleString("no_repositories_found") + "</td>");
-                out.println("\n<td>&nbsp;</td>");
-                out.println("\n</tr>");
-                out.println("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("\n</table></form>");
+                out.println("<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                out.println("<table border=0 width=\"100%\">");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("<tr>");
+                out.println("<td>&nbsp;</td>");
+                out.println("<td colspan=\"2\" align=\"center\">" + paramsRequest.getLocaleString("no_repositories_found") + "</td>");
+                out.println("<td>&nbsp;</td>");
+                out.println("</tr>");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("</table></form>");
             }
         }catch (Exception e) {
             log.error("Error on method DoView() resource " + strRscType + " with id " + base.getId(), e);            
@@ -511,46 +555,84 @@ public class WBALoginUniqueReport extends GenericResource{
      */
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/xml;charset=iso-8859-1");
-        Portlet base = getResourceBase();        
+        PrintWriter out = response.getWriter();
+        
+        Document dom = SWBUtils.XML.getNewDocument();        
+        Portlet base = getResourceBase();
+        
         try {
+            WBAFilterReportBean filter;            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
-            HashMap params = new HashMap();
-            params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");            
+            Iterator<SWBRecHit> itRecHits;
+            int renglones = 0;
+            Element report = dom.createElement("LoginUniqueReport");
+            dom.appendChild(report);
+            
             if(rtype == 0) { // REPORTE DIARIO
-                WBAFilterReportBean filter = buildFilter(request, paramsRequest);
-                params.put("site", filter.getSite());
+                filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRLoggedUniqueDataDetail(filter);
-                JasperTemplate jasperTemplate = JasperTemplate.LOGGED_UNIQUE_DAILY;                
-                try {
-                    JRResource jrResource = new JRXmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
-                    jrResource.prepareReport();
-                    jrResource.exportReport(response);                            
-                }catch (Exception e) {
-                    throw new javax.servlet.ServletException(e);
+                JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
+                itRecHits = ds.getData().iterator();
+                while(itRecHits.hasNext()) {
+                    SWBRecHit rec = itRecHits.next();
+                    Element row = dom.createElement("row");
+                    row.appendChild(dom.createTextNode(""));
+                    row.setAttribute("id",Integer.toString(++renglones));
+                    report.appendChild(row);
+                    Element rep = dom.createElement("repository");
+                    rep.appendChild(dom.createTextNode(rec.getTopicmap()));
+                    row.appendChild(rep);
+                    Element year = dom.createElement("year");
+                    year.appendChild(dom.createTextNode(Integer.toString(rec.getYear())));
+                    row.appendChild(year);
+                    Element month = dom.createElement("month");
+                    month.appendChild(dom.createTextNode(rec.getMonth()));
+                    row.appendChild(month);
+                    Element day = dom.createElement("day");
+                    day.appendChild(dom.createTextNode(Integer.toString(rec.getDay())));
+                    row.appendChild(day);
+                    Element pages = dom.createElement("users");
+                    pages.appendChild(dom.createTextNode(Long.toString(rec.getHits())));
+                    row.appendChild(pages);
                 }
             }else { // REPORTE MENSUAL
                 String repositoryName = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");                
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                params.put("site", repositoryName);
-                WBAFilterReportBean filter = new WBAFilterReportBean();
+                filter = new WBAFilterReportBean();
                 filter.setSite(repositoryName);
                 filter.setIdaux(idaux.iterator());
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRLoggedUniqueDataDetail(filter);
-                JasperTemplate jasperTemplate = JasperTemplate.LOGGED_UNIQUE_MONTHLY;                        
-                try {
-                    JRResource jrResource = new JRXmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
-                    jrResource.prepareReport();
-                    jrResource.exportReport(response);                            
-                }catch (Exception e) {
-                    throw new javax.servlet.ServletException(e);
+                JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
+                itRecHits = ds.getData().iterator();
+                while(itRecHits.hasNext()) {
+                    SWBRecHit rec = itRecHits.next();
+                    Element row = dom.createElement("row");
+                    row.appendChild(dom.createTextNode(""));
+                    row.setAttribute("id",Integer.toString(++renglones));
+                    report.appendChild(row);
+                    Element rep = dom.createElement("repository");
+                    rep.appendChild(dom.createTextNode(rec.getTopicmap()));
+                    row.appendChild(rep);
+                    Element year = dom.createElement("year");
+                    year.appendChild(dom.createTextNode(Integer.toString(rec.getYear())));
+                    row.appendChild(year);
+                    Element month = dom.createElement("month");
+                    month.appendChild(dom.createTextNode(rec.getMonth()));
+                    row.appendChild(month);
+                    Element pages = dom.createElement("users");
+                    pages.appendChild(dom.createTextNode(Long.toString(rec.getHits())));
+                    row.appendChild(pages);
                 }
             }
+            report.setAttribute("rows",Integer.toString(renglones));
         }
         catch (Exception e){            
-            log.error("Error on method doRepXml() resource" + " " + strRscType + " " + "with id" + " " + base.getId(), e);
+            log.error("Error on method doRepXml() resource " + strRscType + " with id " + base.getId(), e);
         }
+        out.print(SWBUtils.XML.domToXml(dom));
+        out.flush();
     }
 
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
