@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
 import javax.servlet.ServletContext;
@@ -18,8 +19,10 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.PortletType;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.office.comunication.OfficeServlet;
 import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
@@ -32,6 +35,18 @@ import static org.semanticwb.office.comunication.Base64.*;
 public class GateWayOffice implements InternalServlet
 {
 
+    private static final String WORD_PORTLET_TYPE = "word_resource";
+    private static final String WORD_PORTLET_DESCRIPTION = "Recurso Word";
+    private static final String WORD_PORTLET_CLASS = "org.semanticwb.portal.resources.office.WordResource";
+    private static final String WORD_PORTLET_TITLE = WORD_PORTLET_DESCRIPTION;
+    private static final String PPT_PORTLET_TYPE = "ppt_resource";
+    private static final String PPT_PORTLET_DESCRIPTION = "Recurso Power Point";
+    private static final String PPT_PORTLET_CLASS = "org.semanticwb.portal.resources.office.PowerPointResource";
+    private static final String PPT_PORTLET_TITLE = PPT_PORTLET_DESCRIPTION;
+    private static final String EXCEL_PORTLET_TYPE = "excel_resource";
+    private static final String EXCEL_PORTLET_DESCRIPTION = "Recurso Excel";
+    private static final String EXCEL_PORTLET_CLASS = "org.semanticwb.portal.resources.office.ExcelResource";
+    private static final String EXCEL_PORTLET_TITLE = EXCEL_PORTLET_DESCRIPTION;
     private static String REALM = "Secure Area";
     private static String PREFIX_BASIC = "Basic ";
     private static final String title = "Gateway de Comunicación con Office INFOTEC Semantic WebBuilder 4";
@@ -73,12 +88,14 @@ public class GateWayOffice implements InternalServlet
         if (path.endsWith("/"))
         {
             path = path.substring(0, path.length() - 1);
-            path += dir + "/" + file;
+            path +=
+                    dir + "/" + file;
         }
         else
         {
             path += dir + "/" + file;
         }
+
         String with = "100%";
         String height = "500";
         out.println("<html>");
@@ -87,7 +104,7 @@ public class GateWayOffice implements InternalServlet
         out.println("</body>");
         out.println("</html>");
         out.close();
-        
+
     }
 
     private void showPPTContent(PrintWriter out, String file, String dir, String contentId, String repositoryName) throws IOException
@@ -96,12 +113,14 @@ public class GateWayOffice implements InternalServlet
         if (path.endsWith("/"))
         {
             path = path.substring(0, path.length() - 1);
-            path += dir + "/" + "frame.html";
+            path +=
+                    dir + "/" + "frame.html";
         }
         else
         {
             path += dir + "/" + "frame.html";
         }
+
         String with = "100%";
         String height = "500";
         out.println("<html>");
@@ -126,13 +145,16 @@ public class GateWayOffice implements InternalServlet
             while (read != -1)
             {
                 html.append(new String(buffer, 0, read));
-                read = inFile.read(buffer);
+                read =
+                        inFile.read(buffer);
             }
+
             inFile.close();
             if (!dir.endsWith("/"))
             {
                 dir += "/";
             }
+
             String workpath = SWBPlatform.getWebWorkPath() + dir;
             String htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
 
@@ -143,13 +165,15 @@ public class GateWayOffice implements InternalServlet
         {
             log.error("Contenido no encontrado en ruta: " + filecontent.getAbsolutePath() + ": " + contentId + "@" + repositoryName);
         }
+
     }
 
     private static String getPassword(String userpassDecoded) throws IOException
     {
         String password = "";
         String[] values = userpassDecoded.split(":");
-        password = values[1];
+        password =
+                values[1];
         return password;
     }
 
@@ -157,9 +181,11 @@ public class GateWayOffice implements InternalServlet
     {
         String userName = "";
         String[] values = userpassDecoded.split(":");
-        userName = values[0];
+        userName =
+                values[0];
         return userName;
     }
+
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
         if (request.getMethod().toLowerCase().equals("post"))
@@ -193,6 +219,7 @@ public class GateWayOffice implements InternalServlet
                     response.setHeader("WWW-Authenticate", PREFIX_BASIC + "realm=\"" + REALM + "\"");
                     response.setStatus(response.SC_UNAUTHORIZED);
                     return;
+
                 }
                 else
                 {
@@ -206,9 +233,10 @@ public class GateWayOffice implements InternalServlet
                         OfficeDocument doc = new OfficeDocument();
                         doc.setUser(pUserName);
                         doc.setPassword(pPassword);
-                        dir = "/" + dir;
+                        dir =
+                                "/" + dir;
                         PrintWriter out = response.getWriter();
-                        
+
                         try
                         {
                             String file = doc.getContentFile(repositoryName, contentId, versionName);
@@ -245,6 +273,7 @@ public class GateWayOffice implements InternalServlet
                             out.println("</html>");
                             out.close();
                         }
+
                     }
                     else
                     {
