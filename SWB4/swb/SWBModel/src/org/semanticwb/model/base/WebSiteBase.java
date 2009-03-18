@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
@@ -30,27 +30,27 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public static final org.semanticwb.platform.SemanticClass frm_FrmThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmThread");
     public static final org.semanticwb.platform.SemanticClass frm_FrmPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmPost");
     public static final org.semanticwb.platform.SemanticClass swb_Community=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Community");
-    public static final org.semanticwb.platform.SemanticClass swb_PortletType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletType");
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceSubType");
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceRef");
     public static final org.semanticwb.platform.SemanticClass swb_RuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
     public static final org.semanticwb.platform.SemanticClass swb_Dns=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Dns");
     public static final org.semanticwb.platform.SemanticClass swb_Rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
     public static final org.semanticwb.platform.SemanticClass swb_Camp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Camp");
     public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
-    public static final org.semanticwb.platform.SemanticClass swb_Portlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Portlet");
     public static final org.semanticwb.platform.SemanticClass swb_Calendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Calendar");
     public static final org.semanticwb.platform.SemanticClass swb_Device=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Device");
     public static final org.semanticwb.platform.SemanticClass swb_AdminFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter");
     public static final org.semanticwb.platform.SemanticClass swb_IPFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#IPFilter");
     public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
-    public static final org.semanticwb.platform.SemanticClass swb_PortletRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletRef");
     public static final org.semanticwb.platform.SemanticClass swb_Permission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Permission");
-    public static final org.semanticwb.platform.SemanticClass swb_PortletFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletFilter");
     public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
     public static final org.semanticwb.platform.SemanticClass swb_PFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlow");
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter");
     public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
+    public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
     public static final org.semanticwb.platform.SemanticClass swb_TemplateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup");
     public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
-    public static final org.semanticwb.platform.SemanticClass swb_PortletSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletSubType");
     public static final org.semanticwb.platform.SemanticClass swb_WebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
 
@@ -584,28 +584,58 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
         return org.semanticwb.model.Community.hasCommunity(id, this);
     }
 
-    public org.semanticwb.model.PortletType getPortletType(String id)
+    public org.semanticwb.model.ResourceSubType getResourceSubType(String id)
     {
-        return org.semanticwb.model.PortletType.getPortletType(id, this);
+        return org.semanticwb.model.ResourceSubType.getResourceSubType(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.model.PortletType> listPortletTypes()
+    public java.util.Iterator<org.semanticwb.model.ResourceSubType> listResourceSubTypes()
     {
-        return org.semanticwb.model.PortletType.listPortletTypes(this);
+        return org.semanticwb.model.ResourceSubType.listResourceSubTypes(this);
     }
 
-    public org.semanticwb.model.PortletType createPortletType(String id)
+    public org.semanticwb.model.ResourceSubType createResourceSubType(String id)
     {
-        return org.semanticwb.model.PortletType.createPortletType(id,this);
+        return org.semanticwb.model.ResourceSubType.createResourceSubType(id,this);
     }
 
-    public void removePortletType(String id)
+    public void removeResourceSubType(String id)
     {
-        org.semanticwb.model.PortletType.removePortletType(id, this);
+        org.semanticwb.model.ResourceSubType.removeResourceSubType(id, this);
     }
-    public boolean hasPortletType(String id)
+    public boolean hasResourceSubType(String id)
     {
-        return org.semanticwb.model.PortletType.hasPortletType(id, this);
+        return org.semanticwb.model.ResourceSubType.hasResourceSubType(id, this);
+    }
+
+    public org.semanticwb.model.ResourceRef getResourceRef(String id)
+    {
+        return org.semanticwb.model.ResourceRef.getResourceRef(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.ResourceRef> listResourceRefs()
+    {
+        return org.semanticwb.model.ResourceRef.listResourceRefs(this);
+    }
+
+    public org.semanticwb.model.ResourceRef createResourceRef(String id)
+    {
+        return org.semanticwb.model.ResourceRef.createResourceRef(id,this);
+    }
+
+    public org.semanticwb.model.ResourceRef createResourceRef()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_ResourceRef);
+        return org.semanticwb.model.ResourceRef.createResourceRef(String.valueOf(id),this);
+    } 
+
+    public void removeResourceRef(String id)
+    {
+        org.semanticwb.model.ResourceRef.removeResourceRef(id, this);
+    }
+    public boolean hasResourceRef(String id)
+    {
+        return org.semanticwb.model.ResourceRef.hasResourceRef(id, this);
     }
 
     public org.semanticwb.model.RuleRef getRuleRef(String id)
@@ -774,36 +804,6 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public boolean hasVersionInfo(String id)
     {
         return org.semanticwb.model.VersionInfo.hasVersionInfo(id, this);
-    }
-
-    public org.semanticwb.model.Portlet getPortlet(String id)
-    {
-        return org.semanticwb.model.Portlet.getPortlet(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.model.Portlet> listPortlets()
-    {
-        return org.semanticwb.model.Portlet.listPortlets(this);
-    }
-
-    public org.semanticwb.model.Portlet createPortlet(String id)
-    {
-        return org.semanticwb.model.Portlet.createPortlet(id,this);
-    }
-
-    public org.semanticwb.model.Portlet createPortlet()
-    {
-        long id=getSemanticObject().getModel().getCounter(swb_Portlet);
-        return org.semanticwb.model.Portlet.createPortlet(String.valueOf(id),this);
-    } 
-
-    public void removePortlet(String id)
-    {
-        org.semanticwb.model.Portlet.removePortlet(id, this);
-    }
-    public boolean hasPortlet(String id)
-    {
-        return org.semanticwb.model.Portlet.hasPortlet(id, this);
     }
 
     public org.semanticwb.model.WebPage getWebPage(String id)
@@ -980,36 +980,6 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
         return org.semanticwb.model.PFlowRef.hasPFlowRef(id, this);
     }
 
-    public org.semanticwb.model.PortletRef getPortletRef(String id)
-    {
-        return org.semanticwb.model.PortletRef.getPortletRef(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.model.PortletRef> listPortletRefs()
-    {
-        return org.semanticwb.model.PortletRef.listPortletRefs(this);
-    }
-
-    public org.semanticwb.model.PortletRef createPortletRef(String id)
-    {
-        return org.semanticwb.model.PortletRef.createPortletRef(id,this);
-    }
-
-    public org.semanticwb.model.PortletRef createPortletRef()
-    {
-        long id=getSemanticObject().getModel().getCounter(swb_PortletRef);
-        return org.semanticwb.model.PortletRef.createPortletRef(String.valueOf(id),this);
-    } 
-
-    public void removePortletRef(String id)
-    {
-        org.semanticwb.model.PortletRef.removePortletRef(id, this);
-    }
-    public boolean hasPortletRef(String id)
-    {
-        return org.semanticwb.model.PortletRef.hasPortletRef(id, this);
-    }
-
     public org.semanticwb.model.Permission getPermission(String id)
     {
         return org.semanticwb.model.Permission.getPermission(id, this);
@@ -1038,36 +1008,6 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public boolean hasPermission(String id)
     {
         return org.semanticwb.model.Permission.hasPermission(id, this);
-    }
-
-    public org.semanticwb.model.PortletFilter getPortletFilter(String id)
-    {
-        return org.semanticwb.model.PortletFilter.getPortletFilter(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.model.PortletFilter> listPortletFilters()
-    {
-        return org.semanticwb.model.PortletFilter.listPortletFilters(this);
-    }
-
-    public org.semanticwb.model.PortletFilter createPortletFilter(String id)
-    {
-        return org.semanticwb.model.PortletFilter.createPortletFilter(id,this);
-    }
-
-    public org.semanticwb.model.PortletFilter createPortletFilter()
-    {
-        long id=getSemanticObject().getModel().getCounter(swb_PortletFilter);
-        return org.semanticwb.model.PortletFilter.createPortletFilter(String.valueOf(id),this);
-    } 
-
-    public void removePortletFilter(String id)
-    {
-        org.semanticwb.model.PortletFilter.removePortletFilter(id, this);
-    }
-    public boolean hasPortletFilter(String id)
-    {
-        return org.semanticwb.model.PortletFilter.hasPortletFilter(id, this);
     }
 
     public org.semanticwb.model.Template getTemplate(String id)
@@ -1130,6 +1070,36 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
         return org.semanticwb.model.PFlow.hasPFlow(id, this);
     }
 
+    public org.semanticwb.model.ResourceFilter getResourceFilter(String id)
+    {
+        return org.semanticwb.model.ResourceFilter.getResourceFilter(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.ResourceFilter> listResourceFilters()
+    {
+        return org.semanticwb.model.ResourceFilter.listResourceFilters(this);
+    }
+
+    public org.semanticwb.model.ResourceFilter createResourceFilter(String id)
+    {
+        return org.semanticwb.model.ResourceFilter.createResourceFilter(id,this);
+    }
+
+    public org.semanticwb.model.ResourceFilter createResourceFilter()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_ResourceFilter);
+        return org.semanticwb.model.ResourceFilter.createResourceFilter(String.valueOf(id),this);
+    } 
+
+    public void removeResourceFilter(String id)
+    {
+        org.semanticwb.model.ResourceFilter.removeResourceFilter(id, this);
+    }
+    public boolean hasResourceFilter(String id)
+    {
+        return org.semanticwb.model.ResourceFilter.hasResourceFilter(id, this);
+    }
+
     public org.semanticwb.model.TemplateRef getTemplateRef(String id)
     {
         return org.semanticwb.model.TemplateRef.getTemplateRef(id, this);
@@ -1158,6 +1128,60 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public boolean hasTemplateRef(String id)
     {
         return org.semanticwb.model.TemplateRef.hasTemplateRef(id, this);
+    }
+
+    public org.semanticwb.model.Resource getResource(String id)
+    {
+        return org.semanticwb.model.Resource.getResource(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.Resource> listResources()
+    {
+        return org.semanticwb.model.Resource.listResources(this);
+    }
+
+    public org.semanticwb.model.Resource createResource(String id)
+    {
+        return org.semanticwb.model.Resource.createResource(id,this);
+    }
+
+    public org.semanticwb.model.Resource createResource()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_Resource);
+        return org.semanticwb.model.Resource.createResource(String.valueOf(id),this);
+    } 
+
+    public void removeResource(String id)
+    {
+        org.semanticwb.model.Resource.removeResource(id, this);
+    }
+    public boolean hasResource(String id)
+    {
+        return org.semanticwb.model.Resource.hasResource(id, this);
+    }
+
+    public org.semanticwb.model.ResourceType getResourceType(String id)
+    {
+        return org.semanticwb.model.ResourceType.getResourceType(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypes()
+    {
+        return org.semanticwb.model.ResourceType.listResourceTypes(this);
+    }
+
+    public org.semanticwb.model.ResourceType createResourceType(String id)
+    {
+        return org.semanticwb.model.ResourceType.createResourceType(id,this);
+    }
+
+    public void removeResourceType(String id)
+    {
+        org.semanticwb.model.ResourceType.removeResourceType(id, this);
+    }
+    public boolean hasResourceType(String id)
+    {
+        return org.semanticwb.model.ResourceType.hasResourceType(id, this);
     }
 
     public org.semanticwb.model.TemplateGroup getTemplateGroup(String id)
@@ -1218,29 +1242,5 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public boolean hasRoleRef(String id)
     {
         return org.semanticwb.model.RoleRef.hasRoleRef(id, this);
-    }
-
-    public org.semanticwb.model.PortletSubType getPortletSubType(String id)
-    {
-        return org.semanticwb.model.PortletSubType.getPortletSubType(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.model.PortletSubType> listPortletSubTypes()
-    {
-        return org.semanticwb.model.PortletSubType.listPortletSubTypes(this);
-    }
-
-    public org.semanticwb.model.PortletSubType createPortletSubType(String id)
-    {
-        return org.semanticwb.model.PortletSubType.createPortletSubType(id,this);
-    }
-
-    public void removePortletSubType(String id)
-    {
-        org.semanticwb.model.PortletSubType.removePortletSubType(id, this);
-    }
-    public boolean hasPortletSubType(String id)
-    {
-        return org.semanticwb.model.PortletSubType.hasPortletSubType(id, this);
     }
 }

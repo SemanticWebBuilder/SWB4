@@ -6,22 +6,25 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
-public class Portlet extends PortletBase 
+
+public class Resource extends org.semanticwb.model.base.ResourceBase 
 {
-    private static Logger log = SWBUtils.getLogger(Portlet.class);
-        
+    private static Logger log = SWBUtils.getLogger(Resource.class);
+
     private String siteid=null;
-    protected int randpriority;    
-    
+    protected int randpriority;
+
     private Document m_dom=null;
     private Document m_filter=null;
     private NodeList m_filternode=null;
-    
-    public Portlet(SemanticObject base)
+
+    public Resource(SemanticObject base)
     {
         super(base);
     }
@@ -34,17 +37,17 @@ public class Portlet extends PortletBase
         }
         return siteid;
     }
-    
+
     public boolean isCached()
     {
         boolean ret=false;
-        if(getPortletType().getPortletCache()>0)
+        if(getResourceType().getResourceCache()>0)
         {
             ret=true;
         }
         return ret;
     }
-    
+
     public void refreshRandPriority()
     {
         //TODO:
@@ -54,20 +57,20 @@ public class Portlet extends PortletBase
 //            randpriority = WBUtils.getInstance().calcPriority(6);
 //        else
 //            randpriority = WBUtils.getInstance().calcPriority(recResource.getPriority());
-    }   
-    
+    }
+
     public void setRandPriority(int randpriority)
     {
         this.randpriority=randpriority;
     }
-    
+
     /**
      * @return  */
     public int getRandPriority()
     {
         return randpriority;
-    }    
-    
+    }
+
     public Document getDom() throws SWBException
     {
        if(m_dom==null)
@@ -75,9 +78,9 @@ public class Portlet extends PortletBase
            m_dom=getSemanticObject().getDomProperty(swb_xml);
        }
        return m_dom;
-    }    
-    
-    
+    }
+
+
     /** Asigna un atributo al DOM del recurso.
      * Si no existe el atributo, lo crea y si existe lo modifica
      * @param name String nombre del atributo
@@ -92,14 +95,14 @@ public class Portlet extends PortletBase
             if(res==null){
                 Element ele = dom.createElement("resource");
                 dom.appendChild(ele);
-            }   
+            }
             SWBUtils.XML.setAttribute(dom, name, value);
         } catch (Exception e)
         {
             log.error("Error in setAttribute: " + name + " ->Resource " + getId(),e);
         }
     }
-    
+
     /** Lee un atributo del DOM del Recurso
      * Si el atributo no esta declarado regresa el valor por defecto defvalue.
      */
@@ -132,7 +135,7 @@ public class Portlet extends PortletBase
         }
         return ret;
     }
-    
+
     /** Lee un atributo del DOM del Recurso
      * Si el atributo no esta declarado regresa null.
      */
@@ -154,7 +157,7 @@ public class Portlet extends PortletBase
         }
         return vec.iterator();
     }
-    
+
 
     /** Borra un atributo del DOM del Recurso
      */
@@ -174,7 +177,7 @@ public class Portlet extends PortletBase
             log.error("Error in removeAttribute: " + name + " ->Resource " + getId(), e);
         }
     }
-    
+
     /** Actualiza los atributos del DOM a base de datos. */
     public void updateAttributesToDB() throws SWBException
     {
@@ -188,19 +191,19 @@ public class Portlet extends PortletBase
             }
         }
     }
-    
+
     @Override
-    public void setXml(String xml) 
+    public void setXml(String xml)
     {
         super.setXml(xml);
         m_dom=null;
     }
-    
+
     public void addHit(HttpServletRequest request, User user, WebPage page)
     {
         //TODO:
     }
-    
+
     /**
      * @throws AFException
      * @return  */
@@ -230,7 +233,7 @@ public class Portlet extends PortletBase
      * @param usr
      * @param data
      * @throws AFException  */
-    public void setData(User usr, String data) 
+    public void setData(User usr, String data)
     {
         setProperty("data/usr/"+usr.getUserRepository().getId()+"/"+usr.getId(),data);
     }
@@ -278,7 +281,7 @@ public class Portlet extends PortletBase
      */
     public org.w3c.dom.NodeList getFilterNode()
     {
-        PortletFilter pfilter=getPortletFilter();
+        ResourceFilter pfilter=getResourceFilter();
         if(pfilter!=null)
         {
             Document aux=pfilter.getSemanticObject().getDomProperty(swb_xml);

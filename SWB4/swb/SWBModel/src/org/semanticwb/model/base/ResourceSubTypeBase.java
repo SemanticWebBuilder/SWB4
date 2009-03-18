@@ -1,62 +1,83 @@
 package org.semanticwb.model.base;
 
 
-public class PortletSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticClass swb_PortletType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletType");
+    public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasPSTResources=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPSTResources");
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
     public static final org.semanticwb.platform.SemanticProperty swb_PSTType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#PSTType");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
-    public static final org.semanticwb.platform.SemanticClass swb_Portlet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Portlet");
-    public static final org.semanticwb.platform.SemanticProperty swb_hasPSTPortlets=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPSTPortlets");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
-    public static final org.semanticwb.platform.SemanticClass swb_PortletSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletSubType");
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PortletSubType");
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceSubType");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceSubType");
 
-    public PortletSubTypeBase(org.semanticwb.platform.SemanticObject base)
+    public ResourceSubTypeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
-    public static org.semanticwb.model.PortletSubType getPortletSubType(String id, org.semanticwb.model.SWBModel model)
+    public static org.semanticwb.model.ResourceSubType getResourceSubType(String id, org.semanticwb.model.SWBModel model)
     {
-        return (org.semanticwb.model.PortletSubType)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        return (org.semanticwb.model.ResourceSubType)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
-    public static java.util.Iterator<org.semanticwb.model.PortletSubType> listPortletSubTypes(org.semanticwb.model.SWBModel model)
+    public static java.util.Iterator<org.semanticwb.model.ResourceSubType> listResourceSubTypes(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType>(org.semanticwb.model.ResourceSubType.class, it, true);
     }
 
-    public static java.util.Iterator<org.semanticwb.model.PortletSubType> listPortletSubTypes()
+    public static java.util.Iterator<org.semanticwb.model.ResourceSubType> listResourceSubTypes()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PortletSubType>(org.semanticwb.model.PortletSubType.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType>(org.semanticwb.model.ResourceSubType.class, it, true);
     }
 
-    public static org.semanticwb.model.PortletSubType createPortletSubType(String id, org.semanticwb.model.SWBModel model)
+    public static org.semanticwb.model.ResourceSubType createResourceSubType(String id, org.semanticwb.model.SWBModel model)
     {
-        return (org.semanticwb.model.PortletSubType)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+        return (org.semanticwb.model.ResourceSubType)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
-    public static void removePortletSubType(String id, org.semanticwb.model.SWBModel model)
+    public static void removeResourceSubType(String id, org.semanticwb.model.SWBModel model)
     {
         model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
     }
 
-    public static boolean hasPortletSubType(String id, org.semanticwb.model.SWBModel model)
+    public static boolean hasResourceSubType(String id, org.semanticwb.model.SWBModel model)
     {
-        return (getPortletSubType(id, model)!=null);
+        return (getResourceSubType(id, model)!=null);
     }
 
-    public void setType(org.semanticwb.model.PortletType portlettype)
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources()
     {
-        getSemanticObject().setObjectProperty(swb_PSTType, portlettype.getSemanticObject());
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(org.semanticwb.model.Resource.class, getSemanticObject().listObjectProperties(swb_hasPSTResources));
+    }
+
+    public boolean hasResource(org.semanticwb.model.Resource resource)
+    {
+        if(resource==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPSTResources,resource.getSemanticObject());
+    }
+
+    public org.semanticwb.model.Resource getResource()
+    {
+         org.semanticwb.model.Resource ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPSTResources);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Resource)obj.getSemanticClass().newGenericInstance(obj);
+         }
+         return ret;
+    }
+
+    public void setType(org.semanticwb.model.ResourceType resourcetype)
+    {
+        getSemanticObject().setObjectProperty(swb_PSTType, resourcetype.getSemanticObject());
     }
 
     public void removeType()
@@ -64,13 +85,13 @@ public class PortletSubTypeBase extends org.semanticwb.model.SWBClass implements
         getSemanticObject().removeProperty(swb_PSTType);
     }
 
-    public org.semanticwb.model.PortletType getType()
+    public org.semanticwb.model.ResourceType getType()
     {
-         org.semanticwb.model.PortletType ret=null;
+         org.semanticwb.model.ResourceType ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_PSTType);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.PortletType)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.ResourceType)obj.getSemanticClass().newGenericInstance(obj);
          }
          return ret;
     }
@@ -139,27 +160,6 @@ public class PortletSubTypeBase extends org.semanticwb.model.SWBClass implements
     public void setUpdated(java.util.Date updated)
     {
         getSemanticObject().setDateProperty(swb_updated, updated);
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet> listPortlets()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Portlet>(org.semanticwb.model.Portlet.class, getSemanticObject().listObjectProperties(swb_hasPSTPortlets));
-    }
-
-    public boolean hasPortlet(org.semanticwb.model.Portlet portlet)
-    {
-        if(portlet==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPSTPortlets,portlet.getSemanticObject());
-    }
-
-    public org.semanticwb.model.Portlet getPortlet()
-    {
-         org.semanticwb.model.Portlet ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPSTPortlets);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Portlet)obj.getSemanticClass().newGenericInstance(obj);
-         }
-         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)
