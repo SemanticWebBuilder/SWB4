@@ -292,16 +292,16 @@ public class SWBFormMgr
     {
         StringBuffer ret=new StringBuffer();
         String frmname=getFormName();
-        ret.append("<form id=\""+frmname+"\" name=\""+frmname+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""+m_action+"\" onSubmit=\"submitForm('"+frmname+"');return false;\" method=\""+m_method+"\">");
-        if(m_obj!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_URI+"\" value=\""+m_obj.getURI()+"\">");
-        if(m_cls!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_CLS+"\" value=\""+m_cls.getURI()+"\">");
-        if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_MODE+"\" value=\""+m_mode+"\">");
-        if(m_ref!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_REF+"\" value=\""+m_ref.getURI()+"\">");
+        ret.append("<form id=\""+frmname+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""+m_action+"\" onSubmit=\"submitForm('"+frmname+"');return false;\" method=\""+m_method.toLowerCase()+"\">");
+        if(m_obj!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_URI+"\" value=\""+m_obj.getURI()+"\"/>");
+        if(m_cls!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_CLS+"\" value=\""+m_cls.getURI()+"\"/>");
+        if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_MODE+"\" value=\""+m_mode+"\"/>");
+        if(m_ref!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_REF+"\" value=\""+m_ref.getURI()+"\"/>");
         Iterator<Map.Entry<String,String>> hit=hidden.entrySet().iterator();
         while(hit.hasNext())
         {
             Map.Entry entry=hit.next();
-            ret.append("    <input type=\"hidden\" name=\""+entry.getKey()+"\" value=\""+entry.getValue()+"\">");
+            ret.append("    <input type=\"hidden\" name=\""+entry.getKey()+"\" value=\""+entry.getValue()+"\"/>");
         }
 
         if(!m_mode.equals(MODE_CREATE))
