@@ -37,9 +37,16 @@ public class ExcelResource extends GenericAdmResource
         
     }
 
-    protected void printDocument(org.semanticwb.resource.office.ExcelResource porlet, PrintWriter out, String path,String workpath,String html)
+    protected void printDocument(org.semanticwb.resource.office.ExcelResource porlet, PrintWriter out, String path,String workpath,String html,SWBParamRequest paramReq)
     {
-        out.write("<iframe src=\"" + path + "\">Este navegador no soporta iframe</iframe>");
+        try
+        {
+            out.write("<iframe src=\"" + path + "\">"+paramReq.getLocaleString("frameNotsupport")+"</iframe>");
+        }
+        catch(Exception e)
+        {
+            out.write("<iframe src=\"" + path + "\">This navigator does not support iframe</iframe>");
+        }
     }
 
     @Override
@@ -47,6 +54,7 @@ public class ExcelResource extends GenericAdmResource
     {
         if (this.getResourceBase() instanceof org.semanticwb.resource.office.ExcelResource)
         {
+            paramReq.getLocaleString("");
             org.semanticwb.resource.office.ExcelResource portlet = (org.semanticwb.resource.office.ExcelResource) this.getResourceBase();
             String version = portlet.getVersionToShow();
             String contentId = portlet.getContent();
@@ -73,7 +81,7 @@ public class ExcelResource extends GenericAdmResource
                     PrintWriter out = response.getWriter();
                     beforePrintDocument(portlet, out);
                     String workpath = SWBPlatform.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
-                    printDocument(portlet, out, path,workpath,"");
+                    printDocument(portlet, out, path,workpath,"",paramReq);
                     afterPrintDocument(portlet, out);
                     out.close();
                 }
