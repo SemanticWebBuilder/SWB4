@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.portal.admin.resources.reports.beans.IncompleteFilterException;
@@ -64,9 +64,9 @@ public class WBAUserReport extends GenericResource {
     
     @Override
     public void init() {
-        Portlet base = getResourceBase();        
+        Resource base = getResourceBase();
         try {
-            strRscType = base.getPortletType().getPortletClassName();
+            strRscType = base.getResourceType().getResourceClassName();
         }catch (Exception e) {
             strRscType = "WBALanguageReport";
         }
@@ -142,7 +142,7 @@ public class WBAUserReport extends GenericResource {
         response.setHeader("Cache-Control", "no-cache"); 
         response.setHeader("Pragma", "no-cache"); 
         PrintWriter out = response.getWriter();
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         
         ArrayList idaux = new ArrayList();        
         
@@ -521,7 +521,7 @@ public class WBAUserReport extends GenericResource {
      */
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         ArrayList idaux = new ArrayList();
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
@@ -582,7 +582,7 @@ public class WBAUserReport extends GenericResource {
     public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.xls\"");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         ArrayList idaux = new ArrayList();
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
@@ -644,7 +644,7 @@ public class WBAUserReport extends GenericResource {
      */
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/xml;charset=iso-8859-1");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         ArrayList idaux = new ArrayList();
         try{            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
@@ -706,7 +706,7 @@ public class WBAUserReport extends GenericResource {
      */    
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         ArrayList idaux = new ArrayList();
         try{            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
@@ -769,7 +769,7 @@ public class WBAUserReport extends GenericResource {
     public void doRepRtf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/rtf");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.rtf\"");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         ArrayList idaux = new ArrayList();
         try{            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            

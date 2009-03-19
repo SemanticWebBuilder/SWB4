@@ -13,9 +13,9 @@ import org.semanticwb.model.Calendarable;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.ObjectBehavior;
 import org.semanticwb.model.PFlowRefable;
-import org.semanticwb.model.Portlet;
-import org.semanticwb.model.PortletType;
-import org.semanticwb.model.Portletable;
+import org.semanticwb.model.Resource;
+import org.semanticwb.model.ResourceType;
+import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.RoleRefable;
 import org.semanticwb.model.Roleable;
 import org.semanticwb.model.Rule;
@@ -66,16 +66,16 @@ public class TestAdminWebSite {
     {
     }
 
-    public PortletType createPortletType(WebSite site, String name, String clsName, int type, String pkg)
+    public ResourceType createResourceType(WebSite site, String name, String clsName, int type, String pkg)
     {
-        PortletType pt=site.getPortletType(name);
+        ResourceType pt=site.getResourceType(name);
         if(pt==null)
         {
-            pt=site.createPortletType(name);
+            pt=site.createResourceType(name);
             pt.setTitle(name);
-            pt.setPortletMode(type);
-            pt.setPortletClassName(pkg+"."+clsName);
-            pt.setPortletBundle(pkg+"."+clsName);
+            pt.setResourceMode(type);
+            pt.setResourceClassName(pkg+"."+clsName);
+            pt.setResourceBundle(pkg+"."+clsName);
             return pt;
         }
         return null;
@@ -194,42 +194,42 @@ public class TestAdminWebSite {
             ob.addTemplateRef(tplref);
         }
 
-        PortletType pt=null;
-        Portlet p=null;
+        ResourceType pt=null;
+        Resource p=null;
 
-        //Create Portlet Types
-        pt=createPortletType(site, "JSPResource", "JSPResource",1,"org.semanticwb.portal.resources");
-        pt=createPortletType(site, "SemObjPropRefEditor", "SWBASOPropRefEditor",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "CreateUser", "SWBACreateUser",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "DBSparql", "SWBADBSparql",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "Editor", "SWBAEditor",1,"org.semanticwb.portal.admin.resources");
+        //Create Resource Types
+        pt=createResourceType(site, "JSPResource", "JSPResource",1,"org.semanticwb.portal.resources");
+        pt=createResourceType(site, "SemObjPropRefEditor", "SWBASOPropRefEditor",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "CreateUser", "SWBACreateUser",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "DBSparql", "SWBADBSparql",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "Editor", "SWBAEditor",1,"org.semanticwb.portal.admin.resources");
         if(pt!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(pt);
+            p=site.createResource();
+            p.setResourceType(pt);
             p.setTitle("Editor");
             p.setActive(true);
         }
-        //p=site.getPortlet("1");
-        //p.setPortletType(site.getPortletType("Editor"));
-        pt=createPortletType(site, "ExportWebSite", "SWBExportWebSite",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "ImportWebSite", "SWBImportWebSite",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "Logs", "SWBALogs",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "MMemory", "SWBAMMemory",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "Properties", "SWBAProperties",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "Rule", "SWBARule",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "Schedule", "SWBASchedule",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "SearchUsers", "SWBASearchUsers",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "VersionInfo", "SWBAVersionInfo",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "WebPageContents", "SWBAWebPageContents",1,"org.semanticwb.portal.admin.resources");
-        pt=createPortletType(site, "GlobalReport", "WBAGlobalReport",1,"org.semanticwb.portal.admin.resources");
-        //createPortletType(site, "XX", "XX",1,"org.semanticwb.portal.admin.resources");
+        //p=site.getResource("1");
+        //p.setResourceType(site.getResourceType("Editor"));
+        pt=createResourceType(site, "ExportWebSite", "SWBExportWebSite",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "ImportWebSite", "SWBImportWebSite",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "Logs", "SWBALogs",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "MMemory", "SWBAMMemory",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "Properties", "SWBAProperties",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "Rule", "SWBARule",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "Schedule", "SWBASchedule",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "SearchUsers", "SWBASearchUsers",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "VersionInfo", "SWBAVersionInfo",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "WebPageContents", "SWBAWebPageContents",1,"org.semanticwb.portal.admin.resources");
+        pt=createResourceType(site, "GlobalReport", "WBAGlobalReport",1,"org.semanticwb.portal.admin.resources");
+        //createResourceType(site, "XX", "XX",1,"org.semanticwb.portal.admin.resources");
 
         ObjectBehavior obj=createBehavior(site,"bh_Information","Información","10");
         if(obj!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("JSPResource"));
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("JSPResource"));
             p.setTitle("Information");
             p.setActive(true);
             p.setPriority(3);
@@ -238,29 +238,29 @@ public class TestAdminWebSite {
             {
                 p.updateAttributesToDB();
             }catch(Exception e){e.printStackTrace();}
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
         }
 
         obj=createBehavior(site,"bh_Contents","Contenidos","20");
         if(obj!=null)
         {
-            obj.setBehaviorParams("sprop=swb:hasPortlet");
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("WebPageContents"));
+            obj.setBehaviorParams("sprop=swb:hasResource");
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("WebPageContents"));
             p.setTitle("Contents");
             p.setActive(true);
             p.setPriority(3);
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
-            obj.setInterface(Portletable.swb_Portletable.getSemanticObject());
+            obj.setInterface(Resourceable.swb_Resourceable.getSemanticObject());
         }
 
         obj=createBehavior(site,"bh_TemplateEdit","Editar Platilla","20");
         if(obj!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("JSPResource"));
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("JSPResource"));
             p.setTitle("Edit Template");
             p.setActive(true);
             p.setPriority(3);
@@ -269,7 +269,7 @@ public class TestAdminWebSite {
             {
                 p.updateAttributesToDB();
             }catch(Exception e){e.printStackTrace();}
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
             obj.setInterface(Template.sclass.getSemanticObject());
         }
@@ -277,12 +277,12 @@ public class TestAdminWebSite {
         obj=createBehavior(site,"bh_RuleEditor","Editar Regla","20");
         if(obj!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("Rule"));
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("Rule"));
             p.setTitle("Edit Rule");
             p.setActive(true);
             p.setPriority(3);
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
             obj.setInterface(Rule.sclass.getSemanticObject());
         }
@@ -290,12 +290,12 @@ public class TestAdminWebSite {
         obj=createBehavior(site,"bh_Templates","Plantillas","20");
         if(obj!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("SemObjPropRefEditor"));
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("SemObjPropRefEditor"));
             p.setTitle("Templates");
             p.setActive(true);
             p.setPriority(3);
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
             obj.setBehaviorParams("sprop=swb:hasTemplateRef&spropref=swb:template");
             obj.setInterface(TemplateRefable.swb_TemplateRefable.getSemanticObject());
@@ -304,30 +304,30 @@ public class TestAdminWebSite {
         obj=createBehavior(site,"bh_AdminPorltet","Administrar","30");
         if(obj!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("JSPResource"));
-            p.setTitle("Admin Portlet");
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("JSPResource"));
+            p.setTitle("Admin Resource");
             p.setActive(true);
             p.setPriority(3);
-            p.setAttribute("jsppath","/swbadmin/jsp/editPortlet.jsp");
+            p.setAttribute("jsppath","/swbadmin/jsp/editResource.jsp");
             try
             {
                 p.updateAttributesToDB();
             }catch(Exception e){e.printStackTrace();}
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
-            obj.setInterface(Portlet.sclass.getSemanticObject());
+            obj.setInterface(Resource.sclass.getSemanticObject());
         }
 
         obj=createBehavior(site,"bh_PFlows","Flujos de Publicación","40");
         if(obj!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("SemObjPropRefEditor"));
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("SemObjPropRefEditor"));
             p.setTitle("PFlows");
             p.setActive(true);
             p.setPriority(3);
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
             obj.setBehaviorParams("sprop=swb:hasPFlowRef&spropref=swb:pflow");
             obj.setInterface(PFlowRefable.swb_PFlowRefable.getSemanticObject());
@@ -336,12 +336,12 @@ public class TestAdminWebSite {
         obj=createBehavior(site,"bh_Versions","Versiones","50");
         if(obj!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("VersionInfo"));
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("VersionInfo"));
             p.setTitle("Version");
             p.setActive(true);
             p.setPriority(3);
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
             obj.setInterface(Versionable.swb_Versionable.getSemanticObject());
         }
@@ -349,12 +349,12 @@ public class TestAdminWebSite {
         obj=createBehavior(site,"bh_Roles","Roles","60");
         if(obj!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("SemObjPropRefEditor"));
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("SemObjPropRefEditor"));
             p.setTitle("Roles");
             p.setActive(true);
             p.setPriority(3);
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
             obj.setBehaviorParams("sprop=swb:hasRoleRef&spropref=swb:role");
             obj.setInterface(RoleRefable.swb_RoleRefable.getSemanticObject());
@@ -363,12 +363,12 @@ public class TestAdminWebSite {
         obj=createBehavior(site,"bh_RolesDirect","Roles","65");
         if(obj!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("SemObjPropRefEditor"));
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("SemObjPropRefEditor"));
             p.setTitle("Roles Direct");
             p.setActive(true);
             p.setPriority(3);
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
             obj.setBehaviorParams("sprop=swb:hasRole&spropref=swb:hasRole");
             obj.setInterface(Roleable.swb_Roleable.getSemanticObject());
@@ -377,12 +377,12 @@ public class TestAdminWebSite {
         obj=createBehavior(site,"bh_Rules","Reglas","70");
         if(obj!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("SemObjPropRefEditor"));
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("SemObjPropRefEditor"));
             p.setTitle("Rules");
             p.setActive(true);
             p.setPriority(3);
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
             obj.setBehaviorParams("sprop=swb:hasRuleRef&spropref=swb:rule");
             obj.setInterface(RuleRefable.swb_RuleRefable.getSemanticObject());
@@ -391,12 +391,12 @@ public class TestAdminWebSite {
         obj=createBehavior(site,"bh_Schedule","Calendarización","80");
         if(obj!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("Schedule"));
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("Schedule"));
             p.setTitle("Schedule");
             p.setActive(true);
             p.setPriority(3);
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
             obj.setBehaviorParams("sprop=swb:hasCalendar");
             obj.setInterface(Calendarable.swb_Calendarable.getSemanticObject());
@@ -405,12 +405,12 @@ public class TestAdminWebSite {
         obj=createBehavior(site,"bh_Log","Bitácora","90");
         if(obj!=null)
         {
-            p=site.createPortlet();
-            p.setPortletType(site.getPortletType("Logs"));
+            p=site.createResource();
+            p.setResourceType(site.getResourceType("Logs"));
             p.setTitle("Logs");
             p.setActive(true);
             p.setPriority(3);
-            obj.addPortlet(p);
+            obj.addResource(p);
             obj.setParent(ob);
         }
 

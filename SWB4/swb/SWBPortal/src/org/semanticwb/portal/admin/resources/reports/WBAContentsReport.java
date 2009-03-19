@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
-import org.semanticwb.model.PortletType;
+import org.semanticwb.model.Resource;
+import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.SWBContext;
@@ -42,9 +42,9 @@ public class WBAContentsReport extends GenericResource {
     
     @Override
     public void init(){
-        Portlet base = getResourceBase();        
+        Resource base = getResourceBase();
         try {
-            strRscType = base.getPortletType().getPortletClassName();
+            strRscType = base.getResourceType().getResourceClassName();
         }catch (Exception e) {
             strRscType = "WBAContentsReport";
         }        
@@ -116,10 +116,10 @@ public class WBAContentsReport extends GenericResource {
         String webPageId = request.getParameter("section");        
         WebPage webPage = webSite.getWebPage(webPageId);        
         Bool first = new Bool();
-        Iterator<Portlet> portlets = webPage.listPortlets();        
+        Iterator<Resource> portlets = webPage.listResources();
         while(portlets.hasNext()) {
-            Portlet portlet = portlets.next();
-            if(portlet.getPortletType().getPortletMode()==1) {
+            Resource portlet = portlets.next();
+            if(portlet.getResourceType().getResourceMode()==1) {
                 if(first.isFirst()) {
                     first.setFirst();                    
                 }else {
@@ -128,7 +128,7 @@ public class WBAContentsReport extends GenericResource {
                 json.append(" {");
                 json.append(" sect:'"+webPage.getTitle()+"'");
                 json.append(", id:'"+portlet.getId()+"'");
-                json.append(", tipo:'"+portlet.getPortletType().getTitle()+"'");
+                json.append(", tipo:'"+portlet.getResourceType().getTitle()+"'");
                 json.append(", contenido:'"+portlet.getTitle()+"'");
                 json.append(", prior:'"+portlet.getPriority()+"'");
                 json.append(", active:'"+(portlet.isActive()?"Si":"No")+"'");
@@ -156,10 +156,10 @@ public class WBAContentsReport extends GenericResource {
         
         while(childs.hasNext()) {
             WebPage webPage = childs.next();
-            Iterator<Portlet> portlets = webPage.listPortlets();
+            Iterator<Resource> portlets = webPage.listResources();
             while(portlets.hasNext()) {
-                Portlet portlet = portlets.next();
-                if(portlet.getPortletType().getPortletMode()==1) {
+                Resource portlet = portlets.next();
+                if(portlet.getResourceType().getResourceMode()==1) {
                     if(first.isFirst()) {
                         first.setFirst();
                     }else {
@@ -168,7 +168,7 @@ public class WBAContentsReport extends GenericResource {
                     json.append(" {");
                     json.append(" sect:'"+webPage.getTitle()+"'");
                     json.append(", id:'"+portlet.getId()+"'");
-                    json.append(", tipo:'"+portlet.getPortletType().getTitle()+"'");
+                    json.append(", tipo:'"+portlet.getResourceType().getTitle()+"'");
                     json.append(", contenido:'"+portlet.getTitle()+"'");
                     json.append(", prior:'"+portlet.getPriority()+"'");
                     json.append(", active:'"+(portlet.isActive()?"Si":"No")+"'");
@@ -198,7 +198,7 @@ public class WBAContentsReport extends GenericResource {
         response.setHeader("Cache-Control", "no-cache"); 
         response.setHeader("Pragma", "no-cache"); 
         PrintWriter out = response.getWriter();
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
                 
         final int I_ACCESS = 0;
         HashMap hm_sites = new HashMap();
@@ -448,14 +448,14 @@ public class WBAContentsReport extends GenericResource {
         WebSite webSite = SWBContext.getWebSite(webSiteId);
         String webPageId = request.getParameter("section");        
         WebPage webPage = webSite.getWebPage(webPageId);        
-        Iterator<Portlet> portlets = webPage.listPortlets();        
+        Iterator<Resource> portlets = webPage.listResources();
         while(portlets.hasNext()) {
-            Portlet portlet = portlets.next();
-            if(portlet.getPortletType().getPortletMode()==1) {
+            Resource portlet = portlets.next();
+            if(portlet.getResourceType().getResourceMode()==1) {
                 html.append("<tr>");
                 html.append("  <td>"+webPage.getTitle()+"</td>");
                 html.append("  <td>"+portlet.getId()+"</td>");
-                html.append("  <td>"+portlet.getPortletType().getTitle()+"</td>");
+                html.append("  <td>"+portlet.getResourceType().getTitle()+"</td>");
                 html.append("  <td>"+portlet.getTitle()+"</td>");
                 html.append("  <td>"+portlet.getPriority()+"</td>");
                 html.append("  <td>"+(portlet.isActive()?"Si":"No")+"</td>");
@@ -482,14 +482,14 @@ public class WBAContentsReport extends GenericResource {
         StringBuilder html = new StringBuilder();        
         while(childs.hasNext()) {
             WebPage webPage = childs.next();
-            Iterator<Portlet> portlets = webPage.listPortlets();
+            Iterator<Resource> portlets = webPage.listResources();
             while(portlets.hasNext()) {
-                Portlet portlet = portlets.next();
-                if(portlet.getPortletType().getPortletMode()==1) {
+                Resource portlet = portlets.next();
+                if(portlet.getResourceType().getResourceMode()==1) {
                     html.append("<tr>");
                     html.append("  <td>"+webPage.getTitle()+"</td>");
                     html.append("  <td>"+portlet.getId()+"</td>");
-                    html.append("  <td>"+portlet.getPortletType().getTitle()+"</td>");
+                    html.append("  <td>"+portlet.getResourceType().getTitle()+"</td>");
                     html.append("  <td>"+portlet.getTitle()+"</td>");
                     html.append("  <td>"+portlet.getPriority()+"</td>");
                     html.append("  <td>"+(portlet.isActive()?"Si":"No")+"</td>");
@@ -525,10 +525,10 @@ public class WBAContentsReport extends GenericResource {
         WebSite webSite = SWBContext.getWebSite(webSiteId);
         String webPageId = request.getParameter("section");        
         WebPage webPage = webSite.getWebPage(webPageId);
-        Iterator<Portlet> portlets = webPage.listPortlets();        
+        Iterator<Resource> portlets = webPage.listResources();
         while(portlets.hasNext()) {
-            Portlet portlet = portlets.next();
-            if(portlet.getPortletType().getPortletMode()==1) {
+            Resource portlet = portlets.next();
+            if(portlet.getResourceType().getResourceMode()==1) {
                 Element resource = dom.createElement("resource");
                 resource.appendChild(dom.createTextNode(""));
                 report.appendChild(resource);
@@ -540,7 +540,7 @@ public class WBAContentsReport extends GenericResource {
                 id.appendChild(dom.createTextNode(portlet.getId()));
                 resource.appendChild(id);
                 Element tipo = dom.createElement("type");
-                tipo.appendChild(dom.createTextNode(portlet.getPortletType().getTitle()));
+                tipo.appendChild(dom.createTextNode(portlet.getResourceType().getTitle()));
                 resource.appendChild(tipo);
                 Element contenido = dom.createElement("content");
                 contenido.appendChild(dom.createTextNode(portlet.getTitle()));
@@ -576,10 +576,10 @@ public class WBAContentsReport extends GenericResource {
         Element report = dom.getDocumentElement();
         while(childs.hasNext()) {
             WebPage webPage = childs.next();
-            Iterator<Portlet> portlets = webPage.listPortlets();
+            Iterator<Resource> portlets = webPage.listResources();
             while(portlets.hasNext()) {
-                Portlet portlet = portlets.next();
-                if(portlet.getPortletType().getPortletMode()==1) {                    
+                Resource portlet = portlets.next();
+                if(portlet.getResourceType().getResourceMode()==1) {
                     Element resource = dom.createElement("resource");
                     resource.appendChild(dom.createTextNode(""));
                     report.appendChild(resource);
@@ -591,7 +591,7 @@ public class WBAContentsReport extends GenericResource {
                     id.appendChild(dom.createTextNode(portlet.getId()));
                     resource.appendChild(id);
                     Element tipo = dom.createElement("type");
-                    tipo.appendChild(dom.createTextNode(portlet.getPortletType().getTitle()));
+                    tipo.appendChild(dom.createTextNode(portlet.getResourceType().getTitle()));
                     resource.appendChild(tipo);
                     Element contenido = dom.createElement("content");
                     contenido.appendChild(dom.createTextNode(portlet.getTitle()));
