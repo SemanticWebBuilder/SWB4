@@ -34,7 +34,7 @@ import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.ContentType;
 import org.semanticwb.office.interfaces.FlowContentInformation;
 import org.semanticwb.office.interfaces.IOfficeApplication;
-import org.semanticwb.office.interfaces.PortletInfo;
+import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.RepositoryInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
@@ -709,15 +709,15 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return contents.toArray(new FlowContentInformation[contents.size()]);
     }
 
-    public void sendContentToAuthorize(PortletInfo portletInfo, String message) throws Exception
+    public void sendContentToAuthorize(ResourceInfo resourceInfo, String message) throws Exception
     {
     }
 
-    public void authorize(PortletInfo portletInfo, String message) throws Exception
+    public void authorize(ResourceInfo resourceInfo, String message) throws Exception
     {
     }
 
-    public void reject(PortletInfo portletInfo, String message) throws Exception
+    public void reject(ResourceInfo resourceInfo, String message) throws Exception
     {
     }
 }

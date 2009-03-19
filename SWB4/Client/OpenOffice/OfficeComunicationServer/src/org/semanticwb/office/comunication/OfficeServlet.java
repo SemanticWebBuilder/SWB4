@@ -11,7 +11,7 @@ import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.portlet.office.OfficePortlet;
+import org.semanticwb.resource.office.OfficeResource;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.xmlrpc.XMLRPCServlet;
 import static org.semanticwb.office.comunication.Base64.*;
@@ -137,7 +137,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
                 InputStream in = doc.getContent(repositoryName, contentId, versionName);
                 String name=UUID.randomUUID().toString();
                 String dir=SWBPlatform.getWorkPath()+"/"+name;
-                OfficePortlet.loadContent(in,dir);
+                OfficeResource.loadContent(in,dir);
                 String file = doc.getContentFile(repositoryName, contentId, versionName);
                 if (file != null)
                 {
@@ -166,7 +166,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
                     }
                     else
                     {
-                        //log.error("Contenido no encontrado en ruta: " + filecontent.getAbsolutePath() + ": " + portlet.getContent() + "@" + portlet.getRepositoryName());
+                        //log.error("Contenido no encontrado en ruta: " + filecontent.getAbsolutePath() + ": " + resource.getContent() + "@" + resource.getRepositoryName());
                     }
                 }
 

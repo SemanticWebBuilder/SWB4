@@ -280,8 +280,8 @@ public class TestServices
             }
             WebSiteInfo site = application.getSites()[0];
             WebPageInfo home = application.getHomePage(site);
-            document.publishToPortletContent(rep, contentId,"1.0","demo","demo",home,null,null);
-            /*for (PortletInfo info : document.getPageInformation(rep, contentId))
+            document.publishToResourceContent(rep, contentId,"1.0","demo","demo",home,null,null);
+            /*for (ResourceInfo info : document.getPageInformation(rep, contentId))
             {
                 System.out.println("id : " + info.id);
                 System.out.println("title : " + info.title);
