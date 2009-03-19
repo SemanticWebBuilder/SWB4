@@ -28,7 +28,7 @@ import org.semanticwb.portal.admin.admresources.lib.WBJsInputFEAbs;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.w3c.dom.*;
 
@@ -230,7 +230,7 @@ public class FileFE extends WBJsInputFEAbs
         {
             try
             {
-                Portlet base=dbconnmgr.getBase();
+                Resource base=dbconnmgr.getBase();
                 
                 //if (base!=null && (!"".equals(base.getAttribute("template", "")) && base.getAttribute("path", "").indexOf(base.getResourceWorkPath()) == -1)) 
                 //  throw new Exception("Error while loading resource template: "+base.getId());
@@ -329,7 +329,7 @@ public class FileFE extends WBJsInputFEAbs
                     else msgbydefault+="Default: ";
                     if(bydefault.endsWith(".html") || bydefault.endsWith(".htm") || bydefault.endsWith(".xml") || bydefault.endsWith(".xsl") || bydefault.endsWith(".xslt") || bydefault.endsWith(".jsp")){
                         String defFileName=bydefault.substring(bydefault.lastIndexOf("/")+1);
-                        Portlet base=dbconnmgr.getBase();
+                        Resource base=dbconnmgr.getBase();
                         xml+="<A href=\""+ SWBPlatform.getContextPath()+"/editfile?file="+ bydefault +"&pathType=def&resUri="+base.getEncodedURI()+"&attr="+getName()+"\">"+defFileName+"</A>";
                     }else{
                         xml+="<A href=\""+bydefault+"\">"+bydefault.substring(bydefault.lastIndexOf("/")+1)+"</A>";

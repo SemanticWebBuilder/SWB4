@@ -11,7 +11,7 @@ import org.semanticwb.portal.admin.admresources.lib.*;
 import org.w3c.dom.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 
 /**
  *
@@ -22,7 +22,7 @@ public class FieldSet extends WBContainerFE {
     private static Logger log = SWBUtils.getLogger(FieldSet.class);
     private String legend = null;
     protected Node tag = null;
-    protected Portlet base = null;
+    protected Resource base = null;
     FormFE form=null;
     private ArrayList ajsfe=new ArrayList();
     private Locale locale=null;
@@ -32,7 +32,7 @@ public class FieldSet extends WBContainerFE {
     }
 
     /** Creates a new instwance with the default parameters */
-    public FieldSet(Node tag, Portlet base, FormFE form) {
+    public FieldSet(Node tag, Resource base, FormFE form) {
         this.tag = tag;
         setAttributes();
         this.base=base;

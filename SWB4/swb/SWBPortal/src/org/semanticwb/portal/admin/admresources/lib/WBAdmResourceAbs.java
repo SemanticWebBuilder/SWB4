@@ -24,7 +24,7 @@
 
 package org.semanticwb.portal.admin.admresources.lib;
 
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.admin.admresources.db.*;
 
 /** Esta es una clase abstracta que implementa los metodos genericos de la interface WBAdmResource.

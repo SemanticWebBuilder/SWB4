@@ -15,10 +15,10 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
-import org.semanticwb.model.PortletRef;
-import org.semanticwb.model.PortletSubType;
-import org.semanticwb.model.PortletType;
+import org.semanticwb.model.Resource;
+import org.semanticwb.model.ResourceRef;
+import org.semanticwb.model.ResourceSubType;
+import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
@@ -70,8 +70,8 @@ public class SWBResourceMgr
     public SWBResource getResource(String model, String id)
     {
         //System.out.println("model:"+model+" id:"+id);
-        Portlet portlet=SWBContext.getWebSite(model).getPortlet(id);
-        return getResource(portlet.getURI());
+        Resource resource=SWBContext.getWebSite(model).getResource(id);
+        return getResource(resource.getURI());
     }
 
     public SWBResource getResource(String uri)
@@ -79,10 +79,10 @@ public class SWBResourceMgr
         SWBResource res=resources.get(uri);
         if(res==null)
         {
-            Portlet portlet=(Portlet)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(uri);
-            if(portlet!=null)
+            Resource resource=(Resource)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(uri);
+            if(resource!=null)
             {
-                res=createSWBResource(portlet);
+                res=createSWBResource(resource);
                 resources.put(uri, res);
             }
         }
@@ -113,20 +113,20 @@ public class SWBResourceMgr
         Date today = new Date();
         //today = new Date(today.getYear(), today.getMonth(), today.getDate());
         TreeSet ret = new TreeSet(new SWBPriorityComparator(true));
-        //Iterator<PortletRef> it = topic.listPortletRefs();
-        Iterator<Portlet> it = topic.listPortlets();
+        //Iterator<ResourceRef> it = topic.listResourceRefs();
+        Iterator<Resource> it = topic.listResources();
         while (it.hasNext())
         {
-            //PortletRef ref = it.next();
+            //ResourceRef ref = it.next();
             //System.out.println("Occ:"+occ.getResourceData());
-            //Portlet portlet=ref.getPortlet();
-            Portlet portlet=it.next();
-            //System.out.println("Portlet:"+portlet);
-            //SWBResource res = getResource(portlet.getWebSiteId(), portlet.getSId());
-            SWBResource res = getResource(portlet.getURI());
+            //Resource resource=ref.getResource();
+            Resource resource=it.next();
+            //System.out.println("Resource:"+resource);
+            //SWBResource res = getResource(resource.getWebSiteId(), resource.getSId());
+            SWBResource res = getResource(resource.getURI());
             if (res != null)
             {
-                Portlet base = res.getResourceBase();
+                Resource base = res.getResourceBase();
                 //System.out.println("base:"+base);
                 if(user.haveAccess(base))
                 {
@@ -151,7 +151,7 @@ public class SWBResourceMgr
      * @param params
      * @param tpl
      * @return  */
-    public Iterator getResources(PortletType type, PortletSubType stype, User user, WebPage topic, HashMap params, Template tpl)
+    public Iterator getResources(ResourceType type, ResourceSubType stype, User user, WebPage topic, HashMap params, Template tpl)
     {
         Date today = new Date();
         TreeSet ret = new TreeSet(new SWBPriorityComparator());
@@ -168,10 +168,10 @@ public class SWBResourceMgr
         if(type!=null)
         {
             //TODO:check stype
-            Iterator<Portlet> it=type.listPortlets();
+            Iterator<Resource> it=type.listResources();
             while(it.hasNext())
             {
-                Portlet base=it.next();
+                Resource base=it.next();
                 int camp=0;
                 if(checkResource(base, user, stype, camp, today, topic))
                 {
@@ -323,7 +323,7 @@ public class SWBResourceMgr
      * @param today
      * @param topic
      * @return  */
-    public boolean checkResource(Portlet base, User user, PortletSubType stype, int camp, Date today, WebPage topic)
+    public boolean checkResource(Resource base, User user, ResourceSubType stype, int camp, Date today, WebPage topic)
     {
         boolean passrules = true;
         //System.out.println("checkResource:"+base.getId()+" tmid:"+base.getTopicMapId()+" stype:"+stype+" stypemap:"+stypemap+" camp:"+camp+" topic:"+topic.getDisplayName());
@@ -336,7 +336,7 @@ public class SWBResourceMgr
         //System.out.println("&& ("+base.getCamp()+" == 0 || "+DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive()+" == 1)");
 
         if (base.isActive() && !base.isDeleted()
-                && base.getPortletSubType() == stype
+                && base.getResourceSubType() == stype
                 //&& (camp < 3 || base.getCamp() == camp)
                 //&& (base.getMaxViews() == -1 || base.getMaxViews() > base.getViews())
                 //&& (base.getCamp() == 0 || DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive() == 1)
@@ -437,28 +437,28 @@ public class SWBResourceMgr
         return cls;
     }
 
-    public SWBResource createSWBResource(Portlet portlet)
+    public SWBResource createSWBResource(Resource resource)
     {
         SWBResource obj = null;
         try
         {
-            log.debug("Loading Portlet:" + portlet.getURI());
-            String clsname = portlet.getPortletType().getPortletClassName();
+            log.debug("Loading Resource:" + resource.getURI());
+            String clsname = resource.getResourceType().getResourceClassName();
             Class cls = createSWBResourceClass(clsname);
 //            obj = (WBResource) convertOldWBResource(cls.newInstance(),base);
             obj=(SWBResource)cls.newInstance();
             if (obj != null)
             {
-                obj.setResourceBase(portlet);
+                obj.setResourceBase(resource);
                 if(obj.getResourceBase()==null)throw new SWBException(clsname+": if you override method setResourceBase, you have to invoke super.setResourceBase(base);");
                 obj.init();
 
-                //HashMap basemap=(HashMap)resourcesbase.get(portlet.getTopicMapId());
-                //resources.put(portlet.getURI(), obj);
+                //HashMap basemap=(HashMap)resourcesbase.get(resource.getTopicMapId());
+                //resources.put(resource.getURI(), obj);
                 //if(base.isWb2Resource())oldresources.put(new Long(base.getId()), obj);
 
-//                String typekey=""+portlet.getType();
-//                if(!portlet.getTypeMap().equals(portlet.getTopicMapId()))typekey+="|"+portlet.getTypeMap();
+//                String typekey=""+resource.getType();
+//                if(!resource.getTypeMap().equals(resource.getTopicMapId()))typekey+="|"+resource.getTypeMap();
 //                HashMap tp = (HashMap) basemap.get(typekey);
 //                if (tp == null)
 //                {
@@ -470,8 +470,8 @@ public class SWBResourceMgr
             }
         } catch (Throwable e)
         {
-            if(portlet!=null)log.error("Error Creating SWBResource:"+" "+portlet.getWebSiteId()+"-"+portlet.getId(),e);
-            else log.error("Error Creating SWBResource: portlet==null"+e);
+            if(resource!=null)log.error("Error Creating SWBResource:"+" "+resource.getWebSiteId()+"-"+resource.getId(),e);
+            else log.error("Error Creating SWBResource: resource==null"+e);
         }
         //System.out.println("createWBResource:"+obj);
         return obj;

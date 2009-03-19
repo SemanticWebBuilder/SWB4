@@ -30,7 +30,7 @@ import org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.w3c.dom.*;
 
 /**
@@ -50,7 +50,7 @@ public class HtmlFE extends WBAdmResourceAbs
     protected String language=null;
     protected String src=null;
     protected ArrayList aAttrs=new ArrayList();
-    protected Portlet base=null;
+    protected Resource base=null;
         
     public HtmlFE() {
         html = null;
@@ -71,7 +71,7 @@ public class HtmlFE extends WBAdmResourceAbs
         setAttributes();
     }
     
-    public HtmlFE(Node tag, Portlet base){
+    public HtmlFE(Node tag, Resource base){
         this.tag=tag;
         setAttributes();
         this.base=base; 

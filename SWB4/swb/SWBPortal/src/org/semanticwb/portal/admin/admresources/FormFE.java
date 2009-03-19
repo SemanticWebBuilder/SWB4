@@ -27,7 +27,7 @@ package org.semanticwb.portal.admin.admresources;
 import java.util.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.w3c.dom.*;
 import org.semanticwb.portal.admin.admresources.db.*;
 import org.semanticwb.portal.admin.admresources.lib.WBAdmResource;
@@ -56,7 +56,7 @@ public class FormFE extends WBContainerFE
     private String redirect=null;
     private ArrayList ajsfe=new ArrayList();
     private Node tag=null;
-    private Portlet base=null;
+    private Resource base=null;
     
     
     //ArrayList formelements=new ArrayList();
@@ -72,7 +72,7 @@ public class FormFE extends WBContainerFE
     }
     
     /** Creates a new instance of FormFE with default values*/
-    public FormFE(Node tag, Portlet base,String redirect) {
+    public FormFE(Node tag, Resource base,String redirect) {
         this.tag=tag;
         this.base=base;
         this.redirect=redirect;
