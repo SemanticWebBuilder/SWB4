@@ -34,7 +34,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.portal.admin.resources.reports.beans.IncompleteFilterException;
@@ -75,9 +75,9 @@ public class WBASessionReport extends GenericResource {
 
     @Override
     public void init(){
-        Portlet base = getResourceBase();        
+        Resource base = getResourceBase();
         try {
-            strRscType = base.getPortletType().getPortletClassName();
+            strRscType = base.getResourceType().getResourceClassName();
         }catch (Exception e) {
             strRscType = "WBASessionReport";
         }
@@ -134,7 +134,7 @@ public class WBASessionReport extends GenericResource {
         response.setHeader("Cache-Control", "no-cache"); 
         response.setHeader("Pragma", "no-cache"); 
         PrintWriter out = response.getWriter();
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         
         final int I_ACCESS = 0;
         //StringBuffer sb_ret = new StringBuffer();
@@ -491,7 +491,7 @@ public class WBASessionReport extends GenericResource {
      */
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/pdf");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         
         try{            
             String repositoryName = request.getParameter("wb_repository");
@@ -547,7 +547,7 @@ public class WBASessionReport extends GenericResource {
     public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"sr.xls\"");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         
         try{
             String repositoryName = request.getParameter("wb_repository");
@@ -605,7 +605,7 @@ public class WBASessionReport extends GenericResource {
         PrintWriter out = response.getWriter();
         
         Document dom = SWBUtils.XML.getNewDocument();        
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         try {
             WBAFilterReportBean filter;            
             
@@ -662,7 +662,7 @@ public class WBASessionReport extends GenericResource {
     
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/pdf");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         
         try {
             String repositoryName = request.getParameter("wb_repository");
@@ -713,7 +713,7 @@ public class WBASessionReport extends GenericResource {
     public void doRepRtf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/rtf");
         response.setHeader("Content-Disposition", "inline; filename=\"sr.rtf\"");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
 
         try {
             String repositoryName = request.getParameter("wb_repository");

@@ -14,8 +14,8 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Dns;
 import org.semanticwb.model.Language;
-import org.semanticwb.model.PortletType;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.ResourceType;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.TemplateGroup;
@@ -200,331 +200,331 @@ public class TestWebSite {
         User user=urep.getUser("1");
         Template tpl=site.getTemplate("1");
         
-        if(site.getPortletType("Test")==null)
+        if(site.getResourceType("Test")==null)
         {
-            PortletType ptype=site.createPortletType("Test");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.Test");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.Test");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("Test");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.Test");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.Test");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso Test");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("Test");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("Test");
             
-            home.addPortlet(portlet);            
+            home.addResource(resource);
         }
         
-        if(site.getPortletType("Banner")==null)
+        if(site.getResourceType("Banner")==null)
         {
-            PortletType ptype=site.createPortletType("Banner");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.Banner");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.Banner");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("Banner");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.Banner");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.Banner");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso Banner");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("Banner");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("Banner");
         }  
         
-        if(site.getPortletType("Recommend")==null)
+        if(site.getResourceType("Recommend")==null)
         {
             
-            PortletType ptype=site.createPortletType("Recommend");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.Recommend");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.Recommend");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("Recommend");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.Recommend");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.Recommend");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso Recommend");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("Recommend");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("Recommend");
         }  
         
-        if(site.getPortletType("RecommendSwf")==null)
+        if(site.getResourceType("RecommendSwf")==null)
         {
             
-            PortletType ptype=site.createPortletType("RecommendSwf");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.RecommendSwf");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.RecommendSwf");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("RecommendSwf");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.RecommendSwf");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.RecommendSwf");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso RecommendSwf");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("RecommendSwf");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("RecommendSwf");
         }  
         
-        if(site.getPortletType("Poll")==null)
+        if(site.getResourceType("Poll")==null)
         {
             
-            PortletType ptype=site.createPortletType("Poll");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.Poll");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.Poll");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("Poll");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.Poll");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.Poll");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso Poll");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("Poll");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("Poll");
         }  
         
-        if(site.getPortletType("WBMenuMap")==null)
+        if(site.getResourceType("WBMenuMap")==null)
         {
             
-            PortletType ptype=site.createPortletType("WBMenuMap");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.WBMenuMap");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.WBMenuMap");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("WBMenuMap");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.WBMenuMap");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.WBMenuMap");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso WBMenuMap");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("WBMenuMap");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("WBMenuMap");
         }  
         
-        if(site.getPortletType("WBMenuNivel")==null)
+        if(site.getResourceType("WBMenuNivel")==null)
         {
             
-            PortletType ptype=site.createPortletType("WBMenuNivel");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.WBMenuNivel");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.WBMenuNivel");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("WBMenuNivel");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.WBMenuNivel");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.WBMenuNivel");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso WBMenuNivel");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("WBMenuNivel");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("WBMenuNivel");
         }  
         
         
-        if(site.getPortletType("Banner1")==null)
+        if(site.getResourceType("Banner1")==null)
         {
             
-            PortletType ptype=site.createPortletType("Banner1");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.Banner1");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.Banner1");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("Banner1");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.Banner1");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.Banner1");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso Banner1");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("Banner");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("Banner");
             
-            home.addPortlet(portlet);
+            home.addResource(resource);
         } 
         
-        if(site.getPortletType("Controls")==null)
+        if(site.getResourceType("Controls")==null)
         {
             
-            PortletType ptype=site.createPortletType("Controls");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.Controls");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.Controls");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("Controls");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.Controls");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.Controls");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso Controls");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("Controls");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("Controls");
             
-            home.addPortlet(portlet);
+            home.addResource(resource);
         } 
         
-        if(site.getPortletType("Menu")==null)
+        if(site.getResourceType("Menu")==null)
         {
             
-            PortletType ptype=site.createPortletType("Menu");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.Menu");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.Menu");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("Menu");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.Menu");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.Menu");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso Menu");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("Menu");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("Menu");
         }          
         
-        if(site.getPortletType("HtmlContent")==null)
+        if(site.getResourceType("HtmlContent")==null)
         {
             
-            PortletType ptype=site.createPortletType("HtmlContent");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.HtmlContent");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.HtmlContent");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("HtmlContent");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.HtmlContent");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.HtmlContent");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso HtmlContent");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("HtmlContent");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("HtmlContent");
             
-            home.addPortlet(portlet);
+            home.addResource(resource);
         }  
         
-        if(site.getPortletType("JSPResource")==null)
+        if(site.getResourceType("JSPResource")==null)
         {
             
-            PortletType ptype=site.createPortletType("JSPResource");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.JSPResource");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.JSPResource");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("JSPResource");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.JSPResource");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.JSPResource");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso JSPResource");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("JSPResource");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("JSPResource");
             
-            home.addPortlet(portlet);
+            home.addResource(resource);
         }  
         
-        if(site.getPortletType("TematicIndexXSL")==null)
+        if(site.getResourceType("TematicIndexXSL")==null)
         {
             
-            PortletType ptype=site.createPortletType("TematicIndexXSL");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.TematicIndexXSL");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.TematicIndexXSL");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("TematicIndexXSL");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.TematicIndexXSL");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.TematicIndexXSL");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso TematicIndexXSL");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("TematicIndexXSL");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("TematicIndexXSL");
             
-            home.addPortlet(portlet);
+            home.addResource(resource);
         }  
         
         
-        if(site.getPortletType("FrameContent")==null)
+        if(site.getResourceType("FrameContent")==null)
         {
             
-            PortletType ptype=site.createPortletType("FrameContent");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.FrameContent");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.FrameContent");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("FrameContent");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.FrameContent");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.FrameContent");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso FrameContent");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("FrameContent");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("FrameContent");
             
-            home.addPortlet(portlet);
+            home.addResource(resource);
         }  
         
-        if(site.getPortletType("IFrameContent")==null)
+        if(site.getResourceType("IFrameContent")==null)
         {
             
-            PortletType ptype=site.createPortletType("IFrameContent");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.IFrameContent");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.IFrameContent");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("IFrameContent");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.IFrameContent");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.IFrameContent");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso IFrameContent");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("IFrameContent");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("IFrameContent");
             
-            home.addPortlet(portlet);
+            home.addResource(resource);
         }  
         
         
-        if(site.getPortletType("HelloXforms")==null)
+        if(site.getResourceType("HelloXforms")==null)
         {
             
-            PortletType ptype=site.createPortletType("HelloXforms");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.HelloXforms");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.HelloXforms");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("HelloXforms");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.HelloXforms");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.HelloXforms");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso HelloXforms");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("HelloXforms");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("HelloXforms");
             
-            home.addPortlet(portlet);
+            home.addResource(resource);
         }   
         
-        if(site.getPortletType("SWBASemObjectEditor")==null)
+        if(site.getResourceType("SWBASemObjectEditor")==null)
         {
             
-            PortletType ptype=site.createPortletType("SWBASemObjectEditor");
-            ptype.setPortletClassName("org.semanticwb.portal.admin.resources.SWBASemObjectEditor");
-            ptype.setPortletBundle("org.semanticwb.portal.admin.resources.SWBASemObjectEditor");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("SWBASemObjectEditor");
+            ptype.setResourceClassName("org.semanticwb.portal.admin.resources.SWBASemObjectEditor");
+            ptype.setResourceBundle("org.semanticwb.portal.admin.resources.SWBASemObjectEditor");
+            ptype.setResourceMode(1);
             ptype.setTitle("SemanticObject Editor");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("SWBASemObjectEditor");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("SWBASemObjectEditor");
             
-            home.addPortlet(portlet);
+            home.addResource(resource);
             
         }
-        if(site.getPortletType("SWBASOPropRefEditor")==null)
+        if(site.getResourceType("SWBASOPropRefEditor")==null)
         {
-            PortletType ptype=site.createPortletType("SWBASOPropRefEditor");
-            ptype.setPortletClassName("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
-            ptype.setPortletBundle("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
-            ptype.setPortletMode(1);
+            ResourceType ptype=site.createResourceType("SWBASOPropRefEditor");
+            ptype.setResourceClassName("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
+            ptype.setResourceBundle("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
+            ptype.setResourceMode(1);
             ptype.setTitle("SemanticObjectPropRef Editor");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("SWBASOPropRefEditor");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("SWBASOPropRefEditor");
             
             WebPage page0=site.getWebPage("page0");
-            page0.addPortlet(portlet);            
+            page0.addResource(resource);
             
         }
         
-        if (site.getPortletType("CommentSwf") == null)
+        if (site.getResourceType("CommentSwf") == null)
         {
-            PortletType ptype = site.createPortletType("CommentSwf");
-            ptype.setPortletClassName("org.semanticwb.portal.resources.CommentSwf");
-            ptype.setPortletBundle("org.semanticwb.portal.resources.CommentSwf");
-            ptype.setPortletMode(1);
+            ResourceType ptype = site.createResourceType("CommentSwf");
+            ptype.setResourceClassName("org.semanticwb.portal.resources.CommentSwf");
+            ptype.setResourceBundle("org.semanticwb.portal.resources.CommentSwf");
+            ptype.setResourceMode(1);
             ptype.setTitle("Recurso CommentSwf");
                     
-            Portlet portlet = site.createPortlet();
-            portlet.setActive(true);
-            portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("CommentSwf");
+            Resource resource = site.createResource();
+            resource.setActive(true);
+            resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("CommentSwf");
         }  
 
     }
@@ -627,17 +627,17 @@ public class TestWebSite {
 //            tplref.setPriority(3);
 //            menus.addTemplateRef(tplref);    
             
-            PortletType ptype=site.createPortletType("SWBASOPropRefEditor");
-            ptype.setPortletClassName("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
-            ptype.setPortletBundle("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
-            ptype.setPortletMode(3);
+            ResourceType ptype=site.createResourceType("SWBASOPropRefEditor");
+            ptype.setResourceClassName("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
+            ptype.setResourceBundle("org.semanticwb.portal.admin.resources.SWBASOPropRefEditor");
+            ptype.setResourceMode(3);
             ptype.setTitle("SemanticObjectPropRef Editor");
                     
-            Portlet portlet=site.createPortlet();
-            portlet.setActive(true);
-            //portlet.setCreator(user);
-            portlet.setPortletType(ptype);
-            portlet.setTitle("SWBASOPropRefEditor");
+            Resource resource=site.createResource();
+            resource.setActive(true);
+            //resource.setCreator(user);
+            resource.setResourceType(ptype);
+            resource.setTitle("SWBASOPropRefEditor");
             
         }
     }

@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.portal.admin.resources.reports.beans.IncompleteFilterException;
@@ -63,9 +63,9 @@ public class WBAGlobalReport extends GenericResource {
 
     @Override
     public void init(){
-        Portlet base = getResourceBase();        
+        Resource base = getResourceBase();
         try {
-            strRscType = base.getPortletType().getPortletClassName();
+            strRscType = base.getResourceType().getResourceClassName();
         }catch (Exception e) {
             strRscType = "WBAGlobalReport";
         }
@@ -120,7 +120,7 @@ public class WBAGlobalReport extends GenericResource {
         response.setHeader("Cache-Control", "no-cache"); 
         response.setHeader("Pragma", "no-cache"); 
         PrintWriter out = response.getWriter();
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         
         final int I_ACCESS = 0;
         HashMap hm_sites = new HashMap();
@@ -488,7 +488,7 @@ public class WBAGlobalReport extends GenericResource {
      */    
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
-        Portlet base = getResourceBase();        
+        Resource base = getResourceBase();
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
             HashMap params = new HashMap();
@@ -540,7 +540,7 @@ public class WBAGlobalReport extends GenericResource {
     public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"gar.xls\"");
-        Portlet base = getResourceBase();        
+        Resource base = getResourceBase();
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
             HashMap params = new HashMap();
@@ -594,7 +594,7 @@ public class WBAGlobalReport extends GenericResource {
         PrintWriter out = response.getWriter();
         
         Document dom = SWBUtils.XML.getNewDocument();        
-        Portlet base = getResourceBase();        
+        Resource base = getResourceBase();
         try {
             WBAFilterReportBean filter;            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
@@ -672,7 +672,7 @@ public class WBAGlobalReport extends GenericResource {
     
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
-        Portlet base = getResourceBase();        
+        Resource base = getResourceBase();
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
             HashMap params = new HashMap();
@@ -717,7 +717,7 @@ public class WBAGlobalReport extends GenericResource {
     public void doRepRtf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/rtf");
         response.setHeader("Content-Disposition", "inline; filename=\"gar.rtf\"");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
             HashMap params = new HashMap();
