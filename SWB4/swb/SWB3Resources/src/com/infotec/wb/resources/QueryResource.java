@@ -33,7 +33,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -66,7 +66,7 @@ public class QueryResource extends GenericAdmResource {
     }
 
     @Override
-    public void setResourceBase(Portlet base) {
+    public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
         } catch(Exception e) {
@@ -112,7 +112,7 @@ public class QueryResource extends GenericAdmResource {
             HttpServletResponse response, SWBParamRequest paramsRequest)
             throws SWBResourceException {
         
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         Document doc = null;
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         String query = parse(base.getAttribute("query"), request, paramsRequest);

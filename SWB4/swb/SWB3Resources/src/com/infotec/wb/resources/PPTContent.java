@@ -33,7 +33,7 @@ import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.SWBResourceMgr;
 import org.semanticwb.portal.api.GenericResource;
@@ -77,7 +77,7 @@ public class PPTContent extends GenericResource {
 
     public void doGetContent(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         OutputStream outStream = response.getOutputStream();
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         Document dom = SWBUtils.XML.xmlToDom(getResourceBase().getXml());
         if (dom == null) {
             throw new SWBResourceException("Dom nulo");
@@ -140,7 +140,7 @@ public class PPTContent extends GenericResource {
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
 
         Document dom = SWBUtils.XML.xmlToDom(getResourceBase().getXml());
         if (dom == null) {
@@ -186,10 +186,10 @@ public class PPTContent extends GenericResource {
                     if (pos != -1) {
                         filepath = filepath.substring(pos + 1);
                         String text = base.getAttribute("text", "");
-                        String webpath = "http://" + request.getServerName() + ":" + request.getServerPort() + SWBPlatform.getWebWorkPath() + "/sites/" + base.getWebSiteId() + "/resources/" + base.getPortletType().getPortletClassName() + "/" + base.getId() + "/" + version + "/" + filepath;
+                        String webpath = "http://" + request.getServerName() + ":" + request.getServerPort() + SWBPlatform.getWebWorkPath() + "/sites/" + base.getWebSiteId() + "/resources/" + base.getResourceType().getResourceClassName() + "/" + base.getId() + "/" + version + "/" + filepath;
                         response.setHeader("Content-Type", "application/ms-powerpoint");
                         response.setHeader("Content-disposition", "attachment;filename=" + webpath);
-                        InputStream in = SWBPlatform.getFileFromWorkPath("/sites/" + base.getWebSiteId() + "/resources/" + base.getPortletType().getPortletClassName() + "/" + base.getId() + "/" + version + "/" + filepath);
+                        InputStream in = SWBPlatform.getFileFromWorkPath("/sites/" + base.getWebSiteId() + "/resources/" + base.getResourceType().getResourceClassName() + "/" + base.getId() + "/" + version + "/" + filepath);
                         OutputStream out = response.getOutputStream();
                         byte[] bcont = new byte[1048];
                         int retbytes = in.read(bcont);
@@ -259,7 +259,7 @@ public class PPTContent extends GenericResource {
     @Override
     public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         Document dom = SWBUtils.XML.xmlToDom(getResourceBase().getXml());
         if (dom == null) {
             throw new SWBResourceException("Dom nulo");

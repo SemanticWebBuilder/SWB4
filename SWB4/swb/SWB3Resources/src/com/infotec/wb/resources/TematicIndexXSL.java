@@ -32,7 +32,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -71,7 +71,7 @@ public class TematicIndexXSL extends GenericAdmResource
      * @throws AFException
      */
     @Override
-    public void setResourceBase(Portlet base) throws SWBResourceException
+    public void setResourceBase(Resource base) throws SWBResourceException
     {
         try 
         {
@@ -106,7 +106,7 @@ public class TematicIndexXSL extends GenericAdmResource
      */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         try
         {        
             String usrlanguage=paramRequest.getUser().getLanguage();
@@ -231,7 +231,7 @@ public class TematicIndexXSL extends GenericAdmResource
             father.setAttribute("totalson",Integer.toString(ison));
             return dom;
         }
-        catch (Exception e) { log.error("Error while generating the comments form in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
+        catch (Exception e) { log.error("Error while generating the comments form in resource "+ base.getResourceType().getResourceClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
         return null;
     }
     

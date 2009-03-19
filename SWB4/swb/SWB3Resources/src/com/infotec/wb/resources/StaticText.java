@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -67,7 +67,7 @@ public class StaticText extends GenericAdmResource
      * @exception com.infotec.appfw.exception.AFException Si se origina cualquier error en el recurso al traer el html.
      */
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         base.getAttribute("text");
         String staticText = replaceTags(base.getAttribute("text"), request,paramRequest);
 

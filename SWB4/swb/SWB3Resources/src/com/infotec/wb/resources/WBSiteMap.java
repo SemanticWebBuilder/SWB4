@@ -36,7 +36,7 @@ import org.w3c.dom.Element;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -66,7 +66,7 @@ public class WBSiteMap extends GenericAdmResource
      * @param base
      */    
     @Override
-    public void setResourceBase(Portlet base)
+    public void setResourceBase(Resource base)
     {
         try 
         {
@@ -101,7 +101,7 @@ public class WBSiteMap extends GenericAdmResource
     {
         StringBuffer ret = new StringBuffer("");
         User user=paramRequest.getUser();
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         try
         {
             WebSite tm = paramRequest.getTopic().getWebSite();
@@ -203,7 +203,7 @@ public class WBSiteMap extends GenericAdmResource
             }
             return dom;
         }
-        catch (Exception e) { log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
+        catch (Exception e) { log.error("Error while generating DOM in resource "+ base.getResourceType().getResourceClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
         return null;      
     }
     
@@ -238,7 +238,7 @@ public class WBSiteMap extends GenericAdmResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer("");
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         
         if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY)
         { // Objeto (imagen/bot�n) para invocar el mapa de sitio   
@@ -487,7 +487,7 @@ public class WBSiteMap extends GenericAdmResource
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         String surl="";
         if(paramRequest.getTopic()!=paramRequest.getAdminTopic())
         {
