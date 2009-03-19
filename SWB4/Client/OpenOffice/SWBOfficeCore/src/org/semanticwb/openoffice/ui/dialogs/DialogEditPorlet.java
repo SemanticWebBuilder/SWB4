@@ -18,7 +18,7 @@ import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.semanticwb.office.interfaces.CalendarInfo;
-import org.semanticwb.office.interfaces.PortletInfo;
+import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
@@ -32,12 +32,12 @@ public class DialogEditPorlet extends javax.swing.JDialog
 {
 
     private String repositoryName,  contentID;
-    private PortletInfo pageInformation;
+    private ResourceInfo pageInformation;
     public boolean isCancel = true;
     ArrayList<CalendarInfo> added = new ArrayList<CalendarInfo>();
 
     /** Creates new form DialogContentPublicationInformation */
-    public DialogEditPorlet(PortletInfo pageInformation, String repositoryName, String contentID)
+    public DialogEditPorlet(ResourceInfo pageInformation, String repositoryName, String contentID)
     {
         super((Frame) null, ModalityType.TOOLKIT_MODAL);
         initComponents();
@@ -128,7 +128,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         try
         {
             HashMap<PropertyInfo, Object> properties = new HashMap<PropertyInfo, Object>();
-            for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getPortletProperties(repositoryName, contentID))
+            for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getResourceProperties(repositoryName, contentID))
             {
                 String value = OfficeApplication.getOfficeDocumentProxy().getViewPropertyValue(pageInformation, info);
                 properties.put(info, value);
@@ -461,7 +461,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 {
                     value = obj.toString();
                 }
-                OfficeApplication.getOfficeDocumentProxy().setPortletProperties(pageInformation, prop, value);
+                OfficeApplication.getOfficeDocumentProxy().setResourceProperties(pageInformation, prop, value);
             }
         }
         catch (Exception e)
