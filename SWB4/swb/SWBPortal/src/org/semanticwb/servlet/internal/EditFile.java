@@ -18,7 +18,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBResourceURLImp;
 
@@ -40,7 +40,7 @@ public class EditFile implements InternalServlet {
                 fileName=path.substring(posfileName+1);
             }
             String path2Save=path;
-            Portlet base=null;
+            Resource base=null;
             String resUri=request.getParameter("resUri");
             if(resUri!=null){
                 base=SWBPortal.getResourceMgr().getResource(resUri).getResourceBase();
