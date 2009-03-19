@@ -41,8 +41,9 @@ import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.IOfficeDocument;
 import org.semanticwb.office.interfaces.PageInfo;
-import org.semanticwb.office.interfaces.ResourceInfo;
+
 import org.semanticwb.office.interfaces.PropertyInfo;
+import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.SiteInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
