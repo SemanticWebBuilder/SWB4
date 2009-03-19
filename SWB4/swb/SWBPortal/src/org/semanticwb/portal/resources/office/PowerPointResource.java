@@ -16,7 +16,7 @@ import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portlet.office.PPTPortlet;
+
 
 /**
  *
@@ -28,17 +28,17 @@ public class PowerPointResource extends GenericAdmResource
     private static Logger log = SWBUtils.getLogger(PowerPointResource.class);
     
 
-    protected void beforePrintDocument(PPTPortlet porlet, PrintWriter out)
+    protected void beforePrintDocument(org.semanticwb.resource.office.PPTResource porlet, PrintWriter out)
     {
         
     }
 
-    protected void afterPrintDocument(PPTPortlet porlet, PrintWriter out)
+    protected void afterPrintDocument(org.semanticwb.resource.office.PPTResource porlet, PrintWriter out)
     {
         
     }
 
-    protected void printDocument(PPTPortlet porlet, PrintWriter out, String path,String workpath,String html)
+    protected void printDocument(org.semanticwb.resource.office.PPTResource porlet, PrintWriter out, String path,String workpath,String html)
     {
         out.write("<iframe src=\"" + path + "\">Este navegador no soporta iframe</iframe>");
     }
@@ -46,9 +46,9 @@ public class PowerPointResource extends GenericAdmResource
     @Override
     public final void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
-        if (this.getResourceBase() instanceof PPTPortlet)
+        if (this.getResourceBase() instanceof org.semanticwb.resource.office.PPTResource)
         {
-            PPTPortlet portlet = (PPTPortlet) this.getResourceBase();
+            org.semanticwb.resource.office.PPTResource portlet = (org.semanticwb.resource.office.PPTResource) this.getResourceBase();
             String version = portlet.getVersionToShow();
             String contentId = portlet.getContent();
             String repositoryName = portlet.getRepositoryName();

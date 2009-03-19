@@ -17,7 +17,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.portal.api.*;
-import org.semanticwb.portlet.office.WordPortlet;
 
 /**
  *
@@ -28,17 +27,17 @@ public class WordResource extends GenericAdmResource
 
     private static Logger log = SWBUtils.getLogger(WordResource.class);
 
-    protected void beforePrintDocument(WordPortlet porlet, PrintWriter out)
+    protected void beforePrintDocument(org.semanticwb.resource.office.WordResource porlet, PrintWriter out)
     {
         
     }
 
-    protected void afterPrintDocument(WordPortlet porlet, PrintWriter out)
+    protected void afterPrintDocument(org.semanticwb.resource.office.WordResource porlet, PrintWriter out)
     {
         
     }
 
-    protected void printDocument(WordPortlet porlet, PrintWriter out, String path, String workpath,String html)
+    protected void printDocument(org.semanticwb.resource.office.WordResource porlet, PrintWriter out, String path, String workpath,String html)
     {
         out.write(html);
     }
@@ -46,9 +45,9 @@ public class WordResource extends GenericAdmResource
     @Override
     public final void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
-        if (this.getResourceBase() instanceof WordPortlet)
+        if (this.getResourceBase() instanceof org.semanticwb.resource.office.WordResource)
         {
-            WordPortlet portlet = (WordPortlet) this.getResourceBase();
+            org.semanticwb.resource.office.WordResource portlet = (org.semanticwb.resource.office.WordResource) this.getResourceBase();
             String version = portlet.getVersionToShow();
             String contentId = portlet.getContent();
             String repositoryName = portlet.getRepositoryName();
