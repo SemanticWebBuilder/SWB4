@@ -9,7 +9,6 @@ import java.awt.Frame;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -18,7 +17,7 @@ import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.semanticwb.office.interfaces.CalendarInfo;
-import org.semanticwb.office.interfaces.PortletInfo;
+import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
@@ -28,16 +27,16 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
  *
  * @author  victor.lorenzana
  */
-public class DialogEditPorlet extends javax.swing.JDialog
+public class DialogEditResource extends javax.swing.JDialog
 {
 
     private String repositoryName,  contentID;
-    private PortletInfo pageInformation;
+    private ResourceInfo pageInformation;
     public boolean isCancel = true;
     ArrayList<CalendarInfo> added = new ArrayList<CalendarInfo>();
 
     /** Creates new form DialogContentPublicationInformation */
-    public DialogEditPorlet(PortletInfo pageInformation, String repositoryName, String contentID)
+    public DialogEditResource(ResourceInfo pageInformation, String repositoryName, String contentID)
     {
         super((Frame) null, ModalityType.TOOLKIT_MODAL);
         initComponents();
@@ -128,7 +127,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         try
         {
             HashMap<PropertyInfo, Object> properties = new HashMap<PropertyInfo, Object>();
-            for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getPortletProperties(repositoryName, contentID))
+            for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getResourceProperties(repositoryName, contentID))
             {
                 String value = OfficeApplication.getOfficeDocumentProxy().getViewPropertyValue(pageInformation, info);
                 properties.put(info, value);
@@ -407,26 +406,6 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         jTextAreaDescription.requestFocus();
         return;
     }
-    // validate view properties
-    Map<PropertyInfo,String> properties=panelPropertyEditor1.getProperties();
-    PropertyInfo[] props=properties.keySet().toArray(new PropertyInfo[properties.keySet().size()]);
-    String[] values=new String[properties.keySet().size()];
-    int j=0;
-    for(PropertyInfo prop : props)
-    {
-        values[j]=properties.get(prop);
-        j++;
-    }
-    try
-    {
-        OfficeApplication.getOfficeDocumentProxy().validateViewValues(repositoryName, contentID, props, values);
-    }
-    catch(Exception e)
-    {
-        JOptionPane.showMessageDialog(this, e.getMessage(), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
     int res = JOptionPane.showConfirmDialog(this, "Se va a realizar los cambios de la información de publicación.\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
     if (res == JOptionPane.YES_OPTION)
     {
@@ -452,16 +431,17 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     OfficeApplication.getOfficeDocumentProxy().updateCalendar(pageInformation, cal);
                 }
             }
-            // update view properties
+
             for (PropertyInfo prop : this.panelPropertyEditor1.getProperties().keySet())
             {
+
                 Object obj = this.panelPropertyEditor1.getProperties().get(prop);
                 String value = null;
                 if (obj != null)
                 {
                     value = obj.toString();
                 }
-                OfficeApplication.getOfficeDocumentProxy().setPortletProperties(pageInformation, prop, value);
+                OfficeApplication.getOfficeDocumentProxy().setResourceProperties(pageInformation, prop, value);
             }
         }
         catch (Exception e)

@@ -87,7 +87,7 @@ public class ViewProperties extends WizardPage
         try
         {
             HashMap<PropertyInfo, Object> properties = new HashMap<PropertyInfo, Object>();
-            for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getPortletProperties(repositoryName, contentID))
+            for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getResourceProperties(repositoryName, contentID))
             {
                 Object defaultValue = null;
                 if (info.type.equalsIgnoreCase("string"))

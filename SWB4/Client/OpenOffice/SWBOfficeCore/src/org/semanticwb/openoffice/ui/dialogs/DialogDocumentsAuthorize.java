@@ -16,7 +16,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.semanticwb.office.interfaces.FlowContentInformation;
-import org.semanticwb.office.interfaces.PortletInfo;
+import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
@@ -85,15 +85,15 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         {
             for (FlowContentInformation flowContentInformation : OfficeApplication.getOfficeApplicationProxy().getContentsForAuthorize())
             {
-                PortletInfo portletInfo = flowContentInformation.portletInfo;
-                String version = flowContentInformation.portletInfo.version;
+                ResourceInfo resourceInfo = flowContentInformation.resourceInfo;
+                String version = flowContentInformation.resourceInfo.version;
                 if (version.equals("*"))
                 {
                     version = "Mostrar la última version";
                 }
                 Object[] rowData =
                 {
-                    portletInfo, portletInfo.page.site.title, portletInfo.page.title, version
+                    resourceInfo, resourceInfo.page.site.title, resourceInfo.page.title, version
                 };
                 model.addRow(rowData);
             }
@@ -285,7 +285,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         if(this.jTableContents.getSelectedRow()!=-1)
         {
             DefaultTableModel model=(DefaultTableModel)this.jTableContents.getModel();
-            PortletInfo info=(PortletInfo)model.getValueAt(this.jTableContents.getSelectedRow(), 0);
+            ResourceInfo info=(ResourceInfo)model.getValueAt(this.jTableContents.getSelectedRow(), 0);
             String version=info.version;
             
         }
