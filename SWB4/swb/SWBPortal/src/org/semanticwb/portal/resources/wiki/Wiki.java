@@ -40,7 +40,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -223,7 +223,7 @@ public class Wiki extends GenericResource
     }    
 
     @Override
-    public void setResourceBase(Portlet base) throws SWBResourceException
+    public void setResourceBase(Resource base) throws SWBResourceException
     {
         super.setResourceBase(base);
         parser=new WikiParser();
