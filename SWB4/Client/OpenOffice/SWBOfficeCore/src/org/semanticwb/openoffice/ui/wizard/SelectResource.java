@@ -1,5 +1,5 @@
 /*
- * SelectPortlet.java
+ * SelectResource.java
  *
  * Created on 26 de diciembre de 2008, 07:19 PM
  */
@@ -12,10 +12,10 @@ import org.netbeans.spi.wizard.WizardPage;
  *
  * @author  victor.lorenzana
  */
-public class SelectPortlet extends WizardPage {
+public class SelectResource extends WizardPage {
 
-    /** Creates new form SelectPortlet */
-    public SelectPortlet() {
+    /** Creates new form SelectResource */
+    public SelectResource() {
         initComponents();
     }
 

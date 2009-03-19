@@ -28,7 +28,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import org.semanticwb.office.interfaces.CategoryInfo;
-import org.semanticwb.office.interfaces.PortletInfo;
+import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
@@ -303,13 +303,13 @@ public class DialogContentInformation extends javax.swing.JDialog
         //column.setCellRenderer(new VersionRender(repository, contentId));
         try
         {
-            for (PortletInfo portletInfo : OfficeApplication.getOfficeDocumentProxy().listPortlets(repository, contentId))
+            for (ResourceInfo resourceInfo : OfficeApplication.getOfficeDocumentProxy().listResources(repository, contentId))
             {
                 VersionInfo selected = new VersionInfo();
-                selected.nameOfVersion = portletInfo.version;
+                selected.nameOfVersion = resourceInfo.version;
                 Object[] rowData =
                 {
-                    portletInfo, portletInfo.page.site.title, portletInfo.page.title, portletInfo.active, new ComboVersiones(repository, contentId, selected)
+                    resourceInfo, resourceInfo.page.site.title, resourceInfo.page.title, resourceInfo.active, new ComboVersiones(repository, contentId, selected)
                 };
                 model.addRow(rowData);
             }
@@ -751,31 +751,31 @@ public class DialogContentInformation extends javax.swing.JDialog
             int rows = model.getRowCount();
             for (int i = 0; i < rows; i++)
             {
-                PortletInfo portletInfo = (PortletInfo) model.getValueAt(i, 0);
+                ResourceInfo resourceInfo = (ResourceInfo) model.getValueAt(i, 0);
                 boolean newactive = (Boolean) model.getValueAt(i, 3);
-                if (portletInfo.active != newactive)
+                if (resourceInfo.active != newactive)
                 {
-                    OfficeApplication.getOfficeDocumentProxy().activatePortlet(portletInfo, newactive);
+                    OfficeApplication.getOfficeDocumentProxy().activateResource(resourceInfo, newactive);
                 }
 
                 if (model.getValueAt(i, 4) instanceof VersionInfo)
                 {
                     VersionInfo versionInfo = (VersionInfo) model.getValueAt(i, 4);
                     String newVersion = versionInfo.nameOfVersion;
-                    String oldVersion = OfficeApplication.getOfficeDocumentProxy().getVersionToShow(portletInfo);
+                    String oldVersion = OfficeApplication.getOfficeDocumentProxy().getVersionToShow(resourceInfo);
                     if (oldVersion == null || !newVersion.equals(oldVersion))
                     {
-                        OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion);
+                        OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(resourceInfo, newVersion);
                     }
                 }
                 if (model.getValueAt(i, 4) instanceof ComboVersiones)
                 {
                     ComboVersiones combo = (ComboVersiones) model.getValueAt(i, 4);
                     String newVersion = ((VersionInfo) combo.getSelectedItem()).nameOfVersion;
-                    String oldVersion = OfficeApplication.getOfficeDocumentProxy().getVersionToShow(portletInfo);
+                    String oldVersion = OfficeApplication.getOfficeDocumentProxy().getVersionToShow(resourceInfo);
                     if (oldVersion == null || !newVersion.equals(oldVersion))
                     {
-                        OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(portletInfo, newVersion);
+                        OfficeApplication.getOfficeDocumentProxy().changeVersionPorlet(resourceInfo, newVersion);
                     }
                 }
             }
@@ -808,7 +808,7 @@ public class DialogContentInformation extends javax.swing.JDialog
     {//GEN-HEADEREND:event_jButtonDeletePageActionPerformed
         if (jTablePages.getSelectedRow() != -1)
         {
-            PortletInfo porlet = (PortletInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
+            ResourceInfo porlet = (ResourceInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
             try
             {
                 int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la publicación del contenido con titulo " + porlet.title + " de la página " + porlet.page.title + "?", this.getTitle(), JOptionPane.YES_NO_OPTION);
@@ -816,7 +816,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                 {
                     this.jButtonDeletePage.setEnabled(false);
                     this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                    OfficeApplication.getOfficeDocumentProxy().deletePortlet(porlet);
+                    OfficeApplication.getOfficeDocumentProxy().deleteResource(porlet);
                     loadPorlets();
                 }
             }
@@ -846,12 +846,12 @@ public class DialogContentInformation extends javax.swing.JDialog
         if (row != -1)
         {
             DefaultTableModel model = (DefaultTableModel) jTablePages.getModel();
-            PortletInfo portletInfo = (PortletInfo) model.getValueAt(row, 0);
+            ResourceInfo resourceInfo = (ResourceInfo) model.getValueAt(row, 0);
             try
             {
-                String title = portletInfo.title;
+                String title = resourceInfo.title;
                 URI uri = document.getOfficeDocumentProxy().getWebAddress();
-                URL url = new URL(uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort() + portletInfo.page.url);
+                URL url = new URL(uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort() + resourceInfo.page.url);
                 DialogPreview preview = new DialogPreview(url, title);
                 preview.setVisible(true);
             }
@@ -914,8 +914,8 @@ public class DialogContentInformation extends javax.swing.JDialog
     {//GEN-HEADEREND:event_jButtonEditActionPerformed
         if (jTablePages.getSelectedRow() != -1)
         {
-            PortletInfo portletInfo = (PortletInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
-            DialogEditPorlet dialogEditPorlet = new DialogEditPorlet(portletInfo, repository, contentId);
+            ResourceInfo resourceInfo = (ResourceInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
+            DialogEditResource dialogEditPorlet = new DialogEditResource(resourceInfo, repository, contentId);
             dialogEditPorlet.setVisible(true);
             if (!dialogEditPorlet.isCancel)
             {
