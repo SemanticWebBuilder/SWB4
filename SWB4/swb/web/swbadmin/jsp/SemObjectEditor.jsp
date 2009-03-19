@@ -84,10 +84,10 @@ try
 
         //TODO: revisar mejor opcion
         String view=null;
-        if(obj.getSemanticClass().equals(Portlet.sclass))
+        if(obj.getSemanticClass().equals(Resource.sclass))
         {
-            int pmode=((org.semanticwb.model.Portlet)obj.createGenericInstance()).getPortletType().getPortletMode();
-            view="portletMode"+pmode;
+            int pmode=((org.semanticwb.model.Resource)obj.createGenericInstance()).getResourceType().getResourceMode();
+            view="resourceMode"+pmode;
         }
         System.out.println(view);
 
