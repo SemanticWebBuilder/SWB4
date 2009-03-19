@@ -35,7 +35,7 @@ public class SWBATrash extends GenericResource {
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         PrintWriter out = response.getWriter();
         String selected = "section";
         if(base.getAttribute("view")!=null) selected = base.getAttribute("view");
@@ -83,7 +83,7 @@ public class SWBATrash extends GenericResource {
         
         User user = paramRequest.getUser();
         
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         StringBuffer ret = new StringBuffer("");
         WebPage topic = paramRequest.getTopic();
         int num =0;
@@ -298,22 +298,22 @@ public class SWBATrash extends GenericResource {
                         {
                             //ArrayList alOcc = Tp.getOccurrences();
                             //Iterator itOcc = alOcc.iterator();
-                            Iterator<Portlet> itOcc = Tp.listPortlets();
+                            Iterator<Resource> itOcc = Tp.listResources();
                             while(itOcc.hasNext()){
 
-                                Portlet rOcc =  itOcc.next();
+                                Resource rOcc =  itOcc.next();
                                 String strTopicAsoc=Tp.getTitle(); //TopicMgr.getInstance().getTopicMap(rOcc.getIdtm()).getTopic(rOcc.getIdtp()).getDisplayName();
                                 String strTopicAsocID=Tp.getId(); //rOcc.getIdtp();
                                 if(rOcc.isDeleted()){
                                     num++;
-                                    Iterator<Portlet> enuRes = SWBContext.getWebSite(viewSite).listPortlets();//DBResource.getInstance().getResources(viewSite);
+                                    Iterator<Resource> enuRes = SWBContext.getWebSite(viewSite).listResources();//DBResource.getInstance().getResources(viewSite);
                                     boolean pasa = false;
                                     while(enuRes.hasNext()){
-                                        Portlet recRes = enuRes.next();
+                                        Resource recRes = enuRes.next();
                                         if(recRes.equals(rOcc)) pasa=true;
                                     }
                                     if(pasa){
-                                        Portlet rRes = rOcc; //SWBContext.getWebSite(viewSite).getPortlet(rOcc.getResourceData());
+                                        Resource rRes = rOcc; //SWBContext.getWebSite(viewSite).getResource(rOcc.getResourceData());
                                         if(rRes!=null&&!rRes.equals(null)){
                                             
                                             SWBResourceURL urlRecover=paramRequest.getActionUrl();   //"?view="+view+"&site="+viewSite+"&ax=recover&id="+rOcc.getId()+
@@ -358,20 +358,20 @@ public class SWBATrash extends GenericResource {
                 
             }
             if(view.equals("resource")){
-                Iterator<Portlet> enumT = SWBContext.getWebSite(viewSite).listPortlets();
+                Iterator<Resource> enumT = SWBContext.getWebSite(viewSite).listResources();
                 
                 try{
                     num=0;
                     String rowColor="";
                     boolean cambiaColor = true;
                     while (enumT.hasNext()){
-                        Portlet rRes = enumT.next();
-                        int oType = rRes.getPortletType().getPortletMode();
+                        Resource rRes = enumT.next();
+                        int oType = rRes.getResourceType().getResourceMode();
                         //try{
-                        PortletType oRec = rRes.getPortletType(); //DBResourceType.getInstance().getResourceType(rRes.getTypeMap(),oType);
-                        if(rRes!=null && oRec!=null && rRes.isDeleted() && (oRec.getPortletMode()==2 || oRec.getPortletMode()==3)){
+                        ResourceType oRec = rRes.getResourceType(); //DBResourceType.getInstance().getResourceType(rRes.getTypeMap(),oType);
+                        if(rRes!=null && oRec!=null && rRes.isDeleted() && (oRec.getResourceMode()==2 || oRec.getResourceMode()==3)){
                             //TODO: AdmFilterMgr.getInstance().haveAccess2ResourceType()
-                            //if(AdmFilterMgr.getInstance().haveAccess2ResourceType(user,viewSite,Integer.parseInt(rRes.getId()),rRes.getPortletType().getWebSite().getId())==2)
+                            //if(AdmFilterMgr.getInstance().haveAccess2ResourceType(user,viewSite,Integer.parseInt(rRes.getId()),rRes.getResourceType().getWebSite().getId())==2)
                             {
                                 SWBResourceURL urlRecover=paramRequest.getActionUrl();   //"?view="+view+"&site="+viewSite+"&ax=recover&id="+rRes.getId()+
                                 urlRecover.setParameter("view",view);
@@ -497,15 +497,15 @@ public class SWBATrash extends GenericResource {
                 if( request.getParameter("tree")!=null && request.getParameter("tree").equals("reload") ){
                     if(request.getParameter("idres")!=null) {
                         try{
-                            Portlet rRes = SWBContext.getWebSite(viewSite).getPortlet(request.getParameter("idres"));
-                            int oType = rRes.getPortletType().getPortletMode();
-                            PortletType oRec = rRes.getPortletType();
+                            Resource rRes = SWBContext.getWebSite(viewSite).getResource(request.getParameter("idres"));
+                            int oType = rRes.getResourceType().getResourceMode();
+                            ResourceType oRec = rRes.getResourceType();
                             String nodo = "sysresources";
-                            if(oRec!=null&&oRec.getPortletMode()==2) nodo = "advresources";
+                            if(oRec!=null&&oRec.getResourceMode()==2) nodo = "advresources";
                             ret.append("<script>");
-                            ret.append("wbTree_executeAction('gotopath."+nodo+"."+rRes.getPortletType().getPortletMode()+"');");
+                            ret.append("wbTree_executeAction('gotopath."+nodo+"."+rRes.getResourceType().getResourceMode()+"');");
                             ret.append("wbTree_reload();");
-                            ret.append("wbTree_executeAction('gotopath."+nodo+"."+rRes.getPortletType().getPortletMode()+"."+rRes.getId()+"'); ");
+                            ret.append("wbTree_executeAction('gotopath."+nodo+"."+rRes.getResourceType().getResourceMode()+"."+rRes.getId()+"'); ");
                             ret.append("</script>");
                         }
                         catch(Exception e){log.error(e);}
@@ -570,7 +570,7 @@ public class SWBATrash extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         
         
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         String view="section";
         if(base.getAttribute("view")!=null) view = base.getAttribute("view");
         String viewSite=request.getParameter("site");
@@ -701,7 +701,7 @@ public class SWBATrash extends GenericResource {
                                         thisToken=localToken.nextToken();
                                         thisToken=localToken.nextToken();
                                     }
-                                    PortletRef rOcc = SWBContext.getWebSite(viewSite).getPortletRef(thisToken);
+                                    ResourceRef rOcc = SWBContext.getWebSite(viewSite).getResourceRef(thisToken);
                                     //rOcc.setDeleted(false);
                                     //rOcc.update();
                                     rOcc=null;
@@ -716,7 +716,7 @@ public class SWBATrash extends GenericResource {
                                         thisToken=localToken.nextToken();
                                         idocc=localToken.nextToken();
                                     }
-                                    SWBContext.getWebSite(viewSite).removePortletRef(idocc.trim());
+                                    SWBContext.getWebSite(viewSite).removeResourceRef(idocc.trim());
                                 }
                             }
                             response.setRenderParameter("view","content");
@@ -734,7 +734,7 @@ public class SWBATrash extends GenericResource {
                                 for(int i=0; i<strSections.length;i++){
                                     cuenta++;
                                     thisToken = strSections[i];
-                                    Portlet rRes = SWBContext.getWebSite(viewSite).getPortlet(thisToken);
+                                    Resource rRes = SWBContext.getWebSite(viewSite).getResource(thisToken);
                                     rRes.setDeleted(false);
                                     rRes.setModifiedBy(user);
                                     //rRes.update(user.getId(),response.getLocaleString("msgLogResourceUndeleted"));
@@ -750,7 +750,7 @@ public class SWBATrash extends GenericResource {
                                     thisToken = strSections[i];
                                     //ResourceSrv resSrv = new ResourceSrv();
                                     //resSrv.removeResource(viewSite, Long.parseLong(thisToken), request, response.getUser());
-                                    SWBContext.getWebSite(viewSite).removePortlet(thisToken);
+                                    SWBContext.getWebSite(viewSite).removeResource(thisToken);
                                     //RecResource rRes = DBResource.getInstance().getResource(viewSite,Long.parseLong(thisToken));
                                     //WBResource wbRes = ResourceMgr.getInstance().getResource(viewSite,Long.parseLong(thisToken));
                                     //rRes.remove(user.getId(),response.getLocaleString("msgLogResourceDeleted"));

@@ -15,7 +15,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.TemplateGroup;
@@ -53,7 +53,7 @@ public class SWBATemplate extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
-        //Portlet base = getResourceBase();
+        //Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
 
         if (debugVar) {
@@ -215,7 +215,7 @@ public class SWBATemplate extends GenericResource {
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String act = null;
         String id = request.getParameter("id");
         PrintWriter out = response.getWriter();
@@ -753,7 +753,7 @@ public class SWBATemplate extends GenericResource {
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
         if (debugVar) {
             System.out.println("entro a doAdmin");
@@ -877,7 +877,7 @@ public class SWBATemplate extends GenericResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
 
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String accion = response.getAction();
         String id = request.getParameter("id");
         User user = response.getUser();

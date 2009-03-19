@@ -853,7 +853,7 @@ public class SWBATreeDBQuery extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out=response.getWriter();
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String operValidas = SWBPlatform.getEnv("wb/resDBQueryFilter","select");
         hmoper = new HashMap();
         if(operValidas.indexOf(';')>-1||operValidas.indexOf(',')>-1)

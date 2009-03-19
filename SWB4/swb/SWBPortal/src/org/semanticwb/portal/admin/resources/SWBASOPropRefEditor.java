@@ -24,7 +24,7 @@ public class SWBASOPropRefEditor extends GenericResource {
     private Logger log = SWBUtils.getLogger(SWBASOPropRefEditor.class);
     static String MODE_IdREQUEST = "FORMID";
     String Mode_Action = "PACTION";
-    Portlet base = null;
+    Resource base = null;
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

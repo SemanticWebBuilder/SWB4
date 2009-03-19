@@ -12,7 +12,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.Versionable;
@@ -34,7 +34,7 @@ public class SWBAVersionInfo extends GenericResource {
 
     private Logger log = SWBUtils.getLogger(SWBAVersionInfo.class);
     String webpath = SWBPlatform.getContextPath();
-    Portlet base;
+    Resource base;
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 
     @Override
