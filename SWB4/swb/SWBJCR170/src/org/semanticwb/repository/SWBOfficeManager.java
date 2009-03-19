@@ -22,6 +22,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.repository.office.OfficeCategory;
 import org.semanticwb.repository.office.OfficeContent;
+import org.semanticwb.repository.office.OfficeDocument;
 
 /**
  *
@@ -90,7 +91,7 @@ public class SWBOfficeManager implements OfficeManager
 
     public String getPropertyFileType()
     {
-        return OfficeContent.cm_file.getPrefix() + ":" + OfficeContent.cm_file.getName();
+        return OfficeDocument.cm_file.getPrefix() + ":" + OfficeDocument.cm_file.getName();
     }
 
     public String getPropertyType()
@@ -100,7 +101,7 @@ public class SWBOfficeManager implements OfficeManager
 
     public String getUserType()
     {
-        return OfficeContent.cm_user.getPrefix() + ":" + OfficeContent.cm_user.getName();
+        return OfficeDocument.cm_user.getPrefix() + ":" + OfficeDocument.cm_user.getName();
     }
 
     public Collection<RepositoryInfo> getWorkspaces()
