@@ -45,7 +45,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.util.FileUpload;
 import javax.mail.internet.InternetAddress;
@@ -89,7 +89,7 @@ public class Comment extends GenericResource {
      * @param base
      */       
     @Override
-    public void setResourceBase(Portlet base) {
+    public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
             webWorkPath = SWBPlatform.getWebWorkPath() + base.getWorkPath();
@@ -139,7 +139,7 @@ public class Comment extends GenericResource {
                          && (!"".equals(request.getParameter("com_act").trim()))
                          ? request.getParameter("com_act").trim()
                          : "com_step2");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         
         try {
             Document dom = SWBUtils.XML.getNewDocument();
@@ -294,7 +294,7 @@ public class Comment extends GenericResource {
             return dom;
         } catch (Exception e) {
             log.error("Error while generating the comments form in resource "
-                    + base.getPortletType().getPortletClassName()
+                    + base.getResourceType().getResourceClassName()
                     + " with identifier " + base.getId() + " - "
                     + base.getTitle(), e);
         }
@@ -315,7 +315,7 @@ public class Comment extends GenericResource {
             HttpServletResponse response, SWBParamRequest reqParams)
             throws SWBResourceException, IOException {
         
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         
         try {
             String strFromName = (null != request.getParameter("txtFromName") 
@@ -522,7 +522,7 @@ public class Comment extends GenericResource {
                         + "\n in getDomEmail()");
             }
         } catch (Exception e) {
-            log.error("Error while generating email message in resource " + base.getPortletType().getPortletClassName() + " with identifier " + base.getId() + " - " + base.getTitle(), e);
+            log.error("Error while generating email message in resource " + base.getResourceType().getResourceClassName() + " with identifier " + base.getId() + " - " + base.getTitle(), e);
         }
         return null;
     }         
@@ -563,7 +563,7 @@ public class Comment extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest reqParams) throws IOException {
         StringBuffer ret = new StringBuffer(600);
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String action = (null != request.getParameter("com_act")
                 && !"".equals(request.getParameter("com_act").trim())
                 ? request.getParameter("com_act").trim()
@@ -648,7 +648,7 @@ public class Comment extends GenericResource {
                 }
             } catch (Exception e) {
                 log.error("Error while showing form caller in resource "
-                        + base.getPortletType().getPortletClassName()
+                        + base.getResourceType().getResourceClassName()
                         + " with identifier " + base.getId() + " - "
                         + base.getTitle(), e);
             }
@@ -729,7 +729,7 @@ public class Comment extends GenericResource {
             SWBParamRequest paramsRequest) throws IOException, SWBResourceException {
         
         StringBuffer ret = new StringBuffer(400);
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String msg = paramsRequest.getLocaleString("msgUndefinedOperation");
         String action = ((null != request.getParameter("act"))
                 && (!"".equals(request.getParameter("act").trim()))
@@ -1003,11 +1003,11 @@ public class Comment extends GenericResource {
      * Fija un atributo en el objeto base con el nombre indicado.
      * Si el atributo no existe en el objeto fup o su valor es <code>null</code>,
      * el atributo att se elimina de base.
-     * @param base Portlet en el que se fijar&aacute; el atributo.
+     * @param base Resource en el que se fijar&aacute; el atributo.
      * @param fup Objeto del cual se obtiene el valor del atributo.
      * @param att Contiene el nombre del atributo a fijar en base.
      */  
-    protected void setAttribute(Portlet base, FileUpload fup, String att) {
+    protected void setAttribute(Resource base, FileUpload fup, String att) {
         try {
             if (null != fup.getValue(att)
                     && !"".equals(fup.getValue(att).trim())) {
@@ -1025,12 +1025,12 @@ public class Comment extends GenericResource {
      * Fija un atributo en el objeto base con el nombre y el valor indicados.
      * Si el atributo no existe en el objeto fup o tiene otro valor al indicado,
      * el atributo att se elimina de base.
-     * @param base Portlet en el que se fijar&aacute; el atributo.
+     * @param base Resource en el que se fijar&aacute; el atributo.
      * @param fup Objeto del cual se verifica el valor del atributo.
      * @param att Contiene el nombre del atributo a fijar en base.
      * @param value Contiene el valor del atributo a fijar en base.
      */  
-    protected void setAttribute(Portlet base, FileUpload fup, String att,
+    protected void setAttribute(Resource base, FileUpload fup, String att,
                                 String value) {
         try {
             if (null != fup.getValue(att)
@@ -1080,7 +1080,7 @@ public class Comment extends GenericResource {
         
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
         StringBuffer ret = new StringBuffer(1000);
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         try {
             SWBResourceURL url = paramsRequest.getRenderUrl().setAction("update");
             ret.append("<div class=\"swbform\">");
@@ -1713,7 +1713,7 @@ public class Comment extends GenericResource {
      */
     protected void feedCommentLog(Document dom, User user) throws IOException {
         
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String logPath = SWBPlatform.getWorkPath() + base.getWorkPath() 
                 + "/Comment.log";
         StringBuilder toLog = new StringBuilder(500);

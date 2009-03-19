@@ -37,7 +37,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -90,7 +90,7 @@ public class RecommendSwf extends Recommend {
                 && !"".equals(request.getParameter("rec_act").trim()))
                 ? request.getParameter("rec_act").trim()
                 : "rec_step2";
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String lang = paramRequest.getUser().getLanguage();
         try {        
             Document  dom = SWBUtils.XML.getNewDocument();
@@ -150,7 +150,7 @@ public class RecommendSwf extends Recommend {
             return dom;
         } catch (Exception e) {
             log.error("Error while generating DOM in resource "
-                    + base.getPortletType().getPortletClassName()
+                    + base.getResourceType().getResourceClassName()
                     + " with identifier " + base.getId() + " - "
                     + base.getTitle(), e);
         }
@@ -169,7 +169,7 @@ public class RecommendSwf extends Recommend {
             HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
         
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
         StringBuffer ret = new StringBuffer("");
         String msg = paramRequest.getLocaleString("msgUndefinedOperation");
@@ -346,7 +346,7 @@ public class RecommendSwf extends Recommend {
      * @param fup
      * @param att
      */  
-    protected void setAttribute(Portlet base, FileUpload fup, String att) {
+    protected void setAttribute(Resource base, FileUpload fup, String att) {
         try {
             if (null != fup.getValue(att) && !"".equals(fup.getValue(att).trim())) {
                 base.setAttribute(att, fup.getValue(att).trim());
@@ -365,7 +365,7 @@ public class RecommendSwf extends Recommend {
      * @param att
      * @param value
      */  
-    protected void setAttribute(Portlet base, FileUpload fup, String att,
+    protected void setAttribute(Resource base, FileUpload fup, String att,
             String value) {
         
         try {
@@ -408,7 +408,7 @@ public class RecommendSwf extends Recommend {
                            throws SWBResourceException, IOException {
         
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         StringBuffer ret = new StringBuffer("");
         try {
             SWBResourceURL url = paramRequest.getRenderUrl().setAction("update");

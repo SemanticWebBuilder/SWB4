@@ -41,7 +41,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.Template;
 import org.semanticwb.portal.TemplateImp;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
@@ -80,7 +80,7 @@ public class Print extends GenericResource
     /**
      * @param base
      */    
-    public void setResourceBase(Portlet base)
+    public void setResourceBase(Resource base)
     {
         try 
         {
@@ -137,7 +137,7 @@ public class Print extends GenericResource
         {
             // Objeto(imagen/bot�n) para invocar la nueva ventana
             StringBuffer ret = new StringBuffer("");
-            Portlet base=getResourceBase();
+            Resource base=getResourceBase();
 
             SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
             url.setResourceBase(base);
@@ -283,7 +283,7 @@ public class Print extends GenericResource
     public void printContent(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
         response.setContentType("text/html");
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         if (!"".equals(base.getAttribute("template", "").trim()))
         {
             try
@@ -302,7 +302,7 @@ public class Print extends GenericResource
     
     private void setWindowConf()
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         this.windowconf  = "menubar="+ base.getAttribute("menubar", "no").trim();
         this.windowconf += ",toolbar="+ base.getAttribute("toolbar", "no").trim();
         this.windowconf += ",status="+ base.getAttribute("status", "no").trim();
@@ -333,7 +333,7 @@ public class Print extends GenericResource
      */    
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         StringBuffer ret = new StringBuffer("");
         String msg=paramRequest.getLocaleString("msgUndefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
@@ -426,7 +426,7 @@ public class Print extends GenericResource
      * @param fup
      * @param att
      */  
-    protected void setAttribute(Portlet base, FileUpload fup, String att)
+    protected void setAttribute(Resource base, FileUpload fup, String att)
     {
         try
         {
@@ -444,7 +444,7 @@ public class Print extends GenericResource
      * @param att
      * @param value
      */  
-    protected void setAttribute(Portlet base, FileUpload fup, String att, String value)
+    protected void setAttribute(Resource base, FileUpload fup, String att, String value)
     {
         try
         {
@@ -465,7 +465,7 @@ public class Print extends GenericResource
      */    
     private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramsRequest)
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         StringBuffer ret=new StringBuffer("");
         try
         {

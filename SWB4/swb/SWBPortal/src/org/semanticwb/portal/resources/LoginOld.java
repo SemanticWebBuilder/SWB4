@@ -41,7 +41,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -67,7 +67,7 @@ public class LoginOld extends GenericAdmResource
     //LoginInterface li = null;
     Hashtable list = null;
     Templates templates = null;
-    Portlet base = null;
+    Resource base = null;
     String path = SWBPlatform.getContextPath() + "swbadmin/xsl/Login/";
     String redirect = SWBPlatform.getContextPath();
     String msg = null;
@@ -123,7 +123,7 @@ public class LoginOld extends GenericAdmResource
         */
     }
 
-    public void setResourceBase(Portlet base) {
+    public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
         }

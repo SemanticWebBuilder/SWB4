@@ -41,7 +41,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -84,7 +84,7 @@ public class Recommend extends GenericAdmResource {
      * @param base
      */    
     @Override
-    public void setResourceBase(Portlet base) {
+    public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
             webWorkPath = (String) SWBPlatform.getWebWorkPath()
@@ -132,7 +132,7 @@ public class Recommend extends GenericAdmResource {
                          && !"".equals(request.getParameter("rec_act").trim()))
                          ? request.getParameter("rec_act").trim()
                          : "rec_step2";
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         try {        
             Document dom = SWBUtils.XML.getNewDocument();
             if ("rec_step3".equals(action)) {
@@ -270,7 +270,7 @@ public class Recommend extends GenericAdmResource {
             return dom;
         } catch (Exception e) {
             log.error("Error while generating DOM in resource "
-                    + base.getPortletType().getPortletClassName()
+                    + base.getResourceType().getResourceClassName()
                     + " with identifier " + base.getId() + " - "
                     + base.getTitle(), e);
         }
@@ -281,7 +281,7 @@ public class Recommend extends GenericAdmResource {
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String action = null != request.getParameter("rec_act") && !"".equals(request.getParameter("rec_act").trim()) ? request.getParameter("rec_act").trim() : "rec_step2";
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         try
         {        
             Document  dom = SWBUtils.XML.getNewDocument();
@@ -373,7 +373,7 @@ public class Recommend extends GenericAdmResource {
             }
             return dom;
         }
-        catch (Exception e) { log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
+        catch (Exception e) { log.error("Error while generating DOM in resource "+ base.getResourceType().getResourceClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
         return null;
     }
 **/
@@ -389,7 +389,7 @@ public class Recommend extends GenericAdmResource {
             HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
         
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         try {
             String strFromEmail = (null != request.getParameter("txtFromEmail")
                     && !"".equals(request.getParameter("txtFromEmail").trim()))
@@ -506,7 +506,7 @@ public class Recommend extends GenericAdmResource {
             }
         } catch (Exception e) {
             log.error("Error while generating email message in resource "
-                    + base.getPortletType().getPortletClassName()
+                    + base.getResourceType().getResourceClassName()
                     + " with identifier " + base.getId() + " - "
                     + base.getTitle(), e);
         }
@@ -527,7 +527,7 @@ public class Recommend extends GenericAdmResource {
         
         response.setContentType("text/html");
         StringBuffer ret = new StringBuffer(200);
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String action = (null != request.getParameter("rec_act")
                          && !"".equals(request.getParameter("rec_act").trim()))
                         ? request.getParameter("rec_act").trim()
@@ -714,7 +714,7 @@ public class Recommend extends GenericAdmResource {
      */
     protected void feedRecommendLog(Document dom, User user) throws IOException {
         
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String logPath = SWBPlatform.getWorkPath() + base.getWorkPath() 
                 + "/Comment.log";
         StringBuilder toLog = new StringBuilder(500);

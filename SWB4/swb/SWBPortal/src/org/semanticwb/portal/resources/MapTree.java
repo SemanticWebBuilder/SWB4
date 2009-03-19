@@ -183,7 +183,7 @@ public class MapTree extends GenericResource{
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
         String path = SWBPlatform.getContextPath();
         WebPage tp = paramsRequest.getTopic();

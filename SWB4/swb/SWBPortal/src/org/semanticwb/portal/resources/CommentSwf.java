@@ -41,7 +41,7 @@ import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
@@ -93,7 +93,7 @@ public class CommentSwf extends Comment {
     public Document getDom(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest reqParams)
             throws SWBResourceException, IOException {
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String action = (null != request.getParameter("com_act") 
                          && !"".equals(request.getParameter("com_act").trim())
                          ? request.getParameter("com_act").trim()
@@ -165,7 +165,7 @@ public class CommentSwf extends Comment {
              return dom;
         } catch (Exception e) {
             log.error("Error while generating the comments form in resource "
-                    + base.getPortletType().getPortletClassName()
+                    + base.getResourceType().getResourceClassName()
                     + " with identifier " + base.getId() + " - "
                     + base.getTitle(), e);
         }
@@ -188,7 +188,7 @@ public class CommentSwf extends Comment {
             throws SWBResourceException, IOException {
         
         StringBuffer ret = new StringBuffer("");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
         String msg = paramsRequest.getLocaleString("msgUndefinedOperation");
         String action = (null != request.getParameter("act")
@@ -393,7 +393,7 @@ public class CommentSwf extends Comment {
         
         StringBuffer ret = new StringBuffer("");
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         
         try {
             SWBResourceURL url = paramsRequest.getRenderUrl().setAction("update");
