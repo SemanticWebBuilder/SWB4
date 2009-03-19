@@ -24,7 +24,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 public class SWBASubtypes extends GenericResource{
 
     private Logger log = SWBUtils.getLogger(SWBASubtypes.class);
-    Portlet base=null;
+    Resource base=null;
     /** Creates a new instance of WBASubtypes */
     public SWBASubtypes() {
     }
@@ -45,7 +45,7 @@ public class SWBASubtypes extends GenericResource{
         //if(user==null) user = new User();
         
         if(request.getParameter("act")==null && request.getParameter("id")!=null) {
-            PortletSubType recSubType=SWBContext.getWebSite(request.getParameter("idsmap")).getPortletSubType(request.getParameter("id"));
+            ResourceSubType recSubType=SWBContext.getWebSite(request.getParameter("idsmap")).getResourceSubType(request.getParameter("id"));
             
             out.println("<p  class=box>");
             out.println("<TABLE width=\"100%\"  border=\"0\" cellpadding=\"10\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
@@ -74,11 +74,11 @@ public class SWBASubtypes extends GenericResource{
                 
                 //SubtypeSrv stSrv=new SubtypeSrv();
                 WebSite ws = SWBContext.getWebSite(request.getParameter("idsmap"));
-                ws.removePortletSubType(id);
+                ws.removeResourceSubType(id);
                 ws.setModifiedBy(user);
                 
                 //if(stSrv.removeSubType(request.getParameter("idsmap"),id, user, request)){
-                if(ws.getPortletSubType(id)==null){
+                if(ws.getResourceSubType(id)==null){
                     //System.out.println("Entra a borrar subtype-1");
                     out.println("<script>wbTree_remove();</script>");
                     out.println(paramRequest.getLocaleString("subtyperemoved"));
@@ -117,32 +117,32 @@ public class SWBASubtypes extends GenericResource{
         if(request.getParameter("tree")!=null&&request.getParameter("tree").equals("reload")){
             if(request.getParameter("flag")!=null){
                 if(request.getParameter("flag").equals("add")){
-                    PortletSubType recSubType = SWBContext.getWebSite(idsmap).getPortletSubType(id);
-                    //PortletType restype=DBResourceType.getInstance().getResourceType(recSubType.getTypeMap(),recSubType.getType());
-                    PortletType restype=recSubType.getType();
+                    ResourceSubType recSubType = SWBContext.getWebSite(idsmap).getResourceSubType(id);
+                    //ResourceType restype=DBResourceType.getInstance().getResourceType(recSubType.getTypeMap(),recSubType.getType());
+                    ResourceType restype=recSubType.getType();
                     String type=""+restype.getId();
                     if(!restype.getWebSite().getId().equals(request.getParameter("tm")))type="0"+type;
                     
-                    if(restype.getPortletMode()==2){ // de tipo adversiting
+                    if(restype.getResourceMode()==2){ // de tipo adversiting
                         out.println("<script>wbTree_executeAction('gotopath."+request.getParameter("tm")+".advresources."+type+"');");
                         out.println("wbTree_reload();");
                         out.println("wbTree_executeAction('gotopath."+request.getParameter("tm")+".advresources."+type+"."+id+"');</script>");
-                    }else if(restype.getPortletMode()==3){ // de tipo sistema
+                    }else if(restype.getResourceMode()==3){ // de tipo sistema
                         out.println("<script>wbTree_executeAction('gotopath."+request.getParameter("tm")+".sysresources."+type+"');");
                         out.println("wbTree_reload();");
                         out.println("wbTree_executeAction('gotopath."+request.getParameter("tm")+".sysresources."+type+"."+id+"');</script>");
                     }
                 }
                 if(request.getParameter("flag").equals("update")){
-                    PortletSubType recSubType = SWBContext.getWebSite(idsmap).getPortletSubType(id);
-                    PortletType restype=recSubType.getType();
+                    ResourceSubType recSubType = SWBContext.getWebSite(idsmap).getResourceSubType(id);
+                    ResourceType restype=recSubType.getType();
                     String type=""+restype.getId();
                     if(!restype.getWebSite().getId().equals(request.getParameter("tm")))type="0"+type;
                     
-                    if(restype.getPortletMode()==2){ // de tipo adversiting
+                    if(restype.getResourceMode()==2){ // de tipo adversiting
                         out.println("<script>wbTree_executeAction('gotopath."+request.getParameter("tm")+".advresources."+ type +"."+id+"');");
                         out.println("wbTree_reload();</script>");
-                    }else if(restype.getPortletMode()==3){ // de tipo sistema
+                    }else if(restype.getResourceMode()==3){ // de tipo sistema
                         out.println("<script>wbTree_executeAction('gotopath."+request.getParameter("tm")+".sysresources."+ type +"."+id+"');");
                         out.println("wbTree_reload();</script>");
                     }
@@ -211,9 +211,9 @@ public class SWBASubtypes extends GenericResource{
                 out.println("</TD>");
                 out.println("</TR>");
                 out.println("</TABLE></P>");
-                PortletSubType recSubType = SWBContext.getWebSite(idsmap).getPortletSubType(id);
+                ResourceSubType recSubType = SWBContext.getWebSite(idsmap).getResourceSubType(id);
                 //Modificacion en el update
-                //PortletSubType recSubType = DBCatalogs.getInstance().getSubType(typemap,Integer.parseInt(id));
+                //ResourceSubType recSubType = DBCatalogs.getInstance().getSubType(typemap,Integer.parseInt(id));
                 out.println("<form name=\"forma\" onSubmit=\"return (valida(forma));\"  action=\""+paramRequest.getActionUrl().setAction("update").toString()+"\" method=\"post\" class=box>");
                 out.println("<table width=\"100%\"  border=\"0\" cellpadding=\"10\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
                 //out.println("<tr ><td colspan=\"2\"></td></tr>");
@@ -248,7 +248,7 @@ public class SWBASubtypes extends GenericResource{
         //if(user==null) user=new User(response.getTopic().getMap().getDbdata().getRepository());
         try{
             if(accion.equals("update")){
-                PortletSubType pst = ws.getPortletSubType(id);
+                ResourceSubType pst = ws.getResourceSubType(id);
                 pst.setTitle(request.getParameter("title"));
                 pst.setDescription(request.getParameter("description"));
                 pst.setModifiedBy(user);
@@ -262,16 +262,16 @@ public class SWBASubtypes extends GenericResource{
             }
             else if(accion.equals("add")){
                 
-                PortletSubType pst=null;
+                ResourceSubType pst=null;
                 try{
                     WebSite tpm = SWBContext.getWebSite(tm);
                     if(tpm!=null) {
                         //revisar Logica
-                        pst = tpm.createPortletSubType(id);
+                        pst = tpm.createResourceSubType(id);
                         pst.setCreator(user);
                         pst.setDescription(request.getParameter("description"));
                         pst.setTitle(request.getParameter("title"));
-                        PortletType pt = tpm.getPortletType(request.getParameter("typemap"));
+                        ResourceType pt = tpm.getResourceType(request.getParameter("typemap"));
                         pst.setType(pt);
                         //recSbt=subtSrv.createSubType(tm,Integer.parseInt(id),request.getParameter("typemap"),request.getParameter("title"), request.getParameter("description"),user.getId());
                     }

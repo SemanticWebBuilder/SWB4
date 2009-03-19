@@ -22,7 +22,7 @@ import org.semanticwb.portal.api.*;
 public class SWBAWebPage extends GenericResource {
 
     private Logger log=SWBUtils.getLogger(SWBAWebPage.class);
-    Portlet base=null;
+    Resource base=null;
     String imgPath =(String)SWBPlatform.getContextPath()+"wbadmin/";
     
     /** Creates a new instance of WebPage */

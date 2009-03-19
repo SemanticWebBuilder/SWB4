@@ -21,7 +21,7 @@ import org.semanticwb.portal.api.*;
  */
 public class SWBAWebSite extends GenericResource {
     private Logger log=SWBUtils.getLogger(SWBAWebSite.class);
-    Portlet base=null;
+    Resource base=null;
     /** Creates a new instance of WBATopicMaps */
     public SWBAWebSite() {
     }

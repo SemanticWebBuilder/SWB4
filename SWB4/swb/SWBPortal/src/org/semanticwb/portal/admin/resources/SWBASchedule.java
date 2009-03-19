@@ -32,7 +32,7 @@ public class SWBASchedule extends GenericResource {
 
     public void init() {
         try {
-            strRscType = getResourceBase().getPortletType().getTitle();
+            strRscType = getResourceBase().getResourceType().getTitle();
         } catch (Exception e) {
             strRscType = "SWBASchedule";
         }

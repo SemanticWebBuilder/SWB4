@@ -165,7 +165,7 @@ public class SWBASemObjectEditor extends GenericResource {
                         }
                         WebSite ws = paramRequest.getTopic().getWebSite();
                         WebPage page0 = ws.getWebPage("page0");
-                        Portlet portlet = ws.getPortlet("3");
+                        Resource portlet = ws.getResource("3");
                         SWBResourceURLImp urltest = (SWBResourceURLImp) paramRequest.getRenderUrl();
                         urltest.setResourceBase(portlet);
                         urltest.setTopic(page0);
