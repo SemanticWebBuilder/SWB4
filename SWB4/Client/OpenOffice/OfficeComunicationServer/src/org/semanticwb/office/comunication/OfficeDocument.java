@@ -67,18 +67,19 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
 
+    private static final String OFFICE_RESOURCE_PAKAGE = "org.semanticwb.portal.resources.office.";
     private static final String JCR_FROZEN_NODE = "jcr:frozenNode";
     private static final String WORD_RESOURCE_TYPE = "word_resource";
     private static final String WORD_RESOURCE_DESCRIPTION = "Recurso Word";
-    private static final String WORD_RESOURCE_CLASS = "org.semanticwb.portal.resources.office.WordResource";
+    private static final String WORD_CLASS = "WordResource";
     private static final String WORD_RESOURCE_TITLE = WORD_RESOURCE_DESCRIPTION;
     private static final String PPT_RESOURCE_TYPE = "ppt_resource";
     private static final String PPT_RESOURCE_DESCRIPTION = "Recurso Power Point";
-    private static final String PPT_RESOURCE_CLASS = "org.semanticwb.portal.resources.office.PowerPointResource";
+    private static final String PPT_CLASS = "PowerPointResource";
     private static final String PPT_RESOURCE_TITLE = PPT_RESOURCE_DESCRIPTION;
     private static final String EXCEL_RESOURCE_TYPE = "excel_resource";
     private static final String EXCEL_RESOURCE_DESCRIPTION = "Recurso Excel";
-    private static final String EXCEL_RESOURCE_CLASS = "org.semanticwb.portal.resources.office.ExcelResource";
+    private static final String EXCEL_CLASS = "org.semanticwb.portal.resources.office.ExcelResource";
     private static final String EXCEL_RESOURCE_TITLE = EXCEL_RESOURCE_DESCRIPTION;
     private static final String CONTENT_NOT_FOUND = "El contenido no se encontró en el repositorio.";
     public static final String JCR_CONTENT = "jcr:content";
@@ -832,9 +833,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resourceType = site.createResourceType(EXCEL_RESOURCE_TYPE);
                     resourceType.setCreated(new Date(System.currentTimeMillis()));
                     resourceType.setDescription(EXCEL_RESOURCE_DESCRIPTION);
+                    resourceType.setResourceBundle(EXCEL_CLASS);
                     resourceType.setTitle(EXCEL_RESOURCE_TITLE);
                     resourceType.setResourceMode(1);
-                    resourceType.setResourceClassName(EXCEL_RESOURCE_CLASS);
+                    resourceType.setResourceClassName(OFFICE_RESOURCE_PAKAGE+EXCEL_CLASS);
                     resourceType.setUpdated(new Date(System.currentTimeMillis()));
                 }
             }
@@ -847,9 +849,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resourceType = site.createResourceType(PPT_RESOURCE_TYPE);
                     resourceType.setCreated(new Date(System.currentTimeMillis()));
                     resourceType.setDescription(PPT_RESOURCE_DESCRIPTION);
+                    resourceType.setResourceBundle(PPT_CLASS);
                     resourceType.setTitle(PPT_RESOURCE_TITLE);
                     resourceType.setResourceMode(1);
-                    resourceType.setResourceClassName(PPT_RESOURCE_CLASS);
+                    resourceType.setResourceClassName(OFFICE_RESOURCE_PAKAGE+PPT_CLASS);
                     resourceType.setUpdated(new Date(System.currentTimeMillis()));
                 }
             }
@@ -863,8 +866,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resourceType.setCreated(new Date(System.currentTimeMillis()));
                     resourceType.setDescription(WORD_RESOURCE_DESCRIPTION);
                     resourceType.setTitle(WORD_RESOURCE_TITLE);
+                    resourceType.setResourceBundle(WORD_CLASS);
                     resourceType.setResourceMode(1);
-                    resourceType.setResourceClassName(WORD_RESOURCE_CLASS);
+                    resourceType.setResourceClassName(OFFICE_RESOURCE_PAKAGE+WORD_CLASS);
                     resourceType.setUpdated(new Date(System.currentTimeMillis()));
                 }
             }
