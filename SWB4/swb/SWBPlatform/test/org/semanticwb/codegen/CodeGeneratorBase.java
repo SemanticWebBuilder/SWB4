@@ -49,7 +49,7 @@ public class CodeGeneratorBase
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
+    //@Test
     public void generateCode()
     {
         try
@@ -116,6 +116,24 @@ public class CodeGeneratorBase
             String sPakage = "org.semanticwb.model";
             CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
             codeGeneration.generateCode("frm");
+            System.out.println("Generación de clases completa");
+        }
+        catch ( CodeGeneratorException cge )
+        {
+            fail(cge.getMessage());
+        }
+    }
+
+    @Test
+    public void generateOffice()
+    {
+        try
+        {
+            String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
+            File dir = new File(path+"../../../SWBModel/src");
+            String sPakage = "org.semanticwb.repository.office";
+            CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
+            codeGeneration.generateCode("cm",false);
             System.out.println("Generación de clases completa");
         }
         catch ( CodeGeneratorException cge )
