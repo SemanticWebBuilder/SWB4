@@ -24,7 +24,7 @@ import org.semanticwb.forum.FrmPost;
 import org.semanticwb.forum.FrmThread;
 import org.semanticwb.forum.FrmUserThread;
 import org.semanticwb.model.GenericIterator;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -164,7 +164,7 @@ public class SWBForum extends GenericResource {
 
 //        out.println("<tr>");
 //        out.println("  <td colspan=\"3\" align=\"center\" bgcolor=\"#F5F5F5\" style=\"BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; BORDER-LEFT: 1px inset; BORDER-BOTTOM: 1px inset\">");
-//        out.println("    <span class=\"portlet-font\">Showing: 12 of 60</span>");
+//        out.println("    <span class=\"resource-font\">Showing: 12 of 60</span>");
 //        out.println("    <table>");
 //        out.println("      <tr id=\"showlink\">");
 //        out.println("        <td align=\"center\"><a href=\"javascript:showMoreEmotion()\" class=\"messageTextBold\">Show More</a></td>");
@@ -222,7 +222,7 @@ public class SWBForum extends GenericResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         User user = response.getUser();
-        Portlet base=response.getResourceBase();
+        Resource base=response.getResourceBase();
         WebSite website = response.getTopic().getWebSite();
         Date date = new Date();
         String action = response.getAction();
