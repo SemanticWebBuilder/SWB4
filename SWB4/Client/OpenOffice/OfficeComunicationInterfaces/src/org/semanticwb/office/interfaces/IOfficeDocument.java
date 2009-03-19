@@ -47,32 +47,32 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.getVersions")
     public VersionInfo[] getVersions(String repositoryName, String contentId) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.publishToPortletContent")
-    public PortletInfo publishToPortletContent(String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage,PropertyInfo[] properties,String[] values) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.publishToResourceContent")
+    public ResourceInfo publishToResourceContent(String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage,PropertyInfo[] properties,String[] values) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.getPortletProperties")
-    public PropertyInfo[] getPortletProperties(String repositoryName, String contentID) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.getResourceProperties")
+    public PropertyInfo[] getResourceProperties(String repositoryName, String contentID) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.getContentProperties")
     public PropertyInfo[] getContentProperties(String repositoryName, String type) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.getViewPropertyValue")
-    public String getViewPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo) throws Exception;
+    public String getViewPropertyValue(ResourceInfo resourceInfo, PropertyInfo propertyInfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.setViewPropertyValue")
-    public void setViewPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception;
+    public void setViewPropertyValue(ResourceInfo resourceInfo, PropertyInfo propertyInfo, String value) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.setPortletProperties")
-    public void setPortletProperties(PortletInfo portletInfo, PropertyInfo propertyInfo, String value) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.setResourceProperties")
+    public void setResourceProperties(ResourceInfo resourceInfo, PropertyInfo propertyInfo, String value) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.listPortlets")
-    public PortletInfo[] listPortlets(String repositoryName, String contentid) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.listResources")
+    public ResourceInfo[] listResources(String repositoryName, String contentid) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.deleteContentOfPage")
-    public void deleteContentOfPage(PortletInfo info) throws Exception;
+    public void deleteContentOfPage(ResourceInfo info) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.activatePortlet")
-    public void activatePortlet(PortletInfo info, boolean active) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.activateResource")
+    public void activateResource(ResourceInfo info, boolean active) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.getCategoryInfo")
     public CategoryInfo getCategoryInfo(String repositoryName, String contentid) throws Exception;
@@ -81,13 +81,13 @@ public interface IOfficeDocument
     public void changeCategory(String repositoryName, String contentId, String newCategoryId) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.changeVersionPorlet")
-    public void changeVersionPorlet(PortletInfo info, String newVersion) throws Exception;
+    public void changeVersionPorlet(ResourceInfo info, String newVersion) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.deletePortlet")
-    public void deletePortlet(PortletInfo info) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.deleteResource")
+    public void deleteResource(ResourceInfo info) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.getVersionToShow")
-    public String getVersionToShow(PortletInfo info) throws Exception;
+    public String getVersionToShow(ResourceInfo info) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.createPreview")
     public String createPreview(String repositoryName, String contentId, String version) throws Exception;
@@ -99,22 +99,22 @@ public interface IOfficeDocument
     public int getNumberOfVersions(String repositoryName, String contentId) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.getCalendars")
-    public CalendarInfo[] getCalendars(PortletInfo portletInfo) throws Exception;
+    public CalendarInfo[] getCalendars(ResourceInfo resourceInfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.updateCalendar")
-    public void updateCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo) throws Exception;
+    public void updateCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.insertCalendar")
-    public CalendarInfo insertCalendar(PortletInfo portletInfo, String title, String xml) throws Exception;
+    public CalendarInfo insertCalendar(ResourceInfo resourceInfo, String title, String xml) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.deleteCalendar")
-    public void deleteCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo) throws Exception;
+    public void deleteCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.activeCalendar")
-    public void activeCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo, boolean active) throws Exception;
+    public void activeCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo, boolean active) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.updatePorlet")
-    public void updatePorlet(PortletInfo portletInfo) throws Exception;
+    public void updatePorlet(ResourceInfo resourceInfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.deleteVersionOfContent")
     public void deleteVersionOfContent(String repositoryName, String contentId, String versionName) throws Exception;
