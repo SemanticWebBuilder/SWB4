@@ -131,7 +131,7 @@ public class CodeGenerator
         return letter.toUpperCase() + data.substring(1);
     }
 
-    public void generateCode(String prefix) throws CodeGeneratorException
+    public void generateCode(String prefix, boolean createSWBcontent) throws CodeGeneratorException
     {
         if (m_Directory.exists() && m_Directory.isFile())
         {
@@ -173,9 +173,16 @@ public class CodeGenerator
                 }
             }
         }
-        //createVocabulary();
-        createSWBContextBase();
-        createSWBContext();
+        if (createSWBcontent)
+        {
+            createSWBContextBase();
+            createSWBContext();
+        }
+    }
+
+    public void generateCode(String prefix) throws CodeGeneratorException
+    {
+        generateCode(prefix, true);
     }
 
     public void generateCode() throws CodeGeneratorException
@@ -500,7 +507,7 @@ public class CodeGenerator
         }
         if (!staticClasses.contains(tpc))
         {
-            javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + tpc.getPrefix() + "_" + getClassName(tpc) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);            
+            javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + tpc.getPrefix() + "_" + getClassName(tpc) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
             staticClasses.add(tpc);
         }
 
@@ -523,7 +530,7 @@ public class CodeGenerator
 
         String fullpathClass = getPackage(tpc) + "." + getClassName(tpc);
         javaClassContent.append(ENTER);
-        javaClassContent.append("    public static " + fullpathClass + " get"+className+"(String id, org.semanticwb.model.SWBModel model)" + ENTER);
+        javaClassContent.append("    public static " + fullpathClass + " get" + className + "(String id, org.semanticwb.model.SWBModel model)" + ENTER);
         javaClassContent.append("    {" + ENTER);
         javaClassContent.append("        return (" + fullpathClass + ")model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);" + ENTER);
         javaClassContent.append("    }" + ENTER);
@@ -543,51 +550,51 @@ public class CodeGenerator
         javaClassContent.append("    }" + ENTER);*/
 
         javaClassContent.append(ENTER);
-        javaClassContent.append("    public static java.util.Iterator<"+fullpathClass+"> list"+className+"s(org.semanticwb.model.SWBModel model)" + ENTER);
+        javaClassContent.append("    public static java.util.Iterator<" + fullpathClass + "> list" + className + "s(org.semanticwb.model.SWBModel model)" + ENTER);
         javaClassContent.append("    {" + ENTER);
         javaClassContent.append("        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);" + ENTER);
         javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + fullpathClass + ">(" + fullpathClass + ".class, it, true);" + ENTER);
         javaClassContent.append("    }" + ENTER);
 
         javaClassContent.append(ENTER);
-        javaClassContent.append("    public static java.util.Iterator<"+fullpathClass+"> list"+className+"s()" + ENTER);
+        javaClassContent.append("    public static java.util.Iterator<" + fullpathClass + "> list" + className + "s()" + ENTER);
         javaClassContent.append("    {" + ENTER);
         javaClassContent.append("        java.util.Iterator it=sclass.listInstances();" + ENTER);
         javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + fullpathClass + ">(" + fullpathClass + ".class, it, true);" + ENTER);
         javaClassContent.append("    }" + ENTER);
 
-            javaClassContent.append(ENTER);
-            javaClassContent.append("    public static " + fullpathClass + " create"+className+"(String id, org.semanticwb.model.SWBModel model)" + ENTER);
-            javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return (" + fullpathClass + ")model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);" + ENTER);
-            javaClassContent.append("    }" + ENTER);
+        javaClassContent.append(ENTER);
+        javaClassContent.append("    public static " + fullpathClass + " create" + className + "(String id, org.semanticwb.model.SWBModel model)" + ENTER);
+        javaClassContent.append("    {" + ENTER);
+        javaClassContent.append("        return (" + fullpathClass + ")model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);" + ENTER);
+        javaClassContent.append("    }" + ENTER);
 
         if (tpc.isAutogenId())
         {
             javaClassContent.append(ENTER);
-            javaClassContent.append("    public static " + fullpathClass + " create"+className+"(org.semanticwb.model.SWBModel model)" + ENTER);
+            javaClassContent.append("    public static " + fullpathClass + " create" + className + "(org.semanticwb.model.SWBModel model)" + ENTER);
             javaClassContent.append("    {" + ENTER);
             javaClassContent.append("        long id=model.getSemanticObject().getModel().getCounter(sclass);" + ENTER);
-            javaClassContent.append("        return "+fullpathClass+".create"+className+"(String.valueOf(id), model);" + ENTER);
+            javaClassContent.append("        return " + fullpathClass + ".create" + className + "(String.valueOf(id), model);" + ENTER);
             javaClassContent.append("    }" + ENTER);
 
-            /*javaClassContent.append(ENTER);
-            javaClassContent.append("    private static " + fullpathClass + " create"+ getClassName(tpc) +"(String id, org.semanticwb.model.SWBModel model)" + ENTER);
-            javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return (" + fullpathClass + ")model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);" + ENTER);
-            javaClassContent.append("    }" + ENTER);*/
-        }       
+        /*javaClassContent.append(ENTER);
+        javaClassContent.append("    private static " + fullpathClass + " create"+ getClassName(tpc) +"(String id, org.semanticwb.model.SWBModel model)" + ENTER);
+        javaClassContent.append("    {" + ENTER);
+        javaClassContent.append("        return (" + fullpathClass + ")model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);" + ENTER);
+        javaClassContent.append("    }" + ENTER);*/
+        }
 
         javaClassContent.append(ENTER);
-        javaClassContent.append("    public static void remove"+className+"(String id, org.semanticwb.model.SWBModel model)" + ENTER);
+        javaClassContent.append("    public static void remove" + className + "(String id, org.semanticwb.model.SWBModel model)" + ENTER);
         javaClassContent.append("    {" + ENTER);
         javaClassContent.append("        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));" + ENTER);
         javaClassContent.append("    }" + ENTER);
 
         javaClassContent.append(ENTER);
-        javaClassContent.append("    public static boolean has"+className+"(String id, org.semanticwb.model.SWBModel model)" + ENTER);
+        javaClassContent.append("    public static boolean has" + className + "(String id, org.semanticwb.model.SWBModel model)" + ENTER);
         javaClassContent.append("    {" + ENTER);
-        javaClassContent.append("        return (get"+className+"(id, model)!=null);" + ENTER);
+        javaClassContent.append("        return (get" + className + "(id, model)!=null);" + ENTER);
         javaClassContent.append("    }" + ENTER);
 
         insertPropertiesToClass(tpc, javaClassContent, parent);
@@ -873,19 +880,19 @@ public class CodeGenerator
 
             javaClassContent.append("    public " + getPackage(tpc) + "." + className + " get" + className + "(String id)" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return "+getPackage(tpc) + "." + className+".get"+className+"(id, this);" + ENTER);
+            javaClassContent.append("        return " + getPackage(tpc) + "." + className + ".get" + className + "(id, this);" + ENTER);
             javaClassContent.append("    }" + ENTER);
             javaClassContent.append(ENTER);
 
             javaClassContent.append("    public java.util.Iterator<" + getPackage(tpc) + "." + className + "> list" + className + "s()" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return "+getPackage(tpc) + "." + className+".list"+ className +"s(this);" + ENTER);
+            javaClassContent.append("        return " + getPackage(tpc) + "." + className + ".list" + className + "s(this);" + ENTER);
             javaClassContent.append("    }" + ENTER);
-            
+
             javaClassContent.append(ENTER);
             javaClassContent.append("    public " + getPackage(tpc) + "." + className + " create" + className + "(String id)" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return "+getPackage(tpc) + "." + className+".create"+className+"(id,this);" + ENTER);
+            javaClassContent.append("        return " + getPackage(tpc) + "." + className + ".create" + className + "(id,this);" + ENTER);
             javaClassContent.append("    }" + ENTER);
 
             if (tpc.isAutogenId())
@@ -894,21 +901,21 @@ public class CodeGenerator
                 javaClassContent.append("    public " + getPackage(tpc) + "." + className + " create" + className + "()" + ENTER);
                 javaClassContent.append("    {" + ENTER);
                 javaClassContent.append("        long id=getSemanticObject().getModel().getCounter(" + tpc.getPrefix() + "_" + className + ");" + ENTER);
-                javaClassContent.append("        return "+getPackage(tpc) + "." + className+".create"+className+"(String.valueOf(id),this);" + ENTER);
+                javaClassContent.append("        return " + getPackage(tpc) + "." + className + ".create" + className + "(String.valueOf(id),this);" + ENTER);
                 javaClassContent.append("    } " + ENTER);
 
-               
+
 
             }
             javaClassContent.append(ENTER);
             javaClassContent.append("    public void remove" + className + "(String id)" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        "+getPackage(tpc) + "." + className+".remove"+className+"(id, this);" + ENTER);
+            javaClassContent.append("        " + getPackage(tpc) + "." + className + ".remove" + className + "(id, this);" + ENTER);
             javaClassContent.append("    }" + ENTER);
 
             javaClassContent.append("    public boolean has" + className + "(String id)" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return "+getPackage(tpc) + "." + className+".has"+className+"(id, this);" + ENTER);
+            javaClassContent.append("        return " + getPackage(tpc) + "." + className + ".has" + className + "(id, this);" + ENTER);
             javaClassContent.append("    }" + ENTER);
         }
 
