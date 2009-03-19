@@ -18,8 +18,8 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.PortletSubType;
-import org.semanticwb.model.PortletType;
+import org.semanticwb.model.ResourceSubType;
+import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
@@ -131,12 +131,12 @@ public class TemplateImp extends Template
         return auxparts;
     }
     
-    private PortletType getResourceType(String type)
+    private ResourceType getResourceType(String type)
     {
         //busca el tipo de recurso en el topicmap del template
-        PortletType rt=getWebSite().getPortletType(type);
+        ResourceType rt=getWebSite().getResourceType(type);
         //busca el tipo de recurso en el topicmap global
-        if(rt==null)rt=SWBContext.getGlobalWebSite().getPortletType(type);
+        if(rt==null)rt=SWBContext.getGlobalWebSite().getResourceType(type);
         return rt;
     }
     
@@ -144,12 +144,12 @@ public class TemplateImp extends Template
      * Regresa ID (numero) del subtipo de recurso como string y concatena 
      * subtypemap en el caso de no coincidir con el topicmap de la plantilla
      */    
-    public PortletSubType getSubType(String type, String stype)
+    public ResourceSubType getSubType(String type, String stype)
     {
         //busca el tipo de recurso en el topicmap del template
-        PortletSubType rt=getWebSite().getPortletSubType((type+"_"+stype));
+        ResourceSubType rt=getWebSite().getResourceSubType((type+"_"+stype));
         //busca el tipo de recurso en el topicmap global
-        if(rt==null)rt=SWBContext.getGlobalWebSite().getPortletSubType((type+"_"+stype));
+        if(rt==null)rt=SWBContext.getGlobalWebSite().getResourceSubType((type+"_"+stype));
         return rt;
     }
     
@@ -207,8 +207,8 @@ public class TemplateImp extends Template
                                     String name = (String) en.nextElement();
                                     params.put(name.toLowerCase(), tag.getParam(name));
                                 }
-                                PortletType type=getResourceType(tag.getParam("type"));
-                                PortletSubType stype=getSubType(tag.getParam("type"),tag.getParam("stype"));
+                                ResourceType type=getResourceType(tag.getParam("type"));
+                                ResourceSubType stype=getSubType(tag.getParam("type"),tag.getParam("stype"));
                                 Object args[] = {type, params, stype};
                                 parts.add(new SWBMethod(null, obj, args, this));
                                 //System.out.print(cls.getName()+":"+"getResources");
@@ -232,8 +232,8 @@ public class TemplateImp extends Template
                         {
                             if (!tag.isEndTag())
                             {
-                                PortletType rec=getResourceType(tag.getParam("name"));
-                                String objclass = rec.getPortletClassName();
+                                ResourceType rec=getResourceType(tag.getParam("name"));
+                                String objclass = rec.getResourceClassName();
                                 Class cls = Class.forName(objclass);
                                 objects.put(tag.getParam("name").toLowerCase(), cls.newInstance());
                             }

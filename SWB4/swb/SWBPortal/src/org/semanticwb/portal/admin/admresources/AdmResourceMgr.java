@@ -38,7 +38,7 @@ import org.semanticwb.portal.admin.admresources.TextFE;
 import org.semanticwb.portal.admin.admresources.lib.WBContainerFE;
 import org.semanticwb.Logger;
 import org.semanticwb.portal.admin.admresources.db.AdmDBConnMgr;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.w3c.dom.*;
 import org.semanticwb.SWBPlatform;
@@ -61,7 +61,7 @@ public class AdmResourceMgr extends WBContainerFE
     private Document dom;
     private String xml;
     private boolean isdefconn;
-    private Portlet base;
+    private Resource base;
     String strRes;
     String redirect;
     
@@ -102,7 +102,7 @@ public class AdmResourceMgr extends WBContainerFE
      * @param base Objeto base del recurso
      * @param redirect Ruta de redireccionamiento para el submit de la forma
      */    
-    public void setXml(String xml, Portlet base,String redirect) {
+    public void setXml(String xml, Resource base,String redirect) {
         this.xml = xml;
         this.base = base;
         this.redirect=redirect;

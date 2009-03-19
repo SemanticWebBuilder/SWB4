@@ -26,7 +26,7 @@ package org.semanticwb.portal.admin.admresources.util;
 //import gnu.regexp.REException;
 import java.io.*;
 import java.util.*;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import javax.xml.transform.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
@@ -191,7 +191,7 @@ public class WBAdmResourceUtils {
         return xmlVerifierImpl(sysid, schema, xml);
     }
 
-    public Document transformAdmResource(User user, String path, String redirect, Portlet base) {
+    public Document transformAdmResource(User user, String path, String redirect, Resource base) {
         if (path == null || base == null) {
             return null;
         }
@@ -200,7 +200,7 @@ public class WBAdmResourceUtils {
         return dom;
     }
 
-    public Document transformAdmResource(User user, String path, String redirect, Portlet base, String form) {
+    public Document transformAdmResource(User user, String path, String redirect, Resource base, String form) {
         if (path == null || base == null) {
             return null;
         }
@@ -216,14 +216,14 @@ public class WBAdmResourceUtils {
         return transformAdmResourceByXml(user, xml, redirect, base, form);
     }
 
-    public String transformAdmResource(User user, String path, String redirect, Portlet base, Templates plt) {
+    public String transformAdmResource(User user, String path, String redirect, Resource base, Templates plt) {
         if (path == null || base == null || plt == null) {
             return null;
         }
         return transformAdmResource(user, path, redirect, base, plt, null);
     }
 
-    public String transformAdmResource(User user, String path, String redirect, Portlet base, Templates plt, String form) {
+    public String transformAdmResource(User user, String path, String redirect, Resource base, Templates plt, String form) {
         if (path == null || base == null || plt == null) {
             return null;
         }
@@ -240,7 +240,7 @@ public class WBAdmResourceUtils {
         return ret.toString();
     }
 
-    public Document transformAdmResourceByXml(User user, String xml, String redirect, Portlet base) {
+    public Document transformAdmResourceByXml(User user, String xml, String redirect, Resource base) {
         if (xml == null || base == null) {
             return null;
         }
@@ -249,7 +249,7 @@ public class WBAdmResourceUtils {
         return dom;
     }
 
-    public Document transformAdmResourceByXml(User user, String xml, String redirect, Portlet base, String form) {
+    public Document transformAdmResourceByXml(User user, String xml, String redirect, Resource base, String form) {
         if (xml == null || base == null) {
             return null;
         }
@@ -269,14 +269,14 @@ public class WBAdmResourceUtils {
         return SWBUtils.XML.xmlToDom(xml);
     }
 
-    public String transformAdmResourceByXml(User user, String xml, String redirect, Portlet base, Templates plt) {
+    public String transformAdmResourceByXml(User user, String xml, String redirect, Resource base, Templates plt) {
         if (xml == null || base == null || plt == null) {
             return null;
         }
         return transformAdmResourceByXml(user, xml, redirect, base, plt, null);
     }
 
-    public String transformAdmResourceByXml(User user, String xml, String redirect, Portlet base, Templates plt, String form) {
+    public String transformAdmResourceByXml(User user, String xml, String redirect, Resource base, Templates plt, String form) {
         if (xml == null || base == null || plt == null) {
             return null;
         }
@@ -477,7 +477,7 @@ public class WBAdmResourceUtils {
      * @param   pImage  El nombre de la imagen que se va a desplegar.
      * @return  Regresa un nuevo String que contiene la representación html de la imagen.
      */
-    public String displayImage(Portlet base, String pImage, String pNode) {
+    public String displayImage(Resource base, String pImage, String pNode) {
         StringBuffer sbfRet = new StringBuffer("");
         try {
             String img = base.getAttribute(pNode, "").trim();
@@ -534,7 +534,7 @@ public class WBAdmResourceUtils {
      * @param   filename  El nombre de la imagen que se va a desplegar.
      * @return  Regresa un nuevo String que contiene la representaciÃ³n html de la imagen.
      */
-    public String displayImage(Portlet base, String filename, int width, int height) {
+    public String displayImage(Resource base, String filename, int width, int height) {
         StringBuffer strb = new StringBuffer();
         try {
             if (filename.endsWith(".swf")) { //para desplegar imagenes de flash
@@ -607,7 +607,7 @@ public class WBAdmResourceUtils {
      * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
      * @return    Regresa un nuevo String que contiene el applet para subir las imágenes relativas al archivo parseado.
      */
-    public String uploadFileParsed(Portlet base, WBFileUpload fUp, String pInForm, String idsession) {
+    public String uploadFileParsed(Resource base, WBFileUpload fUp, String pInForm, String idsession) {
         StringBuffer strb = null;
         String strWorkPath = workPath;
         String strFile = null, strClientPath = "";
@@ -682,7 +682,7 @@ public class WBAdmResourceUtils {
                 }
             }
         } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc03") + " " + strFile + ".", e);
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc02") + " " + base.getResourceType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc03") + " " + strFile + ".", e);
         }
         if (strb != null) {
             return strb.toString();
@@ -699,7 +699,7 @@ public class WBAdmResourceUtils {
      * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
      * @return    Regresa un nuevo String que contiene el applet para subir las imágenes relativas al archivo parseado.
      */
-    public String uploadFileParsed(Portlet base, FileUpload fUp, String pInForm, String idsession,String path2save)
+    public String uploadFileParsed(Resource base, FileUpload fUp, String pInForm, String idsession,String path2save)
     {
         StringBuffer sbfRet = new StringBuffer();
         String strWorkPath = workPath;
@@ -765,7 +765,7 @@ public class WBAdmResourceUtils {
                 }
             }
         } 
-        catch (Exception e) { log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc03") + " " + strFile + ".",  e); }
+        catch (Exception e) { log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc02") + " " + base.getResourceType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFileParsed_exc03") + " " + strFile + ".",  e); }
         return sbfRet.toString();
     }
 
@@ -777,7 +777,7 @@ public class WBAdmResourceUtils {
      * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
      * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
      */
-    public boolean uploadFile(Portlet base, WBFileUpload fUp, String pInForm) {
+    public boolean uploadFile(Resource base, WBFileUpload fUp, String pInForm) {
 
         String strWorkPath = workPath;
         String strFile = null;
@@ -797,7 +797,7 @@ public class WBAdmResourceUtils {
                 }
             }
         } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc03") + " " + strFile + ".");
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc02") + " " + base.getResourceType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc03") + " " + strFile + ".");
         }
         return bOk;
     }
@@ -810,7 +810,7 @@ public class WBAdmResourceUtils {
      * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
      * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
      */
-    public boolean uploadFile(Portlet base, FileUpload fUp, String pInForm)
+    public boolean uploadFile(Resource base, FileUpload fUp, String pInForm)
     {
         String strWorkPath = workPath;
         String strFile = null;
@@ -829,7 +829,7 @@ public class WBAdmResourceUtils {
                 }
             }
         } 
-        catch (Exception e) { log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc03") + " " + strFile + ".", e); }
+        catch (Exception e) { log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc02") + " " + base.getResourceType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc03") + " " + strFile + ".", e); }
         return bOk;
     }
 
@@ -840,17 +840,17 @@ public class WBAdmResourceUtils {
      * @param     base      La información del recurso en memoria.
      * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
      */
-    public String removeResource(Portlet base) {
+    public String removeResource(Resource base) {
         StringBuffer sbfRet = new StringBuffer();
         String strError = SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_htmlAlerta");
         try {
-            strError += SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_removeResource_nodelete") + base.getTitle() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResourceremoveResource_tipo") + " " + base.getPortletType().getId() + " " + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_removeResource_ident") + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_html2");
+            strError += SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_removeResource_nodelete") + base.getTitle() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResourceremoveResource_tipo") + " " + base.getResourceType().getId() + " " + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_removeResource_ident") + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_html2");
 
             File file = new File(workPath + base.getWorkPath());
             if (file.exists() && file.isDirectory()) {
                 try {
                     SWBUtils.IO.removeDirectory(workPath + base.getWorkPath() + "/");
-                    sbfRet.append(SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ok1") + base.getTitle() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ok2") + base.getPortletType().getId() + " " + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ok3") + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ok4"));
+                    sbfRet.append(SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ok1") + base.getTitle() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ok2") + base.getResourceType().getId() + " " + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ok3") + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ok4"));
                     sbfRet.append(SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_ubica") + workPath + base.getWorkPath() + " " + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_removeResource_coment"));
                 } catch (Exception e) {
                     sbfRet.append("\n<br>" + strError + "<br>\n<!-- " + e + " -->");
@@ -860,7 +860,7 @@ public class WBAdmResourceUtils {
                 sbfRet.append("\n<br>" + strError + "<br>\n<!-- Error no " + workPath + base.getWorkPath() + " -->");
             }
         } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_run_recerror") + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_removeResource_tiperec") + base.getPortletType() + ".", e);
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_run_recerror") + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_removeResource_tiperec") + base.getResourceType() + ".", e);
         }
         return sbfRet.toString();
     }
@@ -871,12 +871,12 @@ public class WBAdmResourceUtils {
      * @param     pFile     El nombre del archivo que se va a guardar.
      * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
      */
-    public String getFileName(Portlet base, String pFile) {
+    public String getFileName(Resource base, String pFile) {
         String ret = "";
         try {
             ret = getFileName(pFile);
         } catch (Exception e) {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_getFileName_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_getFileName_exc02") + " " + base.getPortletType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_getFileName_excp03") + " " + pFile + ".", e);
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_getFileName_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_getFileName_exc02") + " " + base.getResourceType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_getFileName_excp03") + " " + pFile + ".", e);
         }
         return ret;
     }
@@ -1004,7 +1004,7 @@ public class WBAdmResourceUtils {
         return sbfRet.toString();
     }
 
-    public String loadWindowConfiguration(Portlet base, org.semanticwb.portal.api.SWBParamRequest paramsRequest) {
+    public String loadWindowConfiguration(Resource base, org.semanticwb.portal.api.SWBParamRequest paramsRequest) {
         StringBuffer ret = new StringBuffer("");
         try {
             ret.append("<tr> \n");
@@ -1400,13 +1400,13 @@ public class WBAdmResourceUtils {
      * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
      * @return    Regresa un nuevo String que contiene el applet para subir las imágenes relativas al archivo parseado.
      */
-    public String uploadFileParsed(Portlet base, FileUpload fUp, String pInForm)
+    public String uploadFileParsed(Resource base, FileUpload fUp, String pInForm)
     {
         return uploadFileParsed(base, fUp, pInForm, fUp.getSessid(),null);
     }
 
     
-    public String uploadFileParsed(Portlet base, FileUpload fUp, String pInForm, String idsession){
+    public String uploadFileParsed(Resource base, FileUpload fUp, String pInForm, String idsession){
         return uploadFileParsed(base, fUp, pInForm, idsession,null);
     }
     

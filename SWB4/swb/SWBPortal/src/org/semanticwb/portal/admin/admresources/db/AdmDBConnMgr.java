@@ -45,7 +45,7 @@ public class AdmDBConnMgr {
 
     private static Logger log = SWBUtils.getLogger(AdmDBConnMgr.class);
     private boolean defconn = true;
-    private Portlet base = null;
+    private Resource base = null;
     private Document dom = null;
     private HttpServletRequest req = null;
     private User user = null;
@@ -68,7 +68,7 @@ public class AdmDBConnMgr {
     }
 
     /** Creates a new instance of AdmDBConnMgr when is the dafult db*/
-    public AdmDBConnMgr(Portlet base) {
+    public AdmDBConnMgr(Resource base) {
         this.base = base;
         this.defconn = true;
         this.conname = SWBPlatform.getEnv("wb/db/nameconn", "wb"); //conexion por defecto
@@ -76,7 +76,7 @@ public class AdmDBConnMgr {
     }
 
     /** Creates a new instance of AdmDBConnMgr when is the dafult db*/
-    public AdmDBConnMgr(String conname, String tablename, String fieldname, String resID, String resIDTM, Portlet base) {
+    public AdmDBConnMgr(String conname, String tablename, String fieldname, String resID, String resIDTM, Resource base) {
         this.defconn = false;
         this.conname = conname;
         this.tablename = tablename;
@@ -88,14 +88,14 @@ public class AdmDBConnMgr {
     }
 
     /** Creates a new instance of AdmDBConnMgr */
-    public AdmDBConnMgr(HttpServletRequest req, Portlet base) {
+    public AdmDBConnMgr(HttpServletRequest req, Resource base) {
         this.req = req;
         this.base = base;
         createXmlAdmRes(req);
     }
 
     /** Creates a new instance of AdmDBConnMgr */
-    public AdmDBConnMgr(HttpServletRequest req, String conname, String tablename, String fieldname, String resID, String resIDTM, Portlet base) {
+    public AdmDBConnMgr(HttpServletRequest req, String conname, String tablename, String fieldname, String resID, String resIDTM, Resource base) {
         this.defconn = false;
         this.req = req;
         this.conname = conname;
@@ -108,7 +108,7 @@ public class AdmDBConnMgr {
     }
 
     /** Creates a new instance of AdmDBConnMgr when is the dafult db*/
-    public AdmDBConnMgr(FormFE formfe, Node tag, Portlet base) {
+    public AdmDBConnMgr(FormFE formfe, Node tag, Resource base) {
         this.tag = tag;
         this.base = base;
         this.formfe = formfe;
@@ -330,7 +330,7 @@ public class AdmDBConnMgr {
         return imgapplet;
     }
 
-    public Portlet getBase() {
+    public Resource getBase() {
         return base;
     }
 

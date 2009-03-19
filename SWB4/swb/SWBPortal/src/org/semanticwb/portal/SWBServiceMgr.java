@@ -11,7 +11,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Language;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.Template;
@@ -70,7 +70,7 @@ public class SWBServiceMgr implements SemanticObserver {
                         }
                         java.io.File dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/"+ obj.getId() + "/Template");
                         dir.mkdirs();
-                        dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/" + obj.getId() + "/Portlet");
+                        dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/" + obj.getId() + "/Resource");
                         dir.mkdirs();
                         //
                     }
@@ -94,7 +94,7 @@ public class SWBServiceMgr implements SemanticObserver {
                     } else if (obj.instanceOf(Template.sclass)) // Removes Template
                     {
                         SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + obj.getWorkPath());
-                    } else if (obj.instanceOf(Portlet.sclass)) // Removes Portlet
+                    } else if (obj.instanceOf(Resource.sclass)) // Removes Resource
                     {
                         SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + obj.getWorkPath());
                     }
