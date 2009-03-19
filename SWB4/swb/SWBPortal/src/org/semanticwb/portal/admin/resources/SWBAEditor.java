@@ -40,8 +40,8 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.URLEncoder;
-import org.semanticwb.model.PortletSubType;
-import org.semanticwb.model.PortletType;
+import org.semanticwb.model.ResourceSubType;
+import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
@@ -54,7 +54,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 /** Recurso de administraci�n que permite la edici�n de contenidos y plantillas en
  * la administraci�n de WebBuilder.
  *
- * Portlet of administration that allows to the edition of contents and templates
+ * Resource of administration that allows to the edition of contents and templates
  * in the administration of WebBuilder.
  * @author Javier Solis Gonzalez
  */
@@ -67,10 +67,10 @@ public class SWBAEditor extends GenericResource
         
         public int compare(Object o1, Object o2)
         {
-            if(o1 instanceof PortletType && o2 instanceof PortletType)
+            if(o1 instanceof ResourceType && o2 instanceof ResourceType)
             {
-                PortletType r1=(PortletType)o1;
-                PortletType r2=(PortletType)o2;
+                ResourceType r1=(ResourceType)o1;
+                ResourceType r2=(ResourceType)o2;
                 return r1.getTitle().toLowerCase().compareTo(r2.getTitle().toLowerCase());
             }
             return 0;
@@ -82,10 +82,10 @@ public class SWBAEditor extends GenericResource
         
         public int compare(Object o1, Object o2)
         {
-            if(o1 instanceof PortletSubType && o2 instanceof PortletSubType)
+            if(o1 instanceof ResourceSubType && o2 instanceof ResourceSubType)
             {
-                PortletSubType r1=(PortletSubType)o1;
-                PortletSubType r2=(PortletSubType)o2;
+                ResourceSubType r1=(ResourceSubType)o1;
+                ResourceSubType r2=(ResourceSubType)o2;
                 return r1.getTitle().toLowerCase().compareTo(r2.getTitle().toLowerCase());
             }
             return 0;
@@ -139,12 +139,12 @@ public class SWBAEditor extends GenericResource
         WebSite map=SWBContext.getWebSite(tm);
         WebSite tmInit=map;
         //TODO:listar globales
-        Iterator elements=sortIterator(map.listPortletTypes());
+        Iterator elements=sortIterator(map.listResourceTypes());
         while(elements.hasNext())
         {            
-            PortletType obj=(PortletType)elements.next();
+            ResourceType obj=(ResourceType)elements.next();
             //System.out.println("obj:"+obj.getDisplayName());
-            if(obj.getPortletMode()==2 || obj.getPortletMode()==3)
+            if(obj.getResourceMode()==2 || obj.getResourceMode()==3)
             {
                 Element erole=addNode("resourceType",""+obj.getId(), obj.getTitle(), res);
                 erole.setAttribute("topicmap",map.getId());
@@ -154,7 +154,7 @@ public class SWBAEditor extends GenericResource
 
                 while(itsub.hasNext())
                 {
-                    PortletSubType sub=(PortletSubType)itsub.next();
+                    ResourceSubType sub=(ResourceSubType)itsub.next();
                     Element esubType=addNode("subResourceType",""+sub.getId(), sub.getTitle(), erole);            
                     esubType.setAttribute("topicmap",sub.getWebSite().getId());
                 }
@@ -188,7 +188,7 @@ public class SWBAEditor extends GenericResource
         {
             //TODO
             /*
-            Portlet res=ResourceMgr.getInstance().getResource(tm,id).getResourceBase();
+            Resource res=ResourceMgr.getInstance().getResource(tm,id).getResourceBase();
             webpath=WBUtils.getInstance().getWebWorkPath()+res.getResourceWorkPath();
             workpath=WBUtils.getInstance().getWorkPath()+res.getResourceWorkPath();
             if(sver==null)ver=res.getLastversion();
@@ -721,7 +721,7 @@ public class SWBAEditor extends GenericResource
             {
                 //TODO:
 /*
-                Portlet res=ResourceMgr.getInstance().getResource(tm, id).getResourceBase();
+                Resource res=ResourceMgr.getInstance().getResource(tm, id).getResourceBase();
                 work=WBUtils.getInstance().getWorkPath()+res.getResourceWorkPath()+"/"+ver+"/";
                 webWork=WBUtils.getInstance().getWebWorkPath()+res.getResourceWorkPath()+"/"+ver+"/";
                 
@@ -987,7 +987,7 @@ public class SWBAEditor extends GenericResource
      */
     //TODO:
     /*
-    public static void getContentApplet(PrintWriter out, Portlet base, int version, WebPage topic, User user, String filename)
+    public static void getContentApplet(PrintWriter out, Resource base, int version, WebPage topic, User user, String filename)
     {
         out.println("<APPLET id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\""+WBUtils.getInstance().getWebPath()+"\" ARCHIVE=\"swbadmin/lib/htmleditor.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
         String url=WBUtils.getInstance().getDistPath()+"/SWBAdmin/WBAd_utl_HTMLEditor/_rid/1/_mto/3/_mod/";

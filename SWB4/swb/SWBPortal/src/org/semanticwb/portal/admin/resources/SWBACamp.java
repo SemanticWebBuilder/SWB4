@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Camp;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
@@ -31,7 +31,7 @@ public class SWBACamp extends GenericResource {
 
     public String strRscType=SWBACamp.class.getName();
     private Logger log=SWBUtils.getLogger(SWBACamp.class);
-    Portlet base=null;
+    Resource base=null;
  /** Creates a new instance of SWBACamp */
     public SWBACamp() {
     }
