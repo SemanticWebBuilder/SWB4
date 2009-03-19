@@ -130,10 +130,10 @@
             WebSite site=it.next();
             if(!site.isDeleted())
             {
-                Iterator<Portlet> itp = site.listPortlets();
+                Iterator<Resource> itp = site.listResources();
                 while(itp.hasNext())
                 {
-                    Portlet por = itp.next();
+                    Resource por = itp.next();
                     if(por.isDeleted())
                     {
                         addSemanticObject(arr, por.getSemanticObject(),false,true);
