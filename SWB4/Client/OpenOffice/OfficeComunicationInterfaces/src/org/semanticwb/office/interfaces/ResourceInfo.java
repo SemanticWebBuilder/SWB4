@@ -9,7 +9,7 @@ package org.semanticwb.office.interfaces;
  *
  * @author victor.lorenzana
  */
-public class PortletInfo {
+public class ResourceInfo {
     public String id;    
     public String title;
     public String description;
@@ -32,7 +32,7 @@ public class PortletInfo {
         {
             return false;
         }
-        final PortletInfo other = (PortletInfo) obj;
+        final ResourceInfo other = (ResourceInfo) obj;
         return true;
     }
 

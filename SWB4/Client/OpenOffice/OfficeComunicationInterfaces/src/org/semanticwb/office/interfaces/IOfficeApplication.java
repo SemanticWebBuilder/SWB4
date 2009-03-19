@@ -76,11 +76,11 @@ public interface IOfficeApplication
     public FlowContentInformation[] getContentsForAuthorize() throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.sendContentToAuthorize")
-    public void sendContentToAuthorize(PortletInfo portletInfo, String message) throws Exception;
+    public void sendContentToAuthorize(ResourceInfo resourceInfo, String message) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.authorize")
-    public void authorize(PortletInfo portletInfo, String message) throws Exception;
+    public void authorize(ResourceInfo resourceInfo, String message) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.reject")
-    public void reject(PortletInfo portletInfo, String message) throws Exception;
+    public void reject(ResourceInfo resourceInfo, String message) throws Exception;
 }
