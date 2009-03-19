@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- *
+ * Word lexicon. A list of {@link Word}s and their {@link WordTag}s.
  * @author hasdai
  */
 public class Lexicon {
@@ -17,21 +17,23 @@ public class Lexicon {
     private ArrayList<Word> lexic;
 
     /**
-     * Constructor.
-     * @param lex Diccionario de palabras.
+     * Creates a new instance of a lexicon with the given list of {@link Word}s.
+     * @param lex {@link Word} List.
      */
     public Lexicon(ArrayList<Word> lex) {
         lexic = lex;
     }
 
+    /**
+     * Creates a new instance of a lexicon. The created lexicon is empty.
+     */
     public Lexicon() {
         lexic = new ArrayList<Word>();
     }
 
     /**
-     * Agrega una palabra al diccionario verificando que no exista previamente,
-     * en cuyo caso no la inserta.
-     * @param w palabra a agregar.
+     * Adds a {@link Word} to the lexicon (if the word doesn exist).
+     * @param w {@link Word} to add to the lexicon.
      */
     public void addWord(Word w) {
         if (!entryExist(w)) {
@@ -40,10 +42,9 @@ public class Lexicon {
     }
 
     /**
-     * Obtiene la etiqueta de la palabra especificada.
-     * @param w palabra a etiquetar.
-     * @return WordTag con la etiqueta de la palabra y su tipo. Si la palabra no
-     *         existe en el diccionario, la etiqueta como variable.
+     * Gets the {@link WordTag} of the given {@link Word}.
+     * @param w {@link Word} to tag.
+     * @return {@link WordTag} for the word.
      */
     public WordTag getWordTag(Word w) {
         //TODO: Arreglar para hacer la búsqueda en un árbol
@@ -56,6 +57,11 @@ public class Lexicon {
         return new WordTag("VAR", "");
     }
 
+    /**
+     * Gets the {@link WordTag} of the given {@link Word} label.
+     * @param label of Word to tag.
+     * @return {@link WordTag} for the word.
+     */
     public WordTag getWordTag(String label) {
         for (int i = 0; i < lexic.size(); i++) {
             if (lexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
@@ -67,9 +73,9 @@ public class Lexicon {
     }
 
     /**
-     * Verifica si ya existe una palabra en el diccionario.
-     * @param entry palabra a verificar.
-     * @return true si la palabra existe en el diccionario.
+     * Verifies if the given {@link Word} already exists in the dictionary.
+     * @param entry {@link Word} to search for.
+     * @return true if the word is already in Dictionary, false otherwise.
      */
     public boolean entryExist(Word entry)
     {
@@ -86,8 +92,7 @@ public class Lexicon {
     }
 
     /**
-     * Devuelve un iterador para recorrer el diccionario.
-     * @return Iterador a las palabras del diciconario.
+     * Gets an iterator to the {@link Word}s in the Dictionary.
      */
     public Iterator<Word> listEntries()
     {
