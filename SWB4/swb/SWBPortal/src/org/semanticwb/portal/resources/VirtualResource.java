@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.semanticwb.SWBPortal;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBParamRequestImp;
@@ -64,7 +64,7 @@ public class VirtualResource extends GenericAdmResource
         PrintWriter out = response.getWriter();
         
         
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         String tmid=base.getAttribute("tmid","0");
         String id=base.getAttribute("resid","0");
         //TODO quitar la siguiente línea

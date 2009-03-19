@@ -34,7 +34,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -62,7 +62,7 @@ public class WBSiteMap extends GenericAdmResource
      * @param base
      */    
     @Override
-    public void setResourceBase(Portlet base)
+    public void setResourceBase(Resource base)
     {
         try {
             super.setResourceBase(base);
@@ -92,7 +92,7 @@ public class WBSiteMap extends GenericAdmResource
     public void doChilds(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/json;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         StringBuffer data = new StringBuffer();
         try {
             WebPage tpsite = null;                        
@@ -150,7 +150,7 @@ public class WBSiteMap extends GenericAdmResource
      */
     public String getJSONDynamically(WebSite webSite, User user) throws SWBResourceException, IOException
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         StringBuffer data = new StringBuffer();
         int subLevel = 1;
         try {
@@ -217,7 +217,7 @@ public class WBSiteMap extends GenericAdmResource
                 }
             }
         }catch(Exception e) { 
-            log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); 
+            log.error("Error while generating DOM in resource "+ base.getResourceType().getResourceClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e);
             data.append(e.toString());
         }
         return data.toString();
@@ -231,7 +231,7 @@ public class WBSiteMap extends GenericAdmResource
      */
     public String getJSONDynamically(WebSite webSite, WebPage webPage, User user, int subLevel) throws SWBResourceException, IOException
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         StringBuffer data = new StringBuffer();
         try {
             WebPage tpsite = webPage;                        
@@ -272,7 +272,7 @@ public class WBSiteMap extends GenericAdmResource
             }
             //return data.toString();
         }catch(Exception e) { 
-            log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); 
+            log.error("Error while generating DOM in resource "+ base.getResourceType().getResourceClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e);
             data.append(e.toString());
         }
         return data.toString();      
@@ -291,7 +291,7 @@ public class WBSiteMap extends GenericAdmResource
         response.setContentType("text/html;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
         StringBuffer ret = new StringBuffer("");
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         
         if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {
             String surl="";
@@ -390,7 +390,7 @@ public class WBSiteMap extends GenericAdmResource
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         String surl="";
         if(paramRequest.getTopic()!=paramRequest.getAdminTopic())
         {

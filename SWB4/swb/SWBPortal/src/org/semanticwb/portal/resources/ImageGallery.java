@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.FileUpload;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
@@ -30,7 +30,7 @@ public class ImageGallery extends GenericAdmResource {
     }
     
     @Override
-    public void setResourceBase(Portlet base)
+    public void setResourceBase(Resource base)
     {
         try 
         {
@@ -55,7 +55,7 @@ public class ImageGallery extends GenericAdmResource {
         response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
         PrintWriter out = response.getWriter();
         
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         
         StringBuffer ret = new StringBuffer();
         try {
@@ -115,7 +115,7 @@ public class ImageGallery extends GenericAdmResource {
     {        
         response.setContentType("text/html;charset=iso-8859-1");
         StringBuffer ret = new StringBuffer("");
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         
         String msg=paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_undefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
@@ -212,7 +212,7 @@ public class ImageGallery extends GenericAdmResource {
     private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest)
     {
         StringBuffer ret=new StringBuffer("");
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         try
         {
             SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN);

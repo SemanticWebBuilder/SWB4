@@ -20,14 +20,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portlet.office.ExcelPortlet;
-import org.semanticwb.portlet.office.PPTPortlet;
-import org.semanticwb.portlet.office.WordPortlet;
+import org.semanticwb.resource.office.ExcelResource;
+import org.semanticwb.resource.office.PPTResource;
+import org.semanticwb.resource.office.WordResource;
 
 /**
  *
@@ -39,7 +39,7 @@ public class DocumentExcelContent extends GenericAdmResource
     private static Logger log = SWBUtils.getLogger(DocumentExcelContent.class);
 
     @Override
-    public void setResourceBase(Portlet base)
+    public void setResourceBase(Resource base)
     {
         loadContent(base);
         try
@@ -52,7 +52,7 @@ public class DocumentExcelContent extends GenericAdmResource
         }
     }
 
-    private void clean(Portlet base)
+    private void clean(Resource base)
     {
         String basePath = SWBUtils.getApplicationPath() + base.getWorkPath() + "/";
         File dir = new File(basePath);
@@ -68,21 +68,21 @@ public class DocumentExcelContent extends GenericAdmResource
         }
     }
 
-    private void loadContent(Portlet base)
+    private void loadContent(Resource base)
     {
-        if (base instanceof ExcelPortlet)
+        if (base instanceof ExcelResource)
         {
             String basePath = SWBUtils.getApplicationPath() + base.getWorkPath() + "/";
             clean(base);
-            ExcelPortlet portlet = (ExcelPortlet) base;
-            String contentId = portlet.getContent();
-            String repositoryName = portlet.getRepositoryName();
+            ExcelResource resource = (ExcelResource) base;
+            String contentId = resource.getContent();
+            String repositoryName = resource.getRepositoryName();
             OfficeDocument document = new OfficeDocument();
             // is a zip file
             File zipFile = null;
             try
             {
-                InputStream in = document.getContent(repositoryName, contentId,portlet.getVersionToShow());
+                InputStream in = document.getContent(repositoryName, contentId,resource.getVersionToShow());
                 String name = UUID.randomUUID().toString();
                 String zipPath = basePath + name + ".zip";
                 zipFile = new File(zipPath);
@@ -132,17 +132,17 @@ public class DocumentExcelContent extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
-        if (this.getResourceBase() instanceof ExcelPortlet)
+        if (this.getResourceBase() instanceof ExcelResource)
         {
             String basePath = SWBUtils.getApplicationPath() + this.getResourceBase().getWorkPath() + "/";
-            ExcelPortlet portlet = (ExcelPortlet) this.getResourceBase();
-            String contentId = portlet.getContent();
-            String repositoryName = portlet.getRepositoryName();
+            ExcelResource resource = (ExcelResource) this.getResourceBase();
+            String contentId = resource.getContent();
+            String repositoryName = resource.getRepositoryName();
             OfficeDocument document = new OfficeDocument();
             try
             {
                 PrintWriter out = response.getWriter();
-                String file = document.getContentFile(repositoryName, contentId,portlet.getVersionToShow());
+                String file = document.getContentFile(repositoryName, contentId,resource.getVersionToShow());
                 file = file.replace(".doc", ".html");
                 String path = basePath + file;
                 FileInputStream in = new FileInputStream(path);

@@ -37,7 +37,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -77,7 +77,7 @@ public class FavoriteTopics extends GenericAdmResource
     /**
      * @param base
      */      
-    public void setResourceBase(Portlet base)
+    public void setResourceBase(Resource base)
     {
         try 
         { 
@@ -116,7 +116,7 @@ public class FavoriteTopics extends GenericAdmResource
         //if(!user.isLoged()) return null; TODO: VER 4.0
         
         String action = null != request.getParameter("ftp_act") && !"".equals(request.getParameter("ftp_act").trim()) ? request.getParameter("ftp_act").trim() : "ftp_step1";
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         try
         {
             Document  dom = SWBUtils.XML.getNewDocument();
@@ -255,7 +255,7 @@ public class FavoriteTopics extends GenericAdmResource
     /*
     public org.w3c.dom.Document getDomFavoriteTopic(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, com.infotec.wb.lib.WBParamRequest reqParams) throws com.infotec.appfw.exception.AFException, java.io.IOException
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         try
         {
             Document  dom = AFUtils.getInstance().getNewDocument();
@@ -409,7 +409,7 @@ public class FavoriteTopics extends GenericAdmResource
     /*
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         User user=response.getUser();
         WebPage topic=response.getTopic();
         Document dom = SWBUtils.XML.xmlToDom(base.getData(user));

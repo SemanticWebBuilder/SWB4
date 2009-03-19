@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericXformsResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -33,7 +33,7 @@ public class Banner1 extends GenericXformsResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer("");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         try {
             //System.out.println("Entra Banne1Jorge:" + base.getXml());
             String local = base.getAttribute("txtLocal", "0").trim();
@@ -132,7 +132,7 @@ public class Banner1 extends GenericXformsResource {
                 String res = super.initViewModel(request, paramsRequest);
                 response.getWriter().print(res);
             } else { //Se desea la instancia de Administración
-                Portlet base = getResourceBase();
+                Resource base = getResourceBase();
                 Document dom = SWBUtils.XML.xmlToDom(initAdminModel(request, paramsRequest));
                 NodeList nElements = dom.getFirstChild().getChildNodes();
                 for (int i = 0; i < nElements.getLength(); i++) {
@@ -178,7 +178,7 @@ public class Banner1 extends GenericXformsResource {
     Document dom = SWBUtils.XML.xmlToDom(initAdminModel(request, paramsRequest));
     Node node = dom.getFirstChild();
     if (node != null) {
-    Portlet base = getResourceBase();
+    Resource base = getResourceBase();
     String value="<img src=\"" + SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/" + base.getAttribute("img", "").trim() + "\">";
     Node nodeShowImg=addElement("showimg", value , (Element) node);
     ((Element)nodeShowImg).setAttribute("wbsave","0");

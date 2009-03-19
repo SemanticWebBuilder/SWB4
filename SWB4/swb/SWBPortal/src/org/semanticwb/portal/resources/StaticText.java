@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -67,7 +67,7 @@ public class StaticText extends GenericAdmResource {
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         String staticText = replaceTags(base.getAttribute("text"), request, paramRequest);
         
         SWBResourceURL url=paramRequest.getActionUrl();
@@ -137,7 +137,7 @@ public class StaticText extends GenericAdmResource {
     
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         String staticText = replaceTags(base.getAttribute("text"), request, paramRequest);
         PrintWriter out = response.getWriter();
         out.print(staticText);
@@ -146,7 +146,7 @@ public class StaticText extends GenericAdmResource {
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        Portlet base = response.getResourceBase();
+        Resource base = response.getResourceBase();
         base.setAttribute("text", request.getParameter("value_"+base.getId()));
         try{
             base.updateAttributesToDB();

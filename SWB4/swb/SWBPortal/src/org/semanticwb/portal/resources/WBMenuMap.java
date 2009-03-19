@@ -13,7 +13,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -46,7 +46,7 @@ public class WBMenuMap extends GenericAdmResource
      * @param     base  La información del recurso en memoria.
      */
     @Override
-    public void setResourceBase(Portlet base) {
+    public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
             webWorkPath = (String) SWBPlatform.getWebWorkPath() + base.getWorkPath();
@@ -89,7 +89,7 @@ public class WBMenuMap extends GenericAdmResource
      * @throws IOException
      */
     public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Portlet base = paramRequest.getResourceBase();
+        Resource base = paramRequest.getResourceBase();
         User user = paramRequest.getUser();
         WebPage basetp = paramRequest.getTopic().getWebSite().getHomePage();
         WebPage topic = paramRequest.getTopic();
@@ -118,7 +118,7 @@ public class WBMenuMap extends GenericAdmResource
 
             return dom;
         } catch (Exception e) {
-            log.error("Error while generating DOM in resource " + base.getPortletType().getPortletClassName() + " with identifier " + base.getId() + " - " + base.getTitle(), e);
+            log.error("Error while generating DOM in resource " + base.getResourceType().getResourceClassName() + " with identifier " + base.getId() + " - " + base.getTitle(), e);
         }
         return null;
     }

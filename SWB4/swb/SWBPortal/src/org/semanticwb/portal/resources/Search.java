@@ -37,7 +37,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -79,7 +79,7 @@ public class Search extends GenericAdmResource
      * @param     base  La informaci�n del recurso en memoria.
      */
     @Override
-    public void setResourceBase(Portlet base)
+    public void setResourceBase(Resource base)
     {
         try { super.setResourceBase(base); }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
@@ -286,7 +286,7 @@ public class Search extends GenericAdmResource
             }
             return doc;
         }
-        catch (Exception e) { log.error("Error while generating DOM in resource "+ getResourceBase().getPortletType().getPortletClassName() +" with identifier " + getResourceBase().getId() + " - " + getResourceBase().getTitle(), e); }
+        catch (Exception e) { log.error("Error while generating DOM in resource "+ getResourceBase().getResourceType().getResourceClassName() +" with identifier " + getResourceBase().getId() + " - " + getResourceBase().getTitle(), e); }
         return null; 
     }
 

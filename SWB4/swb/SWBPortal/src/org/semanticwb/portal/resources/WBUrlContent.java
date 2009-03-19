@@ -36,7 +36,7 @@ import org.w3c.dom.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -69,7 +69,7 @@ public class WBUrlContent extends GenericAdmResource {
     /**
      * Inicializa el recurso
      */    
-    public void setResourceBase(Portlet base) throws SWBResourceException {
+    public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
         //if (recproperties == null) {
             FileInputStream fptr = null;
@@ -110,7 +110,7 @@ public class WBUrlContent extends GenericAdmResource {
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         if(base.getAttribute("msg1")!=null) msg1=base.getAttribute("msg1");
         if(base.getAttribute("msg2")!=null) msg2=base.getAttribute("msg2");
         if(msg1==null) msg1 = paramRequest.getLocaleString("msg1") + ":";
@@ -196,7 +196,7 @@ public class WBUrlContent extends GenericAdmResource {
      * @return
      */    
     public StringBuffer CorrigeRuta(String surl, WebPage topic, String param, StringBuffer othersparam, HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         String OriPath = surl;
         String cadCod = null;
         

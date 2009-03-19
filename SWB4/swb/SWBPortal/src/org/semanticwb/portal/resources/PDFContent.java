@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -69,7 +69,7 @@ public class PDFContent extends GenericAdmResource {
      */    
     public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException 
     {
-        Portlet base=paramReq.getResourceBase();
+        Resource base=paramReq.getResourceBase();
         String faux=base.getAttribute("archive");
         if(faux==null)
             return;
@@ -100,7 +100,7 @@ public class PDFContent extends GenericAdmResource {
      */        
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException 
     {        
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         StringBuffer ret = new StringBuffer("");        
         String ind = request.getParameter("WBIndexer");
         if (!"indexing".equals(ind))
