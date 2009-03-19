@@ -14,7 +14,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -48,7 +48,7 @@ public class WBMenuNivel extends GenericAdmResource
      * @param     base  La información del recurso en memoria.
      */
     @Override
-    public void setResourceBase(Portlet base)
+    public void setResourceBase(Resource base)
     {
         try
         {
@@ -87,7 +87,7 @@ public class WBMenuNivel extends GenericAdmResource
      */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         int niveles = Integer.parseInt(base.getAttribute("niveles","2"));
         String basetopic = base.getAttribute("basetopic","_home");
         WebPage basetp = paramRequest.getTopic().getWebSite().getHomePage();
@@ -218,7 +218,7 @@ public class WBMenuNivel extends GenericAdmResource
             return dom;
         }
         catch (Exception e)
-        { log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
+        { log.error("Error while generating DOM in resource "+ base.getResourceType().getResourceClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
         return null;
     }
     

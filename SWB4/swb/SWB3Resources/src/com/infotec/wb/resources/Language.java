@@ -33,7 +33,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
@@ -74,7 +74,7 @@ public class Language extends GenericAdmResource
      * @param base
      */    
     @Override
-    public void setResourceBase(Portlet base)
+    public void setResourceBase(Resource base)
     {
         try { super.setResourceBase(base); }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
@@ -129,7 +129,7 @@ public class Language extends GenericAdmResource
             }
             return dom;
         }
-        catch (Exception e) { log.error("Error while generating DOM in resource "+ getResourceBase().getPortletType().getPortletClassName() +" with identifier " + getResourceBase().getId() + " - " + getResourceBase().getTitle(), e); }
+        catch (Exception e) { log.error("Error while generating DOM in resource "+ getResourceBase().getResourceType().getResourceClassName() +" with identifier " + getResourceBase().getId() + " - " + getResourceBase().getTitle(), e); }
         return null;            
     }
     

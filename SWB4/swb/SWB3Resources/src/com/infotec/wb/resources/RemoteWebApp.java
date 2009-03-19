@@ -35,7 +35,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SFBase64;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -104,7 +104,7 @@ public class RemoteWebApp extends GenericAdmResource
         //PrintWriter ret=response.getWriter();
         WebPage topic=paramRequest.getTopic();
         User user=paramRequest.getUser();
-        Portlet base=paramRequest.getResourceBase();
+        Resource base=paramRequest.getResourceBase();
         Map args=paramRequest.getArguments();
         try
         {

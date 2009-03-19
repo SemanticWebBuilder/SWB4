@@ -32,7 +32,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -70,7 +70,7 @@ public class WBMenu extends GenericAdmResource
      * @param     base  La informaci�n del recurso en memoria.
      */
     @Override
-    public void setResourceBase(Portlet base) 
+    public void setResourceBase(Resource base)
     {
         try 
         {
@@ -105,7 +105,7 @@ public class WBMenu extends GenericAdmResource
      */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         try
         {   
             boolean onlychilds=new Boolean(paramRequest.getArgument("onlychilds","false")).booleanValue();
@@ -210,7 +210,7 @@ public class WBMenu extends GenericAdmResource
             el.appendChild(ehermanos);            
             return dom;
         }
-        catch (Exception e) { log.error("Error while generating DOM in resource "+ base.getPortletType().getPortletClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
+        catch (Exception e) { log.error("Error while generating DOM in resource "+ base.getResourceType().getResourceClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
         return null;
     }
     

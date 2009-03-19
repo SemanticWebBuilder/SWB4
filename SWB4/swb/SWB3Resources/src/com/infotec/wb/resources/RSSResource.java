@@ -43,15 +43,15 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
-/** Recurso de tipo contenido para incluir y tranformar un XML del tipo RSS Portlet
+/** Recurso de tipo contenido para incluir y tranformar un XML del tipo RSS Resource
  * como recurso.
  *
- * Resource of content type to include and to tranform to XML of RSS Portlet type
+ * Resource of content type to include and to tranform to XML of RSS Resource type
  * like resource.
  *
  * @author Javier Solis Gonzalez
@@ -69,7 +69,7 @@ public class RSSResource extends GenericAdmResource
      * @param base
      */    
     @Override
-    public void setResourceBase(Portlet base)
+    public void setResourceBase(Resource base)
     {
         try { 
             super.setResourceBase(base); 
@@ -106,7 +106,7 @@ public class RSSResource extends GenericAdmResource
      */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         try
         {
             URL url = new URL(base.getAttribute("url","").trim());

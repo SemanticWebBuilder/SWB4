@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -64,7 +64,7 @@ public class Window extends GenericAdmResource {
      * @param base
      */    
     @Override
-    public void setResourceBase(Portlet base) {
+    public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
             workPath = SWBPlatform.getWorkPath() + base.getWorkPath();
@@ -97,7 +97,7 @@ public class Window extends GenericAdmResource {
         if ("ven_step2".equals(action)) {
             showWindow(request, response, reqParams); // Nueva ventana pop-up
         } else { // Se invoca la nueva ventana
-            Portlet base = getResourceBase();
+            Resource base = getResourceBase();
             if ("yes".equals(base.getAttribute("bysession", ""))) {
                 if (request.getSession().getAttribute("wbwindow") != null 
                         && String.valueOf(base.getId() + "_" 
@@ -166,7 +166,7 @@ public class Window extends GenericAdmResource {
                            throws SWBResourceException, java.io.IOException {
         
         StringBuffer ret = new StringBuffer("");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         
         ret.append("<html> \n");
         ret.append("<head> \n");
@@ -274,7 +274,7 @@ public class Window extends GenericAdmResource {
     public void processAction(HttpServletRequest request,
                               SWBActionResponse response) 
                               throws SWBResourceException, java.io.IOException {
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         //TODO Espera de adicion de un metodo equivalente a addHit
         base.addHit(request, response.getUser(), response.getTopic());
         String url = base.getAttribute("url", "").trim();

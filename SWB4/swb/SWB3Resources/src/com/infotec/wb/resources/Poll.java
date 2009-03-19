@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -80,7 +80,7 @@ public class Poll extends GenericResource
      * @param base
      */    
     @Override
-    public void setResourceBase(Portlet base)
+    public void setResourceBase(Resource base)
     {
         try 
         {
@@ -89,7 +89,7 @@ public class Poll extends GenericResource
             hashPrim = new HashMap();
             workPath = (String) SWBPlatform.getWorkPath() +  base;
             webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();
-            restype= base.getPortletType().getPortletClassName();
+            restype= base.getResourceType().getResourceClassName();
         }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
     }
@@ -110,7 +110,7 @@ public class Poll extends GenericResource
         if("enc_step2".equals(action))  showPollResults(request, response, paramRequest); // Resultados de la encuesta
         else 
         { // Encuesta
-            Portlet base=getResourceBase();
+            Resource base=getResourceBase();
             try 
             {
                 Document dom=SWBUtils.XML.xmlToDom(base.getXml());
@@ -269,7 +269,7 @@ public class Poll extends GenericResource
     public void showPollResults(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer("");
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         try
         {
             String data = base.getData();
@@ -437,7 +437,7 @@ public class Poll extends GenericResource
     private String getPollResults(HttpServletRequest request, SWBParamRequest paramRequest, Document data) throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer("");
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         try
         {
             Document dom=SWBUtils.XML.xmlToDom(base.getXml());
@@ -608,7 +608,7 @@ public class Poll extends GenericResource
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
         StringBuffer ret = new StringBuffer("");
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         String msg=paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_undefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
 
@@ -816,7 +816,7 @@ public class Poll extends GenericResource
      * @param fup
      * @param att
      */  
-    protected void setAttribute(Portlet base, FileUpload fup, String att)
+    protected void setAttribute(Resource base, FileUpload fup, String att)
     {
         try
         {
@@ -836,7 +836,7 @@ public class Poll extends GenericResource
      * @param att
      * @param value
      */  
-    protected void setAttribute(Portlet base, FileUpload fup, String att, String value)
+    protected void setAttribute(Resource base, FileUpload fup, String att, String value)
     {
         try
         {
@@ -882,7 +882,7 @@ public class Poll extends GenericResource
     private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest)
     {
         StringBuffer ret=new StringBuffer("");
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         try
         {
             SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN);

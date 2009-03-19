@@ -36,7 +36,7 @@ import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.SWBResourceMgr;
 import org.semanticwb.portal.api.GenericResource;
@@ -91,7 +91,7 @@ public class ExcelContent extends GenericResource
     public void doGetContent(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         OutputStream outStream = response.getOutputStream();
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         
         Document dom=SWBUtils.XML.xmlToDom(getResourceBase().getXml());
         if(dom==null){
@@ -161,7 +161,7 @@ public class ExcelContent extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         PrintWriter out = response.getWriter();
         Document dom=SWBUtils.XML.xmlToDom(base.getXml());
         if(dom==null){
@@ -229,7 +229,7 @@ public class ExcelContent extends GenericResource
     public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         response.setContentType("text/html");
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         Document dom=SWBUtils.XML.xmlToDom(getResourceBase().getXml());
         if(dom==null){
             throw new SWBResourceException("Dom nulo");

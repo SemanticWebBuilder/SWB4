@@ -43,7 +43,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.util.FileUpload;
 import javax.mail.internet.InternetAddress;
@@ -85,7 +85,7 @@ public class Comment extends GenericResource {
      * @param base
      */       
     @Override
-    public void setResourceBase(Portlet base) {
+    public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
             webWorkPath = SWBPlatform.getWebWorkPath() + base.getWorkPath();
@@ -123,7 +123,7 @@ public class Comment extends GenericResource {
             throws SWBResourceException, IOException {
         
         String action = null != request.getParameter("com_act") && !"".equals(request.getParameter("com_act").trim()) ? request.getParameter("com_act").trim() : "com_step2";
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         try {        
             Document dom = SWBUtils.XML.getNewDocument();
             if ("com_step3".equals(action)) {
@@ -238,7 +238,7 @@ public class Comment extends GenericResource {
             }
             return dom;
         } catch (Exception e) {
-            log.error("Error while generating the comments form in resource " + base.getPortletType().getPortletClassName() + " with identifier " + base.getId() + " - " + base.getTitle(), e);
+            log.error("Error while generating the comments form in resource " + base.getResourceType().getResourceClassName() + " with identifier " + base.getId() + " - " + base.getTitle(), e);
         }
         return null;
     }
@@ -255,7 +255,7 @@ public class Comment extends GenericResource {
             HttpServletResponse response, SWBParamRequest reqParams)
             throws SWBResourceException, IOException {
         
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         try {
             String strFromName = null != request.getParameter("txtFromName") && !"".equals(request.getParameter("txtFromName").trim()) ? request.getParameter("txtFromName").trim() : null;
             String strFromEmail = null != request.getParameter("txtFromEmail") && !"".equals(request.getParameter("txtFromEmail").trim()) ? request.getParameter("txtFromEmail").trim() : null;
@@ -382,7 +382,7 @@ public class Comment extends GenericResource {
                 "\n\t email account of the sender: " + strFromEmail +
                 "\n\t email message: " + strTarMsg + "\n in getDomEmail()");
         } catch (Exception e) {
-            log.error("Error while generating email message in resource " + base.getPortletType().getPortletClassName() + " with identifier " + base.getId() + " - " + base.getTitle(), e);
+            log.error("Error while generating email message in resource " + base.getResourceType().getResourceClassName() + " with identifier " + base.getId() + " - " + base.getTitle(), e);
         }
         return null;
     }         
@@ -416,7 +416,7 @@ public class Comment extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest reqParams) throws IOException {
         StringBuffer ret = new StringBuffer(400);
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String action = null != request.getParameter("com_act") && !"".equals(request.getParameter("com_act").trim()) ? request.getParameter("com_act").trim() : "com_step1";
         
         if("com_step1".equals(action)) {
@@ -469,7 +469,7 @@ public class Comment extends GenericResource {
                     ret.append("</a>");
                 }
             } catch (Exception e) {
-                log.error("Error while showing form caller in resource " + base.getPortletType().getPortletClassName() + " with identifier " + base.getId() + " - " + base.getTitle(), e);
+                log.error("Error while showing form caller in resource " + base.getResourceType().getResourceClassName() + " with identifier " + base.getId() + " - " + base.getTitle(), e);
             }
         } else {
             try {
@@ -522,7 +522,7 @@ public class Comment extends GenericResource {
             SWBParamRequest paramsRequest) throws IOException, SWBResourceException {
         
         StringBuffer ret = new StringBuffer(400);
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String msg = paramsRequest.getLocaleString("msgUndefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramsRequest.getAction();
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
@@ -718,7 +718,7 @@ public class Comment extends GenericResource {
      * @param fup
      * @param att
      */  
-    protected void setAttribute(Portlet base, FileUpload fup, String att) {
+    protected void setAttribute(Resource base, FileUpload fup, String att) {
         try {
             if(null != fup.getValue(att) && !"".equals(fup.getValue(att).trim())) base.setAttribute(att, fup.getValue(att).trim());
             else base.removeAttribute(att);        
@@ -733,7 +733,7 @@ public class Comment extends GenericResource {
      * @param att
      * @param value
      */  
-    protected void setAttribute(Portlet base, FileUpload fup, String att, String value) {
+    protected void setAttribute(Resource base, FileUpload fup, String att, String value) {
         try {
             if(null != fup.getValue(att) && value.equals(fup.getValue(att).trim())) base.setAttribute(att, fup.getValue(att).trim());
             else base.removeAttribute(att);        
@@ -769,7 +769,7 @@ public class Comment extends GenericResource {
         
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
         StringBuffer ret = new StringBuffer("");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         try {
             SWBResourceURL url = paramsRequest.getRenderUrl().setAction("update");  
             ret.append("<form name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> \n");            

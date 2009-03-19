@@ -38,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -61,7 +61,7 @@ public class Banner extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer("");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         try {
             String local = base.getAttribute("txtLocal", "0").trim();
             if (local.equals("0")) {
