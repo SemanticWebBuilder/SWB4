@@ -2,18 +2,18 @@
 <%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.model.*,java.util.*,java.io.*"%>
 <%!
-   void addChild(WebPage page, JspWriter out) throws IOException
+   void addChild(WebPage page, JspWriter out, String lang) throws IOException
    {
-        Iterator<WebPage> it=page.listVisibleChilds(null);
+        Iterator<WebPage> it=page.listVisibleChilds(lang);
         while(it.hasNext())
         {
             WebPage child=it.next();
-            if(child.listVisibleChilds(null).hasNext())
+            if(child.listVisibleChilds(lang).hasNext())
             {
                 out.println("		<div dojoType=\"dijit.PopupMenuItem\" iconClass_=\"swbIconWebPage\">");
-                out.println("			<span>"+child.getTitle()+"</span>");
+                out.println("			<span>"+child.getDisplayName(lang)+"</span>");
                 out.println("		<div dojoType=\"dijit.Menu\">");
-                addChild(child,out);
+                addChild(child,out,lang);
                 out.println("		</div>");
                 out.println("		</div>");
             }else
@@ -24,15 +24,15 @@
                     String show=((MenuItem)child.getSemanticObject().createGenericInstance()).getShowAs();
                     if(show!=null && show.equals("DIALOG"))
                     {
-                        out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"showDialog('"+child.getUrl()+"','"+child.getTitle()+"');\">"+child.getTitle()+"</div>");
+                        out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"showDialog('"+child.getUrl()+"','"+child.getDisplayName(lang)+"');\">"+child.getDisplayName(lang)+"</div>");
                     }else
                     {
-                        out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"','"+child.getTitle()+"');\">"+child.getTitle()+"</div>");
+                        out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"','"+child.getDisplayName(lang)+"');\">"+child.getDisplayName(lang)+"</div>");
                     }
                 }else
                 {
                     //out.println("            <div dojoType=\"dijit.MenuItem\" accelKey=\"Ctrl+S\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+child.getTitle()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"');\">"+child.getTitle()+"</div>");
-                    out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"','"+child.getTitle()+"');\">"+child.getTitle()+"</div>");
+                    out.println("            <div dojoType=\"dijit.MenuItem\" iconClass_=\"swbIconWebPage\" onclick=\"addNewTab('"+child.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/menuTab.jsp"+"','"+child.getDisplayName(lang)+"');\">"+child.getDisplayName(lang)+"</div>");
                 }
             }
         }
@@ -60,7 +60,7 @@
         </script>
         <span><%=child.getDisplayName(lang)%></span>
         <div dojoType="dijit.Menu" onOpen="hideApplet(true);" onClose="hideApplet(false);">
-<%      addChild(child,out);%>
+<%      addChild(child,out,lang);%>
         </div>
     </div>
 <%
