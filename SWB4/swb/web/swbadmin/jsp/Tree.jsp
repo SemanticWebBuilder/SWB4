@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%><%@page pageEncoding="ISO-8859-1"%>
-<%@page import="org.json.*,org.semanticwb.*,org.semanticwb.model.*,org.semanticwb.repository.*,org.semanticwb.platform.*,java.util.*"%>
+<%@page import="org.json.*,org.semanticwb.*,org.semanticwb.model.*,org.semanticwb.platform.*,java.util.*"%>
 <%!
     int nullnode=0;
     String lang="es";
@@ -91,10 +91,10 @@
     public void addDocRepositories(JSONArray arr)  throws JSONException
     {
         //System.out.println("addWebSites");
-        Iterator<Workspace> it=SWBComparator.sortSermanticObjects(SWBContext.listWorkspaces(),lang);
+        Iterator<org.semanticwb.repository.Workspace> it=SWBComparator.sortSermanticObjects(SWBContext.listWorkspaces(),lang);
         while(it.hasNext())
         {
-            Workspace rep=it.next();
+            org.semanticwb.repository.Workspace rep=it.next();
             //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
             //rep=SWBContext.getUserRepository(rep.getURI());
             addSemanticObject(arr, rep.getSemanticObject(),false,true);

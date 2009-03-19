@@ -37,11 +37,11 @@ html, body, #main{
 .swbIconMnuAdd,
 .swbIconMnuActive,
 .swbIconMnuEdit,
-.swbIconPortlets,
-.swbIconPortletType,
-.swbIconPortlet,
-.swbIconPortletU,
-.swbIconPortletSubType,
+.swbIconResources,
+.swbIconResourceType,
+.swbIconResource,
+.swbIconResourceU,
+.swbIconResourceSubType,
 .swbIconTemplateGroup,
 .swbIconTemplates,
 .swbIconTemplate,
@@ -90,10 +90,10 @@ html, body, #main{
     background-image: url('../icons/icons20x18.png'); background-position: -620px -18px;
 }
 
-.swbIconPortlets    { background-position: -340px -0px; }
-.swbIconPortlet     { background-position: -340px -18px; }
-.swbIconPortletU    { background-position: -340px -36px; }
-.swbIconPortletType { background-position: -340px -0px; }
+.swbIconResources    { background-position: -340px -0px; }
+.swbIconResource     { background-position: -340px -18px; }
+.swbIconResourceU    { background-position: -340px -36px; }
+.swbIconResourceType { background-position: -340px -0px; }
 .swbIconTemplates   { background-position: -140px -0px; }
 .swbIconTemplate    { background-position: -140px -18px; }
 .swbIconTemplateU   { background-position: -140px -36px; }
@@ -134,10 +134,10 @@ html, body, #main{
 .swbIcon2MnuAdd,
 .swbIcon2MnuActive,
 .swbIcon2MnuEdit,
-.swbIcon2Portlets,
-.swbIcon2PortletType,
-.swbIcon2Portlet,
-.swbIcon2PortletU,
+.swbIcon2Resources,
+.swbIcon2ResourceType,
+.swbIcon2Resource,
+.swbIcon2ResourceU,
 .swbIcon2TemplateGroup,
 .swbIcon2Templates,
 .swbIcon2Template,
