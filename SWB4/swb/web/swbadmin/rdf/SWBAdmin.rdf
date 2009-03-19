@@ -139,7 +139,7 @@
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ConfigFiles"/>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:21"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:21"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_MapViews">
     <j.2:updated>2009-02-02T17:15:36.921</j.2:updated>
@@ -165,17 +165,17 @@
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:title xml:lang="pt">Base de Dados</j.2:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Ftp">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Ftp">
     <j.2:creator rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
     <j.2:created>2009-02-03T18:01:10.921</j.2:created>
     <j.2:title>Ftp</j.2:title>
     <j.2:updated>2009-02-03T18:02:37.171</j.2:updated>
     <j.2:modifiedBy rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBAFTP</j.2:portletBundle>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBAFTP</j.2:portletClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBAFTP</j.2:resourceBundle>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBAFTP</j.2:resourceClassName>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_TemplateCopy">
     <j.2:title xml:lang="pt">Cópia modelo</j.2:title>
@@ -199,7 +199,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:25"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:25"/>
     <j.2:title xml:lang="en">Requests</j.2:title>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_wb3Help">
@@ -269,15 +269,15 @@
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#counter:swb_Reference">
     <j.1:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">14</j.1:counter>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:25">
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:HitsMonitor"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:25">
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:HitsMonitor"/>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:created>2009-02-03T18:24:05.171</j.2:created>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:updated>2009-02-03T18:24:14.312</j.2:updated>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:title>HitsMonitor</j.2:title>
@@ -329,7 +329,7 @@
     <j.2:mnuItemShowIFrame>DIALOG</j.2:mnuItemShowIFrame>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:31"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:31"/>
     <j.2:title>Guardar Sitio</j.2:title>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:mnu_File"/>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
@@ -363,16 +363,16 @@
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <j.2:title xml:lang="pt">Criar família</j.2:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:15">
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:15">
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:MMemory"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:MMemory"/>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:created>2009-02-02T19:49:11.968</j.2:created>
     <j.2:title>Memory Monitor</j.2:title>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-02T19:49:19.328</j.2:updated>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:bh_Versions">
@@ -382,16 +382,16 @@
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
     <j.2:updated>2009-02-02T17:04:20.281</j.2:updated>
     <j.2:title>Versiones</j.2:title>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:9"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:9"/>
     <j.2:created>2009-02-02T17:04:17.828</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:13">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:13">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-02T17:04:25.718</j.2:updated>
     <j.2:title>Schedule</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Schedule"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Schedule"/>
     <j.2:created>2009-02-02T17:04:25.343</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -510,19 +510,19 @@
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_TopicTitle"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:bh_PortletFilter">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:bh_ResourceFilter">
     <j.2:created>2009-02-04T11:54:27.203</j.2:created>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
     <j.0:behaviorRefreshOnShow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.0:behaviorRefreshOnShow>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:updated>2009-02-04T11:55:12.140</j.2:updated>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:33"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:33"/>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:webPageSortName>80</j.2:webPageSortName>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
-    <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:title>Filtro</j.2:title>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
   </rdf:Description>
@@ -539,12 +539,12 @@
     <j.2:title>HTML Editor</j.2:title>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:3">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:3">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-02T17:04:09.640</j.2:updated>
     <j.2:title>Contents</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:WebPageContents"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:WebPageContents"/>
     <j.2:created>2009-02-02T17:04:09.328</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -563,15 +563,15 @@
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Topic"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:37">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:37">
     <j.2:created>2009-02-17T17:20:01.000</j.2:created>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:creator rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:SWBAListRelatedObjects"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SWBAListRelatedObjects"/>
     <j.2:title>Related Objects</j.2:title>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:modifiedBy rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
@@ -640,19 +640,19 @@
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:title xml:lang="es">Agregar idioma</j.2:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:SearchUsers">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SearchUsers">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:05.625</j.2:updated>
     <j.2:title>SearchUsers</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBASearchUsers</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBASearchUsers</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBASearchUsers</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBASearchUsers</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:05.296</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_DBQuery">
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
     <j.2:title xml:lang="pt">Consultas de DB</j.2:title>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:34"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:34"/>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <j.2:mnuItemShowIFrame>IFRAME</j.2:mnuItemShowIFrame>
@@ -681,26 +681,26 @@
     <j.2:title xml:lang="pt">Editar DNS</j.2:title>
     <j.2:description xml:lang="pt">Altere a informação geral do DNS e clique no botão&lt;B&gt;"Salvar"&lt;/B&gt;.</j.2:description>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:CreateUser">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:CreateUser">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:00.265</j.2:updated>
     <j.2:title>CreateUser</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBACreateUser</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBACreateUser</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBACreateUser</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBACreateUser</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:03:59.765</j.2:created>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:CacheMonitor">
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBACacheMonitor</j.2:portletBundle>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:CacheMonitor">
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBACacheMonitor</j.2:resourceBundle>
     <j.2:modifiedBy rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:creator rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
     <j.2:updated>2009-02-03T18:21:44.187</j.2:updated>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
     <j.2:created>2009-02-03T18:21:15.531</j.2:created>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:title>CacheMonitor</j.2:title>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBACacheMonitor</j.2:portletClassName>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBACacheMonitor</j.2:resourceClassName>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_LoginReporter">
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
@@ -741,13 +741,13 @@
     <j.2:updated>2009-02-02T17:15:48.593</j.2:updated>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Logs">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Logs">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:03.156</j.2:updated>
     <j.2:title>Logs</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBALogs</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBALogs</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBALogs</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBALogs</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:02.796</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ContentFlowPreview">
@@ -787,7 +787,7 @@
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:mnui_loggin">
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:23"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:23"/>
     <j.2:title>loggin.properties</j.2:title>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
@@ -802,11 +802,11 @@
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
     <j.2:updated>2009-02-02T17:04:27.453</j.2:updated>
     <j.2:title>Bitácora</j.2:title>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:14"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:14"/>
     <j.2:created>2009-02-02T17:04:26.234</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#counter:Portlet">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#counter:Resource">
     <j.1:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">38</j.1:counter>
     <j.1:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">37</j.1:counter>
   </rdf:Description>
@@ -835,13 +835,13 @@
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:JSPResource">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:JSPResource">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:03:58.937</j.2:updated>
     <j.2:title>JSPResource</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.resources.JSPResource</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.resources.JSPResource</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.resources.JSPResource</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.resources.JSPResource</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:03:58.609</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_Reference:5">
@@ -856,7 +856,7 @@
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
     <j.2:updated>2009-02-02T17:04:08.593</j.2:updated>
     <j.2:title>Información</j.2:title>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:2"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:2"/>
     <j.2:created>2009-02-02T17:04:07.015</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -884,21 +884,21 @@
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <j.2:title xml:lang="en">Unique logins report</j.2:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:ImportWebSite">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:ImportWebSite">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:02.671</j.2:updated>
     <j.2:title>ImportWebSite</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBImportWebSite</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBImportWebSite</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBImportWebSite</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBImportWebSite</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:02.328</j.2:created>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:11">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:11">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-02T17:04:22.765</j.2:updated>
     <j.2:title>Roles Direct</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:SemObjPropRefEditor"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SemObjPropRefEditor"/>
     <j.2:created>2009-02-02T17:04:22.296</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -962,17 +962,17 @@
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:HitsMonitor">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:HitsMonitor">
     <j.2:creator rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:created>2009-02-03T18:18:21.125</j.2:created>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:updated>2009-02-03T18:18:44.265</j.2:updated>
     <j.2:title>HitsMonitor</j.2:title>
     <j.2:modifiedBy rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBAHitsMonitor</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBAHitsMonitor</j.2:portletBundle>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBAHitsMonitor</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBAHitsMonitor</j.2:resourceBundle>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_LanguageEdit">
     <j.2:description xml:lang="pt">Modifique a informação geral do idioma e clique no botão &lt;B&gt;"Salvar"&lt;/B&gt;.</j.2:description>
@@ -995,9 +995,9 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
     <j.2:webPageSortName>30</j.2:webPageSortName>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:hasTemplateRef rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_Reference:6"/>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:7"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:7"/>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
     <j.2:updated>2009-02-02T20:49:54.343</j.2:updated>
   </rdf:Description>
@@ -1026,14 +1026,14 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:ResourceFilter">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:updated>2009-02-04T11:15:56.531</j.2:updated>
-    <j.2:title>PortletFilter</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBAFilterPortlet</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBAFilterPortlet</j.2:portletBundle>
+    <j.2:title>ResourceFilter</j.2:title>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBAFilterResource</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBAFilterResource</j.2:resourceBundle>
     <j.2:created>2009-02-04T11:15:13.687</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_TemplateRemove">
@@ -1056,7 +1056,7 @@
     <j.2:title>Flujos de Publicación</j.2:title>
     <j.0:behaviorParams>sprop=swb:hasPFlowRef&amp;spropref=swb:pflow</j.0:behaviorParams>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:8"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:8"/>
     <j.2:created>2009-02-02T17:04:15.890</j.2:created>
     <j.2:webPageSortName>40</j.2:webPageSortName>
   </rdf:Description>
@@ -1110,25 +1110,25 @@
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_WBWeb"/>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:34">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:34">
     <j.2:updated>2009-02-06T12:51:29.093</j.2:updated>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
     <j.2:created>2009-02-06T12:50:00.421</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:title>DBQuery</j.2:title>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:TreeDBQuery"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:TreeDBQuery"/>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Schedule">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Schedule">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:05.046</j.2:updated>
     <j.2:title>Schedule</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBASchedule</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBASchedule</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBASchedule</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBASchedule</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:04.750</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_PFlowRemove">
@@ -1146,7 +1146,7 @@
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ServerDocuments">
     <j.2:title xml:lang="pt">Documentos do servidor</j.2:title>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Tools"/>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:24"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:24"/>
     <j.2:creator rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
     <j.2:title xml:lang="en">Server documents</j.2:title>
     <j.2:hasTemplateRef rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_Reference:13"/>
@@ -1224,32 +1224,32 @@
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:27">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:27">
     <j.2:created>2009-02-03T18:27:43.859</j.2:created>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:DBPool"/>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:DBPool"/>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:title>DBPool</j.2:title>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
     <j.2:updated>2009-02-03T18:27:53.015</j.2:updated>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:DBNatural">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:DBNatural">
     <j.2:created>2009-03-09T21:34:01.187</j.2:created>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBADBNatural</j.2:portletBundle>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBADBNatural</j.2:portletClassName>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBADBNatural</j.2:resourceBundle>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBADBNatural</j.2:resourceClassName>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
     <j.2:title>DBNatural</j.2:title>
     <j.2:updated>2009-03-09T21:34:39.515</j.2:updated>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:19">
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Properties"/>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:19">
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Properties"/>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:created>2009-02-03T16:51:56.609</j.2:created>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
@@ -1258,7 +1258,7 @@
     <j.2:updated>2009-02-03T16:52:12.437</j.2:updated>
     <j.2:title>System</j.2:title>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_db_properties">
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
@@ -1270,7 +1270,7 @@
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:mnuItemShowIFrame>CONTENT</j.2:mnuItemShowIFrame>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:20"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:20"/>
     <j.2:updated>2009-02-03T16:58:36.312</j.2:updated>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
   </rdf:Description>
@@ -1298,21 +1298,21 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
     <j.2:mnuItemShowIFrame>IFRAME</j.2:mnuItemShowIFrame>
     <j.2:title xml:lang="pt">Pesquisa</j.2:title>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:17"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:17"/>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Users"/>
     <j.2:title xml:lang="en">Search</j.2:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:29">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:29">
     <j.2:created>2009-02-03T18:35:00.656</j.2:created>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:title>DBSparQL</j.2:title>
     <j.2:updated>2009-02-03T18:35:07.968</j.2:updated>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:DBSparql"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:DBSparql"/>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_System">
@@ -1328,18 +1328,18 @@
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:webPageSortName>50</j.2:webPageSortName>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:7">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:7">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:xml>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
 &lt;resource&gt;
    &lt;btnSave&gt;Guardar&lt;/btnSave&gt;
-   &lt;jsppath&gt;/swbadmin/jsp/editPortlet.jsp&lt;/jsppath&gt;
+   &lt;jsppath&gt;/swbadmin/jsp/editResource.jsp&lt;/jsppath&gt;
    &lt;jspactpath&gt;&lt;/jspactpath&gt;
 &lt;/resource&gt;</j.2:xml>
     <j.2:updated>2009-02-02T20:55:41.078</j.2:updated>
-    <j.2:title>Admin Portlet</j.2:title>
+    <j.2:title>Admin Resource</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:JSPResource"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:JSPResource"/>
     <j.2:created>2009-02-02T17:04:14.953</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -1461,7 +1461,7 @@
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:creator rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:6"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:6"/>
     <j.2:title>Plantillas</j.2:title>
     <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#TemplateRefable"/>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
@@ -1487,13 +1487,13 @@
     <j.2:updated>2009-02-03T16:58:48.640</j.2:updated>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Rule">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Rule">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:04.640</j.2:updated>
     <j.2:title>Rule</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBARule</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBARule</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBARule</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBARule</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:04.359</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ConfigFiles">
@@ -1515,7 +1515,7 @@
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:created>2009-03-09T21:35:31.312</j.2:created>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:38"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:38"/>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:mnuItemShowIFrame>IFRAME</j.2:mnuItemShowIFrame>
@@ -1524,11 +1524,11 @@
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Utils"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:21">
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Properties"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:21">
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Properties"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-03T16:53:40.078</j.2:updated>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
@@ -1573,10 +1573,10 @@
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:23">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:23">
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Properties"/>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Properties"/>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.3:uptPropFile>logging.properties</j.3:uptPropFile>
     <j.2:title>Loggin</j.2:title>
@@ -1584,16 +1584,16 @@
     <j.2:updated>2009-02-03T16:58:24.078</j.2:updated>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:created>2009-02-03T16:58:10.812</j.2:created>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#counter:swb_TemplateGroup">
     <j.1:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.1:counter>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:1">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:1">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-02T17:04:01.640</j.2:updated>
     <j.2:title>Editor</j.2:title>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Editor"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Editor"/>
     <j.2:created>2009-02-02T17:04:01.406</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -1615,13 +1615,13 @@
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:WebPageContents">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:WebPageContents">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:06.500</j.2:updated>
     <j.2:title>WebPageContents</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBAWebPageContents</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBAWebPageContents</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBAWebPageContents</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBAWebPageContents</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:06.203</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Trash">
@@ -1643,7 +1643,7 @@
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:mnuItemShowIFrame>IFRAME</j.2:mnuItemShowIFrame>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:29"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:29"/>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:updated>2009-02-03T18:37:15.937</j.2:updated>
     <j.2:title>SparQL</j.2:title>
@@ -1664,7 +1664,7 @@
     <j.2:title xml:lang="es">Activar recurso</j.2:title>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_System_properties">
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:19"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:19"/>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
     <j.2:mnuItemShowIFrame>CONTENT</j.2:mnuItemShowIFrame>
@@ -1677,25 +1677,25 @@
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Editor">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Editor">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:01.234</j.2:updated>
     <j.2:title>Editor</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBAEditor</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBAEditor</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBAEditor</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBAEditor</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:00.843</j.2:created>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:17">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:17">
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:title>Serch Users</j.2:title>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:created>2009-02-02T20:59:45.515</j.2:created>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:SearchUsers"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SearchUsers"/>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:updated>2009-02-02T20:59:53.281</j.2:updated>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_Reference:8">
@@ -1728,14 +1728,14 @@
     <j.2:updated>2009-02-02T17:15:21.218</j.2:updated>
     <j.2:title xml:lang="pt">Excluir título</j.2:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:GlobalReport">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:GlobalReport">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:updated>2009-02-03T19:59:27.875</j.2:updated>
     <j.2:title>GlobalReport</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.reports.WBAGlobalReport</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.reports.WBAGlobalReport</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.reports.WBAGlobalReport</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.reports.WBAGlobalReport</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:06.609</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_HitsReporter">
@@ -1777,12 +1777,12 @@
     <j.2:description xml:lang="en">Change the template's general info and click on the &lt;B&gt;"Update"&lt;/B&gt; button.</j.2:description>
     <j.2:updated>2009-02-02T17:15:25.015</j.2:updated>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:14">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:14">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-02T17:04:27.109</j.2:updated>
     <j.2:title>Logs</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Logs"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Logs"/>
     <j.2:created>2009-02-02T17:04:26.796</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -1805,17 +1805,17 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
     <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Calendarable"/>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:13"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:13"/>
     <j.2:title>Calendarización</j.2:title>
     <j.2:created>2009-02-02T17:04:24.859</j.2:created>
     <j.0:behaviorParams>sprop=swb:hasCalendar</j.0:behaviorParams>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:6">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:6">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-02T17:04:14.015</j.2:updated>
     <j.2:title>Templates</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:SemObjPropRefEditor"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SemObjPropRefEditor"/>
     <j.2:created>2009-02-02T17:04:13.703</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -1858,11 +1858,11 @@
     <j.2:updated>2009-02-02T17:15:30.203</j.2:updated>
     <j.2:title xml:lang="es">Administración del recurso</j.2:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:26">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:26">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:CacheMonitor"/>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:CacheMonitor"/>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:title>Cache Monitor</j.2:title>
     <j.2:created>2009-02-03T18:25:48.156</j.2:created>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
@@ -1930,7 +1930,7 @@
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:bh_Contents">
-    <j.0:behaviorParams>sprop=swb:hasPortlet</j.0:behaviorParams>
+    <j.0:behaviorParams>sprop=swb:hasResource</j.0:behaviorParams>
     <j.2:created>2009-02-02T17:04:08.703</j.2:created>
     <j.2:title>Contenidos</j.2:title>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
@@ -1938,8 +1938,8 @@
     <j.2:webPageSortName>20</j.2:webPageSortName>
     <j.2:updated>2009-02-02T17:04:10.000</j.2:updated>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:3"/>
-    <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portletable"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:3"/>
+    <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resourceable"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_UserAdd">
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
@@ -1947,7 +1947,7 @@
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:16"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:16"/>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:hasTemplateRef rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_Reference:8"/>
     <j.2:creator rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
@@ -1995,12 +1995,12 @@
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
     <j.2:title xml:lang="en">Edit title</j.2:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:8">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:8">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-02T17:04:16.765</j.2:updated>
     <j.2:title>PFlows</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:SemObjPropRefEditor"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SemObjPropRefEditor"/>
     <j.2:created>2009-02-02T17:04:16.328</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -2036,7 +2036,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ConnectionPool">
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:27"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:27"/>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_SiteMonitoring"/>
@@ -2054,19 +2054,19 @@
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
     <j.2:title xml:lang="en">Resource cache</j.2:title>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:26"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:26"/>
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_SiteMonitoring"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:VersionInfo">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:VersionInfo">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:06.015</j.2:updated>
     <j.2:title>VersionInfo</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBAVersionInfo</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBAVersionInfo</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBAVersionInfo</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBAVersionInfo</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:05.734</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_DocumentsToAuthorize">
@@ -2092,7 +2092,7 @@
     <j.2:title xml:lang="pt">Memória</j.2:title>
     <j.2:title xml:lang="en">Memory</j.2:title>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:15"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:15"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ResourceSubtype">
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnu_PopUp"/>
@@ -2175,23 +2175,23 @@
     <j.2:updated>2009-02-02T17:03:56.093</j.2:updated>
     <j.2:created>2009-02-02T17:03:55.921</j.2:created>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:DBSparql">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:DBSparql">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:00.718</j.2:updated>
     <j.2:title>DBSparql</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBADBSparql</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBADBSparql</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBADBSparql</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBADBSparql</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:00.390</j.2:created>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:32">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:32">
     <j.2:updated>2009-02-03T20:28:11.046</j.2:updated>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:SemObjPropRefEditor"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SemObjPropRefEditor"/>
     <j.2:created>2009-02-03T20:28:06.890</j.2:created>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:title>User Group</j.2:title>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
@@ -2220,7 +2220,7 @@
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Users"/>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:16">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:16">
     <j.2:created>2009-02-02T20:48:27.546</j.2:created>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
@@ -2228,17 +2228,17 @@
     <j.2:title>Create User</j.2:title>
     <j.2:updated>2009-02-02T20:48:45.359</j.2:updated>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:CreateUser"/>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:CreateUser"/>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:4">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:4">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:xml>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;resource&gt;&lt;jsppath&gt;/swbadmin/jsp/templateEdit.jsp&lt;/jsppath&gt;&lt;/resource&gt;</j.2:xml>
     <j.2:updated>2009-02-02T17:04:11.875</j.2:updated>
     <j.2:title>Edit Template</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:JSPResource"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:JSPResource"/>
     <j.2:created>2009-02-02T17:04:11.531</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -2275,7 +2275,7 @@
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_SMResourceTrace">
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:updated>2009-02-03T18:29:39.015</j.2:updated>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:28"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:28"/>
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
     <j.2:title xml:lang="es">Seguimiento de recursos</j.2:title>
@@ -2298,13 +2298,13 @@
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Properties">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Properties">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:04.234</j.2:updated>
     <j.2:title>Properties</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBAProperties</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBAProperties</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBAProperties</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBAProperties</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:03.828</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Rule">
@@ -2319,12 +2319,12 @@
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:12">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:12">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-02T17:04:24.187</j.2:updated>
     <j.2:title>Rules</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:SemObjPropRefEditor"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SemObjPropRefEditor"/>
     <j.2:created>2009-02-02T17:04:23.843</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -2365,7 +2365,7 @@
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
     <j.2:updated>2009-02-02T17:04:13.187</j.2:updated>
     <j.2:title>Editar Regla</j.2:title>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:5"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:5"/>
     <j.2:created>2009-02-02T17:04:12.281</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -2379,7 +2379,7 @@
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:bh_RelatedObjects">
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:37"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:37"/>
     <j.2:modifiedBy rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
     <j.2:webPageSortName>85</j.2:webPageSortName>
     <j.2:created>2009-02-17T17:18:18.265</j.2:created>
@@ -2408,12 +2408,12 @@
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Template"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:9">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:9">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-02T17:04:19.984</j.2:updated>
     <j.2:title>Version</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:VersionInfo"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:VersionInfo"/>
     <j.2:created>2009-02-02T17:04:19.062</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -2456,16 +2456,16 @@
     <j.2:title xml:lang="pt">Editar regra</j.2:title>
     <j.2:description xml:lang="en">Please modify rule's title and description and click on the &lt;B&gt;"Update"&lt;/B&gt; button, or change the evaluation criteria using the &lt;B&gt;"Edit", "Add" or "Remove"&lt;/B&gt; buttons.</j.2:description>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:18">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:18">
     <j.2:updated>2009-02-03T14:48:11.687</j.2:updated>
     <j.2:created>2009-02-03T14:48:06.828</j.2:created>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:title>Create Site</j.2:title>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:ImportWebSite"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:ImportWebSite"/>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_SMErrorViewer">
@@ -2487,7 +2487,7 @@
     <j.2:created>2009-02-02T17:03:52.390</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:bh_TemplateEdit">
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:4"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:4"/>
     <j.2:creator rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Template"/>
@@ -2519,37 +2519,37 @@
     <j.2:title xml:lang="en">Create site</j.2:title>
     <j.2:title xml:lang="es">Crear sitio</j.2:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:35">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:35">
     <j.2:created>2009-02-09T22:30:03.031</j.2:created>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-09T22:30:14.531</j.2:updated>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:SemObjPropRefEditor"/>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SemObjPropRefEditor"/>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:title>Grupos</j.2:title>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:2">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:2">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:xml>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;resource&gt;&lt;jsppath&gt;/swbadmin/jsp/SemObjectEditor.jsp&lt;/jsppath&gt;&lt;/resource&gt;</j.2:xml>
     <j.2:updated>2009-02-02T17:04:08.156</j.2:updated>
     <j.2:title>Information</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:JSPResource"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:JSPResource"/>
     <j.2:created>2009-02-02T17:04:07.531</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:24">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:24">
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:updated>2009-02-03T18:03:19.671</j.2:updated>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Ftp"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Ftp"/>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:title>FTP</j.2:title>
     <j.2:modifiedBy rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
@@ -2568,14 +2568,14 @@
     <j.2:title xml:lang="en">Device access report</j.2:title>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:DBPool">
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBADBPool</j.2:portletClassName>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:DBPool">
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBADBPool</j.2:resourceClassName>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:created>2009-02-03T18:16:21.250</j.2:created>
     <j.2:creator rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBADBPool</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBADBPool</j.2:resourceBundle>
     <j.2:updated>2009-02-03T18:16:46.953</j.2:updated>
     <j.2:title>DBPool</j.2:title>
     <j.2:modifiedBy rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
@@ -2648,26 +2648,26 @@
     <j.2:title xml:lang="es">Español</j.2:title>
     <j.2:created>2009-02-02T17:03:50.828</j.2:created>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:ExportWebSite">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:ExportWebSite">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:02.093</j.2:updated>
     <j.2:title>ExportWebSite</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBExportWebSite</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBExportWebSite</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBExportWebSite</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBExportWebSite</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:01.765</j.2:created>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:30">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:30">
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:title>Global report</j.2:title>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:created>2009-02-03T19:56:07.140</j.2:created>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-03T19:56:43.203</j.2:updated>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:GlobalReport"/>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:GlobalReport"/>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Camp">
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
@@ -2741,26 +2741,26 @@
     <j.2:updated>2009-02-02T17:15:42.703</j.2:updated>
     <j.2:title xml:lang="es">Reporteador de accesos</j.2:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:31">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:31">
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:created>2009-02-03T20:07:57.703</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-03T20:08:25.390</j.2:updated>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:title>ExportWebSite</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:ExportWebSite"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:ExportWebSite"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:SemObjPropRefEditor">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SemObjPropRefEditor">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:03:59.640</j.2:updated>
     <j.2:title>SemObjPropRefEditor</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBASOPropRefEditor</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBASOPropRefEditor</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBASOPropRefEditor</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBASOPropRefEditor</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:03:59.062</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_SessionReportMonthly">
@@ -2794,7 +2794,7 @@
     <j.2:title>Grupos</j.2:title>
     <j.2:updated>2009-02-09T22:58:01.250</j.2:updated>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:35"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:35"/>
     <j.2:webPageSortName>65</j.2:webPageSortName>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
@@ -2816,13 +2816,13 @@
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:SWBAListRelatedObjects">
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBAListRelatedObjects</j.2:portletBundle>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SWBAListRelatedObjects">
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBAListRelatedObjects</j.2:resourceBundle>
     <j.2:created>2009-02-17T17:13:20.875</j.2:created>
     <j.2:modifiedBy rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBAListRelatedObjects</j.2:portletClassName>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBAListRelatedObjects</j.2:resourceClassName>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-17T17:14:56.031</j.2:updated>
     <j.2:creator rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
     <j.2:title>SWBAListRelatedObjects</j.2:title>
@@ -2853,13 +2853,13 @@
     <j.2:updated>2009-02-02T17:15:40.281</j.2:updated>
     <j.2:title xml:lang="en">Daily</j.2:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:MMemory">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:MMemory">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:updated>2009-02-02T17:04:03.687</j.2:updated>
     <j.2:title>MMemory</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBAMMemory</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBAMMemory</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBAMMemory</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBAMMemory</j.2:resourceBundle>
     <j.2:created>2009-02-02T17:04:03.328</j.2:created>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ResourceRemove">
@@ -2874,33 +2874,33 @@
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:10">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:10">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-02T17:04:21.250</j.2:updated>
     <j.2:title>Roles</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:SemObjPropRefEditor"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SemObjPropRefEditor"/>
     <j.2:created>2009-02-02T17:04:20.968</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletTrace">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:ResourceTrace">
     <j.2:created>2009-02-03T18:17:21.562</j.2:created>
     <j.2:creator rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
-    <j.2:title>PortletTrace</j.2:title>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBAResTrace</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBAResTrace</j.2:portletBundle>
+    <j.2:title>ResourceTrace</j.2:title>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBAResTrace</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBAResTrace</j.2:resourceBundle>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:modifiedBy rdf:resource="http://org.semanticwb.userrep#swb_User:2"/>
     <j.2:updated>2009-02-03T18:17:40.296</j.2:updated>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:bh_UserGroup">
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
     <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable"/>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:32"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:32"/>
     <j.2:webPageSortName>70</j.2:webPageSortName>
     <j.2:title>Grupos de Usuarios</j.2:title>
     <j.2:updated>2009-02-04T11:21:23.906</j.2:updated>
@@ -2970,23 +2970,23 @@
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ConfigFiles"/>
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:22">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:22">
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.3:uptPropFile>web.properties</j.3:uptPropFile>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:title>Web</j.2:title>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Properties"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Properties"/>
     <j.2:updated>2009-02-03T16:56:55.406</j.2:updated>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:created>2009-02-03T16:56:46.078</j.2:created>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_GlobalReportMonthly">
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:30"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:30"/>
     <j.2:title xml:lang="pt">Mensal</j.2:title>
     <j.2:title xml:lang="es">Mensual</j.2:title>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
@@ -3015,7 +3015,7 @@
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
     <j.2:title>web.properties</j.2:title>
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:22"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:22"/>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ConfigFiles"/>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
@@ -3087,7 +3087,7 @@
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:mnu_File"/>
     <j.2:title>Crear Sitio</j.2:title>
     <j.2:updated>2009-02-03T14:48:31.593</j.2:updated>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:18"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:18"/>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
   </rdf:Description>
@@ -3118,7 +3118,7 @@
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:bh_RolesDirect">
     <j.2:created>2009-02-02T17:04:21.875</j.2:created>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:11"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:11"/>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
     <j.0:behaviorParams>sprop=swb:hasRole&amp;spropref=swb:hasRole</j.0:behaviorParams>
     <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Roleable"/>
@@ -3167,28 +3167,28 @@
     <j.2:created>2006-12-31T14:37:35.000</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_PortletType:TreeDBQuery">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#PortletType"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:TreeDBQuery">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:updated>2009-02-06T12:49:12.625</j.2:updated>
     <j.2:title>TreeDBQuery</j.2:title>
-    <j.2:portletMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:portletMode>
-    <j.2:portletClassName>org.semanticwb.portal.admin.resources.SWBATreeDBQuery</j.2:portletClassName>
-    <j.2:portletBundle>org.semanticwb.portal.admin.resources.SWBATreeDBQuery</j.2:portletBundle>
+    <j.2:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.2:resourceMode>
+    <j.2:resourceClassName>org.semanticwb.portal.admin.resources.SWBATreeDBQuery</j.2:resourceClassName>
+    <j.2:resourceBundle>org.semanticwb.portal.admin.resources.SWBATreeDBQuery</j.2:resourceBundle>
     <j.2:created>2009-02-06T12:48:29.656</j.2:created>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:28">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:28">
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:updated>2009-02-03T18:29:49.296</j.2:updated>
-    <j.2:title>Portlet Trace</j.2:title>
+    <j.2:title>Resource Trace</j.2:title>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletTrace"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:ResourceTrace"/>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:created>2009-02-03T18:29:38.578</j.2:created>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Help">
     <j.2:updated>2009-02-02T17:15:45.625</j.2:updated>
@@ -3243,18 +3243,18 @@
     <j.2:updated>2009-02-02T17:15:34.953</j.2:updated>
     <j.2:description xml:lang="pt">Por favor, modifique a informação geral do site e clique no botão &lt;B&gt;"Salvar"&lt;/B&gt;.</j.2:description>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:38">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:38">
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:created>2009-03-09T21:36:05.515</j.2:created>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:DBNatural"/>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:DBNatural"/>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
     <j.2:title>natural</j.2:title>
     <j.2:updated>2009-03-09T21:36:56.234</j.2:updated>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_UserReportDaily">
     <j.2:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:hidden>
@@ -3298,12 +3298,12 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
     <j.2:updated>2009-02-02T17:15:19.578</j.2:updated>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:5">
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:5">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:updated>2009-02-02T17:04:12.937</j.2:updated>
     <j.2:title>Edit Rule</j.2:title>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Rule"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Rule"/>
     <j.2:created>2009-02-02T17:04:12.640</j.2:created>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
@@ -3319,17 +3319,17 @@
     <j.2:updated>2009-02-02T17:15:21.406</j.2:updated>
     <j.2:title xml:lang="en">Assign language</j.2:title>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:20">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:20">
     <j.2:updated>2009-02-03T16:52:36.375</j.2:updated>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:Properties"/>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Properties"/>
     <j.2:created>2009-02-03T16:52:29.015</j.2:created>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:title>DB</j.2:title>
     <j.2:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:deleted>
     <j.3:uptPropFile>db.properties</j.3:uptPropFile>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_DeviceReportMonthly">
@@ -3351,7 +3351,7 @@
     <j.0:behaviorParams>sprop=swb:hasRuleRef&amp;spropref=swb:rule</j.0:behaviorParams>
     <j.2:title>Reglas</j.2:title>
     <j.2:webPageSortName>70</j.2:webPageSortName>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:12"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:12"/>
     <j.2:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
     <j.2:updated>2009-02-02T17:04:24.718</j.2:updated>
     <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RuleRefable"/>
@@ -3392,7 +3392,7 @@
     <j.0:behaviorParams>sprop=swb:hasRoleRef&amp;spropref=swb:role</j.0:behaviorParams>
     <j.2:updated>2009-02-02T17:04:21.750</j.2:updated>
     <j.0:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RoleRefable"/>
-    <j.2:hasPortlet rdf:resource="http://www.semanticwb.org/SWBAdmin#Portlet:10"/>
+    <j.2:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:10"/>
     <j.2:webPageSortName>60</j.2:webPageSortName>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ResourceAdd">
@@ -3462,14 +3462,14 @@
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Portlet:33">
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:33">
     <j.2:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:valid>
     <j.2:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.2:active>
     <j.2:updated>2009-02-04T11:55:20.359</j.2:updated>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <j.2:created>2009-02-04T11:55:11.609</j.2:created>
-    <j.2:portletWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:portletWindow>
-    <j.2:portletType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_PortletType:PortletFilter"/>
+    <j.2:resourceWindow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:resourceWindow>
+    <j.2:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:ResourceFilter"/>
     <j.2:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.2:priority>
     <j.2:title>Filter</j.2:title>
     <j.2:indexable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.2:indexable>
