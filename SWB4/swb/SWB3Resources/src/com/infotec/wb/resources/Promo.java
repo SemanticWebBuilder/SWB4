@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -58,7 +58,7 @@ public class Promo extends GenericAdmResource
      * @param base
      */    
     @Override
-    public void setResourceBase(Portlet base)
+    public void setResourceBase(Resource base)
     {
         try 
         {
@@ -80,7 +80,7 @@ public class Promo extends GenericAdmResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
         StringBuffer ret = new StringBuffer("");
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         try 
         {
             String position = base.getAttribute("pos", "3").trim();
@@ -128,7 +128,7 @@ public class Promo extends GenericAdmResource
     /**
      * Obtiene las ligas de redireccionamiento del promocional
      */    
-    private String getUrlHtml(SWBParamRequest reqParams, Portlet base)
+    private String getUrlHtml(SWBParamRequest reqParams, Resource base)
     {
         StringBuffer ret = new StringBuffer("");
         SWBResourceURL wburl=reqParams.getActionUrl();
@@ -147,7 +147,7 @@ public class Promo extends GenericAdmResource
      * Obtiene la imagen del promocional asi como su posicionamiento (en caso de
      * existir)
      */    
-    private String getImgPromo(SWBParamRequest reqParams, Portlet base)
+    private String getImgPromo(SWBParamRequest reqParams, Resource base)
     {
         StringBuffer ret = new StringBuffer("");
         String position = base.getAttribute("pos", "3").trim();
@@ -253,7 +253,7 @@ public class Promo extends GenericAdmResource
     /**
      * Obtiene el html de la imagen
      */    
-    private String getImgHtml(SWBParamRequest reqParams, Portlet base)
+    private String getImgHtml(SWBParamRequest reqParams, Resource base)
     {
         StringBuffer ret = new StringBuffer("");
         String width=base.getAttribute("width", "").trim();
@@ -296,7 +296,7 @@ public class Promo extends GenericAdmResource
     /**
      * Obtiene el texto del promocional ya armado
      */    
-    private String getTextHtml(Portlet base)
+    private String getTextHtml(Resource base)
     {
         StringBuffer ret = new StringBuffer("");
         if (!"".equals(base.getAttribute("text", "").trim())) 
@@ -318,7 +318,7 @@ public class Promo extends GenericAdmResource
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException 
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         //base. addHit(request, response.getUser(), response.getTopic());
         String url = base.getAttribute("url", "").trim();
         if (!url.equals("")) response.sendRedirect(url);
