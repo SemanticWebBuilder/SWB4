@@ -45,7 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.PortletSubType;
+import org.semanticwb.model.ResourceSubType;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.TemplateImp;
@@ -108,7 +108,7 @@ public class ResourceTag extends HTMLTag implements INoBodyParsingTag
                         {
                             TemplateImp tpl=(TemplateImp)SWBPortal.getTemplateMgr().getTemplate(paramRequest.getUser(),paramRequest.getTopic());
                             HashMap map=filterAttributes(attributes);
-                            PortletSubType pst=tpl.getSubType(type,stype);
+                            ResourceSubType pst=tpl.getSubType(type,stype);
                             if(stype!=null)map.put("stype",pst);
                             Iterator it=SWBPortal.getResourceMgr().getResources(pst.getType(),pst,paramRequest.getUser(),paramRequest.getTopic(),map,tpl);
                             
