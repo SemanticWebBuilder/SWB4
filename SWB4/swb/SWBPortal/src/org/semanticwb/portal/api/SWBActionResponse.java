@@ -19,20 +19,20 @@ public interface SWBActionResponse extends SWBParameters
 
 
   /**
-   * Instructs the portlet container to send a redirect response 
+   * Instructs the resource container to send a redirect response
    * to the client using the specified redirect location URL.  
    * <p>
    * This method only accepts an absolute URL (e.g. 
    * <code>http://my.co/myportal/mywebap/myfolder/myresource.gif</code>)
    * or a full path URI (e.g. <code>/myportal/mywebap/myfolder/myresource.gif</code>).
    * If required, 
-   * the portlet container may encode the given URL before the 
+   * the resource container may encode the given URL before the
    * redirection is issued to the client.
    * <p>
    * The sendRedirect method can not be invoked after any of the 
    * following methods of the ActionResponse interface has been called:
    * <ul>
-   * <li>setPortletMode
+   * <li>setResourceMode
    * <li>setWindowState
    * <li>setRenderParameter
    * <li>setRenderParameters
@@ -55,10 +55,10 @@ public interface SWBActionResponse extends SWBParameters
 
   
   /**
-   * Sets the window state of a portlet to the given window state.
+   * Sets the window state of a resource to the given window state.
    * <p>
    * Possible values are the standard window states and any custom 
-   * window states supported by the portal and the portlet. 
+   * window states supported by the portal and the resource.
    * Standard window states are:
    * <ul>
    * <li>MINIMIZED
@@ -67,11 +67,11 @@ public interface SWBActionResponse extends SWBParameters
    * </ul>
    *
    * @param windowState
-   *               the new portlet window state
+   *               the new resource window state
    *
    * @exception WindowStateException
-   *                   if the portlet cannot switch to the specified window state.
-   *                   To avoid this exception the portlet can check the allowed
+   *                   if the resource cannot switch to the specified window state.
+   *                   To avoid this exception the resource can check the allowed
    *                   window states with <code>Request.isWindowStateAllowed()</code>.
    * @exception java.lang.IllegalStateException
    *                    if the method is invoked after <code>sendRedirect</code> has been called.
@@ -88,8 +88,8 @@ public interface SWBActionResponse extends SWBParameters
    * <p>
    * These parameters will be accessible in all
    * sub-sequent render calls via the
-   * <code>PortletRequest.getParameter</code> call until
-   * a new request is targeted to the portlet.
+   * <code>ResourceRequest.getParameter</code> call until
+   * a new request is targeted to the resource.
    * <p>
    * The given parameters do not need to be encoded
    * prior to calling this method.
@@ -119,8 +119,8 @@ public interface SWBActionResponse extends SWBParameters
    * <p>
    * These parameters will be accessible in all
    * sub-sequent render calls via the
-   * <code>PortletRequest.getParameter</code> call until
-   * a request is targeted to the portlet.
+   * <code>ResourceRequest.getParameter</code> call until
+   * a request is targeted to the resource.
    * <p>
    * This method replaces all parameters with the given key.
    * <p>
@@ -144,8 +144,8 @@ public interface SWBActionResponse extends SWBParameters
    * <p>
    * These parameters will be accessible in all
    * sub-sequent render calls via the
-   * <code>PortletRequest.getParameter</code> call until
-   * a request is targeted to the portlet.
+   * <code>ResourceRequest.getParameter</code> call until
+   * a request is targeted to the resource.
    * <p>
    * This method replaces all parameters with the given key.
    * <p>

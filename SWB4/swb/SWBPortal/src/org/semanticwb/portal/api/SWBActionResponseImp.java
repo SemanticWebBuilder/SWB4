@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 
@@ -36,7 +36,7 @@ public class SWBActionResponseImp implements SWBActionResponse
     private int userLevel=0;    
     private String action=null;    
     private boolean secure=false;   
-    private Portlet resource=null;
+    private Resource resource=null;
     private int callMethod=0;
 
     private Locale locale=null;
@@ -54,10 +54,10 @@ public class SWBActionResponseImp implements SWBActionResponse
     }
 
   /**
-   * Sets the window state of a portlet to the given window state.
+   * Sets the window state of a resource to the given window state.
    * <p>
    * Possible values are the standard window states and any custom 
-   * window states supported by the portal and the portlet. 
+   * window states supported by the portal and the resource.
    * Standard window states are:
    * <ul>
    * <li>MINIMIZED
@@ -66,11 +66,11 @@ public class SWBActionResponseImp implements SWBActionResponse
    * </ul>
    *
    * @param windowState
-   *               the new portlet window state
+   *               the new resource window state
    *
    * @exception WindowStateException
-   *                   if the portlet cannot switch to the specified window state.
-   *                   To avoid this exception the portlet can check the allowed
+   *                   if the resource cannot switch to the specified window state.
+   *                   To avoid this exception the resource can check the allowed
    *                   window states with <code>Request.isWindowStateAllowed()</code>.
    * @exception java.lang.IllegalStateException
    *                    if the method is invoked after <code>sendRedirect</code> has been called.
@@ -92,31 +92,31 @@ public class SWBActionResponseImp implements SWBActionResponse
 
 
   /**
-   * Sets the portlet mode of a portlet to the given portlet mode.
+   * Sets the resource mode of a resource to the given resource mode.
    * <p>
-   * Possible values are the standard portlet modes and any custom 
-   * portlet modes supported by the portal and the portlet. Portlets 
-   * must declare in the deployment descriptor the portlet modes they 
+   * Possible values are the standard resource modes and any custom
+   * resource modes supported by the portal and the resource. Resources
+   * must declare in the deployment descriptor the resource modes they
    * support for each markup type.  
-   * Standard portlet modes are:
+   * Standard resource modes are:
    * <ul>
    * <li>EDIT
    * <li>HELP
    * <li>VIEW
    * </ul>
    * <p>
-   * Note: The portlet may still be called in a different window
-   *       state in the next render call, depending on the portlet container / portal.
+   * Note: The resource may still be called in a different window
+   *       state in the next render call, depending on the resource container / portal.
    * 
-   * @param portletMode
-   *               the new portlet mode
+   * @param resourceMode
+   *               the new resource mode
    *
-   * @exception PortletModeException
-   *                   if the portlet cannot switch to this portlet mode,
-   *                   because the portlet or portal does not support it for this markup,
-   *                   or the current user is not allowed to switch to this portlet mode.
-   *                   To avoid this exception the portlet can check the allowed
-   *                   portlet modes with <code>Request.isPortletModeAllowed()</code>.
+   * @exception ResourceModeException
+   *                   if the resource cannot switch to this resource mode,
+   *                   because the resource or portal does not support it for this markup,
+   *                   or the current user is not allowed to switch to this resource mode.
+   *                   To avoid this exception the resource can check the allowed
+   *                   resource modes with <code>Request.isResourceModeAllowed()</code>.
    * @exception java.lang.IllegalStateException
    *                    if the method is invoked after <code>sendRedirect</code> has been called.
    */
@@ -132,20 +132,20 @@ public class SWBActionResponseImp implements SWBActionResponse
   }
 
   /**
-   * Instructs the portlet container to send a redirect response 
+   * Instructs the resource container to send a redirect response
    * to the client using the specified redirect location URL.  
    * <p>
    * This method only accepts an absolute URL (e.g. 
    * <code>http://my.co/myportal/mywebap/myfolder/myresource.gif</code>)
    * or a full path URI (e.g. <code>/myportal/mywebap/myfolder/myresource.gif</code>).
    * If required, 
-   * the portlet container may encode the given URL before the 
+   * the resource container may encode the given URL before the
    * redirection is issued to the client.
    * <p>
    * The sendRedirect method can not be invoked after any of the 
    * following methods of the ActionResponse interface has been called:
    * <ul>
-   * <li>setPortletMode
+   * <li>setResourceMode
    * <li>setWindowState
    * <li>setRenderParameter
    * <li>setRenderParameters
@@ -233,8 +233,8 @@ public class SWBActionResponseImp implements SWBActionResponse
    * <p>
    * These parameters will be accessible in all
    * sub-sequent render calls via the
-   * <code>PortletRequest.getParameter</code> call until
-   * a new request is targeted to the portlet.
+   * <code>ResourceRequest.getParameter</code> call until
+   * a new request is targeted to the resource.
    * <p>
    * The given parameters do not need to be encoded
    * prior to calling this method.
@@ -272,8 +272,8 @@ public class SWBActionResponseImp implements SWBActionResponse
    * <p>
    * These parameters will be accessible in all
    * sub-sequent render calls via the
-   * <code>PortletRequest.getParameter</code> call until
-   * a request is targeted to the portlet.
+   * <code>ResourceRequest.getParameter</code> call until
+   * a request is targeted to the resource.
    * <p>
    * This method replaces all parameters with the given key.
    * <p>
@@ -301,8 +301,8 @@ public class SWBActionResponseImp implements SWBActionResponse
    * <p>
    * These parameters will be accessible in all
    * sub-sequent render calls via the
-   * <code>PortletRequest.getParameter</code> call until
-   * a request is targeted to the portlet.
+   * <code>ResourceRequest.getParameter</code> call until
+   * a request is targeted to the resource.
    * <p>
    * This method replaces all parameters with the given key.
    * <p>
@@ -412,7 +412,7 @@ public class SWBActionResponseImp implements SWBActionResponse
      * @return Value of property base.
      *
      */
-    public Portlet getResourceBase()
+    public Resource getResourceBase()
     {
         return resource;
     }
@@ -421,14 +421,14 @@ public class SWBActionResponseImp implements SWBActionResponse
      * @param base New value of property base.
      *
      */
-    public void setResourceBase(Portlet resource)
+    public void setResourceBase(Resource resource)
     {
         try
         {
             if(resource!=null)
             {
-                this.bundle=resource.getPortletType().getPortletBundle();
-                this.loader=(ClassLoader)SWBPortal.getResourceMgr().getResourceLoaders().get(resource.getPortletType().getPortletClassName());
+                this.bundle=resource.getResourceType().getResourceBundle();
+                this.loader=(ClassLoader)SWBPortal.getResourceMgr().getResourceLoaders().get(resource.getResourceType().getResourceClassName());
             }
         }catch(Exception e){log.error(e);}
         this.resource = resource;

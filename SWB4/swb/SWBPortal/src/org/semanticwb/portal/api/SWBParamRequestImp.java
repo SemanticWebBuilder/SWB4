@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 
@@ -30,8 +30,8 @@ public class SWBParamRequestImp implements SWBParamRequest
     private WebPage adminTopic=null;
     private User user=null;
     private int userLevel=0;
-    private Portlet resource=null;
-    private Portlet virtResource=null;
+    private Resource resource=null;
+    private Resource virtResource=null;
     private String action=Action_EDIT;
     private int callMethod=0;
     private String mode=Mode_VIEW;
@@ -49,7 +49,7 @@ public class SWBParamRequestImp implements SWBParamRequest
     private String extParams=null;
     
     /** Creates a new instance of WBResRequest */
-    public SWBParamRequestImp(HttpServletRequest request, Portlet resource, WebPage topic, User user)
+    public SWBParamRequestImp(HttpServletRequest request, Resource resource, WebPage topic, User user)
     {
         this.request=request;
         this.resource=resource;
@@ -61,11 +61,11 @@ public class SWBParamRequestImp implements SWBParamRequest
         this.locale=new Locale(user.getLanguage());
         try
         {
-            this.bundle=resource.getPortletType().getPortletBundle();
+            this.bundle=resource.getResourceType().getResourceBundle();
         }catch(Exception e){log.error(e);}
         try
         {
-            this.loader=(ClassLoader)SWBPortal.getResourceMgr().getResourceLoaders().get(resource.getPortletType().getPortletClassName());
+            this.loader=(ClassLoader)SWBPortal.getResourceMgr().getResourceLoaders().get(resource.getResourceType().getResourceClassName());
         }catch(Exception e){log.error(e);}
     }
     
@@ -164,19 +164,19 @@ public class SWBParamRequestImp implements SWBParamRequest
         this.winState=winState;
     }
     
-    public Portlet getResourceBase()
+    public Resource getResourceBase()
     {
         return resource;
     }
     
-    public void setResourceBase(Portlet resource)
+    public void setResourceBase(Resource resource)
     {
         try
         {
             if(resource!=null)
             {
-                this.bundle=resource.getPortletType().getPortletBundle();
-                this.loader=(ClassLoader)SWBPortal.getResourceMgr().getResourceLoaders().get(resource.getPortletType().getPortletClassName());
+                this.bundle=resource.getResourceType().getResourceBundle();
+                this.loader=(ClassLoader)SWBPortal.getResourceMgr().getResourceLoaders().get(resource.getResourceType().getResourceClassName());
             }
         }catch(Exception e){log.error(e);}
         this.resource=resource;
@@ -288,7 +288,7 @@ public class SWBParamRequestImp implements SWBParamRequest
      * Getter for property virtResource.
      * @return Value of property virtResource.
      */
-    public Portlet getVirtualResource()
+    public Resource getVirtualResource()
     {
         return virtResource;
     }
@@ -297,7 +297,7 @@ public class SWBParamRequestImp implements SWBParamRequest
      * Setter for property virtResource.
      * @param virtResource New value of property virtResource.
      */
-    public void setVirtualResource(Portlet virtResource)
+    public void setVirtualResource(Resource virtResource)
     {
         this.virtResource = virtResource;
     }

@@ -11,7 +11,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 
 /** Objeto: Se encarga de manejar los objetos SWBResourceCached disponibles en memoria.
  *
@@ -93,7 +93,7 @@ public class SWBResourceCachedMgr
         return ret;
     }
 
-    public void removeResource(Portlet base)
+    public void removeResource(Resource base)
     {
         String mkey=getKey(base);
         Enumeration en=cache.keys();
@@ -108,7 +108,7 @@ public class SWBResourceCachedMgr
         }
     }
     
-    public static String getKey(Portlet base)
+    public static String getKey(Resource base)
     {
         return base.getURI();
     }

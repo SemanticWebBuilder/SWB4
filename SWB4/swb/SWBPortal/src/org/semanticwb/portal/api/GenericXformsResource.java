@@ -22,7 +22,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.util.XmlBundle;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 
 /**
  *
@@ -35,7 +35,7 @@ public class GenericXformsResource extends GenericResource {
     XmlBundle bundle = null;
 
     @Override
-    public void setResourceBase(Portlet base) throws SWBResourceException {
+    public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
         String name = getClass().getName();
         String className = name;
@@ -120,7 +120,7 @@ public class GenericXformsResource extends GenericResource {
      **/
     public String initAdminModel(HttpServletRequest request, SWBParamRequest paramsRequest) // Inicializa el modelo de la forma, puede leerse de un archivo xml
     {
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         Document dom = null;
         if (base.getXml() != null && base.getXml().trim().length() > 0) {
             dom = SWBUtils.XML.xmlToDom(base.getXml());
@@ -308,7 +308,7 @@ public class GenericXformsResource extends GenericResource {
     }
 
     public String processData(Document dom) {
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String data = null;
         //RecResource recRsc=base.
         try {
@@ -358,7 +358,7 @@ public class GenericXformsResource extends GenericResource {
     }
 
     private void uploadFiles(Document doc) {
-        Portlet portlet = getResourceBase();
+        Resource resource = getResourceBase();
         NodeList nListUploads = doc.getFirstChild().getChildNodes();
         for (int i = 0; i < nListUploads.getLength(); i++) {
             Node node = nListUploads.item(i);
@@ -377,12 +377,12 @@ public class GenericXformsResource extends GenericResource {
                         //byte[] decodedData = Base64.decode(node.getFirstChild().getNodeValue());
                         String decodedData = SWBUtils.TEXT.decodeBase64(node.getFirstChild().getNodeValue());
                         if (decodedData != null) {
-                            File file = new File(SWBPlatform.getWorkPath() + portlet.getWorkPath());
+                            File file = new File(SWBPlatform.getWorkPath() + resource.getWorkPath());
                             if (!file.exists()) {
                                 file.mkdirs();
                             }
                             try {
-                                FileOutputStream fos = new FileOutputStream(SWBPlatform.getWorkPath() + portlet.getWorkPath() + "/" + fileName);
+                                FileOutputStream fos = new FileOutputStream(SWBPlatform.getWorkPath() + resource.getWorkPath() + "/" + fileName);
                                 fos.write(decodedData.getBytes());
                                 fos.close();
                             } catch (Exception e) {

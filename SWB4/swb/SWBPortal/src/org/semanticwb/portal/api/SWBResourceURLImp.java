@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.URLEncoder;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.servlet.internal.DistributorParams;
 
@@ -29,8 +29,8 @@ public class SWBResourceURLImp implements SWBResourceURL
     private String winState=WinState_NORMAL;
     private boolean secure=false;
     private int urlType=UrlType_RENDER;  //0 render, 1 action
-    private Portlet resource=null;
-    private Portlet virtResource=null;
+    private Resource resource=null;
+    private Resource virtResource=null;
     private WebPage topic=null;
     private WebPage adminTopic=null;
     private HttpServletRequest request=null;
@@ -41,7 +41,7 @@ public class SWBResourceURLImp implements SWBResourceURL
     private boolean onlyContent=false;    
     
     /** Creates a new instance of WBResRequest */
-    public SWBResourceURLImp(HttpServletRequest request, Portlet resource,WebPage topic, int urlType)
+    public SWBResourceURLImp(HttpServletRequest request, Resource resource,WebPage topic, int urlType)
     {
         this.request=request;
         this.resource=resource;
@@ -106,10 +106,10 @@ public class SWBResourceURLImp implements SWBResourceURL
     }
     
     /**
-     * Returns the portlet URL string representation to be embedded in the
+     * Returns the resource URL string representation to be embedded in the
      * markup.<br>
      * Note that the returned String may not be a valid URL, as it may
-     * be rewritten by the portal/portlet-container before returning the
+     * be rewritten by the portal/resource-container before returning the
      * markup to the client.
      *
      * @return   the encoded URL as a string
@@ -230,7 +230,7 @@ public class SWBResourceURLImp implements SWBResourceURL
      * @return Value of property resource.
      *
      */
-    public Portlet getResourceBase()
+    public Resource getResourceBase()
     {
         return resource;
     }
@@ -239,7 +239,7 @@ public class SWBResourceURLImp implements SWBResourceURL
      * @param resource New value of property resource.
      *
      */
-    public void setResourceBase(Portlet resource)
+    public void setResourceBase(Resource resource)
     {
         this.resource = resource;
         this.virtResource = resource;
@@ -252,8 +252,8 @@ public class SWBResourceURLImp implements SWBResourceURL
    * <p>
    * These parameters will be accessible in all
    * sub-sequent render calls via the
-   * <code>PortletRequest.getParameter</code> call until
-   * a new request is targeted to the portlet.
+   * <code>ResourceRequest.getParameter</code> call until
+   * a new request is targeted to the resource.
    * <p>
    * The given parameters do not need to be encoded
    * prior to calling this method.
@@ -294,8 +294,8 @@ public class SWBResourceURLImp implements SWBResourceURL
    * <p>
    * These parameters will be accessible in all
    * sub-sequent render calls via the
-   * <code>PortletRequest.getParameter</code> call until
-   * a request is targeted to the portlet.
+   * <code>ResourceRequest.getParameter</code> call until
+   * a request is targeted to the resource.
    * <p>
    * This method replaces all parameters with the given key.
    * <p>
@@ -323,8 +323,8 @@ public class SWBResourceURLImp implements SWBResourceURL
    * <p>
    * These parameters will be accessible in all
    * sub-sequent render calls via the
-   * <code>PortletRequest.getParameter</code> call until
-   * a request is targeted to the portlet.
+   * <code>ResourceRequest.getParameter</code> call until
+   * a request is targeted to the resource.
    * <p>
    * This method replaces all parameters with the given key.
    * <p>
@@ -374,7 +374,7 @@ public class SWBResourceURLImp implements SWBResourceURL
      * Getter for property virtResource.
      * @return Value of property virtResource.
      */
-    public Portlet getVirtualResource()
+    public Resource getVirtualResource()
     {
         return virtResource;
     }
@@ -383,7 +383,7 @@ public class SWBResourceURLImp implements SWBResourceURL
      * Setter for property virtResource.
      * @param virtResource New value of property virtResource.
      */
-    public void setVirtualResource(Portlet virtResource)
+    public void setVirtualResource(Resource virtResource)
     {
         this.virtResource = virtResource;
     }
