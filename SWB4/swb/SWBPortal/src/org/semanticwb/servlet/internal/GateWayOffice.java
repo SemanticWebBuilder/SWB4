@@ -19,7 +19,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.PortletType;
+//import org.semanticwb.model.PortletType;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
