@@ -26,7 +26,7 @@ public class SWBAGrpTemplates extends GenericResource{
     public SWBAGrpTemplates() {
     }
 
-    /** User View of WBAGrpTemplates Portlet
+    /** User View of WBAGrpTemplates Resource
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest a list of objects (user, topic, action, ...)
@@ -35,7 +35,7 @@ public class SWBAGrpTemplates extends GenericResource{
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         PrintWriter out=response.getWriter();
         User user = paramRequest.getUser();
         String strTm = request.getParameter("tm");
@@ -78,7 +78,7 @@ public class SWBAGrpTemplates extends GenericResource{
         }
     }
 
-    /** Edition view of WBAGrpTemplates Portlet
+    /** Edition view of WBAGrpTemplates Resource
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest a list of objects (user, topic, action, ...)
