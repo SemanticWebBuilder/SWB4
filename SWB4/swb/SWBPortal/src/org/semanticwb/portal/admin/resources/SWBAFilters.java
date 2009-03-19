@@ -51,7 +51,7 @@ import org.semanticwb.model.AdminFilter;
 
 import org.semanticwb.model.HerarquicalNode;
 import org.semanticwb.model.ObjectBehavior;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
@@ -75,7 +75,7 @@ public class SWBAFilters extends SWBATree {
 
     private Logger log = SWBUtils.getLogger(SWBAFilters.class);
     
-    static final String[] pathValids={"getGlobal","getTemplates","getServer","getPortlets","getPortletTypes","getSysResources","getTopic","getTemplateGroup","getUserRep","getRules","getPFlows","getLanguages","getDevices","getMDTables","getDnss","getTopicMap","getUserReps","getCamps","getCamp","getCntResources"};
+    static final String[] pathValids={"getGlobal","getTemplates","getServer","getResources","getResourceTypes","getSysResources","getTopic","getTemplateGroup","getUserRep","getRules","getPFlows","getLanguages","getDevices","getMDTables","getDnss","getTopicMap","getUserReps","getCamps","getCamp","getCntResources"};
     static final String[] namevalids={"node","config","icons","icon","res","events","willExpand","Template"};
     private HashMap hmclass = null;
     private Document jsondom = null;
@@ -1079,7 +1079,7 @@ public class SWBAFilters extends SWBATree {
             out.println("</table>");
             out.println("</fieldset>");
             out.println("<fieldset>");
-            Portlet base = getResourceBase();
+            Resource base = getResourceBase();
             out.println("<form id=\""+base.getId()+"/addAdminFilter\" action=\""+ url  +"\">");
             out.println("<button dojoType=\"dijit.form.Button\" name=\"op\" onclick=\"submitForm('" + getResourceBase().getId() + "/addAdminFilter'); return false;\">"+paramRequest.getLocaleString("msgBtnAdd")+"</button>");
             //out.println("<input type=\"submit\" name=\"op\" value=\""+paramRequest.getLocaleString("msgBtnAdd")+"\">");

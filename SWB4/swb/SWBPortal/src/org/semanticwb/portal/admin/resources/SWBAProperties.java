@@ -25,7 +25,7 @@ public class SWBAProperties extends GenericResource {
     private Logger log = SWBUtils.getLogger(SWBAProperties.class);
     ArrayList properties;
     SWBProperties prop;
-    Portlet base;
+    Resource base;
     
     /** Creates a new instance of WBAProperties */
     public SWBAProperties() {
@@ -52,7 +52,7 @@ public class SWBAProperties extends GenericResource {
      * @throws AFException an exception of type AFException
      */    
     @Override
-    public void setResourceBase(Portlet base) throws SWBResourceException
+    public void setResourceBase(Resource base) throws SWBResourceException
     {
         super.setResourceBase(base);
 

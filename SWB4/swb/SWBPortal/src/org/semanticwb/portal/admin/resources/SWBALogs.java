@@ -39,7 +39,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -68,7 +68,7 @@ public class SWBALogs extends GenericResource {
     public SWBALogs() {
     }
 
-    /** Admin wiew of WBALogs Portlet
+    /** Admin wiew of WBALogs Resource
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
@@ -81,7 +81,7 @@ public class SWBALogs extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         log.debug("doAdmin()");
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
         String actionRow = "1";
         String descriptionRow = "1";
@@ -186,10 +186,10 @@ public class SWBALogs extends GenericResource {
 //        }
 //        out.println("<option value=\"PFlow\" " + strSelect + ">" + paramRequest.getLocaleString("selectPFlow") + "</option>");
 //        strSelect = "";
-//        if (tipo.equals("Portlet")) {
+//        if (tipo.equals("Resource")) {
 //            strSelect = "selected";
 //        }
-//        out.println("<option value=\"Portlet\" " + strSelect + ">" + paramRequest.getLocaleString("selectResource") + "</option>");
+//        out.println("<option value=\"Resource\" " + strSelect + ">" + paramRequest.getLocaleString("selectResource") + "</option>");
 //        strSelect = "";
 //        if (tipo.equals("ResourceType")) {
 //            strSelect = "selected";
@@ -328,7 +328,7 @@ public class SWBALogs extends GenericResource {
 
     }
 
-    /** User View of WBALogs Portlet
+    /** User View of WBALogs Resource
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest a list of objects (user, topic, action, ...)
@@ -342,7 +342,7 @@ public class SWBALogs extends GenericResource {
         response.setHeader("Pragma", "no-cache");
         log.debug("doView()");
         PrintWriter out = response.getWriter();
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         int rowNumber = 0;
 
         User user = paramRequest.getUser();
@@ -649,7 +649,7 @@ public class SWBALogs extends GenericResource {
         response.setHeader("Content-Disposition", "attachment; filename=\"Excel Report.xls\";");
 
         log.debug("doView()");
-        Portlet base = getResourceBase(); //paramRequest
+        Resource base = getResourceBase(); //paramRequest
         PrintWriter out = response.getWriter();
         int rowNumber = 0;
 
@@ -786,7 +786,7 @@ public class SWBALogs extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         log.debug("doXML()");
-        Portlet base = paramRequest.getResourceBase();
+        Resource base = paramRequest.getResourceBase();
         int rowNumber = 0;
 
         User user = paramRequest.getUser();
@@ -929,7 +929,7 @@ public class SWBALogs extends GenericResource {
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        Portlet base = getResourceBase();
+        Resource base = getResourceBase();
         String accion = response.getAction();
         
 

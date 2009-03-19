@@ -17,7 +17,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Language;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
@@ -36,7 +36,7 @@ public class SWBALanguages extends GenericResource{
     
     private Logger log=SWBUtils.getLogger(SWBALanguages.class);
     public String strRscType=SWBALanguages.class.getName();
-    Portlet base=null;
+    Resource base=null;
 
     
     /** Método que despliega la parte pública del recurso
