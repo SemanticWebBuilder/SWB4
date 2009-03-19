@@ -82,9 +82,9 @@ public class SWBResourceTraceMgr extends TimerTask
             if (type == null)
             {
                 type= new SWBResourceTraceMeter();
-                type.setId(res.getWBResource().getResourceBase().getPortletType().getId());
-                type.setTypeMap(res.getWBResource().getResourceBase().getPortletType().getWebSite().getId());
-                type.setName(res.getWBResource().getResourceBase().getPortletType().getTitle());
+                type.setId(res.getWBResource().getResourceBase().getResourceType().getId());
+                type.setTypeMap(res.getWBResource().getResourceBase().getResourceType().getWebSite().getId());
+                type.setName(res.getWBResource().getResourceBase().getResourceType().getTitle());
                 getTypesMeter().put(res.getType(), type);
             }
             type.addTime(fin-res.getTime());
@@ -121,7 +121,7 @@ public class SWBResourceTraceMgr extends TimerTask
             if(trace!=null)
             {
                 removeResource(trace);
-                log.debug("<!-- res:"+res.getResourceBase().getPortletType().getTitle()+":"+res.getResourceBase().getTitle()+":"+res.getResourceBase().getId()+":"+res.getResourceBase().getWebSite().getId()+" "+(System.currentTimeMillis()-trace.getTime())+"ms -->");            }
+                log.debug("<!-- res:"+res.getResourceBase().getResourceType().getTitle()+":"+res.getResourceBase().getTitle()+":"+res.getResourceBase().getId()+":"+res.getResourceBase().getWebSite().getId()+" "+(System.currentTimeMillis()-trace.getTime())+"ms -->");            }
         }
     }
 

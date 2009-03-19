@@ -60,11 +60,11 @@ public class SWBResourceWindowRender
 //        out.println("	     <td align='right'>");
 //        out.println("	       <font face='arial' size='-3'>");
 
-        String id=paramsRequest.getResourceBase().getPortletType().getId()+"_"+paramsRequest.getResourceBase().getId()+"_"+paramsRequest.getResourceBase().getWebSite().getId();
-        out.println("<div class=\"portlet\" id=\"portlet-window-"+id+"\">");
-        out.println("  <div class=\"portlet-topper\">");
-        out.println("    <span class=\"portlet-title\">"+title+"</span>");
-        out.println("    <div class=\"portlet-icons\" id=\"portlet-icon-bar_"+id+"\">");
+        String id=paramsRequest.getResourceBase().getResourceType().getId()+"_"+paramsRequest.getResourceBase().getId()+"_"+paramsRequest.getResourceBase().getWebSite().getId();
+        out.println("<div class=\"resource\" id=\"resource-window-"+id+"\">");
+        out.println("  <div class=\"resource-topper\">");
+        out.println("    <span class=\"resource-title\">"+title+"</span>");
+        out.println("    <div class=\"resource-icons\" id=\"resource-icon-bar_"+id+"\">");
 
         String[] modes=((SWBResourceWindow)resource).getModes(request, paramsRequest);
         if(modes!=null)
@@ -96,8 +96,8 @@ public class SWBResourceWindowRender
         
         out.println("    </div>");
         out.println("  </div>");
-        out.println("  <div class=\"portlet-content\">");
-        out.println("    <div class=\"portlet-content-container\" style=\"\">");
+        out.println("  <div class=\"resource-content\">");
+        out.println("    <div class=\"resource-content-container\" style=\"\">");
         out.println("      <div>");
         
         out.println(content);
@@ -122,19 +122,19 @@ public class SWBResourceWindowRender
         if(mode.equals(paramsRequest.Mode_VIEW))
         {
             title="Regresar";
-            img=web+"wbadmin/images/portlet/back.png";
+            img=web+"wbadmin/images/resource/back.png";
         }else if(mode.equals(paramsRequest.Mode_EDIT))
         {
             title="Preferencias";
-            img=web+"wbadmin/images/portlet/edit.png";
+            img=web+"wbadmin/images/resource/edit.png";
         }else if(mode.equals(paramsRequest.Mode_HELP))
         {
             title="Ayuda";
-            img=web+"wbadmin/images/portlet/help.png";
+            img=web+"wbadmin/images/resource/help.png";
         }else if(mode.equals(paramsRequest.Mode_ADMIN))
         {
             title="Configuraci�n";
-            img=web+"wbadmin/images/portlet/configuration.png";
+            img=web+"wbadmin/images/resource/configuration.png";
         }
         
         if(url.getMode().equals(mode))
@@ -166,15 +166,15 @@ public class SWBResourceWindowRender
         if(state.equals(paramsRequest.WinState_NORMAL))
         {
             title="Restaurar";
-            img=web+"wbadmin/images/portlet/restore.png";
+            img=web+"wbadmin/images/resource/restore.png";
         }else if(state.equals(paramsRequest.WinState_MAXIMIZED))
         {
             title="Maximizar";
-            img=web+"wbadmin/images/portlet/maximize.png";
+            img=web+"wbadmin/images/resource/maximize.png";
         }else if(state.equals(paramsRequest.WinState_MINIMIZED))
         {
             title="Minimizar";
-            img=web+"wbadmin/images/portlet/minimize.png";
+            img=web+"wbadmin/images/resource/minimize.png";
         }
         if(url.getWindowState().equals(state))
         {

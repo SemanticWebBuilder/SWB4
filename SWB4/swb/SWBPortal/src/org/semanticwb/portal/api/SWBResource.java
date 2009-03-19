@@ -10,8 +10,8 @@ package org.semanticwb.portal.api;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.model.Portlet;
-import org.semanticwb.model.PortletType;
+import org.semanticwb.model.Resource;
+import org.semanticwb.model.ResourceType;
 
 
 /** La interfaz WBResource es la que define los m�todos que una clase debe implementar
@@ -22,11 +22,11 @@ import org.semanticwb.model.PortletType;
  */
 public interface SWBResource
 {
-    /** Asigna el Objeto Portlet con la informaci�n base del recurso.
+    /** Asigna el Objeto Resource con la informaci�n base del recurso.
      * (es llamando cada que el recurso es modificado desde la administraci�n de WB)
-     * @param base Objeto Portlet
+     * @param base Objeto Resource
      */
-    public void setResourceBase(Portlet base) throws SWBResourceException;
+    public void setResourceBase(Resource base) throws SWBResourceException;
 
     /** Es llamado cuando es cargado el recurso en memoria
      * (solo es llamado una vez)
@@ -34,10 +34,10 @@ public interface SWBResource
      */
     public void init() throws SWBResourceException;
     
-    /** Regresa el Objeto Portlet con la informaci�n base del recurso.
-     * @return  Objeto Portlet
+    /** Regresa el Objeto Resource con la informaci�n base del recurso.
+     * @return  Objeto Resource
      */
-    public Portlet getResourceBase();
+    public Resource getResourceBase();
     
     /**
      * Este m�todo permite al recurso procesar una acci�n. Este m�todo 
@@ -95,13 +95,13 @@ public interface SWBResource
      * M�todo que es llamado al momento de instalar el recurso en webbuilder
      * @param recobj informaci�n de base de datos de la definici�n del Recurso
      */
-    public void install(PortletType portletType) throws SWBResourceException;
+    public void install(ResourceType resourceType) throws SWBResourceException;
 
     /**
      * M�todo que es llamado al momento de desinstalar el recurso en webbuilder
      * @param recobj informaci�n de base de datos de la definici�n del Recurso
      */
-    public void uninstall(PortletType portletType) throws SWBResourceException;
+    public void uninstall(ResourceType resourceType) throws SWBResourceException;
     
     /**
      * Es llamado por el ResourceMgr para indicarle al recurso cuando 

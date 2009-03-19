@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Locale;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.PortletType;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.ResourceType;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
 
@@ -27,7 +27,7 @@ import org.semanticwb.model.WebSite;
  */
 public class GenericResource implements SWBResource, SWBResourceCache, SWBResourceWindow
 {
-    private Portlet base;
+    private Resource base;
     
     /** Creates a new instance of GenericResource */
     public GenericResource()
@@ -41,7 +41,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     /**
      * @return
      */    
-    public Portlet getResourceBase()
+    public Resource getResourceBase()
     {
         return base;
     }
@@ -57,7 +57,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * @param recobj
      * @throws SWBResourceException
      */    
-    public void install(PortletType recobj) throws SWBResourceException
+    public void install(ResourceType recobj) throws SWBResourceException
     {
     }
     
@@ -220,7 +220,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * @param base
      * @throws SWBResourceException
      */    
-    public void setResourceBase(Portlet base) throws SWBResourceException
+    public void setResourceBase(Resource base) throws SWBResourceException
     {
         this.base=base;
     }
@@ -229,7 +229,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      * @param recobj
      * @throws SWBResourceException
      */    
-    public void uninstall(PortletType recobj) throws SWBResourceException
+    public void uninstall(ResourceType recobj) throws SWBResourceException
     {
     }
     
@@ -244,7 +244,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
             return null;
         }else
         {
-            Portlet base=paramRequest.getResourceBase();
+            Resource base=paramRequest.getResourceBase();
             return SWBResourceCachedMgr.getKey(base);
         }
     }
@@ -275,7 +275,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     
     public boolean windowSupport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
-        //System.out.println("----> "+paramRequest.getResourceBase().getId()+" windowSupport:"+paramRequest.getResourceBase().getConfAttribute("portletWindow","0"));
+        //System.out.println("----> "+paramRequest.getResourceBase().getId()+" windowSupport:"+paramRequest.getResourceBase().getConfAttribute("resourceWindow","0"));
         if(!paramRequest.getAdminTopic().getWebSiteId().equals(SWBContext.WEBSITE_ADMIN))
         {
 //            TopicMap tm=TopicMgr.getInstance().getTopicMap(TopicMgr.TM_ADMIN);
@@ -286,7 +286,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
 //                    return true;
 //                }
 //            }
-            if(paramRequest.getResourceBase().isPortletWindow())
+            if(paramRequest.getResourceBase().isResourceWindow())
             {
                 return true;
             }

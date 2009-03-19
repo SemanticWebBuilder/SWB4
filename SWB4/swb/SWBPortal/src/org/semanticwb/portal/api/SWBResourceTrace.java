@@ -9,7 +9,7 @@ package org.semanticwb.portal.api;
 
 import java.util.Random;
 import javax.servlet.http.*;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 
 /** Objeto: Se encarga de dar seguimiento a la invocaci�n de recursos.
  *
@@ -35,12 +35,12 @@ public class SWBResourceTrace
         this.paramsRequest=paramsRequest;
         this.request=request;
         wbResource = wbres;
-        Portlet resource=wbres.getResourceBase();
+        Resource resource=wbres.getResourceBase();
         
         time = System.currentTimeMillis();
         id=time+resource.hashCode()+ran.nextInt();
-        description = resource.getPortletType().getTitle()+": "+resource.getTitle();
-        type = resource.getPortletType().getURI();
+        description = resource.getResourceType().getTitle()+": "+resource.getTitle();
+        type = resource.getResourceType().getURI();
         thread = Thread.currentThread();
     }
     
@@ -108,7 +108,7 @@ public class SWBResourceTrace
      * @return Value of property resource.
      *
      */
-    public Portlet getResource()
+    public Resource getResource()
     {
         return wbResource.getResourceBase();
     }

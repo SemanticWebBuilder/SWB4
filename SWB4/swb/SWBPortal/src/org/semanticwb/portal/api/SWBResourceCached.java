@@ -12,8 +12,8 @@ import java.io.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
-import org.semanticwb.model.PortletType;
+import org.semanticwb.model.Resource;
+import org.semanticwb.model.ResourceType;
 import org.semanticwb.servlet.SWBHttpServletResponseWrapper;
 
 
@@ -42,7 +42,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
         this.resource = resource;
         try
         {
-            cachetime = resource.getResourceBase().getPortletType().getPortletCache() * 1000;
+            cachetime = resource.getResourceBase().getResourceType().getResourceCache() * 1000;
         } catch (Exception e)
         {
             log.error(e);
@@ -61,7 +61,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
     
     /** regresa la informacion de base de datos del recurso
      * @return  */
-    public Portlet getResourceBase()
+    public Resource getResourceBase()
     {
         return resource.getResourceBase();
     }
@@ -140,7 +140,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
     
     /** asigna la informacion de base de datos al recurso
      * @param base  */
-    public void setResourceBase(Portlet base) throws SWBResourceException
+    public void setResourceBase(Resource base) throws SWBResourceException
     {
         resource.setResourceBase(base);
         cache = null;
@@ -149,7 +149,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
     /** Metodo que es llamado al momento de instalar el recurso en webbuilder
      * @param recobj informaci�n de base de datos de la definici�n del Recurso
      */
-    public void install(PortletType recobj) throws SWBResourceException
+    public void install(ResourceType recobj) throws SWBResourceException
     {
         resource.install(recobj);
     }
@@ -157,7 +157,7 @@ public class SWBResourceCached implements SWBResource, SWBResourceWindow
     /** Metodo que es llamado al momento de desinstalar el recurso en webbuilder
      * @param recobj informaci�n de base de datos de la definici�n del Recurso
      */
-    public void uninstall(PortletType recobj) throws SWBResourceException
+    public void uninstall(ResourceType recobj) throws SWBResourceException
     {
         resource.uninstall(recobj);
     }

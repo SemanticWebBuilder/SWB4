@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Portlet;
+import org.semanticwb.model.Resource;
 
 /** Objeto: Implementa una administración genérica de recursos bajo el API de administración de
  * recursos de Infotec WebBuilder.
@@ -88,7 +88,7 @@ public class GenericAdmResource extends GenericResource
      * @throws AFException
      */    
     @Override
-    public void setResourceBase(Portlet base) throws SWBResourceException
+    public void setResourceBase(Resource base) throws SWBResourceException
     {
         super.setResourceBase(base);
         String name=getClass().getName();
@@ -110,7 +110,7 @@ public class GenericAdmResource extends GenericResource
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         StringBuffer ret = new StringBuffer("");
         String action =  request.getParameter("act");
         if(action==null || (action!=null && action.trim().equals(""))) action=paramsRequest.getAction();
@@ -170,7 +170,7 @@ public class GenericAdmResource extends GenericResource
     @Override
     public void doView(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
-        Portlet base=getResourceBase();
+        Resource base=getResourceBase();
         StringBuffer ret = new StringBuffer("");
         String action =  request.getParameter("act");
         if(action==null || (action!=null && action.trim().equals(""))) action=paramsRequest.getAction();
