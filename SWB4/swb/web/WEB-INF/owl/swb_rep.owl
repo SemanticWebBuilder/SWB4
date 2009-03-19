@@ -646,14 +646,14 @@
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="showDownload">
     <rdfs:domain>
-      <swb:Class rdf:ID="PPTPortlet">
+      <swb:Class rdf:ID="PPTResource">
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.portlet.office.PPTPortlet</swb:className>
+        >org.semanticwb.resource.office.PPTResource</swb:className>
         <rdfs:subClassOf>
-          <swb:Class rdf:ID="OfficePortlet">
+          <swb:Class rdf:ID="OfficeResource">
             <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >org.semanticwb.portlet.office.OfficePortlet</swb:className>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Portlet"/>
+            >org.semanticwb.resource.office.OfficeResource</swb:className>
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
           </swb:Class>
         </rdfs:subClassOf>
@@ -711,7 +711,7 @@
         >true</swbxf:propHidden>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#OfficePortlet"/>
+    <rdfs:domain rdf:resource="#OfficeResource"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#officetype">
@@ -771,10 +771,10 @@
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/content/office/word#paginated">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain>
-      <swb:Class rdf:ID="WordPortlet">
+      <swb:Class rdf:ID="WordResource">
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.portlet.office.WordPortlet</swb:className>
-        <rdfs:subClassOf rdf:resource="#OfficePortlet"/>
+        >org.semanticwb.resource.office.WordResource</swb:className>
+        <rdfs:subClassOf rdf:resource="#OfficeResource"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:domain>
@@ -944,7 +944,7 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#OfficePortlet"/>
+    <rdfs:domain rdf:resource="#OfficeResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.jcp.org/jcr/1.0#isCheckedOut">
     <rdfs:domain rdf:resource="http://www.jcp.org/jcr/mix/1.0#versionable"/>
@@ -1030,7 +1030,7 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="versionToShow">
-    <rdfs:domain rdf:resource="#OfficePortlet"/>
+    <rdfs:domain rdf:resource="#OfficeResource"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="name">
@@ -1077,7 +1077,7 @@
     <rdfs:label xml:lang="en">Category</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/content/office/word#NumberOfPages">
-    <rdfs:domain rdf:resource="#WordPortlet"/>
+    <rdfs:domain rdf:resource="#WordResource"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty>
@@ -1132,10 +1132,10 @@
     <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</jcr:multiple>
   </owl:DatatypeProperty>
-  <swb:Class rdf:ID="ExcelPortlet">
+  <swb:Class rdf:ID="ExcelResource">
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.portlet.office.ExcelPortlet</swb:className>
-    <rdfs:subClassOf rdf:resource="#OfficePortlet"/>
+    >org.semanticwb.resource.office.ExcelResource</swb:className>
+    <rdfs:subClassOf rdf:resource="#OfficeResource"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#DatatypeProperty">

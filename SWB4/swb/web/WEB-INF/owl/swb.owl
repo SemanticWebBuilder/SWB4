@@ -12,7 +12,7 @@
   <owl:Ontology rdf:about="">
     <rdfs:comment>SemanticWebBuilder Ontology</rdfs:comment>
     <rdfs:comment>SemanticWebBuilder Default Ontology</rdfs:comment>
-    <rdfs:label>Wine Ontology</rdfs:label>
+    <rdfs:label>SemanticWebBuilder Default Ontology</rdfs:label>
   </owl:Ontology>
   <rdfs:Class rdf:ID="Model">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
@@ -138,10 +138,10 @@
     >org.semanticwb.model.Traceable</swb:className>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
-  <owl:Class rdf:ID="PortletType">
+  <owl:Class rdf:ID="ResourceType">
     <rdfs:subClassOf rdf:resource="#Filterable"/>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.model.PortletType</swb:className>
+    >org.semanticwb.model.ResourceType</swb:className>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:autogenId>
@@ -237,11 +237,11 @@
     <rdfs:subClassOf rdf:resource="#Iconable"/>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="PortletFilter">
+  <owl:Class rdf:ID="ResourceFilter">
     <rdfs:subClassOf rdf:resource="#Traceable"/>
     <rdfs:subClassOf rdf:resource="#XMLable"/>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.model.PortletFilter</swb:className>
+    >org.semanticwb.model.ResourceFilter</swb:className>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -479,9 +479,9 @@
       </swb:Interface>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
-      <swb:Interface rdf:ID="Portletable">
+      <swb:Interface rdf:ID="Resourceable">
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.model.Portletable</swb:className>
+        >org.semanticwb.model.Resourceable</swb:className>
         <rdfs:subClassOf rdf:resource="#SWBInterface"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
@@ -549,12 +549,12 @@
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
     <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasPSTPortlets">
+  <owl:ObjectProperty rdf:ID="hasPSTResources">
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
-    <rdfs:label>hasPortlet</rdfs:label>
+    <rdfs:label>hasResource</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#heClass">
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode"/>
@@ -614,12 +614,12 @@
     </swb:displayProperty>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="PSTType">
-    <rdfs:range rdf:resource="#PortletType"/>
+    <rdfs:range rdf:resource="#ResourceType"/>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasPTSubType"/>
     </owl:inverseOf>
     <rdfs:domain>
-      <swb:Class rdf:ID="PortletSubType">
+      <swb:Class rdf:ID="ResourceSubType">
         <rdfs:subClassOf rdf:resource="#Filterable"/>
         <rdfs:subClassOf rdf:resource="#SWBClass"/>
         <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
@@ -627,7 +627,7 @@
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >false</swb:autogenId>
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.model.PortletSubType</swb:className>
+        >org.semanticwb.model.ResourceSubType</swb:className>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:domain>
@@ -750,10 +750,10 @@
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents">
             <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconPortlets</swb:iconClass>
+            >swbIconResources</swb:iconClass>
             <swbxf:hePropertyFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >portletMode=1</swbxf:hePropertyFilter>
-            <swbxf:heClass rdf:resource="#PortletType"/>
+            >resourceMode=1</swbxf:hePropertyFilter>
+            <swbxf:heClass rdf:resource="#ResourceType"/>
             <swb:title xml:lang="en">Content Compinents</swb:title>
             <swb:title xml:lang="es">Componentes de Contenido</swb:title>
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -848,7 +848,7 @@
         <swb:hasClass rdf:resource="#Permission"/>
         <swb:hasClass rdf:resource="#Camp"/>
         <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-        <swb:hasClass rdf:resource="#PortletFilter"/>
+        <swb:hasClass rdf:resource="#ResourceFilter"/>
         <rdfs:subClassOf rdf:resource="#Activeable"/>
         <rdfs:subClassOf rdf:resource="#SWBModel"/>
         <swb:hasClass rdf:resource="#Calendar"/>
@@ -856,11 +856,11 @@
         <rdfs:subClassOf rdf:resource="#Localeable"/>
         <swb:hasClass rdf:resource="#Language"/>
         <swb:hasClass>
-          <swb:Class rdf:ID="PortletRef">
+          <swb:Class rdf:ID="ResourceRef">
             <rdfs:subClassOf rdf:resource="#Priorityable"/>
             <rdfs:subClassOf rdf:resource="#Reference"/>
             <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >org.semanticwb.model.PortletRef</swb:className>
+            >org.semanticwb.model.ResourceRef</swb:className>
             <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swb:autogenId>
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
@@ -880,16 +880,16 @@
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
           </swb:Class>
         </swb:hasClass>
-        <swb:hasClass rdf:resource="#PortletType"/>
+        <swb:hasClass rdf:resource="#ResourceType"/>
         <swb:hasClass>
-          <swb:Class rdf:ID="Portlet">
+          <swb:Class rdf:ID="Resource">
             <rdfs:subClassOf rdf:resource="#Calendarable"/>
             <swb:classID rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Portlet</swb:classID>
+            >Resource</swb:classID>
             <swb:displayObject>
-              <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_Portlet">
+              <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_Resource">
                 <swbxf:dispatcher rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >/swbadmin/jsp/do_Portlet.jsp</swbxf:dispatcher>
+                >/swbadmin/jsp/do_Resource.jsp</swbxf:dispatcher>
               </swbxf:DisplayObject>
             </swb:displayObject>
             <rdfs:subClassOf rdf:resource="#XMLConfable"/>
@@ -898,7 +898,7 @@
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
             <rdfs:subClassOf rdf:resource="#RuleRefable"/>
             <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >org.semanticwb.model.Portlet</swb:className>
+            >org.semanticwb.model.Resource</swb:className>
             <rdfs:subClassOf rdf:resource="#Activeable"/>
             <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swb:autogenId>
@@ -936,10 +936,10 @@
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTSystems">
             <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconPortlets</swb:iconClass>
+            >swbIconResources</swb:iconClass>
             <swbxf:hePropertyFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >portletMode=3</swbxf:hePropertyFilter>
-            <swbxf:heClass rdf:resource="#PortletType"/>
+            >resourceMode=3</swbxf:hePropertyFilter>
+            <swbxf:heClass rdf:resource="#ResourceType"/>
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >75</swb:index>
             <swb:title xml:lang="en">System Components</swb:title>
@@ -963,10 +963,10 @@
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies">
             <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconPortlets</swb:iconClass>
+            >swbIconResources</swb:iconClass>
             <swbxf:hePropertyFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >portletMode=2</swbxf:hePropertyFilter>
-            <swbxf:heClass rdf:resource="#PortletType"/>
+            >resourceMode=2</swbxf:hePropertyFilter>
+            <swbxf:heClass rdf:resource="#ResourceType"/>
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >70</swb:index>
             <swb:title xml:lang="es">Componentes de Estrategia</swb:title>
@@ -1039,7 +1039,7 @@
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
           </swb:Class>
         </swb:hasClass>
-        <swb:hasClass rdf:resource="#PortletSubType"/>
+        <swb:hasClass rdf:resource="#ResourceSubType"/>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >false</swb:autogenId>
         <swb:hasHerarquicalNode>
@@ -1161,20 +1161,20 @@
     </owl:inverseOf>
     <rdfs:label>parent</rdfs:label>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasPortletRef">
+  <owl:ObjectProperty rdf:ID="hasResourceRef">
     <rdfs:subPropertyOf rdf:resource="#hasReference"/>
-    <rdfs:range rdf:resource="#PortletRef"/>
+    <rdfs:range rdf:resource="#ResourceRef"/>
     <rdfs:domain>
-      <swb:Interface rdf:ID="PortletRefable">
+      <swb:Interface rdf:ID="ResourceRefable">
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.model.PortletRefable</swb:className>
+        >org.semanticwb.model.ResourceRefable</swb:className>
         <rdfs:subClassOf rdf:resource="#Referensable"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:domain>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="pflowInstance">
-    <rdfs:domain rdf:resource="#Portlet"/>
+    <rdfs:domain rdf:resource="#Resource"/>
     <rdfs:range rdf:resource="#PFlowInstance"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
@@ -1183,12 +1183,12 @@
     <rdfs:domain rdf:resource="#Role"/>
     <rdfs:range rdf:resource="#Permission"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasPortlet">
+  <owl:ObjectProperty rdf:ID="hasResource">
     <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasPortletable"/>
+      <owl:ObjectProperty rdf:ID="hasResourceable"/>
     </owl:inverseOf>
-    <rdfs:domain rdf:resource="#Portletable"/>
-    <rdfs:range rdf:resource="#Portlet"/>
+    <rdfs:domain rdf:resource="#Resourceable"/>
+    <rdfs:range rdf:resource="#Resource"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
@@ -1240,10 +1240,10 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasPTPortlet">
+  <owl:ObjectProperty rdf:ID="hasPTResource">
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
-    <rdfs:label>hasPortlet</rdfs:label>
+    <rdfs:label>hasResource</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="lastVersion">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1257,9 +1257,9 @@
     <rdfs:range rdf:resource="#VersionInfo"/>
     <rdfs:domain rdf:resource="#Versionable"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="portletFilter">
-    <rdfs:range rdf:resource="#PortletFilter"/>
-    <rdfs:domain rdf:resource="#Portlet"/>
+  <owl:ObjectProperty rdf:ID="resourceFilter">
+    <rdfs:range rdf:resource="#ResourceFilter"/>
+    <rdfs:domain rdf:resource="#Resource"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasPFlowInstance">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1341,22 +1341,22 @@
       <owl:ObjectProperty rdf:ID="hasGroupedTemplate"/>
     </owl:inverseOf>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="portletType">
-    <owl:inverseOf rdf:resource="#hasPTPortlet"/>
-    <rdfs:range rdf:resource="#PortletType"/>
-    <rdfs:domain rdf:resource="#Portlet"/>
+  <owl:ObjectProperty rdf:ID="resourceType">
+    <owl:inverseOf rdf:resource="#hasPTResource"/>
+    <rdfs:range rdf:resource="#ResourceType"/>
+    <rdfs:domain rdf:resource="#Resource"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="portletSubType">
+  <owl:ObjectProperty rdf:ID="resourceSubType">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_portletSubType">
-        <rdfs:label xml:lang="en">Portlet Subtype</rdfs:label>
+      <swbxf:DisplayProperty rdf:ID="dp_resourceSubType">
+        <rdfs:label xml:lang="en">Resource Subtype</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
-        <rdfs:label xml:lang="es">Subtipo de Portlet</rdfs:label>
+        <rdfs:label xml:lang="es">Subtipo de Resource</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <owl:inverseOf rdf:resource="#hasPSTPortlets"/>
-    <rdfs:domain rdf:resource="#Portlet"/>
-    <rdfs:range rdf:resource="#PortletSubType"/>
+    <owl:inverseOf rdf:resource="#hasPSTResources"/>
+    <rdfs:domain rdf:resource="#Resource"/>
+    <rdfs:range rdf:resource="#ResourceSubType"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="previousVersion">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1447,7 +1447,7 @@
     >true</swb:herarquicalRelation>
     <rdfs:label>hasChild</rdfs:label>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasPortletRefInv">
+  <owl:ObjectProperty rdf:ID="hasResourceRefInv">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
@@ -1489,10 +1489,10 @@
     <rdfs:domain rdf:resource="#Ruleable"/>
     <rdfs:range rdf:resource="#Rule"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="portlet">
-    <owl:inverseOf rdf:resource="#hasPortletRefInv"/>
-    <rdfs:range rdf:resource="#Portlet"/>
-    <rdfs:domain rdf:resource="#PortletRef"/>
+  <owl:ObjectProperty rdf:ID="resource">
+    <owl:inverseOf rdf:resource="#hasResourceRefInv"/>
+    <rdfs:range rdf:resource="#Resource"/>
+    <rdfs:domain rdf:resource="#ResourceRef"/>
     <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:canUsedAsName>
   </owl:ObjectProperty>
@@ -1647,9 +1647,9 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="portletClassName">
+  <owl:DatatypeProperty rdf:ID="resourceClassName">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_portletClassName">
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceClassName">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >40</swb:index>
         <rdfs:label xml:lang="en">Class Name</rdfs:label>
@@ -1657,7 +1657,7 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#PortletType"/>
+    <rdfs:domain rdf:resource="#ResourceType"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="inherit">
     <rdfs:domain rdf:resource="#Inheritable"/>
@@ -1699,20 +1699,20 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="portletMode">
+  <owl:DatatypeProperty rdf:ID="resourceMode">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_portletMode">
+      <swbxf:DisplayProperty rdf:ID="dp_resourceMode">
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
         <swbxf:propSelectValues xml:lang="es">1:Contenido|2:Estrategia|3:Sistema</swbxf:propSelectValues>
         <swbxf:propSelectValues xml:lang="en">1:Content|2:Strategy|3:System</swbxf:propSelectValues>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >30</swb:index>
-        <rdfs:label>Portlet Mode</rdfs:label>
+        <rdfs:label>Resource Mode</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#PortletType"/>
+    <rdfs:domain rdf:resource="#ResourceType"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="dnsDefault">
@@ -1736,17 +1736,17 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#WebPage"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="portletBundle">
+  <owl:DatatypeProperty rdf:ID="resourceBundle">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_portletBundle">
-        <rdfs:label xml:lang="en">Portlet Bundle</rdfs:label>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceBundle">
+        <rdfs:label xml:lang="en">Resource Bundle</rdfs:label>
         <rdfs:label xml:lang="es">Nombre de archivo de Propiedades</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >50</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#PortletType"/>
+    <rdfs:domain rdf:resource="#ResourceType"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrEmail">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -2000,8 +2000,8 @@
     <rdfs:domain rdf:resource="#Class"/>
     <rdfs:comment>Usado para identificar al objeto en el URL (webpage:home)</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="portletWindow">
-    <rdfs:domain rdf:resource="#Portlet"/>
+  <owl:DatatypeProperty rdf:ID="resourceWindow">
+    <rdfs:domain rdf:resource="#Resource"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="versionValue">
@@ -2143,9 +2143,9 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="portletCache">
+  <owl:DatatypeProperty rdf:ID="resourceCache">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_portletCache">
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceCache">
         <rdfs:label xml:lang="en">Cache (sec)</rdfs:label>
         <rdfs:label xml:lang="es">Cache (seg)</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -2153,7 +2153,7 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#PortletType"/>
+    <rdfs:domain rdf:resource="#ResourceType"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#codeEditorLanguage">
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#CodeEditor"/>
@@ -2401,7 +2401,7 @@
     >view</swb:propertyMode>
     <swb:propertyRef rdf:resource="#views"/>
   </swb:ViewReferenceProperty>
-  <swbxf:FormView rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#portletMode2">
+  <swbxf:FormView rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#resourceMode2">
     <swbxf:hasEditProperty rdf:resource="#hits"/>
     <swbxf:hasEditProperty rdf:resource="#description"/>
     <swbxf:hasEditProperty rdf:resource="#active"/>
@@ -2445,13 +2445,13 @@
     <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
     >10000000</swbxf:fileMaxSize>
   </swbxf:FileUpload>
-  <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Portlets">
+  <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Resources">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >70</swb:index>
     <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >swbIconPortlets</swb:iconClass>
-    <swbxf:heClass rdf:resource="#PortletType"/>
-    <swb:title>Portlets</swb:title>
+    >swbIconResources</swb:iconClass>
+    <swbxf:heClass rdf:resource="#ResourceType"/>
+    <swb:title>Resources</swb:title>
   </swbxf:HerarquicalNode>
   <swbxf:RichText rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichTextEditor">
     <swbxf:textAreaRows rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -2463,7 +2463,7 @@
     <swb:title xml:lang="es">Crear</swb:title>
     <swb:title xml:lang="en">Create</swb:title>
   </swbxf:ObjectAction>
-  <swbxf:FormView rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#portletMode1">
+  <swbxf:FormView rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#resourceMode1">
     <swbxf:hasEditProperty rdf:resource="#hits"/>
     <swbxf:hasEditProperty rdf:resource="#title"/>
   </swbxf:FormView>
