@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent implements org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Versionable,org.semanticwb.repository.Referenceable,org.semanticwb.repository.Traceable,org.semanticwb.repository.Lockable
+public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent implements org.semanticwb.repository.Traceable,org.semanticwb.repository.Versionable,org.semanticwb.repository.Referenceable,org.semanticwb.repository.Lockable,org.semanticwb.content.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty cm_Category=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#Category");
     public static final org.semanticwb.platform.SemanticClass cm_Articulo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org.mx/swb4/content#Articulo");

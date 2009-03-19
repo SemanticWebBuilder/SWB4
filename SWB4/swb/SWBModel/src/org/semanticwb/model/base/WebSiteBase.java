@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Deleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#deleted");
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
