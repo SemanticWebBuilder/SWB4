@@ -54,7 +54,7 @@ public class ExcelResource extends GenericAdmResource
     {
         if (this.getResourceBase() instanceof org.semanticwb.resource.office.ExcelResource)
         {
-            paramReq.getLocaleString("");
+            
             org.semanticwb.resource.office.ExcelResource portlet = (org.semanticwb.resource.office.ExcelResource) this.getResourceBase();
             String version = portlet.getVersionToShow();
             String contentId = portlet.getContent();
