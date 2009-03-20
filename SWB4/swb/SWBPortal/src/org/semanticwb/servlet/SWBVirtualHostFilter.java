@@ -149,7 +149,7 @@ public class SWBVirtualHostFilter implements Filter
                             }
                         } else
                         {
-                            _response.getWriter().print(resp.toString());
+                            _response.getOutputStream().write(resp.toByteArray());
                         }
                     }else
                     {
@@ -233,13 +233,13 @@ public class SWBVirtualHostFilter implements Filter
         intServlets.put("wbupload", upload);
         upload.init(filterConfig.getServletContext());
 
-        InternalServlet editFile = new EditFile();
+        /*InternalServlet editFile = new EditFile();
         intServlets.put("editfile", editFile);
         editFile.init(filterConfig.getServletContext());
 
         InternalServlet UploadFormElement = new UploadFormElement();
         intServlets.put("Upload", UploadFormElement);
-        UploadFormElement.init(filterConfig.getServletContext());
+        UploadFormElement.init(filterConfig.getServletContext());*/
 
         //TODO:Admin servlet
         InternalServlet admin = new Admin();
