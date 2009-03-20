@@ -215,7 +215,7 @@ public class SWBOfficeManager implements OfficeManager
                     if (displayObj != null)
                     {
                         DisplayProperty propDisplay = new DisplayProperty(displayObj);
-                        if (!propDisplay.isHidden() && propDisplay.isEditable())
+                        if (!propDisplay.isHidden() && !propDisplay.isDisabled())
                         {
                             PropertyInfo info = new PropertyInfo();
                             info.id = prop.getPrefix() + ":" + prop.getName();
