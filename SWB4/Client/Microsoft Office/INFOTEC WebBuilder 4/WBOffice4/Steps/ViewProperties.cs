@@ -29,7 +29,7 @@ namespace WBOffice4.Steps
             {
                 string repositoryName = this.Wizard.Data[SelectVersionToPublish.REPOSITORY_ID_NAME].ToString();
                 string contentID = this.Wizard.Data[SelectVersionToPublish.CONTENT_ID_NAME].ToString();
-                PropertyInfo[] properties = OfficeApplication.OfficeDocumentProxy.getPortletProperties(repositoryName, contentID);
+                PropertyInfo[] properties = OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
                 obj = TypeFactory.getObject(properties, "Propiedades de presentación");
             }
             grid.SelectedObject = obj;
@@ -40,7 +40,7 @@ namespace WBOffice4.Steps
         {
             string repositoryName = this.Wizard.Data[SelectVersionToPublish.REPOSITORY_ID_NAME].ToString();
             string contentID = this.Wizard.Data[SelectVersionToPublish.CONTENT_ID_NAME].ToString();
-            PropertyInfo[] properties=OfficeApplication.OfficeDocumentProxy.getPortletProperties(repositoryName, contentID);
+            PropertyInfo[] properties=OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
             Object[] values=TypeFactory.getValues(properties, obj);
             try
             {
