@@ -48,12 +48,14 @@ public class GenericFormElement extends FormElementBase
         String pmsg=null;
         String imsg=null;
         String selectValues=null;
+        boolean disabled=false;
         if(sobj!=null)
         {
             DisplayProperty dobj=new DisplayProperty(sobj);
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
             selectValues=dobj.getSelectValues(lang);
+            disabled=dobj.isDisabled();
         }
         
         if(imsg==null)
@@ -76,7 +78,8 @@ public class GenericFormElement extends FormElementBase
                 }
             }
         }
-        
+
+
         if(pmsg==null)
         {
             pmsg="Captura "+label+".";
@@ -84,7 +87,13 @@ public class GenericFormElement extends FormElementBase
             {
                 pmsg="Enter "+label+".";
             }
-        }        
+        }
+
+        String ext="";
+        if(disabled)
+        {
+            ext+=" disabled=\"disabled\"";
+        }
         
         if(prop.isDataTypeProperty())
         {
@@ -127,6 +136,7 @@ public class GenericFormElement extends FormElementBase
                     + " promptMessage=\""+pmsg+"\""
                     + " invalidMessage=\""+imsg+"\""
 //                    + " trim=\"true\""
+                    + ext
                 + "/>";
             }else if(prop.isDateTime())
             {
@@ -150,6 +160,7 @@ public class GenericFormElement extends FormElementBase
                         + " invalidMessage=\""+imsg+"\""
                         + " " + getAttributes()
     //                    + " trim=\"true\""
+                        + ext
                     + "/>";
 //                }else if(mode.equals("edit"))
 //                {
@@ -176,6 +187,7 @@ public class GenericFormElement extends FormElementBase
                         + " invalidMessage=\""+imsg+"\""
                         + " " + getAttributes()
                         + " trim=\"true\""
+                        + ext
                     + "/>";
                 }else if(mode.equals("view"))
                 {
