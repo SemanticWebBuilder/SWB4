@@ -99,6 +99,21 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         return bout.toString();
     }
 
+    public byte[] toByteArray()
+    {
+        try
+        {
+            out.flush();
+            out.close();
+            bout.flush();
+        } catch (Exception e)
+        {
+            log.error(e);
+        }
+        log.trace("WBResponse:out:" + bout.toString());
+        return bout.toByteArray();
+    }
+
     @Override
     public void sendRedirect(String location) throws java.io.IOException
     {
