@@ -35,11 +35,11 @@ namespace WBOffice4.Steps
                 }
                 PropertyInfo[] properties = (PropertyInfo[])this.Wizard.Data[ViewProperties.VIEW_PROPERTIES];
                 String[] values = (String[])this.Wizard.Data[ViewProperties.VIEW_PROPERTIES_VALUES];
-                ResourceInfo portletInfo = OfficeApplication.OfficeDocumentProxy.publishToPortletContent(repositoryName, contentID, version, title, description, webpage,properties,values);
+                ResourceInfo portletInfo = OfficeApplication.OfficeDocumentProxy.publishToResourceContent(repositoryName, contentID, version, title, description, webpage,properties,values);
                 DialogResult res = MessageBox.Show(this, "¿Desea activar el contenido?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (res == DialogResult.Yes)
                 {
-                    OfficeApplication.OfficeDocumentProxy.activatePortlet(portletInfo, true);
+                    OfficeApplication.OfficeDocumentProxy.activateResource(portletInfo, true);
                 }
                 MessageBox.Show(this, "Se ha publicado correctamente el contenido en la página web", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Wizard.Close();
