@@ -135,7 +135,7 @@ public class SelectOne extends SelectOneBase
             {
                 String value=request.getParameter(prop.getName());
                 if(value==null)value=obj.getProperty(prop);
-                ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">";
+                ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\" "+ext+">";
                 StringTokenizer st=new StringTokenizer(selectValues,"|");
                 while(st.hasMoreTokens())
                 {
