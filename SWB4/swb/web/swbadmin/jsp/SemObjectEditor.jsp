@@ -65,7 +65,7 @@ try
             }
         }
         frm.setAction("/swb/swbadmin/jsp/SemObjectEditor.jsp");
-        out.println(frm.renderForm());
+        out.println(frm.renderForm(request));
     }else
     {
         SemanticObject obj=ont.getSemanticObject(suri);
@@ -89,7 +89,7 @@ try
             int pmode=((org.semanticwb.model.Resource)obj.createGenericInstance()).getResourceType().getResourceMode();
             view="resourceMode"+pmode;
         }
-        System.out.println(view);
+        //System.out.println(view);
 
         SWBFormMgr frm=new SWBFormMgr(obj, view,mode);
         frm.setLang(lang);
@@ -112,7 +112,7 @@ try
             out.println("</script>");
         }
         frm.setAction("/swb/swbadmin/jsp/SemObjectEditor.jsp");
-        out.println(frm.renderForm());
+        out.println(frm.renderForm(request));
      }
 }catch(Exception e){e.printStackTrace();}
 %>

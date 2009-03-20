@@ -22,5 +22,5 @@
     SWBFormMgr frm=new SWBFormMgr(clase, null,SWBFormMgr.MODE_VIEW);
         frm.processForm(request);
         frm.setAction("/swb/swbadmin/jsp/SemClassEditor.jsp");
-        out.println(frm.renderForm());
+        out.println(frm.renderForm(request));
 %>
