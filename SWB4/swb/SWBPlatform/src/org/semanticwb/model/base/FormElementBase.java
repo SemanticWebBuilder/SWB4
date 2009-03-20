@@ -96,7 +96,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         }
     }
 
-    public String renderLabel(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         String ret="";
         String name=prop.getName();
@@ -111,7 +111,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         return ret;
     }
 
-    public String renderElement(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
