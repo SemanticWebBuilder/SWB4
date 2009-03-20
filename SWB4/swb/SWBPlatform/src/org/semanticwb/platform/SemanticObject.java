@@ -239,10 +239,11 @@ public class SemanticObject
         if (ns != null && !m_res.getURI().startsWith(ns))
         {
             //System.out.println("ns:"+ns+" "+m_res.getURI());
-            m_res = SWBPlatform.getSemanticMgr().getOntology().getResource(m_res.getURI());
+            Resource aux=SWBPlatform.getSemanticMgr().getOntology().getResource(m_res.getURI());
+            if(aux==null)throw new NullPointerException("Resource not Found:"+m_res.getURI());
+            m_res = aux;
             m_model = null;
         }
-        if(m_res==null)throw new NullPointerException("Resource is Null...");
     }
 
     public boolean isVirtual()
