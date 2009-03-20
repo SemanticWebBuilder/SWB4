@@ -105,7 +105,7 @@ public class SWBForum extends GenericResource {
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("addCategory");
         mgr.setAction(url.toString());
-        out.println(mgr.renderForm());
+        out.println(mgr.renderForm(request));
     }
 
     public void doAddForum(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -121,7 +121,7 @@ public class SWBForum extends GenericResource {
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("addForum");
         mgr.setAction(url.toString());
-        out.println(mgr.renderForm());
+        out.println(mgr.renderForm(request));
     }
 
     public void doEditCategory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -134,7 +134,7 @@ public class SWBForum extends GenericResource {
         url.setParameter("categoryUri", semObject.getURI());
         url.setAction("editCategory");
         mgr.setAction(url.toString());
-        out.println(mgr.renderForm());
+        out.println(mgr.renderForm(request));
     }
 
     public void doEditForum(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -147,7 +147,7 @@ public class SWBForum extends GenericResource {
         url.setParameter("forumUri", semObject.getURI());
         url.setAction("editForum");
         mgr.setAction(url.toString());
-        out.println(mgr.renderForm());
+        out.println(mgr.renderForm(request));
     }
 
     public void doAddThread(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -178,7 +178,7 @@ public class SWBForum extends GenericResource {
 
 //        out.println("</table>");
 
-        out.println(mgr.renderForm());
+        out.println(mgr.renderForm(request));
     }
 
     public void doReplyPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -202,7 +202,7 @@ public class SWBForum extends GenericResource {
         mgr.setType(mgr.TYPE_XHTML);
         url.setAction("replyPost");
         mgr.setAction(url.toString());
-        out.println(mgr.renderForm());
+        out.println(mgr.renderForm(request));
     }
 
     public void doEditPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -216,7 +216,7 @@ public class SWBForum extends GenericResource {
         url.setParameter("postUri", semObject.getURI());
         url.setAction("editPost");
         mgr.setAction(url.toString());
-        out.println(mgr.renderForm());
+        out.println(mgr.renderForm(request));
     }
 
     @Override

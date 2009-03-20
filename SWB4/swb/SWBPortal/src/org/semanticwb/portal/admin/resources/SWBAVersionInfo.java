@@ -200,10 +200,10 @@ public class SWBAVersionInfo extends GenericResource {
             out.println("<tbody>");
             out.println("<tr>");
             out.println("<td>");
-            out.println(fm.renderElement(VersionInfo.swb_versionComment.getLabel())!=null?fm.renderElement(VersionInfo.swb_versionComment.getLabel()):"Comment");
+            out.println(fm.renderElement(request, VersionInfo.swb_versionComment.getLabel())!=null?fm.renderElement(request, VersionInfo.swb_versionComment.getLabel()):"Comment");
             out.println("</td>");
             out.println("<td>");
-            out.println(fm.renderElement(VersionInfo.swb_versionComment,SWBFormMgr.MODE_EDIT));
+            out.println(fm.renderElement(request, VersionInfo.swb_versionComment,SWBFormMgr.MODE_EDIT));
             out.println("</td>");
             out.println("</tr>");
             out.println("</tbody>");
@@ -235,7 +235,7 @@ public class SWBAVersionInfo extends GenericResource {
             fm.addHiddenParameter("sobj", so.getURI());
             fm.setAction(urla.toString());
 
-            out.println(fm.renderForm());
+            out.println(fm.renderForm(request));
         }
     }
 
