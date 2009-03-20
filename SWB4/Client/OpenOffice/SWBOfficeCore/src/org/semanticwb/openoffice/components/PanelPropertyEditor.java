@@ -18,6 +18,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.AbstractCellEditor;
@@ -70,6 +71,60 @@ public class PanelPropertyEditor extends javax.swing.JPanel
             if (prop instanceof PropertyInfo)
             {
                 PropertyInfo propertyInfo = (PropertyInfo) prop;
+                if (propertyInfo.type.equalsIgnoreCase("date"))
+                {
+                    DateEditor editor=new DateEditor(row,column,DateTypeFormat.DATE);
+                    editor.addChangeListener(this);
+                    if(value!=null)
+                    {
+                        try
+                        {
+                            editor.setValue(value);
+                        }
+                        catch(Exception e){}
+                    }
+                    else
+                    {
+                        editor.setValue(new Date(System.currentTimeMillis()));
+                    }
+                    return editor;
+                }
+                if (propertyInfo.type.equalsIgnoreCase("time"))
+                {
+                    DateEditor editor=new DateEditor(row,column,DateTypeFormat.TIME);
+                    editor.addChangeListener(this);
+                    if(value!=null)
+                    {
+                        try
+                        {
+                            editor.setValue(value);
+                        }
+                        catch(Exception e){}
+                    }
+                    else
+                    {
+                        editor.setValue(new Date(System.currentTimeMillis()));
+                    }
+                    return editor;
+                }
+                if (propertyInfo.type.equalsIgnoreCase("datetime"))
+                {
+                    DateEditor editor=new DateEditor(row,column,DateTypeFormat.DATE_TIME);
+                    editor.addChangeListener(this);
+                    if(value!=null)
+                    {
+                        try
+                        {
+                            editor.setValue(value);
+                        }
+                        catch(Exception e){}
+                    }
+                    else
+                    {
+                        editor.setValue(new Date(System.currentTimeMillis()));
+                    }
+                    return editor;
+                }
                 if (propertyInfo.type.equalsIgnoreCase("boolean"))
                 {
                     BooleanEditor jCheckBox = new BooleanEditor(row, column);
@@ -195,6 +250,18 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 StringEditor integerEditor = (StringEditor) e.getSource();
                 jTableProperties.setValueAt(integerEditor.getText(), integerEditor.row, integerEditor.col);
             }
+            if (e.getSource() instanceof DateEditor)
+            {
+                DateEditor dateEditor = (DateEditor) e.getSource();
+                jTableProperties.setValueAt(dateEditor.getValue(), dateEditor.row, dateEditor.col);
+            }
+            if (e.getSource() instanceof MultiValueEditor)
+            {
+                MultiValueEditor multiValueEditor = (MultiValueEditor) e.getSource();
+                DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
+                String valueSelected = multiValueEditor.getSelectedItem().toString();
+                model.setValueAt(valueSelected, multiValueEditor.row, multiValueEditor.col);
+            }
 
         }
 
@@ -293,6 +360,57 @@ public class PanelPropertyEditor extends javax.swing.JPanel
             if (prop instanceof PropertyInfo)
             {
                 PropertyInfo propertyInfo = (PropertyInfo) prop;
+                if (propertyInfo.type.equalsIgnoreCase("date"))
+                {
+                    DateEditor editor=new DateEditor(row,column,DateTypeFormat.DATE);
+                    if(value!=null)
+                    {
+                        try
+                        {
+                            editor.setValue(value);
+                        }
+                        catch(Exception e){}
+                    }
+                    else
+                    {
+                        editor.setValue(new Date(System.currentTimeMillis()));
+                    }
+                    return editor;
+                }
+                if (propertyInfo.type.equalsIgnoreCase("time"))
+                {
+                    DateEditor editor=new DateEditor(row,column,DateTypeFormat.TIME);                    
+                    if(value!=null)
+                    {
+                        try
+                        {
+                            editor.setValue(value);
+                        }
+                        catch(Exception e){}
+                    }
+                    else
+                    {
+                        editor.setValue(new Date(System.currentTimeMillis()));
+                    }
+                    return editor;
+                }
+                if (propertyInfo.type.equalsIgnoreCase("datetime"))
+                {
+                    DateEditor editor=new DateEditor(row,column,DateTypeFormat.DATE_TIME);
+                    if(value!=null)
+                    {
+                        try
+                        {
+                            editor.setValue(value);
+                        }
+                        catch(Exception e){}
+                    }
+                    else
+                    {
+                        editor.setValue(new Date(System.currentTimeMillis()));
+                    }
+                    return editor;
+                }
                 if (propertyInfo.type.equalsIgnoreCase("boolean"))
                 {
                     JCheckBox jCheckBox = new JCheckBox();
