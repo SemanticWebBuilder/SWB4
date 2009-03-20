@@ -53,7 +53,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
             this.title = title;
             this.description = description;
         }
-
+        @Override
         public void start(Map wizardData, ResultProgressHandle progress)
         {
             assert !EventQueue.isDispatchThread();
@@ -90,7 +90,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
 
         }
     }
-
+    @Override
     public Object finish(Map map) throws WizardException
     {
         if (title == null || description == null)
@@ -100,7 +100,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
         }
         return new BackgroundResultCreator(title, description);
     }
-
+    @Override
     public boolean cancel(Map arg0)
     {
         return true;
