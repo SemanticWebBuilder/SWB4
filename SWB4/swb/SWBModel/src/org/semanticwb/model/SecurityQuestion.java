@@ -22,7 +22,7 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
     }
 
     @Override
-    public String renderElement(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
          if(obj==null)obj=new SemanticObject();
         String ret="";

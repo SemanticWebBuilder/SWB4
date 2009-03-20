@@ -1,5 +1,6 @@
 package org.semanticwb.model;
 
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -12,7 +13,7 @@ public class CodeEditor extends org.semanticwb.model.base.CodeEditorBase
     }
 
     @Override
-    public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         StringBuffer ret = new StringBuffer(250);
         String id=obj.getURI()+"/"+prop.getName()+"_editArea";
@@ -55,7 +56,8 @@ public class CodeEditor extends org.semanticwb.model.base.CodeEditorBase
         {
             language=lang;
         }
-        String value=obj.getProperty(prop);
+        String value=request.getParameter(prop.getName());
+        if(value==null)value=obj.getProperty(prop);
         if(value==null)value="";
         if(mode.equals("edit") || mode.equals("create") )
         {

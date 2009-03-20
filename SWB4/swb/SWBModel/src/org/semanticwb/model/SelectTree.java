@@ -2,6 +2,7 @@ package org.semanticwb.model;
 
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -31,7 +32,7 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
     }
 
     @Override
-    public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         String ret="";
         String name=prop.getName();
@@ -72,7 +73,10 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
 
         if(prop.isObjectProperty())
         {
-            SemanticObject val=obj.getObjectProperty(prop);
+            SemanticObject val=null;
+            String aux=request.getParameter(prop.getName());
+            if(aux!=null)val=SemanticObject.createSemanticObject(aux);
+            else val=obj.getObjectProperty(prop);
             String uri="";
             String value="";
             if(val!=null)
@@ -127,7 +131,8 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
         {
             if(selectValues!=null)
             {
-                String value=obj.getProperty(prop);
+                String value=request.getParameter(prop.getName());
+                if(value==null)value=obj.getProperty(prop);
                 ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">";
                 StringTokenizer st=new StringTokenizer(selectValues,"|");
                 while(st.hasMoreTokens())

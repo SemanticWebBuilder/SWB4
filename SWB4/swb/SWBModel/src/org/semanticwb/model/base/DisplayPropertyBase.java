@@ -4,6 +4,7 @@ package org.semanticwb.model.base;
 public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Sortable
 {
     public static final org.semanticwb.platform.SemanticProperty swbxf_propSelectValues=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propSelectValues");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_propDisabled=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propDisabled");
     public static final org.semanticwb.platform.SemanticProperty swbxf_propInvalidMessage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propInvalidMessage");
     public static final org.semanticwb.platform.SemanticClass swbxf_PropertyGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#PropertyGroup");
     public static final org.semanticwb.platform.SemanticProperty swbxf_propGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propGroup");
@@ -12,7 +13,6 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
     public static final org.semanticwb.platform.SemanticClass swb_SWBFormElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement");
     public static final org.semanticwb.platform.SemanticProperty swbxf_formElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement");
     public static final org.semanticwb.platform.SemanticProperty swbxf_propPromptMessage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propPromptMessage");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_propEditable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propEditable");
     public static final org.semanticwb.platform.SemanticClass swbxf_DisplayProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty");
 
@@ -76,6 +76,16 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
     public void setSelectValues(String propSelectValues, String lang)
     {
         getSemanticObject().setProperty(swbxf_propSelectValues, propSelectValues, lang);
+    }
+
+    public boolean isDisabled()
+    {
+        return getSemanticObject().getBooleanProperty(swbxf_propDisabled);
+    }
+
+    public void setDisabled(boolean propDisabled)
+    {
+        getSemanticObject().setBooleanProperty(swbxf_propDisabled, propDisabled);
     }
 
     public String getInvalidMessage()
@@ -184,15 +194,5 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
     public void setPromptMessage(String propPromptMessage, String lang)
     {
         getSemanticObject().setProperty(swbxf_propPromptMessage, propPromptMessage, lang);
-    }
-
-    public boolean isEditable()
-    {
-        return getSemanticObject().getBooleanProperty(swbxf_propEditable);
-    }
-
-    public void setEditable(boolean propEditable)
-    {
-        getSemanticObject().setBooleanProperty(swbxf_propEditable, propEditable);
     }
 }
