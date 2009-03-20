@@ -292,8 +292,8 @@ public class PanelPropertyEditor extends javax.swing.JPanel
             Object prop = table.getModel().getValueAt(row, 0);
             if (prop instanceof PropertyInfo)
             {
-                PropertyInfo PropertyInfo = (PropertyInfo) prop;
-                if (PropertyInfo.type.equalsIgnoreCase("boolean"))
+                PropertyInfo propertyInfo = (PropertyInfo) prop;
+                if (propertyInfo.type.equalsIgnoreCase("boolean"))
                 {
                     JCheckBox jCheckBox = new JCheckBox();
                     jCheckBox.setBackground(new Color(255, 255, 255));
@@ -313,7 +313,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                     }
                     return panel;
                 }
-                if (PropertyInfo.type.equalsIgnoreCase("integer"))
+                if (propertyInfo.type.equalsIgnoreCase("integer"))
                 {
                     IntegerEditor JTextField = new IntegerEditor(row, column);
 
@@ -337,18 +337,38 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                     }
                     return JTextField;
                 }
-                if (PropertyInfo.type.equalsIgnoreCase("String"))
+                if (propertyInfo.type.equalsIgnoreCase("String"))
                 {
-                    StringEditor JTextField = new StringEditor(row, column);
-                    if (value == null)
+                    if (propertyInfo.values == null || propertyInfo.values.length == 0)
                     {
-                        JTextField.setText("");
+                        StringEditor JTextField = new StringEditor(row, column);
+                        if (value == null)
+                        {
+                            JTextField.setText("");
+                        }
+                        else
+                        {
+                            JTextField.setText(value.toString());
+                        }
+                        return JTextField;
                     }
                     else
                     {
-                        JTextField.setText(value.toString());
+                        MultiValueEditor multiValueEditor = new MultiValueEditor(row, column);
+                        for (String valueToCombo : propertyInfo.values)
+                        {
+                            multiValueEditor.addItem(valueToCombo);
+                        }
+                        if (value != null)
+                        {
+                            multiValueEditor.setSelectedItem(value);
+                        }
+                        else
+                        {
+                            multiValueEditor.setSelectedIndex(0);
+                        }
+                        return multiValueEditor;
                     }
-                    return JTextField;
                 }
             }
             return null;
