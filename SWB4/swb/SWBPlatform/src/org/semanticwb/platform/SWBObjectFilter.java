@@ -24,7 +24,7 @@ public class SWBObjectFilter
             while(objects.hasNext())
             {
                 SemanticObject obj=objects.next();
-                StringTokenizer st=new StringTokenizer(filter,",;|");
+                StringTokenizer st=new StringTokenizer(filter,",;|&");
                 while(st.hasMoreTokens())
                 {
                     String txt=st.nextToken();
