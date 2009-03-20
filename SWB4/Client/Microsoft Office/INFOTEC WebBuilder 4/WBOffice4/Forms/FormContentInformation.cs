@@ -68,7 +68,7 @@ namespace WBOffice4.Forms
         private void loadPorlets()
         {
             listViewPages.Items.Clear();
-            foreach (PortletInfo portletInfo in OfficeApplication.OfficeDocumentProxy.listPortlets(repositoryName, contentID))
+            foreach (ResourceInfo portletInfo in OfficeApplication.OfficeDocumentProxy.listPortlets(repositoryName, contentID))
             {
                 VersionInfo selected = new VersionInfo();
                 selected.nameOfVersion = portletInfo.version;
@@ -115,9 +115,9 @@ namespace WBOffice4.Forms
 
         private void toolStripButtonEdit_Click(object sender, EventArgs e)
         {
-            if (this.listViewPages.SelectedItems.Count > 0 && this.listViewPages.SelectedItems[0].Tag is PortletInfo)
+            if (this.listViewPages.SelectedItems.Count > 0 && this.listViewPages.SelectedItems[0].Tag is ResourceInfo)
             {
-                PortletInfo portletInfo = (PortletInfo)this.listViewPages.SelectedItems[0].Tag;
+                ResourceInfo portletInfo = (ResourceInfo)this.listViewPages.SelectedItems[0].Tag;
                 FormEditPorlet formEditPorlet = new FormEditPorlet(portletInfo, repositoryName, contentID);
                 formEditPorlet.ShowDialog();
             }
@@ -162,9 +162,9 @@ namespace WBOffice4.Forms
 
         private void toolStripButtonSeePage_Click(object sender, EventArgs e)
         {
-            if (this.listViewPages.SelectedItems.Count > 0 && this.listViewPages.SelectedItems[0].Tag is PortletInfo)
+            if (this.listViewPages.SelectedItems.Count > 0 && this.listViewPages.SelectedItems[0].Tag is ResourceInfo)
             {
-                PortletInfo portletInfo = (PortletInfo)this.listViewPages.SelectedItems[0].Tag;
+                ResourceInfo portletInfo = (ResourceInfo)this.listViewPages.SelectedItems[0].Tag;
                 Uri uri = OfficeApplication.OfficeDocumentProxy.WebAddress;
                 Uri url = new Uri(uri.Scheme + "://" + uri.Host + ":" + uri.Port + portletInfo.page.url);
                 FormPreview preview = new FormPreview(url,portletInfo.title);
@@ -174,9 +174,9 @@ namespace WBOffice4.Forms
 
         private void toolStripButtonDeletePage_Click(object sender, EventArgs e)
         {
-            if (this.listViewPages.SelectedItems.Count > 0 && this.listViewPages.SelectedItems[0].Tag is PortletInfo)
+            if (this.listViewPages.SelectedItems.Count > 0 && this.listViewPages.SelectedItems[0].Tag is ResourceInfo)
             {
-                PortletInfo portletInfo = (PortletInfo)this.listViewPages.SelectedItems[0].Tag;
+                ResourceInfo portletInfo = (ResourceInfo)this.listViewPages.SelectedItems[0].Tag;
                 OfficeApplication.OfficeDocumentProxy.deletePortlet(portletInfo);
             }
         }

@@ -5,7 +5,7 @@ using System.Text;
 using XmlRpcLibrary;
 namespace WBOffice4.Interfaces
 {
-    public interface IOfficeDocument : IXmlRpcProxy
+    interface IOfficeDocument : IXmlRpcProxy
     {
         [XmlRpcMethod("OfficeDocument.save")]
         String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values);
@@ -40,32 +40,32 @@ namespace WBOffice4.Interfaces
         [XmlRpcMethod("OfficeDocument.getVersions")]
         VersionInfo[] getVersions(String repositoryName, String contentId);
 
-        [XmlRpcMethod("OfficeDocument.publishToPortletContent")]
-        PortletInfo publishToPortletContent(String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage,PropertyInfo[] properties,String[] values);
+        [XmlRpcMethod("OfficeDocument.publishToResourceContent")]
+        ResourceInfo publishToResourceContent(String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage, PropertyInfo[] properties, String[] values);
 
-        [XmlRpcMethod("OfficeDocument.getPortletProperties")]
-        PropertyInfo[] getPortletProperties(String repositoryName, String contentID);
+        [XmlRpcMethod("OfficeDocument.getResourceProperties")]
+        PropertyInfo[] getResourceProperties(String repositoryName, String contentID);
 
         [XmlRpcMethod("OfficeDocument.getContentProperties")]
         PropertyInfo[] getContentProperties(String repositoryName, String type);
 
         [XmlRpcMethod("OfficeDocument.getViewPropertyValue")]
-        String getViewPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo);
+        String getViewPropertyValue(ResourceInfo resourceInfo, PropertyInfo propertyInfo);
 
         [XmlRpcMethod("OfficeDocument.setViewPropertyValue")]
-        void setViewPropertyValue(PortletInfo portletInfo, PropertyInfo propertyInfo, String value);
+        void setViewPropertyValue(ResourceInfo resourceInfo, PropertyInfo propertyInfo, String value);
 
-        [XmlRpcMethod("OfficeDocument.setPortletProperties")]
-        void setPortletProperties(PortletInfo portletInfo, PropertyInfo propertyInfo, String value);
+        [XmlRpcMethod("OfficeDocument.setResourceProperties")]
+        void setResourceProperties(ResourceInfo resourceInfo, PropertyInfo propertyInfo, String value);
 
-        [XmlRpcMethod("OfficeDocument.listPortlets")]
-        PortletInfo[] listPortlets(String repositoryName, String contentid);
+        [XmlRpcMethod("OfficeDocument.listResources")]
+        ResourceInfo[] listResources(String repositoryName, String contentid);
 
         [XmlRpcMethod("OfficeDocument.deleteContentOfPage")]
-        void deleteContentOfPage(PortletInfo info);
+        void deleteContentOfPage(ResourceInfo info);
 
-        [XmlRpcMethod("OfficeDocument.activatePortlet")]
-        void activatePortlet(PortletInfo info, bool active);
+        [XmlRpcMethod("OfficeDocument.activateResource")]
+        void activateResource(ResourceInfo info, bool active);
 
         [XmlRpcMethod("OfficeDocument.getCategoryInfo")]
         CategoryInfo getCategoryInfo(String repositoryName, String contentid);
@@ -74,13 +74,13 @@ namespace WBOffice4.Interfaces
         void changeCategory(String repositoryName, String contentId, String newCategoryId);
 
         [XmlRpcMethod("OfficeDocument.changeVersionPorlet")]
-        void changeVersionPorlet(PortletInfo info, String newVersion);
+        void changeVersionPorlet(ResourceInfo info, String newVersion);
 
-        [XmlRpcMethod("OfficeDocument.deletePortlet")]
-        void deletePortlet(PortletInfo info);
+        [XmlRpcMethod("OfficeDocument.deleteResource")]
+        void deleteResource(ResourceInfo info);
 
         [XmlRpcMethod("OfficeDocument.getVersionToShow")]
-        String getVersionToShow(PortletInfo info);
+        String getVersionToShow(ResourceInfo info);
 
         [XmlRpcMethod("OfficeDocument.createPreview")]
         String createPreview(String repositoryName, String contentId, String version);
@@ -92,22 +92,22 @@ namespace WBOffice4.Interfaces
         int getNumberOfVersions(String repositoryName, String contentId);
 
         [XmlRpcMethod("OfficeDocument.getCalendars")]
-        CalendarInfo[] getCalendars(PortletInfo portletInfo);
+        CalendarInfo[] getCalendars(ResourceInfo resourceInfo);
 
         [XmlRpcMethod("OfficeDocument.updateCalendar")]
-        void updateCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo);
+        void updateCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo);
 
         [XmlRpcMethod("OfficeDocument.insertCalendar")]
-        CalendarInfo insertCalendar(PortletInfo portletInfo, String title, String xml);
+        CalendarInfo insertCalendar(ResourceInfo resourceInfo, String title, String xml);
 
         [XmlRpcMethod("OfficeDocument.deleteCalendar")]
-        void deleteCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo);
+        void deleteCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo);
 
         [XmlRpcMethod("OfficeDocument.activeCalendar")]
-        void activeCalendar(PortletInfo portletInfo, CalendarInfo calendarInfo, bool active);
+        void activeCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo, bool active);
 
         [XmlRpcMethod("OfficeDocument.updatePorlet")]
-        void updatePorlet(PortletInfo portletInfo);
+        void updatePorlet(ResourceInfo resourceInfo);
 
         [XmlRpcMethod("OfficeDocument.deleteVersionOfContent")]
         void deleteVersionOfContent(String repositoryName, String contentId, String versionName);

@@ -108,7 +108,7 @@
     <Compile Include="Interfaces\ContentType.cs" />
     <Compile Include="Interfaces\IOfficeApplication.cs" />
     <Compile Include="Interfaces\IOfficeDocument.cs" />
-    <Compile Include="Interfaces\PortletInfo.cs" />
+    <Compile Include="Interfaces\ResourceInfo.cs" />
     <Compile Include="Interfaces\PropertyInfo.cs" />
     <Compile Include="Interfaces\VersionInfo.cs" />
     <Compile Include="Interfaces\WebPageInfo.cs" />
@@ -426,6 +426,7 @@
     <Compile Include="Interfaces\PageInfo.cs" />
     <Compile Include="Interfaces\RepositoryInfo.cs" />
     <Compile Include="Interfaces\SiteInfo.cs" />
+    <Compile Include="Interfaces\Value.cs" />
     <Compile Include="Steps\ContentProperties.cs">
       <SubType>UserControl</SubType>
     </Compile>
