@@ -77,7 +77,7 @@ namespace TestProjectOffice2007
             double version = 0F; // TODO: Inicializar en un valor adecuado
             bool expected = false; // TODO: Inicializar en un valor adecuado
             bool actual;
-            actual = target.IsValidVersion(version);
+            actual = target.isValidVersion(version);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Compruebe la exactitud de este método de prueba.");
         }
@@ -95,7 +95,7 @@ namespace TestProjectOffice2007
             bool actual;
             WebSiteInfo site = new WebSiteInfo();
             WebPageInfo page = new WebPageInfo();
-            actual = target.existsPage(site,page,id);
+            actual = target.existsPage(site,page.id);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Compruebe la exactitud de este método de prueba.");
         }
@@ -133,7 +133,7 @@ namespace TestProjectOffice2007
         {
             IOfficeApplication target = CreateIOfficeApplication(); // TODO: Inicializar en un valor adecuado
             string newPassword = string.Empty; // TODO: Inicializar en un valor adecuado
-            target.ChangePassword(newPassword);
+            target.changePassword(newPassword);
             Assert.Inconclusive("Un método que no devuelve ningún valor no se puede comprobar.");
         }
 
