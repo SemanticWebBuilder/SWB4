@@ -37,7 +37,7 @@ namespace WBOffice4.Forms
                 this.textBoxNewPassword.Focus();
                 return;
             }
-            OfficeApplication.OfficeApplicationProxy.ChangePassword(this.textBoxNewPassword.Text.Trim());
+            OfficeApplication.OfficeApplicationProxy.changePassword(this.textBoxNewPassword.Text.Trim());
             OfficeApplication.OfficeApplicationProxy.Credentials.Password = this.textBoxNewPassword.Text.Trim();
             OfficeApplication.OfficeDocumentProxy.Credentials.Password = this.textBoxNewPassword.Text.Trim();
             this.Close();

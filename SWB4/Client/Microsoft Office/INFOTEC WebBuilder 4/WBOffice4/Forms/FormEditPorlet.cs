@@ -50,7 +50,7 @@ namespace WBOffice4.Forms
         {
             grid.ToolbarVisible = false;
             grid.Dock = DockStyle.Fill;
-            PropertyInfo[] props = OfficeApplication.OfficeDocumentProxy.getPortletProperties(repositoryName, contentID);
+            PropertyInfo[] props = OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
             obj = TypeFactory.getObject(props, "Propiedades de presentación");
             foreach (PropertyInfo prop in props)
             {
@@ -126,7 +126,7 @@ namespace WBOffice4.Forms
             String[] values = null;
             if (obj != null)
             {
-                properties = OfficeApplication.OfficeDocumentProxy.getPortletProperties(repositoryName, contentID);
+                properties = OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
                 values = TypeFactory.getValues(properties,obj);
                 try
                 {
