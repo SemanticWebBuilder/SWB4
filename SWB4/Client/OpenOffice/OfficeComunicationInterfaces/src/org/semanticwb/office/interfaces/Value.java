@@ -5,22 +5,13 @@
 
 package org.semanticwb.office.interfaces;
 
-
 /**
  *
  * @author victor.lorenzana
  */
-public class PropertyInfo {
+public class Value {
+    public String key;
     public String title;
-    public String type;
-    public boolean isRequired;
-    public String id;
-    public Value[] values;
-    @Override
-    public String toString()
-    {
-        return title;
-    }
 
     @Override
     public boolean equals(Object obj)
@@ -33,8 +24,8 @@ public class PropertyInfo {
         {
             return false;
         }
-        final PropertyInfo other = (PropertyInfo) obj;
-        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id))
+        final Value other = (Value) obj;
+        if ((this.key == null) ? (other.key != null) : !this.key.equals(other.key))
         {
             return false;
         }
@@ -44,14 +35,15 @@ public class PropertyInfo {
     @Override
     public int hashCode()
     {
-        int hash = 5;
-        hash = 41 * hash + (this.id != null ? this.id.hashCode() : 0);
+        int hash = 7;
+        hash = 67 * hash + (this.key != null ? this.key.hashCode() : 0);
         return hash;
     }
 
-   
+    @Override
+    public String toString()
+    {
+        return title;
+    }
 
-
-    
-    
 }
