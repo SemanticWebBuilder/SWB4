@@ -188,12 +188,13 @@
     public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds) throws JSONException
     {
         SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
+        String pf=node.getPropertyFilter();
         JSONObject jobj=getNode("HN|"+obj.getURI()+"|"+node.getURI(), node.getDisplayTitle(lang), "HerarquicalNode", node.getIconClass());
         arr.put(jobj);
 
         JSONArray childs=new JSONArray();
         jobj.putOpt("children", childs);
-        Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang),node.getPropertyFilter());
+        Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang),pf);
 
         //System.out.println("obj:"+obj.getId());
         //drop acceptance
@@ -204,6 +205,7 @@
         JSONArray menus=new JSONArray();
         jobj.putOpt("menus", menus);
         String url=SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI();
+        if(pf!=null)url+="&"+pf;
         menus.put(getMenuItem("Agregar "+cls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", url,"Agregar "+cls.getDisplayName(lang))));
         dropacc.put(cls.getClassId());
         //Iterator<SemanticClass> it2=cls.listSubClasses();
