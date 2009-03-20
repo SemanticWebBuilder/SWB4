@@ -42,11 +42,11 @@ public class PowerPointResource extends GenericAdmResource
     {
         try
         {
-            out.write("<iframe src=\"" + path + "\">"+paramReq.getLocaleString("frameNotsupport")+"</iframe>");
+            out.write("<iframe frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">"+paramReq.getLocaleString("frameNotsupport")+"</iframe>");
         }
         catch(Exception e)
         {
-            out.write("<iframe src=\"" + path + "\">This navigator does not support iframe</iframe>");
+            out.write("<iframe frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">This navigator does not support iframe</iframe>");
         }
     }
 
