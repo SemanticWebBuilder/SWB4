@@ -5,7 +5,7 @@ using System.Text;
 using XmlRpcLibrary;
 namespace WBOffice4.Interfaces
 {
-    interface IOfficeDocument : IXmlRpcProxy
+    public interface IOfficeDocument : IXmlRpcProxy
     {
         [XmlRpcMethod("OfficeDocument.save")]
         String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values);

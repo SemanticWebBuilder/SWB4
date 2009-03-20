@@ -35,7 +35,7 @@ namespace WBOffice4
             {
                 if (officedocument == null)
                 {
-                    if (OfficeApplicationProxy.IsValidVersion(version))
+                    if (OfficeApplicationProxy.isValidVersion(version))
                     {
                         if (_MenuListener != null)
                         {
@@ -71,7 +71,7 @@ namespace WBOffice4
                         officeApplication.ProxyPort = int.Parse(configuration.ProxyPort,CultureInfo.InvariantCulture);
                         officeApplication.ProxyServer = new Uri(configuration.ProxyServer);
                     }
-                    if (!officeApplication.IsValidVersion(version))
+                    if (!officeApplication.isValidVersion(version))
                     {
                         throw new WBAlertException("La versión entre el publicador y el servidor no son compatibles");
                     }
@@ -145,7 +145,7 @@ namespace WBOffice4
                 DialogResult result=form.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    OfficeApplicationProxy.ChangePassword(form.NewPassword);
+                    OfficeApplicationProxy.changePassword(form.NewPassword);
                     userInfo.ChangePassword(form.NewPassword);
                 }
             }
@@ -239,7 +239,7 @@ namespace WBOffice4
             {
                 try
                 {
-                    OfficeApplicationProxy.IsValidVersion(version);
+                    OfficeApplicationProxy.isValidVersion(version);
                     if (MenuListener != null)
                     {
                         MenuListener.LogOn();
