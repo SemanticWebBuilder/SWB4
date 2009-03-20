@@ -68,7 +68,7 @@ namespace WBOffice4.Forms
         private void loadPorlets()
         {
             listViewPages.Items.Clear();
-            foreach (ResourceInfo portletInfo in OfficeApplication.OfficeDocumentProxy.listPortlets(repositoryName, contentID))
+            foreach (ResourceInfo portletInfo in OfficeApplication.OfficeDocumentProxy.listResources(repositoryName, contentID))
             {
                 VersionInfo selected = new VersionInfo();
                 selected.nameOfVersion = portletInfo.version;
@@ -177,7 +177,7 @@ namespace WBOffice4.Forms
             if (this.listViewPages.SelectedItems.Count > 0 && this.listViewPages.SelectedItems[0].Tag is ResourceInfo)
             {
                 ResourceInfo portletInfo = (ResourceInfo)this.listViewPages.SelectedItems[0].Tag;
-                OfficeApplication.OfficeDocumentProxy.deletePortlet(portletInfo);
+                OfficeApplication.OfficeDocumentProxy.deleteResource(portletInfo);
             }
         }
 
