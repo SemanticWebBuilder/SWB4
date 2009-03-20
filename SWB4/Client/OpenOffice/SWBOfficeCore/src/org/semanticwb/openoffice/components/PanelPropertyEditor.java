@@ -74,15 +74,17 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 PropertyInfo propertyInfo = (PropertyInfo) prop;
                 if (propertyInfo.type.equalsIgnoreCase("date"))
                 {
-                    DateEditor editor=new DateEditor(row,column,DateTypeFormat.DATE);
+                    DateEditor editor = new DateEditor(row, column, DateTypeFormat.DATE);
                     editor.addChangeListener(this);
-                    if(value!=null)
+                    if (value != null)
                     {
                         try
                         {
                             editor.setValue(value);
                         }
-                        catch(Exception e){}
+                        catch (Exception e)
+                        {
+                        }
                     }
                     else
                     {
@@ -92,15 +94,17 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 }
                 if (propertyInfo.type.equalsIgnoreCase("time"))
                 {
-                    DateEditor editor=new DateEditor(row,column,DateTypeFormat.TIME);
+                    DateEditor editor = new DateEditor(row, column, DateTypeFormat.TIME);
                     editor.addChangeListener(this);
-                    if(value!=null)
+                    if (value != null)
                     {
                         try
                         {
                             editor.setValue(value);
                         }
-                        catch(Exception e){}
+                        catch (Exception e)
+                        {
+                        }
                     }
                     else
                     {
@@ -110,15 +114,17 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 }
                 if (propertyInfo.type.equalsIgnoreCase("datetime"))
                 {
-                    DateEditor editor=new DateEditor(row,column,DateTypeFormat.DATE_TIME);
+                    DateEditor editor = new DateEditor(row, column, DateTypeFormat.DATE_TIME);
                     editor.addChangeListener(this);
-                    if(value!=null)
+                    if (value != null)
                     {
                         try
                         {
                             editor.setValue(value);
                         }
-                        catch(Exception e){}
+                        catch (Exception e)
+                        {
+                        }
                     }
                     else
                     {
@@ -172,6 +178,32 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                     }
 
                     return integerEditor;
+                }
+                if (propertyInfo.type.equalsIgnoreCase("decimal"))
+                {
+                    DecimalEditor floatEditor = new DecimalEditor(row, column);
+                    floatEditor.addChangeListener(this);
+                    floatEditor.addKeyListener(this);
+                    if (value == null)
+                    {
+                        floatEditor.setValue(0);
+                    }
+                    else
+                    {
+                        int ivalue = 0;
+                        try
+                        {
+                            ivalue = Integer.parseInt(value.toString());
+
+                        }
+                        catch (NumberFormatException nfe)
+                        {
+                            nfe.printStackTrace();
+                        }
+                        floatEditor.setValue(ivalue);
+                    }
+
+                    return floatEditor;
                 }
                 if (propertyInfo.type.equalsIgnoreCase("string"))
                 {
@@ -246,6 +278,11 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 IntegerEditor integerEditor = (IntegerEditor) e.getSource();
                 jTableProperties.setValueAt(integerEditor.getValue(), integerEditor.row, integerEditor.col);
             }
+            if (e.getSource() instanceof DecimalEditor)
+            {
+                DecimalEditor floatEditor = (DecimalEditor) e.getSource();
+                jTableProperties.setValueAt(floatEditor.getValue(), floatEditor.row, floatEditor.col);
+            }
             if (e.getSource() instanceof StringEditor)
             {
                 StringEditor integerEditor = (StringEditor) e.getSource();
@@ -259,7 +296,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
             if (e.getSource() instanceof MultiValueEditor)
             {
                 MultiValueEditor multiValueEditor = (MultiValueEditor) e.getSource();
-                DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();                
+                DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
                 model.setValueAt(multiValueEditor.getSelectedItem(), multiValueEditor.row, multiValueEditor.col);
             }
 
@@ -344,9 +381,9 @@ public class PanelPropertyEditor extends javax.swing.JPanel
         {
             PropertyInfo prop = (PropertyInfo) jTableProperties.getModel().getValueAt(i, 0);
             String value;
-            if(jTableProperties.getModel().getValueAt(i, 1) instanceof Value)
+            if (jTableProperties.getModel().getValueAt(i, 1) instanceof Value)
             {
-                value=((Value)jTableProperties.getModel().getValueAt(i, 1)).key;
+                value = ((Value) jTableProperties.getModel().getValueAt(i, 1)).key;
             }
             else
             {
@@ -370,14 +407,16 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 PropertyInfo propertyInfo = (PropertyInfo) prop;
                 if (propertyInfo.type.equalsIgnoreCase("date"))
                 {
-                    DateEditor editor=new DateEditor(row,column,DateTypeFormat.DATE);
-                    if(value!=null)
+                    DateEditor editor = new DateEditor(row, column, DateTypeFormat.DATE);
+                    if (value != null)
                     {
                         try
                         {
                             editor.setValue(value);
                         }
-                        catch(Exception e){}
+                        catch (Exception e)
+                        {
+                        }
                     }
                     else
                     {
@@ -387,14 +426,16 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 }
                 if (propertyInfo.type.equalsIgnoreCase("time"))
                 {
-                    DateEditor editor=new DateEditor(row,column,DateTypeFormat.TIME);                    
-                    if(value!=null)
+                    DateEditor editor = new DateEditor(row, column, DateTypeFormat.TIME);
+                    if (value != null)
                     {
                         try
                         {
                             editor.setValue(value);
                         }
-                        catch(Exception e){}
+                        catch (Exception e)
+                        {
+                        }
                     }
                     else
                     {
@@ -404,14 +445,16 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 }
                 if (propertyInfo.type.equalsIgnoreCase("datetime"))
                 {
-                    DateEditor editor=new DateEditor(row,column,DateTypeFormat.DATE_TIME);
-                    if(value!=null)
+                    DateEditor editor = new DateEditor(row, column, DateTypeFormat.DATE_TIME);
+                    if (value != null)
                     {
                         try
                         {
                             editor.setValue(value);
                         }
-                        catch(Exception e){}
+                        catch (Exception e)
+                        {
+                        }
                     }
                     else
                     {
@@ -438,6 +481,30 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                         }
                     }
                     return panel;
+                }
+                if (propertyInfo.type.equalsIgnoreCase("decimal"))
+                {
+                    DecimalEditor floatEditor = new DecimalEditor(row, column);
+                    if (value == null)
+                    {
+                        floatEditor.setValue(0);
+                    }
+                    else
+                    {
+                        int ivalue = 0;
+                        try
+                        {
+                            ivalue = Integer.parseInt(value.toString());
+
+                        }
+                        catch (NumberFormatException nfe)
+                        {
+                            nfe.printStackTrace();
+                        }
+                        floatEditor.setValue(ivalue);
+                    }
+
+                    return floatEditor;
                 }
                 if (propertyInfo.type.equalsIgnoreCase("integer"))
                 {

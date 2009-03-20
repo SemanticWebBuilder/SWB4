@@ -10,12 +10,12 @@ import javax.swing.JSpinner;
  *
  * @author victor.lorenzana
  */
-public class FloatEditor extends JSpinner
+public class DecimalEditor extends JSpinner
 {
 
     int row, col;
 
-    public FloatEditor(int row, int col)
+    public DecimalEditor(int row, int col)
     {
         this.row = row;
         this.col = col;
