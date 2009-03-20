@@ -670,7 +670,7 @@ public class SWBAWebPageContents extends GenericResource {
             fmgr.addHiddenParameter("sproptype", idptype);
             fmgr.addHiddenParameter("sobj", sobj);
             fmgr.addHiddenParameter("isGlobal", Boolean.toString(isGlobal));
-            out.println(fmgr.renderForm());
+            out.println(fmgr.renderForm(request));
         }
 
         if(request.getParameter("preview")!=null&&request.getParameter("preview").equals("true"))

@@ -1,5 +1,6 @@
 package org.semanticwb.portal;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,6 +55,7 @@ public class SWBFormMgr
     private PropertyGroup m_general=null;
 
     private HashMap<String, String> hidden=null;
+    //private ArrayList hiddenProps=null;
     
     private HashMap<PropertyGroup, TreeSet> groups=null;
     
@@ -92,6 +94,7 @@ public class SWBFormMgr
         //System.out.println("m_fview:"+m_fview+" m_propmap:"+m_propmap);
         groups=new HashMap();
         hidden=new HashMap();
+        //hiddenProps=new ArrayList();
         Iterator<SemanticProperty> it=m_cls.listProperties();
         while(it.hasNext())
         {
@@ -141,23 +144,27 @@ public class SWBFormMgr
             }
         }else
         {
-            if(!hidden)
+            if(m_mode.equals(MODE_CREATE))      //solo se agregan las requeridas
             {
-                if(m_mode.equals(MODE_CREATE))      //solo se agregan las requeridas
-                {
-                    if(required)
-                    {
-                        addProp=true;
-                    }
-                }else
+                if(required)
                 {
                     addProp=true;
                 }
+            }else
+            {
+                addProp=true;
             }
         }
         if(addProp)
         {
-            props.add(prop);
+//            if(!hidden)
+//            {
+                props.add(prop);
+//            }else
+//            {
+//                hiddenProps.add(prop);
+//            }
+
             //System.out.println("put:"+grp);
             if(createGroup)groups.put(grp, props);
         }
@@ -195,15 +202,15 @@ public class SWBFormMgr
         this.m_type = type;
     }      
     
-    public String renderForm()
+    public String renderForm(HttpServletRequest request)
     {
         String ret="";
         if(m_type.equals(TYPE_XHTML))
         {
-            ret=renderXHTMLForm();
+            ret=renderXHTMLForm(request);
         }else if(m_type.equals(TYPE_IPHONE))
         {
-            ret=renderIphoneForm();
+            ret=renderIphoneForm(request);
         }
         return ret;
     }
@@ -241,35 +248,65 @@ public class SWBFormMgr
         return ret;
     }
     
-    private void renderProp(StringBuffer ret, SemanticProperty prop, FormElement ele)
+    private void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, FormElement ele)
     {
         String label=null;
         String element=null;
-        try
+        boolean hidden=false;
+        SemanticObject dispobj=prop.getDisplayProperty();
+        if(dispobj!=null)
         {
-            if(m_propmap!=null)
-            {
-                label=ele.renderLabel(m_obj, prop, m_type, m_propmap.get(prop), m_lang);
-                element=ele.renderElement(m_obj, prop, m_type, m_propmap.get(prop), m_lang);
-            }else
-            {
-                label=ele.renderLabel(m_obj, prop, m_type, m_mode, m_lang);
-                element=ele.renderElement(m_obj, prop, m_type, m_mode, m_lang);
-            }
-        }catch(Exception e){log.error("Element:"+ele,e);}
-        if(element!=null && element.length()>0)
+            DisplayProperty disp=new DisplayProperty(dispobj);
+            hidden=disp.isHidden();
+        }
+        if(!hidden)
         {
-            if(!m_mode.equals(MODE_CREATE))
+            try
             {
-                ret.append("<tr><td width=\"200px\" align=\"right\">");
-            }else
+                if(m_propmap!=null)
+                {
+                    label=ele.renderLabel(request, m_obj, prop, m_type, m_propmap.get(prop), m_lang);
+                    element=ele.renderElement(request, m_obj, prop, m_type, m_propmap.get(prop), m_lang);
+                }else
+                {
+                    label=ele.renderLabel(request, m_obj, prop, m_type, m_mode, m_lang);
+                    element=ele.renderElement(request, m_obj, prop, m_type, m_mode, m_lang);
+                }
+            }catch(Exception e){log.error("Element:"+ele,e);}
+            if(element!=null && element.length()>0)
             {
-                ret.append("<tr><td align=\"right\">");
+                if(!m_mode.equals(MODE_CREATE))
+                {
+                    ret.append("<tr><td width=\"200px\" align=\"right\">");
+                }else
+                {
+                    ret.append("<tr><td align=\"right\">");
+                }
+                ret.append(label.replaceAll(" ", "&nbsp;"));
+                ret.append("</td><td>");
+                ret.append(element);
+                ret.append("</td></tr>");
             }
-            ret.append(label.replaceAll(" ", "&nbsp;"));
-            ret.append("</td><td>");
-            ret.append(element);
-            ret.append("</td></tr>");
+        }else
+        {
+            String name=prop.getName();
+            String value=request.getParameter(name);
+            //Solo si el valor pasa por parametro se agrega el hidden
+//            if(prop.isDataTypeProperty())
+//            {
+//                value=m_obj.getProperty(prop);
+//            }else
+//            {
+//                SemanticObject aux=m_obj.getObjectProperty(prop);
+//                if(aux!=null)
+//                {
+//                    value=aux.getURI();
+//                }
+//            }
+            if(value!=null)
+            {
+                ret.append("    <input type=\"hidden\" name=\""+name+"\" value=\""+value+"\"/>");
+            }
         }
     }
 
@@ -288,7 +325,7 @@ public class SWBFormMgr
     }
 
     
-    public String renderXHTMLForm()
+    public String renderXHTMLForm(HttpServletRequest request)
     {
         StringBuffer ret=new StringBuffer();
         String frmname=getFormName();
@@ -327,7 +364,7 @@ public class SWBFormMgr
                 {
                     SemanticProperty prop=it.next();
                     FormElement ele=getFormElement(prop);
-                    renderProp(ret, prop,ele);
+                    renderProp(request, ret, prop,ele);
                 }
                 ret.append("	    </table>");
                 ret.append("	</fieldset>");
@@ -365,7 +402,7 @@ public class SWBFormMgr
                     {
                         ele.setAttribute("onkeyup", "dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()");
                     }
-                    renderProp(ret, prop, ele);
+                    renderProp(request, ret, prop, ele);
                 }
             }
             if(!m_cls.isAutogenId())
@@ -390,18 +427,27 @@ public class SWBFormMgr
         return ret.toString();
     }    
     
-    public String renderIphoneForm()
+    public String renderIphoneForm(HttpServletRequest request)
     {
-        //TODO
         return "";
     }        
     
 
-    
-    public String renderElement(String propName)
+    public String renderElement(HttpServletRequest request, String propName, String mode)
     {
-        //TODO
-        return null;
+        String ret=null;
+        if(m_obj!=null)
+        {
+            SemanticProperty prop=m_obj.getSemanticClass().getProperty(propName);
+            FormElement ele=getFormElement(prop);
+            ret=ele.renderElement(request, m_obj, prop, m_type, mode, m_lang);
+        }
+        return ret;
+    }
+
+    public String renderElement(HttpServletRequest request, String propName)
+    {
+        return renderElement(request, propName,m_mode);
     }
     
     private FormElement getFormElement(SemanticProperty prop)
@@ -428,21 +474,21 @@ public class SWBFormMgr
         ele.process(request, m_obj, prop, m_type, mode, m_lang);
     }
     
-    public String renderLabel(SemanticProperty prop, String mode)
+    public String renderLabel(HttpServletRequest request, SemanticProperty prop, String mode)
     {
         String ret=null;
         //System.out.println("prop:"+prop+" mode:"+mode);
         FormElement ele=getFormElement(prop);
-        ret=ele.renderLabel(m_obj, prop, m_type, mode, m_lang);
+        ret=ele.renderLabel(request, m_obj, prop, m_type, mode, m_lang);
         return ret;
     }
 
-    public String renderElement(SemanticProperty prop, String mode)
+    public String renderElement(HttpServletRequest request, SemanticProperty prop, String mode)
     {
         String ret=null;
         //System.out.println("prop:"+prop+" mode:"+mode);
         FormElement ele=getFormElement(prop);
-        ret=ele.renderElement(m_obj, prop, m_type, mode, m_lang);
+        ret=ele.renderElement(request, m_obj, prop, m_type, mode, m_lang);
         return ret;
     }
     
