@@ -16,10 +16,10 @@ namespace WBOffice4.Forms
     {
         private Object obj;
         private PropertyGrid grid = new PropertyGrid();
-        private PortletInfo pageInformation;
+        private ResourceInfo pageInformation;
         private String repositoryName, contentID;
         List<CalendarInfo> added = new List<CalendarInfo>();
-        public FormEditPorlet(PortletInfo pageInformation, String repositoryName, String contentID)
+        public FormEditPorlet(ResourceInfo pageInformation, String repositoryName, String contentID)
         {
             InitializeComponent();
             this.pageInformation = pageInformation;

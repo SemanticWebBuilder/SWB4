@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WBOffice4.Interfaces
 {
-    public class PortletInfo
+    public class ResourceInfo
     {
         public String id;
         public String title;

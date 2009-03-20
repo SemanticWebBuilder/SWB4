@@ -5,19 +5,20 @@ using System.Text;
 using XmlRpcLibrary;
 namespace WBOffice4.Interfaces
 {
-    public interface IOfficeApplication : IXmlRpcProxy
+    interface IOfficeApplication : IXmlRpcProxy
     {
         //static int version = "1.0";
         [XmlRpcMethod("OfficeApplication.isValidVersion")]
-        bool IsValidVersion(double version);
+        bool isValidVersion(double version);
+
         [XmlRpcMethod("OfficeApplication.changePassword")]
-        void ChangePassword(String newPassword);
+        void changePassword(String newPassword);
 
         [XmlRpcMethod("OfficeApplication.createPage")]
         void createPage(WebPageInfo page, String pageid, String title, String description);
 
         [XmlRpcMethod("OfficeApplication.existPage")]
-        bool existsPage(WebSiteInfo site, WebPageInfo page, String pageid);
+        bool existsPage(WebSiteInfo site, String pageid);
 
         [XmlRpcMethod("OfficeApplication.createCategory")]
         String createCategory(String repositoryName, String title, String description);
@@ -36,6 +37,9 @@ namespace WBOffice4.Interfaces
 
         [XmlRpcMethod("OfficeApplication.getCategories")]
         CategoryInfo[] getCategories(String repositoryName);
+
+        [XmlRpcMethod("OfficeApplication.getAllCategories")]
+        CategoryInfo[] getAllCategories(String repositoryName);
 
         [XmlRpcMethod("OfficeApplication.getCategories")]
         CategoryInfo[] getCategories(String repositoryName, String categoryId);
@@ -58,10 +62,19 @@ namespace WBOffice4.Interfaces
         [XmlRpcMethod("OfficeApplication.getPages")]
         WebPageInfo[] getPages(WebPageInfo webpage);
 
-        [XmlRpcMethod("OfficeApplication.getAllCategories")]
-        CategoryInfo[] getAllCategories(String repositoryName);
-
         [XmlRpcMethod("OfficeApplication.getLimitOfVersions")]
         int getLimitOfVersions();
+
+        [XmlRpcMethod("OfficeApplication.getContentsForAuthorize")]
+        FlowContentInformation[] getContentsForAuthorize();
+
+        [XmlRpcMethod("OfficeApplication.sendContentToAuthorize")]
+        void sendContentToAuthorize(ResourceInfo resourceInfo, String message);
+
+        [XmlRpcMethod("OfficeApplication.authorize")]
+        void authorize(ResourceInfo resourceInfo, String message);
+
+        [XmlRpcMethod("OfficeApplication.reject")]
+        void reject(ResourceInfo resourceInfo, String message);
     }
 }
