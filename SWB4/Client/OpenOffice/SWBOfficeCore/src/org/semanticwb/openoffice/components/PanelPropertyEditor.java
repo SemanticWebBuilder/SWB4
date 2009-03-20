@@ -32,6 +32,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import org.semanticwb.office.interfaces.PropertyInfo;
+import org.semanticwb.office.interfaces.Value;
 
 /**
  *
@@ -212,7 +213,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                     else
                     {
                         MultiValueEditor multiValueEditor = new MultiValueEditor(row, column);
-                        for (String valueToCombo : propertyInfo.values)
+                        for (Value valueToCombo : propertyInfo.values)
                         {
                             multiValueEditor.addItem(valueToCombo);
                         }
@@ -258,9 +259,8 @@ public class PanelPropertyEditor extends javax.swing.JPanel
             if (e.getSource() instanceof MultiValueEditor)
             {
                 MultiValueEditor multiValueEditor = (MultiValueEditor) e.getSource();
-                DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
-                String valueSelected = multiValueEditor.getSelectedItem().toString();
-                model.setValueAt(valueSelected, multiValueEditor.row, multiValueEditor.col);
+                DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();                
+                model.setValueAt(multiValueEditor.getSelectedItem(), multiValueEditor.row, multiValueEditor.col);
             }
 
         }
@@ -343,7 +343,15 @@ public class PanelPropertyEditor extends javax.swing.JPanel
         for (int i = 0; i < rows; i++)
         {
             PropertyInfo prop = (PropertyInfo) jTableProperties.getModel().getValueAt(i, 0);
-            String value = jTableProperties.getModel().getValueAt(i, 1).toString();
+            String value;
+            if(jTableProperties.getModel().getValueAt(i, 1) instanceof Value)
+            {
+                value=((Value)jTableProperties.getModel().getValueAt(i, 1)).key;
+            }
+            else
+            {
+                value = jTableProperties.getModel().getValueAt(i, 1).toString();
+            }
             properties.put(prop, value);
         }
         return properties;
@@ -473,7 +481,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                     else
                     {
                         MultiValueEditor multiValueEditor = new MultiValueEditor(row, column);
-                        for (String valueToCombo : propertyInfo.values)
+                        for (Value valueToCombo : propertyInfo.values)
                         {
                             multiValueEditor.addItem(valueToCombo);
                         }
