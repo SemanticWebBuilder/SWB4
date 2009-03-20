@@ -12,6 +12,8 @@ package org.semanticwb.openoffice.components;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -21,11 +23,7 @@ import java.util.Map;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -47,13 +45,14 @@ public class PanelPropertyEditor extends javax.swing.JPanel
         initComponents();
     }
 
-    class PropertyEditor extends AbstractCellEditor implements TableCellEditor, ChangeListener, KeyListener
+    class PropertyEditor extends AbstractCellEditor implements TableCellEditor, ChangeListener, KeyListener, ActionListener
     {
 
         public PropertyEditor()
         {
         }
 
+        @Override
         public Object getCellEditorValue()
         {
             int row = jTableProperties.getEditingRow();
@@ -62,6 +61,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
             return obj;
         }
 
+        @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
                 boolean isSelected, int row, int column)
         {
@@ -69,8 +69,8 @@ public class PanelPropertyEditor extends javax.swing.JPanel
             Object prop = table.getModel().getValueAt(row, 0);
             if (prop instanceof PropertyInfo)
             {
-                PropertyInfo PropertyInfo = (PropertyInfo) prop;
-                if (PropertyInfo.type.equalsIgnoreCase("boolean"))
+                PropertyInfo propertyInfo = (PropertyInfo) prop;
+                if (propertyInfo.type.equalsIgnoreCase("boolean"))
                 {
                     BooleanEditor jCheckBox = new BooleanEditor(row, column);
                     jCheckBox.setBackground(new Color(255, 255, 255));
@@ -91,7 +91,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                     }
                     return panel;
                 }
-                if (PropertyInfo.type.equalsIgnoreCase("integer"))
+                if (propertyInfo.type.equalsIgnoreCase("integer"))
                 {
                     IntegerEditor integerEditor = new IntegerEditor(row, column);
                     integerEditor.addChangeListener(this);
@@ -117,43 +117,67 @@ public class PanelPropertyEditor extends javax.swing.JPanel
 
                     return integerEditor;
                 }
-                if (PropertyInfo.type.equalsIgnoreCase("string"))
+                if (propertyInfo.type.equalsIgnoreCase("string"))
                 {
-                    StringEditor stringEditor = new StringEditor(row, column);
-                    stringEditor.addKeyListener(this);
-                    stringEditor.addFocusListener(new FocusListener()
+                    if (propertyInfo.values == null || propertyInfo.values.length == 0)
                     {
-
-                        public void focusGained(FocusEvent e)
+                        StringEditor stringEditor = new StringEditor(row, column);
+                        stringEditor.addKeyListener(this);
+                        stringEditor.addFocusListener(new FocusListener()
                         {
-                            if (e.getSource() instanceof StringEditor)
+
+                            @Override
+                            public void focusGained(FocusEvent e)
                             {
-                                StringEditor stringEditor = (StringEditor) e.getSource();
-                                stringEditor.setSelectionStart(0);
-                                stringEditor.setSelectionEnd(stringEditor.getText().length());
+                                if (e.getSource() instanceof StringEditor)
+                                {
+                                    StringEditor stringEditor = (StringEditor) e.getSource();
+                                    stringEditor.setSelectionStart(0);
+                                    stringEditor.setSelectionEnd(stringEditor.getText().length());
+                                }
                             }
-                        }
 
-                        public void focusLost(FocusEvent e)
+                            @Override
+                            public void focusLost(FocusEvent e)
+                            {
+                            }
+                        });
+
+                        if (value == null)
                         {
+                            stringEditor.setText("");
                         }
-                    });
+                        else
+                        {
+                            stringEditor.setText(value.toString());
+                        }
 
-                    if (value == null)
-                    {
-                        stringEditor.setText("");
+                        return stringEditor;
                     }
                     else
                     {
-                        stringEditor.setText(value.toString());
+                        MultiValueEditor multiValueEditor = new MultiValueEditor(row, column);
+                        for (String valueToCombo : propertyInfo.values)
+                        {
+                            multiValueEditor.addItem(valueToCombo);
+                        }
+                        if (value != null)
+                        {
+                            multiValueEditor.setSelectedItem(value);
+                        }
+                        else
+                        {
+                            multiValueEditor.setSelectedIndex(0);
+                        }
+                        multiValueEditor.addActionListener(this);
+                        return multiValueEditor;
                     }
-
-                    return stringEditor;
                 }
             }
             return null;
         }
 
+        @Override
         public void stateChanged(ChangeEvent e)
         {
             if (e.getSource() instanceof BooleanEditor)
@@ -174,14 +198,17 @@ public class PanelPropertyEditor extends javax.swing.JPanel
 
         }
 
+        @Override
         public void keyTyped(KeyEvent e)
         {
         }
 
+        @Override
         public void keyPressed(KeyEvent e)
         {
         }
 
+        @Override
         public void keyReleased(KeyEvent e)
         {
             if (e.getSource() instanceof IntegerEditor)
@@ -207,6 +234,18 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 jTableProperties.setValueAt(integerEditor.getText(), integerEditor.row, integerEditor.col);
             }
         }
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if (e.getSource() instanceof MultiValueEditor)
+            {
+                MultiValueEditor multiValueEditor = (MultiValueEditor) e.getSource();
+                DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
+                String valueSelected = multiValueEditor.getSelectedItem().toString();
+                model.setValueAt(valueSelected, multiValueEditor.row, multiValueEditor.col);
+            }
+        }
     }
 
     public void loadProperties(Map<PropertyInfo, Object> properties)
@@ -215,8 +254,8 @@ public class PanelPropertyEditor extends javax.swing.JPanel
         TableColumn col = jTableProperties.getColumnModel().getColumn(1);
         col.setCellEditor(new PropertyEditor());
         col.setCellRenderer(new PropertyRender());
-        int rows=model.getRowCount();
-        for(int i=0;i<rows;i++)
+        int rows = model.getRowCount();
+        for (int i = 0; i < rows; i++)
         {
             model.removeRow(0);
         }
@@ -229,8 +268,6 @@ public class PanelPropertyEditor extends javax.swing.JPanel
             model.addRow(data);
         }
     }
-
-    
 
     public Map<PropertyInfo, String> getProperties()
     {
@@ -248,6 +285,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
     class PropertyRender implements TableCellRenderer
     {
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column)
         {
@@ -314,45 +352,6 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 }
             }
             return null;
-        }
-    }
-
-    class BooleanEditor extends JCheckBox
-    {
-
-        int row, col;
-
-        public BooleanEditor(int row, int col)
-        {
-            this.row = row;
-            this.col = col;
-        }
-    }
-
-    class IntegerEditor extends JSpinner
-    {
-
-        int row, col;
-
-        public IntegerEditor(int row, int col)
-        {
-            this.row = row;
-            this.col = col;
-            SpinnerModel model = new SpinnerNumberModel(0, 0, 9999, 1);
-            this.setModel(model);
-            this.setEditor(new JSpinner.NumberEditor(this, "####"));
-        }
-    }
-
-    class StringEditor extends JTextField
-    {
-
-        int row, col;
-
-        public StringEditor(int row, int col)
-        {
-            this.row = row;
-            this.col = col;
         }
     }
 
