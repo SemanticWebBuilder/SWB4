@@ -19,26 +19,26 @@ public class GenericFormElement extends FormElementBase
     }
     
     @Override
-    public String renderElement(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         if(obj==null)obj=new SemanticObject();
         String ret="";
         if(type.endsWith("iphone"))
         {
-            ret=renderIphone(obj, prop, type, mode, lang);
+            ret=renderIphone(request,obj, prop, type, mode, lang);
         }else
         {
-            ret=renderXHTML(obj, prop, type, mode, lang);
+            ret=renderXHTML(request, obj, prop, type, mode, lang);
         }
         return ret;
     }    
     
-    public String renderIphone(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public String renderIphone(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         return "";
     }
 
-    public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         String ret="";
         String name=prop.getName();
@@ -90,7 +90,8 @@ public class GenericFormElement extends FormElementBase
         {
             if(selectValues!=null)
             {
-                String value=obj.getProperty(prop);
+                String value=request.getParameter(prop.getName());
+                if(value==null)value=obj.getProperty(prop);
                 ret="<span>";
                 StringTokenizer st=new StringTokenizer(selectValues,"|");
                 while(st.hasMoreTokens())
@@ -113,7 +114,11 @@ public class GenericFormElement extends FormElementBase
             }else if(prop.isBoolean())
             {
                 String checked="";
-                boolean value=obj.getBooleanProperty(prop);
+                boolean value=false;
+                String aux=request.getParameter(prop.getName());
+                if(aux!=null)value=Boolean.parseBoolean(aux);
+                else value=obj.getBooleanProperty(prop);
+                
                 if(value)checked="checked=\"checked\"";
                 ret="<input type=\"checkbox\" id_=\""+name+"\" name=\""+name+"\" "+checked
                     + " dojoType=\"dijit.form.CheckBox\""
@@ -125,12 +130,14 @@ public class GenericFormElement extends FormElementBase
                 + "/>";
             }else if(prop.isDateTime())
             {
-                String value=obj.getProperty(prop);
+                String value=request.getParameter(prop.getName());
+                if(value==null)value=obj.getProperty(prop);
                 if(value==null)value="";
                 ret="<span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
             }else if(prop.isInt() || prop.isLong())
             {
-                String value=obj.getProperty(prop);
+                String value=request.getParameter(prop.getName());
+                if(value==null)value=obj.getProperty(prop);
                 if(value==null)value="";
                 if(mode.equals("edit") || mode.equals("create") )
                 {
@@ -156,7 +163,8 @@ public class GenericFormElement extends FormElementBase
                 }
             }else
             {
-                String value=obj.getProperty(prop);
+                String value=request.getParameter(prop.getName());
+                if(value==null)value=obj.getProperty(prop);
                 if(value==null)value="";
                 if(mode.equals("edit") || mode.equals("create") )
                 {
@@ -182,7 +190,10 @@ public class GenericFormElement extends FormElementBase
             
             }else
             {
-                SemanticObject value=obj.getObjectProperty(prop);
+                SemanticObject value=null;
+                String aux=request.getParameter(prop.getName());
+                if(aux!=null)value=SemanticObject.createSemanticObject(aux);
+                else value=obj.getObjectProperty(prop);
                 ret="<span>";
                 if(value!=null)
                 {

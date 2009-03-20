@@ -1,5 +1,6 @@
 package org.semanticwb.model;
 
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -11,7 +12,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
     }
 
     @Override
-    public String renderElement(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         if (obj == null) {
             obj = new SemanticObject();
         }

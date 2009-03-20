@@ -2,6 +2,7 @@ package org.semanticwb.model;
 
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticClass;
@@ -16,26 +17,26 @@ public class SelectOne extends SelectOneBase
     }
 
     @Override
-    public String renderElement(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         if(obj==null)obj=new SemanticObject();
         String ret="";
 
         if(type.endsWith("iphone"))
         {
-            ret=renderIphone(obj, prop, type, mode, lang);
+            ret=renderIphone(request, obj, prop, type, mode, lang);
         }else
         {
-            ret=renderXHTML(obj, prop, type, mode, lang);
+            ret=renderXHTML(request, obj, prop, type, mode, lang);
         }
         return ret;
     }
 
-    public String renderIphone(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public String renderIphone(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         return "";
     }
 
-    public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         String ret="";
         String name=prop.getName();
@@ -45,12 +46,14 @@ public class SelectOne extends SelectOneBase
         String pmsg=null;
         String imsg=null;
         String selectValues=null;
+        boolean disabled=false;
         if(sobj!=null)
         {
             DisplayProperty dobj=new DisplayProperty(sobj);
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
             selectValues=dobj.getSelectValues(lang);
+            disabled=dobj.isDisabled();
         }
 
         if(imsg==null)
@@ -74,9 +77,19 @@ public class SelectOne extends SelectOneBase
             }
         }
 
+        String ext="";
+
+        if(disabled)
+        {
+            ext+=" disabled=\"disabled\"";
+        }
+
         if(prop.isObjectProperty())
         {
-            SemanticObject val=obj.getObjectProperty(prop);
+            SemanticObject val=null;
+            String aux=request.getParameter(prop.getName());
+            if(aux!=null)val=SemanticObject.createSemanticObject(aux);
+            else val=obj.getObjectProperty(prop);
             String uri="";
             String value="";
             if(val!=null)
@@ -86,7 +99,7 @@ public class SelectOne extends SelectOneBase
             }
             if(mode.equals("edit") || mode.equals("create") )
             {
-                ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">";
+                ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\" "+ext+">";
                 //onChange="dojo.byId('oc1').value=arguments[0]"
                 if(isBlankSuport())ret+="<option value=\"\"></option>";
                 SemanticClass cls=prop.getRangeClass();
@@ -120,7 +133,8 @@ public class SelectOne extends SelectOneBase
         {
             if(selectValues!=null)
             {
-                String value=obj.getProperty(prop);
+                String value=request.getParameter(prop.getName());
+                if(value==null)value=obj.getProperty(prop);
                 ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">";
                 StringTokenizer st=new StringTokenizer(selectValues,"|");
                 while(st.hasMoreTokens())

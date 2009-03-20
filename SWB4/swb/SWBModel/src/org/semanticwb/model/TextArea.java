@@ -1,6 +1,7 @@
 package org.semanticwb.model;
 
 import java.util.Iterator;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
@@ -13,25 +14,25 @@ public class TextArea extends TextAreaBase {
     }
 
     @Override
-    public String renderElement(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         if (obj == null) {
             obj = new SemanticObject();
         }
         String ret = "";
 
         if (type.endsWith("iphone")) {
-            ret = renderIphone(obj, prop, type, mode, lang);
+            ret = renderIphone(request, obj, prop, type, mode, lang);
         } else {
-            ret = renderXHTML(obj, prop, type, mode, lang);
+            ret = renderXHTML(request, obj, prop, type, mode, lang);
         }
         return ret;
     }
 
-    public String renderIphone(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderIphone(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         return "";
     }
 
-    public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         String ret = "";
         String name = prop.getName();
         String label = prop.getDisplayName(lang);
@@ -61,7 +62,8 @@ public class TextArea extends TextAreaBase {
             }
         }
 
-        String value = obj.getProperty(prop);
+        String value=request.getParameter(prop.getName());
+        if(value==null)value=obj.getProperty(prop);
         if (value == null) {
             value = "";
         }
