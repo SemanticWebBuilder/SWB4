@@ -46,8 +46,9 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * This class displays and administrate a promocional text with an optional image
  * under criteria like configuration. This resource comes from WebBuilder 2 and can
  * be installed as content resource or a strategy resource.
- * @author Jorge Alberto Jim�nez Sandoval (JAJS)
+ * @author Carlos Ramos (CIRI)
  */
+
 public class Promo extends GenericAdmResource
 {
     private static Logger log = SWBUtils.getLogger(Promo.class);
@@ -58,14 +59,13 @@ public class Promo extends GenericAdmResource
      * @param base
      */    
     @Override
-    public void setResourceBase(Resource base)
-    {
-        try 
-        {
+    public void setResourceBase(Resource base) {
+        try {
             super.setResourceBase(base);
             webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();
+        }catch(Exception e) {
+            log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  
         }
-        catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
     }    
     
     /**
@@ -80,57 +80,56 @@ public class Promo extends GenericAdmResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
         response.setContentType("text/html;charset=iso-8859-1");
-        StringBuffer ret = new StringBuffer("");
+        PrintWriter out = response.getWriter();
         Resource base=getResourceBase();
+        
         try 
         {
             String position = base.getAttribute("pos", "3").trim();
-            ret.append("<div class=\"swb-promo\">");
-            ret.append("<table border=\"0\"  width=\"99%\"> \n");
-            ret.append("<tr> \n");
-            if (!"".equals(base.getAttribute("title", "").trim())) {
-                if ("5".equals(position)) {
-                    ret.append("<td colspan=\"2\"> \n");
-                    ret.append("<h1>" + base.getAttribute("title").trim() + "</h1>");
-                    ret.append("</td></tr><tr><td valign=\"top\"> \n");
+            out.println("<div class=\"swb-promo\">");
+            out.println("<table border=\"0\"  width=\"99%\"> \n");
+            out.println("<tr> \n");
+            if (!"".equalsIgnoreCase(base.getAttribute("title", "").trim())) {
+                if ("5".equalsIgnoreCase(position)) {
+                    out.println("<td colspan=\"2\"> \n");
+                    out.println("<h1>" + base.getAttribute("title").trim() + "</h1>");
+                    out.println("</td></tr><tr><td valign=\"top\"> \n");
                 }else {
-                    ret.append("<td> \n");
-                    ret.append("<h1>" + base.getAttribute("title").trim() + "</h1>");
-                    ret.append("<br /> \n");
+                    out.println("<td> \n");
+                    out.println("<h1>" + base.getAttribute("title").trim() + "</h1>");
+                    out.println("<br /> \n");
                 }
             }else {
-                if ("5".equals(position)) {
-                    ret.append("<td valign=\"top\"> \n");
+                if ("5".equalsIgnoreCase(position)) {
+                    out.println("<td valign=\"top\"> \n");
                 }else {
-                    ret.append("<td> \n");
+                    out.println("<td> \n");
                 }
             }
-            if (!"".equals(base.getAttribute("url", "").trim())) {
-                ret.append(getUrlHtml(paramRequest, base));
+            if (!"".equalsIgnoreCase(base.getAttribute("url", "").trim())) {
+                out.println(getUrlHtml(paramRequest, base));
             }
-            if (!"".equals(base.getAttribute("img", "").trim())) {
-                ret.append(getImgPromo(paramRequest, base));
+            if (!"".equalsIgnoreCase(base.getAttribute("img", "").trim())) {
+                out.println(getImgPromo(paramRequest, base));
             }else {
-                ret.append(getTextHtml(base));
+                out.println(getTextHtml(base));
             }
-            if (!"".equals(base.getAttribute("url", "").trim())) {
-                ret.append("</a>\n");
+            if (!"".equalsIgnoreCase(base.getAttribute("url", "").trim())) {
+                out.println("</a>\n");
             }
-            ret.append("</td></tr></table> \n"); 
-            ret.append("</div>");
+            out.println("</td></tr></table> \n"); 
+            out.println("</div>");
         } 
         catch (Exception e) {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
-        }
-        PrintWriter out = response.getWriter();
-        out.println(ret.toString());
+        }        
+        out.flush();
     }
     
     /**
      * Obtiene las ligas de redireccionamiento del promocional
      */    
-    private String getUrlHtml(SWBParamRequest reqParams, Resource base)
-    {
+    private String getUrlHtml(SWBParamRequest reqParams, Resource base) {
         StringBuffer ret = new StringBuffer("");
         SWBResourceURL wburl=reqParams.getActionUrl();
         ret.append("<a href=\"" + wburl.toString() + "\"");
