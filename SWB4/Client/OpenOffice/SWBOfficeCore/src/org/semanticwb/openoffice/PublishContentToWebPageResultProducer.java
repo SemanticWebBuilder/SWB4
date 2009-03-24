@@ -67,11 +67,12 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                 String version = wizardData.get(PublishVersion.VERSION).toString();
                 HashMap<PropertyInfo, String> properties = (HashMap<PropertyInfo, String>) wizardData.get(ViewProperties.VIEW_PROPERTIES);
                 PropertyInfo[] propertiesToSend=new PropertyInfo[0];
+                String[] values=new String[0];
                 if(properties!=null)
                 {
                     propertiesToSend=properties.keySet().toArray(new PropertyInfo[properties.keySet().size()]);
-                }
-                String[] values=new String[properties.keySet().size()];
+                    values=new String[properties.keySet().size()];
+                }                
                 int i=0;
                 for(PropertyInfo prop : propertiesToSend)
                 {
