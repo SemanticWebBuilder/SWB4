@@ -264,11 +264,6 @@ public class WB4Writer extends OfficeDocument
         try
         {
             XModifiable xModified = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, document);
-
-
-
-
-
             if (xModified.isModified())
             {
                 XStorable xStorable =
@@ -628,11 +623,6 @@ public class WB4Writer extends OfficeDocument
             }
             index++;
         }
-
-
-
-
-
         this.save();
     }
 
@@ -641,6 +631,7 @@ public class WB4Writer extends OfficeDocument
      * @param htmlFile The full path of the Html document exported by the application
      * @throws IllegalArgumentException If the path is a directory
      */
+    @Override
     public final void prepareHtmlFileToSend(File htmlFile)
     {
         if (htmlFile.isDirectory())
@@ -655,6 +646,7 @@ public class WB4Writer extends OfficeDocument
      * Gets is the document is new, it means that the document has not been saved before
      * @return True if the document is new, false otherwise
      */
+    @Override
     public boolean isNewDocument()
     {
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
@@ -670,14 +662,10 @@ public class WB4Writer extends OfficeDocument
      * Gets if the document is readonly or not
      * @return True if the document is readonly or not
      */
+    @Override
     public boolean isReadOnly()
     {
         XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, document);
-
-
-
-
-
         return xStorable.isReadonly();
     }
 
@@ -685,6 +673,7 @@ public class WB4Writer extends OfficeDocument
      * Gets if the document has been modified and can be saves
      * @return True if the document has been modified, false otherwise
      */
+    @Override
     public boolean isModified()
     {
         XModifiable xModified = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, document);
@@ -700,6 +689,7 @@ public class WB4Writer extends OfficeDocument
      * Gets the Default extension used by the application
      * @return A string with the default extension, allways returns .odt
      */
+    @Override
     public String getDefaultExtension()
     {
         return OPENOFFICE_EXTENSION;
@@ -710,6 +700,7 @@ public class WB4Writer extends OfficeDocument
     {
         return WORD_EXTENSION;
     }
+    @Override
     public void insertLink(String url, String text)
     {
 
