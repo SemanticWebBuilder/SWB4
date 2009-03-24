@@ -84,7 +84,7 @@ public class SWBServiceMgr implements SemanticObserver {
                         vi.setVersionFile("template.html");
                         tpl.setActualVersion(vi);
                         tpl.setLastVersion(vi);
-                        String txt="<content/>";
+                        String txt="<html>\n <head>\n  <title><TOPIC METHOD=\"getDisplayName\" LANGUAGE=\"{user@getLanguage}\"/></title>\n </head>\n <body>\n   <p style=\"margin-top: 0\">\n   <Content></Content>\n  </p>\n </body>\n</html>";
                         try
                         {
                             SWBPlatform.writeFileToWorkPath(tpl.getWorkPath()+"/1/"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr.getURI());
