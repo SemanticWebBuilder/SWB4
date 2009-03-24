@@ -55,7 +55,8 @@ public class DialogContentInformation extends javax.swing.JDialog
         this.contentId = contentId;
         this.repository = repository;
         this.document = document;
-
+        jTablePages.setColumnSelectionAllowed(false);
+        jTablePages.setRowSelectionAllowed(true);
 
         try
         {
