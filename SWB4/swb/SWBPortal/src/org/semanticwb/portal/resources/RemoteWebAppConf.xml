@@ -5,9 +5,9 @@
         <display-name xml:lang="en">Remote Web Application</display-name>
         <description xml:lang="es">Recurso que permite integrar una aplicación web de otro sitio, en el sitio actual como si fuera parte natural de la pagina</description>
         <description xml:lang="en">Resource that allows to integrate an Web application from another site, in the present site as if it were a natural part of the page </description>
-        <resource-class>com.infotec.wb.resources.RemoteWebApp</resource-class>
+        <resource-class>org.semanticwb.portal.resources.RemoteWebApp</resource-class>
         <expiration-cache>0</expiration-cache>
-        <resource-bundle>com.infotec.wb.resources.RemoteWebApp</resource-bundle>
+        <resource-bundle>org.semanticwb.portal.resources.RemoteWebApp</resource-bundle>
         <resource-type>3</resource-type>
         <extended-attributes>
         </extended-attributes>

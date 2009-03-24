@@ -5,9 +5,9 @@
         <display-name xml:lang="en">PDF Content</display-name>
         <description xml:lang="es">Recurso que permite desplegar un archivo PDF dentro de un iframe a manera de contenido central de una pagina Web</description>
         <description xml:lang="en">Resource that used to unfold a PDF file inside an Iframe structure like a main content into a Web page</description>
-        <resource-class>com.infotec.wb.resources.PDFContent</resource-class>
+        <resource-class>org.semanticwb.portal.resources.PDFContent</resource-class>
         <expiration-cache>0</expiration-cache>
-        <resource-bundle>com.infotec.wb.resources.PDFContent</resource-bundle>
+        <resource-bundle>org.semanticwb.portal.resources.PDFContent</resource-bundle>
         <resource-type>1</resource-type>
         <extended-attributes>
         </extended-attributes>

@@ -5,9 +5,9 @@
         <display-name xml:lang="en">External content</display-name>
         <description xml:lang="es">Recurso usado para importar de otros sitios y mostrarla como parte de la pagina web actual</description>
         <description xml:lang="en">Resource used to import information from other sites and to show it like part of the present Web page</description>
-        <resource-class>com.infotec.wb.resources.WBUrlContent</resource-class>
+        <resource-class>org.semanticwb.portal.resources.WBUrlContent</resource-class>
         <expiration-cache>0</expiration-cache>
-        <resource-bundle>com.infotec.wb.resources.WBUrlContent</resource-bundle>
+        <resource-bundle>org.semanticwb.portal.resources.WBUrlContent</resource-bundle>
         <resource-type>1</resource-type>
         <extended-attributes>
         </extended-attributes>

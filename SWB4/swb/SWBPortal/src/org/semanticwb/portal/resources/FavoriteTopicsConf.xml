@@ -8,9 +8,9 @@
         </description>
         <description xml:lang="en">Resource that used to unfold and admin My Favorite Topics of the end
             users under certain criteria (resource configuration).</description>
-        <resource-class>com.infotec.wb.resources.FavoriteTopics</resource-class>
+        <resource-class>org.semanticwb.portal.resources.FavoriteTopics</resource-class>
         <expiration-cache>0</expiration-cache>
-        <resource-bundle>com.infotec.wb.resources.FavoriteTopics</resource-bundle>
+        <resource-bundle>org.semanticwb.portal.resources.FavoriteTopics</resource-bundle>
         <resource-type>1</resource-type>
         <extended-attributes>
         </extended-attributes>
