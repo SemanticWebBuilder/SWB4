@@ -707,6 +707,12 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
         return org.semanticwb.model.Dns.createDns(id,this);
     }
 
+    public org.semanticwb.model.Dns createDns()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_Dns);
+        return org.semanticwb.model.Dns.createDns(String.valueOf(id),this);
+    } 
+
     public void removeDns(String id)
     {
         org.semanticwb.model.Dns.removeDns(id, this);

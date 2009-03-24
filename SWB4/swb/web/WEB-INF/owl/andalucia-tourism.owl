@@ -1,0 +1,676 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns="http://mobi.yaco.es/andalucia.rdf/andalucia-tourism.owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xml:base="http://mobi.yaco.es/andalucia.rdf/andalucia-tourism.owl">
+  <owl:Ontology rdf:about="">
+    <dc:creator rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Departamento I+D+i, Fundación CTIC</dc:creator>
+    <owl:imports rdf:resource="http://protege.stanford.edu/plugins/owl/dc/protege-dc.owl"/>
+    <dc:contributor rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Yaco Sistemas</dc:contributor>
+    <rdfs:comment xml:lang="es">Esta ontología ha sido construida a medida para describir los recursos turísticos de la región de Andalucía (España), tal y como aparencen en la base de datos publicada por Yaco en el contexto del proyecto MyMobileWeb</rdfs:comment>
+    <rdfs:comment xml:lang="en">This ontology has been build ad-hoc to describe the tourism resources of the region of Andalusia (Spain), as they appear in a database published by Yaco in the context of the MyMobileWeb project</rdfs:comment>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Playa">
+    <rdfs:comment xml:lang="es">Esta clase correponde a la tabla "Formulario_solyplaya". Aparentemente se corresponde con la información que se puede consultar en http://www-org.andalucia.org/cms/playas/busqueda_playas</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Grado-de-ocupacion"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Municipio"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Alojamiento"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Provincia"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Tipo-alojamiento"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Zona"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Servicio"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Casa-rural"/>
+    </owl:disjointWith>
+    <rdfs:label xml:lang="es">Playa</rdfs:label>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Campo-Golf"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="Servicio-de-playa">
+    <rdfs:comment xml:lang="es">Especialización de Servicio para las playas</rdfs:comment>
+    <rdfs:label xml:lang="es">Servicio de una playa</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Servicio"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Servicio">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Grado-de-ocupacion"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Campo-Golf"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Casa-rural"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Tipo-alojamiento"/>
+    </owl:disjointWith>
+    <rdfs:label xml:lang="es">Servicio</rdfs:label>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Provincia"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Playa"/>
+    <rdfs:comment xml:lang="es">Cada instancia de esta clase es un servicio proporcionado en un recurso turístico, o una prestación/equipamiento de la que dispone el recurso.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Municipio"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Alojamiento"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Zona"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="Tipo-via">
+    <rdfs:comment xml:lang="es">Clase que enumera los tipos de vía pública.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Tipo de vía</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#Provincia">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Municipio"/>
+    </owl:disjointWith>
+    <rdfs:comment xml:lang="es">Clase de las provincias, cada instancia de esta clase es una provincia andaluza.</rdfs:comment>
+    <rdfs:label xml:lang="es">Provincia</rdfs:label>
+    <owl:disjointWith rdf:resource="#Playa"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Alojamiento"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Grado-de-ocupacion"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Servicio"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Casa-rural"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Tipo-alojamiento"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Campo-Golf"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Zona"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="#Grado-de-ocupacion">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Campo-Golf"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Tipo-alojamiento"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Casa-rural"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Provincia"/>
+    <owl:disjointWith rdf:resource="#Playa"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Alojamiento"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Municipio"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Zona"/>
+    </owl:disjointWith>
+    <rdfs:comment xml:lang="es">Esta clase enumera los distintos niveles de ocupación de un recurso turístico, desde una ocupación baja hasta una ocupación masiva.</rdfs:comment>
+    <rdfs:label xml:lang="es">Grado de ocupación</rdfs:label>
+    <owl:disjointWith rdf:resource="#Servicio"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Zona">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Tipo-alojamiento"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Grado-de-ocupacion"/>
+    <owl:disjointWith rdf:resource="#Servicio"/>
+    <owl:disjointWith rdf:resource="#Playa"/>
+    <owl:disjointWith rdf:resource="#Provincia"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Campo-Golf"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Alojamiento"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Municipio"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Casa-rural"/>
+    </owl:disjointWith>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Zona</rdfs:label>
+    <rdfs:comment xml:lang="es">Cada instancia de esta clase es una zona turística de Andalucía.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Playa-virgen">
+    <rdfs:comment xml:lang="es">Especialización de playa que recoge aquellas que se consideran vírgenes.</rdfs:comment>
+    <rdfs:label xml:lang="es">Playa virgen</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Playa"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Tipo-alojamiento">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Municipio"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Campo-Golf"/>
+    </owl:disjointWith>
+    <rdfs:comment xml:lang="es">Clase que enumera los tipos de alojamiento.</rdfs:comment>
+    <rdfs:label xml:lang="es">Tipo de alojamiento</rdfs:label>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Casa-rural"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Alojamiento"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Zona"/>
+    <owl:disjointWith rdf:resource="#Playa"/>
+    <owl:disjointWith rdf:resource="#Servicio"/>
+    <owl:disjointWith rdf:resource="#Grado-de-ocupacion"/>
+    <owl:disjointWith rdf:resource="#Provincia"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Casa-rural">
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Campo-Golf"/>
+    </owl:disjointWith>
+    <rdfs:comment xml:lang="es">Clase de las casas rurales. Cada instancia de esta clase es una casa rural. No esta claro cómo se relaciona esta clase con la clase de los Alojamientos. ¿Son disjuntas? ¿están repetidos los elementos? ¿es Casa-rural una subclase de Alojamiento?</rdfs:comment>
+    <owl:disjointWith rdf:resource="#Tipo-alojamiento"/>
+    <owl:disjointWith rdf:resource="#Provincia"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Alojamiento"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Servicio"/>
+    <owl:disjointWith rdf:resource="#Grado-de-ocupacion"/>
+    <rdfs:label xml:lang="es">Casa rural</rdfs:label>
+    <owl:disjointWith rdf:resource="#Zona"/>
+    <owl:disjointWith rdf:resource="#Playa"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Municipio"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="#Campo-Golf">
+    <owl:disjointWith rdf:resource="#Playa"/>
+    <owl:disjointWith rdf:resource="#Grado-de-ocupacion"/>
+    <owl:disjointWith rdf:resource="#Casa-rural"/>
+    <rdfs:comment xml:lang="es">Clase de los campos de golf.</rdfs:comment>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Alojamiento"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Tipo-alojamiento"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Municipio"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Provincia"/>
+    <owl:disjointWith rdf:resource="#Servicio"/>
+    <rdfs:label xml:lang="es">Campo de golf</rdfs:label>
+    <owl:disjointWith rdf:resource="#Zona"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Alojamiento">
+    <owl:disjointWith rdf:resource="#Campo-Golf"/>
+    <owl:disjointWith rdf:resource="#Playa"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Municipio"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#Tipo-alojamiento"/>
+    <rdfs:label xml:lang="es">Alojamiento</rdfs:label>
+    <owl:disjointWith rdf:resource="#Provincia"/>
+    <owl:disjointWith rdf:resource="#Casa-rural"/>
+    <owl:disjointWith rdf:resource="#Servicio"/>
+    <owl:disjointWith rdf:resource="#Zona"/>
+    <owl:disjointWith rdf:resource="#Grado-de-ocupacion"/>
+    <rdfs:comment xml:lang="es">La clase de los alojamientos. Esta información parece ser la misma que puede consultarse en http://www.andalucia.org/modulos.php?modulo=Alojamientos . Los alojamientos podrían subclasificarse a través de los valores de la propiedad tipo-alojamiento.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="Servicio-de-campo-de-golf">
+    <rdfs:subClassOf rdf:resource="#Servicio"/>
+    <rdfs:comment xml:lang="es">Especialización de servicio para los campos de golf.</rdfs:comment>
+    <rdfs:label xml:lang="es">Servicio de un campo de golf</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="Categoria-alojamiento">
+    <rdfs:comment xml:lang="es">Esta clase enumera las distintas categorías de alojamiento, desde los alojamientos modestos hasta los lujosos.</rdfs:comment>
+    <rdfs:label xml:lang="es">Categoría de alojamiento</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#Municipio">
+    <owl:disjointWith rdf:resource="#Alojamiento"/>
+    <owl:disjointWith rdf:resource="#Grado-de-ocupacion"/>
+    <owl:disjointWith rdf:resource="#Campo-Golf"/>
+    <rdfs:label xml:lang="es">Municipio</rdfs:label>
+    <owl:disjointWith rdf:resource="#Tipo-alojamiento"/>
+    <owl:disjointWith rdf:resource="#Servicio"/>
+    <owl:disjointWith rdf:resource="#Casa-rural"/>
+    <owl:disjointWith rdf:resource="#Playa"/>
+    <rdfs:comment xml:lang="es">Clase de los municipios, cada instancia de esta clase es un municipio andaluz.</rdfs:comment>
+    <owl:disjointWith rdf:resource="#Zona"/>
+    <owl:disjointWith rdf:resource="#Provincia"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="tiene-servicio">
+    <rdfs:comment xml:lang="es">Relaciona una entidad con un servicio que se proporciona en dicha entidad.</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Tiene servicio</rdfs:label>
+    <rdfs:range rdf:resource="#Servicio"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Campo-Golf"/>
+          <owl:Class rdf:about="#Playa"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="tipo-hierba">
+    <rdfs:label xml:lang="es">Tipo de hierba</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Campo-Golf"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="director">
+    <rdfs:label xml:lang="es">Director</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Campo-Golf"/>
+    <rdfs:comment xml:lang="es">Nombre del director del campo de golf.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="acceso-en-coche">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Playa"/>
+    <rdfs:comment xml:lang="es">Nombre (posiblemente multilingüe) de la carretera más próxima, p.e.: "N-340"</rdfs:comment>
+    <rdfs:label xml:lang="es">Acceso en coche</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="entidad-dc">
+    <rdfs:comment xml:lang="es">El significado de esta propiedad es desconocido. Especulamos que pueden ser los datos del usuario que mantiene la información en la base de datos.</rdfs:comment>
+    <rdfs:domain rdf:resource="#Playa"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="extens">
+    <rdfs:domain rdf:resource="#Casa-rural"/>
+    <rdfs:comment xml:lang="es">Desconocemos el significado de esta propiedad</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="imagen-localizacion-clave-cms"/>
+  <owl:DatatypeProperty rdf:ID="email-dc">
+    <rdfs:domain rdf:resource="#Playa"/>
+    <rdfs:comment xml:lang="es">El significado de esta propiedad es desconocido. Especulamos que pueden ser los datos del usuario que mantiene la información en la base de datos.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="numero-ref">
+    <rdfs:label xml:lang="es">Número de referencia</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Casa-rural"/>
+    <rdfs:comment xml:lang="es">Se desconoce el significado de esta propiedad.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="numero-habitaciones">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Alojamiento"/>
+    <rdfs:comment xml:lang="es">Número de habitaciones del establecimiento. No hay que confundir esta propiedad con "capacidad" (número máximo de personas alojadas).</rdfs:comment>
+    <rdfs:label xml:lang="es">Número de habitaciones</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="precio-medio">
+    <rdfs:domain rdf:resource="#Casa-rural"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Precio medio</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="longitud">
+    <rdfs:comment xml:lang="es">Longitud del arenal. En la base de datos, este campo no es numérico, sino una cadena de texto, puesto que incluye las unidades, p.e.: "200 m"</rdfs:comment>
+    <rdfs:domain rdf:resource="#Playa"/>
+    <rdfs:label xml:lang="es">Longitud</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="profesional">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="es">Nombre del profesional responsable del campo de golf.</rdfs:comment>
+    <rdfs:domain rdf:resource="#Campo-Golf"/>
+    <rdfs:label xml:lang="es">Profesional</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="presidente">
+    <rdfs:domain rdf:resource="#Campo-Golf"/>
+    <rdfs:label xml:lang="es">Presidente</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="es">Nombre del presidente del campo de golf.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="imagen-datos-clave-cms">
+    <rdfs:comment xml:lang="es">Clave de la imagen de datos en el CMS.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="usuario-dc">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="es">El significado de esta propiedad es desconocido. Especulamos que pueden ser los datos del usuario que mantiene la información en la base de datos.</rdfs:comment>
+    <rdfs:domain rdf:resource="#Playa"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="precio">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Precio</rdfs:label>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Casa-rural"/>
+          <owl:Class rdf:about="#Alojamiento"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:comment xml:lang="es">Descripción textual multilingüe del precio del establecimiento, incluye el precio por día y por semana en cada temporada.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="temporadas">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="es">Una descripción textual multilingüe de las temporadas en las que está abierto el establecimiento (?). Por ejemplo: "Baja. Alta.". Otras veces se incluye el rango de fechas de apertura, p.e., ""01/01-31/12"</rdfs:comment>
+    <rdfs:domain rdf:resource="#Casa-rural"/>
+    <rdfs:label xml:lang="es">Temporada</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="disenador">
+    <rdfs:comment xml:lang="es">Nombre del diseñador del campo de golf.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Campo-Golf"/>
+    <rdfs:label xml:lang="es">Diseñador</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="otras">
+    <rdfs:comment xml:lang="es">Desconocemos el significado de esta propiedad ("otras_tp" en el original)</rdfs:comment>
+    <rdfs:domain rdf:resource="#Playa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Otras</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="kms-trans">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Distancia a ciudad próxima</rdfs:label>
+    <rdfs:domain rdf:resource="#Campo-Golf"/>
+    <rdfs:comment xml:lang="es">Distancia entre el campo de golf y la ciudad más cercana (?)</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="nombre-descriptivo">
+    <rdfs:domain rdf:resource="#Municipio"/>
+    <rdfs:comment xml:lang="es">El significado de esta propiedad es desconocido.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Nombre descriptivo</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="imagen-foto-clave-cms">
+    <rdfs:comment xml:lang="es">Clave de la fotografía en el CMS.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="servicios-adicionales">
+    <rdfs:comment xml:lang="es">Esta propiedad corresponde con el campo "extens" de la base de datos. Incluye una descripción multilingüe de los servicios adicionales, como: radiador, teléfono, etc.</rdfs:comment>
+    <rdfs:label xml:lang="es">Servicios adicionales</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Casa-rural"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="tlf-dc">
+    <rdfs:comment xml:lang="es">El significado de esta propiedad es desconocido. Especulamos que pueden ser los datos del usuario que mantiene la información en la base de datos.</rdfs:comment>
+    <rdfs:domain rdf:resource="#Playa"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="numero">
+    <rdfs:comment xml:lang="es">Desconocemos el significado de esta propiedad.</rdfs:comment>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Alojamiento"/>
+          <owl:Class rdf:about="#Campo-Golf"/>
+          <owl:Class rdf:about="#Casa-rural"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Número</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="acceso-en-autobus">
+    <rdfs:domain rdf:resource="#Playa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Acceso mediante autobús</rdfs:label>
+    <rdfs:comment xml:lang="es">Descripción multilingüe de los accesos mediante autobús: líneas y paradas más próximas.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="imagen-mapa-clave-cms">
+    <rdfs:comment xml:lang="es">Clave de la imagen del mapa en el CMS.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="nombre-dc">
+    <rdfs:comment xml:lang="es">El significado de esta propiedad es desconocido. Especulamos que pueden ser los datos del usuario que mantiene la información en la base de datos.</rdfs:comment>
+    <rdfs:domain rdf:resource="#Playa"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="anchura-media">
+    <rdfs:comment xml:lang="es">Anchura media del arenal. En la base de datos, el campo no es numérico sino una cadena de texto, puesto que contiene las unidades, p.e.: "30 m"</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Anchura media</rdfs:label>
+    <rdfs:domain rdf:resource="#Playa"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="anio-construccion">
+    <rdfs:label xml:lang="es">Año de construcción</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Alojamiento"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="par">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Campo-Golf"/>
+    <rdfs:label xml:lang="es">Par</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="imagen-fotoed-info">
+    <rdfs:comment xml:lang="es">Clave de la fotografía de información en el CMS.</rdfs:comment>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Casa-rural"/>
+          <owl:Class rdf:about="#Alojamiento"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="imagen-foto-360">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Campo-Golf"/>
+          <owl:Class rdf:about="#Playa"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="acceso-en-ferrocarril">
+    <rdfs:comment xml:lang="es">Descripción multilingüe de los accesos mediante ferrocarril: líneas y estaciones más próximas.</rdfs:comment>
+    <rdfs:label xml:lang="es">Acceso mediante ferrocarril</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Playa"/>
+  </owl:DatatypeProperty>
+  <owl:FunctionalProperty rdf:ID="capacidad">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Alojamiento"/>
+          <owl:Class rdf:about="#Casa-rural"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment xml:lang="es">Número de plazas del establecimiento, determina el máximo de huéspedes que pueden ser alojados simultáneamente. No hay que confundir esta propiedad con "numero-habitaciones".</rdfs:comment>
+    <rdfs:label xml:lang="es">Capacidad</rdfs:label>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:ID="categoria">
+    <rdfs:range rdf:resource="#Categoria-alojamiento"/>
+    <rdfs:domain rdf:resource="#Alojamiento"/>
+    <rdfs:comment xml:lang="es">Relaciona un alojamiento con su categoría.</rdfs:comment>
+    <rdfs:label xml:lang="es">Categoría</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:ID="tipo-via">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Alojamiento"/>
+          <owl:Class rdf:about="#Campo-Golf"/>
+          <owl:Class rdf:about="#Casa-rural"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#Tipo-via"/>
+    <rdfs:label xml:lang="es">Tipo de via</rdfs:label>
+    <rdfs:comment xml:lang="es">Relaciona una localización con el tipo de vía en la que está situada.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:ID="municipio">
+    <rdfs:range rdf:resource="#Municipio"/>
+    <rdfs:label xml:lang="es">Municipio</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:comment xml:lang="es">Relaciona una entidad con el municipio donde se situa.</rdfs:comment>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Alojamiento"/>
+          <owl:Class rdf:about="#Playa"/>
+          <owl:Class rdf:about="#Campo-Golf"/>
+          <owl:Class rdf:about="#Casa-rural"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:ID="grado-de-ocupacion">
+    <rdfs:domain rdf:resource="#Playa"/>
+    <rdfs:range rdf:resource="#Grado-de-ocupacion"/>
+    <rdfs:label xml:lang="es">Grado de ocupación</rdfs:label>
+    <rdfs:comment xml:lang="es">Relaciona una entidad con el grado de ocupación que presenta habitualmente.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:ID="numero-de-hoyos">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Campo-Golf"/>
+    <rdfs:label xml:lang="es">Número de hoyos</rdfs:label>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:ID="tipo-de-alojamiento">
+    <rdfs:range rdf:resource="#Tipo-alojamiento"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:comment xml:lang="es">Relaciona un alojamiento con un recurso que define su tipo. Esta propiedad puede ser utilizada para subclasificar los alojamientos.</rdfs:comment>
+    <rdfs:label xml:lang="es">Tipo de alojamiento</rdfs:label>
+    <rdfs:domain rdf:resource="#Alojamiento"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:ID="provincia">
+    <rdfs:domain rdf:resource="#Municipio"/>
+    <rdfs:range rdf:resource="#Provincia"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="es">Provincia</rdfs:label>
+    <rdfs:comment xml:lang="es">Relaciona un municipio con la provincia donde se sitúa.</rdfs:comment>
+  </owl:FunctionalProperty>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-piscina">
+    <rdfs:comment xml:lang="es">l establecimiento dispone de piscina para disfrute de sus clientes.</rdfs:comment>
+    <rdfs:label xml:lang="es">Servicio de piscina</rdfs:label>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-pitching-putt">
+    <rdfs:label xml:lang="es">Servicio de pitching putt</rdfs:label>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-playa rdf:ID="Servicio-de-zona-nudista">
+    <rdfs:comment xml:lang="es">La playa dispone de una zona destinada a los usuarios nudistas.</rdfs:comment>
+    <rdfs:label xml:lang="es">Zona nudista</rdfs:label>
+  </Servicio-de-playa>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-paddle">
+    <rdfs:label xml:lang="es">Servicio de pistas de paddle</rdfs:label>
+    <rdfs:comment xml:lang="es">El establecimiento dispone de pistas de paddle para uso de sus clientes.</rdfs:comment>
+  </Servicio-de-campo-de-golf>
+  <Grado-de-ocupacion rdf:ID="Grado-de-ocupacion-bajo">
+    <rdfs:label xml:lang="es">Grado de ocupacion bajo</rdfs:label>
+  </Grado-de-ocupacion>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-bar">
+    <rdfs:label xml:lang="es">Servicio de bar</rdfs:label>
+    <rdfs:comment xml:lang="es">El establecimiento dispone de un bar.</rdfs:comment>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-tienda">
+    <rdfs:label xml:lang="es">Servicio de tienda</rdfs:label>
+    <rdfs:comment xml:lang="es">El establecimiento dispone de una tienda especializada.</rdfs:comment>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-restaurante">
+    <rdfs:label xml:lang="es">Servicio de restaurante</rdfs:label>
+    <rdfs:comment xml:lang="es">El establecimiento dispone de un restaurante.</rdfs:comment>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-putting-green">
+    <rdfs:label xml:lang="es">Servicio de putting green</rdfs:label>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-alquiler-de-carro">
+    <rdfs:label xml:lang="es">Servicio de alquiler de carros para palos de golf</rdfs:label>
+    <rdfs:comment xml:lang="es">Los palos se alquilan por separado.</rdfs:comment>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-casa-de-campo">
+    <rdfs:comment xml:lang="es">El establecimiento dispone de casa de campo para sus clientes.</rdfs:comment>
+    <rdfs:label xml:lang="es">Servicio de casa de campo</rdfs:label>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-parking">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Servicio de parking</rdfs:label>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-buggy">
+    <rdfs:label xml:lang="es">Servicio de buggy</rdfs:label>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-playa rdf:ID="Servicio-de-acceso-para-personas-con-discapacidad">
+    <rdfs:label xml:lang="es">Accesos adaptados para personas con discapacidad</rdfs:label>
+  </Servicio-de-playa>
+  <Grado-de-ocupacion rdf:ID="Grado-de-ocupacion-alto">
+    <rdfs:label xml:lang="es">Grado de ocupacion alto</rdfs:label>
+  </Grado-de-ocupacion>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-tenis">
+    <rdfs:label xml:lang="es">Servicio de pistas de tenis</rdfs:label>
+    <rdfs:comment xml:lang="es">l establecimiento dispone de pistas de tenis para su uso por parte de los clientes.</rdfs:comment>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-chipping-green">
+    <rdfs:label xml:lang="es">Servicio de chipping green</rdfs:label>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-playa rdf:ID="Servicio-de-plan-de-infraestructura">
+    <rdfs:label xml:lang="es">Servicio de plan de infraestructura</rdfs:label>
+  </Servicio-de-playa>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-alquiler-de-palos">
+    <rdfs:label xml:lang="es">Servicio de alquiler de palos de golf</rdfs:label>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-carrito-electrico">
+    <rdfs:label xml:lang="es">Servicio de carrito eléctrico</rdfs:label>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-caddies">
+    <rdfs:label xml:lang="es">Servicio de caddies</rdfs:label>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-practicas">
+    <rdfs:label xml:lang="es">Servicio de prácticas</rdfs:label>
+    <rdfs:comment xml:lang="es">El establecimiento dispone de una zona de prácticas para sus clientes menos experimentados.</rdfs:comment>
+  </Servicio-de-campo-de-golf>
+  <Servicio-de-playa rdf:ID="Servicio-de-uso-deportivo">
+    <rdfs:label xml:lang="es">Servicio de uso deportivo</rdfs:label>
+    <rdfs:comment xml:lang="es">La playa dispone de una zona adaptada para su uso en actividades deportivas.</rdfs:comment>
+  </Servicio-de-playa>
+  <Servicio-de-campo-de-golf rdf:ID="Servicio-de-vestuarios">
+    <rdfs:label xml:lang="es">Servicio de vestuarios</rdfs:label>
+  </Servicio-de-campo-de-golf>
+  <owl:AllDifferent>
+    <owl:distinctMembers rdf:parseType="Collection">
+      <Servicio-de-campo-de-golf rdf:ID="Servicio-de-alquier-de-coche">
+        <rdfs:label xml:lang="es">Servicio de alquiler de coches</rdfs:label>
+      </Servicio-de-campo-de-golf>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-alquiler-de-carro"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-alquiler-de-palos"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-bar"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-buggy"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-caddies"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-carrito-electrico"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-casa-de-campo"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-chipping-green"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-paddle"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-parking"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-piscina"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-pitching-putt"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-practicas"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-putting-green"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-restaurante"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-tenis"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-tienda"/>
+      <Servicio-de-campo-de-golf rdf:about="#Servicio-de-vestuarios"/>
+    </owl:distinctMembers>
+  </owl:AllDifferent>
+  <Grado-de-ocupacion rdf:ID="Grado-de-ocupacion-medio">
+    <rdfs:label xml:lang="es">Grado de ocupacion medio</rdfs:label>
+  </Grado-de-ocupacion>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.2.1, Build 365)  http://protege.stanford.edu -->

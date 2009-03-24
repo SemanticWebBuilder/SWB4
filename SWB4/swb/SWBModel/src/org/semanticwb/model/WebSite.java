@@ -13,16 +13,31 @@ public class WebSite extends WebSiteBase
         super(base);
     }
     
-    @Override
-    public Dns createDns(String uri)
-    {
-        return (Dns)getSemanticObject().getModel().createGenericObject(uri, Dns.swb_Dns);
-    }    
+//    @Override
+//    public Dns createDns(String uri)
+//    {
+//        return (Dns)getSemanticObject().getModel().createGenericObject(uri, Dns.swb_Dns);
+//    }
 
-    @Override
-    public Dns getDns(String id)
+//    @Override
+//    public Dns getDns(String id)
+//    {
+//        return (Dns)getSemanticObject().getModel().getGenericObject(id,Dns.swb_Dns);
+//    }
+
+    public Dns getDns(String dns)
     {
-        return (Dns)getSemanticObject().getModel().getGenericObject(id,Dns.swb_Dns);
+        Dns ret = null;
+        if (null != dns)
+        {
+            //TODO: cachar DNS
+            Iterator<SemanticObject> it = getSemanticObject().getModel().listSubjects(Dns.swb_dns, dns);
+            if (it.hasNext())
+            {
+                ret = (Dns) it.next().createGenericInstance();
+            }
+        }
+        return ret;
     }
     
     public Dns getDefaultDns()

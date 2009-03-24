@@ -327,8 +327,7 @@ public class DistributorParams
             }
         }else
         {
-            SemanticClass cls=Dns.swb_Dns;
-            Dns dns=(Dns)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(request.getServerName(), cls);
+            Dns dns=null;//=(Dns)Dns.  webpage.getWebSite().getDns(request.getServerName());
             //System.out.println("dns:"+dns);
             if (dns == null)
             {

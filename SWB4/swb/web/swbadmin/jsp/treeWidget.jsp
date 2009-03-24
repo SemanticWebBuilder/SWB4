@@ -134,11 +134,12 @@
         var ret=false;
         var dropNode = dijit.getEnclosingWidget(node);
         var dragNode = act_treeNode;
+        //self.status="checkItemAcceptance-->dropNode"+dropNode+" dragSupport:"+dragNode.item.dragSupport;
         if(dropNode && dragNode)
         {
             var dragItem=dragNode.item;
             var dropItem=dropNode.item;
-            if(dragItem!=dropItem && !isParent(dragNode,dropNode))
+            if(dragItem!=dropItem && !isParent(dragNode,dropNode) && matchDropLevel(dragNode,dropNode))
             {
                 for (var m in dropItem.dropacc)
                 {
@@ -153,6 +154,7 @@
             //alert("("+dragItem.type.toString()+")("+dropItem.type.toString()+")");
         }
         //alert(this.current);
+        //self.status="checkItemAcceptance-->ret:"+ret;
         return ret;
     </script>
 
@@ -167,7 +169,8 @@
         //var m=dojo.dnd.manager();
         //m.canDrop(false);
         //alert(act_treeNode.item.id);
-        if(act_treeNode.item.dragSupport)return true;
+        //self.status="checkAcceptance-->act_treeNode:"+act_treeNode+" drag:"+act_treeNode.item.dragSupport;
+        if(act_treeNode.item.dragSupport=="true")return true;
         return false;
     </script>
 

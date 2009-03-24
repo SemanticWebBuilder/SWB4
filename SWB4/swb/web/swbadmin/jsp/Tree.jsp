@@ -253,17 +253,14 @@
         }
     }
 
-    public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds) throws JSONException
-    {
-        addSemanticObject(arr, obj, addChilds, false);
-    }
-
-
-    public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy) throws JSONException
+    //TODO:Separar en una clase treeController
+    public void addResourceType(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy) throws JSONException
     {
         boolean hasChilds=false;
         SemanticClass cls=obj.getSemanticClass();
+        SemanticObject dispobj=cls.getDisplayObject();
         String type=cls.getClassId();
+        ResourceType restype=(ResourceType)obj.createGenericInstance();
 
         //Active
         boolean active=false;
@@ -278,7 +275,153 @@
         arr.put(jobj);
 
         //dragSupport
-        jobj.put("dragSupport", cls.isdragSupport());
+        if(dispobj!=null)
+        {
+            DisplayObject dp=(DisplayObject)dispobj.createGenericInstance();
+            jobj.put("dragSupport", dp.isDragSupport());
+            jobj.put("dropMatchLevel", dp.getDropMatchLevel());
+        }
+
+        //System.out.println("obj:"+obj.getId());
+        //drop acceptance
+        JSONArray dropacc=new JSONArray();
+        jobj.putOpt("dropacc", dropacc);
+
+        //menus
+        JSONArray menus=new JSONArray();
+        jobj.putOpt("menus", menus);
+
+        if(restype.getResourceMode()==2)
+        {
+            Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
+            while(pit.hasNext())
+            {
+                SemanticProperty prop=pit.next();
+                SemanticClass rcls=prop.getRangeClass();
+                menus.put(getMenuItem("Agregar "+rcls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+rcls.getDisplayName(lang))));
+                dropacc.put(rcls.getClassId());
+            }
+            menus.put(getMenuSeparator());
+        }
+
+        //Active
+        if(activeprop!=null)
+        {
+            if(!active)
+            {
+                menus.put(getMenuItem("Activar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+            }else
+            {
+                menus.put(getMenuItem("Desactivar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+            }
+        }
+
+        menus.put(getMenuItem("Editar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
+        if(!obj.instanceOf(Unmodifiable.swb_Unmodifiable) ||  (obj.instanceOf(Unmodifiable.swb_Unmodifiable) && obj.getBooleanProperty(Unmodifiable.swb_readOnly)==false))
+        {
+            menus.put(getMenuItem("Eliminar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
+        }
+        menus.put(getMenuSeparator());
+
+        User user=SWBPortal.getSessionUser();
+        boolean isfavo=user.hasFavorite(obj);
+        if(!isfavo)
+        {
+            menus.put(getMenuItem("Agregar a Favoritos", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+        }else
+        {
+            menus.put(getMenuItem("Eliminar de Favoritos", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+        }
+        menus.put(getMenuItem("Recargar", "dijitEditorIcon dijitEditorIconCut", getReloadAction()));
+
+        //eventos
+        JSONArray events=new JSONArray();
+        jobj.putOpt("events", events);
+        events.put(getEvent("onDblClick", getAction("newTab", SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp", null)));
+        events.put(getEvent("onClick", getAction("getHtml", SWBPlatform.getContextPath()+"/swbadmin/jsp/viewProps.jsp?id="+obj.getEncodedURI(), "vprop")));
+
+        //hijos
+        JSONArray childs=new JSONArray();
+        jobj.putOpt("children", childs);
+
+        hasChilds=hasHerarquicalNodes(obj);
+        if(addChilds || !hasChilds)
+        {
+            addHerarquicalNodes(childs, obj);
+
+            Iterator<SemanticObject> it=obj.listHerarquicalChilds();
+            if(addChilds)
+            {
+                Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(it,lang);
+                while(it2.hasNext())
+                {
+                    SemanticObject ch=it2.next();
+                    boolean add=true;
+                    if(ch.instanceOf(Resource.sclass))
+                    {
+                        Resource res=(Resource)ch.createGenericInstance();
+                        if(res.getResourceSubType()!=null)add=false;
+                    }
+                    if(add)addSemanticObject(childs, ch,false);
+                }
+            }else
+            {
+                if(it.hasNext())
+                {
+                    hasChilds=true;
+                }
+            }
+        }
+        if(hasChilds && !addChilds)
+        {
+            if (addDummy) {
+                childs.put(getNode("_NOID_" + (nullnode++), "DUMMY", "DUMMY", "DUMMY"));
+            } else {
+                jobj.put("hasChilds", "true");
+            }
+            events.put(getEvent("onOpen", getReloadAction()));
+        }
+    }
+
+
+    public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds) throws JSONException
+    {
+        addSemanticObject(arr, obj, addChilds, false);
+    }
+
+    public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy) throws JSONException
+    {
+        boolean hasChilds=false;
+        SemanticClass cls=obj.getSemanticClass();
+        SemanticObject dispobj=cls.getDisplayObject();
+        String type=cls.getClassId();
+        
+        //TODO:validar treeController
+        //System.out.println("type:"+type);
+        if(type.equals("swb_ResourceType"))
+        {
+            addResourceType(arr,obj,addChilds,addDummy);
+            return;
+        }
+        //Active
+        boolean active=false;
+        SemanticProperty activeprop=cls.getProperty("active");
+        if(activeprop!=null)
+        {
+            active=obj.getBooleanProperty(activeprop);
+        }
+
+        String icon=SWBContext.UTILS.getIconClass(obj);
+        JSONObject jobj=getNode(obj.getURI(), obj.getDisplayName(lang), type, icon);
+        arr.put(jobj);
+
+        //dragSupport
+        if(dispobj!=null)
+        {
+            DisplayObject dp=(DisplayObject)dispobj.createGenericInstance();
+            jobj.put("dragSupport", dp.isDragSupport());
+            jobj.put("dropMatchLevel", dp.getDropMatchLevel());
+        }
 
         //System.out.println("obj:"+obj.getId());
         //drop acceptance
@@ -304,7 +447,9 @@
                 dropacc.put(scls.getClassId());
             }
         }
-        menus.put(getMenuSeparator());
+        
+        if(menus.length()>0)
+            menus.put(getMenuSeparator());
 
         //Active
         if(activeprop!=null)

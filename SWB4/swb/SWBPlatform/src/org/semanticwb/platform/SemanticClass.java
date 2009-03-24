@@ -48,7 +48,7 @@ public class SemanticClass
     private String m_classID=null;
     private boolean m_isClassIDCheck=false;
 
-    private Boolean isdragSupport=null;
+//    private Boolean isdragSupport=null;
 
     private boolean dispObject=false;
     private SemanticObject displayObject=null;
@@ -145,23 +145,23 @@ public class SemanticClass
         return m_autogenId;
     }
 
-    /**
-     * si el objeto relacionado soporta drag and drop
-     * @return
-     */
-    public boolean isdragSupport()
-    {
-        if(isdragSupport==null)
-        {
-            isdragSupport=false;
-            Statement st=m_class.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DRAGSUPPORT));
-            if(st!=null)
-            {
-                isdragSupport=st.getBoolean();
-            }
-        }
-        return isdragSupport;
-    }
+//    /**
+//     * si el objeto relacionado soporta drag and drop
+//     * @return
+//     */
+//    public boolean isdragSupport()
+//    {
+//        if(isdragSupport==null)
+//        {
+//            isdragSupport=false;
+//            Statement st=m_class.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DRAGSUPPORT));
+//            if(st!=null)
+//            {
+//                isdragSupport=st.getBoolean();
+//            }
+//        }
+//        return isdragSupport;
+//    }
 
 
     public String getClassId()
