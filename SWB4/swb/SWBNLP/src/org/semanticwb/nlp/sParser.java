@@ -9,14 +9,9 @@ package org.semanticwb.nlp;
  *
  * @author hasdai
  */
-// $ANTLR 3.1.2 /home/hasdai/Documentos/sParser.g 2009-03-23 19:50:57
+// $ANTLR 3.1.2 /home/hasdai/Documentos/sParser.g 2009-03-23 20:03:13
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 
 import org.antlr.runtime.tree.*;
 
@@ -256,7 +251,7 @@ public class sParser extends Parser {
 
 
             // AST REWRITE
-            // elements: query, modifier, limiter
+            // elements: modifier, query, limiter
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -668,7 +663,7 @@ public class sParser extends Parser {
 
 
             // AST REWRITE
-            // elements: v1, v2, name
+            // elements: v2, v1, name
             // token labels:
             // rule labels: v1, retval, v2
             // token list labels:
@@ -922,7 +917,7 @@ public class sParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: v2, v1
+                    // elements: v1, v2
                     // token labels: v1, v2
                     // rule labels: retval
                     // token list labels:
@@ -1117,7 +1112,7 @@ public class sParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: name, val
+                    // elements: val, name
                     // token labels:
                     // rule labels: retval
                     // token list labels:
@@ -1217,7 +1212,7 @@ public class sParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: val, name
+                    // elements: name, val
                     // token labels:
                     // rule labels: retval
                     // token list labels:
