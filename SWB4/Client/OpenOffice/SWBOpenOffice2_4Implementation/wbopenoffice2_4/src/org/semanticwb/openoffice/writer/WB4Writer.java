@@ -623,7 +623,14 @@ public class WB4Writer extends OfficeDocument
             }
             index++;
         }
-        this.save();
+        try
+        {
+            this.save();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**
