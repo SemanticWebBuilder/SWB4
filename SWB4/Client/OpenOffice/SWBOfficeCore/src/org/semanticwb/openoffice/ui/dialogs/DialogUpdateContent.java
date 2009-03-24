@@ -8,6 +8,8 @@ package org.semanticwb.openoffice.ui.dialogs;
 import java.awt.Cursor;
 import java.awt.Frame;
 import java.io.File;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeApplication;
@@ -68,13 +70,14 @@ public class DialogUpdateContent extends javax.swing.JDialog
             }
         }
     }
-
+    
     /** Creates new form DialogSummaryPublish */
     public DialogUpdateContent(String wokspaceid, String contentid, OfficeDocument document)
     {
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
         this.setIconImage(ImageLoader.images.get("semius").getImage());
+        
         this.setModal(true);
         this.workspaceid = wokspaceid;
         this.contentid = contentid;
