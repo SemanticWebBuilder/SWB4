@@ -34,7 +34,6 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.portal.resources.Banner;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
 /**
