@@ -28,6 +28,8 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
  */
 public class SWBADBNatural extends GenericResource {
 
+    private Translator tr;
+
     /** Creates a new instance of SWBADBNatural */
     public SWBADBNatural()
     {
@@ -70,6 +72,7 @@ public class SWBADBNatural extends GenericResource {
                      "curSelected = 0;" +
                      "dojo.byId('queryText').focus();" +
                 "}" +
+                //Establece el elemento seleccionado
                 "function setSelection(selected) {" +
                     "var word = getCurrentWord('queryText');" +
                     "var valText = dojo.byId('queryText').value;" +
@@ -77,10 +80,12 @@ public class SWBADBNatural extends GenericResource {
                         "dojo.byId('id' + selected).innerHTML.replace(/<(.|\\n)+?>/g, \"\") +" +
                         "valText.substring(word.endP, valText.length);" +
                 "}" +
+                //Reemplaza el texto del textArea con el seleccionado de la lista
                 "function replaceText(elm, start, end, txt) {" +
                     "var valText = elm.value;" +
                     "elm.value = valText.substring(0, start) + txt + valText.substring(end, valText.length);" +
                 "}" +
+                //Resalta una opción de la lista de sugerencias
                 "function highLightSelection(id, high) {" +
                     "var ele = dojo.byId('id' + id);" +
                     "if (high) {" +
@@ -93,6 +98,7 @@ public class SWBADBNatural extends GenericResource {
                         "});" +
                     "}" +
                  "}" +
+                 //Invoca una página web via AJAX
                  "function getHtml (url, tagid) {" +
                     "dojo.xhrGet ({" +
                         "url: url," +
@@ -256,7 +262,8 @@ public class SWBADBNatural extends GenericResource {
         out.println("Natural Language Query Example:");
         out.println("</td></tr>");
         out.println("<tr><td ><PRE >");
-        out.println("10 User con Active=true, Primer Apellido ordenar (Primer Apellido)");
+        out.println("->10 User con Activo=true, Primer Apellido");
+        out.println("->WebSite con Activo=true");
         out.println("*Type a word and use CTRL + SPACE to show suggestions, ESC to hide suggestions.");
         out.println("</PRE></td></tr>");
         out.println("<tr><td class=\"tabla\">");
@@ -325,10 +332,11 @@ public class SWBADBNatural extends GenericResource {
                 }
 
                 //Translate the Natural Language Sentence to SPARQL
-                Translator tr = new Translator(dict);
-                String queryString = prex + tr.translateSentence(_query);
+                //out.println(dict.toString());
+                tr = new Translator(dict);
+                String queryString = prex + "\n" + tr.translateSentence(_query);
 
-                //out.println("<textarea cols=80>" + queryString + "</textarea>");
+                out.println("<textarea cols=80>" + queryString + "</textarea>");
                 Query query = QueryFactory.create(queryString);
                 query.serialize(); //new IndentedWriter(response.getOutputStream(),true)) ;
                 // Create a single execution of this query, apply to a model
@@ -369,12 +377,31 @@ public class SWBADBNatural extends GenericResource {
                         }
 
                         Iterator<String> it=rs.getResultVars().iterator();
+
+                        boolean first = true;
                         while(it.hasNext())
                         {
                             String name=it.next();
                             RDFNode x = rb.get(name) ;
                             out.println("<td >");
-                            out.println(x!=null?x:" - ");
+                            SemanticObject so = SemanticObject.createSemanticObject(x.toString());
+                            if(so!=null) {
+                                if(first) {
+                                    out.println("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI()
+                                            + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '"
+                                            + so.getDisplayName() + "');\">" + so.getDisplayName() + "</a>");
+                                    first = false;
+                                } else {
+                                    out.println(so.getDisplayName());
+                                }
+                            } else {
+                                if (x!=null) {
+                                    out.println(x);
+                                } else {
+                                  out.println(" - ");
+                                }
+                            }
+                            //out.println(x!=null?SemanticObject.createSemanticObject(x.toString()).getDisplayName(lang):" - ");
                             out.println("</td>");
                         }
                         out.println("</tr>");
@@ -393,13 +420,15 @@ public class SWBADBNatural extends GenericResource {
                 out.println("<p aling=\"center\">Execution Time:"+(System.currentTimeMillis()-time)+"</p>");
                 out.println("</fieldset>");
             }
-        }catch(Exception e)
-        {
+        }catch(Exception e) {
             out.println("<fieldset>");
             out.println("Error: <BR>");
-            out.println("<textarea name=\"queryText\" rows=20 cols=80>");
-            e.printStackTrace(out);
-            out.println("</textarea>");
+            if(tr.getErrCode() != 0) {
+                out.println("La consulta no pudo ser traducida.");
+            } else {
+                out.println("La consulta no pudo ser procesada por Jena.");
+            }
+
             out.println("</fieldset>");
         }
         out.println("</form>");
