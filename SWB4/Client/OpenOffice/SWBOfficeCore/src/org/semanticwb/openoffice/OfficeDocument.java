@@ -283,7 +283,7 @@ public abstract class OfficeDocument
         {
             if (isPublicated())
             {
-                int res = JOptionPane.showConfirmDialog(null, "¿Desea borrar el contenido?", "Borrado de contenido", JOptionPane.YES_NO_OPTION);
+                int res = JOptionPane.showConfirmDialog(null, "¿Desea borrar el contenido?", "Borrado de contenido", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
                     contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
@@ -359,7 +359,7 @@ public abstract class OfficeDocument
             if (contentId == null || rep == null)
             {
                 deleteAssociation(false);
-                int resp = JOptionPane.showConfirmDialog(null, "El contenido no ha sido publicado.\r\n¿Desea publicar el contenido?", "Mostrar información del contenido", JOptionPane.YES_NO_OPTION);
+                int resp = JOptionPane.showConfirmDialog(null, "El contenido no ha sido publicado.\r\n¿Desea publicar el contenido?", "Mostrar información del contenido", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                 if (resp == JOptionPane.YES_OPTION)
                 {
                     saveToSite();
@@ -691,7 +691,7 @@ public abstract class OfficeDocument
         }
         if (file.exists())
         {
-            int resultOption = JOptionPane.showConfirmDialog(null, "El archivo ya existe, ¿Desea sobre escribir?", TITLE_SAVE_CONTENT_SITE, JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+            int resultOption = JOptionPane.showConfirmDialog(null, "El archivo ya existe, ¿Desea sobre escribir?", TITLE_SAVE_CONTENT_SITE, JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
             if (resultOption != JOptionPane.NO_OPTION)
             {
                 try

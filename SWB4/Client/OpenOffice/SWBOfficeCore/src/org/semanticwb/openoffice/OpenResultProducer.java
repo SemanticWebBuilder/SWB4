@@ -6,7 +6,6 @@ package org.semanticwb.openoffice;
 
 import java.awt.EventQueue;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,13 +46,13 @@ public class OpenResultProducer implements WizardResultProducer
     {
 
         public File contentfile;
-       
 
+        @Override
         public void start(Map wizardData, ResultProgressHandle progress)
         {
             assert !EventQueue.isDispatchThread();
             try
-            {                
+            {
                 IOfficeApplication openOfficeDocument = OfficeApplication.getOfficeApplicationProxy();
                 progress.setProgress("Descargando Documento...", 1, 4);
                 String repositoryName = wizardData.get(Search.WORKSPACE).toString();
@@ -81,7 +80,7 @@ public class OpenResultProducer implements WizardResultProducer
                         contentfile.getParentFile().mkdirs();
                         if (contentfile.exists())
                         {
-                            int res = JOptionPane.showConfirmDialog(null, "¡Existe un documento con el nombre " + fileName + "\r\n¿Desea sobre escribir el documento?", "Apertura de contenido", JOptionPane.YES_NO_OPTION);
+                            int res = JOptionPane.showConfirmDialog(null, "¡Existe un documento con el nombre " + fileName + "\r\n¿Desea sobre escribir el documento?", "Apertura de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                             if (res == JOptionPane.NO_OPTION)
                             {
                                 return;
@@ -108,23 +107,23 @@ public class OpenResultProducer implements WizardResultProducer
                         progress.finished(null);
                         OfficeDocument document = application.open(contentfile);
                         progress.setProgress("Documento abierto " + contentfile.getPath() + "...", 4, 4);
-                        HashMap<String, String> properties = new HashMap<String, String>();                        
+                        HashMap<String, String> properties = new HashMap<String, String>();
                         properties.put(OfficeDocument.CONTENT_ID_NAME, versioninfo.contentId);
                         properties.put(OfficeDocument.WORKSPACE_ID_NAME, wizardData.get(Search.WORKSPACE).toString());
                         document.saveCustomProperties(properties);
-                        
+
                     }
                 }
                 catch (ZipException ioe)
-                {                    
+                {
                     progress.failed(ioe.getMessage() + "\r\n" + StackTraceUtil.getStackTrace(ioe), false);
                 }
                 catch (IOException ioe)
-                {                    
+                {
                     progress.failed(ioe.getMessage() + "\r\n" + StackTraceUtil.getStackTrace(ioe), false);
                 }
                 catch (Exception ioe)
-                {                    
+                {
                     progress.failed(ioe.getMessage() + "\r\n" + StackTraceUtil.getStackTrace(ioe), false);
                 }
                 finally
@@ -152,14 +151,13 @@ public class OpenResultProducer implements WizardResultProducer
         }
     }
 
+    @Override
     public boolean cancel(Map map)
     {
-//        boolean dialogShouldClose = JOptionPane.showConfirmDialog(null,
-//                "¿Desea cerrar el asistente de apertura de contenido?","Asistente de Publicación",JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION;
-//        return dialogShouldClose;
         return true;
     }
 
+    @Override
     public Object finish(Map map) throws WizardException
     {
         BackgroundResultCreator res = new BackgroundResultCreator();

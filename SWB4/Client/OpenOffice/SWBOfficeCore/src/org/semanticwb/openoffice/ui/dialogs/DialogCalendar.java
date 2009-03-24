@@ -421,7 +421,7 @@ public class DialogCalendar extends java.awt.Dialog
             Date now = new Date(System.currentTimeMillis());
             if (dateInit.before(now))
             {
-                int res = JOptionPane.showConfirmDialog(this, "¡La fecha de inicio es anterior al día de hoy!\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                int res = JOptionPane.showConfirmDialog(this, "¡La fecha de inicio es anterior al día de hoy!\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.NO_OPTION)
                 {
                     jSpinnerInitDate.requestFocus();
@@ -430,7 +430,7 @@ public class DialogCalendar extends java.awt.Dialog
             }
             if (dateEnd.before(now))
             {
-                int res = JOptionPane.showConfirmDialog(this, "¡La fecha de terminación es anterior al día de hoy!\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                int res = JOptionPane.showConfirmDialog(this, "¡La fecha de terminación es anterior al día de hoy!\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.NO_OPTION)
                 {
                     jSpinnerEndDate.requestFocus();

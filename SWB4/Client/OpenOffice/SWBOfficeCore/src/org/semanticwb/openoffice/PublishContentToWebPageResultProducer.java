@@ -80,7 +80,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                     i++;
                 }
                 ResourceInfo info = openOfficeDocument.publishToResourceContent(repositoryName, contentID, version, title, description, webpage,propertiesToSend,values);
-                int res = JOptionPane.showConfirmDialog(null, "¿Desea activar el contenido?", "Publicación de contenido", JOptionPane.YES_NO_OPTION);
+                int res = JOptionPane.showConfirmDialog(null, "¿Desea activar el contenido?", "Publicación de contenido", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
                     openOfficeDocument.activateResource(info, true);

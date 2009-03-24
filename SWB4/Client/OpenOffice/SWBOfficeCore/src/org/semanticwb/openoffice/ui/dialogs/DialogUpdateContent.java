@@ -181,7 +181,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
                 {
                     if (versions >= limit)
                     {
-                        int resp=JOptionPane.showConfirmDialog(this, "¡El limite máximo de versiones es de " + limit + "!\r\nPuede publicar este contenido, debido a que tiene todas las versiones publicadas, pero excederá del límite de versiones\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                        int resp=JOptionPane.showConfirmDialog(this, "¡El limite máximo de versiones es de " + limit + "!\r\nPuede publicar este contenido, debido a que tiene todas las versiones publicadas, pero excederá del límite de versiones\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                         if(resp==JOptionPane.NO_OPTION)
                         {
                             return;
