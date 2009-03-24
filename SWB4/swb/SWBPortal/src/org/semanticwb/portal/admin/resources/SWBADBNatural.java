@@ -336,6 +336,7 @@ public class SWBADBNatural extends GenericResource {
                 tr = new Translator(dict);
                 String queryString = prex + "\n" + tr.translateSentence(_query);
 
+                System.out.println(queryString);
                 out.println("<textarea cols=80>" + queryString + "</textarea>");
                 Query query = QueryFactory.create(queryString);
                 query.serialize(); //new IndentedWriter(response.getOutputStream(),true)) ;
