@@ -521,7 +521,6 @@ public class SemanticObject
 
     public void setLiteralProperty(SemanticProperty prop, SemanticLiteral literal)
     {
-        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
         if(!m_virtual)
         {
             Object obj=literal.getValue();
@@ -604,6 +603,7 @@ public class SemanticObject
             }
         }
         setPropertyValueCache(prop, literal.getLanguage(), literal);
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
     }
 
     public SemanticObject removeProperty(SemanticProperty prop)
@@ -657,7 +657,6 @@ public class SemanticObject
 
     public SemanticObject setObjectProperty(SemanticProperty prop, SemanticObject object)
     {
-        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
         if (m_virtual)
         {
             ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
@@ -696,6 +695,7 @@ public class SemanticObject
                 if(old!=null && old instanceof SemanticObject)((SemanticObject)old).removePropertyValueCache(prop.getInverse(), "list");
             }
         }
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
         return this;
     }
 
@@ -1256,14 +1256,14 @@ public class SemanticObject
 
     public SemanticObject setInputStreamProperty(SemanticProperty prop, InputStream value, String name) throws SWBException
     {
-        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
         String workPath = this.getWorkPath();
         if (!(workPath.endsWith("\\") || workPath.equals("/")))
         {
             workPath += "/" + name;
         }
+        setProperty(prop, name);
         SWBPlatform.writeFileToWorkPath(workPath, value, "");
-        return this.setProperty(prop, name);
+        return this;
     }
 
     public InputStream getInputStreamProperty(SemanticProperty prop) throws SWBException

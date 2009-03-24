@@ -12,6 +12,8 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.ResourceSubType;
+import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.Template;
@@ -77,14 +79,17 @@ public class SWBServiceMgr implements SemanticObserver {
                     if(obj.instanceOf(Template.sclass))
                     {
                         Template tpl=(Template)obj.createGenericInstance();
-                        VersionInfo vi=new VersionInfo(tpl.getSemanticObject());
+                        VersionInfo vi=VersionInfo.createVersionInfo(tpl.getWebSite());
                         vi.setVersionNumber(1);
+                        vi.setVersionFile("template.html");
                         tpl.setActualVersion(vi);
                         tpl.setLastVersion(vi);
-                        if(tpl.getActualVersion()==null || tpl.getActualVersion().getVersionFile()==null)
+                        String txt="Hola";
+                        try
                         {
-                            vi.setVersionFile("template.html");
-                        }
+                            SWBPlatform.writeFileToWorkPath(tpl.getWorkPath()+"/1"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr.getURI());
+                        }catch(Exception e){log.error(e);}
+
                     }
                 } else //REMOVES
                 {
@@ -102,6 +107,22 @@ public class SWBServiceMgr implements SemanticObserver {
             } else if (prop instanceof SemanticProperty)
             {
                 updateTraceable(obj,usr);
+                //System.out.println("obj:"+obj+" "+Resource.sclass+"="+Resource.sclass+" prop:"+prop+"="+Resource.swb_resourceSubType);
+                if(obj.instanceOf(Resource.sclass) && prop.equals(Resource.swb_resourceSubType))
+                {
+                    Resource res=(Resource)obj.createGenericInstance();
+                    if(res.getResourceType()==null)
+                    {
+                        ResourceSubType sub=res.getResourceSubType();
+                        //System.out.println("sub:"+sub);
+                        new Exception().printStackTrace();
+                        if(sub!=null)
+                        {
+                            res.setResourceType(sub.getType());
+                        }
+                    }
+                }
+
             }else
             {
                 //TODO: SemanticClass

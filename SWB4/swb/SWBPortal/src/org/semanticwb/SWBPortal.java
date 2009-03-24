@@ -223,10 +223,10 @@ public class SWBPortal {
             site.setHomePage(home);
             home.setActive(true);
             //Create DNS
-            Dns dns = site.createDns("localhost");
-            dns.setTitle("localhost");
-            dns.setDescription("DNS por default", "es");
-            dns.setDescription("Default DNS", "en");
+            Dns dns = site.createDns();
+            dns.setDns("localhost");
+            //dns.setDescription("DNS por default", "es");
+            //dns.setDescription("Default DNS", "en");
             dns.setDefault(true);
             dns.setWebPage(home);
         }

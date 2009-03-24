@@ -130,7 +130,7 @@ public class SWBResourceMgr
                 //System.out.println("base:"+base);
                 if(user.haveAccess(base))
                 {
-                    if(checkResource(base, user, null, 0, today, topic))
+                    if(checkResource(base, user, 0, today, topic))
                     {
                         //System.out.println("Add:"+res);
                         ret.add(res);
@@ -167,13 +167,21 @@ public class SWBResourceMgr
 
         if(type!=null)
         {
+            Iterator<Resource> it;
             //TODO:check stype
-            Iterator<Resource> it=type.listResources();
+            if(stype!=null)
+            {
+                it=stype.listResources();
+            }else
+            {
+                it=type.listResources();
+            }
             while(it.hasNext())
             {
                 Resource base=it.next();
                 int camp=0;
-                if(checkResource(base, user, stype, camp, today, topic))
+                if(stype==null && base.getResourceSubType()!=null)continue; //verifica recursos sin subtipo
+                if(checkResource(base, user, camp, today, topic))
                 {
                     SWBResource wbr=getResource(base.getURI());
                     //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
@@ -323,7 +331,7 @@ public class SWBResourceMgr
      * @param today
      * @param topic
      * @return  */
-    public boolean checkResource(Resource base, User user, ResourceSubType stype, int camp, Date today, WebPage topic)
+    public boolean checkResource(Resource base, User user, int camp, Date today, WebPage topic)
     {
         boolean passrules = true;
         //System.out.println("checkResource:"+base.getId()+" tmid:"+base.getTopicMapId()+" stype:"+stype+" stypemap:"+stypemap+" camp:"+camp+" topic:"+topic.getDisplayName());
@@ -336,7 +344,7 @@ public class SWBResourceMgr
         //System.out.println("&& ("+base.getCamp()+" == 0 || "+DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive()+" == 1)");
 
         if (base.isActive() && !base.isDeleted()
-                && base.getResourceSubType() == stype
+                //&& base.getResourceSubType() == stype
                 //&& (camp < 3 || base.getCamp() == camp)
                 //&& (base.getMaxViews() == -1 || base.getMaxViews() > base.getViews())
                 //&& (base.getCamp() == 0 || DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive() == 1)

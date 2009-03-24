@@ -136,7 +136,7 @@ public class TemplateImp extends Template
         //busca el tipo de recurso en el topicmap del template
         ResourceType rt=getWebSite().getResourceType(type);
         //busca el tipo de recurso en el topicmap global
-        if(rt==null)rt=SWBContext.getGlobalWebSite().getResourceType(type);
+        //if(rt==null)rt=SWBContext.getGlobalWebSite().getResourceType(type);
         return rt;
     }
     
@@ -147,9 +147,10 @@ public class TemplateImp extends Template
     public ResourceSubType getSubType(String type, String stype)
     {
         //busca el tipo de recurso en el topicmap del template
-        ResourceSubType rt=getWebSite().getResourceSubType((type+"_"+stype));
+        //ResourceSubType rt=getWebSite().getResourceSubType((type+"_"+stype));
+        ResourceSubType rt=getWebSite().getResourceSubType(stype);
         //busca el tipo de recurso en el topicmap global
-        if(rt==null)rt=SWBContext.getGlobalWebSite().getResourceSubType((type+"_"+stype));
+        //if(rt==null)rt=SWBContext.getGlobalWebSite().getResourceSubType((type+"_"+stype));
         return rt;
     }
     

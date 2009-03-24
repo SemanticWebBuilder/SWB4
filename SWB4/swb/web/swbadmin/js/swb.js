@@ -929,6 +929,64 @@
           return ret;
       }
 
+      //regresa un substring de acuerdo al numero (number) de coincidencias del separador (separator)
+      function subStringSeparator(str, separator, number)
+      {
+          var i=0;
+          var s=0;
+          var aux="";
+          while(i<str.length)
+          {
+             var ch=str.charAt(i);
+             if(ch==separator)
+             {
+                 if(s==number)break;
+                 s++;
+             }
+             aux+=ch;
+             i++;
+          }
+          return aux;
+      }
+
+      function matchDropLevel(dragNode, dropNode)
+      {
+          var ret=true;
+          var level=0;
+          var slevel=dragNode.item.dropMatchLevel;
+          if(slevel)level=parseInt(slevel);
+
+          if(level>0)
+          {
+              var pathDrag;
+              var pathDrop;
+
+              var path="";
+              var aux=dragNode;
+              while(aux!=null)
+              {
+                 path=aux.id+"|"+path
+                 aux=aux.getParent();
+              }
+              pathDrag=path;
+              aux=dropNode;
+              while(aux!=null)
+              {
+                 path=aux.id+"|"+path
+                 aux=aux.getParent();
+              }
+              pathDrop=path;
+
+              pathDrag=subStringSeparator(pathDrag,'|',level);
+              pathDrop=subStringSeparator(pathDrop,'|',level);
+
+              if(pathDrag!=pathDrop)ret=false;
+
+              //self.status=level+" "+pathDrag+" "+pathDrop;
+          }
+          return ret;
+      }
+
 function selectAll(name,val)
    {
       var field = document.getElementsByName(name);

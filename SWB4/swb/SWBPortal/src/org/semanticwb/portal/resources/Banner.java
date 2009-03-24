@@ -60,6 +60,7 @@ public class Banner extends GenericAdmResource
     
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        //System.out.println("Banner.doView");
         StringBuffer ret = new StringBuffer("");
         Resource base = getResourceBase();
         try {

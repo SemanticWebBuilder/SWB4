@@ -87,7 +87,7 @@ try
         if(obj.getSemanticClass().equals(Resource.sclass))
         {
             int pmode=((org.semanticwb.model.Resource)obj.createGenericInstance()).getResourceType().getResourceMode();
-            view="resourceMode"+pmode;
+            //view="resourceMode"+pmode;
         }
         //System.out.println(view);
 
