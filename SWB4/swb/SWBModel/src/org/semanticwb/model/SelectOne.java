@@ -65,6 +65,13 @@ public class SelectOne extends SelectOneBase
                 {
                     imsg=label+" is required.";
                 }
+            }else
+            {
+                imsg="Dato invalido.";
+                if(lang.equals("en"))
+                {
+                    imsg="Invalid data.";
+                }
             }
         }
 

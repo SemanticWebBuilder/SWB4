@@ -551,4 +551,9 @@ public class SemanticProperty
         if(res!=null && res.getURI().equals(SemanticVocabulary.XMLS_SHORT))ret=true;
         return ret;
     }
+
+    public boolean isNumeric()
+    {
+        return isInt() || isLong() || isByte() || isDouble() || isFloat() || isShort();
+    }
 }

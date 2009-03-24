@@ -60,12 +60,19 @@ public class GenericFormElement extends FormElementBase
         
         if(imsg==null)
         {
-            if(prop.isDataTypeProperty() && prop.isInt())
+            if(prop.isDataTypeProperty() && prop.isNumeric())
             {
                 imsg="Número invalido.";
                 if(lang.equals("en"))
                 {
                     imsg="Invalid number.";
+                }
+            }else
+            {
+                imsg="Dato invalido.";
+                if(lang.equals("en"))
+                {
+                    imsg="Invalid data.";
                 }
             }
             
@@ -125,7 +132,7 @@ public class GenericFormElement extends FormElementBase
                 String checked="";
                 boolean value=false;
                 String aux=request.getParameter(prop.getName());
-                if(aux!=null)value=Boolean.parseBoolean(aux);
+                if(aux!=null)value=true;
                 else value=obj.getBooleanProperty(prop);
                 
                 if(value)checked="checked=\"checked\"";
