@@ -697,7 +697,7 @@ public class BaseNode extends BaseNodeBase
         for (SemanticObject nodeDefinition : getChildNodeDefinition(clazz))
         {
             String name = nodeDefinition.getProperty(ChildNodeDefinition.jcr_name);
-            if (name.equals("*"))
+            if (name!=null && name.equals("*"))
             {
                 return nodeDefinition;
             }
