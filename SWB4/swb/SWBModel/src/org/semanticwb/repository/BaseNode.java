@@ -734,7 +734,7 @@ public class BaseNode extends BaseNodeBase
         {
             String name = nodeDefinition.getProperty(Nameable.jcr_name);
             String requiredType = nodeDefinition.getProperty(ChildNodeDefinition.jcr_requiredPrimaryTypes);
-            if (name.equals(nameTocreate) && requiredType != null)
+            if (name!=null && name.equals(nameTocreate) && requiredType != null)
             {
                 try
                 {
@@ -755,7 +755,7 @@ public class BaseNode extends BaseNodeBase
             }
             if (!allowsSameNameSiblings)
             {
-                if (name.equals("*") && requiredType != null)
+                if (name!=null && name.equals("*") && requiredType != null)
                 {
                     try
                     {
