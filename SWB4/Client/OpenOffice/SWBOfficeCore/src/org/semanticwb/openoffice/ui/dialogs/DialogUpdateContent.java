@@ -8,8 +8,6 @@ package org.semanticwb.openoffice.ui.dialogs;
 import java.awt.Cursor;
 import java.awt.Frame;
 import java.io.File;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import org.semanticwb.openoffice.OfficeApplication;
