@@ -175,7 +175,8 @@ private void jButtonViewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
     {
         String workspace = Search.map.get(Search.WORKSPACE).toString();
         DefaultTableModel model=(DefaultTableModel)jTableVersion.getModel();
-        VersionInfo version=(VersionInfo)model.getValueAt(jTableVersion.getSelectedRow(), 0);
+
+        VersionInfo version=(VersionInfo)model.getValueAt(jTableVersion.getSelectedRow(), 2);
         String name=null;
         try
         {
