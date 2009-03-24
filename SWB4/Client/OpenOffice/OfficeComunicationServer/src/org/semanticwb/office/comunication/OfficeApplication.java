@@ -555,9 +555,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             {
                 Node frozenNode = versiontoReturn.getNode("jcr:frozenNode");
                 String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
-                String file = frozenNode.getProperty(cm_file).getString();
-                Node resNode = frozenNode.getNode("jcr:content");
-                InputStream in = resNode.getProperty("jcr:data").getStream();
+                String file = frozenNode.getProperty(cm_file).getString();                
+                InputStream in = frozenNode.getProperty("jcr:data").getStream();
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 byte[] buffer = new byte[2048];
                 int read = in.read(buffer);
