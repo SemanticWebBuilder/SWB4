@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.PortletType;
+import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
@@ -39,7 +39,7 @@ import org.w3c.dom.NodeList;
  */
 public class WBAResTypes extends GenericResource {
 
-    private Logger log = SWBUtils.getLogger(WBAResourceTypes.class);
+    private static Logger log = SWBUtils.getLogger(WBAResTypes.class);
     private Properties propResourceTypes = null;
     private final int I_PAGE_SIZE = 10;
     private final int I_INIT_PAGE = 1;
@@ -91,18 +91,18 @@ public class WBAResTypes extends GenericResource {
 
     private String[] getCatSortArray(WebSite wsite, int actualPage, String resType) {
         Vector vRO = new Vector();
-        Iterator<PortletType> en1 = SWBContext.getGlobalWebSite().listPortletTypes();
+        Iterator<ResourceType> en1 = SWBContext.getGlobalWebSite().listResourceTypes();
         while (en1.hasNext()) {
-            PortletType ROT = en1.next();
+            ResourceType ROT = en1.next();
             vRO.add(ROT);
         }
-        en1 = wsite.listPortletTypes();
+        en1 = wsite.listResourceTypes();
         while (en1.hasNext()) {
             boolean iE = false;
-            PortletType ROT = en1.next();
+            ResourceType ROT = en1.next();
             for (int i = 0; i < vRO.size(); i++) {
-                PortletType RO = (PortletType) vRO.get(i);
-                if (RO.getPortletClassName().equals(ROT.getPortletClassName())) {
+                ResourceType RO = (ResourceType) vRO.get(i);
+                if (RO.getResourceClassName().equals(ROT.getResourceClassName())) {
                     iE = true;
                     break;
                 }
@@ -122,8 +122,8 @@ public class WBAResTypes extends GenericResource {
             boolean isExist = false;
             Enumeration en = vRO.elements();
             while (en.hasMoreElements()) {
-                PortletType RO = (PortletType) en.nextElement();
-                if (value.equalsIgnoreCase(RO.getPortletClassName())) {
+                ResourceType RO = (ResourceType) en.nextElement();
+                if (value.equalsIgnoreCase(RO.getResourceClassName())) {
                     isExist = true;
                     break;
                 }
@@ -314,8 +314,8 @@ public class WBAResTypes extends GenericResource {
         int iType = 0;
         int iCache = 0;
         String strTitleLabel = paramsRequest.getLocaleString("frmTitle");
-        if (paramsRequest.getAction().equals("portlet")) {
-            strTitleLabel = paramsRequest.getLocaleString("frmPortletGUI");
+        if (paramsRequest.getAction().equals("resource")) {
+            strTitleLabel = paramsRequest.getLocaleString("frmResourceGUI");
         }
 
         try {
@@ -386,8 +386,8 @@ public class WBAResTypes extends GenericResource {
             sbRet.append("  <option value=\"3\">" + paramsRequest.getLocaleString("frmComboSystem") + "</option> \n");
             sbRet.append("  <option value=\"4\">" + paramsRequest.getLocaleString("frmComboInner") + "</option> \n");
         } else {
-            sbRet.append("  <option value=\"5\">" + paramsRequest.getLocaleString("frmPortletContent") + "</option> \n");
-            sbRet.append("  <option value=\"6\">" + paramsRequest.getLocaleString("frmPortletStrategy") + "</option> \n");
+            sbRet.append("  <option value=\"5\">" + paramsRequest.getLocaleString("frmResourceContent") + "</option> \n");
+            sbRet.append("  <option value=\"6\">" + paramsRequest.getLocaleString("frmResourceStrategy") + "</option> \n");
         }
         sbRet.append("</select>");
         sbRet.append("<script language=\"JavaScript\" type=\"text/JavaScript\"> \n");
@@ -466,7 +466,7 @@ public class WBAResTypes extends GenericResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         WebSite website=SWBContext.getWebSite(request.getParameter("tmSel"));
-        PortletType rec = null;
+        ResourceType rec = null;
         String ObjClass = null, ClassName = null, BundleFile = null, ClassDisName = null, description = null;
         int type = 0, cache = 0;
         ObjClass = (request.getParameter("class_res") != null) ? request.getParameter("class_res") : "";
@@ -489,7 +489,7 @@ public class WBAResTypes extends GenericResource {
             strXML.append(request.getParameter("ext_att_res"));
         }
         try {
-                rec=createPortletType(website, ObjClass, ClassName, BundleFile, ClassDisName, description, type, cache, strXML.toString(), response.getUser().getId());
+                rec=createResourceType(website, ObjClass, ClassName, BundleFile, ClassDisName, description, type, cache, strXML.toString(), response.getUser().getId());
                 if (rec != null) {
                     response.setRenderParameter("confirm", "added");
                 } else {
@@ -503,17 +503,17 @@ public class WBAResTypes extends GenericResource {
         response.setRenderParameter("resType", request.getParameter("resType"));
     }
 
-    private PortletType createPortletType(WebSite website,String objClass,String classname, String bundle, String classDisName, String description,int mode,int cache,String xml,String userid) {
+    private ResourceType createResourceType(WebSite website,String objClass,String classname, String bundle, String classDisName, String description,int mode,int cache,String xml,String userid) {
         try{
-            PortletType ptype = website.createPortletType(classname);
+            ResourceType ptype = website.createResourceType(classname);
             if(objClass!=null){
-                ptype.setPortletClassName(objClass);
+                ptype.setResourceClassName(objClass);
             }
             if(bundle!=null){
-                ptype.setPortletBundle(bundle);
+                ptype.setResourceBundle(bundle);
             }
             if(mode>0){
-                ptype.setPortletMode(mode);
+                ptype.setResourceMode(mode);
             }
             if(classDisName!=null){
                 ptype.setTitle(classDisName);
@@ -522,10 +522,10 @@ public class WBAResTypes extends GenericResource {
                 ptype.setDescription(description);
             }
             if(cache>0){
-                ptype.setPortletCache(cache);
+                ptype.setResourceCache(cache);
             }
             if(mode!=4){
-                String clsname=ptype.getPortletClassName();
+                String clsname=ptype.getResourceClassName();
                 SWBPortal.getResourceMgr().createSWBResourceClass(clsname, true);
 
                  //TODO:VER COMO QUEDARIA ESTO EN V4
