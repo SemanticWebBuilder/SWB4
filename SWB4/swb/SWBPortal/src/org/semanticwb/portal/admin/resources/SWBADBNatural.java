@@ -76,9 +76,9 @@ public class SWBADBNatural extends GenericResource {
                 "function setSelection(selected) {" +
                     "var word = getCurrentWord('queryText');" +
                     "var valText = dojo.byId('queryText').value;" +
-                        "dojo.byId('queryText').value = valText.substring(0, word.startP) +" +
+                        "dojo.byId('queryText').value = \"[\" + valText.substring(0, word.startP) +" +
                         "dojo.byId('id' + selected).innerHTML.replace(/<(.|\\n)+?>/g, \"\") +" +
-                        "valText.substring(word.endP, valText.length);" +
+                        "valText.substring(word.endP, valText.length) + \"]\";" +
                 "}" +
                 //Reemplaza el texto del textArea con el seleccionado de la lista
                 "function replaceText(elm, start, end, txt) {" +
@@ -344,6 +344,7 @@ public class SWBADBNatural extends GenericResource {
                 // which is wrapped up as a Dataset
                 QueryExecution qexec = QueryExecutionFactory.create(query, model) ;
                 // Or QueryExecutionFactory.create(queryString, model) ;
+                System.out.println();
                 try {
                     // Assumption: it's a SELECT query.
                     ResultSet rs = qexec.execSelect() ;
@@ -386,7 +387,9 @@ public class SWBADBNatural extends GenericResource {
                             RDFNode x = rb.get(name) ;
                             out.println("<td >");
                             SemanticObject so = SemanticObject.createSemanticObject(x.toString());
+
                             if(so!=null) {
+                                System.out.println(so.getDisplayName());
                                 if(first) {
                                     out.println("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI()
                                             + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '"
