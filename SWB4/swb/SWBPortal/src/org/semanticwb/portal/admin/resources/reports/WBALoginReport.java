@@ -600,7 +600,11 @@ public class WBALoginReport extends GenericResource {
                 filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRLoggedUserDataDetail(filter);
                 JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
-                itRecHits = ds.getData().iterator();
+                if(ds!=null){
+                    itRecHits = ds.getData().iterator();
+                }else {
+                    itRecHits = Collections.EMPTY_LIST.iterator();
+                }
                 while(itRecHits.hasNext()) {
                     SWBRecHit rec = itRecHits.next();
                     Element row = dom.createElement("row");
@@ -633,7 +637,11 @@ public class WBALoginReport extends GenericResource {
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRLoggedUserDataDetail(filter);
                 JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
-                itRecHits = ds.getData().iterator();
+                if(ds!=null){
+                    itRecHits = ds.getData().iterator();
+                }else {
+                    itRecHits = Collections.EMPTY_LIST.iterator();
+                }
                 while(itRecHits.hasNext()) {
                     SWBRecHit rec = itRecHits.next();
                     Element row = dom.createElement("row");

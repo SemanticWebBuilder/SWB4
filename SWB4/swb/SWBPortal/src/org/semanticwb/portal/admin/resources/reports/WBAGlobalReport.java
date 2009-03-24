@@ -607,7 +607,11 @@ public class WBAGlobalReport extends GenericResource {
                 filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                 JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
-                itRecHits = ds.getData().iterator();
+                if(ds!=null){
+                    itRecHits = ds.getData().iterator();
+                }else {
+                    itRecHits = Collections.EMPTY_LIST.iterator();
+                }
                 while(itRecHits.hasNext()) {
                     SWBRecHit rec = itRecHits.next();
                     Element row = dom.createElement("row");
@@ -630,6 +634,7 @@ public class WBAGlobalReport extends GenericResource {
                     pages.appendChild(dom.createTextNode(Long.toString(rec.getHits())));
                     row.appendChild(pages);
                 }
+
             }else { // REPORTE MENSUAL
                 String webSite = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");                
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));                
@@ -640,7 +645,11 @@ public class WBAGlobalReport extends GenericResource {
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
                 JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
-                itRecHits = ds.getData().iterator();
+                if(ds!=null){
+                    itRecHits = ds.getData().iterator();
+                }else {
+                    itRecHits = Collections.EMPTY_LIST.iterator();
+                }
                 while(itRecHits.hasNext()) {
                     SWBRecHit rec = itRecHits.next();
                     Element row = dom.createElement("row");
