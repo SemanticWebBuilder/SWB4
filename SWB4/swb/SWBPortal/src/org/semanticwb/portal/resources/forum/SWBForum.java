@@ -44,6 +44,7 @@ import org.semanticwb.servlet.internal.UploadFormElement;
 public class SWBForum extends GenericResource {
 
     private static Logger log = SWBUtils.getLogger(SWBForum.class);
+    private String lang="es";
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -100,7 +101,8 @@ public class SWBForum extends GenericResource {
     public void doAddCategory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         SWBFormMgr mgr = new SWBFormMgr(FrmCategory.frm_FrmCategory, paramRequest.getTopic().getSemanticObject(), null);
-        mgr.setLang("es");
+        if(paramRequest.getUser()!=null) lang=paramRequest.getUser().getLanguage();
+        mgr.setLang(lang);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("addCategory");
@@ -116,7 +118,8 @@ public class SWBForum extends GenericResource {
             semObject = SemanticObject.createSemanticObject(request.getParameter("caturi"));
         }
         SWBFormMgr mgr = new SWBFormMgr(FrmForum.frm_FrmForum, semObject, null);
-        mgr.setLang("es");
+        if(paramRequest.getUser()!=null) lang=paramRequest.getUser().getLanguage();
+        mgr.setLang(lang);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("addForum");
@@ -128,7 +131,8 @@ public class SWBForum extends GenericResource {
         PrintWriter out = response.getWriter();
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("categoryUri"));
         SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
-        mgr.setLang("es");
+        if(paramRequest.getUser()!=null) lang=paramRequest.getUser().getLanguage();
+        mgr.setLang(lang);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("categoryUri", semObject.getURI());
@@ -141,7 +145,8 @@ public class SWBForum extends GenericResource {
         PrintWriter out = response.getWriter();
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("forumUri"));
         SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
-        mgr.setLang("es");
+        if(paramRequest.getUser()!=null) lang=paramRequest.getUser().getLanguage();
+        mgr.setLang(lang);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("forumUri", semObject.getURI());
@@ -154,7 +159,8 @@ public class SWBForum extends GenericResource {
         PrintWriter out = response.getWriter();
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("forumUri"));
         SWBFormMgr mgr = new SWBFormMgr(FrmThread.frm_FrmThread, semObject, null);
-        mgr.setLang("es");
+        if(paramRequest.getUser()!=null) lang=paramRequest.getUser().getLanguage();
+        mgr.setLang(lang);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("addThread");
@@ -198,7 +204,8 @@ public class SWBForum extends GenericResource {
         url.setParameter("threadUri", request.getParameter("threadUri"));
         url.setParameter("postUri", request.getParameter("postUri"));
 
-        mgr.setLang("es");
+        if(paramRequest.getUser()!=null) lang=paramRequest.getUser().getLanguage();
+        mgr.setLang(lang);
         mgr.setType(mgr.TYPE_XHTML);
         url.setAction("replyPost");
         mgr.setAction(url.toString());
@@ -209,7 +216,8 @@ public class SWBForum extends GenericResource {
         PrintWriter out = response.getWriter();
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
         SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
-        mgr.setLang("es");
+        if(paramRequest.getUser()!=null) lang=paramRequest.getUser().getLanguage();
+        mgr.setLang(lang);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("threadUri", request.getParameter("threadUri"));
