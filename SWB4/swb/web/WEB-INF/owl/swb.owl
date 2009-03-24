@@ -1207,6 +1207,12 @@
     <rdfs:label>parent</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="pflowInstance">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_pflowInstance">
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propHidden>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:domain rdf:resource="#Resource"/>
     <rdfs:range rdf:resource="#PFlowInstance"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1325,6 +1331,12 @@
     <rdfs:domain rdf:resource="#TemplateRef"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="resourceFilter">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceFilter">
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propHidden>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:range rdf:resource="#ResourceFilter"/>
     <rdfs:domain rdf:resource="#Resource"/>
   </owl:ObjectProperty>
@@ -1411,6 +1423,14 @@
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="homePage">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_homePage">
+        <rdfs:label xml:lang="es">Página Inicial</rdfs:label>
+        <rdfs:label xml:lang="en">Home Page</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:range rdf:resource="#WebPage"/>
     <rdfs:domain rdf:resource="#WebSite"/>
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1518,7 +1538,12 @@
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="resourceType">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceType"/>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceType">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >160</swb:index>
+        <rdfs:label xml:lang="en">Resource Type</rdfs:label>
+        <rdfs:label xml:lang="es">Tipo de Recurso</rdfs:label>
+      </swbxf:DisplayProperty>
     </swb:displayProperty>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasPTResource"/>
@@ -1530,7 +1555,7 @@
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_resourceSubType">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >100</swb:index>
+        >150</swb:index>
         <rdfs:label xml:lang="en">Resource Subtype</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
         <rdfs:label xml:lang="es">Subtipo de Resource</rdfs:label>
@@ -1748,14 +1773,15 @@
     >true</swb:required>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_resourceMode">
-        <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</swbxf:propDisabled>
+        <rdfs:label xml:lang="es">Modo de Recurso</rdfs:label>
+        <rdfs:label xml:lang="en">Resource Mode</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
         <swbxf:propSelectValues xml:lang="es">1:Contenido|2:Estrategia|3:Sistema</swbxf:propSelectValues>
         <swbxf:propSelectValues xml:lang="en">1:Content|2:Strategy|3:System</swbxf:propSelectValues>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >30</swb:index>
-        <rdfs:label>Resource Mode</rdfs:label>
+        <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swbxf:propDisabled>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:domain rdf:resource="#ResourceType"/>
@@ -1993,6 +2019,14 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="dvcUserAgent">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_dvcUserAgent">
+        <rdfs:label xml:lang="en">User Agent</rdfs:label>
+        <rdfs:label xml:lang="es">Agente de Usuario</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:label>userAgent</rdfs:label>
     <rdfs:domain rdf:resource="#Device"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -2009,6 +2043,13 @@
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="dns">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_dns">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <rdfs:label>Dns</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:domain rdf:resource="#Dns"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -2065,6 +2106,14 @@
     <rdfs:label>action</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="resourceWindow">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceWindow">
+        <rdfs:label xml:lang="en">Function Window</rdfs:label>
+        <rdfs:label xml:lang="es">Ventana de Funciones</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >45</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:domain rdf:resource="#Resource"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
@@ -2100,10 +2149,10 @@
   <owl:DatatypeProperty rdf:ID="maxViews">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_maxViews">
-        <rdfs:label xml:lang="en">Max Views</rdfs:label>
-        <rdfs:label xml:lang="es">Numero Máximo de Apariciones</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >110</swb:index>
+        >85</swb:index>
+        <rdfs:label xml:lang="es">Apariciones Máximas</rdfs:label>
+        <rdfs:label xml:lang="en">Max Views</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
@@ -2187,8 +2236,8 @@
   <owl:DatatypeProperty rdf:ID="resourceBundle">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceBundle">
+        <rdfs:label xml:lang="es">Archivo de Propiedades</rdfs:label>
         <rdfs:label xml:lang="en">Resource Bundle</rdfs:label>
-        <rdfs:label xml:lang="es">Nombre de archivo de Propiedades</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >50</swb:index>
       </swbxf:DisplayProperty>
@@ -2436,6 +2485,12 @@
     <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_inherit"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="priority">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_priority">
+        <rdfs:label xml:lang="en">Priority</rdfs:label>
+        <rdfs:label xml:lang="es">Prioridad</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#Priorityable"/>
   </owl:DatatypeProperty>
@@ -2459,6 +2514,14 @@
     >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="maxHits">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_maxHits">
+        <rdfs:label xml:lang="en">Max Hits</rdfs:label>
+        <rdfs:label xml:lang="es">Hits Máximos</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >95</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
     <rdfs:domain rdf:resource="#Hitable"/>
   </owl:DatatypeProperty>
