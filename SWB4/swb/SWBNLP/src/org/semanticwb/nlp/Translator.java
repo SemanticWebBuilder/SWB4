@@ -11,7 +11,6 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticProperty;
 
 /**
  *
