@@ -611,7 +611,7 @@ public class WBASectionReport extends GenericResource {
         try {
             WBAFilterReportBean filter;            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
-            
+            Iterator<SWBRecHit> itRecHits;
             if(rtype == 0) { // REPORTE DIARIO
                 filter = buildFilter(request, paramsRequest);            
                 int renglones = 0;
@@ -619,7 +619,11 @@ public class WBASectionReport extends GenericResource {
                 dom.appendChild(report);
                 JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
                 JRBeanCollectionDataSource ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
-                Iterator<SWBRecHit> itRecHits = ds.getData().iterator();
+                if(ds!=null){
+                    itRecHits = ds.getData().iterator();
+                }else {
+                    itRecHits = Collections.EMPTY_LIST.iterator();
+                }
                 while(itRecHits.hasNext()) {
                     SWBRecHit rec = itRecHits.next();
                     Element row = dom.createElement("row");
