@@ -5,9 +5,9 @@
         <display-name xml:lang="en">Date</display-name>
         <description xml:lang="es">Recurso que se encarga de desplegar la fecha del sistema</description>
         <description xml:lang="en">Resource used to display the system date</description>
-        <resource-class>com.infotec.wb.resources.WBDate</resource-class>
+        <resource-class>org.semanticwb.portal.resources.WBDate</resource-class>
         <expiration-cache>0</expiration-cache>
-        <resource-bundle>com.infotec.wb.resources.WBDate</resource-bundle>
+        <resource-bundle>org.semanticwb.portal.resources.WBDate</resource-bundle>
         <resource-type>4</resource-type>
         <extended-attributes>
         </extended-attributes>

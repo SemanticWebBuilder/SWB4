@@ -5,9 +5,9 @@
         <display-name xml:lang="en">Level Menu</display-name>
         <description xml:lang="es">Recurso que permite desplegar un menu que agrupe por niveles las diferentes secciones del sitio</description>
         <description xml:lang="en">Resource that allows to unfold a menu that groups by levels the different sections from the site</description>
-        <resource-class>com.infotec.wb.resources.WBMenuNivel</resource-class>
+        <resource-class>org.semanticwb.portal.resources.WBMenuNivel</resource-class>
         <expiration-cache>0</expiration-cache>
-        <resource-bundle>com.infotec.wb.resources.WBMenuNivel</resource-bundle>
+        <resource-bundle>org.semanticwb.portal.resources.WBMenuNivel</resource-bundle>
         <resource-type>2</resource-type>
         <extended-attributes>
         </extended-attributes>

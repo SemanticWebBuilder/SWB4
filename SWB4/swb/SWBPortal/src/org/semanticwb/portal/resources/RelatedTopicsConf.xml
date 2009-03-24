@@ -5,9 +5,9 @@
         <display-name xml:lang="en">Related Topics</display-name>
         <description xml:lang="es">Recurso que se encarga de desplegar la lista de relaciones semanticas con otras secciones generadas para la sección actual</description>
         <description xml:lang="en">Resource that is in charge to unfold the list of semantic relations with other sections generated for the present section</description>
-        <resource-class>com.infotec.wb.resources.RelatedTopics</resource-class>
+        <resource-class>org.semanticwb.portal.resources.RelatedTopics</resource-class>
         <expiration-cache>0</expiration-cache>
-        <resource-bundle>com.infotec.wb.resources.RelatedTopics</resource-bundle>
+        <resource-bundle>org.semanticwb.portal.resources.RelatedTopics</resource-bundle>
         <resource-type>3</resource-type>
         <extended-attributes>
         </extended-attributes>
