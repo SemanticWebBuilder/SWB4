@@ -9,9 +9,12 @@ package org.semanticwb.nlp;
  *
  * @author hasdai
  */
-// $ANTLR 3.1.2 /home/hasdai/Documentos/sLexer.g 2009-03-23 19:49:19
+// $ANTLR 3.1.2 /home/hasdai/Documentos/sLexer.g 2009-03-23 20:05:09
 
 import org.antlr.runtime.*;
+import java.util.Stack;
+import java.util.List;
+import java.util.ArrayList;
 
 public class sLexer extends Lexer {
     public static final int SIGN=5;
