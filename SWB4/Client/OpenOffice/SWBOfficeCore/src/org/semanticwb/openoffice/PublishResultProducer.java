@@ -63,6 +63,7 @@ public class PublishResultProducer implements WizardResultProducer
                 PropertyInfo[] propsToSave=properties.keySet().toArray(new PropertyInfo[properties.keySet().size()]);
                 String[] values=properties.values().toArray(new String[properties.values().size()]);
                 String contentID = openOfficeDocument.save(title, description, repositoryName, categoryID, document.getDocumentType().toString(), nodeType, name,propsToSave,values);
+                document.deleteAssociation(false);
                 document.SaveContentId(contentID, repositoryName);                               
                 int res = JOptionPane.showConfirmDialog(null, "¿Desea publicar este contenido en una página web?", "Publicación de contenido", JOptionPane.YES_NO_OPTION);
                 if (res == JOptionPane.YES_OPTION)
