@@ -9,7 +9,7 @@ package org.semanticwb.nlp;
  *
  * @author hasdai
  */
-// $ANTLR 3.1.2 /home/hasdai/Documentos/sParser.g 2009-03-20 13:29:53
+// $ANTLR 3.1.2 /home/hasdai/Documentos/sParser.g 2009-03-23 19:50:57
 
 import org.antlr.runtime.*;
 import java.util.Stack;
@@ -22,48 +22,50 @@ import org.antlr.runtime.tree.*;
 
 public class sParser extends Parser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "WHITESPACE", "SIGN", "SIGL", "SIGG", "SIGE", "SIGLE", "SIGGE", "PREC", "MODT", "PRED", "MODE", "MODO", "BOL", "NUM", "LIT", "ORDOP", "VAR", "DEL", "LPAR", "RPAR", "SIGI", "LIMIT", "SELECT", "MOD", "OBJLIST", "PROPLIST", "ASIGN", "SENTENCE", "COMPL", "COMPG", "COMPLE", "COMPGE", "PRECON", "PREDE", "OFFSET", "ORDER", "COMPNAME", "ASKQUERY", "MODTO", "NAME"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "WHITESPACE", "SIGN", "SIGL", "SIGG", "SIGE", "SIGLE", "SIGGE", "PREC", "MODT", "PRED", "MODE", "MODO", "BOL", "NUM", "LIT", "ORDOP", "VAR", "DEL", "LPAR", "RPAR", "LBRK", "RBRK", "SIGI", "LIMIT", "SELECT", "MOD", "OBJLIST", "PROPLIST", "ASIGN", "SENTENCE", "COMPL", "COMPG", "COMPLE", "COMPGE", "PRECON", "PREDE", "OFFSET", "ORDER", "COMPNAME", "ASKQUERY", "MODTO", "NAME"
     };
     public static final int SIGN=5;
-    public static final int SIGI=24;
+    public static final int SIGI=26;
     public static final int SIGL=6;
     public static final int SIGE=8;
-    public static final int ORDER=39;
-    public static final int LIMIT=25;
-    public static final int MOD=27;
-    public static final int ASKQUERY=41;
+    public static final int ORDER=41;
+    public static final int LIMIT=27;
+    public static final int MOD=29;
+    public static final int ASKQUERY=43;
     public static final int SIGG=7;
     public static final int DEL=21;
     public static final int ORDOP=19;
     public static final int BOL=16;
-    public static final int MODTO=42;
-    public static final int OBJLIST=28;
-    public static final int COMPL=32;
+    public static final int MODTO=44;
+    public static final int OBJLIST=30;
+    public static final int COMPL=34;
     public static final int EOF=-1;
-    public static final int COMPG=33;
-    public static final int NAME=43;
+    public static final int COMPG=35;
+    public static final int NAME=45;
     public static final int LPAR=22;
-    public static final int SENTENCE=31;
-    public static final int COMPLE=34;
-    public static final int OFFSET=38;
+    public static final int SENTENCE=33;
+    public static final int COMPLE=36;
+    public static final int OFFSET=40;
     public static final int MODT=12;
-    public static final int PROPLIST=29;
+    public static final int PROPLIST=31;
     public static final int VAR=20;
     public static final int MODO=15;
-    public static final int SELECT=26;
+    public static final int SELECT=28;
+    public static final int RBRK=25;
     public static final int MODE=14;
-    public static final int PREDE=37;
-    public static final int COMPGE=35;
-    public static final int PRECON=36;
+    public static final int PREDE=39;
+    public static final int COMPGE=37;
+    public static final int PRECON=38;
     public static final int PREC=11;
+    public static final int LBRK=24;
     public static final int PRED=13;
     public static final int SIGGE=10;
     public static final int LIT=18;
     public static final int WHITESPACE=4;
     public static final int NUM=17;
     public static final int SIGLE=9;
-    public static final int COMPNAME=40;
-    public static final int ASIGN=30;
+    public static final int COMPNAME=42;
+    public static final int ASIGN=32;
     public static final int RPAR=23;
 
     // delegates
@@ -254,7 +256,7 @@ public class sParser extends Parser {
 
 
             // AST REWRITE
-            // elements: query, limiter, modifier
+            // elements: query, modifier, limiter
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -518,7 +520,7 @@ public class sParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: proplist, name
+                    // elements: name, proplist
                     // token labels:
                     // rule labels: retval
                     // token list labels:
@@ -666,7 +668,7 @@ public class sParser extends Parser {
 
 
             // AST REWRITE
-            // elements: v1, name, v2
+            // elements: v1, v2, name
             // token labels:
             // rule labels: v1, retval, v2
             // token list labels:
@@ -744,7 +746,7 @@ public class sParser extends Parser {
     };
 
     // $ANTLR start "name"
-    // /home/hasdai/Documentos/sParser.g:62:1: name : (v1= VAR (v2= VAR )+ -> ^( COMPNAME $v1 $v2) | VAR );
+    // /home/hasdai/Documentos/sParser.g:62:1: name : (v1= VAR (v2= VAR )+ -> ^( COMPNAME $v1 $v2) | LBRK v1= VAR (v2= VAR )+ RBRK -> ^( COMPNAME $v1 $v2) | VAR );
     public final sParser.name_return name() throws RecognitionException {
         sParser.name_return retval = new sParser.name_return();
         retval.start = input.LT(1);
@@ -753,43 +755,52 @@ public class sParser extends Parser {
 
         Token v1=null;
         Token v2=null;
-        Token VAR16=null;
+        Token LBRK16=null;
+        Token RBRK17=null;
+        Token VAR18=null;
 
         Object v1_tree=null;
         Object v2_tree=null;
-        Object VAR16_tree=null;
+        Object LBRK16_tree=null;
+        Object RBRK17_tree=null;
+        Object VAR18_tree=null;
         RewriteRuleTokenStream stream_VAR=new RewriteRuleTokenStream(adaptor,"token VAR");
+        RewriteRuleTokenStream stream_RBRK=new RewriteRuleTokenStream(adaptor,"token RBRK");
+        RewriteRuleTokenStream stream_LBRK=new RewriteRuleTokenStream(adaptor,"token LBRK");
 
         try {
-            // /home/hasdai/Documentos/sParser.g:63:1: (v1= VAR (v2= VAR )+ -> ^( COMPNAME $v1 $v2) | VAR )
-            int alt7=2;
-            int LA7_0 = input.LA(1);
+            // /home/hasdai/Documentos/sParser.g:63:1: (v1= VAR (v2= VAR )+ -> ^( COMPNAME $v1 $v2) | LBRK v1= VAR (v2= VAR )+ RBRK -> ^( COMPNAME $v1 $v2) | VAR )
+            int alt8=3;
+            int LA8_0 = input.LA(1);
 
-            if ( (LA7_0==VAR) ) {
-                int LA7_1 = input.LA(2);
+            if ( (LA8_0==VAR) ) {
+                int LA8_1 = input.LA(2);
 
-                if ( (LA7_1==VAR) ) {
-                    alt7=1;
+                if ( (LA8_1==VAR) ) {
+                    alt8=1;
                 }
-                else if ( (LA7_1==EOF||(LA7_1>=SIGL && LA7_1<=PREC)||(LA7_1>=PRED && LA7_1<=MODO)||LA7_1==DEL||LA7_1==RPAR) ) {
-                    alt7=2;
+                else if ( (LA8_1==EOF||(LA8_1>=SIGL && LA8_1<=PREC)||(LA8_1>=PRED && LA8_1<=MODO)||LA8_1==DEL||LA8_1==RPAR) ) {
+                    alt8=3;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return retval;}
                     NoViableAltException nvae =
-                        new NoViableAltException("", 7, 1, input);
+                        new NoViableAltException("", 8, 1, input);
 
                     throw nvae;
                 }
             }
+            else if ( (LA8_0==LBRK) ) {
+                alt8=2;
+            }
             else {
                 if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                    new NoViableAltException("", 7, 0, input);
+                    new NoViableAltException("", 8, 0, input);
 
                 throw nvae;
             }
-            switch (alt7) {
+            switch (alt8) {
                 case 1 :
                     // /home/hasdai/Documentos/sParser.g:63:3: v1= VAR (v2= VAR )+
                     {
@@ -864,14 +875,93 @@ public class sParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/hasdai/Documentos/sParser.g:64:3: VAR
+                    // /home/hasdai/Documentos/sParser.g:64:3: LBRK v1= VAR (v2= VAR )+ RBRK
+                    {
+                    LBRK16=(Token)match(input,LBRK,FOLLOW_LBRK_in_name284); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_LBRK.add(LBRK16);
+
+                    v1=(Token)match(input,VAR,FOLLOW_VAR_in_name288); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_VAR.add(v1);
+
+                    // /home/hasdai/Documentos/sParser.g:64:17: (v2= VAR )+
+                    int cnt7=0;
+                    loop7:
+                    do {
+                        int alt7=2;
+                        int LA7_0 = input.LA(1);
+
+                        if ( (LA7_0==VAR) ) {
+                            alt7=1;
+                        }
+
+
+                        switch (alt7) {
+                    	case 1 :
+                    	    // /home/hasdai/Documentos/sParser.g:0:0: v2= VAR
+                    	    {
+                    	    v2=(Token)match(input,VAR,FOLLOW_VAR_in_name292); if (state.failed) return retval;
+                    	    if ( state.backtracking==0 ) stream_VAR.add(v2);
+
+
+                    	    }
+                    	    break;
+
+                    	default :
+                    	    if ( cnt7 >= 1 ) break loop7;
+                    	    if (state.backtracking>0) {state.failed=true; return retval;}
+                                EarlyExitException eee =
+                                    new EarlyExitException(7, input);
+                                throw eee;
+                        }
+                        cnt7++;
+                    } while (true);
+
+                    RBRK17=(Token)match(input,RBRK,FOLLOW_RBRK_in_name295); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_RBRK.add(RBRK17);
+
+
+
+                    // AST REWRITE
+                    // elements: v2, v1
+                    // token labels: v1, v2
+                    // rule labels: retval
+                    // token list labels:
+                    // rule list labels:
+                    // wildcard labels:
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleTokenStream stream_v1=new RewriteRuleTokenStream(adaptor,"token v1",v1);
+                    RewriteRuleTokenStream stream_v2=new RewriteRuleTokenStream(adaptor,"token v2",v2);
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
+
+                    root_0 = (Object)adaptor.nil();
+                    // 64:28: -> ^( COMPNAME $v1 $v2)
+                    {
+                        // /home/hasdai/Documentos/sParser.g:64:31: ^( COMPNAME $v1 $v2)
+                        {
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPNAME, "COMPNAME"), root_1);
+
+                        adaptor.addChild(root_1, stream_v1.nextNode());
+                        adaptor.addChild(root_1, stream_v2.nextNode());
+
+                        adaptor.addChild(root_0, root_1);
+                        }
+
+                    }
+
+                    retval.tree = root_0;}
+                    }
+                    break;
+                case 3 :
+                    // /home/hasdai/Documentos/sParser.g:65:3: VAR
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    VAR16=(Token)match(input,VAR,FOLLOW_VAR_in_name284); if (state.failed) return retval;
+                    VAR18=(Token)match(input,VAR,FOLLOW_VAR_in_name311); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
-                    VAR16_tree = (Object)adaptor.create(VAR16);
-                    adaptor.addChild(root_0, VAR16_tree);
+                    VAR18_tree = (Object)adaptor.create(VAR18);
+                    adaptor.addChild(root_0, VAR18_tree);
                     }
 
                     }
@@ -904,46 +994,46 @@ public class sParser extends Parser {
     };
 
     // $ANTLR start "sent"
-    // /home/hasdai/Documentos/sParser.g:67:1: sent : ( name SIGE val -> ^( ASIGN name val ) | name SIGL val -> ^( COMPL name val ) | name SIGG val -> ^( COMPG name val ) | name SIGLE val -> ^( COMPLE name val ) | name SIGGE val -> ^( COMPGE name val ) | name );
+    // /home/hasdai/Documentos/sParser.g:68:1: sent : ( name SIGE val -> ^( ASIGN name val ) | name SIGL val -> ^( COMPL name val ) | name SIGG val -> ^( COMPG name val ) | name SIGLE val -> ^( COMPLE name val ) | name SIGGE val -> ^( COMPGE name val ) | name );
     public final sParser.sent_return sent() throws RecognitionException {
         sParser.sent_return retval = new sParser.sent_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token SIGE18=null;
-        Token SIGL21=null;
-        Token SIGG24=null;
-        Token SIGLE27=null;
-        Token SIGGE30=null;
-        sParser.name_return name17 = null;
+        Token SIGE20=null;
+        Token SIGL23=null;
+        Token SIGG26=null;
+        Token SIGLE29=null;
+        Token SIGGE32=null;
+        sParser.name_return name19 = null;
 
-        sParser.val_return val19 = null;
+        sParser.val_return val21 = null;
 
-        sParser.name_return name20 = null;
+        sParser.name_return name22 = null;
 
-        sParser.val_return val22 = null;
+        sParser.val_return val24 = null;
 
-        sParser.name_return name23 = null;
+        sParser.name_return name25 = null;
 
-        sParser.val_return val25 = null;
+        sParser.val_return val27 = null;
 
-        sParser.name_return name26 = null;
+        sParser.name_return name28 = null;
 
-        sParser.val_return val28 = null;
+        sParser.val_return val30 = null;
 
-        sParser.name_return name29 = null;
+        sParser.name_return name31 = null;
 
-        sParser.val_return val31 = null;
+        sParser.val_return val33 = null;
 
-        sParser.name_return name32 = null;
+        sParser.name_return name34 = null;
 
 
-        Object SIGE18_tree=null;
-        Object SIGL21_tree=null;
-        Object SIGG24_tree=null;
-        Object SIGLE27_tree=null;
-        Object SIGGE30_tree=null;
+        Object SIGE20_tree=null;
+        Object SIGL23_tree=null;
+        Object SIGG26_tree=null;
+        Object SIGLE29_tree=null;
+        Object SIGGE32_tree=null;
         RewriteRuleTokenStream stream_SIGLE=new RewriteRuleTokenStream(adaptor,"token SIGLE");
         RewriteRuleTokenStream stream_SIGL=new RewriteRuleTokenStream(adaptor,"token SIGL");
         RewriteRuleTokenStream stream_SIGE=new RewriteRuleTokenStream(adaptor,"token SIGE");
@@ -952,32 +1042,32 @@ public class sParser extends Parser {
         RewriteRuleSubtreeStream stream_val=new RewriteRuleSubtreeStream(adaptor,"rule val");
         RewriteRuleSubtreeStream stream_name=new RewriteRuleSubtreeStream(adaptor,"rule name");
         try {
-            // /home/hasdai/Documentos/sParser.g:68:1: ( name SIGE val -> ^( ASIGN name val ) | name SIGL val -> ^( COMPL name val ) | name SIGG val -> ^( COMPG name val ) | name SIGLE val -> ^( COMPLE name val ) | name SIGGE val -> ^( COMPGE name val ) | name )
-            int alt8=6;
-            alt8 = dfa8.predict(input);
-            switch (alt8) {
+            // /home/hasdai/Documentos/sParser.g:69:1: ( name SIGE val -> ^( ASIGN name val ) | name SIGL val -> ^( COMPL name val ) | name SIGG val -> ^( COMPG name val ) | name SIGLE val -> ^( COMPLE name val ) | name SIGGE val -> ^( COMPGE name val ) | name )
+            int alt9=6;
+            alt9 = dfa9.predict(input);
+            switch (alt9) {
                 case 1 :
-                    // /home/hasdai/Documentos/sParser.g:68:3: name SIGE val
+                    // /home/hasdai/Documentos/sParser.g:69:3: name SIGE val
                     {
-                    pushFollow(FOLLOW_name_in_sent293);
-                    name17=name();
+                    pushFollow(FOLLOW_name_in_sent320);
+                    name19=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_name.add(name17.getTree());
-                    SIGE18=(Token)match(input,SIGE,FOLLOW_SIGE_in_sent295); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGE.add(SIGE18);
+                    if ( state.backtracking==0 ) stream_name.add(name19.getTree());
+                    SIGE20=(Token)match(input,SIGE,FOLLOW_SIGE_in_sent322); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGE.add(SIGE20);
 
-                    pushFollow(FOLLOW_val_in_sent297);
-                    val19=val();
+                    pushFollow(FOLLOW_val_in_sent324);
+                    val21=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val19.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val21.getTree());
 
 
                     // AST REWRITE
-                    // elements: name, val
+                    // elements: val, name
                     // token labels:
                     // rule labels: retval
                     // token list labels:
@@ -988,9 +1078,9 @@ public class sParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 68:17: -> ^( ASIGN name val )
+                    // 69:17: -> ^( ASIGN name val )
                     {
-                        // /home/hasdai/Documentos/sParser.g:68:20: ^( ASIGN name val )
+                        // /home/hasdai/Documentos/sParser.g:69:20: ^( ASIGN name val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(ASIGN, "ASIGN"), root_1);
@@ -1007,27 +1097,27 @@ public class sParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/hasdai/Documentos/sParser.g:69:3: name SIGL val
+                    // /home/hasdai/Documentos/sParser.g:70:3: name SIGL val
                     {
-                    pushFollow(FOLLOW_name_in_sent311);
-                    name20=name();
+                    pushFollow(FOLLOW_name_in_sent338);
+                    name22=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_name.add(name20.getTree());
-                    SIGL21=(Token)match(input,SIGL,FOLLOW_SIGL_in_sent313); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGL.add(SIGL21);
+                    if ( state.backtracking==0 ) stream_name.add(name22.getTree());
+                    SIGL23=(Token)match(input,SIGL,FOLLOW_SIGL_in_sent340); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGL.add(SIGL23);
 
-                    pushFollow(FOLLOW_val_in_sent315);
-                    val22=val();
+                    pushFollow(FOLLOW_val_in_sent342);
+                    val24=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val22.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val24.getTree());
 
 
                     // AST REWRITE
-                    // elements: val, name
+                    // elements: name, val
                     // token labels:
                     // rule labels: retval
                     // token list labels:
@@ -1038,9 +1128,9 @@ public class sParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 69:17: -> ^( COMPL name val )
+                    // 70:17: -> ^( COMPL name val )
                     {
-                        // /home/hasdai/Documentos/sParser.g:69:20: ^( COMPL name val )
+                        // /home/hasdai/Documentos/sParser.g:70:20: ^( COMPL name val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPL, "COMPL"), root_1);
@@ -1057,23 +1147,23 @@ public class sParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/hasdai/Documentos/sParser.g:70:3: name SIGG val
+                    // /home/hasdai/Documentos/sParser.g:71:3: name SIGG val
                     {
-                    pushFollow(FOLLOW_name_in_sent329);
-                    name23=name();
+                    pushFollow(FOLLOW_name_in_sent356);
+                    name25=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_name.add(name23.getTree());
-                    SIGG24=(Token)match(input,SIGG,FOLLOW_SIGG_in_sent331); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGG.add(SIGG24);
+                    if ( state.backtracking==0 ) stream_name.add(name25.getTree());
+                    SIGG26=(Token)match(input,SIGG,FOLLOW_SIGG_in_sent358); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGG.add(SIGG26);
 
-                    pushFollow(FOLLOW_val_in_sent333);
-                    val25=val();
+                    pushFollow(FOLLOW_val_in_sent360);
+                    val27=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val25.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val27.getTree());
 
 
                     // AST REWRITE
@@ -1088,9 +1178,9 @@ public class sParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 70:17: -> ^( COMPG name val )
+                    // 71:17: -> ^( COMPG name val )
                     {
-                        // /home/hasdai/Documentos/sParser.g:70:20: ^( COMPG name val )
+                        // /home/hasdai/Documentos/sParser.g:71:20: ^( COMPG name val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPG, "COMPG"), root_1);
@@ -1107,23 +1197,23 @@ public class sParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/hasdai/Documentos/sParser.g:71:3: name SIGLE val
+                    // /home/hasdai/Documentos/sParser.g:72:3: name SIGLE val
                     {
-                    pushFollow(FOLLOW_name_in_sent347);
-                    name26=name();
+                    pushFollow(FOLLOW_name_in_sent374);
+                    name28=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_name.add(name26.getTree());
-                    SIGLE27=(Token)match(input,SIGLE,FOLLOW_SIGLE_in_sent349); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGLE.add(SIGLE27);
+                    if ( state.backtracking==0 ) stream_name.add(name28.getTree());
+                    SIGLE29=(Token)match(input,SIGLE,FOLLOW_SIGLE_in_sent376); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGLE.add(SIGLE29);
 
-                    pushFollow(FOLLOW_val_in_sent351);
-                    val28=val();
+                    pushFollow(FOLLOW_val_in_sent378);
+                    val30=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val28.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val30.getTree());
 
 
                     // AST REWRITE
@@ -1138,9 +1228,9 @@ public class sParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 71:18: -> ^( COMPLE name val )
+                    // 72:18: -> ^( COMPLE name val )
                     {
-                        // /home/hasdai/Documentos/sParser.g:71:21: ^( COMPLE name val )
+                        // /home/hasdai/Documentos/sParser.g:72:21: ^( COMPLE name val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPLE, "COMPLE"), root_1);
@@ -1157,23 +1247,23 @@ public class sParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/hasdai/Documentos/sParser.g:72:3: name SIGGE val
+                    // /home/hasdai/Documentos/sParser.g:73:3: name SIGGE val
                     {
-                    pushFollow(FOLLOW_name_in_sent365);
-                    name29=name();
+                    pushFollow(FOLLOW_name_in_sent392);
+                    name31=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_name.add(name29.getTree());
-                    SIGGE30=(Token)match(input,SIGGE,FOLLOW_SIGGE_in_sent367); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGGE.add(SIGGE30);
+                    if ( state.backtracking==0 ) stream_name.add(name31.getTree());
+                    SIGGE32=(Token)match(input,SIGGE,FOLLOW_SIGGE_in_sent394); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGGE.add(SIGGE32);
 
-                    pushFollow(FOLLOW_val_in_sent369);
-                    val31=val();
+                    pushFollow(FOLLOW_val_in_sent396);
+                    val33=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val31.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val33.getTree());
 
 
                     // AST REWRITE
@@ -1188,9 +1278,9 @@ public class sParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 72:18: -> ^( COMPGE name val )
+                    // 73:18: -> ^( COMPGE name val )
                     {
-                        // /home/hasdai/Documentos/sParser.g:72:21: ^( COMPGE name val )
+                        // /home/hasdai/Documentos/sParser.g:73:21: ^( COMPGE name val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPGE, "COMPGE"), root_1);
@@ -1207,16 +1297,16 @@ public class sParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/hasdai/Documentos/sParser.g:73:3: name
+                    // /home/hasdai/Documentos/sParser.g:74:3: name
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_name_in_sent383);
-                    name32=name();
+                    pushFollow(FOLLOW_name_in_sent410);
+                    name34=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name32.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name34.getTree());
 
                     }
                     break;
@@ -1248,60 +1338,60 @@ public class sParser extends Parser {
     };
 
     // $ANTLR start "proplist"
-    // /home/hasdai/Documentos/sParser.g:75:1: proplist : ( sent DEL proplist | sent );
+    // /home/hasdai/Documentos/sParser.g:76:1: proplist : ( sent DEL proplist | sent );
     public final sParser.proplist_return proplist() throws RecognitionException {
         sParser.proplist_return retval = new sParser.proplist_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token DEL34=null;
-        sParser.sent_return sent33 = null;
+        Token DEL36=null;
+        sParser.sent_return sent35 = null;
 
-        sParser.proplist_return proplist35 = null;
+        sParser.proplist_return proplist37 = null;
 
-        sParser.sent_return sent36 = null;
+        sParser.sent_return sent38 = null;
 
 
-        Object DEL34_tree=null;
+        Object DEL36_tree=null;
 
         try {
-            // /home/hasdai/Documentos/sParser.g:76:1: ( sent DEL proplist | sent )
-            int alt9=2;
-            alt9 = dfa9.predict(input);
-            switch (alt9) {
+            // /home/hasdai/Documentos/sParser.g:77:1: ( sent DEL proplist | sent )
+            int alt10=2;
+            alt10 = dfa10.predict(input);
+            switch (alt10) {
                 case 1 :
-                    // /home/hasdai/Documentos/sParser.g:76:3: sent DEL proplist
+                    // /home/hasdai/Documentos/sParser.g:77:3: sent DEL proplist
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_sent_in_proplist391);
-                    sent33=sent();
+                    pushFollow(FOLLOW_sent_in_proplist418);
+                    sent35=sent();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, sent33.getTree());
-                    DEL34=(Token)match(input,DEL,FOLLOW_DEL_in_proplist393); if (state.failed) return retval;
-                    pushFollow(FOLLOW_proplist_in_proplist396);
-                    proplist35=proplist();
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, sent35.getTree());
+                    DEL36=(Token)match(input,DEL,FOLLOW_DEL_in_proplist420); if (state.failed) return retval;
+                    pushFollow(FOLLOW_proplist_in_proplist423);
+                    proplist37=proplist();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, proplist35.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, proplist37.getTree());
 
                     }
                     break;
                 case 2 :
-                    // /home/hasdai/Documentos/sParser.g:77:3: sent
+                    // /home/hasdai/Documentos/sParser.g:78:3: sent
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_sent_in_proplist400);
-                    sent36=sent();
+                    pushFollow(FOLLOW_sent_in_proplist427);
+                    sent38=sent();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, sent36.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, sent38.getTree());
 
                     }
                     break;
@@ -1333,27 +1423,27 @@ public class sParser extends Parser {
     };
 
     // $ANTLR start "val"
-    // /home/hasdai/Documentos/sParser.g:80:1: val : ( NUM | LIT | BOL );
+    // /home/hasdai/Documentos/sParser.g:81:1: val : ( NUM | LIT | BOL );
     public final sParser.val_return val() throws RecognitionException {
         sParser.val_return retval = new sParser.val_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token set37=null;
+        Token set39=null;
 
-        Object set37_tree=null;
+        Object set39_tree=null;
 
         try {
-            // /home/hasdai/Documentos/sParser.g:81:1: ( NUM | LIT | BOL )
+            // /home/hasdai/Documentos/sParser.g:82:1: ( NUM | LIT | BOL )
             // /home/hasdai/Documentos/sParser.g:
             {
             root_0 = (Object)adaptor.nil();
 
-            set37=(Token)input.LT(1);
+            set39=(Token)input.LT(1);
             if ( (input.LA(1)>=BOL && input.LA(1)<=LIT) ) {
                 input.consume();
-                if ( state.backtracking==0 ) adaptor.addChild(root_0, (Object)adaptor.create(set37));
+                if ( state.backtracking==0 ) adaptor.addChild(root_0, (Object)adaptor.create(set39));
                 state.errorRecovery=false;state.failed=false;
             }
             else {
@@ -1391,65 +1481,65 @@ public class sParser extends Parser {
     };
 
     // $ANTLR start "modifier"
-    // /home/hasdai/Documentos/sParser.g:86:1: modifier : ( ordterm )? ( offsetterm )? ;
+    // /home/hasdai/Documentos/sParser.g:87:1: modifier : ( ordterm )? ( offsetterm )? ;
     public final sParser.modifier_return modifier() throws RecognitionException {
         sParser.modifier_return retval = new sParser.modifier_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        sParser.ordterm_return ordterm38 = null;
+        sParser.ordterm_return ordterm40 = null;
 
-        sParser.offsetterm_return offsetterm39 = null;
+        sParser.offsetterm_return offsetterm41 = null;
 
 
 
         try {
-            // /home/hasdai/Documentos/sParser.g:87:1: ( ( ordterm )? ( offsetterm )? )
-            // /home/hasdai/Documentos/sParser.g:87:3: ( ordterm )? ( offsetterm )?
+            // /home/hasdai/Documentos/sParser.g:88:1: ( ( ordterm )? ( offsetterm )? )
+            // /home/hasdai/Documentos/sParser.g:88:3: ( ordterm )? ( offsetterm )?
             {
             root_0 = (Object)adaptor.nil();
 
-            // /home/hasdai/Documentos/sParser.g:87:3: ( ordterm )?
-            int alt10=2;
-            int LA10_0 = input.LA(1);
+            // /home/hasdai/Documentos/sParser.g:88:3: ( ordterm )?
+            int alt11=2;
+            int LA11_0 = input.LA(1);
 
-            if ( (LA10_0==MODO) ) {
-                alt10=1;
+            if ( (LA11_0==MODO) ) {
+                alt11=1;
             }
-            switch (alt10) {
+            switch (alt11) {
                 case 1 :
                     // /home/hasdai/Documentos/sParser.g:0:0: ordterm
                     {
-                    pushFollow(FOLLOW_ordterm_in_modifier427);
-                    ordterm38=ordterm();
+                    pushFollow(FOLLOW_ordterm_in_modifier454);
+                    ordterm40=ordterm();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, ordterm38.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, ordterm40.getTree());
 
                     }
                     break;
 
             }
 
-            // /home/hasdai/Documentos/sParser.g:87:12: ( offsetterm )?
-            int alt11=2;
-            int LA11_0 = input.LA(1);
+            // /home/hasdai/Documentos/sParser.g:88:12: ( offsetterm )?
+            int alt12=2;
+            int LA12_0 = input.LA(1);
 
-            if ( (LA11_0==MODE) ) {
-                alt11=1;
+            if ( (LA12_0==MODE) ) {
+                alt12=1;
             }
-            switch (alt11) {
+            switch (alt12) {
                 case 1 :
                     // /home/hasdai/Documentos/sParser.g:0:0: offsetterm
                     {
-                    pushFollow(FOLLOW_offsetterm_in_modifier430);
-                    offsetterm39=offsetterm();
+                    pushFollow(FOLLOW_offsetterm_in_modifier457);
+                    offsetterm41=offsetterm();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, offsetterm39.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, offsetterm41.getTree());
 
                     }
                     break;
@@ -1485,30 +1575,30 @@ public class sParser extends Parser {
     };
 
     // $ANTLR start "offsetterm"
-    // /home/hasdai/Documentos/sParser.g:90:1: offsetterm : MODE NUM -> ^( OFFSET NUM ) ;
+    // /home/hasdai/Documentos/sParser.g:91:1: offsetterm : MODE NUM -> ^( OFFSET NUM ) ;
     public final sParser.offsetterm_return offsetterm() throws RecognitionException {
         sParser.offsetterm_return retval = new sParser.offsetterm_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token MODE40=null;
-        Token NUM41=null;
+        Token MODE42=null;
+        Token NUM43=null;
 
-        Object MODE40_tree=null;
-        Object NUM41_tree=null;
+        Object MODE42_tree=null;
+        Object NUM43_tree=null;
         RewriteRuleTokenStream stream_MODE=new RewriteRuleTokenStream(adaptor,"token MODE");
         RewriteRuleTokenStream stream_NUM=new RewriteRuleTokenStream(adaptor,"token NUM");
 
         try {
-            // /home/hasdai/Documentos/sParser.g:91:1: ( MODE NUM -> ^( OFFSET NUM ) )
-            // /home/hasdai/Documentos/sParser.g:91:3: MODE NUM
+            // /home/hasdai/Documentos/sParser.g:92:1: ( MODE NUM -> ^( OFFSET NUM ) )
+            // /home/hasdai/Documentos/sParser.g:92:3: MODE NUM
             {
-            MODE40=(Token)match(input,MODE,FOLLOW_MODE_in_offsetterm440); if (state.failed) return retval;
-            if ( state.backtracking==0 ) stream_MODE.add(MODE40);
+            MODE42=(Token)match(input,MODE,FOLLOW_MODE_in_offsetterm467); if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_MODE.add(MODE42);
 
-            NUM41=(Token)match(input,NUM,FOLLOW_NUM_in_offsetterm442); if (state.failed) return retval;
-            if ( state.backtracking==0 ) stream_NUM.add(NUM41);
+            NUM43=(Token)match(input,NUM,FOLLOW_NUM_in_offsetterm469); if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_NUM.add(NUM43);
 
 
 
@@ -1524,9 +1614,9 @@ public class sParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 91:12: -> ^( OFFSET NUM )
+            // 92:12: -> ^( OFFSET NUM )
             {
-                // /home/hasdai/Documentos/sParser.g:91:15: ^( OFFSET NUM )
+                // /home/hasdai/Documentos/sParser.g:92:15: ^( OFFSET NUM )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(OFFSET, "OFFSET"), root_1);
@@ -1567,44 +1657,44 @@ public class sParser extends Parser {
     };
 
     // $ANTLR start "ordterm"
-    // /home/hasdai/Documentos/sParser.g:94:1: ordterm : MODO LPAR ordlist RPAR -> ^( ORDER ordlist ) ;
+    // /home/hasdai/Documentos/sParser.g:95:1: ordterm : MODO LPAR ordlist RPAR -> ^( ORDER ordlist ) ;
     public final sParser.ordterm_return ordterm() throws RecognitionException {
         sParser.ordterm_return retval = new sParser.ordterm_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token MODO42=null;
-        Token LPAR43=null;
-        Token RPAR45=null;
-        sParser.ordlist_return ordlist44 = null;
+        Token MODO44=null;
+        Token LPAR45=null;
+        Token RPAR47=null;
+        sParser.ordlist_return ordlist46 = null;
 
 
-        Object MODO42_tree=null;
-        Object LPAR43_tree=null;
-        Object RPAR45_tree=null;
+        Object MODO44_tree=null;
+        Object LPAR45_tree=null;
+        Object RPAR47_tree=null;
         RewriteRuleTokenStream stream_RPAR=new RewriteRuleTokenStream(adaptor,"token RPAR");
         RewriteRuleTokenStream stream_MODO=new RewriteRuleTokenStream(adaptor,"token MODO");
         RewriteRuleTokenStream stream_LPAR=new RewriteRuleTokenStream(adaptor,"token LPAR");
         RewriteRuleSubtreeStream stream_ordlist=new RewriteRuleSubtreeStream(adaptor,"rule ordlist");
         try {
-            // /home/hasdai/Documentos/sParser.g:95:1: ( MODO LPAR ordlist RPAR -> ^( ORDER ordlist ) )
-            // /home/hasdai/Documentos/sParser.g:95:3: MODO LPAR ordlist RPAR
+            // /home/hasdai/Documentos/sParser.g:96:1: ( MODO LPAR ordlist RPAR -> ^( ORDER ordlist ) )
+            // /home/hasdai/Documentos/sParser.g:96:3: MODO LPAR ordlist RPAR
             {
-            MODO42=(Token)match(input,MODO,FOLLOW_MODO_in_ordterm459); if (state.failed) return retval;
-            if ( state.backtracking==0 ) stream_MODO.add(MODO42);
+            MODO44=(Token)match(input,MODO,FOLLOW_MODO_in_ordterm486); if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_MODO.add(MODO44);
 
-            LPAR43=(Token)match(input,LPAR,FOLLOW_LPAR_in_ordterm461); if (state.failed) return retval;
-            if ( state.backtracking==0 ) stream_LPAR.add(LPAR43);
+            LPAR45=(Token)match(input,LPAR,FOLLOW_LPAR_in_ordterm488); if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_LPAR.add(LPAR45);
 
-            pushFollow(FOLLOW_ordlist_in_ordterm463);
-            ordlist44=ordlist();
+            pushFollow(FOLLOW_ordlist_in_ordterm490);
+            ordlist46=ordlist();
 
             state._fsp--;
             if (state.failed) return retval;
-            if ( state.backtracking==0 ) stream_ordlist.add(ordlist44.getTree());
-            RPAR45=(Token)match(input,RPAR,FOLLOW_RPAR_in_ordterm465); if (state.failed) return retval;
-            if ( state.backtracking==0 ) stream_RPAR.add(RPAR45);
+            if ( state.backtracking==0 ) stream_ordlist.add(ordlist46.getTree());
+            RPAR47=(Token)match(input,RPAR,FOLLOW_RPAR_in_ordterm492); if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_RPAR.add(RPAR47);
 
 
 
@@ -1620,9 +1710,9 @@ public class sParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 95:26: -> ^( ORDER ordlist )
+            // 96:26: -> ^( ORDER ordlist )
             {
-                // /home/hasdai/Documentos/sParser.g:95:29: ^( ORDER ordlist )
+                // /home/hasdai/Documentos/sParser.g:96:29: ^( ORDER ordlist )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(ORDER, "ORDER"), root_1);
@@ -1663,60 +1753,60 @@ public class sParser extends Parser {
     };
 
     // $ANTLR start "ordlist"
-    // /home/hasdai/Documentos/sParser.g:98:1: ordlist : ( name DEL ordlist | name );
+    // /home/hasdai/Documentos/sParser.g:99:1: ordlist : ( name DEL ordlist | name );
     public final sParser.ordlist_return ordlist() throws RecognitionException {
         sParser.ordlist_return retval = new sParser.ordlist_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token DEL47=null;
-        sParser.name_return name46 = null;
+        Token DEL49=null;
+        sParser.name_return name48 = null;
 
-        sParser.ordlist_return ordlist48 = null;
+        sParser.ordlist_return ordlist50 = null;
 
-        sParser.name_return name49 = null;
+        sParser.name_return name51 = null;
 
 
-        Object DEL47_tree=null;
+        Object DEL49_tree=null;
 
         try {
-            // /home/hasdai/Documentos/sParser.g:99:1: ( name DEL ordlist | name )
-            int alt12=2;
-            alt12 = dfa12.predict(input);
-            switch (alt12) {
+            // /home/hasdai/Documentos/sParser.g:100:1: ( name DEL ordlist | name )
+            int alt13=2;
+            alt13 = dfa13.predict(input);
+            switch (alt13) {
                 case 1 :
-                    // /home/hasdai/Documentos/sParser.g:99:3: name DEL ordlist
+                    // /home/hasdai/Documentos/sParser.g:100:3: name DEL ordlist
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_name_in_ordlist482);
-                    name46=name();
+                    pushFollow(FOLLOW_name_in_ordlist509);
+                    name48=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name46.getTree());
-                    DEL47=(Token)match(input,DEL,FOLLOW_DEL_in_ordlist484); if (state.failed) return retval;
-                    pushFollow(FOLLOW_ordlist_in_ordlist487);
-                    ordlist48=ordlist();
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name48.getTree());
+                    DEL49=(Token)match(input,DEL,FOLLOW_DEL_in_ordlist511); if (state.failed) return retval;
+                    pushFollow(FOLLOW_ordlist_in_ordlist514);
+                    ordlist50=ordlist();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, ordlist48.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, ordlist50.getTree());
 
                     }
                     break;
                 case 2 :
-                    // /home/hasdai/Documentos/sParser.g:100:3: name
+                    // /home/hasdai/Documentos/sParser.g:101:3: name
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_name_in_ordlist491);
-                    name49=name();
+                    pushFollow(FOLLOW_name_in_ordlist518);
+                    name51=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name49.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name51.getTree());
 
                     }
                     break;
@@ -1777,27 +1867,31 @@ public class sParser extends Parser {
 
     protected DFA3 dfa3 = new DFA3(this);
     protected DFA4 dfa4 = new DFA4(this);
-    protected DFA8 dfa8 = new DFA8(this);
     protected DFA9 dfa9 = new DFA9(this);
-    protected DFA12 dfa12 = new DFA12(this);
+    protected DFA10 dfa10 = new DFA10(this);
+    protected DFA13 dfa13 = new DFA13(this);
     static final String DFA3_eotS =
-        "\5\uffff";
+        "\11\uffff";
     static final String DFA3_eofS =
-        "\1\uffff\2\4\2\uffff";
+        "\1\uffff\1\5\1\uffff\1\5\4\uffff\1\5";
     static final String DFA3_minS =
-        "\1\24\2\6\2\uffff";
+        "\1\24\1\6\1\24\1\6\2\uffff\2\24\1\6";
     static final String DFA3_maxS =
-        "\1\24\2\25\2\uffff";
+        "\1\30\1\25\1\24\1\25\2\uffff\1\24\1\31\1\25";
     static final String DFA3_acceptS =
-        "\3\uffff\1\2\1\1";
+        "\4\uffff\1\2\1\1\3\uffff";
     static final String DFA3_specialS =
-        "\5\uffff}>";
+        "\11\uffff}>";
     static final String[] DFA3_transitionS = {
-            "\1\1",
-            "\5\3\1\4\1\uffff\1\3\2\4\4\uffff\1\2\1\3",
-            "\5\3\1\4\1\uffff\1\3\2\4\4\uffff\1\2\1\3",
+            "\1\1\3\uffff\1\2",
+            "\5\4\1\5\1\uffff\1\4\2\5\4\uffff\1\3\1\4",
+            "\1\6",
+            "\5\4\1\5\1\uffff\1\4\2\5\4\uffff\1\3\1\4",
             "",
-            ""
+            "",
+            "\1\7",
+            "\1\7\4\uffff\1\10",
+            "\5\4\1\5\1\uffff\1\4\2\5\5\uffff\1\4"
     };
 
     static final short[] DFA3_eot = DFA.unpackEncodedString(DFA3_eotS);
@@ -1834,23 +1928,27 @@ public class sParser extends Parser {
         }
     }
     static final String DFA4_eotS =
-        "\5\uffff";
+        "\11\uffff";
     static final String DFA4_eofS =
-        "\1\uffff\1\2\1\uffff\1\2\1\uffff";
+        "\1\uffff\1\4\1\uffff\1\4\4\uffff\1\4";
     static final String DFA4_minS =
-        "\1\24\1\13\1\uffff\1\13\1\uffff";
+        "\1\24\1\13\1\24\1\13\2\uffff\2\24\1\13";
     static final String DFA4_maxS =
-        "\2\24\1\uffff\1\24\1\uffff";
+        "\1\30\3\24\2\uffff\1\24\1\31\1\17";
     static final String DFA4_acceptS =
-        "\2\uffff\1\2\1\uffff\1\1";
+        "\4\uffff\1\2\1\1\3\uffff";
     static final String DFA4_specialS =
-        "\5\uffff}>";
+        "\11\uffff}>";
     static final String[] DFA4_transitionS = {
-            "\1\1",
-            "\1\4\2\uffff\2\2\4\uffff\1\3",
+            "\1\1\3\uffff\1\2",
+            "\1\5\2\uffff\2\4\4\uffff\1\3",
+            "\1\6",
+            "\1\5\2\uffff\2\4\4\uffff\1\3",
             "",
-            "\1\4\2\uffff\2\2\4\uffff\1\3",
-            ""
+            "",
+            "\1\7",
+            "\1\7\4\uffff\1\10",
+            "\1\5\2\uffff\2\4"
     };
 
     static final short[] DFA4_eot = DFA.unpackEncodedString(DFA4_eotS);
@@ -1886,91 +1984,32 @@ public class sParser extends Parser {
             return "53:1: objquery : ( name PREC proplist -> ^( name ^( PRECON proplist ) ) | name );";
         }
     }
-    static final String DFA8_eotS =
-        "\11\uffff";
-    static final String DFA8_eofS =
-        "\1\uffff\2\6\6\uffff";
-    static final String DFA8_minS =
-        "\1\24\2\6\6\uffff";
-    static final String DFA8_maxS =
-        "\1\24\2\25\6\uffff";
-    static final String DFA8_acceptS =
-        "\3\uffff\1\2\1\5\1\1\1\6\1\3\1\4";
-    static final String DFA8_specialS =
-        "\11\uffff}>";
-    static final String[] DFA8_transitionS = {
-            "\1\1",
-            "\1\3\1\7\1\5\1\10\1\4\2\uffff\3\6\4\uffff\1\2\1\6",
-            "\1\3\1\7\1\5\1\10\1\4\2\uffff\3\6\4\uffff\1\2\1\6",
-            "",
-            "",
-            "",
-            "",
-            "",
-            ""
-    };
-
-    static final short[] DFA8_eot = DFA.unpackEncodedString(DFA8_eotS);
-    static final short[] DFA8_eof = DFA.unpackEncodedString(DFA8_eofS);
-    static final char[] DFA8_min = DFA.unpackEncodedStringToUnsignedChars(DFA8_minS);
-    static final char[] DFA8_max = DFA.unpackEncodedStringToUnsignedChars(DFA8_maxS);
-    static final short[] DFA8_accept = DFA.unpackEncodedString(DFA8_acceptS);
-    static final short[] DFA8_special = DFA.unpackEncodedString(DFA8_specialS);
-    static final short[][] DFA8_transition;
-
-    static {
-        int numStates = DFA8_transitionS.length;
-        DFA8_transition = new short[numStates][];
-        for (int i=0; i<numStates; i++) {
-            DFA8_transition[i] = DFA.unpackEncodedString(DFA8_transitionS[i]);
-        }
-    }
-
-    class DFA8 extends DFA {
-
-        public DFA8(BaseRecognizer recognizer) {
-            this.recognizer = recognizer;
-            this.decisionNumber = 8;
-            this.eot = DFA8_eot;
-            this.eof = DFA8_eof;
-            this.min = DFA8_min;
-            this.max = DFA8_max;
-            this.accept = DFA8_accept;
-            this.special = DFA8_special;
-            this.transition = DFA8_transition;
-        }
-        public String getDescription() {
-            return "67:1: sent : ( name SIGE val -> ^( ASIGN name val ) | name SIGL val -> ^( COMPL name val ) | name SIGG val -> ^( COMPG name val ) | name SIGLE val -> ^( COMPLE name val ) | name SIGGE val -> ^( COMPGE name val ) | name );";
-        }
-    }
     static final String DFA9_eotS =
-        "\17\uffff";
+        "\15\uffff";
     static final String DFA9_eofS =
-        "\1\uffff\1\11\1\uffff\1\11\6\uffff\5\11";
+        "\1\uffff\1\10\1\uffff\1\10\10\uffff\1\10";
     static final String DFA9_minS =
-        "\1\24\1\6\1\20\1\6\3\20\1\uffff\1\20\1\uffff\5\15";
+        "\1\24\1\6\1\24\1\6\6\uffff\2\24\1\6";
     static final String DFA9_maxS =
-        "\1\24\1\25\1\22\1\25\3\22\1\uffff\1\22\1\uffff\5\25";
+        "\1\30\1\25\1\24\1\25\6\uffff\1\24\1\31\1\25";
     static final String DFA9_acceptS =
-        "\7\uffff\1\1\1\uffff\1\2\5\uffff";
+        "\4\uffff\1\3\1\1\1\4\1\2\1\6\1\5\3\uffff";
     static final String DFA9_specialS =
-        "\17\uffff}>";
+        "\15\uffff}>";
     static final String[] DFA9_transitionS = {
-            "\1\1",
-            "\1\4\1\6\1\2\1\10\1\5\2\uffff\3\11\4\uffff\1\3\1\7",
-            "\3\12",
-            "\1\4\1\6\1\2\1\10\1\5\2\uffff\3\11\4\uffff\1\3\1\7",
-            "\3\13",
-            "\3\14",
-            "\3\15",
+            "\1\1\3\uffff\1\2",
+            "\1\7\1\4\1\5\1\6\1\11\2\uffff\3\10\4\uffff\1\3\1\10",
+            "\1\12",
+            "\1\7\1\4\1\5\1\6\1\11\2\uffff\3\10\4\uffff\1\3\1\10",
             "",
-            "\3\16",
             "",
-            "\3\11\5\uffff\1\7",
-            "\3\11\5\uffff\1\7",
-            "\3\11\5\uffff\1\7",
-            "\3\11\5\uffff\1\7",
-            "\3\11\5\uffff\1\7"
+            "",
+            "",
+            "",
+            "",
+            "\1\13",
+            "\1\13\4\uffff\1\14",
+            "\1\7\1\4\1\5\1\6\1\11\2\uffff\3\10\5\uffff\1\10"
     };
 
     static final short[] DFA9_eot = DFA.unpackEncodedString(DFA9_eotS);
@@ -2003,66 +2042,139 @@ public class sParser extends Parser {
             this.transition = DFA9_transition;
         }
         public String getDescription() {
-            return "75:1: proplist : ( sent DEL proplist | sent );";
+            return "68:1: sent : ( name SIGE val -> ^( ASIGN name val ) | name SIGL val -> ^( COMPL name val ) | name SIGG val -> ^( COMPG name val ) | name SIGLE val -> ^( COMPLE name val ) | name SIGGE val -> ^( COMPGE name val ) | name );";
         }
     }
-    static final String DFA12_eotS =
-        "\5\uffff";
-    static final String DFA12_eofS =
-        "\1\uffff\2\3\2\uffff";
-    static final String DFA12_minS =
-        "\3\24\2\uffff";
-    static final String DFA12_maxS =
-        "\1\24\2\27\2\uffff";
-    static final String DFA12_acceptS =
-        "\3\uffff\1\2\1\1";
-    static final String DFA12_specialS =
-        "\5\uffff}>";
-    static final String[] DFA12_transitionS = {
-            "\1\1",
-            "\1\2\1\4\1\uffff\1\3",
-            "\1\2\1\4\1\uffff\1\3",
+    static final String DFA10_eotS =
+        "\23\uffff";
+    static final String DFA10_eofS =
+        "\1\uffff\1\10\1\uffff\1\10\10\uffff\5\10\1\uffff\1\10";
+    static final String DFA10_minS =
+        "\1\24\1\6\1\24\1\6\2\20\1\uffff\1\20\1\uffff\2\20\1\24\5\15\1\24"+
+        "\1\6";
+    static final String DFA10_maxS =
+        "\1\30\1\25\1\24\1\25\2\22\1\uffff\1\22\1\uffff\2\22\1\24\5\25\1"+
+        "\31\1\25";
+    static final String DFA10_acceptS =
+        "\6\uffff\1\1\1\uffff\1\2\12\uffff";
+    static final String DFA10_specialS =
+        "\23\uffff}>";
+    static final String[] DFA10_transitionS = {
+            "\1\1\3\uffff\1\2",
+            "\1\5\1\7\1\12\1\11\1\4\2\uffff\3\10\4\uffff\1\3\1\6",
+            "\1\13",
+            "\1\5\1\7\1\12\1\11\1\4\2\uffff\3\10\4\uffff\1\3\1\6",
+            "\3\14",
+            "\3\15",
             "",
-            ""
+            "\3\16",
+            "",
+            "\3\17",
+            "\3\20",
+            "\1\21",
+            "\3\10\5\uffff\1\6",
+            "\3\10\5\uffff\1\6",
+            "\3\10\5\uffff\1\6",
+            "\3\10\5\uffff\1\6",
+            "\3\10\5\uffff\1\6",
+            "\1\21\4\uffff\1\22",
+            "\1\5\1\7\1\12\1\11\1\4\2\uffff\3\10\5\uffff\1\6"
     };
 
-    static final short[] DFA12_eot = DFA.unpackEncodedString(DFA12_eotS);
-    static final short[] DFA12_eof = DFA.unpackEncodedString(DFA12_eofS);
-    static final char[] DFA12_min = DFA.unpackEncodedStringToUnsignedChars(DFA12_minS);
-    static final char[] DFA12_max = DFA.unpackEncodedStringToUnsignedChars(DFA12_maxS);
-    static final short[] DFA12_accept = DFA.unpackEncodedString(DFA12_acceptS);
-    static final short[] DFA12_special = DFA.unpackEncodedString(DFA12_specialS);
-    static final short[][] DFA12_transition;
+    static final short[] DFA10_eot = DFA.unpackEncodedString(DFA10_eotS);
+    static final short[] DFA10_eof = DFA.unpackEncodedString(DFA10_eofS);
+    static final char[] DFA10_min = DFA.unpackEncodedStringToUnsignedChars(DFA10_minS);
+    static final char[] DFA10_max = DFA.unpackEncodedStringToUnsignedChars(DFA10_maxS);
+    static final short[] DFA10_accept = DFA.unpackEncodedString(DFA10_acceptS);
+    static final short[] DFA10_special = DFA.unpackEncodedString(DFA10_specialS);
+    static final short[][] DFA10_transition;
 
     static {
-        int numStates = DFA12_transitionS.length;
-        DFA12_transition = new short[numStates][];
+        int numStates = DFA10_transitionS.length;
+        DFA10_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA12_transition[i] = DFA.unpackEncodedString(DFA12_transitionS[i]);
+            DFA10_transition[i] = DFA.unpackEncodedString(DFA10_transitionS[i]);
         }
     }
 
-    class DFA12 extends DFA {
+    class DFA10 extends DFA {
 
-        public DFA12(BaseRecognizer recognizer) {
+        public DFA10(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 12;
-            this.eot = DFA12_eot;
-            this.eof = DFA12_eof;
-            this.min = DFA12_min;
-            this.max = DFA12_max;
-            this.accept = DFA12_accept;
-            this.special = DFA12_special;
-            this.transition = DFA12_transition;
+            this.decisionNumber = 10;
+            this.eot = DFA10_eot;
+            this.eof = DFA10_eof;
+            this.min = DFA10_min;
+            this.max = DFA10_max;
+            this.accept = DFA10_accept;
+            this.special = DFA10_special;
+            this.transition = DFA10_transition;
         }
         public String getDescription() {
-            return "98:1: ordlist : ( name DEL ordlist | name );";
+            return "76:1: proplist : ( sent DEL proplist | sent );";
+        }
+    }
+    static final String DFA13_eotS =
+        "\11\uffff";
+    static final String DFA13_eofS =
+        "\1\uffff\1\5\2\uffff\1\5\3\uffff\1\5";
+    static final String DFA13_minS =
+        "\3\24\1\uffff\1\24\1\uffff\2\24\1\25";
+    static final String DFA13_maxS =
+        "\1\30\1\27\1\24\1\uffff\1\27\1\uffff\1\24\1\31\1\27";
+    static final String DFA13_acceptS =
+        "\3\uffff\1\1\1\uffff\1\2\3\uffff";
+    static final String DFA13_specialS =
+        "\11\uffff}>";
+    static final String[] DFA13_transitionS = {
+            "\1\1\3\uffff\1\2",
+            "\1\4\1\3\1\uffff\1\5",
+            "\1\6",
+            "",
+            "\1\4\1\3\1\uffff\1\5",
+            "",
+            "\1\7",
+            "\1\7\4\uffff\1\10",
+            "\1\3\1\uffff\1\5"
+    };
+
+    static final short[] DFA13_eot = DFA.unpackEncodedString(DFA13_eotS);
+    static final short[] DFA13_eof = DFA.unpackEncodedString(DFA13_eofS);
+    static final char[] DFA13_min = DFA.unpackEncodedStringToUnsignedChars(DFA13_minS);
+    static final char[] DFA13_max = DFA.unpackEncodedStringToUnsignedChars(DFA13_maxS);
+    static final short[] DFA13_accept = DFA.unpackEncodedString(DFA13_acceptS);
+    static final short[] DFA13_special = DFA.unpackEncodedString(DFA13_specialS);
+    static final short[][] DFA13_transition;
+
+    static {
+        int numStates = DFA13_transitionS.length;
+        DFA13_transition = new short[numStates][];
+        for (int i=0; i<numStates; i++) {
+            DFA13_transition[i] = DFA.unpackEncodedString(DFA13_transitionS[i]);
+        }
+    }
+
+    class DFA13 extends DFA {
+
+        public DFA13(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 13;
+            this.eot = DFA13_eot;
+            this.eof = DFA13_eof;
+            this.min = DFA13_min;
+            this.max = DFA13_max;
+            this.accept = DFA13_accept;
+            this.special = DFA13_special;
+            this.transition = DFA13_transition;
+        }
+        public String getDescription() {
+            return "99:1: ordlist : ( name DEL ordlist | name );";
         }
     }
 
 
     public static final BitSet FOLLOW_selectquery_in_squery111 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_limiter_in_selectquery121 = new BitSet(new long[]{0x0000000000100000L});
+    public static final BitSet FOLLOW_limiter_in_selectquery121 = new BitSet(new long[]{0x0000000001100000L});
     public static final BitSet FOLLOW_query_in_selectquery124 = new BitSet(new long[]{0x000000000000C000L});
     public static final BitSet FOLLOW_modifier_in_selectquery126 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_selectquery129 = new BitSet(new long[]{0x0000000000000002L});
@@ -2070,50 +2182,54 @@ public class sParser extends Parser {
     public static final BitSet FOLLOW_objquery_in_query172 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_propquery_in_query176 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_name_in_objquery187 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_PREC_in_objquery189 = new BitSet(new long[]{0x0000000000100000L});
+    public static final BitSet FOLLOW_PREC_in_objquery189 = new BitSet(new long[]{0x0000000001100000L});
     public static final BitSet FOLLOW_proplist_in_objquery191 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_name_in_objquery207 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_proplist_in_propquery218 = new BitSet(new long[]{0x0000000000002000L});
-    public static final BitSet FOLLOW_PRED_in_propquery220 = new BitSet(new long[]{0x0000000000100000L});
+    public static final BitSet FOLLOW_PRED_in_propquery220 = new BitSet(new long[]{0x0000000001100000L});
     public static final BitSet FOLLOW_name_in_propquery222 = new BitSet(new long[]{0x0000000000000802L});
-    public static final BitSet FOLLOW_PREC_in_propquery225 = new BitSet(new long[]{0x0000000000100000L});
+    public static final BitSet FOLLOW_PREC_in_propquery225 = new BitSet(new long[]{0x0000000001100000L});
     public static final BitSet FOLLOW_proplist_in_propquery229 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_VAR_in_name263 = new BitSet(new long[]{0x0000000000100000L});
     public static final BitSet FOLLOW_VAR_in_name267 = new BitSet(new long[]{0x0000000000100002L});
-    public static final BitSet FOLLOW_VAR_in_name284 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent293 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_SIGE_in_sent295 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent297 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent311 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_SIGL_in_sent313 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent315 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent329 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_SIGG_in_sent331 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent333 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent347 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_SIGLE_in_sent349 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent351 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent365 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_SIGGE_in_sent367 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent369 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent383 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_sent_in_proplist391 = new BitSet(new long[]{0x0000000000200000L});
-    public static final BitSet FOLLOW_DEL_in_proplist393 = new BitSet(new long[]{0x0000000000100000L});
-    public static final BitSet FOLLOW_proplist_in_proplist396 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_sent_in_proplist400 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LBRK_in_name284 = new BitSet(new long[]{0x0000000000100000L});
+    public static final BitSet FOLLOW_VAR_in_name288 = new BitSet(new long[]{0x0000000000100000L});
+    public static final BitSet FOLLOW_VAR_in_name292 = new BitSet(new long[]{0x0000000002100000L});
+    public static final BitSet FOLLOW_RBRK_in_name295 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_name311 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent320 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_SIGE_in_sent322 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent324 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent338 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_SIGL_in_sent340 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent342 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent356 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_SIGG_in_sent358 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent360 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent374 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_SIGLE_in_sent376 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent378 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent392 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_SIGGE_in_sent394 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent396 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent410 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_sent_in_proplist418 = new BitSet(new long[]{0x0000000000200000L});
+    public static final BitSet FOLLOW_DEL_in_proplist420 = new BitSet(new long[]{0x0000000001100000L});
+    public static final BitSet FOLLOW_proplist_in_proplist423 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_sent_in_proplist427 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_val0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ordterm_in_modifier427 = new BitSet(new long[]{0x0000000000004002L});
-    public static final BitSet FOLLOW_offsetterm_in_modifier430 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MODE_in_offsetterm440 = new BitSet(new long[]{0x0000000000020000L});
-    public static final BitSet FOLLOW_NUM_in_offsetterm442 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MODO_in_ordterm459 = new BitSet(new long[]{0x0000000000400000L});
-    public static final BitSet FOLLOW_LPAR_in_ordterm461 = new BitSet(new long[]{0x0000000000100000L});
-    public static final BitSet FOLLOW_ordlist_in_ordterm463 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_RPAR_in_ordterm465 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_ordlist482 = new BitSet(new long[]{0x0000000000200000L});
-    public static final BitSet FOLLOW_DEL_in_ordlist484 = new BitSet(new long[]{0x0000000000100000L});
-    public static final BitSet FOLLOW_ordlist_in_ordlist487 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_ordlist491 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ordterm_in_modifier454 = new BitSet(new long[]{0x0000000000004002L});
+    public static final BitSet FOLLOW_offsetterm_in_modifier457 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MODE_in_offsetterm467 = new BitSet(new long[]{0x0000000000020000L});
+    public static final BitSet FOLLOW_NUM_in_offsetterm469 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MODO_in_ordterm486 = new BitSet(new long[]{0x0000000000400000L});
+    public static final BitSet FOLLOW_LPAR_in_ordterm488 = new BitSet(new long[]{0x0000000001100000L});
+    public static final BitSet FOLLOW_ordlist_in_ordterm490 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_RPAR_in_ordterm492 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_ordlist509 = new BitSet(new long[]{0x0000000000200000L});
+    public static final BitSet FOLLOW_DEL_in_ordlist511 = new BitSet(new long[]{0x0000000001100000L});
+    public static final BitSet FOLLOW_ordlist_in_ordlist514 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_ordlist518 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_modifier_in_synpred2_sParser126 = new BitSet(new long[]{0x0000000000000002L});
 
 }
