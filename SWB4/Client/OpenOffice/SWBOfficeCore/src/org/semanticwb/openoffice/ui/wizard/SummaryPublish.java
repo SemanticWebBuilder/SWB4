@@ -32,7 +32,7 @@ public class SummaryPublish extends javax.swing.JPanel
         ListSelectionModel listSelectionModel = jTableSummary1.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
-
+            @Override
             public void valueChanged(ListSelectionEvent e)
             {
                 jButtonDelete.setEnabled(false);
