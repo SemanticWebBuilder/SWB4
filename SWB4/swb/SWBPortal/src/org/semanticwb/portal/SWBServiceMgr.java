@@ -84,10 +84,10 @@ public class SWBServiceMgr implements SemanticObserver {
                         vi.setVersionFile("template.html");
                         tpl.setActualVersion(vi);
                         tpl.setLastVersion(vi);
-                        String txt="Hola";
+                        String txt="<content/>";
                         try
                         {
-                            SWBPlatform.writeFileToWorkPath(tpl.getWorkPath()+"/1"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr.getURI());
+                            SWBPlatform.writeFileToWorkPath(tpl.getWorkPath()+"/1/"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr.getURI());
                         }catch(Exception e){log.error(e);}
 
                     }
