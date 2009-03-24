@@ -311,7 +311,6 @@ public class Translator {
             System.out.println("null");
         }
 
-
         //SemanticProperty sp = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(pDisplayName);
 
         //return sc.getProperty(pDisplayName).getPropId();
