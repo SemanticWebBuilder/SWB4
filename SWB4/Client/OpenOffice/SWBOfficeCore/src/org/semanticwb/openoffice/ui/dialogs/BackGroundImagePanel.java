@@ -310,7 +310,7 @@ public class BackGroundImagePanel extends javax.swing.JPanel implements WindowFo
         URI uri = (URI) this.jComboBoxWebAddress.getSelectedItem();
         if (uri != null)
         {
-            int res = JOptionPane.showConfirmDialog(this, "¿Desea borrar esta configuración de conexión?", "Borrado de configuración", JOptionPane.YES_NO_OPTION);
+            int res = JOptionPane.showConfirmDialog(this, "¿Desea borrar esta configuración de conexión?", "Borrado de configuración", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
             if (res == JOptionPane.YES_OPTION)
             {
                 configurationListURI.removeAddress(uri);

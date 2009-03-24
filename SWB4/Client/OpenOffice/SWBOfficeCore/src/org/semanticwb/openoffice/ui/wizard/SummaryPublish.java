@@ -238,7 +238,7 @@ public class SummaryPublish extends javax.swing.JPanel
             }
             try
             {
-                int res=JOptionPane.showConfirmDialog(this, "¿Desea borrar la versión "+ versionInfo +"?","Borrado de versión de contenido",JOptionPane.YES_NO_OPTION);
+                int res=JOptionPane.showConfirmDialog(this, "¿Desea borrar la versión "+ versionInfo +"?","Borrado de versión de contenido",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                 if(res==JOptionPane.YES_OPTION)
                 {
                     try

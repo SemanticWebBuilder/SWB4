@@ -406,7 +406,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         jTextAreaDescription.requestFocus();
         return;
     }
-    int res = JOptionPane.showConfirmDialog(this, "Se va a realizar los cambios de la información de publicación.\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+    int res = JOptionPane.showConfirmDialog(this, "Se va a realizar los cambios de la información de publicación.\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
     if (res == JOptionPane.YES_OPTION)
     {
         pageInformation.title = this.jTextFieldTitle.getText();
@@ -506,7 +506,7 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
 {//GEN-HEADEREND:event_jButtonDeleteSchedulerActionPerformed
     if (jTableScheduler.getSelectedRow() != -1)
     {
-        int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la calendarización?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+        int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la calendarización?", this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
         if (res == JOptionPane.YES_OPTION)
         {
             CalendarInfo cal = (CalendarInfo) jTableScheduler.getModel().getValueAt(jTableScheduler.getSelectedRow(), 0);

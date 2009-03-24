@@ -163,7 +163,7 @@ public class SelectCategory extends WizardPage
         RepositoryInfo rep = (RepositoryInfo) this.getWizardDataMap().get(REPOSITORY_ID);
         if (rep.exclusive)
         {
-            int res = JOptionPane.showConfirmDialog(this, "¡El repositorio selecionado sólo puede publicar contenidos en el sitio " + rep.siteInfo.title + "!\r\n¿Desea continuar?", getDescription(), JOptionPane.YES_NO_OPTION);
+            int res = JOptionPane.showConfirmDialog(this, "¡El repositorio selecionado sólo puede publicar contenidos en el sitio " + rep.siteInfo.title + "!\r\n¿Desea continuar?", getDescription(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
             if (res == JOptionPane.NO_OPTION)
             {
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
@@ -172,7 +172,7 @@ public class SelectCategory extends WizardPage
         }
         else
         {
-            int res = JOptionPane.showConfirmDialog(this, "¡El repositorio selecionado permite publicar en cualquier sitio!\r\n¿Desea continuar?", getDescription(), JOptionPane.YES_NO_OPTION);
+            int res = JOptionPane.showConfirmDialog(this, "¡El repositorio selecionado permite publicar en cualquier sitio!\r\n¿Desea continuar?", getDescription(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
             if (res == JOptionPane.NO_OPTION)
             {
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;

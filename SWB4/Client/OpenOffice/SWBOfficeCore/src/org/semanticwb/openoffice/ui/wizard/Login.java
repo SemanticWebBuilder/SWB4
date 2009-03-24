@@ -7,7 +7,6 @@ package org.semanticwb.openoffice.ui.wizard;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.WizardPage;
 import org.semanticwb.openoffice.ConfigurationListURI;
@@ -163,7 +162,7 @@ public static String getDescription()
         return "Acceso a sitio";
     }
 private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-    int res = JOptionPane.showConfirmDialog(this, "¿Desea borrar esta configuración de conexión?", "Borrado de configuración", JOptionPane.YES_NO_OPTION);
+    int res = JOptionPane.showConfirmDialog(this, "¿Desea borrar esta configuración de conexión?", "Borrado de configuración", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
     if (res == JOptionPane.YES_OPTION)
     {
         URI uri = (URI) this.jComboBoxWebAddress.getSelectedItem();

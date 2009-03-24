@@ -812,7 +812,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             ResourceInfo porlet = (ResourceInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
             try
             {
-                int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la publicación del contenido con titulo " + porlet.title + " de la página " + porlet.page.title + "?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la publicación del contenido con titulo " + porlet.title + " de la página " + porlet.page.title + "?", this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
                     this.jButtonDeletePage.setEnabled(false);
@@ -951,7 +951,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             }
             try
             {
-                int res=JOptionPane.showConfirmDialog(this, "¿Desea borrar la versión "+ versionInfo +"?","Borrado de versión de contenido",JOptionPane.YES_NO_OPTION);
+                int res=JOptionPane.showConfirmDialog(this, "¿Desea borrar la versión "+ versionInfo +"?","Borrado de versión de contenido",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                 if(res==JOptionPane.YES_OPTION)
                 {
                     try
