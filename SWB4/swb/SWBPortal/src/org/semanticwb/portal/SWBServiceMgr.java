@@ -86,7 +86,7 @@ public class SWBServiceMgr implements SemanticObserver {
                         tpl.setLastVersion(vi);
                         String txt="<html>\n"+
                                    "<head>\n" +
-                                        "<script type='text/javascript' src=\"/swb/swbadmin/js/swb_portal.js\"></script>\n" +
+                                        "<script type='text/javascript' src=\"/swb/swbadmin/js/swb.js\"></script>\n" +
                                         "<title>\n"+
                                         "   <TOPIC METHOD=\"getDisplayName\" LANGUAGE=\"{user@getLanguage}\"/>\n" +
                                         "</title>\n" +
