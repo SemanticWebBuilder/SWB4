@@ -2651,5 +2651,3 @@
     <rdfs:comment>Si puede usarse esta propiedad como nombre de despliegue del objeto al que pertenece</rdfs:comment>
   </owl:AnnotationProperty>
 </rdf:RDF>
-
-<!-- Created with TopBraid Composer -->
