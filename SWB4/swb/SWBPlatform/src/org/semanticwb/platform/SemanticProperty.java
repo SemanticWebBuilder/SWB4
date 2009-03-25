@@ -118,7 +118,7 @@ public class SemanticProperty
         if(isLocaleable==null)
         {
             isLocaleable=false;
-            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_LOCALEABLE));
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_LOCALEABLE));
             if(st!=null)
             {
                 isLocaleable=st.getBoolean();
@@ -132,7 +132,7 @@ public class SemanticProperty
         if(isUsedAsName==null)
         {
             isUsedAsName=false;
-            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_ANNOT_CANUSEDASNAME));
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_ANNOT_CANUSEDASNAME));
             if(st!=null)
             {
                 isUsedAsName=st.getBoolean();
@@ -146,7 +146,7 @@ public class SemanticProperty
         if(isRequired==null)
         {
             isRequired=false;
-            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_REQUIRED));
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_REQUIRED));
             if(st!=null)
             {
                 isRequired=st.getBoolean();
@@ -164,7 +164,7 @@ public class SemanticProperty
         if(isHeraquicalRelation==null)
         {
             isHeraquicalRelation=false;
-            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_HERARQUICALRELATION));
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_HERARQUICALRELATION));
             if(st!=null)
             {
                 isHeraquicalRelation=st.getBoolean();
@@ -182,7 +182,7 @@ public class SemanticProperty
         if(isRemoveDependency==null)
         {
             isRemoveDependency=false;
-            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_REMOVEDEPENDENCY));
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_REMOVEDEPENDENCY));
             if(st!=null)
             {
                 isRemoveDependency=st.getBoolean();
@@ -200,7 +200,7 @@ public class SemanticProperty
         if(isNoObservable==null)
         {
             isNoObservable=false;
-            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_NOOBSERVABLE));
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_NOOBSERVABLE));
             if(st!=null)
             {
                 isNoObservable=st.getBoolean();
@@ -218,7 +218,7 @@ public class SemanticProperty
         if(isInheritProperty==null)
         {
             isInheritProperty=false;
-            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_INHERITPROPERTY));
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_INHERITPROPERTY));
             if(st!=null)
             {
                 isInheritProperty=st.getBoolean();
@@ -248,7 +248,7 @@ public class SemanticProperty
         if(isExternalInvocation==null)
         {
             isExternalInvocation=false;
-            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_EXTERNALINVOCATION));
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_EXTERNALINVOCATION));
             if(st!=null)
             {
                 isExternalInvocation=st.getBoolean();
@@ -261,7 +261,7 @@ public class SemanticProperty
     {
         if(!dispProperty)
         {
-            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY));
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYPROPERTY));
             if(st!=null)
             {
                 displayProperty=SemanticObject.createSemanticObject(st.getResource());
@@ -297,7 +297,7 @@ public class SemanticProperty
 //    public String getViewGroup()
 //    {
 //        String ret=null;
-//        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_ANNOT_PROPGROUP));
+//        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_ANNOT_PROPGROUP));
 //        if(st!=null)
 //        {
 //            return st.getString();
@@ -308,7 +308,7 @@ public class SemanticProperty
 //    public int getSortIndex()
 //    {
 //        int ret=99999999;
-//        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_ANNOT_PROPINDEX));
+//        Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_ANNOT_PROPINDEX));
 //        if(st!=null)
 //        {
 //            return st.getInt();

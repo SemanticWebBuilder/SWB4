@@ -62,14 +62,14 @@ public class SemanticClass
 
     public SemanticClass(String classuri) throws SWBException
     {
-        this.m_class=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getOntClass(classuri);
+        this.m_class=SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getOntClass(classuri);
         if(this.m_class==null) throw new SWBException("OntClass Not Found");
         init();
     }
 
     public SemanticObject getSemanticObject()
     {
-        return SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(getURI());
+        return SWBPlatform.getSemanticMgr().getSchema().getSemanticObject(getURI());
     }
 
     private void init()
@@ -154,7 +154,7 @@ public class SemanticClass
 //        if(isdragSupport==null)
 //        {
 //            isdragSupport=false;
-//            Statement st=m_class.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DRAGSUPPORT));
+//            Statement st=m_class.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DRAGSUPPORT));
 //            if(st!=null)
 //            {
 //                isdragSupport=st.getBoolean();
@@ -300,29 +300,30 @@ public class SemanticClass
 
     public SemanticObject newInstance(String uri)
     {
-        Resource res=m_class.getModel().getResource(uri);
-        return newInstance(res);
+        return SemanticObject.createSemanticObject(uri);
     }
 
     public SemanticObject newInstance(Resource res)
     {
-//        try
-//        {
-            //return (SemanticObject)getConstructor().newInstance(res);
-            return SemanticObject.createSemanticObject(res);
-//        }
-//        catch(Exception ie)
-//        {
-//            throw new AssertionError(ie.getMessage());
-//        }
+        return SemanticObject.createSemanticObject(res);
     }
 
     public GenericObject newGenericInstance(Resource res)
     {
-        return newGenericInstance(newInstance(res));
+        return SemanticObject.createSemanticObject(res).createGenericInstance();
     }
 
     public GenericObject newGenericInstance(SemanticObject obj)
+    {
+        return obj.createGenericInstance();
+    }
+
+    /**
+     * Crea una nueva instancia del Objeto Generico (no cache)
+     * @param obj
+     * @return
+     */
+    GenericObject construcGenericInstance(SemanticObject obj)
     {
         try
         {
@@ -333,6 +334,7 @@ public class SemanticClass
             throw new AssertionError(ie.getMessage());
         }
     }
+
 
     public Class getObjectClass()
     {
@@ -388,7 +390,7 @@ public class SemanticClass
     {
         if(!dispObject)
         {
-            Statement st=m_class.getProperty(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYOBJECT));
+            Statement st=m_class.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_DISPLAYOBJECT));
             if(st!=null)
             {
                 displayObject=SemanticObject.createSemanticObject(st.getResource());
@@ -612,7 +614,7 @@ public class SemanticClass
 
     public void addSuperClass(SemanticClass cls)
     {
-        SemanticObject obj=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(getURI());
+        SemanticObject obj=SWBPlatform.getSemanticMgr().getSchema().getSemanticObject(getURI());
         Resource res=obj.getRDFResource();
         res.addProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDFS_SUBCLASSOF).getRDFProperty(), cls.getOntClass());
     }

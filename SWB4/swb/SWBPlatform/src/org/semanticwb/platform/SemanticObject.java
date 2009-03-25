@@ -29,6 +29,7 @@ public class SemanticObject
     private static Logger log = SWBUtils.getLogger(SemanticObject.class);
 
     private static HashMap<String, SemanticObject>m_objs=new HashMap();
+    private GenericObject m_genobj=null;
 
     private Resource m_res = null;
     private SemanticModel m_model = null;
@@ -73,7 +74,11 @@ public class SemanticObject
 
     public GenericObject createGenericInstance()
     {
-        return getSemanticClass().newGenericInstance(this);
+        if(m_genobj==null)
+        {
+            m_genobj=getSemanticClass().construcGenericInstance(this);
+        }
+        return m_genobj;
     }
 
 /**
