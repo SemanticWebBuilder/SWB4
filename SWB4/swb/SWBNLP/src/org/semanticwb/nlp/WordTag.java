@@ -12,22 +12,24 @@ package org.semanticwb.nlp;
 public class WordTag {
     private String lbl; //Etiqueta de la palabra a nivel sintáctico : OBJ, PREC, PRED, etc.
     private String TagType; //tipo de dato en RDF : swb:WebPage, swbxf:Form, etc.
+    private String name;   //nombre de la clase que representa la palabra.
 
     /**
      * Creates a new instance of a WordTag with the given label and TagType.
      * @param t Tag for the compound Tag.
      * @param tt TagType for the compound Tag.
      */
-    public WordTag(String t, String tt)
+    public WordTag(String label, String typ, String cName)
     {
-        lbl = t;
-        TagType = tt;
+        lbl = label;
+        TagType = typ;
+        name = cName;
     }
 
     /**
      * Gets the label of the current WordTag.
      */
-    public String getLabel()
+    public String getTag()
     {
         return lbl;
     }
@@ -54,5 +56,13 @@ public class WordTag {
     public void setType(String tt)
     {
         TagType = tt;
+    }
+
+    public String getWClassName() {
+        return name;
+    }
+
+    public void setClassName(String newName) {
+        name = newName;
     }
 }
