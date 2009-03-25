@@ -109,6 +109,9 @@
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwb.org.mx/swb4/content#OfficeContent">
     <rdfs:label xml:lang="en">Basic Content</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
+    </rdfs:subClassOf>
     <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >mix:referenceable</jcr:supertypes>
     <mix:mixin rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -180,9 +183,6 @@
     </rdfs:subClassOf>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.repository.office.OfficeContent</swb:className>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="http://www.jcp.org/jcr/mix/1.0#versionable"/>
-    </rdfs:subClassOf>
     <rdfs:subClassOf>
       <swb:Interface rdf:about="http://www.semanticwb.org.mx/swb4/content#Descriptiveable">
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
