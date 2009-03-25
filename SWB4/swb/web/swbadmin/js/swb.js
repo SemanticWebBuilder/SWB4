@@ -29,7 +29,6 @@
       dojo.require("dojo.dnd.Source");
 
       // various Form elemetns
-
       dojo.require("dijit.form.CheckBox");
       dojo.require("dijit.form.Textarea");
       dojo.require("dijit.form.FilteringSelect");
@@ -42,7 +41,6 @@
       dojo.require("dijit.form.Slider");
 
       // layouts used in page
-
       dojo.require("dijit.layout.AccordionContainer");
       dojo.require("dijit.layout.ContentPane");
       dojo.require("dijit.layout.TabContainer");
@@ -61,9 +59,9 @@
 
       dojo.require("dijit._tree.dndSource");
 
-      //dojo.require("dijit.PopupMenu");
-
       dojo.require("dojo.fx");
+      // for wipeTo
+      dojo.require("dojox.fx");
 
       dojo.addOnLoad(function() {
 
@@ -80,14 +78,6 @@
                   }
               }).play();
           }, 250);
-
-
-            // assuming our tabContainer has id="bar"
-//            dojo.subscribe("tabs-addChild", function(child){
-//                alert("A new child was selected:"+child.id);
-//            });
-
-
       });
 
       function getHtml(url, tagid)
