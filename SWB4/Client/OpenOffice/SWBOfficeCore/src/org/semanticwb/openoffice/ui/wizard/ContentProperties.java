@@ -36,6 +36,7 @@ public class ContentProperties extends WizardPage
     public ContentProperties()
     {
         initComponents();
+
     }
 
     
@@ -44,6 +45,7 @@ public class ContentProperties extends WizardPage
     protected void renderingPage()
     {
         Map map = this.getWizardDataMap();
+        map.put(CONTENT_PROPERTIES, null);
         if (map != null && map.get(SelectCategory.REPOSITORY_ID) != null && map.get(TitleAndDescription.NODE_TYPE) != null)
         {
             String repositoryName = map.get(SelectCategory.REPOSITORY_ID).toString();
