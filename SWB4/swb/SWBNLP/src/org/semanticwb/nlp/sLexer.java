@@ -9,21 +9,18 @@ package org.semanticwb.nlp;
  *
  * @author hasdai
  */
-// $ANTLR 3.1.2 /home/hasdai/Documentos/sLexer.g 2009-03-23 20:05:09
+// $ANTLR 3.1.2 /home/hasdai/Documentos/sLexer.g 2009-03-24 17:25:18
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 public class sLexer extends Lexer {
     public static final int SIGN=5;
     public static final int SIGI=26;
     public static final int SIGL=6;
     public static final int SIGE=8;
-    public static final int DEL=21;
+    public static final int DEL=25;
     public static final int SIGG=7;
-    public static final int LBRK=24;
+    public static final int LBRK=23;
     public static final int PREC=11;
     public static final int SIGGE=10;
     public static final int PRED=13;
@@ -34,12 +31,12 @@ public class sLexer extends Lexer {
     public static final int EOF=-1;
     public static final int NUM=17;
     public static final int SIGLE=9;
-    public static final int LPAR=22;
+    public static final int LPAR=21;
     public static final int MODT=12;
-    public static final int RPAR=23;
+    public static final int RPAR=22;
     public static final int VAR=20;
     public static final int MODO=15;
-    public static final int RBRK=25;
+    public static final int RBRK=24;
     public static final int MODE=14;
 
     // delegates
@@ -986,33 +983,13 @@ public class sLexer extends Lexer {
     }
     // $ANTLR end "VAR"
 
-    // $ANTLR start "DEL"
-    public final void mDEL() throws RecognitionException {
-        try {
-            int _type = DEL;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:21:5: ( ',' )
-            // /home/hasdai/Documentos/sLexer.g:21:7: ','
-            {
-            match(',');
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "DEL"
-
     // $ANTLR start "LPAR"
     public final void mLPAR() throws RecognitionException {
         try {
             int _type = LPAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:22:6: ( '(' )
-            // /home/hasdai/Documentos/sLexer.g:22:8: '('
+            // /home/hasdai/Documentos/sLexer.g:21:6: ( '(' )
+            // /home/hasdai/Documentos/sLexer.g:21:8: '('
             {
             match('(');
 
@@ -1031,8 +1008,8 @@ public class sLexer extends Lexer {
         try {
             int _type = RPAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:23:6: ( ')' )
-            // /home/hasdai/Documentos/sLexer.g:23:8: ')'
+            // /home/hasdai/Documentos/sLexer.g:22:6: ( ')' )
+            // /home/hasdai/Documentos/sLexer.g:22:8: ')'
             {
             match(')');
 
@@ -1051,8 +1028,8 @@ public class sLexer extends Lexer {
         try {
             int _type = LBRK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:24:6: ( '[' )
-            // /home/hasdai/Documentos/sLexer.g:24:8: '['
+            // /home/hasdai/Documentos/sLexer.g:23:6: ( '[' )
+            // /home/hasdai/Documentos/sLexer.g:23:8: '['
             {
             match('[');
 
@@ -1071,8 +1048,8 @@ public class sLexer extends Lexer {
         try {
             int _type = RBRK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:25:6: ( ']' )
-            // /home/hasdai/Documentos/sLexer.g:25:8: ']'
+            // /home/hasdai/Documentos/sLexer.g:24:6: ( ']' )
+            // /home/hasdai/Documentos/sLexer.g:24:8: ']'
             {
             match(']');
 
@@ -1085,6 +1062,26 @@ public class sLexer extends Lexer {
         }
     }
     // $ANTLR end "RBRK"
+
+    // $ANTLR start "DEL"
+    public final void mDEL() throws RecognitionException {
+        try {
+            int _type = DEL;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/hasdai/Documentos/sLexer.g:25:5: ( ',' )
+            // /home/hasdai/Documentos/sLexer.g:25:7: ','
+            {
+            match(',');
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "DEL"
 
     // $ANTLR start "SIGI"
     public final void mSIGI() throws RecognitionException {
@@ -1107,7 +1104,7 @@ public class sLexer extends Lexer {
     // $ANTLR end "SIGI"
 
     public void mTokens() throws RecognitionException {
-        // /home/hasdai/Documentos/sLexer.g:1:8: ( WHITESPACE | SIGN | SIGL | SIGG | SIGE | SIGLE | SIGGE | PREC | MODT | PRED | MODE | MODO | BOL | NUM | LIT | ORDOP | VAR | DEL | LPAR | RPAR | LBRK | RBRK | SIGI )
+        // /home/hasdai/Documentos/sLexer.g:1:8: ( WHITESPACE | SIGN | SIGL | SIGG | SIGE | SIGLE | SIGGE | PREC | MODT | PRED | MODE | MODO | BOL | NUM | LIT | ORDOP | VAR | LPAR | RPAR | LBRK | RBRK | DEL | SIGI )
         int alt15=23;
         alt15 = dfa15.predict(input);
         switch (alt15) {
@@ -1231,37 +1228,37 @@ public class sLexer extends Lexer {
                 }
                 break;
             case 18 :
-                // /home/hasdai/Documentos/sLexer.g:1:100: DEL
-                {
-                mDEL();
-
-                }
-                break;
-            case 19 :
-                // /home/hasdai/Documentos/sLexer.g:1:104: LPAR
+                // /home/hasdai/Documentos/sLexer.g:1:100: LPAR
                 {
                 mLPAR();
 
                 }
                 break;
-            case 20 :
-                // /home/hasdai/Documentos/sLexer.g:1:109: RPAR
+            case 19 :
+                // /home/hasdai/Documentos/sLexer.g:1:105: RPAR
                 {
                 mRPAR();
 
                 }
                 break;
-            case 21 :
-                // /home/hasdai/Documentos/sLexer.g:1:114: LBRK
+            case 20 :
+                // /home/hasdai/Documentos/sLexer.g:1:110: LBRK
                 {
                 mLBRK();
 
                 }
                 break;
-            case 22 :
-                // /home/hasdai/Documentos/sLexer.g:1:119: RBRK
+            case 21 :
+                // /home/hasdai/Documentos/sLexer.g:1:115: RBRK
                 {
                 mRBRK();
+
+                }
+                break;
+            case 22 :
+                // /home/hasdai/Documentos/sLexer.g:1:120: DEL
+                {
+                mDEL();
 
                 }
                 break;
@@ -1362,10 +1359,10 @@ public class sLexer extends Lexer {
     static final String DFA15_specialS =
         "\154\uffff}>";
     static final String[] DFA15_transitionS = {
-            "\2\1\1\uffff\2\1\22\uffff\1\1\1\uffff\1\22\5\uffff\1\27\1\30"+
-            "\1\uffff\1\24\1\26\1\2\1\21\1\uffff\12\20\2\uffff\1\3\1\5\1"+
+            "\2\1\1\uffff\2\1\22\uffff\1\1\1\uffff\1\22\5\uffff\1\26\1\27"+
+            "\1\uffff\1\24\1\32\1\2\1\21\1\uffff\12\20\2\uffff\1\3\1\5\1"+
             "\4\1\33\1\uffff\1\23\1\25\1\6\1\12\1\25\1\17\10\25\1\14\4\25"+
-            "\1\10\6\25\1\31\1\uffff\1\32\1\uffff\1\25\1\uffff\2\25\1\7\1"+
+            "\1\10\6\25\1\30\1\uffff\1\31\1\uffff\1\25\1\uffff\2\25\1\7\1"+
             "\13\1\25\1\16\10\25\1\15\4\25\1\11\6\25\106\uffff\1\25\7\uffff"+
             "\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff\1\25\6\uffff\1\25\6"+
             "\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff\1"+
@@ -1584,9 +1581,7 @@ public class sLexer extends Lexer {
             this.transition = DFA15_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( WHITESPACE | SIGN | SIGL | SIGG | SIGE | SIGLE | SIGGE | PREC | MODT | PRED | MODE | MODO | BOL | NUM | LIT | ORDOP | VAR | DEL | LPAR | RPAR | LBRK | RBRK | SIGI );";
+            return "1:1: Tokens : ( WHITESPACE | SIGN | SIGL | SIGG | SIGE | SIGLE | SIGGE | PREC | MODT | PRED | MODE | MODO | BOL | NUM | LIT | ORDOP | VAR | LPAR | RPAR | LBRK | RBRK | DEL | SIGI );";
         }
     }
-
-
 }
