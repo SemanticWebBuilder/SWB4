@@ -2,11 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.nlp;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticProperty;
 
 /**
  *
@@ -14,22 +16,25 @@ import java.util.Iterator;
  */
 public class Lexicon {
     //TODO: Poner el léxico en un árbol
+
     private ArrayList<Word> pLexic;
     private ArrayList<Word> oLexic;
+    private String language = "es";
 
     /**
      * Constructor.
      * @param lex Diccionario de palabras.
      */
-    public Lexicon(ArrayList<Word> lex) {
+    public Lexicon(ArrayList<Word> lex, String lang) {
         Iterator<Word> wit = lex.iterator();
         pLexic = new ArrayList<Word>();
         oLexic = new ArrayList<Word>();
+        language = lang;
 
-        while(wit.hasNext()) {
+        while (wit.hasNext()) {
             Word t = wit.next();
 
-            if(t.getTag().getLabel().equals("PRO")) {
+            if (t.getTag().getTag().equals("PRO")) {
                 pLexic.add(t);
             } else {
                 oLexic.add(t);
@@ -37,9 +42,33 @@ public class Lexicon {
         }
     }
 
-    public Lexicon() {
+    public String getLanguage() {
+        return language;
+    }
+
+    public Lexicon(String lang) {
         pLexic = new ArrayList<Word>();
         oLexic = new ArrayList<Word>();
+
+        //Create a new word dictionary instance
+        Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
+
+        //Traverse the ontology model to fill the dictionary
+        while (its.hasNext()) {
+            SemanticClass sc = its.next();
+
+            this.addWord(new Word(sc.getDisplayName(lang),
+                    new WordTag("OBJ", sc.getPrefix() + ":" + sc.getName(), sc.getName())));
+
+            Iterator<SemanticProperty> ip = sc.listProperties();
+
+            while (ip.hasNext()) {
+                SemanticProperty prop = ip.next();
+
+                this.addWord(new Word(prop.getDisplayName(lang),
+                        new WordTag("PRO", prop.getPropId(), prop.getName())));
+            }
+        }
     }
 
     /**
@@ -49,7 +78,7 @@ public class Lexicon {
      */
     public void addWord(Word w) {
         if (!entryExist(w)) {
-            if (w.getTag().getLabel().equals("PRO")) {
+            if (w.getTag().getTag().equals("PRO")) {
                 pLexic.add(w);
             } else {
                 oLexic.add(w);
@@ -68,58 +97,58 @@ public class Lexicon {
 
         for (int i = 0; i < pLexic.size(); i++) {
             if (pLexic.get(i).getLabel().toUpperCase().compareTo(w.getLabel().toUpperCase()) == 0) {
-                return new WordTag(pLexic.get(i).getTag().getLabel(),
-                        pLexic.get(i).getTag().getType());
+                return new WordTag(pLexic.get(i).getTag().getTag(),
+                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName());
             }
         }
 
         for (int i = 0; i < oLexic.size(); i++) {
             if (oLexic.get(i).getLabel().toUpperCase().compareTo(w.getLabel().toUpperCase()) == 0) {
-                return new WordTag(oLexic.get(i).getTag().getLabel(),
-                        oLexic.get(i).getTag().getType());
+                return new WordTag(oLexic.get(i).getTag().getTag(),
+                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName());
             }
         }
-        return new WordTag("VAR", "");
+        return new WordTag("VAR", "", "");
     }
 
     public WordTag getPropWordTag(Word w) {
         for (int i = 0; i < pLexic.size(); i++) {
             if (pLexic.get(i).getLabel().toUpperCase().compareTo(w.getLabel().toUpperCase()) == 0) {
-                return new WordTag(pLexic.get(i).getTag().getLabel(),
-                        pLexic.get(i).getTag().getType());
+                return new WordTag(pLexic.get(i).getTag().getTag(),
+                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName());
             }
         }
-        return new WordTag("VAR", "");
+        return new WordTag("VAR", "", "");
     }
 
     public WordTag getPropWordTag(String label) {
         for (int i = 0; i < pLexic.size(); i++) {
             if (pLexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
-                return new WordTag(pLexic.get(i).getTag().getLabel(),
-                        pLexic.get(i).getTag().getType());
+                return new WordTag(pLexic.get(i).getTag().getTag(),
+                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName());
             }
         }
-        return new WordTag("VAR", "");
+        return new WordTag("VAR", "", "");
     }
 
     public WordTag getObjWordTag(Word w) {
         for (int i = 0; i < oLexic.size(); i++) {
             if (oLexic.get(i).getLabel().toUpperCase().compareTo(w.getLabel().toUpperCase()) == 0) {
-                return new WordTag(oLexic.get(i).getTag().getLabel(),
-                        oLexic.get(i).getTag().getType());
+                return new WordTag(oLexic.get(i).getTag().getTag(),
+                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName());
             }
         }
-        return new WordTag("VAR", "");
+        return new WordTag("VAR", "", "");
     }
 
     public WordTag getObjWordTag(String label) {
         for (int i = 0; i < oLexic.size(); i++) {
             if (oLexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
-                return new WordTag(oLexic.get(i).getTag().getLabel(),
-                        oLexic.get(i).getTag().getType());
+                return new WordTag(oLexic.get(i).getTag().getTag(),
+                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName());
             }
         }
-        return new WordTag("VAR", "");
+        return new WordTag("VAR", "", "");
     }
 
     public WordTag getWordTag(String label) {
@@ -127,18 +156,18 @@ public class Lexicon {
 
         for (int i = 0; i < pLexic.size() && !found; i++) {
             if (pLexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
-                return new WordTag(pLexic.get(i).getTag().getLabel(),
-                        pLexic.get(i).getTag().getType());
+                return new WordTag(pLexic.get(i).getTag().getTag(),
+                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName());
             }
         }
 
         for (int i = 0; i < oLexic.size() && !found; i++) {
             if (oLexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
-                return new WordTag(oLexic.get(i).getTag().getLabel(),
-                        oLexic.get(i).getTag().getType());
+                return new WordTag(oLexic.get(i).getTag().getTag(),
+                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName());
             }
         }
-        return new WordTag("VAR", "");
+        return new WordTag("VAR", "", "");
     }
 
     /**
@@ -146,24 +175,17 @@ public class Lexicon {
      * @param entry palabra a verificar.
      * @return true si la palabra existe en el diccionario.
      */
-    public boolean entryExist(Word entry)
-    {
+    public boolean entryExist(Word entry) {
         boolean found = false;
         //TODO: Arreglar para hacer la búsqueda en un árbol
-        for (int i = 0; i < pLexic.size() && !found; i++)
-        {
-            if (pLexic.get(i).getLabel().toUpperCase().compareTo(entry.getLabel().toUpperCase()) == 0
-                    && pLexic.get(i).getTag().getLabel().compareTo(entry.getTag().getLabel()) == 0
-                    && pLexic.get(i).getTag().getType().compareTo(entry.getTag().getType())==0) {
+        for (int i = 0; i < pLexic.size() && !found; i++) {
+            if (pLexic.get(i).getLabel().toUpperCase().compareTo(entry.getLabel().toUpperCase()) == 0 && pLexic.get(i).getTag().getTag().compareTo(entry.getTag().getTag()) == 0 && pLexic.get(i).getTag().getType().compareTo(entry.getTag().getType()) == 0 && pLexic.get(i).getTag().getWClassName().compareTo(entry.getTag().getWClassName()) == 0) {
                 found = true;
             }
         }
 
-        for (int i = 0; i < oLexic.size() && !found; i++)
-        {
-            if (oLexic.get(i).getLabel().toUpperCase().compareTo(entry.getLabel().toUpperCase()) == 0
-                    && oLexic.get(i).getTag().getLabel().compareTo(entry.getTag().getLabel()) == 0
-                    && oLexic.get(i).getTag().getType().compareTo(entry.getTag().getType())==0) {
+        for (int i = 0; i < oLexic.size() && !found; i++) {
+            if (oLexic.get(i).getLabel().toUpperCase().compareTo(entry.getLabel().toUpperCase()) == 0 && oLexic.get(i).getTag().getTag().compareTo(entry.getTag().getTag()) == 0 && oLexic.get(i).getTag().getType().compareTo(entry.getTag().getType()) == 0) {
                 found = true;
             }
         }
@@ -190,7 +212,7 @@ public class Lexicon {
         while (wit.hasNext()) {
             Word t = wit.next();
 
-            res = res + t.getLabel() + "[" + t.getTag().getLabel() + ", " +
+            res = res + t.getLabel() + "[" + t.getTag().getTag() + ", " +
                     t.getTag().getType() + "]\n";
         }
 
@@ -198,7 +220,7 @@ public class Lexicon {
         while (wit.hasNext()) {
             Word t = wit.next();
 
-            res = res + t.getLabel() + "[" + t.getTag().getLabel() + ", " +
+            res = res + t.getLabel() + "[" + t.getTag().getTag() + ", " +
                     t.getTag().getType() + "]\n";
         }
         return res;
