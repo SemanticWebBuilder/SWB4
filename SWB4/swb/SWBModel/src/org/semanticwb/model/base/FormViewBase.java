@@ -67,7 +67,7 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasFormViewRefInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.FormViewRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.FormViewRef)obj.createGenericInstance();
          }
          return ret;
     }

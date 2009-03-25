@@ -95,7 +95,7 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRule);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Rule)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Rule)obj.createGenericInstance();
          }
          return ret;
     }
@@ -146,7 +146,7 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -217,7 +217,7 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasCalendar);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Calendar)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Calendar)obj.createGenericInstance();
          }
          return ret;
     }
@@ -238,7 +238,7 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -274,7 +274,7 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRole);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Role)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Role)obj.createGenericInstance();
          }
          return ret;
     }
@@ -306,6 +306,6 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

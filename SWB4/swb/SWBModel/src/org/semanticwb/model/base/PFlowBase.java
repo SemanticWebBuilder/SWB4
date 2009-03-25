@@ -82,7 +82,7 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPFlowRefInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.PFlowRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.PFlowRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -113,7 +113,7 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_lastVersion);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
          }
          return ret;
     }
@@ -164,7 +164,7 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -210,7 +210,7 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_actualVersion);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
          }
          return ret;
     }
@@ -241,7 +241,7 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPFlowInstance);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.PFlowInstance)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.PFlowInstance)obj.createGenericInstance();
          }
          return ret;
     }
@@ -262,7 +262,7 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -294,6 +294,6 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

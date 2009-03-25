@@ -127,7 +127,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_language);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Language)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Language)obj.createGenericInstance();
          }
          return ret;
     }
@@ -186,7 +186,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -242,7 +242,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_userRepository);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.UserRepository)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.UserRepository)obj.createGenericInstance();
          }
          return ret;
     }
@@ -263,7 +263,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -284,7 +284,7 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_homePage);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.WebPage)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
          }
          return ret;
     }

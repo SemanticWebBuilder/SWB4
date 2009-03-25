@@ -75,7 +75,7 @@ public class FrmUserThreadBase extends org.semanticwb.model.SWBClass implements 
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_ut_user);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -96,7 +96,7 @@ public class FrmUserThreadBase extends org.semanticwb.model.SWBClass implements 
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_ut_thread);
          if(obj!=null)
          {
-             ret=(org.semanticwb.forum.FrmThread)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.forum.FrmThread)obj.createGenericInstance();
          }
          return ret;
     }
@@ -127,7 +127,7 @@ public class FrmUserThreadBase extends org.semanticwb.model.SWBClass implements 
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -183,7 +183,7 @@ public class FrmUserThreadBase extends org.semanticwb.model.SWBClass implements 
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }

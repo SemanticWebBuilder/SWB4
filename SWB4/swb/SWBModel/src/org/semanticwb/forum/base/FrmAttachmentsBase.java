@@ -116,7 +116,7 @@ public class FrmAttachmentsBase extends org.semanticwb.model.SWBClass implements
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -157,7 +157,7 @@ public class FrmAttachmentsBase extends org.semanticwb.model.SWBClass implements
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -178,13 +178,13 @@ public class FrmAttachmentsBase extends org.semanticwb.model.SWBClass implements
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_atPost);
          if(obj!=null)
          {
-             ret=(org.semanticwb.forum.FrmPost)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.forum.FrmPost)obj.createGenericInstance();
          }
          return ret;
     }
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

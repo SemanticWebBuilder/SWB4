@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Calendarable,org.semanticwb.model.Viewable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Indexable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Hitable,org.semanticwb.model.XMLable,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.Campable,org.semanticwb.model.Traceable,org.semanticwb.model.Deleteable
+public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Calendarable,org.semanticwb.model.Viewable,org.semanticwb.model.Indexable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Hitable,org.semanticwb.model.Priorityable,org.semanticwb.model.XMLable,org.semanticwb.model.Localeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Campable,org.semanticwb.model.Traceable,org.semanticwb.model.Deleteable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
@@ -127,7 +127,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUserGroupRef);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.UserGroupRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.UserGroupRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -148,7 +148,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_camp);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Camp)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Camp)obj.createGenericInstance();
          }
          return ret;
     }
@@ -219,7 +219,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_resourceFilter);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.ResourceFilter)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.ResourceFilter)obj.createGenericInstance();
          }
          return ret;
     }
@@ -240,7 +240,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_language);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Language)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Language)obj.createGenericInstance();
          }
          return ret;
     }
@@ -261,7 +261,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasResourceRefInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.ResourceRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.ResourceRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -282,7 +282,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_resourceType);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.ResourceType)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.ResourceType)obj.createGenericInstance();
          }
          return ret;
     }
@@ -323,7 +323,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -404,7 +404,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasCalendar);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Calendar)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Calendar)obj.createGenericInstance();
          }
          return ret;
     }
@@ -425,7 +425,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_pflowInstance);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.PFlowInstance)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.PFlowInstance)obj.createGenericInstance();
          }
          return ret;
     }
@@ -456,7 +456,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_resourceSubType);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.ResourceSubType)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.ResourceSubType)obj.createGenericInstance();
          }
          return ret;
     }
@@ -507,7 +507,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleRef);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.RoleRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.RoleRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -538,7 +538,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasResourceable);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Resourceable)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Resourceable)obj.createGenericInstance();
          }
          return ret;
     }
@@ -579,7 +579,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRuleRef);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.RuleRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.RuleRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -600,7 +600,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -642,6 +642,6 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

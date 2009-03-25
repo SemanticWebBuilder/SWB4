@@ -90,7 +90,7 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_lastVersion);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
          }
          return ret;
     }
@@ -111,7 +111,7 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRuleRefInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.RuleRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.RuleRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -142,7 +142,7 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -188,7 +188,7 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_actualVersion);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.VersionInfo)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
          }
          return ret;
     }
@@ -234,7 +234,7 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasCalendar);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Calendar)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Calendar)obj.createGenericInstance();
          }
          return ret;
     }
@@ -255,7 +255,7 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -287,6 +287,6 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

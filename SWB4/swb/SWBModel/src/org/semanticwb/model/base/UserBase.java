@@ -90,7 +90,7 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_userFavorites);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.UserFavorites)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.UserFavorites)obj.createGenericInstance();
          }
          return ret;
     }
@@ -141,7 +141,7 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -187,7 +187,7 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUserGroup);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.UserGroup)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();
          }
          return ret;
     }
@@ -273,7 +273,7 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasAdminFilter);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.AdminFilter)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.AdminFilter)obj.createGenericInstance();
          }
          return ret;
     }
@@ -304,7 +304,7 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -362,7 +362,7 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRole);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Role)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Role)obj.createGenericInstance();
          }
          return ret;
     }
@@ -389,6 +389,6 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.UserRepository getUserRepository()
     {
-        return new org.semanticwb.model.UserRepository(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.UserRepository)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

@@ -67,7 +67,7 @@ public class UserGroupRefBase extends org.semanticwb.model.Reference implements 
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_userGroup);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.UserGroup)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();
          }
          return ret;
     }

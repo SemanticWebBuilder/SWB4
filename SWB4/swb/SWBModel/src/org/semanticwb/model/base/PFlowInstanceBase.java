@@ -80,7 +80,7 @@ public class PFlowInstanceBase extends org.semanticwb.model.SWBClass implements 
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_pfiPFlow);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.PFlow)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.PFlow)obj.createGenericInstance();
          }
          return ret;
     }

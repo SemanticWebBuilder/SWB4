@@ -67,13 +67,13 @@ public class RuleRefBase extends org.semanticwb.model.Reference implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_rule);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Rule)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Rule)obj.createGenericInstance();
          }
          return ret;
     }
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

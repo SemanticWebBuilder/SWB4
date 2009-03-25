@@ -129,7 +129,7 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbxf_propGroup);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.PropertyGroup)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.PropertyGroup)obj.createGenericInstance();
          }
          return ret;
     }

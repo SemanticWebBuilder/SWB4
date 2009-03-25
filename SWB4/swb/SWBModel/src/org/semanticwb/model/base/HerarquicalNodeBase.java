@@ -79,7 +79,7 @@ public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implement
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbxf_heModel);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.SWBModel)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.SWBModel)obj.createGenericInstance();
          }
          return ret;
     }

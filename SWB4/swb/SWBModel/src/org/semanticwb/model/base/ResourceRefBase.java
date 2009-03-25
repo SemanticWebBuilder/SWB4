@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable
+public class ResourceRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Priorityable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resource");
@@ -68,7 +68,7 @@ public class ResourceRefBase extends org.semanticwb.model.Reference implements o
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_resource);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Resource)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
     }
@@ -85,6 +85,6 @@ public class ResourceRefBase extends org.semanticwb.model.Reference implements o
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

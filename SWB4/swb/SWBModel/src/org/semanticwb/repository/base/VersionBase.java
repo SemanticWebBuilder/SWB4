@@ -83,7 +83,7 @@ public class VersionBase extends org.semanticwb.repository.BaseNode implements o
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(jcr_successors);
          if(obj!=null)
          {
-             ret=(org.semanticwb.repository.Version)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.repository.Version)obj.createGenericInstance();
          }
          return ret;
     }
@@ -104,7 +104,7 @@ public class VersionBase extends org.semanticwb.repository.BaseNode implements o
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(jcr_predecessors);
          if(obj!=null)
          {
-             ret=(org.semanticwb.repository.Version)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.repository.Version)obj.createGenericInstance();
          }
          return ret;
     }

@@ -70,7 +70,7 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPSTResources);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Resource)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
     }
@@ -91,7 +91,7 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_PSTType);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.ResourceType)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.ResourceType)obj.createGenericInstance();
          }
          return ret;
     }
@@ -122,7 +122,7 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -178,7 +178,7 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -210,6 +210,6 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

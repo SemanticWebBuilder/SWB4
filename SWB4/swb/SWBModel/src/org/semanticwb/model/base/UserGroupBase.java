@@ -86,7 +86,7 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasGroupedUser);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.UserGroupable)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.UserGroupable)obj.createGenericInstance();
          }
          return ret;
     }
@@ -107,7 +107,7 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -163,7 +163,7 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_usrgrpParent);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.UserGroup)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();
          }
          return ret;
     }
@@ -184,7 +184,7 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUsrGrpChild);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.UserGroup)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();
          }
          return ret;
     }
@@ -205,7 +205,7 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -237,6 +237,6 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
 
     public org.semanticwb.model.UserRepository getUserRepository()
     {
-        return new org.semanticwb.model.UserRepository(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.UserRepository)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }
