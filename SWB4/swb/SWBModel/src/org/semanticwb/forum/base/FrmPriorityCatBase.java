@@ -97,6 +97,6 @@ public class FrmPriorityCatBase extends org.semanticwb.model.SWBClass implements
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

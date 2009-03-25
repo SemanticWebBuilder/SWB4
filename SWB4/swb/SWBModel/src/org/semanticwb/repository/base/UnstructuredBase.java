@@ -51,6 +51,6 @@ public class UnstructuredBase extends org.semanticwb.repository.BaseNode
 
     public org.semanticwb.repository.Workspace getWorkspace()
     {
-        return new org.semanticwb.repository.Workspace(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.repository.Workspace)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

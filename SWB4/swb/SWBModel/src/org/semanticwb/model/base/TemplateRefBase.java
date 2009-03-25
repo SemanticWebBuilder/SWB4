@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Inheritable,org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable
+public class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Inheritable,org.semanticwb.model.Priorityable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
     public static final org.semanticwb.platform.SemanticProperty swb_template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#template");
@@ -69,7 +69,7 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_template);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Template)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Template)obj.createGenericInstance();
          }
          return ret;
     }
@@ -96,6 +96,6 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

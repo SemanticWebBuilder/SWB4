@@ -88,7 +88,7 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_userPostRole);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Role)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Role)obj.createGenericInstance();
          }
          return ret;
     }
@@ -109,7 +109,7 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_moderationMode);
          if(obj!=null)
          {
-             ret=(org.semanticwb.forum.FrmModererationCat)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.forum.FrmModererationCat)obj.createGenericInstance();
          }
          return ret;
     }
@@ -150,7 +150,7 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_lastpostusr);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -181,7 +181,7 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -227,7 +227,7 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_hasthread);
          if(obj!=null)
          {
-             ret=(org.semanticwb.forum.FrmThread)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.forum.FrmThread)obj.createGenericInstance();
          }
          return ret;
     }
@@ -268,7 +268,7 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_userThreadRole);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Role)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Role)obj.createGenericInstance();
          }
          return ret;
     }
@@ -299,7 +299,7 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_type);
          if(obj!=null)
          {
-             ret=(org.semanticwb.forum.FrmTypeCat)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.forum.FrmTypeCat)obj.createGenericInstance();
          }
          return ret;
     }
@@ -320,7 +320,7 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_category);
          if(obj!=null)
          {
-             ret=(org.semanticwb.forum.FrmCategory)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.forum.FrmCategory)obj.createGenericInstance();
          }
          return ret;
     }
@@ -341,7 +341,7 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -373,6 +373,6 @@ public class FrmForumBase extends org.semanticwb.model.SWBClass implements org.s
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

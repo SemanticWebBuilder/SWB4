@@ -85,7 +85,7 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbrep_hasNodes);
          if(obj!=null)
          {
-             ret=(org.semanticwb.repository.BaseNode)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.repository.BaseNode)obj.createGenericInstance();
          }
          return ret;
     }
@@ -106,7 +106,7 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbrep_parentNode);
          if(obj!=null)
          {
-             ret=(org.semanticwb.repository.BaseNode)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.repository.BaseNode)obj.createGenericInstance();
          }
          return ret;
     }
@@ -160,6 +160,6 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
 
     public org.semanticwb.repository.Workspace getWorkspace()
     {
-        return new org.semanticwb.repository.Workspace(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.repository.Workspace)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

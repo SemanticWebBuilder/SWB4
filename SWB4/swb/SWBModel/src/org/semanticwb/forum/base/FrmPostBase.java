@@ -81,7 +81,7 @@ public class FrmPostBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_postThread);
          if(obj!=null)
          {
-             ret=(org.semanticwb.forum.FrmThread)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.forum.FrmThread)obj.createGenericInstance();
          }
          return ret;
     }
@@ -122,7 +122,7 @@ public class FrmPostBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_postForum);
          if(obj!=null)
          {
-             ret=(org.semanticwb.forum.FrmForum)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.forum.FrmForum)obj.createGenericInstance();
          }
          return ret;
     }
@@ -143,7 +143,7 @@ public class FrmPostBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_hasAttachments);
          if(obj!=null)
          {
-             ret=(org.semanticwb.forum.FrmAttachments)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.forum.FrmAttachments)obj.createGenericInstance();
          }
          return ret;
     }
@@ -174,7 +174,7 @@ public class FrmPostBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -215,7 +215,7 @@ public class FrmPostBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_postParentPost);
          if(obj!=null)
          {
-             ret=(org.semanticwb.forum.FrmPost)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.forum.FrmPost)obj.createGenericInstance();
          }
          return ret;
     }
@@ -236,7 +236,7 @@ public class FrmPostBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -257,13 +257,13 @@ public class FrmPostBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_haschildPost);
          if(obj!=null)
          {
-             ret=(org.semanticwb.forum.FrmPost)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.forum.FrmPost)obj.createGenericInstance();
          }
          return ret;
     }
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

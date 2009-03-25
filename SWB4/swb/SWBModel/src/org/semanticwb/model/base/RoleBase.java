@@ -79,7 +79,7 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleRefInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.RoleRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.RoleRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -115,7 +115,7 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPermission);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Permission)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Permission)obj.createGenericInstance();
          }
          return ret;
     }
@@ -146,7 +146,7 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_roleParent);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Role)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Role)obj.createGenericInstance();
          }
          return ret;
     }
@@ -177,7 +177,7 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -223,7 +223,7 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleChild);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Role)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Role)obj.createGenericInstance();
          }
          return ret;
     }
@@ -254,7 +254,7 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -286,6 +286,6 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.UserRepository getUserRepository()
     {
-        return new org.semanticwb.model.UserRepository(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.UserRepository)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

@@ -50,7 +50,7 @@ public class SWBContextBase
             org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(name,swb_WebSite));
             if(obj!=null)
             {
-                ret=(org.semanticwb.model.WebSite)new WebSite(obj);
+                ret=(org.semanticwb.model.WebSite)obj.createGenericInstance();
             }
         }
         return ret;
@@ -82,7 +82,7 @@ public class SWBContextBase
             org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(name,swb_UserRepository));
             if(obj!=null)
             {
-                ret=(org.semanticwb.model.UserRepository)new UserRepository(obj);
+                ret=(org.semanticwb.model.UserRepository)obj.createGenericInstance();
             }
         }
         return ret;
@@ -114,7 +114,7 @@ public class SWBContextBase
             org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(name,swbrep_Workspace));
             if(obj!=null)
             {
-                ret=(org.semanticwb.repository.Workspace)new Workspace(obj);
+                ret=(org.semanticwb.repository.Workspace)obj.createGenericInstance();
             }
         }
         return ret;

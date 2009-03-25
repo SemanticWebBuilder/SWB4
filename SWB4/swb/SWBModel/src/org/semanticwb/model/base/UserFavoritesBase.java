@@ -81,6 +81,6 @@ public class UserFavoritesBase extends org.semanticwb.model.SWBClass
 
     public org.semanticwb.model.UserRepository getUserRepository()
     {
-        return new org.semanticwb.model.UserRepository(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.UserRepository)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

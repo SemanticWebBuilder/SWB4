@@ -76,7 +76,7 @@ public class LanguageBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -132,7 +132,7 @@ public class LanguageBase extends org.semanticwb.model.SWBClass implements org.s
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -164,6 +164,6 @@ public class LanguageBase extends org.semanticwb.model.SWBClass implements org.s
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

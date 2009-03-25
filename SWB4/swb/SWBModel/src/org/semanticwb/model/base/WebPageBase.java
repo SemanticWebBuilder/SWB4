@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class WebPageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Hiddenable,org.semanticwb.model.Calendarable,org.semanticwb.model.Viewable,org.semanticwb.model.RoleRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Indexable,org.semanticwb.model.Resourceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Deleteable
+public class WebPageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Hiddenable,org.semanticwb.model.Calendarable,org.semanticwb.model.Viewable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Indexable,org.semanticwb.model.Resourceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Deleteable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
@@ -115,7 +115,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUserGroupRef);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.UserGroupRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.UserGroupRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -181,7 +181,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasWebPageVirtualParent);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.WebPage)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
          }
          return ret;
     }
@@ -222,7 +222,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasWebPageVirtualChild);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.WebPage)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
          }
          return ret;
     }
@@ -263,7 +263,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPFlowRef);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.PFlowRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.PFlowRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -304,7 +304,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasTemplateRef);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.TemplateRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.TemplateRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -325,7 +325,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasWebPageChild);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.WebPage)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
          }
          return ret;
     }
@@ -346,7 +346,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_webPageParent);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.WebPage)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
          }
          return ret;
     }
@@ -387,7 +387,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -423,7 +423,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasResource);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Resource)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
     }
@@ -494,7 +494,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasCalendar);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.Calendar)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.Calendar)obj.createGenericInstance();
          }
          return ret;
     }
@@ -565,7 +565,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleRef);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.RoleRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.RoleRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -596,7 +596,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.User)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -637,7 +637,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRuleRef);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.RuleRef)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.model.RuleRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -679,6 +679,6 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public org.semanticwb.model.WebSite getWebSite()
     {
-        return new org.semanticwb.model.WebSite(getSemanticObject().getModel().getModelObject());
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }
