@@ -19,7 +19,7 @@ public class Word {
      */
     public Word(String lbl) {
         label = lbl;
-        wTag = new WordTag("", "");
+        wTag = new WordTag("", "", "");
     }
 
     /**
