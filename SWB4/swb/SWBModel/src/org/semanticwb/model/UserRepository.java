@@ -41,18 +41,23 @@ public class UserRepository extends UserRepositoryBase
     public UserRepository(SemanticObject base)
     {
         super(base);
+        //System.out.println("***********UserRepository***************");
         userTypes = new ArrayList<String>();
         StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
         while (ptopIt.hasNext())
         {
             Statement sp = (Statement) ptopIt.next();
+            //System.out.println("getPredicate:"+sp.getPredicate());
             if (sp.getPredicate().getLocalName().startsWith(SWBUR_ClassUserTypeHold))
             {
                 String uri = sp.getObject().toString();
                 userTypes.add(uri.split("#")[1]);
+                //System.out.println("userTypes:"+uri.split("#")[1]);
             //getSemanticObject().getModel().registerClass(uri);
             }
         }
+        //System.out.println("***********end***************");
+
     /*
     String uri = getProperty(SWBUR_ClassHold);
     if (uri != null)
