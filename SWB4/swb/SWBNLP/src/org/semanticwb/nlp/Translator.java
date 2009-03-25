@@ -11,6 +11,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticProperty;
 
 /**
  *
@@ -27,6 +28,7 @@ public class Translator {
     private CommonTokenStream tokens;
     private ANTLRStringStream input;
     private int errCode = 0;
+    private String eLog = "";
 
     /**
      * Creates a new instance of a Natural Language to SparQL Translator with
@@ -55,18 +57,23 @@ public class Translator {
             if (parser.getErrorCount() == 0) {
                 sTree = (CommonTree) qres.getTree();
                 fixTree(sTree);
-                Traverse(sTree, "");
+                //Traverse(sTree, "");
                 return getSparqlQuery(sTree, parser.isCompoundQuery());
             } else {
                 errCode = 1;
-                return "no se pudo obtener AST";
+                eLog += "no se pudo obtener AST.\n";
             }
         } catch (org.antlr.runtime.RecognitionException ex) {
-            System.out.println("No se ha podido traducir la consulta.");
+            eLog += "No se ha podido traducir la consulta.\n";
             errCode = 2;
         }
         errCode = 2;
-        return "No se ha podido traducir la consulta.";
+        eLog += "No se ha podido traducir la consulta.\n";
+        return "";
+    }
+
+    public String getErrors() {
+        return eLog;
     }
 
     /**
@@ -82,45 +89,74 @@ public class Translator {
         String res = "";
 
         if (root.getText().equals("SELECT")) {
-            res += ProcessSelect((CommonTree) root.getChild(0), isCompound);
+            res += ProcessSelect(root, isCompound);
         }
         return res;
     }
 
-    private String ProcessSelect (CommonTree root, boolean isCompound) {
-        String res = "SELECT ";
+    private String ProcessSelect(CommonTree root, boolean isCompound) {
+        String limitoff = "";
+        String order = "";
+        String res = "";
+
+        List<CommonTree> child = root.getChildren();
+        if (child != null) {
+            res = "SELECT ";
+            Iterator<CommonTree> cit = child.iterator();
+            while (cit.hasNext()) {
+                CommonTree t = cit.next();
+
+                if (t.getText().equals("LIMIT")) {
+                    limitoff = limitoff + " LIMIT " + t.getChild(0).getText() + "\n";
+                } else if (t.getText().equals("ORDER")) {
+                    order += " ORDER BY ";
+                    Iterator<CommonTree> oit = t.getChildren().iterator();
+                    while (oit.hasNext()) {
+                        order = order + "?" + oit.next().getText() + " ";
+                    }
+                    order = order.trim() + "\n";
+                } else if (t.getText().equals("OFFSET")) {
+                    limitoff = limitoff + " OFFSET " + t.getChild(0).getText() + "\n";
+                } else {
+                    res += ProcessNode((CommonTree) t, isCompound);
+                }
+            }
+        }
+        return res + "}" + order + limitoff;
+    }
+
+    private String ProcessNode(CommonTree root, boolean isCompound) {
+        String res = "";
+
         Iterator<CommonTree> cit;
         List<CommonTree> child = root.getChildren();
 
         if (child != null) {
             res = res + "?" + root.getText() + " ";
             if (isCompound) {
-                res += getVars((CommonTree)root.getChild(0));
+                res += getVars((CommonTree) root.getChild(0));
             }
 
             res = res + " \nWHERE\n{\n?" + root.getText() + " rdf:type " + lex.getObjWordTag(root.getText()).getType() + ".\n";
-            if(isCompound) {
-                res += ProcessPrede((CommonTree)root.getChild(0), root.getText());
+            if (isCompound) {
+                res += ProcessPrede((CommonTree) root.getChild(0), root.getText());
             } else {
-                res += ProcessPrecon((CommonTree)root.getChild(0), root.getText());
+                res += ProcessPrecon((CommonTree) root.getChild(0), root.getText());
             }
         } else {
-
             res = res + " *\nWHERE\n{\n?" + root.getText() + " rdf:type " + lex.getObjWordTag(root.getText()).getType() + ".\n";
             res = res + "?" + root.getText() + " ?property ?value\n";
         }
-        //System.out.println(res);
-        return res + "}";
+        return res;
     }
-
 
     private String getVars(CommonTree root) {
         String res = " ";
 
         List<CommonTree> child = root.getChildren();
-        if(child != null) {
+        if (child != null) {
             Iterator<CommonTree> cit = child.iterator();
-            while(cit.hasNext()) {
+            while (cit.hasNext()) {
                 CommonTree t = cit.next();
                 res = res + "?" + t.getText().replace(" ", "_") + " ";
             }
@@ -168,71 +204,70 @@ public class Translator {
     }
 
     /*private String ProcessNode(CommonTree root, String parent) {
-        String res = "";
+    String res = "";
 
-        //if node label is PRECON
-        if (root.getText().equals("PRECON")) {
-            List<CommonTree> child = root.getChildren();
+    //if node label is PRECON
+    if (root.getText().equals("PRECON")) {
+    List<CommonTree> child = root.getChildren();
 
-            if(child != null) {
-                Iterator<CommonTree> cit = child.iterator();
-                while(cit.hasNext()) {
-                    CommonTree t = cit.next();
-                    //If node is a NAME
-                    if (nodeLabels.indexOf(t.getText()) == -1 && t.getChildCount() > 0) {
-                        //ProcessNode with NAME as root
-                        res += ProcessNode(cit.next(), t.getText());
-                    } else {
-                        res += ProcessNode(cit.next(), parent);
-                    }
-                }
-            }
-        } else if (root.getText().equals("PREDE")) {
-            List<CommonTree> child = root.getChildren();
+    if(child != null) {
+    Iterator<CommonTree> cit = child.iterator();
+    while(cit.hasNext()) {
+    CommonTree t = cit.next();
+    //If node is a NAME
+    if (nodeLabels.indexOf(t.getText()) == -1 && t.getChildCount() > 0) {
+    //ProcessNode with NAME as root
+    res += ProcessNode(cit.next(), t.getText());
+    } else {
+    res += ProcessNode(cit.next(), parent);
+    }
+    }
+    }
+    } else if (root.getText().equals("PREDE")) {
+    List<CommonTree> child = root.getChildren();
 
-            if(child != null) {
-                Iterator<CommonTree> cit = child.iterator();
-                while (cit.hasNext()) {
+    if(child != null) {
+    Iterator<CommonTree> cit = child.iterator();
+    while (cit.hasNext()) {
 
-                }
+    }
 
-                cit = child.iterator();
-                while(cit.hasNext()) {
-                    CommonTree t = cit.next();
-                    //If node is a NAME
-                    if (nodeLabels.indexOf(t.getText()) == -1 && t.getChildCount() > 0) {
-                        //ProcessNode with NAME as root
-                        res += ProcessNode(cit.next(), t.getText());
-                    } else {
-                        res += ProcessNode(cit.next(), parent);
-                    }
-                }
-            }
-        } else if (root.getText().equals("ASIGN")) {
-            //ProcessAsign
-            res =res + "?" + parent + " " + lex.getWordTag(root.getChild(0).getText()).getType()
-                    + " " + root.getChild(1).getText() + ".\n";
-        } else if (root.getText().equals("COMPL")) {
-            //ProcessComp
-            System.out.println("Processing COMPL");
-        } else if (root.getText().equals("COMPG")) {
-            //ProcessAsign
-            System.out.println("Processing COMPG");
-        } else if (root.getText().equals("COMPLE")) {
-            //ProcessAsign
-            System.out.println("Processing COMPLE");
-        } else if (root.getText().equals("COMPGE")) {
-            //ProcessAsign
-            System.out.println("Processing COMPGE");
-        } else {
-            //ProcessName
-            res = res + "?" + parent + " " + lex.getWordTag(root.getText()).getType()
-                    + " ?" + root.getText() + ".\n";
-        }
+    cit = child.iterator();
+    while(cit.hasNext()) {
+    CommonTree t = cit.next();
+    //If node is a NAME
+    if (nodeLabels.indexOf(t.getText()) == -1 && t.getChildCount() > 0) {
+    //ProcessNode with NAME as root
+    res += ProcessNode(cit.next(), t.getText());
+    } else {
+    res += ProcessNode(cit.next(), parent);
+    }
+    }
+    }
+    } else if (root.getText().equals("ASIGN")) {
+    //ProcessAsign
+    res =res + "?" + parent + " " + lex.getWordTag(root.getChild(0).getText()).getType()
+    + " " + root.getChild(1).getText() + ".\n";
+    } else if (root.getText().equals("COMPL")) {
+    //ProcessComp
+    System.out.println("Processing COMPL");
+    } else if (root.getText().equals("COMPG")) {
+    //ProcessAsign
+    System.out.println("Processing COMPG");
+    } else if (root.getText().equals("COMPLE")) {
+    //ProcessAsign
+    System.out.println("Processing COMPLE");
+    } else if (root.getText().equals("COMPGE")) {
+    //ProcessAsign
+    System.out.println("Processing COMPGE");
+    } else {
+    //ProcessName
+    res = res + "?" + parent + " " + lex.getWordTag(root.getText()).getType()
+    + " ?" + root.getText() + ".\n";
+    }
 
-        return res;
+    return res;
     }*/
-
     /**
      * Prints the given AST with indentation.
      * @param root AST to print.
@@ -277,42 +312,72 @@ public class Translator {
             CommonTree t = (CommonTree) cit.next();
             //String rootId = lex.getObjWordTag(t.getText()).getType();
             //System.out.println(">>" + getElmProperty(parent, t.getText()));
-
+            String pName = "";
             if (t.getText().equals("ASIGN")) {
-                res = res + "?" + parent + " " + lex.getPropWordTag(t.getChild(0).getText()).getType() + " " + t.getChild(1).getText() + ".\n";
+                pName = assertProperty(parent, t.getChild(0).getText());
+                if (!pName.equals("")) {
+                    res = res + "?" + parent + " " + pName + " " + t.getChild(1).getText() + ".\n";
+                }
             } else if (t.getText().equals("COMPL")) {
-                res = res + "?" + parent + " " + lex.getPropWordTag(t.getChild(0).getText()).getType() + " ?v_" + t.getChild(0) + ".\n";
-                res = res + "FILTER ( ?v_" + t.getChild(0) + " < " + t.getChild(1) + ").\n";
+                pName = assertProperty(parent, t.getChild(0).getText());
+                if (!pName.equals("")) {
+                    res = res + "?" + parent + " " + pName + " ?v_" + t.getChild(0) + ".\n";
+                    res = res + "FILTER ( ?v_" + t.getChild(0).getText() + " < " + t.getChild(1).getText() + ").\n";
+                }
             } else if (t.getText().equals("COMPG")) {
-                res = res + "?" + parent + " " + lex.getPropWordTag(t.getChild(0).getText()).getType() + " ?v_" + t.getChild(0) + ".\n";
-                res = res + "FILTER ( ?v_" + t.getChild(0) + " > " + t.getChild(1) + ").\n";
+                pName = assertProperty(parent, t.getChild(0).getText());
+                if (!pName.equals("")) {
+                    res = res + "?" + parent + " " + pName + " ?v_" + t.getChild(0) + ".\n";
+                    res = res + "FILTER ( ?v_" + t.getChild(0).getText() + " > " + t.getChild(1).getText() + ").\n";
+                }
             } else if (t.getText().equals("COMPLE")) {
-                res = res + "?" + parent + lex.getPropWordTag(t.getChild(0).getText()).getType() + " ?v_" + t.getChild(0) + ".\n";
-                res = res + "FILTER ( ?v_" + t.getChild(0) + " <= " + t.getChild(1) + ").\n";
+                pName = assertProperty(parent, t.getChild(0).getText());
+                if (!pName.equals("")) {
+                    res = res + "?" + parent + " " + pName + " ?v_" + t.getChild(0) + ".\n";
+                    res = res + "FILTER ( ?v_" + t.getChild(0).getText() + " <= " + t.getChild(1).getText() + ").\n";
+                }
             } else if (t.getText().equals("COMPGE")) {
-                res = res + "?" + parent + lex.getPropWordTag(t.getChild(0).getText()).getType() + " ?v_" + t.getChild(0) + ".\n";
-                res = res + "FILTER ( ?v_" + t.getChild(0) + " >= " + t.getChild(1) + ").\n";
+                pName = assertProperty(parent, t.getChild(0).getText());
+                if (!pName.equals("")) {
+                    res = res + "?" + parent + " " + pName + " ?v_" + t.getChild(0) + ".\n";
+                    res = res + "FILTER ( ?v_" + t.getChild(0).getText() + " >= " + t.getChild(1).getText() + ").\n";
+                }
             } else {
-                res = res + "?" + parent + " " + lex.getPropWordTag(t.getText()).getType() + " ?" + t.getText().replace(" ", "_") + ".\n";
+                pName = assertProperty(parent, t.getChild(0).getText());
+                System.out.println("--" + pName);
+                if (!pName.equals("")) {
+                    res = res + "?" + parent + " " + pName + " ?" + t.getText().replace(" ", "_") + ".\n";
+                }
             }
         }
         return res;
     }
 
-    private String getElmProperty(String parent, String pDisplayName) {
-        System.out.println("tratando de obtener " + pDisplayName + " de " + parent);
-        String cId = lex.getObjWordTag(parent).getType();
-        System.out.println("id obtenido: " + cId);
-        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(cId);
-        if(sc != null) {
-            System.out.println(sc.getClassId());
-        } else {
-            System.out.println("null");
+    private String assertProperty(String parent, String pName) {
+        String res = "";
+        String name = lex.getObjWordTag(parent).getType().replace(":", "_");
+        //System.out.println("--" + name + ", " + pName);
+        boolean found = false;
+        SemanticProperty sp = null;
+
+        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(name);
+        if (sc != null) {
+            Iterator<SemanticProperty> sit = sc.listProperties();
+            while (sit.hasNext() && !found) {
+                sp = sit.next();
+                if (sp.getDisplayName(lex.getLanguage()).equals(pName)) {
+                    res = res + sp.getPrefix() + ":" + sp.getName();
+                    found = true;
+                }
+            }
+            sp = sit.next();
         }
-
-        //SemanticProperty sp = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(pDisplayName);
-
-        //return sc.getProperty(pDisplayName).getPropId();
-        return "";
+        if (!found) {
+            eLog += "La clase " + sc.getDisplayName(lex.getLanguage()) + " no tiene una propiedad llamada "
+                    + sp.getDisplayName(lex.getLanguage()) + "\n";
+            System.out.println("ERROR");
+            errCode = 3;
+        }
+        return res;
     }
 }
