@@ -371,7 +371,7 @@ public class CodeGenerator
                 javaClassContent.append("            org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(name," + tpc.getPrefix() + "_" + className + "));" + ENTER);
                 javaClassContent.append("            if(obj!=null)" + ENTER);
                 javaClassContent.append("            {" + ENTER);
-                javaClassContent.append("                ret=(" + getPackage(tpc) + "." + className + ")new " + className + "(obj);" + ENTER);
+                javaClassContent.append("                ret=(" + getPackage(tpc) + "." + className + ")obj.createGenericInstance();" + ENTER);
                 javaClassContent.append("            }" + ENTER);
                 javaClassContent.append("        }" + ENTER);
                 javaClassContent.append("        return ret;" + ENTER);
@@ -861,7 +861,7 @@ public class CodeGenerator
                 String className = getClassName(tpc);
                 javaClassContent.append("    public " + tpc.getClassName() + " get" + className + "()" + ENTER);
                 javaClassContent.append("    {" + ENTER);
-                javaClassContent.append("        return new " + tpc.getClassName() + "(getSemanticObject().getModel().getModelObject());" + ENTER);
+                javaClassContent.append("        return (" + tpc.getClassName() + ")getSemanticObject().getModel().getModelObject().createGenericInstance();" + ENTER);
                 javaClassContent.append("    }" + ENTER);
             }
         }
@@ -1315,7 +1315,7 @@ public class CodeGenerator
             javaClassContent.append("         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
             javaClassContent.append("         if(obj!=null)" + ENTER);
             javaClassContent.append("         {" + ENTER);
-            javaClassContent.append("             ret=(" + tpcToReturn.getClassName() + ")obj.getSemanticClass().newGenericInstance(obj);" + ENTER);
+            javaClassContent.append("             ret=(" + tpcToReturn.getClassName() + ")obj.createGenericInstance();" + ENTER);
             javaClassContent.append("         }" + ENTER);
             javaClassContent.append("         return ret;" + ENTER);
             javaClassContent.append(CLOSE_BLOCK + ENTER);

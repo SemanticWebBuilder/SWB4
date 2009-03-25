@@ -47,7 +47,7 @@ public class SWBFormMgr
     private SemanticClass m_cls;
     private FormView m_fview=null;
     private Map<SemanticProperty, String> m_propmap=null;
-    private String m_mode="view";
+    private String m_mode=MODE_VIEW;
     private String m_action="";
     private String m_method="POST";
     private String m_lang="es";
@@ -287,7 +287,7 @@ public class SWBFormMgr
                 ret.append(element);
                 ret.append("</td></tr>");
             }
-        }else
+        }else if(m_mode.equals(MODE_CREATE))
         {
             String name=prop.getName();
             String value=request.getParameter(name);
