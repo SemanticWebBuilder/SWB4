@@ -25,7 +25,6 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.portal.admin.resources.SWBWebSiteTpls;
 import static org.junit.Assert.*;
 /**
  *
@@ -89,7 +88,7 @@ public class TestClass {
     SWBFormMgr frm=new SWBFormMgr(clase, null, null);
      //   frm.processForm(request, response);
         frm.setAction("/swb/swbadmin/jsp/SemClassEditor.jsp");
-        out.println(frm.renderForm());
+        out.println(frm.renderForm(null));
     }
 
 
