@@ -84,13 +84,16 @@ public class sParser extends Parser {
         return adaptor;
     }
 
+    @Override
     public String[] getTokenNames() { return sParser.tokenNames; }
+    @Override
     public String getGrammarFileName() { return "/home/hasdai/Documentos/sParser.g"; }
 
 
     	private int errCount = 0;
     	private boolean isCompound = false;
 
+    @Override
     	public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
             	errCount++;
         	}
@@ -106,6 +109,7 @@ public class sParser extends Parser {
 
     public static class squery_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
@@ -158,6 +162,7 @@ public class sParser extends Parser {
 
     public static class selectquery_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
@@ -389,6 +394,7 @@ public class sParser extends Parser {
 
     public static class query_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
