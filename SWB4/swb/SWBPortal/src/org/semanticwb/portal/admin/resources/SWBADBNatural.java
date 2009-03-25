@@ -293,7 +293,7 @@ public class SWBADBNatural extends GenericResource {
                 List namespaces = new ArrayList();
 
                 //Create a new word dictionary instance
-                Lexicon dict = new Lexicon();
+                Lexicon dict = new Lexicon(lang);
                 Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
 
                 //Traverse the ontology model to fill the dictionary
@@ -305,8 +305,8 @@ public class SWBADBNatural extends GenericResource {
                     if(!namespaces.contains(sc.getOntClass().getNameSpace()))
                         namespaces.add(sc.getOntClass().getNameSpace());
 
-                    dict.addWord(new Word(sc.getDisplayName(lang),
-                            new WordTag("OBJ", sc.getPrefix() + ":" + sc.getName())));
+                    /*dict.addWord(new Word(sc.getDisplayName(lang),
+                            new WordTag("OBJ", sc.getPrefix() + ":" + sc.getName(), sc.getName())));*/
 
                     Iterator<SemanticProperty> ip = sc.listProperties();
 
@@ -318,8 +318,8 @@ public class SWBADBNatural extends GenericResource {
                         if(!namespaces.contains(prop.getRDFProperty().getNameSpace()))
                             namespaces.add(prop.getRDFProperty().getNameSpace());
 
-                        dict.addWord(new Word(prop.getDisplayName(lang),
-                                new WordTag("PRO", prop.getPropId())));
+                    /*    dict.addWord(new Word(prop.getDisplayName(lang),
+                                new WordTag("PRO", prop.getPropId(), prop.getName())));*/
                     }
                 }
 
@@ -335,8 +335,14 @@ public class SWBADBNatural extends GenericResource {
                 //out.println(dict.toString());
                 tr = new Translator(dict);
                 String queryString = prex + "\n" + tr.translateSentence(_query);
-
-                System.out.println(queryString);
+                System.out.println("qs-" + queryString);
+                if(tr.getErrCode() != 0) {
+                    out.println("<fieldset>");
+                    out.println("Se produjeron los siguientes errores: <BR>");
+                    out.println(tr.getErrors());
+                    out.println("</fieldset>");
+                } else {
+               // System.out.println(queryString);
                 out.println("<textarea cols=80>" + queryString + "</textarea>");
                 Query query = QueryFactory.create(queryString);
                 query.serialize(); //new IndentedWriter(response.getOutputStream(),true)) ;
@@ -344,7 +350,7 @@ public class SWBADBNatural extends GenericResource {
                 // which is wrapped up as a Dataset
                 QueryExecution qexec = QueryExecutionFactory.create(query, model) ;
                 // Or QueryExecutionFactory.create(queryString, model) ;
-                
+
                 try {
                     // Assumption: it's a SELECT query.
                     ResultSet rs = qexec.execSelect() ;
@@ -389,14 +395,20 @@ public class SWBADBNatural extends GenericResource {
                             SemanticObject so = SemanticObject.createSemanticObject(x.toString());
 
                             if(so!=null) {
-                                System.out.println(so.getDisplayName());
+                                //System.out.println(so.getDisplayName());
                                 if(first) {
                                     out.println("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI()
                                             + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '"
-                                            + so.getDisplayName() + "');\">" + so.getDisplayName() + "</a>");
+                                            + so.getDisplayName(lang) + "');\">" + so.getDisplayName(lang) + "</a>");
                                     first = false;
                                 } else {
-                                    out.println(so.getDisplayName());
+                                    SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
+                                    if(tt!=null) {
+                                        out.println(tt.getDisplayName(lang));
+                                    } else {
+                                        SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
+                                        out.println(stt.getDisplayName(lang));
+                                    }
                                 }
                             } else {
                                 if (x!=null) {
@@ -405,7 +417,7 @@ public class SWBADBNatural extends GenericResource {
                                   out.println(" - ");
                                 }
                             }
-                            //out.println(x!=null?SemanticObject.createSemanticObject(x.toString()).getDisplayName(lang):" - ");
+                            //out.println(x!=null?SemanticObject.createSemanticObject(x.toString()).getTag(lang):" - ");
                             out.println("</td>");
                         }
                         out.println("</tr>");
@@ -423,6 +435,7 @@ public class SWBADBNatural extends GenericResource {
                 out.println("<fieldset>");
                 out.println("<p aling=\"center\">Execution Time:"+(System.currentTimeMillis()-time)+"</p>");
                 out.println("</fieldset>");
+                }
             }
         }catch(Exception e) {
             out.println("<fieldset>");
