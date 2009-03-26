@@ -42,6 +42,7 @@ public class sLexer extends Lexer {
     // delegates
     // delegators
 
+    @SuppressWarnings("empty-statement")
     public sLexer() {;}
     public sLexer(CharStream input) {
         this(input, new RecognizerSharedState());
@@ -50,6 +51,7 @@ public class sLexer extends Lexer {
         super(input,state);
 
     }
+    @Override
     public String getGrammarFileName() { return "/home/hasdai/Documentos/sLexer.g"; }
 
     // $ANTLR start "WHITESPACE"
