@@ -9,7 +9,7 @@ package org.semanticwb.nlp;
  *
  * @author hasdai
  */
-// $ANTLR 3.1.2 /home/hasdai/Documentos/sParser.g 2009-03-23 20:03:13
+// $ANTLR 3.1.2 /home/hasdai/Documentos/sParser.g 2009-03-24 17:29:36
 
 import org.antlr.runtime.*;
 
@@ -17,7 +17,7 @@ import org.antlr.runtime.tree.*;
 
 public class sParser extends Parser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "WHITESPACE", "SIGN", "SIGL", "SIGG", "SIGE", "SIGLE", "SIGGE", "PREC", "MODT", "PRED", "MODE", "MODO", "BOL", "NUM", "LIT", "ORDOP", "VAR", "DEL", "LPAR", "RPAR", "LBRK", "RBRK", "SIGI", "LIMIT", "SELECT", "MOD", "OBJLIST", "PROPLIST", "ASIGN", "SENTENCE", "COMPL", "COMPG", "COMPLE", "COMPGE", "PRECON", "PREDE", "OFFSET", "ORDER", "COMPNAME", "ASKQUERY", "MODTO", "NAME"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "WHITESPACE", "SIGN", "SIGL", "SIGG", "SIGE", "SIGLE", "SIGGE", "PREC", "MODT", "PRED", "MODE", "MODO", "BOL", "NUM", "LIT", "ORDOP", "VAR", "LPAR", "RPAR", "LBRK", "RBRK", "DEL", "SIGI", "LIMIT", "SELECT", "MOD", "OBJLIST", "PROPLIST", "ASIGN", "SENTENCE", "COMPL", "COMPG", "COMPLE", "COMPGE", "PRECON", "PREDE", "OFFSET", "ORDER", "COMPNAME", "ASKQUERY", "MODTO", "NAME"
     };
     public static final int SIGN=5;
     public static final int SIGI=26;
@@ -28,7 +28,7 @@ public class sParser extends Parser {
     public static final int MOD=29;
     public static final int ASKQUERY=43;
     public static final int SIGG=7;
-    public static final int DEL=21;
+    public static final int DEL=25;
     public static final int ORDOP=19;
     public static final int BOL=16;
     public static final int MODTO=44;
@@ -37,7 +37,7 @@ public class sParser extends Parser {
     public static final int EOF=-1;
     public static final int COMPG=35;
     public static final int NAME=45;
-    public static final int LPAR=22;
+    public static final int LPAR=21;
     public static final int SENTENCE=33;
     public static final int COMPLE=36;
     public static final int OFFSET=40;
@@ -46,13 +46,13 @@ public class sParser extends Parser {
     public static final int VAR=20;
     public static final int MODO=15;
     public static final int SELECT=28;
-    public static final int RBRK=25;
+    public static final int RBRK=24;
     public static final int MODE=14;
     public static final int PREDE=39;
     public static final int COMPGE=37;
     public static final int PRECON=38;
     public static final int PREC=11;
-    public static final int LBRK=24;
+    public static final int LBRK=23;
     public static final int PRED=13;
     public static final int SIGGE=10;
     public static final int LIT=18;
@@ -61,7 +61,7 @@ public class sParser extends Parser {
     public static final int SIGLE=9;
     public static final int COMPNAME=42;
     public static final int ASIGN=32;
-    public static final int RPAR=23;
+    public static final int RPAR=22;
 
     // delegates
     // delegators
@@ -84,16 +84,13 @@ public class sParser extends Parser {
         return adaptor;
     }
 
-    @Override
     public String[] getTokenNames() { return sParser.tokenNames; }
-    @Override
     public String getGrammarFileName() { return "/home/hasdai/Documentos/sParser.g"; }
 
 
     	private int errCount = 0;
     	private boolean isCompound = false;
 
-    @Override
     	public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
             	errCount++;
         	}
@@ -109,7 +106,6 @@ public class sParser extends Parser {
 
     public static class squery_return extends ParserRuleReturnScope {
         Object tree;
-        @Override
         public Object getTree() { return tree; }
     };
 
@@ -162,7 +158,6 @@ public class sParser extends Parser {
 
     public static class selectquery_return extends ParserRuleReturnScope {
         Object tree;
-        @Override
         public Object getTree() { return tree; }
     };
 
@@ -256,7 +251,7 @@ public class sParser extends Parser {
 
 
             // AST REWRITE
-            // elements: modifier, query, limiter
+            // elements: query, modifier, limiter
             // token labels:
             // rule labels: retval
             // token list labels:
@@ -394,7 +389,6 @@ public class sParser extends Parser {
 
     public static class query_return extends ParserRuleReturnScope {
         Object tree;
-        @Override
         public Object getTree() { return tree; }
     };
 
@@ -780,7 +774,7 @@ public class sParser extends Parser {
                 if ( (LA8_1==VAR) ) {
                     alt8=1;
                 }
-                else if ( (LA8_1==EOF||(LA8_1>=SIGL && LA8_1<=PREC)||(LA8_1>=PRED && LA8_1<=MODO)||LA8_1==DEL||LA8_1==RPAR) ) {
+                else if ( (LA8_1==EOF||(LA8_1>=SIGL && LA8_1<=PREC)||(LA8_1>=PRED && LA8_1<=MODO)||LA8_1==RPAR||LA8_1==DEL) ) {
                     alt8=3;
                 }
                 else {
@@ -1068,7 +1062,7 @@ public class sParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: val, name
+                    // elements: name, val
                     // token labels:
                     // rule labels: retval
                     // token list labels:
@@ -1218,7 +1212,7 @@ public class sParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: name, val
+                    // elements: val, name
                     // token labels:
                     // rule labels: retval
                     // token list labels:
@@ -1878,21 +1872,21 @@ public class sParser extends Parser {
     static final String DFA3_minS =
         "\1\24\1\6\1\24\1\6\2\uffff\2\24\1\6";
     static final String DFA3_maxS =
-        "\1\30\1\25\1\24\1\25\2\uffff\1\24\1\31\1\25";
+        "\1\27\1\31\1\24\1\31\2\uffff\1\24\1\30\1\31";
     static final String DFA3_acceptS =
         "\4\uffff\1\2\1\1\3\uffff";
     static final String DFA3_specialS =
         "\11\uffff}>";
     static final String[] DFA3_transitionS = {
-            "\1\1\3\uffff\1\2",
-            "\5\4\1\5\1\uffff\1\4\2\5\4\uffff\1\3\1\4",
+            "\1\1\2\uffff\1\2",
+            "\5\4\1\5\1\uffff\1\4\2\5\4\uffff\1\3\4\uffff\1\4",
             "\1\6",
-            "\5\4\1\5\1\uffff\1\4\2\5\4\uffff\1\3\1\4",
+            "\5\4\1\5\1\uffff\1\4\2\5\4\uffff\1\3\4\uffff\1\4",
             "",
             "",
             "\1\7",
-            "\1\7\4\uffff\1\10",
-            "\5\4\1\5\1\uffff\1\4\2\5\5\uffff\1\4"
+            "\1\7\3\uffff\1\10",
+            "\5\4\1\5\1\uffff\1\4\2\5\11\uffff\1\4"
     };
 
     static final short[] DFA3_eot = DFA.unpackEncodedString(DFA3_eotS);
@@ -1935,20 +1929,20 @@ public class sParser extends Parser {
     static final String DFA4_minS =
         "\1\24\1\13\1\24\1\13\2\uffff\2\24\1\13";
     static final String DFA4_maxS =
-        "\1\30\3\24\2\uffff\1\24\1\31\1\17";
+        "\1\27\3\24\2\uffff\1\24\1\30\1\17";
     static final String DFA4_acceptS =
         "\4\uffff\1\2\1\1\3\uffff";
     static final String DFA4_specialS =
         "\11\uffff}>";
     static final String[] DFA4_transitionS = {
-            "\1\1\3\uffff\1\2",
+            "\1\1\2\uffff\1\2",
             "\1\5\2\uffff\2\4\4\uffff\1\3",
             "\1\6",
             "\1\5\2\uffff\2\4\4\uffff\1\3",
             "",
             "",
             "\1\7",
-            "\1\7\4\uffff\1\10",
+            "\1\7\3\uffff\1\10",
             "\1\5\2\uffff\2\4"
     };
 
@@ -1992,16 +1986,16 @@ public class sParser extends Parser {
     static final String DFA9_minS =
         "\1\24\1\6\1\24\1\6\6\uffff\2\24\1\6";
     static final String DFA9_maxS =
-        "\1\30\1\25\1\24\1\25\6\uffff\1\24\1\31\1\25";
+        "\1\27\1\31\1\24\1\31\6\uffff\1\24\1\30\1\31";
     static final String DFA9_acceptS =
         "\4\uffff\1\3\1\1\1\4\1\2\1\6\1\5\3\uffff";
     static final String DFA9_specialS =
         "\15\uffff}>";
     static final String[] DFA9_transitionS = {
-            "\1\1\3\uffff\1\2",
-            "\1\7\1\4\1\5\1\6\1\11\2\uffff\3\10\4\uffff\1\3\1\10",
+            "\1\1\2\uffff\1\2",
+            "\1\7\1\4\1\5\1\6\1\11\2\uffff\3\10\4\uffff\1\3\4\uffff\1\10",
             "\1\12",
-            "\1\7\1\4\1\5\1\6\1\11\2\uffff\3\10\4\uffff\1\3\1\10",
+            "\1\7\1\4\1\5\1\6\1\11\2\uffff\3\10\4\uffff\1\3\4\uffff\1\10",
             "",
             "",
             "",
@@ -2009,8 +2003,8 @@ public class sParser extends Parser {
             "",
             "",
             "\1\13",
-            "\1\13\4\uffff\1\14",
-            "\1\7\1\4\1\5\1\6\1\11\2\uffff\3\10\5\uffff\1\10"
+            "\1\13\3\uffff\1\14",
+            "\1\7\1\4\1\5\1\6\1\11\2\uffff\3\10\11\uffff\1\10"
     };
 
     static final short[] DFA9_eot = DFA.unpackEncodedString(DFA9_eotS);
@@ -2054,17 +2048,17 @@ public class sParser extends Parser {
         "\1\24\1\6\1\24\1\6\2\20\1\uffff\1\20\1\uffff\2\20\1\24\5\15\1\24"+
         "\1\6";
     static final String DFA10_maxS =
-        "\1\30\1\25\1\24\1\25\2\22\1\uffff\1\22\1\uffff\2\22\1\24\5\25\1"+
-        "\31\1\25";
+        "\1\27\1\31\1\24\1\31\2\22\1\uffff\1\22\1\uffff\2\22\1\24\5\31\1"+
+        "\30\1\31";
     static final String DFA10_acceptS =
         "\6\uffff\1\1\1\uffff\1\2\12\uffff";
     static final String DFA10_specialS =
         "\23\uffff}>";
     static final String[] DFA10_transitionS = {
-            "\1\1\3\uffff\1\2",
-            "\1\5\1\7\1\12\1\11\1\4\2\uffff\3\10\4\uffff\1\3\1\6",
+            "\1\1\2\uffff\1\2",
+            "\1\5\1\7\1\12\1\11\1\4\2\uffff\3\10\4\uffff\1\3\4\uffff\1\6",
             "\1\13",
-            "\1\5\1\7\1\12\1\11\1\4\2\uffff\3\10\4\uffff\1\3\1\6",
+            "\1\5\1\7\1\12\1\11\1\4\2\uffff\3\10\4\uffff\1\3\4\uffff\1\6",
             "\3\14",
             "\3\15",
             "",
@@ -2073,13 +2067,13 @@ public class sParser extends Parser {
             "\3\17",
             "\3\20",
             "\1\21",
-            "\3\10\5\uffff\1\6",
-            "\3\10\5\uffff\1\6",
-            "\3\10\5\uffff\1\6",
-            "\3\10\5\uffff\1\6",
-            "\3\10\5\uffff\1\6",
-            "\1\21\4\uffff\1\22",
-            "\1\5\1\7\1\12\1\11\1\4\2\uffff\3\10\5\uffff\1\6"
+            "\3\10\11\uffff\1\6",
+            "\3\10\11\uffff\1\6",
+            "\3\10\11\uffff\1\6",
+            "\3\10\11\uffff\1\6",
+            "\3\10\11\uffff\1\6",
+            "\1\21\3\uffff\1\22",
+            "\1\5\1\7\1\12\1\11\1\4\2\uffff\3\10\11\uffff\1\6"
     };
 
     static final short[] DFA10_eot = DFA.unpackEncodedString(DFA10_eotS);
@@ -2120,23 +2114,23 @@ public class sParser extends Parser {
     static final String DFA13_eofS =
         "\1\uffff\1\5\2\uffff\1\5\3\uffff\1\5";
     static final String DFA13_minS =
-        "\3\24\1\uffff\1\24\1\uffff\2\24\1\25";
+        "\3\24\1\uffff\1\24\1\uffff\2\24\1\26";
     static final String DFA13_maxS =
-        "\1\30\1\27\1\24\1\uffff\1\27\1\uffff\1\24\1\31\1\27";
+        "\1\27\1\31\1\24\1\uffff\1\31\1\uffff\1\24\1\30\1\31";
     static final String DFA13_acceptS =
         "\3\uffff\1\1\1\uffff\1\2\3\uffff";
     static final String DFA13_specialS =
         "\11\uffff}>";
     static final String[] DFA13_transitionS = {
-            "\1\1\3\uffff\1\2",
-            "\1\4\1\3\1\uffff\1\5",
+            "\1\1\2\uffff\1\2",
+            "\1\4\1\uffff\1\5\2\uffff\1\3",
             "\1\6",
             "",
-            "\1\4\1\3\1\uffff\1\5",
+            "\1\4\1\uffff\1\5\2\uffff\1\3",
             "",
             "\1\7",
-            "\1\7\4\uffff\1\10",
-            "\1\3\1\uffff\1\5"
+            "\1\7\3\uffff\1\10",
+            "\1\5\2\uffff\1\3"
     };
 
     static final short[] DFA13_eot = DFA.unpackEncodedString(DFA13_eotS);
@@ -2175,7 +2169,7 @@ public class sParser extends Parser {
 
 
     public static final BitSet FOLLOW_selectquery_in_squery111 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_limiter_in_selectquery121 = new BitSet(new long[]{0x0000000001100000L});
+    public static final BitSet FOLLOW_limiter_in_selectquery121 = new BitSet(new long[]{0x0000000000900000L});
     public static final BitSet FOLLOW_query_in_selectquery124 = new BitSet(new long[]{0x000000000000C000L});
     public static final BitSet FOLLOW_modifier_in_selectquery126 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_selectquery129 = new BitSet(new long[]{0x0000000000000002L});
@@ -2183,19 +2177,19 @@ public class sParser extends Parser {
     public static final BitSet FOLLOW_objquery_in_query172 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_propquery_in_query176 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_name_in_objquery187 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_PREC_in_objquery189 = new BitSet(new long[]{0x0000000001100000L});
+    public static final BitSet FOLLOW_PREC_in_objquery189 = new BitSet(new long[]{0x0000000000900000L});
     public static final BitSet FOLLOW_proplist_in_objquery191 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_name_in_objquery207 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_proplist_in_propquery218 = new BitSet(new long[]{0x0000000000002000L});
-    public static final BitSet FOLLOW_PRED_in_propquery220 = new BitSet(new long[]{0x0000000001100000L});
+    public static final BitSet FOLLOW_PRED_in_propquery220 = new BitSet(new long[]{0x0000000000900000L});
     public static final BitSet FOLLOW_name_in_propquery222 = new BitSet(new long[]{0x0000000000000802L});
-    public static final BitSet FOLLOW_PREC_in_propquery225 = new BitSet(new long[]{0x0000000001100000L});
+    public static final BitSet FOLLOW_PREC_in_propquery225 = new BitSet(new long[]{0x0000000000900000L});
     public static final BitSet FOLLOW_proplist_in_propquery229 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_VAR_in_name263 = new BitSet(new long[]{0x0000000000100000L});
     public static final BitSet FOLLOW_VAR_in_name267 = new BitSet(new long[]{0x0000000000100002L});
     public static final BitSet FOLLOW_LBRK_in_name284 = new BitSet(new long[]{0x0000000000100000L});
     public static final BitSet FOLLOW_VAR_in_name288 = new BitSet(new long[]{0x0000000000100000L});
-    public static final BitSet FOLLOW_VAR_in_name292 = new BitSet(new long[]{0x0000000002100000L});
+    public static final BitSet FOLLOW_VAR_in_name292 = new BitSet(new long[]{0x0000000001100000L});
     public static final BitSet FOLLOW_RBRK_in_name295 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_VAR_in_name311 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_name_in_sent320 = new BitSet(new long[]{0x0000000000000100L});
@@ -2214,8 +2208,8 @@ public class sParser extends Parser {
     public static final BitSet FOLLOW_SIGGE_in_sent394 = new BitSet(new long[]{0x0000000000070000L});
     public static final BitSet FOLLOW_val_in_sent396 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_name_in_sent410 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_sent_in_proplist418 = new BitSet(new long[]{0x0000000000200000L});
-    public static final BitSet FOLLOW_DEL_in_proplist420 = new BitSet(new long[]{0x0000000001100000L});
+    public static final BitSet FOLLOW_sent_in_proplist418 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_DEL_in_proplist420 = new BitSet(new long[]{0x0000000000900000L});
     public static final BitSet FOLLOW_proplist_in_proplist423 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_sent_in_proplist427 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_val0 = new BitSet(new long[]{0x0000000000000002L});
@@ -2223,12 +2217,12 @@ public class sParser extends Parser {
     public static final BitSet FOLLOW_offsetterm_in_modifier457 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_MODE_in_offsetterm467 = new BitSet(new long[]{0x0000000000020000L});
     public static final BitSet FOLLOW_NUM_in_offsetterm469 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MODO_in_ordterm486 = new BitSet(new long[]{0x0000000000400000L});
-    public static final BitSet FOLLOW_LPAR_in_ordterm488 = new BitSet(new long[]{0x0000000001100000L});
-    public static final BitSet FOLLOW_ordlist_in_ordterm490 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_MODO_in_ordterm486 = new BitSet(new long[]{0x0000000000200000L});
+    public static final BitSet FOLLOW_LPAR_in_ordterm488 = new BitSet(new long[]{0x0000000000900000L});
+    public static final BitSet FOLLOW_ordlist_in_ordterm490 = new BitSet(new long[]{0x0000000000400000L});
     public static final BitSet FOLLOW_RPAR_in_ordterm492 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_ordlist509 = new BitSet(new long[]{0x0000000000200000L});
-    public static final BitSet FOLLOW_DEL_in_ordlist511 = new BitSet(new long[]{0x0000000001100000L});
+    public static final BitSet FOLLOW_name_in_ordlist509 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_DEL_in_ordlist511 = new BitSet(new long[]{0x0000000000900000L});
     public static final BitSet FOLLOW_ordlist_in_ordlist514 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_name_in_ordlist518 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_modifier_in_synpred2_sParser126 = new BitSet(new long[]{0x0000000000000002L});
