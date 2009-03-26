@@ -6,6 +6,7 @@ package org.semanticwb.nlp;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
@@ -20,12 +21,16 @@ public class Lexicon {
     private ArrayList<Word> pLexic;
     private ArrayList<Word> oLexic;
     private String language = "es";
+    private List prefixes = new ArrayList();
+    private List namespaces = new ArrayList();
+    private String prefixString = "";
 
     /**
      * Constructor.
      * @param lex Diccionario de palabras.
      */
     public Lexicon(ArrayList<Word> lex, String lang) {
+        getVocabularyPrefixes(lang);
         Iterator<Word> wit = lex.iterator();
         pLexic = new ArrayList<Word>();
         oLexic = new ArrayList<Word>();
@@ -46,9 +51,50 @@ public class Lexicon {
         return language;
     }
 
+    private void getVocabularyPrefixes(String lang) {
+        language = lang;
+
+        //Traverse the ontology model to fill the dictionary
+        Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
+        while (its.hasNext()) {
+            SemanticClass sc = its.next();
+
+            if (!prefixes.contains(sc.getPrefix())) {
+                prefixes.add(sc.getPrefix());
+            }
+            if (!namespaces.contains(sc.getOntClass().getNameSpace())) {
+                namespaces.add(sc.getOntClass().getNameSpace());
+            }
+
+            Iterator<org.semanticwb.platform.SemanticProperty> ip = sc.listProperties();
+            while (ip.hasNext()) {
+                SemanticProperty prop = ip.next();
+
+                if (!prefixes.contains(prop.getPrefix())) {
+                    prefixes.add(prop.getPrefix());
+                }
+                if (!namespaces.contains(prop.getRDFProperty().getNameSpace())) {
+                    namespaces.add(prop.getRDFProperty().getNameSpace());
+                }
+            }
+        }
+
+        prefixString = prefixString + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
+        for (int i = 0; i < prefixes.size(); i++) {
+            prefixString = prefixString + "PREFIX " + prefixes.get(i) + ": " + "<" + namespaces.get(i) + ">\n";
+        }
+    }
+
+    public String getPrefixString() {
+        return prefixString;
+    }
+
     public Lexicon(String lang) {
+        getVocabularyPrefixes(lang);
         pLexic = new ArrayList<Word>();
         oLexic = new ArrayList<Word>();
+        language = lang;
 
         //Create a new word dictionary instance
         Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
