@@ -70,7 +70,7 @@ public class SWBPortal {
         WebSite site = SWBContext.getGlobalWebSite();
         if (site == null) {
             log.event("Creating Global WebSite...");
-            site = SWBContext.createWebSite(SWBContext.WEBSITE_GLOBAL, "http://org.semanticwb.globalws");
+            site = SWBContext.createWebSite(SWBContext.WEBSITE_GLOBAL, "http://org.semanticwb.globalws#");
             site.setTitle("Global");
             site.setDescription("Global WebSite");
             site.setActive(true);
@@ -97,7 +97,7 @@ public class SWBPortal {
         UserRepository urep = SWBContext.getDefaultRepository();
         if (urep == null) {
             log.event("Creating Default User Repository...");
-            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://org.semanticwb.userrep");
+            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://org.semanticwb.userrep#");
             urep.setTitle("Default UserRepository");
             urep.setDescription("Default UserRpository");
             urep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
@@ -118,7 +118,7 @@ public class SWBPortal {
         if (site == null)
         {
             log.event("Creating Admin WebSite...");
-            SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin");
+            SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin#");
         }
 
         //Crear tablas LOGS
@@ -207,7 +207,7 @@ public class SWBPortal {
         if (site == null)
         {
             log.event("Creating Admin WebSite...");
-            site = SWBContext.createWebSite(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin");
+            site = SWBContext.createWebSite(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin#");
             site.setTitle("Admin");
             site.setDescription("Admin WebSite");
             site.setActive(true);
