@@ -72,47 +72,61 @@ public class SemanticOntology
     //TODO: Mejorar performance
     public Resource getResource(String uri)
     {
+        if(uri==null)return null;
         Resource ret=null;
-        Iterator<Entry<String, SemanticModel>> it=SWBPlatform.getSemanticMgr().getModels().iterator();
-        while(it.hasNext())
+        Property type=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
+        int i=uri.indexOf('#');
+        if(i==-1)i=uri.lastIndexOf('/');
+        if(i>0)
         {
-            Entry<String, SemanticModel> ent=it.next();
-            SemanticModel model=ent.getValue();
-            String ns=model.getNameSpace();
-            if(ns!=null && uri.startsWith(ns))
+            String base=uri.substring(0,i+1);
+            //System.out.println("paso 1:"+uri+" "+base);
+            SemanticModel model=SWBPlatform.getSemanticMgr().getModelByNS(base);
+            if(model!=null)
             {
                 Resource res=model.getRDFModel().getResource(uri);
-                Property type=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
                 if(model.getRDFModel().contains(res, type))
                 {
                     ret=res;
                 }
             }
         }
+
         if(ret==null)
         {
-            it=SWBPlatform.getSemanticMgr().getModels().iterator();
+            //System.out.println("paso 2");
+            //new Exception().printStackTrace();
+            Model model=SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel();
+            Resource res=model.getResource(uri);
+            if(model.contains(res, type))
+            {
+                ret=res;
+            }
+        }
+
+        if(ret==null)
+        {
+            //System.out.println("paso 3");
+            //new Exception().printStackTrace();
+            Iterator<Entry<String, SemanticModel>> it=SWBPlatform.getSemanticMgr().getModels().iterator();
             while(it.hasNext())
             {
                 Entry<String, SemanticModel> ent=it.next();
                 SemanticModel model=ent.getValue();
-                if(model.getRDFModel()!=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel())
+                Resource res=model.getRDFModel().getResource(uri);
+                if(model.getRDFModel().contains(res, type))
                 {
-                    Resource res=model.getRDFModel().getResource(uri);
-                    Property type=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
-                    if(model.getRDFModel().contains(res, type))
-                    {
-                        ret=res;
-                    }
-                    if(ret!=null)break;
+                    ret=res;
                 }
+                if(ret!=null)break;
             }
         }
         if(ret==null)
         {
+            //System.out.println("paso 4");
+            //new Exception().printStackTrace();
             Model model=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
             Resource res=model.getResource(uri);
-            Property type=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
             if(model.contains(res, type))
             {
                 ret=res;

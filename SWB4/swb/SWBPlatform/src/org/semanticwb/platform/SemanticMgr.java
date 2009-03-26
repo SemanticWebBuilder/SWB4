@@ -47,10 +47,11 @@ public class SemanticMgr implements SWBInstanceObject
     private SWBPlatform m_context;
     
     private SemanticOntology m_ontology;
-    private SemanticModel m_system;
+//    private SemanticModel m_system;
     //private HashMap<String,SemanticModel> m_schemas;
     private SemanticOntology m_schema;
     private HashMap<String,SemanticModel>m_models=null;
+    private HashMap<String,SemanticModel>m_nsmodels=null;
     private HashMap<Model,SemanticModel>m_imodels=null;
 
     private IDBConnection conn;
@@ -65,7 +66,8 @@ public class SemanticMgr implements SWBInstanceObject
         log.event("Initializing SemanticMgr...");
         this.m_context=context;
         
-        m_models=new HashMap();                     //Arreglo de SemanticModel
+        m_models=new HashMap();                     //Arreglo de SemanticModel por name
+        m_nsmodels=new HashMap();                   //Arreglo de SemanticModel por NS
         m_imodels=new HashMap();                    //Arreglo de RDFModel
         //m_schemas=new HashMap();
         m_observers=new ArrayList();
@@ -81,6 +83,11 @@ public class SemanticMgr implements SWBInstanceObject
         conn.getDriver().setTableNamePrefix("swb_");
         //conn.getDriver().setDoDuplicateCheck(false);
         maker = ModelFactory.createModelRDBMaker(conn);
+
+        //Create Schema
+        m_schema = new SemanticOntology("SWBSquema",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_TRANS_INF));
+        //Create Ontology
+        m_ontology = new SemanticOntology("SWBOntology",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM));
         
         //Load Ontology from file
         StringTokenizer st=new StringTokenizer(SWB_OWL_PATH,",;");
@@ -91,33 +98,30 @@ public class SemanticMgr implements SWBInstanceObject
             File owlf=new File(swbowl);
             log.debug("Loading Model:"+owlf.getName());
             Model model=loadRDFFileModel(swbowl);
-            SemanticModel smodel=new SemanticModel("SWBSchema",model);
-            m_models.put(owlf.getName(),smodel);
-            m_imodels.put(model, smodel);
+            SemanticModel smodel=new SemanticModel(owlf.getName(),model);
+//            m_models.put(owlf.getName(),smodel);
+//            m_imodels.put(model, smodel);
+            m_schema.addSubModel(smodel,false);
+            m_ontology.addSubModel(smodel,false);
             //debugModel(swbSquema);
         }
 
-        //Create Schema
-        m_schema = new SemanticOntology("SWBSquema",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_TRANS_INF));
-        //Create Ontology
-        m_ontology = new SemanticOntology("SWBOntology",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM));
-        Iterator<SemanticModel> it=m_models.values().iterator();
-        while(it.hasNext())
-        {
-            SemanticModel model=it.next();
-            m_schema.addSubModel(model,false);
-            m_ontology.addSubModel(model,false);
-        }
-        
         //Agrega ontologia a los modelos
         SemanticModel ontModel=new SemanticModel("swb_ontology", m_ontology.getRDFOntModel());
-        m_models.put("swb_ontology", ontModel);
+//        m_models.put("swb_ontology", ontModel);
         m_imodels.put(ontModel.getRDFModel(), ontModel);
 
         //Agrega squema a los modelos
         SemanticModel ontSchemaModel=new SemanticModel("swb_schema", m_schema.getRDFOntModel());
-        m_models.put("swb_schema", ontSchemaModel);
+//        m_models.put("swb_schema", ontSchemaModel);
+        //para busqueda inversa
         m_imodels.put(ontSchemaModel.getRDFModel(), ontSchemaModel);
+        //agregar todos los NS del schema
+        Iterator it=ontSchemaModel.getRDFModel().getNsPrefixMap().values().iterator();
+        while(it.hasNext())
+        {
+            m_nsmodels.put((String)it.next(), ontSchemaModel);
+        }
         
         //Create Vocabulary
         vocabulary=new SemanticVocabulary();
@@ -144,10 +148,10 @@ public class SemanticMgr implements SWBInstanceObject
         //debugModel(ontoModel);
         
         //load SWBSystem Model
-        log.debug("Loading DBModel:"+"SWBSystem");
-        m_system=new SemanticModel("SWBSystem",loadRDFDBModel("SWBSystem"));
-//        debugModel(m_system);
-        if(SWBPlatform.isUseDB())m_ontology.addSubModel(m_system,false);
+//        log.debug("Loading DBModel:"+"SWBSystem");
+//        m_system=new SemanticModel("SWBSystem",loadRDFDBModel("SWBSystem"));
+////        debugModel(m_system);
+//        if(SWBPlatform.isUseDB())m_ontology.addSubModel(m_system,false);
 
         loadDBModels();
         m_ontology.rebind();
@@ -236,6 +240,11 @@ public class SemanticMgr implements SWBInstanceObject
         return m_models.get(name);
     }
 
+    public SemanticModel getModelByNS(String nameSpace)
+    {
+        return m_nsmodels.get(nameSpace);
+    }
+
     public SemanticModel getModel(Model model)
     {
         return m_imodels.get(model);
@@ -277,6 +286,7 @@ public class SemanticMgr implements SWBInstanceObject
         SemanticModel m=new SemanticModel(name, model);
         //TODO:notify this
         m_models.put(name, m);
+        m_nsmodels.put(m.getNameSpace(), m);
         m_imodels.put(m.getRDFModel(), m);
         //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
         if(SWBPlatform.isUseDB())m_ontology.addSubModel(m,false);
@@ -306,6 +316,7 @@ public class SemanticMgr implements SWBInstanceObject
         SemanticModel model=m_models.get(name);
         //TODO:notify this
         m_models.remove(name);
+        m_nsmodels.remove(model.getNameSpace());
         m_imodels.remove(model.getRDFModel());
         m_ontology.removeSubModel(model,true);
         maker.removeModel(name);
@@ -327,10 +338,10 @@ public class SemanticMgr implements SWBInstanceObject
 //        return m_schemas.get(name);
 //    }
     
-    public SemanticModel getSystemModel() 
-    {
-        return m_system;
-    }
+//    public SemanticModel getSystemModel()
+//    {
+//        return m_system;
+//    }
     
 //    public OntClass getOntClass(String uri)
 //    {

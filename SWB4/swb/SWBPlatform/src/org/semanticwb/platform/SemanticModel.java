@@ -173,10 +173,10 @@ public class SemanticModel
         if(cls!=null && !cls.isSWBModel())
         {
             cls=cls.getRootClass(); //busca la clase raiz
-            ret+="#"+cls.getClassId()+":"+id;
+            ret+=cls.getClassId()+":"+id;
         }else
         {
-            ret+="#"+id;
+            ret+=id;
         }
         return ret;
     }
@@ -291,7 +291,7 @@ public class SemanticModel
      */
     public synchronized long getCounterValue(String name)
     {
-        String uri=getNameSpace()+"#counter";
+        String uri=getNameSpace()+"counter";
         Resource res=getRDFModel().createResource(uri+":"+name);
         Property prop=getRDFModel().createProperty(uri);
         StmtIterator it=getRDFModel().listStatements(res, prop, (String)null);
@@ -308,7 +308,7 @@ public class SemanticModel
      */
     public synchronized void setCounterValue(String name, long val)
     {
-        String uri=getNameSpace()+"#counter";
+        String uri=getNameSpace()+"counter";
         Resource res=getRDFModel().createResource(uri+":"+name);
         Property prop=getRDFModel().createProperty(uri);
         StmtIterator it=getRDFModel().listStatements(res, prop, (String)null);
@@ -346,7 +346,7 @@ public class SemanticModel
 
     public synchronized void deleteCounterValue(String name)
     {
-        String uri=getNameSpace()+"#counter";
+        String uri=getNameSpace()+"counter";
         Resource res=getRDFModel().createResource(uri+":"+name);
         Property prop=getRDFModel().createProperty(uri);
         getRDFModel().remove(res, prop, null);
