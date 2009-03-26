@@ -317,7 +317,7 @@
         }
 
         menus.put(getMenuItem("Editar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
-        if(!obj.instanceOf(Unmodifiable.swb_Unmodifiable) ||  (obj.instanceOf(Unmodifiable.swb_Unmodifiable) && obj.getBooleanProperty(Unmodifiable.swb_readOnly)==false))
+        if(!obj.instanceOf(Undeleteable.swb_Undeleteable) ||  (obj.instanceOf(Undeleteable.swb_Undeleteable) && obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false))
         {
             menus.put(getMenuItem("Eliminar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
         }
@@ -464,7 +464,7 @@
         }
 
         menus.put(getMenuItem("Editar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
-        if(!obj.instanceOf(Unmodifiable.swb_Unmodifiable) ||  (obj.instanceOf(Unmodifiable.swb_Unmodifiable) && obj.getBooleanProperty(Unmodifiable.swb_readOnly)==false))
+        if(!obj.instanceOf(Undeleteable.swb_Undeleteable) ||  (obj.instanceOf(Undeleteable.swb_Undeleteable) && obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false))
         {
             menus.put(getMenuItem("Eliminar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
         }
