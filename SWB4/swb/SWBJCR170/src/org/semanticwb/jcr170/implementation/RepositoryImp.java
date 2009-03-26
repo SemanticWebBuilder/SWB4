@@ -56,7 +56,7 @@ public final class RepositoryImp implements Repository
 
     }
     private String defaultWorkspaceName = "defaultWorkspace";
-    private static final String namespace = "http://www.semanticwb.org/repository/";
+    private static final String namespace = "http://www.semanticwb.org/repository#";
     private ObservationManagerImp observationManager;
 
     public RepositoryImp() throws RepositoryException
