@@ -57,7 +57,6 @@ public class Translator {
             if (parser.getErrorCount() == 0) {
                 sTree = (CommonTree) qres.getTree();
                 fixTree(sTree);
-                //Traverse(sTree, "");
                 return getSparqlQuery(sTree, parser.isCompoundQuery());
             } else {
                 errCode = 1;
@@ -144,8 +143,14 @@ public class Translator {
                 res += ProcessPrecon((CommonTree) root.getChild(0), root.getText());
             }
         } else {
-            res = res + " *\nWHERE\n{\n?" + root.getText() + " rdf:type " + lex.getObjWordTag(root.getText()).getType() + ".\n";
-            res = res + "?" + root.getText() + " ?property ?value\n";
+            String tag = lex.getObjWordTag(root.getText()).getTag();
+            if (!tag.equals("VAR")) {
+                res = res + " *\nWHERE\n{\n?" + root.getText() + " rdf:type " + lex.getObjWordTag(root.getText()).getType() + ".\n";
+                res = res + "?" + root.getText() + " ?property ?value\n";
+            } else {
+                eLog = "No existe alguna clase con nombre " + root.getText() + "\n";
+                errCode = 3;
+            }
         }
         return res;
     }
@@ -203,71 +208,6 @@ public class Translator {
         }
     }
 
-    /*private String ProcessNode(CommonTree root, String parent) {
-    String res = "";
-
-    //if node label is PRECON
-    if (root.getText().equals("PRECON")) {
-    List<CommonTree> child = root.getChildren();
-
-    if(child != null) {
-    Iterator<CommonTree> cit = child.iterator();
-    while(cit.hasNext()) {
-    CommonTree t = cit.next();
-    //If node is a NAME
-    if (nodeLabels.indexOf(t.getText()) == -1 && t.getChildCount() > 0) {
-    //ProcessNode with NAME as root
-    res += ProcessNode(cit.next(), t.getText());
-    } else {
-    res += ProcessNode(cit.next(), parent);
-    }
-    }
-    }
-    } else if (root.getText().equals("PREDE")) {
-    List<CommonTree> child = root.getChildren();
-
-    if(child != null) {
-    Iterator<CommonTree> cit = child.iterator();
-    while (cit.hasNext()) {
-
-    }
-
-    cit = child.iterator();
-    while(cit.hasNext()) {
-    CommonTree t = cit.next();
-    //If node is a NAME
-    if (nodeLabels.indexOf(t.getText()) == -1 && t.getChildCount() > 0) {
-    //ProcessNode with NAME as root
-    res += ProcessNode(cit.next(), t.getText());
-    } else {
-    res += ProcessNode(cit.next(), parent);
-    }
-    }
-    }
-    } else if (root.getText().equals("ASIGN")) {
-    //ProcessAsign
-    res =res + "?" + parent + " " + lex.getWordTag(root.getChild(0).getText()).getType()
-    + " " + root.getChild(1).getText() + ".\n";
-    } else if (root.getText().equals("COMPL")) {
-    //ProcessComp
-    System.out.println("Processing COMPL");
-    } else if (root.getText().equals("COMPG")) {
-    //ProcessAsign
-    System.out.println("Processing COMPG");
-    } else if (root.getText().equals("COMPLE")) {
-    //ProcessAsign
-    System.out.println("Processing COMPLE");
-    } else if (root.getText().equals("COMPGE")) {
-    //ProcessAsign
-    System.out.println("Processing COMPGE");
-    } else {
-    //ProcessName
-    res = res + "?" + parent + " " + lex.getWordTag(root.getText()).getType()
-    + " ?" + root.getText() + ".\n";
-    }
-
-    return res;
-    }*/
     /**
      * Prints the given AST with indentation.
      * @param root AST to print.
@@ -294,10 +234,15 @@ public class Translator {
         String props = "";
         List<CommonTree> ch = root.getChildren();
         Iterator<CommonTree> cit = ch.iterator();
+        //System.out.println("---" + root.getText());
 
         while (cit.hasNext()) {
             CommonTree t = (CommonTree) cit.next();
-            props = props + " ?" + parent + " " + lex.getPropWordTag(t.getText()).getType() + " ?" + t.getText().replace(" ", "_") + ".\n";
+            String pName = "";
+            pName = assertProperty(parent, t.getText());
+                if (!pName.equals("")) {
+                    props = props + " ?" + parent + " " + pName + " ?" + t.getText().replace(" ", "_") + ".\n";
+                }
         }
         res += props;
         return res;
@@ -343,8 +288,8 @@ public class Translator {
                     res = res + "FILTER ( ?v_" + t.getChild(0).getText() + " >= " + t.getChild(1).getText() + ").\n";
                 }
             } else {
-                pName = assertProperty(parent, t.getChild(0).getText());
-                System.out.println("--" + pName);
+                pName = assertProperty(parent, t.getText());
+                //System.out.println("--" + pName);
                 if (!pName.equals("")) {
                     res = res + "?" + parent + " " + pName + " ?" + t.getText().replace(" ", "_") + ".\n";
                 }
@@ -359,24 +304,30 @@ public class Translator {
         //System.out.println("--" + name + ", " + pName);
         boolean found = false;
         SemanticProperty sp = null;
+        Iterator<SemanticProperty> sit;
 
         SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(name);
+        //System.out.println(sc.getDisplayName(lex.getLanguage()));
         if (sc != null) {
-            Iterator<SemanticProperty> sit = sc.listProperties();
+            sit = sc.listProperties();
             while (sit.hasNext() && !found) {
                 sp = sit.next();
+                //System.out.println("  " + sp.getDisplayName(lex.getLanguage()));
                 if (sp.getDisplayName(lex.getLanguage()).equals(pName)) {
                     res = res + sp.getPrefix() + ":" + sp.getName();
                     found = true;
                 }
             }
-            sp = sit.next();
-        }
-        if (!found) {
-            eLog += "La clase " + sc.getDisplayName(lex.getLanguage()) + " no tiene una propiedad llamada "
-                    + sp.getDisplayName(lex.getLanguage()) + "\n";
-            System.out.println("ERROR");
-            errCode = 3;
+            if (!found) {
+                eLog += "La clase " + sc.getDisplayName(lex.getLanguage()) + " no tiene una propiedad llamada ";
+                if (sit.hasNext()) {
+                    sp = sit.next();
+                    eLog += sp.getDisplayName(lex.getLanguage()) + "\n";
+                } else {
+                    eLog += pName + "\n";
+                }
+                errCode = 3;
+            }
         }
         return res;
     }
