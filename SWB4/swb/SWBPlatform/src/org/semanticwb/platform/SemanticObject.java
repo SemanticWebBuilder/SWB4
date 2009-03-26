@@ -110,9 +110,9 @@ public class SemanticObject
         if(ret==null)
         {
             //System.out.println("res1:"+res+" "+id);
-            if(hasCache)
+            //if(hasCache)
             {
-                if(res.getURI()!=null && res.getModel()==SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel())
+                if(res.getModel()==SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel() || res.getModel()==SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel())
                 {
                     res=SWBPlatform.getSemanticMgr().getOntology().getResource(res.getURI());
                 }

@@ -90,7 +90,7 @@ public class GenericObjectBase implements GenericObject
     
     private SemanticProperty _getProperty(String prop)
     {
-        return new SemanticProperty(m_obj.getModel().getRDFModel().createProperty(m_obj.getModel().getNameSpace()+"/property#"+prop));
+        return new SemanticProperty(m_obj.getModel().getRDFModel().createProperty(m_obj.getModel().getNameSpace()+"prop_"+prop));
     }
     
     @Override
