@@ -86,10 +86,12 @@ public class SWBServiceMgr implements SemanticObserver {
                         tpl.setLastVersion(vi);
                         String txt="<html>\n"+
                                    "<head>\n" +
-                                        "<script type='text/javascript' src=\"/swb/swbadmin/js/swb.js\"></script>\n" +
+                                        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" +
                                         "<title>\n"+
                                         "   <TOPIC METHOD=\"getDisplayName\" LANGUAGE=\"{user@getLanguage}\"/>\n" +
                                         "</title>\n" +
+                                        "<script type=\"text/javascript\" src=\"/swb/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n" +
+                                        "<script type=\"text/javascript\" src=\"/swb/swbadmin/js/swb.js\"></script>\n" +
                                    " </head>\n " +
                                    "<body>\n   " +
                                    "<p style=\"margin-top: 0\">\n" +
