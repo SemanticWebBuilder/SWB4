@@ -52,14 +52,14 @@ public class SWBImportWebSite extends GenericResource {
             String id = request.getParameter("wsid");
             String usrRep = request.getParameter("wsrepository");
             if (wstype.equals("1")) { //creación de sitio nuevo
-                WebSite site = SWBContext.createWebSite(title, "http://www." + id + ".swb");
+                WebSite site = SWBContext.createWebSite(title, "http://www." + id + ".swb#");
                 //site.setCreated(new java.util.Date(System.currentTimeMillis()));
                 site.setTitle(request.getParameter("wstitle"));
 /*
                 UserRepository newUsrRep = null;
                 if (usrRep != null) {
                     if (usrRep.equals("0")) { //Utilizara un repositorio exclusivo
-                        newUsrRep = SWBContext.createUserRepository(title, "http://users." + id + "_usr.swb");
+                        newUsrRep = SWBContext.createUserRepository(title, "http://users." + id + "_usr.swb#");
                         newUsrRep.setTitle(title);
                         newUsrRep.setTitle("Repositorio de usuarios("+title+")","es");
                         newUsrRep.setTitle("Users Repository("+title+")","en");
@@ -75,7 +75,7 @@ public class SWBImportWebSite extends GenericResource {
                 }
 
                 //creación de repositorio de documentoss
-                Workspace workspace = SWBContext.createWorkspace(title, "http://repository." + id + "_rep.swb");
+                Workspace workspace = SWBContext.createWorkspace(title, "http://repository." + id + "_rep.swb#");
                 workspace.setTitle("Repositorio de documentos("+title+")", "es");
                 workspace.setTitle("Documents Repository("+title+")", "en");
                 site.addSubModel(workspace.getSemanticObject());
@@ -183,7 +183,7 @@ public class SWBImportWebSite extends GenericResource {
             }
 
             //Parseo de nombre de NameSpace anteriores por nuevos
-            String newNs = "http://www." + newId + ".swb";
+            String newNs = "http://www." + newId + ".swb#";
             rdfcontent = rdfcontent.replaceAll(oldNamespace, newNs); //Reempplazar namespace anterior x nuevo
             //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
             rdfcontent = parseRdfContent(rdfcontent, oldName, newTitle, newNs);
@@ -198,7 +198,7 @@ public class SWBImportWebSite extends GenericResource {
             UserRepository newUsrRep = null;
             if (repository != null) {
                 if (repository.equals("0")) { //Utilizara un repositorio exclusivo
-                    newUsrRep = SWBContext.createUserRepository(newTitle, "http://users." + newId + "_usr.swb");
+                    newUsrRep = SWBContext.createUserRepository(newTitle, "http://users." + newId + "_usr.swb#");
                     newUsrRep.setTitle("Repositorio de usuarios("+newTitle+")","es");
                     newUsrRep.setTitle("Users Repository("+newTitle+")","en");
                     website.addSubModel(newUsrRep.getSemanticObject());
@@ -209,7 +209,7 @@ public class SWBImportWebSite extends GenericResource {
                 }
             }
             //Crea repositorio de documentos para el nuevo sitio
-            Workspace workspace = SWBContext.createWorkspace(newTitle, "http://repository." + newId + "_rep.swb");
+            Workspace workspace = SWBContext.createWorkspace(newTitle, "http://repository." + newId + "_rep.swb#");
             workspace.setTitle("Repositorio de documentos("+newTitle+")", "es");
             workspace.setTitle("Documents Repository("+newTitle+")", "en");
             website.addSubModel(workspace.getSemanticObject());
