@@ -2,62 +2,78 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.portal.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.nlp.*;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.platform.*;
+import org.semanticwb.nlp.Lexicon;
+import org.semanticwb.nlp.Translator;
 import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import com.hp.hpl.jena.query.*;
+import org.semanticwb.portal.api.SWBResourceURL;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import java.util.Iterator;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 
 /**
  *
- * @author hasdai
+ * @author juan.fernandez
  */
 public class SWBADBNatural extends GenericResource {
 
+    private Logger log = SWBUtils.getLogger(SWBADBSparql.class);
     private Translator tr;
 
-    /** Creates a new instance of SWBADBNatural */
-    public SWBADBNatural()
-    {
-    }
-
+    /**
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws AFException
+     * @throws IOException
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        String _query = request.getParameter("queryText");
+        StringBuffer ret = new StringBuffer();
+        SWBResourceURL url = paramRequest.getActionUrl();
+        String query = request.getParameter("naturalQuery");
+        String errCount = request.getParameter("errCode");
+        String sparqlQuery = request.getParameter("sparqlQuery");
         String lang = paramRequest.getUser().getLanguage();
 
-        if (_query == null) {
-            _query="";
+        if (query == null) {
+            query = "";
         } else {
-            _query=_query.trim();
+            query = query.trim();
         }
 
-        //out.println("<script src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/acTextArea.js\"></script>");
-        out.println("<script type=\"text/javascript\">" +
-                "dojo.require(\"dijit.form.Textarea\");" +
+        url.setParameter("lang", lang);
+
+        ret.append("<script type=\"text/javascript\">" +
                 "dojo.require(\"dijit.form.Form\");" +
                 "dojo.require(\"dijit.form.Button\");" +
                 "</script>");
-        out.println("<script type=\"text/javascript\">" +
+        ret.append("<script type=\"text/javascript\">" +
                 "dojo.addOnLoad(function () {" +
-                    "dojo.connect(dojo.byId('queryText'), 'onkeydown', 'queryOnKeyDown');" +
-                    "dojo.connect(dojo.byId('queryText'), 'onkeydown', 'queryOnKeyUp');" +
-                    "dojo.connect(dojo.byId('queryText'), 'onblur', function () {" +
+                    "dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyDown');" +
+                    "dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyUp');" +
+                    "dojo.connect(dojo.byId('naturalQuery'), 'onblur', function () {" +
                         "clearSuggestions();" +
                     "});" +
                 "});" +
@@ -70,13 +86,13 @@ public class SWBADBNatural extends GenericResource {
                      "}" +
                      "displayed = false;" +
                      "curSelected = 0;" +
-                     "dojo.byId('queryText').focus();" +
+                     "dojo.byId('naturalQuery').focus();" +
                 "}" +
                 //Establece el elemento seleccionado
                 "function setSelection(selected) {" +
-                    "var word = getCurrentWord('queryText');" +
-                    "var valText = dojo.byId('queryText').value;" +
-                        "dojo.byId('queryText').value = valText.substring(0, word.startP) +" +
+                    "var word = getCurrentWord('naturalQuery');" +
+                    "var valText = dojo.byId('naturalQuery').value;" +
+                        "dojo.byId('naturalQuery').value = valText.substring(0, word.startP) +" +
                         "dojo.byId('id' + selected).innerHTML.replace(/<(.|\\n)+?>/g, \"\") +" +
                         "valText.substring(word.endP, valText.length);" +
                 "}" +
@@ -126,7 +142,7 @@ public class SWBADBNatural extends GenericResource {
                     "timeout: 5000" +
                 "});" + "}" +
                 "function getSuggestions(clear) {" +
-                    "var word = getCurrentWord('queryText');" +
+                    "var word = getCurrentWord('naturalQuery');" +
                     "if (clear) {" +
                         "clearSuggestions();" +
                     "}" +
@@ -249,206 +265,146 @@ public class SWBADBNatural extends GenericResource {
                     "evt.keyCode != dojo.keys.DOWN_ARROW && evt.keyCode != dojo.keys.ESC &&" +
                     "evt.keyCode != dojo.keys.ENTER)) {" +
                     "getSuggestions(false);" +
-                    "dojo.byId('queryText').focus();" +
+                    "dojo.byId('naturalQuery').focus();" +
                 "}" +
             "}" +
-             "</script>");
+             "</script>\n");
 
-        out.println("<div class=\"swbform\">");
-        out.println("<form dojoType=\"dijit.form.Form\" id=\""+getResourceBase().getId()+"/natsparql\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\" onsubmit=\"submitForm('"+getResourceBase().getId()+"/natsparql'); return false;\">");
-        out.println("<fieldset>");
-        out.println("<table border=\"0\" cellspacing=\"2\" cellpadding=\"0\" >");
-        out.println("<tr><td >");
-        out.println("Natural Language Query Example:");
-        out.println("</td></tr>");
-        out.println("<tr><td ><PRE >");
-        out.println("->10 User con Activo=true, Primer Apellido");
-        out.println("->WebSite con Activo=true");
-        out.println("*Type a word and use CTRL + SPACE to show suggestions, ESC to hide suggestions.");
-        out.println("</PRE></td></tr>");
-        out.println("<tr><td class=\"tabla\">");
-        out.println("Natural Language Query:");
-        out.println("</td></tr>");
-        out.println("<tr><td>");
-        out.print("<textarea id=\"queryText\" name=\"queryText\" rows=5 cols=70>");
-        out.print(_query);
-        out.println("</textarea><div id=\"results\"></div>");
-        out.println("</td></tr>");
-        out.println("</table>");
-        out.println("</fieldset>");
-        out.println("<fieldset>");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submit/btnSend\" >"+paramRequest.getLocaleString("send")+"</button>");
-        out.println("</fieldset>");
+        ret.append("<form id=\"" + getResourceBase().getId() + "/DBNatural\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
+        ret.append("action=\"" + url + "\" ");
+        ret.append("onSubmit=\"submitForm('" + getResourceBase().getId() + "/DBNatural'); return false;\" method=\"POST\">\n");
+        ret.append("<fieldset>Natural Language Query Example");
+        ret.append("<PRE>");
+        ret.append("->10 User con Activo=true, Primer Apellido\n");
+        ret.append("->WebSite con Activo=true\n");
+        ret.append("*Type a word and use CTRL + SPACE to show suggestions, ESC to hide suggestions.");
+        ret.append("</PRE>");
+        ret.append("Natural Language Query:<BR>");
+        ret.append("<textarea id=\"naturalQuery\" name=\"naturalQuery\" rows=5 cols=70>");
+        ret.append(query);
+        ret.append("</textarea><div id=\"results\"></div>");
+        ret.append("</fieldset>");
+        ret.append("<fieldset>");
+        ret.append("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submit/btnSend\" >" + paramRequest.getLocaleString("send") + "</button>");
+        ret.append("</fieldset>");
 
-        long time=System.currentTimeMillis();
-        try
-        {
-            if (_query.length() > 0)
-            {
-                out.println("<fieldset>");
-                out.println("<table border=0>");
-
-                Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
-                List prefixes = new ArrayList();
-                List namespaces = new ArrayList();
-
-                //Create a new word dictionary instance
-                Lexicon dict = new Lexicon(lang);
-                Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
-
-                //Traverse the ontology model to fill the dictionary
-                while(its.hasNext()) {
-                    SemanticClass sc = its.next();
-
-                    if(!prefixes.contains(sc.getPrefix()))
-                        prefixes.add(sc.getPrefix());
-                    if(!namespaces.contains(sc.getOntClass().getNameSpace()))
-                        namespaces.add(sc.getOntClass().getNameSpace());
-
-                    /*dict.addWord(new Word(sc.getDisplayName(lang),
-                            new WordTag("OBJ", sc.getPrefix() + ":" + sc.getName(), sc.getName())));*/
-
-                    Iterator<SemanticProperty> ip = sc.listProperties();
-
-                    while(ip.hasNext()) {
-                        SemanticProperty prop = ip.next();
-
-                        if(!prefixes.contains(prop.getPrefix()))
-                            prefixes.add(prop.getPrefix());
-                        if(!namespaces.contains(prop.getRDFProperty().getNameSpace()))
-                            namespaces.add(prop.getRDFProperty().getNameSpace());
-
-                    /*    dict.addWord(new Word(prop.getDisplayName(lang),
-                                new WordTag("PRO", prop.getPropId(), prop.getName())));*/
-                    }
-                }
-
-                //Get the SPARQL query prefixes
-                String prex = "";
-                prex += "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n";
-                prex += "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
-                for(int i = 0; i < prefixes.size(); i++) {
-                    prex = prex + "PREFIX " + prefixes.get(i) + ": " + "<" + namespaces.get(i) + ">\n";
-                }
-
-                //Translate the Natural Language Sentence to SPARQL
-                //out.println(dict.toString());
-                tr = new Translator(dict);
-                String queryString = prex + "\n" + tr.translateSentence(_query);
-                System.out.println("qs-" + queryString);
-                if(tr.getErrCode() != 0) {
-                    out.println("<fieldset>");
-                    out.println("Se produjeron los siguientes errores: <BR>");
-                    out.println(tr.getErrors());
-                    out.println("</fieldset>");
-                } else {
-               // System.out.println(queryString);
-                out.println("<textarea cols=80>" + queryString + "</textarea>");
-                Query query = QueryFactory.create(queryString);
-                query.serialize(); //new IndentedWriter(response.getOutputStream(),true)) ;
-                // Create a single execution of this query, apply to a model
-                // which is wrapped up as a Dataset
-                QueryExecution qexec = QueryExecutionFactory.create(query, model) ;
-                // Or QueryExecutionFactory.create(queryString, model) ;
+        if (errCount != null) {
+            if (Integer.parseInt(errCount) == 0) {
+                /*ret.append("<fieldset>");
+                ret.append("<textarea rows=5 cols=70>");
+                ret.append(request.getParameter("sparqlQuery"));
+                ret.append("</textarea>");
+                ret.append("</fieldset>");*/
 
                 try {
-                    // Assumption: it's a SELECT query.
-                    ResultSet rs = qexec.execSelect() ;
-                    int col = rs.getResultVars().size();
-                    out.println("<thead>");
-                    out.println("<tr>");
+                    Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+                    Query squery = QueryFactory.create(sparqlQuery);
+                    squery.serialize();
+                    QueryExecution qexec = QueryExecutionFactory.create(squery, model);
+                    long time = System.currentTimeMillis();
 
-                    Iterator<String> itcols=rs.getResultVars().iterator();
-                    while(itcols.hasNext())
-                    {
-                        out.println("<th>");
-                        out.println(itcols.next());
-                        out.println("</th>");
-                    }
-                    out.println("</tr>");
-                    out.println("</thead>");
-                    out.println("<tbody>");
-                    int ch=0;
-                    // The order of results is undefined.
-                    for ( ; rs.hasNext() ; )
-                    {
-                        QuerySolution rb = rs.nextSolution() ;
-                        if(ch==0)
-                        {
-                            ch=1;
-                            out.println("<tr bgcolor=\"#EFEDEC\">");
+                    try {
+                        ret.append("<fieldset>");
+                        ret.append("<table>");
+                        ResultSet rs = qexec.execSelect();
+                        ret.append("<thead>");
+                        ret.append("<tr>");
+
+                        Iterator<String> itcols = rs.getResultVars().iterator();
+                        while (itcols.hasNext()) {
+                            ret.append("<th>");
+                            ret.append(itcols.next());
+                            ret.append("</th>");
                         }
-                        else
-                        {
-                            ch=0;
-                            out.println("<tr>");
-                        }
+                        ret.append("</tr>");
+                        ret.append("</thead>");
+                        ret.append("<tbody>");
 
-                        Iterator<String> it=rs.getResultVars().iterator();
+                        boolean odd = true;
+                        while (rs.hasNext()) {
+                            odd = !odd;
+                            QuerySolution rb = rs.nextSolution();
 
-                        boolean first = true;
-                        while(it.hasNext())
-                        {
-                            String name=it.next();
-                            RDFNode x = rb.get(name) ;
-                            out.println("<td >");
-                            SemanticObject so = SemanticObject.createSemanticObject(x.toString());
+                            if (odd) {
+                                ret.append("<tr bgcolor=\"#EFEDEC\">");
+                            } else {
+                                ret.append("<tr>");
+                            }
 
-                            if(so!=null) {
-                                //System.out.println(so.getDisplayName());
-                                if(first) {
-                                    out.println("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI()
-                                            + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '"
-                                            + so.getDisplayName(lang) + "');\">" + so.getDisplayName(lang) + "</a>");
-                                    first = false;
-                                } else {
-                                    SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
-                                    if(tt!=null) {
-                                        out.println(tt.getDisplayName(lang));
+                            Iterator<String> it = rs.getResultVars().iterator();
+                            boolean first = true;
+                            while (it.hasNext()) {
+                                String name = it.next();
+                                RDFNode x = rb.get(name);
+                                ret.append("<td >");
+                                SemanticObject so = SemanticObject.createSemanticObject(x.toString());
+
+                                if (so != null) {
+                                    if (first) {
+                                        ret.append("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI() + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '" + so.getDisplayName(lang) + "');\">" + so.getDisplayName(lang) + "</a>");
+                                        first = false;
                                     } else {
-                                        SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
-                                        out.println(stt.getDisplayName(lang));
+                                        SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
+                                        if (tt != null) {
+                                            ret.append(tt.getDisplayName(lang));
+                                        } else {
+                                            SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
+                                            ret.append(stt.getDisplayName(lang));
+                                        }
+                                    }
+                                } else {
+                                    if (x != null) {
+                                        ret.append(x);
+                                    } else {
+                                        ret.append(" - ");
                                     }
                                 }
-                            } else {
-                                if (x!=null) {
-                                    out.println(x);
-                                } else {
-                                  out.println(" - ");
-                                }
+                                ret.append("</td>");
                             }
-                            //out.println(x!=null?SemanticObject.createSemanticObject(x.toString()).getTag(lang):" - ");
-                            out.println("</td>");
+                            ret.append("</tr>");
                         }
-                        out.println("</tr>");
+                        ret.append("</tbody>");
+                        ret.append("</table>");
+                        ret.append("</fieldset>");
+                        ret.append("<fieldset>");
+                        ret.append("<p aling=\"center\">Execution Time:" + (System.currentTimeMillis() - time) + "ms." + "</p>");
+                        ret.append("</fieldset>");
+                    } finally {
+                        qexec.close();
                     }
-                    out.println("</tbody>");
+                } catch (Exception e) {
+                    if (tr.getErrCode() != 0) {
+                        ret.append("<script language=\"javascript\" type=\"text/javascript\">alert('La consulta no pudo ser traducida.');</script>");
+                    } else {
+                        ret.append("<script language=\"javascript\" type=\"text/javascript\">alert('La consulta no pudo ser procesada por Jena.');</script>");
+                    }
                 }
-                finally
-                {
-                    // QueryExecution objects should be closed to free any system resources
-
-                    qexec.close() ;
-                }
-                out.println("</table>");
-                out.println("</fieldset>");
-                out.println("<fieldset>");
-                out.println("<p aling=\"center\">Execution Time:"+(System.currentTimeMillis()-time)+"</p>");
-                out.println("</fieldset>");
-                }
-            }
-        }catch(Exception e) {
-            out.println("<fieldset>");
-            out.println("Error: <BR>");
-            if(tr.getErrCode() != 0) {
-                out.println("La consulta no pudo ser traducida.");
             } else {
-                out.println("La consulta no pudo ser procesada por Jena.");
+                ret.append("<script language=\"javascript\" type=\"text/javascript\">");
+                ret.append("alert(\"" + tr.getErrors().replace("\n", "\\n") + "\");");
+                ret.append("</script>");
             }
-
-            out.println("</fieldset>");
         }
-        out.println("</form>");
-        out.println("</div>");
+        ret.append("</form>");
+        response.getWriter().print(ret.toString());
+    }
+
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        String query = request.getParameter("naturalQuery");
+
+        if (query == null || query.equals("")) {
+            response.setMode(SWBResourceURL.Mode_VIEW);
+            return;
+        }
+
+        Lexicon dict = new Lexicon(request.getParameter("lang"));
+        tr = new Translator(dict);
+        String queryString = dict.getPrefixString() + "\n" + tr.translateSentence(query);
+
+        response.setRenderParameter("errCode", Integer.toString(tr.getErrCode()));
+        response.setRenderParameter("sparqlQuery", queryString);
+        response.setRenderParameter("naturalQuery", query);
+        response.setMode(SWBResourceURL.Mode_VIEW);
     }
 }
