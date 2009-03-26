@@ -76,11 +76,6 @@ try
         //out.println("</fieldset>");
 
         String mode=SWBFormMgr.MODE_EDIT;
-        if(obj.instanceOf(Unmodifiable.swb_Unmodifiable))
-        {
-            boolean read=obj.getBooleanProperty(Unmodifiable.swb_readOnly);
-            if(read)mode=SWBFormMgr.MODE_VIEW;
-        }
 
         //TODO: revisar mejor opcion
         String view=null;
