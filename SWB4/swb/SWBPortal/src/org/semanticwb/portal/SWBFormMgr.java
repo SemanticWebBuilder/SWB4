@@ -20,6 +20,7 @@ import org.semanticwb.model.PropertyGroup;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBVocabulary;
+import org.semanticwb.model.Undeleteable;
 import org.semanticwb.platform.*;
 
 /**
@@ -380,7 +381,10 @@ public class SWBFormMgr
             {
                 ret.append("<button dojoType='dijit.form.Button' onclick=\"showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+m_obj.getEncodedURI()+"&act=unactive"+"');\">Eliminar de Favoritos</button>");
             }
-            ret.append("<button dojoType='dijit.form.Button' onclick=\"if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+m_obj.getEncodedURI()+"');\">Eliminar</button>");
+            if(m_obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false)
+            {
+                ret.append("<button dojoType='dijit.form.Button' onclick=\"if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+m_obj.getEncodedURI()+"');\">Eliminar</button>");
+            }
             ret.append("</span></fieldset>");
 
         }else
