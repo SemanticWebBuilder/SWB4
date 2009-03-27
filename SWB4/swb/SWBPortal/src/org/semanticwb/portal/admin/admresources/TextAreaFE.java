@@ -198,6 +198,9 @@ public class TextAreaFE extends WBJsInputFEAbs
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
                 if(dbconnmgr!=null && dbconnmgr.getAttribute(name)!=null) child.appendChild(dom.createTextNode(dbconnmgr.getAttribute(name)));
                 else if(value!=null) child.appendChild(dom.createTextNode(value.trim()));
+
+                setJsFrameworkAttributes(child);
+
                 if(root!=null) root.appendChild(child); 
                 else dom.appendChild(child);
 
@@ -267,6 +270,39 @@ public class TextAreaFE extends WBJsInputFEAbs
             }
            if(tag.hasChildNodes() && tag.getFirstChild().getNodeValue()!=null)  value=tag.getFirstChild().getNodeValue();
         }
+    }
+
+    /**
+     * Manejo de Frameworks de JavaScript
+     * @param child
+     */
+    private void setJsFrameworkAttributes(Element child){
+            String jsFramework=getFormFE().getJsFrameWork();
+            if(jsFramework!=null){
+                if(jsFramework.equalsIgnoreCase("dojo")){
+                    child.setAttribute("dojoType","dijit.Editor");
+                    if(required){
+                        child.setAttribute("required","true");
+                    }
+                    if(promptMessage!=null){
+                        child.setAttribute("promptMessage",promptMessage);
+                    }
+                    if(invalidMessage!=null){
+                        child.setAttribute("invalidMessage",invalidMessage);
+                    }
+                    if(trim){
+                        child.setAttribute("trim","true");
+                    }
+                    if(regExp!=null || sjspatron!=null){
+                        if(regExp!=null) child.setAttribute("regExp",regExp);
+                        if(sjspatron!=null) child.setAttribute("regExp",sjspatron);
+                    }else if(svaltype!=null && svaltype.equalsIgnoreCase("js_numbers")) {
+                        if(regExp!=null) child.setAttribute("regExp","\\d+");
+                    }else if(svaltype!=null && svaltype.equalsIgnoreCase("js_alphabetic")) {
+                        if(regExp!=null) child.setAttribute("regExp","\\w+");
+                    }
+                }
+            }
     }
     
 }
