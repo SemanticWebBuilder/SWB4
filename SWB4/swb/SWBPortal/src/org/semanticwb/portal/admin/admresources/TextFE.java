@@ -51,8 +51,7 @@ public class TextFE extends WBJsInputFEAbs
     protected int width=-1;
     protected int height=-1;
     protected Node tag=null;
-    
-    
+
     protected String xmltag=null;
     
     
@@ -121,8 +120,8 @@ public class TextFE extends WBJsInputFEAbs
     public void setXmlTag(String xmltag){
         this.xmltag=xmltag;
     }
-    
-    
+
+
     // Gets
     
     public String getAccessKey(){
@@ -213,6 +212,9 @@ public class TextFE extends WBJsInputFEAbs
                 if(style!=null) child.setAttribute("style",style);
                 if(styleclass!=null) child.setAttribute("class",styleclass);
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
+
+                setJsFrameworkAttributes(child);
+
                 if(root!=null) root.appendChild(child); 
                 else dom.appendChild(child);
 
@@ -233,12 +235,9 @@ public class TextFE extends WBJsInputFEAbs
     /**
      * Set attributes to class according with the xml tag element
      */    
-    public void setAttributes(){
-        boolean required=false;
+    public void setAttributes(){        
         int minsize=0;
-        String svaltype=null;
         String sjsvalchars=null;
-        String sjspatron=null;
         boolean isshowpatron=true;
         boolean isvalchars=true;
         boolean isshowchars=true;
@@ -274,6 +273,10 @@ public class TextFE extends WBJsInputFEAbs
                         else if(attrName.equalsIgnoreCase("isshowchars")) isshowchars=Boolean.valueOf(attrValue).booleanValue();
                         else if(attrName.equalsIgnoreCase("jspatron")) sjspatron=attrValue;
                         else if(attrName.equalsIgnoreCase("isshowpatron")) isshowpatron=Boolean.valueOf(attrValue).booleanValue();
+                        else if(attrName.equalsIgnoreCase("promptMessage")) promptMessage=attrValue;
+                        else if(attrName.equalsIgnoreCase("invalidMessage")) invalidMessage=attrValue;
+                        else if(attrName.equalsIgnoreCase("regExp")) regExp=attrValue;
+                        else if(attrName.equalsIgnoreCase("trim")) trim=Boolean.valueOf(attrValue).booleanValue();
                     }
                 }
                 if(minsize>0) setJsMinSize(minsize); 
@@ -281,8 +284,48 @@ public class TextFE extends WBJsInputFEAbs
                 if(svaltype!=null) setJsValType(svaltype);
                 if(sjsvalchars!=null) setJsValidChars(isvalchars,sjsvalchars, isshowchars);
                 if(sjspatron!=null) setJsPatron(sjspatron,isshowpatron);
+                if(regExp!=null){
+                    if(regExp.equals("\\d+")){ //Expresión regular para números
+                        setJsValType("js_numbers");
+                    }else if(regExp.equals("\\w+")){ //Expresión regular para alfanuméricos
+                        setJsValType("js_alphabetic");
+                    }
+                }
             }
         }
+    }
+
+    /**
+     * Manejo de Frameworks de JavaScript
+     * @param child
+     */
+    private void setJsFrameworkAttributes(Element child){
+            String jsFramework=getFormFE().getJsFrameWork();
+            if(jsFramework!=null){
+                if(jsFramework.equalsIgnoreCase("dojo")){
+                    child.setAttribute("dojoType","dijit.form.ValidationTextBox");
+                    if(required){
+                        child.setAttribute("required","true");
+                    }
+                    if(promptMessage!=null){
+                        child.setAttribute("promptMessage",promptMessage);
+                    }
+                    if(invalidMessage!=null){
+                        child.setAttribute("invalidMessage",invalidMessage);
+                    }
+                    if(trim){
+                        child.setAttribute("trim","true");
+                    }
+                    if(regExp!=null || sjspatron!=null){
+                        if(regExp!=null) child.setAttribute("regExp",regExp);
+                        if(sjspatron!=null) child.setAttribute("regExp",sjspatron);
+                    }else if(svaltype!=null && svaltype.equalsIgnoreCase("js_numbers")) {
+                        if(regExp!=null) child.setAttribute("regExp","\\d+");
+                    }else if(svaltype!=null && svaltype.equalsIgnoreCase("js_alphabetic")) {
+                        if(regExp!=null) child.setAttribute("regExp","\\w+");
+                    }
+                }
+            }
     }
     
 }
