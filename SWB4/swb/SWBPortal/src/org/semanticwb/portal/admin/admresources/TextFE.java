@@ -52,6 +52,14 @@ public class TextFE extends WBJsInputFEAbs
     protected int height=-1;
     protected Node tag=null;
 
+    protected boolean required=false;
+    protected String svaltype=null;
+    protected String sjspatron=null;
+    protected String promptMessage=null;
+    protected String invalidMessage=null;
+    protected String regExp=null;
+    protected boolean trim=false;
+
     protected String xmltag=null;
     
     
@@ -228,6 +236,7 @@ public class TextFE extends WBJsInputFEAbs
             }
         } 
         catch(Exception e) { log.error(e);}
+        System.out.println("XML FINAL TEXT:"+xml);
         return xml;        
     }
     
