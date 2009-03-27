@@ -236,7 +236,6 @@ public class TextFE extends WBJsInputFEAbs
             }
         } 
         catch(Exception e) { log.error(e);}
-        System.out.println("XML FINAL TEXT:"+xml);
         return xml;        
     }
     

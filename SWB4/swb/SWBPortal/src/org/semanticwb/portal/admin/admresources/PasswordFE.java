@@ -88,6 +88,9 @@ public class PasswordFE extends TextFE
                 if(style!=null) child.setAttribute("style",style);
                 if(styleclass!=null) child.setAttribute("class",styleclass);
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
+
+                setJsFrameworkAttributes(child);
+
                 if(root!=null) root.appendChild(child); 
                 else dom.appendChild(child);
 
@@ -103,4 +106,38 @@ public class PasswordFE extends TextFE
         catch(Exception e) { log.error(e); }
         return xml;         
     }
+    
+    /**
+     * Manejo de Frameworks de JavaScript
+     * @param child
+     */
+    private void setJsFrameworkAttributes(Element child){
+            String jsFramework=getFormFE().getJsFrameWork();
+            if(jsFramework!=null){
+                if(jsFramework.equalsIgnoreCase("dojo")){
+                    child.setAttribute("dojoType","dijit.form.ValidationTextBox");
+                    if(required){
+                        child.setAttribute("required","true");
+                    }
+                    if(promptMessage!=null){
+                        child.setAttribute("promptMessage",promptMessage);
+                    }
+                    if(invalidMessage!=null){
+                        child.setAttribute("invalidMessage",invalidMessage);
+                    }
+                    if(trim){
+                        child.setAttribute("trim","true");
+                    }
+                    if(regExp!=null || sjspatron!=null){
+                        if(regExp!=null) child.setAttribute("regExp",regExp);
+                        if(sjspatron!=null) child.setAttribute("regExp",sjspatron);
+                    }else if(svaltype!=null && svaltype.equalsIgnoreCase("js_numbers")) {
+                        if(regExp!=null) child.setAttribute("regExp","\\d+");
+                    }else if(svaltype!=null && svaltype.equalsIgnoreCase("js_alphabetic")) {
+                        if(regExp!=null) child.setAttribute("regExp","\\w+");
+                    }
+                }
+            }
+    }
+
 }

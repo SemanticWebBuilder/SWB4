@@ -53,6 +53,14 @@ public class TextAreaFE extends WBJsInputFEAbs
     private String value=null;
     private String xmltag=null;
     private Node tag=null;
+
+    protected boolean required=false;
+    protected String svaltype=null;
+    protected String sjspatron=null;
+    protected String promptMessage=null;
+    protected String invalidMessage=null;
+    protected String regExp=null;
+    protected boolean trim=false;
     
     /** Creates a new instance of TextAreaFE */
     public TextAreaFE() {
@@ -199,7 +207,7 @@ public class TextAreaFE extends WBJsInputFEAbs
                 if(dbconnmgr!=null && dbconnmgr.getAttribute(name)!=null) child.appendChild(dom.createTextNode(dbconnmgr.getAttribute(name)));
                 else if(value!=null) child.appendChild(dom.createTextNode(value.trim()));
 
-                setJsFrameworkAttributes(child);
+                //setJsFrameworkAttributes(child);
 
                 if(root!=null) root.appendChild(child); 
                 else dom.appendChild(child);
@@ -221,9 +229,7 @@ public class TextAreaFE extends WBJsInputFEAbs
     * Set attributes to class according with the xml tag element
     */ 
     public void setAttributes(){
-        boolean required=false;
         int minsize=0;
-        String svaltype=null;
         String sjsvalchars=null;
         boolean isvalchars=true;
         boolean isshowchars=true;
@@ -260,6 +266,10 @@ public class TextAreaFE extends WBJsInputFEAbs
                         else if(attrName.equalsIgnoreCase("isshowchars")) isshowchars=Boolean.valueOf(attrValue).booleanValue();
                         else if(attrName.equalsIgnoreCase("jspatron")) sjspatron=attrValue;
                         else if(attrName.equalsIgnoreCase("isshowpatron")) isshowpatron=Boolean.valueOf(attrValue).booleanValue();
+                        else if(attrName.equalsIgnoreCase("promptMessage")) promptMessage=attrValue;
+                        else if(attrName.equalsIgnoreCase("invalidMessage")) invalidMessage=attrValue;
+                        else if(attrName.equalsIgnoreCase("regExp")) regExp=attrValue;
+                        else if(attrName.equalsIgnoreCase("trim")) trim=Boolean.valueOf(attrValue).booleanValue();
                     }
                 }
                 if(minsize>0) setJsMinSize(minsize); 

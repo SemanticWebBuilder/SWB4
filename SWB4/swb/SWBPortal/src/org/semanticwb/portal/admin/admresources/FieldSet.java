@@ -26,7 +26,7 @@ public class FieldSet extends WBContainerFE {
     FormFE form=null;
     private ArrayList ajsfe=new ArrayList();
     private Locale locale=null;
-    
+
     public FieldSet(String id) {
         this.id = id;
     }
@@ -37,7 +37,7 @@ public class FieldSet extends WBContainerFE {
         setAttributes();
         this.base=base;
         this.form=form;
-        createObjs();        
+        createObjs();
     }
 
     public void setLegend(String legend) {
@@ -47,8 +47,8 @@ public class FieldSet extends WBContainerFE {
     public String setLegend() {
         return legend;
     }
-    
-    
+
+
     /**
     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
     * obtains the final xml element to show in the resource admin
@@ -57,9 +57,9 @@ public class FieldSet extends WBContainerFE {
     public String getHtml(){
         StringBuffer ret=new StringBuffer("");
         String xml="";
-        try 
+        try
         {
-            Document dom=SWBUtils.XML.getNewDocument(); 
+            Document dom=SWBUtils.XML.getNewDocument();
             if(dom!=null)
             {
                 Element child=dom.createElement("fieldset");
@@ -82,21 +82,21 @@ public class FieldSet extends WBContainerFE {
                     child.setAttribute("legend",legend);
                 }
                 dom.appendChild(child);
-                
+
                 xml=SWBUtils.XML.domToXml(dom, "ISO-8859-1", true);
                 if(xml!=null && !"".equals(xml.trim())) {
                     xml=xml.substring(xml.indexOf("<fieldset"), xml.indexOf("/>", xml.indexOf("<fieldset"))) + ">";
                 }
                 else {
                     xml="";
-                }     
+                }
             }
-        } 
+        }
         catch(Exception e) { log.error(e); }
         ret.append(xml);
         ret.append(show());
         ret.append("\n</fieldset>");
-        return ret.toString();        
+        return ret.toString();
     }
 
     public Iterator getJscripsFE(){
@@ -146,7 +146,7 @@ public class FieldSet extends WBContainerFE {
            }
          }
     }
-    
+
     @Override
     public void setAttributes() {
         if (tag != null) {
@@ -175,14 +175,14 @@ public class FieldSet extends WBContainerFE {
         }
     }
 
-    /** 
-     * Crea objetos html de acuerdo a tags del xml de la administraci�n de los recursos
+    /**
+     * Crea objetos html de acuerdo a tags del xml de la administraciï¿½n de los recursos
      * Creates html objects according with the tags of xml admin resources
      */
     private void createObjs() {
         if (tag != null) {
             NodeList ndlchilds = tag.getChildNodes();
-            for (int i = 0; i < ndlchilds.getLength(); i++) 
+            for (int i = 0; i < ndlchilds.getLength(); i++)
             {
                 Node tag=ndlchilds.item(i);
                 if (tag.getNodeName().equalsIgnoreCase("INPUT")) {
@@ -190,39 +190,39 @@ public class FieldSet extends WBContainerFE {
                     if (type != null) {
                         if (type.equalsIgnoreCase("TEXT")) {
                             TextFE textfe = new TextFE(tag);
-                            textfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                            textfe.setFormFE(form);
                             this.add(textfe);
                         } else if (type.equalsIgnoreCase("PASSWORD")) {
                             PasswordFE passwordfe = new PasswordFE(tag);
-                            passwordfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                            passwordfe.setFormFE(form);
                             this.add(passwordfe);
                         } else if (type.equalsIgnoreCase("FILE")) {
                             FileFE filefe = new FileFE(tag);
-                            filefe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                            filefe.setFormFE(form);
                             this.add(filefe);
                         } else if (type.equalsIgnoreCase("CHECKBOX")) {
                             CheckBoxFE checkboxfe = new CheckBoxFE(tag);
-                            checkboxfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                            checkboxfe.setFormFE(form);
                             this.add(checkboxfe);
                         } else if (type.equalsIgnoreCase("RADIO")) {
                             RadioFE radiofe = new RadioFE(tag);
-                            radiofe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                            radiofe.setFormFE(form);
                             this.add(radiofe);
                         } else if (type.equalsIgnoreCase("SUBMIT")) {
                             SubmitFE submitfe = new SubmitFE(tag, form);
-                            submitfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                            submitfe.setFormFE(form);
                             this.add(submitfe);
                         } else if (type.equalsIgnoreCase("RESET")) {
                             ResetFE resetfe = new ResetFE(tag);
-                            resetfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                            resetfe.setFormFE(form);
                             this.add(resetfe);
                         } else if (type.equalsIgnoreCase("HIDDEN")) {
                             HiddenFE hiddenfe = new HiddenFE(tag);
-                            hiddenfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                            hiddenfe.setFormFE(form);
                             this.add(hiddenfe);
                         } else if (type.equalsIgnoreCase("BUTTON")) {
                             ButtonFE buttonfe = new ButtonFE(tag);
-                            buttonfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                            buttonfe.setFormFE(form);
                             this.add(buttonfe);
                         }
                     }
@@ -230,15 +230,15 @@ public class FieldSet extends WBContainerFE {
                     if (tag.getNodeName().equalsIgnoreCase("SELECT")) {
                         SelectFE selectfe = new SelectFE(tag);
                         selectfe = (SelectFE) addChildsFE(tag, selectfe);
-                        selectfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                        selectfe.setFormFE(form);
                         this.add(selectfe);
                     } else if (tag.getNodeName().equalsIgnoreCase("TEXTAREA")) {
                         TextAreaFE textareafe = new TextAreaFE(tag);
-                        textareafe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                        textareafe.setFormFE(form);
                         this.add(textareafe);
                     } else if (tag.getNodeName().equalsIgnoreCase("IMG")) {
                         ImgFE imgfe = new ImgFE(tag);
-                        imgfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                        imgfe.setFormFE(form);
                         this.add(imgfe);
                     } else if (tag.getNodeName().equalsIgnoreCase("MAP")) {
                         MapFE mapfe = new MapFE(tag);
@@ -260,7 +260,7 @@ public class FieldSet extends WBContainerFE {
                         //HtmlFE htmlfe = new HtmlFE(tag);
                         //TODO:check if the base needs to be passed to other tags, if yes it need to be declared in the WBAdmResource interface
                         HtmlFE htmlfe = new HtmlFE(tag, base);
-                        htmlfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
+                        htmlfe.setFormFE(form);
                         this.add(htmlfe);
                     } else if (tag.getNodeName().equalsIgnoreCase("fieldset")) {
                         //HtmlFE htmlfe = new HtmlFE(tag);
@@ -284,7 +284,7 @@ public class FieldSet extends WBContainerFE {
         }
         return type;
     }
-    
+
     private Object addChildsFE(Node tag, Object obj) {
         NodeList ndlchilds = tag.getChildNodes();
         if(ndlchilds.getLength() > 0) {
@@ -299,7 +299,7 @@ public class FieldSet extends WBContainerFE {
                     obj = selecFe;
                 }
             }
-            
+
         }
         return obj;
     }
@@ -321,7 +321,7 @@ public class FieldSet extends WBContainerFE {
         }
         return obj;
     }
-    
+
     private Object addChildsMapFE(Node tag, Object obj) {
         NodeList ndlchilds = tag.getChildNodes();
         if(ndlchilds.getLength() > 0) {
@@ -338,6 +338,6 @@ public class FieldSet extends WBContainerFE {
             }
         }
         return obj;
-    }   
-    
+    }
+
 }

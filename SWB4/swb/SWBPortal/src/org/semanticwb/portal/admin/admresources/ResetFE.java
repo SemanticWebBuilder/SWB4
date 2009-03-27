@@ -86,6 +86,9 @@ public class ResetFE extends ButtonFE
                 if(style!=null) child.setAttribute("style",style);
                 if(styleclass!=null) child.setAttribute("class",styleclass);
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
+
+                setJsFrameworkAttributes(child);
+                
                 if(root!=null) root.appendChild(child); 
                 else dom.appendChild(child);
 

@@ -50,6 +50,9 @@ public class ButtonFE extends WBAdmResourceAbs
     protected Node tag;
     protected String onClick;
 
+    protected String promptMessage=null;
+    protected String invalidMessage=null;
+
     /**
      * Inicializa la clase
      */    
@@ -195,6 +198,9 @@ public class ButtonFE extends WBAdmResourceAbs
                 if(styleclass!=null) child.setAttribute("class",styleclass);
                 if(onClick != null) child.setAttribute("onclick",onClick);
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
+
+                setJsFrameworkAttributes(child);
+
                 if(root!=null) root.appendChild(child); 
                 else dom.appendChild(child);
 
@@ -230,61 +236,82 @@ public class ButtonFE extends WBAdmResourceAbs
                     String attrValue = nnodemap.item(i).getNodeValue();
                     if(attrValue == null || attrValue.equals(""))
                         continue;
-                    if(attrName.equalsIgnoreCase("name"))
+                    else if(attrName.equalsIgnoreCase("name"))
                     {
                         name = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("style"))
+                    else if(attrName.equalsIgnoreCase("style"))
                     {
                         style = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("class"))
+                    else if(attrName.equalsIgnoreCase("class"))
                     {
                         styleclass = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("moreattr"))
+                    else if(attrName.equalsIgnoreCase("moreattr"))
                     {
                         moreattr = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("onclick"))
+                    else if(attrName.equalsIgnoreCase("onclick"))
                     {
                         onClick = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("accesskey"))
+                    else if(attrName.equalsIgnoreCase("accesskey"))
                     {
                         accesskey = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("align"))
+                    else if(attrName.equalsIgnoreCase("align"))
                     {
                         align = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("disabled"))
+                    else if(attrName.equalsIgnoreCase("disabled"))
                     {
                         isdisabled = Boolean.valueOf(attrValue).booleanValue();
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("width"))
+                    else if(attrName.equalsIgnoreCase("width"))
                     {
                         width = Integer.parseInt(attrValue);
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("height"))
+                    else if(attrName.equalsIgnoreCase("height"))
                     {
                         height = Integer.parseInt(attrValue);
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("value"))
-                        value = attrValue;
+                    else if(attrName.equalsIgnoreCase("value")) value = attrValue;
+                    else if(attrName.equalsIgnoreCase("promptMessage")) promptMessage=attrValue;
+                    else if(attrName.equalsIgnoreCase("invalidMessage")) invalidMessage=attrValue;
                 }
 
             }
         }
     }
+     
+     /**
+     * Manejo de Frameworks de JavaScript
+     * @param child
+     */
+    protected void setJsFrameworkAttributes(Element child){
+            String jsFramework=getFormFE().getJsFrameWork();
+            if(jsFramework!=null){
+                if(jsFramework.equalsIgnoreCase("dojo")){
+                    child.setAttribute("dojoType","dijit.form.Button");
+                    if(promptMessage!=null){
+                        child.setAttribute("promptMessage",promptMessage);
+                    }
+                    if(invalidMessage!=null){
+                        child.setAttribute("invalidMessage",invalidMessage);
+                    }                   
+                }
+            }
+    }
+
 }

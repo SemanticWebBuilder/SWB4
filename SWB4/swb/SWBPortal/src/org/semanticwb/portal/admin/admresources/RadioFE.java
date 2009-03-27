@@ -48,6 +48,10 @@ public class RadioFE extends WBAdmResourceAbs
     private boolean ischecked=false;
     private String xmltag=null;
     private Node tag=null;
+
+    protected boolean required=false;
+    protected String promptMessage=null;
+    protected String invalidMessage=null;
     
     /** Creates a new instance of RadioFE */
     public RadioFE() {
@@ -162,6 +166,8 @@ public class RadioFE extends WBAdmResourceAbs
                 if(root!=null) root.appendChild(child); 
                 else dom.appendChild(child);
 
+                setJsFrameworkAttributes(child);
+
                 xml=SWBUtils.XML.domToXml(dom, "ISO-8859-1", true);
                 if(xml!=null && !"".equals(xml.trim())) 
                 {
@@ -199,10 +205,34 @@ public class RadioFE extends WBAdmResourceAbs
                         else if(attrName.equalsIgnoreCase("value")) value=attrValue;
                         else if(attrName.equalsIgnoreCase("checked")) ischecked=Boolean.valueOf(attrValue).booleanValue();
                         else if(attrName.equalsIgnoreCase("label")) label=attrValue;
+                        else if(attrName.equalsIgnoreCase("promptMessage")) promptMessage=attrValue;
+                        else if(attrName.equalsIgnoreCase("invalidMessage")) invalidMessage=attrValue;
                     }
                 }
             }
         }
     }
-   
+    
+    /**
+     * Manejo de Frameworks de JavaScript
+     * @param child
+     */
+    private void setJsFrameworkAttributes(Element child){
+            String jsFramework=getFormFE().getJsFrameWork();
+            if(jsFramework!=null){
+                if(jsFramework.equalsIgnoreCase("dojo")){
+                    child.setAttribute("dojoType","dijit.form.RadioButton");
+                    if(required){
+                        child.setAttribute("required","true");
+                    }
+                    if(promptMessage!=null){
+                        child.setAttribute("promptMessage",promptMessage);
+                    }
+                    if(invalidMessage!=null){
+                        child.setAttribute("invalidMessage",invalidMessage);
+                    }                   
+                }
+            }
+    }
+
 }
