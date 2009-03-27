@@ -515,6 +515,7 @@
 			<xs:attribute name="class" type="xs:string"/>
 			<xs:attribute name="style" type="xs:string"/>
 			<xs:attribute name="title" type="xs:string"/>
+            <xs:attribute name="invalidMessage" type="xs:string"/>
 			<xs:attribute name="lang" type="xs:NMTOKEN"/>
 			<xs:attribute name="dir">
 				<xs:simpleType>
