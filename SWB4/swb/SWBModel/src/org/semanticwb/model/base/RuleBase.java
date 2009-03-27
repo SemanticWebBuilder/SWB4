@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class RuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Versionable,org.semanticwb.model.Calendarable,org.semanticwb.model.XMLable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class RuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Calendarable,org.semanticwb.model.Versionable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_xml=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xml");
     public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");

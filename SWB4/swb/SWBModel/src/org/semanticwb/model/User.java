@@ -367,6 +367,21 @@ public class User extends UserBase implements Principal, java.io.Serializable
                 }
             }
         }
+        if(ret && obj instanceof UserGroupRefable)
+        {
+            Iterator<UserGroupRef> it=((UserGroupRefable)obj).listUserGroupRefs();
+            while(it.hasNext())
+            {
+                UserGroupRef ref=it.next();
+                //System.out.println("ref:"+ref+" role:"+ref.getRole());
+                UserGroup usrgrp=ref.getUserGroup();
+                if(!hasUserGroup(usrgrp))
+                {
+                    ret=false;
+                    break;
+                }
+            }
+        }
         //System.out.println("User:"+this+" haveAccess:"+obj+" "+ret);
         return ret;
     }

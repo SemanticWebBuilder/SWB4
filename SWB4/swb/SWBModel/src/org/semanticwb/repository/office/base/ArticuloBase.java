@@ -1,7 +1,7 @@
 package org.semanticwb.repository.office.base;
 
 
-public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent implements org.semanticwb.repository.Referenceable,org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Lockable,org.semanticwb.repository.Versionable,org.semanticwb.repository.Traceable
+public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent implements org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Referenceable,org.semanticwb.repository.Lockable,org.semanticwb.repository.Versionable,org.semanticwb.repository.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass nt_VersionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#versionHistory");
     public static final org.semanticwb.platform.SemanticProperty jcr_versionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#versionHistory");
@@ -66,7 +66,7 @@ public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(jcr_versionHistory);
          if(obj!=null)
          {
-             ret=(org.semanticwb.repository.VersionHistory)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.repository.VersionHistory)obj.createGenericInstance();
          }
          return ret;
     }
@@ -87,7 +87,7 @@ public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(jcr_baseVersion);
          if(obj!=null)
          {
-             ret=(org.semanticwb.repository.Version)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.repository.Version)obj.createGenericInstance();
          }
          return ret;
     }
@@ -108,7 +108,7 @@ public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(jcr_mergeFailed);
          if(obj!=null)
          {
-             ret=(org.semanticwb.repository.Version)obj.getSemanticClass().newGenericInstance(obj);
+             ret=(org.semanticwb.repository.Version)obj.createGenericInstance();
          }
          return ret;
     }

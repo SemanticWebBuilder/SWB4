@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Calendarable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Ruleable,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable,org.semanticwb.model.Deleteable,org.semanticwb.model.Descriptiveable
+public class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Calendarable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable,org.semanticwb.model.Ruleable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Rule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Rule");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRule");
