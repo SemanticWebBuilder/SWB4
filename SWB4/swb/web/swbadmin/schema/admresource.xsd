@@ -75,7 +75,8 @@
 			<xs:attribute name="onkeyup" type="xs:string"/>
 			<xs:attribute name="onsubmit" type="xs:string"/>
 			<xs:attribute name="onreset" type="xs:string"/>
-		</xs:complexType>
+            <xs:attribute name="jsframework" type="xs:string"/>
+      	</xs:complexType>
 	</xs:element>
 	<xs:element name="fieldset">
 			<xs:complexType>
@@ -207,7 +208,18 @@
 			<xs:attribute name="name" type="xs:string" use="required"/>
 			<xs:attribute name="label" type="xs:string"/>
 			<xs:attribute name="value" type="xs:string"/>
-			<xs:attribute name="checked">
+            <xs:attribute name="promptMessage" type="xs:string"/>
+            <xs:attribute name="invalidMessage" type="xs:string"/>
+            <xs:attribute name="trim">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="true"/>
+						<xs:enumeration value="false"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+            <xs:attribute name="regExp" type="xs:string"/>
+            <xs:attribute name="checked">
 				<xs:simpleType>
 					<xs:restriction base="xs:NMTOKEN">
 						<xs:enumeration value="true"/>
@@ -390,6 +402,17 @@
 						  </xs:restriction>
 						</xs:simpleType>			
 					</xs:attribute>
+                    <xs:attribute name="promptMessage" type="xs:string"/>
+                    <xs:attribute name="invalidMessage" type="xs:string"/>
+                    <xs:attribute name="trim">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:NMTOKEN">
+                                <xs:enumeration value="true"/>
+                                <xs:enumeration value="false"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="regExp" type="xs:string"/>
 					<xs:attribute name="name" type="xs:string" use="required"/>
 					<xs:attribute name="label" type="xs:string"/>
 					<xs:attribute name="rows" type="xs:string" use="required"/>
