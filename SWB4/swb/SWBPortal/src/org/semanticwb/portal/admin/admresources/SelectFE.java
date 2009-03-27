@@ -60,6 +60,8 @@ public class SelectFE extends WBContainerFE
     private String fromload=null;
     private String whereload=null;
     private String onchange=null;
+
+    protected String invalidMessage=null;
    
     /** Creates a new instance of SelectFE */
     public SelectFE(String name) {
@@ -222,6 +224,9 @@ public class SelectFE extends WBContainerFE
                 if(style!=null) child.setAttribute("style",style);
                 if(styleclass!=null) child.setAttribute("class",styleclass);
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
+
+                setJsFrameworkAttributes(child);
+
                 dom.appendChild(child);
                 
                 xml=SWBUtils.XML.domToXml(dom, "ISO-8859-1", true);
@@ -272,6 +277,7 @@ public class SelectFE extends WBContainerFE
                         else if(attrName.equalsIgnoreCase("titleload")) titleload=attrValue;
                         else if(attrName.equalsIgnoreCase("fromload")) fromload=attrValue;
                         else if(attrName.equalsIgnoreCase("whereload")) whereload=attrValue;
+                        else if(attrName.equalsIgnoreCase("invalidMessage")) invalidMessage=attrValue;
                     }
                 }
             }
@@ -356,5 +362,22 @@ public class SelectFE extends WBContainerFE
        }
         return acoincide.iterator();
     }
+    
+    /**
+     * Manejo de Frameworks de JavaScript
+     * @param child
+     */
+    private void setJsFrameworkAttributes(Element child){
+            String jsFramework=getFormFE().getJsFrameWork();
+            if(jsFramework!=null){
+                if(jsFramework.equalsIgnoreCase("dojo")){
+                    child.setAttribute("dojoType","dijit.form.FilteringSelect");
+                    if(invalidMessage!=null){
+                        child.setAttribute("invalidMessage",invalidMessage);
+                    }                   
+                }
+            }
+    }
+
     
 }

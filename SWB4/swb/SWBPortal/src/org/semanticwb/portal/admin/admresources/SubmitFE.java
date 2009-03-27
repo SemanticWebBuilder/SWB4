@@ -107,6 +107,9 @@ public class SubmitFE extends ButtonFE
                     child.setAttribute("onclick","if(valida_"+formfe.getName()+"()) { "+sonClick+"} else return false;");
                 }
                 if(formfe != null && formfe.getSizeJsFE() < 1 && onClick!=null) child.setAttribute("onclick", onClick);
+
+                setJsFrameworkAttributes(child);
+
                 if(root!=null) root.appendChild(child); 
                 else dom.appendChild(child);
 

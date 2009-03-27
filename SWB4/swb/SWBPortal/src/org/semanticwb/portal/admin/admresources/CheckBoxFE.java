@@ -54,6 +54,10 @@ public class CheckBoxFE extends WBAdmResourceAbs
     private boolean ischecked=false;
     private String xmltag=null;
     private Node tag=null;
+
+    protected boolean required=false;
+    protected String promptMessage=null;
+    protected String invalidMessage=null;
     
     /** Creates a new instance of CheckBoxFE */
     public CheckBoxFE() {
@@ -162,6 +166,9 @@ public class CheckBoxFE extends WBAdmResourceAbs
                 if(style!=null) child.setAttribute("style",style);
                 if(styleclass!=null) child.setAttribute("class",styleclass);
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
+
+                setJsFrameworkAttributes(child);
+
                 if(root!=null) root.appendChild(child); 
                 else dom.appendChild(child);
 
@@ -203,10 +210,34 @@ public class CheckBoxFE extends WBAdmResourceAbs
                         else if(attrName.equalsIgnoreCase("value")) value=attrValue;
                         else if(attrName.equalsIgnoreCase("checked")) ischecked=Boolean.valueOf(attrValue).booleanValue();
                         else if(attrName.equalsIgnoreCase("label")) label=attrValue;
+                        else if(attrName.equalsIgnoreCase("promptMessage")) promptMessage=attrValue;
+                        else if(attrName.equalsIgnoreCase("invalidMessage")) invalidMessage=attrValue;
                     }
                 }
             }
         }
+    }
+
+     /**
+     * Manejo de Frameworks de JavaScript
+     * @param child
+     */
+    private void setJsFrameworkAttributes(Element child){
+            String jsFramework=getFormFE().getJsFrameWork();
+            if(jsFramework!=null){
+                if(jsFramework.equalsIgnoreCase("dojo")){
+                    child.setAttribute("dojoType","dijit.form.CheckBox");
+                    if(required){
+                        child.setAttribute("required","true");
+                    }
+                    if(promptMessage!=null){
+                        child.setAttribute("promptMessage",promptMessage);
+                    }
+                    if(invalidMessage!=null){
+                        child.setAttribute("invalidMessage",invalidMessage);
+                    }                   
+                }
+            }
     }
     
 }
