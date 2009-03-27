@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Calendarable,org.semanticwb.model.Viewable,org.semanticwb.model.Indexable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Hitable,org.semanticwb.model.Priorityable,org.semanticwb.model.XMLable,org.semanticwb.model.Localeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Campable,org.semanticwb.model.Traceable,org.semanticwb.model.Deleteable
+public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Localeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Hitable,org.semanticwb.model.Activeable,org.semanticwb.model.XMLable,org.semanticwb.model.Viewable,org.semanticwb.model.Calendarable,org.semanticwb.model.Priorityable,org.semanticwb.model.Indexable,org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Campable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");

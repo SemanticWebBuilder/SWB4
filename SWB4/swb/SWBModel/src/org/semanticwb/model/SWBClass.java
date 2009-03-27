@@ -16,9 +16,9 @@ public class SWBClass extends org.semanticwb.model.base.SWBClassBase
         {
             if(!((Activeable)this).isActive())ret=false;
         }
-        if(ret && this instanceof Deleteable)
+        if(ret && this instanceof Trashable)
         {
-            if(((Deleteable)this).isDeleted())ret=false;
+            if(((Trashable)this).isDeleted())ret=false;
         }
         //TODO: calendarizacion
         return ret;

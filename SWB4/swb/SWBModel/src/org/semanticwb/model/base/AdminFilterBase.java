@@ -1,9 +1,10 @@
 package org.semanticwb.model.base;
 
 
-public class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Undeleteable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_xml=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#xml");
+    public static final org.semanticwb.platform.SemanticProperty swb_undeleteable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#undeleteable");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
@@ -65,6 +66,16 @@ public class AdminFilterBase extends org.semanticwb.model.SWBClass implements or
     public void setXml(String xml)
     {
         getSemanticObject().setProperty(swb_xml, xml);
+    }
+
+    public boolean isUndeleteable()
+    {
+        return getSemanticObject().getBooleanProperty(swb_undeleteable);
+    }
+
+    public void setUndeleteable(boolean undeleteable)
+    {
+        getSemanticObject().setBooleanProperty(swb_undeleteable, undeleteable);
     }
 
     public java.util.Date getCreated()

@@ -1,13 +1,13 @@
 package org.semanticwb.model.base;
 
 
-public class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Unmodifiable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable
 {
     public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRoleRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleRefInv");
     public static final org.semanticwb.platform.SemanticClass swb_Permission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Permission");
     public static final org.semanticwb.platform.SemanticProperty swb_hasPermission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPermission");
-    public static final org.semanticwb.platform.SemanticProperty swb_readOnly=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#readOnly");
+    public static final org.semanticwb.platform.SemanticProperty swb_undeleteable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#undeleteable");
     public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
     public static final org.semanticwb.platform.SemanticProperty swb_roleParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#roleParent");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
@@ -120,14 +120,14 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
          return ret;
     }
 
-    public boolean isReadOnly()
+    public boolean isUndeleteable()
     {
-        return getSemanticObject().getBooleanProperty(swb_readOnly);
+        return getSemanticObject().getBooleanProperty(swb_undeleteable);
     }
 
-    public void setReadOnly(boolean readOnly)
+    public void setUndeleteable(boolean undeleteable)
     {
-        getSemanticObject().setBooleanProperty(swb_readOnly, readOnly);
+        getSemanticObject().setBooleanProperty(swb_undeleteable, undeleteable);
     }
 
     public void setParent(org.semanticwb.model.Role role)

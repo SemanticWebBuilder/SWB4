@@ -1,9 +1,10 @@
 package org.semanticwb.model.base;
 
 
-public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Undeleteable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_userRepSecurityQuestionList=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepSecurityQuestionList");
+    public static final org.semanticwb.platform.SemanticProperty swb_undeleteable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#undeleteable");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
@@ -62,6 +63,16 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
     public void setUserRepSecurityQuestionList(String userRepSecurityQuestionList)
     {
         getSemanticObject().setProperty(swb_userRepSecurityQuestionList, userRepSecurityQuestionList);
+    }
+
+    public boolean isUndeleteable()
+    {
+        return getSemanticObject().getBooleanProperty(swb_undeleteable);
+    }
+
+    public void setUndeleteable(boolean undeleteable)
+    {
+        getSemanticObject().setBooleanProperty(swb_undeleteable, undeleteable);
     }
 
     public java.util.Date getCreated()
