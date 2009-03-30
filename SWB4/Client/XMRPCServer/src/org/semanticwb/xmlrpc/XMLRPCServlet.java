@@ -89,6 +89,7 @@ public abstract class XMLRPCServlet extends HttpServlet
             }
             catch (Exception cne)
             {
+                cne.printStackTrace();
                 try
                 {
                     Document docResponse = XMLRPCServlet.getException(cne);
@@ -198,9 +199,9 @@ public abstract class XMLRPCServlet extends HttpServlet
         if (objToResponse.getResponseParts() == null || objToResponse.getResponseParts().size() == 0)
         {
             response.setContentType("text/xml;charset=utf-8");
-            ServletOutputStream out = response.getOutputStream();            
-            XMLOutputter xMLOutputter = new XMLOutputter();                        
-            String xml=xMLOutputter.outputString(docResponse);
+            ServletOutputStream out = response.getOutputStream();
+            XMLOutputter xMLOutputter = new XMLOutputter();
+            String xml = xMLOutputter.outputString(docResponse);
             out.write(xml.getBytes("utf-8"));
             out.flush();
             out.close();
@@ -286,12 +287,26 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     private static String getMethodName(Document document) throws XmlRpcException, JDOMException, ClassNotFoundException
     {
-        Element methodNameElement = (Element) XPath.selectSingleNode(document.getRootElement(), "/methodCall/methodName");
-        if (methodNameElement == null)
+        try
         {
-            throw new XmlRpcException("The methodName tag was not found");
+            Element methodNameElement = (Element) XPath.selectSingleNode(document.getRootElement(), "/methodCall/methodName");
+            if (methodNameElement == null)
+            {
+                throw new XmlRpcException("The methodName tag was not found");
+            }
+            return methodNameElement.getText();
         }
-        return methodNameElement.getText();
+        catch (XmlRpcException e)
+        {
+            log.error(e);
+            throw e;
+        }
+        catch (JDOMException e)
+        {
+            log.error(e);
+            throw e;
+        }
+        
     }
 
     private static ArrayList<Method> getMethods(String pCallMethod) throws XmlRpcException, JDOMException, ClassNotFoundException
