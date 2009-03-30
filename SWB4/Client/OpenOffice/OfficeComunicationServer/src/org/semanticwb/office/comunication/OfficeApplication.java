@@ -158,7 +158,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             while (it.hasNext())
             {
                 Node node = it.nextNode();
-                if (node.getName().equals(cm_category))
+                if (node.getDefinition().getDeclaringNodeType().getName().equals(cm_category))
                 {
                     CategoryInfo category = new CategoryInfo();
                     category.UDDI = node.getUUID();
@@ -363,14 +363,17 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             while (it.hasNext())
             {
                 Node node = it.nextNode();
-                CategoryInfo category = new CategoryInfo();
-                category.UDDI = node.getUUID();
-                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
-                String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
-                category.description = node.getProperty(cm_description).getValue().getString();
-                category.title = node.getProperty(cm_title).getValue().getString();
-                //category.childs = (int) node.getNodes(cm_category).getSize();
-                categories.add(category);
+                if (node.getDefinition().getDeclaringNodeType().getName().equals(cm_category))
+                {
+                    CategoryInfo category = new CategoryInfo();
+                    category.UDDI = node.getUUID();
+                    String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                    String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+                    category.description = node.getProperty(cm_description).getValue().getString();
+                    category.title = node.getProperty(cm_title).getValue().getString();
+                    //category.childs = (int) node.getNodes(cm_category).getSize();
+                    categories.add(category);
+                }
 
             }
             return categories.toArray(new CategoryInfo[categories.size()]);
@@ -402,15 +405,17 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             while (it.hasNext())
             {
                 Node node = it.nextNode();
-                CategoryInfo category = new CategoryInfo();
-                category.UDDI = node.getUUID();
-                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
-                String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
-                category.description = node.getProperty(cm_description).getValue().getString();
-                category.title = node.getProperty(cm_title).getValue().getString();
-                category.childs = (int) node.getNodes(cm_category).getSize();
-                categories.add(category);
-
+                if (node.getDefinition().getDeclaringNodeType().getName().equals(cm_category))
+                {
+                    CategoryInfo category = new CategoryInfo();
+                    category.UDDI = node.getUUID();
+                    String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                    String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+                    category.description = node.getProperty(cm_description).getValue().getString();
+                    category.title = node.getProperty(cm_title).getValue().getString();
+                    category.childs = (int) node.getNodes(cm_category).getSize();
+                    categories.add(category);
+                }
             }
             return categories.toArray(new CategoryInfo[categories.size()]);
         }
@@ -555,7 +560,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             {
                 Node frozenNode = versiontoReturn.getNode("jcr:frozenNode");
                 String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
-                String file = frozenNode.getProperty(cm_file).getString();                
+                String file = frozenNode.getProperty(cm_file).getString();
                 InputStream in = frozenNode.getProperty("jcr:data").getStream();
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 byte[] buffer = new byte[2048];
@@ -711,18 +716,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public void sendContentToAuthorize(ResourceInfo resourceInfo, String message) throws Exception
     {
-
     }
 
     public void authorize(ResourceInfo resourceInfo, String message) throws Exception
     {
-
     }
 
     public void reject(ResourceInfo resourceInfo, String message) throws Exception
     {
-
     }
-
-    
 }
