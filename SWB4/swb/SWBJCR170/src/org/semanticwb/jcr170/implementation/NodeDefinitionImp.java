@@ -22,15 +22,16 @@ import org.semanticwb.repository.ChildNodeDefinition;
 public class NodeDefinitionImp implements NodeDefinition
 {
     private ArrayList<NodeType> requiredPrimaryTypes=new ArrayList<NodeType>();
-    private NodeType defaultPrimaryType=null;
+    private NodeTypeImp defaultPrimaryType=null;
     private boolean allowsSameNameSiblings=true;
-    private NodeType declaringNodeType;
+    private NodeTypeImp declaringNodeType;
     private String name="*";
     private int onParentVerion=OnParentVersionAction.VERSION;
     private boolean autocreated,mandatory,isProtected;
     NodeDefinitionImp(SemanticObject object,SessionImp session)
     {
         BaseNode node=new BaseNode(object);
+        declaringNodeType=new NodeTypeImp(object.getSemanticClass(), session);
         name=object.getProperty(ChildNodeDefinition.jcr_name);
         autocreated=object.getBooleanProperty(ChildNodeDefinition.jcr_autoCreated, false);
         mandatory=object.getBooleanProperty(ChildNodeDefinition.jcr_mandatory, false);
