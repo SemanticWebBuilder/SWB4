@@ -88,8 +88,7 @@ public abstract class XMLRPCServlet extends HttpServlet
 
             }
             catch (Exception cne)
-            {
-                cne.printStackTrace();
+            {                
                 try
                 {
                     Document docResponse = XMLRPCServlet.getException(cne);
