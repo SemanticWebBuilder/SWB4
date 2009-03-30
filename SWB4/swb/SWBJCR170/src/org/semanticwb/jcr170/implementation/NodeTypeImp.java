@@ -34,7 +34,14 @@ public class NodeTypeImp implements NodeType
 
     public String getName()
     {
-        return clazz.getName();
+        if(clazz.getPrefix()==null)
+        {
+            return clazz.getName();
+        }
+        else
+        {
+            return clazz.getPrefix()+":"+clazz.getName();
+        }
     }
 
     public boolean isMixin()
