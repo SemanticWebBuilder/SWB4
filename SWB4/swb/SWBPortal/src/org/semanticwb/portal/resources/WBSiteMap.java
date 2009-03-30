@@ -27,12 +27,10 @@ package org.semanticwb.portal.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
-import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
@@ -82,7 +80,7 @@ public class WBSiteMap extends GenericAdmResource
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        if(paramRequest.getMode().equals("childs")){
+        if(paramRequest.getMode().equalsIgnoreCase("Json")) {
             doChilds(request, response, paramRequest);
         }else {
             super.processRequest(request, response, paramRequest);
@@ -92,190 +90,89 @@ public class WBSiteMap extends GenericAdmResource
     public void doChilds(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/json;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
-        Resource base=getResourceBase();
-        StringBuffer data = new StringBuffer();
-        try {
-            WebPage tpsite = null;                        
-            tpsite = paramRequest.getTopic().getWebSite().getWebPage(request.getParameter("wp").trim());
-            if (tpsite == null) {
-                throw new SWBResourceException("pagina desconocida");
-            }
-                        
-            //if(user.haveAccess(tpsite)) TODO: VER4
-            {
-                String lang = paramRequest.getUser().getLanguage();                                
-                Iterator <WebPage> it = tpsite.listChilds(lang, true, false, false, null);
-                if(it.hasNext()) {
-                    data.append("[");
-                    boolean hasChilds;
-                    while (it.hasNext())
-                    {
-                        WebPage tp = it.next();
-                        //if(tp!=null && tp.getId()!=null && user.haveAccess(tp)) //TODO VER 4.0
-                        if(tp!=null && tp.getId()!=null)
-                        {
-                            data.append("{");
-                            data.append("id:'"+tp.getId()+"'");
-                            data.append(",title:'"+tp.getDisplayName(lang)+"'");
-                            hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();                            
-                            if(hasChilds) {
-                                data.append(",isFolder:true");
-                                    data.append(",isLazy:true");
-                            }else{
-                                data.append(",purl:'"+tp.getUrl()+"'");
-                            }
+        String lang = paramRequest.getUser().getLanguage();
+        WebPage home = paramRequest.getTopic().getWebSite().getHomePage();
 
-                            if(it.hasNext()) {
-                                data.append("},");
-                            }else {
-                                data.append("}");
-                            }
-                        }
-                    }
-                    data.append("]");
-                }
+        StringBuilder json = new StringBuilder();
+        try {
+            json.append("{");
+            json.append("identifier:'id',");
+            json.append("label:'name',");
+            json.append("items:[");
+
+            json.append("{");
+            json.append("name:'"+home.getDisplayName(lang)+"',");
+            json.append("id:'"+home.getId()+"',");
+            json.append("purl:'"+home.getUrl()+"',");
+            json.append("type:'home'");
+            if(home.listVisibleChilds(lang).hasNext()) {
+                json.append(",children:[");
+                json.append(addReferences(home, lang));
+                json.append("]");
             }
+            json.append("}");
+
+            if(home.listVisibleChilds(lang).hasNext()) {
+                json.append(",");
+                json.append(addChilds(home, lang));
+            }
+
+            json.append("]");
+            json.append("}");
         }catch(Exception e) {
-            log.error(e);
-            data.append(e.toString());
+            json.append(e);
         }
-        out.println(data.toString());
+        out.print(json.toString());
+        System.out.println("json="+json);
+        out.flush();
     }
-    
-    /** Crea el inicio del objeto json del árbol del mapa del sitio eventualmente usando ajax.
-     * @param webSite
-     * @param user
-     * @throws SWBResourceException
-     * @throws IOException
-     */
-    public String getJSONDynamically(WebSite webSite, User user) throws SWBResourceException, IOException
-    {
-        Resource base=getResourceBase();
-        StringBuffer data = new StringBuffer();
-        int subLevel = 1;
-        try {
-            WebPage tpsite = null;
-                        
-            if (!"".equals(base.getAttribute("level", "").trim())) {
-                try {
-                    maxLevel = Integer.parseInt(base.getAttribute("level", "1").trim());
-                    if(maxLevel<1) {
-                        maxLevel = 1;
-                    }                        
-                }catch (Exception e) {
-                    maxLevel = 1;
-                }
-            }
-            subLevel = 1;
-                        
-            if(base.getAttribute("home") != null) {
-                tpsite = webSite.getWebPage(base.getAttribute("home").trim());
-            }            
-            if (tpsite == null) {
-                tpsite = webSite.getHomePage();
-            }
-                        
-            //if (subLevel<=maxLevel && user.haveAccess(tpsite)) TODO: VER4
-            if(subLevel<=maxLevel)
-            {
-                String lang = user.getLanguage();
-                Iterator <WebPage> it = tpsite.listChilds(lang, true, false, false, null);
-                if(it.hasNext()) {                    
-                    data.append(",children:[");
-                    boolean hasChilds;
-                    while (it.hasNext())
-                    {
-                        WebPage tp = it.next();
-                        //if(tp!=null && tp.getId()!=null && user.haveAccess(tp)) //TODO VER 4.0
-                        if(tp!=null && tp.getId()!=null)
-                        {
-                            data.append("{");
-                            data.append("id:'"+tp.getId()+"'");
-                            data.append(",title:'"+tp.getDisplayName(lang)+"'");
-                            hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();                            
-                            if(hasChilds) {
-                                data.append(",isFolder:true");
-                                if(subLevel < maxLevel) {
-                                    data.append(",expand:true,children:[");
-                                    data.append(getJSONDynamically(webSite, tp, user, subLevel+1));
-                                    data.append("]");
-                                }else {
-                                    data.append(",isLazy:true");
-                                }
-                            }else{
-                                data.append(",purl:'"+tp.getUrl()+"'");
-                            }
 
-                            if(it.hasNext()) {
-                                data.append("},");
-                            }else {
-                                data.append("}");
-                            }
-                        }
-                    }
-                    data.append("]");
-                }
+    private String addReferences(WebPage node, String lang) {
+        StringBuilder json = new StringBuilder();
+
+        Iterator<WebPage> itwps = node.listVisibleChilds(lang);
+        while(itwps.hasNext()) {
+            WebPage wp = itwps.next();
+            if(wp.getId().equalsIgnoreCase(node.getId())) {
+                System.out.println("singularidad en id="+wp.getId());
+                continue;
             }
-        }catch(Exception e) { 
-            log.error("Error while generating DOM in resource "+ base.getResourceType().getResourceClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e);
-            data.append(e.toString());
+            json.append("{_reference:'"+wp.getDisplayName(lang)+"'}");
+            if(itwps.hasNext()) {
+                json.append(",");
+            }
         }
-        return data.toString();
+        return json.toString();
     }
-    
-    /** Crea el cuerpo del objeto json del árbol del mapa del sitio eventualmente usando ajax.
-     * @param webSite
-     * @param user
-     * @throws SWBResourceException
-     * @throws IOException
-     */
-    public String getJSONDynamically(WebSite webSite, WebPage webPage, User user, int subLevel) throws SWBResourceException, IOException
-    {
-        Resource base=getResourceBase();
-        StringBuffer data = new StringBuffer();
-        try {
-            WebPage tpsite = webPage;                        
-            //if (user.haveAccess(tpsite)) TODO: VER4
-            {
-                String lang = user.getLanguage();
-                Iterator <WebPage> it = tpsite.listChilds(lang, true, false, false, null);
-                boolean hasChilds;
-                while (it.hasNext()) {
-                    WebPage tp = it.next();
-                    //if(tp!=null && tp.getId()!=null && user.haveAccess(tp)) //TODO VER 4.0
-                    if(tp!=null && tp.getId()!=null)
-                    {
-                        data.append("{");
-                        data.append("id:'"+tp.getId()+"'");
-                        data.append(",title:'"+tp.getDisplayName(lang)+"'");
-                        hasChilds = tp.listChilds(lang, true, false, false, null).hasNext();                            
-                        if(hasChilds) {
-                            data.append(",isFolder:true");
-                            if(subLevel < maxLevel) {
-                                data.append(",expand:true,children:[");
-                                data.append(getJSONDynamically(webSite, tp, user, subLevel+1));
-                                data.append("]");
-                            }else {
-                                data.append(",isLazy:true");
-                            }
-                        }else{
-                            data.append(",purl:'"+tp.getUrl()+"'");
-                        }
 
-                        if(it.hasNext()) {
-                            data.append("},");
-                        }else {
-                            data.append("}");
-                        }                        
-                    }
-                }
+    private String addChilds(WebPage node, String lang) {
+        StringBuilder json = new StringBuilder();
+
+        Iterator<WebPage> itwps = node.listVisibleChilds(lang);
+        while(itwps.hasNext()) {
+            WebPage wp = itwps.next();
+            json.append("{");
+            json.append("name:'"+wp.getDisplayName(lang)+"',");
+            json.append("id:'"+wp.getId()+"',");
+            json.append("purl:'"+wp.getUrl()+"'");
+            if(wp.listVisibleChilds(lang).hasNext()) {
+                json.append(",type:'chanel'");
+                json.append(",children:[");
+                json.append(addReferences(wp, lang));
+                json.append("]");
             }
-            //return data.toString();
-        }catch(Exception e) { 
-            log.error("Error while generating DOM in resource "+ base.getResourceType().getResourceClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e);
-            data.append(e.toString());
+            json.append("}");
+
+            if(wp.listVisibleChilds(lang).hasNext()) {
+                json.append(",");
+                json.append(addChilds(wp, lang));
+            }
+
+            if(itwps.hasNext()) {
+                json.append(",");
+            }
         }
-        return data.toString();      
+        return json.toString();
     }
         
     /**
@@ -286,98 +183,103 @@ public class WBSiteMap extends GenericAdmResource
      * @throws IOException
      */    
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
-        StringBuffer ret = new StringBuffer("");
         Resource base=getResourceBase();
         
-        if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {
+        //if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {
+        if(false) {
             String surl="";
             if (!"".equals(base.getAttribute("url", "").trim())) {
                 surl=base.getAttribute("url").trim();
-            }
-            else 
-            {
+            }else {
                 SWBResourceURL url=paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
                 url.setParameter("smp_act", "smp_step2");
                 surl=url.toString();
             }
-            if (!"".equals(base.getAttribute("img", "").trim()))
-            {
-                ret.append("\n<a href=\"" + surl +"\">");
-                ret.append("<img src=\""+ webWorkPath +"/"+ base.getAttribute("img").trim() +"\"");
+
+            if (!"".equals(base.getAttribute("img", "").trim())) {
+                out.println("<a href=\"" + surl +"\">");
+                out.println("<img src=\""+ webWorkPath +"/"+ base.getAttribute("img").trim() +"\"");
                 if (!"".equals(base.getAttribute("alt", "").trim())) {
-                    ret.append(" alt=\"" + base.getAttribute("alt").trim() + "\"");
+                    out.println(" alt=\"" + base.getAttribute("alt").trim() + "\"");
                 }
-                ret.append(" border=0></a>");
-            } 
-            else if (!"".equals(base.getAttribute("btntexto", "").trim()))
-            {
-                ret.append("\n<form name=frmWBSiteMap method=POST action=\"" + surl + "\">");
-                ret.append("\n<input type=submit name=btnWBSiteMap value=");
-                ret.append("\"" + base.getAttribute("btntexto").trim().replaceAll("\"","&#34;") + "\"");
+                out.println(" border=0></a>");
+            }else if (!"".equals(base.getAttribute("btntexto", "").trim())) {
+                out.println("<form name=frmWBSiteMap method=POST action=\"" + surl + "\">");
+                out.println("<input type=submit name=btnWBSiteMap value=");
+                out.println("\"" + base.getAttribute("btntexto").trim().replaceAll("\"","&#34;") + "\"");
                 if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
-                    ret.append(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"","&#34;") + "\"");
+                    out.println(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"","&#34;") + "\"");
                 }
-                ret.append("></form>");
-            } 
-            else
-            {
-                ret.append("\n<a href=\"" + surl +"\"");
+                out.println("></form>");
+            }else {
+                out.println("<a href=\"" + surl +"\"");
                 if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
-                    ret.append(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"","&#34;") + "\"");
+                    out.println(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"","&#34;") + "\"");
                 }
-                ret.append(">");
+                out.println(">");
                 if (!"".equals(base.getAttribute("lnktexto", "").trim())) {
-                    ret.append(base.getAttribute("lnktexto").trim());
+                    out.println(base.getAttribute("lnktexto").trim());
                 }
-                else ret.append(paramRequest.getLocaleString("msgSiteMap"));
-                ret.append("</a>");
+                else out.println(paramRequest.getLocaleString("msgSiteMap"));
+                out.println("</a>");
             }
         }else {
             // Mapa de sitio
             try {
-                SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
+                System.out.println("mapa de sitio.....");
+
+                /*SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
-                url.setMode("childs");                
+                url.setMode("Json");
                 url.setTopic(paramRequest.getTopic());
-                url.setCallMethod(paramRequest.Call_DIRECT);
-                
-                ret.append("<div id=\"tree_sitemap_"+base.getId()+"\"> </div> \n");
-                ret.append("<script type='text/javascript' src='/swb/swbadmin/js/jquery/jquery.dynatree.js'></script> \n");
-                ret.append("<script type='text/javascript'> \n");
-                ret.append("$(function(){ \n");                
-                ret.append("    $(\"#tree_sitemap_"+base.getId()+"\").dynatree({ \n");
-                ret.append("        onLazyRead: function(dtnode) { \n");
-                ret.append("            dtnode.appendAjax({url:'"+url.toString()+"?wp='+dtnode.data.id, \n");
-                ret.append("            cache: false \n");
-                ret.append("            }); \n");
-                ret.append("        } \n");
-                ret.append("        ,autoCollapse:"+base.getAttribute("collapse","false")+" \n");
-                ret.append("        ,title: '"+base.getAttribute("home","Home")+"' \n");
-                ret.append("        ,rootVisible: "+base.getAttribute("showroot","false")+" \n");
-                ret.append("        ,strings: { \n");
-                ret.append("            loading: '"+base.getAttribute("loadmsg","Cargando&#8230;")+"' \n");
-                ret.append("            ,loadError: '"+base.getAttribute("errormsg","¡Error, la p&aacute;gina no existe!")+"' \n");
-                ret.append("        } \n");
-                
-                ret.append("        ,onSelect: function(dtnode) { \n");
-                ret.append("            if(dtnode.data.purl) {");
-                ret.append("                window.location=dtnode.data.purl");
-                ret.append("            }");
-                ret.append("        } \n");                
-                ret.append(getJSONDynamically(paramRequest.getTopic().getWebSite(), paramRequest.getUser()));
-                ret.append("    }); \n");
-                ret.append("}); \n");
-                ret.append("</script>\n");
+                url.setCallMethod(paramRequest.Call_DIRECT);*/
+                SWBResourceURL url=paramRequest.getRenderUrl();
+                url.setCallMethod(url.Call_DIRECT);
+                url.setMode("Json");
+
+                out.println("<script type='text/javascript'>");
+                out.println("  var sitemaptree_"+base.getId()+" = null;");
+                out.println("  var store_"+base.getId()+" = null;");
+                out.println("  var model_"+base.getId()+" = null;");
+
+                out.println("  function send(item) {");
+                out.println("    console.log(store_"+base.getId()+".getValue(item, 'purl'));");
+                out.println("    window.location=store_"+base.getId()+".getValue(item, 'purl');");
+                out.println("  }");
+
+                out.println("  dojo.addOnLoad(function(){");
+                out.println("    store_"+base.getId()+" = new dojo.data.ItemFileReadStore({ url: '"+url.toString()+"' });");
+
+                out.println("    model_"+base.getId()+" = new dijit.tree.ForestStoreModel({");
+                out.println("          id: 'treeModel',");
+                out.println("          store: store_"+base.getId()+",");
+                out.println("          query: {'type': 'home'},");
+                out.println("          rootId: 'root',");
+                out.println("          rootLabel: '"+paramRequest.getTopic().getWebSite().getTitle()+"',");
+                out.println("          childrenAttrs: ['children'] });");
+
+                out.println("    sitemaptree_"+base.getId()+" = new dijit.Tree({");
+                out.println("          id: 'continentes',");
+                out.println("          model: model_"+base.getId()+",");
+                out.println("          class: 'soria',");
+                out.println("          openOnClick: false }");
+                out.println("      , 'sytemap_"+base.getId()+"');");
+
+                out.println("    dojo.connect(dijit.byId('continentes'), 'onClick', send);");
+                out.println("  });");
+
+
+                out.println("</script>");
+                out.println("<div id=\"sytemap_"+base.getId()+"\"></div>");
             }
             catch(Exception e) {
                 log.error(e);
             }
         }
-        out.println(ret.toString());
+        out.flush();
     }
     
     /**
