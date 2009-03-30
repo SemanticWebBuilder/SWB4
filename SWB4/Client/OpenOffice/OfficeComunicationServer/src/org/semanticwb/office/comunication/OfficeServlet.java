@@ -55,8 +55,9 @@ public abstract class OfficeServlet extends XMLRPCServlet
         return userName;
     }
 
-    public void checkSecurity(HttpServletRequest request, HttpServletResponse response) throws IOException
+    public boolean  checkSecurity(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
+        boolean checkSecurity=false;
         try
         {
             String pUserName = null;
@@ -66,7 +67,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
             {
                 response.setHeader("WWW-Authenticate", PREFIX_BASIC + "realm=\"" + REALM + "\"");
                 response.setStatus(response.SC_UNAUTHORIZED);
-                return;
+                return checkSecurity;
             }
             else
             {
@@ -79,11 +80,14 @@ public abstract class OfficeServlet extends XMLRPCServlet
                     if (!this.isAuthenticate(pUserName, pPassword))
                     {
                         response.sendError(response.SC_FORBIDDEN);
+                        return checkSecurity;
                     }
                     else
                     {
                         request.setAttribute("user", pUserName);
                         request.setAttribute("password", pPassword);
+                        checkSecurity=true;
+                        return checkSecurity;
                     }
                 }
                 else
@@ -96,14 +100,17 @@ public abstract class OfficeServlet extends XMLRPCServlet
         {
             throw ioe;
         }
+        return checkSecurity;
 
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        checkSecurity(request, response);
-        super.doPost(request, response);
+        if(checkSecurity(request, response))
+        {
+            super.doPost(request, response);
+        }
 
     }
 
