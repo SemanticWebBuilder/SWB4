@@ -290,11 +290,10 @@ public class SimpleNode implements Node
     }
 
     private NodeDefinitionImp getNodeDefinition(BaseNode node, SemanticClass clazz, String name, SessionImp session)
-    {
-        SemanticObject object = node.getChildNodeDefinition(clazz, name);
-        if (object != null)
+    {        
+        if(node!=null)
         {
-            return new NodeDefinitionImp(object, session);
+            return new NodeDefinitionImp(node.getSemanticObject(), session);
         }
         return null;
     }
