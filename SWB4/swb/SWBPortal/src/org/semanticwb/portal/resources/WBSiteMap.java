@@ -123,7 +123,6 @@ public class WBSiteMap extends GenericAdmResource
             json.append(e);
         }
         out.print(json.toString());
-        System.out.println("json="+json);
         out.flush();
     }
 
@@ -133,10 +132,6 @@ public class WBSiteMap extends GenericAdmResource
         Iterator<WebPage> itwps = node.listVisibleChilds(lang);
         while(itwps.hasNext()) {
             WebPage wp = itwps.next();
-            if(wp.getId().equalsIgnoreCase(node.getId())) {
-                System.out.println("singularidad en id="+wp.getId());
-                continue;
-            }
             json.append("{_reference:'"+wp.getDisplayName(lang)+"'}");
             if(itwps.hasNext()) {
                 json.append(",");
@@ -191,14 +186,11 @@ public class WBSiteMap extends GenericAdmResource
         if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {        
             String surl="";
 
-            System.out.println("url="+base.getAttribute("url"));
             if (!"".equals(base.getAttribute("url", "").trim())) {
                 surl=base.getAttribute("url").trim();
-            }/*else {
-                SWBResourceURL url=paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
-                url.setParameter("smp_act", "smp_step2");
-                surl=url.toString();
-            }*/
+            }else {
+                surl=paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString();
+            }
 
             if (!"".equals(base.getAttribute("img", "").trim())) {
                 out.println("<a href=\"" + surl +"\">");
@@ -230,7 +222,6 @@ public class WBSiteMap extends GenericAdmResource
         }else {
             // Mapa de sitio
             try {
-                System.out.println("mapa de sitio.....");
 
                 /*SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
@@ -258,7 +249,7 @@ public class WBSiteMap extends GenericAdmResource
                 out.println("          store: store_"+base.getId()+",");
                 out.println("          query: {'type': 'home'},");
                 out.println("          rootId: 'root_"+base.getId()+"',");
-                out.println("          rootLabel: '"+paramRequest.getTopic().getWebSite().getTitle()+"',");
+                out.println("          rootLabel: '"+base.getAttribute("title")!=null ? base.getAttribute("title") : paramRequest.getTopic().getWebSite().getTitle()+"',");
                 out.println("          childrenAttrs: ['children'] });");
 
                 out.println("    sitemaptree_"+base.getId()+" = new dijit.Tree({");
@@ -281,44 +272,4 @@ public class WBSiteMap extends GenericAdmResource
         }
         out.flush();
     }
-    
-    /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws AFException
-     * @throws IOException
-     */    
-    /*@Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        Resource base=getResourceBase();
-        String surl="";
-        if(paramRequest.getTopic()!=paramRequest.getAdminTopic())
-        {
-            String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
-            if("add".equals(action))
-            {                
-                SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
-                url.setResourceBase(base);
-                url.setMode(url.Mode_VIEW);
-                url.setParameter("smp_act","smp_step2");
-                url.setTopic(paramRequest.getTopic());
-                surl=url.toString();
-            }
-            else {
-                surl=base.getAttribute("url","");
-            }
-        }
-        super.doAdmin(request, response, paramRequest);
-        if(paramRequest.getTopic()!=paramRequest.getAdminTopic() && !"".equals(surl))
-        {
-            base.setAttribute("url", surl);
-            try{
-                base.updateAttributesToDB();
-            }catch(Exception e){
-                throw new SWBResourceException(e.getMessage());
-            }
-        }
-    }*/
 }
