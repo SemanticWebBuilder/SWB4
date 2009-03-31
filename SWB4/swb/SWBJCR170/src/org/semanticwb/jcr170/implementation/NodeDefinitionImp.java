@@ -81,6 +81,12 @@ public class NodeDefinitionImp implements NodeDefinition
         return name;
     }
 
+    @Override
+    public String toString()
+    {
+        return name;
+    }
+
     public boolean isAutoCreated()
     {
         return autocreated;
