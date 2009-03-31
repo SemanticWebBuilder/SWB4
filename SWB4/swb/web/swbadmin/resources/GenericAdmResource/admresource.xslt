@@ -119,6 +119,7 @@
 	        <xsl:if test="string-length( @name  ) &gt; 0"> name=&quot;<xsl:value-of select="@name" />&quot;</xsl:if>
 	        <xsl:if test="string-length( @title ) &gt; 0"> title=&quot;<xsl:value-of select="@title" />&quot;</xsl:if>
 	        <xsl:if test="string-length( @value ) &gt; 0"> value=&quot;<xsl:value-of select="@value" />&quot;</xsl:if>
+            <xsl:if test="string-length( @dojoType ) &gt; 0"> dojoType=&quot;<xsl:value-of select="@dojoType" />&quot;</xsl:if>
 	        <xsl:choose>
 	            <xsl:when test="string-length(@class)&gt;0"> class=&quot;<xsl:value-of select="@class" />&quot;</xsl:when>
 	            <xsl:otherwise> class=&quot;boton&quot;</xsl:otherwise>
@@ -162,6 +163,7 @@
 	        <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
 	        <xsl:if test="string-length( @name  ) &gt; 0"> name=&quot;<xsl:value-of select="@name" />&quot;</xsl:if>
 	        <xsl:if test="string-length( @title ) &gt; 0"> title=&quot;<xsl:value-of select="@title" />&quot;</xsl:if>
+            <xsl:if test="string-length( @dojoType ) &gt; 0"> dojoType=&quot;<xsl:value-of select="@dojoType" />&quot;</xsl:if>
             <xsl:if test="string-length( @promptMessage ) &gt; 0"> promptMessage=&quot;<xsl:value-of select="@promptMessage" />&quot;</xsl:if>
             <xsl:if test="string-length( @invalidMessage ) &gt; 0"> invalidMessage=&quot;<xsl:value-of select="@invalidMessage" />&quot;</xsl:if>
             <xsl:if test="string-length( @trim ) &gt; 0"> trim=&quot;<xsl:value-of select="@trim" />&quot;</xsl:if>
@@ -230,6 +232,7 @@
 	        <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
 	        <xsl:if test="string-length( @name  ) &gt; 0"> name=&quot;<xsl:value-of select="@name" />&quot;</xsl:if>
 	        <xsl:if test="string-length( @title ) &gt; 0"> title=&quot;<xsl:value-of select="@title" />&quot;</xsl:if>
+            <xsl:if test="string-length( @dojoType ) &gt; 0"> dojoType=&quot;<xsl:value-of select="@dojoType" />&quot;</xsl:if>
              <xsl:if test="string-length( promptMessage ) &gt; 0"> promptMessage=&quot;<xsl:value-of select="promptMessage" />&quot;</xsl:if>
             <xsl:if test="string-length( invalidMessage ) &gt; 0"> invalidMessage=&quot;<xsl:value-of select="invalidMessage" />&quot;</xsl:if>
             <xsl:if test="string-length( trim ) &gt; 0"> trim=&quot;<xsl:value-of select="trim" />&quot;</xsl:if>
@@ -276,6 +279,7 @@
 	        <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
 	        <xsl:if test="string-length( @name  ) &gt; 0"> name=&quot;<xsl:value-of select="@name" />&quot;</xsl:if>
 	        <xsl:if test="string-length( @title ) &gt; 0"> title=&quot;<xsl:value-of select="@title" />&quot;</xsl:if>
+            <xsl:if test="string-length( @dojoType ) &gt; 0"> dojoType=&quot;<xsl:value-of select="@dojoType" />&quot;</xsl:if>
             <xsl:if test="string-length( invalidMessage ) &gt; 0"> invalidMessage=&quot;<xsl:value-of select="invalidMessage" />&quot;</xsl:if>
 		<xsl:if test="string-length( @size  ) &gt; 0"> size=&quot;<xsl:value-of select="@size" />&quot;</xsl:if>
 	        <xsl:if test="string-length( @class ) &gt; 0"> class=&quot;<xsl:value-of select="@class" />&quot;</xsl:if>
