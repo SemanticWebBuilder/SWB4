@@ -341,5 +341,14 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
         return ret;
     }
 
+    public void incHits()
+    {
+        setHits(getHits()+1);
+    }
+
+    public void incViews()
+    {
+        setViews(getViews()+1);
+    }
 
 }

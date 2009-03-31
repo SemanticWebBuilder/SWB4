@@ -95,12 +95,12 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          return ret;
     }
 
-    public String getUsrLastName()
+    public String getLastName()
     {
         return getSemanticObject().getProperty(swb_usrLastName);
     }
 
-    public void setUsrLastName(String usrLastName)
+    public void setLastName(String usrLastName)
     {
         getSemanticObject().setProperty(swb_usrLastName, usrLastName);
     }
@@ -146,12 +146,12 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          return ret;
     }
 
-    public String getUsrSecondLastName()
+    public String getSecondLastName()
     {
         return getSemanticObject().getProperty(swb_usrSecondLastName);
     }
 
-    public void setUsrSecondLastName(String usrSecondLastName)
+    public void setSecondLastName(String usrSecondLastName)
     {
         getSemanticObject().setProperty(swb_usrSecondLastName, usrSecondLastName);
     }
@@ -192,12 +192,12 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          return ret;
     }
 
-    public String getUsrEmail()
+    public String getEmail()
     {
         return getSemanticObject().getProperty(swb_usrEmail);
     }
 
-    public void setUsrEmail(String usrEmail)
+    public void setEmail(String usrEmail)
     {
         getSemanticObject().setProperty(swb_usrEmail, usrEmail);
     }
@@ -212,12 +212,12 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         getSemanticObject().setDateProperty(swb_updated, updated);
     }
 
-    public String getUsrFirstName()
+    public String getFirstName()
     {
         return getSemanticObject().getProperty(swb_usrFirstName);
     }
 
-    public void setUsrFirstName(String usrFirstName)
+    public void setFirstName(String usrFirstName)
     {
         getSemanticObject().setProperty(swb_usrFirstName, usrFirstName);
     }
@@ -232,12 +232,12 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         getSemanticObject().setProperty(swb_usrLanguage, usrLanguage);
     }
 
-    public java.util.Date getUsrPasswordChanged()
+    public java.util.Date getPasswordChanged()
     {
         return getSemanticObject().getDateProperty(swb_usrPasswordChanged);
     }
 
-    public void setUsrPasswordChanged(java.util.Date usrPasswordChanged)
+    public void setPasswordChanged(java.util.Date usrPasswordChanged)
     {
         getSemanticObject().setDateProperty(swb_usrPasswordChanged, usrPasswordChanged);
     }
@@ -278,12 +278,12 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          return ret;
     }
 
-    public java.util.Date getUsrLastLogin()
+    public java.util.Date getLastLogin()
     {
         return getSemanticObject().getDateProperty(swb_usrLastLogin);
     }
 
-    public void setUsrLastLogin(java.util.Date usrLastLogin)
+    public void setLastLogin(java.util.Date usrLastLogin)
     {
         getSemanticObject().setDateProperty(swb_usrLastLogin, usrLastLogin);
     }
@@ -309,24 +309,24 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          return ret;
     }
 
-    public String getUsrPassword()
+    public String getPassword()
     {
         //Implement this method in User object
         throw new org.semanticwb.SWBMethodImplementationRequiredException();
     }
 
-    public void setUsrPassword(String usrPassword)
+    public void setPassword(String usrPassword)
     {
         //Implement this method in User object
         throw new org.semanticwb.SWBMethodImplementationRequiredException();
     }
 
-    public String getUsrLogin()
+    public String getLogin()
     {
         return getSemanticObject().getProperty(swb_usrLogin);
     }
 
-    public void setUsrLogin(String usrLogin)
+    public void setLogin(String usrLogin)
     {
         getSemanticObject().setProperty(swb_usrLogin, usrLogin);
     }
@@ -367,22 +367,22 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
          return ret;
     }
 
-    public int getUsrSecurityQuestion()
+    public int getSecurityQuestion()
     {
         return getSemanticObject().getIntProperty(swb_usrSecurityQuestion);
     }
 
-    public void setUsrSecurityQuestion(int usrSecurityQuestion)
+    public void setSecurityQuestion(int usrSecurityQuestion)
     {
         getSemanticObject().setLongProperty(swb_usrSecurityQuestion, usrSecurityQuestion);
     }
 
-    public String getUsrSecurityAnswer()
+    public String getSecurityAnswer()
     {
         return getSemanticObject().getProperty(swb_usrSecurityAnswer);
     }
 
-    public void setUsrSecurityAnswer(String usrSecurityAnswer)
+    public void setSecurityAnswer(String usrSecurityAnswer)
     {
         getSemanticObject().setProperty(swb_usrSecurityAnswer, usrSecurityAnswer);
     }

@@ -29,11 +29,11 @@ public class User extends UserBase implements Principal, java.io.Serializable
 
     public String getName()
     {
-        return getUsrLogin();
+        return getLogin();
     }
 
     @Override
-    public void setUsrPassword(String password)
+    public void setPassword(String password)
     {
         //System.out.println("setPassword:"+password);
         String tmpPasswd = null;
@@ -51,7 +51,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
             {
                 getSemanticObject().getRDFResource().addProperty(User.swb_usrPassword.getRDFProperty(), tmpPasswd);
             }
-            setUsrPasswordChanged(new Date());
+            setPasswordChanged(new Date());
         } catch (NoSuchAlgorithmException ex)
         {
             log.error("User: Can't set a crypted Password", ex);
@@ -60,7 +60,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
     }
 
     @Override
-    public String getUsrPassword()
+    public String getPassword()
     {
         String ret=null;
         Statement st=getSemanticObject().getRDFResource().getProperty(User.swb_usrPassword.getRDFProperty());
@@ -105,7 +105,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
 
     public void checkCredential(Object credential) throws NoSuchAlgorithmException
     {
-        this.login = getUsrPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)));
+        this.login = getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)));
     }
 
     public void setUserTypeAttribute(String userType, String name, Object value) throws SWBException
@@ -224,14 +224,14 @@ public class User extends UserBase implements Principal, java.io.Serializable
         return getExtendedAttribute(prop);
     }
 
-    public String getUsrFullName()
+    public String getFullName()
     {
-        String fn=getUsrFirstName();
+        String fn=getFirstName();
         if(fn==null)fn="";
-        String ln=getUsrLastName();
+        String ln=getLastName();
         if(ln==null)ln="";
         else ln=" "+ln;
-        String sln=getUsrSecondLastName();
+        String sln=getSecondLastName();
         if(sln==null)sln="";
         else ln=" "+ln;
         return fn+ln+sln;
