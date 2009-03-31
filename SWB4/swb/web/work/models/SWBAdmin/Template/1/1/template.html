@@ -8,10 +8,10 @@
         <title>Semantic WebBuilder 4</title>
 
         <style type="text/css">
-            @import "/swb/swbadmin/js/dojo/dojo/resources/dojo.css";
-            @import "/swb/swbadmin/js/dojo/dojo/resources/dnd.css";
-            @import "/swb/swbadmin/js/dojo/dijit/themes/soria/soria.css";
-            @import "/swb/swbadmin/css/swb.css";
+            @import "<webpath/>/swbadmin/js/dojo/dojo/resources/dojo.css";
+            @import "<webpath/>/swbadmin/js/dojo/dojo/resources/dnd.css";
+            @import "<webpath/>/swbadmin/js/dojo/dijit/themes/soria/soria.css";
+            @import "<webpath/>/swbadmin/css/swb.css";
 
             /* pre-loader specific stuff to prevent unsightly flash of unstyled content */
             #loader {
@@ -48,9 +48,9 @@
             }
         </style>
 
-        <script type="text/javascript" src="/swb/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: true"></script>
-        <script type="text/javascript" charset="utf-8" src="/swb/swbadmin/js/swb.js"></script>
-        <script type="text/javascript" charset="utf-8" src="/swb/swbadmin/js/schedule.js"></script>
+        <script type="text/javascript" src="{webpath}/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: true"></script>
+        <script type="text/javascript" charset="utf-8" src="{webpath}/swbadmin/js/swb.js"></script>
+        <script type="text/javascript" charset="utf-8" src="{webpath}/swbadmin/js/schedule.js"></script>
 
     </head>
     <body class="soria">
@@ -58,13 +58,13 @@
         <div id="loader"><div id="loaderInner">Loading Semantic WebBuilder... </div></div>
 
 <!--
-        <div dojoType="dojo.data.ItemFileWriteStore" jsId="sitesStore" url="/swb/swbadmin/jsp/Sites.jsp"></div>
+        <div dojoType="dojo.data.ItemFileWriteStore" jsId="sitesStore" url="{webpath}/swbadmin/jsp/Sites.jsp"></div>
 -->
         <!-- "main" BorderContainer just contains page title and another BorderContainer -->
         <div id="main" dojoType="dijit.layout.BorderContainer">
 
             <!-- toolbar with new mail button, etc. -->
-            <div dojoType="dijit.Toolbar" region="top" style="height:25px;" href="/swb/swbadmin/jsp/toolBar.jsp">
+            <div dojoType="dijit.Toolbar" region="top" style="height:25px;" href="{webpath}/swbadmin/jsp/toolBar.jsp">
                 <include src="/swbadmin/jsp/toolBar.jsp"/>
             </div>
             <!-- end toolbar -->
@@ -148,8 +148,8 @@
                         <!-- top tabs (marked as "center" to take up the main part of the BorderContainer) -->
                 <div dojoType="dijit.layout.TabContainer" region="center" id="tabs" jsId="tabs">
                     <!-- sixth upper tab -->
-                    <div id="swbPreviewTab" dojoType="dijit.layout.ContentPane" title="Preview" style="display:none; padding:10px; " closable="false" href_="/swb/swb">
-                        <iframe id="swbPreviewFrame" dojoType_="dijit.layout.ContentPane" src_="/swb/swb" width="100%" height="100%" frameborder="0"></iframe>
+                    <div id="swbPreviewTab" dojoType="dijit.layout.ContentPane" title="Preview" style="display:none; padding:10px; " closable="false" href_="{webpath}/swb">
+                        <iframe id="swbPreviewFrame" dojoType_="dijit.layout.ContentPane" src="{webpath}/swb/SWBAdmin/Work_Admin" width="100%" height="100%" frameborder="0"></iframe>
                     </div>
                 </div><!-- end of region="center" TabContainer -->
             </div> <!-- end of "mainSplit" BorderContainer -->
