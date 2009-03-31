@@ -229,12 +229,12 @@ public class SWBASearchUsers extends GenericResource
             JSONObject obj = new JSONObject();
             try
             {
-                obj.put("@uri", "javascript:parent.addNewTab('" + lista[start] + "',null,'" + usr.getUsrLogin() + "')");
-                obj.put("login", usr.getUsrLogin());
-                obj.put("name", usr.getUsrFirstName());
-                obj.put("papellid", usr.getUsrLastName());
-                obj.put("sapellid", usr.getUsrSecondLastName());
-                obj.put("email", usr.getUsrEmail());
+                obj.put("@uri", "javascript:parent.addNewTab('" + lista[start] + "',null,'" + usr.getLogin() + "')");
+                obj.put("login", usr.getLogin());
+                obj.put("name", usr.getFirstName());
+                obj.put("papellid", usr.getLastName());
+                obj.put("sapellid", usr.getSecondLastName());
+                obj.put("email", usr.getEmail());
                 jarr.put(obj);
             } catch (JSONException jsone)
             {

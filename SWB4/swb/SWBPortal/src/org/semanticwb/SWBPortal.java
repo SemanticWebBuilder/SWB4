@@ -106,10 +106,10 @@ public class SWBPortal {
             site.setUserRepository(urep);
             //Create User
             User user = urep.createUser();
-            user.setUsrLogin("admin");
-            user.setUsrPassword("webbuilder");
-            user.setUsrEmail("admin@semanticwebbuilder.org");
-            user.setUsrFirstName("Admin");
+            user.setLogin("admin");
+            user.setPassword("webbuilder");
+            user.setEmail("admin@semanticwebbuilder.org");
+            user.setFirstName("Admin");
             user.setLanguage("es");
             user.setActive(true);
         }

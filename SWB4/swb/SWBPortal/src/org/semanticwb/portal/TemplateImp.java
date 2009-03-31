@@ -727,8 +727,8 @@ public class TemplateImp extends Template
             logbuf.append("|");
             logbuf.append(user.getUserRepository().getId());
             logbuf.append("|");
-            if (user.getUsrLogin() != null)
-                logbuf.append(user.getUsrLogin());
+            if (user.getLogin() != null)
+                logbuf.append(user.getLogin());
             else
                 logbuf.append("_");
             logbuf.append("|");
@@ -1155,8 +1155,8 @@ public class TemplateImp extends Template
             logbuf.append("|");
             logbuf.append(user.getUserRepository().getId());
             logbuf.append("|");
-            if (user.getUsrLogin() != null)
-                logbuf.append(user.getUsrLogin());
+            if (user.getLogin() != null)
+                logbuf.append(user.getLogin());
             else
                 logbuf.append("_");
             logbuf.append("|");

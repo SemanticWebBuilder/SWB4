@@ -488,7 +488,7 @@ public class SWBALogs extends GenericResource {
                         if (userId.length() > 1) {
                             log.debug("Usuario: " + userId + " - " + so.getModel().getModelObject().getURI());
                             User rUser = (User) ont.getGenericObject(userId);
-                            out.println("  <td>" + rUser.getUsrFirstName() + " " + (rUser.getUsrLastName() != null ? rUser.getUsrLastName() : " ") + "</td>");
+                            out.println("  <td>" + rUser.getFirstName() + " " + (rUser.getLastName() != null ? rUser.getLastName() : " ") + "</td>");
                         } else {
                             out.println("  <td>" + userId + "</td>");
                         }
@@ -753,7 +753,7 @@ public class SWBALogs extends GenericResource {
                         log.debug("Usuario: " + userId + " - " + so.getModel().getModelObject().getURI());
                         //WebSite ws = SWBContext.getWebSite(so.getModel().getModelObject().getURI());
                         User rUser = (User) ont.getGenericObject(userId);
-                        out.println("  <td>" + rUser.getUsrFirstName() + " " + (rUser.getUsrLastName() != null ? rUser.getUsrLastName() : "") + "</td>");
+                        out.println("  <td>" + rUser.getFirstName() + " " + (rUser.getLastName() != null ? rUser.getLastName() : "") + "</td>");
                     } else {
                         out.println("  <td>" + userId + "</td>");
                     }
@@ -897,7 +897,7 @@ public class SWBALogs extends GenericResource {
                     String strUsr = "";
                     if (userId.length() > 1) {
                         User rUser = (User) ont.getGenericObject(userId);
-                        strUsr = rUser.getUsrFirstName() + " " + (rUser.getUsrLastName() != null ? rUser.getUsrLastName() : "");
+                        strUsr = rUser.getFirstName() + " " + (rUser.getLastName() != null ? rUser.getLastName() : "");
                     } else {
                         strUsr = userId;
                     }

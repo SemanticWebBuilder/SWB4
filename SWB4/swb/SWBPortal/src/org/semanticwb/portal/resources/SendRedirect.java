@@ -106,8 +106,8 @@ public class SendRedirect extends GenericAdmResource
             str=SWBUtils.TEXT.replaceAll(str, "{getEnv(\""+s+"\")}", SWBPlatform.getEnv(replaceTags(s,request,paramsRequest)));
         }
         
-        str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramsRequest.getUser().getUsrLogin());
-        str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramsRequest.getUser().getUsrEmail());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramsRequest.getUser().getLogin());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramsRequest.getUser().getEmail());
         str=SWBUtils.TEXT.replaceAll(str, "{user.language}", paramsRequest.getUser().getLanguage());
         //System.out.println(str);
         return str;

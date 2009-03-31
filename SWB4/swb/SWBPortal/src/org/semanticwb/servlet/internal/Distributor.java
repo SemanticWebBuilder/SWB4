@@ -77,7 +77,7 @@ public class Distributor implements InternalServlet
 
             {
                 log.trace("*********distributor**************");
-                log.trace("email:" + user.getUsrEmail());
+                log.trace("email:" + user.getEmail());
                 log.trace("session:" + request.getSession().getId());
                 //out.println("isRegistered:" + user.isRegistered());
                 //out.println("isloged:" + user.isLoged());

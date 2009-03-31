@@ -268,7 +268,7 @@ public class QueryResource extends GenericAdmResource {
                 } else if (com.equals("topicid")) {
                     ret += paramsRequest.getTopic().getId();
                 } else if (com.equals("userid")) {
-                    ret += paramsRequest.getUser().getUsrEmail();
+                    ret += paramsRequest.getUser().getEmail();
                 } else if (com.startsWith("getUserAttribute(") && com.endsWith(")")) {
                     String aux = com.substring(17, com.length() - 1);
                     ret += paramsRequest.getUser().getProperty(aux);

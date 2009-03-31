@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.semanticwb.security.auth;
 
 import java.io.IOException;
@@ -9,7 +5,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -27,7 +22,7 @@ import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
 
 /**
- *
+ * 
  * @author Sergio Martínez  (sergio.martinez@acm.org)
  */
 public class TripleStoreLoginModule implements LoginModule
@@ -95,7 +90,7 @@ public class TripleStoreLoginModule implements LoginModule
         {
             throw new LoginException("User innactive");
         }
-        if (null == principal.getUsrPassword())
+        if (null == principal.getPassword())
         {
             if (null != credential)
             {
@@ -105,10 +100,10 @@ public class TripleStoreLoginModule implements LoginModule
         {
             try
             {    //TODO quitar siguiente trace
-                log.trace("passwords (u/c/t): " + principal.getUsrPassword() +
+                log.trace("passwords (u/c/t): " + principal.getPassword() +
                         " " + SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)) +
                         " - " + (new String((char[]) credential)));
-                if (!principal.getUsrPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential))))
+                if (!principal.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential))))
                 {
                     throw new LoginException("Password Mistmatch:");
                 }
@@ -119,7 +114,7 @@ public class TripleStoreLoginModule implements LoginModule
             }
         }
         loginflag = true;
-        principal.setUsrLastLogin(new Date());
+        principal.setLastLogin(new Date());
         return loginflag;
     }
 

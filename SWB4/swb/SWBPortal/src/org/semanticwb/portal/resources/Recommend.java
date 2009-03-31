@@ -169,17 +169,17 @@ public class Recommend extends GenericAdmResource {
                 el.setAttribute("tag", paramRequest.getLocaleString("msgSender"));
                 el.setAttribute("inname", "txtFromName");
                 if (user.isSigned()) {
-                    String strFromName = (null != user.getUsrFirstName()
-                            && !"".equals(user.getUsrFirstName().trim()))
-                            ? user.getUsrFirstName().trim()
+                    String strFromName = (null != user.getFirstName()
+                            && !"".equals(user.getFirstName().trim()))
+                            ? user.getFirstName().trim()
                             : "";
-                    strFromName += (null != user.getUsrLastName()
-                            && !"".equals(user.getUsrLastName().trim()))
-                            ? " " + user.getUsrLastName().trim()
+                    strFromName += (null != user.getLastName()
+                            && !"".equals(user.getLastName().trim()))
+                            ? " " + user.getLastName().trim()
                             : "";
-                    strFromName += (null != user.getUsrSecondLastName()
-                            && !"".equals(user.getUsrSecondLastName().trim()))
-                            ? " " + user.getUsrSecondLastName().trim()
+                    strFromName += (null != user.getSecondLastName()
+                            && !"".equals(user.getSecondLastName().trim()))
+                            ? " " + user.getSecondLastName().trim()
                             : "";
                     el.setAttribute("invalue", strFromName);
                 }
@@ -190,9 +190,9 @@ public class Recommend extends GenericAdmResource {
                                 paramRequest.getLocaleString("msgSenderEmail"));
                 el.setAttribute("inname", "txtFromEmail");
                 if (user.isSigned()) {
-                    String strFromEmail = (null != user.getUsrEmail()
-                            && !"".equals(user.getUsrEmail().trim()))
-                            ? user.getUsrEmail().trim()
+                    String strFromEmail = (null != user.getEmail()
+                            && !"".equals(user.getEmail().trim()))
+                            ? user.getEmail().trim()
                             : "";
                     el.setAttribute("invalue", strFromEmail);
                 }
@@ -723,17 +723,17 @@ public class Recommend extends GenericAdmResource {
         toLog.append(SWBUtils.TEXT.iso8601DateFormat(now));
         if (user != null && user.isSigned()) {
             toLog.append("\n    User:");
-            toLog.append((null != user.getUsrFirstName() 
-                          && !"".equals(user.getUsrFirstName().trim()))
-                         ? user.getUsrFirstName().trim()
+            toLog.append((null != user.getFirstName() 
+                          && !"".equals(user.getFirstName().trim()))
+                         ? user.getFirstName().trim()
                          : "");
-            toLog.append((null != user.getUsrLastName() 
-                          && !"".equals(user.getUsrLastName().trim()))
-                         ? user.getUsrLastName().trim()
+            toLog.append((null != user.getLastName() 
+                          && !"".equals(user.getLastName().trim()))
+                         ? user.getLastName().trim()
                          : "");
-            toLog.append((null != user.getUsrSecondLastName() 
-                          && !"".equals(user.getUsrSecondLastName().trim()))
-                         ? user.getUsrSecondLastName().trim()
+            toLog.append((null != user.getSecondLastName() 
+                          && !"".equals(user.getSecondLastName().trim()))
+                         ? user.getSecondLastName().trim()
                          : "");
         }
         toLog.append("\n    Site:" + dom.getElementsByTagName("site").item(
