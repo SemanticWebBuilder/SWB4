@@ -75,7 +75,7 @@ public class SWBForum extends GenericResource {
                 request.setAttribute("action", action);
             }
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher("/resources/jsp/forum/swbForum.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/forum/swbForum.jsp");
             rd.include(request, response);
 
             SWBResourceURL url = paramRequest.getRenderUrl();
@@ -90,7 +90,7 @@ public class SWBForum extends GenericResource {
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher("/resources/jsp/forum/swbForumAdm.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/forum/swbForumAdm.jsp");
             rd.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -223,6 +223,21 @@ public class SWBForum extends GenericResource {
         url.setParameter("postUri", semObject.getURI());
         url.setAction("editPost");
         mgr.setAction(url.toString());
+        
+        Resource base=paramRequest.getResourceBase();
+        WebSite website=paramRequest.getTopic().getWebSite();
+        FrmPost post = FrmPost.getFrmPost(semObject.getId(), website);
+        String basepath="";
+        //GenericIterator <FrmAttachments> lAttchments=post.listAttachmentss();
+        //while(lAttchments.hasNext()){ //Ahorita funciona para un solo attach en un post, sin embargo, podría ser para muchos
+        //    FrmAttachments attch=lAttchments.next();
+        //    basepath=SWBPlatform.getWorkPath()+base.getWorkPath()+"/replies/"+post.getId()+"/"+attch.getFileName();
+        //}
+         if(post.listAttachmentss().hasNext()){
+             FrmAttachments attch=post.listAttachmentss().next();
+             basepath=SWBPlatform.getWebWorkPath()+"/models/"+website.getId()+"/Resource/"+base.getId()+"/replies/"+post.getId()+"/"+attch.getFileName();
+             request.setAttribute("attach", basepath);
+         }
         out.println(mgr.renderForm(request));
     }
 
