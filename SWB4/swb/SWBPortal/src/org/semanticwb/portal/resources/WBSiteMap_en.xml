@@ -50,13 +50,9 @@
         <input type="TEXT" name="lnktexto" label="Text of the link in case of not defining an image or button:" size="50"/>
         <input type="TEXT" name="blnstyle" label="Style of the button or link:" size="50"/>
         <input type="TEXT" name="title" label="Title:" size="50"/>
-        <input type="TEXT" name="level" label="Level for display:" size="2" maxlength="1" value="1" jsvaltype="js_numbers"/>
 
-            <input type="TEXT" name="home" label="Name of the root node:" size="50" maxlength="50" value="Home" />
-            <input type="CHECKBOX" name="showroot" label="Set to true, to make the root node visible:" value="true" />
-            <input type="CHECKBOX" name="collapse" label="Automatically collapse all siblings, when a node is expanded:" value="true" />
-            <input type="TEXT" name="loadmsg" label="Message on request" value="Loading&#8230;" />
-            <input type="TEXT" name="errormsg" label="Message on error" value="Load error!" />
+            <input type="TEXT" name="url" label="Url de la sección que despliega el mapa:" size="50"/>
+
         </fieldset>
         <fieldset>
         <input type="SUBMIT" name="btnSave"  value="Save" onclick="if(jsValida(this.form)) return true; else return false;"/>

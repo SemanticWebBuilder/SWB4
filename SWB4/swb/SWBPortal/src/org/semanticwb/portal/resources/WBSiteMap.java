@@ -188,16 +188,17 @@ public class WBSiteMap extends GenericAdmResource
         PrintWriter out = response.getWriter();
         Resource base=getResourceBase();
         
-        //if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {
-        if(false) {
+        if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {        
             String surl="";
+
+            System.out.println("url="+base.getAttribute("url"));
             if (!"".equals(base.getAttribute("url", "").trim())) {
                 surl=base.getAttribute("url").trim();
-            }else {
+            }/*else {
                 SWBResourceURL url=paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
                 url.setParameter("smp_act", "smp_step2");
                 surl=url.toString();
-            }
+            }*/
 
             if (!"".equals(base.getAttribute("img", "").trim())) {
                 out.println("<a href=\"" + surl +"\">");
@@ -246,7 +247,6 @@ public class WBSiteMap extends GenericAdmResource
                 out.println("  var model_"+base.getId()+" = null;");
 
                 out.println("  function send(item) {");
-                out.println("    console.log(store_"+base.getId()+".getValue(item, 'purl'));");
                 out.println("    window.location=store_"+base.getId()+".getValue(item, 'purl');");
                 out.println("  }");
 
@@ -257,7 +257,7 @@ public class WBSiteMap extends GenericAdmResource
                 out.println("          id: 'treeModel',");
                 out.println("          store: store_"+base.getId()+",");
                 out.println("          query: {'type': 'home'},");
-                out.println("          rootId: 'root',");
+                out.println("          rootId: 'root_"+base.getId()+"',");
                 out.println("          rootLabel: '"+paramRequest.getTopic().getWebSite().getTitle()+"',");
                 out.println("          childrenAttrs: ['children'] });");
 
@@ -289,7 +289,7 @@ public class WBSiteMap extends GenericAdmResource
      * @throws AFException
      * @throws IOException
      */    
-    @Override
+    /*@Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Resource base=getResourceBase();
@@ -320,5 +320,5 @@ public class WBSiteMap extends GenericAdmResource
                 throw new SWBResourceException(e.getMessage());
             }
         }
-    }
+    }*/
 }
