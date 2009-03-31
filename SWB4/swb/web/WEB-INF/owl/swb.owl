@@ -327,12 +327,12 @@
   <owl:Class rdf:ID="AdminFilter">
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="Undeleteable">
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
         <rdfs:subClassOf>
           <owl:Class rdf:about="#SWBInterface"/>
         </rdfs:subClassOf>
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >org.semanticwb.model.Undeleteable</swb:className>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
@@ -523,8 +523,6 @@
     <rdfs:subClassOf rdf:resource="#Trashable"/>
     <rdfs:subClassOf rdf:resource="#PFlowRefable"/>
     <rdfs:subClassOf rdf:resource="#Activeable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-    <rdf:type rdf:resource="#Class"/>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage">
         <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -533,6 +531,8 @@
         >true</swbxf:dragSupport>
       </swbxf:DisplayObject>
     </swb:displayObject>
+    <rdf:type rdf:resource="#Class"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdfs:subClassOf rdf:resource="#Calendarable"/>
     <rdfs:subClassOf rdf:resource="#Traceable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -616,7 +616,6 @@
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >org.semanticwb.model.Camp</swb:className>
         <rdfs:subClassOf rdf:resource="#Calendarable"/>
-        <rdfs:subClassOf rdf:resource="#SWBClass"/>
         <rdfs:subClassOf>
           <swb:Interface rdf:ID="Ruleable">
             <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -625,6 +624,7 @@
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
           </swb:Interface>
         </rdfs:subClassOf>
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
         <rdfs:subClassOf rdf:resource="#Roleable"/>
         <rdfs:subClassOf rdf:resource="#Trashable"/>
         <rdfs:subClassOf rdf:resource="#Filterable"/>
@@ -777,8 +777,8 @@
             </rdfs:subClassOf>
             <swb:classID rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >Resource</swb:classID>
-            <rdfs:subClassOf rdf:resource="#Trashable"/>
             <rdfs:subClassOf rdf:resource="#UserGroupRefable"/>
+            <rdfs:subClassOf rdf:resource="#Trashable"/>
             <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swb:autogenId>
             <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
@@ -1405,6 +1405,7 @@
     <rdfs:range rdf:resource="#Role"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="userFavorites">
+    <rdfs:label>favorites</rdfs:label>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
     <rdfs:domain rdf:resource="#User"/>
@@ -1703,6 +1704,7 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
   </rdf:Property>
   <owl:DatatypeProperty rdf:ID="usrLastName">
+    <rdfs:label>lastName</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#User"/>
     <swb:displayProperty>
@@ -1822,6 +1824,7 @@
     <rdfs:domain rdf:resource="#WebPage"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrEmail">
+    <rdfs:label>email</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#User"/>
     <swb:displayProperty>
@@ -1847,6 +1850,7 @@
     <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrSecondLastName">
+    <rdfs:label>secondLastName</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#User"/>
     <swb:displayProperty>
@@ -1957,6 +1961,7 @@
     </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrPasswordChanged">
+    <rdfs:label>passwordChanged</rdfs:label>
     <rdfs:domain rdf:resource="#User"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     <swb:displayProperty>
@@ -1967,6 +1972,7 @@
     </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrSecurityQuestion">
+    <rdfs:label>securityQuestion</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#User"/>
     <swb:displayProperty>
@@ -2065,6 +2071,8 @@
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="hits">
+    <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:noObservable>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
     <rdfs:domain rdf:resource="#Hitable"/>
     <swb:displayProperty>
@@ -2133,6 +2141,7 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrSecurityAnswer">
+    <rdfs:label>securityAnswer</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#User"/>
     <swb:displayProperty>
@@ -2325,6 +2334,7 @@
     <rdfs:domain rdf:resource="#SWBClass"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrLastLogin">
+    <rdfs:label>lastLogin</rdfs:label>
     <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:noObservable>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
@@ -2356,6 +2366,7 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrFirstName">
+    <rdfs:label>firstName</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrFirstName">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -2398,6 +2409,7 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrPassword">
+    <rdfs:label>password</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#User"/>
     <swb:displayProperty>
@@ -2421,6 +2433,8 @@
     >true</swb:externalInvocation>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="views">
+    <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:noObservable>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
     <rdfs:domain rdf:resource="#Viewable"/>
     <swb:displayProperty>
@@ -2433,7 +2447,7 @@
     </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrLanguage">
-    <rdfs:label>Language</rdfs:label>
+    <rdfs:label>language</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#User"/>
     <swb:displayProperty>
@@ -2498,6 +2512,7 @@
     <rdfs:domain rdf:resource="#Priorityable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrLogin">
+    <rdfs:label>login</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#User"/>
     <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
