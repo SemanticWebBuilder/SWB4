@@ -19,18 +19,18 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
         String ret = "";
 
         if (type.endsWith("iphone")) {
-            ret = renderIphone(obj, prop, type, mode, lang);
+            ret = renderIphone(request, obj, prop, type, mode, lang);
         } else {
-            ret = renderXHTML(obj, prop, type, mode, lang);
+            ret = renderXHTML(request, obj, prop, type, mode, lang);
         }
         return ret;
     }
 
-    public String renderIphone(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderIphone(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         return "";
     }
 
-    public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         String ret = "";
         String name = prop.getName();
         String label = prop.getDisplayName(lang);
@@ -65,6 +65,15 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
             value = "";
         }
         if (mode.equals("edit") || mode.equals("create")) {
+            String attchMsg="";
+            if(request.getAttribute("attach")!=null){
+                        String fileName=(String)request.getAttribute("attach");
+                        int pos=fileName.lastIndexOf("/");
+                        if(pos>-1){
+                            fileName=fileName.substring(pos+1);
+                        }
+                        attchMsg="Archivo existente:<a href=\""+ request.getAttribute("attach")+"\">"+fileName+"</a><br/>";
+            }
             //Página ejemplo de implementación:http://blog.tremend.ro/2007/03/01/ajax-file-upload-monitoring-monitor-your-file-upload-with-dwr-and-commons-fileupload/
             //Fecha de implemetación:26/Febrero/2009
             ret = "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"/swb/swbadmin/css/upload/upload.css\"/>"+
@@ -73,7 +82,8 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
                   "<script type=\"text/javascript\" src=\"/swb/dwr/interface/uploadProxy.js\"></script>"+
                   "<script type='text/javascript' src=\"/swb/swbadmin/js/upload/upload.js\"></script>";
 
-            ret += "<iframe id='target_upload' name='target_upload' src='' style='display: none'></iframe>" +
+            ret += "<iframe id='target_upload' name='target_upload' src='' style='display: none'></iframe><br/>" +
+                    attchMsg+
                     "<input id=\"importFile\" name=\"importFile\" type=\"file\"> <br/>" +
                     "<input type=\"hidden\" name=\"uniqueFileIdentifier\" value=\"1234\"/>" +
                     "<a href=\"#\" onClick=\"javascript:if(uploadjs(document.forms[0])) {return startUploadMonitoring();}\">Subir</a>" + //En lugar de este boton p
