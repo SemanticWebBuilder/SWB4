@@ -62,7 +62,6 @@ public class PerformanceTest
     {
         long time=System.currentTimeMillis();
         
-        SemanticModel model=SWBPlatform.getSemanticMgr().getSystemModel();
         SemanticOntology ontology=SWBPlatform.getSemanticMgr().getOntology();
         SemanticVocabulary voc=SWBPlatform.getSemanticMgr().getVocabulary();
         System.out.println("Time:"+(System.currentTimeMillis()-time));
