@@ -48,8 +48,9 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * Object that is in charge to unfold and to administer a static text, this text
  * it is added in the administration of the resource, accepts tags of HTML to change his
  * aspect.
- * @author Javier Solis Gonzalez
+ * @modified Carlos Ramos
  */
+
 public class StaticText extends GenericAdmResource {
 
     
@@ -81,35 +82,8 @@ public class StaticText extends GenericAdmResource {
         out.println("    postHtml('"+url.toString()+"'+'?val='+arg, id);");
         out.println("  }");
 
-        /*out.println("   var eb;");
-        out.println("   dojo.addOnLoad(function(){");
-        out.println("       eb = new dijit.InlineEditBox({");
-        out.println("         id: 'eb',");
-        out.println("         editor: 'dijit.form.Textarea',");
-        out.println("         autoSave: true");
-        out.println("       }, 'stext_"+base.getId()+"');");
-        out.println("   dojo.connect(dijit.byId('eb'), 'onChange', editableTextOnChange);");
-        out.println("   });");*/
-
         out.println("</script>");
-        /*out.println("<script src=\"/swb/swbadmin/js/jquery/jquery.jeditable.js\" type=\"text/javascript\"></script>");*/
-        /*out.println("<script type=\"text/javascript\">");
-        out.println(" $(document).ready(function() {");
-        //out.println("     $('.editable_textarea').editable('" + url.toString() + "', {");
-        out.println("     $('#" + "statictext_"+base.getId()+ "').editable('" + url.toString() + "', {");
-        out.println("         type:'textarea',");
-        out.println("         cancel:'Cancelar',");
-        out.println("         submit:'Aceptar',");
-        //out.println("         indicator:'<img src=\"img/indicator.gif\">',");        
-        out.println("         id:'inlineid_" + base.getId() + "',");
-        out.println("         name:'value_" + base.getId() + "',");        
-        out.println("         tooltip   : 'Click para editar...'");
-        out.println("     });");
-        out.println(" });");
-        out.println(" </script>");*/
 
-        /*out.println("<div class=\"editable_textarea\" id=\"statictext_" + base.getId() + "\">");*/
-        //out.println("<div dojoType=\"dijit.InlineEditBox\" id=stext_"+base.getId()+" onChange=\"editableTextOnChange(this.id,arguments[0])\">");
         out.println("<div id=\"stext_"+base.getId()+" \" dojoType=\"dijit.InlineEditBox\" onChange=\"editableTextOnChange(this.id,arguments[0])\" autoSave=\"true\">");
         out.println(staticText);
         out.println("</div>");
