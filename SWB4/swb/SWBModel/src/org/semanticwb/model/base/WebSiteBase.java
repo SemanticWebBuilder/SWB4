@@ -43,15 +43,15 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
     public static final org.semanticwb.platform.SemanticClass swb_TemplateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup");
     public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
-    public static final org.semanticwb.platform.SemanticClass frm_FrmTypeCat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmTypeCat");
-    public static final org.semanticwb.platform.SemanticClass frm_FrmModererationCat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmModererationCat");
-    public static final org.semanticwb.platform.SemanticClass frm_FrmThreadTypeCat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmThreadTypeCat");
-    public static final org.semanticwb.platform.SemanticClass frm_FrmForum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmForum");
-    public static final org.semanticwb.platform.SemanticClass frm_FrmAttachments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmAttachment");
-    public static final org.semanticwb.platform.SemanticClass frm_FrmCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmCategory");
-    public static final org.semanticwb.platform.SemanticClass frm_FrmPriorityCat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmPriorityCat");
-    public static final org.semanticwb.platform.SemanticClass frm_FrmThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmThread");
     public static final org.semanticwb.platform.SemanticClass frm_FrmPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmPost");
+    public static final org.semanticwb.platform.SemanticClass frm_FrmThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmThread");
+    public static final org.semanticwb.platform.SemanticClass frm_FrmPriorityCat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmPriorityCat");
+    public static final org.semanticwb.platform.SemanticClass frm_FrmCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmCategory");
+    public static final org.semanticwb.platform.SemanticClass frm_FrmAttachments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmAttachment");
+    public static final org.semanticwb.platform.SemanticClass frm_FrmForum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmForum");
+    public static final org.semanticwb.platform.SemanticClass frm_FrmThreadTypeCat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmThreadTypeCat");
+    public static final org.semanticwb.platform.SemanticClass frm_FrmModererationCat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmModererationCat");
+    public static final org.semanticwb.platform.SemanticClass frm_FrmTypeCat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/forum#FrmTypeCat");
     public static final org.semanticwb.platform.SemanticClass swb_WebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
 
@@ -1015,190 +1015,34 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
         return org.semanticwb.model.RoleRef.hasRoleRef(id, this);
     }
 
-    public org.semanticwb.forum.FrmTypeCat getFrmTypeCat(String id)
+    public org.semanticwb.forum.FrmPost getFrmPost(String id)
     {
-        return org.semanticwb.forum.FrmTypeCat.getFrmTypeCat(id, this);
+        return org.semanticwb.forum.FrmPost.getFrmPost(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.forum.FrmTypeCat> listFrmTypeCats()
+    public java.util.Iterator<org.semanticwb.forum.FrmPost> listFrmPosts()
     {
-        return org.semanticwb.forum.FrmTypeCat.listFrmTypeCats(this);
+        return org.semanticwb.forum.FrmPost.listFrmPosts(this);
     }
 
-    public org.semanticwb.forum.FrmTypeCat createFrmTypeCat(String id)
+    public org.semanticwb.forum.FrmPost createFrmPost(String id)
     {
-        return org.semanticwb.forum.FrmTypeCat.createFrmTypeCat(id,this);
+        return org.semanticwb.forum.FrmPost.createFrmPost(id,this);
     }
 
-    public void removeFrmTypeCat(String id)
+    public org.semanticwb.forum.FrmPost createFrmPost()
     {
-        org.semanticwb.forum.FrmTypeCat.removeFrmTypeCat(id, this);
-    }
-    public boolean hasFrmTypeCat(String id)
-    {
-        return org.semanticwb.forum.FrmTypeCat.hasFrmTypeCat(id, this);
-    }
-
-    public org.semanticwb.forum.FrmModererationCat getFrmModererationCat(String id)
-    {
-        return org.semanticwb.forum.FrmModererationCat.getFrmModererationCat(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.forum.FrmModererationCat> listFrmModererationCats()
-    {
-        return org.semanticwb.forum.FrmModererationCat.listFrmModererationCats(this);
-    }
-
-    public org.semanticwb.forum.FrmModererationCat createFrmModererationCat(String id)
-    {
-        return org.semanticwb.forum.FrmModererationCat.createFrmModererationCat(id,this);
-    }
-
-    public void removeFrmModererationCat(String id)
-    {
-        org.semanticwb.forum.FrmModererationCat.removeFrmModererationCat(id, this);
-    }
-    public boolean hasFrmModererationCat(String id)
-    {
-        return org.semanticwb.forum.FrmModererationCat.hasFrmModererationCat(id, this);
-    }
-
-    public org.semanticwb.forum.FrmThreadTypeCat getFrmThreadTypeCat(String id)
-    {
-        return org.semanticwb.forum.FrmThreadTypeCat.getFrmThreadTypeCat(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.forum.FrmThreadTypeCat> listFrmThreadTypeCats()
-    {
-        return org.semanticwb.forum.FrmThreadTypeCat.listFrmThreadTypeCats(this);
-    }
-
-    public org.semanticwb.forum.FrmThreadTypeCat createFrmThreadTypeCat(String id)
-    {
-        return org.semanticwb.forum.FrmThreadTypeCat.createFrmThreadTypeCat(id,this);
-    }
-
-    public void removeFrmThreadTypeCat(String id)
-    {
-        org.semanticwb.forum.FrmThreadTypeCat.removeFrmThreadTypeCat(id, this);
-    }
-    public boolean hasFrmThreadTypeCat(String id)
-    {
-        return org.semanticwb.forum.FrmThreadTypeCat.hasFrmThreadTypeCat(id, this);
-    }
-
-    public org.semanticwb.forum.FrmForum getFrmForum(String id)
-    {
-        return org.semanticwb.forum.FrmForum.getFrmForum(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.forum.FrmForum> listFrmForums()
-    {
-        return org.semanticwb.forum.FrmForum.listFrmForums(this);
-    }
-
-    public org.semanticwb.forum.FrmForum createFrmForum(String id)
-    {
-        return org.semanticwb.forum.FrmForum.createFrmForum(id,this);
-    }
-
-    public org.semanticwb.forum.FrmForum createFrmForum()
-    {
-        long id=getSemanticObject().getModel().getCounter(frm_FrmForum);
-        return org.semanticwb.forum.FrmForum.createFrmForum(String.valueOf(id),this);
+        long id=getSemanticObject().getModel().getCounter(frm_FrmPost);
+        return org.semanticwb.forum.FrmPost.createFrmPost(String.valueOf(id),this);
     } 
 
-    public void removeFrmForum(String id)
+    public void removeFrmPost(String id)
     {
-        org.semanticwb.forum.FrmForum.removeFrmForum(id, this);
+        org.semanticwb.forum.FrmPost.removeFrmPost(id, this);
     }
-    public boolean hasFrmForum(String id)
+    public boolean hasFrmPost(String id)
     {
-        return org.semanticwb.forum.FrmForum.hasFrmForum(id, this);
-    }
-
-    public org.semanticwb.forum.FrmAttachments getFrmAttachments(String id)
-    {
-        return org.semanticwb.forum.FrmAttachments.getFrmAttachments(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.forum.FrmAttachments> listFrmAttachmentss()
-    {
-        return org.semanticwb.forum.FrmAttachments.listFrmAttachmentss(this);
-    }
-
-    public org.semanticwb.forum.FrmAttachments createFrmAttachments(String id)
-    {
-        return org.semanticwb.forum.FrmAttachments.createFrmAttachments(id,this);
-    }
-
-    public org.semanticwb.forum.FrmAttachments createFrmAttachments()
-    {
-        long id=getSemanticObject().getModel().getCounter(frm_FrmAttachments);
-        return org.semanticwb.forum.FrmAttachments.createFrmAttachments(String.valueOf(id),this);
-    } 
-
-    public void removeFrmAttachments(String id)
-    {
-        org.semanticwb.forum.FrmAttachments.removeFrmAttachments(id, this);
-    }
-    public boolean hasFrmAttachments(String id)
-    {
-        return org.semanticwb.forum.FrmAttachments.hasFrmAttachments(id, this);
-    }
-
-    public org.semanticwb.forum.FrmCategory getFrmCategory(String id)
-    {
-        return org.semanticwb.forum.FrmCategory.getFrmCategory(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.forum.FrmCategory> listFrmCategorys()
-    {
-        return org.semanticwb.forum.FrmCategory.listFrmCategorys(this);
-    }
-
-    public org.semanticwb.forum.FrmCategory createFrmCategory(String id)
-    {
-        return org.semanticwb.forum.FrmCategory.createFrmCategory(id,this);
-    }
-
-    public org.semanticwb.forum.FrmCategory createFrmCategory()
-    {
-        long id=getSemanticObject().getModel().getCounter(frm_FrmCategory);
-        return org.semanticwb.forum.FrmCategory.createFrmCategory(String.valueOf(id),this);
-    } 
-
-    public void removeFrmCategory(String id)
-    {
-        org.semanticwb.forum.FrmCategory.removeFrmCategory(id, this);
-    }
-    public boolean hasFrmCategory(String id)
-    {
-        return org.semanticwb.forum.FrmCategory.hasFrmCategory(id, this);
-    }
-
-    public org.semanticwb.forum.FrmPriorityCat getFrmPriorityCat(String id)
-    {
-        return org.semanticwb.forum.FrmPriorityCat.getFrmPriorityCat(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.forum.FrmPriorityCat> listFrmPriorityCats()
-    {
-        return org.semanticwb.forum.FrmPriorityCat.listFrmPriorityCats(this);
-    }
-
-    public org.semanticwb.forum.FrmPriorityCat createFrmPriorityCat(String id)
-    {
-        return org.semanticwb.forum.FrmPriorityCat.createFrmPriorityCat(id,this);
-    }
-
-    public void removeFrmPriorityCat(String id)
-    {
-        org.semanticwb.forum.FrmPriorityCat.removeFrmPriorityCat(id, this);
-    }
-    public boolean hasFrmPriorityCat(String id)
-    {
-        return org.semanticwb.forum.FrmPriorityCat.hasFrmPriorityCat(id, this);
+        return org.semanticwb.forum.FrmPost.hasFrmPost(id, this);
     }
 
     public org.semanticwb.forum.FrmThread getFrmThread(String id)
@@ -1231,33 +1075,189 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
         return org.semanticwb.forum.FrmThread.hasFrmThread(id, this);
     }
 
-    public org.semanticwb.forum.FrmPost getFrmPost(String id)
+    public org.semanticwb.forum.FrmPriorityCat getFrmPriorityCat(String id)
     {
-        return org.semanticwb.forum.FrmPost.getFrmPost(id, this);
+        return org.semanticwb.forum.FrmPriorityCat.getFrmPriorityCat(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.forum.FrmPost> listFrmPosts()
+    public java.util.Iterator<org.semanticwb.forum.FrmPriorityCat> listFrmPriorityCats()
     {
-        return org.semanticwb.forum.FrmPost.listFrmPosts(this);
+        return org.semanticwb.forum.FrmPriorityCat.listFrmPriorityCats(this);
     }
 
-    public org.semanticwb.forum.FrmPost createFrmPost(String id)
+    public org.semanticwb.forum.FrmPriorityCat createFrmPriorityCat(String id)
     {
-        return org.semanticwb.forum.FrmPost.createFrmPost(id,this);
+        return org.semanticwb.forum.FrmPriorityCat.createFrmPriorityCat(id,this);
     }
 
-    public org.semanticwb.forum.FrmPost createFrmPost()
+    public void removeFrmPriorityCat(String id)
     {
-        long id=getSemanticObject().getModel().getCounter(frm_FrmPost);
-        return org.semanticwb.forum.FrmPost.createFrmPost(String.valueOf(id),this);
+        org.semanticwb.forum.FrmPriorityCat.removeFrmPriorityCat(id, this);
+    }
+    public boolean hasFrmPriorityCat(String id)
+    {
+        return org.semanticwb.forum.FrmPriorityCat.hasFrmPriorityCat(id, this);
+    }
+
+    public org.semanticwb.forum.FrmCategory getFrmCategory(String id)
+    {
+        return org.semanticwb.forum.FrmCategory.getFrmCategory(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.forum.FrmCategory> listFrmCategorys()
+    {
+        return org.semanticwb.forum.FrmCategory.listFrmCategorys(this);
+    }
+
+    public org.semanticwb.forum.FrmCategory createFrmCategory(String id)
+    {
+        return org.semanticwb.forum.FrmCategory.createFrmCategory(id,this);
+    }
+
+    public org.semanticwb.forum.FrmCategory createFrmCategory()
+    {
+        long id=getSemanticObject().getModel().getCounter(frm_FrmCategory);
+        return org.semanticwb.forum.FrmCategory.createFrmCategory(String.valueOf(id),this);
     } 
 
-    public void removeFrmPost(String id)
+    public void removeFrmCategory(String id)
     {
-        org.semanticwb.forum.FrmPost.removeFrmPost(id, this);
+        org.semanticwb.forum.FrmCategory.removeFrmCategory(id, this);
     }
-    public boolean hasFrmPost(String id)
+    public boolean hasFrmCategory(String id)
     {
-        return org.semanticwb.forum.FrmPost.hasFrmPost(id, this);
+        return org.semanticwb.forum.FrmCategory.hasFrmCategory(id, this);
+    }
+
+    public org.semanticwb.forum.FrmAttachments getFrmAttachments(String id)
+    {
+        return org.semanticwb.forum.FrmAttachments.getFrmAttachments(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.forum.FrmAttachments> listFrmAttachmentss()
+    {
+        return org.semanticwb.forum.FrmAttachments.listFrmAttachmentss(this);
+    }
+
+    public org.semanticwb.forum.FrmAttachments createFrmAttachments(String id)
+    {
+        return org.semanticwb.forum.FrmAttachments.createFrmAttachments(id,this);
+    }
+
+    public org.semanticwb.forum.FrmAttachments createFrmAttachments()
+    {
+        long id=getSemanticObject().getModel().getCounter(frm_FrmAttachments);
+        return org.semanticwb.forum.FrmAttachments.createFrmAttachments(String.valueOf(id),this);
+    } 
+
+    public void removeFrmAttachments(String id)
+    {
+        org.semanticwb.forum.FrmAttachments.removeFrmAttachments(id, this);
+    }
+    public boolean hasFrmAttachments(String id)
+    {
+        return org.semanticwb.forum.FrmAttachments.hasFrmAttachments(id, this);
+    }
+
+    public org.semanticwb.forum.FrmForum getFrmForum(String id)
+    {
+        return org.semanticwb.forum.FrmForum.getFrmForum(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.forum.FrmForum> listFrmForums()
+    {
+        return org.semanticwb.forum.FrmForum.listFrmForums(this);
+    }
+
+    public org.semanticwb.forum.FrmForum createFrmForum(String id)
+    {
+        return org.semanticwb.forum.FrmForum.createFrmForum(id,this);
+    }
+
+    public org.semanticwb.forum.FrmForum createFrmForum()
+    {
+        long id=getSemanticObject().getModel().getCounter(frm_FrmForum);
+        return org.semanticwb.forum.FrmForum.createFrmForum(String.valueOf(id),this);
+    } 
+
+    public void removeFrmForum(String id)
+    {
+        org.semanticwb.forum.FrmForum.removeFrmForum(id, this);
+    }
+    public boolean hasFrmForum(String id)
+    {
+        return org.semanticwb.forum.FrmForum.hasFrmForum(id, this);
+    }
+
+    public org.semanticwb.forum.FrmThreadTypeCat getFrmThreadTypeCat(String id)
+    {
+        return org.semanticwb.forum.FrmThreadTypeCat.getFrmThreadTypeCat(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.forum.FrmThreadTypeCat> listFrmThreadTypeCats()
+    {
+        return org.semanticwb.forum.FrmThreadTypeCat.listFrmThreadTypeCats(this);
+    }
+
+    public org.semanticwb.forum.FrmThreadTypeCat createFrmThreadTypeCat(String id)
+    {
+        return org.semanticwb.forum.FrmThreadTypeCat.createFrmThreadTypeCat(id,this);
+    }
+
+    public void removeFrmThreadTypeCat(String id)
+    {
+        org.semanticwb.forum.FrmThreadTypeCat.removeFrmThreadTypeCat(id, this);
+    }
+    public boolean hasFrmThreadTypeCat(String id)
+    {
+        return org.semanticwb.forum.FrmThreadTypeCat.hasFrmThreadTypeCat(id, this);
+    }
+
+    public org.semanticwb.forum.FrmModererationCat getFrmModererationCat(String id)
+    {
+        return org.semanticwb.forum.FrmModererationCat.getFrmModererationCat(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.forum.FrmModererationCat> listFrmModererationCats()
+    {
+        return org.semanticwb.forum.FrmModererationCat.listFrmModererationCats(this);
+    }
+
+    public org.semanticwb.forum.FrmModererationCat createFrmModererationCat(String id)
+    {
+        return org.semanticwb.forum.FrmModererationCat.createFrmModererationCat(id,this);
+    }
+
+    public void removeFrmModererationCat(String id)
+    {
+        org.semanticwb.forum.FrmModererationCat.removeFrmModererationCat(id, this);
+    }
+    public boolean hasFrmModererationCat(String id)
+    {
+        return org.semanticwb.forum.FrmModererationCat.hasFrmModererationCat(id, this);
+    }
+
+    public org.semanticwb.forum.FrmTypeCat getFrmTypeCat(String id)
+    {
+        return org.semanticwb.forum.FrmTypeCat.getFrmTypeCat(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.forum.FrmTypeCat> listFrmTypeCats()
+    {
+        return org.semanticwb.forum.FrmTypeCat.listFrmTypeCats(this);
+    }
+
+    public org.semanticwb.forum.FrmTypeCat createFrmTypeCat(String id)
+    {
+        return org.semanticwb.forum.FrmTypeCat.createFrmTypeCat(id,this);
+    }
+
+    public void removeFrmTypeCat(String id)
+    {
+        org.semanticwb.forum.FrmTypeCat.removeFrmTypeCat(id, this);
+    }
+    public boolean hasFrmTypeCat(String id)
+    {
+        return org.semanticwb.forum.FrmTypeCat.hasFrmTypeCat(id, this);
     }
 }

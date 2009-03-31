@@ -15,7 +15,7 @@ import org.semanticwb.platform.SemanticObject;
 public class WebPage extends WebPageBase 
 {
     private String siteid=null;
-     
+
     public WebPage(SemanticObject base)
     {
         super(base);
@@ -349,6 +349,10 @@ public class WebPage extends WebPageBase
     {
         return 1000;
     }     
-        
+
+    public void incViews()
+    {
+        setViews(getViews()+1);
+    }
     
 }
