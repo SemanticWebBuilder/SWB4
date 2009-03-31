@@ -32,6 +32,12 @@ public class NodeTypeImp implements NodeType
         this.session = session;
     }
 
+    @Override
+    public String toString()
+    {
+        return getName();
+    }
+
     public String getName()
     {
         if(clazz.getPrefix()==null)
