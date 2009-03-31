@@ -119,8 +119,8 @@ public class StaticText extends GenericAdmResource {
             str=SWBUtils.TEXT.replaceAll(str, "{getEnv(\""+s+"\")}", SWBPlatform.getEnv(replaceTags(s,request,paramRequest)));
         }
         
-        str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getUsrLogin());
-        str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getUsrEmail());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
         str=SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
         str=SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPlatform.getContextPath());
         str=SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());

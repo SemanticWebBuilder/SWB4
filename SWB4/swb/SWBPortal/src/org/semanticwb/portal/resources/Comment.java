@@ -197,21 +197,21 @@ public class Comment extends GenericResource {
                 if (user.isSigned()) {
                     String strFromName = ("1".equals(
                             base.getAttribute("firstname", "0").trim())
-                            && (null != user.getUsrFirstName() 
-                                && !"".equals(user.getUsrFirstName().trim()))
-                            ? user.getUsrFirstName().trim()
+                            && (null != user.getFirstName() 
+                                && !"".equals(user.getFirstName().trim()))
+                            ? user.getFirstName().trim()
                             : "");
                     strFromName += ("1".equals(
                             base.getAttribute("lastname", "0").trim())
-                            && (null != user.getUsrLastName() 
-                                && !"".equals(user.getUsrLastName().trim()))
-                            ? " " + user.getUsrLastName().trim()
+                            && (null != user.getLastName() 
+                                && !"".equals(user.getLastName().trim()))
+                            ? " " + user.getLastName().trim()
                             : "");
                     strFromName += ("1".equals(
                             base.getAttribute("middlename", "0").trim())
-                            && (null != user.getUsrSecondLastName()
-                                && !"".equals(user.getUsrSecondLastName().trim()))
-                            ? " " + user.getUsrSecondLastName().trim()
+                            && (null != user.getSecondLastName()
+                                && !"".equals(user.getSecondLastName().trim()))
+                            ? " " + user.getSecondLastName().trim()
                             : "");
                     emn.setAttribute("invalue", strFromName);
                 }
@@ -220,9 +220,9 @@ public class Comment extends GenericResource {
                 emn.setAttribute("tag", reqParams.getLocaleString("msgViewEmail"));
                 emn.setAttribute("inname", "txtFromEmail");
                 if (user.isSigned()) {
-                    String strFromEmail = (null != user.getUsrEmail() 
-                            && !"".equals(user.getUsrEmail().trim())
-                            ? user.getUsrEmail().trim()
+                    String strFromEmail = (null != user.getEmail() 
+                            && !"".equals(user.getEmail().trim())
+                            ? user.getEmail().trim()
                             : "");
                     emn.setAttribute("invalue", strFromEmail);                    
                 }
@@ -1723,17 +1723,17 @@ public class Comment extends GenericResource {
         
         if (user != null && user.isSigned()) {
             toLog.append("\n    User:");
-            toLog.append((null != user.getUsrFirstName() 
-                          && !"".equals(user.getUsrFirstName().trim()))
-                         ? user.getUsrFirstName().trim()
+            toLog.append((null != user.getFirstName() 
+                          && !"".equals(user.getFirstName().trim()))
+                         ? user.getFirstName().trim()
                          : "");
-            toLog.append((null != user.getUsrLastName() 
-                          && !"".equals(user.getUsrLastName().trim()))
-                         ? user.getUsrLastName().trim()
+            toLog.append((null != user.getLastName() 
+                          && !"".equals(user.getLastName().trim()))
+                         ? user.getLastName().trim()
                          : "");
-            toLog.append((null != user.getUsrSecondLastName() 
-                          && !"".equals(user.getUsrSecondLastName().trim()))
-                         ? user.getUsrSecondLastName().trim()
+            toLog.append((null != user.getSecondLastName() 
+                          && !"".equals(user.getSecondLastName().trim()))
+                         ? user.getSecondLastName().trim()
                          : "");
         }
         

@@ -13,9 +13,11 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.servlet.internal.DistributorParams;
+
 /**
- *
- * @author serch
+ * CallbackHandler for login password credentials
+ * CallbackHandler para credenciales login password
+ * @author Sergio Martínez  sergio.martinez@acm.org
  */
 public class SWB4CallbackHandlerLoginPasswordImp extends SWB4CallbackHandler {
 private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordImp.class);
@@ -38,29 +40,13 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
         this.dparams = dparams;
     }
 
-    @Override
-    public HttpServletRequest getRequest() {
-        return request;
-    }
-
-    @Override
-    public void setRequest(HttpServletRequest request) {
-        this.request = request;
-        if (null == dparams) {
-            dparams = new DistributorParams(request, authType);
-        }
-    }
-
-    @Override
-    public HttpServletResponse getResponse() {
-        return response;
-    }
-
-    @Override
-    public void setResponse(HttpServletResponse response) {
-        this.response = response;
-    }
-
+    /**
+     * Manejo de los parámetros para enviarlos al JAAS
+     * parameter management as required by JAAS
+     * @param callbacks
+     * @throws java.io.IOException
+     * @throws javax.security.auth.callback.UnsupportedCallbackException
+     */
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
         log.trace("Tipo de Autenticacion: " + authType);
         if ("BASIC".equalsIgnoreCase(authType)) {

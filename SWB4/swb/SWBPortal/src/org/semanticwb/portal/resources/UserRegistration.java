@@ -340,7 +340,7 @@ public class UserRegistration extends GenericAdmResource
                     return;
                 }
                 User newUser = userRep.createUser();
-                newUser.setUsrLogin(usrLogin);
+                newUser.setLogin(usrLogin);
                 subject.getPrincipals().clear();
                 subject.getPrincipals().add(newUser);
                 newUser.setLanguage(user.getLanguage());
@@ -352,14 +352,14 @@ public class UserRegistration extends GenericAdmResource
 //                System.out.println("*************** "+user.isActive());
             } else
             {
-                if (!user.getUsrLogin().equalsIgnoreCase(usrLogin) && null != userRep.getUserByLogin(usrLogin))
+                if (!user.getLogin().equalsIgnoreCase(usrLogin) && null != userRep.getUserByLogin(usrLogin))
                 {
                     //TODO report Error, Loging Already Exists!
                     return;
                 }
-                if (!user.getUsrLogin().equalsIgnoreCase(usrLogin))
+                if (!user.getLogin().equalsIgnoreCase(usrLogin))
                 {
-                    user.setUsrLogin(usrLogin);
+                    user.setLogin(usrLogin);
                 }
             }
             Iterator<SemanticProperty> itprop = userRep.listBasicAttributes();

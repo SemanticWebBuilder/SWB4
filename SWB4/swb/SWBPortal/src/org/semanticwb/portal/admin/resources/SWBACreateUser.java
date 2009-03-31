@@ -84,11 +84,11 @@ public class SWBACreateUser extends GenericResource {
         }
         User user = ur.createUser();
         //System.out.println("UC:"+user);
-        user.setUsrLogin(login);
-        user.setUsrPassword(password);
+        user.setLogin(login);
+        user.setPassword(password);
         response.setMode(SWBResourceURL.Mode_EDIT);
         response.setRenderParameter("suri", user.getURI());
-        response.setRenderParameter("login", user.getUsrLogin());
+        response.setRenderParameter("login", user.getLogin());
     }
 
     @Override

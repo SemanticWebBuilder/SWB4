@@ -14,7 +14,8 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import org.semanticwb.model.SWBContext;
 
 /**
- *
+ * CallbackHandler para el gateway de office
+ * CallbackHandler fo Office gateway
  * @author victor.lorenzana
  */
 public final class SWB4CallbackHandlerGateWayOffice implements CallbackHandler
@@ -22,12 +23,24 @@ public final class SWB4CallbackHandlerGateWayOffice implements CallbackHandler
 
     private String login,  password;
 
+    /**
+     * Constructor, requiere login y password del sujeto a autenticar
+     * @param login
+     * @param password
+     */
     public SWB4CallbackHandlerGateWayOffice(String login, String password)
     {
         this.login = login;
         this.password = password;
     }
 
+    /**
+     * Manejo de los parámetros para enviarlos al JAAS
+     * parameter management as required by JAAS
+     * @param callbacks
+     * @throws java.io.IOException
+     * @throws javax.security.auth.callback.UnsupportedCallbackException
+     */
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException
     {
         for (int i = 0; i < callbacks.length; i++)

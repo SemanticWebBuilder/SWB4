@@ -122,22 +122,22 @@ public class RecommendSwf extends Recommend {
                     }
                     if (user.isSigned()) {
                         strSwfvar += "&txtFromName=";
-                        strSwfvar += (null != user.getUsrFirstName() 
-                                && !"".equals(user.getUsrFirstName().trim()))
-                                ? user.getUsrFirstName().trim()
+                        strSwfvar += (null != user.getFirstName() 
+                                && !"".equals(user.getFirstName().trim()))
+                                ? user.getFirstName().trim()
                                 : "";
-                        strSwfvar += (null != user.getUsrLastName()
-                                && !"".equals(user.getUsrLastName().trim()))
-                                ? " " + user.getUsrLastName().trim()
+                        strSwfvar += (null != user.getLastName()
+                                && !"".equals(user.getLastName().trim()))
+                                ? " " + user.getLastName().trim()
                                 : "";
-                        strSwfvar += (null != user.getUsrSecondLastName()
-                                && !"".equals(user.getUsrSecondLastName().trim()))
-                                ? " " + user.getUsrSecondLastName().trim()
+                        strSwfvar += (null != user.getSecondLastName()
+                                && !"".equals(user.getSecondLastName().trim()))
+                                ? " " + user.getSecondLastName().trim()
                                 : "";
                         strSwfvar += "&txtFromEmail=";
-                        strSwfvar += (null != user.getUsrEmail()
-                                && !"".equals(user.getUsrEmail().trim()))
-                                ? " " + user.getUsrEmail().trim()
+                        strSwfvar += (null != user.getEmail()
+                                && !"".equals(user.getEmail().trim()))
+                                ? " " + user.getEmail().trim()
                                 : "";
                     }
                     strSwfvar += "&txtTopic=" + paramRequest.getTopic().getTitle();

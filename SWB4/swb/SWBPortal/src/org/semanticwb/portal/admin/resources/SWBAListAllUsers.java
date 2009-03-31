@@ -67,9 +67,9 @@ public class SWBAListAllUsers extends GenericResource {
                 out.println("<tr bgcolor=\""+rowColor+"\"  class=valores>");
                 out.println("<td>"+rUser.getId()+"</td>");
                 out.println("<td>"+rUser.getName()+"</td>");
-                out.println("<td>"+rUser.getUsrFirstName()+"</td>");
-                out.println("<td>"+rUser.getUsrLastName()+"</td>");
-                out.println("<td>"+rUser.getUsrEmail()+"</td>");
+                out.println("<td>"+rUser.getFirstName()+"</td>");
+                out.println("<td>"+rUser.getLastName()+"</td>");
+                out.println("<td>"+rUser.getEmail()+"</td>");
                 out.println("<td>"+rUser.getLanguage()+"</td>");
                 out.println("<td>"+rUser.isActive()+"</td>");
                 //TODO: dateFormat()
