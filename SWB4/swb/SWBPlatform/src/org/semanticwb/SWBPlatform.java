@@ -39,6 +39,7 @@ public class SWBPlatform
 
     private static IDGenerator idgen=null;
 
+    private static boolean client=false;
 
     private static SemanticMgr semanticMgr=null;
 
@@ -115,8 +116,6 @@ public class SWBPlatform
             {
                 log.error("Error seting defaultConnectTimeout, defaultReadTimeout");            
             }                
-
-            
             
             semanticMgr=new SemanticMgr();
             semanticMgr.init(this);
@@ -550,5 +549,10 @@ public class SWBPlatform
 //    public String getRemoteWorkPath() {
 //        return remoteWorkPath;
 //    }    
-    
+
+    //TODO:validar client
+    public static boolean isClient()
+    {
+        return client;
+    }
 }
