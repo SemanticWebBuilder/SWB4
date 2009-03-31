@@ -1405,7 +1405,6 @@
     <rdfs:range rdf:resource="#Role"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="userFavorites">
-    <rdfs:label>favorites</rdfs:label>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
     <rdfs:domain rdf:resource="#User"/>
