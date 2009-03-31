@@ -21,41 +21,63 @@ import org.semanticwb.repository.ChildNodeDefinition;
  */
 public class NodeDefinitionImp implements NodeDefinition
 {
-    private ArrayList<NodeType> requiredPrimaryTypes=new ArrayList<NodeType>();
-    private NodeTypeImp defaultPrimaryType=null;
-    private boolean allowsSameNameSiblings=true;
-    private NodeTypeImp declaringNodeType;
-    private String name="*";
-    private int onParentVerion=OnParentVersionAction.VERSION;
-    private boolean autocreated,mandatory,isProtected;
-    NodeDefinitionImp(SemanticObject object,SessionImp session)
-    {
-        BaseNode node=new BaseNode(object);
-        declaringNodeType=new NodeTypeImp(object.getSemanticClass(), session);
-        name=object.getProperty(ChildNodeDefinition.jcr_name);
-        autocreated=object.getBooleanProperty(ChildNodeDefinition.jcr_autoCreated, false);
-        mandatory=object.getBooleanProperty(ChildNodeDefinition.jcr_mandatory, false);
-        String sOnParentVersion=object.getProperty(ChildNodeDefinition.jcr_onParentVersion);
-        if(sOnParentVersion!=null)
-        {
-            onParentVerion=OnParentVersionAction.valueFromName(sOnParentVersion);
-        }
-        isProtected=object.getBooleanProperty(ChildNodeDefinition.jcr_protected, false);
-        Iterator<SemanticLiteral> values= object.getSemanticClass().listRequiredProperties(ChildNodeDefinition.jcr_requiredPrimaryTypes);
-        while(values.hasNext())
-        {
-            String value=values.next().getString();
-            try
-            {
-                SemanticClass clazz=node.getSemanticClass(value);
-                requiredPrimaryTypes.add(new NodeTypeImp(clazz, session));
-            }
-            catch(Exception e)
-            {
 
+    private ArrayList<NodeType> requiredPrimaryTypes = new ArrayList<NodeType>();
+    private NodeTypeImp defaultPrimaryType = null;
+    private boolean allowsSameNameSiblings = true;
+    private NodeTypeImp declaringNodeType;
+    private String name = "*";
+    private int onParentVerion = OnParentVersionAction.VERSION;
+    private boolean autocreated,  mandatory,  isProtected;
+
+    NodeDefinitionImp(SemanticObject object, SessionImp session)
+    {
+        BaseNode node = new BaseNode(object);
+
+        declaringNodeType = new NodeTypeImp(object.getSemanticClass(), session);
+        name = node.getName();
+        if (node.getParent() != null)
+        {
+            BaseNode parent = node.getParent();
+            SemanticObject childNodeDefinition = parent.getChildNodeDefinition(parent.getSemanticObject().getSemanticClass(), node.getName());
+            String sdefaultPrimaryType = childNodeDefinition.getProperty(ChildNodeDefinition.jcr_defaultPrimaryType);
+            if (sdefaultPrimaryType != null)
+            {
+                try
+                {
+                    SemanticClass classdefaultPrimaryType = parent.getSemanticClass(sdefaultPrimaryType);
+                    defaultPrimaryType = new NodeTypeImp(classdefaultPrimaryType, session);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            autocreated = childNodeDefinition.getBooleanProperty(ChildNodeDefinition.jcr_autoCreated, false);
+            mandatory = childNodeDefinition.getBooleanProperty(ChildNodeDefinition.jcr_mandatory, false);
+            String sOnParentVersion = childNodeDefinition.getProperty(ChildNodeDefinition.jcr_onParentVersion);
+            if (sOnParentVersion != null)
+            {
+                onParentVerion = OnParentVersionAction.valueFromName(sOnParentVersion);
+            }
+            isProtected = childNodeDefinition.getBooleanProperty(ChildNodeDefinition.jcr_protected, false);
+            allowsSameNameSiblings = childNodeDefinition.getBooleanProperty(ChildNodeDefinition.jcr_sameNameSiblings, false);
+            Iterator<SemanticLiteral> values = childNodeDefinition.getSemanticClass().listRequiredProperties(ChildNodeDefinition.jcr_requiredPrimaryTypes);
+            while (values.hasNext())
+            {
+                String value = values.next().getString();
+                try
+                {
+                    SemanticClass clazz = node.getSemanticClass(value);
+                    requiredPrimaryTypes.add(new NodeTypeImp(clazz, session));
+                }
+                catch (Exception e)
+                {
+                }
             }
         }
     }
+
     public NodeType[] getRequiredPrimaryTypes()
     {
         return requiredPrimaryTypes.toArray(new NodeTypeImp[requiredPrimaryTypes.size()]);
