@@ -72,6 +72,8 @@ public class SemanticOntology
     //TODO: Mejorar performance
     public Resource getResource(String uri)
     {
+        //System.out.println("uri:"+uri);
+        //new Exception().printStackTrace();
         if(uri==null)return null;
         Resource ret=null;
         Property type=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
@@ -132,7 +134,8 @@ public class SemanticOntology
                 ret=res;
             }
         }
-        //if(ret==null)log.warn("Uri not Found:"+uri,new AssertionError());
+        //System.out.println("ret:"+ret);
+        if(ret==null)log.warn("Uri not Found:"+uri,new AssertionError());
         return ret;
     }
     
