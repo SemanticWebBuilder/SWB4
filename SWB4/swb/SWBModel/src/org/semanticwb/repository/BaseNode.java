@@ -1426,6 +1426,17 @@ public class BaseNode extends BaseNodeBase
 
     }
 
+    public static String getRequiredProperty(SemanticObject object,SemanticProperty prop)
+    {
+        if(object.getSemanticClass().getRequiredProperty(prop)!=null)
+        {
+            return object.getSemanticClass().getRequiredProperty(prop).getString();
+        }
+        else
+        {
+            return null;
+        }
+    }
     public static SemanticObject[] getPropertyDefinition(SemanticClass clazz)
     {
         ArrayList<SemanticObject> propertyDefinitions = new ArrayList<SemanticObject>();
