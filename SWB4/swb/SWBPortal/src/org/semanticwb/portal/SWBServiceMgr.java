@@ -94,6 +94,7 @@ public class SWBServiceMgr implements SemanticObserver {
                                         "    @import \"/swb/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css\";\n" +
                                         "    @import \"/swb/swbadmin/js/dojo/dijit/themes/tundra/tundra.css\";\n" +
                                         "    @import \"/swb/swbadmin/js/dojo/dijit/themes/soria/soria.css\";\n" +
+                                        "    @import \"/swb/swbadmin/css/swb_portal.css\";\n" +
                                         "</style>\n" +
                                         "<script type=\"text/javascript\" src=\"/swb/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n" +
                                         "<script type=\"text/javascript\" src=\"/swb/swbadmin/js/swb.js\"></script>\n" +
