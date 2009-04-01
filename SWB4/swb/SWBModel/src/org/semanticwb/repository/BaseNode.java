@@ -107,9 +107,9 @@ public class BaseNode extends BaseNodeBase
         return hasOrderableChildNodes;
     }
 
-    public String getOnParentVersion(BaseNode node, BaseNode parent)
+    public static String getOnParentVersion(BaseNode node, BaseNode parent)
     {
-        SemanticObject nodeDefinition = parent.getChildNodeDefinition(parent.getSemanticObject().getSemanticClass(), node.getName());
+        SemanticObject nodeDefinition = BaseNode.getChildNodeDefinition(parent.getSemanticObject().getSemanticClass(), node.getName());
         String value = ONPARENTVERSION_VERSION;
         if (nodeDefinition != null)
         {
@@ -683,7 +683,7 @@ public class BaseNode extends BaseNodeBase
         return isProtected;
     }
 
-    public SemanticObject getChildNodeDefinition(SemanticClass clazz, String nodeName)
+    public static SemanticObject getChildNodeDefinition(SemanticClass clazz, String nodeName)
     {
         SemanticObject getChildNodeDefinition = null;
         for (SemanticObject nodeDefinition : getChildNodeDefinition(clazz))
@@ -702,7 +702,7 @@ public class BaseNode extends BaseNodeBase
                 return nodeDefinition;
             }
         }
-        Iterator<SemanticClass> classes = this.getSemanticObject().getSemanticClass().listSuperClasses(true);
+        Iterator<SemanticClass> classes = clazz.listSuperClasses(true);
         while (classes.hasNext())
         {
             SemanticClass superclazz = classes.next();
@@ -1301,7 +1301,7 @@ public class BaseNode extends BaseNodeBase
         addCreatedProperty();
     }
 
-    public SemanticObject[] getChildNodeDefinition(SemanticClass clazz)
+    public static SemanticObject[] getChildNodeDefinition(SemanticClass clazz)
     {
         ArrayList<SemanticObject> getChildNodeDefinition = new ArrayList<SemanticObject>();
         SemanticProperty property = ClassDefinition.jcr_childNodeDefinition;
@@ -1426,7 +1426,7 @@ public class BaseNode extends BaseNodeBase
 
     }
 
-    private SemanticObject[] getPropertyDefinition(SemanticClass clazz)
+    public static SemanticObject[] getPropertyDefinition(SemanticClass clazz)
     {
         ArrayList<SemanticObject> propertyDefinitions = new ArrayList<SemanticObject>();
         Iterator<SemanticObject> objects = clazz.listObjectRequiredProperties(ClassDefinition.jcr_propertyDefinition);
