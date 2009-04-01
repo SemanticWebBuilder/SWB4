@@ -15,9 +15,11 @@ import org.semanticwb.portal.api.SWBResourceException;
 
 public class SelectTree {
     private static Logger log = SWBUtils.getLogger(WebSiteSectionTree.class);
-    private static int s = 0;
     protected static final String pathImages = SWBPlatform.getContextPath() + "/swbadmin/icons/";
-        
+
+    public SelectTree() {
+    }
+       
     public String renderXHTML(String site, HashMap request, String url) throws SWBResourceException, IOException {
         StringBuilder html = new StringBuilder();
         StringBuilder params = new StringBuilder("&site="+site);
@@ -47,7 +49,7 @@ public class SelectTree {
             
             boolean toggleopen = Boolean.parseBoolean(request.get(tmhome.getId())==null?"false":((String)request.get(tmhome.getId())).equals("1")?"true":"false");
            
-            html.append("<div id=\"tree_"+site+"\">");
+            html.append("<div class=\"sitesectiontree\" id=\"tree_"+site+"\">");
             html.append("<ul class=\"treeres\">");
             html.append("<li>");
             html.append("<img src=\""+pathImages+"/icon_sitea.gif\" />");
@@ -77,7 +79,7 @@ public class SelectTree {
                 }
             }
             
-            html.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','tree_'+'"+site+"')\""+style+">");
+            html.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','tree_'+'"+site+"')\" "+style+">");
             html.append("<img src=\""+pathImages+"/icon_homea.gif\" />");
             html.append("<span>"+tmhome.getDisplayName()+"</span>");
             html.append("</a>");
@@ -133,7 +135,7 @@ public class SelectTree {
                         }                        
                     }                            
 
-                    html.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\""+style+">");
+                    html.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" "+style+">");
                     html.append("<img src=\""+pathImages+"/icon-section.gif\" />");
                     html.append("<span>"+webpage.getDisplayName()+"</span>");
                     html.append("</a>");
@@ -152,7 +154,7 @@ public class SelectTree {
                     
                     html.append("<li>");
                     html.append("<img src=\""+pathImages+"/trans.gif\" />");
-                    html.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\""+style+">");
+                    html.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" "+style+">");
                     html.append("<img src=\""+pathImages+"/icon-section.gif\" />");
                     html.append("<span>"+webpage.getDisplayName()+"</span>");
                     html.append("</a>");
