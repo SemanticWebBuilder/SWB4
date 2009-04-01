@@ -368,22 +368,26 @@ _form.swbform fieldset li {
 
 
 /*------------------- select tree  ----*/
-div#sitesectiontree a.treeres:link {
+div.sitesectiontree a.treeres:link {
 	text-decoration:none;
 	font-weight: normal;
 	cursor: pointer;	
 }
-div#sitesectiontree a.treeres:visited {
+div.sitesectiontree a.treeres:visited {
 	text-decoration:none;
 	font-weight: normal;
 	cursor: pointer;	
 }
-div#sitesectiontree a.treeres:hover {
+div.sitesectiontree a.treeres:hover {
 	text-decoration: underline;
 	cursor: pointer;
 }
 
-div#sitesectiontree ul.treeres {
+div.sitesectiontree span {
+	cursor: pointer;
+}
+
+div.sitesectiontree ul.treeres {
 	list-style-type: none;
 	padding-left: 10px;
 	padding-right:1px;
