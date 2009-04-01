@@ -56,6 +56,7 @@ import org.semanticwb.repository.ChildNodeDefinition;
 import org.semanticwb.repository.HierarchyNode;
 import org.semanticwb.repository.LockUserComparator;
 import org.semanticwb.repository.Lockable;
+import org.semanticwb.repository.PropertyDefinition;
 import org.semanticwb.repository.Referenceable;
 import org.semanticwb.repository.Traceable;
 import org.semanticwb.repository.Unstructured;
