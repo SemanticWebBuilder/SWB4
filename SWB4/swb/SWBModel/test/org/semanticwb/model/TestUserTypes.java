@@ -61,12 +61,12 @@ public class TestUserTypes {
           mail = login+"@webbuilder.info";
           User current = repository.createUser();
           current.setActive(true);
-          current.setUsrFirstName(nombre);
-          current.setUsrLastName(apellido1);
-          current.setUsrSecondLastName(apellido2);
-          current.setUsrLogin(login);
-          current.setUsrEmail(mail);
-          current.setUsrPassword(login);
+          current.setFirstName(nombre);
+          current.setLastName(apellido1);
+          current.setSecondLastName(apellido2);
+          current.setLogin(login);
+          current.setEmail(mail);
+          current.setPassword(login);
       }
     }
 
