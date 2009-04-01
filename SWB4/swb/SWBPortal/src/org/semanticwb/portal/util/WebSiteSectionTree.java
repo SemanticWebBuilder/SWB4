@@ -49,7 +49,7 @@ public class WebSiteSectionTree {
             
             boolean toggleopen = Boolean.parseBoolean(request.getParameter(tmhome.getId())==null?"false":request.getParameter(tmhome.getId()).equals("1")?"true":"false");
            
-            sb_ret.append("<div id=\"sitesectiontree\">");
+            sb_ret.append("<div class=\"sitesectiontree\">");
             sb_ret.append("<ul class=\"treeres\">");
             sb_ret.append("<li>");
             sb_ret.append("<img src=\""+pathImages+"/icon_sitea.gif\" />");
