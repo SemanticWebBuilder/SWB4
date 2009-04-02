@@ -166,6 +166,10 @@ public final class SWBRepository implements Repository
 
     public static void deleteWorkspace(String name) throws RepositoryException
     {
+        if (name == null || name.trim().equals(""))
+        {
+            throw new RepositoryException("The name of repository can not be null or empty");
+        }
         log.debug("Deleting workspace " + name + " ...");
         SWBContext.removeWorkspace(name);
     }
