@@ -114,6 +114,18 @@ public class RepositoryManagerLoader
         }
     }
    
+    public void createWorkspace(String repository,String workspace) throws Exception
+    {
+        repositoryManagers.get(repository).createWorkspace(workspace);
+    }
+    public void deleteWorkspace(String repository,String workspace) throws Exception
+    {
+        repositoryManagers.get(repository).createWorkspace(workspace);
+    }
+    public String[] getRepositories()
+    {
+        return repositoryManagers.keySet().toArray(new String[repositoryManagers.keySet().size()]);
+    }
 
     public OfficeManager getOfficeManager(String workspaceId)
     {
