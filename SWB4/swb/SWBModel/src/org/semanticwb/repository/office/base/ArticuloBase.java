@@ -1,7 +1,7 @@
 package org.semanticwb.repository.office.base;
 
 
-public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent implements org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Referenceable,org.semanticwb.repository.Lockable,org.semanticwb.repository.Versionable,org.semanticwb.repository.Traceable
+public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent implements org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Referenceable,org.semanticwb.repository.Versionable,org.semanticwb.repository.Traceable,org.semanticwb.repository.Lockable
 {
     public static final org.semanticwb.platform.SemanticClass nt_VersionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#versionHistory");
     public static final org.semanticwb.platform.SemanticProperty jcr_versionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#versionHistory");
@@ -123,12 +123,12 @@ public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent
         getSemanticObject().setBooleanProperty(jcr_isCheckedOut, isCheckedOut);
     }
 
-    public String getCategoria()
+    public String getCategory()
     {
         return getSemanticObject().getProperty(cm_Category);
     }
 
-    public void setCategoria(String Category)
+    public void setCategory(String Category)
     {
         getSemanticObject().setProperty(cm_Category, Category);
     }
