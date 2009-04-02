@@ -12,7 +12,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.nlp.Lexicon;
-import org.semanticwb.nlp.Translator;
+import org.semanticwb.nlp.tTranslator;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -38,7 +38,7 @@ import org.semanticwb.platform.SemanticProperty;
 public class SWBADBNatural extends GenericResource {
 
     private Logger log = SWBUtils.getLogger(SWBADBSparql.class);
-    private Translator tr;
+    private tTranslator tr;
 
     /**
      * @param request
@@ -66,20 +66,26 @@ public class SWBADBNatural extends GenericResource {
         url.setParameter("lang", lang);
 
         ret.append("<script type=\"text/javascript\">" +
+                "dojo.require(\"dojo.parser\");" +
+                "dojo.require(\"dijit.layout.ContentPane\");\n"+
                 "dojo.require(\"dijit.form.Form\");" +
                 "dojo.require(\"dijit.form.Button\");" +
                 "</script>");
+        ret.append("<script src=\"/swb/swbadmin/js/acTextArea.js\"></script>");
         ret.append("<script type=\"text/javascript\">" +
                 "dojo.addOnLoad(function () {" +
                     "dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyDown');" +
-                    "dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyUp');" +
+                    "dojo.connect(dojo.byId('naturalQuery'), 'onkeyup', 'queryOnKeyUp');" +
+                    "dojo.connect(dojo.byId('naturalQuery'), 'onkeypress', 'queryOnKeyPress');" +
                     "dojo.connect(dojo.byId('naturalQuery'), 'onblur', function () {" +
                         "clearSuggestions();" +
                     "});" +
                 "});" +
+                "var source =\"" + SWBPlatform.getContextPath() + "/swbadmin/jsp/acTextAreaStore.jsp\";" +
+                "var lang =\"" + paramRequest.getUser().getLanguage() + "\";" +
             "</script>");
 
-        out.println("<script type=\"text/javascript\">" +
+        /*out.println("<script type=\"text/javascript\">" +
                 "function clearSuggestions() {" +
                     "if (dojo.byId('results')) {" +
                         "dojo.byId('results').innerHTML = \"\"; " +
@@ -268,11 +274,11 @@ public class SWBADBNatural extends GenericResource {
                     "dojo.byId('naturalQuery').focus();" +
                 "}" +
             "}" +
-             "</script>\n");
+             "</script>\n");*/
 
-        ret.append("<form id=\"" + getResourceBase().getId() + "/DBNatural\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
-        ret.append("action=\"" + url + "\" ");
-        ret.append("onSubmit=\"submitForm('" + getResourceBase().getId() + "/DBNatural'); return false;\" method=\"POST\">\n");
+        ret.append("<form id=\"" + getResourceBase().getId() + "/natural\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
+        ret.append("action=\"" + url + "\" method=\"POST\"");
+        ret.append("onSubmit=\"submitForm('" + getResourceBase().getId() + "/natural'); return false;\" method=\"POST\">");
         ret.append("<fieldset>Natural Language Query Example");
         ret.append("<PRE>");
         ret.append("->10 User con Activo=true, Primer Apellido\n");
@@ -285,16 +291,16 @@ public class SWBADBNatural extends GenericResource {
         ret.append("</textarea><div id=\"results\"></div>");
         ret.append("</fieldset>");
         ret.append("<fieldset>");
-        ret.append("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submit/btnSend\" >" + paramRequest.getLocaleString("send") + "</button>");
+        ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Enviar</button>\n");
         ret.append("</fieldset>");
 
         if (errCount != null) {
             if (Integer.parseInt(errCount) == 0) {
-                /*ret.append("<fieldset>");
+                ret.append("<fieldset>");
                 ret.append("<textarea rows=5 cols=70>");
                 ret.append(request.getParameter("sparqlQuery"));
                 ret.append("</textarea>");
-                ret.append("</fieldset>");*/
+                ret.append("</fieldset>");
 
                 try {
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
@@ -399,7 +405,7 @@ public class SWBADBNatural extends GenericResource {
         }
 
         Lexicon dict = new Lexicon(request.getParameter("lang"));
-        tr = new Translator(dict);
+        tr = new tTranslator(dict);
         String queryString = dict.getPrefixString() + "\n" + tr.translateSentence(query);
 
         response.setRenderParameter("errCode", Integer.toString(tr.getErrCode()));
