@@ -80,7 +80,7 @@ ordterm
  * an object query.
  */
 oquery
-:	sent
+:	//sent
 	|name
 	|name PREC querylist {precon = true;} -> ^(name ^(PRECON querylist))
 	|LPAR! oquery RPAR!
@@ -89,7 +89,9 @@ oquery
 /*A query list or nested query can be a list of object queries or a single object query */
 querylist
 :	oquery DEL! querylist
+	|sent DEL! querylist
 	|oquery
+	|sent
 ;
 
 /*A properties query is a list of properties of an object. The object could have more properties.*/
