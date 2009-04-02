@@ -76,7 +76,7 @@ public final class SWBRepositoryManager implements RepositoryManager
 
     public void deleteWorkspace(String workspace) throws Exception
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        SWBRepository.deleteWorkspace(workspace);
     }
     
 }
