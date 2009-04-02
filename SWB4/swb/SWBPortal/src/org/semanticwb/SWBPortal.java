@@ -6,6 +6,7 @@ import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -29,7 +30,6 @@ import org.semanticwb.model.*;
 import org.semanticwb.platform.SessionUser;
 import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBResourceMgr;
-import org.semanticwb.model.SWBRuleMgr;
 import org.semanticwb.portal.SWBMessageCenter;
 import org.semanticwb.portal.SWBServiceMgr;
 import org.semanticwb.portal.SWBTemplateMgr;
@@ -837,6 +837,7 @@ public class SWBPortal {
             request.getSession(true).setAttribute("swb_valCad", cadena);
             BufferedImage buffer = new BufferedImage(150, 40, BufferedImage.TYPE_INT_RGB);
             Graphics2D g = buffer.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g.setBackground(new Color(255, 255, 255));
             g.clearRect(0, 0, 150, 40);
             g.setColor(new Color(0, 0, 0));
@@ -845,19 +846,70 @@ public class SWBPortal {
             g.setFont(f);
             g.drawString(cadena, 15, 30);
 
-            for (int i = 0; i < 150; i += 10) {
+            for (int i = 0; i <= 150; i += 10) {
                 g.drawLine(i, 0, i, 39);
             }
-            for (int i = 0; i < 40; i += 10) {
+            for (int i = 0; i <= 40; i += 10) {
                 g.drawLine(0, i, 149, i);
             }
 
-            try {
+            /*try {
                 org.semanticwb.base.util.GIFEncoder encoder = new org.semanticwb.base.util.GIFEncoder(buffer);
-               // AFUtils.log("Cadena: "+cadena);
                 response.setContentType("image/gif");
                 encoder.Write(response.getOutputStream());
             } catch (AWTException e) {
+                log.error(e);
+            }*/
+                
+            try {
+                response.setContentType("image/png");
+                javax.imageio.ImageIO.write(buffer, "png", response.getOutputStream());                
+            } catch (IOException e) {
+                log.error(e);
+            }
+        }
+
+        public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, String attributeName, int size, String cad) throws ServletException, IOException {
+            String cadena = null;
+            if(null==cad) {
+                cadena = getRandString(size);
+            }else {
+                cadena = cad;
+            }
+            if(null==attributeName) {
+                attributeName = "swb_valCad";
+            }
+            request.getSession(true).setAttribute(attributeName, cadena);
+            BufferedImage buffer = new BufferedImage(150, 40, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = buffer.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setBackground(new Color(255, 255, 255));
+            g.clearRect(0, 0, 150, 40);
+            g.setColor(new Color(0, 0, 0));
+            Font f = new Font("Serif",Font.BOLD,25);
+            //g.setFont(g.getFont().deriveFont(Font.ROMAN_BASELINE, 25.0f));
+            g.setFont(f);
+            g.drawString(cadena, 15, 30);
+
+            for (int i = 0; i <= 150; i += 10) {
+                g.drawLine(i, 0, i, 39);
+            }
+            for (int i = 0; i <= 40; i += 10) {
+                g.drawLine(0, i, 149, i);
+            }
+
+            /*try {
+                org.semanticwb.base.util.GIFEncoder encoder = new org.semanticwb.base.util.GIFEncoder(buffer);
+                response.setContentType("image/gif");
+                encoder.Write(response.getOutputStream());
+            } catch (AWTException e) {
+                log.error(e);
+            }*/
+
+            try {
+                response.setContentType("image/png");
+                javax.imageio.ImageIO.write(buffer, "png", response.getOutputStream());
+            } catch (IOException e) {
                 log.error(e);
             }
         }
