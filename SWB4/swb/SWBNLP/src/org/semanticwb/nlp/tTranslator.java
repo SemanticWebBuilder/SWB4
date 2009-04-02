@@ -56,14 +56,18 @@ public class tTranslator {
                 fixNames(sTree);
                 res += processSelectQuery(sTree, parser.hasPrecon(), parser.hasPrede());
                 //System.out.println(sTree.toStringTree());
-                traverseAST(sTree, "");
-                System.out.println(res);
+                //traverseAST(sTree, "");
+                //System.out.println(res);
                 return res;
             } else {
-                return "no se pudo obtener AST.\n";
+                errCode = 2;
+                eLog += "no se pudo obtener AST.\n";
+                return "";
             }
         } catch (org.antlr.runtime.RecognitionException ex) {
-            return "No se ha podido traducir la consulta.\n";
+            errCode = 2;
+            eLog += "No se ha podido traducir la consulta.\n";
+            return "";
         }
     }
 
@@ -92,7 +96,7 @@ public class tTranslator {
                     order += " ORDER BY ";
                     Iterator<CommonTree> oit = t.getChildren().iterator();
                     while (oit.hasNext()) {
-                        order = order + "?" + oit.next().getText().replace(" ", "_") + " ";
+                        order = order + "?" + oit.next().getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ";
                     }
                     order = order.trim() + "\n";
                 } else if (t.getText().equals("OFFSET")) {
@@ -105,12 +109,12 @@ public class tTranslator {
                             varList += getVarList((CommonTree)t.getChild(0), t.getText());
                         }
                     } else {
-                        varList = varList + "?" + t.getText().replace(" ", "_");
+                        varList = varList + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "");
                     }
                     res = res + varList + "\nWHERE \n{\n";
                     String etype = lex.getObjWordTag(t.getText()).getType();
                     if(!etype.equals("")) {
-                        res = res + "?" + t.getText().replace(" ", "_") + " rdf:type " + etype
+                        res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + etype
                             + ".\n";
                         res += startParsing(t);
                     } else {
@@ -173,7 +177,8 @@ public class tTranslator {
                         String pName = "";
                         pName = assertPropertyType(t.getText(), parent);
                         if (!pName.equals("")) {
-                            res = res + "?" + parent + " " + pName + " " + "?" + t.getText() + ".\n";
+                            res = res + "?" + parent + " " + pName + " " +
+                                    "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                         }
                     }
                 }
@@ -187,40 +192,15 @@ public class tTranslator {
                 res = res + "?" + nname + " rdf:type " +
                         pName + ".\n";
                 }
-                res = res + "?" + parent + " ?_" + nname + " ?" + nname + ".\n";
+                res = res + "?" + parent + " ?_" + nname + " ?" +
+                        nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                 res += startParsing(root);
             } else {
                 String pName = assertPropertyType(nname, parent);
                 if(!pName.equals("")) {
                     res = res + "?" + parent + " " +
-                        pName + " ?" + nname + ".\n";
-                }
-            }
-        }
-        return res;
-    }
-
-    private String processPrecon (CommonTree root, String parent) {
-        String res = "";
-        List<CommonTree> child = root.getChildren();
-
-        if (child != null) {
-            Iterator<CommonTree> cit = child.iterator();
-            while(cit.hasNext()) {
-                CommonTree t = cit.next();
-                String nname = t.getText();
-                System.out.println("p::__" + nname);
-
-                if (nname.equals("ASIGN") || nname.equals("COMPL") ||
-                        nname.equals("COMPG") || nname.equals("COMPGE") ||
-                        nname.equals("COMPLE")) {
-                    res += processStatement(t, parent);
-                } else {
-                    String pName = assertPropertyType(nname, parent);
-                    if (!pName.equals("")) {
-                        res = res + "?" + nname + " rdf:type " + pName + ".\n";
-                        res = res + "?" + parent + " ?_" + nname + "?" + nname + ".\n";
-                    }
+                        pName + " ?" + nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        ".\n";
                 }
             }
         }
@@ -249,7 +229,7 @@ public class tTranslator {
             Iterator<CommonTree> cit = child.iterator();
             while (cit.hasNext()) {
                 CommonTree t = cit.next();
-                res = res + "?" + t.getText() + " ";
+                res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ";
             }
         }
         return res.trim();
@@ -294,7 +274,8 @@ public class tTranslator {
                 }
             } else {
                 if (!pName.equals("")) {
-                    res = res + "?" + parent + " " + pName + " ?" + root.getText().replace(" ", "_") + ".\n";
+                    res = res + "?" + parent + " " + pName + " ?" +
+                            root.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                 }
             }
         return res;
