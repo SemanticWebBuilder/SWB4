@@ -125,7 +125,7 @@ public class RepositoryManagerLoader
     public String[] getRepositoryNames()
     {
         return repositoryManagers.keySet().toArray(new String[repositoryManagers.keySet().size()]);
-    }
+    }   
 
     public OfficeManager getOfficeManager(String workspaceId)
     {
