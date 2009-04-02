@@ -166,6 +166,7 @@ public final class SWBRepository implements Repository
 
     public static void deleteWorkspace(String name) throws RepositoryException
     {
+        log.debug("Deleting workspace " + name + " ...");
         SWBContext.removeWorkspace(name);
     }
     public static void createWorkspace(String name) throws RepositoryException
