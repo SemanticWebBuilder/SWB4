@@ -8,7 +8,7 @@ package org.semanticwb.nlp;
  *
  * @author hasdai
  */
-// $ANTLR 3.1.2 /home/hasdai/Documentos/tParser.g 2009-04-01 16:55:22
+// $ANTLR 3.1.2 /home/hasdai/Documentos/tParser.g 2009-04-02 12:24:13
 
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
@@ -82,9 +82,9 @@ public class tParser extends Parser {
     public String getGrammarFileName() { return "/home/hasdai/Documentos/tParser.g"; }
 
 
-    	public int errCount = 0;
-    	public boolean precon = false;
-    	public boolean prede = false;
+    	private int errCount = 0;
+    	private boolean precon = false;
+    	private boolean prede = false;
 
     	/*
     	 * Overrides default displayRecognitionError method in ANTLR to count total
@@ -158,34 +158,24 @@ public class tParser extends Parser {
             case NUM:
                 {
                 switch ( input.LA(2) ) {
-                case VAR:
+                case EOF:
+                case MODE:
+                case MODO:
+                case LPAR:
                     {
-                    int LA5_2 = input.LA(3);
-
-                    if ( (LA5_2==EOF||(LA5_2>=SIGL && LA5_2<=PREC)||(LA5_2>=MODE && LA5_2<=MODO)) ) {
-                        alt5=1;
-                    }
-                    else if ( (LA5_2==PRED||LA5_2==DEL) ) {
-                        alt5=2;
-                    }
-                    else {
-                        if (state.backtracking>0) {state.failed=true; return retval;}
-                        NoViableAltException nvae =
-                            new NoViableAltException("", 5, 2, input);
-
-                        throw nvae;
-                    }
+                    alt5=1;
                     }
                     break;
                 case BVAR:
+                case VAR:
                     {
                     int LA5_3 = input.LA(3);
 
-                    if ( (LA5_3==EOF||(LA5_3>=SIGL && LA5_3<=PREC)||(LA5_3>=MODE && LA5_3<=MODO)) ) {
-                        alt5=1;
-                    }
-                    else if ( (LA5_3==PRED||LA5_3==DEL) ) {
+                    if ( (LA5_3==PRED||LA5_3==DEL) ) {
                         alt5=2;
+                    }
+                    else if ( (LA5_3==EOF||LA5_3==PREC||(LA5_3>=MODE && LA5_3<=MODO)) ) {
+                        alt5=1;
                     }
                     else {
                         if (state.backtracking>0) {state.failed=true; return retval;}
@@ -194,11 +184,6 @@ public class tParser extends Parser {
 
                         throw nvae;
                     }
-                    }
-                    break;
-                case LPAR:
-                    {
-                    alt5=1;
                     }
                     break;
                 case MODT:
@@ -216,34 +201,24 @@ public class tParser extends Parser {
 
                 }
                 break;
-            case VAR:
+            case EOF:
+            case MODE:
+            case MODO:
+            case LPAR:
                 {
-                int LA5_2 = input.LA(2);
-
-                if ( (LA5_2==EOF||(LA5_2>=SIGL && LA5_2<=PREC)||(LA5_2>=MODE && LA5_2<=MODO)) ) {
-                    alt5=1;
-                }
-                else if ( (LA5_2==PRED||LA5_2==DEL) ) {
-                    alt5=2;
-                }
-                else {
-                    if (state.backtracking>0) {state.failed=true; return retval;}
-                    NoViableAltException nvae =
-                        new NoViableAltException("", 5, 2, input);
-
-                    throw nvae;
-                }
+                alt5=1;
                 }
                 break;
             case BVAR:
+            case VAR:
                 {
                 int LA5_3 = input.LA(2);
 
-                if ( (LA5_3==EOF||(LA5_3>=SIGL && LA5_3<=PREC)||(LA5_3>=MODE && LA5_3<=MODO)) ) {
-                    alt5=1;
-                }
-                else if ( (LA5_3==PRED||LA5_3==DEL) ) {
+                if ( (LA5_3==PRED||LA5_3==DEL) ) {
                     alt5=2;
+                }
+                else if ( (LA5_3==EOF||LA5_3==PREC||(LA5_3>=MODE && LA5_3<=MODO)) ) {
+                    alt5=1;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return retval;}
@@ -252,11 +227,6 @@ public class tParser extends Parser {
 
                     throw nvae;
                 }
-                }
-                break;
-            case LPAR:
-                {
-                alt5=1;
                 }
                 break;
             case MODT:
@@ -334,7 +304,7 @@ public class tParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: limiter, modifier, oquery
+                    // elements: modifier, oquery, limiter
                     // token labels:
                     // rule labels: retval
                     // token list labels:
@@ -435,7 +405,7 @@ public class tParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: modifier, pquery, limiter
+                    // elements: limiter, pquery, modifier
                     // token labels:
                     // rule labels: retval
                     // token list labels:
@@ -870,107 +840,62 @@ public class tParser extends Parser {
     };
 
     // $ANTLR start "oquery"
-    // /home/hasdai/Documentos/tParser.g:82:1: oquery : ( sent | name | name PREC querylist -> ^( name ^( PRECON querylist ) ) | LPAR oquery RPAR );
+    // /home/hasdai/Documentos/tParser.g:82:1: oquery : ( | name | name PREC querylist -> ^( name ^( PRECON querylist ) ) | LPAR oquery RPAR );
     public final tParser.oquery_return oquery() throws RecognitionException {
         tParser.oquery_return retval = new tParser.oquery_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token PREC22=null;
-        Token LPAR24=null;
-        Token RPAR26=null;
-        tParser.sent_return sent19 = null;
+        Token PREC21=null;
+        Token LPAR23=null;
+        Token RPAR25=null;
+        tParser.name_return name19 = null;
 
         tParser.name_return name20 = null;
 
-        tParser.name_return name21 = null;
+        tParser.querylist_return querylist22 = null;
 
-        tParser.querylist_return querylist23 = null;
-
-        tParser.oquery_return oquery25 = null;
+        tParser.oquery_return oquery24 = null;
 
 
-        Object PREC22_tree=null;
-        Object LPAR24_tree=null;
-        Object RPAR26_tree=null;
+        Object PREC21_tree=null;
+        Object LPAR23_tree=null;
+        Object RPAR25_tree=null;
         RewriteRuleTokenStream stream_PREC=new RewriteRuleTokenStream(adaptor,"token PREC");
         RewriteRuleSubtreeStream stream_name=new RewriteRuleSubtreeStream(adaptor,"rule name");
         RewriteRuleSubtreeStream stream_querylist=new RewriteRuleSubtreeStream(adaptor,"rule querylist");
         try {
-            // /home/hasdai/Documentos/tParser.g:83:1: ( sent | name | name PREC querylist -> ^( name ^( PRECON querylist ) ) | LPAR oquery RPAR )
+            // /home/hasdai/Documentos/tParser.g:83:1: ( | name | name PREC querylist -> ^( name ^( PRECON querylist ) ) | LPAR oquery RPAR )
             int alt8=4;
             switch ( input.LA(1) ) {
-            case VAR:
+            case EOF:
+            case MODE:
+            case MODO:
+            case RPAR:
+            case DEL:
                 {
-                switch ( input.LA(2) ) {
-                case SIGL:
-                case SIGG:
-                case SIGE:
-                case SIGLE:
-                case SIGGE:
-                    {
-                    alt8=1;
-                    }
-                    break;
-                case EOF:
-                case MODE:
-                case MODO:
-                case RPAR:
-                case DEL:
-                    {
-                    alt8=2;
-                    }
-                    break;
-                case PREC:
-                    {
-                    alt8=3;
-                    }
-                    break;
-                default:
-                    if (state.backtracking>0) {state.failed=true; return retval;}
-                    NoViableAltException nvae =
-                        new NoViableAltException("", 8, 1, input);
-
-                    throw nvae;
-                }
-
+                alt8=1;
                 }
                 break;
             case BVAR:
+            case VAR:
                 {
-                switch ( input.LA(2) ) {
-                case SIGL:
-                case SIGG:
-                case SIGE:
-                case SIGLE:
-                case SIGGE:
-                    {
-                    alt8=1;
-                    }
-                    break;
-                case EOF:
-                case MODE:
-                case MODO:
-                case RPAR:
-                case DEL:
-                    {
+                int LA8_2 = input.LA(2);
+
+                if ( (LA8_2==EOF||(LA8_2>=MODE && LA8_2<=MODO)||(LA8_2>=RPAR && LA8_2<=DEL)) ) {
                     alt8=2;
-                    }
-                    break;
-                case PREC:
-                    {
+                }
+                else if ( (LA8_2==PREC) ) {
                     alt8=3;
-                    }
-                    break;
-                default:
+                }
+                else {
                     if (state.backtracking>0) {state.failed=true; return retval;}
                     NoViableAltException nvae =
                         new NoViableAltException("", 8, 2, input);
 
                     throw nvae;
                 }
-
                 }
                 break;
             case LPAR:
@@ -988,16 +913,9 @@ public class tParser extends Parser {
 
             switch (alt8) {
                 case 1 :
-                    // /home/hasdai/Documentos/tParser.g:83:3: sent
+                    // /home/hasdai/Documentos/tParser.g:84:2:
                     {
                     root_0 = (Object)adaptor.nil();
-
-                    pushFollow(FOLLOW_sent_in_oquery240);
-                    sent19=sent();
-
-                    state._fsp--;
-                    if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, sent19.getTree());
 
                     }
                     break;
@@ -1006,40 +924,40 @@ public class tParser extends Parser {
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_name_in_oquery244);
-                    name20=name();
+                    pushFollow(FOLLOW_name_in_oquery243);
+                    name19=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name20.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name19.getTree());
 
                     }
                     break;
                 case 3 :
                     // /home/hasdai/Documentos/tParser.g:85:3: name PREC querylist
                     {
-                    pushFollow(FOLLOW_name_in_oquery248);
-                    name21=name();
+                    pushFollow(FOLLOW_name_in_oquery247);
+                    name20=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_name.add(name21.getTree());
-                    PREC22=(Token)match(input,PREC,FOLLOW_PREC_in_oquery250); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_PREC.add(PREC22);
+                    if ( state.backtracking==0 ) stream_name.add(name20.getTree());
+                    PREC21=(Token)match(input,PREC,FOLLOW_PREC_in_oquery249); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_PREC.add(PREC21);
 
-                    pushFollow(FOLLOW_querylist_in_oquery252);
-                    querylist23=querylist();
+                    pushFollow(FOLLOW_querylist_in_oquery251);
+                    querylist22=querylist();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_querylist.add(querylist23.getTree());
+                    if ( state.backtracking==0 ) stream_querylist.add(querylist22.getTree());
                     if ( state.backtracking==0 ) {
                       precon = true;
                     }
 
 
                     // AST REWRITE
-                    // elements: name, querylist
+                    // elements: querylist, name
                     // token labels:
                     // rule labels: retval
                     // token list labels:
@@ -1080,14 +998,14 @@ public class tParser extends Parser {
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    LPAR24=(Token)match(input,LPAR,FOLLOW_LPAR_in_oquery270); if (state.failed) return retval;
-                    pushFollow(FOLLOW_oquery_in_oquery273);
-                    oquery25=oquery();
+                    LPAR23=(Token)match(input,LPAR,FOLLOW_LPAR_in_oquery269); if (state.failed) return retval;
+                    pushFollow(FOLLOW_oquery_in_oquery272);
+                    oquery24=oquery();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, oquery25.getTree());
-                    RPAR26=(Token)match(input,RPAR,FOLLOW_RPAR_in_oquery275); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, oquery24.getTree());
+                    RPAR25=(Token)match(input,RPAR,FOLLOW_RPAR_in_oquery274); if (state.failed) return retval;
 
                     }
                     break;
@@ -1119,125 +1037,103 @@ public class tParser extends Parser {
     };
 
     // $ANTLR start "querylist"
-    // /home/hasdai/Documentos/tParser.g:90:1: querylist : ( oquery DEL querylist | oquery );
+    // /home/hasdai/Documentos/tParser.g:90:1: querylist : ( oquery DEL querylist | sent DEL querylist | oquery | sent );
     public final tParser.querylist_return querylist() throws RecognitionException {
         tParser.querylist_return retval = new tParser.querylist_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token DEL28=null;
-        tParser.oquery_return oquery27 = null;
+        Token DEL27=null;
+        Token DEL30=null;
+        tParser.oquery_return oquery26 = null;
 
-        tParser.querylist_return querylist29 = null;
+        tParser.querylist_return querylist28 = null;
 
-        tParser.oquery_return oquery30 = null;
+        tParser.sent_return sent29 = null;
+
+        tParser.querylist_return querylist31 = null;
+
+        tParser.oquery_return oquery32 = null;
+
+        tParser.sent_return sent33 = null;
 
 
-        Object DEL28_tree=null;
+        Object DEL27_tree=null;
+        Object DEL30_tree=null;
 
         try {
-            // /home/hasdai/Documentos/tParser.g:91:1: ( oquery DEL querylist | oquery )
-            int alt9=2;
-            switch ( input.LA(1) ) {
-            case VAR:
-                {
-                int LA9_1 = input.LA(2);
-
-                if ( (synpred11_tParser()) ) {
-                    alt9=1;
-                }
-                else if ( (true) ) {
-                    alt9=2;
-                }
-                else {
-                    if (state.backtracking>0) {state.failed=true; return retval;}
-                    NoViableAltException nvae =
-                        new NoViableAltException("", 9, 1, input);
-
-                    throw nvae;
-                }
-                }
-                break;
-            case BVAR:
-                {
-                int LA9_2 = input.LA(2);
-
-                if ( (synpred11_tParser()) ) {
-                    alt9=1;
-                }
-                else if ( (true) ) {
-                    alt9=2;
-                }
-                else {
-                    if (state.backtracking>0) {state.failed=true; return retval;}
-                    NoViableAltException nvae =
-                        new NoViableAltException("", 9, 2, input);
-
-                    throw nvae;
-                }
-                }
-                break;
-            case LPAR:
-                {
-                int LA9_3 = input.LA(2);
-
-                if ( (synpred11_tParser()) ) {
-                    alt9=1;
-                }
-                else if ( (true) ) {
-                    alt9=2;
-                }
-                else {
-                    if (state.backtracking>0) {state.failed=true; return retval;}
-                    NoViableAltException nvae =
-                        new NoViableAltException("", 9, 3, input);
-
-                    throw nvae;
-                }
-                }
-                break;
-            default:
-                if (state.backtracking>0) {state.failed=true; return retval;}
-                NoViableAltException nvae =
-                    new NoViableAltException("", 9, 0, input);
-
-                throw nvae;
-            }
-
+            // /home/hasdai/Documentos/tParser.g:91:1: ( oquery DEL querylist | sent DEL querylist | oquery | sent )
+            int alt9=4;
+            alt9 = dfa9.predict(input);
             switch (alt9) {
                 case 1 :
                     // /home/hasdai/Documentos/tParser.g:91:3: oquery DEL querylist
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_oquery_in_querylist287);
-                    oquery27=oquery();
+                    pushFollow(FOLLOW_oquery_in_querylist286);
+                    oquery26=oquery();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, oquery27.getTree());
-                    DEL28=(Token)match(input,DEL,FOLLOW_DEL_in_querylist289); if (state.failed) return retval;
-                    pushFollow(FOLLOW_querylist_in_querylist292);
-                    querylist29=querylist();
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, oquery26.getTree());
+                    DEL27=(Token)match(input,DEL,FOLLOW_DEL_in_querylist288); if (state.failed) return retval;
+                    pushFollow(FOLLOW_querylist_in_querylist291);
+                    querylist28=querylist();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, querylist29.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, querylist28.getTree());
 
                     }
                     break;
                 case 2 :
-                    // /home/hasdai/Documentos/tParser.g:92:3: oquery
+                    // /home/hasdai/Documentos/tParser.g:92:3: sent DEL querylist
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_oquery_in_querylist296);
-                    oquery30=oquery();
+                    pushFollow(FOLLOW_sent_in_querylist295);
+                    sent29=sent();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, oquery30.getTree());
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, sent29.getTree());
+                    DEL30=(Token)match(input,DEL,FOLLOW_DEL_in_querylist297); if (state.failed) return retval;
+                    pushFollow(FOLLOW_querylist_in_querylist300);
+                    querylist31=querylist();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, querylist31.getTree());
+
+                    }
+                    break;
+                case 3 :
+                    // /home/hasdai/Documentos/tParser.g:93:3: oquery
+                    {
+                    root_0 = (Object)adaptor.nil();
+
+                    pushFollow(FOLLOW_oquery_in_querylist304);
+                    oquery32=oquery();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, oquery32.getTree());
+
+                    }
+                    break;
+                case 4 :
+                    // /home/hasdai/Documentos/tParser.g:94:3: sent
+                    {
+                    root_0 = (Object)adaptor.nil();
+
+                    pushFollow(FOLLOW_sent_in_querylist308);
+                    sent33=sent();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, sent33.getTree());
 
                     }
                     break;
@@ -1269,32 +1165,32 @@ public class tParser extends Parser {
     };
 
     // $ANTLR start "pquery"
-    // /home/hasdai/Documentos/tParser.g:96:1: pquery : ( plist PRED oquery -> ^( oquery ^( PREDE plist ) ) | MODT PRED oquery -> ^( oquery ^( PREDE MODTO ) ) );
+    // /home/hasdai/Documentos/tParser.g:98:1: pquery : ( plist PRED oquery -> ^( oquery ^( PREDE plist ) ) | MODT PRED oquery -> ^( oquery ^( PREDE MODTO ) ) );
     public final tParser.pquery_return pquery() throws RecognitionException {
         tParser.pquery_return retval = new tParser.pquery_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token PRED32=null;
-        Token MODT34=null;
         Token PRED35=null;
-        tParser.plist_return plist31 = null;
-
-        tParser.oquery_return oquery33 = null;
+        Token MODT37=null;
+        Token PRED38=null;
+        tParser.plist_return plist34 = null;
 
         tParser.oquery_return oquery36 = null;
 
+        tParser.oquery_return oquery39 = null;
 
-        Object PRED32_tree=null;
-        Object MODT34_tree=null;
+
         Object PRED35_tree=null;
+        Object MODT37_tree=null;
+        Object PRED38_tree=null;
         RewriteRuleTokenStream stream_MODT=new RewriteRuleTokenStream(adaptor,"token MODT");
         RewriteRuleTokenStream stream_PRED=new RewriteRuleTokenStream(adaptor,"token PRED");
         RewriteRuleSubtreeStream stream_plist=new RewriteRuleSubtreeStream(adaptor,"rule plist");
         RewriteRuleSubtreeStream stream_oquery=new RewriteRuleSubtreeStream(adaptor,"rule oquery");
         try {
-            // /home/hasdai/Documentos/tParser.g:97:1: ( plist PRED oquery -> ^( oquery ^( PREDE plist ) ) | MODT PRED oquery -> ^( oquery ^( PREDE MODTO ) ) )
+            // /home/hasdai/Documentos/tParser.g:99:1: ( plist PRED oquery -> ^( oquery ^( PREDE plist ) ) | MODT PRED oquery -> ^( oquery ^( PREDE MODTO ) ) )
             int alt10=2;
             int LA10_0 = input.LA(1);
 
@@ -1313,23 +1209,23 @@ public class tParser extends Parser {
             }
             switch (alt10) {
                 case 1 :
-                    // /home/hasdai/Documentos/tParser.g:97:3: plist PRED oquery
+                    // /home/hasdai/Documentos/tParser.g:99:3: plist PRED oquery
                     {
-                    pushFollow(FOLLOW_plist_in_pquery307);
-                    plist31=plist();
+                    pushFollow(FOLLOW_plist_in_pquery319);
+                    plist34=plist();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_plist.add(plist31.getTree());
-                    PRED32=(Token)match(input,PRED,FOLLOW_PRED_in_pquery309); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_PRED.add(PRED32);
+                    if ( state.backtracking==0 ) stream_plist.add(plist34.getTree());
+                    PRED35=(Token)match(input,PRED,FOLLOW_PRED_in_pquery321); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_PRED.add(PRED35);
 
-                    pushFollow(FOLLOW_oquery_in_pquery311);
-                    oquery33=oquery();
+                    pushFollow(FOLLOW_oquery_in_pquery323);
+                    oquery36=oquery();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_oquery.add(oquery33.getTree());
+                    if ( state.backtracking==0 ) stream_oquery.add(oquery36.getTree());
                     if ( state.backtracking==0 ) {
                       prede = true;
                     }
@@ -1347,14 +1243,14 @@ public class tParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 97:37: -> ^( oquery ^( PREDE plist ) )
+                    // 99:37: -> ^( oquery ^( PREDE plist ) )
                     {
-                        // /home/hasdai/Documentos/tParser.g:97:40: ^( oquery ^( PREDE plist ) )
+                        // /home/hasdai/Documentos/tParser.g:99:40: ^( oquery ^( PREDE plist ) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_oquery.nextNode(), root_1);
 
-                        // /home/hasdai/Documentos/tParser.g:97:49: ^( PREDE plist )
+                        // /home/hasdai/Documentos/tParser.g:99:49: ^( PREDE plist )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(PREDE, "PREDE"), root_2);
@@ -1373,20 +1269,20 @@ public class tParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/hasdai/Documentos/tParser.g:98:3: MODT PRED oquery
+                    // /home/hasdai/Documentos/tParser.g:100:3: MODT PRED oquery
                     {
-                    MODT34=(Token)match(input,MODT,FOLLOW_MODT_in_pquery329); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_MODT.add(MODT34);
+                    MODT37=(Token)match(input,MODT,FOLLOW_MODT_in_pquery341); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_MODT.add(MODT37);
 
-                    PRED35=(Token)match(input,PRED,FOLLOW_PRED_in_pquery331); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_PRED.add(PRED35);
+                    PRED38=(Token)match(input,PRED,FOLLOW_PRED_in_pquery343); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_PRED.add(PRED38);
 
-                    pushFollow(FOLLOW_oquery_in_pquery333);
-                    oquery36=oquery();
+                    pushFollow(FOLLOW_oquery_in_pquery345);
+                    oquery39=oquery();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_oquery.add(oquery36.getTree());
+                    if ( state.backtracking==0 ) stream_oquery.add(oquery39.getTree());
                     if ( state.backtracking==0 ) {
                       prede = true;
                     }
@@ -1404,14 +1300,14 @@ public class tParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 98:36: -> ^( oquery ^( PREDE MODTO ) )
+                    // 100:36: -> ^( oquery ^( PREDE MODTO ) )
                     {
-                        // /home/hasdai/Documentos/tParser.g:98:39: ^( oquery ^( PREDE MODTO ) )
+                        // /home/hasdai/Documentos/tParser.g:100:39: ^( oquery ^( PREDE MODTO ) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(stream_oquery.nextNode(), root_1);
 
-                        // /home/hasdai/Documentos/tParser.g:98:48: ^( PREDE MODTO )
+                        // /home/hasdai/Documentos/tParser.g:100:48: ^( PREDE MODTO )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(PREDE, "PREDE"), root_2);
@@ -1457,36 +1353,36 @@ public class tParser extends Parser {
     };
 
     // $ANTLR start "plist"
-    // /home/hasdai/Documentos/tParser.g:102:1: plist : ( name DEL plist | name );
+    // /home/hasdai/Documentos/tParser.g:104:1: plist : ( name DEL plist | name );
     public final tParser.plist_return plist() throws RecognitionException {
         tParser.plist_return retval = new tParser.plist_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token DEL38=null;
-        tParser.name_return name37 = null;
-
-        tParser.plist_return plist39 = null;
-
+        Token DEL41=null;
         tParser.name_return name40 = null;
 
+        tParser.plist_return plist42 = null;
 
-        Object DEL38_tree=null;
+        tParser.name_return name43 = null;
+
+
+        Object DEL41_tree=null;
 
         try {
-            // /home/hasdai/Documentos/tParser.g:103:1: ( name DEL plist | name )
+            // /home/hasdai/Documentos/tParser.g:105:1: ( name DEL plist | name )
             int alt11=2;
             int LA11_0 = input.LA(1);
 
             if ( (LA11_0==BVAR||LA11_0==VAR) ) {
                 int LA11_1 = input.LA(2);
 
-                if ( (LA11_1==DEL) ) {
-                    alt11=1;
-                }
-                else if ( (LA11_1==EOF||LA11_1==PRED||LA11_1==RPAR) ) {
+                if ( (LA11_1==EOF||LA11_1==PRED||LA11_1==RPAR) ) {
                     alt11=2;
+                }
+                else if ( (LA11_1==DEL) ) {
+                    alt11=1;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return retval;}
@@ -1505,37 +1401,37 @@ public class tParser extends Parser {
             }
             switch (alt11) {
                 case 1 :
-                    // /home/hasdai/Documentos/tParser.g:103:3: name DEL plist
+                    // /home/hasdai/Documentos/tParser.g:105:3: name DEL plist
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_name_in_plist358);
-                    name37=name();
-
-                    state._fsp--;
-                    if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name37.getTree());
-                    DEL38=(Token)match(input,DEL,FOLLOW_DEL_in_plist360); if (state.failed) return retval;
-                    pushFollow(FOLLOW_plist_in_plist363);
-                    plist39=plist();
-
-                    state._fsp--;
-                    if (state.failed) return retval;
-                    if ( state.backtracking==0 ) adaptor.addChild(root_0, plist39.getTree());
-
-                    }
-                    break;
-                case 2 :
-                    // /home/hasdai/Documentos/tParser.g:104:3: name
-                    {
-                    root_0 = (Object)adaptor.nil();
-
-                    pushFollow(FOLLOW_name_in_plist367);
+                    pushFollow(FOLLOW_name_in_plist370);
                     name40=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
                     if ( state.backtracking==0 ) adaptor.addChild(root_0, name40.getTree());
+                    DEL41=(Token)match(input,DEL,FOLLOW_DEL_in_plist372); if (state.failed) return retval;
+                    pushFollow(FOLLOW_plist_in_plist375);
+                    plist42=plist();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, plist42.getTree());
+
+                    }
+                    break;
+                case 2 :
+                    // /home/hasdai/Documentos/tParser.g:106:3: name
+                    {
+                    root_0 = (Object)adaptor.nil();
+
+                    pushFollow(FOLLOW_name_in_plist379);
+                    name43=name();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name43.getTree());
 
                     }
                     break;
@@ -1567,27 +1463,27 @@ public class tParser extends Parser {
     };
 
     // $ANTLR start "name"
-    // /home/hasdai/Documentos/tParser.g:108:1: name : ( BVAR | VAR );
+    // /home/hasdai/Documentos/tParser.g:110:1: name : ( BVAR | VAR );
     public final tParser.name_return name() throws RecognitionException {
         tParser.name_return retval = new tParser.name_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token set41=null;
+        Token set44=null;
 
-        Object set41_tree=null;
+        Object set44_tree=null;
 
         try {
-            // /home/hasdai/Documentos/tParser.g:109:1: ( BVAR | VAR )
+            // /home/hasdai/Documentos/tParser.g:111:1: ( BVAR | VAR )
             // /home/hasdai/Documentos/tParser.g:
             {
             root_0 = (Object)adaptor.nil();
 
-            set41=(Token)input.LT(1);
+            set44=(Token)input.LT(1);
             if ( input.LA(1)==BVAR||input.LA(1)==VAR ) {
                 input.consume();
-                if ( state.backtracking==0 ) adaptor.addChild(root_0, (Object)adaptor.create(set41));
+                if ( state.backtracking==0 ) adaptor.addChild(root_0, (Object)adaptor.create(set44));
                 state.errorRecovery=false;state.failed=false;
             }
             else {
@@ -1625,68 +1521,68 @@ public class tParser extends Parser {
     };
 
     // $ANTLR start "sent"
-    // /home/hasdai/Documentos/tParser.g:114:1: sent : ( name SIGE val -> ^( ASIGN name val ) | VAR SIGL val -> ^( COMPL VAR val ) | name SIGL val -> ^( COMPL name val ) | VAR SIGG val -> ^( COMPG VAR val ) | name SIGG val -> ^( COMPG name val ) | VAR SIGLE val -> ^( COMPLE VAR val ) | name SIGLE val -> ^( COMPLE name val ) | VAR SIGGE val -> ^( COMPGE VAR val ) | name SIGGE val -> ^( COMPGE name val ) );
+    // /home/hasdai/Documentos/tParser.g:116:1: sent : ( name SIGE val -> ^( ASIGN name val ) | VAR SIGL val -> ^( COMPL VAR val ) | name SIGL val -> ^( COMPL name val ) | VAR SIGG val -> ^( COMPG VAR val ) | name SIGG val -> ^( COMPG name val ) | VAR SIGLE val -> ^( COMPLE VAR val ) | name SIGLE val -> ^( COMPLE name val ) | VAR SIGGE val -> ^( COMPGE VAR val ) | name SIGGE val -> ^( COMPGE name val ) );
     public final tParser.sent_return sent() throws RecognitionException {
         tParser.sent_return retval = new tParser.sent_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token SIGE43=null;
-        Token VAR45=null;
-        Token SIGL46=null;
+        Token SIGE46=null;
+        Token VAR48=null;
         Token SIGL49=null;
-        Token VAR51=null;
-        Token SIGG52=null;
+        Token SIGL52=null;
+        Token VAR54=null;
         Token SIGG55=null;
-        Token VAR57=null;
-        Token SIGLE58=null;
+        Token SIGG58=null;
+        Token VAR60=null;
         Token SIGLE61=null;
-        Token VAR63=null;
-        Token SIGGE64=null;
+        Token SIGLE64=null;
+        Token VAR66=null;
         Token SIGGE67=null;
-        tParser.name_return name42 = null;
-
-        tParser.val_return val44 = null;
+        Token SIGGE70=null;
+        tParser.name_return name45 = null;
 
         tParser.val_return val47 = null;
 
-        tParser.name_return name48 = null;
-
         tParser.val_return val50 = null;
+
+        tParser.name_return name51 = null;
 
         tParser.val_return val53 = null;
 
-        tParser.name_return name54 = null;
-
         tParser.val_return val56 = null;
+
+        tParser.name_return name57 = null;
 
         tParser.val_return val59 = null;
 
-        tParser.name_return name60 = null;
-
         tParser.val_return val62 = null;
+
+        tParser.name_return name63 = null;
 
         tParser.val_return val65 = null;
 
-        tParser.name_return name66 = null;
-
         tParser.val_return val68 = null;
 
+        tParser.name_return name69 = null;
 
-        Object SIGE43_tree=null;
-        Object VAR45_tree=null;
-        Object SIGL46_tree=null;
+        tParser.val_return val71 = null;
+
+
+        Object SIGE46_tree=null;
+        Object VAR48_tree=null;
         Object SIGL49_tree=null;
-        Object VAR51_tree=null;
-        Object SIGG52_tree=null;
+        Object SIGL52_tree=null;
+        Object VAR54_tree=null;
         Object SIGG55_tree=null;
-        Object VAR57_tree=null;
-        Object SIGLE58_tree=null;
+        Object SIGG58_tree=null;
+        Object VAR60_tree=null;
         Object SIGLE61_tree=null;
-        Object VAR63_tree=null;
-        Object SIGGE64_tree=null;
+        Object SIGLE64_tree=null;
+        Object VAR66_tree=null;
         Object SIGGE67_tree=null;
+        Object SIGGE70_tree=null;
         RewriteRuleTokenStream stream_SIGLE=new RewriteRuleTokenStream(adaptor,"token SIGLE");
         RewriteRuleTokenStream stream_VAR=new RewriteRuleTokenStream(adaptor,"token VAR");
         RewriteRuleTokenStream stream_SIGL=new RewriteRuleTokenStream(adaptor,"token SIGL");
@@ -1696,28 +1592,28 @@ public class tParser extends Parser {
         RewriteRuleSubtreeStream stream_val=new RewriteRuleSubtreeStream(adaptor,"rule val");
         RewriteRuleSubtreeStream stream_name=new RewriteRuleSubtreeStream(adaptor,"rule name");
         try {
-            // /home/hasdai/Documentos/tParser.g:115:1: ( name SIGE val -> ^( ASIGN name val ) | VAR SIGL val -> ^( COMPL VAR val ) | name SIGL val -> ^( COMPL name val ) | VAR SIGG val -> ^( COMPG VAR val ) | name SIGG val -> ^( COMPG name val ) | VAR SIGLE val -> ^( COMPLE VAR val ) | name SIGLE val -> ^( COMPLE name val ) | VAR SIGGE val -> ^( COMPGE VAR val ) | name SIGGE val -> ^( COMPGE name val ) )
+            // /home/hasdai/Documentos/tParser.g:117:1: ( name SIGE val -> ^( ASIGN name val ) | VAR SIGL val -> ^( COMPL VAR val ) | name SIGL val -> ^( COMPL name val ) | VAR SIGG val -> ^( COMPG VAR val ) | name SIGG val -> ^( COMPG name val ) | VAR SIGLE val -> ^( COMPLE VAR val ) | name SIGLE val -> ^( COMPLE name val ) | VAR SIGGE val -> ^( COMPGE VAR val ) | name SIGGE val -> ^( COMPGE name val ) )
             int alt12=9;
             alt12 = dfa12.predict(input);
             switch (alt12) {
                 case 1 :
-                    // /home/hasdai/Documentos/tParser.g:115:3: name SIGE val
+                    // /home/hasdai/Documentos/tParser.g:117:3: name SIGE val
                     {
-                    pushFollow(FOLLOW_name_in_sent394);
-                    name42=name();
+                    pushFollow(FOLLOW_name_in_sent405);
+                    name45=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_name.add(name42.getTree());
-                    SIGE43=(Token)match(input,SIGE,FOLLOW_SIGE_in_sent396); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGE.add(SIGE43);
+                    if ( state.backtracking==0 ) stream_name.add(name45.getTree());
+                    SIGE46=(Token)match(input,SIGE,FOLLOW_SIGE_in_sent407); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGE.add(SIGE46);
 
-                    pushFollow(FOLLOW_val_in_sent398);
-                    val44=val();
+                    pushFollow(FOLLOW_val_in_sent409);
+                    val47=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val44.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val47.getTree());
 
 
                     // AST REWRITE
@@ -1732,9 +1628,9 @@ public class tParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 115:17: -> ^( ASIGN name val )
+                    // 117:17: -> ^( ASIGN name val )
                     {
-                        // /home/hasdai/Documentos/tParser.g:115:20: ^( ASIGN name val )
+                        // /home/hasdai/Documentos/tParser.g:117:20: ^( ASIGN name val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(ASIGN, "ASIGN"), root_1);
@@ -1751,20 +1647,20 @@ public class tParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/hasdai/Documentos/tParser.g:116:3: VAR SIGL val
+                    // /home/hasdai/Documentos/tParser.g:118:3: VAR SIGL val
                     {
-                    VAR45=(Token)match(input,VAR,FOLLOW_VAR_in_sent412); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_VAR.add(VAR45);
+                    VAR48=(Token)match(input,VAR,FOLLOW_VAR_in_sent423); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_VAR.add(VAR48);
 
-                    SIGL46=(Token)match(input,SIGL,FOLLOW_SIGL_in_sent414); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGL.add(SIGL46);
+                    SIGL49=(Token)match(input,SIGL,FOLLOW_SIGL_in_sent425); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGL.add(SIGL49);
 
-                    pushFollow(FOLLOW_val_in_sent416);
-                    val47=val();
+                    pushFollow(FOLLOW_val_in_sent427);
+                    val50=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val47.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val50.getTree());
 
 
                     // AST REWRITE
@@ -1779,9 +1675,9 @@ public class tParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 116:16: -> ^( COMPL VAR val )
+                    // 118:16: -> ^( COMPL VAR val )
                     {
-                        // /home/hasdai/Documentos/tParser.g:116:19: ^( COMPL VAR val )
+                        // /home/hasdai/Documentos/tParser.g:118:19: ^( COMPL VAR val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPL, "COMPL"), root_1);
@@ -1798,27 +1694,27 @@ public class tParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/hasdai/Documentos/tParser.g:117:3: name SIGL val
+                    // /home/hasdai/Documentos/tParser.g:119:3: name SIGL val
                     {
-                    pushFollow(FOLLOW_name_in_sent430);
-                    name48=name();
+                    pushFollow(FOLLOW_name_in_sent441);
+                    name51=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_name.add(name48.getTree());
-                    SIGL49=(Token)match(input,SIGL,FOLLOW_SIGL_in_sent432); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGL.add(SIGL49);
+                    if ( state.backtracking==0 ) stream_name.add(name51.getTree());
+                    SIGL52=(Token)match(input,SIGL,FOLLOW_SIGL_in_sent443); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGL.add(SIGL52);
 
-                    pushFollow(FOLLOW_val_in_sent434);
-                    val50=val();
+                    pushFollow(FOLLOW_val_in_sent445);
+                    val53=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val50.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val53.getTree());
 
 
                     // AST REWRITE
-                    // elements: name, val
+                    // elements: val, name
                     // token labels:
                     // rule labels: retval
                     // token list labels:
@@ -1829,9 +1725,9 @@ public class tParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 117:17: -> ^( COMPL name val )
+                    // 119:17: -> ^( COMPL name val )
                     {
-                        // /home/hasdai/Documentos/tParser.g:117:20: ^( COMPL name val )
+                        // /home/hasdai/Documentos/tParser.g:119:20: ^( COMPL name val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPL, "COMPL"), root_1);
@@ -1848,24 +1744,24 @@ public class tParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/hasdai/Documentos/tParser.g:118:3: VAR SIGG val
+                    // /home/hasdai/Documentos/tParser.g:120:3: VAR SIGG val
                     {
-                    VAR51=(Token)match(input,VAR,FOLLOW_VAR_in_sent448); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_VAR.add(VAR51);
+                    VAR54=(Token)match(input,VAR,FOLLOW_VAR_in_sent459); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_VAR.add(VAR54);
 
-                    SIGG52=(Token)match(input,SIGG,FOLLOW_SIGG_in_sent450); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGG.add(SIGG52);
+                    SIGG55=(Token)match(input,SIGG,FOLLOW_SIGG_in_sent461); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGG.add(SIGG55);
 
-                    pushFollow(FOLLOW_val_in_sent452);
-                    val53=val();
+                    pushFollow(FOLLOW_val_in_sent463);
+                    val56=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val53.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val56.getTree());
 
 
                     // AST REWRITE
-                    // elements: VAR, val
+                    // elements: val, VAR
                     // token labels:
                     // rule labels: retval
                     // token list labels:
@@ -1876,9 +1772,9 @@ public class tParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 118:16: -> ^( COMPG VAR val )
+                    // 120:16: -> ^( COMPG VAR val )
                     {
-                        // /home/hasdai/Documentos/tParser.g:118:19: ^( COMPG VAR val )
+                        // /home/hasdai/Documentos/tParser.g:120:19: ^( COMPG VAR val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPG, "COMPG"), root_1);
@@ -1895,23 +1791,23 @@ public class tParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/hasdai/Documentos/tParser.g:119:3: name SIGG val
+                    // /home/hasdai/Documentos/tParser.g:121:3: name SIGG val
                     {
-                    pushFollow(FOLLOW_name_in_sent466);
-                    name54=name();
+                    pushFollow(FOLLOW_name_in_sent477);
+                    name57=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_name.add(name54.getTree());
-                    SIGG55=(Token)match(input,SIGG,FOLLOW_SIGG_in_sent468); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGG.add(SIGG55);
+                    if ( state.backtracking==0 ) stream_name.add(name57.getTree());
+                    SIGG58=(Token)match(input,SIGG,FOLLOW_SIGG_in_sent479); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGG.add(SIGG58);
 
-                    pushFollow(FOLLOW_val_in_sent470);
-                    val56=val();
+                    pushFollow(FOLLOW_val_in_sent481);
+                    val59=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val56.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val59.getTree());
 
 
                     // AST REWRITE
@@ -1926,9 +1822,9 @@ public class tParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 119:17: -> ^( COMPG name val )
+                    // 121:17: -> ^( COMPG name val )
                     {
-                        // /home/hasdai/Documentos/tParser.g:119:20: ^( COMPG name val )
+                        // /home/hasdai/Documentos/tParser.g:121:20: ^( COMPG name val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPG, "COMPG"), root_1);
@@ -1945,20 +1841,20 @@ public class tParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/hasdai/Documentos/tParser.g:120:3: VAR SIGLE val
+                    // /home/hasdai/Documentos/tParser.g:122:3: VAR SIGLE val
                     {
-                    VAR57=(Token)match(input,VAR,FOLLOW_VAR_in_sent484); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_VAR.add(VAR57);
+                    VAR60=(Token)match(input,VAR,FOLLOW_VAR_in_sent495); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_VAR.add(VAR60);
 
-                    SIGLE58=(Token)match(input,SIGLE,FOLLOW_SIGLE_in_sent486); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGLE.add(SIGLE58);
+                    SIGLE61=(Token)match(input,SIGLE,FOLLOW_SIGLE_in_sent497); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGLE.add(SIGLE61);
 
-                    pushFollow(FOLLOW_val_in_sent488);
-                    val59=val();
+                    pushFollow(FOLLOW_val_in_sent499);
+                    val62=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val59.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val62.getTree());
 
 
                     // AST REWRITE
@@ -1973,9 +1869,9 @@ public class tParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 120:17: -> ^( COMPLE VAR val )
+                    // 122:17: -> ^( COMPLE VAR val )
                     {
-                        // /home/hasdai/Documentos/tParser.g:120:20: ^( COMPLE VAR val )
+                        // /home/hasdai/Documentos/tParser.g:122:20: ^( COMPLE VAR val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPLE, "COMPLE"), root_1);
@@ -1992,27 +1888,27 @@ public class tParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // /home/hasdai/Documentos/tParser.g:121:3: name SIGLE val
+                    // /home/hasdai/Documentos/tParser.g:123:3: name SIGLE val
                     {
-                    pushFollow(FOLLOW_name_in_sent502);
-                    name60=name();
+                    pushFollow(FOLLOW_name_in_sent513);
+                    name63=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_name.add(name60.getTree());
-                    SIGLE61=(Token)match(input,SIGLE,FOLLOW_SIGLE_in_sent504); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGLE.add(SIGLE61);
+                    if ( state.backtracking==0 ) stream_name.add(name63.getTree());
+                    SIGLE64=(Token)match(input,SIGLE,FOLLOW_SIGLE_in_sent515); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGLE.add(SIGLE64);
 
-                    pushFollow(FOLLOW_val_in_sent506);
-                    val62=val();
+                    pushFollow(FOLLOW_val_in_sent517);
+                    val65=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val62.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val65.getTree());
 
 
                     // AST REWRITE
-                    // elements: val, name
+                    // elements: name, val
                     // token labels:
                     // rule labels: retval
                     // token list labels:
@@ -2023,9 +1919,9 @@ public class tParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 121:18: -> ^( COMPLE name val )
+                    // 123:18: -> ^( COMPLE name val )
                     {
-                        // /home/hasdai/Documentos/tParser.g:121:21: ^( COMPLE name val )
+                        // /home/hasdai/Documentos/tParser.g:123:21: ^( COMPLE name val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPLE, "COMPLE"), root_1);
@@ -2042,20 +1938,20 @@ public class tParser extends Parser {
                     }
                     break;
                 case 8 :
-                    // /home/hasdai/Documentos/tParser.g:122:3: VAR SIGGE val
+                    // /home/hasdai/Documentos/tParser.g:124:3: VAR SIGGE val
                     {
-                    VAR63=(Token)match(input,VAR,FOLLOW_VAR_in_sent520); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_VAR.add(VAR63);
+                    VAR66=(Token)match(input,VAR,FOLLOW_VAR_in_sent531); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_VAR.add(VAR66);
 
-                    SIGGE64=(Token)match(input,SIGGE,FOLLOW_SIGGE_in_sent522); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGGE.add(SIGGE64);
+                    SIGGE67=(Token)match(input,SIGGE,FOLLOW_SIGGE_in_sent533); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGGE.add(SIGGE67);
 
-                    pushFollow(FOLLOW_val_in_sent524);
-                    val65=val();
+                    pushFollow(FOLLOW_val_in_sent535);
+                    val68=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val65.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val68.getTree());
 
 
                     // AST REWRITE
@@ -2070,9 +1966,9 @@ public class tParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 122:17: -> ^( COMPGE VAR val )
+                    // 124:17: -> ^( COMPGE VAR val )
                     {
-                        // /home/hasdai/Documentos/tParser.g:122:20: ^( COMPGE VAR val )
+                        // /home/hasdai/Documentos/tParser.g:124:20: ^( COMPGE VAR val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPGE, "COMPGE"), root_1);
@@ -2089,23 +1985,23 @@ public class tParser extends Parser {
                     }
                     break;
                 case 9 :
-                    // /home/hasdai/Documentos/tParser.g:123:3: name SIGGE val
+                    // /home/hasdai/Documentos/tParser.g:125:3: name SIGGE val
                     {
-                    pushFollow(FOLLOW_name_in_sent538);
-                    name66=name();
+                    pushFollow(FOLLOW_name_in_sent549);
+                    name69=name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_name.add(name66.getTree());
-                    SIGGE67=(Token)match(input,SIGGE,FOLLOW_SIGGE_in_sent540); if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_SIGGE.add(SIGGE67);
+                    if ( state.backtracking==0 ) stream_name.add(name69.getTree());
+                    SIGGE70=(Token)match(input,SIGGE,FOLLOW_SIGGE_in_sent551); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGGE.add(SIGGE70);
 
-                    pushFollow(FOLLOW_val_in_sent542);
-                    val68=val();
+                    pushFollow(FOLLOW_val_in_sent553);
+                    val71=val();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    if ( state.backtracking==0 ) stream_val.add(val68.getTree());
+                    if ( state.backtracking==0 ) stream_val.add(val71.getTree());
 
 
                     // AST REWRITE
@@ -2120,9 +2016,9 @@ public class tParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 123:18: -> ^( COMPGE name val )
+                    // 125:18: -> ^( COMPGE name val )
                     {
-                        // /home/hasdai/Documentos/tParser.g:123:21: ^( COMPGE name val )
+                        // /home/hasdai/Documentos/tParser.g:125:21: ^( COMPGE name val )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPGE, "COMPGE"), root_1);
@@ -2166,27 +2062,27 @@ public class tParser extends Parser {
     };
 
     // $ANTLR start "val"
-    // /home/hasdai/Documentos/tParser.g:127:1: val : ( LIT | BOL | NUM );
+    // /home/hasdai/Documentos/tParser.g:129:1: val : ( LIT | BOL | NUM );
     public final tParser.val_return val() throws RecognitionException {
         tParser.val_return retval = new tParser.val_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token set69=null;
+        Token set72=null;
 
-        Object set69_tree=null;
+        Object set72_tree=null;
 
         try {
-            // /home/hasdai/Documentos/tParser.g:128:1: ( LIT | BOL | NUM )
+            // /home/hasdai/Documentos/tParser.g:130:1: ( LIT | BOL | NUM )
             // /home/hasdai/Documentos/tParser.g:
             {
             root_0 = (Object)adaptor.nil();
 
-            set69=(Token)input.LT(1);
+            set72=(Token)input.LT(1);
             if ( (input.LA(1)>=BOL && input.LA(1)<=LIT) ) {
                 input.consume();
-                if ( state.backtracking==0 ) adaptor.addChild(root_0, (Object)adaptor.create(set69));
+                if ( state.backtracking==0 ) adaptor.addChild(root_0, (Object)adaptor.create(set72));
                 state.errorRecovery=false;state.failed=false;
             }
             else {
@@ -2223,13 +2119,13 @@ public class tParser extends Parser {
         // /home/hasdai/Documentos/tParser.g:91:3: ( oquery DEL querylist )
         // /home/hasdai/Documentos/tParser.g:91:3: oquery DEL querylist
         {
-        pushFollow(FOLLOW_oquery_in_synpred11_tParser287);
+        pushFollow(FOLLOW_oquery_in_synpred11_tParser286);
         oquery();
 
         state._fsp--;
         if (state.failed) return ;
-        match(input,DEL,FOLLOW_DEL_in_synpred11_tParser289); if (state.failed) return ;
-        pushFollow(FOLLOW_querylist_in_synpred11_tParser292);
+        match(input,DEL,FOLLOW_DEL_in_synpred11_tParser288); if (state.failed) return ;
+        pushFollow(FOLLOW_querylist_in_synpred11_tParser291);
         querylist();
 
         state._fsp--;
@@ -2239,52 +2135,50 @@ public class tParser extends Parser {
     }
     // $ANTLR end synpred11_tParser
 
-    // $ANTLR start synpred16_tParser
-    public final void synpred16_tParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/tParser.g:116:3: ( VAR SIGL val )
-        // /home/hasdai/Documentos/tParser.g:116:3: VAR SIGL val
+    // $ANTLR start synpred12_tParser
+    public final void synpred12_tParser_fragment() throws RecognitionException {
+        // /home/hasdai/Documentos/tParser.g:92:3: ( sent DEL querylist )
+        // /home/hasdai/Documentos/tParser.g:92:3: sent DEL querylist
         {
-        match(input,VAR,FOLLOW_VAR_in_synpred16_tParser412); if (state.failed) return ;
-        match(input,SIGL,FOLLOW_SIGL_in_synpred16_tParser414); if (state.failed) return ;
-        pushFollow(FOLLOW_val_in_synpred16_tParser416);
-        val();
+        pushFollow(FOLLOW_sent_in_synpred12_tParser295);
+        sent();
+
+        state._fsp--;
+        if (state.failed) return ;
+        match(input,DEL,FOLLOW_DEL_in_synpred12_tParser297); if (state.failed) return ;
+        pushFollow(FOLLOW_querylist_in_synpred12_tParser300);
+        querylist();
 
         state._fsp--;
         if (state.failed) return ;
 
         }
     }
-    // $ANTLR end synpred16_tParser
+    // $ANTLR end synpred12_tParser
 
-    // $ANTLR start synpred17_tParser
-    public final void synpred17_tParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/tParser.g:117:3: ( name SIGL val )
-        // /home/hasdai/Documentos/tParser.g:117:3: name SIGL val
+    // $ANTLR start synpred13_tParser
+    public final void synpred13_tParser_fragment() throws RecognitionException {
+        // /home/hasdai/Documentos/tParser.g:93:3: ( oquery )
+        // /home/hasdai/Documentos/tParser.g:93:3: oquery
         {
-        pushFollow(FOLLOW_name_in_synpred17_tParser430);
-        name();
-
-        state._fsp--;
-        if (state.failed) return ;
-        match(input,SIGL,FOLLOW_SIGL_in_synpred17_tParser432); if (state.failed) return ;
-        pushFollow(FOLLOW_val_in_synpred17_tParser434);
-        val();
+        pushFollow(FOLLOW_oquery_in_synpred13_tParser304);
+        oquery();
 
         state._fsp--;
         if (state.failed) return ;
 
         }
     }
-    // $ANTLR end synpred17_tParser
+    // $ANTLR end synpred13_tParser
 
     // $ANTLR start synpred18_tParser
     public final void synpred18_tParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/tParser.g:118:3: ( VAR SIGG val )
-        // /home/hasdai/Documentos/tParser.g:118:3: VAR SIGG val
+        // /home/hasdai/Documentos/tParser.g:118:3: ( VAR SIGL val )
+        // /home/hasdai/Documentos/tParser.g:118:3: VAR SIGL val
         {
-        match(input,VAR,FOLLOW_VAR_in_synpred18_tParser448); if (state.failed) return ;
-        match(input,SIGG,FOLLOW_SIGG_in_synpred18_tParser450); if (state.failed) return ;
-        pushFollow(FOLLOW_val_in_synpred18_tParser452);
+        match(input,VAR,FOLLOW_VAR_in_synpred18_tParser423); if (state.failed) return ;
+        match(input,SIGL,FOLLOW_SIGL_in_synpred18_tParser425); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred18_tParser427);
         val();
 
         state._fsp--;
@@ -2296,16 +2190,16 @@ public class tParser extends Parser {
 
     // $ANTLR start synpred19_tParser
     public final void synpred19_tParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/tParser.g:119:3: ( name SIGG val )
-        // /home/hasdai/Documentos/tParser.g:119:3: name SIGG val
+        // /home/hasdai/Documentos/tParser.g:119:3: ( name SIGL val )
+        // /home/hasdai/Documentos/tParser.g:119:3: name SIGL val
         {
-        pushFollow(FOLLOW_name_in_synpred19_tParser466);
+        pushFollow(FOLLOW_name_in_synpred19_tParser441);
         name();
 
         state._fsp--;
         if (state.failed) return ;
-        match(input,SIGG,FOLLOW_SIGG_in_synpred19_tParser468); if (state.failed) return ;
-        pushFollow(FOLLOW_val_in_synpred19_tParser470);
+        match(input,SIGL,FOLLOW_SIGL_in_synpred19_tParser443); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred19_tParser445);
         val();
 
         state._fsp--;
@@ -2317,12 +2211,12 @@ public class tParser extends Parser {
 
     // $ANTLR start synpred20_tParser
     public final void synpred20_tParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/tParser.g:120:3: ( VAR SIGLE val )
-        // /home/hasdai/Documentos/tParser.g:120:3: VAR SIGLE val
+        // /home/hasdai/Documentos/tParser.g:120:3: ( VAR SIGG val )
+        // /home/hasdai/Documentos/tParser.g:120:3: VAR SIGG val
         {
-        match(input,VAR,FOLLOW_VAR_in_synpred20_tParser484); if (state.failed) return ;
-        match(input,SIGLE,FOLLOW_SIGLE_in_synpred20_tParser486); if (state.failed) return ;
-        pushFollow(FOLLOW_val_in_synpred20_tParser488);
+        match(input,VAR,FOLLOW_VAR_in_synpred20_tParser459); if (state.failed) return ;
+        match(input,SIGG,FOLLOW_SIGG_in_synpred20_tParser461); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred20_tParser463);
         val();
 
         state._fsp--;
@@ -2334,16 +2228,16 @@ public class tParser extends Parser {
 
     // $ANTLR start synpred21_tParser
     public final void synpred21_tParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/tParser.g:121:3: ( name SIGLE val )
-        // /home/hasdai/Documentos/tParser.g:121:3: name SIGLE val
+        // /home/hasdai/Documentos/tParser.g:121:3: ( name SIGG val )
+        // /home/hasdai/Documentos/tParser.g:121:3: name SIGG val
         {
-        pushFollow(FOLLOW_name_in_synpred21_tParser502);
+        pushFollow(FOLLOW_name_in_synpred21_tParser477);
         name();
 
         state._fsp--;
         if (state.failed) return ;
-        match(input,SIGLE,FOLLOW_SIGLE_in_synpred21_tParser504); if (state.failed) return ;
-        pushFollow(FOLLOW_val_in_synpred21_tParser506);
+        match(input,SIGG,FOLLOW_SIGG_in_synpred21_tParser479); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred21_tParser481);
         val();
 
         state._fsp--;
@@ -2355,12 +2249,12 @@ public class tParser extends Parser {
 
     // $ANTLR start synpred22_tParser
     public final void synpred22_tParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/tParser.g:122:3: ( VAR SIGGE val )
-        // /home/hasdai/Documentos/tParser.g:122:3: VAR SIGGE val
+        // /home/hasdai/Documentos/tParser.g:122:3: ( VAR SIGLE val )
+        // /home/hasdai/Documentos/tParser.g:122:3: VAR SIGLE val
         {
-        match(input,VAR,FOLLOW_VAR_in_synpred22_tParser520); if (state.failed) return ;
-        match(input,SIGGE,FOLLOW_SIGGE_in_synpred22_tParser522); if (state.failed) return ;
-        pushFollow(FOLLOW_val_in_synpred22_tParser524);
+        match(input,VAR,FOLLOW_VAR_in_synpred22_tParser495); if (state.failed) return ;
+        match(input,SIGLE,FOLLOW_SIGLE_in_synpred22_tParser497); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred22_tParser499);
         val();
 
         state._fsp--;
@@ -2370,8 +2264,74 @@ public class tParser extends Parser {
     }
     // $ANTLR end synpred22_tParser
 
+    // $ANTLR start synpred23_tParser
+    public final void synpred23_tParser_fragment() throws RecognitionException {
+        // /home/hasdai/Documentos/tParser.g:123:3: ( name SIGLE val )
+        // /home/hasdai/Documentos/tParser.g:123:3: name SIGLE val
+        {
+        pushFollow(FOLLOW_name_in_synpred23_tParser513);
+        name();
+
+        state._fsp--;
+        if (state.failed) return ;
+        match(input,SIGLE,FOLLOW_SIGLE_in_synpred23_tParser515); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred23_tParser517);
+        val();
+
+        state._fsp--;
+        if (state.failed) return ;
+
+        }
+    }
+    // $ANTLR end synpred23_tParser
+
+    // $ANTLR start synpred24_tParser
+    public final void synpred24_tParser_fragment() throws RecognitionException {
+        // /home/hasdai/Documentos/tParser.g:124:3: ( VAR SIGGE val )
+        // /home/hasdai/Documentos/tParser.g:124:3: VAR SIGGE val
+        {
+        match(input,VAR,FOLLOW_VAR_in_synpred24_tParser531); if (state.failed) return ;
+        match(input,SIGGE,FOLLOW_SIGGE_in_synpred24_tParser533); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred24_tParser535);
+        val();
+
+        state._fsp--;
+        if (state.failed) return ;
+
+        }
+    }
+    // $ANTLR end synpred24_tParser
+
     // Delegated rules
 
+    public final boolean synpred13_tParser() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred13_tParser_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
+    public final boolean synpred24_tParser() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred24_tParser_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
     public final boolean synpred20_tParser() {
         state.backtracking++;
         int start = input.mark();
@@ -2428,6 +2388,20 @@ public class tParser extends Parser {
         state.failed=false;
         return success;
     }
+    public final boolean synpred12_tParser() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred12_tParser_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
     public final boolean synpred11_tParser() {
         state.backtracking++;
         int start = input.mark();
@@ -2442,11 +2416,11 @@ public class tParser extends Parser {
         state.failed=false;
         return success;
     }
-    public final boolean synpred17_tParser() {
+    public final boolean synpred23_tParser() {
         state.backtracking++;
         int start = input.mark();
         try {
-            synpred17_tParser_fragment(); // can never throw exception
+            synpred23_tParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -2470,23 +2444,149 @@ public class tParser extends Parser {
         state.failed=false;
         return success;
     }
-    public final boolean synpred16_tParser() {
-        state.backtracking++;
-        int start = input.mark();
-        try {
-            synpred16_tParser_fragment(); // can never throw exception
-        } catch (RecognitionException re) {
-            System.err.println("impossible: "+re);
+
+
+    protected DFA9 dfa9 = new DFA9(this);
+    protected DFA12 dfa12 = new DFA12(this);
+    static final String DFA9_eotS =
+        "\14\uffff";
+    static final String DFA9_eofS =
+        "\1\5\13\uffff";
+    static final String DFA9_minS =
+        "\1\16\4\0\7\uffff";
+    static final String DFA9_maxS =
+        "\1\32\4\0\7\uffff";
+    static final String DFA9_acceptS =
+        "\5\uffff\1\3\3\uffff\1\1\1\2\1\4";
+    static final String DFA9_specialS =
+        "\1\uffff\1\0\1\1\1\2\1\3\7\uffff}>";
+    static final String[] DFA9_transitionS = {
+            "\2\5\5\uffff\1\4\1\uffff\1\2\1\3\1\5\1\1",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+    };
+
+    static final short[] DFA9_eot = DFA.unpackEncodedString(DFA9_eotS);
+    static final short[] DFA9_eof = DFA.unpackEncodedString(DFA9_eofS);
+    static final char[] DFA9_min = DFA.unpackEncodedStringToUnsignedChars(DFA9_minS);
+    static final char[] DFA9_max = DFA.unpackEncodedStringToUnsignedChars(DFA9_maxS);
+    static final short[] DFA9_accept = DFA.unpackEncodedString(DFA9_acceptS);
+    static final short[] DFA9_special = DFA.unpackEncodedString(DFA9_specialS);
+    static final short[][] DFA9_transition;
+
+    static {
+        int numStates = DFA9_transitionS.length;
+        DFA9_transition = new short[numStates][];
+        for (int i=0; i<numStates; i++) {
+            DFA9_transition[i] = DFA.unpackEncodedString(DFA9_transitionS[i]);
         }
-        boolean success = !state.failed;
-        input.rewind(start);
-        state.backtracking--;
-        state.failed=false;
-        return success;
     }
 
+    class DFA9 extends DFA {
 
-    protected DFA12 dfa12 = new DFA12(this);
+        public DFA9(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 9;
+            this.eot = DFA9_eot;
+            this.eof = DFA9_eof;
+            this.min = DFA9_min;
+            this.max = DFA9_max;
+            this.accept = DFA9_accept;
+            this.special = DFA9_special;
+            this.transition = DFA9_transition;
+        }
+        public String getDescription() {
+            return "90:1: querylist : ( oquery DEL querylist | sent DEL querylist | oquery | sent );";
+        }
+        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+            TokenStream input = (TokenStream)_input;
+        	int _s = s;
+            switch ( s ) {
+                    case 0 :
+                        int LA9_1 = input.LA(1);
+
+
+                        int index9_1 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred11_tParser()) ) {s = 9;}
+
+                        else if ( (synpred13_tParser()) ) {s = 5;}
+
+
+                        input.seek(index9_1);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 :
+                        int LA9_2 = input.LA(1);
+
+
+                        int index9_2 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred11_tParser()) ) {s = 9;}
+
+                        else if ( (synpred12_tParser()) ) {s = 10;}
+
+                        else if ( (synpred13_tParser()) ) {s = 5;}
+
+                        else if ( (true) ) {s = 11;}
+
+
+                        input.seek(index9_2);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 2 :
+                        int LA9_3 = input.LA(1);
+
+
+                        int index9_3 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred11_tParser()) ) {s = 9;}
+
+                        else if ( (synpred13_tParser()) ) {s = 5;}
+
+
+                        input.seek(index9_3);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 3 :
+                        int LA9_4 = input.LA(1);
+
+
+                        int index9_4 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred11_tParser()) ) {s = 9;}
+
+                        else if ( (synpred12_tParser()) ) {s = 10;}
+
+                        else if ( (synpred13_tParser()) ) {s = 5;}
+
+                        else if ( (true) ) {s = 11;}
+
+
+                        input.seek(index9_4);
+                        if ( s>=0 ) return s;
+                        break;
+            }
+            if (state.backtracking>0) {state.failed=true; return -1;}
+            NoViableAltException nvae =
+                new NoViableAltException(getDescription(), 9, _s, input);
+            error(nvae);
+            throw nvae;
+        }
+    }
     static final String DFA12_eotS =
         "\24\uffff";
     static final String DFA12_eofS =
@@ -2496,13 +2596,13 @@ public class tParser extends Parser {
     static final String DFA12_maxS =
         "\1\27\2\12\4\22\5\uffff\4\0\4\uffff";
     static final String DFA12_acceptS =
-        "\7\uffff\1\1\1\5\1\11\1\7\1\3\4\uffff\1\2\1\4\1\6\1\10";
+        "\7\uffff\1\1\1\7\1\11\1\5\1\3\4\uffff\1\2\1\4\1\6\1\10";
     static final String DFA12_specialS =
-        "\14\uffff\1\0\1\1\1\2\1\3\4\uffff}>";
+        "\14\uffff\1\0\1\1\1\3\1\2\4\uffff}>";
     static final String[] DFA12_transitionS = {
             "\1\2\1\uffff\1\1",
             "\1\3\1\4\1\7\1\5\1\6",
-            "\1\13\1\10\1\7\1\12\1\11",
+            "\1\13\1\12\1\7\1\10\1\11",
             "\3\14",
             "\3\15",
             "\3\16",
@@ -2552,7 +2652,7 @@ public class tParser extends Parser {
             this.transition = DFA12_transition;
         }
         public String getDescription() {
-            return "114:1: sent : ( name SIGE val -> ^( ASIGN name val ) | VAR SIGL val -> ^( COMPL VAR val ) | name SIGL val -> ^( COMPL name val ) | VAR SIGG val -> ^( COMPG VAR val ) | name SIGG val -> ^( COMPG name val ) | VAR SIGLE val -> ^( COMPLE VAR val ) | name SIGLE val -> ^( COMPLE name val ) | VAR SIGGE val -> ^( COMPGE VAR val ) | name SIGGE val -> ^( COMPGE name val ) );";
+            return "116:1: sent : ( name SIGE val -> ^( ASIGN name val ) | VAR SIGL val -> ^( COMPL VAR val ) | name SIGL val -> ^( COMPL name val ) | VAR SIGG val -> ^( COMPG VAR val ) | name SIGG val -> ^( COMPG name val ) | VAR SIGLE val -> ^( COMPLE VAR val ) | name SIGLE val -> ^( COMPLE name val ) | VAR SIGGE val -> ^( COMPGE VAR val ) | name SIGGE val -> ^( COMPGE name val ) );";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             TokenStream input = (TokenStream)_input;
@@ -2565,9 +2665,9 @@ public class tParser extends Parser {
                         int index12_12 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred16_tParser()) ) {s = 16;}
+                        if ( (synpred18_tParser()) ) {s = 16;}
 
-                        else if ( (synpred17_tParser()) ) {s = 11;}
+                        else if ( (synpred19_tParser()) ) {s = 11;}
 
 
                         input.seek(index12_12);
@@ -2580,42 +2680,42 @@ public class tParser extends Parser {
                         int index12_13 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred18_tParser()) ) {s = 17;}
+                        if ( (synpred20_tParser()) ) {s = 17;}
 
-                        else if ( (synpred19_tParser()) ) {s = 8;}
+                        else if ( (synpred21_tParser()) ) {s = 10;}
 
 
                         input.seek(index12_13);
                         if ( s>=0 ) return s;
                         break;
                     case 2 :
-                        int LA12_14 = input.LA(1);
-
-
-                        int index12_14 = input.index();
-                        input.rewind();
-                        s = -1;
-                        if ( (synpred20_tParser()) ) {s = 18;}
-
-                        else if ( (synpred21_tParser()) ) {s = 10;}
-
-
-                        input.seek(index12_14);
-                        if ( s>=0 ) return s;
-                        break;
-                    case 3 :
                         int LA12_15 = input.LA(1);
 
 
                         int index12_15 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred22_tParser()) ) {s = 19;}
+                        if ( (synpred24_tParser()) ) {s = 19;}
 
                         else if ( (true) ) {s = 9;}
 
 
                         input.seek(index12_15);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 3 :
+                        int LA12_14 = input.LA(1);
+
+
+                        int index12_14 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred22_tParser()) ) {s = 18;}
+
+                        else if ( (synpred23_tParser()) ) {s = 8;}
+
+
+                        input.seek(index12_14);
                         if ( s>=0 ) return s;
                         break;
             }
@@ -2628,7 +2728,7 @@ public class tParser extends Parser {
     }
 
 
-    public static final BitSet FOLLOW_limiter_in_squery98 = new BitSet(new long[]{0x0000000001A00000L});
+    public static final BitSet FOLLOW_limiter_in_squery98 = new BitSet(new long[]{0x0000000001A0C000L});
     public static final BitSet FOLLOW_oquery_in_squery101 = new BitSet(new long[]{0x000000000000C000L});
     public static final BitSet FOLLOW_modifier_in_squery103 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_EOF_in_squery106 = new BitSet(new long[]{0x0000000000000002L});
@@ -2646,80 +2746,86 @@ public class tParser extends Parser {
     public static final BitSet FOLLOW_LPAR_in_ordterm217 = new BitSet(new long[]{0x0000000000A00000L});
     public static final BitSet FOLLOW_plist_in_ordterm219 = new BitSet(new long[]{0x0000000002000000L});
     public static final BitSet FOLLOW_RPAR_in_ordterm221 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_sent_in_oquery240 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_oquery244 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_oquery248 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_PREC_in_oquery250 = new BitSet(new long[]{0x0000000001A00000L});
-    public static final BitSet FOLLOW_querylist_in_oquery252 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LPAR_in_oquery270 = new BitSet(new long[]{0x0000000001A00000L});
-    public static final BitSet FOLLOW_oquery_in_oquery273 = new BitSet(new long[]{0x0000000002000000L});
-    public static final BitSet FOLLOW_RPAR_in_oquery275 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_oquery_in_querylist287 = new BitSet(new long[]{0x0000000004000000L});
-    public static final BitSet FOLLOW_DEL_in_querylist289 = new BitSet(new long[]{0x0000000001A00000L});
-    public static final BitSet FOLLOW_querylist_in_querylist292 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_oquery_in_querylist296 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_plist_in_pquery307 = new BitSet(new long[]{0x0000000000002000L});
-    public static final BitSet FOLLOW_PRED_in_pquery309 = new BitSet(new long[]{0x0000000001A00000L});
-    public static final BitSet FOLLOW_oquery_in_pquery311 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MODT_in_pquery329 = new BitSet(new long[]{0x0000000000002000L});
-    public static final BitSet FOLLOW_PRED_in_pquery331 = new BitSet(new long[]{0x0000000001A00000L});
-    public static final BitSet FOLLOW_oquery_in_pquery333 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_plist358 = new BitSet(new long[]{0x0000000004000000L});
-    public static final BitSet FOLLOW_DEL_in_plist360 = new BitSet(new long[]{0x0000000000A00000L});
-    public static final BitSet FOLLOW_plist_in_plist363 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_plist367 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_oquery243 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_oquery247 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_PREC_in_oquery249 = new BitSet(new long[]{0x0000000005A00000L});
+    public static final BitSet FOLLOW_querylist_in_oquery251 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LPAR_in_oquery269 = new BitSet(new long[]{0x0000000003A00000L});
+    public static final BitSet FOLLOW_oquery_in_oquery272 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_RPAR_in_oquery274 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_oquery_in_querylist286 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_DEL_in_querylist288 = new BitSet(new long[]{0x0000000005A00000L});
+    public static final BitSet FOLLOW_querylist_in_querylist291 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_sent_in_querylist295 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_DEL_in_querylist297 = new BitSet(new long[]{0x0000000005A00000L});
+    public static final BitSet FOLLOW_querylist_in_querylist300 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_oquery_in_querylist304 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_sent_in_querylist308 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_plist_in_pquery319 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_PRED_in_pquery321 = new BitSet(new long[]{0x0000000001A00000L});
+    public static final BitSet FOLLOW_oquery_in_pquery323 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MODT_in_pquery341 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_PRED_in_pquery343 = new BitSet(new long[]{0x0000000001A00000L});
+    public static final BitSet FOLLOW_oquery_in_pquery345 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_plist370 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_DEL_in_plist372 = new BitSet(new long[]{0x0000000000A00000L});
+    public static final BitSet FOLLOW_plist_in_plist375 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_plist379 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_name0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent394 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_SIGE_in_sent396 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent398 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_sent412 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_SIGL_in_sent414 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent416 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent430 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_SIGL_in_sent432 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent434 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_sent448 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_SIGG_in_sent450 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent452 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent466 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_SIGG_in_sent468 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent470 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_sent484 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_SIGLE_in_sent486 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent488 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent502 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_SIGLE_in_sent504 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent506 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_sent520 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_SIGGE_in_sent522 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent524 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent538 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_SIGGE_in_sent540 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_sent542 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent405 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_SIGE_in_sent407 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent409 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_sent423 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_SIGL_in_sent425 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent427 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent441 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_SIGL_in_sent443 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent445 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_sent459 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_SIGG_in_sent461 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent463 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent477 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_SIGG_in_sent479 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent481 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_sent495 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_SIGLE_in_sent497 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent499 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent513 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_SIGLE_in_sent515 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent517 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_sent531 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_SIGGE_in_sent533 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent535 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent549 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_SIGGE_in_sent551 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_sent553 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_val0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_oquery_in_synpred11_tParser287 = new BitSet(new long[]{0x0000000004000000L});
-    public static final BitSet FOLLOW_DEL_in_synpred11_tParser289 = new BitSet(new long[]{0x0000000001A00000L});
-    public static final BitSet FOLLOW_querylist_in_synpred11_tParser292 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_synpred16_tParser412 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_SIGL_in_synpred16_tParser414 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_synpred16_tParser416 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_synpred17_tParser430 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_SIGL_in_synpred17_tParser432 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_synpred17_tParser434 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_synpred18_tParser448 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_SIGG_in_synpred18_tParser450 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_synpred18_tParser452 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_synpred19_tParser466 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_SIGG_in_synpred19_tParser468 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_synpred19_tParser470 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_synpred20_tParser484 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_SIGLE_in_synpred20_tParser486 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_synpred20_tParser488 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_synpred21_tParser502 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_SIGLE_in_synpred21_tParser504 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_synpred21_tParser506 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_synpred22_tParser520 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_SIGGE_in_synpred22_tParser522 = new BitSet(new long[]{0x0000000000070000L});
-    public static final BitSet FOLLOW_val_in_synpred22_tParser524 = new BitSet(new long[]{0x0000000000000002L});
-
+    public static final BitSet FOLLOW_oquery_in_synpred11_tParser286 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_DEL_in_synpred11_tParser288 = new BitSet(new long[]{0x0000000005A00000L});
+    public static final BitSet FOLLOW_querylist_in_synpred11_tParser291 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_sent_in_synpred12_tParser295 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_DEL_in_synpred12_tParser297 = new BitSet(new long[]{0x0000000005A00000L});
+    public static final BitSet FOLLOW_querylist_in_synpred12_tParser300 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_oquery_in_synpred13_tParser304 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_synpred18_tParser423 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_SIGL_in_synpred18_tParser425 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_synpred18_tParser427 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_synpred19_tParser441 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_SIGL_in_synpred19_tParser443 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_synpred19_tParser445 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_synpred20_tParser459 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_SIGG_in_synpred20_tParser461 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_synpred20_tParser463 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_synpred21_tParser477 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_SIGG_in_synpred21_tParser479 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_synpred21_tParser481 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_synpred22_tParser495 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_SIGLE_in_synpred22_tParser497 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_synpred22_tParser499 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_synpred23_tParser513 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_SIGLE_in_synpred23_tParser515 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_synpred23_tParser517 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_synpred24_tParser531 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_SIGGE_in_synpred24_tParser533 = new BitSet(new long[]{0x0000000000070000L});
+    public static final BitSet FOLLOW_val_in_synpred24_tParser535 = new BitSet(new long[]{0x0000000000000002L});
 }
