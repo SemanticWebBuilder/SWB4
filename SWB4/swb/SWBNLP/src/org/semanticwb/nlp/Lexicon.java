@@ -12,8 +12,11 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 
 /**
- *
  * @author hasdai
+ * A lexicon is a list of tagged words. In this case, word labels are the
+ * display names (in the given language) for Semantic Classes and Semantic
+ * Properties. For the analysis purpose, Class names and Propery names are
+ * stored in separated sets.
  */
 public class Lexicon {
     //TODO: Poner el léxico en un árbol
@@ -26,16 +29,51 @@ public class Lexicon {
     private String prefixString = "";
 
     /**
-     * Constructor.
-     * @param lex Diccionario de palabras.
+     * Creates a new Lexicon given the user's language. This method traverses the
+     * SemanticVocabulary and retrieves the displayName of all Semantic Classes and
+     * Semantic Properties, then adds each of the names to the corresponding list.
+     * @param lang language for the new Lexicon.
+     */
+    public Lexicon(String lang) {
+        pLexic = new ArrayList<Word>();
+        oLexic = new ArrayList<Word>();
+        language = lang;
+        getVocabularyPrefixes();
+
+        //Create a new word dictionary instance
+        Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
+
+        //Traverse the ontology model to fill the dictionary
+        while (its.hasNext()) {
+            SemanticClass sc = its.next();
+
+            this.addWord(new Word(sc.getDisplayName(lang),
+                    new WordTag("OBJ", sc.getPrefix() + ":" + sc.getName(), sc.getName())));
+
+            Iterator<SemanticProperty> ip = sc.listProperties();
+
+            while (ip.hasNext()) {
+                SemanticProperty prop = ip.next();
+
+                this.addWord(new Word(prop.getDisplayName(lang),
+                        new WordTag("PRO", prop.getPropId(), prop.getName())));
+            }
+        }
+    }
+
+    /**
+     * Creates a new Lexicon with the given list of tagged words and its
+     * language.
+     * @param lex list of tagged words.
+     * @param lang language for the new Lexicon.
      */
     public Lexicon(ArrayList<Word> lex, String lang) {
-        getVocabularyPrefixes(lang);
         Iterator<Word> wit = lex.iterator();
         pLexic = new ArrayList<Word>();
         oLexic = new ArrayList<Word>();
         language = lang;
 
+        getVocabularyPrefixes();
         while (wit.hasNext()) {
             Word t = wit.next();
 
@@ -47,14 +85,18 @@ public class Lexicon {
         }
     }
 
+    /**
+     * Gets the language of the Lexicon.
+     */
     public String getLanguage() {
         return language;
     }
 
-    private void getVocabularyPrefixes(String lang) {
-        language = lang;
-
-        //Traverse the ontology model to fill the dictionary
+    /**
+     * Gets the prefixes from the SemanticVocabulary of the lexicon, adding
+     * rdf and rdfs default prefixes.
+     */
+    private void getVocabularyPrefixes() {
         Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
         while (its.hasNext()) {
             SemanticClass sc = its.next();
@@ -86,41 +128,16 @@ public class Lexicon {
         }
     }
 
+    /**
+     * Gets the prefixes string of the Lexicon.
+     */
     public String getPrefixString() {
         return prefixString;
     }
 
-    public Lexicon(String lang) {
-        getVocabularyPrefixes(lang);
-        pLexic = new ArrayList<Word>();
-        oLexic = new ArrayList<Word>();
-        language = lang;
-
-        //Create a new word dictionary instance
-        Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
-
-        //Traverse the ontology model to fill the dictionary
-        while (its.hasNext()) {
-            SemanticClass sc = its.next();
-
-            this.addWord(new Word(sc.getDisplayName(lang),
-                    new WordTag("OBJ", sc.getPrefix() + ":" + sc.getName(), sc.getName())));
-
-            Iterator<SemanticProperty> ip = sc.listProperties();
-
-            while (ip.hasNext()) {
-                SemanticProperty prop = ip.next();
-
-                this.addWord(new Word(prop.getDisplayName(lang),
-                        new WordTag("PRO", prop.getPropId(), prop.getName())));
-            }
-        }
-    }
-
     /**
-     * Agrega una palabra al diccionario verificando que no exista previamente,
-     * en cuyo caso no la inserta.
-     * @param w palabra a agregar.
+     * Adds a word to the léxicon if it doesn't already exist.
+     * @param w word to add.
      */
     public void addWord(Word w) {
         if (!entryExist(w)) {
@@ -133,10 +150,10 @@ public class Lexicon {
     }
 
     /**
-     * Obtiene la etiqueta de la palabra especificada.
-     * @param w palabra a etiquetar.
-     * @return WordTag con la etiqueta de la palabra y su tipo. Si la palabra no
-     *         existe en el diccionario, la etiqueta como variable.
+     * Gets the tag for the specified word. It searches in both, classes and
+     * properties list in order to find a tag.
+     * @param w word to get tag for.
+     * @return WordTag object with the tag and type for the word.
      */
     public WordTag getWordTag(Word w) {
         //TODO: Arreglar para hacer la búsqueda en un árbol
@@ -157,46 +174,12 @@ public class Lexicon {
         return new WordTag("VAR", "", "");
     }
 
-    public WordTag getPropWordTag(Word w) {
-        for (int i = 0; i < pLexic.size(); i++) {
-            if (pLexic.get(i).getLabel().toUpperCase().compareTo(w.getLabel().toUpperCase()) == 0) {
-                return new WordTag(pLexic.get(i).getTag().getTag(),
-                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName());
-            }
-        }
-        return new WordTag("VAR", "", "");
-    }
-
-    public WordTag getPropWordTag(String label) {
-        for (int i = 0; i < pLexic.size(); i++) {
-            if (pLexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
-                return new WordTag(pLexic.get(i).getTag().getTag(),
-                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName());
-            }
-        }
-        return new WordTag("VAR", "", "");
-    }
-
-    public WordTag getObjWordTag(Word w) {
-        for (int i = 0; i < oLexic.size(); i++) {
-            if (oLexic.get(i).getLabel().toUpperCase().compareTo(w.getLabel().toUpperCase()) == 0) {
-                return new WordTag(oLexic.get(i).getTag().getTag(),
-                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName());
-            }
-        }
-        return new WordTag("VAR", "", "");
-    }
-
-    public WordTag getObjWordTag(String label) {
-        for (int i = 0; i < oLexic.size(); i++) {
-            if (oLexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
-                return new WordTag(oLexic.get(i).getTag().getTag(),
-                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName());
-            }
-        }
-        return new WordTag("VAR", "", "");
-    }
-
+    /**
+     * Gets the tag for the specified word label. It searches in both, classes and
+     * properties list in order to find a tag.
+     * @param w label of word to get tag for.
+     * @return WordTag object with the tag and type for the word label.
+     */
     public WordTag getWordTag(String label) {
         boolean found = false;
 
@@ -217,9 +200,73 @@ public class Lexicon {
     }
 
     /**
-     * Verifica si ya existe una palabra en el diccionario.
-     * @param entry palabra a verificar.
-     * @return true si la palabra existe en el diccionario.
+     * Gets the tag for the specified word (word for a property). It searches
+     * only in the properties list.
+     * @param w word to get tag for.
+     * @return WordTag object with the tag and type for the word.
+     */
+    public WordTag getPropWordTag(Word w) {
+        for (int i = 0; i < pLexic.size(); i++) {
+            if (pLexic.get(i).getLabel().toUpperCase().compareTo(w.getLabel().toUpperCase()) == 0) {
+                return new WordTag(pLexic.get(i).getTag().getTag(),
+                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName());
+            }
+        }
+        return new WordTag("VAR", "", "");
+    }
+
+    /**
+     * Gets the tag for the specified label (name of a property). It searches
+     * only in the properties list.
+     * @param label name of the property to get tag for.
+     * @return WordTag object with the tag and type for the given property name.
+     */
+    public WordTag getPropWordTag(String label) {
+        for (int i = 0; i < pLexic.size(); i++) {
+            if (pLexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
+                return new WordTag(pLexic.get(i).getTag().getTag(),
+                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName());
+            }
+        }
+        return new WordTag("VAR", "", "");
+    }
+
+    /**
+     * Gets the tag for the specified word (word for a class). It searches
+     * only in the classes list.
+     * @param w word to get tag for.
+     * @return WordTag object with the tag and type for the word.
+     */
+    public WordTag getObjWordTag(Word w) {
+        for (int i = 0; i < oLexic.size(); i++) {
+            if (oLexic.get(i).getLabel().toUpperCase().compareTo(w.getLabel().toUpperCase()) == 0) {
+                return new WordTag(oLexic.get(i).getTag().getTag(),
+                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName());
+            }
+        }
+        return new WordTag("VAR", "", "");
+    }
+
+    /**
+     * Gets the tag for the specified label (name of a class). It searches
+     * only in the classes list.
+     * @param label name of the class to get tag for.
+     * @return WordTag object with the tag and type for the given class name.
+     */
+    public WordTag getObjWordTag(String label) {
+        for (int i = 0; i < oLexic.size(); i++) {
+            if (oLexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
+                return new WordTag(oLexic.get(i).getTag().getTag(),
+                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName());
+            }
+        }
+        return new WordTag("VAR", "", "");
+    }
+
+    /**
+     * Verifies if a word already exists in the Lexicon.
+     * @param entry word to search for.
+     * @return true if word is in the Lexicon, false otherwise.
      */
     public boolean entryExist(Word entry) {
         boolean found = false;
@@ -239,13 +286,19 @@ public class Lexicon {
     }
 
     /**
-     * Devuelve un iterador para recorrer el diccionario.
-     * @return Iterador a las palabras del diciconario.
+     * Gets an iterator to the list of words for the classes in the
+     * SemanticVocabulary.
+     * @return Iterator to Class words.
      */
     public Iterator<Word> listObjEntries() {
         return oLexic.iterator();
     }
 
+    /**
+     * Gets an iterator to the list of words for the properties in the
+     * SemanticVocabulary.
+     * @return Iterator to Property words.
+     */
     public Iterator<Word> listPropEntries() {
         return pLexic.iterator();
     }
