@@ -76,7 +76,7 @@ public class SWBADBNatural extends GenericResource {
                 "dojo.addOnLoad(function () {" +
                     "dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyDown');" +
                     "dojo.connect(dojo.byId('naturalQuery'), 'onkeyup', 'queryOnKeyUp');" +
-                    "dojo.connect(dojo.byId('naturalQuery'), 'onkeypress', 'queryOnKeyPress');" +
+//                    "dojo.connect(dojo.byId('naturalQuery'), 'onkeypress', 'queryOnKeyPress');" +
                     "dojo.connect(dojo.byId('naturalQuery'), 'onblur', function () {" +
                         "clearSuggestions();" +
                     "});" +
@@ -279,10 +279,12 @@ public class SWBADBNatural extends GenericResource {
         ret.append("<form id=\"" + getResourceBase().getId() + "/natural\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         ret.append("action=\"" + url + "\" method=\"POST\"");
         ret.append("onSubmit=\"submitForm('" + getResourceBase().getId() + "/natural'); return false;\" method=\"POST\">");
-        ret.append("<fieldset>Natural Language Query Example");
+        ret.append("<fieldset>Natural Language Query Examples");
         ret.append("<PRE>");
-        ret.append("->10 User con Activo=true, Primer Apellido\n");
-        ret.append("->WebSite con Activo=true\n");
+        ret.append("1. [User] con [Activo]=true, [Primer Apellido]\n");
+        ret.append("2. [Activo], [Contraseña] de [User] con [Usuario]=\"admin\"\n");
+        ret.append("3. [Creación], [Correo Electrónico] de [User] con [Usuario] = \"admin\"\n");
+        ret.append("4. todo de [User] con [Creación] < \"2009-04-02T13:36:21.409\"");
         ret.append("*Type a word and use CTRL + SPACE to show suggestions, ESC to hide suggestions.");
         ret.append("</PRE>");
         ret.append("Natural Language Query:<BR>");
@@ -316,6 +318,7 @@ public class SWBADBNatural extends GenericResource {
                         ret.append("<thead>");
                         ret.append("<tr>");
 
+                        if (rs.hasNext()) {
                         Iterator<String> itcols = rs.getResultVars().iterator();
                         while (itcols.hasNext()) {
                             ret.append("<th>");
@@ -368,6 +371,11 @@ public class SWBADBNatural extends GenericResource {
                                 ret.append("</td>");
                             }
                             ret.append("</tr>");
+                        }
+                        } else {
+                            ret.append("<font color='red'>No se encontraron coincidencias</font>");
+                            ret.append("</tr>");
+                            ret.append("</thead>");
                         }
                         ret.append("</tbody>");
                         ret.append("</table>");
