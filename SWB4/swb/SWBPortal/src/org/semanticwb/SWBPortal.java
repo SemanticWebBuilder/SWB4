@@ -30,7 +30,6 @@ import org.semanticwb.model.*;
 import org.semanticwb.platform.SessionUser;
 import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBResourceMgr;
-import org.semanticwb.portal.SWBMessageCenter;
 import org.semanticwb.portal.SWBServiceMgr;
 import org.semanticwb.portal.SWBTemplateMgr;
 import org.semanticwb.portal.SWBUserMgr;
@@ -45,7 +44,6 @@ public class SWBPortal {
     private static HashMap hAnchors = null;
     private static HashMap admFiles = new HashMap();
     private static SWBUserMgr usrMgr;
-    private static SWBMessageCenter messageCenter = null;
     private static SWBMonitor monitor = null;
     private static SWBResourceMgr resmgr = null;
     private static SWBTemplateMgr templatemgr = null;
@@ -72,7 +70,7 @@ public class SWBPortal {
         WebSite site = SWBContext.getGlobalWebSite();
         if (site == null) {
             log.event("Creating Global WebSite...");
-            site = SWBContext.createWebSite(SWBContext.WEBSITE_GLOBAL, "http://org.semanticwb.globalws#");
+            site = SWBContext.createWebSite(SWBContext.WEBSITE_GLOBAL, "http://org.semanticwb.globalws");
             site.setTitle("Global");
             site.setDescription("Global WebSite");
             site.setActive(true);
@@ -99,7 +97,7 @@ public class SWBPortal {
         UserRepository urep = SWBContext.getDefaultRepository();
         if (urep == null) {
             log.event("Creating Default User Repository...");
-            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://org.semanticwb.userrep#");
+            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://org.semanticwb.userrep");
             urep.setTitle("Default UserRepository");
             urep.setDescription("Default UserRpository");
             urep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
@@ -108,10 +106,10 @@ public class SWBPortal {
             site.setUserRepository(urep);
             //Create User
             User user = urep.createUser();
-            user.setLogin("admin");
-            user.setPassword("webbuilder");
-            user.setEmail("admin@semanticwebbuilder.org");
-            user.setFirstName("Admin");
+            user.setUsrLogin("admin");
+            user.setUsrPassword("webbuilder");
+            user.setUsrEmail("admin@semanticwebbuilder.org");
+            user.setUsrFirstName("Admin");
             user.setLanguage("es");
             user.setActive(true);
         }
@@ -120,7 +118,7 @@ public class SWBPortal {
         if (site == null)
         {
             log.event("Creating Admin WebSite...");
-            SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin#");
+            SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin");
         }
 
         //Crear tablas LOGS
@@ -155,12 +153,6 @@ public class SWBPortal {
         monitor = new SWBMonitor();
         monitor.init();
 
-//        messageCenter = new SWBMessageCenter();
-//        messageCenter.init();
-
-        monitor = new SWBMonitor();
-        monitor.init();
-
         resmgr = new SWBResourceMgr();
         resmgr.init();
 
@@ -189,7 +181,7 @@ public class SWBPortal {
             zf.close();
         //log.event("-->Admin Files in Memory:\t" + admFiles.size());
         } catch (Exception e) {
-            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar");
+            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar", e);
         }
 
         try {
@@ -205,7 +197,7 @@ public class SWBPortal {
             zf.close();
             log.event("-->Admin Files in Memory:\t" + admFiles.size());
         } catch (Exception e) {
-            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/dojo.zip");
+            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/dojo.zip", e);
         }
     }
 
@@ -215,7 +207,7 @@ public class SWBPortal {
         if (site == null)
         {
             log.event("Creating Admin WebSite...");
-            site = SWBContext.createWebSite(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin#");
+            site = SWBContext.createWebSite(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin");
             site.setTitle("Admin");
             site.setDescription("Admin WebSite");
             site.setActive(true);
@@ -897,14 +889,6 @@ public class SWBPortal {
             for (int i = 0; i <= 40; i += 10) {
                 g.drawLine(0, i, 149, i);
             }
-
-            /*try {
-                org.semanticwb.base.util.GIFEncoder encoder = new org.semanticwb.base.util.GIFEncoder(buffer);
-                response.setContentType("image/gif");
-                encoder.Write(response.getOutputStream());
-            } catch (AWTException e) {
-                log.error(e);
-            }*/
 
             try {
                 response.setContentType("image/png");
