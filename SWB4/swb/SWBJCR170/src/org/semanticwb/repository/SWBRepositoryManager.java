@@ -68,5 +68,10 @@ public final class SWBRepositoryManager implements RepositoryManager
     {
         return repository.login(new SWBCredentials(principal), workspace);
     }
+
+    public void createWorkspace(String workspace) throws Exception
+    {
+        RepositoryImp.createWorkspace(workspace);
+    }
     
 }
