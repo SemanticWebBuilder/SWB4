@@ -298,11 +298,11 @@ public class SWBADBNatural extends GenericResource {
 
         if (errCount != null) {
             if (Integer.parseInt(errCount) == 0) {
-                ret.append("<fieldset>");
+                /*ret.append("<fieldset>");
                 ret.append("<textarea rows=5 cols=70>");
                 ret.append(request.getParameter("sparqlQuery"));
                 ret.append("</textarea>");
-                ret.append("</fieldset>");
+                ret.append("</fieldset>");*/
 
                 try {
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
