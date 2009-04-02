@@ -114,15 +114,15 @@ public class RepositoryManagerLoader
         }
     }
    
-    public void createWorkspace(String repository,String workspace) throws Exception
+    public void createWorkspace(String repositoryName,String workspace) throws Exception
     {
-        repositoryManagers.get(repository).createWorkspace(workspace);
+        repositoryManagers.get(repositoryName).createWorkspace(workspace);
     }
-    public void deleteWorkspace(String repository,String workspace) throws Exception
+    public void deleteWorkspace(String repositoryName,String workspace) throws Exception
     {
-        repositoryManagers.get(repository).createWorkspace(workspace);
+        repositoryManagers.get(repositoryName).createWorkspace(workspace);
     }
-    public String[] getRepositories()
+    public String[] getRepositoryNames()
     {
         return repositoryManagers.keySet().toArray(new String[repositoryManagers.keySet().size()]);
     }
