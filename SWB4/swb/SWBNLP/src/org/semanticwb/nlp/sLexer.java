@@ -9,40 +9,40 @@ package org.semanticwb.nlp;
  *
  * @author hasdai
  */
-// $ANTLR 3.1.2 /home/hasdai/Documentos/sLexer.g 2009-03-24 17:25:18
+// $ANTLR 3.1.2 /home/hasdai/Documentos/sLexer.g 2009-04-01 09:39:38
 
 import org.antlr.runtime.*;
 
 public class sLexer extends Lexer {
     public static final int SIGN=5;
-    public static final int SIGI=26;
+    public static final int BVAR=21;
+    public static final int SIGI=27;
     public static final int SIGL=6;
     public static final int SIGE=8;
-    public static final int DEL=25;
+    public static final int DEL=26;
     public static final int SIGG=7;
-    public static final int LBRK=23;
     public static final int PREC=11;
+    public static final int LBRK=19;
     public static final int SIGGE=10;
     public static final int PRED=13;
-    public static final int ORDOP=19;
+    public static final int ORDOP=22;
     public static final int LIT=18;
     public static final int WHITESPACE=4;
     public static final int BOL=16;
     public static final int EOF=-1;
     public static final int NUM=17;
     public static final int SIGLE=9;
-    public static final int LPAR=21;
+    public static final int LPAR=24;
     public static final int MODT=12;
-    public static final int RPAR=22;
-    public static final int VAR=20;
+    public static final int RPAR=25;
+    public static final int VAR=23;
     public static final int MODO=15;
-    public static final int RBRK=24;
+    public static final int RBRK=20;
     public static final int MODE=14;
 
     // delegates
     // delegators
 
-    @SuppressWarnings("empty-statement")
     public sLexer() {;}
     public sLexer(CharStream input) {
         this(input, new RecognizerSharedState());
@@ -51,7 +51,6 @@ public class sLexer extends Lexer {
         super(input,state);
 
     }
-    @Override
     public String getGrammarFileName() { return "/home/hasdai/Documentos/sLexer.g"; }
 
     // $ANTLR start "WHITESPACE"
@@ -880,30 +879,84 @@ public class sLexer extends Lexer {
     }
     // $ANTLR end "LIT"
 
+    // $ANTLR start "BVAR"
+    public final void mBVAR() throws RecognitionException {
+        try {
+            int _type = BVAR;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/hasdai/Documentos/sLexer.g:19:6: ( LBRK (~ ( ']' | '[' | '\\n' | '\\r' | '\\t' ) )* RBRK )
+            // /home/hasdai/Documentos/sLexer.g:19:8: LBRK (~ ( ']' | '[' | '\\n' | '\\r' | '\\t' ) )* RBRK
+            {
+            mLBRK();
+            // /home/hasdai/Documentos/sLexer.g:19:12: (~ ( ']' | '[' | '\\n' | '\\r' | '\\t' ) )*
+            loop13:
+            do {
+                int alt13=2;
+                int LA13_0 = input.LA(1);
+
+                if ( ((LA13_0>='\u0000' && LA13_0<='\b')||(LA13_0>='\u000B' && LA13_0<='\f')||(LA13_0>='\u000E' && LA13_0<='Z')||LA13_0=='\\'||(LA13_0>='^' && LA13_0<='\uFFFF')) ) {
+                    alt13=1;
+                }
+
+
+                switch (alt13) {
+            	case 1 :
+            	    // /home/hasdai/Documentos/sLexer.g:19:13: ~ ( ']' | '[' | '\\n' | '\\r' | '\\t' )
+            	    {
+            	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\b')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='Z')||input.LA(1)=='\\'||(input.LA(1)>='^' && input.LA(1)<='\uFFFF') ) {
+            	        input.consume();
+
+            	    }
+            	    else {
+            	        MismatchedSetException mse = new MismatchedSetException(null,input);
+            	        recover(mse);
+            	        throw mse;}
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop13;
+                }
+            } while (true);
+
+            mRBRK();
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "BVAR"
+
     // $ANTLR start "ORDOP"
     public final void mORDOP() throws RecognitionException {
         try {
             int _type = ORDOP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:19:7: ( 'ASC' | 'DES' )
-            int alt13=2;
-            int LA13_0 = input.LA(1);
+            // /home/hasdai/Documentos/sLexer.g:20:7: ( 'ASC' | 'DES' )
+            int alt14=2;
+            int LA14_0 = input.LA(1);
 
-            if ( (LA13_0=='A') ) {
-                alt13=1;
+            if ( (LA14_0=='A') ) {
+                alt14=1;
             }
-            else if ( (LA13_0=='D') ) {
-                alt13=2;
+            else if ( (LA14_0=='D') ) {
+                alt14=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 13, 0, input);
+                    new NoViableAltException("", 14, 0, input);
 
                 throw nvae;
             }
-            switch (alt13) {
+            switch (alt14) {
                 case 1 :
-                    // /home/hasdai/Documentos/sLexer.g:19:9: 'ASC'
+                    // /home/hasdai/Documentos/sLexer.g:20:9: 'ASC'
                     {
                     match("ASC");
 
@@ -911,7 +964,7 @@ public class sLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/hasdai/Documentos/sLexer.g:19:15: 'DES'
+                    // /home/hasdai/Documentos/sLexer.g:20:15: 'DES'
                     {
                     match("DES");
 
@@ -933,22 +986,22 @@ public class sLexer extends Lexer {
         try {
             int _type = VAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:20:5: ( ( '0' .. '9' | 'a' .. 'z' | 'A' .. 'Z' | '_' | '-' | 'á' | 'é' | 'í' | 'ó' | 'ú' | '\\u00C1' | 'É' | 'Í' | 'Ó' | 'Ú' | 'Ñ' | 'ñ' )+ )
-            // /home/hasdai/Documentos/sLexer.g:20:7: ( '0' .. '9' | 'a' .. 'z' | 'A' .. 'Z' | '_' | '-' | 'á' | 'é' | 'í' | 'ó' | 'ú' | '\\u00C1' | 'É' | 'Í' | 'Ó' | 'Ú' | 'Ñ' | 'ñ' )+
+            // /home/hasdai/Documentos/sLexer.g:21:5: ( ( '0' .. '9' | 'a' .. 'z' | 'A' .. 'Z' | '_' | '-' | 'á' | 'é' | 'í' | 'ó' | 'ú' | '\\u00C1' | 'É' | 'Í' | 'Ó' | 'Ú' | 'Ñ' | 'ñ' )+ )
+            // /home/hasdai/Documentos/sLexer.g:21:7: ( '0' .. '9' | 'a' .. 'z' | 'A' .. 'Z' | '_' | '-' | 'á' | 'é' | 'í' | 'ó' | 'ú' | '\\u00C1' | 'É' | 'Í' | 'Ó' | 'Ú' | 'Ñ' | 'ñ' )+
             {
-            // /home/hasdai/Documentos/sLexer.g:20:7: ( '0' .. '9' | 'a' .. 'z' | 'A' .. 'Z' | '_' | '-' | 'á' | 'é' | 'í' | 'ó' | 'ú' | '\\u00C1' | 'É' | 'Í' | 'Ó' | 'Ú' | 'Ñ' | 'ñ' )+
-            int cnt14=0;
-            loop14:
+            // /home/hasdai/Documentos/sLexer.g:21:7: ( '0' .. '9' | 'a' .. 'z' | 'A' .. 'Z' | '_' | '-' | 'á' | 'é' | 'í' | 'ó' | 'ú' | '\\u00C1' | 'É' | 'Í' | 'Ó' | 'Ú' | 'Ñ' | 'ñ' )+
+            int cnt15=0;
+            loop15:
             do {
-                int alt14=2;
-                int LA14_0 = input.LA(1);
+                int alt15=2;
+                int LA15_0 = input.LA(1);
 
-                if ( (LA14_0=='-'||(LA14_0>='0' && LA14_0<='9')||(LA14_0>='A' && LA14_0<='Z')||LA14_0=='_'||(LA14_0>='a' && LA14_0<='z')||LA14_0=='\u00C1'||LA14_0=='\u00C9'||LA14_0=='\u00CD'||LA14_0=='\u00D1'||LA14_0=='\u00D3'||LA14_0=='\u00DA'||LA14_0=='\u00E1'||LA14_0=='\u00E9'||LA14_0=='\u00ED'||LA14_0=='\u00F1'||LA14_0=='\u00F3'||LA14_0=='\u00FA') ) {
-                    alt14=1;
+                if ( (LA15_0=='-'||(LA15_0>='0' && LA15_0<='9')||(LA15_0>='A' && LA15_0<='Z')||LA15_0=='_'||(LA15_0>='a' && LA15_0<='z')||LA15_0=='\u00C1'||LA15_0=='\u00C9'||LA15_0=='\u00CD'||LA15_0=='\u00D1'||LA15_0=='\u00D3'||LA15_0=='\u00DA'||LA15_0=='\u00E1'||LA15_0=='\u00E9'||LA15_0=='\u00ED'||LA15_0=='\u00F1'||LA15_0=='\u00F3'||LA15_0=='\u00FA') ) {
+                    alt15=1;
                 }
 
 
-                switch (alt14) {
+                switch (alt15) {
             	case 1 :
             	    // /home/hasdai/Documentos/sLexer.g:
             	    {
@@ -966,12 +1019,12 @@ public class sLexer extends Lexer {
             	    break;
 
             	default :
-            	    if ( cnt14 >= 1 ) break loop14;
+            	    if ( cnt15 >= 1 ) break loop15;
                         EarlyExitException eee =
-                            new EarlyExitException(14, input);
+                            new EarlyExitException(15, input);
                         throw eee;
                 }
-                cnt14++;
+                cnt15++;
             } while (true);
 
 
@@ -990,8 +1043,8 @@ public class sLexer extends Lexer {
         try {
             int _type = LPAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:21:6: ( '(' )
-            // /home/hasdai/Documentos/sLexer.g:21:8: '('
+            // /home/hasdai/Documentos/sLexer.g:22:6: ( '(' )
+            // /home/hasdai/Documentos/sLexer.g:22:8: '('
             {
             match('(');
 
@@ -1010,8 +1063,8 @@ public class sLexer extends Lexer {
         try {
             int _type = RPAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:22:6: ( ')' )
-            // /home/hasdai/Documentos/sLexer.g:22:8: ')'
+            // /home/hasdai/Documentos/sLexer.g:23:6: ( ')' )
+            // /home/hasdai/Documentos/sLexer.g:23:8: ')'
             {
             match(')');
 
@@ -1030,8 +1083,8 @@ public class sLexer extends Lexer {
         try {
             int _type = LBRK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:23:6: ( '[' )
-            // /home/hasdai/Documentos/sLexer.g:23:8: '['
+            // /home/hasdai/Documentos/sLexer.g:24:6: ( '[' )
+            // /home/hasdai/Documentos/sLexer.g:24:8: '['
             {
             match('[');
 
@@ -1050,8 +1103,8 @@ public class sLexer extends Lexer {
         try {
             int _type = RBRK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:24:6: ( ']' )
-            // /home/hasdai/Documentos/sLexer.g:24:8: ']'
+            // /home/hasdai/Documentos/sLexer.g:25:6: ( ']' )
+            // /home/hasdai/Documentos/sLexer.g:25:8: ']'
             {
             match(']');
 
@@ -1070,8 +1123,8 @@ public class sLexer extends Lexer {
         try {
             int _type = DEL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:25:5: ( ',' )
-            // /home/hasdai/Documentos/sLexer.g:25:7: ','
+            // /home/hasdai/Documentos/sLexer.g:26:5: ( ',' )
+            // /home/hasdai/Documentos/sLexer.g:26:7: ','
             {
             match(',');
 
@@ -1090,8 +1143,8 @@ public class sLexer extends Lexer {
         try {
             int _type = SIGI;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/hasdai/Documentos/sLexer.g:26:6: ( '\\?' )
-            // /home/hasdai/Documentos/sLexer.g:26:8: '\\?'
+            // /home/hasdai/Documentos/sLexer.g:27:6: ( '\\?' )
+            // /home/hasdai/Documentos/sLexer.g:27:8: '\\?'
             {
             match('?');
 
@@ -1106,10 +1159,10 @@ public class sLexer extends Lexer {
     // $ANTLR end "SIGI"
 
     public void mTokens() throws RecognitionException {
-        // /home/hasdai/Documentos/sLexer.g:1:8: ( WHITESPACE | SIGN | SIGL | SIGG | SIGE | SIGLE | SIGGE | PREC | MODT | PRED | MODE | MODO | BOL | NUM | LIT | ORDOP | VAR | LPAR | RPAR | LBRK | RBRK | DEL | SIGI )
-        int alt15=23;
-        alt15 = dfa15.predict(input);
-        switch (alt15) {
+        // /home/hasdai/Documentos/sLexer.g:1:8: ( WHITESPACE | SIGN | SIGL | SIGG | SIGE | SIGLE | SIGGE | PREC | MODT | PRED | MODE | MODO | BOL | NUM | LIT | BVAR | ORDOP | VAR | LPAR | RPAR | LBRK | RBRK | DEL | SIGI )
+        int alt16=24;
+        alt16 = dfa16.predict(input);
+        switch (alt16) {
             case 1 :
                 // /home/hasdai/Documentos/sLexer.g:1:10: WHITESPACE
                 {
@@ -1216,56 +1269,63 @@ public class sLexer extends Lexer {
                 }
                 break;
             case 16 :
-                // /home/hasdai/Documentos/sLexer.g:1:90: ORDOP
+                // /home/hasdai/Documentos/sLexer.g:1:90: BVAR
+                {
+                mBVAR();
+
+                }
+                break;
+            case 17 :
+                // /home/hasdai/Documentos/sLexer.g:1:95: ORDOP
                 {
                 mORDOP();
 
                 }
                 break;
-            case 17 :
-                // /home/hasdai/Documentos/sLexer.g:1:96: VAR
+            case 18 :
+                // /home/hasdai/Documentos/sLexer.g:1:101: VAR
                 {
                 mVAR();
 
                 }
                 break;
-            case 18 :
-                // /home/hasdai/Documentos/sLexer.g:1:100: LPAR
+            case 19 :
+                // /home/hasdai/Documentos/sLexer.g:1:105: LPAR
                 {
                 mLPAR();
 
                 }
                 break;
-            case 19 :
-                // /home/hasdai/Documentos/sLexer.g:1:105: RPAR
+            case 20 :
+                // /home/hasdai/Documentos/sLexer.g:1:110: RPAR
                 {
                 mRPAR();
 
                 }
                 break;
-            case 20 :
-                // /home/hasdai/Documentos/sLexer.g:1:110: LBRK
+            case 21 :
+                // /home/hasdai/Documentos/sLexer.g:1:115: LBRK
                 {
                 mLBRK();
 
                 }
                 break;
-            case 21 :
-                // /home/hasdai/Documentos/sLexer.g:1:115: RBRK
+            case 22 :
+                // /home/hasdai/Documentos/sLexer.g:1:120: RBRK
                 {
                 mRBRK();
 
                 }
                 break;
-            case 22 :
-                // /home/hasdai/Documentos/sLexer.g:1:120: DEL
+            case 23 :
+                // /home/hasdai/Documentos/sLexer.g:1:125: DEL
                 {
                 mDEL();
 
                 }
                 break;
-            case 23 :
-                // /home/hasdai/Documentos/sLexer.g:1:124: SIGI
+            case 24 :
+                // /home/hasdai/Documentos/sLexer.g:1:129: SIGI
                 {
                 mSIGI();
 
@@ -1278,7 +1338,7 @@ public class sLexer extends Lexer {
 
 
     protected DFA11 dfa11 = new DFA11(this);
-    protected DFA15 dfa15 = new DFA15(this);
+    protected DFA16 dfa16 = new DFA16(this);
     static final String DFA11_eotS =
         "\1\uffff\1\3\2\uffff";
     static final String DFA11_eofS =
@@ -1331,49 +1391,50 @@ public class sLexer extends Lexer {
             return "17:13: ( ( '0' .. '9' )+ | ( ( '0' .. '9' )* '.' ( '0' .. '9' )+ ) )";
         }
     }
-    static final String DFA15_eotS =
-        "\2\uffff\1\34\1\36\1\40\1\uffff\12\25\1\21\2\uffff\1\25\1\34\14"+
-        "\uffff\11\25\3\76\7\25\3\110\6\25\1\120\1\uffff\10\25\1\120\1\uffff"+
-        "\2\131\2\132\1\131\1\132\1\25\1\uffff\10\25\2\uffff\3\144\3\25\3"+
-        "\132\1\uffff\3\25\3\153\1\uffff";
-    static final String DFA15_eofS =
-        "\154\uffff";
-    static final String DFA15_minS =
+    static final String DFA16_eotS =
+        "\2\uffff\1\34\1\36\1\40\1\uffff\12\26\1\21\2\uffff\1\63\1\26\1\34"+
+        "\13\uffff\11\26\3\100\6\26\2\uffff\1\26\3\112\6\26\1\122\1\uffff"+
+        "\10\26\1\122\1\uffff\2\133\2\134\1\133\1\134\1\26\1\uffff\10\26"+
+        "\2\uffff\3\146\3\26\3\134\1\uffff\3\26\3\155\1\uffff";
+    static final String DFA16_eofS =
+        "\156\uffff";
+    static final String DFA16_minS =
         "\1\11\1\uffff\1\55\2\75\1\uffff\1\117\1\157\1\117\1\157\1\105\1"+
-        "\145\1\122\1\162\1\141\1\101\1\55\2\uffff\1\123\1\56\14\uffff\1"+
-        "\116\2\156\1\104\1\144\1\125\1\165\1\144\1\165\3\55\1\104\2\144"+
-        "\1\154\1\114\1\154\1\103\3\55\1\117\1\157\1\105\1\145\1\157\1\145"+
-        "\1\55\1\uffff\2\144\1\105\2\145\1\163\1\123\1\163\1\55\1\uffff\6"+
-        "\55\1\105\1\uffff\2\145\1\116\2\156\1\145\1\105\1\145\2\uffff\3"+
-        "\55\1\101\2\141\3\55\1\uffff\1\122\2\162\3\55\1\uffff";
-    static final String DFA15_maxS =
+        "\145\1\122\1\162\1\141\1\101\1\55\2\uffff\1\0\1\123\1\56\13\uffff"+
+        "\1\116\2\156\1\104\1\144\1\125\1\165\1\144\1\165\3\55\1\104\2\144"+
+        "\1\154\1\114\1\154\2\uffff\1\103\3\55\1\117\1\157\1\105\1\145\1"+
+        "\157\1\145\1\55\1\uffff\2\144\1\105\2\145\1\163\1\123\1\163\1\55"+
+        "\1\uffff\6\55\1\105\1\uffff\2\145\1\116\2\156\1\145\1\105\1\145"+
+        "\2\uffff\3\55\1\101\2\141\3\55\1\uffff\1\122\2\162\3\55\1\uffff";
+    static final String DFA16_maxS =
         "\1\u00fa\1\uffff\1\u00fa\2\75\1\uffff\2\157\2\162\2\145\2\162\2"+
-        "\141\1\u00fa\2\uffff\1\123\1\71\14\uffff\1\116\2\156\1\104\1\144"+
-        "\1\125\1\165\1\144\1\165\3\u00fa\1\104\2\144\1\154\1\114\1\154\1"+
-        "\103\3\u00fa\1\117\1\157\1\105\1\145\1\157\1\145\1\u00fa\1\uffff"+
-        "\2\144\1\105\2\145\1\163\1\123\1\163\1\u00fa\1\uffff\6\u00fa\1\105"+
-        "\1\uffff\2\145\1\116\2\156\1\145\1\105\1\145\2\uffff\3\u00fa\1\101"+
-        "\2\141\3\u00fa\1\uffff\1\122\2\162\3\u00fa\1\uffff";
-    static final String DFA15_acceptS =
-        "\1\uffff\1\1\3\uffff\1\5\13\uffff\1\16\1\17\2\uffff\1\21\1\22\1"+
-        "\23\1\24\1\25\1\26\1\27\1\2\1\6\1\3\1\7\1\4\35\uffff\1\12\11\uffff"+
-        "\1\10\7\uffff\1\20\10\uffff\1\11\1\15\11\uffff\1\13\6\uffff\1\14";
-    static final String DFA15_specialS =
-        "\154\uffff}>";
-    static final String[] DFA15_transitionS = {
-            "\2\1\1\uffff\2\1\22\uffff\1\1\1\uffff\1\22\5\uffff\1\26\1\27"+
-            "\1\uffff\1\24\1\32\1\2\1\21\1\uffff\12\20\2\uffff\1\3\1\5\1"+
-            "\4\1\33\1\uffff\1\23\1\25\1\6\1\12\1\25\1\17\10\25\1\14\4\25"+
-            "\1\10\6\25\1\30\1\uffff\1\31\1\uffff\1\25\1\uffff\2\25\1\7\1"+
-            "\13\1\25\1\16\10\25\1\15\4\25\1\11\6\25\106\uffff\1\25\7\uffff"+
-            "\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff\1\25\6\uffff\1\25\6"+
-            "\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff\1"+
-            "\25\6\uffff\1\25",
+        "\141\1\u00fa\2\uffff\1\uffff\1\123\1\71\13\uffff\1\116\2\156\1\104"+
+        "\1\144\1\125\1\165\1\144\1\165\3\u00fa\1\104\2\144\1\154\1\114\1"+
+        "\154\2\uffff\1\103\3\u00fa\1\117\1\157\1\105\1\145\1\157\1\145\1"+
+        "\u00fa\1\uffff\2\144\1\105\2\145\1\163\1\123\1\163\1\u00fa\1\uffff"+
+        "\6\u00fa\1\105\1\uffff\2\145\1\116\2\156\1\145\1\105\1\145\2\uffff"+
+        "\3\u00fa\1\101\2\141\3\u00fa\1\uffff\1\122\2\162\3\u00fa\1\uffff";
+    static final String DFA16_acceptS =
+        "\1\uffff\1\1\3\uffff\1\5\13\uffff\1\16\1\17\3\uffff\1\22\1\23\1"+
+        "\24\1\26\1\27\1\30\1\2\1\6\1\3\1\7\1\4\22\uffff\1\25\1\20\13\uffff"+
+        "\1\12\11\uffff\1\10\7\uffff\1\21\10\uffff\1\11\1\15\11\uffff\1\13"+
+        "\6\uffff\1\14";
+    static final String DFA16_specialS =
+        "\23\uffff\1\0\132\uffff}>";
+    static final String[] DFA16_transitionS = {
+            "\2\1\1\uffff\2\1\22\uffff\1\1\1\uffff\1\22\5\uffff\1\27\1\30"+
+            "\1\uffff\1\25\1\32\1\2\1\21\1\uffff\12\20\2\uffff\1\3\1\5\1"+
+            "\4\1\33\1\uffff\1\24\1\26\1\6\1\12\1\26\1\17\10\26\1\14\4\26"+
+            "\1\10\6\26\1\23\1\uffff\1\31\1\uffff\1\26\1\uffff\2\26\1\7\1"+
+            "\13\1\26\1\16\10\26\1\15\4\26\1\11\6\26\106\uffff\1\26\7\uffff"+
+            "\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff\1\26\6\uffff\1\26\6"+
+            "\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff\1"+
+            "\26\6\uffff\1\26",
             "",
-            "\1\25\1\21\1\uffff\12\20\7\uffff\32\25\4\uffff\1\25\1\uffff"+
-            "\32\25\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25"+
-            "\1\uffff\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff"+
-            "\1\25\3\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
+            "\1\26\1\21\1\uffff\12\20\7\uffff\32\26\4\uffff\1\26\1\uffff"+
+            "\32\26\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26"+
+            "\1\uffff\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff"+
+            "\1\26\3\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
             "\1\35",
             "\1\37",
             "",
@@ -1387,13 +1448,14 @@ public class sLexer extends Lexer {
             "\1\57",
             "\1\60",
             "\1\61\37\uffff\1\62",
-            "\1\25\2\uffff\12\20\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
+            "\1\26\2\uffff\12\20\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
             "",
             "",
-            "\1\63",
+            "\11\64\2\uffff\2\64\1\uffff\115\64\1\uffff\uffa4\64",
+            "\1\65",
             "\1\21\1\uffff\12\21",
             "",
             "",
@@ -1406,9 +1468,6 @@ public class sLexer extends Lexer {
             "",
             "",
             "",
-            "",
-            "\1\64",
-            "\1\65",
             "\1\66",
             "\1\67",
             "\1\70",
@@ -1416,174 +1475,199 @@ public class sLexer extends Lexer {
             "\1\72",
             "\1\73",
             "\1\74",
-            "\1\25\2\uffff\12\25\7\uffff\22\25\1\75\7\25\4\uffff\1\25\1"+
-            "\uffff\32\25\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff"+
-            "\1\25\1\uffff\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3"+
-            "\uffff\1\25\3\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\22\25"+
-            "\1\77\7\25\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff"+
-            "\1\25\1\uffff\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3"+
-            "\uffff\1\25\3\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\22\25"+
-            "\1\100\7\25\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff"+
-            "\1\25\1\uffff\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3"+
-            "\uffff\1\25\3\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\101",
-            "\1\102",
+            "\1\75",
+            "\1\76",
+            "\1\26\2\uffff\12\26\7\uffff\22\26\1\77\7\26\4\uffff\1\26\1"+
+            "\uffff\32\26\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff"+
+            "\1\26\1\uffff\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3"+
+            "\uffff\1\26\3\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\22\26"+
+            "\1\101\7\26\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff"+
+            "\1\26\1\uffff\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3"+
+            "\uffff\1\26\3\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\22\26"+
+            "\1\102\7\26\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff"+
+            "\1\26\1\uffff\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3"+
+            "\uffff\1\26\3\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
             "\1\103",
             "\1\104",
             "\1\105",
             "\1\106",
             "\1\107",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
+            "\1\110",
+            "",
+            "",
             "\1\111",
-            "\1\112",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
             "\1\113",
             "\1\114",
             "\1\115",
             "\1\116",
-            "\1\25\2\uffff\12\25\7\uffff\3\25\1\117\26\25\4\uffff\1\25\1"+
-            "\uffff\32\25\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff"+
-            "\1\25\1\uffff\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3"+
-            "\uffff\1\25\3\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
+            "\1\117",
+            "\1\120",
+            "\1\26\2\uffff\12\26\7\uffff\3\26\1\121\26\26\4\uffff\1\26\1"+
+            "\uffff\32\26\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff"+
+            "\1\26\1\uffff\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3"+
+            "\uffff\1\26\3\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
             "",
-            "\1\121",
-            "\1\122",
             "\1\123",
             "\1\124",
             "\1\125",
             "\1\126",
             "\1\127",
             "\1\130",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
+            "\1\131",
+            "\1\132",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
             "",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\133",
-            "",
-            "\1\134",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
             "\1\135",
+            "",
             "\1\136",
             "\1\137",
             "\1\140",
             "\1\141",
             "\1\142",
             "\1\143",
-            "",
-            "",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
+            "\1\144",
             "\1\145",
-            "\1\146",
-            "\1\147",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
             "",
+            "",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\147",
             "\1\150",
             "\1\151",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "",
             "\1\152",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
-            "\1\25\2\uffff\12\25\7\uffff\32\25\4\uffff\1\25\1\uffff\32\25"+
-            "\106\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3\uffff\1\25\1\uffff"+
-            "\1\25\6\uffff\1\25\6\uffff\1\25\7\uffff\1\25\3\uffff\1\25\3"+
-            "\uffff\1\25\1\uffff\1\25\6\uffff\1\25",
+            "\1\153",
+            "\1\154",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
+            "\1\26\2\uffff\12\26\7\uffff\32\26\4\uffff\1\26\1\uffff\32\26"+
+            "\106\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3\uffff\1\26\1\uffff"+
+            "\1\26\6\uffff\1\26\6\uffff\1\26\7\uffff\1\26\3\uffff\1\26\3"+
+            "\uffff\1\26\1\uffff\1\26\6\uffff\1\26",
             ""
     };
 
-    static final short[] DFA15_eot = DFA.unpackEncodedString(DFA15_eotS);
-    static final short[] DFA15_eof = DFA.unpackEncodedString(DFA15_eofS);
-    static final char[] DFA15_min = DFA.unpackEncodedStringToUnsignedChars(DFA15_minS);
-    static final char[] DFA15_max = DFA.unpackEncodedStringToUnsignedChars(DFA15_maxS);
-    static final short[] DFA15_accept = DFA.unpackEncodedString(DFA15_acceptS);
-    static final short[] DFA15_special = DFA.unpackEncodedString(DFA15_specialS);
-    static final short[][] DFA15_transition;
+    static final short[] DFA16_eot = DFA.unpackEncodedString(DFA16_eotS);
+    static final short[] DFA16_eof = DFA.unpackEncodedString(DFA16_eofS);
+    static final char[] DFA16_min = DFA.unpackEncodedStringToUnsignedChars(DFA16_minS);
+    static final char[] DFA16_max = DFA.unpackEncodedStringToUnsignedChars(DFA16_maxS);
+    static final short[] DFA16_accept = DFA.unpackEncodedString(DFA16_acceptS);
+    static final short[] DFA16_special = DFA.unpackEncodedString(DFA16_specialS);
+    static final short[][] DFA16_transition;
 
     static {
-        int numStates = DFA15_transitionS.length;
-        DFA15_transition = new short[numStates][];
+        int numStates = DFA16_transitionS.length;
+        DFA16_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA15_transition[i] = DFA.unpackEncodedString(DFA15_transitionS[i]);
+            DFA16_transition[i] = DFA.unpackEncodedString(DFA16_transitionS[i]);
         }
     }
 
-    class DFA15 extends DFA {
+    class DFA16 extends DFA {
 
-        public DFA15(BaseRecognizer recognizer) {
+        public DFA16(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 15;
-            this.eot = DFA15_eot;
-            this.eof = DFA15_eof;
-            this.min = DFA15_min;
-            this.max = DFA15_max;
-            this.accept = DFA15_accept;
-            this.special = DFA15_special;
-            this.transition = DFA15_transition;
+            this.decisionNumber = 16;
+            this.eot = DFA16_eot;
+            this.eof = DFA16_eof;
+            this.min = DFA16_min;
+            this.max = DFA16_max;
+            this.accept = DFA16_accept;
+            this.special = DFA16_special;
+            this.transition = DFA16_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( WHITESPACE | SIGN | SIGL | SIGG | SIGE | SIGLE | SIGGE | PREC | MODT | PRED | MODE | MODO | BOL | NUM | LIT | ORDOP | VAR | LPAR | RPAR | LBRK | RBRK | DEL | SIGI );";
+            return "1:1: Tokens : ( WHITESPACE | SIGN | SIGL | SIGG | SIGE | SIGLE | SIGGE | PREC | MODT | PRED | MODE | MODO | BOL | NUM | LIT | BVAR | ORDOP | VAR | LPAR | RPAR | LBRK | RBRK | DEL | SIGI );";
+        }
+        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+            IntStream input = _input;
+        	int _s = s;
+            switch ( s ) {
+                    case 0 :
+                        int LA16_19 = input.LA(1);
+
+                        s = -1;
+                        if ( ((LA16_19>='\u0000' && LA16_19<='\b')||(LA16_19>='\u000B' && LA16_19<='\f')||(LA16_19>='\u000E' && LA16_19<='Z')||(LA16_19>='\\' && LA16_19<='\uFFFF')) ) {s = 52;}
+
+                        else s = 51;
+
+                        if ( s>=0 ) return s;
+                        break;
+            }
+            NoViableAltException nvae =
+                new NoViableAltException(getDescription(), 16, _s, input);
+            error(nvae);
+            throw nvae;
         }
     }
+
 }
