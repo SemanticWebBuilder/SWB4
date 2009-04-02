@@ -67,7 +67,7 @@ public class TestWebSite {
     {
         if(SWBContext.getWebSite("sep")==null)
         {
-            WebSite site=SWBContext.createWebSite("sep", "http://www.sep.gob.mx");
+            WebSite site=SWBContext.createWebSite("sep", "http://www.sep.gob.mx#");
             //site.setCreated(new java.util.Date(System.currentTimeMillis()));
             site.setTitle("Sep");
             site.setDescription("Sep WebSite");

@@ -80,6 +80,43 @@ public class DistributorParams
     /** Creates a new instance of DistributorParams */
     public DistributorParams(HttpServletRequest request, String uri)
     {
+        init(request,uri);
+    }
+    
+    /** Creates a new instance of DistributorParams */
+    public DistributorParams(HttpServletRequest request)
+    {
+        String uri = request.getRequestURI();
+        String cntx = request.getContextPath();
+        String path = uri.substring(cntx.length());
+        String iserv = "";
+
+        if (path == null || path.length() == 0)
+        {
+            path = "/";
+        } else
+        {
+            int j = path.indexOf('/', 1);
+            if (j > 0)
+            {
+                iserv = path.substring(1, j);
+            } else
+            {
+                iserv = path.substring(1);
+            }
+        }
+        String auri = path.substring(iserv.length() + 1);
+        
+        System.out.println("uri:"+uri);
+        System.out.println("cntx:"+cntx);
+        System.out.println("path:"+path);
+        System.out.println("iserv:"+iserv);
+        System.out.println("auri:"+auri);
+        init(request, auri);
+    }
+
+    private void init(HttpServletRequest request, String uri)
+    {
         URIParams=_getURIParams(request, uri);
         //System.out.println("URIParams"+URIParams);
         webpage=_getWebPage(request);
@@ -104,12 +141,6 @@ public class DistributorParams
         //System.out.println("user"+user);
         queryString=_getQueryString(request);
         //System.out.println("queryString:"+queryString);
-    }
-    
-    /** Creates a new instance of DistributorParams */
-    public DistributorParams(HttpServletRequest request)
-    {
-        //TODO
     }
     
     private ArrayList _getURIParams(HttpServletRequest request, String uri)

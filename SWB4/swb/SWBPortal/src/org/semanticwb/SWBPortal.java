@@ -30,6 +30,7 @@ import org.semanticwb.platform.SessionUser;
 import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBResourceMgr;
 import org.semanticwb.model.SWBRuleMgr;
+import org.semanticwb.portal.SWBMessageCenter;
 import org.semanticwb.portal.SWBServiceMgr;
 import org.semanticwb.portal.SWBTemplateMgr;
 import org.semanticwb.portal.SWBUserMgr;
@@ -44,6 +45,7 @@ public class SWBPortal {
     private static HashMap hAnchors = null;
     private static HashMap admFiles = new HashMap();
     private static SWBUserMgr usrMgr;
+    private static SWBMessageCenter messageCenter = null;
     private static SWBMonitor monitor = null;
     private static SWBResourceMgr resmgr = null;
     private static SWBTemplateMgr templatemgr = null;
@@ -153,6 +155,12 @@ public class SWBPortal {
         monitor = new SWBMonitor();
         monitor.init();
 
+//        messageCenter = new SWBMessageCenter();
+//        messageCenter.init();
+
+        monitor = new SWBMonitor();
+        monitor.init();
+
         resmgr = new SWBResourceMgr();
         resmgr.init();
 
@@ -181,7 +189,7 @@ public class SWBPortal {
             zf.close();
         //log.event("-->Admin Files in Memory:\t" + admFiles.size());
         } catch (Exception e) {
-            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar", e);
+            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/SWBAdmin.jar");
         }
 
         try {
@@ -197,7 +205,7 @@ public class SWBPortal {
             zf.close();
             log.event("-->Admin Files in Memory:\t" + admFiles.size());
         } catch (Exception e) {
-            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/dojo.zip", e);
+            log.warn("Error loading files for Webbuilder Administration:" + SWBUtils.getApplicationPath() + "/WEB-INF/lib/dojo.zip");
         }
     }
 
