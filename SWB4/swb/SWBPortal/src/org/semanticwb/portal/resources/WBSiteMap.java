@@ -102,7 +102,7 @@ public class WBSiteMap extends GenericAdmResource
 
         SWBResourceURL url=paramRequest.getRenderUrl();
         url.setCallMethod(url.Call_DIRECT);
-        url.setMode("x");
+        url.setMode("bind");
 
         HashMap params = new HashMap();
         Enumeration<String> names = request.getParameterNames();
@@ -331,7 +331,7 @@ public class WBSiteMap extends GenericAdmResource
 
             try {
                 WebPage tpsite=null, tpid=null;
-                String style;
+                String style="";
 
                 if(request.containsKey("reptm") && request.get("reptm")!=null) {
                     tm=SWBContext.getWebSite((String)request.get("reptm"));
@@ -361,7 +361,7 @@ public class WBSiteMap extends GenericAdmResource
                 html.append("<li>");
 
                 if(tpid!=null && tpid.getId().equalsIgnoreCase(tmhome.getId())) {
-                    style=" style=\"color:#FF6600; font-weight:bold\" ";
+                    //style=" style=\"color:#FF6600; font-weight:bold\" ";
                     if(toggleopen) {
                         params.append("&"+tmhome.getId()+"=0");
                         html.append("<img src=\""+pathImages+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\" />");
@@ -410,7 +410,7 @@ public class WBSiteMap extends GenericAdmResource
         }
 
         private String addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params) {
-            String style;
+            String style="";
             boolean toggleopen;
 
             StringBuilder html = new StringBuilder("<ul class=\"treeres\">");
@@ -424,7 +424,7 @@ public class WBSiteMap extends GenericAdmResource
                     if(webpage.listChilds().hasNext()) {
                         html.append("<li>");
                         if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
-                            style=" style=\"color:#FF6600; font-weight:bold\" ";                            
+                            //style=" style=\"color:#FF6600; font-weight:bold\" ";
                             if(toggleopen) {
                                 params.append("&"+webpage.getId()+"=0");
                                 html.append("<img src=\""+pathImages+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" />");
@@ -464,7 +464,7 @@ public class WBSiteMap extends GenericAdmResource
                         html.append("</li>");
                     }else {
                         if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())){
-                            style=" style=\"color:#FF6600; font-weight:bold\" ";
+                            //style=" style=\"color:#FF6600; font-weight:bold\" ";
                         }else {
                             style="";
                         }
