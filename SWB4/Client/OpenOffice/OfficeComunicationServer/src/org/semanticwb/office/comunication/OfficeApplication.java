@@ -153,8 +153,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             session = loader.openSession(repositoryName, this.user, this.password);
             ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
             Node root = session.getRootNode();
-            NodeIterator it = root.getNodes();
             String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
+            NodeIterator it = root.getNodes(cm_category);
             while (it.hasNext())
             {
                 Node node = it.nextNode();
@@ -188,6 +188,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public String createCategory(String repositoryName, String title, String description) throws Exception
     {
+
         String UUID = "";
         Session session = null;
         Node root = null;
