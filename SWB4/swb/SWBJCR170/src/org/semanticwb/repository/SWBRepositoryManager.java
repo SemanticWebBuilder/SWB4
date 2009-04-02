@@ -5,7 +5,7 @@
 package org.semanticwb.repository;
 
 import java.util.ArrayList;
-import org.semanticwb.jcr170.implementation.RepositoryImp;
+import org.semanticwb.jcr170.implementation.SWBRepository;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -24,11 +24,11 @@ import org.semanticwb.platform.SemanticProperty;
 public final class SWBRepositoryManager implements RepositoryManager
 {    
     private static Logger log = SWBUtils.getLogger(SWBRepositoryManager.class);
-    private RepositoryImp repository;
+    private SWBRepository repository;
     private OfficeManager officeManager;
     public SWBRepositoryManager() throws SWBException,RepositoryException
     {
-        repository=new RepositoryImp();
+        repository=new SWBRepository();
         officeManager=new SWBOfficeManager(this);
     }
 
@@ -71,7 +71,12 @@ public final class SWBRepositoryManager implements RepositoryManager
 
     public void createWorkspace(String workspace) throws Exception
     {
-        RepositoryImp.createWorkspace(workspace);
+        SWBRepository.createWorkspace(workspace);
+    }
+
+    public void deleteWorkspace(String workspace) throws Exception
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }
