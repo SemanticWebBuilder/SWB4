@@ -233,7 +233,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
         else ln=" "+ln;
         String sln=getSecondLastName();
         if(sln==null)sln="";
-        else ln=" "+ln;
+        else sln=" "+sln;
         return fn+ln+sln;
     }
 
