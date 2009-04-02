@@ -68,7 +68,7 @@ public class SessionImp implements Session
     private static final Namespace NAMESPACE = Namespace.getNamespace(SYSTEM_VIEW_PREFIX, SYSTEM_VIEW_NAMESPACE);
     private static final String PATH_SEPARATOR = "/";
     private static final String NOT_SUPPORTED_YET = "Not supported yet.";
-    private final RepositoryImp repository;
+    private final SWBRepository repository;
     private final WorkspaceImp workspace;
     private final Principal principal;
     private final String workspaceName;
@@ -78,7 +78,7 @@ public class SessionImp implements Session
     private final Hashtable<String, SimpleNode> nodes = new Hashtable<String, SimpleNode>();
     private final SimpleNode root;
    
-    SessionImp(RepositoryImp repository, String workspaceName, Principal principal) throws RepositoryException
+    SessionImp(SWBRepository repository, String workspaceName, Principal principal) throws RepositoryException
     {
         if (repository == null || workspaceName == null || principal == null)
         {
@@ -913,7 +913,7 @@ public class SessionImp implements Session
         return root.getBaseNode();
     }
 
-    RepositoryImp getRepositoryImp()
+    SWBRepository getRepositoryImp()
     {
         return repository;
     }

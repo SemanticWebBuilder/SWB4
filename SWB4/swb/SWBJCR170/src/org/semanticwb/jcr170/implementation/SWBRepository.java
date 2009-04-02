@@ -29,10 +29,10 @@ import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
  *
  * @author victor.lorenzana
  */
-public final class RepositoryImp implements Repository
+public final class SWBRepository implements Repository
 {
 
-    static Logger log = SWBUtils.getLogger(RepositoryImp.class);
+    static Logger log = SWBUtils.getLogger(SWBRepository.class);
     private static Hashtable<String, String> descriptors = new Hashtable<String, String>();
 
 
@@ -59,7 +59,7 @@ public final class RepositoryImp implements Repository
     private static final String namespace = "http://www.semanticwb.org/repository#";
     private ObservationManagerImp observationManager;
 
-    public RepositoryImp() throws RepositoryException
+    public SWBRepository() throws RepositoryException
     {
 
         log.event("Initializing repository with namespace " + namespace + " ...");
@@ -80,7 +80,7 @@ public final class RepositoryImp implements Repository
 
     }
 
-    public RepositoryImp(String defaultWorkspaceName) throws RepositoryException
+    public SWBRepository(String defaultWorkspaceName) throws RepositoryException
     {
         this();
         this.defaultWorkspaceName = defaultWorkspaceName;
@@ -164,6 +164,10 @@ public final class RepositoryImp implements Repository
         return descriptors.get(descriptor);
     }
 
+    public static void deleteWorkspace(String name) throws RepositoryException
+    {
+        SWBContext.removeWorkspace(name);
+    }
     public static void createWorkspace(String name) throws RepositoryException
     {
         if (name == null || name.trim().equals(""))
