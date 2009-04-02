@@ -19,6 +19,7 @@ public interface RepositoryManager {
     public Session openSession(String workspace,String id,String password) throws Exception;
     public Session openSession(String workspace,User principal) throws Exception;
     public void createWorkspace(String workspace) throws Exception;
+    public void deleteWorkspace(String workspace) throws Exception;
     public String getName();
     public OfficeManager getOfficeManager();
 }
