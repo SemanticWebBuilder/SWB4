@@ -79,8 +79,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     public void changePassword(String newPassword) throws Exception
     {
         org.semanticwb.model.User userModel = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
-        userModel.setUsrPassword(newPassword);
-        userModel.setUsrPasswordChanged(new Date(System.currentTimeMillis()));
+        userModel.setPassword(newPassword);
+        userModel.setUpdated(new Date(System.currentTimeMillis()));
     }
 
     public boolean existsPage(WebSiteInfo site, String pageid) throws Exception
