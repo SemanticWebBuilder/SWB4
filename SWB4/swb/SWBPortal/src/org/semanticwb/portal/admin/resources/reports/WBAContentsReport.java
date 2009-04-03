@@ -94,7 +94,7 @@ public class WBAContentsReport extends GenericResource {
         while(names.hasMoreElements()) {
             String name = names.nextElement();
             params.put(name, request.getParameter(name));
-        }        
+        }
         out.println(tree.renderXHTML(webSiteId, params, url.toString()));
         
         out.flush();
