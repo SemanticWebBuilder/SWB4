@@ -13,10 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.ResourceRef;
 import org.semanticwb.model.ResourceSubType;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.SWBContext;
@@ -71,7 +69,7 @@ public class SWBResourceMgr
     {
         //System.out.println("model:"+model+" id:"+id);
         Resource resource=SWBContext.getWebSite(model).getResource(id);
-        return getResource(resource.getURI());
+        return getResource(resource);
     }
 
     public SWBResource getResource(String uri)
@@ -80,7 +78,19 @@ public class SWBResourceMgr
         if(res==null)
         {
             Resource resource=(Resource)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(uri);
-            if(resource!=null)
+            res=getResource(resource);
+        }
+        return res;
+    }
+
+    public SWBResource getResource(Resource resource)
+    {
+        SWBResource res=null;
+        if(resource!=null)
+        {
+            String uri=resource.getURI();
+            res=resources.get(uri);
+            if(res==null)
             {
                 res=createSWBResource(resource);
                 resources.put(uri, res);
@@ -123,7 +133,7 @@ public class SWBResourceMgr
             Resource resource=it.next();
             //System.out.println("Resource:"+resource);
             //SWBResource res = getResource(resource.getWebSiteId(), resource.getSId());
-            SWBResource res = getResource(resource.getURI());
+            SWBResource res = getResource(resource);
             if (res != null)
             {
                 Resource base = res.getResourceBase();
@@ -168,7 +178,7 @@ public class SWBResourceMgr
         if(type!=null)
         {
             Iterator<Resource> it;
-            //TODO:check stype
+            //TODO:check type
             if(stype!=null)
             {
                 it=stype.listResources();
@@ -183,7 +193,7 @@ public class SWBResourceMgr
                 if(stype==null && base.getResourceSubType()!=null)continue; //verifica recursos sin subtipo
                 if(checkResource(base, user, camp, today, topic))
                 {
-                    SWBResource wbr=getResource(base.getURI());
+                    SWBResource wbr=getResource(base);
                     //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
                     if(wbr!=null)
                     {
