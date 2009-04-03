@@ -36,7 +36,7 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
         {
             try
             {
-                String query = "select * from wbreshits where topicmap=? and idaux not in(select lang from wblanguage where idtm=?) and type=? order by wbdate";
+                String query = "select * from swb_reshits where topicmap=? and idaux not in(select lang from wblanguage where idtm=?) and type=? order by wbdate";
                 st = con.prepareStatement(query);
                 st.setString(1, topicmap);
                 st.setString(2, topicmap);
@@ -90,7 +90,7 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
                 String query;                
                 GregorianCalendar date;
                 for(int i=mi; i<=mf; i++){                    
-                    query = "select topicmap,idaux,type,sum(hits) as hits from wbreshits where topicmap=? and idaux not in(select lang from wblanguage where idtm=?) and type=? and (wbdate>=? and wbdate<?) group by topicmap,idaux,type";
+                    query = "select topicmap,idaux,type,sum(hits) as hits from swb_reshits where topicmap=? and idaux not in(select lang from wblanguage where idtm=?) and type=? and (wbdate>=? and wbdate<?) group by topicmap,idaux,type";
                     st = con.prepareStatement(query);
                     st.setString(1, topicmap);
                     st.setString(2, topicmap);
@@ -170,10 +170,10 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
                 String query;                
                 if (year > 0 && month > 0 && day > 0)
                 {                    
-                    query = "select * from wbreshits where topicmap=? and idaux not in(select lang from wblanguage where idtm=?) and type=? and (wbdate=? or wbdate=?) order by wbdate asc";
+                    query = "select * from swb_reshits where topicmap=? and idaux not in(select lang from wblanguage where idtm=?) and type=? and (wbdate=? or wbdate=?) order by wbdate asc";
                 } else
                 {
-                    query = "select * from wbreshits where topicmap=? and idaux not in(select lang from wblanguage where idtm=?) and type=? and (wbdate>=? and wbdate<?) order by wbdate asc";
+                    query = "select * from swb_reshits where topicmap=? and idaux not in(select lang from wblanguage where idtm=?) and type=? and (wbdate>=? and wbdate<?) order by wbdate asc";
                 }
                 st = con.prepareStatement(query);
                 st.setString(1, topicmap);
@@ -220,7 +220,7 @@ public class LanguageAccessDataDetail extends SWBDataDetail {
             try
             {
                 GregorianCalendar date;
-                String query = "select * from wbreshits where topicmap=? and idaux not in(select lang from wblanguage where idtm=?) and type=? and (wbdate>=? and wbdate<=?) order by wbdate asc";
+                String query = "select * from swb_reshits where topicmap=? and idaux not in(select lang from wblanguage where idtm=?) and type=? and (wbdate>=? and wbdate<=?) order by wbdate asc";
                 st = con.prepareStatement(query);
                 st.setString(1, topicmap);
                 st.setString(2, topicmap);
