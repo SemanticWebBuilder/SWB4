@@ -489,7 +489,7 @@ public class CodeGenerator
         javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
 
         javaClassContent.append("    public org.semanticwb.platform.SemanticObject getResourceData()" + ENTER);
-        javaClassContent.append("    {");
+        javaClassContent.append("    {"+ ENTER);
         javaClassContent.append("        org.semanticwb.platform.SemanticObject obj=getResourceBase().getResourceData();" + ENTER);
         javaClassContent.append("        if(obj==null)" + ENTER);
         javaClassContent.append("        {" + ENTER);
