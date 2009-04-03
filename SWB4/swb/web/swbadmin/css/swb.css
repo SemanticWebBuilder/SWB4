@@ -294,6 +294,7 @@ _form.swbform fieldset li {
 	font-size: 1.1em;
 	color: #333;
     font: normal 100% "Lucida Grande", Helvetica, Verdana, Arial;
+    background: url(../images/swbform-fieldset.png) left bottom repeat-x;
 	}
 
 .swbform legend,
@@ -306,7 +307,7 @@ _form.swbform fieldset li {
 	border-left: 1px solid #a0a0ff;
 	border-bottom: 1px solid #a0a0ff;
 	border-right: 1px solid #a0a0ff;
-	background: url(../images/swbform-fieldset.png) left bottom repeat-x;
+	_background: url(../images/swbform-fieldset.png) left bottom repeat-x;
     _background: url('../js/dojo/dijit/themes/soria/images/titleBar.png') left bottom repeat-x;
 	}
 
