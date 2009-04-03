@@ -1,12 +1,12 @@
 package org.semanticwb.repository.base;
 
 
-public class VersionBase extends org.semanticwb.repository.BaseNode implements org.semanticwb.repository.Referenceable,org.semanticwb.repository.Traceable
+public class VersionBase extends org.semanticwb.repository.BaseNode implements org.semanticwb.repository.Traceable,org.semanticwb.repository.Referenceable
 {
-    public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
     public static final org.semanticwb.platform.SemanticProperty jcr_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#created");
     public static final org.semanticwb.platform.SemanticClass nt_Version=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#version");
     public static final org.semanticwb.platform.SemanticProperty jcr_successors=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#successors");
+    public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
     public static final org.semanticwb.platform.SemanticProperty jcr_predecessors=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#predecessors");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#version");
 
@@ -47,16 +47,6 @@ public class VersionBase extends org.semanticwb.repository.BaseNode implements o
         return (getVersion(id, model)!=null);
     }
 
-    public String getUuid()
-    {
-        return getSemanticObject().getProperty(jcr_uuid);
-    }
-
-    public void setUuid(String uuid)
-    {
-        getSemanticObject().setProperty(jcr_uuid, uuid);
-    }
-
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(jcr_created);
@@ -86,6 +76,16 @@ public class VersionBase extends org.semanticwb.repository.BaseNode implements o
              ret=(org.semanticwb.repository.Version)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public String getUuid()
+    {
+        return getSemanticObject().getProperty(jcr_uuid);
+    }
+
+    public void setUuid(String uuid)
+    {
+        getSemanticObject().setProperty(jcr_uuid, uuid);
     }
 
     public void setPredecessors(org.semanticwb.repository.Version version)
