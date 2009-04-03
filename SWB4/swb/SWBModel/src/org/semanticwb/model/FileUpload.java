@@ -66,52 +66,66 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
         }
         if (mode.equals("edit") || mode.equals("create")) {
             String attchMsg="";
-            if(request.getAttribute("attach")!=null){
-                        String fileName=(String)request.getAttribute("attach");
-                        int pos=fileName.lastIndexOf("/");
-                        if(pos>-1){
-                            fileName=fileName.substring(pos+1);
+            if(request.getAttribute("attachCount")!=null){
+                        attchMsg="Archivo(s) existentes:<br/>";
+                        int count=Integer.parseInt((String)request.getAttribute("attachCount"));
+                        for(int i=1;i<=count;i++){
+                            String fileName=(String)request.getAttribute("attach_"+i);
+                            int pos=fileName.lastIndexOf("/");
+                            if(pos>-1){
+                                fileName=fileName.substring(pos+1);
+                            }
+                            String target="";
+                            if(request.getAttribute("attachTarget_"+i)!=null){
+                                target=(String)request.getAttribute("attachTarget_"+i);
+                            }
+
+                            if(request.getAttribute("attachRemovePath_"+i)!=null){
+                                attchMsg+="<a href=\""+request.getAttribute("attachRemovePath_"+i)+"\">X</a> ";
+                            }
+                            attchMsg+=i+")<a href=\""+ request.getAttribute("attach_"+i) +"\" target=\""+target+"\">"+fileName+"</a>";
+                            attchMsg+="<br/>";
                         }
-                        attchMsg="Archivo existente:<a href=\""+ request.getAttribute("attach")+"\">"+fileName+"</a><br/>";
             }
             //Página ejemplo de implementación:http://blog.tremend.ro/2007/03/01/ajax-file-upload-monitoring-monitor-your-file-upload-with-dwr-and-commons-fileupload/
             //Fecha de implemetación:26/Febrero/2009
-            ret = "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"/swb/swbadmin/css/upload/upload.css\"/>"+
-                  "<script type='text/javascript' src=\"/swb/dwr/util.js\"></script>"+
-                  "<script type='text/javascript' src=\"/swb/dwr/engine.js\"></script>"+
-                  "<script type=\"text/javascript\" src=\"/swb/dwr/interface/uploadProxy.js\"></script>"+
-                  "<script type='text/javascript' src=\"/swb/swbadmin/js/upload/upload.js\"></script>";
+            ret = "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"/swb/swbadmin/css/upload/upload.css\"/>\n"+
+                  "<script type='text/javascript' src=\"/swb/dwr/util.js\"></script>\n"+
+                  "<script type='text/javascript' src=\"/swb/dwr/engine.js\"></script>\n"+
+                  "<script type=\"text/javascript\" src=\"/swb/dwr/interface/uploadProxy.js\"></script>\n"+
+                  "<script type='text/javascript' src=\"/swb/swbadmin/js/upload/upload.js\"></script>\n";
 
             ret += "<iframe id='target_upload' name='target_upload' src='' style='display: none'></iframe><br/>" +
                     attchMsg+
                     "<input id=\"importFile\" name=\"importFile\" type=\"file\"> <br/>" +
-                    "<input type=\"hidden\" name=\"uniqueFileIdentifier\" value=\"1234\"/>" +
-                    "<a href=\"#\" onClick=\"javascript:if(uploadjs(document.forms[0])) {return startUploadMonitoring();}\">Subir</a>" + //En lugar de este boton p
-                    "<div id=\"uploadStatus\">" +
-                    "<div id=\"uploadProgressBar\" style=\"width:200px;\">" +
-                    "<div id=\"uploadIndicator\"></div>" +
-                    "</div>" +
-                    "<div id=\"uploadPercentage\"></div>" +
-                    "</div>";
+                    "<input type=\"hidden\" name=\"uniqueFileIdentifier\" value=\"1234\"/>\n" +
+                    "<a href=\"#\" onClick=\"javascript:if(uploadjs(document.forms[0])) {return startUploadMonitoring();}\">Subir</a>\n" + //En lugar de este boton p
+                    "<div id=\"uploadStatus\">\n" +
+                    "   <div id=\"uploadProgressBar\" style=\"width:200px;\">\n" +
+                    "       <div id=\"uploadIndicator\"></div>\n" +
+                    "   </div>\n" +
+                    "   <div id=\"uploadPercentage\"></div>\n" +
+                    "</div>\n";
 
-            ret += "<script type=\"text/javascript\">" +
-                    "function uploadjs(forma){" +
-                    "  var encoding=forma.encoding;" +
-                    "  forma.encoding='multipart/form-data';" +
-                    "  var method=forma.method;" +
-                    "  forma.method='post';" +
-                    "  var action=forma.action;" +
-                    "  forma.action='"+SWBPlatform.getContextPath()+"/Upload';" +
-                    "  var target=forma.target;" +
-                    "  forma.target='target_upload';" +
-                    "  forma.submit();" +
-                    "  forma.encoding=encoding;" +
-                    "  forma.method=method;" +
-                    "  forma.action=action;" +
-                    "  forma.target=target;" +
-                    "  return true;" +
-                    "}" +
-                    "</script>";
+            ret += "<script type=\"text/javascript\">\n" +
+                    "function uploadjs(forma){\n" +
+                    "if(forma.importFile.value==''){alert('El campo archivo no debe estar vacio');forma.importFile.focus(); return false;}" +
+                    "  var encoding=forma.encoding;\n" +
+                    "  forma.encoding='multipart/form-data';\n" +
+                    "  var method=forma.method;\n" +
+                    "  forma.method='post';\n" +
+                    "  var action=forma.action;\n" +
+                    "  forma.action='"+SWBPlatform.getContextPath()+"/Upload';\n" +
+                    "  var target=forma.target;\n" +
+                    "  forma.target='target_upload';\n" +
+                    "  forma.submit();\n" +
+                    "  forma.encoding=encoding;\n" +
+                    "  forma.method=method;\n" +
+                    "  forma.action=action;\n" +
+                    "  forma.target=target;\n" +
+                    "  return true;\n" +
+                    "}\n" +
+                    "</script>\n";
         } else if (mode.equals("view")) {
             ret = "<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>";
         }
