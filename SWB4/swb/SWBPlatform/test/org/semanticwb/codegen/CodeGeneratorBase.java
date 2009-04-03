@@ -48,7 +48,7 @@ public class CodeGeneratorBase
 
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
+    //@Test
     public void generateCode()
     {
         try
@@ -122,13 +122,13 @@ public class CodeGeneratorBase
         }
     }
 
-    //@Test
+    @Test
     public void generateOffice()
     {
         try
         {
             String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"../../../SWBModel/src");
+            File dir = new File(path+"../../../SWBOffice/src");
             String sPakage = "org.semanticwb.repository.office";
             CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
             codeGeneration.generateCode("cm",false);
