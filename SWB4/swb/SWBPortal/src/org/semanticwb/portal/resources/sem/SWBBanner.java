@@ -12,5 +12,8 @@ public class SWBBanner extends org.semanticwb.portal.resources.sem.base.SWBBanne
     {
         PrintWriter out=response.getWriter();
         out.println("Hello SWBBanner...");
+        out.println("Width:"+getWidth());
+        out.println("Height:"+getHeight());
+        out.println("Image:"+getImage());
     }
 }
