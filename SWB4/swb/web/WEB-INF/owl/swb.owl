@@ -1433,6 +1433,8 @@
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="resourceData">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
     <rdfs:range rdf:resource="#SWBPortalElement"/>
     <rdfs:domain rdf:resource="#Resource"/>
   </owl:ObjectProperty>
