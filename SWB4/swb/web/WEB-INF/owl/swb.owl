@@ -13,9 +13,6 @@
     <rdfs:comment>SemanticWebBuilder Default Ontology</rdfs:comment>
     <rdfs:label>SemanticWebBuilder Default Ontology</rdfs:label>
   </owl:Ontology>
-  <rdfs:Class rdf:ID="PortalElement">
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdfs:Class>
   <rdfs:Class rdf:ID="Model">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdfs:Class>
@@ -23,6 +20,9 @@
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdfs:Class>
   <rdfs:Class rdf:ID="Class">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdfs:Class>
+  <rdfs:Class rdf:ID="SemanticResource">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdfs:Class>
   <rdfs:Class rdf:ID="Property">
@@ -80,11 +80,6 @@
     >org.semanticwb.model.Text</swb:className>
     <rdf:type rdf:resource="#FormElement"/>
   </owl:Class>
-  <owl:Class rdf:ID="SWBPortalElement">
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.model.SWBPortalElement</swb:className>
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-  </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode">
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="Filterable">
@@ -122,11 +117,17 @@
     <rdfs:subClassOf rdf:resource="#Sortable"/>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="Traceable">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#SWBInterface"/>
+    </rdfs:subClassOf>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.Traceable</swb:className>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
   <owl:Class rdf:ID="TemplateGroup">
     <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Traceable"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
     <rdf:type rdf:resource="#Class"/>
     <rdfs:label xml:lang="es">Grupo de Plantillas</rdfs:label>
     <rdfs:label xml:lang="en">Template Group</rdfs:label>
@@ -136,14 +137,6 @@
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.TemplateGroup</swb:className>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Traceable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.model.Traceable</swb:className>
-    <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="UserGroup">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -432,6 +425,11 @@
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.XMLConfable</swb:className>
     <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SWBSemanticResource">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model.SWBPortalElement</swb:className>
   </owl:Class>
   <owl:Class rdf:ID="PFlowRefable">
     <rdfs:subClassOf>
@@ -1433,9 +1431,9 @@
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="resourceData">
+    <rdfs:range rdf:resource="#SWBSemanticResource"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
-    <rdfs:range rdf:resource="#SWBPortalElement"/>
     <rdfs:domain rdf:resource="#Resource"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="homePage">
