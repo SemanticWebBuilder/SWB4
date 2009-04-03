@@ -14,37 +14,37 @@
     xmlns:mix="http://www.jcp.org/jcr/mix/1.0#"
   xml:base="http://www.semanticwebbuilder.org/office.owl">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/repository"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/repository"/>
   </owl:Ontology>
   <owl:Class rdf:about="http://www.semanticwb.org.mx/swb4/content#OfficeContent">
     <rdfs:label xml:lang="en">Basic Content</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
     <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >mix:referenceable</jcr:supertypes>
-    <jcr:childNodeDefinition>
-      <nt:childNodeDefinition>
-        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >jcr:content</jcr:name>
-        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:autoCreated>
-        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:sameNameSiblings>
-        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</jcr:protected>
-        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >COPY</jcr:onParentVersion>
-        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >cm:OfficeDocument</jcr:requiredPrimaryTypes>
-        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</jcr:mandatory>
-      </nt:childNodeDefinition>
-    </jcr:childNodeDefinition>
     <mix:mixin rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</mix:mixin>
     <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >COPY</jcr:onParentVersion>
+    <jcr:childNodeDefinition>
+      <nt:childNodeDefinition>
+        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</jcr:mandatory>
+        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >cm:OfficeDocument</jcr:requiredPrimaryTypes>
+        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >COPY</jcr:onParentVersion>
+        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</jcr:protected>
+        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:sameNameSiblings>
+        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:autoCreated>
+        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >jcr:content</jcr:name>
+      </nt:childNodeDefinition>
+    </jcr:childNodeDefinition>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
     <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#lockable"/>
@@ -55,60 +55,82 @@
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.repository.office.OfficeContent</swb:className>
     <rdfs:subClassOf>
-      <swb:Interface rdf:about="http://www.semanticwb.org.mx/swb4/content#Descriptiveable">
-        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.content.Descriptiveable</swb:className>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Interface>
+      <owl:Class rdf:about="http://www.semanticwb.org.mx/swb4/content#Descriptiveable"/>
     </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="http://www.semanticwb.org.mx/swb4/content#OfficeDocument">
-    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#resource"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="http://www.semanticwb.org.mx/swb4/content#Traceable"/>
-    </rdfs:subClassOf>
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.repository.office.OfficeDocument</swb:className>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwb.org.mx/swb4/content#Traceable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
   </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwb.org.mx/swb4/content#Descriptiveable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.content.Descriptiveable</swb:className>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#content">
+    <rdfs:domain>
+      <swb:SemanticResource rdf:about="http://www.semanticwb.org.mx/swb4/content#OfficeResource">
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.resource.office.sem.OfficeResource</swb:className>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#lastModified">
-    <rdfs:subPropertyOf rdf:resource="http://www.jcp.org/jcr/1.0#lastModified"/>
-    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeContent"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
-    <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</jcr:protected>
-    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</jcr:mandatory>
     <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</jcr:multiple>
+    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</jcr:mandatory>
+    <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</jcr:protected>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeContent"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.jcp.org/jcr/1.0#lastModified"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#title">
-    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#Descriptiveable"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#title"/>
+    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</jcr:mandatory>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >IGNORE</jcr:onParentVersion>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</jcr:mandatory>
-    <rdfs:subPropertyOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#title"/>
+    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#Descriptiveable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#user">
-    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#Traceable"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</jcr:multiple>
-    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</jcr:mandatory>
-    <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >COPY</jcr:onParentVersion>
+    <rdfs:subPropertyOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#usrLogin"/>
     <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</jcr:protected>
-    <rdfs:subPropertyOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#usrLogin"/>
+    <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >COPY</jcr:onParentVersion>
+    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</jcr:mandatory>
+    <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</jcr:multiple>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#Traceable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#repositoryName">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#Category">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty>
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swbxf:propHidden>
+        <rdfs:label xml:lang="es">Seleccione una categoria</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
+        <swbxf:propSelectValues xml:lang="en">Categoria2</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="es">Categoria1</swbxf:propSelectValues>
+        <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propDisabled>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Categoria</rdfs:label>
+    <rdfs:label xml:lang="en">Category</rdfs:label>
     <rdfs:domain>
       <swbrep:Node rdf:about="http://www.semanticwb.org.mx/swb4/content#Articulo">
         <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -131,51 +153,56 @@
         <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
       </swbrep:Node>
     </rdfs:domain>
-    <rdfs:label xml:lang="en">Category</rdfs:label>
-    <rdfs:label xml:lang="es">Categoria</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty>
-        <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swbxf:propDisabled>
-        <swbxf:propSelectValues xml:lang="es">Categoria1</swbxf:propSelectValues>
-        <swbxf:propSelectValues xml:lang="en">Categoria2</swbxf:propSelectValues>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
-        <rdfs:label xml:lang="es">Seleccione una categoria</rdfs:label>
-        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</swbxf:propHidden>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#versionToShow">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#officetype">
-    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeContent"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >IGNORE</jcr:onParentVersion>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeContent"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#showDownload">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#description">
-    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#Descriptiveable"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#description"/>
+    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</jcr:mandatory>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >IGNORE</jcr:onParentVersion>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</jcr:mandatory>
-    <rdfs:subPropertyOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#description"/>
+    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#Descriptiveable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#file">
-    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeDocument"/>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >COPY</jcr:onParentVersion>
-    <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</jcr:protected>
-    <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</jcr:multiple>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</jcr:mandatory>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</jcr:multiple>
+    <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</jcr:protected>
+    <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >COPY</jcr:onParentVersion>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:domain>
+      <swb:Class rdf:about="http://www.semanticwb.org.mx/swb4/content#OfficeDocument">
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.repository.office.OfficeDocument</swb:className>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwb.org.mx/swb4/content#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#resource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
   </owl:DatatypeProperty>
+  <swb:SemanticResource rdf:about="http://www.semanticwb.org.mx/swb4/content#ExcelResource">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:SemanticResource>
   <swb:Class rdf:about="http://www.semanticwb.org.mx/swb4/content#OfficeCategory">
     <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#folder"/>
     <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -186,17 +213,19 @@
     <jcr:childNodeDefinition>
       <nt:childNodeDefinition>
         <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >cm:OfficeContent</jcr:requiredPrimaryTypes>
-        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</jcr:sameNameSiblings>
+        >cm:OfficeCategory</jcr:requiredPrimaryTypes>
         <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >VERSION</jcr:onParentVersion>
+        >COPY</jcr:onParentVersion>
         <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >false</jcr:protected>
+        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</jcr:sameNameSiblings>
+        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:autoCreated>
         <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >false</jcr:mandatory>
         <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >*</jcr:name>
+        >cm:OfficeCategory</jcr:name>
       </nt:childNodeDefinition>
     </jcr:childNodeDefinition>
     <rdfs:subClassOf rdf:resource="http://www.semanticwb.org.mx/swb4/content#Traceable"/>
@@ -205,29 +234,37 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >mix:lockable</jcr:supertypes>
-    <jcr:childNodeDefinition>
-      <nt:childNodeDefinition>
-        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >cm:OfficeCategory</jcr:name>
-        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:mandatory>
-        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:autoCreated>
-        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</jcr:sameNameSiblings>
-        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:protected>
-        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >COPY</jcr:onParentVersion>
-        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >cm:OfficeCategory</jcr:requiredPrimaryTypes>
-      </nt:childNodeDefinition>
-    </jcr:childNodeDefinition>
     <rdfs:subClassOf rdf:resource="http://www.semanticwb.org.mx/swb4/content#Descriptiveable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
     <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</jcr:sameNameSiblings>
+    <jcr:childNodeDefinition>
+      <nt:childNodeDefinition>
+        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >*</jcr:name>
+        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:mandatory>
+        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:protected>
+        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >VERSION</jcr:onParentVersion>
+        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</jcr:sameNameSiblings>
+        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >cm:OfficeContent</jcr:requiredPrimaryTypes>
+      </nt:childNodeDefinition>
+    </jcr:childNodeDefinition>
   </swb:Class>
+  <swb:SemanticResource rdf:about="http://www.semanticwb.org.mx/swb4/content#PPTResource">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:SemanticResource>
+  <swb:SemanticResource rdf:about="http://www.semanticwb.org.mx/swb4/content#WordResource">
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.resource.office.sem.WordResource</swb:className>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:SemanticResource>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
