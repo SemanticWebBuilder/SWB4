@@ -1,17 +1,17 @@
 package org.semanticwb.model.base;
 
 
-public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Iconable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Sortable
+public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Iconable,org.semanticwb.model.Sortable
 {
-    public static final org.semanticwb.platform.SemanticProperty swbxf_heTreeController=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#heTreeController");
-    public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_heModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#heModel");
     public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_heTreeController=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#heTreeController");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swb_iconClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#iconClass");
     public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
     public static final org.semanticwb.platform.SemanticProperty swbxf_heClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#heClass");
     public static final org.semanticwb.platform.SemanticProperty swbxf_hePropertyFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hePropertyFilter");
+    public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_heModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#heModel");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swbxf_HerarquicalNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode");
@@ -53,37 +53,6 @@ public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implement
         return (getHerarquicalNode(id, model)!=null);
     }
 
-    public String getTreeController()
-    {
-        return getSemanticObject().getProperty(swbxf_heTreeController);
-    }
-
-    public void setTreeController(String heTreeController)
-    {
-        getSemanticObject().setProperty(swbxf_heTreeController, heTreeController);
-    }
-
-    public void setModel(org.semanticwb.model.SWBModel swbmodel)
-    {
-        getSemanticObject().setObjectProperty(swbxf_heModel, swbmodel.getSemanticObject());
-    }
-
-    public void removeModel()
-    {
-        getSemanticObject().removeProperty(swbxf_heModel);
-    }
-
-    public org.semanticwb.model.SWBModel getModel()
-    {
-         org.semanticwb.model.SWBModel ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbxf_heModel);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.SWBModel)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
     public int getIndex()
     {
         return getSemanticObject().getIntProperty(swb_index);
@@ -92,6 +61,16 @@ public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implement
     public void setIndex(int index)
     {
         getSemanticObject().setLongProperty(swb_index, index);
+    }
+
+    public String getTreeController()
+    {
+        return getSemanticObject().getProperty(swbxf_heTreeController);
+    }
+
+    public void setTreeController(String heTreeController)
+    {
+        getSemanticObject().setProperty(swbxf_heTreeController, heTreeController);
     }
 
     public String getTitle()
@@ -154,6 +133,27 @@ public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implement
     public void setPropertyFilter(String hePropertyFilter)
     {
         getSemanticObject().setProperty(swbxf_hePropertyFilter, hePropertyFilter);
+    }
+
+    public void setModel(org.semanticwb.model.SWBModel swbmodel)
+    {
+        getSemanticObject().setObjectProperty(swbxf_heModel, swbmodel.getSemanticObject());
+    }
+
+    public void removeModel()
+    {
+        getSemanticObject().removeProperty(swbxf_heModel);
+    }
+
+    public org.semanticwb.model.SWBModel getModel()
+    {
+         org.semanticwb.model.SWBModel ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbxf_heModel);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.SWBModel)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public String getDescription()
