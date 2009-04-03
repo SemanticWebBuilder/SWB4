@@ -167,9 +167,9 @@ public class CodeGenerator
                 {
                     createInterface(tpc);
                 }
-                else if (tpc.isSWBPortalElement())
+                else if (tpc.isSWBSemanticResource())
                 {
-                    createPortalElementBase(tpc);
+                    createSemanticResourceBase(tpc);
                 }
                 else if (tpc.isSWBClass() || tpc.isSWBModel() || tpc.isSWBFormElement())
                 {
@@ -410,7 +410,7 @@ public class CodeGenerator
         }
     }
 
-    private void createPortalElementBase(SemanticClass tpc) throws CodeGeneratorException
+    private void createSemanticResourceBase(SemanticClass tpc) throws CodeGeneratorException
     {
         String exts = "org.semanticwb.portal.api.GenericSemResource";
         String sPackage = getPackage(tpc);
