@@ -42,17 +42,17 @@ import org.semanticwb.SWBUtils;
  *
  * Se tienen 6 tipos de reportes diarios con la siguiente informacion:
  *
- * ---------- date, topicmap, idaux, hits, type  --------------------
+ * ---------- date, hits_modelid, hits_objid, hits, hits_type  --------------------
  *
  * tipo
- * 0	registro diario global, 		idaux=_
- * 1	registro diario por dispositivo, 	idaux=disp,    ejemplo: web
- * 2	registro diario por lenguaje,		idaux=lang,    ejemplo: en
- * 3	registro diario por topico		idaux=topicid, ejemplo: Egobierno
- * 4	registro diario por tipousu		idaux=tipousu, ejemplo: estudiante, si es nulo=_
- * 5	registro diario num sesiones	        topicmap=repid idaux=_
- * 6    registro diario login                   topicmap=repid idaux=_
- * 7    registro diario login unicos            topicmap=repid idaux=_
+ * 0	registro diario global, 		hits_objid=_
+ * 1	registro diario por dispositivo, 	hits_objid=disp,    ejemplo: web
+ * 2	registro diario por lenguaje,		hits_objid=lang,    ejemplo: en
+ * 3	registro diario por topico		hits_objid=topicid, ejemplo: Egobierno
+ * 4	registro diario por tipousu		hits_objid=tipousu, ejemplo: estudiante, si es nulo=_
+ * 5	registro diario num sesiones	        hits_modelid=repid hits_objid=_
+ * 6    registro diario login                   hits_modelid=repid hits_objid=_
+ * 7    registro diario login unicos            hits_modelid=repid hits_objid=_
  *
  * Object: It stores daily summaries of hits:
  *
@@ -86,16 +86,16 @@ public class SWBRecHits //implements AFAppObject, AFObserver
     public void init() {
     }
 
-    public Iterator getResGlobalHitsLog(String topicmap) {
+    public Iterator getResGlobalHitsLog(String hits_modelid) {
         Iterator ret = new ArrayList().iterator();
 //        Connection con = SWBUtils.DB.getDefaultConnection();
 //        if (con != null)
 //        {
 //            try
 //            {
-//                String query = "select * from wbreshits where topicmap=? and type=0";
+//                String query = "select * from swb_reshits where hits_modelid=? and hits_type=0";
 //                PreparedStatement st = con.prepareStatement(query);
-//                st.setString(1, topicmap);
+//                st.setString(1, hits_modelid);
 //                ResultSet rs = st.executeQuery();
 //                ret = new IterResHits(con, st, rs);
 //            } catch (Exception e)
@@ -110,68 +110,71 @@ public class SWBRecHits //implements AFAppObject, AFObserver
     }
 
     /**
-     * @param topicmap
-     * @param idaux
+     * @param modelid
+     * @param objid
      * @param type
      * @return  */
-    public List getResHitsLog(String topicmap, String idaux, int type)
-    {
+    public List getResHitsLog(String modelid, String objid, int type) {
         List resumeRecHits = new ArrayList();
+        StringBuilder query = new StringBuilder();
         Connection con = SWBUtils.DB.getDefaultConnection();
-        if (con != null)
-        {
-            try
-            {
-                String query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=?";
-                if (idaux != null)
-                    query = query + " and idaux=?";
-                query = query + " order by wbdate";
-                PreparedStatement st = con.prepareStatement(query);
-                st.setString(1, topicmap);
+        if(con != null) {
+            try {
+                query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_type=?");
+                if(objid != null) {
+                    query.append(" and hits_objid=?");
+                }
+                query.append(" order by hits_date");
+                PreparedStatement st = con.prepareStatement(query.toString());
+                st.setString(1, modelid);
                 st.setInt(2, type);
-                if (idaux != null)
-                    st.setString(3, idaux);
+                if(objid != null) {
+                    st.setString(3, objid);
+                }
                 ResultSet rs = st.executeQuery();
                 SWBRecHit detail;                    
-                while(rs.next()){                        
-                    detail = new SWBRecHit(rs.getTimestamp("wbdate"),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                while(rs.next()) {
+                    detail = new SWBRecHit(rs.getTimestamp("hits_date"),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                     resumeRecHits.add(detail);
                 }
-            } catch (Exception e)
-            {
+            }catch (Exception e) {
                 log.error("Error DBResHits_getResHitsLog_getLogError", e);
+            }finally {
+                try {
+                    if(con!=null){ con.close();}
+                }catch(SQLException e) {
+                }
             }
-        } else
-        {
+        }else {
             //tira una exception
         }
         return resumeRecHits;
     }
 
     /**
-     * @param topicmap
+     * @param modelid
      * @param type
      * @return  */
-    public Iterator getResHitsLog(String topicmap, int type)
-    {
+    public Iterator getResHitsLog(String modelid, int type) {
         Iterator ret = new ArrayList().iterator();
 //        Connection con = SWBUtils.DB.getDefaultConnection();
-//        if (con != null)
-//        {
-//            try
-//            {
-//                String query = "select wbdate,topicmap,idaux, sum(hits) hits,type from wbreshits where topicmap=? and type=? group by idaux order by wbdate";
+//        if (con != null) {
+//            try {
+//                String query = "select hits_date,hits_modelid,hits_objid, sum(hits) hits,hits_type from swb_reshits where hits_modelid=? and hits_type=? group by hits_objid order by hits_date";
 //                PreparedStatement st = con.prepareStatement(query);
-//                st.setString(1, topicmap);
-//                st.setInt(2, type);
+//                st.setString(1, hits_modelid);
+//                st.setInt(2, hits_type);
 //                ResultSet rs = st.executeQuery();
 //                ret = new IterResHits(con, st, rs);
-//            } catch (Exception e)
-//            {
+//            }catch (Exception e) {
 //                log.error("Error DBResHits_getResHitsLog_getLogError", e);
+//            }finally {
+//                try {
+//                    if(con!=null){ con.close();}
+//                }catch(SQLException e) {
+//                }
 //            }
-//        } else
-//        {
+//        }else {
 //            //tira una exception
 //        }
         return ret;
@@ -179,43 +182,41 @@ public class SWBRecHits //implements AFAppObject, AFObserver
 
 
     /**
-     * @param topicmap
-     * @param idaux
+     * @param modelid
+     * @param objid
      * @param type
      * @param year
      * @param month
      * @param day
      * @return  */
-    public List getResHitsLog(String topicmap, String idaux, int type, int year, int month, int day)
-    {
+    public List getResHitsLog(String modelid, String objid, int type, int year, int month, int day) {
         List resumeRecHits = new ArrayList();
+        StringBuilder query = new StringBuilder();
         Timestamp fecha = null;
         Timestamp fecha2 = null;
         PreparedStatement st = null;
         ResultSet rs = null;
         GregorianCalendar date;
         
-        if (year > 0)
-        {
-            if (month > 0)
-            {
-                if (day > 0)
-                { //para cuando envian year,month y day
+        if(year > 0) {
+            if(month > 0) {
+                if(day > 0) {
+                    //para cuando envian year,month y day
                     date = new GregorianCalendar(year,month-1,day,0,0,0);
                     fecha = new Timestamp(date.getTimeInMillis());                    
                     date = new GregorianCalendar(year,month-1,day,23,59,59);
                     fecha2 = new Timestamp(date.getTimeInMillis());
                 }
-                if (fecha == null)
-                { //para cuando envian year y month
+                if(fecha == null) {
+                    //para cuando envian year y month
                     date = new GregorianCalendar(year,month-1,1,0,0,0);                    
                     fecha = new Timestamp(date.getTimeInMillis());                    
                     date = new GregorianCalendar(year,month,1,0,0,0);
                     fecha2 = new Timestamp(date.getTimeInMillis());
                 }
             }
-            if (fecha == null)
-            { //para cuando envian solamente year
+            if(fecha == null) {
+                //para cuando envian solamente year
                 date = new GregorianCalendar(year,0,1,0,0,0);                
                 fecha = new Timestamp(date.getTimeInMillis());
                 date = new GregorianCalendar(year+1,0,1,0,0,0);                
@@ -224,67 +225,58 @@ public class SWBRecHits //implements AFAppObject, AFObserver
         }
 
         Connection con = SWBUtils.DB.getDefaultConnection();
-        if (con != null)
-        {
-            try
-            {
-                String query = null;
-                if (idaux != null)
-                {
-                    if (year > 0 && month > 0 && day > 0)
-                    {
-                        query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and idaux=? and type=? and (wbdate>=? and wbdate<=?) order by wbdate";
-                    } else
-                    {
-                        query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and idaux=? and type=? and (wbdate>=? and wbdate<?) order by wbdate";
+        if (con != null) {
+            try {
+                if(objid != null) {
+                    if (year > 0 && month > 0 && day > 0) {
+                        query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_objid=? and hits_type=? and (hits_date>=? and hits_date<=?) order by hits_date");
+                    }else {
+                        query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_objid=? and hits_type=? and (hits_date>=? and hits_date<?) order by hits_date");
                     }
-                    st = con.prepareStatement(query);
-                    st.setString(1, topicmap);
-                    st.setString(2, idaux);
+                    st = con.prepareStatement(query.toString());
+                    st.setString(1, modelid);
+                    st.setString(2, objid);
                     st.setInt(3, type);
                     st.setTimestamp(4, fecha);
                     st.setTimestamp(5, fecha2);
-                } else
-                {
-                    if (year > 0 && month > 0 && day > 0)
-                        query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<=?) order by wbdate";
-                    else
-                        query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<?) order by wbdate";
-                    st = con.prepareStatement(query);
-                    st.setString(1, topicmap);
+                }else {
+                    if(year > 0 && month > 0 && day > 0) {
+                        query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<=?) order by hits_date");
+                    }else {
+                        query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<?) order by hits_date");
+                    }
+                    st = con.prepareStatement(query.toString());
+                    st.setString(1, modelid);
                     st.setInt(2, type);
                     st.setTimestamp(3, fecha);
                     st.setTimestamp(4, fecha2);
                 }
-                if (st != null)
-                {
+
+                if(st != null) {
                     rs = st.executeQuery();                    
                     SWBRecHit detail;                    
-                    while(rs.next()){                        
-                        detail = new SWBRecHit(rs.getTimestamp("wbdate"),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                    while(rs.next()) {
+                        detail = new SWBRecHit(rs.getTimestamp("hits_date"),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                         resumeRecHits.add(detail);
                     }
                 }
-            } catch (Exception e){
+            }catch(Exception e) {
                 log.error("Error DBResHits_getResHitsLog_getLogError", e);
-            } finally{
-                try{
-                    if(rs!=null)rs.close();
-                    if(st!=null)st.close();
-                    if(con!=null)con.close();
-                } catch(SQLException e){
+            }finally {
+                try {
+                    if(con!=null){ con.close();}
+                }catch(SQLException e) {
                 }
             }
-        } else
-        {
+        }else {
             //tira una exception
         }
         return resumeRecHits;
     }
 
     /**
-     * @param topicmap
-     * @param idaux
+     * @param modelid
+     * @param objid
      * @param type
      * @param year1
      * @param month1
@@ -293,24 +285,23 @@ public class SWBRecHits //implements AFAppObject, AFObserver
      * @param month2
      * @param day2
      * @return  */
-    public List getResHitsLog(String topicmap, String idaux, int type, int year1, int month1, int day1, int year2, int month2, int day2)
-    {
+    public List getResHitsLog(String modelid, String objid, int type, int year1, int month1, int day1, int year2, int month2, int day2) {
         List resumeRecHits = new ArrayList();
+        StringBuilder query = new StringBuilder();
         ResultSet rs = null;
         PreparedStatement st = null;
         
         Connection con = SWBUtils.DB.getDefaultConnection();
-        if (con != null)
-        {               
-            try
-            {
+        if(con != null) {
+            try {
                 GregorianCalendar date;
-                String query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<=?)";
-                if (idaux != null)
-                    query = query + " and idaux=?";
-                query = query + " order by wbdate";
-                st = con.prepareStatement(query);
-                st.setString(1, topicmap);
+                query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<=?)");
+                if(objid != null) {
+                    query.append(" and hits_objid=?");
+                }
+                query.append(" order by hits_date");
+                st = con.prepareStatement(query.toString());
+                st.setString(1, modelid);
                 st.setInt(2, type);
                 
                 date = new GregorianCalendar(year1, month1-1, day1, 0, 0, 0);                    
@@ -318,36 +309,33 @@ public class SWBRecHits //implements AFAppObject, AFObserver
                 date = new GregorianCalendar(year2, month2-1, day2, 23, 59, 59);
                 st.setTimestamp(4, new Timestamp(date.getTimeInMillis()));
 
-                if (idaux != null)
-                    st.setString(5, idaux);
+                if(objid != null) {
+                    st.setString(5, objid);
+                }
                 rs = st.executeQuery();
                 
                 SWBRecHit detail;
                 rs = st.executeQuery();
                 while(rs.next()){                   
-                    detail = new SWBRecHit(rs.getTimestamp("wbdate"),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                    detail = new SWBRecHit(rs.getTimestamp("hits_date"),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                     resumeRecHits.add(detail);
                 }
-            } catch (Exception e)
-            {
+            }catch (Exception e) {
                 log.error("Error DBResHits_getResHitsLog_getLogError", e);
-            } finally{
-                try{
-                    if(rs!=null)rs.close();
-                    if(st!=null)st.close();
-                    if(con!=null)con.close();
-                } catch(SQLException e){
+            }finally {
+                try {
+                    if(con!=null){ con.close();}
+                }catch(SQLException e){
                 }
             }
-        } else
-        {
+        }else {
             //tira una exception
         }
         return resumeRecHits;
     }
 
     /**
-     * @param topicmap
+     * @param modelid
      * @param type
      * @param year1
      * @param month1
@@ -356,91 +344,83 @@ public class SWBRecHits //implements AFAppObject, AFObserver
      * @param month2
      * @param day2
      * @return  */
-    public Iterator getResHitsLog(String topicmap, int type, int year1, int month1, int day1, int year2, int month2, int day2)
-    {
+    public Iterator getResHitsLog(String modelid, int type, int year1, int month1, int day1, int year2, int month2, int day2) {
         Timestamp fecha = null;
         Timestamp fecha2 = null;
-        fecha = new Timestamp(year1 - 1900, month1 - 1, day1, 00, 00, 00, 00);
-        fecha2 = new Timestamp(year2 - 1900, month2 - 1, day2, 00, 00, 00, 00);
+        /*fecha = new Timestamp(year1 - 1900, month1 - 1, day1, 00, 00, 00, 00);
+        fecha2 = new Timestamp(year2 - 1900, month2 - 1, day2, 00, 00, 00, 00);*/
         Iterator ret = new ArrayList().iterator();
 //        Connection con = SWBUtils.DB.getDefaultConnection();
-//        if (con != null)
-//        {
-//            try
-//            {
-//                String query = "select wbdate,topicmap,idaux, sum(hits) hits,type from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<=?) group by idaux order by wbdate";
+//        if(con != null) {
+//            try {
+//                String query = "select hits_date,hits_modelid,hits_objid, sum(hits) hits,hits_type from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<=?) group by hits_objid order by hits_date";
 //                PreparedStatement st = con.prepareStatement(query);
-//                st.setString(1, topicmap);
-//                st.setInt(2, type);
+//                st.setString(1, hits_modelid);
+//                st.setInt(2, hits_type);
 //                st.setTimestamp(3, fecha);
 //                st.setTimestamp(4, fecha2);
 //                ResultSet rs = st.executeQuery();
 //                ret = new IterResHits(con, st, rs);
-//            } catch (Exception e)
-//            {
+//            }catch (Exception e) {
 //                log.error("Error DBResHits_getResHitsLog_getLogError", e);
+//            }finally {
+//                try {
+//                    if(con!=null){ con.close();}
+//                }catch(SQLException e){
+//                }
 //            }
-//        } else
-//        {
+//        }else {
 //            //tira una exception
 //        }
         return ret;
     }
 
-
-    public void refresh()
-    {
+    public void refresh() {
     }
 
     /** Avisa al observador de que se ha producido un cambio.
      * @param s
      * @param obj  */
-    public void sendDBNotify(String s, Object obj)
-    {
-        if (s.equals("remove"))
-        {
+    public void sendDBNotify(String s, Object obj) {
+        if (s.equals("remove")) {
         }
-        if (s.equals("create"))
-        {
+        
+        if (s.equals("create")) {
         }
     }
     
     /**
-     * @param topicmap
-     * @param idaux
+     * @param modelid
+     * @param objid
      * @param type
      * @param year
      * @param month
      * @param day
      * @return  */
-    public List getResHitsLog(String topicmap, String idaux, int type, int year)
-    {
+    public List getResHitsLog(String modelid, String objid, int type, int year) {
         List resumeRecHits = new ArrayList();
+        StringBuilder query = new StringBuilder();
         PreparedStatement st = null;
         ResultSet rs = null;
         int mi=0, mf=0;        
         
-        if (year > 0)            
-        {
+        if (year > 0) {
             GregorianCalendar gcf = new GregorianCalendar();
             gcf.set(GregorianCalendar.YEAR, year);
             mi = gcf.getActualMinimum(GregorianCalendar.MONTH);
             mf = gcf.getActualMaximum(GregorianCalendar.MONTH);
         }
+
         Connection con = SWBUtils.DB.getDefaultConnection();
-        if (con != null)
-        {
-            try
-            {
-                String query;                
+        if(con != null) {
+            try {
                 GregorianCalendar date;
-                if (idaux != null)
-                {
-                    for(int i=mi; i<=mf; i++){
-                        query = "select topicmap,idaux,type,sum(hits) as hits from wbreshits where topicmap=? and idaux=? and type=? and (wbdate>=? and wbdate<?) group by topicmap,idaux,type order by wbdate";
-                        st = con.prepareStatement(query);
-                        st.setString(1, topicmap);
-                        st.setString(2, idaux);
+                if(objid != null) {
+                    for(int i=mi; i<=mf; i++) {
+                        query.append("select hits_modelid,hits_objid,hits_type,sum(hits) as hits from swb_reshits where hits_modelid=? and hits_objid=? and hits_type=? and (hits_date>=? and hits_date<?) group by hits_modelid,hits_objid,hits_type order by hits_date");
+                        st = con.prepareStatement(query.toString());
+                        st.setString(1, modelid);
+                        st.setString(2, objid);
                         st.setInt(3, type);
                                                 
                         date = new GregorianCalendar(year,i,1,0,0,0);                    
@@ -450,18 +430,17 @@ public class SWBRecHits //implements AFAppObject, AFObserver
                       
                         SWBRecHit detail;
                         rs = st.executeQuery();
-                        while(rs.next()){
+                        while(rs.next()) {
                             date = new GregorianCalendar(year,i,1);
-                            detail = new SWBRecHit(new Timestamp(date.getTimeInMillis()),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                            detail = new SWBRecHit(new Timestamp(date.getTimeInMillis()),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                             resumeRecHits.add(detail);
                         }                        
                     }
-                }else
-                {
-                    for(int i=mi; i<=mf; i++){
-                        query = "select topicmap,idaux,type,sum(hits) as hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<?) group by topicmap,idaux,type order by wbdate";
-                        st = con.prepareStatement(query);
-                        st.setString(1, topicmap);
+                }else {
+                    for(int i=mi; i<=mf; i++) {
+                        query.append("select hits_modelid,hits_objid,hits_type,sum(hits) as hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<?) group by hits_modelid,hits_objid,hits_type order by hits_date");
+                        st = con.prepareStatement(query.toString());
+                        st.setString(1, modelid);
                         st.setInt(2, type);
                                                 
                         date = new GregorianCalendar(year,i,1,0,0,0);                    
@@ -471,105 +450,102 @@ public class SWBRecHits //implements AFAppObject, AFObserver
                       
                         SWBRecHit detail;
                         rs = st.executeQuery();
-                        while(rs.next()){
+                        while(rs.next()) {
                             date = new GregorianCalendar(year,i,1);
-                            detail = new SWBRecHit(new Timestamp(date.getTimeInMillis()),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                            detail = new SWBRecHit(new Timestamp(date.getTimeInMillis()),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                             resumeRecHits.add(detail);
                         }                        
                     }
                 }
-            } catch (Exception e){
+            }catch (Exception e) {
                 log.error("Error DBResHits_getResHitsLog_getLogError", e);
-            } finally{
-                try{
-                    if(rs!=null)rs.close();
-                    if(st!=null)st.close();
-                    if(con!=null)con.close();
-                } catch(SQLException e){
+            }finally {
+                try {
+                    if(con!=null){ con.close();}
+                }catch(SQLException e){
                 }
             }
-        } else{
+        }else {
             //tira una exception
         }
         return resumeRecHits;
     }
     
     /**
-     * @param topicmap
-     * @param idaux
+     * @param modelid
+     * @param objid
      * @param type
      * @return  */
-    public List getResHitsLog(String topicmap, String idaux, int type, String item)
-    {
+    public List getResHitsLog(String modelid, String objid, int type, String item) {
         List resumeRecHits = new ArrayList();
+        StringBuilder query = new StringBuilder();
         Connection con = SWBUtils.DB.getDefaultConnection();
-        if (con != null)
-        {
-            try
-            {
-                String query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=?";
-                if (idaux != null)
-                    query = query + " and idaux=?";
-                query = query + " order by wbdate";
-                PreparedStatement st = con.prepareStatement(query);
-                st.setString(1, topicmap);
+        if(con != null) {
+            try {
+                query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_type=?");
+                if(objid != null) {
+                    query.append(" and hits_objid=?");
+                }
+                query.append(" order by hits_date");
+                PreparedStatement st = con.prepareStatement(query.toString());
+                st.setString(1, modelid);
                 st.setInt(2, type);
-                if (idaux != null)
-                    st.setString(3, idaux);
+                if(objid != null) {
+                    st.setString(3, objid);
+                }
                 ResultSet rs = st.executeQuery();
                 SWBRecHit detail;                    
-                while(rs.next()){                        
-                    detail = new SWBRecHit(rs.getTimestamp("wbdate"),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                while(rs.next()) {
+                    detail = new SWBRecHit(rs.getTimestamp("hits_date"),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                     detail.setItem(item);
                     resumeRecHits.add(detail);
                 }
-            } catch (Exception e)
-            {
+            }catch (Exception e) {
                 log.error("Error DBResHits_getResHitsLog_getLogError", e);
+            }finally {
+                try {
+                    if(con!=null){ con.close();}
+                }catch(SQLException e){
+                }
             }
-        } else
-        {
+        }else {
             //tira una exception
         }
         return resumeRecHits;
     }
     
     /**
-     * @param topicmap
-     * @param idaux
+     * @param modelid
+     * @param objid
      * @param type
      * @param year
      * @param month
      * @param day
      * @return  */
-    public List getResHitsLog(String topicmap, String idaux, int type, int year, String item)
-    {
+    public List getResHitsLog(String modelid, String objid, int type, int year, String item) {
         List resumeRecHits = new ArrayList();
+        StringBuilder query = new StringBuilder();
         PreparedStatement st = null;
         ResultSet rs = null;
         int mi=0, mf=0;        
         
-        if (year > 0)            
-        {
+        if(year > 0) {
             GregorianCalendar gcf = new GregorianCalendar();
             gcf.set(GregorianCalendar.YEAR, year);
             mi = gcf.getActualMinimum(GregorianCalendar.MONTH);
             mf = gcf.getActualMaximum(GregorianCalendar.MONTH);
         }
+
         Connection con = SWBUtils.DB.getDefaultConnection();
-        if (con != null)
-        {
-            try
-            {
-                String query;                
+        if(con != null) {
+            try {
                 GregorianCalendar date;
-                if (idaux != null)
-                {
+                if(objid != null) {
                     for(int i=mi; i<=mf; i++){
-                        query = "select topicmap,idaux,type,sum(hits) as hits from wbreshits where topicmap=? and idaux=? and type=? and (wbdate>=? and wbdate<?) group by topicmap,idaux,type order by wbdate";
-                        st = con.prepareStatement(query);
-                        st.setString(1, topicmap);
-                        st.setString(2, idaux);
+                        query.append("select hits_modelid,hits_objid,hits_type,sum(hits) as hits from swb_reshits where hits_modelid=? and hits_objid=? and hits_type=? and (hits_date>=? and hits_date<?) group by hits_modelid,hits_objid,hits_type order by hits_date");
+                        st = con.prepareStatement(query.toString());
+                        st.setString(1, modelid);
+                        st.setString(2, objid);
                         st.setInt(3, type);
                                                 
                         date = new GregorianCalendar(year,i,1,0,0,0);                    
@@ -581,17 +557,16 @@ public class SWBRecHits //implements AFAppObject, AFObserver
                         rs = st.executeQuery();
                         while(rs.next()){
                             date = new GregorianCalendar(year,i,1);
-                            detail = new SWBRecHit(new Timestamp(date.getTimeInMillis()),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                            detail = new SWBRecHit(new Timestamp(date.getTimeInMillis()),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                             detail.setItem(item);
                             resumeRecHits.add(detail);
                         }                        
                     }
-                }else
-                {
-                    for(int i=mi; i<=mf; i++){
-                        query = "select topicmap,idaux,type,sum(hits) as hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<?) group by topicmap,idaux,type order by wbdate";
-                        st = con.prepareStatement(query);
-                        st.setString(1, topicmap);
+                }else {
+                    for(int i=mi; i<=mf; i++) {
+                        query.append("select hits_modelid,hits_objid,hits_type,sum(hits) as hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<?) group by hits_modelid,hits_objid,hits_type order by hits_date");
+                        st = con.prepareStatement(query.toString());
+                        st.setString(1, modelid);
                         st.setInt(2, type);
                                                 
                         date = new GregorianCalendar(year,i,1,0,0,0);                    
@@ -603,72 +578,68 @@ public class SWBRecHits //implements AFAppObject, AFObserver
                         rs = st.executeQuery();
                         while(rs.next()){
                             date = new GregorianCalendar(year,i,1);
-                            detail = new SWBRecHit(new Timestamp(date.getTimeInMillis()),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                            detail = new SWBRecHit(new Timestamp(date.getTimeInMillis()),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                             detail.setItem(item);                            
                             resumeRecHits.add(detail);
                         }                        
                     }
                 }
-            } catch (Exception e){
+            }catch (Exception e) {
                 log.error("Error DBResHits_getResHitsLog_getLogError", e);
-            } finally{
-                try{
-                    if(rs!=null) rs.close();
-                    if(st!=null) st.close();
-                    if(con!=null)con.close();
-                } catch(SQLException e){
+            }finally {
+                try {
+                    if(con!=null){ con.close();}
+                }catch(SQLException e){
                 }
             }
-        } else{
+        }else {
             //tira una exception
         }
         return resumeRecHits;
     }
     
     /**
-     * @param topicmap
-     * @param idaux
+     * @param modelid
+     * @param objid
      * @param type
      * @param year
      * @param month
      * @param day
      * @return  */
-    public List getResHitsLog(String topicmap, String idaux, int type, int year, int month, int day, String item)
-    {
+    public List getResHitsLog(String modelid, String objid, int type, int year, int month, int day, String item) {
         List resumeRecHits = new ArrayList();
+        StringBuilder query = new StringBuilder();
         Timestamp fecha = null;
         Timestamp fecha2 = null;
         PreparedStatement st = null;
         ResultSet rs = null;
         GregorianCalendar date;
         
-        if (year > 0)
-        {
-            if (month > 0)
-            {
-                if (day > 0)
-                { //para cuando envian year,month y day
+        if(year > 0) {
+            if(month > 0) {
+                if(day > 0) {
+                    //para cuando envian year,month y day
                     date = new GregorianCalendar(year,month-1,day,0,0,0);
                     fecha = new Timestamp(date.getTimeInMillis());                    
                     date = new GregorianCalendar(year,month-1,day,23,59,59);
                     fecha2 = new Timestamp(date.getTimeInMillis());
                 }
-                if (fecha == null)
-                { //para cuando envian year y month
+                if(fecha == null) {
+                    //para cuando envian year y month
                     date = new GregorianCalendar(year,month-1,1,0,0,0);                    
                     fecha = new Timestamp(date.getTimeInMillis());                    
                     date = new GregorianCalendar(year,month,1,0,0,0);
                     fecha2 = new Timestamp(date.getTimeInMillis());
                 }
             }
-            if (fecha == null)
-            { //para cuando envian solamente year
+            if(fecha == null) {
+                //para cuando envian solamente year
                 date = new GregorianCalendar(year,0,1,0,0,0);                
                 fecha = new Timestamp(date.getTimeInMillis());
                 date = new GregorianCalendar(year+1,0,1,0,0,0);                
                 fecha2 = new Timestamp(date.getTimeInMillis());
             }
-        }else{
+        }else {
             date = new GregorianCalendar(2000,0,1,0,0,0);                
             fecha = new Timestamp(date.getTimeInMillis());
             date = new GregorianCalendar(2022,0,1,0,0,0);                
@@ -676,68 +647,59 @@ public class SWBRecHits //implements AFAppObject, AFObserver
         }
 
         Connection con = SWBUtils.DB.getDefaultConnection();
-        if (con != null)
-        {
-            try
-            {
-                String query = null;
-                if (idaux != null)
-                {
-                    if (year > 0 && month > 0 && day > 0)
-                    {
-                        query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and idaux=? and type=? and (wbdate>=? and wbdate<=?) order by wbdate";
-                    } else
-                    {
-                        query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and idaux=? and type=? and (wbdate>=? and wbdate<?) order by wbdate";
+        if(con != null) {
+            try {
+                if(objid != null) {
+                    if (year > 0 && month > 0 && day > 0) {
+                        query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_objid=? and hits_type=? and (hits_date>=? and hits_date<=?) order by hits_date");
+                    }else {
+                        query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_objid=? and hits_type=? and (hits_date>=? and hits_date<?) order by hits_date");
                     }
-                    st = con.prepareStatement(query);
-                    st.setString(1, topicmap);
-                    st.setString(2, idaux);
+                    st = con.prepareStatement(query.toString());
+                    st.setString(1, modelid);
+                    st.setString(2, objid);
                     st.setInt(3, type);
                     st.setTimestamp(4, fecha);
                     st.setTimestamp(5, fecha2);
-                } else
-                {
-                    if (year > 0 && month > 0 && day > 0)
-                        query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<=?) order by wbdate";
-                    else
-                        query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<?) order by wbdate";
-                    st = con.prepareStatement(query);
-                    st.setString(1, topicmap);
+                }else {
+                    if (year > 0 && month > 0 && day > 0) {
+                        query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<=?) order by hits_date");
+                    }else {
+                        query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<?) order by hits_date");
+                    }
+                    st = con.prepareStatement(query.toString());
+                    st.setString(1, modelid);
                     st.setInt(2, type);
                     st.setTimestamp(3, fecha);
                     st.setTimestamp(4, fecha2);
                 }
-                if (st != null)
-                {
+
+                if(st != null) {
                     rs = st.executeQuery();                    
                     SWBRecHit detail;                    
-                    while(rs.next()){                        
-                        detail = new SWBRecHit(rs.getTimestamp("wbdate"),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                    while(rs.next()) {
+                        detail = new SWBRecHit(rs.getTimestamp("hits_date"),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                         detail.setItem(item);
                         resumeRecHits.add(detail);
                     }
                 }
-            } catch (Exception e){
+            }catch (Exception e) {
                 log.error("Error DBResHits_getResHitsLog_getLogError", e);
-            } finally{
-                try{
-                    if(rs!=null)rs.close();
-                    if(st!=null)st.close();
-                    if(con!=null)con.close();
-                } catch(SQLException e){
+            }finally {
+                try {
+                    if(con!=null){ con.close();}
+                }catch(SQLException e){
                 }
             }
-        } else
-        {
+        }else {
             //tira una exception
         }
         return resumeRecHits;
     }
     
     /**
-     * @param topicmap
-     * @param idaux
+     * @param modelid
+     * @param objid
      * @param type
      * @param year1
      * @param month1
@@ -746,122 +708,115 @@ public class SWBRecHits //implements AFAppObject, AFObserver
      * @param month2
      * @param day2
      * @return  */
-    public List getResHitsLog(String topicmap, String idaux, int type, int year1, int month1, int day1, int year2, int month2, int day2, String item)
-    {
+    public List getResHitsLog(String modelid, String objid, int type, int year1, int month1, int day1, int year2, int month2, int day2, String item) {
         List resumeRecHits = new ArrayList();
+        StringBuilder query = new StringBuilder();
         ResultSet rs = null;
         PreparedStatement st = null;
 
         Connection con = SWBUtils.DB.getDefaultConnection();
-        if (con != null)
-        {               
-            try
-            {
+        if(con != null) {
+            try {
                 GregorianCalendar date;
-                String query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<=?)";
-                if (idaux != null) {
-                    query = query + " and idaux=?";
+                query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<=?)");
+                if(objid != null) {
+                    query.append(" and hits_objid=?");
                 }
-                query = query + " order by wbdate";
-                st = con.prepareStatement(query);
-                st.setString(1, topicmap);
+                query.append(" order by hits_date");
+                st = con.prepareStatement(query.toString());
+                st.setString(1, modelid);
                 st.setInt(2, type);
                 date = new GregorianCalendar(year1, month1-1, day1, 0, 0, 0);                    
                 st.setTimestamp(3, new Timestamp(date.getTimeInMillis()));
                 date = new GregorianCalendar(year2, month2-1, day2, 23, 59, 59);
                 st.setTimestamp(4, new Timestamp(date.getTimeInMillis()));
-                if (idaux != null) {
-                    st.setString(5, idaux);
+                if(objid != null) {
+                    st.setString(5, objid);
                 }                
                 SWBRecHit detail;
                 rs = st.executeQuery();
-                while(rs.next()){                   
-                    detail = new SWBRecHit(rs.getTimestamp("wbdate"),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                while(rs.next()) {
+                    detail = new SWBRecHit(rs.getTimestamp("hits_date"),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                     detail.setItem(item);                 
                     resumeRecHits.add(detail);
                 }
-            } catch (Exception e)
-            {
+            }catch (Exception e) {
                 log.error("Error DBResHits_getResHitsLog_getLogError", e);
-            } finally{
-                try{
-                    if(rs!=null)rs.close();
-                    if(st!=null)st.close();
-                    if(con!=null)con.close();
-                } catch(SQLException e){
+            }finally {
+                try {
+                    if(con!=null){ con.close();}
+                }catch(SQLException e){
                 }
             }
-        } else
-        {
+        }else {
             //tira una exception
         }
         return resumeRecHits;
     }
     
-    public List getResHitsLog(String topicmap, String idaux, int type, String item, int iditem)
-    {
+    public List getResHitsLog(String modelid, String objid, int type, String item, int iditem) {
         List resumeRecHits = new ArrayList();
+        StringBuilder query = new StringBuilder();
         Connection con = SWBUtils.DB.getDefaultConnection();
-        if (con != null)
-        {
-            try
-            {
-                String query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=?";
-                if (idaux != null)
-                    query = query + " and idaux=?";
-                query = query + " order by wbdate";
-                PreparedStatement st = con.prepareStatement(query);
-                st.setString(1, topicmap);
+        if(con != null) {
+            try {
+                query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_type=?");
+                if(objid != null) {
+                    query.append(" and hits_objid=?");
+                }
+                query.append(" order by hits_date");
+                PreparedStatement st = con.prepareStatement(query.toString());
+                st.setString(1, modelid);
                 st.setInt(2, type);
-                if (idaux != null)
-                    st.setString(3, idaux);
+                if(objid != null) {
+                    st.setString(3, objid);
+                }
                 ResultSet rs = st.executeQuery();
                 SWBRecHit detail;                    
                 while(rs.next()){                        
-                    detail = new SWBRecHit(rs.getTimestamp("wbdate"),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                    detail = new SWBRecHit(rs.getTimestamp("hits_date"),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                     detail.setItem(item);
                     detail.setIditem(iditem);
                     resumeRecHits.add(detail);
                 }
-            } catch (Exception e)
-            {
+            }catch (Exception e) {
                 log.error("Error DBResHits_getResHitsLog_getLogError", e);
+            }finally {
+                try {
+                    if(con!=null){ con.close();}
+                }catch(SQLException e){
+                }
             }
-        } else
-        {
+        }else {
             //tira una exception
         }
         return resumeRecHits;
     }
     
-    public List getResHitsLog(String topicmap, String idaux, int type, int year, String item, int iditem)
-    {
+    public List getResHitsLog(String modelid, String objid, int type, int year, String item, int iditem) {
         List resumeRecHits = new ArrayList();
+        StringBuilder query = new StringBuilder();
         PreparedStatement st = null;
         ResultSet rs = null;
         int mi=0, mf=0;        
         
-        if (year > 0)            
-        {
+        if(year > 0) {
             GregorianCalendar gcf = new GregorianCalendar();
             gcf.set(GregorianCalendar.YEAR, year);
             mi = gcf.getActualMinimum(GregorianCalendar.MONTH);
             mf = gcf.getActualMaximum(GregorianCalendar.MONTH);
         }
+
         Connection con = SWBUtils.DB.getDefaultConnection();
-        if (con != null)
-        {
-            try
-            {
-                String query;                
+        if(con != null) {
+            try {
                 GregorianCalendar date;
-                if (idaux != null)
-                {
-                    for(int i=mi; i<=mf; i++){
-                        query = "select topicmap,idaux,type,sum(hits) as hits from wbreshits where topicmap=? and idaux=? and type=? and (wbdate>=? and wbdate<?) group by topicmap,idaux,type order by wbdate";
-                        st = con.prepareStatement(query);
-                        st.setString(1, topicmap);
-                        st.setString(2, idaux);
+                if(objid != null) {
+                    for(int i=mi; i<=mf; i++) {
+                        query.append("select hits_modelid,hits_objid,hits_type,sum(hits) as hits from swb_reshits where hits_modelid=? and hits_objid=? and hits_type=? and (hits_date>=? and hits_date<?) group by hits_modelid,hits_objid,hits_type order by hits_date");
+                        st = con.prepareStatement(query.toString());
+                        st.setString(1, modelid);
+                        st.setString(2, objid);
                         st.setInt(3, type);
                                                 
                         date = new GregorianCalendar(year,i,1,0,0,0);                    
@@ -873,18 +828,17 @@ public class SWBRecHits //implements AFAppObject, AFObserver
                         rs = st.executeQuery();
                         while(rs.next()){
                             date = new GregorianCalendar(year,i,1);
-                            detail = new SWBRecHit(new Timestamp(date.getTimeInMillis()),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                            detail = new SWBRecHit(new Timestamp(date.getTimeInMillis()),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                             detail.setItem(item);
                             detail.setIditem(iditem);
                             resumeRecHits.add(detail);
                         }                        
                     }
-                }else
-                {
-                    for(int i=mi; i<=mf; i++){
-                        query = "select topicmap,idaux,type,sum(hits) as hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<?) group by topicmap,idaux,type order by wbdate";
-                        st = con.prepareStatement(query);
-                        st.setString(1, topicmap);
+                }else {
+                    for(int i=mi; i<=mf; i++) {
+                        query.append("select hits_modelid,hits_objid,hits_type,sum(hits) as hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<?) group by hits_modelid,hits_objid,hits_type order by hits_date");
+                        st = con.prepareStatement(query.toString());
+                        st.setString(1, modelid);
                         st.setInt(2, type);
                                                 
                         date = new GregorianCalendar(year,i,1,0,0,0);                    
@@ -894,66 +848,62 @@ public class SWBRecHits //implements AFAppObject, AFObserver
                       
                         SWBRecHit detail;
                         rs = st.executeQuery();
-                        while(rs.next()){
+                        while(rs.next()) {
                             date = new GregorianCalendar(year,i,1);
-                            detail = new SWBRecHit(new Timestamp(date.getTimeInMillis()),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                            detail = new SWBRecHit(new Timestamp(date.getTimeInMillis()),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                             detail.setItem(item);                            
                             resumeRecHits.add(detail);
                         }                        
                     }
                 }
-            } catch (Exception e){
+            }catch (Exception e) {
                 log.error("Error DBResHits_getResHitsLog_getLogError", e);
-            } finally{
-                try{
-                    if(rs!=null) rs.close();
-                    if(st!=null) st.close();
-                    if(con!=null)con.close();
-                } catch(SQLException e){
+            }finally {
+                try {
+                    if(con!=null){ con.close();}
+                }catch(SQLException e){
                 }
             }
-        } else{
+        }else{
             //tira una exception
         }
         return resumeRecHits;
     }
     
-    public List getResHitsLog(String topicmap, String idaux, int type, int year, int month, int day, String item, int iditem)
-    {
+    public List getResHitsLog(String modelid, String objid, int type, int year, int month, int day, String item, int iditem) {
         List resumeRecHits = new ArrayList();
+        StringBuilder query = new StringBuilder();
         Timestamp fecha = null;
         Timestamp fecha2 = null;
         PreparedStatement st = null;
         ResultSet rs = null;
         GregorianCalendar date;
         
-        if (year > 0)
-        {
-            if (month > 0)
-            {
-                if (day > 0)
-                { //para cuando envian year,month y day
+        if(year > 0) {
+            if(month > 0) {
+                if(day > 0) {
+                    //para cuando envian year,month y day
                     date = new GregorianCalendar(year,month-1,day,0,0,0);
                     fecha = new Timestamp(date.getTimeInMillis());                    
                     date = new GregorianCalendar(year,month-1,day,23,59,59);
                     fecha2 = new Timestamp(date.getTimeInMillis());
                 }
-                if (fecha == null)
-                { //para cuando envian year y month
+                if(fecha == null) {
+                    //para cuando envian year y month
                     date = new GregorianCalendar(year,month-1,1,0,0,0);                    
                     fecha = new Timestamp(date.getTimeInMillis());                    
                     date = new GregorianCalendar(year,month,1,0,0,0);
                     fecha2 = new Timestamp(date.getTimeInMillis());
                 }
             }
-            if (fecha == null)
-            { //para cuando envian solamente year
+            if(fecha == null) {
+                //para cuando envian solamente year
                 date = new GregorianCalendar(year,0,1,0,0,0);                
                 fecha = new Timestamp(date.getTimeInMillis());
                 date = new GregorianCalendar(year+1,0,1,0,0,0);                
                 fecha2 = new Timestamp(date.getTimeInMillis());
             }
-        }else{
+        }else {
             date = new GregorianCalendar(2000,0,1,0,0,0);                
             fecha = new Timestamp(date.getTimeInMillis());
             date = new GregorianCalendar(2022,0,1,0,0,0);                
@@ -961,84 +911,72 @@ public class SWBRecHits //implements AFAppObject, AFObserver
         }
 
         Connection con = SWBUtils.DB.getDefaultConnection();
-        if (con != null)
-        {
-            try
-            {
-                String query = null;
-                if (idaux != null)
-                {
-                    if (year > 0 && month > 0 && day > 0)
-                    {
-                        query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and idaux=? and type=? and (wbdate>=? and wbdate<=?) order by wbdate";
-                    } else
-                    {
-                        query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and idaux=? and type=? and (wbdate>=? and wbdate<?) order by wbdate";
+        if (con != null) {
+            try {
+                if(objid != null) {
+                    if(year > 0 && month > 0 && day > 0) {
+                        query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_objid=? and hits_type=? and (hits_date>=? and hits_date<=?) order by hits_date");
+                    }else {
+                        query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_objid=? and hits_type=? and (hits_date>=? and hits_date<?) order by hits_date");
                     }
-                    st = con.prepareStatement(query);
-                    st.setString(1, topicmap);
-                    st.setString(2, idaux);
+                    st = con.prepareStatement(query.toString());
+                    st.setString(1, modelid);
+                    st.setString(2, objid);
                     st.setInt(3, type);
                     st.setTimestamp(4, fecha);
                     st.setTimestamp(5, fecha2);
-                } else
-                {
+                }else {
                     if (year > 0 && month > 0 && day > 0)
-                        query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<=?) order by wbdate";
+                        query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<=?) order by hits_date");
                     else
-                        query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<?) order by wbdate";
-                    st = con.prepareStatement(query);
-                    st.setString(1, topicmap);
+                        query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<?) order by hits_date");
+                    st = con.prepareStatement(query.toString());
+                    st.setString(1, modelid);
                     st.setInt(2, type);
                     st.setTimestamp(3, fecha);
                     st.setTimestamp(4, fecha2);
                 }
-                if (st != null)
-                {
+                if(st != null) {
                     rs = st.executeQuery();                    
                     SWBRecHit detail;                    
-                    while(rs.next()){                        
-                        detail = new SWBRecHit(rs.getTimestamp("wbdate"),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                    while(rs.next()) {
+                        detail = new SWBRecHit(rs.getTimestamp("hits_date"),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                         detail.setItem(item);
                         detail.setIditem(iditem);
                         resumeRecHits.add(detail);
                     }
                 }
-            } catch (Exception e){
+            }catch (Exception e) {
                 log.error("Error_DBResHits_getResHitsLog_getLogError", e);
-            } finally{
-                try{
-                    if(rs!=null)rs.close();
-                    if(st!=null)st.close();
-                    if(con!=null)con.close();
-                } catch(SQLException e){
+            }finally {
+                try {
+                    if(con!=null){ con.close();}
+                }catch(SQLException e){
                 }
             }
-        } else
-        {
+        }else {
             //tira una exception
         }
         return resumeRecHits;
     }
     
-    public List getResHitsLog(String topicmap, String idaux, int type, int year1, int month1, int day1, int year2, int month2, int day2, String item, int iditem)
-    {
+    public List getResHitsLog(String modelid, String objid, int type, int year1, int month1, int day1, int year2, int month2, int day2, String item, int iditem) {
         List resumeRecHits = new ArrayList();
+        StringBuilder query = new StringBuilder();
         ResultSet rs = null;
         PreparedStatement st = null;
         
         Connection con = SWBUtils.DB.getDefaultConnection();
-        if (con != null)
-        {               
-            try
-            {
+        if(con != null) {
+            try {
                 GregorianCalendar date;
-                String query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and type=? and (wbdate>=? and wbdate<=?)";
-                if (idaux != null)
-                    query = query + " and idaux=?";
-                query = query + " order by wbdate";
-                st = con.prepareStatement(query);
-                st.setString(1, topicmap);
+                query.append("select hits_date,hits_modelid,hits_objid,hits_type,hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<=?)");
+                if(objid != null) {
+                    query.append(" and hits_objid=?");
+                }
+                query.append(" order by hits_date");
+                st = con.prepareStatement(query.toString());
+                st.setString(1, modelid);
                 st.setInt(2, type);
                 
                 date = new GregorianCalendar(year1, month1-1, day1, 0, 0, 0);                    
@@ -1046,30 +984,26 @@ public class SWBRecHits //implements AFAppObject, AFObserver
                 date = new GregorianCalendar(year2, month2-1, day2, 23, 59, 59);
                 st.setTimestamp(4, new Timestamp(date.getTimeInMillis()));
 
-                if (idaux != null)
-                    st.setString(5, idaux);
+                if(objid != null)
+                    st.setString(5, objid);
                 
                 SWBRecHit detail;
                 rs = st.executeQuery();
                 while(rs.next()){                   
-                    detail = new SWBRecHit(rs.getTimestamp("wbdate"),rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getLong("hits"));
+                    detail = new SWBRecHit(rs.getTimestamp("hits_date"),rs.getString("hits_modelid"),rs.getString("hits_objid"),rs.getInt("hits_type"),rs.getLong("hits"));
                     detail.setItem(item);
                     detail.setIditem(iditem);
                     resumeRecHits.add(detail);
                 }
-            } catch (Exception e)
-            {
+            }catch (Exception e) {
                 log.error("Error DBResHits_getResHitsLog_getLogError", e);
-            } finally{
-                try{
-                    if(rs!=null)rs.close();
-                    if(st!=null)st.close();
-                    if(con!=null)con.close();
-                } catch(SQLException e){
+            }finally {
+                try {
+                    if(con!=null){ con.close();}
+                }catch(SQLException e){
                 }
             }
-        } else
-        {
+        }else {
             //tira una exception
         }
         return resumeRecHits;
