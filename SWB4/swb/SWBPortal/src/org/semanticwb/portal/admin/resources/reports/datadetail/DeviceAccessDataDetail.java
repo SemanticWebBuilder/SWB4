@@ -36,7 +36,7 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
         {
             try
             {
-                String query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and idaux not in(select id from wbdevice) and type=? order by wbdate";
+                String query = "select wbdate,topicmap,idaux,type,hits from swb_reshits where topicmap=? and idaux not in(select id from wbdevice) and type=? order by wbdate";
                 st = con.prepareStatement(query);
                 st.setString(1, topicmap);                
                 st.setInt(2, type);
@@ -90,7 +90,7 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
                 String query;                
                 GregorianCalendar date;
                 for(int i=mi; i<=mf; i++){
-                    query = "select topicmap,idaux,type,sum(hits) as hits from wbreshits where topicmap=? and idaux not in(select id from wbdevice) and type=? and (wbdate>=? and wbdate<?) group by topicmap,idaux,type";
+                    query = "select topicmap,idaux,type,sum(hits) as hits from swb_reshits where topicmap=? and idaux not in(select id from wbdevice) and type=? and (wbdate>=? and wbdate<?) group by topicmap,idaux,type";
                     st = con.prepareStatement(query);
                     st.setString(1, topicmap);
                     st.setInt(2, type);
@@ -169,10 +169,10 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
                 String query;                
                 if (year > 0 && month > 0 && day > 0)
                 {
-                    query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and idaux not in(select id from wbdevice) and type=? and (wbdate=? or wbdate=?) order by wbdate";
+                    query = "select wbdate,topicmap,idaux,type,hits from swb_reshits where topicmap=? and idaux not in(select id from wbdevice) and type=? and (wbdate=? or wbdate=?) order by wbdate";
                 } else
                 {
-                    query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and idaux not in(select id from wbdevice) and type=? and (wbdate>=? and wbdate<?) order by wbdate";
+                    query = "select wbdate,topicmap,idaux,type,hits from swb_reshits where topicmap=? and idaux not in(select id from wbdevice) and type=? and (wbdate>=? and wbdate<?) order by wbdate";
                 }
                 st = con.prepareStatement(query);
                 st.setString(1, topicmap);                
@@ -218,7 +218,7 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
             try
             {
                 GregorianCalendar date;
-                String query = "select wbdate,topicmap,idaux,type,hits from wbreshits where topicmap=? and idaux not in(select id from wbdevice) and type=? and (wbdate>=? and wbdate<=?) order by wbdate";
+                String query = "select wbdate,topicmap,idaux,type,hits from swb_reshits where topicmap=? and idaux not in(select id from wbdevice) and type=? and (wbdate>=? and wbdate<=?) order by wbdate";
                 st = con.prepareStatement(query);
                 st.setString(1, topicmap);
                 st.setInt(2, type);
