@@ -38,6 +38,7 @@ public class SemanticClass
     private Boolean m_isSWBInterface=null;
     private Boolean m_isSWBModel=null;
     private Boolean m_isSWBFormElement=null;
+    private Boolean m_isSWBPortalElement=null;
     private String m_className=null;
     private Boolean m_autogenId=null;
     private Class m_cls=null;
@@ -538,6 +539,7 @@ public class SemanticClass
         m_isSWBInterface=false;
         m_isSWBModel=false;
         m_isSWBFormElement=false;
+        m_isSWBPortalElement=false;
         for (Iterator i = m_class.listRDFTypes(false); i.hasNext(); )
         {
             Resource res=(Resource)i.next();
@@ -557,6 +559,10 @@ public class SemanticClass
             }else if(uri.equals(SemanticVocabulary.SWB_FORMELEMENT))
             {
                 m_isSWBFormElement = true;
+                break;
+            }else if(uri.equals(SemanticVocabulary.SWB_PORTALELEMENT))
+            {
+                m_isSWBPortalElement = true;
                 break;
             }
         }
@@ -598,6 +604,15 @@ public class SemanticClass
         return m_isSWBFormElement.booleanValue();
     }
 
+    public boolean isSWBPortalElement()
+    {
+        if(m_isSWBPortalElement==null)
+        {
+            checkType();
+        }
+        return m_isSWBPortalElement.booleanValue();
+    }
+
     public SemanticProperty getDisplayNameProperty() {
         return displayNameProperty;
     }
@@ -621,7 +636,7 @@ public class SemanticClass
 
     public boolean isSWB()
     {
-        return isSWBClass() || isSWBModel() || isSWBFormElement() || isSWBInterface();
+        return isSWBClass() || isSWBModel() || isSWBFormElement() || isSWBInterface() || isSWBPortalElement();
     }
 
     public SemanticClass getRootClass()
