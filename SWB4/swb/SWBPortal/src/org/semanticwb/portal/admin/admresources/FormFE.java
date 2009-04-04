@@ -192,6 +192,7 @@ public class FormFE extends WBContainerFE
                 if(style!=null) child.setAttribute("style",style);
                 if(styleclass!=null) child.setAttribute("class",styleclass);
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
+
                 dom.appendChild(child);
 
                 xml=SWBUtils.XML.domToXml(dom, "ISO-8859-1", true);
