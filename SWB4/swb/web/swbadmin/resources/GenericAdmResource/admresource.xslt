@@ -54,8 +54,7 @@
 	<xsl:if test="string-length( @onsubmit   ) &gt; 0"> onsubmit=&quot;<xsl:value-of select="@onsubmit" />&quot;</xsl:if>
 	<xsl:if test="string-length( @onreset    ) &gt; 0"> onreset=&quot;<xsl:value-of select="@onreset" />&quot;</xsl:if>
 	<xsl:if test="string-length( @moreattr) &gt; 0"><xsl:text> </xsl:text><xsl:value-of select="@moreattr" /></xsl:if>
-    <xsl:if test="string-length( @dojoType ) &gt; 0"> dojoType=&quot;<xsl:value-of select="@dojoType" />&quot;</xsl:if>
-	<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    <xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 		<xsl:apply-templates />
 	<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     </xsl:template>
