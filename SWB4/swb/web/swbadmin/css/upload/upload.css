@@ -3,17 +3,16 @@
 }
 
 #uploadProgressBar {
-    height: 14px;
-    border: 1px solid #BBB;
+    height: 2px;
+    border: 0px solid #BBB;
     text-align: center;
-    display: inline;
     float: left;
 }
 
 #uploadIndicator {
-    height: 10px;
+    height: 1px;
     position: relative;
-    margin: 1px;
+    margin: 0px;
     padding: 1px;
     background: #9DC0F4;
     width: 0;
@@ -21,7 +20,6 @@
 }
 
 #uploadPercentage {
-    width: 20px;
-    display: inline;
+    width:5px;
     float: right;
 }
