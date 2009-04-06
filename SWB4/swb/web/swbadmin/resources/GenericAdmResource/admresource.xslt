@@ -102,8 +102,14 @@
     </xsl:template>
     <xsl:template match="label">
 	<TR>
-		<TD class="datos" width="200px" align="right"><xsl:value-of select="node()" disable-output-escaping="yes" /></TD>
-		<TD class="valores"><xsl:apply-templates select="./*" /></TD>
+		<TD class="datos" width="200px" align="right"><xsl:value-of select="node()" disable-output-escaping="yes" />
+            <xsl:if test="string-length( @required    ) &gt; 0">
+                <xsl:text disable-output-escaping="yes">&lt;</xsl:text>FONT color="RED"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+                    <xsl:value-of select="@required" />
+                <xsl:text disable-output-escaping="yes">&lt;</xsl:text>/FONT<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+            </xsl:if>
+        </TD>
+        <TD class="valores"><xsl:apply-templates select="./*" /></TD>
 	</TR>
     </xsl:template>
     <xsl:template match="legend">
