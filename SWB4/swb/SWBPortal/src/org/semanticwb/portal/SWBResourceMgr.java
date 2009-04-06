@@ -76,24 +76,29 @@ public class SWBResourceMgr
         while(it.hasNext())
         {
             ResourceType type=it.next();
-            String cls=type.getResourceClassName();
-            SemanticModel model=SWBPlatform.getSemanticMgr().getModel(cls);
-            if(model==null)
-            {
-                String path="/"+SWBUtils.TEXT.replaceAll(cls, ".", "/")+".owl";
-                InputStream in=getClass().getResourceAsStream(path);
-                if(in!=null)
-                {
-                    log.debug("Reading:"+path);
-                    Model m=ModelFactory.createDefaultModel();
-                    m.read(in, null);
-                    model=new SemanticModel(cls,m);
-                    SWBPlatform.getSemanticMgr().getSchema().addSubModel(model,false);
-                    System.out.println(cls);
-                }
-            }
+            loadResourceTypeModel(type);
         }
         SWBPlatform.getSemanticMgr().getSchema().rebind();
+    }
+
+    public void loadResourceTypeModel(ResourceType type)
+    {
+        String cls=type.getResourceClassName();
+        SemanticModel model=SWBPlatform.getSemanticMgr().getModel(cls);
+        if(model==null)
+        {
+            String path="/"+SWBUtils.TEXT.replaceAll(cls, ".", "/")+".owl";
+            InputStream in=getClass().getResourceAsStream(path);
+            if(in!=null)
+            {
+                log.debug("Reading:"+path);
+                Model m=ModelFactory.createDefaultModel();
+                m.read(in, null);
+                model=new SemanticModel(cls,m);
+                SWBPlatform.getSemanticMgr().getSchema().addSubModel(model,false);
+                System.out.println(cls);
+            }
+        }
     }
 
     public SWBResource getResource(String model, String id)
