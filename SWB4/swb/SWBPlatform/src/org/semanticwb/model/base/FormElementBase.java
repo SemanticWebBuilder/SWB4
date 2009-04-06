@@ -8,7 +8,6 @@ package org.semanticwb.model.base;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.FormElement;
@@ -16,7 +15,6 @@ import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
-
 
 /**
  *
@@ -40,6 +38,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         //System.out.println("process...:"+obj.getURI()+" "+prop.getURI());
+        if(prop.getDisplayProperty()==null)return;
         if(prop.isDataTypeProperty())
         {
             String value=request.getParameter(prop.getName());
@@ -47,8 +46,11 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
             //System.out.println("com:"+old+"-"+value+"-");
             if(prop.isBoolean())
             {
-                if(value!=null && (old==null || old.equals("false")))obj.setBooleanProperty(prop, true);
-                else if(value==null && (old==null || old.equals("true"))) obj.setBooleanProperty(prop, false);
+                //System.out.println("prop:"+prop);
+                //System.out.println("value:"+value);
+                //System.out.println("old:"+old);
+                if(value!=null && (value.equals("true") || value.equals("on")) && (old==null || old.equals("false")))obj.setBooleanProperty(prop, true);
+                else if((value==null || value.equals("false")) && old!=null && old.equals("true")) obj.setBooleanProperty(prop, false);
             }else
             {
                 if(value!=null)
