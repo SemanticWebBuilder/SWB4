@@ -37,7 +37,6 @@ public class GenericSemResource extends GenericResource implements org.semanticw
 
     public GenericSemResource(SemanticObject obj)
     {
-        loadModel();
         this.m_obj=obj;
         try
         {
@@ -52,39 +51,20 @@ public class GenericSemResource extends GenericResource implements org.semanticw
 
     public GenericSemResource()
     {
-        loadModel();
     }
-
-    private void loadModel()
-    {
-        if(model==null)
-        {
-            String cls=getClass().getName();
-            String path="/"+SWBUtils.TEXT.replaceAll(cls, ".", "/")+".owl";
-            InputStream in=getClass().getResourceAsStream(path);
-            if(in!=null)
-            {
-                log.debug("Reading:"+path);
-                Model m=ModelFactory.createDefaultModel();
-                m.read(in, null);
-                model=new SemanticModel(cls,m);
-                SWBPlatform.getSemanticMgr().getSchema().addSubModel(model,false);
-                semanticInit();
-                //System.out.println(cls);
-            }
-        }
-    }
-
-    protected void semanticInit()
-    {
-        //To override
-    }
-
 
     public SemanticClass getSemanticClass()
     {
-        String clsname=getClass().getName();
-        return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByJavaName(clsname);
+        SemanticClass cls=null;
+        if(m_obj==null)
+        {
+            String clsname=getClass().getName();
+            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByJavaName(clsname);
+        }else
+        {
+            cls=m_obj.getSemanticClass();
+        }
+        return cls;
     }
 
     @Override
