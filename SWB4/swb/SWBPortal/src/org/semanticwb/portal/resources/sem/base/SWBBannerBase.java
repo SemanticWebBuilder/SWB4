@@ -9,8 +9,9 @@ public class SWBBannerBase extends org.semanticwb.portal.api.GenericSemResource
     public static org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources#SWBBanner");
 
 
-    public void SWBBannerBase()
+    public SWBBannerBase()
     {
+        super();
     }
 
     public SWBBannerBase(org.semanticwb.platform.SemanticObject base)
