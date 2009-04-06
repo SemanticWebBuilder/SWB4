@@ -369,7 +369,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
         }
         if(ret && obj instanceof UserGroupRefable)
         {
-            Iterator<UserGroupRef> it=((UserGroupRefable)obj).listUserGroupRefs();
+            Iterator<UserGroupRef> it=((UserGroupRefable)obj).listInheritUserGroupRefs();
             while(it.hasNext())
             {
                 UserGroupRef ref=it.next();

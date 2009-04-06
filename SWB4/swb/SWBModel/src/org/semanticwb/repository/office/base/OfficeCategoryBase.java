@@ -3,8 +3,8 @@ package org.semanticwb.repository.office.base;
 
 public class OfficeCategoryBase extends org.semanticwb.repository.Folder implements org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Referenceable,org.semanticwb.repository.Traceable
 {
-    public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
     public static final org.semanticwb.platform.SemanticProperty cm_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#title");
+    public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
     public static final org.semanticwb.platform.SemanticProperty cm_user=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#user");
     public static final org.semanticwb.platform.SemanticProperty cm_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#description");
     public static final org.semanticwb.platform.SemanticClass cm_OfficeCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org.mx/swb4/content#OfficeCategory");
@@ -47,16 +47,6 @@ public class OfficeCategoryBase extends org.semanticwb.repository.Folder impleme
         return (getOfficeCategory(id, model)!=null);
     }
 
-    public String getUuid()
-    {
-        return getSemanticObject().getProperty(jcr_uuid);
-    }
-
-    public void setUuid(String uuid)
-    {
-        getSemanticObject().setProperty(jcr_uuid, uuid);
-    }
-
     public String getTitle()
     {
         return getSemanticObject().getProperty(cm_title);
@@ -65,6 +55,16 @@ public class OfficeCategoryBase extends org.semanticwb.repository.Folder impleme
     public void setTitle(String title)
     {
         getSemanticObject().setProperty(cm_title, title);
+    }
+
+    public String getUuid()
+    {
+        return getSemanticObject().getProperty(jcr_uuid);
+    }
+
+    public void setUuid(String uuid)
+    {
+        getSemanticObject().setProperty(jcr_uuid, uuid);
     }
 
     public String getUser()

@@ -18,6 +18,7 @@ public class SWBContext extends SWBContextBase
     public static String WEBSITE_ADMIN="SWBAdmin";
     public static String WEBSITE_GLOBAL="SWBGlobal";
     public static String USERREPOSITORY_DEFAULT="urswb";
+    public static String USERREPOSITORY_ADMIN="uradm";
     
     private static SWBContext instance=null;
     static public synchronized SWBContext createInstance()
@@ -47,6 +48,11 @@ public class SWBContext extends SWBContextBase
     public static UserRepository getDefaultRepository()
     {
         return getUserRepository(USERREPOSITORY_DEFAULT);
+    }
+
+    public static UserRepository getAdminRepository()
+    {
+        return getUserRepository(USERREPOSITORY_ADMIN);
     }
     
     public static FormView getFormView(String id)
