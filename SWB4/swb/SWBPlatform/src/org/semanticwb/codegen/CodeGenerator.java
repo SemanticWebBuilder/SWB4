@@ -373,7 +373,7 @@ public class CodeGenerator
         saveFile(fileClass, javaClassContent.toString());
     }
 
-    private void createPortalElement(SemanticClass tpc) throws CodeGeneratorException
+    private void createSemanticResource(SemanticClass tpc) throws CodeGeneratorException
     {
         String sPackage = getPackage(tpc);
 
@@ -486,6 +486,16 @@ public class CodeGenerator
             staticClasses.add(tpc);
         }
 
+
+        javaClassContent.append("    public void "+ className +"Base()"+ ENTER);
+        javaClassContent.append("    {"+ ENTER);
+        javaClassContent.append("    }"+ ENTER);
+
+        javaClassContent.append("    public "+className+"Base(org.semanticwb.platform.SemanticObject base)"+ ENTER);
+        javaClassContent.append("    {"+ ENTER);
+        javaClassContent.append("        super(base);"+ ENTER);
+        javaClassContent.append("    }"+ ENTER);
+
         javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
 
         javaClassContent.append("    public org.semanticwb.platform.SemanticObject getResourceData()" + ENTER);
@@ -500,12 +510,12 @@ public class CodeGenerator
         javaClassContent.append("        return obj;" + ENTER);
         javaClassContent.append("    }" + ENTER);
 
-        insertPropertiesToClass(tpc, javaClassContent, null,"ResourceData");
+        insertPropertiesToClass(tpc, javaClassContent, null,"SemanticObject");
 
         javaClassContent.append("}" + ENTER);
         File fileClass = new File(dir.getPath() + File.separatorChar + className + "Base.java");
         saveFile(fileClass, javaClassContent.toString());
-        createPortalElement(tpc);
+        createSemanticResource(tpc);
     }
 
     private void createClassBase(SemanticClass tpc) throws CodeGeneratorException
