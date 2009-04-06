@@ -50,6 +50,13 @@ public class SemanticModel
         return it;
     }
 
+    public Iterator<SemanticObject> listSubjects(SemanticProperty prop,SemanticObject obj)
+    {
+        SemanticIterator<SemanticObject> it = new SemanticIterator(getRDFModel().listStatements(null, prop.getRDFProperty(), obj.getRDFResource()), true);
+        return it;
+    }
+
+
     public String getName() {
         return m_name;
     }
