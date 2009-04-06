@@ -259,12 +259,12 @@ public class UserTest {
           mail = login+"@webbuilder.info";
           User current = repository.createUser();
           current.setActive(true);
-          current.setUsrFirstName(nombre);
-          current.setUsrLastName(apellido1);
-          current.setUsrSecondLastName(apellido2);
-          current.setUsrLogin(login);
-          current.setUsrEmail(mail);
-          current.setUsrPassword(apellido2+"."+apellido1);
+          current.setFirstName(nombre);
+          current.setLastName(apellido1);
+          current.setSecondLastName(apellido2);
+          current.setLogin(login);
+          current.setEmail(mail);
+          current.setPassword(apellido2+"."+apellido1);
       }
     }
 
@@ -328,9 +328,9 @@ public class UserTest {
             Iterator<User> itus = ur.listUsers();
             while (itus.hasNext()){
                 User user = itus.next();
-                if (null==user.getUsrLogin()) user.remove();
+                if (null==user.getLogin()) user.remove();
                 else
-                user.setUsrPassword(user.getUsrLogin());
+                user.setPassword(user.getLogin());
             }
         }
     }
