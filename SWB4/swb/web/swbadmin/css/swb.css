@@ -325,6 +325,22 @@ _form.swbform fieldset li {
     z-index:10000
 }
 
+.dijitContentPaneLoading {
+	_background:url(../js/dojo/dijit/themes/tundra/images/loading.gif) no-repeat left center;
+    background:url(../icons/loading.gif) no-repeat left center;
+	padding-left:25px;
+}
+
+.dijitContentPaneError {
+	background:url(../js/dojo/dijit/themes/tundra/images/warning.png) no-repeat left center;
+	padding-left:25px;
+}
+
+.dijitTreeExpandoLoading {
+	background-image: url(../js/dojo/dijit/themes/tundra/images/treeExpand_loading.gif);
+}
+
+
 
 /************* Version 3 ****************/
 
