@@ -67,17 +67,6 @@
     >org.semanticwb.content.Descriptiveable</swb:className>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#content">
-    <rdfs:domain>
-      <swb:SemanticResource rdf:about="http://www.semanticwb.org.mx/swb4/content#OfficeResource">
-        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.resource.office.sem.OfficeResource</swb:className>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:SemanticResource>
-    </rdfs:domain>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#lastModified">
     <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</jcr:multiple>
@@ -98,6 +87,53 @@
     >IGNORE</jcr:onParentVersion>
     <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#Descriptiveable"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#versionToShow">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain>
+      <swb:SemanticResource rdf:about="http://www.semanticwb.org.mx/swb4/content#OfficeResource">
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.resource.office.sem.OfficeResource</swb:className>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#officetype">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >IGNORE</jcr:onParentVersion>
+    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeContent"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#showDownload">
+    <rdfs:domain>
+      <swb:SemanticResource rdf:about="http://www.semanticwb.org.mx/swb4/content#PPTResource">
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.resource.office.sem.PPTResource</swb:className>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#Paginated">
+    <rdfs:domain>
+      <swb:SemanticResource rdf:about="http://www.semanticwb.org.mx/swb4/content#WordResource">
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.resource.office.sem.WordResource</swb:className>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#content">
+    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#numberOfPages">
+    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#WordResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#user">
     <rdfs:subPropertyOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#usrLogin"/>
     <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -110,10 +146,6 @@
     >false</jcr:multiple>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#Traceable"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#repositoryName">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#Category">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -154,35 +186,9 @@
       </swbrep:Node>
     </rdfs:domain>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#versionToShow">
+  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#repositoryName">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#officetype">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >IGNORE</jcr:onParentVersion>
-    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeContent"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#showDownload">
-    <rdfs:domain>
-      <swb:SemanticResource rdf:about="http://www.semanticwb.org.mx/swb4/content#PPTResource">
-        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.resource.office.sem.PPTResource</swb:className>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:SemanticResource>
-    </rdfs:domain>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#description">
-    <rdfs:subPropertyOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#description"/>
-    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</jcr:mandatory>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >IGNORE</jcr:onParentVersion>
-    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#Descriptiveable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#file">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -206,7 +212,18 @@
       </swb:Class>
     </rdfs:domain>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwb.org.mx/swb4/content#description">
+    <rdfs:subPropertyOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#description"/>
+    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</jcr:mandatory>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >IGNORE</jcr:onParentVersion>
+    <rdfs:domain rdf:resource="http://www.semanticwb.org.mx/swb4/content#Descriptiveable"/>
+  </owl:DatatypeProperty>
   <swb:SemanticResource rdf:about="http://www.semanticwb.org.mx/swb4/content#ExcelResource">
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.resource.office.sem.ExcelResource</swb:className>
     <rdfs:subClassOf rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:SemanticResource>
@@ -262,12 +279,6 @@
       </nt:childNodeDefinition>
     </jcr:childNodeDefinition>
   </swb:Class>
-  <swb:SemanticResource rdf:about="http://www.semanticwb.org.mx/swb4/content#WordResource">
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.resource.office.sem.WordResource</swb:className>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwb.org.mx/swb4/content#OfficeResource"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:SemanticResource>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
