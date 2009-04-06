@@ -21,7 +21,6 @@ import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
 import org.semanticwb.servlet.internal.EditFile;
-import org.semanticwb.servlet.internal.GateWayOffice;
 import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.Login;
 import org.semanticwb.servlet.internal.Upload;
@@ -61,7 +60,7 @@ public class SWBVirtualHostFilter implements Filter
         HttpServletResponse _response = (HttpServletResponse) response;
         log.trace("VirtualHostFilter:doFilter()");
 
-        boolean catchErrors=true;
+        boolean catchErrors = true;
 
         if (fistCall)
         {
@@ -78,13 +77,15 @@ public class SWBVirtualHostFilter implements Filter
         if (path == null || path.length() == 0)
         {
             path = "/";
-        } else
+        }
+        else
         {
             int j = path.indexOf('/', 1);
             if (j > 0)
             {
                 iserv = path.substring(1, j);
-            } else
+            }
+            else
             {
                 iserv = path.substring(1);
             }
@@ -127,7 +128,7 @@ public class SWBVirtualHostFilter implements Filter
                     {
                         dparams = new DistributorParams(_request, auri);
                     }
-                    if(catchErrors)
+                    if (catchErrors)
                     {
                         SWBHttpServletResponseWrapper resp = new SWBHttpServletResponseWrapper(_response);
                         resp.setTrapSendError(true);
@@ -139,7 +140,7 @@ public class SWBVirtualHostFilter implements Filter
                                 case 500:
                                 case 404:
                                     processError(resp.getError(), resp.getErrorMsg(), _response);
-                                    log.error(path+" - "+resp.getError()+":"+resp.getErrorMsg());
+                                    log.error(path + " - " + resp.getError() + ":" + resp.getErrorMsg());
                                     break;
                                 case 403:
                                     loginInternalServlet.doProcess(_request, _response, dparams);
@@ -147,16 +148,19 @@ public class SWBVirtualHostFilter implements Filter
                                 default:
                                     _response.sendError(resp.getError(), resp.getErrorMsg());
                             }
-                        } else
+                        }
+                        else
                         {
                             _response.getOutputStream().write(resp.toByteArray());
                         }
-                    }else
+                    }
+                    else
                     {
                         serv.doProcess(_request, _response, dparams);
                     }
                 }
-            } else
+            }
+            else
             {
                 if (isjsp)
                 {
@@ -165,7 +169,8 @@ public class SWBVirtualHostFilter implements Filter
                 }
                 chain.doFilter(request, response);
             }
-        } catch (Throwable t)
+        }
+        catch (Throwable t)
         {
             problem = t;
         }
@@ -225,9 +230,17 @@ public class SWBVirtualHostFilter implements Filter
         loginInternalServlet.init(filterConfig.getServletContext());
         loginInternalServlet.setHandleError(true);
 
-        InternalServlet gtwOffice = new GateWayOffice();
-        intServlets.put("gtw", gtwOffice);
-        gtwOffice.init(filterConfig.getServletContext());
+        try
+        {
+            Class gtwOfficeClass = Class.forName("org.semanticwb.servlet.internal.GateWayOffice");
+            InternalServlet gtwOffice = (InternalServlet) gtwOfficeClass.newInstance();
+            intServlets.put("gtw", gtwOffice);
+            gtwOffice.init(filterConfig.getServletContext());
+        }
+        catch (Exception cnfe)
+        {
+            log.error(cnfe);
+        }
 
         InternalServlet upload = new Upload();
         intServlets.put("wbupload", upload);
@@ -299,7 +312,8 @@ public class SWBVirtualHostFilter implements Filter
             msg = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/work/" + path);
             //msg = WBUtils.getInstance().parseHTML(msg, WBUtils.getInstance().getWebWorkPath() + "/config/images/");
             msg = SWBPortal.UTIL.parseHTML(msg, SWBPlatform.getWebWorkPath() + "/config/images/");
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             log.error("Error lo load error message...", e);
         }
