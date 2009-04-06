@@ -5,6 +5,9 @@
 
 package org.semanticwb.portal;
 
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Model;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,6 +24,7 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.api.SWBResourceCachedMgr;
@@ -63,6 +67,33 @@ public class SWBResourceMgr
         }
         cache = new SWBResourceCachedMgr(time);
         tracer = new SWBResourceTraceMgr();
+        loadResourceModels();
+    }
+
+    public void loadResourceModels()
+    {
+        Iterator<ResourceType> it=ResourceType.listResourceTypes();
+        while(it.hasNext())
+        {
+            ResourceType type=it.next();
+            String cls=type.getResourceClassName();
+            SemanticModel model=SWBPlatform.getSemanticMgr().getModel(cls);
+            if(model==null)
+            {
+                String path="/"+SWBUtils.TEXT.replaceAll(cls, ".", "/")+".owl";
+                InputStream in=getClass().getResourceAsStream(path);
+                if(in!=null)
+                {
+                    log.debug("Reading:"+path);
+                    Model m=ModelFactory.createDefaultModel();
+                    m.read(in, null);
+                    model=new SemanticModel(cls,m);
+                    SWBPlatform.getSemanticMgr().getSchema().addSubModel(model,false);
+                    System.out.println(cls);
+                }
+            }
+        }
+        SWBPlatform.getSemanticMgr().getSchema().rebind();
     }
 
     public SWBResource getResource(String model, String id)
