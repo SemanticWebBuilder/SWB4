@@ -198,6 +198,9 @@ public class TextFE extends WBJsInputFEAbs
                 {
                     root=dom.createElement("label");
                     root.appendChild(dom.createTextNode(label.trim()));
+                    if(required){
+                        root.setAttribute("required", "*");
+                    }
                 }
                 if(root!=null) dom.appendChild(root);
                 Element child=dom.createElement("input");
@@ -235,7 +238,7 @@ public class TextFE extends WBJsInputFEAbs
                 else xml="";
             }
         } 
-        catch(Exception e) { log.error(e);}
+        catch(Exception e) { log.error(e);}        
         return xml;        
     }
     
