@@ -2033,6 +2033,30 @@ public class SWBUtils {
             return getConnectionManager().getPools().elements();
         }
 
+        /** Returns a DBConnectionPool
+         * @return a DBConnectionPool
+         */
+        public static DBConnectionPool getPool(String name)
+        {
+            return (DBConnectionPool)getConnectionManager().getPools().get(name);
+        }
+
+        /** Returns a default DBConnectionPool
+         * @return a default DBConnectionPool
+         */
+        public static DBConnectionPool getDefaultPool()
+        {
+            return (DBConnectionPool)getConnectionManager().getPools().get(defaultPoolName);
+        }
+
+        /** Returns a ConnectionPoolName
+         * @return a ConnectionPoolName
+         */
+        public static String getDefaultPoolName()
+        {
+            return defaultPoolName;
+        }
+
         /**
          * 
          * @param poolName

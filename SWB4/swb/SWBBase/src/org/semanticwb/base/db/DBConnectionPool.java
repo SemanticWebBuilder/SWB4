@@ -255,6 +255,16 @@ public class DBConnectionPool
         return name;
     }
 
+    /** Getter for property name.
+     * @return Value of property name.
+     *
+     */
+    public java.lang.String getPassword()
+    {
+        return password;
+    }
+
+
     /** Getter for property maxConn.
      * @return Value of property maxConn.
      *
