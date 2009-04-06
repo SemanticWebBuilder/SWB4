@@ -73,17 +73,17 @@ public class ChangePassword extends GenericAdmResource
                         "   alert('" + request.getParameter("_msg") + "');\n" +
                         "</script>\n";
             }
-            if (user.getUsrPassword() != null && !user.getUsrPassword().trim().equals("")) {
+            if (user.getPassword() != null && !user.getPassword().trim().equals("")) {
                 userattr.setAttribute("msgCurrentPassword", paramRequest.getLocaleString("msgCurrentPassword"));
             }
             userattr.setAttribute("msgNewPassword", paramRequest.getLocaleString("msgNewPassword"));
             userattr.setAttribute("msgConfirmPassword", paramRequest.getLocaleString("msgConfirmPassword"));
             userattr.setAttribute("name", user.getName());
-            userattr.setAttribute("lastName", user.getUsrLastName());
-            userattr.setAttribute("firstName", user.getUsrFirstName());
-            userattr.setAttribute("middleName", user.getUsrSecondLastName());
-            userattr.setAttribute("email", user.getUsrEmail());
-            userattr.setAttribute("login", user.getUsrLogin());
+            userattr.setAttribute("lastName", user.getLastName());
+            userattr.setAttribute("firstName", user.getFirstName());
+            userattr.setAttribute("middleName", user.getSecondLastName());
+            userattr.setAttribute("email", user.getEmail());
+            userattr.setAttribute("login", user.getLogin());
             //}
             
             org.semanticwb.portal.api.SWBResourceURL url=paramRequest.getActionUrl();
@@ -109,7 +109,7 @@ public class ChangePassword extends GenericAdmResource
         String rePassword = null != request.getParameter("rePassword") && !"".equals(request.getParameter("rePassword").trim()) ? request.getParameter("rePassword").trim() : null;
 
         User user = response.getUser();
-        if ((user.getUsrPassword() != null && !user.getUsrPassword().trim().equals("")) && !user.getUsrPassword().equals(curPassword)) {
+        if ((user.getPassword() != null && !user.getPassword().trim().equals("")) && !user.getPassword().equals(curPassword)) {
             msg = response.getLocaleString("msgErrCurrentPassword");
         } else if (newPassword != null && rePassword != null && newPassword.equals(rePassword)) {
             try {
