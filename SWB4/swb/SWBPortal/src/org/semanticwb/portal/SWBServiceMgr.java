@@ -84,20 +84,22 @@ public class SWBServiceMgr implements SemanticObserver {
                         vi.setVersionFile("template.html");
                         tpl.setActualVersion(vi);
                         tpl.setLastVersion(vi);
-                        String txt="<html>\n" +
+                        String txt="<template method=\"setHeaders\" Content-Type=\"text/html\"  response=\"{response}\" />\n" +
+                                   "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n" +
+                                   "<html>\n" +
                                    "<head>\n" +
                                         "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" +
                                         "<title>\n" +
                                         "   <TOPIC METHOD=\"getDisplayName\" LANGUAGE=\"{user@getLanguage}\"/>\n" +
                                         "</title>\n" +
                                         "<style type=\"text/css\">\n" +
-                                        "    @import \"/swb/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css\";\n" +
-                                        "    @import \"/swb/swbadmin/js/dojo/dijit/themes/tundra/tundra.css\";\n" +
-                                        "    @import \"/swb/swbadmin/js/dojo/dijit/themes/soria/soria.css\";\n" +
-                                        "    @import \"/swb/swbadmin/css/swb_portal.css\";\n" +
+                                        //"    @import \"<webpath/>/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css\";\n" +
+                                        //"    @import \"<webpath/>/swbadmin/js/dojo/dijit/themes/tundra/tundra.css\";\n" +
+                                        "    @import \"<webpath/>/swbadmin/js/dojo/dijit/themes/soria/soria.css\";\n" +
+                                        "    @import \"<webpath/>/swbadmin/css/swb_portal.css\";\n" +
                                         "</style>\n" +
-                                        "<script type=\"text/javascript\" src=\"/swb/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n" +
-                                        "<script type=\"text/javascript\" src=\"/swb/swbadmin/js/swb.js\"></script>\n" +
+                                        "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n" +
+                                        "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb.js\"></script>\n" +
                                    "</head>\n " +
                                    "<body>\n   " +
                                    "<p style=\"margin-top: 0\">\n" +
