@@ -32,7 +32,7 @@ public class ExLucene2
         System.out.println() ;
         
         Model model = ModelFactory.createDefaultModel() ;
-        IndexLARQ index = ExLucene1.buildIndex(model,  "file:E:/programming/proys/swb4/swb/SWBTripleStore/src/data-1.ttl") ;
+        IndexLARQ index = ExLucene1.buildIndex(model,  "file:d:/programming/proys/SWB4/swb/SWBTripleStore/src/data-1.ttl") ;
         
         // Search for string 
         String searchString = "+document" ;
