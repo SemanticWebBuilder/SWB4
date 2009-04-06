@@ -2,7 +2,6 @@ package org.semanticwb;
 
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
-import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -66,14 +65,55 @@ public class SWBPortal {
     //Initialize context
 
     private void init() {
+        WebSite site = SWBContext.getAdminWebSite();
+        if (site == null)
+        {
+            log.event("Creating Admin WebSite...");
+            SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin#");
+        }
+
+        UserRepository urep = SWBContext.getAdminRepository();
+        if (urep == null) {
+            log.event("Creating Admin User Repository...");
+            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_ADMIN, "http://org.semanticwb.userrep#");
+            urep.setTitle("Admin User Repository");
+            urep.setDescription("Admin User Repository");
+            //TODO: cambiar a semantic prop
+            urep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
+            urep.setProperty(UserRepository.SWBUR_LoginContext, "swb4TripleStoreModule");
+            urep.setProperty(UserRepository.SWBUR_CallBackHandlerClassName, "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+            urep.setUndeleteable(true);
+            //site.setUserRepository(urep);
+            //Create User
+            User user = urep.createUser();
+            user.setLogin("admin");
+            user.setPassword("webbuilder");
+            user.setEmail("admin@semanticwb.org");
+            user.setFirstName("Admin");
+            user.setLanguage("es");
+            user.setActive(true);
+
+            UserGroup grp1=urep.createUserGroup("admin");
+            grp1.setTitle("Administrator","en");
+            grp1.setTitle("Administrador","es");
+            grp1.setUndeleteable(true);
+            UserGroup grp2=urep.createUserGroup("su");
+            grp2.setTitle("Super User","en");
+            grp2.setTitle("Super Usuario","es");
+            grp2.setUndeleteable(true);
+            grp2.setParent(grp1);
+            user.addUserGroup(grp1);
+        }
+
         //Check for GlobalWebSite
-        WebSite site = SWBContext.getGlobalWebSite();
+        site = SWBContext.getGlobalWebSite();
         if (site == null) {
             log.event("Creating Global WebSite...");
-            site = SWBContext.createWebSite(SWBContext.WEBSITE_GLOBAL, "http://org.semanticwb.globalws");
+            site = SWBContext.createWebSite(SWBContext.WEBSITE_GLOBAL, "http://org.semanticwb.globalws#");
             site.setTitle("Global");
             site.setDescription("Global WebSite");
             site.setActive(true);
+            site.setUndeleteable(true);
             //Crear lenguajes por defecto
             Language lang = site.createLanguage("es");
             lang.setTitle("Español", "es");
@@ -82,9 +122,9 @@ public class SWBPortal {
             lang.setTitle("Ingles", "es");
             lang.setTitle("English", "en");
             //Create HomePage
-            WebPage home = site.createWebPage("home");
-            site.setHomePage(home);
-            home.setActive(true);
+//            WebPage home = site.createWebPage("home");
+//            site.setHomePage(home);
+//            home.setActive(true);
             //Create DNS
 //            Dns dns = site.createDns("localhost");
 //            dns.setTitle("localhost");
@@ -93,33 +133,19 @@ public class SWBPortal {
 //            dns.setDefault(true);
 //            dns.setWebPage(home);
         }
-        //Check for GlobalWebSite
-        UserRepository urep = SWBContext.getDefaultRepository();
+
+        urep = SWBContext.getDefaultRepository();
         if (urep == null) {
             log.event("Creating Default User Repository...");
-            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://org.semanticwb.userrep");
+            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://org.semanticwb.userrep#");
             urep.setTitle("Default UserRepository");
             urep.setDescription("Default UserRpository");
             urep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
             urep.setProperty(UserRepository.SWBUR_LoginContext, "swb4TripleStoreModule");
             urep.setProperty(UserRepository.SWBUR_CallBackHandlerClassName, "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
             site.setUserRepository(urep);
-            //Create User
-            User user = urep.createUser();
-            user.setUsrLogin("admin");
-            user.setUsrPassword("webbuilder");
-            user.setUsrEmail("admin@semanticwebbuilder.org");
-            user.setUsrFirstName("Admin");
-            user.setLanguage("es");
-            user.setActive(true);
         }
 
-        site = SWBContext.getAdminWebSite();
-        if (site == null)
-        {
-            log.event("Creating Admin WebSite...");
-            SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin");
-        }
 
         //Crear tablas LOGS
         try {
@@ -201,36 +227,36 @@ public class SWBPortal {
         }
     }
 
-    private void createAdminSite()
-    {
-        WebSite site = SWBContext.getAdminWebSite();
-        if (site == null)
-        {
-            log.event("Creating Admin WebSite...");
-            site = SWBContext.createWebSite(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin");
-            site.setTitle("Admin");
-            site.setDescription("Admin WebSite");
-            site.setActive(true);
-            //Crear lenguajes por defecto
-            Language lang = site.createLanguage("es");
-            lang.setTitle("Español", "es");
-            lang.setTitle("Spanish", "en");
-            lang = site.createLanguage("en");
-            lang.setTitle("Ingles", "es");
-            lang.setTitle("English", "en");
-            //Create HomePage
-            WebPage home = site.createWebPage("home");
-            site.setHomePage(home);
-            home.setActive(true);
-            //Create DNS
-            Dns dns = site.createDns();
-            dns.setDns("localhost");
-            //dns.setDescription("DNS por default", "es");
-            //dns.setDescription("Default DNS", "en");
-            dns.setDefault(true);
-            dns.setWebPage(home);
-        }
-    }
+//    private void createAdminSite()
+//    {
+//        WebSite site = SWBContext.getAdminWebSite();
+//        if (site == null)
+//        {
+//            log.event("Creating Admin WebSite...");
+//            site = SWBContext.createWebSite(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin#");
+//            site.setTitle("Admin");
+//            site.setDescription("Admin WebSite");
+//            site.setActive(true);
+//            //Crear lenguajes por defecto
+//            Language lang = site.createLanguage("es");
+//            lang.setTitle("Español", "es");
+//            lang.setTitle("Spanish", "en");
+//            lang = site.createLanguage("en");
+//            lang.setTitle("Ingles", "es");
+//            lang.setTitle("English", "en");
+//            //Create HomePage
+//            WebPage home = site.createWebPage("home");
+//            site.setHomePage(home);
+//            home.setActive(true);
+//            //Create DNS
+//            Dns dns = site.createDns();
+//            dns.setDns("localhost");
+//            //dns.setDescription("DNS por default", "es");
+//            //dns.setDescription("Default DNS", "en");
+//            dns.setDefault(true);
+//            dns.setWebPage(home);
+//        }
+//    }
 
     public static String getDistributorPath() {
         return SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor", "swb");

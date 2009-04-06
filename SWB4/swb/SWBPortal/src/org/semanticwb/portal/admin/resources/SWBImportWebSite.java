@@ -53,35 +53,43 @@ public class SWBImportWebSite extends GenericResource {
             String id = request.getParameter("wsid");
             String usrRep = request.getParameter("wsrepository");
             if (wstype.equals("1")) { //creación de sitio nuevo
-                WebSite site = SWBContext.createWebSite(title, "http://www." + id + ".swb#");
+                WebSite site = SWBContext.createWebSite(id, "http://www." + id + ".swb#");
                 //site.setCreated(new java.util.Date(System.currentTimeMillis()));
-                site.setTitle(request.getParameter("wstitle"));
-/*
+                site.setTitle(title);
+
                 UserRepository newUsrRep = null;
                 if (usrRep != null) {
                     if (usrRep.equals("0")) { //Utilizara un repositorio exclusivo
-                        newUsrRep = SWBContext.createUserRepository(title, "http://users." + id + "_usr.swb#");
-                        newUsrRep.setTitle(title);
+                        newUsrRep = SWBContext.createUserRepository(id+"_usr", "http://user." + id + ".swb#");
                         newUsrRep.setTitle("Repositorio de usuarios("+title+")","es");
                         newUsrRep.setTitle("Users Repository("+title+")","en");
+                        newUsrRep.setUndeleteable(true);
+                        //TODO: cambiar a semantic prop
+                        newUsrRep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
+                        newUsrRep.setProperty(UserRepository.SWBUR_LoginContext, "swb4TripleStoreModule");
+                        newUsrRep.setProperty(UserRepository.SWBUR_CallBackHandlerClassName, "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+
                         if (user != null && user.isRegistered()) {
                             newUsrRep.setCreator(user);
                         }
-                        site.addSubModel(newUsrRep.getSemanticObject());
                         site.setUserRepository(newUsrRep);
+                        site.addSubModel(newUsrRep.getSemanticObject());
                     } else { //Utilizara un repositorio existente
                         UserRepository exitUsrRep = SWBContext.getUserRepository(usrRep);
                         site.setUserRepository(exitUsrRep);
                     }
                 }
 
-                //creación de repositorio de documentoss
-                Workspace workspace = SWBContext.createWorkspace(title, "http://repository." + id + "_rep.swb#");
-                workspace.setTitle("Repositorio de documentos("+title+")", "es");
-                workspace.setTitle("Documents Repository("+title+")", "en");
-                site.addSubModel(workspace.getSemanticObject());
-*/
+//                //creación de repositorio de documentoss
+//                Workspace workspace = SWBContext.createWorkspace(id+"_rep", "http://repository." + id + ".swb#");
+//                workspace.setTitle("Repositorio de documentos("+title+")", "es");
+//                workspace.setTitle("Documents Repository("+title+")", "en");
+//                //TODO: undeleted repository
+//                //workspace.setUn
+//                site.addSubModel(workspace.getSemanticObject());
+
                 site.setHomePage(site.createWebPage("home"));
+                site.getHomePage().setUndeleteable(true);
 
                 if(site.getResourceType("Banner")==null)
                 {
@@ -451,7 +459,7 @@ public class SWBImportWebSite extends GenericResource {
     private void getStep1(PrintWriter out, SWBResourceURL url, SWBParamRequest paramRequest) {
         try {
 
-            out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');return false;\" method=\"post\">");
+            out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');try{document.getElementById('csLoading').style.display='inline';}catch(noe){}return false;\" method=\"post\">");
             out.println("<fieldset>");
             out.println("<table>");
 
@@ -514,6 +522,7 @@ public class SWBImportWebSite extends GenericResource {
             out.println("</table>");
             out.println("</fieldset>");
             out.println("</form>");
+            out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\""+SWBPlatform.getContextPath()+"/swbadmin/images/loading.gif\"/></span>");
 
         } catch (Exception e) {
             log.debug(e);

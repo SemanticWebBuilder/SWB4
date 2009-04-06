@@ -318,9 +318,10 @@ public class DistributorParams
     private User _getUser(HttpServletRequest request, WebSite site)
     {
         User user=SWBPortal.getUserMgr().getUser(request, site);
+        //System.out.println("_getUser:"+site+" "+user);
         if(lang!=null)
         {
-            if(!user.getLanguage().equals(lang))
+            if(user.getLanguage()==null || !user.getLanguage().equals(lang))
             {
                 if(site.hasLanguage(lang))
                 {

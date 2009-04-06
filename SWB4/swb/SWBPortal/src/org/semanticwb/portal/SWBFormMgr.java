@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -19,7 +18,6 @@ import org.semanticwb.model.GenericFormElement;
 import org.semanticwb.model.PropertyGroup;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBVocabulary;
 import org.semanticwb.model.Undeleteable;
 import org.semanticwb.platform.*;
 
@@ -56,7 +54,8 @@ public class SWBFormMgr
     private PropertyGroup m_general=null;
 
     private HashMap<String, String> hidden=null;
-    //private ArrayList hiddenProps=null;
+    private ArrayList hiddenProps=null;
+    private ArrayList<String> buttons=null;
     
     private HashMap<PropertyGroup, TreeSet> groups=null;
     
@@ -95,7 +94,7 @@ public class SWBFormMgr
         //System.out.println("m_fview:"+m_fview+" m_propmap:"+m_propmap);
         groups=new HashMap();
         hidden=new HashMap();
-        //hiddenProps=new ArrayList();
+        buttons=new ArrayList();
         Iterator<SemanticProperty> it=m_cls.listProperties();
         while(it.hasNext())
         {
@@ -160,7 +159,10 @@ public class SWBFormMgr
         {
 //            if(!hidden)
 //            {
+            if(obj!=null)
+            {
                 props.add(prop);
+            }
 //            }else
 //            {
 //                hiddenProps.add(prop);
@@ -373,17 +375,11 @@ public class SWBFormMgr
 
             ret.append("<fieldset><span align=\"center\">");
             ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
-            boolean isfavo=SWBPortal.getSessionUser().hasFavorite(m_obj);
-            if(!isfavo)
+            Iterator<String> it=buttons.iterator();
+            while(it.hasNext())
             {
-                ret.append("<button dojoType='dijit.form.Button' onclick=\"showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+m_obj.getEncodedURI()+"&act=active"+"');\">Agregar a Favoritos</button>");
-            }else
-            {
-                ret.append("<button dojoType='dijit.form.Button' onclick=\"showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+m_obj.getEncodedURI()+"&act=unactive"+"');\">Eliminar de Favoritos</button>");
-            }
-            if(m_obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false)
-            {
-                ret.append("<button dojoType='dijit.form.Button' onclick=\"if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+m_obj.getEncodedURI()+"');\">Eliminar</button>");
+                String html=it.next();
+                ret.append(html);
             }
             ret.append("</span></fieldset>");
 
@@ -428,6 +424,7 @@ public class SWBFormMgr
             ret.append("	</fieldset>");
         }
         ret.append("</form>");
+        //ret.append("<div id=\""+frmname+"_loading\">Loading...</div>");
         return ret.toString();
     }    
     
@@ -499,5 +496,15 @@ public class SWBFormMgr
     public void addHiddenParameter(String key, String value)
     {
         if(key!=null && value!=null)hidden.put(key, value);
+    }
+
+    /**
+     * Add HTML text for Button
+     * Sample: <button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>
+     * @param html
+     */
+    public void addButton(String html)
+    {
+        buttons.add(html);
     }
 }
