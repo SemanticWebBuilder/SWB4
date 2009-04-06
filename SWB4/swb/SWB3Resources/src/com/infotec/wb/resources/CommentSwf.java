@@ -121,11 +121,11 @@ public class CommentSwf extends Comment {
                     //if (user.isLoged())  // TODO ver. 4
                     {
                         strSwfvar += "&txtFromName=";
-                        strSwfvar += "1".equals(base.getAttribute("firstname", "0").trim()) && (null != user.getUsrFirstName() && !"".equals(user.getUsrFirstName().trim())) ? user.getUsrFirstName().trim() : "";
-                        strSwfvar += "1".equals(base.getAttribute("lastname", "0").trim()) && (null != user.getUsrLastName() && !"".equals(user.getUsrLastName().trim())) ? " " + user.getUsrLastName().trim() : "";
-                        strSwfvar += "1".equals(base.getAttribute("middlename", "0").trim()) && (null != user.getUsrSecondLastName() && !"".equals(user.getUsrSecondLastName().trim())) ? " " + user.getUsrSecondLastName().trim() : "";
+                        strSwfvar += "1".equals(base.getAttribute("firstname", "0").trim()) && (null != user.getFirstName() && !"".equals(user.getFirstName().trim())) ? user.getFirstName().trim() : "";
+                        strSwfvar += "1".equals(base.getAttribute("lastname", "0").trim()) && (null != user.getLastName() && !"".equals(user.getLastName().trim())) ? " " + user.getLastName().trim() : "";
+                        strSwfvar += "1".equals(base.getAttribute("middlename", "0").trim()) && (null != user.getSecondLastName() && !"".equals(user.getSecondLastName().trim())) ? " " + user.getSecondLastName().trim() : "";
                         strSwfvar += "&txtFromEmail=";
-                        strSwfvar += null != user.getUsrEmail() && !"".equals(user.getUsrEmail().trim()) ? " " + user.getUsrEmail().trim() : "";
+                        strSwfvar += null != user.getEmail() && !"".equals(user.getEmail().trim()) ? " " + user.getEmail().trim() : "";
                     }
                     strSwfvar += "&txtTopic=" + topic.getTitle(lang);
                     strSwfvar += "&txtTopicDesc=" + topic.getDescription(lang);
