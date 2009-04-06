@@ -430,6 +430,21 @@ public class CodeGenerator
         String exts = "org.semanticwb.portal.api.GenericSemResource";
         String sPackage = getPackage(tpc);
         File dir = createPackage(sPackage);
+        SemanticClass parent = null;
+        Iterator<SemanticClass> it = tpc.listSuperClasses(true);
+        while (it.hasNext())
+        {
+            parent = it.next();
+            if (parent.isSWBSemanticResource())
+            {
+                exts = getPackage(parent) + "." + getClassName(parent);
+                break;
+            }
+            else
+            {
+                parent = null;
+            }
+        }
         dir = new File(dir.getPath() + File.separatorChar + "base");
         if (!dir.exists())
         {
@@ -515,17 +530,7 @@ public class CodeGenerator
 
         javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
 
-        /*javaClassContent.append("    public org.semanticwb.platform.SemanticObject getResourceData()" + ENTER);
-        javaClassContent.append("    {"+ ENTER);
-        javaClassContent.append("        org.semanticwb.platform.SemanticObject obj=getResourceBase().getResourceData();" + ENTER);
-        javaClassContent.append("        if(obj==null)" + ENTER);
-        javaClassContent.append("        {" + ENTER);
-        javaClassContent.append("            org.semanticwb.platform.SemanticModel model=getResourceBase().getSemanticObject().getModel();" + ENTER);
-        javaClassContent.append("            obj=model.createSemanticObject(model.getObjectUri(getResourceBase().getId(), sclass), sclass);" + ENTER);
-        javaClassContent.append("            getResourceBase().setResourceData(obj);" + ENTER);
-        javaClassContent.append("        }" + ENTER);
-        javaClassContent.append("        return obj;" + ENTER);
-        javaClassContent.append("    }" + ENTER);*/
+       
 
         insertPropertiesToClass(tpc, javaClassContent, null, "SemanticObject");
 
