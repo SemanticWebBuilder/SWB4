@@ -14,10 +14,6 @@ import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.ModelMaker;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +27,7 @@ import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.db.DBConnectionPool;
 
 /**
  *
@@ -72,8 +69,17 @@ public class SemanticMgr implements SWBInstanceObject
         //m_schemas=new HashMap();
         m_observers=new ArrayList();
 
+//        DBConnectionPool pool=SWBUtils.DB.getDefaultPool();
+//        String M_DB_URL         = pool.getURL();
+//        String M_DB_USER        = pool.getUser();
+//        String M_DB_PASSWD      = pool.getPassword();
+//        String M_DB             = SWBUtils.DB.getDatabaseName(pool.getName());
+//        // create a database connection
+//        conn = new DBConnection(M_DB_URL, M_DB_USER, M_DB_PASSWD, M_DB);
+
         // Create database connection
         conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName());
+        
         if(SWBUtils.DB.getDatabaseName().equalsIgnoreCase("mysql"))
         {
             IRDBDriver driver=new Driver_MySQL_SWB();
@@ -160,6 +166,17 @@ public class SemanticMgr implements SWBInstanceObject
     private Model loadRDFFileModel(String path)
     {
         return FileManager.get().loadModel(path);
+    }
+
+    public SemanticModel readRDFFile(String name, String path)
+    {
+        SemanticModel ret=null;
+        Model m=loadRDFFileModel(path);
+        if(m!=null)
+        {
+            ret=new SemanticModel(name, m);
+        }
+        return ret;
     }
     
     private Model loadRDFDBModel(String name)
@@ -295,6 +312,7 @@ public class SemanticMgr implements SWBInstanceObject
     
     public SemanticModel createModel(String name, String nameSpace)
     {
+        //System.out.println("createModel:"+name+" "+nameSpace);
         SemanticModel ret=loadDBModel(name);
         Model model=ret.getRDFModel();
 //        model.setNsPrefix(name+"_"+SemanticVocabulary.SWB_NS, nameSpace);

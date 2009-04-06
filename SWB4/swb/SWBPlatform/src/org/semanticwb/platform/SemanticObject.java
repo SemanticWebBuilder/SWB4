@@ -1012,10 +1012,48 @@ public class SemanticObject
         return ret;
     }
 
+    public void removeDependencies()
+    {
+        Iterator<SemanticProperty> itp=getSemanticClass().listProperties();
+        while(itp.hasNext())
+        {
+            SemanticProperty prop=itp.next();
+            if(prop.isRemoveDependency())
+            {
+                //System.out.println(prop+" "+prop.isRemoveDependency());
+                if(prop.getCardinality()==1)
+                {
+                    SemanticObject dep=getObjectProperty(prop);
+                    if(dep!=null)
+                    {
+                        //System.out.println(dep);
+                        try
+                        {
+                            dep.remove();
+                        }catch(Exception e){log.error(e);}
+                    }
+                }else
+                {
+                    Iterator<SemanticObject> it=listObjectProperties(prop);
+                    while(it.hasNext())
+                    {
+                        SemanticObject dep=it.next();
+                        //System.out.println(dep);
+                        try
+                        {
+                            dep.remove();
+                        }catch(Exception e){log.error(e);}
+                    }
+                }
+            }
+        }
+    }
+
     public void remove()
     {
         if(getModel().getModelObject().equals(this))    //es un modelo
         {
+            removeDependencies();
             SWBPlatform.getSemanticMgr().removeModel(getId());
             SWBPlatform.getSemanticMgr().notifyChange(this, null, "REMOVE");
         }else                                           //es un objeto
@@ -1042,39 +1080,7 @@ public class SemanticObject
             }
 
             //Eliminar dependencias
-            Iterator<SemanticProperty> itp=getSemanticClass().listProperties();
-            while(itp.hasNext())
-            {
-                SemanticProperty prop=itp.next();
-                if(prop.isRemoveDependency())
-                {
-                    //System.out.println(prop+" "+prop.isRemoveDependency());
-                    if(prop.getCardinality()==1)
-                    {
-                        SemanticObject dep=getObjectProperty(prop);
-                        if(dep!=null)
-                        {
-                            //System.out.println(dep);
-                            try
-                            {
-                                dep.remove();
-                            }catch(Exception e){log.error(e);}
-                        }
-                    }else
-                    {
-                        Iterator<SemanticObject> it=listObjectProperties(prop);
-                        while(it.hasNext())
-                        {
-                            SemanticObject dep=it.next();
-                            //System.out.println(dep);
-                            try
-                            {
-                                dep.remove();
-                            }catch(Exception e){log.error(e);}
-                        }
-                    }
-                }
-            }
+            removeDependencies();
 
             //Borrar objeto
             Resource res=getRDFResource();

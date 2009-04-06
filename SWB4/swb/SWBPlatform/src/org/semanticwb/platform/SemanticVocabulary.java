@@ -90,12 +90,14 @@ public class SemanticVocabulary
     public HashMap<String, SemanticClass> classes;
     public HashMap<String, SemanticProperty> properties;
     public HashMap<String, SemanticClass> clsbyid;
+    public HashMap<String, SemanticClass> clsbyname;
     
     
     public SemanticVocabulary()
     {
         classes=new HashMap();
         clsbyid=new HashMap();
+        clsbyname=new HashMap();
         properties=new HashMap();
     }
    
@@ -103,16 +105,16 @@ public class SemanticVocabulary
     {
         //SWBClass=getSemanticClass(URI+"SWBClass");
         //SWBInterface=getSemanticClass(URI+"SWBInterface");
-        filterProperties();
+        //filterProperties();
     }
     
-    private void filterProperties()
+    private void filterProperties(SemanticClass tpc)
     {
         //System.out.println("filterProperties");
-        Iterator<SemanticClass> tpcit=listSemanticClasses();
-        while(tpcit.hasNext())
-        {
-            SemanticClass tpc=tpcit.next();
+//        Iterator<SemanticClass> tpcit=listSemanticClasses();
+//        while(tpcit.hasNext())
+//        {
+//            SemanticClass tpc=tpcit.next();
             Iterator<SemanticProperty> tppit=tpc.listProperties();
             while(tppit.hasNext())
             {
@@ -125,7 +127,7 @@ public class SemanticVocabulary
                     tpc.herarquicalProps.remove(tpp);
                 }
             }
-        }        
+//        }
     }
     
     void addSemanticClass(SemanticClass tpc)
@@ -133,6 +135,8 @@ public class SemanticVocabulary
         classes.put(tpc.getURI(), tpc);
         String clsid=tpc.getClassId();
         if(clsid!=null)clsbyid.put(clsid, tpc);
+        String clsname=tpc.getClassName();
+        if(clsname!=null)clsbyname.put(clsname, tpc);
     }
     
     public Iterator<SemanticClass> listSemanticClasses()
@@ -163,7 +167,7 @@ public class SemanticVocabulary
                 if(c!=null)
                 {
                     cls=new SemanticClass(c);
-                    addSemanticClass(cls);
+                    registerClass(cls);
                 }
             }catch(Exception e){log.warn(uri,e);}
         }
@@ -175,6 +179,10 @@ public class SemanticVocabulary
         return clsbyid.get(classId);
     }
 
+    public SemanticClass getSemanticClassByJavaName(String className)
+    {
+        return clsbyname.get(className);
+    }
     
     void addSemanticProperty(SemanticProperty tpp)
     {
@@ -238,6 +246,7 @@ public class SemanticVocabulary
                 addSemanticProperty(prop);
             }
         }
+        filterProperties(cls);
     }    
     
     

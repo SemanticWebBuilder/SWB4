@@ -178,6 +178,7 @@ public class SemanticModel
         {
             ret+=id;
         }
+        //System.out.println("uri:"+ret);
         return ret;
     }
     
