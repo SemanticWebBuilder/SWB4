@@ -2,7 +2,9 @@
 <%@page pageEncoding="ISO-8859-1"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
+    User user=SWBPortal.getSessionUser();
     String lang="es";
+    if(user!=null)lang=user.getLanguage();
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     String suri=request.getParameter("suri");
@@ -63,9 +65,12 @@ try
                 out.println("addNewTab('"+obj.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp"+"','"+obj.getDisplayName(lang)+"');");
                 out.println("</script>");
             }
+        }else
+        {
+            frm.setAction("/swb/swbadmin/jsp/SemObjectEditor.jsp");
+            out.println(frm.renderForm(request));
+            //out.println("hola...");
         }
-        frm.setAction("/swb/swbadmin/jsp/SemObjectEditor.jsp");
-        out.println(frm.renderForm(request));
     }else
     {
         SemanticObject obj=ont.getSemanticObject(suri);
@@ -107,6 +112,24 @@ try
             out.println("</script>");
         }
         frm.setAction("/swb/swbadmin/jsp/SemObjectEditor.jsp");
+
+
+        if(user!=null)
+        {
+            boolean isfavo=user.hasFavorite(obj);
+            if(!isfavo)
+            {
+                frm.addButton("<button dojoType='dijit.form.Button' onclick=\"showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active"+"');\">Agregar a Favoritos</button>");
+            }else
+            {
+                frm.addButton("<button dojoType='dijit.form.Button' onclick=\"showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive"+"');\">Eliminar de Favoritos</button>");
+            }
+        }
+        if(obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false)
+        {
+            frm.addButton("<button dojoType='dijit.form.Button' onclick=\"if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"');\">Eliminar</button>");
+        }
+
         out.println(frm.renderForm(request));
      }
 }catch(Exception e){e.printStackTrace();}

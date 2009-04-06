@@ -7,6 +7,8 @@
 
       var CONST_TAB="/tab";   //Constante sufijo para identificar al tab
 
+      //var LOADING_MSG="<BR/><center><img src='"+context+"/swbadmin/images/loading.gif'><center>";
+
       var act_item;
       var act_store;
       var act_treeNode;
@@ -356,6 +358,7 @@
               {
                   id: objid,
                   closeable:'true',
+                  //loadingMessage: LOADING_MSG,
                   onClose: function()
                   {
                       var ret=true;
@@ -434,6 +437,7 @@
               {
                   id: objid,
                   closeable:'true',
+                  //loadingMessage: LOADING_MSG,
                   onClose: function()
                   {
                       var ret=true;
@@ -802,6 +806,7 @@
         sy+=si;
         ele.style.bottom=sy+'px';
         if(sy>ini)setTimeout(scroll,t);
+        else ele.style.display = "none";
      }
 
      function showError(msg)
@@ -816,6 +821,7 @@
          ele.innerHTML=msg;
          sy=ini;
          si=2;
+         ele.style.display = "block";
          scroll();
      }
 
@@ -1028,12 +1034,15 @@ function canAddLogin(model, slogin)
     return oldlret;
 }
 
-function replaceChars4Id(value)
+/**
+ * value: texto 
+ */
+function replaceChars4Id(value, lowercase)
 {
     var id="";
     if(value)
     {
-        //value=value.toLowerCase();
+        if(lowercase)value=value.toLowerCase();
         for(var x=0;x<value.length;x++)
         {
             var ch=value.charAt(x);

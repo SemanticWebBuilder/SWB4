@@ -1,6 +1,6 @@
 <template method="setHeaders" Content-Type="text/html"  Cache-Control="no-cache" Pragma="no-cache"  response="{response}" />
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{user@getLanguage}" lang="{user@getLanguage}">
     <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html">
     <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
     <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
@@ -20,7 +20,7 @@
                 position:absolute;
                 top:0; left:0;
                 width:100%; height:100%;
-                background:#ededed;
+                background:#fff url('<webpath/>/swbadmin/images/loading.gif') no-repeat center center;
                 z-index:999;
             }
             #loaderInner {
@@ -29,8 +29,9 @@
                 left:0;
                 top:0;
                 width:230px;
-                background:#3c3;
-                color:#fff;
+                _background:#e1ebfb;
+                background:#94b9ef;
+                color:#000;
             }
             #status {
                 padding:5px;
@@ -48,7 +49,7 @@
             }
         </style>
 
-        <script type="text/javascript" src="{webpath}/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false"></script>
+        <script type="text/javascript" src="{webpath}/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: '{user@getLanguage}'"></script>
         <script type="text/javascript" charset="utf-8" src="{webpath}/swbadmin/js/swb.js"></script>
         <script type="text/javascript" charset="utf-8" src="{webpath}/swbadmin/js/schedule.js"></script>
 

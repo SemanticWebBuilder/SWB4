@@ -15,7 +15,7 @@
     //System.out.println("mnu:"+mnu);
     if(mnu.getShowAs()==null || mnu.getShowAs().equals("CONTENT"))
     {
-        out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\""+mnu.getDisplayName(lang)+"\" refreshOnShow=\""+"false"+"\" href=\""+mnu.getUrl()+"\" _onLoad=\"alert('test');\">");
+        out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\""+mnu.getDisplayName(lang)+"\" refreshOnShow=\""+"false"+"\" href=\""+mnu.getUrl()+"\" loadingMessage=\"<center><img src='/swb/swbadmin/images/loading.gif'/><center>\" _onLoad=\"alert('test');\">");
         out.println("</div>");
     }else if(mnu.getShowAs().equals("IFRAME"))
     {
