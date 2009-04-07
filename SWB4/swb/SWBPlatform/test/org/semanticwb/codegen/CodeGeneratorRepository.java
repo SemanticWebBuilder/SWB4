@@ -5,6 +5,8 @@
 package org.semanticwb.codegen;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -57,6 +59,32 @@ public class CodeGeneratorRepository
             CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
             codeGeneration.generateCode("nt", false);
             System.out.println("Generación de clases completa");
+        }
+        catch (CodeGeneratorException cge)
+        {
+            fail(cge.getMessage());
+        }
+    }
+
+    //@Test
+    public void generateRepositoryNamespace()
+    {
+        try
+        {
+            String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
+            File dir = new File(path + "../../../SWBModel/src");
+            String sPakage = "org.semanticwb.repository";
+            CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
+            try
+            {
+                URI namespace = new URI("http://www.jcp.org/jcr/nt/1.0#");
+                codeGeneration.generateCode(namespace, false);
+                System.out.println("Generación de clases completa");
+            }
+            catch (URISyntaxException e)
+            {
+                e.printStackTrace();
+            }
         }
         catch (CodeGeneratorException cge)
         {
