@@ -20,8 +20,8 @@ public class Workspace extends WorkspaceBase
         root.setName("jcr:root");
         root.setPath("/");
         org.semanticwb.repository.Workspace ws=(org.semanticwb.repository.Workspace)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-        ws.setRoot(root);
         log.debug("Adding root node to workspace...");
+        ws.setRoot(root);        
         log.debug("Workspace created...");
         return ws;
     }
