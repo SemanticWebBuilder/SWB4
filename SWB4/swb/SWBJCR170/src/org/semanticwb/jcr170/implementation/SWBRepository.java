@@ -71,6 +71,19 @@ public final class SWBRepository implements Repository
         {
             if (name.equals(defaultWorkspaceName))
             {
+                Workspace ws=SWBContext.getWorkspace(name);
+                if(ws.getRoot()==null)
+                {
+                    Unstructured root = Unstructured.createUnstructured(ws);
+                    root.setName("jcr:root");
+                    root.setPath("/");
+                    ws.setRoot(root);
+                }
+                if(ws.getTitle()==null)
+                {
+                    ws.setTitle(TITLE_DEFAULT_WORKSPACE);
+                    ws.setDescription(DESCRIPTION_DEFAULT_WORKSPACE);
+                }
                 exists = true;
                 break;
             }
@@ -91,7 +104,7 @@ public final class SWBRepository implements Repository
         {
             if (name.equals(defaultWorkspaceName))
             {
-                Workspace ws = SWBContext.createWorkspace(name, namespace);
+                Workspace ws = SWBContext.getWorkspace(name);
                 if(ws.getRoot()==null)
                 {
                     Unstructured root = Unstructured.createUnstructured(ws);
