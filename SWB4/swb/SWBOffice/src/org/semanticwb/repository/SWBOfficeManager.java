@@ -32,7 +32,7 @@ public class SWBOfficeManager implements OfficeManager
 {
 
     private final SWBRepositoryManager manager;
-    private static final String DESCRIPTION_BY_DEFAULT = "Sin descripción";
+    private static final String DESCRIPTION_BY_DEFAULT = "Sin descripciÃ³n";
     private static final String LANGUAGE_BY_DEFAULT = "es";
     private static Logger log = SWBUtils.getLogger(SWBOfficeManager.class);
     private final SemanticClass cm_content = OfficeContent.cm_OfficeContent;
