@@ -578,7 +578,7 @@ public abstract class OfficeDocument
                 PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName, title, description);
                 WizardPage[] clazz = new WizardPage[]
                 {
-                    new SelectPage(siteid), new PublishVersion(contentID, repositoryName)
+                    new SelectPage(siteid), new PublishVersion(contentID, repositoryName),new ViewProperties(repositoryName, contentID)
                 };
                 Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
                 wiz.show();
