@@ -47,9 +47,9 @@ public class PublishResultProducer implements WizardResultProducer
             File zipFile = null;
             try
             {
-                progress.setProgress("Preparando documento para publicar", 0, 2);
+                progress.setProgress("Preparando documento para guardar...", 0, 2);
                 zipFile = document.createZipFile();
-                progress.setProgress("Publicando Documento", 1, 2);
+                progress.setProgress("Guardando Documento...", 1, 2);
                 IOpenOfficeDocument openOfficeDocument = document.getOfficeDocumentProxy();
                 openOfficeDocument.addAttachment(new Attachment(zipFile));
                 String title = wizardData.get(TitleAndDescription.TITLE).toString();
