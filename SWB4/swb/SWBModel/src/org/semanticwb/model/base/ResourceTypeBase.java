@@ -135,6 +135,16 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         getSemanticObject().setDateProperty(swb_updated, updated);
     }
 
+    public String getResourceOWL()
+    {
+        return getSemanticObject().getProperty(swb_resourceOWL);
+    }
+
+    public void setResourceOWL(String resourceOWL)
+    {
+        getSemanticObject().setProperty(swb_resourceOWL, resourceOWL);
+    }
+
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType> listSubTypes()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType>(org.semanticwb.model.ResourceSubType.class, getSemanticObject().listObjectProperties(swb_hasPTSubType));
