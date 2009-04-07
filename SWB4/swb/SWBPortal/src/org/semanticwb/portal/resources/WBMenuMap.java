@@ -1,14 +1,15 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * WBMenuMap.java
+ *
+ * Created on 13 de septiembre de 2007, 04:25 PM
  */
+
 package org.semanticwb.portal.resources;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Iterator;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -22,62 +23,75 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-/**
- *
- * @author jorge.jimenez
- */
-public class WBMenuMap extends GenericAdmResource 
-{
 
+/**
+ * Muestra un menu desde Home y se abre segun la navegación
+ * @author  Javier Solis
+ * @modified by  Jorge Jiménez
+ */
+public class WBMenuMap extends GenericAdmResource
+{
     private static Logger log = SWBUtils.getLogger(WBMenuMap.class);
+
     javax.xml.transform.Templates tpl;
     String webWorkPath = "/work";
-    String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/WBMenuMap/";
-    private int ancho = 10;
-    private int nsup = 0;
-    private int ninf = 0;
-    private int nini = 0;
-    private boolean bro = true;
-    private boolean bro4ch = false;
+    String path = SWBPlatform.getContextPath() +"swbadmin/xsl/WBMenuMap/";
+    //private int ancho=10;
+    private int nsup=0;
+    private int ninf=0;
+    private int nini=0;
+    private boolean bro=true;
+    private boolean bro4ch=false;
 
     /**
      * Asigna la información de la base de datos al recurso.
      *
      * @param     base  La información del recurso en memoria.
      */
-    @Override
-    public void setResourceBase(Resource base) {
-        try {
+    public void setResourceBase(Resource base)
+    {
+        try
+        {
             super.setResourceBase(base);
-            webWorkPath = (String) SWBPlatform.getWebWorkPath() + base.getWorkPath();
-        } catch (Exception e) {
-            log.error("Error while setting resource base: " + base.getId() + "-" + base.getTitle(), e);
+            webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();
+        }catch(Exception e)
+        {
+            log.debug("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
-        if (!"".equals(base.getAttribute("template", "").trim())) {
-            try {
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("template").trim()));
-                path = webWorkPath + "/";
-            } catch (Exception e) {
-                log.error("Error while loading resource template: " + base.getId(), e);
+        if(!"".equals(base.getAttribute("template","").trim()))
+        {
+            try
+            {
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                path=webWorkPath + "/";
+            }catch(Exception e)
+            {
+                log.debug("Error while loading resource template: "+base.getId(), e);
             }
         }
-        if (tpl == null) {
-            try {
+        if(tpl==null)
+        {
+            try
+            {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/WBMenuMap/WBMenuMap.xslt"));
-            } catch (Exception e) {
-                log.error("Error while loading default resource template: " + base.getId(), e);
+            }catch(Exception e)
+            {
+                log.debug("Error while loading default resource template: "+base.getId(), e);
             }
         }
 
-        try {
-            bro = Boolean.parseBoolean(base.getAttribute("bro", "true"));
-            bro4ch = Boolean.parseBoolean(base.getAttribute("bro4ch", "false"));
-            nsup = Integer.parseInt(base.getAttribute("nsup", "-1"));
-            ninf = Integer.parseInt(base.getAttribute("ninf", "-1"));
-            nini = Integer.parseInt(base.getAttribute("nini", "0"));
-        } catch (Exception e) {
-            log.error(e);
-        }
+        try
+        {
+            bro=Boolean.parseBoolean(base.getAttribute("bro","true"));
+            bro4ch=Boolean.parseBoolean(base.getAttribute("bro4ch","false"));
+            nsup=Integer.parseInt(base.getAttribute("nsup","-1"));
+            ninf=Integer.parseInt(base.getAttribute("ninf","-1"));
+            nini=Integer.parseInt(base.getAttribute("nini","0"));
+        }catch(Exception e){log.debug(e);}
+        //System.out.println("nsup:"+nsup);
+        //System.out.println("ninf:"+ninf);
+        //System.out.println("bro:"+bro);
+        //System.out.println("bro4ch:"+bro4ch);
     }
 
     /**
@@ -88,54 +102,66 @@ public class WBMenuMap extends GenericAdmResource
      * @throws AFException
      * @throws IOException
      */
-    public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Resource base = paramRequest.getResourceBase();
-        User user = paramRequest.getUser();
+    public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        Resource base=paramRequest.getResourceBase();
+        User user=paramRequest.getUser();
         WebPage basetp = paramRequest.getTopic().getWebSite().getHomePage();
         WebPage topic = paramRequest.getTopic();
 
-        String basetopic = base.getAttribute("basetopic", "_home");
-        try {
-            if (!"_home".equals(basetopic)) {
-                basetp = paramRequest.getTopic().getWebSite().getWebPage(basetopic);
+        String basetopic = base.getAttribute("basetopic","_home");
+        try
+        {
+            if(!"_home".equals(basetopic))
+            {
+                basetp = topic.getWebSite().getWebPage(basetopic);
             }
-        } catch (Exception e) {
-            log.error("Error. Tópico no encontrado: " + basetopic + ". WBMenuNivel.getDom()", e);
-            basetp = paramRequest.getTopic().getWebSite().getHomePage();
+        }catch(Exception e)
+        {
+            log.debug("Error. Tópico no encontrado: "+basetopic+". WBMenuNivel.getDom()", e);
+            basetp = topic.getWebSite().getHomePage();
         }
-        try {
-            String lang = user.getLanguage();
 
-            Document dom = SWBUtils.XML.getNewDocument();
+        try
+        {
+            String lang = paramRequest.getUser().getLanguage();
+
+
+            Document  dom = SWBUtils.XML.getNewDocument();
             Element el = dom.createElement("menu");
             el.setAttribute("path", path);
             dom.appendChild(el);
 
-            int max = getLimits(basetp, topic, 1, user);
+            int max=getLimits(basetp,topic,1,user);
             //System.out.println("max:"+max);
 
             getChilds(dom, el, basetp, topic, lang, 1, 1, user, max);
 
             return dom;
-        } catch (Exception e) {
-            log.error("Error while generating DOM in resource " + base.getResourceType().getResourceClassName() + " with identifier " + base.getId() + " - " + base.getTitle(), e);
+        }catch (Exception e)
+        {
+            log.debug("Error while generating DOM in resource "+ base.getResourceType().getResourceClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e);
         }
         return null;
     }
- 
-    
-    public int getLimits(WebPage aux, WebPage topic, int level, User user) {
-        int max = level;
-        Iterator<WebPage> it = aux.listVisibleChilds(user.getLanguage());
-        while (it.hasNext()) {
-            WebPage tp = it.next();
-            if (tp.isActive() && (tp.isVisible() || tp == topic || tp.isParentof(topic))) {
-                //if(user.haveAccess(tp))
+
+    public int getLimits(WebPage aux, WebPage topic, int level, User user)
+    {
+        int max=level;
+        Iterator <WebPage> it=aux.listChilds();  //CHECAR
+        while(it.hasNext())
+        {
+            WebPage tp=it.next();
+            if(tp.isActive() && (tp.isVisible() || tp==topic || tp.isParentof(topic)))
+            {
+                if(user.haveAccess(tp))
                 {
-                    if (tp.isParentof(topic) || tp == topic) {
-                        return getLimits(tp, topic, level + 1, user);
-                    } else {
-                        max = level + 1;
+                    if(tp.isParentof(topic) || tp==topic)
+                    {
+                        return getLimits(tp, topic,level+1,user);
+                    }else
+                    {
+                        max=level+1;
                     }
                 }
             }
@@ -143,70 +169,86 @@ public class WBMenuMap extends GenericAdmResource
         return max;
     }
 
-    public boolean getChilds(Document dom, Element nodo, WebPage aux, WebPage topic, String lang, int level, int rlevel, User user, int max) {
-        boolean childs = false;
-        Iterator<WebPage> itwp = aux.listVisibleChilds(user.getLanguage());
-        while (itwp.hasNext()) {
-            WebPage wbtp = itwp.next();
-            if (wbtp.isActive() && (wbtp.isVisible() || wbtp == topic || wbtp.isParentof(topic))) {
-                //if(user.haveAccess(tp))
+
+    public boolean getChilds(Document dom, Element nodo, WebPage aux, WebPage topic, String lang, int level, int rlevel, User user, int max)
+    {
+        //System.out.println("****************** enter"+level+":"+aux.getId()+" ***********************");
+        boolean childs=false;
+        Iterator <WebPage>it=aux.listVisibleChilds(lang);  //CHECAR
+        while(it.hasNext())
+        {
+            WebPage tp=it.next();
+            //if(tp.isActive() && (tp.isVisible() || tp==topic || tp.isParentof(topic)) && tp.checkSchedule(true))  //CHECAR
+            {
+                if(user.haveAccess(tp))
                 {
-                    childs = true;
+                    childs=true;
 
+                    String tpurl = tp.getUrl();
                     Element ele = dom.createElement("node");
-                    ele.setAttribute("id", wbtp.getUrl());
-                    ele.setAttribute("name", wbtp.getDisplayName(lang));
-                    ele.setAttribute("path", wbtp.getUrl());
-                    ele.setAttribute("realLevel", "" + rlevel);
-                    ele.setAttribute("level", "" + level);
-                    ele.setAttribute("inPath", "" + wbtp.isParentof(topic));
-                    if (wbtp == topic) {
-                        ele.setAttribute("current", "true");
-                    } else {
-                        ele.setAttribute("current", "false");
+                    ele.setAttribute("id", tpurl);
+                    ele.setAttribute("name", tp.getDisplayName(lang));
+                    ele.setAttribute("path", tpurl);
+                    ele.setAttribute("realLevel", ""+rlevel);
+                    ele.setAttribute("level", ""+level);
+                    ele.setAttribute("inPath", ""+tp.isParentof(topic));
+                    if(tp==topic) ele.setAttribute("current", "true");
+                    else ele.setAttribute("current", "false");
+                    if(tpurl.startsWith("http://")||tpurl.startsWith("https://")) ele.setAttribute("target", "_blank");
+                    else ele.setAttribute("target", "_self");
+
+                    int auxl=0;
+                    if(((nsup<0 || rlevel<=nsup) || (ninf<0 || rlevel>=(max-ninf))))
+                    {
+                        if(!(topic==tp && tp.getParent()!=aux))
+                        {
+                            if(nini<=rlevel)
+                            {
+                                nodo.appendChild(ele);
+                                auxl=1;
+                                //System.out.println("node:"+tp.getId()+":"+level+":"+rlevel);
+                            }else
+                            {
+                                ele=nodo;
+                            }
+                        }
+                    }else
+                    {
+                        ele=nodo;
                     }
 
-                    int auxl = 0;
-                    if (((nsup < 0 || rlevel <= nsup) || (ninf < 0 || rlevel >= (max - ninf)))) {
-                        if (!(topic == wbtp && wbtp.getParent() != aux)) {
-                            if (nini <= rlevel) {
-                                nodo.appendChild(ele);
-                                auxl = 1;
-                            //System.out.println("node:"+tp.getId()+":"+level+":"+rlevel);
-                            } else {
-                                ele = nodo;
-                            }
+                    if(tp.isParentof(topic) || tp==topic)
+                    {
+                        ele.setAttribute("open","true");
+                        if(getChilds(dom,ele, tp, topic, lang, level+auxl, rlevel+1, user,max))
+                        {
+                            ele.setAttribute("childs","true");
+                        }else
+                        {
+                            ele.setAttribute("childs","false");
                         }
-                    } else {
-                        ele = nodo;
-                    }
-                    if (wbtp.isParentof(topic) || wbtp == topic) {
-                        ele.setAttribute("open", "true");
-                        if (getChilds(dom, ele, wbtp, topic, lang, level + auxl, rlevel + 1, user, max)) {
-                            ele.setAttribute("childs", "true");
-                        } else {
-                            ele.setAttribute("childs", "false");
-                        }
-                    } else {
-                        try {
-                            if (bro4ch) {
+                    }else
+                    {
+                        try
+                        {
+                            if(bro4ch)
+                            {
                                 //System.out.println("tp:"+tp.getId()+" topic:"+topic.getId()+":"+level+":"+rlevel+" max:"+max+" bro4ch");
-                                if (!bro && (rlevel + 1) < max && (!wbtp.isChildof(topic) || (wbtp.getParent() != aux && (wbtp.getParent() == topic || wbtp.getParent() == topic)))) {
-                                    nodo.removeChild(ele);
-                                }
-                            } else {
+                                if(!bro && (rlevel+1)<max && (!tp.isChildof(topic)||(tp.getParent()!=aux && (tp.getParent()==topic||tp==topic))))nodo.removeChild(ele);
+                            }else
+                            {
                                 //System.out.println("tp:"+tp.getId()+" topic:"+topic.getId()+":"+level+":"+rlevel+" max:"+max+" bro:"+bro);
-                                if (!bro && (!wbtp.isChildof(topic) || (wbtp.getParent() != aux && (wbtp.getParent() == topic || wbtp.getParent() == topic)))) {
-                                    nodo.removeChild(ele);
-                                }
+                                if(!bro && (!tp.isChildof(topic)||(tp.getParent()!=aux && (tp.getParent()==topic||tp==topic))))nodo.removeChild(ele);
                             }
-                        } catch (Exception noe) {
-                        }
-                        ele.setAttribute("open", "false");
-                        if (haveChilds(aux, user)) {
-                            ele.setAttribute("childs", "true");
-                        } else {
-                            ele.setAttribute("childs", "false");
+                        }catch(Exception noe){}
+
+                        ele.setAttribute("open","false");
+                        if(haveChilds(aux, user))
+                        {
+                            ele.setAttribute("childs","true");
+                        }else
+                        {
+                            ele.setAttribute("childs","false");
                         }
                     }
                 }
@@ -216,11 +258,13 @@ public class WBMenuMap extends GenericAdmResource
         return childs;
     }
 
-    public boolean haveChilds(WebPage aux, User user) {
-        Iterator<WebPage> it = aux.listVisibleChilds(null);
-        while (it.hasNext()) {
-            WebPage tp = it.next();
-            //if(user.haveAccess(tp))
+    public boolean haveChilds(WebPage aux, User user)
+    {
+        Iterator it=aux.listChilds();
+        while(it.hasNext())
+        {
+            WebPage tp=(WebPage)it.next();
+            if(user.haveAccess(tp))
             {
                 return true;
             }
@@ -237,22 +281,25 @@ public class WBMenuMap extends GenericAdmResource
      * @throws IOException
      */
     @Override
-    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        try {
-            Document dom = getDom(request, response, paramRequest);
-            if (dom != null) {
-                response.getWriter().println(SWBUtils.XML.domToXml(dom));
-            }
-        } catch (Exception e) {
-            log.error(e);
+    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        try
+        {
+            Document dom=getDom(request, response, paramRequest);
+            if(dom!=null) response.getWriter().println(SWBUtils.XML.domToXml(dom));
+        }
+        catch(Exception e)
+        {
+            log.debug(e);
         }
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        try {
-            Document dom = getDom(request, response, paramRequest);
+        try
+        {
+            Document dom=getDom(request, response, paramRequest);
 //            System.out.println(AFUtils.getInstance().DomtoXml(dom));
 //            if(dom != null)
 //            {
@@ -260,15 +307,9 @@ public class WBMenuMap extends GenericAdmResource
 //                System.out.println(AFUtils.getInstance().transformDom(tpl, dom));
 //            }
 
-            if (dom != null) {
-                PrintWriter out = response.getWriter();
-                //response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
-                out.print(SWBUtils.XML.transformDom(tpl, dom));
-                out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
-            }
-        } catch (Exception e) {
-            log.error(e);
+            if(dom != null)  response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
         }
+        catch(Exception e)
+        { log.debug(e); }
     }
-    
  }
