@@ -28,6 +28,8 @@ public class Lexicon {
     private List namespaces = new ArrayList();
     private String prefixString = "";
 
+
+
     /**
      * Creates a new Lexicon given the user's language. This method traverses the
      * SemanticVocabulary and retrieves the displayName of all Semantic Classes and
@@ -47,8 +49,8 @@ public class Lexicon {
         while (its.hasNext()) {
             SemanticClass sc = its.next();
 
-            this.addWord(new Word(sc.getDisplayName(lang),
-                    new WordTag("OBJ", sc.getPrefix() + ":" + sc.getName(), sc.getName())));
+            addWord(new Word(sc.getDisplayName(lang),
+                    new WordTag("OBJ", sc.getPrefix() + ":" + sc.getName(), sc.getName(), sc.getClassId())));
 
             Iterator<SemanticProperty> ip = sc.listProperties();
 
@@ -56,7 +58,7 @@ public class Lexicon {
                 SemanticProperty prop = ip.next();
 
                 this.addWord(new Word(prop.getDisplayName(lang),
-                        new WordTag("PRO", prop.getPropId(), prop.getName())));
+                        new WordTag("PRO", prop.getPropId(), prop.getName(), prop.getPropId())));
             }
         }
     }
@@ -140,10 +142,12 @@ public class Lexicon {
      * @param w word to add.
      */
     public void addWord(Word w) {
-        if (!entryExist(w)) {
-            if (w.getTag().getTag().equals("PRO")) {
+        if (w.getTag().getTag().equals("PRO")) {
+            if (!entryExist(w, pLexic)) {
                 pLexic.add(w);
-            } else {
+            }
+        } else {
+            if (!entryExist(w, oLexic)) {
                 oLexic.add(w);
             }
         }
@@ -161,17 +165,19 @@ public class Lexicon {
         for (int i = 0; i < pLexic.size(); i++) {
             if (pLexic.get(i).getLabel().toUpperCase().compareTo(w.getLabel().toUpperCase()) == 0) {
                 return new WordTag(pLexic.get(i).getTag().getTag(),
-                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName());
+                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName(),
+                        pLexic.get(i).getTag().getObjId());
             }
         }
 
         for (int i = 0; i < oLexic.size(); i++) {
             if (oLexic.get(i).getLabel().toUpperCase().compareTo(w.getLabel().toUpperCase()) == 0) {
                 return new WordTag(oLexic.get(i).getTag().getTag(),
-                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName());
+                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName(),
+                        oLexic.get(i).getTag().getObjId());
             }
         }
-        return new WordTag("VAR", "", "");
+        return new WordTag("VAR", "", "", "");
     }
 
     /**
@@ -186,17 +192,19 @@ public class Lexicon {
         for (int i = 0; i < pLexic.size() && !found; i++) {
             if (pLexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
                 return new WordTag(pLexic.get(i).getTag().getTag(),
-                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName());
+                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName(),
+                        pLexic.get(i).getTag().getObjId());
             }
         }
 
         for (int i = 0; i < oLexic.size() && !found; i++) {
             if (oLexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
                 return new WordTag(oLexic.get(i).getTag().getTag(),
-                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName());
+                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName(),
+                        oLexic.get(i).getTag().getObjId());
             }
         }
-        return new WordTag("VAR", "", "");
+        return new WordTag("VAR", "", "", "");
     }
 
     /**
@@ -209,10 +217,11 @@ public class Lexicon {
         for (int i = 0; i < pLexic.size(); i++) {
             if (pLexic.get(i).getLabel().toUpperCase().compareTo(w.getLabel().toUpperCase()) == 0) {
                 return new WordTag(pLexic.get(i).getTag().getTag(),
-                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName());
+                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName(),
+                        pLexic.get(i).getTag().getObjId());
             }
         }
-        return new WordTag("VAR", "", "");
+        return new WordTag("VAR", "", "", "");
     }
 
     /**
@@ -225,10 +234,11 @@ public class Lexicon {
         for (int i = 0; i < pLexic.size(); i++) {
             if (pLexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
                 return new WordTag(pLexic.get(i).getTag().getTag(),
-                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName());
+                        pLexic.get(i).getTag().getType(), pLexic.get(i).getTag().getWClassName(),
+                        oLexic.get(i).getTag().getObjId());
             }
         }
-        return new WordTag("VAR", "", "");
+        return new WordTag("VAR", "", "", "");
     }
 
     /**
@@ -241,10 +251,11 @@ public class Lexicon {
         for (int i = 0; i < oLexic.size(); i++) {
             if (oLexic.get(i).getLabel().toUpperCase().compareTo(w.getLabel().toUpperCase()) == 0) {
                 return new WordTag(oLexic.get(i).getTag().getTag(),
-                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName());
+                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName(),
+                        oLexic.get(i).getTag().getObjId());
             }
         }
-        return new WordTag("VAR", "", "");
+        return new WordTag("VAR", "", "", "");
     }
 
     /**
@@ -257,10 +268,11 @@ public class Lexicon {
         for (int i = 0; i < oLexic.size(); i++) {
             if (oLexic.get(i).getLabel().toUpperCase().compareTo(label.toUpperCase()) == 0) {
                 return new WordTag(oLexic.get(i).getTag().getTag(),
-                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName());
+                        oLexic.get(i).getTag().getType(), oLexic.get(i).getTag().getWClassName(),
+                        oLexic.get(i).getTag().getObjId());
             }
         }
-        return new WordTag("VAR", "", "");
+        return new WordTag("VAR", "", "","");
     }
 
     /**
@@ -268,17 +280,11 @@ public class Lexicon {
      * @param entry word to search for.
      * @return true if word is in the Lexicon, false otherwise.
      */
-    public boolean entryExist(Word entry) {
+    public boolean entryExist(Word entry, ArrayList<Word> entries) {
         boolean found = false;
         //TODO: Arreglar para hacer la búsqueda en un árbol
-        for (int i = 0; i < pLexic.size() && !found; i++) {
-            if (pLexic.get(i).getLabel().toUpperCase().compareTo(entry.getLabel().toUpperCase()) == 0 && pLexic.get(i).getTag().getTag().compareTo(entry.getTag().getTag()) == 0 && pLexic.get(i).getTag().getType().compareTo(entry.getTag().getType()) == 0 && pLexic.get(i).getTag().getWClassName().compareTo(entry.getTag().getWClassName()) == 0) {
-                found = true;
-            }
-        }
-
-        for (int i = 0; i < oLexic.size() && !found; i++) {
-            if (oLexic.get(i).getLabel().toUpperCase().compareTo(entry.getLabel().toUpperCase()) == 0 && oLexic.get(i).getTag().getTag().compareTo(entry.getTag().getTag()) == 0 && oLexic.get(i).getTag().getType().compareTo(entry.getTag().getType()) == 0) {
+        for (int i = 0; i < entries.size() && !found; i++) {
+            if (entries.get(i).getLabel().toUpperCase().compareTo(entry.getLabel().toUpperCase()) == 0 && entries.get(i).getTag().getTag().compareTo(entry.getTag().getTag()) == 0 && pLexic.get(i).getTag().getType().compareTo(entry.getTag().getType()) == 0 && pLexic.get(i).getTag().getWClassName().compareTo(entry.getTag().getWClassName()) == 0) {
                 found = true;
             }
         }
