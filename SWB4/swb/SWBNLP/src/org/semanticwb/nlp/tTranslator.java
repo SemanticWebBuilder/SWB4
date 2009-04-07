@@ -19,16 +19,20 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class tTranslator {
 
-    private tParser parser;
-    private sLexer tokenizer;
-    private Lexicon lex;
-    private CommonTokenStream tokens;
-    private ANTLRStringStream input;
+    private tParser parser;     //ANTLR parser
+    private sLexer tokenizer;   //ANTLR tokenizer
+    private Lexicon lex;        //Dictionary
+    private CommonTokenStream tokens;   //TokenStream for parsing
+    private ANTLRStringStream input;    //StringStream to parse
     private String nodeLabels = "SELECT|PRECON|PREDE|ASIGN|COMPL|COMPG|COMPLE|COMPGE|OFFSET|LIMIT|ORDER";
-    private String eLog = "";
-    private int errCode = 0;
-    private String language = "es";
+    private String eLog = "";   //Error log
+    private int errCode = 0;    //Last error code
+    private String language = "es"; //Translator language
 
+    /**
+     * Creates a new instance of tTranslator with the given dictionary.
+     * @param dict Dictionary for the new translator.
+     */
     public tTranslator (Lexicon dict) {
         lex = dict;
         language = dict.getLanguage();
@@ -73,9 +77,10 @@ public class tTranslator {
 
     /**
      * Transforms a SELECT node in the AST to a SparQL query fragment.
-     * @param root SELECT node.
-     * @param isCompound
-     * @return
+     * @param root SELECT node to transform.
+     * @param hasPrecon wheter or not the AST has a PRECON node.
+     * @param hasPrede wheter or not the AST has a PREDE node.
+     * @return String of a a SparQL query fragment.
      */
     private String processSelectQuery(CommonTree root, boolean hasPrecon, boolean hasPrede) {
         String limitoff = "";
@@ -127,6 +132,11 @@ public class tTranslator {
         return res + "}" + order + limitoff;
     }
 
+    /**
+     * Starts deep parsing of the AST.
+     * @param root root node to start parsing (usually child of SELECT node).
+     * @return String with a SParQL query fragment.
+     */
     private String startParsing(CommonTree root) {
         String res = "";
         List<CommonTree> child = root.getChildren();
@@ -144,7 +154,8 @@ public class tTranslator {
     /**
      * Transforms an AST node into a SparQL query fragment.
      * @param root AST node to transform.
-     * @param parent name of the parent object of the node.
+     * @param parent name of the parent object of the node (for searching properties).
+     * @param parentLabel name of the parent object of the node (for ataching properties).
      * @return a SparQL query fragment for the AST node.
      */
     private String processNode(CommonTree root, String parent, String parentLabel) {
@@ -251,7 +262,8 @@ public class tTranslator {
      * query fragment. The last four nodes generate a FILTER clause in the
      * resulting fragment.
      * @param root one of the above nodes.
-     * @param parent name of the parent object of the statement node.
+     * @param parent name of the parent object of the statement node (for searching).
+     * @param parentLabel name of the parent object of the statement node (for attaching).
      * @return a SparQL query fragment, specifically a triple for an ASIGN node
      * or a triple and a FILTER clause for the node.
      */
@@ -331,6 +343,12 @@ public class tTranslator {
         return res;
     }
 
+    /**
+     * Gets the range class (as a SemanticClass) of an object property.
+     * @param propertyName name of the property to assert.
+     * @param className name of the SemanticClass with the specified property.
+     * @return a SemanticClass which is the range class of the object property. Null otherwise.
+     */
     public SemanticClass assertPropertyRangeClass(String propertyName, String className) {
         String name = lex.getObjWordTag(className).getObjId();
         boolean found = false;
@@ -374,6 +392,13 @@ public class tTranslator {
     return null;
     }
 
+    /**
+     * Gets the type (prefix + name) of the range class for an object property.
+     * @param propertyName name of the property to assert.
+     * @param className name of the SemanticClass with the specified property.
+     * @return prefix + name of the property, empty String if propertyName is
+     *         not a SemanticProperty of className.
+     */
     public String assertPropertyRangeType(String propertyName, String className) {
         String res = "";
         String name = lex.getObjWordTag(className).getObjId();
@@ -442,7 +467,7 @@ public class tTranslator {
     /**
      * Prints the given AST with indentation.
      * @param root AST to print.
-     * @param indent indentation string
+     * @param indent indentation string.
      */
     private void traverseAST(CommonTree root, String indent) {
         System.out.println(indent + root.getText());
@@ -460,10 +485,16 @@ public class tTranslator {
         }
     }
 
+    /**
+     * Gets the code of the last error occured.
+     */
     public int getErrCode () {
         return errCode;
     }
 
+    /**
+     * Gets the error log for a parsing task.
+     */
     public String getErrors () {
         return eLog;
     }
