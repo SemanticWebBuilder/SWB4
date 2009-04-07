@@ -22,7 +22,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.jcr170.implementation.RepositoryImp;
+import org.semanticwb.jcr170.implementation.SWBRepository;
 import static org.junit.Assert.*;
 
 /**
@@ -66,7 +66,7 @@ public class TestRepository
     {
         try
         {
-            Repository repository = new RepositoryImp();
+            Repository repository = new SWBRepository();
             SimpleCredentials credentials = new SimpleCredentials("victor", "victor".toCharArray());
             Session session = repository.login(credentials);
             //session.getWorkspace().getObservationManager().addEventListener(arg0, arg1, arg2, arg3, arg4, arg5, arg6)
@@ -75,9 +75,29 @@ public class TestRepository
             System.out.println(root.getName());
             System.out.println(root.getPath());
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
             Assert.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    //@Ignore
+    public void lockNodeTest()
+    {
+        try
+        {
+            Repository repository = new SWBRepository();
+            SimpleCredentials credentials = new SimpleCredentials("admin", "webbuilder".toCharArray());
+            Session session = repository.login(credentials);
+            Node root=session.getRootNode();
+            root.lock(true, false);
+            root.unlock();
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -89,30 +109,30 @@ public class TestRepository
         Session session = null;
         try
         {
-            RepositoryImp repository = new RepositoryImp();                        
+            SWBRepository repository = new SWBRepository();
             SimpleCredentials credentials = new SimpleCredentials("victor", "victor".toCharArray());
             session = repository.login(credentials);
             String title = "Deportes";
             Workspace ws = session.getWorkspace();
-            Node root = session.getRootNode();            
-            NodeIterator it=root.getNodes();
-            while(it.hasNext())
+            Node root = session.getRootNode();
+            NodeIterator it = root.getNodes();
+            while (it.hasNext())
             {
-                Node node=it.nextNode();
+                Node node = it.nextNode();
                 node.remove();
             }
             QueryManager qmanager = ws.getQueryManager();
             Query query;
-            if(repository.getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder")!=-1)
+            if (repository.getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
             {
-        
-                String statement="SELECT ?x WHERE {?x cm:title ?title FILTER regex(?title, \""+ title +"\")  }" ;
+
+                String statement = "SELECT ?x WHERE {?x cm:title ?title FILTER regex(?title, \"" + title + "\")  }";
                 query = qmanager.createQuery(statement, "SPARQL");
             }
             else
             {
                 query = qmanager.createQuery("//" + title + "[@cm:title='" + title + "']", Query.XPATH);
-            }            
+            }
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
             while (nodeIterator.hasNext())
@@ -120,12 +140,12 @@ public class TestRepository
                 Node node = nodeIterator.nextNode();
                 node.remove();
             }
-            Node newNode = root.addNode(title, "cm:Category");            
+            Node newNode = root.addNode(title, "cm:Category");
             newNode.setProperty("cm:title", title);
             newNode.setProperty("cm:description", title);
             root.save();
-            String id=newNode.getUUID();
-            session.getNodeByUUID(id);            
+            String id = newNode.getUUID();
+            session.getNodeByUUID(id);
             Node content = newNode.addNode("Contenido1", "cm:Content");
             content.setProperty("cm:title", "Contenido 1");
             content.setProperty("cm:description", "Contenido de prueba");
@@ -136,26 +156,25 @@ public class TestRepository
             content.setProperty("cm:title", "Contenido 2");
             content.setProperty("cm:description", "Contenido de prueba 2");
             content.save();
-            content.checkin();            
-            if ( UUID == null || UUID.equals("") )
+            content.checkin();
+            if (UUID == null || UUID.equals(""))
             {
                 Assert.fail("UUDI incorrecto");
             }
 
         }
-        catch ( Throwable e )
+        catch (Throwable e)
         {
             e.printStackTrace(System.out);
             fail(e.getMessage());
         }
         finally
         {
-            if ( session != null )
+            if (session != null)
             {
                 session.logout();
             }
-            
+
         }
     }
-    
 }
