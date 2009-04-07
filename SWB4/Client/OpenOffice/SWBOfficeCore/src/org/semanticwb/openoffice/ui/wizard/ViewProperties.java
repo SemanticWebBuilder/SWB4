@@ -90,6 +90,7 @@ public class ViewProperties extends WizardPage
 
     private void loadProperties()
     {
+        panelPropertyEditor1.removeProperties();
         this.remove(this.panelPropertyEditor1);
         this.remove(panel);
         this.add(panel);
@@ -126,6 +127,7 @@ public class ViewProperties extends WizardPage
             e.printStackTrace();
         }
     }
+    
 
     public static String getDescription()
     {
