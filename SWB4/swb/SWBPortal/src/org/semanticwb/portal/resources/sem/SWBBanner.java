@@ -12,10 +12,12 @@ public class SWBBanner extends org.semanticwb.portal.resources.sem.base.SWBBanne
     {
         
     }
+
     public SWBBanner(SemanticObject obj)
     {
         super(obj);
     }
+
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
