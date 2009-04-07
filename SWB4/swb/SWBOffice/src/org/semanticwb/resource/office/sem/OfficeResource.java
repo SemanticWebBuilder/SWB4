@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -12,6 +13,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.*;
 
 public class OfficeResource extends org.semanticwb.resource.office.sem.base.OfficeResourceBase
@@ -32,7 +34,10 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
     }
+    public void validatePropertyValue(HashMap<SemanticProperty, Object> valuesToValidate)
+    {
 
+    }
     public static void clean(String dir)
     {
         File fdir = new File(SWBPlatform.getWorkPath() + dir);
