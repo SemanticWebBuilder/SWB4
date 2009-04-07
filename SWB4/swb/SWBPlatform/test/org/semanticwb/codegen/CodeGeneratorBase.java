@@ -122,22 +122,7 @@ public class CodeGeneratorBase
         }
     }
 
-    //@Test
-    public void generateOffice()
-    {
-        try
-        {
-            String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"../../../SWBOffice/src");
-            String sPakage = "org.semanticwb.repository.office";
-            CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
-            codeGeneration.generateCode("cm",false);
-            System.out.println("Generación de clases completa");
-        }
-        catch ( CodeGeneratorException cge )
-        {
-            fail(cge.getMessage());
-        }
-    }
+    
+    
 
 }
