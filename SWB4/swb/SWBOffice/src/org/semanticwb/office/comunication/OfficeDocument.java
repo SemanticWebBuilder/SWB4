@@ -1013,7 +1013,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 i++;
             }
 
-            Constructor c = type.getConstructor(clazz.getSemanticObject().getClass());
+            /*Constructor c = type.getConstructor(clazz.getSemanticObject().getClass());
             Object obj = c.newInstance(clazz.getSemanticObject());
             Method m = type.getMethod("validatePropertyValue", valuesToValidate.getClass());
             try
@@ -1026,7 +1026,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 {
                     throw new Exception(ite.getTargetException());
                 }
-            }
+            }*/
         }
         else
         {
