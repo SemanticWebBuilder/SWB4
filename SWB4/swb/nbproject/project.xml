@@ -190,6 +190,10 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library>
+                    <file>${reference.SWBOffice.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library>
                     <file>${reference.SWBJCR170.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
@@ -345,6 +349,14 @@
             </reference>
             <reference>
                 <foreign-project>SWBNLP</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>SWBOffice</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
