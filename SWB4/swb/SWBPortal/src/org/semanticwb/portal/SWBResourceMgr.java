@@ -84,19 +84,25 @@ public class SWBResourceMgr
     public void loadResourceTypeModel(ResourceType type)
     {
         String cls=type.getResourceOWL();
-        SemanticModel model=SWBPlatform.getSemanticMgr().getModel(cls);
-        if(model==null)
+        if(cls!=null)
         {
-            String path="/"+SWBUtils.TEXT.replaceAll(cls, ".", "/")+".owl";
-            InputStream in=getClass().getResourceAsStream(path);
-            if(in!=null)
+            SemanticModel model=SWBPlatform.getSemanticMgr().getModel(cls);
+            if(model==null)
             {
-                log.debug("Reading:"+path);
-                Model m=ModelFactory.createDefaultModel();
-                m.read(in, null);
-                model=new SemanticModel(cls,m);
-                SWBPlatform.getSemanticMgr().getSchema().addSubModel(model,false);
-                System.out.println(cls);
+                try
+                {
+                    String path="/"+SWBUtils.TEXT.replaceAll(cls, ".", "/")+".owl";
+                    InputStream in=getClass().getResourceAsStream(path);
+                    if(in!=null)
+                    {
+                        log.debug("Reading:"+path);
+                        Model m=ModelFactory.createDefaultModel();
+                        m.read(in, null);
+                        model=new SemanticModel(cls,m);
+                        SWBPlatform.getSemanticMgr().getSchema().addSubModel(model,false);
+                        System.out.println(cls);
+                    }
+                }catch(Exception e){log.error("Error loading OWL File:"+cls,e);}
             }
         }
     }
