@@ -285,6 +285,7 @@ public class SWBADBNatural extends GenericResource {
         ret.append("2. [Activo], [Contraseña] de [User] con [Usuario]=\"admin\"\n");
         ret.append("3. [Creación], [Correo Electrónico] de [User] con [Usuario] = \"admin\"\n");
         ret.append("4. todo de [User] con [Creación] < \"2009-04-02T13:36:21.409\"\n");
+        ret.append("5. todo de [Página Web] con [Usuario Creador] con [Usuario] = \"admin\"\n\n");
         ret.append("\n*Type a word and use CTRL + SPACE to show suggestions, ESC to hide suggestions.");
         ret.append("</PRE>");
         ret.append("Natural Language Query:<BR>");
