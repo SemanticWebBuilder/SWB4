@@ -34,7 +34,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
     }
-    public static void validatePropertyValue(HashMap<SemanticProperty, Object> valuesToValidate)
+    public void validatePropertyValue(HashMap<SemanticProperty, Object> valuesToValidate)
     {
 
     }
