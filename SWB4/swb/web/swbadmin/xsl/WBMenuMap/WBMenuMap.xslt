@@ -13,7 +13,9 @@
                     </xsl:text>
                 </xsl:if>
 		<xsl:if test="@current = 'false'">
-			<A href="{@path}" class="wmn_link" ><xsl:value-of select="@name"/></A>
+			<A href="{@path}" class="wmn_link" >
+                <xsl:attribute name="target"><xsl:value-of select="@target"/></xsl:attribute><xsl:value-of select="@name"/>
+            </A>
 		</xsl:if>
 		<xsl:if test="@current = 'true'">
 			<b><i><xsl:value-of select="@name"/></i></b>
