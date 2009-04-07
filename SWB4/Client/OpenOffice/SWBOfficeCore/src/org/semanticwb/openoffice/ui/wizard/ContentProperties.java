@@ -59,6 +59,7 @@ public class ContentProperties extends WizardPage
 
     public void loadProperties(String repositoryName, String type)
     {
+        panelPropertyEditor1.removeProperties();
         this.remove(this.panelPropertyEditor1);
         this.remove(panel);
         this.add(panel);
