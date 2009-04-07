@@ -41,7 +41,8 @@ public class SWBComparator implements Comparator
         String name2=null;
 
         SemanticClass cls1=sobj1.getSemanticClass();
-        SemanticClass cls2=sobj1.getSemanticClass();
+        SemanticClass cls2=sobj2.getSemanticClass();
+        //System.out.println("cls1:"+cls1+" cls2:"+cls2);
         if(cls1!=null || cls2!=null)
         {
             if(cls1.hasProperty(Sortable.swb_index.getName()) && cls2.hasProperty(Sortable.swb_index.getName()))
@@ -49,12 +50,15 @@ public class SWBComparator implements Comparator
                 return compareSortable(obj1, obj2);
             }
 
-            if(cls1.hasProperty(WebPage.swb_webPageSortName.getName()))name1=sobj1.getProperty(WebPage.swb_webPageSortName);
-            if(cls2.hasProperty(WebPage.swb_webPageSortName.getName()))name2=sobj2.getProperty(WebPage.swb_webPageSortName);
+            if(cls1!=null && cls1.hasProperty(WebPage.swb_webPageSortName.getName()))name1=sobj1.getProperty(WebPage.swb_webPageSortName);
+            if(cls2!=null && cls2.hasProperty(WebPage.swb_webPageSortName.getName()))name2=sobj2.getProperty(WebPage.swb_webPageSortName);
+            //System.out.println("name1:"+name1+" name2:"+name2);
         }
 
         if(name1==null)name1=sobj1.getDisplayName(lang);
         if(name2==null)name2=sobj2.getDisplayName(lang);
+
+        //System.out.println("name1:"+name1+" name2:"+name2);
 
         if(name1!=null && name2!=null)
         {
