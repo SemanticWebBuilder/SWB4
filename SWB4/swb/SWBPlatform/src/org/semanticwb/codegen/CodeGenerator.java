@@ -130,6 +130,69 @@ public class CodeGenerator
         return letter.toUpperCase() + data.substring(1);
     }
 
+    public void generateCodeByNamespace(String namespace, boolean createSWBcontent) throws CodeGeneratorException
+    {
+        SemanticMgr mgr = SWBPlatform.getSemanticMgr();
+        Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
+        while (tpcit.hasNext())
+        {
+            SemanticClass tpc = tpcit.next();
+            boolean create = false;
+            if (namespace == null)
+            {
+                create = true;
+            }
+            else
+            {
+                if (tpc.getURI() != null)
+                {
+                    String strnamespace = namespace;
+                    if (!strnamespace.endsWith("#"))
+                    {
+                        strnamespace += "#";
+                    }
+                    strnamespace += tpc.getName();
+                    if (tpc.getURI().equals(strnamespace.toString()))
+                    {
+                        create = true;
+                    }
+                }
+
+            }
+            if (create)
+            {
+                if (m_Directory.exists() && m_Directory.isFile())
+                {
+                    throw new CodeGeneratorException("The path " + m_Directory.getPath() + " is not a directory");
+                }
+                if (!m_Directory.exists())
+                {
+                    if (!m_Directory.mkdirs())
+                    {
+                        throw new CodeGeneratorException("The path " + m_Directory.getPath() + " was not possible to create");
+                    }
+                }
+                if (tpc.isSWBInterface())
+                {
+                    createInterface(tpc);
+                }
+                else if (tpc.isSWBSemanticResource())
+                {
+                    createSemanticResourceBase(tpc);
+                }
+                else if (tpc.isSWBClass() || tpc.isSWBModel() || tpc.isSWBFormElement())
+                {
+                    createClassBase(tpc);
+                }
+            }
+        }
+        if (createSWBcontent)
+        {
+            createSWBContextBase();
+            createSWBContext();
+        }
+    }
+
     public void generateCode(URI namespace, boolean createSWBcontent) throws CodeGeneratorException
     {
         SemanticMgr mgr = SWBPlatform.getSemanticMgr();
@@ -147,12 +210,12 @@ public class CodeGenerator
                 try
                 {
                     URI tpcNamespace = new URI(tpc.getURI());
-                    String strnamespace=namespace.toString();
-                    if(!strnamespace.endsWith("#"))
+                    String strnamespace = namespace.toString();
+                    if (!strnamespace.endsWith("#"))
                     {
-                        strnamespace+="#";
+                        strnamespace += "#";
                     }
-                    strnamespace+=tpc.getName();
+                    strnamespace += tpc.getName();
                     if (tpcNamespace.toString().equals(strnamespace.toString()))
                     {
                         create = true;
