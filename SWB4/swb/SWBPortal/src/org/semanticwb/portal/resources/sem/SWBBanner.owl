@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
 <rdf:RDF
     xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
-    xmlns:swbres="http://www.semanticwebbuilder.org/portal/resources#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
-  xml:base="http://www.semanticwebbuilder.org/portal/resources">
+    xmlns:swbbanner="http://www.semanticwebbuilder.org/portal/resources/SWBBanner#"
+  xml:base="http://www.semanticwebbuilder.org/portal/resources/SWBBanner">
   <owl:Ontology rdf:about="">
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
     <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
   <owl:Class rdf:ID="SWBBanner">
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem.SWBBanner</swb:className>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
   </owl:Class>
   <owl:DatatypeProperty rdf:ID="image">
-    <rdfs:domain rdf:resource="#SWBBanner"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_image">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -28,6 +28,8 @@
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SWBBanner"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="height">
     <swb:displayProperty>
@@ -38,8 +40,8 @@
         <rdfs:label xml:lang="es">Alto</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#SWBBanner"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#SWBBanner"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="width">
     <swb:displayProperty>
@@ -50,8 +52,8 @@
         >20</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#SWBBanner"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#SWBBanner"/>
   </owl:DatatypeProperty>
 </rdf:RDF>
 

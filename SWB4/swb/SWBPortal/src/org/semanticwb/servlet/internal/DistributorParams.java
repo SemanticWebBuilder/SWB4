@@ -107,11 +107,11 @@ public class DistributorParams
         }
         String auri = path.substring(iserv.length() + 1);
         
-        System.out.println("uri:"+uri);
-        System.out.println("cntx:"+cntx);
-        System.out.println("path:"+path);
-        System.out.println("iserv:"+iserv);
-        System.out.println("auri:"+auri);
+        //System.out.println("uri:"+uri);
+        //System.out.println("cntx:"+cntx);
+        //System.out.println("path:"+path);
+        //System.out.println("iserv:"+iserv);
+        //System.out.println("auri:"+auri);
         init(request, auri);
     }
 

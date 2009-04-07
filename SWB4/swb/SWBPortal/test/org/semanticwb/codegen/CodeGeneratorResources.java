@@ -5,6 +5,7 @@
 package org.semanticwb.codegen;
 
 import com.hp.hpl.jena.rdf.model.NsIterator;
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,6 +16,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticClassIterator;
 import org.semanticwb.platform.SemanticModel;
 import static org.junit.Assert.*;
 
@@ -89,12 +92,19 @@ public class CodeGeneratorResources
             while(it.hasNext())
             {
                 SemanticModel model=it.next();
-                NsIterator it2=model.getRDFModel().listNameSpaces();
-                while(it2.hasNext())
+                SWBPlatform.getSemanticMgr().getSchema().addSubModel(model, false);
+
+                Iterator<SemanticClass> tpcit=new SemanticClassIterator(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().listClasses());
+                while(tpcit.hasNext())
                 {
-                    String ns=it2.nextNs();
-                    System.out.println("Ns:"+ns);
+                    SemanticClass cls=tpcit.next();
+                    SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(cls.getURI());
                 }
+
+                String nsb=model.getNameSpace();
+                System.out.println(nsb);
+                CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
+                codeGeneration.generateCodeByNamespace(nsb,false);
             }
 
 
