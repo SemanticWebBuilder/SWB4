@@ -34,7 +34,8 @@ public final class SWBRepository implements Repository
 
     static Logger log = SWBUtils.getLogger(SWBRepository.class);
     private static Hashtable<String, String> descriptors = new Hashtable<String, String>();
-
+    private static final String TITLE_DEFAULT_WORKSPACE="Workspace por defecto";
+    private static final String DESCRIPTION_DEFAULT_WORKSPACE=TITLE_DEFAULT_WORKSPACE;
 
     static
     {
@@ -75,7 +76,7 @@ public final class SWBRepository implements Repository
         }
         if (!exists)
         {
-            createWorkspace(defaultWorkspaceName);
+            createWorkspace(defaultWorkspaceName,TITLE_DEFAULT_WORKSPACE,DESCRIPTION_DEFAULT_WORKSPACE);
         }
 
     }
@@ -102,7 +103,7 @@ public final class SWBRepository implements Repository
         }
         if (!exists)
         {
-            createWorkspace(defaultWorkspaceName);
+            createWorkspace(defaultWorkspaceName,TITLE_DEFAULT_WORKSPACE,DESCRIPTION_DEFAULT_WORKSPACE);
         }
     }
 
@@ -119,7 +120,7 @@ public final class SWBRepository implements Repository
             {
                 String uri = SWBContext.getWorkspace(defaultWorkspaceName).getURI();
                 SWBContext.removeWorkspace(uri);
-                createWorkspace(defaultWorkspaceName);
+                createWorkspace(defaultWorkspaceName,TITLE_DEFAULT_WORKSPACE,DESCRIPTION_DEFAULT_WORKSPACE);
                 break;
             }
         }
@@ -173,7 +174,7 @@ public final class SWBRepository implements Repository
         log.debug("Deleting workspace " + name + " ...");
         SWBContext.removeWorkspace(name);
     }
-    public static void createWorkspace(String name) throws RepositoryException
+    public static void createWorkspace(String name,String title,String description) throws RepositoryException
     {
         if (name == null || name.trim().equals(""))
         {
@@ -181,6 +182,8 @@ public final class SWBRepository implements Repository
         }
         log.debug("Creating workspace " + name + " ...");
         Workspace ws = SWBContext.createWorkspace(name, namespace);
+        ws.setTitle(title);
+        ws.setDescription(description);
         Unstructured root = ws.createUnstructured();
         root.setName("jcr:root");
         root.setPath("/");
