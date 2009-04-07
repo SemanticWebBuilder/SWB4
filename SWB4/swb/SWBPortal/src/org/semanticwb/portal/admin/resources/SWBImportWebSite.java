@@ -15,10 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Language;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.TemplateGroup;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
@@ -80,16 +83,22 @@ public class SWBImportWebSite extends GenericResource {
                     }
                 }
 
-//                //creación de repositorio de documentoss
-//                Workspace workspace = SWBContext.createWorkspace(id+"_rep", "http://repository." + id + ".swb#");
-//                workspace.setTitle("Repositorio de documentos("+title+")", "es");
-//                workspace.setTitle("Documents Repository("+title+")", "en");
-//                //TODO: undeleted repository
-//                //workspace.setUn
-//                site.addSubModel(workspace.getSemanticObject());
+                //creación de repositorio de documentoss
+                Workspace workspace = SWBContext.createWorkspace(id+"_rep", "http://repository." + id + ".swb#");
+                workspace.setTitle("Repositorio de documentos("+title+")", "es");
+                workspace.setTitle("Documents Repository("+title+")", "en");
+                //TODO: undeleted repository
+                //workspace.setUn
+                site.addSubModel(workspace.getSemanticObject());
 
-                site.setHomePage(site.createWebPage("home"));
-                site.getHomePage().setUndeleteable(true);
+                WebPage home=site.createWebPage("home");
+                site.setHomePage(home);
+                home.setUndeleteable(true);
+                home.setTitle("Home");
+                home.setSortName("z");
+
+                TemplateGroup grp=site.createTemplateGroup();
+                grp.setTitle("Default");
 
                 if(site.getResourceType("Banner")==null)
                 {
@@ -278,6 +287,14 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("Serch");
                 }
 
+                //Crear lenguajes por defecto
+                Language lang = site.createLanguage("es");
+                lang.setTitle("Español", "es");
+                lang.setTitle("Spanish", "en");
+                lang = site.createLanguage("en");
+                lang.setTitle("Ingles", "es");
+                lang.setTitle("English", "en");
+
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
                 //out.println("addItemByURI(mdocStore, null, '" + workspace.getURI() + "');");
@@ -389,7 +406,7 @@ public class SWBImportWebSite extends GenericResource {
             SWBPlatform.getSemanticMgr().createModelByRDF(newTitle, newNs, io);
             WebSite website = SWBContext.getWebSite(newTitle);
             website.setDescription(olDescription);
-/*
+
             //Crea repositorio de usuarios para el nuevo sitio
             UserRepository newUsrRep = null;
             if (repository != null) {
@@ -404,6 +421,7 @@ public class SWBImportWebSite extends GenericResource {
                     website.setUserRepository(existUsrRep);
                 }
             }
+/*
             //Crea repositorio de documentos para el nuevo sitio
             Workspace workspace = SWBContext.createWorkspace(newTitle, "http://repository." + newId + "_rep.swb#");
             workspace.setTitle("Repositorio de documentos("+newTitle+")", "es");

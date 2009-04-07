@@ -39,6 +39,7 @@ public class SWBServiceMgr implements SemanticObserver {
     {
         User usr = SWBPortal.getSessionUser();
         log.trace("obj:" + obj + " prop:" + prop + " action:" + action + " " + usr);
+        //System.out.println("obj:" + obj + " prop:" + prop + " action:" + action + " " + usr);
         SWBPortal.getDBAdmLog().saveAdmLog(usr, obj, prop, action);
 
         SemanticClass cls = obj.getSemanticClass();
@@ -56,20 +57,21 @@ public class SWBServiceMgr implements SemanticObserver {
                     }
                     if(obj.instanceOf(WebSite.sclass))
                     {
-                        WebSite website=(WebSite)obj.createGenericInstance();
-                        //Crea repositorio x defecto
-                        website.setUserRepository(SWBContext.getDefaultRepository());
-                        WebPage wp=website.createWebPage("home");
-                        wp.setTitle("home");
-                        website.setHomePage(wp);
-                        //Crea lenguages x defecto
-                        Iterator <Language> itLangs=SWBContext.getGlobalWebSite().listLanguages();
-                        while(itLangs.hasNext()){
-                            Language langNext=itLangs.next();
-                            Language lang=website.createLanguage(langNext.getId());
-                            lang.setTitle(langNext.getTitle());
-                            lang.setDescription(langNext.getDescription());
-                        }
+//                        WebSite website=(WebSite)obj.createGenericInstance();
+//                        //Crea repositorio x defecto
+//                        website.setUserRepository(SWBContext.getDefaultRepository());
+//                        WebPage wp=website.createWebPage("home");
+//                        wp.setTitle("Home");
+//                        wp.set
+//                        website.setHomePage(wp);
+//                        //Crea lenguages x defecto
+//                        Iterator <Language> itLangs=SWBContext.getGlobalWebSite().listLanguages();
+//                        while(itLangs.hasNext()){
+//                            Language langNext=itLangs.next();
+//                            Language lang=website.createLanguage(langNext.getId());
+//                            lang.setTitle(langNext.getTitle());
+//                            lang.setDescription(langNext.getDescription());
+//                        }
                         java.io.File dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/"+ obj.getId() + "/Template");
                         dir.mkdirs();
                         dir=new java.io.File(SWBPlatform.getWorkPath() + "/models/" + obj.getId() + "/Resource");
@@ -78,6 +80,7 @@ public class SWBServiceMgr implements SemanticObserver {
                     }
                     if(obj.instanceOf(Template.sclass))
                     {
+                        String ctx=SWBPlatform.getContextPath();
                         Template tpl=(Template)obj.createGenericInstance();
                         VersionInfo vi=VersionInfo.createVersionInfo(tpl.getWebSite());
                         vi.setVersionNumber(1);
@@ -95,8 +98,8 @@ public class SWBServiceMgr implements SemanticObserver {
                                         "<style type=\"text/css\">\n" +
                                         //"    @import \"<webpath/>/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css\";\n" +
                                         //"    @import \"<webpath/>/swbadmin/js/dojo/dijit/themes/tundra/tundra.css\";\n" +
-                                        "    @import \"<webpath/>/swbadmin/js/dojo/dijit/themes/soria/soria.css\";\n" +
-                                        "    @import \"<webpath/>/swbadmin/css/swb_portal.css\";\n" +
+                                        "    @import \""+ctx+"/swbadmin/js/dojo/dijit/themes/soria/soria.css\";\n" +
+                                        "    @import \""+ctx+"/swbadmin/css/swb_portal.css\";\n" +
                                         "</style>\n" +
                                         "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n" +
                                         "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb.js\"></script>\n" +
@@ -154,6 +157,7 @@ public class SWBServiceMgr implements SemanticObserver {
 
     public void updateTraceable(SemanticObject obj, User usr)
     {
+        //System.out.println("obj:" + obj + " " + usr.getName()+" "+usr.isRegistered());
         if (obj.instanceOf(Traceable.swb_Traceable))
         {
             Date date = new Date();
