@@ -21,7 +21,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.UserRepository;
-import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.Unstructured;
 import org.semanticwb.repository.Workspace;
 import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
