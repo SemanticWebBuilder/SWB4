@@ -21,6 +21,8 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.repository.BaseNode;
+import org.semanticwb.repository.Unstructured;
 import org.semanticwb.repository.Workspace;
 import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
 
@@ -90,8 +92,19 @@ public final class SWBRepository implements Repository
             if (name.equals(defaultWorkspaceName))
             {
                 Workspace ws = SWBContext.createWorkspace(name, namespace);
-                ws.setTitle(TITLE_DEFAULT_WORKSPACE);
-                ws.setDescription(DESCRIPTION_DEFAULT_WORKSPACE);
+                if(ws.getRoot()==null)
+                {
+                    Unstructured root = Unstructured.createUnstructured(ws);
+                    root.setName("jcr:root");
+                    root.setPath("/");
+                    ws.setRoot(root);
+                }
+                if(ws.getTitle()==null)
+                {
+                    ws.setTitle(TITLE_DEFAULT_WORKSPACE);
+                    ws.setDescription(DESCRIPTION_DEFAULT_WORKSPACE);                    
+                }
+                
                 exists = true;
                 break;
             }
