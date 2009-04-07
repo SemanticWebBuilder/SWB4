@@ -83,7 +83,7 @@ public class SWBResourceMgr
 
     public void loadResourceTypeModel(ResourceType type)
     {
-        String cls=type.getResourceClassName();
+        String cls=type.getResourceOWL();
         SemanticModel model=SWBPlatform.getSemanticMgr().getModel(cls);
         if(model==null)
         {
