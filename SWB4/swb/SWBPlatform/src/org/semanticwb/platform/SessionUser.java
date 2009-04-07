@@ -28,6 +28,7 @@ public class SessionUser {
     }
 
     public void setUser(Principal user) {
+        //System.out.println("setUser:"+user.getName());
         this.user = user;
         req++;
     }

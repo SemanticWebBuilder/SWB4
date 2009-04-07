@@ -48,7 +48,7 @@ public class CodeGeneratorBase
 
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
+    //@Test
     public void generateCode()
     {
         try
@@ -68,7 +68,7 @@ public class CodeGeneratorBase
 
     // The methods must be annotated with annotation @Test. For example:
     //
-    //@Test
+    @Test
     public void generateCodeSwb()
     {
         try

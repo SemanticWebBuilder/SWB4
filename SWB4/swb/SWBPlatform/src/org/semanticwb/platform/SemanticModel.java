@@ -170,6 +170,19 @@ public class SemanticModel
         if(m_nameSpace==null)
         {
             this.m_nameSpace=m_model.getNsPrefixURI(m_name);
+
+            if(m_nameSpace==null)
+            {
+                //System.out.println("getNameSpace");
+                Iterator<Statement> it=m_model.listStatements(null,m_model.getProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),m_model.getResource("http://www.w3.org/2002/07/owl#Ontology"));
+                while(it.hasNext())
+                {
+                    Statement st=it.next();
+                    //System.out.println("sub:"+st.getSubject().getURI());
+                    m_nameSpace=st.getSubject().getURI();
+                    break;
+                }
+            }
         }
         return m_nameSpace;
     }    
