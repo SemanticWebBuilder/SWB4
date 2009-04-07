@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -129,6 +128,74 @@ public class CodeGenerator
     {
         String letter = data.substring(0, 1);
         return letter.toUpperCase() + data.substring(1);
+    }
+
+    public void generateCode(URI namespace, boolean createSWBcontent) throws CodeGeneratorException
+    {
+        SemanticMgr mgr = SWBPlatform.getSemanticMgr();
+        Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
+        while (tpcit.hasNext())
+        {
+            SemanticClass tpc = tpcit.next();
+            boolean create = false;
+            if (namespace == null)
+            {
+                create = true;
+            }
+            else
+            {
+                try
+                {
+                    URI tpcNamespace = new URI(tpc.getURI());
+                    String strnamespace=namespace.toString();
+                    if(!strnamespace.endsWith("#"))
+                    {
+                        strnamespace+="#";
+                    }
+                    strnamespace+=tpc.getName();
+                    if (tpcNamespace.toString().equals(strnamespace.toString()))
+                    {
+                        create = true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    create = false;
+                }
+            }
+            if (create)
+            {
+                if (m_Directory.exists() && m_Directory.isFile())
+                {
+                    throw new CodeGeneratorException("The path " + m_Directory.getPath() + " is not a directory");
+                }
+                if (!m_Directory.exists())
+                {
+                    if (!m_Directory.mkdirs())
+                    {
+                        throw new CodeGeneratorException("The path " + m_Directory.getPath() + " was not possible to create");
+                    }
+                }
+                if (tpc.isSWBInterface())
+                {
+                    createInterface(tpc);
+                }
+                else if (tpc.isSWBSemanticResource())
+                {
+                    createSemanticResourceBase(tpc);
+                }
+                else if (tpc.isSWBClass() || tpc.isSWBModel() || tpc.isSWBFormElement())
+                {
+                    createClassBase(tpc);
+                }
+            }
+        }
+        if (createSWBcontent)
+        {
+            createSWBContextBase();
+            createSWBContext();
+        }
     }
 
     public void generateCode(String prefix, boolean createSWBcontent) throws CodeGeneratorException
@@ -530,7 +597,7 @@ public class CodeGenerator
 
         javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
 
-       
+
 
         insertPropertiesToClass(tpc, javaClassContent, null, "SemanticObject");
 
