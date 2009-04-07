@@ -1,15 +1,23 @@
 package org.semanticwb.model.base;
 
+import java.util.Iterator;
 import org.semanticwb.model.*;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.SemanticModel;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticClass;
-
-
-
-
+import org.semanticwb.repository.File;
+import org.semanticwb.repository.FrozenNode;
+import org.semanticwb.repository.Unstructured;
+import org.semanticwb.repository.BaseNode;
+import org.semanticwb.repository.HierarchyNode;
+import org.semanticwb.repository.VersionLabels;
+import org.semanticwb.repository.VersionHistory;
+import org.semanticwb.repository.Resource;
+import org.semanticwb.repository.Folder;
+import org.semanticwb.repository.Version;
 import org.semanticwb.repository.Workspace;
-
 public class SWBContextBase
 {
     private static SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
