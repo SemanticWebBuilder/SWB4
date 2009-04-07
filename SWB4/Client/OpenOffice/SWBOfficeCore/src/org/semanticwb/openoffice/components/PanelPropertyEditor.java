@@ -352,6 +352,15 @@ public class PanelPropertyEditor extends javax.swing.JPanel
         }
     }
 
+    public void removeProperties()
+    {
+        DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
+        int rows = model.getRowCount();
+        for (int i = 0; i < rows; i++)
+        {
+            model.removeRow(0);
+        }
+    }
     public void loadProperties(Map<PropertyInfo, Object> properties)
     {
         DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
