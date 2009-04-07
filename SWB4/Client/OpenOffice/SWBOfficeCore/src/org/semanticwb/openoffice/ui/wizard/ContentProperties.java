@@ -30,16 +30,18 @@ import org.semanticwb.openoffice.OfficeApplication;
 public class ContentProperties extends WizardPage
 {
 
-
+    private final JLabel label = new JLabel("No se tienen propiedades para este tipo de contenido, puede continuar.");
+    private final JPanel panel = new JPanel();
     public static final String CONTENT_PROPERTIES = "PROPERTIES";
 
     public ContentProperties()
     {
         initComponents();
+        //panel.setBackground(new Color(255, 255, 255));
+        panel.setLayout(new BorderLayout());
+        panel.add(label, BorderLayout.NORTH);
 
     }
-
-    
 
     @Override
     protected void renderingPage()
@@ -57,22 +59,16 @@ public class ContentProperties extends WizardPage
 
     public void loadProperties(String repositoryName, String type)
     {
-
+        this.remove(this.panelPropertyEditor1);
+        this.remove(panel);
+        this.add(panel);
         try
         {
             PropertyInfo[] props = OfficeApplication.getOfficeDocumentProxy().getContentProperties(repositoryName, type);
-            if (props.length == 0)
+            if (props.length > 0)
             {
-                this.remove(this.panelPropertyEditor1);
-                JPanel panel = new JPanel();
-                panel.setBackground(new Color(255, 255, 255));
-                panel.setLayout(new BorderLayout());
-                JLabel label = new JLabel("No se tienen propiedades para este tipo de contenido, puede continuar.");
-                panel.add(label, BorderLayout.NORTH);
-                this.add(panel);
-            }
-            else
-            {
+                this.remove(panel);
+                this.add(this.panelPropertyEditor1);
                 HashMap<PropertyInfo, Object> properties = new HashMap<PropertyInfo, Object>();
                 for (PropertyInfo info : props)
                 {
@@ -88,8 +84,8 @@ public class ContentProperties extends WizardPage
                     if (info.type.equalsIgnoreCase("boolean"))
                     {
                         defaultValue = false;
-                    }                    
-                    properties.put(info, defaultValue);                    
+                    }
+                    properties.put(info, defaultValue);
                 }
                 this.panelPropertyEditor1.loadProperties(properties);
             }
@@ -138,7 +134,7 @@ public class ContentProperties extends WizardPage
         loadProperties(repositoryName, type);
         try
         {
-            OfficeApplication.getOfficeDocumentProxy().validateContentValues(repositoryName, props, values,type);
+            OfficeApplication.getOfficeDocumentProxy().validateContentValues(repositoryName, props, values, type);
         }
         catch (Exception e)
         {

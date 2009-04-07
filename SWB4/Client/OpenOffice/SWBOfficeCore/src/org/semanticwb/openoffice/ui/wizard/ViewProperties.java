@@ -10,9 +10,12 @@
  */
 package org.semanticwb.openoffice.ui.wizard;
 
+import java.awt.BorderLayout;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
@@ -28,12 +31,16 @@ public class ViewProperties extends WizardPage
 
     public static final String VIEW_PROPERTIES = "PROPERTIES";
     private String repositoryName,  contentID;
+    private final JLabel label = new JLabel("No se tienen propiedades para este tipo de contenido, puede continuar.");
+    private final JPanel panel = new JPanel();
 
     public ViewProperties(String repositoryName, String contentID)
     {
         this.repositoryName = repositoryName;
         this.contentID = contentID;
         initComponents();
+        panel.setLayout(new BorderLayout());
+        panel.add(label, BorderLayout.NORTH);
         loadProperties();
     }
 
@@ -83,28 +90,36 @@ public class ViewProperties extends WizardPage
 
     private void loadProperties()
     {
-
+        this.remove(this.panelPropertyEditor1);
+        this.remove(panel);
+        this.add(panel);
         try
         {
             HashMap<PropertyInfo, Object> properties = new HashMap<PropertyInfo, Object>();
-            for (PropertyInfo info : OfficeApplication.getOfficeDocumentProxy().getResourceProperties(repositoryName, contentID))
+            PropertyInfo[] props=OfficeApplication.getOfficeDocumentProxy().getResourceProperties(repositoryName, contentID);
+            if (props.length > 0)
             {
-                Object defaultValue = null;
-                if (info.type.equalsIgnoreCase("string"))
+                this.remove(panel);
+                this.add(this.panelPropertyEditor1);
+                for (PropertyInfo info : props)
                 {
-                    defaultValue = "";
+                    Object defaultValue = null;
+                    if (info.type.equalsIgnoreCase("string"))
+                    {
+                        defaultValue = "";
+                    }
+                    if (info.type.equalsIgnoreCase("integer"))
+                    {
+                        defaultValue = 0;
+                    }
+                    if (info.type.equalsIgnoreCase("boolean"))
+                    {
+                        defaultValue = false;
+                    }
+                    properties.put(info, defaultValue);
                 }
-                if (info.type.equalsIgnoreCase("integer"))
-                {
-                    defaultValue = 0;
-                }
-                if (info.type.equalsIgnoreCase("boolean"))
-                {
-                    defaultValue = false;
-                }
-                properties.put(info, defaultValue);
+                panelPropertyEditor1.loadProperties(properties);
             }
-            panelPropertyEditor1.loadProperties(properties);
         }
         catch (Exception e)
         {
