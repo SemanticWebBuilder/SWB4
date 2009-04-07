@@ -431,14 +431,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Iterator<WebSite> sites = SWBContext.listWebSites();
             while (sites.hasNext())
             {
-                Iterator<SemanticObject> it = sites.next().getSemanticObject().getModel().listSubjects(OfficeResource.cm_content, contentID);
+                WebSite site=sites.next();
+                Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficeResource.cm_content, contentID);
                 while (it.hasNext())
                 {
                     SemanticObject obj = it.next();
                     if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                     {
                         OfficeResource officeResource = new OfficeResource(obj);
-                        officeResource.getSemanticObject().remove();
+                        site.removeResource(officeResource.getId());
                     }
                 }
             }
@@ -1391,6 +1392,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         Resource resource = site.getResource(info.id);
         OfficeResource officeResource=new OfficeResource();
+        officeResource.setResourceBase(resource);
         try
         {
             officeResource.clean();
@@ -1401,7 +1403,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         finally
         {
-            resource.remove();
+            site.removeResource(officeResource.getId());
         }
     }
 
