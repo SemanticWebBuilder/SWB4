@@ -13,17 +13,25 @@ public class WordTag {
     private String lbl; //Etiqueta de la palabra a nivel sintáctico : OBJ, PREC, PRED, etc.
     private String TagType; //tipo de dato en RDF : swb:WebPage, swbxf:Form, etc.
     private String name;   //nombre de la clase que representa la palabra.
+    private String oId;    //Id de la clase que representa la palabra
 
+    public void setObjId(String oId) {
+        this.oId = oId;
+    }
+    public String getObjId() {
+        return oId;
+    }
     /**
      * Creates a new instance of a WordTag with the given label and TagType.
      * @param t Tag for the compound Tag.
      * @param tt TagType for the compound Tag.
      */
-    public WordTag(String label, String typ, String cName)
+    public WordTag(String label, String typ, String cName, String cId)
     {
         lbl = label;
         TagType = typ;
         name = cName;
+        oId = cId;
     }
 
     /**
