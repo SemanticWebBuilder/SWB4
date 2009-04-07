@@ -972,22 +972,22 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public void validateViewValues(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception
     {
         String contentType = getContentType(repositoryName, contentID);
+        OfficeResource officeResource;
         SemanticClass clazz;
-        Class type = null;
         if (contentType.equalsIgnoreCase("excel"))
         {
-            type = ExcelResource.class;
-            clazz = ExcelResource.sclass;
+            officeResource=new ExcelResource();
+            clazz=ExcelResource.sclass;
         }
         else if (contentType.equalsIgnoreCase("ppt"))
         {
-            type = PPTResource.class;
-            clazz = PPTResource.sclass;
+            officeResource=new PPTResource();
+            clazz=PPTResource.sclass;
         }
         else
         {
-            type = WordResource.class;
-            clazz = WordResource.sclass;
+            officeResource=new WordResource();
+            clazz=WordResource.sclass;
         }
         if (properties.length == values.length)
         {
@@ -1007,22 +1007,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 }
                 i++;
             }
-
-            
-            /*Constructor c = type.getConstructor(clazz.getSemanticObject().getClass());
-            Object obj = c.newInstance(clazz.getSemanticObject());
-            Method m = type.getMethod("validatePropertyValue", valuesToValidate.getClass());
-            try
-            {
-                m.invoke(obj, valuesToValidate);
-            }
-            catch (InvocationTargetException ite)
-            {
-                if (ite.getTargetException() != null)
-                {
-                    throw new Exception(ite.getTargetException());
-                }
-            }*/
+            officeResource.validateViewPropertyValues(valuesToValidate);           
         }
         else
         {
