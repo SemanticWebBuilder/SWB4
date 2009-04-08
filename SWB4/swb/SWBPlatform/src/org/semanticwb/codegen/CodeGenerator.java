@@ -832,6 +832,12 @@ public class CodeGenerator
             javaClassContent.append("        org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();"+ ENTER);
             javaClassContent.append("        mgr.removeModel(id);"+ ENTER);
             javaClassContent.append("    }" + ENTER);
+
+             javaClassContent.append(ENTER);
+             javaClassContent.append("    public static boolean has" + className + "(String id)" + ENTER);
+             javaClassContent.append("    {" + ENTER);
+             javaClassContent.append("        return (get" + className + "(id)!=null);" + ENTER);
+             javaClassContent.append("    }" + ENTER);
         }
         else
         {
@@ -852,13 +858,15 @@ public class CodeGenerator
             javaClassContent.append("    {" + ENTER);
             javaClassContent.append("        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));" + ENTER);
             javaClassContent.append("    }" + ENTER);
+
+             javaClassContent.append(ENTER);
+             javaClassContent.append("    public static boolean has" + className + "(String id, org.semanticwb.model.SWBModel model)" + ENTER);
+             javaClassContent.append("    {" + ENTER);
+             javaClassContent.append("        return (get" + className + "(id, model)!=null);" + ENTER);
+             javaClassContent.append("    }" + ENTER);
         }
 
-        javaClassContent.append(ENTER);
-        javaClassContent.append("    public static boolean has" + className + "(String id, org.semanticwb.model.SWBModel model)" + ENTER);
-        javaClassContent.append("    {" + ENTER);
-        javaClassContent.append("        return (get" + className + "(id, model)!=null);" + ENTER);
-        javaClassContent.append("    }" + ENTER);
+       
 
         insertPropertiesToClass(tpc, javaClassContent, parent);
         if (tpc.isSWBModel())
