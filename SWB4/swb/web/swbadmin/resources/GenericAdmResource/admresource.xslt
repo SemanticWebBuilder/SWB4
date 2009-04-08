@@ -10,7 +10,9 @@
     </xsl:template>
     <xsl:template match="statictext">
 	<TR>
-		<TD colspan="2" class="datos" width="200px" align="right"><xsl:value-of select="." disable-output-escaping="yes"/></TD>
+		<TD class="datos" width="200px" align="left" colspan="2">
+            <xsl:value-of select="." disable-output-escaping="yes"/>
+        </TD>
 	</TR>
     </xsl:template>
     <xsl:template match="wbmsg">
@@ -156,6 +158,51 @@
     			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
    		</xsl:if>
     </xsl:template>
+    <xsl:template match="button">
+    		<xsl:if test="@type = 'submit'">
+			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD colspan="2" align="right"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    		</xsl:if>
+	        <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" /> type=&quot;<xsl:value-of select="@type" />&quot;
+	        <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
+	        <xsl:if test="string-length( @name  ) &gt; 0"> name=&quot;<xsl:value-of select="@name" />&quot;</xsl:if>
+	        <xsl:if test="string-length( @title ) &gt; 0"> title=&quot;<xsl:value-of select="@title" />&quot;</xsl:if>
+	        <xsl:if test="string-length( @value ) &gt; 0"> value=&quot;&amp;nbsp;&amp;nbsp;<xsl:value-of select="@value" />&amp;nbsp;&amp;nbsp;&quot;</xsl:if>
+            <xsl:if test="string-length( @dojoType ) &gt; 0"> dojoType=&quot;<xsl:value-of select="@dojoType" />&quot;</xsl:if>
+	        <xsl:choose>
+	            <xsl:when test="string-length(@class)&gt;0"> class=&quot;<xsl:value-of select="@class" />&quot;</xsl:when>
+	            <xsl:otherwise> class=&quot;boton&quot;</xsl:otherwise>
+	        </xsl:choose>
+	        <xsl:if test="string-length( @style ) &gt; 0"> style=&quot;<xsl:value-of select="@style" />&quot;</xsl:if>
+	        <xsl:if test="string-length( @tabindex  ) &gt; 0"> tabindex=&quot;<xsl:value-of select="@tabindex" />&quot;</xsl:if>
+	        <xsl:if test="string-length( @accesskey ) &gt; 0"> accesskey=&quot;<xsl:value-of select="@accesskey" />&quot;</xsl:if>
+	        <xsl:if test="@disabled = 'true'"> disabled</xsl:if>
+	        <xsl:if test="@readonly = 'true'"> readonly</xsl:if>
+		<xsl:if test="string-length( @onclick    ) &gt; 0"> onclick=&quot;<xsl:value-of select="@onclick" />&quot;</xsl:if>
+		<xsl:if test="string-length( @ondblclick ) &gt; 0"> ondblclick=&quot;<xsl:value-of select="@ondblclick" />&quot;</xsl:if>
+		<xsl:if test="string-length( @onmousedown) &gt; 0"> onmousedown=&quot;<xsl:value-of select="@onmousedown" />&quot;</xsl:if>
+		<xsl:if test="string-length( @onmouseup  ) &gt; 0"> onmouseup=&quot;<xsl:value-of select="@onmouseup" />&quot;</xsl:if>
+		<xsl:if test="string-length( @onmouseover) &gt; 0"> onmouseover=&quot;<xsl:value-of select="@onmouseover" />&quot;</xsl:if>
+		<xsl:if test="string-length( @onmousemove) &gt; 0"> onmousemove=&quot;<xsl:value-of select="@onmousemove" />&quot;</xsl:if>
+		<xsl:if test="string-length( @onmouseout ) &gt; 0"> onmouseout=&quot;<xsl:value-of select="@onmouseout" />&quot;</xsl:if>
+		<xsl:if test="string-length( @onkeypress ) &gt; 0"> onkeypress=&quot;<xsl:value-of select="@onkeypress" />&quot;</xsl:if>
+		<xsl:if test="string-length( @onkeydown  ) &gt; 0"> onkeydown=&quot;<xsl:value-of select="@onkeydown" />&quot;</xsl:if>
+		<xsl:if test="string-length( @onkeyup    ) &gt; 0"> onkeyup=&quot;<xsl:value-of select="@onkeyup" />&quot;</xsl:if>
+		<xsl:if test="string-length( @onfocus    ) &gt; 0"> onfocus=&quot;<xsl:value-of select="@onfocus" />&quot;</xsl:if>
+		<xsl:if test="string-length( @onblur     ) &gt; 0"> onblur=&quot;<xsl:value-of select="@onblur" />&quot;</xsl:if>
+		<xsl:if test="string-length( @onselect   ) &gt; 0"> onselect=&quot;<xsl:value-of select="@onselect" />&quot;</xsl:if>
+		<xsl:if test="string-length( @onchange   ) &gt; 0"> onchange=&quot;<xsl:value-of select="@onchange" />&quot;</xsl:if>
+	        <xsl:if test="string-length( @moreattr) &gt; 0"><xsl:text> </xsl:text><xsl:value-of select="@moreattr" /></xsl:if>
+	        <xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+             <xsl:if test="string-length( @value ) &gt; 0"><xsl:value-of select="@value" /></xsl:if>
+ 	         <xsl:value-of select="." disable-output-escaping="yes"/>
+	         <xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+
+		<xsl:if test="@type = 'reset'">
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+   		</xsl:if>
+    </xsl:template>
     <xsl:template match="input[@type != 'submit' and @type != 'reset']">
     		<xsl:if test="name(parent::*)!='label'">
     			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
@@ -169,7 +216,6 @@
 	        <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
 	        <xsl:if test="string-length( @name  ) &gt; 0"> name=&quot;<xsl:value-of select="@name" />&quot;</xsl:if>
 	        <xsl:if test="string-length( @title ) &gt; 0"> title=&quot;<xsl:value-of select="@title" />&quot;</xsl:if>
-            <xsl:if test="string-length( @dojoType ) &gt; 0"> dojoType=&quot;<xsl:value-of select="@dojoType" />&quot;</xsl:if>
             <xsl:if test="string-length( @promptMessage ) &gt; 0"> promptMessage=&quot;<xsl:value-of select="@promptMessage" />&quot;</xsl:if>
             <xsl:if test="string-length( @invalidMessage ) &gt; 0"> invalidMessage=&quot;<xsl:value-of select="@invalidMessage" />&quot;</xsl:if>
             <xsl:if test="string-length( @trim ) &gt; 0"> trim=&quot;<xsl:value-of select="@trim" />&quot;</xsl:if>
