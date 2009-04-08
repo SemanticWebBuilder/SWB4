@@ -11,11 +11,6 @@ public class FileBase extends org.semanticwb.repository.HierarchyNode implements
         super(base);
     }
 
-    public static org.semanticwb.repository.File getFile(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.File)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.repository.File> listFiles(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -26,6 +21,11 @@ public class FileBase extends org.semanticwb.repository.HierarchyNode implements
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.File>(org.semanticwb.repository.File.class, it, true);
+    }
+
+    public static org.semanticwb.repository.File getFile(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.File)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.repository.File createFile(String id, org.semanticwb.model.SWBModel model)

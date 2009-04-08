@@ -11,11 +11,6 @@ public class FolderBase extends org.semanticwb.repository.HierarchyNode implemen
         super(base);
     }
 
-    public static org.semanticwb.repository.Folder getFolder(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.Folder)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.repository.Folder> listFolders(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -26,6 +21,11 @@ public class FolderBase extends org.semanticwb.repository.HierarchyNode implemen
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Folder>(org.semanticwb.repository.Folder.class, it, true);
+    }
+
+    public static org.semanticwb.repository.Folder getFolder(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.Folder)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.repository.Folder createFolder(String id, org.semanticwb.model.SWBModel model)

@@ -16,11 +16,6 @@ public class ResourceBase extends org.semanticwb.repository.BaseNode implements 
         super(base);
     }
 
-    public static org.semanticwb.repository.Resource getResource(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.Resource)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.repository.Resource> listResources(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -31,6 +26,11 @@ public class ResourceBase extends org.semanticwb.repository.BaseNode implements 
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Resource>(org.semanticwb.repository.Resource.class, it, true);
+    }
+
+    public static org.semanticwb.repository.Resource getResource(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.Resource)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.repository.Resource createResource(String id, org.semanticwb.model.SWBModel model)

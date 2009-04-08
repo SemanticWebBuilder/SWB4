@@ -11,11 +11,6 @@ public class UnstructuredBase extends org.semanticwb.repository.BaseNode
         super(base);
     }
 
-    public static org.semanticwb.repository.Unstructured getUnstructured(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.Unstructured)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.repository.Unstructured> listUnstructureds(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -28,15 +23,20 @@ public class UnstructuredBase extends org.semanticwb.repository.BaseNode
         return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Unstructured>(org.semanticwb.repository.Unstructured.class, it, true);
     }
 
-    public static org.semanticwb.repository.Unstructured createUnstructured(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.Unstructured)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.repository.Unstructured createUnstructured(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.repository.Unstructured.createUnstructured(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.repository.Unstructured getUnstructured(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.Unstructured)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.repository.Unstructured createUnstructured(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.Unstructured)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeUnstructured(String id, org.semanticwb.model.SWBModel model)

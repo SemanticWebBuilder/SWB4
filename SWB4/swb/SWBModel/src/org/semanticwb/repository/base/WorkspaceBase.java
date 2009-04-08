@@ -16,11 +16,6 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel implements org.
         super(base);
     }
 
-    public static org.semanticwb.repository.Workspace getWorkspace(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.Workspace)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.repository.Workspace> listWorkspaces(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -33,19 +28,41 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel implements org.
         return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Workspace>(org.semanticwb.repository.Workspace.class, it, true);
     }
 
-    public static org.semanticwb.repository.Workspace createWorkspace(String id, org.semanticwb.model.SWBModel model)
+    public static org.semanticwb.repository.Workspace getWorkspace(String id)
     {
-        return (org.semanticwb.repository.Workspace)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+       org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
+       org.semanticwb.repository.Workspace ret=null;
+       org.semanticwb.platform.SemanticModel model=mgr.getModel(id);
+       if(model!=null)
+       {
+           org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(id,sclass));
+           if(obj!=null)
+           {
+               ret=(org.semanticwb.repository.Workspace)obj.createGenericInstance();
+           }
+       }
+       return ret;
     }
 
-    public static void removeWorkspace(String id, org.semanticwb.model.SWBModel model)
+    public static org.semanticwb.repository.Workspace createWorkspace(String id, String namespace)
     {
-        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+        org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
+        org.semanticwb.platform.SemanticModel model=mgr.createModel(id, namespace);
+        return (org.semanticwb.repository.Workspace)model.createGenericObject(model.getObjectUri(id, sclass), sclass);
     }
 
-    public static boolean hasWorkspace(String id, org.semanticwb.model.SWBModel model)
+    public static void removeWorkspace(String id)
     {
-        return (getWorkspace(id, model)!=null);
+       org.semanticwb.repository.Workspace obj=getWorkspace(id);
+       if(obj!=null)
+       {
+           obj.remove();
+       }
+    }
+
+    public static boolean hasWorkspace(String id)
+    {
+        return (getWorkspace(id)!=null);
     }
 
     public String getTitle()
