@@ -70,7 +70,29 @@ public class SWBPlatform
         } catch (Exception e)
         {
             log.warn("-->File web.properties not found...");
-        }        
+        }
+
+        workPath = SWBPlatform.getEnv("swb/workPath");
+        try {
+            //TODO:revisar sincronizacion
+            //if (confCS.equalsIgnoreCase("Client")) remoteWorkPath = (String) AFUtils.getInstance().getEnv("swb/remoteWorkPath");
+
+            workPath = (String) SWBPlatform.getEnv("swb/workPath","/work");
+            if (workPath.startsWith("file:"))
+            {
+                workPath = (new File(workPath.substring(5))).toString();
+            } else if (workPath.startsWith("http://"))
+            {
+                workPath = (URLEncoder.encode(workPath));
+            } else {
+                workPath = SWBUtils.getApplicationPath()+workPath;
+            }
+        } catch (Exception e) {
+            log.error("Can't read the context path...",e);
+            workPath = "";
+        }
+        //System.out.println("workPath:"+workPath);
+
         
         try
         {
@@ -219,26 +241,6 @@ public class SWBPlatform
         } catch (Throwable e)
         {
             log.error("Error loading SemanticWebBuilder Instance...", e);
-        }
-        
-        workPath = SWBPlatform.getEnv("swb/workPath");
-        try {
-            //TODO:revisar sincronizacion
-            //if (confCS.equalsIgnoreCase("Client")) remoteWorkPath = (String) AFUtils.getInstance().getEnv("wb/remoteWorkPath");
-
-            workPath = (String) SWBPlatform.getEnv("swb/workPath","/work");
-            if (workPath.startsWith("file:")) 
-            {
-                workPath = (new File(workPath.substring(5))).toString();
-            } else if (workPath.startsWith("http://")) 
-            {
-                workPath = (URLEncoder.encode(workPath));
-            } else {
-                workPath = SWBUtils.getApplicationPath()+workPath;
-            }
-        } catch (Exception e) {
-            log.error("Can't read the context path...",e);
-            workPath = "";
         }
 
         idgen=new IDGenerator();
