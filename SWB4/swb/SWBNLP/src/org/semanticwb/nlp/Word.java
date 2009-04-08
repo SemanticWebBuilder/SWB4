@@ -5,13 +5,20 @@
 
 package org.semanticwb.nlp;
 
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
+
 /**
  * Entry of a Lexicon and its {@link WordTag}.
  * @author hasdai
  */
 public class Word {
+    private SemanticProperty prop;
+    private SemanticClass cls;
     private String label=""; //DisplayName
     private WordTag wTag;   //POS-TAG
+    private boolean isClass = true;
 
     /**
      * Creates a new instance of a Word with the given label.
@@ -19,9 +26,18 @@ public class Word {
      */
     public Word(String lbl) {
         label = lbl;
-        wTag = new WordTag("", "", "", "");
+        wTag = new WordTag("", "", "", "", "");
     }
 
+    public Word(SemanticClass cl) {
+        isClass = true;
+        cls = cl;
+    }
+
+    public Word (SemanticProperty p) {
+        isClass = false;
+        prop = p;
+    }
     /**
      * Creates a new instance of a Word with the given label and {@link WordTag}.
      * @param lbl Word label.
