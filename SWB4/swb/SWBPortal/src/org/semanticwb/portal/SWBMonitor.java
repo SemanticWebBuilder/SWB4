@@ -43,7 +43,7 @@ public class SWBMonitor
         timer = new Timer();
         timer.schedule(t, delays*1000, delays*1000);
 
-        log.event("Initializing SWBMonitor("+max+","+delays+"s)");
+        log.event("Initializing SWBMonitor("+max+","+delays+"s)...");
     }        
     
     public void _run()
