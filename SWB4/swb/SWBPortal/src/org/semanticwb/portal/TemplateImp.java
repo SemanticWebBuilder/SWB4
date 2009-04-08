@@ -708,8 +708,7 @@ public class TemplateImp extends Template
             logbuf.append("log|");
             logbuf.append(request.getRemoteAddr());
             logbuf.append("|");
-            //TODO:implementar Message
-            //logbuf.append(SWBMessageCenter.getInstance().getAddress());
+            logbuf.append(SWBPortal.getMessageCenter().getAddress());
             logbuf.append("_");
             logbuf.append("|");
             String sess=request.getSession().getId();
@@ -734,7 +733,10 @@ public class TemplateImp extends Template
             logbuf.append("|");
             logbuf.append(user.getSemanticObject().getSemanticClass().getClassId());
             logbuf.append("|");
-            logbuf.append(user.getDevice());
+            if(user.getDevice()!=null)
+                logbuf.append(user.getDevice());
+            else
+                logbuf.append("_");
             logbuf.append("|");
             if (user.getLanguage() != null && user.getLanguage().length() > 0)
                 logbuf.append(user.getLanguage());
@@ -1113,8 +1115,7 @@ public class TemplateImp extends Template
         if (savelog)
         {
             long tfin = System.currentTimeMillis() - tini;            
-            //TODO:Implementar Message
-            //WBMessageCenter.getInstance().sendMessage(logbuf.toString()+"|"+tfin+resbuf.toString());
+            SWBPortal.getMessageCenter().sendMessage(logbuf.toString()+"|"+tfin+resbuf.toString());
         }
         log.debug("<!-- TemplateFin:"+ (System.currentTimeMillis()-tini) +"ms -->");
     }
@@ -1136,8 +1137,7 @@ public class TemplateImp extends Template
             logbuf.append("log|");
             logbuf.append(request.getRemoteAddr());
             logbuf.append("|");
-            //TODO:implementar message
-            //logbuf.append(WBMessageCenter.getInstance().getAddress());
+            logbuf.append(SWBPortal.getMessageCenter().getAddress());
             logbuf.append("_");
             logbuf.append("|");
             String sess=request.getSession().getId();
