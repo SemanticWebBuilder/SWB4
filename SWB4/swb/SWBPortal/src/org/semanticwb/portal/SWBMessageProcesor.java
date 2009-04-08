@@ -11,6 +11,7 @@ import java.net.*;
 import java.util.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBObserver;
 
@@ -62,29 +63,27 @@ public class SWBMessageProcesor extends TimerTask
                     {
                         if (!SWBPlatform.isClient())
                         {
-                            SWBAccessLog.getInstance().updateRes(str.substring(4));
+                            SWBPortal.getAccessLog().updateRes(str.substring(4));
                         }
-                        //TODO
-                        //SWBAccessIncrement.getInstance().log(str.substring(4));
+                        SWBPortal.getAccessIncrement().log(str.substring(4));
                     } else if(ini.equals("hit"))
                     {
                         if (!SWBPlatform.isClient())
                         {
-                            SWBAccessLog.getInstance().hitLog(str.substring(4));
+                            SWBPortal.getAccessLog().hitLog(str.substring(4));
                         }
-                        //TODO
-                        //SWBAccessIncrement.getInstance().logHit(str.substring(4));
+                        SWBPortal.getAccessIncrement().logHit(str.substring(4));
                     } else if(ini.equals("ses"))
                     {
                         if (!SWBPlatform.isClient())
                         {
-                            SWBAccessLog.getInstance().updateSess(str.substring(4));
+                            SWBPortal.getAccessLog().updateSess(str.substring(4));
                         }
                     } else if(ini.equals("lgn"))
                     {
                         if (!SWBPlatform.isClient())
                         {
-                            SWBAccessLog.getInstance().updateLogin(str.substring(4));
+                            SWBPortal.getAccessLog().updateLogin(str.substring(4));
                         }
                     } else if(ini.equals("ini"))
                     {
