@@ -74,10 +74,19 @@ public class ResetFE extends ButtonFE
                     root.appendChild(dom.createTextNode(label.trim()));
                 }
                 if(root!=null) dom.appendChild(root);
-                Element child=dom.createElement("input");
+
+                Element child=null;
+                String jsFramework=getFormFE().getJsFrameWork();
+                if(jsFramework!=null && jsFramework.equalsIgnoreCase("dojo")){
+                    child=dom.createElement("button");
+                }else{
+                    child=dom.createElement("input");
+                }
+
+
                 child.setAttribute("type", "reset");
                 if(name!=null) child.setAttribute("name",name);
-                if(value!=null) child.setAttribute("value",value);
+                //if(value!=null) child.setAttribute("value",value);
                 if(align!=null) child.setAttribute("align",align);
                 if(isdisabled) child.setAttribute("disabled","true");
                 if(width!=-1) child.setAttribute("width",String.valueOf(width));
@@ -95,8 +104,13 @@ public class ResetFE extends ButtonFE
                 xml=SWBUtils.XML.domToXml(dom, "ISO-8859-1", true);
                 if(xml!=null && !"".equals(xml.trim())) 
                 {
-                    if(xml.indexOf("<label")!=-1 && xml.indexOf("<label") < xml.indexOf("<input")) xml=xml.substring(xml.indexOf("<label"));
-                    else xml=xml.substring(xml.indexOf("<input"));
+                    if(xml.indexOf("<input")>-1){
+                        if(xml.indexOf("<label")!=-1 && xml.indexOf("<label") < xml.indexOf("<input")) xml=xml.substring(xml.indexOf("<label"));
+                        else xml=xml.substring(xml.indexOf("<input"));
+                    }else if(xml.indexOf("<button")>-1){ //si es dojo
+                        if(xml.indexOf("<label")!=-1 && xml.indexOf("<label") < xml.indexOf("<button")) xml=xml.substring(xml.indexOf("<label"));
+                        else xml=xml.substring(xml.indexOf("<button"));
+                    }
                 }
                 else xml="";
             }
