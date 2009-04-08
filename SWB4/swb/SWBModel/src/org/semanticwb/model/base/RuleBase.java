@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class RuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Versionable,org.semanticwb.model.Calendarable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable
+public class RuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Calendarable,org.semanticwb.model.XMLable,org.semanticwb.model.Versionable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -26,11 +26,6 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
         super(base);
     }
 
-    public static org.semanticwb.model.Rule getRule(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Rule)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.Rule> listRules(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -43,15 +38,20 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, it, true);
     }
 
-    public static org.semanticwb.model.Rule createRule(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Rule)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.Rule createRule(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.Rule.createRule(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.Rule getRule(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Rule)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.Rule createRule(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Rule)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeRule(String id, org.semanticwb.model.SWBModel model)

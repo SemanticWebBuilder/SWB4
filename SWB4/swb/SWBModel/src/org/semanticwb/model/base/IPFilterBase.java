@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
+public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -21,11 +21,6 @@ public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.s
         super(base);
     }
 
-    public static org.semanticwb.model.IPFilter getIPFilter(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.IPFilter)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilters(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -38,15 +33,20 @@ public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.s
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter>(org.semanticwb.model.IPFilter.class, it, true);
     }
 
-    public static org.semanticwb.model.IPFilter createIPFilter(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.IPFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.IPFilter createIPFilter(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.IPFilter.createIPFilter(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.IPFilter getIPFilter(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.IPFilter)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.IPFilter createIPFilter(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.IPFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeIPFilter(String id, org.semanticwb.model.SWBModel model)

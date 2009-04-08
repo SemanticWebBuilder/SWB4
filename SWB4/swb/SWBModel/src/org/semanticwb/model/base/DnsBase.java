@@ -20,11 +20,6 @@ public class DnsBase extends org.semanticwb.model.SWBClass implements org.semant
         super(base);
     }
 
-    public static org.semanticwb.model.Dns getDns(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Dns)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.Dns> listDnss(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -37,15 +32,20 @@ public class DnsBase extends org.semanticwb.model.SWBClass implements org.semant
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Dns>(org.semanticwb.model.Dns.class, it, true);
     }
 
-    public static org.semanticwb.model.Dns createDns(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Dns)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.Dns createDns(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.Dns.createDns(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.Dns getDns(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Dns)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.Dns createDns(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Dns)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeDns(String id, org.semanticwb.model.SWBModel model)

@@ -12,11 +12,6 @@ public class ReferenceBase extends org.semanticwb.model.SWBClass implements org.
         super(base);
     }
 
-    public static org.semanticwb.model.Reference getReference(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Reference)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.Reference> listReferences(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -29,15 +24,20 @@ public class ReferenceBase extends org.semanticwb.model.SWBClass implements org.
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Reference>(org.semanticwb.model.Reference.class, it, true);
     }
 
-    public static org.semanticwb.model.Reference createReference(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Reference)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.Reference createReference(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.Reference.createReference(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.Reference getReference(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Reference)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.Reference createReference(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Reference)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeReference(String id, org.semanticwb.model.SWBModel model)

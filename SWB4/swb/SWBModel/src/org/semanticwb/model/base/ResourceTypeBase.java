@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable
+public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -27,11 +27,6 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
         super(base);
     }
 
-    public static org.semanticwb.model.ResourceType getResourceType(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.ResourceType)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypes(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -42,6 +37,11 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceType>(org.semanticwb.model.ResourceType.class, it, true);
+    }
+
+    public static org.semanticwb.model.ResourceType getResourceType(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.ResourceType)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.ResourceType createResourceType(String id, org.semanticwb.model.SWBModel model)
