@@ -82,7 +82,7 @@ public class CodeGeneratorResources
         try
         {
             String sPakage = "org.semanticwb.portal.resources.sem";
-            String models[]={"SWBBanner.owl"};
+            String models[]={"SWBComment.owl"};
             String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
             //System.out.println("path:"+path);
             File dir = new File(path+"../../src");

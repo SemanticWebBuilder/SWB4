@@ -62,7 +62,7 @@ public class GenericSemResource extends GenericResource implements org.semanticw
             cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByJavaName(clsname);
         }else
         {
-            cls=m_obj.getSemanticClass();
+            cls=getSemanticObject().getSemanticClass();
         }
         return cls;
     }
@@ -71,8 +71,8 @@ public class GenericSemResource extends GenericResource implements org.semanticw
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out=response.getWriter();
-        out.println("<div id=\""+m_obj.getURI()+"/admform\" dojoType=\"dijit.layout.ContentPane\">");
-        SWBFormMgr mgr=new SWBFormMgr(m_obj, null, SWBFormMgr.MODE_EDIT);
+        out.println("<div id=\""+getSemanticObject().getURI()+"/admform\" dojoType=\"dijit.layout.ContentPane\">");
+        SWBFormMgr mgr=new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
         if("update".equals(paramRequest.getAction()))
         {
             mgr.processForm(request);
@@ -92,11 +92,11 @@ public class GenericSemResource extends GenericResource implements org.semanticw
     }
 
     public String getURI() {
-        return m_obj.getURI();
+        return getSemanticObject().getURI();
     }
 
     public String getId() {
-        return m_obj.getId();
+        return getSemanticObject().getId();
     }
 
     public SemanticObject getSemanticObject()
@@ -133,13 +133,13 @@ public class GenericSemResource extends GenericResource implements org.semanticw
      */
     public GenericObject setProperty(String prop, String value)
     {
-        m_obj.setProperty(_getProperty(prop), value);
+        getSemanticObject().setProperty(_getProperty(prop), value);
         return this;
     }
 
     public GenericObject removeProperty(String prop)
     {
-        m_obj.removeProperty(_getProperty(prop));
+        getSemanticObject().removeProperty(_getProperty(prop));
         return this;
     }
 
@@ -155,7 +155,7 @@ public class GenericSemResource extends GenericResource implements org.semanticw
 
     private SemanticProperty _getProperty(String prop)
     {
-        return new SemanticProperty(m_obj.getModel().getRDFModel().createProperty(m_obj.getModel().getNameSpace()+"prop_"+prop));
+        return new SemanticProperty(getSemanticObject().getModel().getRDFModel().createProperty(m_obj.getModel().getNameSpace()+"prop_"+prop));
     }
 
      /**
