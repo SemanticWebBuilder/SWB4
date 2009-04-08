@@ -829,8 +829,11 @@ public class CodeGenerator
             javaClassContent.append(ENTER);
             javaClassContent.append("    public static void remove" + className + "(String id)" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();"+ ENTER);
-            javaClassContent.append("        mgr.removeModel(id);"+ ENTER);
+            javaClassContent.append("       "+fullpathClass +" obj=get"+ className +"(id);"+ ENTER);
+            javaClassContent.append("       if(obj!=null)"+ ENTER);
+            javaClassContent.append("       {"+ ENTER);
+            javaClassContent.append("           obj.remove();"+ ENTER);
+            javaClassContent.append("       }"+ ENTER);
             javaClassContent.append("    }" + ENTER);
 
              javaClassContent.append(ENTER);
