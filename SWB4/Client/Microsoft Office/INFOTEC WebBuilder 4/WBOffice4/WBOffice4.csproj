@@ -423,6 +423,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Interfaces\CalendarInfo.cs" />
+    <Compile Include="Interfaces\FlowContentInformation.cs" />
     <Compile Include="Interfaces\PageInfo.cs" />
     <Compile Include="Interfaces\RepositoryInfo.cs" />
     <Compile Include="Interfaces\SiteInfo.cs" />
@@ -448,6 +449,7 @@
     <Compile Include="Steps\ViewProperties.Designer.cs">
       <DependentUpon>ViewProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils\MultivalueEditor.cs" />
     <Compile Include="Utils\TypeFactory.cs" />
     <None Include="Resources\edit.png" />
   </ItemGroup>

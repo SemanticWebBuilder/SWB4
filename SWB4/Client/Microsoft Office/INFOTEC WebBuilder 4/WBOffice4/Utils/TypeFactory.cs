@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.ComponentModel;
 using WBOffice4.Interfaces;
+using System.Drawing.Design;
 namespace WBOffice4.Utils
 {
     public sealed class TypeFactory
@@ -22,9 +23,17 @@ namespace WBOffice4.Utils
                 {
                     type = typeof(int);
                 }
-                if(prop.type.Equals("boolean",StringComparison.InvariantCultureIgnoreCase))
+                else if(prop.type.Equals("boolean",StringComparison.InvariantCultureIgnoreCase))
                 {
                     type = typeof(bool);
+                }
+                else if (prop.type.Equals("datetime", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    type = typeof(DateTime);
+                }
+                else if (prop.type.Equals("decimal", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    type = typeof(float);
                 }                
                 propertiesToCreate.Add(prop,type);
             }
@@ -141,8 +150,8 @@ namespace WBOffice4.Utils
                 name = name.Replace(':', '_');                
                 FieldBuilder fbNumber = typeBldr.DefineField(name, properties[prop], FieldAttributes.Private);
                 PropertyBuilder pbNumber = typeBldr.DefineProperty(name, PropertyAttributes.HasDefault, properties[prop], null);
-
-
+                
+                
 
                 Type description = typeof(System.ComponentModel.DescriptionAttribute);
                 Type[] ctorParams = new Type[] { typeof(string) };
@@ -164,6 +173,25 @@ namespace WBOffice4.Utils
                 pbNumber.SetCustomAttribute(myCABuilder);
 
 
+                if (prop.values != null && prop.values.Length > 0)
+                {
+                    Type type = properties[prop];
+
+                    Type editorAttribute = typeof(EditorAttribute);
+                    classCtorInfo = editorAttribute.GetConstructor(ctorParams);                    
+                    myCABuilder = new CustomAttributeBuilder(
+                        classCtorInfo,
+                        new object[] { typeof(MultivalueEditor), typeof(UITypeEditor) });
+                    pbNumber.SetCustomAttribute(myCABuilder);
+
+
+                    Type typeConverterAttribute = typeof(TypeConverterAttribute);
+                    classCtorInfo = typeConverterAttribute.GetConstructor(ctorParams);
+                    myCABuilder = new CustomAttributeBuilder(
+                        classCtorInfo,
+                        new object[] { typeof(MultivalueEditor)});
+                    pbNumber.SetCustomAttribute(myCABuilder);
+                }
 
                 MethodAttributes getSetAttr = MethodAttributes.Public |
                 MethodAttributes.SpecialName | MethodAttributes.HideBySig;
