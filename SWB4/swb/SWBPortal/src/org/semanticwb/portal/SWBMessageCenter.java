@@ -32,7 +32,6 @@ public class SWBMessageCenter
 
     private boolean sa = true;                        //standalon
 
-    static private SWBMessageCenter instance;       // The single instance
     private SWBMessageServer server = null;
     private SWBMessageProcesor procesor = null;
 
@@ -51,25 +50,12 @@ public class SWBMessageCenter
     /** Creates a new instance of SWBMessageCenter */
     public SWBMessageCenter()
     {
-        log.event("Initializing SWBMessageCenter");
+        log.event("Initializing SWBMessageCenter...");
         messages = new LinkedList();
-    }
-
-    /**
-     * @return  */
-    static public SWBMessageCenter getInstance()
-    {
-        if (instance == null)
-        {
-            instance = new SWBMessageCenter();
-            instance.init();
-        }
-        return instance;
     }
 
     public void destroy()
     {
-        instance=null;
         log.event("Destroy SWBMessageCenter...");
         if (sock != null) sock.close();
         if (server != null) server.stop();
