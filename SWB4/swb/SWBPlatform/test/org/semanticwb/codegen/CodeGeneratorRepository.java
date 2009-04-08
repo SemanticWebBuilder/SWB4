@@ -58,6 +58,7 @@ public class CodeGeneratorRepository
             String sPakage = "org.semanticwb.repository";
             CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
             codeGeneration.generateCode("nt", false);
+            codeGeneration.generateCode("swbrep", false);
             System.out.println("Generación de clases completa");
         }
         catch (CodeGeneratorException cge)
