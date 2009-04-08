@@ -58,10 +58,9 @@ public class tTranslator {
             if (parser.getErrorCount() == 0) {
                 sTree = (CommonTree) qres.getTree();
                 fixNames(sTree);
-                traverseAST(sTree, "");
+                //traverseAST(sTree, "");
                 res += processSelectQuery(sTree, parser.hasPrecon(), parser.hasPrede());
-
-                System.out.println("---");
+                //System.out.println(res);
                 return res;
             } else {
                 errCode = 2;
@@ -145,7 +144,7 @@ public class tTranslator {
             Iterator<CommonTree> cit = child.iterator();
             while (cit.hasNext()) {
                 CommonTree t = cit.next();
-                res += processNode(t, root.getText(), "");
+                res += processNode(t, root.getText(), root.getText());
             }
         }
         return res;
@@ -163,7 +162,7 @@ public class tTranslator {
         List<CommonTree> child = root.getChildren();
         String nname = root.getText();
 
-        System.out.println(nname + "[ " + parent + ", " + parentLabel + "]");
+        //System.out.println(nname + "[ " + parent + ", " + parentLabel + "]");
         if (nname.equals("PRECON")) {
             //Procesar los hijos con el padre del actual
             if (child != null) {
@@ -185,24 +184,24 @@ public class tTranslator {
                         CommonTree t = cit.next();
                         String cname = t.getText();
 
-                        res = res + "?" + parent.replace(" ", "_") + " " +
+                        res = res + "?" + parent.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " +
                                 assertPropertyType(cname, parent) + " ?" +
-                                cname.replace(" ", "_") + ".\n";
+                                cname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                     }
                 }
             } else {
-                res = res + "?" + parent.replace(" ", "_") + " ?prop ?val.\n";
+                res = res + "?" + parent.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ?prop ?val.\n";
             }
         } else {
             if (child != null) {
                 String rangeType = assertPropertyRangeType(nname, parent);
                 if (!rangeType.equals("")) {
                     SemanticClass scl = assertPropertyRangeClass(nname, parent);
-                    res = res + "?" + nname.replace(" ","_") + " rdf:type " + rangeType + ".\n";
+                    res = res + "?" + nname.replace(" ","_").replaceAll("[\\(|\\)]", "") + " rdf:type " + rangeType + ".\n";
                     String pName = assertPropertyType(nname, parent);
                     if (!pName.equals("")) {
-                        res = res + "?" + parent.replace(" ","_") + " " + pName + " ?" +
-                                nname.replace(" ", "_") + ".\n";
+                        res = res + "?" + parent.replace(" ","_").replaceAll("[\\(|\\)]", "") + " " + pName + " ?" +
+                                nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                     }
                     if (scl != null) {
                         String cName = scl.getDisplayName(lex.getLanguage());
@@ -217,11 +216,11 @@ public class tTranslator {
                 String pName = assertPropertyType(nname, parent);
                 if (!pName.equals("")) {
                     if (!parentLabel.equals("")) {
-                        res = res + "?" + parentLabel.replace(" ", "_") +
-                            " " + pName + " ?" + nname.replace(" ", "_") + ".\n";
+                        res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                            " " + pName + " ?" + nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                     } else {
-                        res = res + "?" + parent.replace(" ", "_") +
-                            " " + pName + " ?" + nname.replace(" ", "_") + ".\n";
+                        res = res + "?" + parent.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                            " " + pName + " ?" + nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                     }
                 }
             }
@@ -243,7 +242,7 @@ public class tTranslator {
         String res = "";
 
         if (root.getChild(0).getText().equals("MODTO")) {
-            return "?" + parent.replace(" ", "_") + " ?prop ?val";
+            return "?" + parent.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ?prop ?val";
         }
 
         List<CommonTree> child = root.getChildren();
@@ -270,34 +269,45 @@ public class tTranslator {
     private String processStatement(CommonTree root, String parent, String parentLabel) {
         String res = "";
         String pName = assertPropertyType(root.getChild(0).getText(), parent);
-
+        System.out.println("verificando " + root.getChild(0).getText() + " de " + parent + " con etiqueta " + parentLabel);
         if (root.getText().equals("ASIGN")) {
             if (!pName.equals("")) {
-                res = res + "?" + parentLabel.replace(" ", "_") + " " + pName + " " + root.getChild(1).getText() + ".\n";
+                res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        " " + pName + " " + root.getChild(1).getText() + ".\n";
             }
         } else if (root.getText().equals("COMPL")) {
                 if (!pName.equals("")) {
-                    res = res + "?" + parent.replace(" ", "_") + " " + pName + " ?v_" + root.getChild(0).getText().replace(" ", "_") + ".\n";
-                    res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_") + " < " + root.getChild(1).getText() + ").\n";
+                    res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                            " " + pName + " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                            ".\n";
+                    res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                            " < " + root.getChild(1).getText() + ").\n";
                 }
             } else if (root.getText().equals("COMPG")) {
                 if (!pName.equals("")) {
-                    res = res + "?" + parent.replace(" ", "_") + " " + pName + " ?v_" + root.getChild(0).getText().replace(" ", "_") + ".\n";
-                    res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_") + " > " + root.getChild(1).getText() + ").\n";
+                    res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName +
+                            " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
+                    res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                            " > " + root.getChild(1).getText() + ").\n";
                 }
             } else if (root.getText().equals("COMPLE")) {
                 if (!pName.equals("")) {
-                    res = res + "?" + parent.replace(" ", "_") + " " + pName + " ?v_" + root.getChild(0).getText().replace(" ", "_") + ".\n";
-                    res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_") + " <= " + root.getChild(1).getText() + ").\n";
+                    res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName +
+                            " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
+                    res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                            " <= " + root.getChild(1).getText() + ").\n";
                 }
             } else if (root.getText().equals("COMPGE")) {
                 if (!pName.equals("")) {
-                    res = res + "?" + parent.replace(" ", "_") + " " + pName + " ?v_" + root.getChild(0).getText().replace(" ", "_") + ".\n";
-                    res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_") + " >= " + root.getChild(1).getText() + ").\n";
+                    res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName +
+                            " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                            ".\n";
+                    res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                            " >= " + root.getChild(1).getText() + ").\n";
                 }
             } else {
                 if (!pName.equals("")) {
-                    res = res + "?" + parent.replace(" ", "_") + " " + pName + " ?" +
+                    res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName + " ?" +
                             root.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                 }
             }
@@ -318,7 +328,7 @@ public class tTranslator {
         boolean found = false;
         SemanticProperty sp = null;
         Iterator<SemanticProperty> sit;
-        System.out.println(">verificando " + propertyName + " de " + className);
+        //System.out.println(">verificando " + propertyName + " de " + className);
         SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(name);
         if (sc != null) {
             sit = sc.listProperties();
