@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class TemplateGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable
+public class TemplateGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -20,11 +20,6 @@ public class TemplateGroupBase extends org.semanticwb.model.SWBClass implements 
         super(base);
     }
 
-    public static org.semanticwb.model.TemplateGroup getTemplateGroup(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.TemplateGroup)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.TemplateGroup> listTemplateGroups(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -37,15 +32,20 @@ public class TemplateGroupBase extends org.semanticwb.model.SWBClass implements 
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateGroup>(org.semanticwb.model.TemplateGroup.class, it, true);
     }
 
-    public static org.semanticwb.model.TemplateGroup createTemplateGroup(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.TemplateGroup)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.TemplateGroup createTemplateGroup(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.TemplateGroup.createTemplateGroup(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.TemplateGroup getTemplateGroup(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.TemplateGroup)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.TemplateGroup createTemplateGroup(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.TemplateGroup)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeTemplateGroup(String id, org.semanticwb.model.SWBModel model)

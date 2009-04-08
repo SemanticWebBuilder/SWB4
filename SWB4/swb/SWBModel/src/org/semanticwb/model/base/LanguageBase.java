@@ -18,11 +18,6 @@ public class LanguageBase extends org.semanticwb.model.SWBClass implements org.s
         super(base);
     }
 
-    public static org.semanticwb.model.Language getLanguage(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Language)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.Language> listLanguages(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -33,6 +28,11 @@ public class LanguageBase extends org.semanticwb.model.SWBClass implements org.s
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Language>(org.semanticwb.model.Language.class, it, true);
+    }
+
+    public static org.semanticwb.model.Language getLanguage(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Language)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.Language createLanguage(String id, org.semanticwb.model.SWBModel model)

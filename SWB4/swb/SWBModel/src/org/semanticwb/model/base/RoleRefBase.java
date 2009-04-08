@@ -13,11 +13,6 @@ public class RoleRefBase extends org.semanticwb.model.Reference implements org.s
         super(base);
     }
 
-    public static org.semanticwb.model.RoleRef getRoleRef(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.RoleRef)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.RoleRef> listRoleRefs(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -30,15 +25,20 @@ public class RoleRefBase extends org.semanticwb.model.Reference implements org.s
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, it, true);
     }
 
-    public static org.semanticwb.model.RoleRef createRoleRef(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.RoleRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.RoleRef createRoleRef(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.RoleRef.createRoleRef(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.RoleRef getRoleRef(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.RoleRef)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.RoleRef createRoleRef(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.RoleRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeRoleRef(String id, org.semanticwb.model.SWBModel model)

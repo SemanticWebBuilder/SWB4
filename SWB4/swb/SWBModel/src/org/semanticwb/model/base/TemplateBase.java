@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.Calendarable,org.semanticwb.model.Activeable,org.semanticwb.model.Deviceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable
+public class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Deviceable,org.semanticwb.model.Versionable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Calendarable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
@@ -39,11 +39,6 @@ public class TemplateBase extends org.semanticwb.model.SWBClass implements org.s
         super(base);
     }
 
-    public static org.semanticwb.model.Template getTemplate(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Template)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.Template> listTemplates(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -56,15 +51,20 @@ public class TemplateBase extends org.semanticwb.model.SWBClass implements org.s
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Template>(org.semanticwb.model.Template.class, it, true);
     }
 
-    public static org.semanticwb.model.Template createTemplate(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Template)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.Template createTemplate(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.Template.createTemplate(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.Template getTemplate(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Template)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.Template createTemplate(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Template)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeTemplate(String id, org.semanticwb.model.SWBModel model)

@@ -13,11 +13,6 @@ public class UserFavoritesBase extends org.semanticwb.model.SWBClass
         super(base);
     }
 
-    public static org.semanticwb.model.UserFavorites getUserFavorites(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.UserFavorites)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.UserFavorites> listUserFavoritess(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -30,15 +25,20 @@ public class UserFavoritesBase extends org.semanticwb.model.SWBClass
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserFavorites>(org.semanticwb.model.UserFavorites.class, it, true);
     }
 
-    public static org.semanticwb.model.UserFavorites createUserFavorites(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.UserFavorites)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.UserFavorites createUserFavorites(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.UserFavorites.createUserFavorites(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.UserFavorites getUserFavorites(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.UserFavorites)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.UserFavorites createUserFavorites(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.UserFavorites)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeUserFavorites(String id, org.semanticwb.model.SWBModel model)

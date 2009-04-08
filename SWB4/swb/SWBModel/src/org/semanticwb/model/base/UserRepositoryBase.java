@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable
+public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -23,11 +23,6 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
         super(base);
     }
 
-    public static org.semanticwb.model.UserRepository getUserRepository(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.UserRepository)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositorys(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -40,19 +35,41 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository>(org.semanticwb.model.UserRepository.class, it, true);
     }
 
-    public static org.semanticwb.model.UserRepository createUserRepository(String id, org.semanticwb.model.SWBModel model)
+    public static org.semanticwb.model.UserRepository getUserRepository(String id)
     {
-        return (org.semanticwb.model.UserRepository)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+       org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
+       org.semanticwb.model.UserRepository ret=null;
+       org.semanticwb.platform.SemanticModel model=mgr.getModel(id);
+       if(model!=null)
+       {
+           org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(id,sclass));
+           if(obj!=null)
+           {
+               ret=(org.semanticwb.model.UserRepository)obj.createGenericInstance();
+           }
+       }
+       return ret;
     }
 
-    public static void removeUserRepository(String id, org.semanticwb.model.SWBModel model)
+    public static org.semanticwb.model.UserRepository createUserRepository(String id, String namespace)
     {
-        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+        org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
+        org.semanticwb.platform.SemanticModel model=mgr.createModel(id, namespace);
+        return (org.semanticwb.model.UserRepository)model.createGenericObject(model.getObjectUri(id, sclass), sclass);
     }
 
-    public static boolean hasUserRepository(String id, org.semanticwb.model.SWBModel model)
+    public static void removeUserRepository(String id)
     {
-        return (getUserRepository(id, model)!=null);
+       org.semanticwb.model.UserRepository obj=getUserRepository(id);
+       if(obj!=null)
+       {
+           obj.remove();
+       }
+    }
+
+    public static boolean hasUserRepository(String id)
+    {
+        return (getUserRepository(id)!=null);
     }
 
     public java.util.Date getCreated()

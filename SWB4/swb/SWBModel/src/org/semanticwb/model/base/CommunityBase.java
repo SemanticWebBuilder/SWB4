@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class CommunityBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
+public class CommunityBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -19,11 +19,6 @@ public class CommunityBase extends org.semanticwb.model.SWBClass implements org.
         super(base);
     }
 
-    public static org.semanticwb.model.Community getCommunity(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Community)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.Community> listCommunitys(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -34,6 +29,11 @@ public class CommunityBase extends org.semanticwb.model.SWBClass implements org.
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Community>(org.semanticwb.model.Community.class, it, true);
+    }
+
+    public static org.semanticwb.model.Community getCommunity(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Community)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.Community createCommunity(String id, org.semanticwb.model.SWBModel model)

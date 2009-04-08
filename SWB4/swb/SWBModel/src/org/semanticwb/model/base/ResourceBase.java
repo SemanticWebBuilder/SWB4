@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Priorityable,org.semanticwb.model.Indexable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.Calendarable,org.semanticwb.model.Activeable,org.semanticwb.model.Hitable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.XMLConfable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Campable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Referensable
+public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLConfable,org.semanticwb.model.Hitable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Campable,org.semanticwb.model.Priorityable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Calendarable,org.semanticwb.model.XMLable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Indexable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
@@ -55,11 +55,6 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
         super(base);
     }
 
-    public static org.semanticwb.model.Resource getResource(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Resource)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.Resource> listResources(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -72,15 +67,20 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(org.semanticwb.model.Resource.class, it, true);
     }
 
-    public static org.semanticwb.model.Resource createResource(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Resource)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.Resource createResource(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.Resource.createResource(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.Resource getResource(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Resource)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.Resource createResource(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Resource)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeResource(String id, org.semanticwb.model.SWBModel model)

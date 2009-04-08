@@ -19,11 +19,6 @@ public class DeviceBase extends org.semanticwb.model.SWBClass implements org.sem
         super(base);
     }
 
-    public static org.semanticwb.model.Device getDevice(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Device)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.Device> listDevices(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -36,15 +31,20 @@ public class DeviceBase extends org.semanticwb.model.SWBClass implements org.sem
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Device>(org.semanticwb.model.Device.class, it, true);
     }
 
-    public static org.semanticwb.model.Device createDevice(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Device)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.Device createDevice(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.Device.createDevice(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.Device getDevice(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Device)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.Device createDevice(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Device)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeDevice(String id, org.semanticwb.model.SWBModel model)

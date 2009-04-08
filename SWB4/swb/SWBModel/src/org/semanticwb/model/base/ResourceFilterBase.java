@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable
+public class ResourceFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -17,11 +17,6 @@ public class ResourceFilterBase extends org.semanticwb.model.SWBClass implements
         super(base);
     }
 
-    public static org.semanticwb.model.ResourceFilter getResourceFilter(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.ResourceFilter)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.ResourceFilter> listResourceFilters(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -34,15 +29,20 @@ public class ResourceFilterBase extends org.semanticwb.model.SWBClass implements
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceFilter>(org.semanticwb.model.ResourceFilter.class, it, true);
     }
 
-    public static org.semanticwb.model.ResourceFilter createResourceFilter(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.ResourceFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.ResourceFilter createResourceFilter(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.ResourceFilter.createResourceFilter(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.ResourceFilter getResourceFilter(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.ResourceFilter)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.ResourceFilter createResourceFilter(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.ResourceFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeResourceFilter(String id, org.semanticwb.model.SWBModel model)

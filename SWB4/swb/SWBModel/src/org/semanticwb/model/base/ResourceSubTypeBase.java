@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable
+public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -22,11 +22,6 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
         super(base);
     }
 
-    public static org.semanticwb.model.ResourceSubType getResourceSubType(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.ResourceSubType)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.ResourceSubType> listResourceSubTypes(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -37,6 +32,11 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType>(org.semanticwb.model.ResourceSubType.class, it, true);
+    }
+
+    public static org.semanticwb.model.ResourceSubType getResourceSubType(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.ResourceSubType)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.ResourceSubType createResourceSubType(String id, org.semanticwb.model.SWBModel model)

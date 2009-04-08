@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable
+public class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -25,11 +25,6 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
         super(base);
     }
 
-    public static org.semanticwb.model.Role getRole(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Role)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.Role> listRoles(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -42,15 +37,20 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, it, true);
     }
 
-    public static org.semanticwb.model.Role createRole(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Role)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.Role createRole(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.Role.createRole(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.Role getRole(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Role)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.Role createRole(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Role)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeRole(String id, org.semanticwb.model.SWBModel model)

@@ -13,11 +13,6 @@ public class PermissionBase extends org.semanticwb.model.SWBClass implements org
         super(base);
     }
 
-    public static org.semanticwb.model.Permission getPermission(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Permission)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.Permission> listPermissions(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -30,15 +25,20 @@ public class PermissionBase extends org.semanticwb.model.SWBClass implements org
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission>(org.semanticwb.model.Permission.class, it, true);
     }
 
-    public static org.semanticwb.model.Permission createPermission(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Permission)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.model.Permission createPermission(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.model.Permission.createPermission(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.model.Permission getPermission(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Permission)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.Permission createPermission(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Permission)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removePermission(String id, org.semanticwb.model.SWBModel model)
