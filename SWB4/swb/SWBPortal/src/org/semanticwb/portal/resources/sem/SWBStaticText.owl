@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swbstatictext="http://www.semanticwebbuilder.org/portal/resources/StaticText#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.semanticwebbuilder.org/portal/resources/StaticText">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="SWBStaticText">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem.SWBStaticText</swb:className>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
+  </owl:Class>
+  <owl:DatatypeProperty rdf:ID="text">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_text">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <rdfs:label xml:lang="en">Text</rdfs:label>
+        <rdfs:label xml:lang="es">Texto</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#SWBStaticText"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->

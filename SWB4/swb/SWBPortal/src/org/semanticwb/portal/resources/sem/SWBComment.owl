@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swbr_cmt="http://www.semanticwebbuilder.org/portal/resources/SWBComment#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.semanticwebbuilder.org/portal/resources/SWBComment">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="CmtComment">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem.CmtComment</swb:className>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="hasComment">
+    <rdfs:range rdf:resource="#CmtComment"/>
+    <rdfs:domain>
+      <swb:SemanticResource rdf:ID="SWBComment">
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.portal.resources.sem.SWBComment</swb:className>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
