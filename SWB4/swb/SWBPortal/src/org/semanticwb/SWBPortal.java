@@ -27,11 +27,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SessionUser;
+import org.semanticwb.portal.SWBMessageCenter;
 import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBResourceMgr;
 import org.semanticwb.portal.SWBServiceMgr;
 import org.semanticwb.portal.SWBTemplateMgr;
 import org.semanticwb.portal.SWBUserMgr;
+import org.semanticwb.portal.access.SWBAccessIncrement;
+import org.semanticwb.portal.access.SWBAccessLog;
 import org.semanticwb.portal.db.SWBDBAdmLog;
 import org.semanticwb.util.JarFile;
 import org.semanticwb.util.db.GenericDB;
@@ -48,6 +51,9 @@ public class SWBPortal {
     private static SWBTemplateMgr templatemgr = null;
     private static SWBServiceMgr servicemgr = null;
     private static SWBDBAdmLog admlog=null;
+    private static SWBMessageCenter msgcenter=null;
+    private static SWBAccessLog acclog=null;
+    private static SWBAccessIncrement accInc=null;
     private static HashMap<String, SessionUser> m_sessions;
 
     static public synchronized SWBPortal createInstance() {
@@ -191,6 +197,15 @@ public class SWBPortal {
         admlog = new SWBDBAdmLog();
         admlog.init();
 
+        msgcenter = new SWBMessageCenter();
+        msgcenter.init();
+
+        acclog= new SWBAccessLog();
+        acclog.init();
+
+        accInc=new SWBAccessIncrement();
+        accInc.init();
+
         //Inicializa el RuleMgr
         Rule.getRuleMgr();
 
@@ -285,6 +300,21 @@ public class SWBPortal {
     public static SWBDBAdmLog getDBAdmLog()
     {
         return admlog;
+    }
+
+    public static SWBMessageCenter getMessageCenter()
+    {
+        return msgcenter;
+    }
+
+    public static SWBAccessLog getAccessLog()
+    {
+        return acclog;
+    }
+
+    public static SWBAccessIncrement getAccessIncrement()
+    {
+        return accInc;
     }
 
     public static JarFile getAdminFile(String path) {
