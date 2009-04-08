@@ -8,9 +8,6 @@
 package org.semanticwb.portal;
 
 import java.net.*;
-import java.util.*;
-import java.io.*;
-import java.lang.reflect.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -56,7 +53,7 @@ public class SWBMessageServer extends java.lang.Thread
 
     public void run()
     {
-        log.info("server running...");
+        log.info("Message Server Running...");
         DatagramPacket packet = new DatagramPacket(new byte[PKSIZE], PKSIZE);
         while (true)
         {
