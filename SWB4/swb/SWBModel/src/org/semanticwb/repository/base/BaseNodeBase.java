@@ -17,11 +17,6 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
         super(base);
     }
 
-    public static org.semanticwb.repository.BaseNode getBaseNode(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.BaseNode)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodes(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -32,6 +27,11 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode>(org.semanticwb.repository.BaseNode.class, it, true);
+    }
+
+    public static org.semanticwb.repository.BaseNode getBaseNode(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.BaseNode)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.repository.BaseNode createBaseNode(String id, org.semanticwb.model.SWBModel model)

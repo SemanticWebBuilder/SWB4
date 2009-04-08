@@ -11,11 +11,6 @@ public class VersionLabelsBase extends org.semanticwb.repository.BaseNode
         super(base);
     }
 
-    public static org.semanticwb.repository.VersionLabels getVersionLabels(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.VersionLabels)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.repository.VersionLabels> listVersionLabelss(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -26,6 +21,11 @@ public class VersionLabelsBase extends org.semanticwb.repository.BaseNode
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionLabels>(org.semanticwb.repository.VersionLabels.class, it, true);
+    }
+
+    public static org.semanticwb.repository.VersionLabels getVersionLabels(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.VersionLabels)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.repository.VersionLabels createVersionLabels(String id, org.semanticwb.model.SWBModel model)

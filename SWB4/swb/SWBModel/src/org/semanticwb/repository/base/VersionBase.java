@@ -1,7 +1,7 @@
 package org.semanticwb.repository.base;
 
 
-public class VersionBase extends org.semanticwb.repository.BaseNode implements org.semanticwb.repository.Traceable,org.semanticwb.repository.Referenceable
+public class VersionBase extends org.semanticwb.repository.BaseNode implements org.semanticwb.repository.Referenceable,org.semanticwb.repository.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty jcr_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#created");
     public static final org.semanticwb.platform.SemanticClass nt_Version=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#version");
@@ -15,11 +15,6 @@ public class VersionBase extends org.semanticwb.repository.BaseNode implements o
         super(base);
     }
 
-    public static org.semanticwb.repository.Version getVersion(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.Version)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.repository.Version> listVersions(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -30,6 +25,11 @@ public class VersionBase extends org.semanticwb.repository.BaseNode implements o
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version>(org.semanticwb.repository.Version.class, it, true);
+    }
+
+    public static org.semanticwb.repository.Version getVersion(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.Version)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.repository.Version createVersion(String id, org.semanticwb.model.SWBModel model)
