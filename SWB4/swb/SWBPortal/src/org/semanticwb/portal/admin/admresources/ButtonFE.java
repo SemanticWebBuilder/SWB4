@@ -309,7 +309,10 @@ public class ButtonFE extends WBAdmResourceAbs
                     }
                     if(invalidMessage!=null){
                         child.setAttribute("invalidMessage",invalidMessage);
-                    }                   
+                    }
+                    if(value!=null){
+                        child.appendChild(child.getOwnerDocument().createTextNode(value.trim()));
+                    }
                 }
             }
     }
