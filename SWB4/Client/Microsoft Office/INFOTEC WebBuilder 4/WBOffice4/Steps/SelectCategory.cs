@@ -60,18 +60,16 @@ namespace WBOffice4.Steps
             {
                 foreach (RepositoryInfo repository in OfficeApplication.OfficeApplicationProxy.getRepositories())
                 {
-                    TreeNode repositoryNode = root.Nodes.Add(repository.name);
-                    repositoryNode.Tag = repository;
-                    repositoryNode.ImageIndex = 0;
-                    repositoryNode.SelectedImageIndex = 1;
+                    RepositoryNode repositoryNode = new RepositoryNode(repository);
+                    root.Nodes.Add(repositoryNode);                    
                     foreach (CategoryInfo category in OfficeApplication.OfficeApplicationProxy.getCategories(repository.name))
-                    {
-                        TreeNode categoryNode = repositoryNode.Nodes.Add(category.UDDI, category.title,0,1);
-                        categoryNode.ToolTipText = category.description;
-                        categoryNode.Tag = repository;
+                    {                        
+                        CategoryNode categoryNode = new CategoryNode(category, repository);
+                        repositoryNode.Nodes.Add(categoryNode);
                         if (category.childs > 0)
                         {
-                            TreeNode dummyNode = categoryNode.Nodes.Add("");                            
+                            TreeNode dummyNode = new DummyNode();
+                            categoryNode.Nodes.Add(dummyNode);                            
                         }                        
                     }
                 }
@@ -86,18 +84,37 @@ namespace WBOffice4.Steps
             }
 
         }
-        private void addCategory(RepositoryInfo repository, TreeNode parent)
+        private void addCategory(CategoryNode parentcategoryNode)
         {
             try
             {
-                foreach (CategoryInfo category in OfficeApplication.OfficeApplicationProxy.getCategories(repository.name, parent.Name))
-                {
-                    TreeNode categoryNode = parent.Nodes.Add(category.UDDI, category.title,0,1);
-                    categoryNode.ToolTipText = category.description;
-                    categoryNode.Tag = repository;                    
+                foreach (CategoryInfo category in OfficeApplication.OfficeApplicationProxy.getCategories(parentcategoryNode.Repository.name,parentcategoryNode.Category.UDDI))
+                {                    
+                    CategoryNode categoryNode = new CategoryNode(category, parentcategoryNode.Repository);
+                    parentcategoryNode.Nodes.Add(categoryNode);                      
                     if (category.childs > 0)
                     {
-                        TreeNode dummyNode = categoryNode.Nodes.Add("");                        
+                        TreeNode dummyNode = new DummyNode();
+                        categoryNode.Nodes.Add(dummyNode);
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+        private void addCategoryToRepository(RepositoryNode repository)
+        {
+            try
+            {
+                foreach (CategoryInfo category in OfficeApplication.OfficeApplicationProxy.getCategories(repository.Repository.name))
+                {                    
+                    CategoryNode categoryNode = new CategoryNode(category, repository.Repository);
+                    repository.Nodes.Add(categoryNode);
+                    if (category.childs > 0)
+                    {
+                        TreeNode dummyNode = new DummyNode();
+                        categoryNode.Nodes.Add(dummyNode);  
                     }
                 }
             }
@@ -108,27 +125,32 @@ namespace WBOffice4.Steps
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode != null && treeView1.SelectedNode.Name != null)
+            if (treeView1.SelectedNode is CategoryNode || treeView1.SelectedNode is RepositoryNode)
             {
-                FormAddCategory formAddCategory;
-                RepositoryInfo repository;
-                if (treeView1.SelectedNode.Tag != null) // CategoryNode
+                FormAddCategory formAddCategory;                
+                if (treeView1.SelectedNode is CategoryNode) // CategoryNode
                 {
-                    formAddCategory = new FormAddCategory(treeView1.SelectedNode.Tag.ToString(), treeView1.SelectedNode.Name);
-                    repository = (RepositoryInfo)treeView1.SelectedNode.Tag;
+                    CategoryNode categoryNode=(CategoryNode)treeView1.SelectedNode;
+                    formAddCategory = new FormAddCategory(categoryNode.Repository.name,categoryNode.Category.UDDI);                    
+                    DialogResult res = formAddCategory.ShowDialog();
+                    if (res == DialogResult.OK)
+                    {
+                        treeView1.SelectedNode.Nodes.Clear();
+                        addCategory(categoryNode);
+                    }
                 }
-                else // RepositoryNode
+                else
                 {
-                    formAddCategory = new FormAddCategory(treeView1.SelectedNode.Text);
-                    repository = (RepositoryInfo)treeView1.SelectedNode.Tag;
+                    RepositoryNode repositoryNode = (RepositoryNode)treeView1.SelectedNode;
+                    formAddCategory = new FormAddCategory(repositoryNode.Repository.name);                    
+                    DialogResult res = formAddCategory.ShowDialog();
+                    if (res == DialogResult.OK)
+                    {
+                        treeView1.SelectedNode.Nodes.Clear();
+                        addCategoryToRepository(repositoryNode);
+                    }
 
-                }
-                DialogResult res = formAddCategory.ShowDialog();
-                if (res == DialogResult.OK)
-                {
-                    treeView1.SelectedNode.Nodes.Clear();
-                    addCategory(repository, treeView1.SelectedNode);
-                }
+                }               
 
             }
         }
@@ -139,12 +161,12 @@ namespace WBOffice4.Steps
             this.Wizard.Data[REPOSITORY_ID] = null;
             this.toolStripButtonDeleteCategory.Enabled = false;
             this.toolStripButtonAddCategory.Enabled = true;
-            if (e.Node.Name != null) //The node is diferent to Repositories
+            if (treeView1.SelectedNode is CategoryNode || treeView1.SelectedNode is RepositoryNode)
             {
-                if (e.Node.Tag != null) // Node Category
-                {   
-                    this.Wizard.Data[CATEGORY_ID] = e.Node.Name;
-                    this.Wizard.Data[REPOSITORY_ID] = e.Node.Tag;
+                if (treeView1.SelectedNode is CategoryNode)
+                {
+                    this.Wizard.Data[CATEGORY_ID] = ((CategoryNode)treeView1.SelectedNode).Category.UDDI;
+                    this.Wizard.Data[REPOSITORY_ID] = ((CategoryNode)treeView1.SelectedNode).Repository;
                     this.Cursor = Cursors.WaitCursor;
                     try
                     {
@@ -156,7 +178,7 @@ namespace WBOffice4.Steps
                     catch { }
                     this.Cursor = Cursors.Default;
                 }
-                else // Node Repository
+                else
                 {
                     if (e.Node.Nodes.Count == 0)
                     {
@@ -201,13 +223,12 @@ namespace WBOffice4.Steps
 
         private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            if (e.Node.Nodes.Count == 1 && e.Node.Nodes[0].Text == "" && e.Node.Nodes[0].Tag==null)
+            if (e.Node is CategoryNode && e.Node.Nodes.Count==1 && e.Node.Nodes[0] is DummyNode)
             {
                 this.Cursor = Cursors.WaitCursor;
-                RepositoryInfo rep = (RepositoryInfo)e.Node.Tag;
-                TreeNode parent = e.Node;
-                e.Node.Nodes.Clear();                
-                addCategory(rep, e.Node);
+                CategoryNode parent = (CategoryNode)e.Node;
+                e.Node.Nodes.Clear();
+                addCategory(parent);
                 this.Cursor = Cursors.Default;
             }
         }
