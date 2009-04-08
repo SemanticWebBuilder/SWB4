@@ -805,14 +805,14 @@ public class CodeGenerator
             javaClassContent.append("    public static " + fullpathClass + " get" + className + "(String id)" + ENTER);
             javaClassContent.append("    {" + ENTER);
             javaClassContent.append("       org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();"+ ENTER);
-            javaClassContent.append("       org.semanticwb.repository.Workspace ret=null;"+ ENTER);
+            javaClassContent.append("       "+ fullpathClass +" ret=null;"+ ENTER);
             javaClassContent.append("       org.semanticwb.platform.SemanticModel model=mgr.getModel(id);"+ ENTER);
             javaClassContent.append("       if(model!=null)"+ ENTER);
             javaClassContent.append("       {"+ ENTER);
             javaClassContent.append("           org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(id,sclass));"+ ENTER);
             javaClassContent.append("           if(obj!=null)"+ ENTER);
             javaClassContent.append("           {"+ ENTER);
-            javaClassContent.append("               ret=(org.semanticwb.repository.Workspace)obj.createGenericInstance();"+ ENTER);
+            javaClassContent.append("               ret=("+ fullpathClass +")obj.createGenericInstance();"+ ENTER);
             javaClassContent.append("           }"+ ENTER);
             javaClassContent.append("       }"+ ENTER);
             javaClassContent.append("       return ret;"+ ENTER);
