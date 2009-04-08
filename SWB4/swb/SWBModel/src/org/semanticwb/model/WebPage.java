@@ -15,6 +15,7 @@ import org.semanticwb.platform.SemanticObject;
 public class WebPage extends WebPageBase 
 {
     private String siteid=null;
+    private long views=0;
 
     public WebPage(SemanticObject base)
     {
@@ -348,11 +349,33 @@ public class WebPage extends WebPageBase
     public long getDiskUsage()
     {
         return 1000;
-    }     
+    }
 
-    public void incViews()
+    @Override
+    public long getViews()
     {
-        setViews(getViews()+1);
+        if(views==0)views=super.getViews();
+        return views;
+    }
+
+    public boolean incViews()
+    {
+        if(views==0)views=getViews();
+        views+=1;
+        //TODO validar por tiempo
+        return true;
+    }
+    
+    @Override
+    public void setViews(long views)
+    {
+        super.setViews(views);
+        this.views=views;
+    }
+
+    public void updateViews()
+    {
+        setViews(views);
     }
     
 }
