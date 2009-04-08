@@ -24,6 +24,10 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
     private Document m_filter=null;
     private NodeList m_filternode=null;
 
+    private long views=0;
+    private long hits=0;
+
+
     public Resource(SemanticObject base)
     {
         super(base);
@@ -341,14 +345,58 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
         return ret;
     }
 
-    public void incHits()
+    @Override
+    public long getHits()
     {
-        setHits(getHits()+1);
+        if(hits==0)hits=super.getHits();
+        return hits;
     }
 
-    public void incViews()
+    public boolean incHits()
     {
-        setViews(getViews()+1);
+        if(hits==0)hits=getViews();
+        hits+=1;
+        //TODO validar por tiempo
+        return true;
+    }
+
+    @Override
+    public void setHits(long hits)
+    {
+        super.setHits(hits);
+        this.hits=hits;
+    }
+
+    public void updateHits()
+    {
+        setHits(hits);
+    }
+
+    @Override
+    public long getViews()
+    {
+        if(views==0)views=super.getViews();
+        return views;
+    }
+
+    public boolean incViews()
+    {
+        if(views==0)views=getViews();
+        views+=1;
+        //TODO validar por tiempo
+        return true;
+    }
+
+    @Override
+    public void setViews(long views)
+    {
+        super.setViews(views);
+        this.views=views;
+    }
+
+    public void updateViews()
+    {
+        setViews(views);
     }
 
 }
