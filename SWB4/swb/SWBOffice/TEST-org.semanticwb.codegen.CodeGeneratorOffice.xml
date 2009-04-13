@@ -1,0 +1,645 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="VLORENZANA" name="org.semanticwb.codegen.CodeGeneratorOffice" tests="1" time="128.507" timestamp="2009-04-13T21:39:43">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) 2 Runtime Environment, Standard Edition" />
+    <property name="sun.boot.library.path" value="C:\Archivos de programa\Java\jdk1.5.0_17\jre\bin" />
+    <property name="java.vm.version" value="1.5.0_17-b04" />
+    <property name="java.vm.vendor" value="Sun Microsystems Inc." />
+    <property name="java.vendor.url" value="http://java.sun.com/" />
+    <property name="path.separator" value=";" />
+    <property name="java.vm.name" value="Java HotSpot(TM) Client VM" />
+    <property name="file.encoding.pkg" value="sun.io" />
+    <property name="user.country" value="MX" />
+    <property name="sun.java.launcher" value="SUN_STANDARD" />
+    <property name="sun.os.patch.level" value="Service Pack 3" />
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+    <property name="user.dir" value="C:\swb4\SWB4\swb\SWBOffice" />
+    <property name="java.runtime.version" value="1.5.0_17-b04" />
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment" />
+    <property name="java.endorsed.dirs" value="C:\Archivos de programa\Java\jdk1.5.0_17\jre\lib\endorsed" />
+    <property name="os.arch" value="x86" />
+    <property name="java.io.tmpdir" value="C:\DOCUME~1\VICTOR~1.LOR\CONFIG~1\Temp\" />
+    <property name="line.separator" value="
+" />
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc." />
+    <property name="user.variant" value="" />
+    <property name="os.name" value="Windows XP" />
+    <property name="sun.jnu.encoding" value="Cp1252" />
+    <property name="java.library.path" value="C:\Archivos de programa\Java\jdk1.5.0_17\bin;.;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Archivos de programa\Wave Systems Corp\Dell Preboot Manager\Access Client\v5\;C:\Archivos de programa\MySQL\MySQL Server 5.0\bin;C:\Archivos de programa\QuickTime\QTSystem\;C:\Archivos de programa\Microsoft SQL Server\90\Tools\binn\;C:\Archivos de programa\Java\jdk1.5.0_14\bin;C:\Archivos de programa\CollabNet Subversion" />
+    <property name="java.specification.name" value="Java Platform API Specification" />
+    <property name="java.class.version" value="49.0" />
+    <property name="sun.management.compiler" value="HotSpot Client Compiler" />
+    <property name="os.version" value="5.1" />
+    <property name="user.home" value="C:\Documents and Settings\victor.lorenzana" />
+    <property name="user.timezone" value="" />
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob" />
+    <property name="file.encoding" value="Cp1252" />
+    <property name="java.specification.version" value="1.5" />
+    <property name="user.name" value="victor.lorenzana" />
+    <property name="java.class.path" value="C:\Archivos de programa\NetBeans 6.5\java2\ant\patches\72080.jar;C:\Archivos de programa\NetBeans 6.5\java2\ant\patches\ant-42275.jar;C:\Archivos de programa\NetBeans 6.5\java2\ant\lib\ant.jar;C:\Archivos de programa\NetBeans 6.5\java2\ant\lib\ant-junit.jar;C:\swb4\SWB4\swb\SWBBase\build\classes;C:\swb4\SWB4\swb\SWBBase\src;C:\swb4\SWB4\swb\SWBPlatform\build\classes;C:\swb4\SWB4\swb\SWBPlatform\src;C:\swb4\SWB4\swb\lib\servlet.jar;C:\swb4\SWB4\swb\SWBPortal\build\classes;C:\swb4\SWB4\swb\SWBPortal\src;C:\swb4\SWB4\swb\SWBModel\build\classes;C:\swb4\SWB4\swb\SWBModel\src;C:\swb4\SWB4\Client\OpenOffice\OfficeComunicationInterfaces\build\classes;C:\swb4\SWB4\Client\OpenOffice\OfficeComunicationInterfaces\src;C:\swb4\SWB4\swb\lib\jcr-1.0.jar;C:\swb4\SWB4\swb\SWBJCR170\build\classes;C:\swb4\SWB4\swb\SWBJCR170\src;C:\swb4\SWB4\RepositoryManager\build\classes;C:\swb4\SWB4\RepositoryManager\src;C:\swb4\SWB4\Client\XMRPCServer\build\classes;C:\swb4\SWB4\Client\XMRPCServer\src;C:\swb4\SWB4\Client\XMLRPCCommon\build\classes;C:\swb4\SWB4\Client\XMLRPCCommon\src;C:\swb4\SWB4\swb\lib\jena.jar;C:\swb4\SWB4\swb\SWBOffice\build\classes;C:\swb4\SWB4\swb\SWBOffice\src;C:\Archivos de programa\NetBeans 6.5\java2\modules\ext\junit-3.8.2.jar;C:\Archivos de programa\NetBeans 6.5\platform9\modules\ext\junit-4.5.jar;C:\swb4\SWB4\swb\lib\activation-1.0.2.jar;C:\swb4\SWB4\swb\lib\antlrworks-1.2.3.jar;C:\swb4\SWB4\swb\lib\arq.jar;C:\swb4\SWB4\swb\lib\arq_src.jar;C:\swb4\SWB4\swb\lib\arthurdo.jar;C:\swb4\SWB4\swb\lib\bliki-3.0.6.jar;C:\swb4\SWB4\swb\lib\chiba-1.4.0.jar;C:\swb4\SWB4\swb\lib\chiba-web-2.2.0.jar;C:\swb4\SWB4\swb\lib\classes12.jar;C:\swb4\SWB4\swb\lib\commons-beanutils-1.7.jar;C:\swb4\SWB4\swb\lib\commons-codec-1.3.jar;C:\swb4\SWB4\swb\lib\commons-collections-2.1.jar;C:\swb4\SWB4\swb\lib\commons-digester-1.7.jar;C:\swb4\SWB4\swb\lib\commons-email-1.1.jar;C:\swb4\SWB4\swb\lib\commons-fileupload-1.2.1.jar;C:\swb4\SWB4\swb\lib\commons-httpclient-3.0.1.jar;C:\swb4\SWB4\swb\lib\commons-io-1.3.jar;C:\swb4\SWB4\swb\lib\commons-jxpath-1.2-chiba-patched.jar;C:\swb4\SWB4\swb\lib\commons-logging.jar;C:\swb4\SWB4\swb\lib\concurrent.jar;C:\swb4\SWB4\swb\lib\dwr-1.1.1.jar;C:\swb4\SWB4\swb\lib\fileupload-ext.jar;C:\swb4\SWB4\swb\lib\gnu-regexp.jar;C:\swb4\SWB4\swb\lib\hibernate3.jar;C:\swb4\SWB4\swb\lib\hsqldb.jar;C:\swb4\SWB4\swb\lib\icu4j_3_4.jar;C:\swb4\SWB4\swb\lib\informix.jar;C:\swb4\SWB4\swb\lib\iri.jar;C:\swb4\SWB4\swb\lib\isorelax.jar;C:\swb4\SWB4\swb\lib\iText-2.1.5.jar;C:\swb4\SWB4\swb\lib\jasperreports-3.1.4.jar;C:\swb4\SWB4\swb\lib\jaxen-core.jar;C:\swb4\SWB4\swb\lib\jaxen-jdom.jar;C:\swb4\SWB4\swb\lib\jcommon-1.0.9.jar;C:\swb4\SWB4\swb\lib\jdom.jar;C:\swb4\SWB4\swb\lib\jena_src.jar;C:\swb4\SWB4\swb\lib\jfreechart-1.0.0.jar;C:\swb4\SWB4\swb\lib\json.jar;C:\swb4\SWB4\swb\lib\log4j-1.2.15.jar;C:\swb4\SWB4\swb\lib\lucene-core-2.3.1.jar;C:\swb4\SWB4\swb\lib\lucene-snowball-2.3.2.jar;C:\swb4\SWB4\swb\lib\mail-1.3.3.jar;C:\swb4\SWB4\swb\lib\msv.jar;C:\swb4\SWB4\swb\lib\mysql-connector-java-5.0.3-bin.jar;C:\swb4\SWB4\swb\lib\ojmail.jar;C:\swb4\SWB4\swb\lib\PDFBox-0.7.3.jar;C:\swb4\SWB4\swb\lib\plugin.jar;C:\swb4\SWB4\swb\lib\poi-3.2.jar;C:\swb4\SWB4\swb\lib\poi-scratchpad-2.5.1.jar;C:\swb4\SWB4\swb\lib\poi_ppt_2.5.1.jar;C:\swb4\SWB4\swb\lib\portlet-api-2.0.jar;C:\swb4\SWB4\swb\lib\saxon-8.7.jar;C:\swb4\SWB4\swb\lib\saxon-dom-8.7.jar;C:\swb4\SWB4\swb\lib\saxpath.jar;C:\swb4\SWB4\swb\lib\sdb.jar;C:\swb4\SWB4\swb\lib\serializer.jar;C:\swb4\SWB4\swb\lib\spring-sources.jar;C:\swb4\SWB4\swb\lib\spring.jar;C:\swb4\SWB4\swb\lib\tdb-0.7.0.jar;C:\swb4\SWB4\swb\lib\xalan.jar;C:\swb4\SWB4\swb\lib\xercesImpl.jar;C:\swb4\SWB4\swb\lib\xml-apis.jar;C:\swb4\SWB4\swb\SWBOffice\build\test\classes;C:\swb4\SWB4\swb\SWBOffice\test" />
+    <property name="java.vm.specification.version" value="1.0" />
+    <property name="sun.arch.data.model" value="32" />
+    <property name="java.home" value="C:\Archivos de programa\Java\jdk1.5.0_17\jre" />
+    <property name="java.specification.vendor" value="Sun Microsystems Inc." />
+    <property name="user.language" value="es" />
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit" />
+    <property name="java.vm.info" value="mixed mode" />
+    <property name="java.version" value="1.5.0_17" />
+    <property name="java.ext.dirs" value="C:\Archivos de programa\Java\jdk1.5.0_17\jre\lib\ext" />
+    <property name="sun.boot.class.path" value="C:\Archivos de programa\Java\jdk1.5.0_17\jre\lib\rt.jar;C:\Archivos de programa\Java\jdk1.5.0_17\jre\lib\i18n.jar;C:\Archivos de programa\Java\jdk1.5.0_17\jre\lib\sunrsasign.jar;C:\Archivos de programa\Java\jdk1.5.0_17\jre\lib\jsse.jar;C:\Archivos de programa\Java\jdk1.5.0_17\jre\lib\jce.jar;C:\Archivos de programa\Java\jdk1.5.0_17\jre\lib\charsets.jar;C:\Archivos de programa\Java\jdk1.5.0_17\jre\classes" />
+    <property name="java.vendor" value="Sun Microsystems Inc." />
+    <property name="file.separator" value="\" />
+    <property name="java.vendor.url.bug" value="http://java.sun.com/cgi-bin/bugreport.cgi" />
+    <property name="sun.cpu.endian" value="little" />
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+    <property name="sun.desktop" value="windows" />
+    <property name="sun.cpu.isalist" value="pentium_pro+mmx pentium_pro pentium+mmx pentium i486 i386 i86" />
+  </properties>
+  <testcase classname="org.semanticwb.codegen.CodeGeneratorOffice" name="generateOffice" time="121.272" />
+  <system-out><![CDATA[2009-04-13 16:39:43,825 OFF - Initializing SemanticWebBuilder Platform...
+2009-04-13 16:39:43,825 OFF - -->SemanticWebBuilder Version: 4.0.0.0
+2009-04-13 16:39:43,825 OFF - -->Java Version: 1.5.0_17-b04
+2009-04-13 16:39:43,825 OFF - -->Java Memory: 2031616
+2009-04-13 16:39:43,841 INFO - -->File web.properties found...
+2009-04-13 16:39:43,841 OFF - Initializing DBConnectionManager...
+2009-04-13 16:39:43,856 INFO - Registered JDBC driver org.gjt.mm.mysql.Driver
+2009-04-13 16:39:43,872 INFO - Initialized Connection Pool [swb]
+2009-04-13 16:39:44,200 DEBUG - Created a new connection in pool swb
+2009-04-13 16:39:44,200 TRACE - PoolConnection(0,swb):1
+2009-04-13 16:39:44,263 DEBUG - Created a new connection in pool swb
+2009-04-13 16:39:44,263 TRACE - PoolConnection(0,swb):2
+2009-04-13 16:39:44,263 TRACE - close:(1239658784263,swb):2
+2009-04-13 16:39:44,263 INFO - -->Database: MySQL
+2009-04-13 16:39:44,263 TRACE - close:(1239658784200,swb):2
+2009-04-13 16:39:44,294 OFF - Initializing SemanticMgr...
+2009-04-13 16:39:44,294 TRACE - close:(1239658784294,swb):2
+2009-04-13 16:39:44,341 DEBUG - Created a new connection in pool swb
+2009-04-13 16:39:44,341 TRACE - AutoConnection(0,swb):2
+2009-04-13 16:39:44,341 TRACE - close:(1239658784341,swb):2
+2009-04-13 16:39:44,341 TRACE - close:(1239658784342,swb):2
+2009-04-13 16:39:47,138 DEBUG - Loading Model:swb.owl
+2009-04-13 16:39:47,513 DEBUG - Loading Model:swb_rep.owl
+2009-04-13 16:39:47,575 DEBUG - Loading Model:office.owl
+2009-04-13 16:39:47,779 TRACE - SemanticClass:Rule org.semanticwb.model.Rule http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,779 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Rule --> org.semanticwb.model.Rule
+2009-04-13 16:39:47,810 TRACE - SemanticClass:UserGroup org.semanticwb.model.UserGroup http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,810 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#UserGroup --> org.semanticwb.model.UserGroup
+2009-04-13 16:39:47,825 TRACE - SemanticClass:Traceable org.semanticwb.model.Traceable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,825 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Traceable --> org.semanticwb.model.Traceable
+2009-04-13 16:39:47,841 TRACE - SemanticClass:Role org.semanticwb.model.Role http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,841 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Role --> org.semanticwb.model.Role
+2009-04-13 16:39:47,857 TRACE - SemanticClass:Descriptiveable org.semanticwb.model.Descriptiveable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,857 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable --> org.semanticwb.model.Descriptiveable
+2009-04-13 16:39:47,872 TRACE - SemanticClass:PFlow org.semanticwb.model.PFlow http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,872 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#PFlow --> org.semanticwb.model.PFlow
+2009-04-13 16:39:47,888 TRACE - SemanticClass:Versionable org.semanticwb.model.Versionable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,888 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Versionable --> org.semanticwb.model.Versionable
+2009-04-13 16:39:47,904 TRACE - SemanticClass:ResourceType org.semanticwb.model.ResourceType http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,904 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#ResourceType --> org.semanticwb.model.ResourceType
+2009-04-13 16:39:47,919 TRACE - SemanticClass:Model Model http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,919 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Model --> Model
+2009-04-13 16:39:47,919 TRACE - SemanticClass:FormView org.semanticwb.model.FormView http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:47,919 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView --> org.semanticwb.model.FormView
+2009-04-13 16:39:47,935 TRACE - SemanticClass:ResourceSubType org.semanticwb.model.ResourceSubType http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,935 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#ResourceSubType --> org.semanticwb.model.ResourceSubType
+2009-04-13 16:39:47,950 TRACE - SemanticClass:WebPage org.semanticwb.model.WebPage http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,950 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#WebPage --> org.semanticwb.model.WebPage
+2009-04-13 16:39:47,950 TRACE - SemanticClass:UserGroupRefable org.semanticwb.model.UserGroupRefable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,950 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRefable --> org.semanticwb.model.UserGroupRefable
+2009-04-13 16:39:47,966 TRACE - SemanticClass:base org.semanticwb.repository.BaseNode http://www.jcp.org/jcr/nt/1.0# nt
+2009-04-13 16:39:47,966 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#base --> org.semanticwb.repository.BaseNode
+2009-04-13 16:39:47,966 TRACE - SemanticClass:Template org.semanticwb.model.Template http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,966 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Template --> org.semanticwb.model.Template
+2009-04-13 16:39:47,982 TRACE - SemanticClass:Calendarable org.semanticwb.model.Calendarable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,982 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Calendarable --> org.semanticwb.model.Calendarable
+2009-04-13 16:39:47,982 TRACE - SemanticClass:Device org.semanticwb.model.Device http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,982 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Device --> org.semanticwb.model.Device
+2009-04-13 16:39:47,997 TRACE - SemanticClass:Resource org.semanticwb.model.Resource http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,997 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Resource --> org.semanticwb.model.Resource
+2009-04-13 16:39:47,997 TRACE - SemanticClass:Campable org.semanticwb.model.Campable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:47,997 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Campable --> org.semanticwb.model.Campable
+2009-04-13 16:39:48,013 TRACE - SemanticClass:TemplateGroup org.semanticwb.model.TemplateGroup http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,013 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup --> org.semanticwb.model.TemplateGroup
+2009-04-13 16:39:48,029 TRACE - SemanticClass:Hitable org.semanticwb.model.Hitable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,029 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Hitable --> org.semanticwb.model.Hitable
+2009-04-13 16:39:48,044 TRACE - SemanticClass:XMLable org.semanticwb.model.XMLable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,044 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#XMLable --> org.semanticwb.model.XMLable
+2009-04-13 16:39:48,044 TRACE - SemanticClass:XMLConfable org.semanticwb.model.XMLConfable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,044 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#XMLConfable --> org.semanticwb.model.XMLConfable
+2009-04-13 16:39:48,060 TRACE - SemanticClass:Trashable org.semanticwb.model.Trashable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,060 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Trashable --> org.semanticwb.model.Trashable
+2009-04-13 16:39:48,075 TRACE - SemanticClass:Activeable org.semanticwb.model.Activeable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,075 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Activeable --> org.semanticwb.model.Activeable
+2009-04-13 16:39:48,075 TRACE - SemanticClass:Localeable org.semanticwb.model.Localeable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,075 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Localeable --> org.semanticwb.model.Localeable
+2009-04-13 16:39:48,091 TRACE - SemanticClass:Viewable org.semanticwb.model.Viewable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,091 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Viewable --> org.semanticwb.model.Viewable
+2009-04-13 16:39:48,107 TRACE - SemanticClass:Indexable org.semanticwb.model.Indexable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,107 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Indexable --> org.semanticwb.model.Indexable
+2009-04-13 16:39:48,122 TRACE - SemanticClass:Priorityable org.semanticwb.model.Priorityable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,122 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Priorityable --> org.semanticwb.model.Priorityable
+2009-04-13 16:39:48,122 TRACE - SemanticClass:RoleRefable org.semanticwb.model.RoleRefable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,122 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#RoleRefable --> org.semanticwb.model.RoleRefable
+2009-04-13 16:39:48,138 TRACE - SemanticClass:RuleRefable org.semanticwb.model.RuleRefable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,138 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#RuleRefable --> org.semanticwb.model.RuleRefable
+2009-04-13 16:39:48,154 TRACE - SemanticClass:Deviceable org.semanticwb.model.Deviceable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,154 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Deviceable --> org.semanticwb.model.Deviceable
+2009-04-13 16:39:48,169 TRACE - SemanticClass:TemplateRefable org.semanticwb.model.TemplateRefable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,200 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#TemplateRefable --> org.semanticwb.model.TemplateRefable
+2009-04-13 16:39:48,216 TRACE - SemanticClass:PFlowRefable org.semanticwb.model.PFlowRefable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,216 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#PFlowRefable --> org.semanticwb.model.PFlowRefable
+2009-04-13 16:39:48,216 TRACE - SemanticClass:Undeleteable org.semanticwb.model.Undeleteable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,216 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Undeleteable --> org.semanticwb.model.Undeleteable
+2009-04-13 16:39:48,232 TRACE - SemanticClass:Resourceable org.semanticwb.model.Resourceable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,232 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Resourceable --> org.semanticwb.model.Resourceable
+2009-04-13 16:39:48,247 TRACE - SemanticClass:Hiddenable org.semanticwb.model.Hiddenable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,247 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Hiddenable --> org.semanticwb.model.Hiddenable
+2009-04-13 16:39:48,263 TRACE - SemanticClass:Class Class http://www.w3.org/2002/07/owl# owl
+2009-04-13 16:39:48,263 TRACE - Registering SemanticClass:http://www.w3.org/2002/07/owl#Class --> Class
+2009-04-13 16:39:48,279 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Rule --> org.semanticwb.model.Rule
+2009-04-13 16:39:48,279 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#WebPage --> org.semanticwb.model.WebPage
+2009-04-13 16:39:48,279 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Traceable --> org.semanticwb.model.Traceable
+2009-04-13 16:39:48,279 TRACE - SemanticClass:DisplayProperty org.semanticwb.model.DisplayProperty http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,279 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty --> org.semanticwb.model.DisplayProperty
+2009-04-13 16:39:48,294 TRACE - SemanticClass:Sortable org.semanticwb.model.Sortable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,294 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Sortable --> org.semanticwb.model.Sortable
+2009-04-13 16:39:48,294 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty --> org.semanticwb.model.DisplayProperty
+2009-04-13 16:39:48,310 TRACE - SemanticClass:SWBInterface org.semanticwb.model.SWBInterface http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,310 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface --> org.semanticwb.model.SWBInterface
+2009-04-13 16:39:48,310 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface --> org.semanticwb.model.SWBInterface
+2009-04-13 16:39:48,310 TRACE - SemanticClass:FormViewRef org.semanticwb.model.FormViewRef http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,310 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef --> org.semanticwb.model.FormViewRef
+2009-04-13 16:39:48,325 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef --> org.semanticwb.model.FormViewRef
+2009-04-13 16:39:48,325 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#TemplateRefable --> org.semanticwb.model.TemplateRefable
+2009-04-13 16:39:48,325 TRACE - SemanticClass:PFlowInstance org.semanticwb.model.PFlowInstance http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,325 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#PFlowInstance --> org.semanticwb.model.PFlowInstance
+2009-04-13 16:39:48,325 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#PFlowInstance --> org.semanticwb.model.PFlowInstance
+2009-04-13 16:39:48,325 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Resourceable --> org.semanticwb.model.Resourceable
+2009-04-13 16:39:48,325 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Calendarable --> org.semanticwb.model.Calendarable
+2009-04-13 16:39:48,341 TRACE - SemanticClass:SecurityQuestion org.semanticwb.model.SecurityQuestion http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,341 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#SecurityQuestion --> org.semanticwb.model.SecurityQuestion
+2009-04-13 16:39:48,341 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#SecurityQuestion --> org.semanticwb.model.SecurityQuestion
+2009-04-13 16:39:48,341 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable --> org.semanticwb.model.Descriptiveable
+2009-04-13 16:39:48,341 TRACE - SemanticClass:TextArea org.semanticwb.model.TextArea http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,341 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea --> org.semanticwb.model.TextArea
+2009-04-13 16:39:48,357 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea --> org.semanticwb.model.TextArea
+2009-04-13 16:39:48,357 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#ResourceSubType --> org.semanticwb.model.ResourceSubType
+2009-04-13 16:39:48,357 TRACE - SemanticClass:UserGroupable org.semanticwb.model.UserGroupable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,357 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable --> org.semanticwb.model.UserGroupable
+2009-04-13 16:39:48,357 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable --> org.semanticwb.model.UserGroupable
+2009-04-13 16:39:48,357 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Resource --> org.semanticwb.model.Resource
+2009-04-13 16:39:48,357 TRACE - SemanticClass:Roleable org.semanticwb.model.Roleable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,357 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Roleable --> org.semanticwb.model.Roleable
+2009-04-13 16:39:48,372 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Roleable --> org.semanticwb.model.Roleable
+2009-04-13 16:39:48,372 TRACE - SemanticClass:SWBClass org.semanticwb.model.SWBClass http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,372 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#SWBClass --> org.semanticwb.model.SWBClass
+2009-04-13 16:39:48,388 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#SWBClass --> org.semanticwb.model.SWBClass
+2009-04-13 16:39:48,388 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#PFlow --> org.semanticwb.model.PFlow
+2009-04-13 16:39:48,388 TRACE - SemanticClass:Community org.semanticwb.model.Community http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,388 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Community --> org.semanticwb.model.Community
+2009-04-13 16:39:48,388 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Community --> org.semanticwb.model.Community
+2009-04-13 16:39:48,388 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Versionable --> org.semanticwb.model.Versionable
+2009-04-13 16:39:48,388 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#XMLConfable --> org.semanticwb.model.XMLConfable
+2009-04-13 16:39:48,404 TRACE - SemanticClass:Inheritable org.semanticwb.model.Inheritable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,404 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Inheritable --> org.semanticwb.model.Inheritable
+2009-04-13 16:39:48,404 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Inheritable --> org.semanticwb.model.Inheritable
+2009-04-13 16:39:48,404 TRACE - SemanticClass:RuleRef org.semanticwb.model.RuleRef http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,404 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#RuleRef --> org.semanticwb.model.RuleRef
+2009-04-13 16:39:48,419 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#RuleRef --> org.semanticwb.model.RuleRef
+2009-04-13 16:39:48,419 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Trashable --> org.semanticwb.model.Trashable
+2009-04-13 16:39:48,419 TRACE - SemanticClass:HtmlElement org.semanticwb.model.HtmlElement http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,419 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#HtmlElement --> org.semanticwb.model.HtmlElement
+2009-04-13 16:39:48,419 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#HtmlElement --> org.semanticwb.model.HtmlElement
+2009-04-13 16:39:48,419 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#PFlowRefable --> org.semanticwb.model.PFlowRefable
+2009-04-13 16:39:48,419 TRACE - SemanticClass:SWBFormElement org.semanticwb.model.SWBFormElement http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,419 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement --> org.semanticwb.model.SWBFormElement
+2009-04-13 16:39:48,435 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement --> org.semanticwb.model.SWBFormElement
+2009-04-13 16:39:48,435 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup --> org.semanticwb.model.TemplateGroup
+2009-04-13 16:39:48,435 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Deviceable --> org.semanticwb.model.Deviceable
+2009-04-13 16:39:48,435 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Viewable --> org.semanticwb.model.Viewable
+2009-04-13 16:39:48,435 TRACE - SemanticClass:SelectOne org.semanticwb.model.SelectOne http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,435 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne --> org.semanticwb.model.SelectOne
+2009-04-13 16:39:48,435 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne --> org.semanticwb.model.SelectOne
+2009-04-13 16:39:48,435 TRACE - SemanticClass:ResourceRef org.semanticwb.model.ResourceRef http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,435 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#ResourceRef --> org.semanticwb.model.ResourceRef
+2009-04-13 16:39:48,450 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#ResourceRef --> org.semanticwb.model.ResourceRef
+2009-04-13 16:39:48,450 TRACE - SemanticClass:Camp org.semanticwb.model.Camp http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,450 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Camp --> org.semanticwb.model.Camp
+2009-04-13 16:39:48,466 TRACE - SemanticClass:Ruleable org.semanticwb.model.Ruleable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,466 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Ruleable --> org.semanticwb.model.Ruleable
+2009-04-13 16:39:48,466 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Camp --> org.semanticwb.model.Camp
+2009-04-13 16:39:48,482 TRACE - SemanticClass:ObjectBehavior org.semanticwb.model.ObjectBehavior http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,482 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior --> org.semanticwb.model.ObjectBehavior
+2009-04-13 16:39:48,482 TRACE - SemanticClass:Iconable org.semanticwb.model.Iconable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,482 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Iconable --> org.semanticwb.model.Iconable
+2009-04-13 16:39:48,497 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior --> org.semanticwb.model.ObjectBehavior
+2009-04-13 16:39:48,497 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Ruleable --> org.semanticwb.model.Ruleable
+2009-04-13 16:39:48,497 TRACE - SemanticClass:Dns org.semanticwb.model.Dns http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,497 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Dns --> org.semanticwb.model.Dns
+2009-04-13 16:39:48,513 TRACE - SemanticClass:WebPageable org.semanticwb.model.WebPageable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,513 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#WebPageable --> org.semanticwb.model.WebPageable
+2009-04-13 16:39:48,513 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Dns --> org.semanticwb.model.Dns
+2009-04-13 16:39:48,513 TRACE - SemanticClass:WebSite org.semanticwb.model.WebSite http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,513 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#WebSite --> org.semanticwb.model.WebSite
+2009-04-13 16:39:48,529 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#WebSite --> org.semanticwb.model.WebSite
+2009-04-13 16:39:48,529 TRACE - SemanticClass:UserGroupRef org.semanticwb.model.UserGroupRef http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,529 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef --> org.semanticwb.model.UserGroupRef
+2009-04-13 16:39:48,529 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef --> org.semanticwb.model.UserGroupRef
+2009-04-13 16:39:48,544 TRACE - SemanticClass:PFlowable org.semanticwb.model.PFlowable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,544 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#PFlowable --> org.semanticwb.model.PFlowable
+2009-04-13 16:39:48,544 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#PFlowable --> org.semanticwb.model.PFlowable
+2009-04-13 16:39:48,544 TRACE - SemanticClass:Filterable org.semanticwb.model.Filterable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,544 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Filterable --> org.semanticwb.model.Filterable
+2009-04-13 16:39:48,544 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Filterable --> org.semanticwb.model.Filterable
+2009-04-13 16:39:48,544 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Localeable --> org.semanticwb.model.Localeable
+2009-04-13 16:39:48,544 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#RuleRefable --> org.semanticwb.model.RuleRefable
+2009-04-13 16:39:48,560 TRACE - SemanticClass:HerarquicalNode org.semanticwb.model.HerarquicalNode http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,560 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode --> org.semanticwb.model.HerarquicalNode
+2009-04-13 16:39:48,560 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode --> org.semanticwb.model.HerarquicalNode
+2009-04-13 16:39:48,560 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Campable --> org.semanticwb.model.Campable
+2009-04-13 16:39:48,560 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Activeable --> org.semanticwb.model.Activeable
+2009-04-13 16:39:48,560 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRefable --> org.semanticwb.model.UserGroupRefable
+2009-04-13 16:39:48,560 TRACE - SemanticClass:ResourceRefable org.semanticwb.model.ResourceRefable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,560 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#ResourceRefable --> org.semanticwb.model.ResourceRefable
+2009-04-13 16:39:48,576 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#ResourceRefable --> org.semanticwb.model.ResourceRefable
+2009-04-13 16:39:48,576 TRACE - SemanticClass:UserFavorites org.semanticwb.model.UserFavorites http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,576 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#UserFavorites --> org.semanticwb.model.UserFavorites
+2009-04-13 16:39:48,576 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#UserFavorites --> org.semanticwb.model.UserFavorites
+2009-04-13 16:39:48,576 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#XMLable --> org.semanticwb.model.XMLable
+2009-04-13 16:39:48,576 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Iconable --> org.semanticwb.model.Iconable
+2009-04-13 16:39:48,576 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Priorityable --> org.semanticwb.model.Priorityable
+2009-04-13 16:39:48,591 TRACE - SemanticClass:Permission org.semanticwb.model.Permission http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,591 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Permission --> org.semanticwb.model.Permission
+2009-04-13 16:39:48,591 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Permission --> org.semanticwb.model.Permission
+2009-04-13 16:39:48,591 TRACE - SemanticClass:IPFilter org.semanticwb.model.IPFilter http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,591 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#IPFilter --> org.semanticwb.model.IPFilter
+2009-04-13 16:39:48,607 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#IPFilter --> org.semanticwb.model.IPFilter
+2009-04-13 16:39:48,607 TRACE - SemanticClass:CodeEditor org.semanticwb.model.CodeEditor http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,607 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#CodeEditor --> org.semanticwb.model.CodeEditor
+2009-04-13 16:39:48,607 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#CodeEditor --> org.semanticwb.model.CodeEditor
+2009-04-13 16:39:48,607 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Template --> org.semanticwb.model.Template
+2009-04-13 16:39:48,622 TRACE - SemanticClass:ObjectAction org.semanticwb.model.ObjectAction http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,622 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectAction --> org.semanticwb.model.ObjectAction
+2009-04-13 16:39:48,622 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectAction --> org.semanticwb.model.ObjectAction
+2009-04-13 16:39:48,638 TRACE - SemanticClass:RichText org.semanticwb.model.RichText http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,638 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichText --> org.semanticwb.model.RichText
+2009-04-13 16:39:48,638 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichText --> org.semanticwb.model.RichText
+2009-04-13 16:39:48,638 TRACE - SemanticClass:FileUpload org.semanticwb.model.FileUpload http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,638 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload --> org.semanticwb.model.FileUpload
+2009-04-13 16:39:48,638 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload --> org.semanticwb.model.FileUpload
+2009-04-13 16:39:48,638 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView --> org.semanticwb.model.FormView
+2009-04-13 16:39:48,654 TRACE - SemanticClass:TemplateRef org.semanticwb.model.TemplateRef http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,654 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef --> org.semanticwb.model.TemplateRef
+2009-04-13 16:39:48,654 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef --> org.semanticwb.model.TemplateRef
+2009-04-13 16:39:48,654 TRACE - SemanticClass:SelectTree org.semanticwb.model.SelectTree http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,654 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree --> org.semanticwb.model.SelectTree
+2009-04-13 16:39:48,669 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree --> org.semanticwb.model.SelectTree
+2009-04-13 16:39:48,669 TRACE - SemanticClass:PFlowRef org.semanticwb.model.PFlowRef http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,669 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef --> org.semanticwb.model.PFlowRef
+2009-04-13 16:39:48,669 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef --> org.semanticwb.model.PFlowRef
+2009-04-13 16:39:48,685 TRACE - SemanticClass:VersionInfo org.semanticwb.model.VersionInfo http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,685 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo --> org.semanticwb.model.VersionInfo
+2009-04-13 16:39:48,685 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo --> org.semanticwb.model.VersionInfo
+2009-04-13 16:39:48,685 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#WebPageable --> org.semanticwb.model.WebPageable
+2009-04-13 16:39:48,685 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Undeleteable --> org.semanticwb.model.Undeleteable
+2009-04-13 16:39:48,685 TRACE - SemanticClass:MenuItem org.semanticwb.model.MenuItem http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,685 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem --> org.semanticwb.model.MenuItem
+2009-04-13 16:39:48,701 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem --> org.semanticwb.model.MenuItem
+2009-04-13 16:39:48,701 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Hitable --> org.semanticwb.model.Hitable
+2009-04-13 16:39:48,701 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#UserGroup --> org.semanticwb.model.UserGroup
+2009-04-13 16:39:48,701 TRACE - SemanticClass:PropertyGroup org.semanticwb.model.PropertyGroup http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,701 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#PropertyGroup --> org.semanticwb.model.PropertyGroup
+2009-04-13 16:39:48,716 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#PropertyGroup --> org.semanticwb.model.PropertyGroup
+2009-04-13 16:39:48,716 TRACE - SemanticClass:Text org.semanticwb.model.Text http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,716 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#Text --> org.semanticwb.model.Text
+2009-04-13 16:39:48,716 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#Text --> org.semanticwb.model.Text
+2009-04-13 16:39:48,716 TRACE - SemanticClass:Templateable org.semanticwb.model.Templateable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,716 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Templateable --> org.semanticwb.model.Templateable
+2009-04-13 16:39:48,732 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Templateable --> org.semanticwb.model.Templateable
+2009-04-13 16:39:48,732 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Hiddenable --> org.semanticwb.model.Hiddenable
+2009-04-13 16:39:48,732 TRACE - SemanticClass:Referensable org.semanticwb.model.Referensable http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,732 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Referensable --> org.semanticwb.model.Referensable
+2009-04-13 16:39:48,732 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Referensable --> org.semanticwb.model.Referensable
+2009-04-13 16:39:48,747 TRACE - SemanticClass:DisplayObject org.semanticwb.model.DisplayObject http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,747 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject --> org.semanticwb.model.DisplayObject
+2009-04-13 16:39:48,747 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject --> org.semanticwb.model.DisplayObject
+2009-04-13 16:39:48,747 TRACE - SemanticClass:ResourceFilter org.semanticwb.model.ResourceFilter http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,747 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter --> org.semanticwb.model.ResourceFilter
+2009-04-13 16:39:48,747 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter --> org.semanticwb.model.ResourceFilter
+2009-04-13 16:39:48,763 TRACE - SemanticClass:Calendar org.semanticwb.model.Calendar http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,763 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Calendar --> org.semanticwb.model.Calendar
+2009-04-13 16:39:48,763 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Calendar --> org.semanticwb.model.Calendar
+2009-04-13 16:39:48,763 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Indexable --> org.semanticwb.model.Indexable
+2009-04-13 16:39:48,763 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Sortable --> org.semanticwb.model.Sortable
+2009-04-13 16:39:48,779 TRACE - SemanticClass:User org.semanticwb.model.User http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,779 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#User --> org.semanticwb.model.User
+2009-04-13 16:39:48,779 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#User --> org.semanticwb.model.User
+2009-04-13 16:39:48,779 TRACE - SemanticClass:Language org.semanticwb.model.Language http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,779 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Language --> org.semanticwb.model.Language
+2009-04-13 16:39:48,794 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Language --> org.semanticwb.model.Language
+2009-04-13 16:39:48,794 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Device --> org.semanticwb.model.Device
+2009-04-13 16:39:48,794 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Role --> org.semanticwb.model.Role
+2009-04-13 16:39:48,794 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#ResourceType --> org.semanticwb.model.ResourceType
+2009-04-13 16:39:48,794 TRACE - SemanticClass:RoleRef org.semanticwb.model.RoleRef http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,794 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#RoleRef --> org.semanticwb.model.RoleRef
+2009-04-13 16:39:48,794 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#RoleRef --> org.semanticwb.model.RoleRef
+2009-04-13 16:39:48,810 TRACE - SemanticClass:SWBModel org.semanticwb.model.SWBModel http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,810 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#SWBModel --> org.semanticwb.model.SWBModel
+2009-04-13 16:39:48,810 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#SWBModel --> org.semanticwb.model.SWBModel
+2009-04-13 16:39:48,810 TRACE - SemanticClass:SWBSemanticResource org.semanticwb.model.SWBPortalElement http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,810 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource --> org.semanticwb.model.SWBPortalElement
+2009-04-13 16:39:48,810 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource --> org.semanticwb.model.SWBPortalElement
+2009-04-13 16:39:48,826 TRACE - SemanticClass:UserRepository org.semanticwb.model.UserRepository http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,826 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#UserRepository --> org.semanticwb.model.UserRepository
+2009-04-13 16:39:48,826 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#UserRepository --> org.semanticwb.model.UserRepository
+2009-04-13 16:39:48,826 TRACE - SemanticClass:AdminFilter org.semanticwb.model.AdminFilter http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,826 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter --> org.semanticwb.model.AdminFilter
+2009-04-13 16:39:48,841 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter --> org.semanticwb.model.AdminFilter
+2009-04-13 16:39:48,841 TRACE - SemanticClass:Reference org.semanticwb.model.Reference http://www.semanticwebbuilder.org/swb4/ontology# swb
+2009-04-13 16:39:48,841 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Reference --> org.semanticwb.model.Reference
+2009-04-13 16:39:48,841 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#Reference --> org.semanticwb.model.Reference
+2009-04-13 16:39:48,841 TRACE - SemanticClass:PasswordUpdate org.semanticwb.model.PasswordUpdate http://www.semanticwebbuilder.org/swb4/xforms/ontology# swbxf
+2009-04-13 16:39:48,841 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#PasswordUpdate --> org.semanticwb.model.PasswordUpdate
+2009-04-13 16:39:48,857 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/xforms/ontology#PasswordUpdate --> org.semanticwb.model.PasswordUpdate
+2009-04-13 16:39:48,857 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/ontology#RoleRefable --> org.semanticwb.model.RoleRefable
+2009-04-13 16:39:48,857 TRACE - SemanticClass:resource org.semanticwb.repository.Resource http://www.jcp.org/jcr/nt/1.0# nt
+2009-04-13 16:39:48,857 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#resource --> org.semanticwb.repository.Resource
+2009-04-13 16:39:48,857 TRACE - SemanticClass:referenceable org.semanticwb.repository.Referenceable http://www.jcp.org/jcr/mix/1.0# mix
+2009-04-13 16:39:48,872 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/mix/1.0#referenceable --> org.semanticwb.repository.Referenceable
+2009-04-13 16:39:48,872 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#resource --> org.semanticwb.repository.Resource
+2009-04-13 16:39:48,872 TRACE - SemanticClass:Nameable org.semanticwb.repository.Nameable http://www.semanticwebbuilder.org/swb4/repository# swbrep
+2009-04-13 16:39:48,872 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#Nameable --> org.semanticwb.repository.Nameable
+2009-04-13 16:39:48,872 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#Nameable --> org.semanticwb.repository.Nameable
+2009-04-13 16:39:48,888 TRACE - SemanticClass:versionLabels org.semanticwb.repository.VersionLabels http://www.jcp.org/jcr/nt/1.0# nt
+2009-04-13 16:39:48,888 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#versionLabels --> org.semanticwb.repository.VersionLabels
+2009-04-13 16:39:48,888 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#versionLabels --> org.semanticwb.repository.VersionLabels
+2009-04-13 16:39:48,888 TRACE - SemanticClass:versionable org.semanticwb.repository.Versionable http://www.jcp.org/jcr/mix/1.0# mix
+2009-04-13 16:39:48,888 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/mix/1.0#versionable --> org.semanticwb.repository.Versionable
+2009-04-13 16:39:48,904 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/mix/1.0#versionable --> org.semanticwb.repository.Versionable
+2009-04-13 16:39:48,904 TRACE - SemanticClass:hierarchyNode org.semanticwb.repository.HierarchyNode http://www.jcp.org/jcr/nt/1.0# nt
+2009-04-13 16:39:48,904 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#hierarchyNode --> org.semanticwb.repository.HierarchyNode
+2009-04-13 16:39:48,904 TRACE - SemanticClass:Traceable org.semanticwb.repository.Traceable http://www.semanticwebbuilder.org/swb4/repository# swbrep
+2009-04-13 16:39:48,904 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#Traceable --> org.semanticwb.repository.Traceable
+2009-04-13 16:39:48,919 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#hierarchyNode --> org.semanticwb.repository.HierarchyNode
+2009-04-13 16:39:48,919 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#base --> org.semanticwb.repository.BaseNode
+2009-04-13 16:39:48,919 TRACE - SemanticClass:unstructured org.semanticwb.repository.Unstructured http://www.jcp.org/jcr/nt/1.0# nt
+2009-04-13 16:39:48,919 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#unstructured --> org.semanticwb.repository.Unstructured
+2009-04-13 16:39:48,919 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#unstructured --> org.semanticwb.repository.Unstructured
+2009-04-13 16:39:48,935 TRACE - SemanticClass:frozenNode org.semanticwb.repository.FrozenNode http://www.jcp.org/jcr/nt/1.0# nt
+2009-04-13 16:39:48,935 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#frozenNode --> org.semanticwb.repository.FrozenNode
+2009-04-13 16:39:48,935 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#frozenNode --> org.semanticwb.repository.FrozenNode
+2009-04-13 16:39:48,935 TRACE - SemanticClass:propertyDefinition org.semanticwb.repository.PropertyDefinition http://www.jcp.org/jcr/nt/1.0# nt
+2009-04-13 16:39:48,935 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#propertyDefinition --> org.semanticwb.repository.PropertyDefinition
+2009-04-13 16:39:48,951 TRACE - SemanticClass:PropertyDefinition org.semanticwb.repository.PropertyDefinition http://www.semanticwebbuilder.org/swb4/repository# swbrep
+2009-04-13 16:39:48,951 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#PropertyDefinition --> org.semanticwb.repository.PropertyDefinition
+2009-04-13 16:39:49,029 TRACE - SemanticClass:CommonPropertiesforDefinition org.semanticwb.repository.CommonPropertiesforDefinition http://www.semanticwebbuilder.org/swb4/repository# swbrep
+2009-04-13 16:39:49,029 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#CommonPropertiesforDefinition --> org.semanticwb.repository.CommonPropertiesforDefinition
+2009-04-13 16:39:49,029 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#propertyDefinition --> org.semanticwb.repository.PropertyDefinition
+2009-04-13 16:39:49,029 TRACE - SemanticClass:version org.semanticwb.repository.Version http://www.jcp.org/jcr/nt/1.0# nt
+2009-04-13 16:39:49,029 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#version --> org.semanticwb.repository.Version
+2009-04-13 16:39:49,044 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#version --> org.semanticwb.repository.Version
+2009-04-13 16:39:49,044 TRACE - SemanticClass:Workspace org.semanticwb.repository.Workspace http://www.semanticwebbuilder.org/swb4/repository# swbrep
+2009-04-13 16:39:49,044 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#Workspace --> org.semanticwb.repository.Workspace
+2009-04-13 16:39:49,044 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#Workspace --> org.semanticwb.repository.Workspace
+2009-04-13 16:39:49,060 TRACE - SemanticClass:file org.semanticwb.repository.File http://www.jcp.org/jcr/nt/1.0# nt
+2009-04-13 16:39:49,060 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#file --> org.semanticwb.repository.File
+2009-04-13 16:39:49,060 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#file --> org.semanticwb.repository.File
+2009-04-13 16:39:49,060 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#Traceable --> org.semanticwb.repository.Traceable
+2009-04-13 16:39:49,060 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/mix/1.0#referenceable --> org.semanticwb.repository.Referenceable
+2009-04-13 16:39:49,060 TRACE - SemanticClass:ChildNodeDefinition org.semanticwb.repository.ChildNodeDefinition http://www.semanticwebbuilder.org/swb4/repository# swbrep
+2009-04-13 16:39:49,060 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#ChildNodeDefinition --> org.semanticwb.repository.ChildNodeDefinition
+2009-04-13 16:39:49,076 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#ChildNodeDefinition --> org.semanticwb.repository.ChildNodeDefinition
+2009-04-13 16:39:49,076 TRACE - SemanticClass:childNodeDefinition org.semanticwb.repository.ChildNodeDefinition http://www.jcp.org/jcr/nt/1.0# nt
+2009-04-13 16:39:49,076 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#childNodeDefinition --> org.semanticwb.repository.ChildNodeDefinition
+2009-04-13 16:39:49,076 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#childNodeDefinition --> org.semanticwb.repository.ChildNodeDefinition
+2009-04-13 16:39:49,091 TRACE - SemanticClass:folder org.semanticwb.repository.Folder http://www.jcp.org/jcr/nt/1.0# nt
+2009-04-13 16:39:49,091 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#folder --> org.semanticwb.repository.Folder
+2009-04-13 16:39:49,091 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#folder --> org.semanticwb.repository.Folder
+2009-04-13 16:39:49,091 TRACE - SemanticClass:lockable org.semanticwb.repository.Lockable http://www.jcp.org/jcr/mix/1.0# mix
+2009-04-13 16:39:49,091 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/mix/1.0#lockable --> org.semanticwb.repository.Lockable
+2009-04-13 16:39:49,091 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/mix/1.0#lockable --> org.semanticwb.repository.Lockable
+2009-04-13 16:39:49,091 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#CommonPropertiesforDefinition --> org.semanticwb.repository.CommonPropertiesforDefinition
+2009-04-13 16:39:49,091 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#PropertyDefinition --> org.semanticwb.repository.PropertyDefinition
+2009-04-13 16:39:49,107 TRACE - SemanticClass:ClassDefinition org.semanticwb.repository.ClassDefinition http://www.semanticwebbuilder.org/swb4/repository# swbrep
+2009-04-13 16:39:49,107 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#ClassDefinition --> org.semanticwb.repository.ClassDefinition
+2009-04-13 16:39:49,107 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#ClassDefinition --> org.semanticwb.repository.ClassDefinition
+2009-04-13 16:39:49,107 TRACE - SemanticClass:versionHistory org.semanticwb.repository.VersionHistory http://www.jcp.org/jcr/nt/1.0# nt
+2009-04-13 16:39:49,107 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#versionHistory --> org.semanticwb.repository.VersionHistory
+2009-04-13 16:39:49,122 TRACE - Registering SemanticClass:http://www.jcp.org/jcr/nt/1.0#versionHistory --> org.semanticwb.repository.VersionHistory
+2009-04-13 16:39:49,122 TRACE - SemanticClass:Articulo org.semanticwb.repository.office.Articulo http://www.semanticwb.org.mx/swb4/content# cm
+2009-04-13 16:39:49,122 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#Articulo --> org.semanticwb.repository.office.Articulo
+2009-04-13 16:39:49,122 TRACE - SemanticClass:Descriptiveable org.semanticwb.content.Descriptiveable http://www.semanticwb.org.mx/swb4/content# cm
+2009-04-13 16:39:49,122 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#Descriptiveable --> org.semanticwb.content.Descriptiveable
+2009-04-13 16:39:49,138 TRACE - SemanticClass:OfficeContent org.semanticwb.repository.office.OfficeContent http://www.semanticwb.org.mx/swb4/content# cm
+2009-04-13 16:39:49,138 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#OfficeContent --> org.semanticwb.repository.office.OfficeContent
+2009-04-13 16:39:49,154 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#Articulo --> org.semanticwb.repository.office.Articulo
+2009-04-13 16:39:49,154 TRACE - SemanticClass:WordResource org.semanticwb.resource.office.sem.WordResource http://www.semanticwb.org.mx/swb4/content# cm
+2009-04-13 16:39:49,154 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#WordResource --> org.semanticwb.resource.office.sem.WordResource
+2009-04-13 16:39:49,169 TRACE - SemanticClass:OfficeResource org.semanticwb.resource.office.sem.OfficeResource http://www.semanticwb.org.mx/swb4/content# cm
+2009-04-13 16:39:49,169 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#OfficeResource --> org.semanticwb.resource.office.sem.OfficeResource
+2009-04-13 16:39:49,169 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#WordResource --> org.semanticwb.resource.office.sem.WordResource
+2009-04-13 16:39:49,169 TRACE - SemanticClass:ExcelResource org.semanticwb.resource.office.sem.ExcelResource http://www.semanticwb.org.mx/swb4/content# cm
+2009-04-13 16:39:49,169 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#ExcelResource --> org.semanticwb.resource.office.sem.ExcelResource
+2009-04-13 16:39:49,169 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#ExcelResource --> org.semanticwb.resource.office.sem.ExcelResource
+2009-04-13 16:39:49,185 TRACE - SemanticClass:Traceable Traceable http://www.semanticwb.org.mx/swb4/content# cm
+2009-04-13 16:39:49,185 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#Traceable --> Traceable
+2009-04-13 16:39:49,185 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#Traceable --> Traceable
+2009-04-13 16:39:49,185 TRACE - SemanticClass:OfficeDocument org.semanticwb.repository.office.OfficeDocument http://www.semanticwb.org.mx/swb4/content# cm
+2009-04-13 16:39:49,185 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#OfficeDocument --> org.semanticwb.repository.office.OfficeDocument
+2009-04-13 16:39:49,201 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#OfficeDocument --> org.semanticwb.repository.office.OfficeDocument
+2009-04-13 16:39:49,201 TRACE - SemanticClass:OfficeCategory org.semanticwb.repository.office.OfficeCategory http://www.semanticwb.org.mx/swb4/content# cm
+2009-04-13 16:39:49,201 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#OfficeCategory --> org.semanticwb.repository.office.OfficeCategory
+2009-04-13 16:39:49,201 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#OfficeCategory --> org.semanticwb.repository.office.OfficeCategory
+2009-04-13 16:39:49,201 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#OfficeContent --> org.semanticwb.repository.office.OfficeContent
+2009-04-13 16:39:49,201 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#Descriptiveable --> org.semanticwb.content.Descriptiveable
+2009-04-13 16:39:49,216 TRACE - SemanticClass:PPTResource org.semanticwb.resource.office.sem.PPTResource http://www.semanticwb.org.mx/swb4/content# cm
+2009-04-13 16:39:49,216 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#PPTResource --> org.semanticwb.resource.office.sem.PPTResource
+2009-04-13 16:39:49,263 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#PPTResource --> org.semanticwb.resource.office.sem.PPTResource
+2009-04-13 16:39:49,263 TRACE - Registering SemanticClass:http://www.semanticwb.org.mx/swb4/content#OfficeResource --> org.semanticwb.resource.office.sem.OfficeResource
+2009-04-13 16:39:49,263 DEBUG - loadDBModels
+2009-04-13 16:39:49,372 TRACE - LoadingModel:SWBAdmin
+2009-04-13 16:39:49,466 WARN - \swbadmin\rdf\SWBAdmin.rdf (El sistema no puede hallar la ruta especificada)
+2009-04-13 16:39:49,466 TRACE - LoadingModel:uradm
+2009-04-13 16:39:49,482 TRACE - LoadingModel:SWBGlobal
+2009-04-13 16:39:49,497 TRACE - LoadingModel:urswb
+2009-04-13 16:39:49,513 TRACE - LoadingModel:defaultWorkspace
+2009-04-13 16:39:49,529 TRACE - LoadingModel:sep
+2009-04-13 16:39:49,544 TRACE - LoadingModel:sep_usr
+2009-04-13 16:39:49,560 TRACE - LoadingModel:demo
+2009-04-13 16:39:49,576 TRACE - LoadingModel:demo_usr
+2009-04-13 16:39:49,607 OFF - Initializing SemanticWebBuilder Context...
+2009-04-13 16:39:49,638 OFF - Initializing SemanticWebBuilder Portal...
+2009-04-13 16:39:49,669 OFF - Creating Admin WebSite...
+2009-04-13 16:39:49,701 WARN - \swbadmin\rdf\SWBAdmin.rdf (El sistema no puede hallar la ruta especificada)
+2009-04-13 16:39:49,732 TRACE - close:(1239658789732,swb):2
+2009-04-13 16:39:49,732 OFF - Initializing SWBUserMgr...
+2009-04-13 16:39:49,732 OFF - Initializing SWBMonitor(500,5s)...
+2009-04-13 16:39:49,732 OFF - Initializing SWBResourceMgr...
+2009-04-13 16:39:49,732 OFF - Initializing SWBResourceCachedMgr: 100
+2009-04-13 16:39:49,763 OFF - Initializing SWBTemplateMgr...
+2009-04-13 16:39:49,763 OFF - Initializing SWBServiceMgr...
+2009-04-13 16:39:49,794 ERROR - Error while looking for properties key
+java.util.MissingResourceException: Can't find bundle for base name locale_core, locale en
+	at java.util.ResourceBundle.throwMissingResourceException(ResourceBundle.java:836)
+	at java.util.ResourceBundle.getBundleImpl(ResourceBundle.java:805)
+	at java.util.ResourceBundle.getBundle(ResourceBundle.java:576)
+	at org.semanticwb.SWBUtils$TEXT.getLocaleString(SWBUtils.java:474)
+	at org.semanticwb.SWBUtils$TEXT.getLocaleString(SWBUtils.java:467)
+	at org.semanticwb.SWBUtils$TEXT.getLocaleString(SWBUtils.java:463)
+	at org.semanticwb.portal.db.SWBDBAdmLog.<init>(SWBDBAdmLog.java:35)
+	at org.semanticwb.SWBPortal.init(SWBPortal.java:197)
+	at org.semanticwb.SWBPortal.<init>(SWBPortal.java:69)
+	at org.semanticwb.SWBPortal.createInstance(SWBPortal.java:62)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.semanticwb.SWBPlatform.createInstance(SWBPlatform.java:292)
+	at org.semanticwb.SWBPlatform.init(SWBPlatform.java:146)
+	at org.semanticwb.SWBPlatform.<init>(SWBPlatform.java:54)
+	at org.semanticwb.SWBPlatform.createInstance(SWBPlatform.java:279)
+	at org.semanticwb.codegen.CodeGeneratorOffice.setUpClass(CodeGeneratorOffice.java:30)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:27)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:220)
+	at junit.framework.JUnit4TestAdapter.run(JUnit4TestAdapter.java:39)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.run(JUnitTestRunner.java:515)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.launch(JUnitTestRunner.java:1031)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.main(JUnitTestRunner.java:888)
+2009-04-13 16:39:49,794 OFF - 
+2009-04-13 16:39:49,794 OFF - Initializing SWBMessageCenter...
+2009-04-13 16:39:49,794 ERROR - SWBMessageCenter Init Error...
+java.lang.NullPointerException
+	at org.semanticwb.portal.SWBMessageCenter.init(SWBMessageCenter.java:69)
+	at org.semanticwb.SWBPortal.init(SWBPortal.java:201)
+	at org.semanticwb.SWBPortal.<init>(SWBPortal.java:69)
+	at org.semanticwb.SWBPortal.createInstance(SWBPortal.java:62)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.semanticwb.SWBPlatform.createInstance(SWBPlatform.java:292)
+	at org.semanticwb.SWBPlatform.init(SWBPlatform.java:146)
+	at org.semanticwb.SWBPlatform.<init>(SWBPlatform.java:54)
+	at org.semanticwb.SWBPlatform.createInstance(SWBPlatform.java:279)
+	at org.semanticwb.codegen.CodeGeneratorOffice.setUpClass(CodeGeneratorOffice.java:30)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:27)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:220)
+	at junit.framework.JUnit4TestAdapter.run(JUnit4TestAdapter.java:39)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.run(JUnitTestRunner.java:515)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.launch(JUnitTestRunner.java:1031)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.main(JUnitTestRunner.java:888)
+2009-04-13 16:39:49,919 OFF - Initializing SWBAccessLog...
+2009-04-13 16:39:49,935 OFF - Initializing SWBAccessIncrement...
+2009-04-13 16:39:49,951 OFF - SWBRuleMgr Initialized...
+2009-04-13 16:39:49,951 DEBUG - Loading admin Files from: /WEB-INF/lib/SWBAdmin.jar
+2009-04-13 16:39:49,951 WARN - Error loading files for Webbuilder Administration:/WEB-INF/lib/SWBAdmin.jar
+java.io.FileNotFoundException: \WEB-INF\lib\SWBAdmin.jar (El sistema no puede hallar la ruta especificada)
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:203)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:84)
+	at org.semanticwb.SWBPortal.init(SWBPortal.java:215)
+	at org.semanticwb.SWBPortal.<init>(SWBPortal.java:69)
+	at org.semanticwb.SWBPortal.createInstance(SWBPortal.java:62)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.semanticwb.SWBPlatform.createInstance(SWBPlatform.java:292)
+	at org.semanticwb.SWBPlatform.init(SWBPlatform.java:146)
+	at org.semanticwb.SWBPlatform.<init>(SWBPlatform.java:54)
+	at org.semanticwb.SWBPlatform.createInstance(SWBPlatform.java:279)
+	at org.semanticwb.codegen.CodeGeneratorOffice.setUpClass(CodeGeneratorOffice.java:30)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:27)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:220)
+	at junit.framework.JUnit4TestAdapter.run(JUnit4TestAdapter.java:39)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.run(JUnitTestRunner.java:515)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.launch(JUnitTestRunner.java:1031)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.main(JUnitTestRunner.java:888)
+2009-04-13 16:39:49,966 DEBUG - Loading admin Files from: /WEB-INF/lib/dojo.jar
+2009-04-13 16:39:49,982 WARN - Error loading files for Webbuilder Administration:/WEB-INF/lib/dojo.zip
+java.io.FileNotFoundException: \WEB-INF\lib\dojo.jar (El sistema no puede hallar la ruta especificada)
+	at java.util.zip.ZipFile.open(Native Method)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:203)
+	at java.util.zip.ZipFile.<init>(ZipFile.java:84)
+	at org.semanticwb.SWBPortal.init(SWBPortal.java:231)
+	at org.semanticwb.SWBPortal.<init>(SWBPortal.java:69)
+	at org.semanticwb.SWBPortal.createInstance(SWBPortal.java:62)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.semanticwb.SWBPlatform.createInstance(SWBPlatform.java:292)
+	at org.semanticwb.SWBPlatform.init(SWBPlatform.java:146)
+	at org.semanticwb.SWBPlatform.<init>(SWBPlatform.java:54)
+	at org.semanticwb.SWBPlatform.createInstance(SWBPlatform.java:279)
+	at org.semanticwb.codegen.CodeGeneratorOffice.setUpClass(CodeGeneratorOffice.java:30)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:585)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:27)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:220)
+	at junit.framework.JUnit4TestAdapter.run(JUnit4TestAdapter.java:39)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.run(JUnitTestRunner.java:515)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.launch(JUnitTestRunner.java:1031)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.main(JUnitTestRunner.java:888)
+2009-04-13 16:39:54,732 TRACE - SWBMonitor.run():0
+2009-04-13 16:39:59,732 TRACE - SWBMonitor.run():0
+2009-04-13 16:40:04,733 TRACE - SWBMonitor.run():0
+2009-04-13 16:40:09,733 TRACE - SWBMonitor.run():0
+2009-04-13 16:40:14,733 TRACE - SWBMonitor.run():0
+2009-04-13 16:40:19,734 TRACE - SWBMonitor.run():0
+2009-04-13 16:40:24,734 TRACE - SWBMonitor.run():0
+2009-04-13 16:40:29,734 TRACE - SWBMonitor.run():0
+2009-04-13 16:40:34,735 TRACE - SWBMonitor.run():0
+2009-04-13 16:40:39,735 TRACE - SWBMonitor.run():0
+2009-04-13 16:40:44,735 TRACE - SWBMonitor.run():0
+2009-04-13 16:40:49,736 TRACE - SWBMonitor.run():0
+2009-04-13 16:40:54,736 TRACE - SWBMonitor.run():0
+2009-04-13 16:40:59,736 TRACE - SWBMonitor.run():0
+2009-04-13 16:41:04,737 TRACE - SWBMonitor.run():0
+2009-04-13 16:41:05,846 TRACE - SemanticClass:Thing Thing http://www.w3.org/2002/07/owl# owl
+2009-04-13 16:41:05,846 TRACE - Registering SemanticClass:http://www.w3.org/2002/07/owl#Thing --> Thing
+2009-04-13 16:41:09,737 TRACE - SWBMonitor.run():0
+2009-04-13 16:41:14,737 TRACE - SWBMonitor.run():0
+2009-04-13 16:41:19,737 TRACE - SWBMonitor.run():0
+2009-04-13 16:41:24,738 TRACE - SWBMonitor.run():0
+2009-04-13 16:41:29,738 TRACE - SWBMonitor.run():0
+2009-04-13 16:41:34,738 TRACE - SWBMonitor.run():0
+2009-04-13 16:41:37,207 TRACE - SemanticClass:SWBNode SWBNode http://www.semanticwebbuilder.org/swb4/repository# swbrep
+2009-04-13 16:41:37,207 TRACE - Registering SemanticClass:http://www.semanticwebbuilder.org/swb4/repository#SWBNode --> SWBNode
+2009-04-13 16:41:39,738 TRACE - SWBMonitor.run():0
+2009-04-13 16:41:44,738 TRACE - SWBMonitor.run():0
+2009-04-13 16:41:49,738 TRACE - SWBMonitor.run():0
+Generación de clases completa
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
