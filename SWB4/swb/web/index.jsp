@@ -1,3 +1,5 @@
-<jsp:forward page="/swb"/>
+<%
+    response.sendRedirect(org.semanticwb.SWBPortal.getDistributorPath());
+%>
 
 
