@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Device;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.SWBContext;
@@ -278,13 +279,83 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("WBUrlContent");
                 }
 
-                if (site.getResourceType("Serch") == null)
+                if (site.getResourceType("Search") == null)
                 {
-                    ResourceType ptype = site.createResourceType("Serch");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.Serch");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.Serch");
+                    ResourceType ptype = site.createResourceType("Search");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.Search");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.Search");
                     ptype.setResourceMode(3);
-                    ptype.setTitle("Serch");
+                    ptype.setTitle("Search");
+                }
+
+                if (site.getResourceType("Search") == null)
+                {
+                    ResourceType ptype = site.createResourceType("Search");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.Search");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.Search");
+                    ptype.setResourceMode(3);
+                    ptype.setTitle("Search");
+                }
+
+                if (!site.hasDevice("1"))
+                {
+                    Device dev = site.createDevice();
+                    dev.setTitle("PC");
+                    dev.setUserAgent("Mozilla");
+                    Device dev2 = site.createDevice();
+                    dev2.setTitle("Internet Explorer");
+                    dev2.setUserAgent("Mozilla MSIE");
+                    dev2.setParent(dev);
+                    dev2 = site.createDevice();
+                    dev2.setTitle("Mozilla FireFox");
+                    dev2.setUserAgent("Mozilla Firefox");
+                    dev2.setParent(dev);
+                    dev2 = site.createDevice();
+                    dev2.setTitle("Safari");
+                    dev2.setUserAgent("Mozilla Safari");
+                    dev2.setParent(dev);
+
+                    dev = site.createDevice();
+                    dev.setTitle("PDA");
+                    dev2 = site.createDevice();
+                    dev2.setTitle("BlackBerry");
+                    dev2.setUserAgent("BlackBerry");
+                    dev2.setParent(dev);
+                    dev2 = site.createDevice();
+                    dev2.setTitle("iPhone");
+                    dev2.setUserAgent("Mozilla iPhone Safari");
+                    dev2.setParent(dev);
+                    dev2 = site.createDevice();
+                    dev2.setTitle("Windows CE");
+                    dev2.setUserAgent("Mozilla Windows CE");
+                    dev2.setParent(dev);
+                    dev2 = site.createDevice();
+                    dev2.setTitle("PalmOS");
+                    dev2.setUserAgent("Mozilla PalmOS");
+                    dev2.setParent(dev);
+                    Device dev3 = site.createDevice();
+                    dev3.setTitle("AvantGo");
+                    dev3.setUserAgent("Mozilla AvantGo");
+                    dev3.setParent(dev2);
+                    dev3 = site.createDevice();
+                    dev3.setTitle("EudoraWeb");
+                    dev3.setUserAgent("Mozilla PalmOS EudoraWeb");
+                    dev3.setParent(dev2);
+
+                    dev = site.createDevice();
+                    dev.setTitle("Phone");
+                    dev2 = site.createDevice();
+                    dev2.setTitle("MIDP");
+                    dev2.setUserAgent("MIDP");
+                    dev2.setParent(dev);
+                    dev2 = site.createDevice();
+                    dev2.setTitle("MMP");
+                    dev2.setUserAgent("MMP");
+                    dev2.setParent(dev);
+                    dev2 = site.createDevice();
+                    dev2.setTitle("Opera Mobi");
+                    dev2.setUserAgent("Opera Mobi");
+                    dev2.setParent(dev);
                 }
 
                 //Crear lenguajes por defecto
