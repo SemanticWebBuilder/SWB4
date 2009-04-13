@@ -21,13 +21,13 @@ public class ModererationCatBase extends org.semanticwb.model.SWBClass implement
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.ModererationCat> listModererationCats(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.ModererationCat>(org.semanticwb.portal.resources.sem.forum.ModererationCat.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.ModererationCat>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.ModererationCat> listModererationCats()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.ModererationCat>(org.semanticwb.portal.resources.sem.forum.ModererationCat.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.ModererationCat>(it, true);
     }
 
     public static org.semanticwb.portal.resources.sem.forum.ModererationCat createModererationCat(String id, org.semanticwb.model.SWBModel model)

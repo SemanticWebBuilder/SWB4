@@ -21,13 +21,13 @@ public class TypeCatBase extends org.semanticwb.model.SWBClass implements org.se
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.TypeCat> listTypeCats(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.TypeCat>(org.semanticwb.portal.resources.sem.forum.TypeCat.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.TypeCat>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.TypeCat> listTypeCats()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.TypeCat>(org.semanticwb.portal.resources.sem.forum.TypeCat.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.TypeCat>(it, true);
     }
 
     public static org.semanticwb.portal.resources.sem.forum.TypeCat createTypeCat(String id, org.semanticwb.model.SWBModel model)

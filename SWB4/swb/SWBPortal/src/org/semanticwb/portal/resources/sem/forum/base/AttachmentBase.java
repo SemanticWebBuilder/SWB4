@@ -30,13 +30,13 @@ public class AttachmentBase extends org.semanticwb.model.SWBClass implements org
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachments(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment>(org.semanticwb.portal.resources.sem.forum.Attachment.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachments()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment>(org.semanticwb.portal.resources.sem.forum.Attachment.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment>(it, true);
     }
 
     public static org.semanticwb.portal.resources.sem.forum.Attachment createAttachment(String id, org.semanticwb.model.SWBModel model)
