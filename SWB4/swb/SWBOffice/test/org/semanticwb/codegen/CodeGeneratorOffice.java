@@ -26,7 +26,7 @@ public class CodeGeneratorOffice {
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        SWBPlatform.setUseDB(false);
+        //SWBPlatform.setUseDB(false);
         SWBPlatform.createInstance(null);
     }
 
@@ -52,7 +52,7 @@ public class CodeGeneratorOffice {
             File dir = new File(path+"../../src");
             String sPakage = "org.semanticwb.repository.office";
             CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
-            codeGeneration.generateCode("cm",false);
+            codeGeneration.generateCode("office",false);
             System.out.println("Generación de clases completa");
         }
         catch ( CodeGeneratorException cge )
