@@ -3,10 +3,10 @@ package org.semanticwb.repository.office.base;
 
 public class OfficeDocumentBase extends org.semanticwb.repository.Resource implements org.semanticwb.repository.Referenceable
 {
-    public static final org.semanticwb.platform.SemanticProperty cm_file=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#file");
-    public static final org.semanticwb.platform.SemanticProperty cm_user=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#user");
-    public static final org.semanticwb.platform.SemanticClass cm_OfficeDocument=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org.mx/swb4/content#OfficeDocument");
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org.mx/swb4/content#OfficeDocument");
+    public static final org.semanticwb.platform.SemanticProperty office_file=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#file");
+    public static final org.semanticwb.platform.SemanticProperty office_user=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#user");
+    public static final org.semanticwb.platform.SemanticClass office_OfficeDocument=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#OfficeDocument");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#OfficeDocument");
 
     public OfficeDocumentBase(org.semanticwb.platform.SemanticObject base)
     {
@@ -47,21 +47,21 @@ public class OfficeDocumentBase extends org.semanticwb.repository.Resource imple
 
     public String getFile()
     {
-        return getSemanticObject().getProperty(cm_file);
+        return getSemanticObject().getProperty(office_file);
     }
 
     public void setFile(String file)
     {
-        getSemanticObject().setProperty(cm_file, file);
+        getSemanticObject().setProperty(office_file, file);
     }
 
     public String getUser()
     {
-        return getSemanticObject().getProperty(cm_user);
+        return getSemanticObject().getProperty(office_user);
     }
 
     public void setUser(String user)
     {
-        getSemanticObject().setProperty(cm_user, user);
+        getSemanticObject().setProperty(office_user, user);
     }
 }

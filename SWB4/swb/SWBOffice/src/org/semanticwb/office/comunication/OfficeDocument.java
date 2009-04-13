@@ -245,7 +245,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 while (sites.hasNext())
                 {
                     WebSite site=sites.next();
-                    Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficeResource.cm_content, contentId);
+                    Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficeResource.office_content, contentId);
                     while (it.hasNext())
                     {
                         SemanticObject obj = it.next();
@@ -342,7 +342,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 Iterator<WebSite> sites = SWBContext.listWebSites();
                 while (sites.hasNext())
                 {
-                    Iterator<SemanticObject> it = sites.next().getSemanticObject().getModel().listSubjects(OfficeResource.cm_content, contentId);
+                    Iterator<SemanticObject> it = sites.next().getSemanticObject().getModel().listSubjects(OfficeResource.office_content, contentId);
                     while (it.hasNext())
                     {
                         SemanticObject obj = it.next();
@@ -432,7 +432,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             while (sites.hasNext())
             {
                 WebSite site=sites.next();
-                Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficeResource.cm_content, contentID);
+                Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficeResource.office_content, contentID);
                 while (it.hasNext())
                 {
                     SemanticObject obj = it.next();
@@ -565,7 +565,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         {
                             break;
                         }
-                        Iterator<SemanticObject> itSubjects = sites.next().getSemanticObject().getModel().listSubjects(OfficeResource.cm_content, contentId);
+                        Iterator<SemanticObject> itSubjects = sites.next().getSemanticObject().getModel().listSubjects(OfficeResource.office_content, contentId);
                         while (itSubjects.hasNext())
                         {
                             SemanticObject obj = itSubjects.next();
@@ -785,7 +785,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         while (sites.hasNext())
         {
             WebSite site = sites.next();
-            Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficeResource.cm_content, contentid);
+            Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficeResource.office_content, contentid);
             while (it.hasNext())
             {
                 SemanticObject obj = it.next();
