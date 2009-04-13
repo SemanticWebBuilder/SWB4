@@ -71,8 +71,7 @@ public class SimpleNode implements Node
 
     private static Logger log = SWBUtils.getLogger(SimpleNode.class);    
     private String id;
-    private boolean modified = false;
-    static final String DEFAULT_PRIMARY_NODE_TYPE_NAME = Unstructured.nt_Unstructured.getPrefix() + ":" + Unstructured.nt_Unstructured.getName();
+    private boolean modified = false;    
     protected static final String NOT_SUPPORTED_YET = "Not supported yet.";
     protected static final String WAS_NOT_FOUND = " was not found";
     private static final String PATH_SEPARATOR = "/";
@@ -1324,8 +1323,7 @@ public class SimpleNode implements Node
     {
         SessionImp.checkRelPath(relPath);
         if (primaryNodeTypeName == null)
-        {
-            primaryNodeTypeName = DEFAULT_PRIMARY_NODE_TYPE_NAME;
+        {            
             if(node!=null)
             {
                 SemanticObject childNodeDefinition=node.getChildNodeDefinition(node.getSemanticObject().getSemanticClass(),relPath);
