@@ -3,11 +3,11 @@ package org.semanticwb.resource.office.sem.base;
 
 public class PPTResourceBase extends org.semanticwb.resource.office.sem.OfficeResource 
 {
-    public static final org.semanticwb.platform.SemanticProperty cm_content=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#content");
-    public static final org.semanticwb.platform.SemanticProperty cm_showDownload=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#showDownload");
-    public static final org.semanticwb.platform.SemanticProperty cm_versionToShow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#versionToShow");
-    public static final org.semanticwb.platform.SemanticProperty cm_repositoryName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#repositoryName");
-    public static final org.semanticwb.platform.SemanticClass cm_PPTResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org.mx/swb4/content#PPTResource");
+    public static final org.semanticwb.platform.SemanticProperty office_content=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#content");
+    public static final org.semanticwb.platform.SemanticProperty office_showDownload=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#showDownload");
+    public static final org.semanticwb.platform.SemanticProperty office_versionToShow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#versionToShow");
+    public static final org.semanticwb.platform.SemanticProperty office_repositoryName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#repositoryName");
+    public static final org.semanticwb.platform.SemanticClass office_PPTResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#PPTResource");
 
     public PPTResourceBase()
     {
@@ -17,45 +17,45 @@ public class PPTResourceBase extends org.semanticwb.resource.office.sem.OfficeRe
     {
         super(base);
     }
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org.mx/swb4/content#PPTResource");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#PPTResource");
 
     public String getContent()
     {
-        return getSemanticObject().getProperty(cm_content);
+        return getSemanticObject().getProperty(office_content);
     }
 
     public void setContent(String content)
     {
-        getSemanticObject().setProperty(cm_content, content);
+        getSemanticObject().setProperty(office_content, content);
     }
 
     public boolean isShowDownload()
     {
-        return getSemanticObject().getBooleanProperty(cm_showDownload);
+        return getSemanticObject().getBooleanProperty(office_showDownload);
     }
 
     public void setShowDownload(boolean showDownload)
     {
-        getSemanticObject().setBooleanProperty(cm_showDownload, showDownload);
+        getSemanticObject().setBooleanProperty(office_showDownload, showDownload);
     }
 
     public String getVersionToShow()
     {
-        return getSemanticObject().getProperty(cm_versionToShow);
+        return getSemanticObject().getProperty(office_versionToShow);
     }
 
     public void setVersionToShow(String versionToShow)
     {
-        getSemanticObject().setProperty(cm_versionToShow, versionToShow);
+        getSemanticObject().setProperty(office_versionToShow, versionToShow);
     }
 
     public String getRepositoryName()
     {
-        return getSemanticObject().getProperty(cm_repositoryName);
+        return getSemanticObject().getProperty(office_repositoryName);
     }
 
     public void setRepositoryName(String repositoryName)
     {
-        getSemanticObject().setProperty(cm_repositoryName, repositoryName);
+        getSemanticObject().setProperty(office_repositoryName, repositoryName);
     }
 }
