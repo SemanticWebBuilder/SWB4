@@ -27,7 +27,7 @@ public class CodeGeneratorOffice {
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        //SWBPlatform.setUseDB(false);
+        SWBPlatform.setUseDB(false);
         SWBPlatform.createInstance(null);
     }
 
