@@ -49,7 +49,7 @@ public class CodeGeneratorOffice {
         try
         {
             String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"../../../SWBOffice/src");
+            File dir = new File(path+"../../src");
             String sPakage = "org.semanticwb.repository.office";
             CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
             codeGeneration.generateCode("cm",false);
