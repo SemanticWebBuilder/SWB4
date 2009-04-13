@@ -150,6 +150,23 @@ public class DBConnectionManager
         return null;
     }
 
+    /**
+     * Regresa una conexión que no se registra en el pool, pero que se auto restablece si se piede la conexion.
+     *
+     * @param   name        El nombre del pool definido en el archivo de propiedades.
+     * @return  Connection  La conexi�n o nulo.
+     */
+    public Connection getAutoConnection(String name)
+    {
+        DBConnectionPool pool = (DBConnectionPool) pools.get(name);
+        if (pool != null)
+        {
+            return pool.newAutoConnection();
+        }
+        return null;
+    }
+
+
 
     /**
      * Regresa una conexi�n abierta. Si ninguna otra conexi�n est� disponible y el n�mero m�ximo

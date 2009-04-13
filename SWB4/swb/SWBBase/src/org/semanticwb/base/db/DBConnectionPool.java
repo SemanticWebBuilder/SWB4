@@ -219,6 +219,35 @@ public class DBConnectionPool
     }
 
     /**
+     * Crea una nueva conexión que se auto conecta si se piede la conexion.
+     * @return
+     */
+    public Connection newAutoConnection()
+    {
+        Connection con = null;
+        try
+        {
+            if (user == null)
+            {
+                con = DriverManager.getConnection(URL);
+            } else
+            {
+                con = DriverManager.getConnection(URL, user, password);
+            }
+            log.debug("Created a new connection in pool " + name);
+        } catch (SQLException e)
+        {
+            log.error("Can't create a new connection for " + URL,e);
+            return null;
+        }
+        if(con!=null)
+        {
+            return new AutoConnection(con, this);
+        }else return null;
+    }
+    
+
+    /**
      * Crea una nueva conexión usando un identificador de usuario y passsword si son especificados.
      */
     private Connection newConnection()
