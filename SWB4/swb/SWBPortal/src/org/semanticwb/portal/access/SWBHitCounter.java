@@ -25,12 +25,24 @@ public class SWBHitCounter
     private boolean changed = false;
     private Date date = new Date();
     private long timer;               //valores de sincronizacion de views, hits
-    private long time;                //tiempo en milisegundos por cada actualizacion
+    private static long time;                //tiempo en milisegundos por cada actualizacion
     private String patern = null;
     private String map = null;
     private String id = "_";
     private int type = 0;
     //private RecResHits res=null;
+
+    static
+    {
+        time = 600000L;
+        try
+        {
+            time = 1000L * Long.parseLong((String) SWBPlatform.getEnv("swb/accessLogTime"));
+        } catch (Exception e)
+        {
+            log.error("SWBHitCounter Log Time Error...");
+        }
+    }
 
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -41,14 +53,6 @@ public class SWBHitCounter
         date.setMinutes(0);
         date.setSeconds(0);
         patern = df.format(date);
-        time = 600000L;
-        try
-        {
-            time = 1000L * Long.parseLong((String) SWBPlatform.getEnv("swb/accessLogTime"));
-        } catch (Exception e)
-        {
-            log.error("SWBHitCounter Log Time Error...");
-        }
     }
 
     /** Creates a new instance of SWBHitCounter

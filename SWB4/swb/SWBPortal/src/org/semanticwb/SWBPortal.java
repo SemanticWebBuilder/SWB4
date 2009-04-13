@@ -360,21 +360,25 @@ public class SWBPortal {
     }
 
     public static void setSessionUser(User user) {
-        //if (user != null) {
+        if (user != null) {
             SessionUser sess = m_sessions.get(Thread.currentThread().getName());
             if (sess == null) {
-                m_sessions.put(Thread.currentThread().getName(), new SessionUser(user));
+                m_sessions.put(Thread.currentThread().getName(), new SessionUser(user,user.getUserRepository().getId()));
             } else {
-                sess.setUser(user);
+                sess.setUser(user, user.getUserRepository().getId());
             }
-        //}
+        }
     }
 
     public static User getSessionUser() {
+        return getSessionUser(null);
+    }
+
+    public static User getSessionUser(String usrrep) {
         Principal user = null;
         SessionUser sess = m_sessions.get(Thread.currentThread().getName());
         if (sess != null) {
-            user = sess.getUser();
+            user = sess.getUser(usrrep);
         }
         return (User) user;
     }

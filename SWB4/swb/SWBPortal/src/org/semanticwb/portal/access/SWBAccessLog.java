@@ -279,16 +279,16 @@ public class SWBAccessLog implements SWBAppObject
             logAcc(map,str);
             
 
-            System.out.println("SWBAccessLog-----");
-            System.out.println("date:"+date);
-            System.out.println("ipuser:"+ipuser);
-            System.out.println("ipserver:"+ipserver);
-            System.out.println("map:"+map);
-            System.out.println("topic:"+topic);
-            System.out.println("user:"+user);
-            System.out.println("usertype:"+usertype);
-            System.out.println("device:"+device);
-            System.out.println("lang:"+lang);
+//            System.out.println("SWBAccessLog-----");
+//            System.out.println("date:"+date);
+//            System.out.println("ipuser:"+ipuser);
+//            System.out.println("ipserver:"+ipserver);
+//            System.out.println("map:"+map);
+//            System.out.println("topic:"+topic);
+//            System.out.println("user:"+user);
+//            System.out.println("usertype:"+usertype);
+//            System.out.println("device:"+device);
+//            System.out.println("lang:"+lang);
 
             String sdate = date.substring(0, 10);
 

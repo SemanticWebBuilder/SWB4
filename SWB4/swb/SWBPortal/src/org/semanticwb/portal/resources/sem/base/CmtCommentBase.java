@@ -26,13 +26,13 @@ public class CmtCommentBase extends org.semanticwb.model.SWBClass implements org
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.CmtComment> listCmtComments(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CmtComment>(org.semanticwb.portal.resources.sem.CmtComment.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CmtComment>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.CmtComment> listCmtComments()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CmtComment>(org.semanticwb.portal.resources.sem.CmtComment.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CmtComment>(it, true);
     }
 
     public static org.semanticwb.portal.resources.sem.CmtComment createCmtComment(String id, org.semanticwb.model.SWBModel model)

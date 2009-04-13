@@ -86,9 +86,9 @@ public class TripleStoreLoginModule implements LoginModule
         }
 
         //System.out.println(principal.getClass().getName());
-        if (!principal.isActive())
+        if (!principal.isValid())
         {
-            throw new LoginException("User innactive");
+            throw new LoginException("User invalid");
         }
         if (null == principal.getPassword())
         {

@@ -123,7 +123,7 @@ public class Distributor implements InternalServlet
                 response.sendError(404, "La pagina " + request.getRequestURI() + " no existe... ");
                 log.debug("Distributor: SendError 404");
                 return false;
-            } else if (!webpage.getWebSite().isActive() || !webpage.isActive()) 
+            } else if (!webpage.getWebSite().isActive() || webpage.getWebSite().isDeleted() || !webpage.isValid())
             {
                 response.sendError(404, "La pagina " + request.getRequestURI() + " no esta disponible por el momento... ");
                 log.debug("Distributor: SendError 404");

@@ -334,7 +334,7 @@ public class DistributorParams
         }
         if (device!=null) 
         {
-            user.setDevice(device);        
+            user.setDevice(site.getDevice(device));
         }
         return user;        
     }
