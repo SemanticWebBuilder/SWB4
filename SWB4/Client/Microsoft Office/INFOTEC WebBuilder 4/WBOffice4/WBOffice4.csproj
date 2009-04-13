@@ -428,12 +428,15 @@
     <Compile Include="Interfaces\RepositoryInfo.cs" />
     <Compile Include="Interfaces\SiteInfo.cs" />
     <Compile Include="Interfaces\Value.cs" />
+    <Compile Include="Steps\CategoryNode.cs" />
     <Compile Include="Steps\ContentProperties.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Steps\ContentProperties.Designer.cs">
       <DependentUpon>ContentProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Steps\DummyNode.cs" />
+    <Compile Include="Steps\RepositoryNode.cs" />
     <Compile Include="Steps\SelectSiteCreatePage.cs">
       <SubType>UserControl</SubType>
     </Compile>
