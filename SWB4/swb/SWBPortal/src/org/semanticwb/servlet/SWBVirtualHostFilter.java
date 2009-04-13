@@ -96,6 +96,7 @@ public class SWBVirtualHostFilter implements Filter
 //        log.trace("path:"+path);
 //        log.trace("host:"+host);
 //        log.trace("iserv:"+iserv);
+        //System.out.println("Path:"+path);
         boolean isjsp = false;
         InternalServlet serv = intServlets.get(iserv);
         if (serv != null && path.endsWith(".jsp"))
@@ -164,7 +165,14 @@ public class SWBVirtualHostFilter implements Filter
             {
                 if (isjsp)
                 {
-                    User user = SWBPortal.getUserMgr().getUser(_request, SWBContext.getGlobalWebSite());
+                    User user=null;
+                    if(path.startsWith("/swbadmin"))
+                    {
+                        user = SWBPortal.getUserMgr().getUser(_request, SWBContext.getAdminWebSite());
+                    }else
+                    {
+                        user = SWBPortal.getUserMgr().getUser(_request, SWBContext.getGlobalWebSite());
+                    }
                     SWBPortal.setSessionUser(user);
                 }
                 chain.doFilter(request, response);

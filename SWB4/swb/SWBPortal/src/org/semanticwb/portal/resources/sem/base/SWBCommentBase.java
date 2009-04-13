@@ -19,7 +19,7 @@ public class SWBCommentBase extends org.semanticwb.portal.api.GenericSemResource
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CmtComment> listComments()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CmtComment>(org.semanticwb.portal.resources.sem.CmtComment.class, getSemanticObject().listObjectProperties(swbr_cmt_hasComment));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CmtComment>(getSemanticObject().listObjectProperties(swbr_cmt_hasComment));
     }
 
     public boolean hasComment(org.semanticwb.portal.resources.sem.CmtComment cmtcomment)

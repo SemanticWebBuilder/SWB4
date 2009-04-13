@@ -395,7 +395,7 @@ public class SWBResourceMgr
         //System.out.println("&& ("+base.getMaxViews()+" == -1 || "+base.getMaxViews()+" > "+base.getViews()+")");
         //System.out.println("&& ("+base.getCamp()+" == 0 || "+DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive()+" == 1)");
 
-        if (base.isActive() && !base.isDeleted()
+        if (base.isValid()
                 //&& base.getResourceSubType() == stype
                 //&& (camp < 3 || base.getCamp() == camp)
                 //&& (base.getMaxViews() == -1 || base.getMaxViews() > base.getViews())

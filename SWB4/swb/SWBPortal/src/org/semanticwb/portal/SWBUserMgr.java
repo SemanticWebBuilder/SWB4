@@ -7,12 +7,14 @@ package org.semanticwb.portal;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Device;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBVocabulary;
 import org.semanticwb.model.User;
@@ -92,8 +94,70 @@ public class SWBUserMgr
             sub.getPrincipals().add(ret);
             ret.setLanguage(language);
             //TODO: validar dispositivo
-            //ret.setDevice(XXX);
+            Device dev=getDevice(request, site);
+            if(dev!=null)
+            {
+                //System.out.println("User:"+ret+" device:"+dev);
+                ret.setDevice(dev);
+            }
             ret.setIp(request.getRemoteAddr());
+        }
+        return ret;
+    }
+
+    private Device getDevice(HttpServletRequest request, WebSite site)
+    {
+        Device ret=null;
+        //Comienza detección de Dispositivo
+        String useragent = request.getHeader("User-Agent");
+        log.debug("User-Agent:"+useragent);
+        //System.out.println("User-Agent:"+useragent);
+        if(useragent!=null)
+        {
+            Iterator<Device> listaDev = site.listDevices();
+            int coincide = 0;
+            while (listaDev.hasNext())
+            {
+                Device dev = listaDev.next();
+                String auxuseragent=useragent;
+                String useragentmatch=dev.getUserAgent();
+                //System.out.println("dev: "+dev+" "+useragentmatch);
+                if(useragentmatch!=null)
+                {
+                    int cont = 0;
+                    StringTokenizer st = new StringTokenizer(useragentmatch);
+                    while (st.hasMoreElements())
+                    {
+                        String token = st.nextToken();
+                        //System.out.println("Token: "+token);
+                        int pos = auxuseragent.indexOf(token);
+                        //System.out.println("Pos: "+pos);
+                        if (pos >= 0)
+                        {
+                            cont++;
+                            auxuseragent = auxuseragent.substring(pos);
+                        }
+                    }
+                    //System.out.println(dev+" cont:"+cont);
+                    if (cont > coincide)
+                    {
+                        coincide = cont;
+                        ret=dev;
+                        //System.out.println("ret:"+ret);
+                        //TODO: Detectar Navegador
+    //                    if (recDevice.getUserAgent().indexOf("Mozilla") != -1)
+    //                    {
+    //                        if (device1.indexOf("MSIE") != -1 || device1.indexOf("Opera") != -1)
+    //                        {
+    //                            usr.setNavegador("Explorer");
+    //                        } else if (device1.indexOf("en") != -1 || device1.indexOf("Netscape") != -1)
+    //                        {
+    //                            usr.setNavegador("Netscape");
+    //                        }
+    //                    }
+                    }
+                }
+            }
         }
         return ret;
     }
