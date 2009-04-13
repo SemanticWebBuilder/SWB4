@@ -1,7 +1,7 @@
 package org.semanticwb.repository.office.base;
 
 
-public class OfficeDocumentBase extends org.semanticwb.repository.Resource implements org.semanticwb.repository.Referenceable
+public class OfficeDocumentBase extends org.semanticwb.repository.Resource implements org.semanticwb.repository.office.Traceable,org.semanticwb.repository.Referenceable
 {
     public static final org.semanticwb.platform.SemanticProperty office_file=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#file");
     public static final org.semanticwb.platform.SemanticProperty office_user=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#user");
