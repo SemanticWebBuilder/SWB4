@@ -1,15 +1,15 @@
 package org.semanticwb.repository.office.base;
 
 
-public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent implements org.semanticwb.repository.Referenceable,org.semanticwb.repository.Versionable,org.semanticwb.repository.Lockable,org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Traceable
+public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent implements org.semanticwb.repository.Lockable,org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Referenceable,org.semanticwb.repository.Traceable,org.semanticwb.repository.Versionable
 {
+    public static final org.semanticwb.platform.SemanticProperty cm_Author=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#Author");
     public static final org.semanticwb.platform.SemanticProperty jcr_isCheckedOut=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#isCheckedOut");
     public static final org.semanticwb.platform.SemanticClass nt_VersionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#versionHistory");
     public static final org.semanticwb.platform.SemanticProperty jcr_versionHistory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#versionHistory");
     public static final org.semanticwb.platform.SemanticClass nt_Version=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#version");
     public static final org.semanticwb.platform.SemanticProperty jcr_baseVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#baseVersion");
     public static final org.semanticwb.platform.SemanticProperty jcr_mergeFailed=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#mergeFailed");
-    public static final org.semanticwb.platform.SemanticProperty cm_Category=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#Category");
     public static final org.semanticwb.platform.SemanticClass cm_Articulo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org.mx/swb4/content#Articulo");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org.mx/swb4/content#Articulo");
 
@@ -18,21 +18,21 @@ public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent
         super(base);
     }
 
-    public static org.semanticwb.repository.office.Articulo getArticulo(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.office.Articulo)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.repository.office.Articulo> listArticulos(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.office.Articulo>(org.semanticwb.repository.office.Articulo.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.office.Articulo>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.office.Articulo> listArticulos()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.office.Articulo>(org.semanticwb.repository.office.Articulo.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.office.Articulo>(it, true);
+    }
+
+    public static org.semanticwb.repository.office.Articulo getArticulo(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.office.Articulo)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.repository.office.Articulo createArticulo(String id, org.semanticwb.model.SWBModel model)
@@ -48,6 +48,16 @@ public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent
     public static boolean hasArticulo(String id, org.semanticwb.model.SWBModel model)
     {
         return (getArticulo(id, model)!=null);
+    }
+
+    public String getAuthor()
+    {
+        return getSemanticObject().getProperty(cm_Author);
+    }
+
+    public void setAuthor(String Author)
+    {
+        getSemanticObject().setProperty(cm_Author, Author);
     }
 
     public boolean isCheckedOut()
@@ -121,15 +131,5 @@ public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent
              ret=(org.semanticwb.repository.Version)obj.createGenericInstance();
          }
          return ret;
-    }
-
-    public String getCategory()
-    {
-        return getSemanticObject().getProperty(cm_Category);
-    }
-
-    public void setCategory(String Category)
-    {
-        getSemanticObject().setProperty(cm_Category, Category);
     }
 }

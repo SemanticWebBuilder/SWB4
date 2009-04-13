@@ -13,21 +13,21 @@ public class OfficeDocumentBase extends org.semanticwb.repository.Resource imple
         super(base);
     }
 
-    public static org.semanticwb.repository.office.OfficeDocument getOfficeDocument(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.office.OfficeDocument)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.repository.office.OfficeDocument> listOfficeDocuments(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.office.OfficeDocument>(org.semanticwb.repository.office.OfficeDocument.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.office.OfficeDocument>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.office.OfficeDocument> listOfficeDocuments()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.office.OfficeDocument>(org.semanticwb.repository.office.OfficeDocument.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.office.OfficeDocument>(it, true);
+    }
+
+    public static org.semanticwb.repository.office.OfficeDocument getOfficeDocument(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.office.OfficeDocument)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.repository.office.OfficeDocument createOfficeDocument(String id, org.semanticwb.model.SWBModel model)

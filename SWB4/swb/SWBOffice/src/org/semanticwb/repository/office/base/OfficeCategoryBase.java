@@ -1,7 +1,7 @@
 package org.semanticwb.repository.office.base;
 
 
-public class OfficeCategoryBase extends org.semanticwb.repository.Folder implements org.semanticwb.repository.Referenceable,org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Traceable
+public class OfficeCategoryBase extends org.semanticwb.repository.Folder implements org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Referenceable,org.semanticwb.repository.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty cm_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#title");
     public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
@@ -15,21 +15,21 @@ public class OfficeCategoryBase extends org.semanticwb.repository.Folder impleme
         super(base);
     }
 
-    public static org.semanticwb.repository.office.OfficeCategory getOfficeCategory(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.repository.office.OfficeCategory)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.repository.office.OfficeCategory> listOfficeCategorys(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.office.OfficeCategory>(org.semanticwb.repository.office.OfficeCategory.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.office.OfficeCategory>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.office.OfficeCategory> listOfficeCategorys()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.office.OfficeCategory>(org.semanticwb.repository.office.OfficeCategory.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.office.OfficeCategory>(it, true);
+    }
+
+    public static org.semanticwb.repository.office.OfficeCategory getOfficeCategory(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.repository.office.OfficeCategory)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.repository.office.OfficeCategory createOfficeCategory(String id, org.semanticwb.model.SWBModel model)
