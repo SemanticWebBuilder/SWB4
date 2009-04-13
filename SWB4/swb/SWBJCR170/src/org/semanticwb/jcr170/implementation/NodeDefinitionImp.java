@@ -39,7 +39,7 @@ public class NodeDefinitionImp implements NodeDefinition
         if (node.getParent() != null)
         {
             BaseNode parent = node.getParent();
-            SemanticObject childNodeDefinition = parent.getChildNodeDefinition(parent.getSemanticObject().getSemanticClass(), node.getName());
+            SemanticObject childNodeDefinition = BaseNode.getChildNodeDefinition(parent.getSemanticObject().getSemanticClass(), node.getName());
             String sdefaultPrimaryType = childNodeDefinition.getProperty(ChildNodeDefinition.jcr_defaultPrimaryType);
             if (sdefaultPrimaryType != null)
             {
