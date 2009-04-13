@@ -1324,7 +1324,7 @@ public class SimpleNode implements Node
         {            
             if(node!=null)
             {
-                SemanticObject childNodeDefinition=node.getChildNodeDefinition(node.getSemanticObject().getSemanticClass(),relPath);
+                SemanticObject childNodeDefinition=BaseNode.getChildNodeDefinition(node.getSemanticObject().getSemanticClass(),relPath);
                 if(childNodeDefinition!=null)
                 {
                     primaryNodeTypeName=childNodeDefinition.getProperty(ChildNodeDefinition.jcr_defaultPrimaryType);
