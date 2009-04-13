@@ -5,6 +5,7 @@ import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticObject;
 import org.w3c.dom.Document;
@@ -24,13 +25,31 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
     private Document m_filter=null;
     private NodeList m_filternode=null;
 
-    private long views=0;
     private long hits=0;
+    private long views=0;
+    private long timer;                     //valores de sincronizacion de views, hits
+    private static long time;               //tiempo en milisegundos por cada actualizacion
+    private boolean viewed = false;
+
+    static
+    {
+        time = 600000L;
+        try
+        {
+            time = 1000L * Long.parseLong((String) SWBPlatform.getEnv("swb/accessLogTime","600"));
+        } catch (Exception e)
+        {
+            log.error("Error to read accessLogTime...",e);
+        }
+    }
+
 
 
     public Resource(SemanticObject base)
     {
         super(base);
+        //System.out.println("Create Resource:"+base.getURI());
+        //new Exception().printStackTrace();
     }
 
     public String getWebSiteId()
@@ -354,10 +373,16 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
 
     public boolean incHits()
     {
-        if(hits==0)hits=getViews();
+        viewed = true;
+        if(hits==0)hits=getHits();
         hits+=1;
-        //TODO validar por tiempo
-        return true;
+        long t = System.currentTimeMillis() - timer;
+        if (t > time || t < -time)
+        {
+            //TODO: evalDate4Views();
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -365,11 +390,6 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
     {
         super.setHits(hits);
         this.hits=hits;
-    }
-
-    public void updateHits()
-    {
-        setHits(hits);
     }
 
     @Override
@@ -381,22 +401,37 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
 
     public boolean incViews()
     {
+        //System.out.println("incViews:"+views);
+        viewed = true;
         if(views==0)views=getViews();
         views+=1;
-        //TODO validar por tiempo
-        return true;
+        long t = System.currentTimeMillis() - timer;
+        if (t > time || t < -time)
+        {
+            //TODO: evalDate4Views();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void setViews(long views)
     {
+        //System.out.println("setViews:"+views);
         super.setViews(views);
         this.views=views;
     }
 
     public void updateViews()
     {
-        setViews(views);
+        //System.out.println("updateViews:"+views);
+        if(viewed)
+        {
+            timer = System.currentTimeMillis();
+            if(views>0)setViews(views);
+            if(hits>0)setHits(hits);
+            viewed = false;
+        }
     }
 
 }

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class RuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Calendarable,org.semanticwb.model.XMLable,org.semanticwb.model.Versionable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class RuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Calendarable,org.semanticwb.model.XMLable,org.semanticwb.model.Versionable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -29,13 +29,13 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
     public static java.util.Iterator<org.semanticwb.model.Rule> listRules(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.Rule> listRules()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(it, true);
     }
 
     public static org.semanticwb.model.Rule createRule(org.semanticwb.model.SWBModel model)
@@ -184,7 +184,7 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(swb_hasCalendar));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(getSemanticObject().listObjectProperties(swb_hasCalendar));
     }
 
     public boolean hasCalendar(org.semanticwb.model.Calendar calendar)
@@ -220,7 +220,7 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listRuleRefInvs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(swb_hasRuleRefInv));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(getSemanticObject().listObjectProperties(swb_hasRuleRefInv));
     }
 
     public boolean hasRuleRefInv(org.semanticwb.model.RuleRef ruleref)

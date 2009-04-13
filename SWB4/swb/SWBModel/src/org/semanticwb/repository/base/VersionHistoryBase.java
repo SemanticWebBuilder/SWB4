@@ -16,13 +16,13 @@ public class VersionHistoryBase extends org.semanticwb.repository.BaseNode imple
     public static java.util.Iterator<org.semanticwb.repository.VersionHistory> listVersionHistorys(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionHistory>(org.semanticwb.repository.VersionHistory.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionHistory>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.VersionHistory> listVersionHistorys()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionHistory>(org.semanticwb.repository.VersionHistory.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionHistory>(it, true);
     }
 
     public static org.semanticwb.repository.VersionHistory getVersionHistory(String id, org.semanticwb.model.SWBModel model)

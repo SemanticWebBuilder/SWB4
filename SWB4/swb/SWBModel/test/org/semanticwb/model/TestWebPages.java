@@ -47,25 +47,29 @@ public class TestWebPages {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    //@Test
+    @Test
     public void testCreate()
     {
-        WebSite site=SWBContext.createWebSite("sep", "http://www.sep.gob.mx");
-        WebPage home=site.createWebPage("home");
-        home.setTitle("Home");
-        site.setHomePage(home);
-//        for(int x=0;x<10;x++)
-//        {
-//            WebPage page=site.createWebPage("page"+x);
-//            page.setTitle("Page"+x);
-//            page.addParentWebPage(home);
-//            for(int y=0;y<10;y++)
+        WebSite site=SWBContext.getWebSite("sep");
+        if(site==null)
+        {
+            site=SWBContext.createWebSite("sep", "http://www.sep.gob.mx#");
+            WebPage home=site.createWebPage("home");
+            home.setTitle("Home");
+            site.setHomePage(home);
+//            for(int x=0;x<10;x++)
 //            {
-//                WebPage ipage=site.createWebPage("page"+x+"_"+y);
-//                ipage.setTitle("Page"+x+"."+y);
-//                ipage.addParentWebPage(page);
+//                WebPage page=site.createWebPage("page"+x);
+//                page.setTitle("Page"+x);
+//                page.addParentWebPage(home);
+//                for(int y=0;y<10;y++)
+//                {
+//                    WebPage ipage=site.createWebPage("page"+x+"_"+y);
+//                    ipage.setTitle("Page"+x+"."+y);
+//                    ipage.addParentWebPage(page);
+//                }
 //            }
-//        }
+        }
     }
     
     //@Test

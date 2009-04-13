@@ -208,7 +208,7 @@ public class UserRepository extends UserRepositoryBase
         if (null != login)
         {
             Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
-            Iterator it = new GenericIterator(User.swb_User, aux, true);
+            Iterator it = new GenericIterator(aux, true);
             if (it.hasNext())
             {
                 ret = (User) it.next();

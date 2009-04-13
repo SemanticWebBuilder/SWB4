@@ -11,21 +11,21 @@ public class TextBase extends org.semanticwb.model.base.FormElementBase
         super(base);
     }
 
-    public static org.semanticwb.model.Text getText(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.Text)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.Text> listTexts(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Text>(org.semanticwb.model.Text.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Text>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.Text> listTexts()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Text>(org.semanticwb.model.Text.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Text>(it, true);
+    }
+
+    public static org.semanticwb.model.Text getText(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.Text)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.Text createText(String id, org.semanticwb.model.SWBModel model)
@@ -50,6 +50,6 @@ public class TextBase extends org.semanticwb.model.base.FormElementBase
 
     public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
     {
-        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
+        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
 }

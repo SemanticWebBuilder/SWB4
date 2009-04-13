@@ -26,13 +26,13 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
     public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroups(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(org.semanticwb.model.UserGroup.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroups()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(org.semanticwb.model.UserGroup.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(it, true);
     }
 
     public static org.semanticwb.model.UserGroup createUserGroup(org.semanticwb.model.SWBModel model)
@@ -73,7 +73,7 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupable> listUsers()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupable>(org.semanticwb.model.UserGroupable.class, getSemanticObject().listObjectProperties(swb_hasGroupedUser));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupable>(getSemanticObject().listObjectProperties(swb_hasGroupedUser));
     }
 
     public boolean hasUser(org.semanticwb.model.UserGroupable usergroupable)
@@ -171,7 +171,7 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> listChilds()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(org.semanticwb.model.UserGroup.class, getSemanticObject().listObjectProperties(swb_hasUsrGrpChild));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(getSemanticObject().listObjectProperties(swb_hasUsrGrpChild));
     }
 
     public boolean hasChild(org.semanticwb.model.UserGroup usergroup)

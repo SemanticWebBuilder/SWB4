@@ -11,21 +11,21 @@ public class RichTextBase extends org.semanticwb.model.TextArea
         super(base);
     }
 
-    public static org.semanticwb.model.RichText getRichText(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.RichText)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.RichText> listRichTexts(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RichText>(org.semanticwb.model.RichText.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RichText>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.RichText> listRichTexts()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RichText>(org.semanticwb.model.RichText.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RichText>(it, true);
+    }
+
+    public static org.semanticwb.model.RichText getRichText(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.RichText)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.RichText createRichText(String id, org.semanticwb.model.SWBModel model)

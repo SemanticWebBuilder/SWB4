@@ -16,13 +16,13 @@ public class PermissionBase extends org.semanticwb.model.SWBClass implements org
     public static java.util.Iterator<org.semanticwb.model.Permission> listPermissions(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission>(org.semanticwb.model.Permission.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.Permission> listPermissions()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission>(org.semanticwb.model.Permission.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission>(it, true);
     }
 
     public static org.semanticwb.model.Permission createPermission(org.semanticwb.model.SWBModel model)

@@ -14,13 +14,13 @@ public class UnstructuredBase extends org.semanticwb.repository.BaseNode
     public static java.util.Iterator<org.semanticwb.repository.Unstructured> listUnstructureds(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Unstructured>(org.semanticwb.repository.Unstructured.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Unstructured>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.Unstructured> listUnstructureds()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Unstructured>(org.semanticwb.repository.Unstructured.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Unstructured>(it, true);
     }
 
     public static org.semanticwb.repository.Unstructured createUnstructured(org.semanticwb.model.SWBModel model)

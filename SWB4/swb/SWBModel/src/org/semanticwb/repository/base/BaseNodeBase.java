@@ -20,13 +20,13 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
     public static java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodes(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode>(org.semanticwb.repository.BaseNode.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodes()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode>(org.semanticwb.repository.BaseNode.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode>(it, true);
     }
 
     public static org.semanticwb.repository.BaseNode getBaseNode(String id, org.semanticwb.model.SWBModel model)
@@ -102,7 +102,7 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode> listNodes()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode>(org.semanticwb.repository.BaseNode.class, getSemanticObject().listObjectProperties(swbrep_hasNodes));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.BaseNode>(getSemanticObject().listObjectProperties(swbrep_hasNodes));
     }
 
     public boolean hasNode(org.semanticwb.repository.BaseNode basenode)
@@ -155,7 +155,7 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
 
     public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
     {
-        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
+        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
 
     public org.semanticwb.repository.Workspace getWorkspace()

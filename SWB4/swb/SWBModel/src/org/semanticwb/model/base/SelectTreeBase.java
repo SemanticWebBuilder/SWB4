@@ -11,21 +11,21 @@ public class SelectTreeBase extends org.semanticwb.model.SelectOne
         super(base);
     }
 
-    public static org.semanticwb.model.SelectTree getSelectTree(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.SelectTree)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.SelectTree> listSelectTrees(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SelectTree>(org.semanticwb.model.SelectTree.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SelectTree>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.SelectTree> listSelectTrees()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SelectTree>(org.semanticwb.model.SelectTree.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SelectTree>(it, true);
+    }
+
+    public static org.semanticwb.model.SelectTree getSelectTree(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.SelectTree)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.SelectTree createSelectTree(String id, org.semanticwb.model.SWBModel model)

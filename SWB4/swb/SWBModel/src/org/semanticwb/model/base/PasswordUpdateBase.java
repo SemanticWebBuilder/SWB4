@@ -12,21 +12,21 @@ public class PasswordUpdateBase extends org.semanticwb.model.base.FormElementBas
         super(base);
     }
 
-    public static org.semanticwb.model.PasswordUpdate getPasswordUpdate(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.PasswordUpdate)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.PasswordUpdate> listPasswordUpdates(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PasswordUpdate>(org.semanticwb.model.PasswordUpdate.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PasswordUpdate>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.PasswordUpdate> listPasswordUpdates()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PasswordUpdate>(org.semanticwb.model.PasswordUpdate.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PasswordUpdate>(it, true);
+    }
+
+    public static org.semanticwb.model.PasswordUpdate getPasswordUpdate(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.PasswordUpdate)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.PasswordUpdate createPasswordUpdate(String id, org.semanticwb.model.SWBModel model)
@@ -76,6 +76,6 @@ public class PasswordUpdateBase extends org.semanticwb.model.base.FormElementBas
 
     public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
     {
-        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
+        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
 }

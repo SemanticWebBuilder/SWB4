@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -28,13 +28,13 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
     public static java.util.Iterator<org.semanticwb.model.Role> listRoles(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.Role> listRoles()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(it, true);
     }
 
     public static org.semanticwb.model.Role createRole(org.semanticwb.model.SWBModel model)
@@ -121,7 +121,7 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefInvs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(swb_hasRoleRefInv));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listObjectProperties(swb_hasRoleRefInv));
     }
 
     public boolean hasRoleRefInv(org.semanticwb.model.RoleRef roleref)
@@ -142,7 +142,7 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listChilds()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, getSemanticObject().listObjectProperties(swb_hasRoleChild));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(getSemanticObject().listObjectProperties(swb_hasRoleChild));
     }
 
     public boolean hasChild(org.semanticwb.model.Role role)
@@ -173,7 +173,7 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission> listPermissions()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission>(org.semanticwb.model.Permission.class, getSemanticObject().listObjectProperties(swb_hasPermission));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Permission>(getSemanticObject().listObjectProperties(swb_hasPermission));
     }
 
     public boolean hasPermission(org.semanticwb.model.Permission permission)

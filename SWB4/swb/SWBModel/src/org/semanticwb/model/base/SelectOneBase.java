@@ -13,21 +13,21 @@ public class SelectOneBase extends org.semanticwb.model.base.FormElementBase
         super(base);
     }
 
-    public static org.semanticwb.model.SelectOne getSelectOne(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.SelectOne)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.SelectOne> listSelectOnes(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SelectOne>(org.semanticwb.model.SelectOne.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SelectOne>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.SelectOne> listSelectOnes()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SelectOne>(org.semanticwb.model.SelectOne.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SelectOne>(it, true);
+    }
+
+    public static org.semanticwb.model.SelectOne getSelectOne(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.SelectOne)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.SelectOne createSelectOne(String id, org.semanticwb.model.SWBModel model)
@@ -72,6 +72,6 @@ public class SelectOneBase extends org.semanticwb.model.base.FormElementBase
 
     public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
     {
-        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
+        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
 }

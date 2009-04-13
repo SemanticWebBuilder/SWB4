@@ -11,7 +11,7 @@ public interface PropertyDefinition extends org.semanticwb.model.GenericObject
     public static final org.semanticwb.platform.SemanticProperty jcr_multiple=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#multiple");
     public static final org.semanticwb.platform.SemanticProperty jcr_protected=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#protected");
     public static final org.semanticwb.platform.SemanticProperty swbrep_internal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/repository#internal");
-    public static final org.semanticwb.platform.SemanticClass nt_PropertyDefinition=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/nt/1.0#propertyDefinition");
+    public static final org.semanticwb.platform.SemanticClass swbrep_PropertyDefinition=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#PropertyDefinition");
     public boolean isAutoCreated();
     public void setAutoCreated(boolean autoCreated);
     public boolean isMandatory();

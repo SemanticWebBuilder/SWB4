@@ -14,13 +14,13 @@ public class FolderBase extends org.semanticwb.repository.HierarchyNode implemen
     public static java.util.Iterator<org.semanticwb.repository.Folder> listFolders(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Folder>(org.semanticwb.repository.Folder.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Folder>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.Folder> listFolders()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Folder>(org.semanticwb.repository.Folder.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Folder>(it, true);
     }
 
     public static org.semanticwb.repository.Folder getFolder(String id, org.semanticwb.model.SWBModel model)

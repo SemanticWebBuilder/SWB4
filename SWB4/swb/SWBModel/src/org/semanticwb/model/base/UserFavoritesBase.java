@@ -16,13 +16,13 @@ public class UserFavoritesBase extends org.semanticwb.model.SWBClass
     public static java.util.Iterator<org.semanticwb.model.UserFavorites> listUserFavoritess(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserFavorites>(org.semanticwb.model.UserFavorites.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserFavorites>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.UserFavorites> listUserFavoritess()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserFavorites>(org.semanticwb.model.UserFavorites.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserFavorites>(it, true);
     }
 
     public static org.semanticwb.model.UserFavorites createUserFavorites(org.semanticwb.model.SWBModel model)

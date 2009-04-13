@@ -18,13 +18,13 @@ public class FrozenNodeBase extends org.semanticwb.repository.BaseNode implement
     public static java.util.Iterator<org.semanticwb.repository.FrozenNode> listFrozenNodes(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.FrozenNode>(org.semanticwb.repository.FrozenNode.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.FrozenNode>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.FrozenNode> listFrozenNodes()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.FrozenNode>(org.semanticwb.repository.FrozenNode.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.FrozenNode>(it, true);
     }
 
     public static org.semanticwb.repository.FrozenNode getFrozenNode(String id, org.semanticwb.model.SWBModel model)

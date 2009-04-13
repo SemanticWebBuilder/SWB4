@@ -18,13 +18,13 @@ public class VersionBase extends org.semanticwb.repository.BaseNode implements o
     public static java.util.Iterator<org.semanticwb.repository.Version> listVersions(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version>(org.semanticwb.repository.Version.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.Version> listVersions()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version>(org.semanticwb.repository.Version.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Version>(it, true);
     }
 
     public static org.semanticwb.repository.Version getVersion(String id, org.semanticwb.model.SWBModel model)

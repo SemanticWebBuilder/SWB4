@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ObjectActionBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Indexable,org.semanticwb.model.Resourceable,org.semanticwb.model.Trashable,org.semanticwb.model.Calendarable,org.semanticwb.model.Activeable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Iconable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Referensable
+public class ObjectActionBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Undeleteable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.RuleRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Viewable,org.semanticwb.model.Hiddenable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Calendarable,org.semanticwb.model.Iconable,org.semanticwb.model.Resourceable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticProperty swbxf_actGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#actGroup");
     public static final org.semanticwb.platform.SemanticProperty swbxf_actionURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#actionURL");
@@ -14,21 +14,21 @@ public class ObjectActionBase extends org.semanticwb.model.WebPage implements or
         super(base);
     }
 
-    public static org.semanticwb.model.ObjectAction getObjectAction(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.ObjectAction)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.ObjectAction> listObjectActions(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ObjectAction>(org.semanticwb.model.ObjectAction.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ObjectAction>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.ObjectAction> listObjectActions()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ObjectAction>(org.semanticwb.model.ObjectAction.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ObjectAction>(it, true);
+    }
+
+    public static org.semanticwb.model.ObjectAction getObjectAction(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.ObjectAction)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.ObjectAction createObjectAction(String id, org.semanticwb.model.SWBModel model)

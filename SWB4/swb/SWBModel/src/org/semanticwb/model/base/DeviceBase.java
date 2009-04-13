@@ -7,11 +7,13 @@ public class DeviceBase extends org.semanticwb.model.SWBClass implements org.sem
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
+    public static final org.semanticwb.platform.SemanticClass swb_Device=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Device");
+    public static final org.semanticwb.platform.SemanticProperty swb_dvcParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dvcParent");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasDvcChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasDvcChild");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_dvcUserAgent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dvcUserAgent");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
-    public static final org.semanticwb.platform.SemanticClass swb_Device=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Device");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Device");
 
     public DeviceBase(org.semanticwb.platform.SemanticObject base)
@@ -22,13 +24,13 @@ public class DeviceBase extends org.semanticwb.model.SWBClass implements org.sem
     public static java.util.Iterator<org.semanticwb.model.Device> listDevices(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Device>(org.semanticwb.model.Device.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Device>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.Device> listDevices()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Device>(org.semanticwb.model.Device.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Device>(it, true);
     }
 
     public static org.semanticwb.model.Device createDevice(org.semanticwb.model.SWBModel model)
@@ -113,6 +115,27 @@ public class DeviceBase extends org.semanticwb.model.SWBClass implements org.sem
         getSemanticObject().setProperty(swb_title, title, lang);
     }
 
+    public void setParent(org.semanticwb.model.Device device)
+    {
+        getSemanticObject().setObjectProperty(swb_dvcParent, device.getSemanticObject());
+    }
+
+    public void removeParent()
+    {
+        getSemanticObject().removeProperty(swb_dvcParent);
+    }
+
+    public org.semanticwb.model.Device getParent()
+    {
+         org.semanticwb.model.Device ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_dvcParent);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Device)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
@@ -121,6 +144,27 @@ public class DeviceBase extends org.semanticwb.model.SWBClass implements org.sem
     public void setUpdated(java.util.Date updated)
     {
         getSemanticObject().setDateProperty(swb_updated, updated);
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Device> listChilds()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Device>(getSemanticObject().listObjectProperties(swb_hasDvcChild));
+    }
+
+    public boolean hasChild(org.semanticwb.model.Device device)
+    {
+        if(device==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasDvcChild,device.getSemanticObject());
+    }
+
+    public org.semanticwb.model.Device getChild()
+    {
+         org.semanticwb.model.Device ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasDvcChild);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Device)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)

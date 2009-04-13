@@ -15,21 +15,21 @@ public class DisplayObjectBase extends org.semanticwb.model.SWBClass
         super(base);
     }
 
-    public static org.semanticwb.model.DisplayObject getDisplayObject(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.DisplayObject)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.DisplayObject> listDisplayObjects(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.DisplayObject>(org.semanticwb.model.DisplayObject.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.DisplayObject>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.DisplayObject> listDisplayObjects()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.DisplayObject>(org.semanticwb.model.DisplayObject.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.DisplayObject>(it, true);
+    }
+
+    public static org.semanticwb.model.DisplayObject getDisplayObject(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.DisplayObject)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.DisplayObject createDisplayObject(String id, org.semanticwb.model.SWBModel model)

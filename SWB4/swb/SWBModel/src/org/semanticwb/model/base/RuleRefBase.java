@@ -16,13 +16,13 @@ public class RuleRefBase extends org.semanticwb.model.Reference implements org.s
     public static java.util.Iterator<org.semanticwb.model.RuleRef> listRuleRefs(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(it, true);
     }
 
     public static org.semanticwb.model.RuleRef createRuleRef(org.semanticwb.model.SWBModel model)

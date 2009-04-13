@@ -14,13 +14,13 @@ public class VersionLabelsBase extends org.semanticwb.repository.BaseNode
     public static java.util.Iterator<org.semanticwb.repository.VersionLabels> listVersionLabelss(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionLabels>(org.semanticwb.repository.VersionLabels.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionLabels>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.VersionLabels> listVersionLabelss()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionLabels>(org.semanticwb.repository.VersionLabels.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.VersionLabels>(it, true);
     }
 
     public static org.semanticwb.repository.VersionLabels getVersionLabels(String id, org.semanticwb.model.SWBModel model)

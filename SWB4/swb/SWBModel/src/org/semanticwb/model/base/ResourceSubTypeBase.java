@@ -25,13 +25,13 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
     public static java.util.Iterator<org.semanticwb.model.ResourceSubType> listResourceSubTypes(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType>(org.semanticwb.model.ResourceSubType.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.ResourceSubType> listResourceSubTypes()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType>(org.semanticwb.model.ResourceSubType.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType>(it, true);
     }
 
     public static org.semanticwb.model.ResourceSubType getResourceSubType(String id, org.semanticwb.model.SWBModel model)
@@ -122,7 +122,7 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(org.semanticwb.model.Resource.class, getSemanticObject().listObjectProperties(swb_hasPSTResources));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(getSemanticObject().listObjectProperties(swb_hasPSTResources));
     }
 
     public boolean hasResource(org.semanticwb.model.Resource resource)

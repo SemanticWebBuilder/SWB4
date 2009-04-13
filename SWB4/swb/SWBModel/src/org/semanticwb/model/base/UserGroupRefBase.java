@@ -16,13 +16,13 @@ public class UserGroupRefBase extends org.semanticwb.model.Reference implements 
     public static java.util.Iterator<org.semanticwb.model.UserGroupRef> listUserGroupRefs(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(org.semanticwb.model.UserGroupRef.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.UserGroupRef> listUserGroupRefs()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(org.semanticwb.model.UserGroupRef.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(it, true);
     }
 
     public static org.semanticwb.model.UserGroupRef createUserGroupRef(org.semanticwb.model.SWBModel model)

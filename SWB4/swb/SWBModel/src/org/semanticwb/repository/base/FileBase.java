@@ -14,13 +14,13 @@ public class FileBase extends org.semanticwb.repository.HierarchyNode implements
     public static java.util.Iterator<org.semanticwb.repository.File> listFiles(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.File>(org.semanticwb.repository.File.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.File>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.File> listFiles()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.File>(org.semanticwb.repository.File.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.File>(it, true);
     }
 
     public static org.semanticwb.repository.File getFile(String id, org.semanticwb.model.SWBModel model)

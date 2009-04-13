@@ -12,21 +12,21 @@ public class PropertyGroupBase extends org.semanticwb.model.SWBClass implements 
         super(base);
     }
 
-    public static org.semanticwb.model.PropertyGroup getPropertyGroup(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.PropertyGroup)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.PropertyGroup> listPropertyGroups(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PropertyGroup>(org.semanticwb.model.PropertyGroup.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PropertyGroup>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.PropertyGroup> listPropertyGroups()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PropertyGroup>(org.semanticwb.model.PropertyGroup.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PropertyGroup>(it, true);
+    }
+
+    public static org.semanticwb.model.PropertyGroup getPropertyGroup(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.PropertyGroup)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.PropertyGroup createPropertyGroup(String id, org.semanticwb.model.SWBModel model)

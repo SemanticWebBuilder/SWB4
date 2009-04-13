@@ -21,13 +21,13 @@ public class LanguageBase extends org.semanticwb.model.SWBClass implements org.s
     public static java.util.Iterator<org.semanticwb.model.Language> listLanguages(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Language>(org.semanticwb.model.Language.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Language>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.Language> listLanguages()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Language>(org.semanticwb.model.Language.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Language>(it, true);
     }
 
     public static org.semanticwb.model.Language getLanguage(String id, org.semanticwb.model.SWBModel model)
