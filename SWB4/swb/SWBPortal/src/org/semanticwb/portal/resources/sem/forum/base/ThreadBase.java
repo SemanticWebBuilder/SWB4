@@ -1,7 +1,7 @@
 package org.semanticwb.portal.resources.sem.forum.base;
 
 
-public class ThreadBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Calendarable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Referensable,org.semanticwb.model.Viewable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.PFlowRefable
+public class ThreadBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.RuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Resourceable,org.semanticwb.model.Activeable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Indexable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Calendarable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.Viewable
 {
     public static final org.semanticwb.platform.SemanticProperty frm_thIcon=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#thIcon");
     public static final org.semanticwb.platform.SemanticProperty frm_thViewcount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#thViewcount");
