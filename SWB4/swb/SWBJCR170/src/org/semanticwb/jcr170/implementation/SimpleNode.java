@@ -71,8 +71,7 @@ public class SimpleNode implements Node
     private String id;
     private boolean modified = false;    
     protected static final String NOT_SUPPORTED_YET = "Not supported yet.";
-    protected static final String WAS_NOT_FOUND = " was not found";
-    private static final String PATH_SEPARATOR = "/";
+    protected static final String WAS_NOT_FOUND = " was not found";    
     private static final ValueFactoryImp factory = new ValueFactoryImp();
     protected BaseNode node;
     private final HashSet<SemanticClass> mixins = new HashSet<SemanticClass>();
