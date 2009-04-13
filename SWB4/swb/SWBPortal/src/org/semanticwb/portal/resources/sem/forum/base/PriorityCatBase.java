@@ -21,13 +21,13 @@ public class PriorityCatBase extends org.semanticwb.model.SWBClass implements or
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.PriorityCat> listPriorityCats(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.PriorityCat>(org.semanticwb.portal.resources.sem.forum.PriorityCat.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.PriorityCat>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.PriorityCat> listPriorityCats()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.PriorityCat>(org.semanticwb.portal.resources.sem.forum.PriorityCat.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.PriorityCat>(it, true);
     }
 
     public static org.semanticwb.portal.resources.sem.forum.PriorityCat createPriorityCat(String id, org.semanticwb.model.SWBModel model)

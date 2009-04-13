@@ -38,13 +38,13 @@ public class ThreadBase extends org.semanticwb.model.WebPage implements org.sema
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreads(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread>(org.semanticwb.portal.resources.sem.forum.Thread.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreads()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread>(org.semanticwb.portal.resources.sem.forum.Thread.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread>(it, true);
     }
 
     public static org.semanticwb.portal.resources.sem.forum.Thread createThread(String id, org.semanticwb.model.SWBModel model)
@@ -173,7 +173,7 @@ public class ThreadBase extends org.semanticwb.model.WebPage implements org.sema
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.UserFavThread> listFavThreadss()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.UserFavThread>(org.semanticwb.portal.resources.sem.forum.UserFavThread.class, getSemanticObject().listObjectProperties(frm_hasFavThreads));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.UserFavThread>(getSemanticObject().listObjectProperties(frm_hasFavThreads));
     }
 
     public boolean hasFavThreads(org.semanticwb.portal.resources.sem.forum.UserFavThread userfavthread)
@@ -246,7 +246,7 @@ public class ThreadBase extends org.semanticwb.model.WebPage implements org.sema
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> listPosts()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(org.semanticwb.portal.resources.sem.forum.Post.class, getSemanticObject().listObjectProperties(frm_hasPost));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(getSemanticObject().listObjectProperties(frm_hasPost));
     }
 
     public boolean hasPost(org.semanticwb.portal.resources.sem.forum.Post post)

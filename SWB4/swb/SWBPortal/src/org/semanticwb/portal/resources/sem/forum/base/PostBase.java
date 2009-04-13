@@ -35,13 +35,13 @@ public class PostBase extends org.semanticwb.model.SWBClass implements org.seman
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPosts(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(org.semanticwb.portal.resources.sem.forum.Post.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPosts()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(org.semanticwb.portal.resources.sem.forum.Post.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(it, true);
     }
 
     public static org.semanticwb.portal.resources.sem.forum.Post createPost(String id, org.semanticwb.model.SWBModel model)
@@ -129,7 +129,7 @@ public class PostBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachmentss()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment>(org.semanticwb.portal.resources.sem.forum.Attachment.class, getSemanticObject().listObjectProperties(frm_hasAttachments));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment>(getSemanticObject().listObjectProperties(frm_hasAttachments));
     }
 
     public boolean hasAttachments(org.semanticwb.portal.resources.sem.forum.Attachment attachment)
@@ -243,7 +243,7 @@ public class PostBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> listchildPosts()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(org.semanticwb.portal.resources.sem.forum.Post.class, getSemanticObject().listObjectProperties(frm_haschildPost));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(getSemanticObject().listObjectProperties(frm_haschildPost));
     }
 
     public boolean haschildPost(org.semanticwb.portal.resources.sem.forum.Post post)

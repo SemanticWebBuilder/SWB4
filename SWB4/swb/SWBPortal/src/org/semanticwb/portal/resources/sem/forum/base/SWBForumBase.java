@@ -142,7 +142,7 @@ public class SWBForumBase extends org.semanticwb.portal.api.GenericSemResource i
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> listthreads()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread>(org.semanticwb.portal.resources.sem.forum.Thread.class, getSemanticObject().listObjectProperties(frm_hasthread));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread>(getSemanticObject().listObjectProperties(frm_hasthread));
     }
 
     public boolean hasthread(org.semanticwb.portal.resources.sem.forum.Thread thread)
