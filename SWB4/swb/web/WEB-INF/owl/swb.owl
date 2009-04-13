@@ -531,9 +531,9 @@
     <rdfs:subClassOf rdf:resource="#Trashable"/>
     <rdfs:subClassOf rdf:resource="#PFlowRefable"/>
     <rdfs:subClassOf rdf:resource="#Activeable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-    <rdf:type rdf:resource="#Class"/>
     <rdfs:subClassOf rdf:resource="#Calendarable"/>
+    <rdf:type rdf:resource="#Class"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage">
         <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -822,16 +822,24 @@
         </swb:hasClass>
         <swb:hasClass>
           <swb:Class rdf:ID="Device">
+            <rdfs:subClassOf rdf:resource="#SWBClass"/>
             <rdfs:label xml:lang="en">Device</rdfs:label>
-            <rdfs:label xml:lang="es">Dispositivo</rdfs:label>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swb:autogenId>
+            <swb:displayObject>
+              <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_Device">
+                <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                >2</swbxf:dropMatchLevel>
+                <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</swbxf:dragSupport>
+              </swbxf:DisplayObject>
+            </swb:displayObject>
             <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >org.semanticwb.model.Device</swb:className>
-            <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-            <rdfs:subClassOf rdf:resource="#SWBClass"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
             <rdfs:subClassOf rdf:resource="#Traceable"/>
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+            <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+            <rdfs:label xml:lang="es">Dispositivo</rdfs:label>
           </swb:Class>
         </swb:hasClass>
         <swb:hasHerarquicalNode>
@@ -1279,6 +1287,14 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="dvcParent">
+    <rdfs:domain rdf:resource="#Device"/>
+    <rdfs:range rdf:resource="#Device"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasDvcChild"/>
+    </owl:inverseOf>
+    <rdfs:label>parent</rdfs:label>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="lastVersion">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
@@ -1464,6 +1480,13 @@
     <rdfs:range rdf:resource="#PFlowRef"/>
     <rdfs:subPropertyOf rdf:resource="#hasReference"/>
     <rdfs:domain rdf:resource="#PFlowRefable"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasDvcChild">
+    <rdfs:label>hasChild</rdfs:label>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
@@ -2089,6 +2112,8 @@
         <rdfs:label>Hits</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#actGroup">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -2098,16 +2123,18 @@
     <rdfs:label>diskUsage</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_webPageDiskUsage">
-        <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swbxf:propDisabled>
+        <rdfs:label xml:lang="es">Espacio Usado</rdfs:label>
         <rdfs:label xml:lang="en">Used Disk Space</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >250</swb:index>
-        <rdfs:label xml:lang="es">Espacio Usado</rdfs:label>
+        <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propDisabled>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
     <rdfs:domain rdf:resource="#WebPage"/>
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="classID">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -2340,12 +2367,6 @@
       </swb:Class>
     </rdfs:domain>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="valid">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBClass"/>
-    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:externalInvocation>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrLastLogin">
     <rdfs:label>lastLogin</rdfs:label>
     <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -2458,6 +2479,8 @@
         <rdfs:label xml:lang="es">Apariciones</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrLanguage">
     <rdfs:label>language</rdfs:label>
