@@ -26,13 +26,13 @@ public class VersionInfoBase extends org.semanticwb.model.SWBClass implements or
     public static java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfos(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo>(org.semanticwb.model.VersionInfo.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfos()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo>(org.semanticwb.model.VersionInfo.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo>(it, true);
     }
 
     public static org.semanticwb.model.VersionInfo createVersionInfo(org.semanticwb.model.SWBModel model)

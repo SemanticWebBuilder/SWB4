@@ -19,13 +19,13 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel implements org.
     public static java.util.Iterator<org.semanticwb.repository.Workspace> listWorkspaces(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Workspace>(org.semanticwb.repository.Workspace.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Workspace>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.Workspace> listWorkspaces()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Workspace>(org.semanticwb.repository.Workspace.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.Workspace>(it, true);
     }
 
     public static org.semanticwb.repository.Workspace getWorkspace(String id)
@@ -136,30 +136,6 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel implements org.
          return ret;
     }
 
-    public org.semanticwb.repository.BaseNode getBaseNode(String id)
-    {
-        return org.semanticwb.repository.BaseNode.getBaseNode(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodes()
-    {
-        return org.semanticwb.repository.BaseNode.listBaseNodes(this);
-    }
-
-    public org.semanticwb.repository.BaseNode createBaseNode(String id)
-    {
-        return org.semanticwb.repository.BaseNode.createBaseNode(id,this);
-    }
-
-    public void removeBaseNode(String id)
-    {
-        org.semanticwb.repository.BaseNode.removeBaseNode(id, this);
-    }
-    public boolean hasBaseNode(String id)
-    {
-        return org.semanticwb.repository.BaseNode.hasBaseNode(id, this);
-    }
-
     public org.semanticwb.repository.Unstructured getUnstructured(String id)
     {
         return org.semanticwb.repository.Unstructured.getUnstructured(id, this);
@@ -188,5 +164,29 @@ public class WorkspaceBase extends org.semanticwb.model.SWBModel implements org.
     public boolean hasUnstructured(String id)
     {
         return org.semanticwb.repository.Unstructured.hasUnstructured(id, this);
+    }
+
+    public org.semanticwb.repository.BaseNode getBaseNode(String id)
+    {
+        return org.semanticwb.repository.BaseNode.getBaseNode(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.repository.BaseNode> listBaseNodes()
+    {
+        return org.semanticwb.repository.BaseNode.listBaseNodes(this);
+    }
+
+    public org.semanticwb.repository.BaseNode createBaseNode(String id)
+    {
+        return org.semanticwb.repository.BaseNode.createBaseNode(id,this);
+    }
+
+    public void removeBaseNode(String id)
+    {
+        org.semanticwb.repository.BaseNode.removeBaseNode(id, this);
+    }
+    public boolean hasBaseNode(String id)
+    {
+        return org.semanticwb.repository.BaseNode.hasBaseNode(id, this);
     }
 }

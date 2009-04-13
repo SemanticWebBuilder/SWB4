@@ -16,13 +16,13 @@ public class RoleRefBase extends org.semanticwb.model.Reference implements org.s
     public static java.util.Iterator<org.semanticwb.model.RoleRef> listRoleRefs(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(it, true);
     }
 
     public static org.semanticwb.model.RoleRef createRoleRef(org.semanticwb.model.SWBModel model)

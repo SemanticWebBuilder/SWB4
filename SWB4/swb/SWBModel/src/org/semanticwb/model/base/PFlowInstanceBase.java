@@ -19,13 +19,13 @@ public class PFlowInstanceBase extends org.semanticwb.model.SWBClass implements 
     public static java.util.Iterator<org.semanticwb.model.PFlowInstance> listPFlowInstances(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance>(org.semanticwb.model.PFlowInstance.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.PFlowInstance> listPFlowInstances()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance>(org.semanticwb.model.PFlowInstance.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance>(it, true);
     }
 
     public static org.semanticwb.model.PFlowInstance createPFlowInstance(org.semanticwb.model.SWBModel model)

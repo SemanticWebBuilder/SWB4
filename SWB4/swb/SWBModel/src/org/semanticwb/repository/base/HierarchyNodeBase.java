@@ -15,13 +15,13 @@ public class HierarchyNodeBase extends org.semanticwb.repository.BaseNode implem
     public static java.util.Iterator<org.semanticwb.repository.HierarchyNode> listHierarchyNodes(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.HierarchyNode>(org.semanticwb.repository.HierarchyNode.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.HierarchyNode>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.HierarchyNode> listHierarchyNodes()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.HierarchyNode>(org.semanticwb.repository.HierarchyNode.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.repository.HierarchyNode>(it, true);
     }
 
     public static org.semanticwb.repository.HierarchyNode getHierarchyNode(String id, org.semanticwb.model.SWBModel model)

@@ -12,21 +12,21 @@ public class CodeEditorBase extends org.semanticwb.model.TextArea
         super(base);
     }
 
-    public static org.semanticwb.model.CodeEditor getCodeEditor(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.model.CodeEditor)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.model.CodeEditor> listCodeEditors(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.CodeEditor>(org.semanticwb.model.CodeEditor.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.CodeEditor>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.CodeEditor> listCodeEditors()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.CodeEditor>(org.semanticwb.model.CodeEditor.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.CodeEditor>(it, true);
+    }
+
+    public static org.semanticwb.model.CodeEditor getCodeEditor(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.CodeEditor)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.model.CodeEditor createCodeEditor(String id, org.semanticwb.model.SWBModel model)

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class PFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Versionable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class PFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Versionable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -31,13 +31,13 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
     public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlows(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow>(org.semanticwb.model.PFlow.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlows()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow>(org.semanticwb.model.PFlow.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow>(it, true);
     }
 
     public static org.semanticwb.model.PFlow createPFlow(org.semanticwb.model.SWBModel model)
@@ -155,7 +155,7 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> listPFlowRefInvs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(org.semanticwb.model.PFlowRef.class, getSemanticObject().listObjectProperties(swb_hasPFlowRefInv));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(getSemanticObject().listObjectProperties(swb_hasPFlowRefInv));
     }
 
     public boolean hasPFlowRefInv(org.semanticwb.model.PFlowRef pflowref)
@@ -227,7 +227,7 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance> listPFlowInstances()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance>(org.semanticwb.model.PFlowInstance.class, getSemanticObject().listObjectProperties(swb_hasPFlowInstance));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance>(getSemanticObject().listObjectProperties(swb_hasPFlowInstance));
     }
 
     public boolean hasPFlowInstance(org.semanticwb.model.PFlowInstance pflowinstance)

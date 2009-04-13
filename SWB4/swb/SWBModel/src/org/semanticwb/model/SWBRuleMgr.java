@@ -291,7 +291,8 @@ public class SWBRuleMgr
                 return user.isSigned()==Boolean.parseBoolean(value);
             }else if(name.equals(TAG_INT_DEVICE)) //validacion de roles
             {
-                return user.getDevice().equals(value);
+                Device dev=(Device)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(value);
+                return user.hasDevice(dev);
             }else //se busca en el xml del usuario
             {
                 SemanticProperty prop=user.getSemanticObject().getSemanticClass().getProperty(name);

@@ -16,13 +16,13 @@ public class PFlowRefBase extends org.semanticwb.model.Reference implements org.
     public static java.util.Iterator<org.semanticwb.model.PFlowRef> listPFlowRefs(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(org.semanticwb.model.PFlowRef.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.PFlowRef> listPFlowRefs()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(org.semanticwb.model.PFlowRef.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(it, true);
     }
 
     public static org.semanticwb.model.PFlowRef createPFlowRef(org.semanticwb.model.SWBModel model)

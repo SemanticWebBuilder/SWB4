@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Localeable,org.semanticwb.model.Filterable
+public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -54,13 +54,13 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite>(org.semanticwb.model.WebSite.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite>(org.semanticwb.model.WebSite.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite>(it, true);
     }
 
     public static org.semanticwb.model.WebSite getWebSite(String id)

@@ -7,19 +7,40 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 
 public class WebPage extends WebPageBase 
 {
+    private static Logger log=SWBUtils.getLogger(WebPage.class);
+
     private String siteid=null;
-    private long views=0;
+
+    private long views=-1;
+    private long timer;                     //valores de sincronizacion de views, hits
+    private static long time;                      //tiempo en milisegundos por cada actualizacion
+    private boolean viewed = false;
+
+    static
+    {
+        time = 600000L;
+        try
+        {
+            time = 1000L * Long.parseLong((String) SWBPlatform.getEnv("swb/accessLogTime","600"));
+        } catch (Exception e)
+        {
+            log.error("Error to read accessLogTime...",e);
+        }
+    }
 
     public WebPage(SemanticObject base)
     {
         super(base);
+        timer = System.currentTimeMillis();
     }
     
     public String getWebSiteId()
@@ -183,7 +204,7 @@ public class WebPage extends WebPageBase
     
     public boolean isVisible()
     {
-        return isActive() && !isDeleted() && !isHidden();
+        return isValid() && !isHidden();
     }
     
     /**  Regresa el Url del topico
@@ -354,16 +375,21 @@ public class WebPage extends WebPageBase
     @Override
     public long getViews()
     {
-        if(views==0)views=super.getViews();
+        if(views==-1)views=super.getViews();
         return views;
     }
 
     public boolean incViews()
     {
-        if(views==0)views=getViews();
+        viewed = true;
+        if(views==-1)views=getViews();
         views+=1;
-        //TODO validar por tiempo
-        return true;
+        long t = System.currentTimeMillis() - timer;
+        if (t > time || t < -time)
+        {
+            return true;
+        }
+        return false;
     }
     
     @Override
@@ -375,7 +401,12 @@ public class WebPage extends WebPageBase
 
     public void updateViews()
     {
-        setViews(views);
+        if(viewed)
+        {
+            timer = System.currentTimeMillis();
+            setViews(views);
+            viewed = false;
+        }
     }
     
 }

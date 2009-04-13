@@ -14,13 +14,13 @@ public class SWBModelBase extends org.semanticwb.model.base.GenericObjectBase
     public static java.util.Iterator<org.semanticwb.model.SWBModel> listSWBModels(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel>(org.semanticwb.model.SWBModel.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.SWBModel> listSWBModels()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel>(org.semanticwb.model.SWBModel.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel>(it, true);
     }
 
     public static org.semanticwb.model.SWBModel getSWBModel(String id, org.semanticwb.model.SWBModel model)
@@ -50,6 +50,6 @@ public class SWBModelBase extends org.semanticwb.model.base.GenericObjectBase
 
     public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
     {
-        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);
+        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
 }

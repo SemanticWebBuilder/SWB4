@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Calendarable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.Ruleable
+public class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Ruleable,org.semanticwb.model.Traceable,org.semanticwb.model.Calendarable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Roleable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -29,13 +29,13 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
     public static java.util.Iterator<org.semanticwb.model.Camp> listCamps(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp>(org.semanticwb.model.Camp.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.Camp> listCamps()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp>(org.semanticwb.model.Camp.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp>(it, true);
     }
 
     public static org.semanticwb.model.Camp createCamp(org.semanticwb.model.SWBModel model)
@@ -132,7 +132,7 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(swb_hasCalendar));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(getSemanticObject().listObjectProperties(swb_hasCalendar));
     }
 
     public boolean hasCalendar(org.semanticwb.model.Calendar calendar)
@@ -168,7 +168,7 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> listRules()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(org.semanticwb.model.Rule.class, getSemanticObject().listObjectProperties(swb_hasRule));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(getSemanticObject().listObjectProperties(swb_hasRule));
     }
 
     public boolean hasRule(org.semanticwb.model.Rule rule)
@@ -245,7 +245,7 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listRoles()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, getSemanticObject().listObjectProperties(swb_hasRole));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(getSemanticObject().listObjectProperties(swb_hasRole));
     }
 
     public boolean hasRole(org.semanticwb.model.Role role)

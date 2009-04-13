@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable
+public class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -38,13 +38,13 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
     public static java.util.Iterator<org.semanticwb.model.User> listUsers(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.User>(org.semanticwb.model.User.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.User>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.User> listUsers()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.User>(org.semanticwb.model.User.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.User>(it, true);
     }
 
     public static org.semanticwb.model.User createUser(org.semanticwb.model.SWBModel model)
@@ -116,7 +116,7 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> listUserGroups()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(org.semanticwb.model.UserGroup.class, getSemanticObject().listObjectProperties(swb_hasUserGroup));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(getSemanticObject().listObjectProperties(swb_hasUserGroup));
     }
 
     public boolean hasUserGroup(org.semanticwb.model.UserGroup usergroup)
@@ -233,7 +233,7 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter> listAdminFilters()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter>(org.semanticwb.model.AdminFilter.class, getSemanticObject().listObjectProperties(swb_hasAdminFilter));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter>(getSemanticObject().listObjectProperties(swb_hasAdminFilter));
     }
 
     public boolean hasAdminFilter(org.semanticwb.model.AdminFilter adminfilter)
@@ -310,14 +310,14 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public String getPassword()
     {
-        //Implement this method in User object
-        throw new org.semanticwb.SWBMethodImplementationRequiredException();
+        //Override this method in User object
+        return getSemanticObject().getProperty(swb_usrPassword,false);
     }
 
     public void setPassword(String usrPassword)
     {
-        //Implement this method in User object
-        throw new org.semanticwb.SWBMethodImplementationRequiredException();
+        //Override this method in User object
+        getSemanticObject().setProperty(swb_usrPassword, usrPassword,false);
     }
 
     public String getLogin()
@@ -332,7 +332,7 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listRoles()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(org.semanticwb.model.Role.class, getSemanticObject().listObjectProperties(swb_hasRole));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(getSemanticObject().listObjectProperties(swb_hasRole));
     }
 
     public boolean hasRole(org.semanticwb.model.Role role)

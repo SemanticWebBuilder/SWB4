@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class DnsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.WebPageable,org.semanticwb.model.Traceable
+public class DnsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.WebPageable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -23,13 +23,13 @@ public class DnsBase extends org.semanticwb.model.SWBClass implements org.semant
     public static java.util.Iterator<org.semanticwb.model.Dns> listDnss(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Dns>(org.semanticwb.model.Dns.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Dns>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.Dns> listDnss()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Dns>(org.semanticwb.model.Dns.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Dns>(it, true);
     }
 
     public static org.semanticwb.model.Dns createDns(org.semanticwb.model.SWBModel model)

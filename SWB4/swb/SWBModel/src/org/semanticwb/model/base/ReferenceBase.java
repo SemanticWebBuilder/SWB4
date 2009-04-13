@@ -15,13 +15,13 @@ public class ReferenceBase extends org.semanticwb.model.SWBClass implements org.
     public static java.util.Iterator<org.semanticwb.model.Reference> listReferences(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Reference>(org.semanticwb.model.Reference.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Reference>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.Reference> listReferences()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Reference>(org.semanticwb.model.Reference.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Reference>(it, true);
     }
 
     public static org.semanticwb.model.Reference createReference(org.semanticwb.model.SWBModel model)

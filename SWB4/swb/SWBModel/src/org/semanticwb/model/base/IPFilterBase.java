@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -24,13 +24,13 @@ public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.s
     public static java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilters(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter>(org.semanticwb.model.IPFilter.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilters()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter>(org.semanticwb.model.IPFilter.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter>(it, true);
     }
 
     public static org.semanticwb.model.IPFilter createIPFilter(org.semanticwb.model.SWBModel model)

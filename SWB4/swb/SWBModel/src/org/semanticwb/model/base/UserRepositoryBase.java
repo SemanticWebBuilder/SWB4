@@ -26,13 +26,13 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
     public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositorys(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository>(org.semanticwb.model.UserRepository.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositorys()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository>(org.semanticwb.model.UserRepository.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository>(it, true);
     }
 
     public static org.semanticwb.model.UserRepository getUserRepository(String id)

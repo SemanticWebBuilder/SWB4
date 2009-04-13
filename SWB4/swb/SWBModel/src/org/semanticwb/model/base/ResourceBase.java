@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLConfable,org.semanticwb.model.Hitable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Campable,org.semanticwb.model.Priorityable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Calendarable,org.semanticwb.model.XMLable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Indexable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable
+public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLConfable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.XMLable,org.semanticwb.model.Priorityable,org.semanticwb.model.Trashable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Viewable,org.semanticwb.model.Calendarable,org.semanticwb.model.Hitable,org.semanticwb.model.Campable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
@@ -58,13 +58,13 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
     public static java.util.Iterator<org.semanticwb.model.Resource> listResources(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(org.semanticwb.model.Resource.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.Resource> listResources()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(org.semanticwb.model.Resource.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(it, true);
     }
 
     public static org.semanticwb.model.Resource createResource(org.semanticwb.model.SWBModel model)
@@ -95,7 +95,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listUserGroupRefs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(org.semanticwb.model.UserGroupRef.class, getSemanticObject().listObjectProperties(swb_hasUserGroupRef));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listObjectProperties(swb_hasUserGroupRef));
     }
 
     public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref)
@@ -105,7 +105,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listInheritUserGroupRefs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(org.semanticwb.model.UserGroupRef.class, getSemanticObject().listInheritProperties(swb_hasUserGroupRef));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listInheritProperties(swb_hasUserGroupRef));
     }
 
     public void addUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref)
@@ -157,12 +157,14 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public long getHits()
     {
-        return getSemanticObject().getLongProperty(swb_hits);
+        //Override this method in Resource object
+        return getSemanticObject().getLongProperty(swb_hits,false);
     }
 
     public void setHits(long hits)
     {
-        getSemanticObject().setLongProperty(swb_hits, hits);
+        //Override this method in Resource object
+        getSemanticObject().setLongProperty(swb_hits, hits,false);
     }
 
     public String getXml()
@@ -249,7 +251,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceRef> listResourceRefInvs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceRef>(org.semanticwb.model.ResourceRef.class, getSemanticObject().listObjectProperties(swb_hasResourceRefInv));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceRef>(getSemanticObject().listObjectProperties(swb_hasResourceRefInv));
     }
 
     public boolean hasResourceRefInv(org.semanticwb.model.ResourceRef resourceref)
@@ -394,7 +396,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar> listCalendars()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(org.semanticwb.model.Calendar.class, getSemanticObject().listObjectProperties(swb_hasCalendar));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar>(getSemanticObject().listObjectProperties(swb_hasCalendar));
     }
 
     public boolean hasCalendar(org.semanticwb.model.Calendar calendar)
@@ -492,7 +494,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listObjectProperties(swb_hasRoleRef));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listObjectProperties(swb_hasRoleRef));
     }
 
     public boolean hasRoleRef(org.semanticwb.model.RoleRef roleref)
@@ -502,7 +504,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listInheritRoleRefs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(org.semanticwb.model.RoleRef.class, getSemanticObject().listInheritProperties(swb_hasRoleRef));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listInheritProperties(swb_hasRoleRef));
     }
 
     public void addRoleRef(org.semanticwb.model.RoleRef roleref)
@@ -533,17 +535,19 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public long getViews()
     {
-        return getSemanticObject().getLongProperty(swb_views);
+        //Override this method in Resource object
+        return getSemanticObject().getLongProperty(swb_views,false);
     }
 
     public void setViews(long views)
     {
-        getSemanticObject().setLongProperty(swb_views, views);
+        //Override this method in Resource object
+        getSemanticObject().setLongProperty(swb_views, views,false);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resourceable> listResourceables()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resourceable>(org.semanticwb.model.Resourceable.class, getSemanticObject().listObjectProperties(swb_hasResourceable));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resourceable>(getSemanticObject().listObjectProperties(swb_hasResourceable));
     }
 
     public boolean hasResourceable(org.semanticwb.model.Resourceable resourceable)
@@ -585,7 +589,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listObjectProperties(swb_hasRuleRef));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(getSemanticObject().listObjectProperties(swb_hasRuleRef));
     }
 
     public boolean hasRuleRef(org.semanticwb.model.RuleRef ruleref)
@@ -595,7 +599,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listInheritRuleRefs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(org.semanticwb.model.RuleRef.class, getSemanticObject().listInheritProperties(swb_hasRuleRef));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(getSemanticObject().listInheritProperties(swb_hasRuleRef));
     }
 
     public void addRuleRef(org.semanticwb.model.RuleRef ruleref)

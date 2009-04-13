@@ -10,6 +10,7 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
@@ -18,7 +19,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
 {
 
     static Logger log = SWBUtils.getLogger(User.class);
-    private String device = null;
+    private Device device = null;
     private String ip = null;
     private boolean login = false;
 
@@ -41,44 +42,20 @@ public class User extends UserBase implements Principal, java.io.Serializable
         {
             tmpPasswd = SWBUtils.CryptoWrapper.passwordDigest(password);
             //System.out.println("tmpPasswd:"+tmpPasswd);
-
-            Statement stm = getSemanticObject().getRDFResource().getProperty(User.swb_usrPassword.getRDFProperty());
-            if (stm != null)
-            {
-                stm.changeObject(tmpPasswd);
-            }
-            else
-            {
-                getSemanticObject().getRDFResource().addProperty(User.swb_usrPassword.getRDFProperty(), tmpPasswd);
-            }
+            super.setPassword(tmpPasswd);
             setPasswordChanged(new Date());
         } catch (NoSuchAlgorithmException ex)
         {
             log.error("User: Can't set a crypted Password", ex);
         }
-
     }
 
-    @Override
-    public String getPassword()
-    {
-        String ret=null;
-        Statement st=getSemanticObject().getRDFResource().getProperty(User.swb_usrPassword.getRDFProperty());
-        if(st!=null)
-        {
-            ret=st.getString();
-        }
-        //System.out.println("getPassword:"+ret);
-        return ret;
-    }
-
-
-    public String getDevice()
+    public Device getDevice()
     {
         return device;
     }
 
-    public void setDevice(String device)
+    public void setDevice(Device device)
     {
         this.device = device;
     }
@@ -399,6 +376,28 @@ public class User extends UserBase implements Principal, java.io.Serializable
             }else
             {
                 role=role.getParent();
+            }
+        }
+        return ret;
+    }
+
+    public boolean hasDevice(Device device)
+    {
+        boolean ret=false;
+        Device act=getDevice();
+        //System.out.println(act+" "+device);
+        if(act!=null)
+        {
+            while(act!=null)
+            {
+                if(device==act)
+                {
+                    ret=true;
+                    break;
+                }else
+                {
+                    act=act.getParent();
+                }
             }
         }
         return ret;

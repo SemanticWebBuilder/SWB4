@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -23,13 +23,13 @@ public class AdminFilterBase extends org.semanticwb.model.SWBClass implements or
     public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilters(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter>(org.semanticwb.model.AdminFilter.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter>(it, true);
     }
 
     public static java.util.Iterator<org.semanticwb.model.AdminFilter> listAdminFilters()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter>(org.semanticwb.model.AdminFilter.class, it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter>(it, true);
     }
 
     public static org.semanticwb.model.AdminFilter createAdminFilter(org.semanticwb.model.SWBModel model)
