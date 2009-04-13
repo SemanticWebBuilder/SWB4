@@ -5,7 +5,6 @@
 
 package org.semanticwb.codegen;
 
-import org.semanticwb.codegen.*;
 import java.io.File;
 import org.junit.After;
 import org.junit.AfterClass;
