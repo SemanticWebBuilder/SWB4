@@ -1,7 +1,7 @@
 package org.semanticwb.repository.office.base;
 
 
-public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent implements org.semanticwb.repository.Lockable,org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Referenceable,org.semanticwb.repository.Traceable,org.semanticwb.repository.Versionable
+public class ArticuloBase extends org.semanticwb.repository.office.OfficeContent implements org.semanticwb.content.Descriptiveable,org.semanticwb.repository.Referenceable,org.semanticwb.repository.Versionable,org.semanticwb.repository.Lockable,org.semanticwb.repository.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty cm_Author=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org.mx/swb4/content#Author");
     public static final org.semanticwb.platform.SemanticProperty jcr_isCheckedOut=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#isCheckedOut");
