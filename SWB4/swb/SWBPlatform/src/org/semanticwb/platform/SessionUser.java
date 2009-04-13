@@ -6,6 +6,7 @@
 package org.semanticwb.platform;
 
 import java.security.Principal;
+import java.util.HashMap;
 
 /**
  *
@@ -13,23 +14,26 @@ import java.security.Principal;
  */
 public class SessionUser {
 
-    private Principal user;
     private static long req=0;
+    private HashMap<String, Principal> usrs=new HashMap();
 
-    public SessionUser(Principal user)
+    public SessionUser(Principal user, String usrrep)
     {
-        this.user=user;
+        usrs.put(usrrep, user);
+        if(usrrep!=null)usrs.put(null, user);
         req++;
     }
 
-    public Principal getUser()
+    public Principal getUser(String usrrep)
     {
-        return user;
+        return usrs.get(usrrep);
     }
 
-    public void setUser(Principal user) {
+    public void setUser(Principal user, String usrrep)
+    {
         //System.out.println("setUser:"+user.getName());
-        this.user = user;
+        usrs.put(usrrep, user);
+        if(usrrep!=null)usrs.put(null, user);
         req++;
     }
 

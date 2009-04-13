@@ -777,14 +777,14 @@ public class CodeGenerator
         javaClassContent.append("    public static java.util.Iterator<" + fullpathClass + "> list" + className + "s(org.semanticwb.model.SWBModel model)" + ENTER);
         javaClassContent.append("    {" + ENTER);
         javaClassContent.append("        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);" + ENTER);
-        javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + fullpathClass + ">(" + fullpathClass + ".class, it, true);" + ENTER);
+        javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + fullpathClass + ">(it, true);" + ENTER);
         javaClassContent.append("    }" + ENTER);
 
         javaClassContent.append(ENTER);
         javaClassContent.append("    public static java.util.Iterator<" + fullpathClass + "> list" + className + "s()" + ENTER);
         javaClassContent.append("    {" + ENTER);
         javaClassContent.append("        java.util.Iterator it=sclass.listInstances();" + ENTER);
-        javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + fullpathClass + ">(" + fullpathClass + ".class, it, true);" + ENTER);
+        javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + fullpathClass + ">(it, true);" + ENTER);
         javaClassContent.append("    }" + ENTER);
 
         
@@ -890,7 +890,7 @@ public class CodeGenerator
                 javaClassContent.append("    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()" + ENTER);
                 javaClassContent.append("    {" + ENTER);
 
-                javaClassContent.append("        return new org.semanticwb.model.GenericIterator((org.semanticwb.platform.SemanticClass)null, getSemanticObject().listRelatedObjects(),true);" + ENTER);
+                javaClassContent.append("        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);" + ENTER);
                 javaClassContent.append("    }" + ENTER);
             }
             insertLinkToClass4Model(tpc, javaClassContent, parent);
@@ -1414,14 +1414,13 @@ public class CodeGenerator
             if (tpp.isExternalInvocation())
             {
                 String className = getClassName(tpc);
-                javaClassContent.append("        //Implement this method in " + className + " object" + ENTER);
-                javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
-
+                javaClassContent.append("        //Override this method in " + className + " object" + ENTER);
+                //javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
+                javaClassContent.append("        return " + getMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ",false);" + ENTER);
             }
             else
             {
                 javaClassContent.append("        return " + getMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
-
             }
             javaClassContent.append(CLOSE_BLOCK + ENTER);
 
@@ -1438,9 +1437,15 @@ public class CodeGenerator
             if (tpp.isExternalInvocation())
             {
                 String className = getClassName(tpc);
-                javaClassContent.append("        //Implement this method in " + className + " object" + ENTER);
-                javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
-
+                javaClassContent.append("        //Override this method in " + className + " object" + ENTER);
+                if (type.equals("java.io.InputStream"))
+                {
+                    javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
+                }
+                else
+                {
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + propertyName + ",false);" + ENTER);
+                }
             }
             else
             {
@@ -1463,8 +1468,9 @@ public class CodeGenerator
                 if (tpp.isExternalInvocation())
                 {
                     String className = getClassName(tpc);
-                    javaClassContent.append("        //Implement this method in " + className + " object" + ENTER);
-                    javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
+                    javaClassContent.append("        //Override this method in " + className + " object" + ENTER);
+                    //javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
+                    javaClassContent.append("        return " + getMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", null, lang,false);" + ENTER);
 
                 }
                 else
@@ -1488,8 +1494,9 @@ public class CodeGenerator
                 if (tpp.isExternalInvocation())
                 {
                     String className = getClassName(tpc);
-                    javaClassContent.append("        //Implement this method in " + className + " object" + ENTER);
-                    javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
+                    javaClassContent.append("        //Override this method in " + className + " object" + ENTER);
+                    //javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpp.getName() + ", lang,false);" + ENTER);
 
                 }
                 else
@@ -1524,7 +1531,7 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + "> list" + objectName + "s()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + ">(" + getPackage(tpcToReturn) + "." + valueToReturn + ".class, getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));");
+                javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + ">(getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));");
                 javaClassContent.append(ENTER + CLOSE_BLOCK + ENTER);
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public boolean has" + objectName + "(" + getPackage(tpcToReturn) + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
@@ -1537,7 +1544,7 @@ public class CodeGenerator
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + "> listInherit" + objectName + "s()" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + ">(" + getPackage(tpcToReturn) + "." + valueToReturn + ".class, getSemanticObject().listInheritProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));");
+                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + getPackage(tpcToReturn) + "." + valueToReturn + ">(getSemanticObject().listInheritProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));");
                     javaClassContent.append(ENTER + CLOSE_BLOCK + ENTER);
                 }
 

@@ -14,6 +14,12 @@ import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.ModelMaker;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.sdb.SDBFactory;
+import com.hp.hpl.jena.sdb.StoreDesc;
+import com.hp.hpl.jena.sdb.Store;
+import com.hp.hpl.jena.query.Dataset;
+import com.hp.hpl.jena.sdb.sql.SDBConnection;
+import com.hp.hpl.jena.sdb.sql.SDBConnection_SWB;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +27,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -38,6 +45,7 @@ public class SemanticMgr implements SWBInstanceObject
     private static Logger log = SWBUtils.getLogger(SemanticMgr.class);
 
     public final static String SWB_OWL_PATH=SWBPlatform.getEnv("swb/ontologyFiles","/WEB-INF/owl/swb.owl");
+    public final static String SWB_PERSIST=SWBPlatform.getEnv("swb/persist","default");
     public final static String SWBSystem="SWBSystem";
     public final static String SWBAdmin="SWBAdmin";
     
@@ -53,6 +61,7 @@ public class SemanticMgr implements SWBInstanceObject
 
     private IDBConnection conn;
     private ModelMaker maker;
+    private Store store;
     
     private SemanticVocabulary vocabulary;
 
@@ -69,26 +78,44 @@ public class SemanticMgr implements SWBInstanceObject
         //m_schemas=new HashMap();
         m_observers=new ArrayList();
 
-//        DBConnectionPool pool=SWBUtils.DB.getDefaultPool();
-//        String M_DB_URL         = pool.getURL();
-//        String M_DB_USER        = pool.getUser();
-//        String M_DB_PASSWD      = pool.getPassword();
-//        String M_DB             = SWBUtils.DB.getDatabaseName(pool.getName());
+        DBConnectionPool pool=SWBUtils.DB.getDefaultPool();
+        String M_DB_URL         = pool.getURL();
+        String M_DB_USER        = pool.getUser();
+        String M_DB_PASSWD      = pool.getPassword();
+        String M_DB             = SWBUtils.DB.getDatabaseName(pool.getName());
+
+        if(SWB_PERSIST.equalsIgnoreCase("sdb"))
+        {
+            StoreDesc sd=new StoreDesc("layout2", M_DB);
+            //SDBConnection con=new SDBConnection(M_DB_URL, M_DB_USER, M_DB_PASSWD);
+            SDBConnection con=new SDBConnection(SWBUtils.DB.getDefaultPool().newAutoConnection());
+            //SDBConnection con=new SDBConnection_SWB();
+            store = SDBFactory.connectStore(con,sd);
+            //Revisar si las tablas existen
+            List list=store.getConnection().getTableNames();
+            if(!list.contains("nodes") && !list.contains("triples") && !list.contains("quads"))
+            {
+                store.getTableFormatter().create();
+            }            
+        }else
+        {
+
 //        // create a database connection
 //        conn = new DBConnection(M_DB_URL, M_DB_USER, M_DB_PASSWD, M_DB);
 
-        // Create database connection
-        conn = new DBConnection(SWBUtils.DB.getDefaultConnection(), SWBUtils.DB.getDatabaseName());
-        
-        if(SWBUtils.DB.getDatabaseName().equalsIgnoreCase("mysql"))
-        {
-            IRDBDriver driver=new Driver_MySQL_SWB();
-            driver.setConnection(conn);
-            conn.setDriver(driver);
+            // Create database connection
+            conn = new DBConnection(SWBUtils.DB.getDefaultPool().newAutoConnection(), SWBUtils.DB.getDatabaseName());
+
+            if(SWBUtils.DB.getDatabaseName().equalsIgnoreCase("mysql"))
+            {
+                IRDBDriver driver=new Driver_MySQL_SWB();
+                driver.setConnection(conn);
+                conn.setDriver(driver);
+            }
+            conn.getDriver().setTableNamePrefix("swb_");
+            conn.getDriver().setDoDuplicateCheck(false);
+            maker = ModelFactory.createModelRDBMaker(conn);
         }
-        conn.getDriver().setTableNamePrefix("swb_");
-        //conn.getDriver().setDoDuplicateCheck(false);
-        maker = ModelFactory.createModelRDBMaker(conn);
 
         //Create Schema
         m_schema = new SemanticOntology("SWBSquema",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_TRANS_INF));
@@ -181,8 +208,16 @@ public class SemanticMgr implements SWBInstanceObject
     
     private Model loadRDFDBModel(String name)
     {
+        Model ret=null;
         // create or open the default model
-        return maker.openModel(name);
+        if(SWB_PERSIST.equals("sdb"))
+        {
+            ret=SDBFactory.connectNamedModel(store, name);
+        }else
+        {
+            ret=maker.openModel(name);
+        }
+        return ret;
     }
     
     
@@ -269,15 +304,28 @@ public class SemanticMgr implements SWBInstanceObject
     
     private void loadDBModels()
     {
-        //LoadModels
         log.debug("loadDBModels");
-        Iterator tpit=maker.listModels();
-        while(tpit.hasNext())
+        //LoadModels
+        if(SWB_PERSIST.equalsIgnoreCase("sdb"))
         {
-            String name=(String)tpit.next();
-            log.trace("LoadingModel:"+name);
-            loadDBModel(name);
-        }    
+            Dataset set=SDBFactory.connectDataset(store);
+            Iterator<String>it=set.listNames();
+            while(it.hasNext())
+            {
+                String name=it.next();
+                log.trace("LoadingModel:"+name);
+                loadDBModel(name);
+            }
+        }else
+        {
+            Iterator tpit=maker.listModels();
+            while(tpit.hasNext())
+            {
+                String name=(String)tpit.next();
+                log.trace("LoadingModel:"+name);
+                loadDBModel(name);
+            }
+        }
     }
     
     /**
