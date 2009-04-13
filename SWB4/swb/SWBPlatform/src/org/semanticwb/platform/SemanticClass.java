@@ -436,7 +436,7 @@ public class SemanticClass
 
     public Iterator listGenericInstances(boolean direct)
     {
-        return new GenericIterator(this,listInstances(direct));
+        return new GenericIterator(listInstances(direct));
     }
 
     public SemanticProperty getProperty(String name)

@@ -46,8 +46,20 @@ public class SemanticObject
     private static boolean hasCache=true;
     private static boolean hasPropertyCache=true;
 
-    private static HashMap<SemanticProperty, Method> extGetMethods=new HashMap();
-    private static HashMap<SemanticProperty, Method> extSetMethods=new HashMap();
+    private static HashMap<String, Method> extGetMethods=new HashMap();
+    private static HashMap<String, Method> extSetMethods=new HashMap();
+
+    private static HashMap<Class,Class> wrapperToPrimitive = new HashMap();
+	static {
+		wrapperToPrimitive.put( Boolean.class, Boolean.TYPE );
+		wrapperToPrimitive.put( Byte.class, Byte.TYPE );
+		wrapperToPrimitive.put( Short.class, Short.TYPE );
+		wrapperToPrimitive.put( Character.class, Character.TYPE );
+		wrapperToPrimitive.put( Integer.class, Integer.TYPE );
+		wrapperToPrimitive.put( Long.class, Long.TYPE );
+		wrapperToPrimitive.put( Float.class, Float.TYPE );
+		wrapperToPrimitive.put( Double.class, Double.TYPE );
+	}
 
     private SemanticObject(Resource res)
     {
@@ -929,16 +941,17 @@ public class SemanticObject
 
     private Object externalInvokerGet(SemanticProperty prop)
     {
+        System.out.println("externalInvokerGet:"+prop);
         Object ret = null;
         if (!m_virtual)
         {
-            GenericObject obj = getSemanticClass().newGenericInstance(this);
-            Method method=extGetMethods.get(prop);
+            GenericObject obj = createGenericInstance();
+            Class cls = obj.getClass();
+            Method method=extGetMethods.get(cls.getName()+"-"+prop.getURI());
             if(method==null)
             {
                 String pre="get";
                 if(prop.isBoolean())pre="is";
-                Class cls = obj.getClass();
                 String name = prop.getLabel();
                 if (name == null)
                 {
@@ -948,12 +961,13 @@ public class SemanticObject
                 try
                 {
                     method = cls.getMethod(name);
-                    extGetMethods.put(prop, method);
+                    extGetMethods.put(cls.getName()+"-"+prop.getURI(), method);
                 }
                 catch (Exception e)
                 {
                     log.error(e);
                 }
+                //System.out.println(obj+" "+name+" "+cls+" "+method);
             }
             try
             {
@@ -970,14 +984,15 @@ public class SemanticObject
 
     private Object externalInvokerSet(SemanticProperty prop, Object... values)
     {
+        //System.out.println("externalInvokerSet:"+prop+" "+values);
         Object ret = null;
         if (!m_virtual)
         {
-            GenericObject obj = getSemanticClass().newGenericInstance(this);
-            Method method=extSetMethods.get(prop);
+            GenericObject obj = this.createGenericInstance();
+            Class cls = obj.getClass();
+            Method method=extSetMethods.get(cls.getName()+"-"+prop.getURI());
             if(method==null)
             {
-                Class cls = obj.getClass();
                 String name = prop.getLabel();
                 if (name == null)
                 {
@@ -990,9 +1005,15 @@ public class SemanticObject
                     for(int x=0;x<values.length;x++)
                     {
                         types[x]=values[x].getClass();
+                        Class pri=wrapperToPrimitive.get(types[x]);
+                        if(pri!=null)
+                        {
+                            types[x]=pri;
+                        }
                     }
+                    //System.out.println("getMethod:"+name+" "+types);
                     method = cls.getMethod(name,types);
-                    extSetMethods.put(prop, method);
+                    extSetMethods.put(cls.getName()+"-"+prop.getURI(), method);
                 }
                 catch (Exception e)
                 {
@@ -1113,14 +1134,18 @@ public class SemanticObject
      */
     public SemanticObject setProperty(SemanticProperty prop, String value)
     {
-        if (prop.isExternalInvocation())
-        {
-            externalInvokerSet(prop,value);
-        }else
-        {
-            setProperty(prop, value,null);
-        }
-        return this;
+        return setProperty(prop, value,null);
+    }
+
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return SemanticObject para cascada
+     */
+    public SemanticObject setProperty(SemanticProperty prop, String value, boolean evalExtInvo)
+    {
+        return setProperty(prop, value,null,evalExtInvo);
     }
 
     /**
@@ -1131,7 +1156,19 @@ public class SemanticObject
      */
     public SemanticObject setProperty(SemanticProperty prop, String value, String lang)
     {
-        if (prop.isExternalInvocation())
+        return setProperty(prop, value, lang, true);
+    }
+
+
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return SemanticObject para cascada
+     */
+    public SemanticObject setProperty(SemanticProperty prop, String value, String lang, boolean evalExtInvo)
+    {
+        if (evalExtInvo && prop.isExternalInvocation())
         {
             externalInvokerSet(prop,value,lang);
         }else
@@ -1148,13 +1185,29 @@ public class SemanticObject
      */
     public String getProperty(SemanticProperty prop)
     {
-        return getProperty(prop, null);
+        return getProperty(prop, true);
     }
+
+    /**
+     * Regresa valor de la Propiedad especificada
+     * @param prop
+     * @return valor de la propiedad, si no existe la propiedad regresa null
+     */
+    public String getProperty(SemanticProperty prop, boolean evalExtInvo)
+    {
+        return getProperty(prop, null,evalExtInvo);
+    }
+
 
     public String getProperty(SemanticProperty prop, String defValue)
     {
+        return getProperty(prop,defValue, true);
+    }
+
+    public String getProperty(SemanticProperty prop, String defValue, boolean evalExtInvo)
+    {
         String ret = null;
-        if (prop.isExternalInvocation())
+        if (evalExtInvo && prop.isExternalInvocation())
         {
             Object aux = externalInvokerGet(prop);
             if (aux!=null)
@@ -1210,13 +1263,23 @@ public class SemanticObject
 
     public int getIntProperty(SemanticProperty prop)
     {
-        return getIntProperty(prop, 0);
+        return getIntProperty(prop, true);
+    }
+
+    public int getIntProperty(SemanticProperty prop, boolean evalExtInvo)
+    {
+        return getIntProperty(prop, 0, evalExtInvo);
     }
 
     public int getIntProperty(SemanticProperty prop, int defValue)
     {
+        return getIntProperty(prop, defValue, true);
+    }
+
+    public int getIntProperty(SemanticProperty prop, int defValue, boolean evalExtInvo)
+    {
         Integer ret=defValue;
-        if (prop.isExternalInvocation())
+        if (evalExtInvo && prop.isExternalInvocation())
         {
             ret=(Integer)externalInvokerGet(prop);
         }else
@@ -1238,20 +1301,46 @@ public class SemanticObject
      */
     public SemanticObject setIntProperty(SemanticProperty prop, int value)
     {
-        setLiteralProperty(prop, new SemanticLiteral(new Integer(value)));
+        return setIntProperty(prop, value, true);
+    }
+
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return SemanticObject para cascada
+     */
+    public SemanticObject setIntProperty(SemanticProperty prop, int value, boolean evalExtInvo)
+    {
+        if (evalExtInvo && prop.isExternalInvocation())
+        {
+            externalInvokerSet(prop,value);
+        }else
+        {
+            setLiteralProperty(prop, new SemanticLiteral(new Integer(value)));
+        }
         return this;
     }
 
     public long getLongProperty(SemanticProperty prop)
     {
-        return getLongProperty(prop, 0L);
+        return getLongProperty(prop, true);
     }
 
+    public long getLongProperty(SemanticProperty prop, boolean evalExtInvo)
+    {
+        return getLongProperty(prop, 0L, evalExtInvo);
+    }
 
     public long getLongProperty(SemanticProperty prop, long defValue)
     {
+        return getLongProperty(prop, defValue, true);
+    }
+
+    public long getLongProperty(SemanticProperty prop, long defValue, boolean evalExtInvo)
+    {
         Long ret=defValue;
-        if (prop.isExternalInvocation())
+        if (evalExtInvo && prop.isExternalInvocation())
         {
             ret=(Long)externalInvokerGet(prop);
         }else
@@ -1296,19 +1385,46 @@ public class SemanticObject
      */
     public SemanticObject setLongProperty(SemanticProperty prop, long value)
     {
-        setLiteralProperty(prop, new SemanticLiteral(new Long(value)));
+        return setLongProperty(prop, value, true);
+    }
+
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return SemanticObject para cascada
+     */
+    public SemanticObject setLongProperty(SemanticProperty prop, long value, boolean evalExtInvo)
+    {
+        if (evalExtInvo && prop.isExternalInvocation())
+        {
+            externalInvokerSet(prop,value);
+        }else
+        {
+            setLiteralProperty(prop, new SemanticLiteral(new Long(value)));
+        }
         return this;
     }
 
     public float getFloatProperty(SemanticProperty prop)
     {
-        return getFloatProperty(prop, 0F);
+        return getFloatProperty(prop, true);
+    }
+
+    public float getFloatProperty(SemanticProperty prop, boolean evalExtInvo)
+    {
+        return getFloatProperty(prop, 0F, evalExtInvo);
     }
 
     public float getFloatProperty(SemanticProperty prop, float defValue)
     {
+        return getFloatProperty(prop, defValue, true);
+    }
+
+    public float getFloatProperty(SemanticProperty prop, float defValue, boolean evalExtInvo)
+    {
         Float ret=defValue;
-        if (prop.isExternalInvocation())
+        if (evalExtInvo && prop.isExternalInvocation())
         {
             ret=(Float)externalInvokerGet(prop);
         }else
@@ -1330,19 +1446,46 @@ public class SemanticObject
      */
     public SemanticObject setFloatProperty(SemanticProperty prop, float value)
     {
-        setLiteralProperty(prop, new SemanticLiteral(new Float(value)));
+        return setFloatProperty(prop, value, true);
+    }
+
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return SemanticObject para cascada
+     */
+    public SemanticObject setFloatProperty(SemanticProperty prop, float value, boolean evalExtInvo)
+    {
+        if (evalExtInvo && prop.isExternalInvocation())
+        {
+            externalInvokerSet(prop,value);
+        }else
+        {
+            setLiteralProperty(prop, new SemanticLiteral(new Float(value)));
+        }
         return this;
     }
 
     public double getDoubleProperty(SemanticProperty prop)
     {
-        return getDoubleProperty(prop, 0D);
+        return getDoubleProperty(prop, true);
+    }
+
+    public double getDoubleProperty(SemanticProperty prop, boolean evalExtInvo)
+    {
+        return getDoubleProperty(prop, 0D,evalExtInvo);
     }
 
     public double getDoubleProperty(SemanticProperty prop, double defValue)
     {
+        return getDoubleProperty(prop, defValue, true);
+    }
+
+    public double getDoubleProperty(SemanticProperty prop, double defValue, boolean evalExtInvo)
+    {
         Double ret=defValue;
-        if (prop.isExternalInvocation())
+        if (evalExtInvo && prop.isExternalInvocation())
         {
             ret=(Double)externalInvokerGet(prop);
         }else
@@ -1364,19 +1507,41 @@ public class SemanticObject
      */
     public SemanticObject setDoubleProperty(SemanticProperty prop, double value)
     {
-        setLiteralProperty(prop, new SemanticLiteral(new Double(value)));
+        return setDoubleProperty(prop, value, true);
+    }
+
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return SemanticObject para cascada
+     */
+    public SemanticObject setDoubleProperty(SemanticProperty prop, double value, boolean evalExtInvo)
+    {
+        if (evalExtInvo && prop.isExternalInvocation())
+        {
+            externalInvokerSet(prop,value);
+        }else
+        {
+            setLiteralProperty(prop, new SemanticLiteral(new Double(value)));
+        }
         return this;
     }
 
     public boolean getBooleanProperty(SemanticProperty prop)
     {
-        return getBooleanProperty(prop, false);
+        return getBooleanProperty(prop, true);
     }
 
-    public boolean getBooleanProperty(SemanticProperty prop, boolean defValue)
+    public boolean getBooleanProperty(SemanticProperty prop, boolean evalExtInvo)
+    {
+        return getBooleanProperty(prop, false, evalExtInvo);
+    }
+
+    public boolean getBooleanProperty(SemanticProperty prop, boolean defValue, boolean evalExtInvo)
     {
         Boolean ret=defValue;
-        if (prop.isExternalInvocation())
+        if (evalExtInvo && prop.isExternalInvocation())
         {
             ret=(Boolean)externalInvokerGet(prop);
         }else
@@ -1398,20 +1563,47 @@ public class SemanticObject
      */
     public SemanticObject setBooleanProperty(SemanticProperty prop, boolean value)
     {
-        setLiteralProperty(prop, new SemanticLiteral(new Boolean(value)));
+        return setBooleanProperty(prop, value, true);
+    }
+
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return SemanticObject para cascada
+     */
+    public SemanticObject setBooleanProperty(SemanticProperty prop, boolean value, boolean evalExtInvo)
+    {
+        if (evalExtInvo && prop.isExternalInvocation())
+        {
+            externalInvokerSet(prop,value);
+        }else
+        {
+            setLiteralProperty(prop, new SemanticLiteral(new Boolean(value)));
+        }
         return this;
     }
 
 
     public java.util.Date getDateProperty(SemanticProperty prop)
     {
-        return getDateProperty(prop, null);
+        return getDateProperty(prop, true);
+    }
+
+    public java.util.Date getDateProperty(SemanticProperty prop, boolean evalExtInvo)
+    {
+        return getDateProperty(prop, null, evalExtInvo);
     }
 
     public java.util.Date getDateProperty(SemanticProperty prop, java.util.Date defValue)
     {
+        return getDateProperty(prop, defValue, true);
+    }
+
+    public java.util.Date getDateProperty(SemanticProperty prop, java.util.Date defValue, boolean evalExtInvo)
+    {
         java.util.Date ret=defValue;
-        if (prop.isExternalInvocation())
+        if (evalExtInvo && prop.isExternalInvocation())
         {
             ret=(java.util.Date)externalInvokerGet(prop);
         }else
@@ -1433,20 +1625,47 @@ public class SemanticObject
      */
     public SemanticObject setDateProperty(SemanticProperty prop, java.util.Date value)
     {
-        setLiteralProperty(prop, new SemanticLiteral(new Timestamp(value.getTime())));
+        return setDateProperty(prop, value, true);
+    }
+
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return SemanticObject para cascada
+     */
+    public SemanticObject setDateProperty(SemanticProperty prop, java.util.Date value, boolean evalExtInvo)
+    {
+        if (evalExtInvo && prop.isExternalInvocation())
+        {
+            externalInvokerSet(prop,value);
+        }else
+        {
+            setLiteralProperty(prop, new SemanticLiteral(new Timestamp(value.getTime())));
+        }
         return this;
     }
 
 
     public Date getSQLDateProperty(SemanticProperty prop)
     {
-        return getSQLDateProperty(prop, null);
+        return getSQLDateProperty(prop, true);
+    }
+
+    public Date getSQLDateProperty(SemanticProperty prop, boolean evalExtInvo)
+    {
+        return getSQLDateProperty(prop, null, evalExtInvo);
     }
 
     public Date getSQLDateProperty(SemanticProperty prop, Date defValue)
     {
+        return getSQLDateProperty(prop, defValue, true);
+    }
+
+    public Date getSQLDateProperty(SemanticProperty prop, Date defValue, boolean evalExtInvo)
+    {
         Date ret=defValue;
-        if (prop.isExternalInvocation())
+        if (evalExtInvo && prop.isExternalInvocation())
         {
             ret=(Date)externalInvokerGet(prop);
         }else
@@ -1468,19 +1687,46 @@ public class SemanticObject
      */
     public SemanticObject setSQLDateProperty(SemanticProperty prop, Date value)
     {
-        setLiteralProperty(prop, new SemanticLiteral(value));
+        return setSQLDateProperty(prop, value, true);
+    }
+
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return SemanticObject para cascada
+     */
+    public SemanticObject setSQLDateProperty(SemanticProperty prop, Date value, boolean evalExtInvo)
+    {
+        if (evalExtInvo && prop.isExternalInvocation())
+        {
+            externalInvokerSet(prop,value);
+        }else
+        {
+            setLiteralProperty(prop, new SemanticLiteral(value));
+        }
         return this;
     }
 
     public Timestamp getDateTimeProperty(SemanticProperty prop)
     {
-        return getDateTimeProperty(prop, null);
+        return getDateTimeProperty(prop, true);
+    }
+
+    public Timestamp getDateTimeProperty(SemanticProperty prop, boolean evalExtInvo)
+    {
+        return getDateTimeProperty(prop, null, evalExtInvo);
     }
 
     public Timestamp getDateTimeProperty(SemanticProperty prop, Timestamp defValue)
     {
+        return getDateTimeProperty(prop, defValue, true);
+    }
+
+    public Timestamp getDateTimeProperty(SemanticProperty prop, Timestamp defValue, boolean evalExtInvo)
+    {
         Timestamp ret=defValue;
-        if (prop.isExternalInvocation())
+        if (evalExtInvo && prop.isExternalInvocation())
         {
             ret=(Timestamp)externalInvokerGet(prop);
         }else
@@ -1494,7 +1740,6 @@ public class SemanticObject
         return ret;
     }
 
-
     /**
      * Asigna la propiedad con el valor especificado
      * @param prop Propiedad a modificar
@@ -1503,7 +1748,24 @@ public class SemanticObject
      */
     public SemanticObject setDateTimeProperty(SemanticProperty prop, Timestamp value)
     {
-        setLiteralProperty(prop, new SemanticLiteral(value));
+        return setDateTimeProperty(prop, value, true);
+    }
+
+    /**
+     * Asigna la propiedad con el valor especificado
+     * @param prop Propiedad a modificar
+     * @param value Valor a asignar
+     * @return SemanticObject para cascada
+     */
+    public SemanticObject setDateTimeProperty(SemanticProperty prop, Timestamp value, boolean evalExtInvo)
+    {
+        if (evalExtInvo && prop.isExternalInvocation())
+        {
+            externalInvokerSet(prop,value);
+        }else
+        {
+            setLiteralProperty(prop, new SemanticLiteral(value));
+        }
         return this;
     }
 
