@@ -46,6 +46,7 @@ import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
+import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -107,7 +108,7 @@ public class SWBAEditor extends GenericResource
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
-        System.out.println("Mode:"+paramsRequest.getMode());
+//        System.out.println("Mode:"+paramsRequest.getMode());
         if(paramsRequest.getMode().equals("gateway"))
         {
             doGateway(request,response,paramsRequest);
@@ -664,22 +665,21 @@ public class SWBAEditor extends GenericResource
             String webWork=null;
             FileOutputStream fout=null;
 
-            System.out.println("TM:"+tm);
-            System.out.println("ID:"+id);
-            System.out.println("TP:"+tp);
-            System.out.println("VER:"+ver);
-            System.out.println("TYPE:"+type);
-            System.out.println("PATHFILEWB:"+name);
-            System.out.println("DOCUMENT:"+doc);
+//            System.out.println("TM:"+tm);
+//            System.out.println("ID:"+id);
+//            System.out.println("TP:"+tp);
+//            System.out.println("VER:"+ver);
+//            System.out.println("TYPE:"+type);
+//            System.out.println("PATHFILEWB:"+name);
+//            System.out.println("DOCUMENT:"+doc);
             
             if(type.equalsIgnoreCase("Template"))
             {
                 Template template=SWBPortal.getTemplateMgr().getTemplateImp(SWBContext.getWebSite(tm).getTemplate(id));
                 work=template.getWorkPath()+"/"+ver+"/";
-                
-                if(request.getHeader("ATTACHWB")!=null)name="images/"+name;
-                
 
+                if(request.getHeader("ATTACHWB")!=null)work+="images/";
+                
                 //System.out.println("work:"+work+" name:"+name);
 
                 if(!("FINDATTACHES".equals(doc)))
@@ -687,33 +687,36 @@ public class SWBAEditor extends GenericResource
                     File fpath=new File(work);
                     fpath.mkdirs();
                     File file=new File(work+name);
-                    System.out.println("file:"+file);
+//                    System.out.println("file:"+file);
                     fout=new FileOutputStream(file);
                 }
                 
                 String ret=writeFile(in, fout);
-                System.out.println("ret:"+ret);
+                //System.out.println("ret:"+ret);
                 if(doc!=null)
                 {
                     if(doc.equals("RELOAD"))
                     {
-                        //TODO:
-                        //template.getRecTemplate().update(paramsRequest.getUser().getId(), "Template updated...");
                         template.reload();
                         out.println("ok");
                     }else if(doc.equals("REPLACE"))
                     {
-                        //new com.infotec.wb.services.TemplateSrv().replaceVersion(template.getTopicMapId(), template.getId(), ver,name,user.getId());
-                        //TODO:
-                        System.out.print("TODO:SWBAeditor - REPLACE");
+                        VersionInfo verinfo=template.getLastVersion();
+                        while(verinfo!=null && verinfo.getVersionNumber()!=ver)
+                        {
+                            verinfo=verinfo.getPreviousVersion();
+                        }
+                        if(verinfo!=null)
+                        {
+                            verinfo.setVersionFile(name);
+                        }
                         out.println("ok");
                     }else if(doc.equals("FINDATTACHES"))
                     {
-                        //out.print(SWBUtils.TEXT.FindAttaches(ret));
-                        //out.print("|");
-                        //out.print(SWBUtils.TEXT.parseHTML(ret,"images/"));
-                        //TODO:
-                        System.out.print("TODO:SWBAeditor - FINDATTACHES");
+                        out.print(SWBPortal.UTIL.FindAttaches(ret));
+                        out.print("|");
+                        out.print(SWBPortal.UTIL.parseHTML(ret,"images/"));
+                        //System.out.print("TODO:SWBAeditor - FINDATTACHES");
                     }
                 }                
                 
