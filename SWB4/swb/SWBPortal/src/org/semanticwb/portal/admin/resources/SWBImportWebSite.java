@@ -480,12 +480,12 @@ public class SWBImportWebSite extends GenericResource {
             //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
             rdfcontent = parseRdfContent(rdfcontent, oldName, newTitle, newNs);
 
-            
+            /*
             File filesTest=new File(zipdirectory + oldName+"jorge.rdf");
             FileOutputStream fout = new FileOutputStream(filesTest);
             fout.write(rdfcontent.getBytes("utf-8"));
             fout.flush();
-            fout.close();
+            fout.close();**/
             
             //Mediante inputStream creado generar sitio
             InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
@@ -538,7 +538,6 @@ public class SWBImportWebSite extends GenericResource {
     private String parseRdfContent(String rdfcontent, String oldName, String newName, String newNS) {
         Document dom = null;
         try {
-            System.out.println("parseRdfContent/newNS:"+newNS+",oldName:"+oldName);
             dom = SWBUtils.XML.xmlToDom(rdfcontent);
             NodeList nodeList = dom.getElementsByTagName("rdf:Description");
             for (int i = 0; i < nodeList.getLength(); i++) {
@@ -546,17 +545,11 @@ public class SWBImportWebSite extends GenericResource {
                 NamedNodeMap nodeMap = nodeDescr.getAttributes();
                 for (int j = 0; j < nodeMap.getLength(); j++) {
                     String nvalue = nodeMap.item(j).getNodeValue();
-                    if(nvalue != null && nvalue.equalsIgnoreCase("http://www.g3.swb#wiki")){
-                        System.out.println("SIII ES IGUALLL");
-                    }
-                    if (nvalue != null && nvalue.equalsIgnoreCase(newNS.trim() + "#" + oldName.trim())) {
-                        System.out.println("ENTRA nvalue:"+nvalue+",NODE:"+nodeMap.item(j).getNodeName());
-                        nodeMap.item(j).setNodeValue(newNS + "#" + newName); //ver como tengo que poner el newName, si debe ser con minusculas
-                        NodeList nlist = nodeMap.item(j).getChildNodes();
+                    if (nvalue != null && nvalue.equalsIgnoreCase(newNS + oldName)) {
+                        nodeMap.item(j).setNodeValue(newNS + newName); //ver como tengo que poner el newName, si debe ser con minusculas
+                        NodeList nlist = nodeDescr.getChildNodes();
                         for (int k = 0; k < nlist.getLength(); k++) {
-                            System.out.println("ENTRA-1 nvalue:"+nvalue+",NODE-1:"+nodeMap.item(j).getNodeName());
                             if (nlist.item(k).getNodeName().endsWith("title")) {
-                                System.out.println("ENTRA-2 nvalue:"+nlist.item(k).getNodeValue());
                                 nlist.item(k).getFirstChild().setNodeValue(newName);
                             }
                         }
