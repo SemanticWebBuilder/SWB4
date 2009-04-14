@@ -941,7 +941,7 @@ public class SemanticObject
 
     private Object externalInvokerGet(SemanticProperty prop)
     {
-        System.out.println("externalInvokerGet:"+prop);
+        //System.out.println("externalInvokerGet:"+prop);
         Object ret = null;
         if (!m_virtual)
         {
