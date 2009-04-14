@@ -13,11 +13,6 @@ public class ModererationCatBase extends org.semanticwb.model.SWBClass implement
         super(base);
     }
 
-    public static org.semanticwb.portal.resources.sem.forum.ModererationCat getModererationCat(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.portal.resources.sem.forum.ModererationCat)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.ModererationCat> listModererationCats(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -28,6 +23,11 @@ public class ModererationCatBase extends org.semanticwb.model.SWBClass implement
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.ModererationCat>(it, true);
+    }
+
+    public static org.semanticwb.portal.resources.sem.forum.ModererationCat getModererationCat(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.portal.resources.sem.forum.ModererationCat)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.portal.resources.sem.forum.ModererationCat createModererationCat(String id, org.semanticwb.model.SWBModel model)

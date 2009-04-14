@@ -13,11 +13,6 @@ public class ThreadTypeCatBase extends org.semanticwb.model.SWBClass implements 
         super(base);
     }
 
-    public static org.semanticwb.portal.resources.sem.forum.ThreadTypeCat getThreadTypeCat(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.portal.resources.sem.forum.ThreadTypeCat)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.ThreadTypeCat> listThreadTypeCats(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -28,6 +23,11 @@ public class ThreadTypeCatBase extends org.semanticwb.model.SWBClass implements 
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.ThreadTypeCat>(it, true);
+    }
+
+    public static org.semanticwb.portal.resources.sem.forum.ThreadTypeCat getThreadTypeCat(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.portal.resources.sem.forum.ThreadTypeCat)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.portal.resources.sem.forum.ThreadTypeCat createThreadTypeCat(String id, org.semanticwb.model.SWBModel model)
