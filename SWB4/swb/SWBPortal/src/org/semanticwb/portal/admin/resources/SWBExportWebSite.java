@@ -47,9 +47,9 @@ public class SWBExportWebSite extends GenericResource {
                 java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(new FileOutputStream(zipdirectory + uri + ".zip"));
                 java.io.File directory = new File(modelspath + uri + "/");
                 java.io.File base = new File(modelspath + uri);
-                System.out.println("antes de enviar a zipear");
+                //System.out.println("antes de enviar a zipear");
                 org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
-                System.out.println("despues de enviar a zipear");
+                //System.out.println("despues de enviar a zipear");
                  //Graba archivo cualquiera
                 ZipEntry entry = new ZipEntry("vacio.txt");
                 zos.putNextEntry(entry);
@@ -85,6 +85,7 @@ public class SWBExportWebSite extends GenericResource {
                     e.printStackTrace();
                 }
                 //Generación de submodelos
+                /*
                 File file=new File(zipdirectory + "submodels/");
                 if(!file.exists()){
                     file.mkdirs();
@@ -106,6 +107,7 @@ public class SWBExportWebSite extends GenericResource {
                     out.flush();
                     out.close();
                 }
+                 * **/
 
                 //--------------Agregar archivo rdf y xml generados a zip generado---------------------
                 File existingzip = new File(zipdirectory + uri + ".zip");
