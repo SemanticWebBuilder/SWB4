@@ -81,7 +81,7 @@ public class SWBPortal {
         UserRepository urep = SWBContext.getAdminRepository();
         if (urep == null) {
             log.event("Creating Admin User Repository...");
-            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_ADMIN, "http://org.semanticwb.userrep#");
+            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_ADMIN, "http://www.semanticwb.org/uradm#");
             urep.setTitle("Admin User Repository");
             urep.setDescription("Admin User Repository");
             //TODO: cambiar a semantic prop
@@ -115,7 +115,7 @@ public class SWBPortal {
         site = SWBContext.getGlobalWebSite();
         if (site == null) {
             log.event("Creating Global WebSite...");
-            site = SWBContext.createWebSite(SWBContext.WEBSITE_GLOBAL, "http://org.semanticwb.globalws#");
+            site = SWBContext.createWebSite(SWBContext.WEBSITE_GLOBAL, "http://www.semanticwb.org/wsglobal#");
             site.setTitle("Global");
             site.setDescription("Global WebSite");
             site.setActive(true);
@@ -143,7 +143,7 @@ public class SWBPortal {
         urep = SWBContext.getDefaultRepository();
         if (urep == null) {
             log.event("Creating Default User Repository...");
-            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://org.semanticwb.userrep#");
+            urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://www.semanticwb.org/urswb#");
             urep.setTitle("Default UserRepository");
             urep.setDescription("Default UserRpository");
             urep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
