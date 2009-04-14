@@ -35,7 +35,7 @@ public class SWBOfficeManager implements OfficeManager
     private static final String DESCRIPTION_BY_DEFAULT = "Sin descripción";
     private static final String LANGUAGE_BY_DEFAULT = "es";
     private static Logger log = SWBUtils.getLogger(SWBOfficeManager.class);
-    private final SemanticClass cm_content = OfficeContent.office_OfficeContent;
+    private final SemanticClass cm_content = OfficeContent.swboffice_OfficeContent;
 
     public SWBOfficeManager(SWBRepositoryManager manager)
     {
@@ -76,32 +76,32 @@ public class SWBOfficeManager implements OfficeManager
 
     public String getCategoryType()
     {
-        return OfficeCategory.office_OfficeCategory.getPrefix() + ":" + OfficeCategory.office_OfficeCategory.getName();
+        return OfficeCategory.swboffice_OfficeCategory.getPrefix() + ":" + OfficeCategory.swboffice_OfficeCategory.getName();
     }
 
     public String getPropertyTitleType()
     {
-        return OfficeCategory.office_title.getPrefix() + ":" + OfficeCategory.office_title.getName();
+        return OfficeCategory.swboffice_title.getPrefix() + ":" + OfficeCategory.swboffice_title.getName();
     }
 
     public String getPropertyDescriptionType()
     {
-        return OfficeCategory.office_description.getPrefix() + ":" + OfficeCategory.office_description.getName();
+        return OfficeCategory.swboffice_description.getPrefix() + ":" + OfficeCategory.swboffice_description.getName();
     }
 
     public String getPropertyFileType()
     {
-        return OfficeDocument.office_file.getPrefix() + ":" + OfficeDocument.office_file.getName();
+        return OfficeDocument.swboffice_file.getPrefix() + ":" + OfficeDocument.swboffice_file.getName();
     }
 
     public String getPropertyType()
     {
-        return OfficeContent.office_officetype.getPrefix() + ":" + OfficeContent.office_officetype.getName();
+        return OfficeContent.swboffice_officetype.getPrefix() + ":" + OfficeContent.swboffice_officetype.getName();
     }
 
     public String getUserType()
     {
-        return OfficeDocument.office_user.getPrefix() + ":" + OfficeDocument.office_user.getName();
+        return OfficeDocument.swboffice_user.getPrefix() + ":" + OfficeDocument.swboffice_user.getName();
     }
 
     public Collection<RepositoryInfo> getWorkspaces()
