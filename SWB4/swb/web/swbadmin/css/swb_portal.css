@@ -25,7 +25,7 @@ border: 1px solid #cccccc; /* Set image border color */
 border: 1px solid navy; /* Set image border hover color */
 }
 #statusdiv {
-background-color: lightyellow;
+background-color: #ffff99;
 border: 1px solid gray;
 padding: 2px;
 position: absolute; /* Stop Editing Gallery Styles */
@@ -33,7 +33,7 @@ left: 300px;
 visibility: visible;
 }
 #motioncontainer a:hover {
-color: red; /* Dummy definition to overcome IE bug */
+color: #ff0000; /* Dummy definition to overcome IE bug */
 }
 /* End Gallery Styles */
 
@@ -53,7 +53,7 @@ body {
 	font-size:1em;
 }
 #swb-menu h1{
-	background: url(bg_titulos.gif) #336699 repeat-x;
+	background-color: #336699;
 	margin: 0 0 0.63em 0;
 	padding: 0;
 	line-height:1.56em;
@@ -105,7 +105,9 @@ body {
 	color: #FFFFFF;
 	text-decoration:none;
 }
-
+#swb-menu span {
+	color:#990000;
+}
 /*------------------- Menu ---------*/
 /*------------------- Encuesta  ----*/
 
@@ -116,7 +118,7 @@ body {
 	font-size:1em;
 }
 #swb-encuesta h1{
-	background: url(bg_titulos.gif) #336699 repeat-x;
+	background-color: #336699;
 	margin: 0 0 0.63em 0;
 	padding: 0;
 	line-height:1.56em;
@@ -159,7 +161,7 @@ body {
 	font-size:1em;
 }
 #swb-recomendar h1{
-	background: url(bg_titulos.gif) #336699 repeat-x;
+	background-color: #336699;
 	margin: 0 0 0.63em 0;
 	padding: 0;
 	line-height:1.56em;
@@ -170,13 +172,14 @@ body {
 	text-transform: capitalize;
 }
 #swb-recomendar fieldset{
+    background-color: #336699;
 	margin-left:1em;
 	margin-right:1em;
-	margin-bottom:1em;
-	background: #d6e7f8 url(bg_fieldset.jpg) top repeat-x;
+	margin-bottom:1em;	
 	border:#336699 solid 0.06em;
 }
 #swb-recomendar legend{
+    background-color: #6699cc;
 	padding: .3em .6em .3em .6em;
 	margin-left:2em;
 	margin-bottom:0.5em;
@@ -184,7 +187,6 @@ body {
 	font-weight:bold;
 	color: #FFFFFF;
 	border:#336699 solid 0.06em;
-	background: #6699cc;
 }
 #swb-recomendar table{
 	padding: .6em .6em .6em .6em;
@@ -192,16 +194,17 @@ body {
 }
 #swb-recomendar td{
 	vertical-align: top;
-	text-align:right;
 }
 #swb-recomendar label{
 	font-size: 0.75em;
 	color:#336699;
+	float:right;
 }
 .swb-recomendar-text {
 	/* class en código para funcionar en IE y FFox*/
 	color:#336699;
 	width:15em;
+	float:left;
 }
 #swb-recomendar textarea{
 	width:16.7em;
@@ -209,10 +212,11 @@ body {
 	color:#336699;
 	font-family:Arial;
 	font-size:0.75em;
+	float:left;
 }
 .swb-recomendar-boton {
 	/* class en código para funcionar en IE y FFox*/
-	background:#336699;
+	background-color: #336699;
 	width:auto;
 	color:#FFFFFF;
 	margin: .3em 1.25em .3em 1.25em;
@@ -225,8 +229,322 @@ body {
 #swb-recomendar a {
 	color:#336699;
 }
-/*------------------- Recomend  ----*/
+/*------------------- Recomendar  ----*/
+/*------------------- Comentarios  ----*/
+#swb-comentar {
+	width: 21.33em;
+	border:#336699 solid .05em;
+	font-family:Arial;
+	font-size:1em;
+}
+#swb-comentar h1{
+	background-color: #336699;
+	margin: 0 0 0.63em 0;
+	padding: 0;
+	line-height:1.56em;
+	font-size:0.88em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: center;
+	text-transform: capitalize;
+}
+#swb-comentar h2{
+	font-size:0.8em;
+	font-weight: bold;
+	color: #336699;
+	text-align: center;
+}
+#swb-comentar table{
+	padding: .6em .6em .6em .6em;
+	margin-left:1.25em;
+	font-size:.75em;
+	color:#336699;
+}
+#swb-comentar td{
+	vertical-align: top;
+}
+#swb-comentar label{
+	font-size: 0.75em;
+	color:#336699;
+	float:right;
+}
+#swb-comentar select{
+	height:1.6em;
+	font-size: 0.8em;
+	color:#336699;
+	float:left;
+}
+.swb-comentar-text {
+	/* class en código para funcionar en IE y FFox*/
+	color:#336699;
+	width:15em;
+	float:left;
+}
+#swb-comentar textarea{
+	width:16.7em;
+	height:4.7em;
+	color:#336699;
+	font-family:Arial;
+	font-size:0.75em;
+	float:left;
+}
+.swb-comentar-boton {
+	/* class en código para funcionar en IE y FFox*/
+	background-color: #336699;
+	width:auto;
+	color:#FFFFFF;
+	margin: .3em 1.25em .3em 1.25em;
+	font-size:.75em;
+}
+#swb-comentar p {
+	text-align:center;
+	font-size:.75em;
+	color:#336699;
+}
+#swb-comentar a {
+	color:#336699;
+}
+#swb-comentar fieldset{
+    background-color: #d6e7f8;
+	margin:1em 1em 1em 1em;
+	padding-bottom:.6em;
+	/*background: #d6e7f8 url(bg_fieldset.jpg) top repeat-x;*/
+	border:#336699 solid 0.06em;
+}
+#swb-comentar legend{
+    background-color: #6699cc;
+	padding: .3em .6em .3em .6em;
+	margin-left:2em;
+	margin-bottom:0.5em;
+	font-size:.75em;
+	font-weight:bold;
+	color: #FFFFFF;
+	border:#336699 solid 0.06em;
+}
+/*------------------- Comentarios  ----*/
+/*------------------- PROMO        ----*/
+#swb-promo {
+	width: 21.3em;
+	min-height: 12em;
+	border: #336699 solid .06em;
+	padding: .6em .6em .6em .6em;
+}
+#swb-promo h1{
+	font-family:Arial;
+	font-size: 1em;
+	font-weight: bold;
+	color: #336699;
+	text-align:center;
+	margin: 0;
+	padding:0;
+}
+#swb-promo h2{
+	font-family:Arial;
+	font-size: .75em;
+	font-weight: bold;
+	color: #336699;
+	text-align:center;
+}
+#swb-promo img{
+	width: 120px;
+	height: 100px;
+	border: #999999 solid 1px;
+	margin: .3em .3em 0em .3em;
+	display:block;
+	float: left;
+}
+#swb-promo h6{
+    background-color: #999999;
+	width:120px;
+	border:#999999 solid 1px;
+	font-family:Arial;
+	font-size: .6em;
+	font-weight: bold;
+	text-align:center;
+	color: #FFFFFF;
+	float: left;
+	clear:left;
+	margin: 0em .3em 1em .5em;
+}
+#swb-promo p{
+	font-family:Arial;
+	font-size: .75em;
+	color: #336699;
+	text-align:justify;
+}
+#swb-promo ul {
+	padding: 0;
+	margin: 0;
+	font-family:Arial;
+	font-size: 0.75em;
+	margin-left: 13em;
+}
+#swb-promo li{
+	list-style:url(bullet-mas1.gif);
+	color:#336699;
+}
+#swb-promo li a:link{
+	list-style:url(bullet-mas1.gif);
+	color:#336699;
+}
+#swb-promo li a:visited{
+	list-style:url(bullet-mas1.gif);
+	color: #336699;
+}
+#swb-promo li a:hover{
+	list-style:url(bullet-mas2.gif);
+	color: #99ccff;
+}
+#swb-promo li a:active{
+	list-style:url(bullet-mas3.gif);
+	color:#FFFFFF;
+}
 
+/*------------------- PROMO        ----*/
+/*------------------- QUERY        ----*/
+#swb-query {
+	border: #336699 solid .06em;
+	padding: .2em .2em .2em .2em;
+	font-family:Arial;
+}
+#swb-query table {
+	width:100%;
+	border: #336699 solid .06em;
+	border-collapse:collapse;
+	text-align:center;
+	font-size: 1em;
+}
+#swb-query caption {
+	background-color: #336699;
+	margin: 0 0 0 0;
+	padding: 0;
+	line-height:1.56em;
+	font-size:0.88em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-transform: capitalize;
+}
+#swb-query thead {
+	font-size: .75em;
+}
+#swb-query tbody {
+}
+#swb-query tfoot td {
+    background-color: #6699cc;
+	font-size: .6em;
+	color:#FFFFFF;
+}
+#swb-query th {
+    background-color: #cce6ff;
+	color: #336699;
+	border-bottom: #336699 solid .06em;
+	padding:5px;
+}
+#swb-query span {
+    background-color: #ff0000;
+}
+#swb-query td {
+    background-color: #eff6ff;
+	border-bottom: #CEDAE6 solid .06em;
+	font-size: .75em;
+	padding:5px;
+}
+/*------------------- QUERY        ----*/
+
+
+/*------------------- Mapa de sitio ---*/
+.swb-mapa {
+	border:#336699 solid 1px;
+	font-family:Arial;
+	font-size: 12px;
+}
+.swb-mapa h1{
+	background-color: #336699;
+	margin: 0 0 0.63em 0;
+	padding: 0;
+	font-size: 1em;
+	font-family:Arial;
+	text-transform:capitalize;
+	text-align:center;
+	color: #FFFFFF;
+}
+
+.swb-mapa li, .swb-mapa li a{
+	list-style:none;
+	text-decoration:none;
+	/*display:block;*/
+    cursor: pointer;
+}
+.swb-mapa li a:hover{
+	color: #3399CC;
+    cursor: pointer;
+}
+
+/* para cada nivel */
+.swb-mapa li:hover{ /* en IE se deforma
+	background: #EFF2FF;
+	border-bottom:#CCC dotted 1px; */
+}
+.swb-mapa ul li a {
+	line-height: 20px;
+	color:#336699;
+	font-weight:bold;
+    cursor: pointer;
+}
+/*.swb-mapa ul ul li a {
+	line-height: 20px;
+	color:#336699;
+	font-weight:normal;
+}
+.swb-mapa ul ul ul li a {
+	line-height: 20px;
+	color: #666666;
+	font-weight:normal;
+}
+.swb-mapa ul ul ul ul li a {
+	line-height: 20px;
+	color:#666666;
+	font-weight:normal;
+}*/
+
+/* estilos para los "+" y "-"  */
+.sinicomap{
+	width:8px;
+	height:8px;
+	margin:5px 3px 0px 0px;
+	float:left;
+}
+.icomap {
+    background-color: #eeeeee;
+	width:8px;
+	height:8px;
+	margin:5px 3px 0px 0px;
+	float:left;
+	border:#CCCCCC solid 1px;
+	cursor:pointer;
+	text-align:center;
+}
+.icomap hover{
+    background-color: #009900;
+	width:8px;
+	height:8px;
+	margin:5px 3px 0px 0px;
+	float:left;
+	border:#CCCCCC solid 1px;
+	cursor:pointer;
+}
+.icomap span {
+	color: #999;
+	line-height: 8px;
+}
+.icomap span:hover {
+    background-color: #99ccff;
+	color: #0000FF;
+	line-height: 8px;
+	display: block;
+}
+/* estilos para los "+" y "-"  */
+/*------------------- Mapa de sitio ---*/
 
 
 
