@@ -24,9 +24,17 @@
             </init-param>
             <load-on-startup>2</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>Connector</servlet-name>
+        <servlet-class>net.fckeditor.connector.ConnectorServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
             <servlet-name>dwr-invoker</servlet-name>
             <url-pattern>/dwr/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Connector</servlet-name>
+        <url-pattern>/resources/scripts/fckeditor/editor/filemanager/connectors/*</url-pattern>
     </servlet-mapping>
     <!--WB-->
     <session-config>
