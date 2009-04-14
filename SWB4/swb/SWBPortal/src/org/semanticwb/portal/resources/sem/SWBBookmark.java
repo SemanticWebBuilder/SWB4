@@ -20,11 +20,36 @@ public class SWBBookmark extends org.semanticwb.portal.resources.sem.base.SWBBoo
     }
 
     @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        SWBResourceURL url = paramRequest.getRenderUrl();
+        String mode = url.getMode();
+        
+        if (mode.equals(url.Mode_EDIT)) {
+            doEdit(request, response, paramRequest);
+            url.setMode(url.Mode_VIEW);
+        } else if (mode.equals("DELETE")) {
+            doDelete(request, response, paramRequest);
+            url.setMode(url.Mode_VIEW);
+        } else {
+            super.processRequest(request, response, paramRequest);
+        }
+    }
+
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+
+    }
+
+    public void doDelete(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+
+    }
+
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out=response.getWriter();
         Iterator<BookmarkEntry> entries = listEntrys();
         int regNumber = 0;
+        SWBResourceURL url = paramRequest.getRenderUrl();
 
         out.println("<table>");
         while(entries.hasNext()) {
@@ -40,6 +65,11 @@ public class SWBBookmark extends org.semanticwb.portal.resources.sem.base.SWBBoo
             out.print(" - ");
             out.print(en.getDescription(paramRequest.getUser().getLanguage()) + "] ");
             out.println(en.getScore());
+            url.setParameter("id", String.valueOf(regNumber));
+            url.setMode(url.Mode_EDIT);
+            out.print("<a href=\"" + url +">Edit</a>");
+            url.setMode("DELETE");
+            out.print("<a href=\"" + url +">Eliminar</a>");
             out.println("</tr></td>");
         }
         out.println("</table>");
