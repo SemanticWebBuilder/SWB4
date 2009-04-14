@@ -24,11 +24,12 @@ public class SWBBookmark extends org.semanticwb.portal.resources.sem.base.SWBBoo
     {
         PrintWriter out=response.getWriter();
         Iterator<BookmarkEntry> entries = listEntrys();
+        int regNumber = 0;
 
         out.println("<table>");
         while(entries.hasNext()) {
             BookmarkEntry en = entries.next();
-            out.println("<tr><td>");
+            out.println("<tr id = \""+ regNumber++ + "\"><td>");
             out.print("<a href=\"" +  en.getUrl() + ">" + en.getTitle(paramRequest.getUser().getLanguage()) + "</a>");
             out.println(" - " + en.getUrl() + " - " + en.getCreated().toString() + "<BR>");
             out.print("[");
