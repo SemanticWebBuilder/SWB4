@@ -63,8 +63,24 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
-    
+
+    private static final SemanticProperty prop_content=OfficeResource.swboffice_content;
+    private static final SemanticClass swb_office=org.semanticwb.repository.office.OfficeDocument.swboffice_OfficeDocument;
+
+    private static final SemanticProperty PROP_JCR_DATA = org.semanticwb.repository.office.OfficeDocument.jcr_data;
+    private static final String JCR_DATA = PROP_JCR_DATA.getPrefix()+":"+PROP_JCR_DATA.getName();
+
+
+    private static final SemanticProperty PROP_JCR_LASTMODIFIED = org.semanticwb.repository.office.OfficeDocument.jcr_lastModified;
+    private static final String JCR_LASTMODIFIED = PROP_JCR_LASTMODIFIED.getPrefix()+":"+PROP_JCR_LASTMODIFIED.getName();
+
+
+    private static final SemanticProperty PROP_LASTMODIFIED = org.semanticwb.repository.office.OfficeContent.swboffice_lastModified;
+    private static final String LASTMODIFIED=PROP_LASTMODIFIED.getPrefix()+":"+PROP_LASTMODIFIED.getName();
+
+    public static final String JCR_CONTENT = "jcr:content";
     private static final String JCR_FROZEN_NODE = "jcr:frozenNode";
+
     private static final String WORD_RESOURCE_TYPE = "word_resource";
     private static final String WORD_RESOURCE_DESCRIPTION = "Recurso Word";    
     private static final String WORD_RESOURCE_TITLE = WORD_RESOURCE_DESCRIPTION;
@@ -77,15 +93,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     
     private static final String EXCEL_RESOURCE_TITLE = EXCEL_RESOURCE_DESCRIPTION;
     private static final String CONTENT_NOT_FOUND = "El contenido no se encontró en el repositorio.";
-    public static final String JCR_CONTENT = "jcr:content";
-    private static final String JCR_DATA = "jcr:data";
-    private static final String JCR_LASTMODIFIED = "jcr:lastModified";
-    private static final String CM_LASTMODIFIED = "cm:lastModified";
+
+
+
+
     private static Logger log = SWBUtils.getLogger(OfficeDocument.class);
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
-    private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
-    private static final String NL = System.getProperty("line.separator");
-    private static final SemanticProperty prop_content=OfficeResource.swboffice_content;
+    private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();    
+    
     public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
     {
         Session session = null;
@@ -106,7 +121,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 contentNode.setProperty(cm_description, description);
                 Calendar lastModified = Calendar.getInstance();
                 lastModified.setTimeInMillis(System.currentTimeMillis());
-                contentNode.setProperty(CM_LASTMODIFIED, lastModified);
+                contentNode.setProperty(LASTMODIFIED, lastModified);
                 if (properties != null)
                 {
                     int i = 0;
@@ -128,7 +143,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                             mimeType = DEFAULT_MIME_TYPE;
                         }
                     }
-                    Node resNode = contentNode.addNode(JCR_CONTENT, "cm:OfficeDocument");
+                    Node resNode = contentNode.addNode(JCR_CONTENT, swb_office.getPrefix()+":"+swb_office.getName());
                     resNode.addMixin("mix:versionable");
                     resNode.setProperty("jcr:mimeType", mimeType);
                     resNode.setProperty("jcr:encoding", "");
@@ -294,7 +309,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             String cm_user = loader.getOfficeManager(repositoryName).getUserType();
             Calendar lastModified = Calendar.getInstance();
             lastModified.setTimeInMillis(System.currentTimeMillis());
-            nodeContent.setProperty(CM_LASTMODIFIED, lastModified);
+            nodeContent.setProperty(LASTMODIFIED, lastModified);
             nodeContent.save();
             try
             {
@@ -628,7 +643,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
 
             nodeContent.setProperty(cm_title, title);
-            nodeContent.getProperty(CM_LASTMODIFIED).setValue(Calendar.getInstance());
+            nodeContent.getProperty(LASTMODIFIED).setValue(Calendar.getInstance());
             nodeContent.save();
 
 
@@ -703,7 +718,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
 
             nodeContent.setProperty(cm_description, description);
-            nodeContent.getProperty(CM_LASTMODIFIED).setValue(Calendar.getInstance());
+            nodeContent.getProperty(LASTMODIFIED).setValue(Calendar.getInstance());
             nodeContent.save();
 
 
@@ -729,7 +744,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentID);
-            return nodeContent.getProperty(CM_LASTMODIFIED).getDate().getTime();
+            return nodeContent.getProperty(LASTMODIFIED).getDate().getTime();
 
         }
         catch (ItemNotFoundException infe)
@@ -1329,7 +1344,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             Node newCategory = session.getNodeByUUID(newCategoryId);
             session.move(nodeContent.getPath(), newCategory.getPath());
             Node resource = nodeContent.getNode(JCR_CONTENT);
-            resource.getProperty(CM_LASTMODIFIED).setValue(Calendar.getInstance());
+            resource.getProperty(LASTMODIFIED).setValue(Calendar.getInstance());
         }
         catch (ItemNotFoundException infe)
         {
