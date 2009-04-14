@@ -76,7 +76,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private static final String EXCEL_RESOURCE_DESCRIPTION = "Recurso Excel";
     
     private static final String EXCEL_RESOURCE_TITLE = EXCEL_RESOURCE_DESCRIPTION;
-    private static final String CONTENT_NOT_FOUND = "El contenido no se encontr� en el repositorio.";
+    private static final String CONTENT_NOT_FOUND = "El contenido no se encontró en el repositorio.";
     public static final String JCR_CONTENT = "jcr:content";
     private static final String JCR_DATA = "jcr:data";
     private static final String JCR_LASTMODIFIED = "jcr:lastModified";
