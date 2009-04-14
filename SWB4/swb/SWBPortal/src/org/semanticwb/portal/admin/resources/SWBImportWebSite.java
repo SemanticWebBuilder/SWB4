@@ -6,6 +6,7 @@ package org.semanticwb.portal.admin.resources;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -24,6 +25,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericResource;
@@ -47,6 +49,8 @@ public class SWBImportWebSite extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        try
+        {
         User user = paramRequest.getUser();
         PrintWriter out = response.getWriter();
         String action = paramRequest.getAction();
@@ -386,6 +390,10 @@ public class SWBImportWebSite extends GenericResource {
             url.setAction("step2");
             getStep1(out, url, paramRequest);
         }
+        }catch(Exception e){
+            e.printStackTrace();
+            log.debug(e);
+        }
     }
 
     private String directoryList(SWBParamRequest paramRequest, String wstitle, String wsid, String repository) {
@@ -472,10 +480,17 @@ public class SWBImportWebSite extends GenericResource {
             //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
             rdfcontent = parseRdfContent(rdfcontent, oldName, newTitle, newNs);
 
+            File filesTest=new File(zipdirectory + oldName+"jorge.rdf");
+            FileOutputStream fout = new FileOutputStream(filesTest);
+            fout.write(rdfcontent.getBytes("utf-8"));
+            fout.flush();
+            fout.close();
+            
             //Mediante inputStream creado generar sitio
             InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
-            SWBPlatform.getSemanticMgr().createModelByRDF(newTitle, newNs, io);
-            WebSite website = SWBContext.getWebSite(newTitle);
+            SemanticModel model=SWBPlatform.getSemanticMgr().createModelByRDF(newTitle, newNs, io);
+            //La siguiente linea no regresa un sitio y por lo tanto marca NullPointer en la que sigue
+            WebSite website = SWBContext.getWebSite(model.getName());
             website.setDescription(olDescription);
 
             //Crea repositorio de usuarios para el nuevo sitio
@@ -513,6 +528,7 @@ public class SWBImportWebSite extends GenericResource {
 
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             log.debug(e);
         }
         return false;
@@ -530,12 +546,16 @@ public class SWBImportWebSite extends GenericResource {
                     String nvalue = nodeMap.item(j).getNodeValue();
                     if (nvalue != null && nvalue.equalsIgnoreCase(newNS + "#" + oldName)) {
                         nodeMap.item(j).setNodeValue(newNS + "#" + newName); //ver como tengo que poner el newName, si debe ser con minusculas
-                        NodeList nlist = nodeDescr.getChildNodes();
-                        for (int k = 0; k < nlist.getLength(); k++) {
-                            if (nlist.item(k).getNodeName().endsWith("title")) {
-                                nlist.item(k).getFirstChild().setNodeValue(newName);
-                            }
-                        }
+                    }
+                }
+                NodeList nlist = nodeDescr.getChildNodes();
+                for (int k = 0; k < nlist.getLength(); k++) {
+                    Node node=nlist.item(k);
+                    if (node.getNodeName().endsWith("title")) {
+                        node.getFirstChild().setNodeValue(newName);
+                    }
+                    if(node.getPrefix()!=null && node.getPrefix().equals(oldName)){
+                        node.setPrefix(newName);
                     }
                 }
             }
