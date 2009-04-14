@@ -1262,11 +1262,14 @@ public class SWBUtils {
                     }
 
                     //Writes content
-                    FileOutputStream out = new FileOutputStream(file);
-                    copyStream(getStreamFromString(content), out);
-
-                    out.close();
-                    in.close();                    
+                    try{
+                        FileOutputStream out = new FileOutputStream(file);
+                        copyStream(getStreamFromString(content), out);
+                        out.close();
+                        in.close();
+                    } catch(Exception ex){
+                        log.debug(ex);
+                    }
                 }
             }
             archive.close();
