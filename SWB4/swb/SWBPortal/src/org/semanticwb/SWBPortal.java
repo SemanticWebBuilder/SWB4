@@ -783,7 +783,6 @@ public class SWBPortal {
                                 Enumeration en = tag.getParamNames();
                                 String name = "";
                                 String value = "";
-                                String actionval = "";
                                 while (en.hasMoreElements()) {
                                     name = (String) en.nextElement();
                                     value = tag.getParam(name);
@@ -797,7 +796,7 @@ public class SWBPortal {
                                             if (value.toLowerCase().endsWith(".gif") || value.toLowerCase().endsWith(".jpg") || value.toLowerCase().endsWith(".jpeg") || value.toLowerCase().endsWith(".bmp") ||
                                                     value.toLowerCase().endsWith(".doc") || value.toLowerCase().endsWith(".htm") || value.toLowerCase().endsWith(".html") || value.toLowerCase().endsWith(".zip") ||
                                                     value.toLowerCase().endsWith(".txt") || value.toLowerCase().endsWith(".pdf") || value.toLowerCase().endsWith(".xls") || value.toLowerCase().endsWith(".ppt") ||
-                                                    value.toLowerCase().endsWith(".xsl") || value.toLowerCase().endsWith(".xslt") || value.toLowerCase().endsWith(".bin") || value.toLowerCase().endsWith(".tar")) {
+                                                    value.toLowerCase().endsWith(".xsl") || value.toLowerCase().endsWith(".xslt") || value.toLowerCase().endsWith(".bin") || value.toLowerCase().endsWith(".tar") || value.toLowerCase().endsWith(".css")) {
                                                 out = value;
                                             }
                                         }
