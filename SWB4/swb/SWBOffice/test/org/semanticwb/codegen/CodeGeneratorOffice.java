@@ -52,7 +52,7 @@ public class CodeGeneratorOffice {
             File dir = new File(path+"../../../SWBOffice/src");
             String sPakage = "org.semanticwb.repository.office";
             CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
-            codeGeneration.generateCode("office",false);
+            codeGeneration.generateCode("swboffice",false);
             System.out.println("Generación de clases completa");
         }
         catch ( CodeGeneratorException cge )
