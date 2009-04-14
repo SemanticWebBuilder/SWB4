@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <rdf:RDF
     xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
-    xmlns:office="http://www.semanticwebbuilder.org/office#"
+    xmlns:swboffice="http://www.semanticwebbuilder.org/office#"
     xmlns="http://www.semanticwebbuilder.org/office.owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
@@ -90,27 +90,10 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org/office#Author">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:required>
     <swb:displayProperty rdf:nodeID="A1"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/office#Articulo"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwebbuilder.org/office#Articulo">
-    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mix:referenceable</jcr:supertypes>
-    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#versionable"/>
-    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mix:versionable</jcr:supertypes>
-    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mix:lockable</jcr:supertypes>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <mix:mixin rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</mix:mixin>
-    <rdfs:label xml:lang="es">Articulo demostración</rdfs:label>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/office#OfficeContent"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
-    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
-    <rdfs:label xml:lang="en">Demo</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string">org.semanticwb.repository.office.Articulo</swb:className>
-    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#lockable"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org/office#numberOfPages">
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/office#WordResource"/>
