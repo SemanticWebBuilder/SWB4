@@ -85,7 +85,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
     private static final String NL = System.getProperty("line.separator");
-
+    private static final SemanticProperty prop_content=OfficeResource.swboffice_content;
     public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
     {
         Session session = null;
@@ -245,7 +245,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 while (sites.hasNext())
                 {
                     WebSite site=sites.next();
-                    Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficeResource.office_content, contentId);
+                    Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(prop_content, contentId);
                     while (it.hasNext())
                     {
                         SemanticObject obj = it.next();
@@ -342,7 +342,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 Iterator<WebSite> sites = SWBContext.listWebSites();
                 while (sites.hasNext())
                 {
-                    Iterator<SemanticObject> it = sites.next().getSemanticObject().getModel().listSubjects(OfficeResource.office_content, contentId);
+                    Iterator<SemanticObject> it = sites.next().getSemanticObject().getModel().listSubjects(prop_content, contentId);
                     while (it.hasNext())
                     {
                         SemanticObject obj = it.next();
@@ -432,7 +432,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             while (sites.hasNext())
             {
                 WebSite site=sites.next();
-                Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficeResource.office_content, contentID);
+                Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(prop_content, contentID);
                 while (it.hasNext())
                 {
                     SemanticObject obj = it.next();
@@ -565,7 +565,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         {
                             break;
                         }
-                        Iterator<SemanticObject> itSubjects = sites.next().getSemanticObject().getModel().listSubjects(OfficeResource.office_content, contentId);
+                        Iterator<SemanticObject> itSubjects = sites.next().getSemanticObject().getModel().listSubjects(prop_content, contentId);
                         while (itSubjects.hasNext())
                         {
                             SemanticObject obj = itSubjects.next();
@@ -785,7 +785,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         while (sites.hasNext())
         {
             WebSite site = sites.next();
-            Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(OfficeResource.office_content, contentid);
+            Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(prop_content, contentid);
             while (it.hasNext())
             {
                 SemanticObject obj = it.next();

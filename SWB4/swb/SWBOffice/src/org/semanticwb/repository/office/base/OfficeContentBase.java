@@ -1,16 +1,16 @@
 package org.semanticwb.repository.office.base;
 
 
-public class OfficeContentBase extends org.semanticwb.repository.File implements org.semanticwb.repository.office.Descriptiveable,org.semanticwb.repository.Traceable,org.semanticwb.repository.Referenceable,org.semanticwb.repository.Lockable
+public class OfficeContentBase extends org.semanticwb.repository.File implements org.semanticwb.repository.office.Descriptiveable,org.semanticwb.repository.Lockable,org.semanticwb.repository.Traceable,org.semanticwb.repository.Referenceable
 {
-    public static final org.semanticwb.platform.SemanticProperty office_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#title");
-    public static final org.semanticwb.platform.SemanticProperty office_officetype=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#officetype");
+    public static final org.semanticwb.platform.SemanticProperty swboffice_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#title");
+    public static final org.semanticwb.platform.SemanticProperty swboffice_officetype=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#officetype");
     public static final org.semanticwb.platform.SemanticProperty jcr_uuid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#uuid");
-    public static final org.semanticwb.platform.SemanticProperty office_lastModified=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#lastModified");
+    public static final org.semanticwb.platform.SemanticProperty swboffice_lastModified=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#lastModified");
     public static final org.semanticwb.platform.SemanticProperty jcr_lockIsDeep=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#lockIsDeep");
     public static final org.semanticwb.platform.SemanticProperty jcr_lockOwner=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.jcp.org/jcr/1.0#lockOwner");
-    public static final org.semanticwb.platform.SemanticProperty office_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#description");
-    public static final org.semanticwb.platform.SemanticClass office_OfficeContent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#OfficeContent");
+    public static final org.semanticwb.platform.SemanticProperty swboffice_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#description");
+    public static final org.semanticwb.platform.SemanticClass swboffice_OfficeContent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#OfficeContent");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#OfficeContent");
 
     public OfficeContentBase(org.semanticwb.platform.SemanticObject base)
@@ -52,22 +52,22 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
 
     public String getTitle()
     {
-        return getSemanticObject().getProperty(office_title);
+        return getSemanticObject().getProperty(swboffice_title);
     }
 
     public void setTitle(String title)
     {
-        getSemanticObject().setProperty(office_title, title);
+        getSemanticObject().setProperty(swboffice_title, title);
     }
 
     public String getOfficetype()
     {
-        return getSemanticObject().getProperty(office_officetype);
+        return getSemanticObject().getProperty(swboffice_officetype);
     }
 
     public void setOfficetype(String officetype)
     {
-        getSemanticObject().setProperty(office_officetype, officetype);
+        getSemanticObject().setProperty(swboffice_officetype, officetype);
     }
 
     public String getUuid()
@@ -82,12 +82,12 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
 
     public java.util.Date getLastModified()
     {
-        return getSemanticObject().getDateProperty(office_lastModified);
+        return getSemanticObject().getDateProperty(swboffice_lastModified);
     }
 
     public void setLastModified(java.util.Date lastModified)
     {
-        getSemanticObject().setDateProperty(office_lastModified, lastModified);
+        getSemanticObject().setDateProperty(swboffice_lastModified, lastModified);
     }
 
     public boolean isLockIsDeep()
@@ -112,11 +112,11 @@ public class OfficeContentBase extends org.semanticwb.repository.File implements
 
     public String getDescription()
     {
-        return getSemanticObject().getProperty(office_description);
+        return getSemanticObject().getProperty(swboffice_description);
     }
 
     public void setDescription(String description)
     {
-        getSemanticObject().setProperty(office_description, description);
+        getSemanticObject().setProperty(swboffice_description, description);
     }
 }
