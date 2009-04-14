@@ -27,11 +27,6 @@ public class PostBase extends org.semanticwb.model.SWBClass implements org.seman
         super(base);
     }
 
-    public static org.semanticwb.portal.resources.sem.forum.Post getPost(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.portal.resources.sem.forum.Post)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPosts(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -44,15 +39,20 @@ public class PostBase extends org.semanticwb.model.SWBClass implements org.seman
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(it, true);
     }
 
-    public static org.semanticwb.portal.resources.sem.forum.Post createPost(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.portal.resources.sem.forum.Post)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.portal.resources.sem.forum.Post createPost(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.portal.resources.sem.forum.Post.createPost(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.portal.resources.sem.forum.Post getPost(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.portal.resources.sem.forum.Post)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.portal.resources.sem.forum.Post createPost(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.portal.resources.sem.forum.Post)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removePost(String id, org.semanticwb.model.SWBModel model)

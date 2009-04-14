@@ -22,11 +22,6 @@ public class AttachmentBase extends org.semanticwb.model.SWBClass implements org
         super(base);
     }
 
-    public static org.semanticwb.portal.resources.sem.forum.Attachment getAttachment(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.portal.resources.sem.forum.Attachment)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachments(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -39,15 +34,20 @@ public class AttachmentBase extends org.semanticwb.model.SWBClass implements org
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment>(it, true);
     }
 
-    public static org.semanticwb.portal.resources.sem.forum.Attachment createAttachment(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.portal.resources.sem.forum.Attachment)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.portal.resources.sem.forum.Attachment createAttachment(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.portal.resources.sem.forum.Attachment.createAttachment(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.portal.resources.sem.forum.Attachment getAttachment(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.portal.resources.sem.forum.Attachment)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.portal.resources.sem.forum.Attachment createAttachment(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.portal.resources.sem.forum.Attachment)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeAttachment(String id, org.semanticwb.model.SWBModel model)

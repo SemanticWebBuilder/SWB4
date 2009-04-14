@@ -1,7 +1,7 @@
 package org.semanticwb.portal.resources.sem.forum.base;
 
 
-public class UserFavThreadBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class UserFavThreadBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty frm_ut_user=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/forum#ut_user");
@@ -21,11 +21,6 @@ public class UserFavThreadBase extends org.semanticwb.model.SWBClass implements 
         super(base);
     }
 
-    public static org.semanticwb.portal.resources.sem.forum.UserFavThread getUserFavThread(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.portal.resources.sem.forum.UserFavThread)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.UserFavThread> listUserFavThreads(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -38,15 +33,20 @@ public class UserFavThreadBase extends org.semanticwb.model.SWBClass implements 
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.UserFavThread>(it, true);
     }
 
-    public static org.semanticwb.portal.resources.sem.forum.UserFavThread createUserFavThread(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.portal.resources.sem.forum.UserFavThread)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-    }
-
     public static org.semanticwb.portal.resources.sem.forum.UserFavThread createUserFavThread(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.portal.resources.sem.forum.UserFavThread.createUserFavThread(String.valueOf(id), model);
+    }
+
+    public static org.semanticwb.portal.resources.sem.forum.UserFavThread getUserFavThread(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.portal.resources.sem.forum.UserFavThread)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.portal.resources.sem.forum.UserFavThread createUserFavThread(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.portal.resources.sem.forum.UserFavThread)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     public static void removeUserFavThread(String id, org.semanticwb.model.SWBModel model)

@@ -80,7 +80,7 @@
     <rdfs:domain>
       <swb:Class rdf:ID="Thread">
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
+        >false</swb:autogenId>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
@@ -272,9 +272,9 @@
   <owl:ObjectProperty rdf:ID="thPriority">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_threadPriority">
-        <rdfs:label xml:lang="es">Prioridad</rdfs:label>
-        <rdfs:label xml:lang="en">Priority</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
+        <rdfs:label xml:lang="en">Priority</rdfs:label>
+        <rdfs:label xml:lang="es">Prioridad</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >30</swb:index>
       </swbxf:DisplayProperty>

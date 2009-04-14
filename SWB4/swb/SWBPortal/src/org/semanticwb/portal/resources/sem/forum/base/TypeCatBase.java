@@ -13,11 +13,6 @@ public class TypeCatBase extends org.semanticwb.model.SWBClass implements org.se
         super(base);
     }
 
-    public static org.semanticwb.portal.resources.sem.forum.TypeCat getTypeCat(String id, org.semanticwb.model.SWBModel model)
-    {
-        return (org.semanticwb.portal.resources.sem.forum.TypeCat)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-    }
-
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.TypeCat> listTypeCats(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
@@ -28,6 +23,11 @@ public class TypeCatBase extends org.semanticwb.model.SWBClass implements org.se
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.TypeCat>(it, true);
+    }
+
+    public static org.semanticwb.portal.resources.sem.forum.TypeCat getTypeCat(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.portal.resources.sem.forum.TypeCat)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
     public static org.semanticwb.portal.resources.sem.forum.TypeCat createTypeCat(String id, org.semanticwb.model.SWBModel model)
