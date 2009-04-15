@@ -1132,6 +1132,7 @@ public class SWBUtils {
          * @throws java.io.IOException
          */
         public static final void zip(File directory, File base, ZipOutputStream zos) throws IOException {
+            if(directory==null || !directory.exists()) return;
             byte[] buffer = new byte[8192];
             int read = 0;
             File[] files=directory.listFiles();
