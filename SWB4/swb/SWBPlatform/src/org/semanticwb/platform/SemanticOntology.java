@@ -72,7 +72,7 @@ public class SemanticOntology
     //TODO: Mejorar performance
     public Resource getResource(String uri)
     {
-        //System.out.println("uri:"+uri);
+        log.debug("getResource:"+uri);
         //new Exception().printStackTrace();
         if(uri==null)return null;
         Resource ret=null;
@@ -82,7 +82,7 @@ public class SemanticOntology
         if(i>0)
         {
             String base=uri.substring(0,i+1);
-            //System.out.println("paso 1:"+uri+" "+base);
+            log.trace("getResource in Model(1):"+uri+" "+base);
             SemanticModel model=SWBPlatform.getSemanticMgr().getModelByNS(base);
             if(model!=null)
             {
@@ -96,7 +96,7 @@ public class SemanticOntology
 
         if(ret==null)
         {
-            //System.out.println("paso 2");
+            log.trace("getResource in Schema(2):");
             //new Exception().printStackTrace();
             Model model=SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel();
             Resource res=model.getResource(uri);
@@ -108,7 +108,7 @@ public class SemanticOntology
 
         if(ret==null)
         {
-            //System.out.println("paso 3");
+            log.trace("getResource in All Model(3):");
             //new Exception().printStackTrace();
             Iterator<Entry<String, SemanticModel>> it=SWBPlatform.getSemanticMgr().getModels().iterator();
             while(it.hasNext())
@@ -125,7 +125,7 @@ public class SemanticOntology
         }
         if(ret==null)
         {
-            //System.out.println("paso 4");
+            log.trace("getResource in Ontology(4):");
             //new Exception().printStackTrace();
             Model model=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
             Resource res=model.getResource(uri);

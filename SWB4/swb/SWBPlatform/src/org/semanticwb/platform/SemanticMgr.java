@@ -153,7 +153,9 @@ public class SemanticMgr implements SWBInstanceObject
         Iterator it=ontSchemaModel.getRDFModel().getNsPrefixMap().values().iterator();
         while(it.hasNext())
         {
-            m_nsmodels.put((String)it.next(), ontSchemaModel);
+            String key=(String)it.next();
+            m_nsmodels.put(key, ontSchemaModel);
+            log.debug("Add NS:"+key+" "+ontSchemaModel.getName());
         }
         
         //Create Vocabulary
@@ -352,6 +354,7 @@ public class SemanticMgr implements SWBInstanceObject
         //TODO:notify this
         m_models.put(name, m);
         m_nsmodels.put(m.getNameSpace(), m);
+        log.debug("Add NS:"+m.getNameSpace()+" "+m.getName());
         m_imodels.put(m.getRDFModel(), m);
         //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
         if(SWBPlatform.isUseDB())m_ontology.addSubModel(m,false);
