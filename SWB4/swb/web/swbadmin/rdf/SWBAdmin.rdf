@@ -5,7 +5,7 @@
     xmlns:SWBAdmin="http://www.semanticwb.org/SWBAdmin#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
-    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#" > 
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#" >
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:WebPageContents">
     <swb:created>2009-02-02T17:04:06.203</swb:created>
     <swb:resourceBundle>org.semanticwb.portal.admin.resources.SWBAWebPageContents</swb:resourceBundle>
