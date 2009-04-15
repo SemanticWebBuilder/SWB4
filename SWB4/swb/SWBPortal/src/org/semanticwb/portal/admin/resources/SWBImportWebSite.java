@@ -428,8 +428,6 @@ public class SWBImportWebSite extends GenericResource {
             File zip = new File(zipdirectory + name + ".zip");
             java.io.File extractTo = new File(models + newId);
             //Descomprimir zip
-            System.out.println("zip file:"+zip.getAbsolutePath());
-            System.out.println("extractTo file:"+extractTo.getAbsolutePath());
             org.semanticwb.SWBUtils.IO.unzip(zip, extractTo);
             //Mover directorios de modelos a directorio work leyecdo rdfs
             File [] fieldsUnziped=extractTo.listFiles();
@@ -437,8 +435,6 @@ public class SWBImportWebSite extends GenericResource {
                 File file=fieldsUnziped[i];
                 if(file.isDirectory()){ //
                        if(file.getName().equals(name)){ //Es la carpeta del modelo a principal a cargar
-                           System.out.println("ruta dirJ:"+file.getAbsolutePath());
-                           System.out.println("ruta2 dirJ:"+extractTo.getAbsolutePath()+"/");
                            SWBUtils.IO.copyStructure(file.getAbsolutePath()+"/", extractTo.getAbsolutePath()+"/");
                            SWBUtils.IO.removeDirectory(file.getAbsolutePath());
                        }else {
