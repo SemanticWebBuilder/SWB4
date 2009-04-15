@@ -88,8 +88,8 @@ public class SWBExportWebSite extends GenericResource {
                         File fileSubModel=new File(zipdirectory + "/"+sObj.getId()+".rdf");
                         FileOutputStream rdfout = new FileOutputStream(fileSubModel);
                         sObj.getModel().write(rdfout);
-                        out.flush();
-                        out.close();
+                        rdfout.flush();
+                        rdfout.close();
                         //Agregar c/archivo .rdf de submodelos a arreglo de archivos
                         aFiles.add(fileSubModel);
                         //graba el directorio work de c/submodelo en archivo zip
@@ -98,7 +98,7 @@ public class SWBExportWebSite extends GenericResource {
                         //Genera datos de c/summodelo en archivo siteInfo.xml
                         strbr.append("<model>");
                         //if(obj.instanceOf(WebSite.sclass)) //Que datos saco si es un rep de usuarios o de documentos y como los parseo despues
-                        strbr.append("<name>"+sObj.getId()+"</name>\n");
+                        strbr.append("<id>"+sObj.getId()+"</id>\n");
                         strbr.append("<namespace>"+sObj.getModel().getNameSpace()+"</namespace>\n");
                         strbr.append("<title>"+sObj.getProperty(WebPage.swb_title)+"</title>\n");
                         strbr.append("<description>"+sObj.getProperty(WebPage.swb_description)+"</description>\n");
