@@ -30,14 +30,14 @@ public class WBALoginUniqueReport extends GenericResource{
     private static Logger log = SWBUtils.getLogger(WBALoginUniqueReport.class);
 
     private static final String S_REPORT_IDAUX = "_";
-    private static final ArrayList idaux = new ArrayList(1);
+    /*private static final ArrayList idaux = new ArrayList(1);*/
     private static final int I_REPORT_TYPE = 7;
     
     public String strRscType;
     
-    static {
+    /*static {
         idaux.add(S_REPORT_IDAUX);            
-    }
+    }*/
 
     @Override
     public void init(){
@@ -396,7 +396,7 @@ public class WBALoginUniqueReport extends GenericResource{
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(repositoryName);
-                        filter.setIdaux(idaux.iterator());
+                        filter.setIdaux(S_REPORT_IDAUX);
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(year13);                            
                         JRDataSourceable dataDetail = new JRLoggedUniqueDataDetail(filter);
@@ -475,7 +475,7 @@ public class WBALoginUniqueReport extends GenericResource{
                 params.put("site", repositoryName);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(repositoryName);
-                filter.setIdaux(idaux.iterator());
+                filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRLoggedUniqueDataDetail(filter);
@@ -527,7 +527,7 @@ public class WBALoginUniqueReport extends GenericResource{
                 params.put("site", repositoryName);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(repositoryName);
-                filter.setIdaux(idaux.iterator());
+                filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRLoggedUniqueDataDetail(filter);
@@ -604,7 +604,7 @@ public class WBALoginUniqueReport extends GenericResource{
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 filter = new WBAFilterReportBean();
                 filter.setSite(repositoryName);
-                filter.setIdaux(idaux.iterator());
+                filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRLoggedUniqueDataDetail(filter);
@@ -668,7 +668,7 @@ public class WBALoginUniqueReport extends GenericResource{
                 params.put("site", repositoryName);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(repositoryName);
-                filter.setIdaux(idaux.iterator());
+                filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRLoggedUniqueDataDetail(filter);
@@ -713,7 +713,7 @@ public class WBALoginUniqueReport extends GenericResource{
                 params.put("site", repositoryName);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(repositoryName);
-                filter.setIdaux(idaux.iterator());
+                filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRLoggedUniqueDataDetail(filter);
@@ -761,7 +761,7 @@ public class WBALoginUniqueReport extends GenericResource{
                 String[] numFecha = fecha1.split("-");
                 filterReportBean = new WBAFilterReportBean();
                 filterReportBean.setSite(repositoryName);
-                filterReportBean.setIdaux(idaux.iterator());
+                filterReportBean.setIdaux(S_REPORT_IDAUX);
                 filterReportBean.setType(I_REPORT_TYPE);
                 filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
                 filterReportBean.setMonthI(Integer.parseInt(numFecha[1]));
@@ -770,7 +770,7 @@ public class WBALoginUniqueReport extends GenericResource{
             }else { // radio button was 1. Select between two dates
                 filterReportBean = new WBAFilterReportBean();
                 filterReportBean.setSite(repositoryName);
-                filterReportBean.setIdaux(idaux.iterator());
+                filterReportBean.setIdaux(S_REPORT_IDAUX);
                 filterReportBean.setType(I_REPORT_TYPE);
                 String[] numFecha = fecha11.split("-");
                 filterReportBean.setYearI(Integer.parseInt(numFecha[0]));

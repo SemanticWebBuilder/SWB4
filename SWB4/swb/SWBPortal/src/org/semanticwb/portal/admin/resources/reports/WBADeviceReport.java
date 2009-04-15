@@ -104,25 +104,28 @@ public class WBADeviceReport extends GenericResource {
     }
     
     public void doBind(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        System.out.println("inicia doBind");
         response.setContentType("text/json;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         
         String webSiteId = request.getParameter("site");
-        System.out.println("websiteid= "+webSiteId);
-        WebSite webSite = SWBContext.getWebSite(webSiteId);        
-        System.out.println("website= "+webSiteId.toString());
+        WebSite webSite = SWBContext.getWebSite(webSiteId);
+
+        String deviceId = request.getParameter("wb_device");
         
         out.println("<select id=\"wb_device\" name=\"wb_device\" size=\"1\">");
         Iterator<Device> itDevices = webSite.listDevices();
         while (itDevices.hasNext()) {
             Device device = itDevices.next();
-            out.println("<option value=\"" + device.getId() + "\">" + device.getTitle() + "</option>");
+            out.println("<option value=\""+device.getId()+"\"");
+            if(device.getId().equalsIgnoreCase(deviceId)) {
+                out.print(" selected=\"selected\"");
+            }
+            out.print(">");
+            out.println(device.getDisplayTitle(paramsRequest.getUser().getLanguage()) + "</option>");
         }
         out.println("</select>");
-        System.out.println("\ndobind="+out.toString());
         out.flush();
     }
 
@@ -133,8 +136,6 @@ public class WBADeviceReport extends GenericResource {
         response.setHeader("Pragma", "no-cache"); 
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
-        
-        ArrayList idaux = new ArrayList();
         
         final int I_ACCESS = 0;        
         StringBuffer sb_ret = new StringBuffer();
@@ -156,7 +157,7 @@ public class WBADeviceReport extends GenericResource {
 //                    i_access = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramsRequest.getUser(),site.getDbdata().getId());
 //                    if(I_ACCESS < i_access) {
 //                        if(site.getDbdata().getDeleted()==0) {                            
-                            hm_sites.put(site.getId(), site.getTitle());
+                            hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
 //                        }
 //                    }
                 }
@@ -166,7 +167,7 @@ public class WBADeviceReport extends GenericResource {
             if (hm_sites.size() > I_ACCESS) {
                 String address = paramsRequest.getTopic().getUrl();
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String deviceId = request.getParameter("wb_device")==null ? "":request.getParameter("wb_device");
+                String deviceId = request.getParameter("wb_device");
                 
                 int deleteFilter;
                 try {
@@ -205,7 +206,11 @@ public class WBADeviceReport extends GenericResource {
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
                 //out.println("dojo.require(\"dijit.form.ComboBox\");");
                 out.println("dojo.addOnLoad(doBlockade);");
-                out.println("dojo.addOnLoad(function(){getHtml('"+url.toString()+"'+'?site="+webSiteId+"','slave')});");
+                out.println("dojo.addOnLoad(function(){getHtml('"+url.toString()+"'+'?site="+webSiteId+"'");
+                if(deviceId != null) {
+                    out.print("+'&wb_device="+deviceId+"'");
+                }
+                out.print(",'slave')});");
 
                 out.println("function getParams(accion) {");
                 out.println("   var dp = null;");
@@ -289,7 +294,17 @@ public class WBADeviceReport extends GenericResource {
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf") + "\"+params,\"graphWindow\",size);    ");
                 out.println("   }");
-                out.println("}");               
+                out.println("}");
+
+                out.println(" function getTypeSelected(){");
+                out.println("     var strType = \"0\";");
+                out.println("     for(i=0;i<window.document.frmrep.wb_rep_type.length;i++){");
+                out.println("       if(window.document.frmrep.wb_rep_type[i].checked==true){");
+                out.println("           strType=window.document.frmrep.wb_rep_type[i].value;");
+                out.println("       }");
+                out.println("     }");
+                out.println("     return strType;");
+                out.println(" }");
 
                 out.println("function doApply() { ");
                 out.println("   if(validate(dojo.byId('wb_rtype').value)) {");
@@ -298,6 +313,7 @@ public class WBADeviceReport extends GenericResource {
                 out.println("}");
                 
                 out.println(" function doBlockade() {");
+                out.println("   if(window.document.frmrep.wb_rep_type) {");
                 out.println("     if(window.document.frmrep.wb_rep_type[0].checked){");
                 out.println("       dojo.byId('wb_fecha1').disabled = false;");
                 out.println("       dojo.byId('wb_fecha11').disabled = true;");
@@ -308,6 +324,7 @@ public class WBADeviceReport extends GenericResource {
                 out.println("       dojo.byId('wb_fecha11').disabled = false;");
                 out.println("       dojo.byId('wb_fecha12').disabled = false;");
                 out.println("     }");
+                out.println("   }");
                 out.println(" }");
 
                 out.println("</script>");
@@ -384,7 +401,7 @@ public class WBADeviceReport extends GenericResource {
                 out.println("</tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
 
-                if (rtype.equals("0")) { // REPORTE DIARIO
+                if(rtype.equals("0")) { // REPORTE DIARIO
                     out.println("<tr>");
                     out.println("<td>");
                     out.println("<label>");
@@ -484,19 +501,20 @@ public class WBADeviceReport extends GenericResource {
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(webSiteId);
-                        Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();
+                        /*Iterator<Device> itDevices = SWBContext.getWebSite(webSiteId).listDevices();*/
                         if(deleteFilter==0) {
-                            while(itDevices.hasNext()) {
+                            /*while(itDevices.hasNext()) {
                                 Device device = (Device)itDevices.next();
                                 if(device.getId().equalsIgnoreCase(deviceId)) {                                        
                                     idaux.add(device);
                                     filter.setIdaux(idaux.iterator());
                                     break;
                                 }
-                            }
-                        }else {
+                            }*/
+                            filter.setIdaux(deviceId);
+                        }/*else {
                             filter.setIdaux(itDevices);
-                        }                            
+                        }*/
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(year13);
                         JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
@@ -554,7 +572,7 @@ public class WBADeviceReport extends GenericResource {
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
         Resource base = getResourceBase();
-        ArrayList idaux = new ArrayList();
+
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
             if(rtype == 0) { // REPORTE DIARIO
@@ -566,7 +584,7 @@ public class WBADeviceReport extends GenericResource {
                 jrResource.exportReport(response);
             }else { // REPORTE MENSUAL                
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String deviceId = request.getParameter("wb_device")==null ? "":request.getParameter("wb_device");
+                String deviceId = request.getParameter("wb_device");
                 int deleteFilter;
                 try {
                     deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
@@ -576,19 +594,20 @@ public class WBADeviceReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();
+                /*Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();*/
                 if(deleteFilter == 0) {                                
-                    while(itDevices.hasNext()) {
+                    /*while(itDevices.hasNext()) {
                         Device device = itDevices.next();
                         if(device.getId().equalsIgnoreCase(deviceId)) {                                        
                             idaux.add(device);
                             filter.setIdaux(idaux.iterator());
                             break;
                         }
-                    }
-                }else {
+                    }*/
+                    filter.setIdaux(deviceId);
+                }/*else {
                     filter.setIdaux(itDevices);                             
-                }
+                }*/
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
 
@@ -615,12 +634,11 @@ public class WBADeviceReport extends GenericResource {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.xls\"");
         Resource base = getResourceBase();
-        ArrayList idaux = new ArrayList();
+        /*ArrayList idaux = new ArrayList();*/
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // by day
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
-                System.out.println("por dia. filtro="+filter.toString());
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_DAILY;
                 JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
@@ -628,7 +646,7 @@ public class WBADeviceReport extends GenericResource {
                 jrResource.exportReport(response);
             }else { // by month                
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String deviceId = request.getParameter("wb_device")==null ? "":request.getParameter("wb_device");
+                String deviceId = request.getParameter("wb_device");
                 int deleteFilter;
                 try {
                     deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
@@ -638,23 +656,22 @@ public class WBADeviceReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();
+                /*Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();*/
                 if(deleteFilter == 0) {                                
-                    while(itDevices.hasNext()) {
+                    /*while(itDevices.hasNext()) {
                         Device device = itDevices.next();
                         if(device.getId().equalsIgnoreCase(deviceId)) {                                        
                             idaux.add(device);
                             filter.setIdaux(idaux.iterator());
                             break;
                         }
-                    }
-                }else {
+                    }*/
+                    filter.setIdaux(deviceId);
+                }/*else {
                     filter.setIdaux(itDevices);                             
-                }
+                }*/
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
-                System.out.println("por mes. filtro="+filter.toString());
-
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_MONTHLY;                        
                 JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
@@ -680,7 +697,7 @@ public class WBADeviceReport extends GenericResource {
         
         Document dom = SWBUtils.XML.getNewDocument();        
         Resource base = getResourceBase();
-        ArrayList idaux = new ArrayList();
+        /*ArrayList idaux = new ArrayList();*/
         
         try {
             WBAFilterReportBean filter;            
@@ -726,7 +743,7 @@ public class WBADeviceReport extends GenericResource {
                 }
             }else { // REPORTE MENSUAL
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String deviceId = request.getParameter("wb_device")==null ? "":request.getParameter("wb_device");
+                String deviceId = request.getParameter("wb_device");
                 int deleteFilter;
                 try {
                     deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
@@ -736,19 +753,20 @@ public class WBADeviceReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();
+                /*Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();*/
                 if(deleteFilter == 0) {                                
-                    while(itDevices.hasNext()) {
+                    /*while(itDevices.hasNext()) {
                         Device device = itDevices.next();
                         if(device.getId().equalsIgnoreCase(deviceId)) {                                        
                             idaux.add(device);
                             filter.setIdaux(idaux.iterator());
                             break;
                         }
-                    }
-                }else {
+                    }*/
+                    filter.setIdaux(deviceId);
+                }/*else {
                     filter.setIdaux(itDevices);                             
-                }
+                }*/
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
@@ -795,13 +813,13 @@ public class WBADeviceReport extends GenericResource {
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.xls\"");
+
         Resource base = getResourceBase();
-        ArrayList idaux = new ArrayList();
+        /*ArrayList idaux = new ArrayList();*/
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // by day
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
-                System.out.println("por dia. filtro="+filter.toString());
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_DAILY;
                 JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
@@ -809,7 +827,7 @@ public class WBADeviceReport extends GenericResource {
                 jrResource.exportReport(response);
             }else { // by month                
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String deviceId = request.getParameter("wb_device")==null ? "":request.getParameter("wb_device");
+                String deviceId = request.getParameter("wb_device");
                 int deleteFilter;
                 try {
                     deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
@@ -819,23 +837,22 @@ public class WBADeviceReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();
+                /*Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();*/
                 if(deleteFilter == 0) {                                
-                    while(itDevices.hasNext()) {
+                    /*while(itDevices.hasNext()) {
                         Device device = itDevices.next();
                         if(device.getId().equalsIgnoreCase(deviceId)) {                                        
                             idaux.add(device);
                             filter.setIdaux(idaux.iterator());
                             break;
                         }
-                    }
-                }else {
+                    }*/
+                    filter.setIdaux(deviceId);
+                }/*else {
                     filter.setIdaux(itDevices);                             
-                }
+                }*/
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
-                System.out.println("por mes. filtro="+filter.toString());
-
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_MONTHLY;                        
                 JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
@@ -851,13 +868,13 @@ public class WBADeviceReport extends GenericResource {
     public void doRepRtf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.xls\"");
+
         Resource base = getResourceBase();
-        ArrayList idaux = new ArrayList();
+        /*ArrayList idaux = new ArrayList();*/
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // by day
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
-                System.out.println("por dia. filtro="+filter.toString());
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_DAILY;
                 JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
@@ -865,7 +882,7 @@ public class WBADeviceReport extends GenericResource {
                 jrResource.exportReport(response);
             }else { // by month                
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String deviceId = request.getParameter("wb_device")==null ? "":request.getParameter("wb_device");
+                String deviceId = request.getParameter("wb_device");
                 int deleteFilter;
                 try {
                     deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
@@ -875,23 +892,22 @@ public class WBADeviceReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();
+                /*Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();*/
                 if(deleteFilter == 0) {                                
-                    while(itDevices.hasNext()) {
+                    /*while(itDevices.hasNext()) {
                         Device device = itDevices.next();
                         if(device.getId().equalsIgnoreCase(deviceId)) {                                        
                             idaux.add(device);
                             filter.setIdaux(idaux.iterator());
                             break;
                         }
-                    }
-                }else {
+                    }*/
+                    filter.setIdaux(deviceId);
+                }/*else {
                     filter.setIdaux(itDevices);                             
-                }
+                }*/
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
-                System.out.println("por mes. filtro="+filter.toString());
-
                 JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.DEVICE_MONTHLY;                        
                 JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
@@ -906,11 +922,10 @@ public class WBADeviceReport extends GenericResource {
         
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;
-        GregorianCalendar gc_now = new GregorianCalendar();
-        ArrayList idaux = new ArrayList();
-        
+        GregorianCalendar gc_now = new GregorianCalendar();        
+        /*ArrayList idaux = new ArrayList();*/
         String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-        String deviceId = request.getParameter("wb_device")==null ? "":request.getParameter("wb_device");
+        String deviceId = request.getParameter("wb_device");
         int deleteFilter;
         try {
             deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
@@ -934,20 +949,20 @@ public class WBADeviceReport extends GenericResource {
         }
         
         try {
+            /*Iterator<Device> itDevices = SWBContext.getWebSite(webSiteId).listDevices();*/
             if(deleteFilter==0) {
-                Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();
-                while(itDevices.hasNext()) {
+                /*while(itDevices.hasNext()) {
                     Device device = itDevices.next();
                     if(device.getId().equalsIgnoreCase(deviceId)) {
                         idaux.add(device);
                         break;
                     }
-                }                
+                }*/
                 if(groupDates==0) { // radio button was 0. Select only one date
                     String[] numFecha = fecha1.split("-");
                     filterReportBean = new WBAFilterReportBean();
                     filterReportBean.setSite(webSiteId);
-                    filterReportBean.setIdaux(idaux.iterator());
+                    filterReportBean.setIdaux(deviceId);
                     filterReportBean.setType(I_REPORT_TYPE);                    
                     filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
                     filterReportBean.setMonthI(Integer.parseInt(numFecha[1]));
@@ -955,7 +970,7 @@ public class WBADeviceReport extends GenericResource {
                 }else { // radio button was 1. Select between two dates
                     filterReportBean = new WBAFilterReportBean();
                     filterReportBean.setSite(webSiteId);
-                    filterReportBean.setIdaux(idaux.iterator());
+                    filterReportBean.setIdaux(deviceId);
                     filterReportBean.setType(I_REPORT_TYPE);
                     
                     String[] numFecha = fecha11.split("-");
@@ -969,12 +984,11 @@ public class WBADeviceReport extends GenericResource {
                     filterReportBean.setDayF(Integer.parseInt(numFecha[2]));
                 }
             }else {
-                Iterator<Device> itDevices = paramsRequest.getTopic().getWebSite().listDevices();
                 if(groupDates==0) { // radio button was 0. Select only one date
                     String[] numFecha = fecha1.split("-");
                     filterReportBean = new WBAFilterReportBean();
                     filterReportBean.setSite(webSiteId);
-                    filterReportBean.setIdaux(itDevices);
+                    /*filterReportBean.setIdaux(deviceId);*/
                     filterReportBean.setType(I_REPORT_TYPE);
                     filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
                     filterReportBean.setMonthI(Integer.parseInt(numFecha[1]));
@@ -982,7 +996,7 @@ public class WBADeviceReport extends GenericResource {
                 }else { // radio button was 1. Select between two dates                    
                     filterReportBean = new WBAFilterReportBean();
                     filterReportBean.setSite(webSiteId);
-                    filterReportBean.setIdaux(itDevices);
+                    /*filterReportBean.setIdaux(deviceId);*/
                     filterReportBean.setType(I_REPORT_TYPE);
                     
                     String[] numFecha = fecha11.split("-");

@@ -92,11 +92,6 @@ public class WBAUserReport extends GenericResource {
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         
-        String webSiteId = request.getParameter("site");
-        System.out.println("websiteid= "+webSiteId);
-        WebSite webSite = SWBContext.getWebSite(webSiteId);        
-        System.out.println("website= "+webSiteId.toString());
-        
         out.println("<select id=\"wb_usertype\" name=\"wb_usertype\" size=\"1\">");
         Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
         while(itUserTypes.hasNext()) {
@@ -452,19 +447,20 @@ public class WBAUserReport extends GenericResource {
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(webSiteId);
-                        Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
+                        /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();*/
                         if(deleteFilter==0) {
-                            while(itUserTypes.hasNext()) {
+                            /*while(itUserTypes.hasNext()) {
                                 String val = itUserTypes.next();
                                 if(val.equalsIgnoreCase(userTypeId)) {                                        
                                     idaux.add(val);
                                     filter.setIdaux(idaux.iterator());
                                     break;
                                 }
-                            }
-                        }else {
+                            }*/
+                            filter.setIdaux(userTypeId);
+                        }/*else {
                             filter.setIdaux(itUserTypes);
-                        }                            
+                        }*/
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(year13);
                         JRDataSourceable dataDetail = new JRUserTypesAccessDataDetail(filter);
@@ -521,8 +517,9 @@ public class WBAUserReport extends GenericResource {
      */
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
+
         Resource base = getResourceBase();
-        ArrayList idaux = new ArrayList();
+        /*ArrayList idaux = new ArrayList();*/
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));
             if(rtype == 0) { // REPORTE DIARIO
@@ -544,19 +541,20 @@ public class WBAUserReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
+                /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();*/
                 if(deleteFilter == 0) {                                
-                    while(itUserTypes.hasNext()) {
+                    /*while(itUserTypes.hasNext()) {
                         String val = itUserTypes.next();
                         if(val.equalsIgnoreCase(userTypeId)) {
                             idaux.add(val);
                             filter.setIdaux(idaux.iterator());
                             break;
                         }
-                    }
-                }else {
+                    }*/
+                    filter.setIdaux(userTypeId);
+                }/*else {
                     filter.setIdaux(itUserTypes);                             
-                }
+                }*/
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
 
@@ -582,8 +580,9 @@ public class WBAUserReport extends GenericResource {
     public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.xls\"");
+
         Resource base = getResourceBase();
-        ArrayList idaux = new ArrayList();
+        /*ArrayList idaux = new ArrayList();*/
         try {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // by day
@@ -606,19 +605,20 @@ public class WBAUserReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
+                /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();*/
                 if(deleteFilter == 0) {                                
-                    while(itUserTypes.hasNext()) {
+                    /*while(itUserTypes.hasNext()) {
                         String val = itUserTypes.next();
                         if(val.equalsIgnoreCase(userTypeId)) {
                             idaux.add(val);
                             filter.setIdaux(idaux.iterator());
                             break;
                         }
-                    }
-                }else {
+                    }*/
+                    filter.setIdaux(userTypeId);
+                }/*else {
                     filter.setIdaux(itUserTypes);                             
-                }
+                }*/
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 System.out.println("por mes. filtro="+filter.toString());
@@ -644,8 +644,9 @@ public class WBAUserReport extends GenericResource {
      */
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/xml;charset=iso-8859-1");
+
         Resource base = getResourceBase();
-        ArrayList idaux = new ArrayList();
+        /*ArrayList idaux = new ArrayList();*/
         try{            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // by day
@@ -668,19 +669,20 @@ public class WBAUserReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
+                /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();*/
                 if(deleteFilter == 0) {                                
-                    while(itUserTypes.hasNext()) {
+                    /*while(itUserTypes.hasNext()) {
                         String val = itUserTypes.next();
                         if(val.equalsIgnoreCase(userTypeId)) {
                             idaux.add(val);
                             filter.setIdaux(idaux.iterator());
                             break;
                         }
-                    }
-                }else {
+                    }*/
+                    filter.setIdaux(userTypeId);
+                }/*else {
                     filter.setIdaux(itUserTypes);                             
-                }
+                }*/
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 System.out.println("por mes. filtro="+filter.toString());
@@ -706,8 +708,9 @@ public class WBAUserReport extends GenericResource {
      */    
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
+
         Resource base = getResourceBase();
-        ArrayList idaux = new ArrayList();
+        /*ArrayList idaux = new ArrayList();*/
         try{            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // by day
@@ -730,19 +733,20 @@ public class WBAUserReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
+                /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();*/
                 if(deleteFilter == 0) {                                
-                    while(itUserTypes.hasNext()) {
+                    /*while(itUserTypes.hasNext()) {
                         String val = itUserTypes.next();
                         if(val.equalsIgnoreCase(userTypeId)) {
                             idaux.add(val);
                             filter.setIdaux(idaux.iterator());
                             break;
                         }
-                    }
-                }else {
+                    }*/
+                    filter.setIdaux(userTypeId);
+                }/*else {
                     filter.setIdaux(itUserTypes);                             
-                }
+                }*/
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 System.out.println("por mes. filtro="+filter.toString());
@@ -769,8 +773,9 @@ public class WBAUserReport extends GenericResource {
     public void doRepRtf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/rtf");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.rtf\"");
+
         Resource base = getResourceBase();
-        ArrayList idaux = new ArrayList();
+        /*ArrayList idaux = new ArrayList();*/
         try{            
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             if(rtype == 0) { // by day
@@ -793,19 +798,20 @@ public class WBAUserReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
+                /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();*/
                 if(deleteFilter == 0) {                                
-                    while(itUserTypes.hasNext()) {
+                    /*while(itUserTypes.hasNext()) {
                         String val = itUserTypes.next();
                         if(val.equalsIgnoreCase(userTypeId)) {
                             idaux.add(val);
                             filter.setIdaux(idaux.iterator());
                             break;
                         }
-                    }
-                }else {
+                    }*/
+                    filter.setIdaux(userTypeId);
+                }/*else {
                     filter.setIdaux(itUserTypes);                             
-                }
+                }*/
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 System.out.println("por mes. filtro="+filter.toString());
@@ -855,7 +861,7 @@ public class WBAUserReport extends GenericResource {
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;
         GregorianCalendar gc_now = new GregorianCalendar();
-        ArrayList idaux = new ArrayList();
+        /*ArrayList idaux = new ArrayList();*/
         
         String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
         String userTypeId = request.getParameter("wb_usertype")==null ? "":request.getParameter("wb_usertype");
@@ -883,19 +889,19 @@ public class WBAUserReport extends GenericResource {
         
         try {
             if(deleteFilter==0) {                
-                Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
+                /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
                 while(itUserTypes.hasNext()) {
                     String val = itUserTypes.next();
                     if(val.equalsIgnoreCase(userTypeId)) {
                         idaux.add(val);
                         break;
                     }
-                }                
+                }*/
                 if(groupDates==0) { // radio button was 0. Select only one date
                     String[] numFecha = fecha1.split("-");
                     filterReportBean = new WBAFilterReportBean();
                     filterReportBean.setSite(webSiteId);
-                    filterReportBean.setIdaux(idaux.iterator());
+                    filterReportBean.setIdaux(userTypeId);
                     filterReportBean.setType(I_REPORT_TYPE);                    
                     filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
                     filterReportBean.setMonthI(Integer.parseInt(numFecha[1]));
@@ -903,7 +909,7 @@ public class WBAUserReport extends GenericResource {
                 }else { // radio button was 1. Select between two dates
                     filterReportBean = new WBAFilterReportBean();
                     filterReportBean.setSite(webSiteId);
-                    filterReportBean.setIdaux(idaux.iterator());
+                    filterReportBean.setIdaux(userTypeId);
                     filterReportBean.setType(I_REPORT_TYPE);
                     
                     String[] numFecha = fecha11.split("-");
@@ -922,7 +928,7 @@ public class WBAUserReport extends GenericResource {
                     String[] numFecha = fecha1.split("-");
                     filterReportBean = new WBAFilterReportBean();
                     filterReportBean.setSite(webSiteId);
-                    filterReportBean.setIdaux(itUserTypes);
+                    /*filterReportBean.setIdaux(itUserTypes);*/
                     filterReportBean.setType(I_REPORT_TYPE);
                     filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
                     filterReportBean.setMonthI(Integer.parseInt(numFecha[1]));
@@ -930,7 +936,7 @@ public class WBAUserReport extends GenericResource {
                 }else { // radio button was 1. Select between two dates                    
                     filterReportBean = new WBAFilterReportBean();
                     filterReportBean.setSite(webSiteId);
-                    filterReportBean.setIdaux(itUserTypes);
+                    /*filterReportBean.setIdaux(itUserTypes);*/
                     filterReportBean.setType(I_REPORT_TYPE);
                     
                     String[] numFecha = fecha11.split("-");

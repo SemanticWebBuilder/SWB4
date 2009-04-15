@@ -20,16 +20,19 @@ public class WBAFilterReportBean {
     private int monthF;
     private int yearF;
     private String site;
-    private Iterator idaux;
+    private String idaux;
     private int type;       
     
     private HashMap userTypes;
+
+    private String userLanguage;
 
     
     public WBAFilterReportBean(){
         dayI   = -1;
         monthI = -1;
         yearI  = -1;
+        userLanguage = "es";
     }
 
     public int getDayI() {
@@ -40,11 +43,11 @@ public class WBAFilterReportBean {
         this.dayI = dayI;
     }
     
-    public Iterator getIdaux() {
+    public String getIdaux() {
         return idaux;
     }
 
-    public void setIdaux(Iterator idaux) {
+    public void setIdaux(String idaux) {
         this.idaux = idaux;
     }
 
@@ -127,5 +130,19 @@ public class WBAFilterReportBean {
         sb.append(", type=" + type);
         
         return sb.toString();
+    }
+
+    /**
+     * @return the userLanguage
+     */
+    public String getUserLanguage() {
+        return userLanguage;
+    }
+
+    /**
+     * @param userLanguage the userLanguage to set
+     */
+    public void setUserLanguage(String userLanguage) {
+        this.userLanguage = userLanguage;
     }
 }
