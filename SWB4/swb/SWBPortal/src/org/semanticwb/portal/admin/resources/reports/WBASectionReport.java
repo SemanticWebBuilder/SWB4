@@ -736,8 +736,8 @@ public class WBASectionReport extends GenericResource {
         
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;
-        ArrayList idaux = new ArrayList();
-        idaux.add(request.getParameter("reptp"));
+        /*ArrayList idaux = new ArrayList();
+        idaux.add(request.getParameter("reptp"));*/
         
         String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
         /*String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");*/
@@ -747,6 +747,7 @@ public class WBASectionReport extends GenericResource {
         }catch(NumberFormatException e) {
             deleteFilter = 0;
         }*/
+        String section = request.getParameter("section");
         int groupDates;
         try {
             groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
@@ -777,7 +778,7 @@ public class WBASectionReport extends GenericResource {
                     String[] numFecha = fecha1.split("-");
                     filterReportBean = new WBAFilterReportBean();
                     filterReportBean.setSite(webSiteId);
-                    filterReportBean.setIdaux(idaux.iterator());
+                    filterReportBean.setIdaux(section);
                     filterReportBean.setType(I_REPORT_TYPE);                    
                     filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
                     filterReportBean.setMonthI(Integer.parseInt(numFecha[1]));
@@ -785,7 +786,7 @@ public class WBASectionReport extends GenericResource {
                 }else { // radio button was 1. Select between two dates
                     filterReportBean = new WBAFilterReportBean();
                     filterReportBean.setSite(webSiteId);
-                    filterReportBean.setIdaux(idaux.iterator());
+                    filterReportBean.setIdaux(section);
                     filterReportBean.setType(I_REPORT_TYPE);
                     
                     String[] numFecha = fecha11.split("-");

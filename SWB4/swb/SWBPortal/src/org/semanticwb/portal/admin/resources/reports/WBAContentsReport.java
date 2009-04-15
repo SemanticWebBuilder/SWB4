@@ -29,7 +29,7 @@ public class WBAContentsReport extends GenericResource {
     
     private String strRscType;
     //private WebSiteSectionTree tree = new WebSiteSectionTree();
-    private SelectTree tree = new SelectTree();
+    //private SelectTree tree = new SelectTree();
     
     private static Integer x;
     static{x=new Integer(0);}
@@ -95,6 +95,7 @@ public class WBAContentsReport extends GenericResource {
             String name = names.nextElement();
             params.put(name, request.getParameter(name));
         }
+        SelectTree tree = new SelectTree(paramsRequest.getUser().getLanguage());
         out.println(tree.renderXHTML(webSiteId, params, url.toString()));
         
         out.flush();
@@ -134,24 +135,25 @@ public class WBAContentsReport extends GenericResource {
                 json.append(", active:'"+(portlet.isActive()?"Si":"No")+"'");
                 json.append(", loc:'"+portlet.getWorkPath()+"'");
                 json.append(", uri:'"+portlet.getURI()+"'");
-                json.append(", broke:'No'");
+                json.append(", break:'No'");
                 json.append(" }");
                 
             }
         }
         
         if(request.getParameter("sons")!=null && request.getParameter("sons").equalsIgnoreCase("1")) {
-            json.append(getContentInJson(webPage.listChilds(), first));
+            String lang = paramsRequest.getUser().getLanguage();
+            json.append(getContentInJson(webPage.listVisibleChilds(lang), first, lang));
         }
         
         json.append("],");
         json.append("source:1, rating:3 }");
-        System.out.println("\n\n"+json+"\n");
+        System.out.println("json:\n"+json.toString());
         out.print(json.toString());                
         out.flush();
     }
     
-    private String getContentInJson(Iterator<WebPage> childs, Bool first) {
+    private String getContentInJson(Iterator<WebPage> childs, Bool first, final String lang) {
         StringBuilder json = new StringBuilder();        
         
         while(childs.hasNext()) {
@@ -174,12 +176,12 @@ public class WBAContentsReport extends GenericResource {
                     json.append(", active:'"+(portlet.isActive()?"Si":"No")+"'");
                     json.append(", loc:'"+portlet.getWorkPath()+"'");
                     json.append(", uri:'"+portlet.getURI()+"'");
-                    json.append(", broke:'No'");
+                    json.append(", break:'No'");
                     json.append(" }");
                 }
             }
             if(webPage.listChilds().hasNext()) {
-                json.append(getContentInJson(webPage.listChilds(), first));
+                json.append(getContentInJson(webPage.listVisibleChilds(lang), first, lang));
             }
         }
         

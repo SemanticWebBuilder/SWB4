@@ -52,14 +52,14 @@ public class WBAGlobalReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBAGlobalReport.class);
 
     private static final String S_REPORT_IDAUX = "_";
-    private static final ArrayList idaux = new ArrayList(1);
+    //private static final ArrayList idaux = new ArrayList(1);
     private static final int I_REPORT_TYPE = 0;
 
     public String strRscType;
     
-    static {
+    /*static {
         idaux.add(S_REPORT_IDAUX);            
-    }
+    }*/
 
     @Override
     public void init(){
@@ -139,7 +139,7 @@ public class WBAGlobalReport extends GenericResource {
 //                    i_access = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramsRequest.getUser(),site.getDbdata().getId());
 //                    if(I_ACCESS < i_access) {
 //                        if(site.getDbdata().getDeleted()==0) {
-                            hm_sites.put(site.getId(), site.getTitle());
+                            hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
 //                        }
 //                    }
                 }
@@ -271,6 +271,7 @@ public class WBAGlobalReport extends GenericResource {
                 out.println(" }");                
 
                 out.println(" function doBlockade() {");
+                out.println("   if(window.document.frmrep.wb_rep_type) {");
                 out.println("     if(window.document.frmrep.wb_rep_type[0].checked){");
                 out.println("       dojo.byId('wb_fecha1').disabled = false;");
                 out.println("       dojo.byId('wb_fecha11').disabled = true;");
@@ -281,6 +282,7 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("       dojo.byId('wb_fecha11').disabled = false;");
                 out.println("       dojo.byId('wb_fecha12').disabled = false;");
                 out.println("     }");
+                out.println("   }");
                 out.println(" }");
                 out.println("</script>");
                 
@@ -430,7 +432,7 @@ public class WBAGlobalReport extends GenericResource {
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(webSite);
-                        filter.setIdaux(idaux.iterator());
+                        filter.setIdaux(S_REPORT_IDAUX);
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(year13);                            
                         JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
@@ -511,7 +513,7 @@ public class WBAGlobalReport extends GenericResource {
                 params.put("site", webSite);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSite);
-                filter.setIdaux(idaux.iterator());
+                filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
@@ -563,7 +565,7 @@ public class WBAGlobalReport extends GenericResource {
                 params.put("site", webSite);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSite);
-                filter.setIdaux(idaux.iterator());
+                filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
@@ -640,7 +642,7 @@ public class WBAGlobalReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));                
                 filter = new WBAFilterReportBean();
                 filter.setSite(webSite);
-                filter.setIdaux(idaux.iterator());
+                filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
@@ -704,7 +706,7 @@ public class WBAGlobalReport extends GenericResource {
                 params.put("site", webSite);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSite);
-                filter.setIdaux(idaux.iterator());
+                filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
@@ -749,7 +751,7 @@ public class WBAGlobalReport extends GenericResource {
                 params.put("site", webSite);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSite);
-                filter.setIdaux(idaux.iterator());
+                filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
@@ -778,11 +780,8 @@ public class WBAGlobalReport extends GenericResource {
             groupDates = 0;
         }
         String fecha1 = request.getParameter("wb_fecha1");
-        System.out.println("fecha1="+fecha1);
         String fecha11 = request.getParameter("wb_fecha11");
-        System.out.println("fecha11="+fecha11);
         String fecha12 = request.getParameter("wb_fecha12");
-        System.out.println("fecha12="+fecha12);
         if(groupDates==0 && fecha1==null) {
             throw new IncompleteFilterException("Falta la fecha");
         }
@@ -795,7 +794,7 @@ public class WBAGlobalReport extends GenericResource {
                 /*String[] numFecha = fecha1.split("-");*/
                 filterReportBean = new WBAFilterReportBean();
                 filterReportBean.setSite(webSite);
-                filterReportBean.setIdaux(idaux.iterator());
+                filterReportBean.setIdaux(S_REPORT_IDAUX);
                 filterReportBean.setType(I_REPORT_TYPE);
                 filterReportBean.setYearI(Integer.parseInt(fecha1.substring(0,4)));
                 filterReportBean.setMonthI(Integer.parseInt(fecha1.substring(5,7)));
@@ -804,7 +803,7 @@ public class WBAGlobalReport extends GenericResource {
             }else { // radio button was 1. Select between two dates
                 filterReportBean = new WBAFilterReportBean();
                 filterReportBean.setSite(webSite);
-                filterReportBean.setIdaux(idaux.iterator());
+                filterReportBean.setIdaux(S_REPORT_IDAUX);
                 filterReportBean.setType(I_REPORT_TYPE);
                 
                 /*String[] numFecha = fecha11.split("-");*/                                

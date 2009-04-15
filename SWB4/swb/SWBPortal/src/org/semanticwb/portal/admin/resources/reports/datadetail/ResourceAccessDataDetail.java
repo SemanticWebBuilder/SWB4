@@ -15,7 +15,7 @@ public class ResourceAccessDataDetail extends SWBDataDetail{
         super(filterReportBean);
     }
     
-    public List doDataList(String site, Iterator rfilter, int type) throws IncompleteFilterException{
+    public List doDataList(String site, String rfilter, int type, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
 //        StringTokenizer st_res = new StringTokenizer(rfilter,"|");
 //        while(st_res.hasMoreTokens()) {
@@ -26,7 +26,7 @@ public class ResourceAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
-    public List doDataList(String site, Iterator rfilter, int type, int year) throws IncompleteFilterException{
+    public List doDataList(String site, String rfilter, int type, int year, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
 //        StringTokenizer st_res = new StringTokenizer(rfilter,"|");
 //        while(st_res.hasMoreTokens()) {
@@ -37,7 +37,7 @@ public class ResourceAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;        
     }
     
-    public List doDataList(String site, Iterator rfilter, int type, int year, int month, int day) throws IncompleteFilterException{
+    public List doDataList(String site, String rfilter, int type, int year, int month, int day, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
 //        StringTokenizer st_res = new StringTokenizer(rfilter,"|");
 //        while(st_res.hasMoreTokens()) {
@@ -48,7 +48,7 @@ public class ResourceAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
-    public List doDataList(String site, Iterator rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF) throws IncompleteFilterException{
+    public List doDataList(String site, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
 //        StringTokenizer st_res = new StringTokenizer(rfilter,"|");
 //        while(st_res.hasMoreTokens()) {

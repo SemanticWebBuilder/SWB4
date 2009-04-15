@@ -13,14 +13,8 @@ public class UserTypesAccessDataDetail extends SWBDataDetail{
     public UserTypesAccessDataDetail(WBAFilterReportBean filterReportBean) {
         super(filterReportBean);
     }
-        
-    /*public URL getJasperResource(){
-        URL urlJR = null;
-        urlJR = this.getClass().getResource("templates/dailyRepUserTypes.jasper");        
-        return urlJR;
-    }*/
-        
-    public List doDataList(String site, Iterator rfilter, int type) throws IncompleteFilterException {
+       
+    public List doDataList(String site, String rfilter, int type, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
 //        String userTypeName;
 //        if(rfilter != null) {
@@ -47,7 +41,7 @@ public class UserTypesAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
-    public List doDataList(String site, Iterator rfilter, int type, int year) throws IncompleteFilterException {
+    public List doDataList(String site, String rfilter, int type, int year, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
 //        String userTypeName;        
 //        if(rfilter!=null){
@@ -76,7 +70,7 @@ public class UserTypesAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
-    public List doDataList(String site, Iterator rfilter, int type, int year, int month, int day) throws IncompleteFilterException {
+    public List doDataList(String site, String rfilter, int type, int year, int month, int day, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();        
 //        String userTypeName;
 //        if(rfilter != null) {
@@ -103,7 +97,7 @@ public class UserTypesAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
-    public List doDataList(String site, Iterator rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF) throws IncompleteFilterException {
+    public List doDataList(String site, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();        
 //        String userTypeName;
 //

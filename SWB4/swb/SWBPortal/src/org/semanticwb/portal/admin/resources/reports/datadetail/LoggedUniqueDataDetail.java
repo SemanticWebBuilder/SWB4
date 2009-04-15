@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 import org.semanticwb.portal.admin.resources.reports.beans.*;
-import org.semanticwb.portal.db.SWBRecHits;
+import org.semanticwb.portal.db.SWBRecHits_;
 
 
 
@@ -14,43 +14,37 @@ public class LoggedUniqueDataDetail extends SWBDataDetail{
     
     public LoggedUniqueDataDetail(WBAFilterReportBean filterReportBean) {
         super(filterReportBean);
-    }   
-        
-    /*public URL getJasperResource(){
-        URL urlJR = null;        
-        urlJR = this.getClass().getResource("templates/dailyRepUniqueUsers.jasper");
-        return urlJR;
-    }*/
+    }
     
-    protected List doDataList(String repository, Iterator rfilter, int type) throws IncompleteFilterException{
+    protected List doDataList(String repository, String rfilter, int type, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
-        if(rfilter.hasNext()) {
-            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(repository, (String)rfilter.next(), type);
-        }
+//        //if(rfilter.hasNext()) {
+//            resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(repository, rfilter, type);
+//        //}
         return resumeRecHits;
     }
     
-    protected List doDataList(String site, Iterator rfilter, int type, int year) throws IncompleteFilterException {
+    protected List doDataList(String site, String rfilter, int type, int year, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
-        if(rfilter.hasNext()) {
-            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(site, (String)rfilter.next(), type, year);
-        }
+        //if(rfilter.hasNext()) {
+            resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, year);
+        //}
         return resumeRecHits;
     }
     
-    protected List doDataList(String repository, Iterator rfilter, int type, int year, int month, int day) throws IncompleteFilterException{
+    protected List doDataList(String repository, String rfilter, int type, int year, int month, int day, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
-        if(rfilter.hasNext()) {
-            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(repository, (String)rfilter.next(), type, year, month, day);
-        }
+        //if(rfilter.hasNext()) {
+            resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(repository, rfilter, type, year, month, day);
+        //}
         return resumeRecHits;
     }
     
-    protected List doDataList(String repository, Iterator rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF) throws IncompleteFilterException{
+    protected List doDataList(String repository, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
-        if(rfilter.hasNext()) {
-            resumeRecHits = SWBRecHits.getInstance().getResHitsLog(repository, (String)rfilter.next(), type, yearI, monthI, dayI, yearF, monthF, dayF);
-        }
+        //if(rfilter.hasNext()) {
+            resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(repository, rfilter, type, yearI, monthI, dayI, yearF, monthF, dayF);
+        //}
         return resumeRecHits;
     }
 }
