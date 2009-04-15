@@ -105,12 +105,14 @@ public class WBAContentsReport extends GenericResource {
         response.setContentType("text/json;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
+        
         PrintWriter out = response.getWriter();
         StringBuilder json = new StringBuilder();
+        String lang = paramsRequest.getUser().getLanguage();
         
-        json.append("{ identifier: 'id',");
-        json.append("label: 'id',");
-        json.append("items: [");        
+        json.append("\n{ identifier: \"id\",\n");
+        json.append("label: \"sect\",\n");
+        json.append("items: [\n");
         
         String webSiteId = request.getParameter("site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("site");
         WebSite webSite = SWBContext.getWebSite(webSiteId);
@@ -127,28 +129,23 @@ public class WBAContentsReport extends GenericResource {
                     json.append(",");
                 }
                 json.append(" {");
-                json.append(" sect:'"+webPage.getTitle()+"'");
-                json.append(", id:'"+portlet.getId()+"'");
-                json.append(", tipo:'"+portlet.getResourceType().getTitle()+"'");
-                json.append(", contenido:'"+portlet.getTitle()+"'");
-                json.append(", prior:'"+portlet.getPriority()+"'");
-                json.append(", active:'"+(portlet.isActive()?"Si":"No")+"'");
-                json.append(", loc:'"+portlet.getWorkPath()+"'");
-                json.append(", uri:'"+portlet.getURI()+"'");
-                json.append(", break:'No'");
-                json.append(" }");
+                json.append(" id:\""+portlet.getId()+"\"");
+                json.append(", sect:\""+webPage.getDisplayName(lang)+"\"");
+                json.append(", tipo:\""+portlet.getResourceType().getDisplayTitle(lang)+"\"");
+                json.append(", contenido:\""+portlet.getDisplayTitle(lang)+"\"");
+                json.append(", prior:\""+portlet.getPriority()+"\"");
+                json.append(", active:\""+(portlet.isActive()?"Si":"No")+"\"");
+                json.append(", loc:\""+portlet.getWorkPath()+"\"");
+                json.append(", uri:\""+portlet.getURI()+"\"");
+                json.append(", break_:\"No\"");
+                json.append(" }\n");
                 
             }
-        }
-        
-        if(request.getParameter("sons")!=null && request.getParameter("sons").equalsIgnoreCase("1")) {
-            String lang = paramsRequest.getUser().getLanguage();
+        }        
+        if(request.getParameter("sons")!=null && request.getParameter("sons").equalsIgnoreCase("1")) {            
             json.append(getContentInJson(webPage.listVisibleChilds(lang), first, lang));
-        }
-        
-        json.append("],");
-        json.append("source:1, rating:3 }");
-        System.out.println("json:\n"+json.toString());
+        }        
+        json.append("\n]\n}");
         out.print(json.toString());                
         out.flush();
     }
@@ -168,16 +165,16 @@ public class WBAContentsReport extends GenericResource {
                         json.append(",");
                     }
                     json.append(" {");
-                    json.append(" sect:'"+webPage.getTitle()+"'");
-                    json.append(", id:'"+portlet.getId()+"'");
-                    json.append(", tipo:'"+portlet.getResourceType().getTitle()+"'");
-                    json.append(", contenido:'"+portlet.getTitle()+"'");
-                    json.append(", prior:'"+portlet.getPriority()+"'");
-                    json.append(", active:'"+(portlet.isActive()?"Si":"No")+"'");
-                    json.append(", loc:'"+portlet.getWorkPath()+"'");
-                    json.append(", uri:'"+portlet.getURI()+"'");
-                    json.append(", break:'No'");
-                    json.append(" }");
+                    json.append(" id:\""+portlet.getId()+"\"");
+                    json.append(", sect:\""+webPage.getTitle()+"\"");
+                    json.append(", tipo:\""+portlet.getResourceType().getDisplayTitle(lang)+"\"");
+                    json.append(", contenido:\""+portlet.getDisplayTitle(lang)+"\"");
+                    json.append(", prior:\""+portlet.getPriority()+"\"");
+                    json.append(", active:\""+(portlet.isActive()?"Si":"No")+"\"");
+                    json.append(", loc:\""+portlet.getWorkPath()+"\"");
+                    json.append(", uri:\""+portlet.getURI()+"\"");
+                    json.append(", break_:\"No\"");
+                    json.append(" }\n");
                 }
             }
             if(webPage.listChilds().hasNext()) {
@@ -257,6 +254,7 @@ public class WBAContentsReport extends GenericResource {
                 
                 out.println("function fillGrid(grid, uri, mode, params) {");
                 out.println("   grid.store = new dojo.data.ItemFileReadStore({url: uri+'/_mod/'+mode+'?'+params});");
+                //out.println("   grid.store = new dojo.data.ItemFileReadStore({url: \"/swb/contenido2.json\" });");
                 out.println("   grid._refresh();");
                 out.println("}");
                 
@@ -266,27 +264,27 @@ public class WBAContentsReport extends GenericResource {
                 out.println("var gridResources = null;");
                 
                 out.println("dojo.addOnLoad(function() {");
-                out.println("    dojo.byId('ctnerMaster').style.display = 'none';");
+                //out.println("    dojo.byId(\"ctnerMaster\").style.display = \"none\";");
                                 
                 out.println("   layout= [");
-                out.println("      { field:'sect', width:'100px', name:'Sección' },");        
-                out.println("      { field:'id', width:'50px', name:'Id' },");
-                out.println("      { field:'tipo', width:'100px', name:'Tipo contenido' },");
-                out.println("      { field:'contenido', width:'100px', name:'Contenido' },");
-                out.println("      { field:'prior', width:'50px', name:'Prioridad' },");
-                out.println("      { field:'active', width:'50px', name:'Activo' },");
-                out.println("      { field:'loc', width:'100px', name:'Localidad' },");
-                out.println("      { field:'uri', width:'150px', name:'Uri' },");
-                out.println("      { field:'broke', width: '50px', name:'Liga rota' },");
+                out.println("      { field:\"sect\", width:\"100px\", name:\"Sección\" },");
+                out.println("      { field:\"id\", width:\"50px\", name:\"Id\" },");
+                out.println("      { field:\"tipo\", width:\"100px\", name:\"Tipo contenido\" },");
+                out.println("      { field:\"contenido\", width:\"100px\", name:\"Contenido\" },");
+                out.println("      { field:\"prior\", width:\"50px\", name:\"Prioridad\" },");
+                out.println("      { field:\"active\", width:\"50px\", name:\"Activo\" },");
+                out.println("      { field:\"loc\", width:\"100px\", name:\"Localidad\" },");
+                out.println("      { field:\"uri\", width:\"150px\", name:\"Uri\" },");
+                out.println("      { field:\"break_\", width: \"50px\", name:\"Liga rota\" },");
                 out.println("   ];");
 
                 out.println("   gridMaster = new dojox.grid.DataGrid({");
-                out.println("      id: 'gridMaster',");
+                out.println("      id: \"gridMaster\",");
                 //out.println("      store: jStrMaster,");
                 out.println("      structure: layout,");
-                out.println("      rowSelector: '20px',");
-                out.println("      rowsPerPage: '20'");
-                out.println("   }, 'gridMaster');");
+                out.println("      rowSelector: \"10px\",");
+                out.println("      rowsPerPage: \"15\"");
+                out.println("   }, \"gridMaster\");");
                 out.println("   gridMaster.startup();");
                 //out.println("    dojo.connect(dijit.byId('gridMaster'), 'onRowDblClick', getResources);");
                 out.println("});");
@@ -341,8 +339,8 @@ public class WBAContentsReport extends GenericResource {
                 out.println("<legend>" + paramsRequest.getLocaleString("contents_report") + "</legend>");
 
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
-                out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-                out.println("<tr><td width=\"100\"></td><td width=\"120\"></td><td></td><td></td></tr>");
+                out.println("<table border=\"0\" width=\"95%\" align=\"center\">");                
+                out.println("<tr><td width=\"100\"></td><td width=\"200\"></td><td width=\"224\"></td><td width=\"264\"></td></tr>");
                 out.println("<tr>");
                 out.println("<td colspan=\"4\">");
                 // Show report description

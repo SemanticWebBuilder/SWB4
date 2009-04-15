@@ -335,7 +335,11 @@ public class WBALanguageReport extends GenericResource {
 
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-                out.println("<tr><td width=\"100\"></td><td width=\"120\"></td><td></td><td></td></tr>");
+                if(rtype.equals("0")) {
+                    out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
+                }else {
+                    out.println("<tr><td width=\"100\"></td><td width=\"196\"></td><td width=\"224\"></td><td width=\"364\"></td></tr>");
+                }
                 out.println("<tr>");
                 out.println("<td colspan=\"4\">");
                 // Show report description
