@@ -28,7 +28,8 @@ import org.semanticwb.security.auth.SWB4CallbackHandler;
  *
  * @author Sergio Martínez  (sergio.martinez@acm.org)
  */
-public class Login implements InternalServlet {
+public class Login implements InternalServlet
+{
 
     private static Logger log = SWBUtils.getLogger(Login.class);
     private static String VALSESS = "swb4-auto";
@@ -37,16 +38,20 @@ public class Login implements InternalServlet {
     private String _name = "login";
     private boolean handleError = false;
     //Constantes para primer implementación
-    public void init(ServletContext config) {
+
+    public void init(ServletContext config)
+    {
         log.event("Initializing InternalServlet Login...");
     //TODO: preparar los aspectos configurables de la autenticación
     }
 
-    public void setHandleError(boolean handleError){
-        this.handleError=handleError;
+    public void setHandleError(boolean handleError)
+    {
+        this.handleError = handleError;
     }
 
-    public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException {
+    public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException
+    {
         if (null == dparams.getWebPage())
         {
             return;
@@ -61,8 +66,11 @@ public class Login implements InternalServlet {
         String uri = request.getRequestURI();
         String path = SWBPlatform.getContextPath();
         User user = null;
-        Iterator it=subject.getPrincipals().iterator();
-        if(it.hasNext()) user = (User)it.next();
+        Iterator it = subject.getPrincipals().iterator();
+        if (it.hasNext())
+        {
+            user = (User) it.next();
+        }
         if (request.getParameter("wb_logout") != null)
         {
             LoginContext lc;
@@ -74,7 +82,7 @@ public class Login implements InternalServlet {
                 String url = request.getParameter("wb_goto");
                 if ((url == null || url.equals("/")))
                 {
-                    url = path +"/"+SWBPlatform.getEnv("swb/distributor")+ "/" +dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
+                    url = path + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
                     log.debug("LOGOUT3(Path, uri, url): " + path + "   |   " + uri + "    |  " + url);
                     sendRedirect(response, url);
                     return;
@@ -89,38 +97,44 @@ public class Login implements InternalServlet {
         {
             path = uri.replaceFirst(_name, SWBPlatform.getEnv("swb/distributor"));
         }
-        if (handleError ||user==null || !user.isSigned()){
+        if (handleError || user == null || !user.isSigned())
+        {
             CallbackHandler callbackHandler = (CallbackHandler) session.getAttribute(CALLBACK);
             if (null == callbackHandler)
             {
-                if (null != request.getParameter("wb_username")){
-                        enAuto = "Working";
-                    }
+                if (null != request.getParameter("wb_username"))
+                {
+                    enAuto = "Working";
+                }
                 try
-                {   
+                {
                     log.debug("New callbackHandler...");
-                    Constructor[] constructor =  Class.forName(CBHClassName).getConstructors();
+                    Constructor[] constructor = Class.forName(CBHClassName).getConstructors();
                     int method = 0;
-                    for (int i=0; i<constructor.length; i++)
+                    for (int i = 0; i < constructor.length; i++)
                     {
-                        if (constructor[i].getParameterTypes().length==4) method = i;
+                        if (constructor[i].getParameterTypes().length == 4)
+                        {
+                            method = i;
+                        }
                     }
                     callbackHandler = (CallbackHandler) constructor[method].newInstance(request, response, authMethod, dparams);
                     //callbackHandler = new SWB4CallbackHandlerLoginPasswordImp(request, response, authMethod, dparams); //TODO proveer otros métodos
                     session.setAttribute(CALLBACK, callbackHandler);
                 } catch (Exception ex)
                 {
-                    log.error("Can't Instanciate a CallBackHandler for UserRepository "+ur.getId(), ex);
+                    log.error("Can't Instanciate a CallBackHandler for UserRepository " + ur.getId(), ex);
                     response.sendError(500, "Authentication System failure!!!");
                     return;
                 }
             } else
             {
-                if (null == request.getParameter("wb_username")){
-                log.debug("Request a new username...");
-                doResponse(request, response, dparams, null, authMethod);
-                session.setAttribute(VALSESS, "Working");
-                return;
+                if (null == request.getParameter("wb_username"))
+                {
+                    log.debug("Request a new username...");
+                    doResponse(request, response, dparams, null, authMethod);
+                    session.setAttribute(VALSESS, "Working");
+                    return;
                 }
                 ((SWB4CallbackHandler) callbackHandler).setRequest(request);
                 ((SWB4CallbackHandler) callbackHandler).setResponse(response);
@@ -137,13 +151,18 @@ public class Login implements InternalServlet {
             {
                 request.getSession(true).invalidate();
                 subject = SWBPortal.getUserMgr().getSubject(request);
+                if (callbackHandler instanceof SWB4CallbackHandler && null == ((SWB4CallbackHandler) callbackHandler).getRequest())
+                {
+                    ((SWB4CallbackHandler) callbackHandler).setRequest(request);
+                    ((SWB4CallbackHandler) callbackHandler).setResponse(response);
+                }
                 lc = new LoginContext(context, subject, callbackHandler);
                 lc.login();
             // session.removeAttribute(VALSESS);
             // session.removeAttribute(CALLBACK);
-             //   System.out.println(subject.toString());
-             //   System.out.println(lc.getSubject().toString());
-             //   System.out.println(((User)lc.getSubject().getPrincipals().iterator().next()).isSigned());
+            //   System.out.println(subject.toString());
+            //   System.out.println(lc.getSubject().toString());
+            //   System.out.println(((User)lc.getSubject().getPrincipals().iterator().next()).isSigned());
             } catch (LoginException ex)
             {
                 log.debug("Can't log User", ex);
@@ -161,7 +180,8 @@ public class Login implements InternalServlet {
     //response.getWriter().print("Hello Login, Authenticated User: "+subject.getPrincipals().iterator().next().getName());
     }
 
-    private void doResponse(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert, String authMethod) throws IOException {
+    private void doResponse(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert, String authMethod) throws IOException
+    {
         if ("BASIC".equals(authMethod))
         {
             String realm = (null != distributorParams.getWebPage().getDescription(distributorParams.getUser().getLanguage()) ? distributorParams.getWebPage().getDescription(distributorParams.getUser().getLanguage()) : _realm);
@@ -173,7 +193,8 @@ public class Login implements InternalServlet {
         }
     }
 
-    private void basicChallenge(String realm, HttpServletResponse response) {
+    private void basicChallenge(String realm, HttpServletResponse response)
+    {
         StringBuffer header = new StringBuffer();
         header.append("Basic realm=\"");
         header.append(realm);
@@ -183,13 +204,16 @@ public class Login implements InternalServlet {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
-    private void formChallenge(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert) throws IOException {
+    private void formChallenge(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert) throws IOException
+    {
         String ruta = "/config/";
         //TODO: Obtener objetivo del siguiente código
-        if (handleError) {
-        ruta += "403";
-        } else {
-         ruta += "login";
+        if (handleError)
+        {
+            ruta += "403";
+        } else
+        {
+            ruta += "login";
         }
 
 
@@ -240,7 +264,8 @@ public class Login implements InternalServlet {
         out.close();
     }
 
-    public void sendRedirect(HttpServletResponse response, String url) {
+    public void sendRedirect(HttpServletResponse response, String url)
+    {
         try
         {
             response.setContentType("Text/html");
