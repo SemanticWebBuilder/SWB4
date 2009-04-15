@@ -449,7 +449,7 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement
             System.out.println("--> execute():"+query);
             System.out.println("--> args:"+args);
             args="";
-            new Exception().printStackTrace();
+            //new Exception().printStackTrace();
         }
 
         try
