@@ -17,7 +17,18 @@ public class SelectTree {
     private static Logger log = SWBUtils.getLogger(WebSiteSectionTree.class);
     protected static final String pathImages = SWBPlatform.getContextPath() + "/swbadmin/icons/";
 
+    private String lang;
+
     public SelectTree() {
+        this("es");
+    }
+
+    public SelectTree(String lang) {
+        if(lang!=null) {
+            this.lang = lang;
+        }else {
+            this.lang = "es";
+        }
     }
        
     public String renderXHTML(String site, HashMap request, String url) throws SWBResourceException, IOException {
@@ -104,14 +115,14 @@ public class SelectTree {
         boolean toggleopen;
         
         StringBuilder html = new StringBuilder("<ul class=\"treeres\">");
-        Iterator<WebPage> childs=pageroot.listChilds();
+        Iterator<WebPage> childs=pageroot.listVisibleChilds(lang);
         while(childs.hasNext()) {
             WebPage webpage = childs.next();
             if(webpage.getId()!=null) {
                                 
                 toggleopen = Boolean.parseBoolean(request.get(webpage.getId())==null?"false":((String)request.get(webpage.getId())).equals("1")?"true":"false");
                 
-                if(webpage.listChilds().hasNext()) {
+                if(webpage.listVisibleChilds(lang).hasNext()) {
                     html.append("<li>");
                     if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
                         style=" style=\"color:#FF6600; font-weight:bold\" ";
