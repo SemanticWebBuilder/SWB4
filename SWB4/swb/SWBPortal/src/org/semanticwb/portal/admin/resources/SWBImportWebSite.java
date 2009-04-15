@@ -9,10 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -65,7 +62,7 @@ public class SWBImportWebSite extends GenericResource {
                     WebSite site = SWBContext.createWebSite(id, "http://www." + id + ".swb#");
                     //site.setCreated(new java.util.Date(System.currentTimeMillis()));
                     site.setTitle(title);
-
+                    //Crea repositorio de usuarios para el nuevo sitio
                     UserRepository newUsrRep = null;
                     if (usrRep != null) {
                         if (usrRep.equals("0")) { //Utilizara un repositorio exclusivo
@@ -103,9 +100,11 @@ public class SWBImportWebSite extends GenericResource {
                     home.setTitle("Home");
                     home.setSortName("z");
 
+                    //Crea grupo de templates de defecto
                     TemplateGroup grp = site.createTemplateGroup();
                     grp.setTitle("Default");
 
+                    //Crea recursos de defecto
                     if (site.getResourceType("Banner") == null) {
                         ResourceType ptype = site.createResourceType("Banner");
                         ptype.setResourceClassName("org.semanticwb.portal.resources.Banner");
@@ -280,7 +279,7 @@ public class SWBImportWebSite extends GenericResource {
                         ptype.setResourceMode(3);
                         ptype.setTitle("Search");
                     }
-
+                    //Crea dispositivos de defecto
                     if (!site.hasDevice("1")) {
                         Device dev = site.createDevice();
                         dev.setTitle("PC");
@@ -348,10 +347,9 @@ public class SWBImportWebSite extends GenericResource {
                     lang = site.createLanguage("en");
                     lang.setTitle("Ingles", "es");
                     lang.setTitle("English", "en");
-
+                    //Envia estatus a pantalla
                     out.println("<script type=\"text/javascript\">");
                     out.println("hideDialog();");
-                    //out.println("addItemByURI(mdocStore, null, '" + workspace.getURI() + "');");
                     out.println("addItemByURI(mtreeStore, null, '" + site.getURI() + "');");
                     out.println("showStatus('Sitio Creado');");
                     out.println("</script>");
@@ -447,7 +445,6 @@ public class SWBImportWebSite extends GenericResource {
                 }
             }
 
-
             FileInputStream frdfio = new FileInputStream(models + newTitle + "/" + name + ".rdf");
             String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
             FileInputStream fxmlio = new FileInputStream(models + newTitle + "/siteInfo.xml");
@@ -476,17 +473,9 @@ public class SWBImportWebSite extends GenericResource {
             //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
             rdfcontent = parseRdfContent(rdfcontent, oldName, newTitle, newNs);
 
-            /*
-            File filesTest=new File(zipdirectory + oldName+"jorge.rdf");
-            FileOutputStream fout = new FileOutputStream(filesTest);
-            fout.write(rdfcontent.getBytes("utf-8"));
-            fout.flush();
-            fout.close();**/
-
             //Mediante inputStream creado generar sitio
             InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
             SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newTitle, newNs, io);
-            //La siguiente linea no regresa un sitio y por lo tanto marca NullPointer en la que sigue
             WebSite website = SWBContext.getWebSite(model.getName());
             website.setDescription(olDescription);
 
@@ -528,7 +517,6 @@ public class SWBImportWebSite extends GenericResource {
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
             out.println("hideDialog();");
-//            out.println("addItemByURI(mdocStore, null, '" + workspace.getURI() + "');");
             out.println("addItemByURI(mtreeStore, null, '" + website.getURI() + "');");
             out.println("showStatus('Sitio Creado');");
             out.println("</script>");
@@ -581,16 +569,6 @@ public class SWBImportWebSite extends GenericResource {
             out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');try{document.getElementById('csLoading').style.display='inline';}catch(noe){}return false;\" method=\"post\">");
             out.println("<fieldset>");
             out.println("<table>");
-
-//            out.append("<tr>");
-//            out.append("<td>");
-//            out.println(paramRequest.getLocaleLogString("msgwsName"));
-//            out.println("</td>");
-//            out.append("<td>");
-//            out.println("<input type=\"text\" name=\"wsname\" size=\"30\">");
-//            out.println("</td>");
-//            out.append("</tr>");
-
             out.append("<tr><td>");
             out.println(paramRequest.getLocaleLogString("msgwsTitle"));
             out.println("</td>");
@@ -598,7 +576,6 @@ public class SWBImportWebSite extends GenericResource {
             out.println("<input type=\"text\" name=\"wstitle\" size=\"30\">");
             out.println("</td>");
             out.append("</tr>");
-
             out.append("<tr><td>");
             out.println("ID:");
             out.println("</td>");
@@ -606,7 +583,6 @@ public class SWBImportWebSite extends GenericResource {
             out.println("<input type=\"text\" name=\"wsid\" size=\"30\">");
             out.println("</td>");
             out.append("</tr>");
-
             out.append("<tr><td>");
             out.println(paramRequest.getLocaleLogString("usrRep"));
             out.println("</td><td>");
@@ -619,15 +595,6 @@ public class SWBImportWebSite extends GenericResource {
             }
             out.println("</select>");
             out.println("</td></tr>");
-
-//            out.append("<tr><td>");
-//            out.println(paramRequest.getLocaleLogString("msgwsNameSpace"));
-//            out.println("</td>");
-//            out.append("<td>");
-//            out.println("<input type=\"text\" name=\"wsns\" size=\"30\">");
-//            out.println("</td>");
-//            out.append("</tr>");
-
             out.append("<tr><td>");
             out.println(paramRequest.getLocaleLogString("msgwstype"));
             out.println("</td><td>");
@@ -642,7 +609,6 @@ public class SWBImportWebSite extends GenericResource {
             out.println("</fieldset>");
             out.println("</form>");
             out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
-
         } catch (Exception e) {
             log.debug(e);
         }
