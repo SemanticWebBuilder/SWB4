@@ -17,6 +17,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
@@ -43,10 +44,10 @@ public class SWBExportWebSite extends GenericResource {
                 String path = SWBPlatform.getWorkPath() + "/";
                 String modelspath=path + "models/";
                 String zipdirectory = path + "sitetemplates/";
-                String zipFile=zipdirectory + uri + ".zip";
+                String zipFile=zipdirectory + site.getId() + ".zip";
                 //---------Generación de archivo zip de carpeta work de sitio especificado-------------
                 java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(new FileOutputStream(zipFile));
-                java.io.File directory = new File(modelspath + uri + "/");
+                java.io.File directory = new File(modelspath + site.getId() + "/");
                 java.io.File base = new File(modelspath);
                 org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
                 //Graba archivo cualquiera
@@ -60,78 +61,90 @@ public class SWBExportWebSite extends GenericResource {
                 
                 //-------------Generación de archivo rdf del sitio especificado----------------
                 try {
-                    WebSite ws = SWBContext.getWebSite(uri);
-                    File file = new File(zipdirectory + uri + ".rdf");
+                    File file = new File(zipdirectory + site.getId() + ".rdf");
                     FileOutputStream out = new FileOutputStream(file);
-                    ws.getSemanticObject().getModel().write(out);
+                    site.getSemanticObject().getModel().write(out);
                     out.flush();
                     out.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 //----------Generación de archivo siteInfo.xml del sitio especificado-----------
+                ArrayList aFiles=new ArrayList();
+                File file = new File(zipdirectory + "siteInfo.xml");
+                FileOutputStream out = new FileOutputStream(file);
                 try {
                     strbr.append("<siteinfo>\n");
-                    strbr.append("<name>"+site.getTitle()+"</name>\n");
+                    strbr.append("<model>");
+                    strbr.append("<id>"+site.getId()+"</id>\n");
                     strbr.append("<namespace>"+site.getNameSpace()+"</namespace>\n");
                     strbr.append("<title>"+site.getTitle()+"</title>\n");
                     strbr.append("<description>"+site.getDescription()+"</description>\n");
+                    //--------------Generación de submodelos------------------------------------------------
+                    Iterator<SemanticObject> sitSubModels=site.getSemanticObject().listObjectProperties(site.swb_hasSubModel);
+                    while(sitSubModels.hasNext())
+                    {
+                        SemanticObject sObj=sitSubModels.next();
+                        File fileSubModel=new File(zipdirectory + "/"+sObj.getId()+".rdf");
+                        FileOutputStream rdfout = new FileOutputStream(fileSubModel);
+                        sObj.getModel().write(rdfout);
+                        out.flush();
+                        out.close();
+                        //Agregar c/archivo .rdf de submodelos a arreglo de archivos
+                        aFiles.add(fileSubModel);
+                        //graba el directorio work de c/submodelo en archivo zip
+                        directory = new File(modelspath + sObj.getId() + "/");
+                        org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
+                        //Genera datos de c/summodelo en archivo siteInfo.xml
+                        strbr.append("<model>");
+                        //if(obj.instanceOf(WebSite.sclass)) //Que datos saco si es un rep de usuarios o de documentos y como los parseo despues
+                        strbr.append("<name>"+sObj.getId()+"</name>\n");
+                        strbr.append("<namespace>"+sObj.getModel().getNameSpace()+"</namespace>\n");
+                        strbr.append("<title>"+sObj.getProperty(WebPage.swb_title)+"</title>\n");
+                        strbr.append("<description>"+sObj.getProperty(WebPage.swb_description)+"</description>\n");
+                        strbr.append("</model>");
+                    }
+                    strbr.append("</model>");
                     strbr.append("</siteinfo>");
-                    File file = new File(zipdirectory + "siteInfo.xml");
-                    FileOutputStream out = new FileOutputStream(file);
                     out.write(strbr.toString().getBytes("utf-8"));
                     out.flush();
                     out.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-               
-                //--------------Generación de submodelos------------------------------------------------
-                ArrayList aFiles=new ArrayList();
-                Iterator<SemanticObject> sitSubModels=site.getSemanticObject().listObjectProperties(site.swb_hasSubModel);
-                while(sitSubModels.hasNext())
-                {
-                    SemanticObject sObj=sitSubModels.next();
-                    File fileSubModel=new File(zipdirectory + "/"+sObj.getId()+".rdf");
-                    FileOutputStream out = new FileOutputStream(fileSubModel);
-                    sObj.getModel().write(out);
-                    out.flush();
-                    out.close();
-                    //Agregar c/archivo .rdf de submodelos a arreglo de archivos
-                    aFiles.add(fileSubModel);
-                    //graba el directorio work de c/submodelo en archivo zip
-                    directory = new File(modelspath + sObj.getId() + "/");
-                    org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
-                }
                 zos.close();
                 
 
                  //--------------Agregar archivo rdf y xml generados a arraylist---------------------
-                aFiles.add(new File(zipdirectory + uri + ".rdf"));
+                aFiles.add(new File(zipdirectory + site.getId() + ".rdf"));
                 aFiles.add(new File(zipdirectory + "siteInfo.xml"));
                 //--------------Barrer archivos de arrayList para pasar a arreglo de Files y eliminar---
                 File [] files2add=new File[aFiles.size()];
                 int cont=0;
                 Iterator <File>itFiles=aFiles.iterator();
                 while(itFiles.hasNext()){
-                    File file=itFiles.next();
-                    files2add[cont]=file;
+                    File filetmp=itFiles.next();
+                    files2add[cont]=filetmp;
                     cont++;
                 }
                 //Agregar archivos rfd de modelo y submodelos y archivo siteInfo.xml a zip existente
                 org.semanticwb.SWBUtils.IO.addFilesToExistingZip(new File(zipFile), files2add);
                 itFiles=aFiles.iterator();
                 while(itFiles.hasNext()){
-                    File file=itFiles.next();
-                    file.delete();
+                    File filetmp=itFiles.next();
+                    filetmp.delete();
                 }
                 
+                new File(zipdirectory + site.getId() + ".rdf").delete();
+                new File(zipdirectory + "siteInfo.xml").delete();
+
+
                 //Envia mensage de estatus en admin de wb
-                PrintWriter out=response.getWriter();
-                out.println("<script type=\"text/javascript\">");
-                out.println("hideDialog();");
-                out.println("showStatus('Sitio Exportado');");
-                out.println("</script>");               
+                PrintWriter pout=response.getWriter();
+                pout.println("<script type=\"text/javascript\">");
+                pout.println("hideDialog();");
+                pout.println("showStatus('Sitio Exportado');");
+                pout.println("</script>");
             } else {
                 strbr.append("<div class=\"swbform\">");
                 strbr.append("<fieldset>");
