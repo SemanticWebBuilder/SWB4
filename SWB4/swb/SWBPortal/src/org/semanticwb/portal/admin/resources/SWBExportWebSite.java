@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.zip.ZipEntry;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticIterator;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -43,24 +43,25 @@ public class SWBExportWebSite extends GenericResource {
                 String path = SWBPlatform.getWorkPath() + "/";
                 String modelspath=path + "models/";
                 String zipdirectory = path + "sitetemplates/";
+                String zipFile=zipdirectory + uri + ".zip";
                 //---------Generación de archivo zip de carpeta work de sitio especificado-------------
-                java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(new FileOutputStream(zipdirectory + uri + ".zip"));
+                java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(new FileOutputStream(zipFile));
                 java.io.File directory = new File(modelspath + uri + "/");
-                java.io.File base = new File(modelspath + uri);
-                //System.out.println("antes de enviar a zipear");
+                java.io.File base = new File(modelspath);
                 org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
-                //System.out.println("despues de enviar a zipear");
-                 //Graba archivo cualquiera
-                ZipEntry entry = new ZipEntry("vacio.txt");
-                zos.putNextEntry(entry);
-                zos.write("".getBytes());
-                zos.closeEntry();
-                zos.close();
+                //Graba archivo cualquiera
+                zos.setComment("Model File SemanticWebBuilderOS");
+                try{
+                    ZipEntry entry = new ZipEntry("readme.txt");
+                    zos.putNextEntry(entry);
+                    zos.write("Model File SemanticWebBuilderOS".getBytes());
+                    zos.closeEntry();
+                }catch(Exception e){}
+                
                 //-------------Generación de archivo rdf del sitio especificado----------------
                 try {
                     WebSite ws = SWBContext.getWebSite(uri);
                     File file = new File(zipdirectory + uri + ".rdf");
-                    //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     FileOutputStream out = new FileOutputStream(file);
                     ws.getSemanticObject().getModel().write(out);
                     out.flush();
@@ -84,46 +85,48 @@ public class SWBExportWebSite extends GenericResource {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                //Generación de submodelos
-                /*
-                File file=new File(zipdirectory + "submodels/");
-                if(!file.exists()){
-                    file.mkdirs();
-                }
-                System.out.println("sitio exp:"+site.getId());
-
+               
+                //--------------Generación de submodelos------------------------------------------------
+                ArrayList aFiles=new ArrayList();
                 Iterator<SemanticObject> sitSubModels=site.getSemanticObject().listObjectProperties(site.swb_hasSubModel);
                 while(sitSubModels.hasNext())
                 {
                     SemanticObject sObj=sitSubModels.next();
-                    System.out.println("sObjSMOdel:"+sObj.getId());
-                    File filesModel=new File(zipdirectory + "submodels/"+sObj.getId());
-                    if(!filesModel.exists()){
-                        filesModel.mkdirs();
-                    }
-                    filesModel=new File(zipdirectory + "submodels/"+sObj.getId()+"/"+sObj.getId()+".rdf");
-                    FileOutputStream out = new FileOutputStream(filesModel);
+                    File fileSubModel=new File(zipdirectory + "/"+sObj.getId()+".rdf");
+                    FileOutputStream out = new FileOutputStream(fileSubModel);
                     sObj.getModel().write(out);
                     out.flush();
                     out.close();
+                    //Agregar c/archivo .rdf de submodelos a arreglo de archivos
+                    aFiles.add(fileSubModel);
+                    //graba el directorio work de c/submodelo en archivo zip
+                    directory = new File(modelspath + sObj.getId() + "/");
+                    org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
                 }
-                 * **/
-
-                //--------------Agregar archivo rdf y xml generados a zip generado---------------------
-                File existingzip = new File(zipdirectory + uri + ".zip");
-                File rdfFile = new File(zipdirectory + uri + ".rdf");
-                File infoFile = new File(zipdirectory + "siteInfo.xml");
-                java.io.File[] files2add = {rdfFile, infoFile};
-                org.semanticwb.SWBUtils.IO.addFilesToExistingZip(existingzip, files2add);
-
-                //--------------Agregar archivo rdf de submodelos a zip generado---------------------
-
+                zos.close();
                 
 
-                //Eliminar rdf y xml generados y ya agregados a zip
-                rdfFile.delete();
-                infoFile.delete();
-
+                 //--------------Agregar archivo rdf y xml generados a arraylist---------------------
+                aFiles.add(new File(zipdirectory + uri + ".rdf"));
+                aFiles.add(new File(zipdirectory + "siteInfo.xml"));
+                //--------------Barrer archivos de arrayList para pasar a arreglo de Files y eliminar---
+                File [] files2add=new File[aFiles.size()];
+                int cont=0;
+                Iterator <File>itFiles=aFiles.iterator();
+                while(itFiles.hasNext()){
+                    File file=itFiles.next();
+                    files2add[cont]=file;
+                    cont++;
+                }
+                //Agregar archivos rfd de modelo y submodelos y archivo siteInfo.xml a zip existente
+                org.semanticwb.SWBUtils.IO.addFilesToExistingZip(new File(zipFile), files2add);
+                itFiles=aFiles.iterator();
+                while(itFiles.hasNext()){
+                    File file=itFiles.next();
+                    file.delete();
+                }
+                
+                //Envia mensage de estatus en admin de wb
                 PrintWriter out=response.getWriter();
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
@@ -154,4 +157,5 @@ public class SWBExportWebSite extends GenericResource {
             log.debug(e);
         }
     }
+
 }
