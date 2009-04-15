@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -425,8 +426,10 @@ public class SWBImportWebSite extends GenericResource {
             String models = path + "models/";
             String zipdirectory = path + "sitetemplates/";
             File zip = new File(zipdirectory + name + ".zip");
-            java.io.File extractTo = new File(models + newTitle);
+            java.io.File extractTo = new File(models + newId);
             //Descomprimir zip
+            System.out.println("zip file:"+zip.getAbsolutePath());
+            System.out.println("extractTo file:"+extractTo.getAbsolutePath());
             org.semanticwb.SWBUtils.IO.unzip(zip, extractTo);
             //Mover directorios de modelos a directorio work leyecdo rdfs
             File [] fieldsUnziped=extractTo.listFiles();
@@ -434,20 +437,35 @@ public class SWBImportWebSite extends GenericResource {
                 File file=fieldsUnziped[i];
                 if(file.isDirectory()){ //
                        if(file.getName().equals(name)){ //Es la carpeta del modelo a principal a cargar
-                           SWBUtils.IO.copyStructure(file.getAbsolutePath(), extractTo.getAbsolutePath()+"/");
+                           System.out.println("ruta dirJ:"+file.getAbsolutePath());
+                           System.out.println("ruta2 dirJ:"+extractTo.getAbsolutePath()+"/");
+                           SWBUtils.IO.copyStructure(file.getAbsolutePath()+"/", extractTo.getAbsolutePath()+"/");
                            SWBUtils.IO.removeDirectory(file.getAbsolutePath());
-                       }else{ //las carpetas de los submodelos
-                           SWBUtils.IO.copyStructure(file.getAbsolutePath(), extractTo.getAbsolutePath()+"/");
-                           SWBUtils.IO.removeDirectory(file.getAbsolutePath());
+                       }else {
+                           if(file.getName().endsWith("_usr") || file.getName().endsWith("_rep")){
+                                //las carpetas de los submodelos, predefinidos en wb
+                                String wbmodelType="";
+                                if(file.getName().endsWith("_usr")) wbmodelType="_usr";
+                                if(file.getName().endsWith("_rep")) wbmodelType="_rep";
+
+                                SWBUtils.IO.copyStructure(file.getAbsolutePath(), extractTo.getAbsolutePath() + wbmodelType + "/");
+                                SWBUtils.IO.removeDirectory(file.getAbsolutePath());
+                           }else{ //Puede ser un submodelo tipo sitio
+                               
+                           }
                        }
-                }else {
-                    System.out.println("Achivo J:"+file.getAbsolutePath());
+                }else { //TODO:Archivos rdf(modelos) y xml (siteinfo) y readme, eliminarlos
+                    if(file.getName().endsWith(".rdf")){ //modelos
+
+                    }else if(file.getName().endsWith(".xml")){ //Archivo siteinfo
+
+                    }
                 }
             }
 
-            FileInputStream frdfio = new FileInputStream(models + newTitle + "/" + name + ".rdf");
+            FileInputStream frdfio = new FileInputStream(models + newId + "/" + name + ".rdf");
             String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
-            FileInputStream fxmlio = new FileInputStream(models + newTitle + "/siteInfo.xml");
+            FileInputStream fxmlio = new FileInputStream(models + newId + "/siteInfo.xml");
             Document dom = SWBUtils.XML.xmlToDom(fxmlio);
             String oldName = null;
             String oldNamespace = null;
@@ -509,11 +527,7 @@ public class SWBImportWebSite extends GenericResource {
             workspace.setTitle("Documents Repository("+newTitle+")", "en");
             website.addSubModel(workspace.getSemanticObject());
              */
-            //Eliminar archivo rdf y archivo xml y readme
-            new File(models + newTitle + "/" + name + ".rdf").delete();
-            new File(models + newTitle + "/siteInfo.xml").delete();
-            new File(models + newTitle + "/readme.txt").delete();
-
+            
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
             out.println("hideDialog();");
