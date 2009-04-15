@@ -212,7 +212,7 @@
 					<textElement textAlignment="Right">
 						<font fontName="Arial" size="11" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{site} + " Reporte de accesos globales por mes"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{site} + " - Reporte de accesos globales por mes"]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>
@@ -305,7 +305,7 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="24"  isSplitAllowed="true" >
+			<band height="23"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="17"
@@ -377,7 +377,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="22"
+						y="21"
 						width="552"
 						height="0"
 						forecolor="#CCCCCC"

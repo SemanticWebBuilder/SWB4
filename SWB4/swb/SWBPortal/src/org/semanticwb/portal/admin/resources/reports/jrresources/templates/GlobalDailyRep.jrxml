@@ -163,7 +163,7 @@
 					<textElement textAlignment="Right">
 						<font fontName="Arial" size="11" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{site} + " Reporte de accesos globales por día"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{site} + " - Reporte de accesos globales por día"]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>
