@@ -42,7 +42,9 @@ public class GateWayOffice implements InternalServlet
         public boolean isAuthenticate(String pUserName, String pPassword)
         {
             UserRepository ur = SWBContext.getAdminWebSite().getUserRepository();
-            String context = ur.getProperty(UserRepository.SWBUR_LoginContext);
+            //String context = ur.getProperty(UserRepository.SWBUR_LoginContext);
+            //MAPS74 cambiando propiedades a semantic prop
+            String context = ur.getLoginContext();
             Subject subject = new Subject();
             LoginContext lc;
             try
