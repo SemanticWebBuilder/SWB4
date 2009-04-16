@@ -123,7 +123,7 @@ public class WBADeviceReport extends GenericResource {
                 out.print(" selected=\"selected\"");
             }
             out.print(">");
-            out.println(device.getDisplayTitle(paramsRequest.getUser().getLanguage()) + "</option>");
+            out.println(device.getDisplayTitle(paramsRequest.getUser().getLanguage())+"</option>");
         }
         out.println("</select>");
         out.flush();
