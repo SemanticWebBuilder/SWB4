@@ -27,6 +27,7 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
     private DistributorParams dparams;
 
     public SWB4CallbackHandlerLoginPasswordImp() {
+        log.trace("Simple CallbackHandler");
         this.request = null;
         this.response = null;
         this.dparams = null;
@@ -34,6 +35,7 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
     }
 
     public SWB4CallbackHandlerLoginPasswordImp(HttpServletRequest request, HttpServletResponse response, String authType, DistributorParams dparams) {
+        log.trace("Complete CallbackHandler");
         this.request = request;
         this.response = response;
         this.authType = authType;
@@ -49,6 +51,7 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
      */
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
         log.trace("Tipo de Autenticacion: " + authType);
+        log.trace("has request: "+request);
         if ("BASIC".equalsIgnoreCase(authType)) {
             getBasicCredentials(callbacks);
         }

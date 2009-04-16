@@ -95,7 +95,7 @@ public class SWBACreateUser extends GenericResource {
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer();
-        ret.append("<script type=\"text/javascript\">\ndijit.byId('swbDialog').hide();\nreloadTreeNodeByURI('"+request.getParameter("suri")+"');\nshowStatus('Usuario creado');\n");
+        ret.append("<script type=\"text/javascript\">\ndijit.byId('swbDialog').hide();\nshowStatus('Usuario creado');\n");
         ret.append("addNewTab('"+request.getParameter("suri")+"','/swb/swbadmin/jsp/objectTab.jsp','"+request.getParameter("login")+"');\n");
         ret.append("</script>");
         response.getWriter().write(ret.toString());
