@@ -76,9 +76,9 @@ public class SWBImportWebSite extends GenericResource {
 //                            newUsrRep.setProperty(UserRepository.SWBUR_LoginContext, "swb4TripleStoreModule");
 //                            newUsrRep.setProperty(UserRepository.SWBUR_CallBackHandlerClassName, "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
                             //MAPS74 - Cambiado a semantic prop
-                            newUsrRep.setAuthMethod("FORM");
-                            newUsrRep.setLoginContext("swb4TripleStoreModule");
-                            newUsrRep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+                            //newUsrRep.setAuthMethod("FORM");
+                            //newUsrRep.setLoginContext("swb4TripleStoreModule");
+                            //newUsrRep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
                             if (user != null && user.isRegistered()) {
                                 newUsrRep.setCreator(user);
                             }
@@ -510,9 +510,9 @@ public class SWBImportWebSite extends GenericResource {
 //                    newUsrRep.setProperty(UserRepository.SWBUR_CallBackHandlerClassName, "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
 
                     //MAPS74 - Cambiado a semantic prop
-                    newUsrRep.setAuthMethod("FORM");
-                    newUsrRep.setLoginContext("swb4TripleStoreModule");
-                    newUsrRep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+                    //newUsrRep.setAuthMethod("FORM");
+                    //newUsrRep.setLoginContext("swb4TripleStoreModule");
+                    //newUsrRep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
 
 
                     if (user != null && user.isRegistered()) {
