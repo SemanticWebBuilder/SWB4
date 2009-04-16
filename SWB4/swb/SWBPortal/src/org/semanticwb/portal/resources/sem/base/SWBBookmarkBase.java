@@ -3,9 +3,9 @@ package org.semanticwb.portal.resources.sem.base;
 
 public class SWBBookmarkBase extends org.semanticwb.portal.api.GenericSemResource 
 {
-    public static final org.semanticwb.platform.SemanticClass swb_res_bkm_BookmarkEntry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/SWBBookmark.owl#BookmarkEntry");
-    public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_hasEntry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/SWBBookmark.owl#hasEntry");
-    public static final org.semanticwb.platform.SemanticClass swb_res_bkm_SWBBookmark=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/SWBBookmark.owl#SWBBookmark");
+    public static final org.semanticwb.platform.SemanticClass swb_res_bkm_BookmarkEntry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/SWBBookmark#BookmarkEntry");
+    public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_hasEntry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/SWBBookmark#hasEntry");
+    public static final org.semanticwb.platform.SemanticClass swb_res_bkm_SWBBookmark=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/SWBBookmark#SWBBookmark");
 
     public SWBBookmarkBase()
     {
@@ -15,7 +15,7 @@ public class SWBBookmarkBase extends org.semanticwb.portal.api.GenericSemResourc
     {
         super(base);
     }
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/SWBBookmark.owl#SWBBookmark");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/SWBBookmark#SWBBookmark");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.BookmarkEntry> listEntrys()
     {
