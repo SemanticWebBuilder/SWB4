@@ -1811,10 +1811,10 @@
     <rdfs:label>callBackHandlerClassName</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_userRepCallBackHandlerClassName">
+        <rdfs:label xml:lang="es">CallBackHandler (JAAS)</rdfs:label>
+        <rdfs:label xml:lang="en">CallBackHandler (JAAS)</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >210</swb:index>
-        <rdfs:label xml:lang="es">Nombre de la clase del CallBackHandler</rdfs:label>
-        <rdfs:label xml:lang="en">CallBackHandler ClassName</rdfs:label>
+        >310</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1992,7 +1992,7 @@
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_userRepAuthMethod">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >200</swb:index>
+        >300</swb:index>
         <swbxf:propSelectValues rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >FORM:FORM|BASIC:BASIC</swbxf:propSelectValues>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
@@ -2275,7 +2275,7 @@
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_userRepLoginContext">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >220</swb:index>
+        >320</swb:index>
         <rdfs:label xml:lang="en">Login Context (JAAS)</rdfs:label>
         <rdfs:label xml:lang="es">Contexto de Login (JAAS)</rdfs:label>
       </swbxf:DisplayProperty>
