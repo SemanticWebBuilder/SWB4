@@ -63,6 +63,7 @@ public abstract class SWB4CallbackHandler implements CallbackHandler, Serializab
      * @param request
      */
     public void setRequest(HttpServletRequest request) {
+        log.trace("Setting Request");
         this.request = request;
         if (null == dparams) {
             dparams = new DistributorParams(request, request.getRequestURI());
@@ -84,6 +85,7 @@ public abstract class SWB4CallbackHandler implements CallbackHandler, Serializab
      * @param response
      */
     public void setResponse(HttpServletResponse response) {
+        log.trace("Setting Response");
         this.response = response;
     }
 }
