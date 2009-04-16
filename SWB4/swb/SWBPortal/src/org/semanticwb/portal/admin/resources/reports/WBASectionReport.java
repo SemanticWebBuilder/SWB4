@@ -12,7 +12,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.portal.util.WebSiteSectionTree;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -25,15 +24,16 @@ import org.semanticwb.portal.db.SWBRecHit;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import org.semanticwb.portal.util.SelectTree;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class WBASectionReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBASectionReport.class);
 
-    private final int I_REPORT_TYPE = 3;   // Type 3 of reports "Export"
+    private final int I_REPORT_TYPE = 3;
     public String strRscType;
-    WebSiteSectionTree tree = new WebSiteSectionTree();
+    //WebSiteSectionTree tree = new WebSiteSectionTree();
 
     @Override
     public void init(){
@@ -87,15 +87,16 @@ public class WBASectionReport extends GenericResource {
         if(section != null) {
             out.println("<input type=\"hidden\" name=\"section\" id=\"section\" value=\""+section+"\" />");
         }
-        
-        System.out.println("\n");
-        Enumeration<String> e = request.getParameterNames();
-        while(e.hasMoreElements()){
-            String key = e.nextElement();
-            System.out.print("parametro="+key+" value="+request.getParameter(key)+", ");
+
+        HashMap params = new HashMap();
+        Enumeration<String> names = request.getParameterNames();
+        while(names.hasMoreElements()) {
+            String name = names.nextElement();
+            params.put(name, request.getParameter(name));
         }
-        
-        out.println(tree.renderXHTML(webSiteId, request, paramsRequest.getUser(), url.toString()));
+        SelectTree tree = new SelectTree(paramsRequest.getUser().getLanguage());
+        out.println(tree.renderXHTML(webSiteId, params, url.toString()));
+        //out.println(tree.renderXHTML(webSiteId, request, paramsRequest.getUser(), url.toString()));
         out.flush();
     }
 
@@ -222,16 +223,20 @@ public class WBASectionReport extends GenericResource {
                 out.println("} ");
                 
                 out.println("function validate(accion) {");
-                out.println("    if(accion=='0') {");
-                out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
-                out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
-                out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");
-                out.println("       if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
-                out.println("          alert('Especifique la fecha o el rango de fechas que desea consultar');");
-                out.println("          return false;");
-                out.println("       }");
-                out.println("    }");
-                out.println("    return true;");
+                out.println("   if(!dojo.byId('section')) {");
+                out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
+                out.println("      return false;");
+                out.println("   }");                
+                out.println("   if(accion=='0') {");
+                out.println("      var fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                out.println("      var fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                out.println("      var fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                out.println("      if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
+                out.println("         alert('Especifique la fecha o el rango de fechas que desea consultar');");
+                out.println("         return false;");
+                out.println("      }");
+                out.println("   }");
+                out.println("   return true;");
                 out.println("}");
 
                 out.println("function doXml(accion, size) { ");
@@ -285,7 +290,8 @@ public class WBASectionReport extends GenericResource {
                 out.println("   }");
                 out.println("}");
 
-                out.println(" function doBlockade() {");
+                out.println("function doBlockade() {");
+                out.println("  if(window.document.frmrep.wb_rep_type) {");
                 out.println("     if(window.document.frmrep.wb_rep_type[0].checked){");
                 out.println("       dojo.byId('wb_fecha1').disabled = false;");
                 out.println("       dojo.byId('wb_fecha11').disabled = true;");
@@ -296,7 +302,8 @@ public class WBASectionReport extends GenericResource {
                 out.println("       dojo.byId('wb_fecha11').disabled = false;");
                 out.println("       dojo.byId('wb_fecha12').disabled = false;");
                 out.println("     }");
-                out.println(" }");
+                out.println("  }");
+                out.println("}");
 
                 out.println("</script>");
                 // javascript
@@ -307,7 +314,7 @@ public class WBASectionReport extends GenericResource {
 
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-                out.println("<tr><td width=\"100\"></td><td width=\"120\"></td><td></td><td></td></tr>");
+                out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
                 out.println("<tr>");
                 out.println("<td colspan=\"4\">");
                 // Show report description
