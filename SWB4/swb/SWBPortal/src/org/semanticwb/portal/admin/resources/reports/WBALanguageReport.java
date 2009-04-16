@@ -118,7 +118,7 @@ public class WBALanguageReport extends GenericResource {
         Iterator<Language> itLanguages = webSite.listLanguages();
         while (itLanguages.hasNext()) {
             Language language = itLanguages.next();
-            out.println("<option value=\"" + language.getId() + "\">" + language.getTitle() + "</option>");
+            out.println("<option value=\"" + language.getId() + "\">"+language.getDisplayTitle(paramsRequest.getUser().getLanguage())+"</option>");
         }
         out.println("</select>");
         out.flush();
