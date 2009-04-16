@@ -85,9 +85,14 @@ public class SWBPortal {
             urep.setTitle("Admin User Repository");
             urep.setDescription("Admin User Repository");
             //TODO: cambiar a semantic prop
-            urep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
-            urep.setProperty(UserRepository.SWBUR_LoginContext, "swb4TripleStoreModule");
-            urep.setProperty(UserRepository.SWBUR_CallBackHandlerClassName, "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+//            urep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
+//            urep.setProperty(UserRepository.SWBUR_LoginContext, "swb4TripleStoreModule");
+//            urep.setProperty(UserRepository.SWBUR_CallBackHandlerClassName, "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+            //MAPS74 - Cambiado a semantic prop
+            urep.setAuthMethod("FORM");
+            urep.setLoginContext("swb4TripleStoreModule");
+            urep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+
             urep.setUndeleteable(true);
             //site.setUserRepository(urep);
             //Create User
@@ -146,9 +151,13 @@ public class SWBPortal {
             urep = SWBContext.createUserRepository(SWBContext.USERREPOSITORY_DEFAULT, "http://www.semanticwb.org/urswb#");
             urep.setTitle("Default UserRepository");
             urep.setDescription("Default UserRpository");
-            urep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
-            urep.setProperty(UserRepository.SWBUR_LoginContext, "swb4TripleStoreModule");
-            urep.setProperty(UserRepository.SWBUR_CallBackHandlerClassName, "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+//            urep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
+//            urep.setProperty(UserRepository.SWBUR_LoginContext, "swb4TripleStoreModule");
+//            urep.setProperty(UserRepository.SWBUR_CallBackHandlerClassName, "org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+            //MAPS74 - Cambiado a semantic prop
+            urep.setAuthMethod("FORM");
+            urep.setLoginContext("swb4TripleStoreModule");
+            urep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
             site.setUserRepository(urep);
         }
 
