@@ -155,6 +155,33 @@ public class Login implements InternalServlet
                 {
                     ((SWB4CallbackHandler) callbackHandler).setRequest(request);
                     ((SWB4CallbackHandler) callbackHandler).setResponse(response);
+                    try
+                    {
+                        ((SWB4CallbackHandler) callbackHandler).getRequest().getParameter("wb_username");
+                    } catch (NullPointerException npe)
+                    {
+                        try
+                        {
+                            log.debug("re Build callbackHandler...");
+                            Constructor[] constructor = Class.forName(CBHClassName).getConstructors();
+                            int method = 0;
+                            for (int i = 0; i < constructor.length; i++)
+                            {
+                                if (constructor[i].getParameterTypes().length == 4)
+                                {
+                                    method = i;
+                                }
+                            }
+                            callbackHandler = (CallbackHandler) constructor[method].newInstance(request, response, authMethod, dparams);
+                            //callbackHandler = new SWB4CallbackHandlerLoginPasswordImp(request, response, authMethod, dparams); //TODO proveer otros métodos
+                            session.setAttribute(CALLBACK, callbackHandler);
+                        } catch (Exception ex)
+                        {
+                            log.error("Can't Instanciate a CallBackHandler for UserRepository " + ur.getId(), ex);
+                            response.sendError(500, "Authentication System failure!!!");
+                            return;
+                        }
+                    }
                 }
                 lc = new LoginContext(context, subject, callbackHandler);
                 lc.login();
@@ -170,12 +197,15 @@ public class Login implements InternalServlet
                 return;
             }
         }
+
         String url = request.getParameter("wb_goto");
         if ((url == null || url.equals("/")))
         {
             log.debug("PATHs: Path:" + path + " - " + dparams.getWebPage().getWebSiteId() + " - " + dparams.getWebPage().getId());
-            url = SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
+            url =
+                    SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
         }
+
         sendRedirect(response, url);
     //response.getWriter().print("Hello Login, Authenticated User: "+subject.getPrincipals().iterator().next().getName());
     }
@@ -187,10 +217,12 @@ public class Login implements InternalServlet
             String realm = (null != distributorParams.getWebPage().getDescription(distributorParams.getUser().getLanguage()) ? distributorParams.getWebPage().getDescription(distributorParams.getUser().getLanguage()) : _realm);
             basicChallenge(realm, response);//TODO Asignar nombre de Realm
         }
+
         if ("FORM".equals(authMethod))
         {
             formChallenge(request, response, distributorParams, alert);
         }
+
     }
 
     private void basicChallenge(String realm, HttpServletResponse response)
@@ -216,8 +248,6 @@ public class Login implements InternalServlet
             ruta += "login";
         }
 
-
-
         ruta += ".html";
         String login = null;
         try
@@ -229,16 +259,20 @@ public class Login implements InternalServlet
             try
             {
                 rutaSite = "/" + distributorParams.getWebPage().getWebSite().getId() + ruta;
-                login = SWBPlatform.readFileFromWorkPath(rutaSite);
-                login = SWBPortal.UTIL.parseHTML(login, SWBPlatform.getWebWorkPath() + "/" + distributorParams.getWebPage().getWebSite().getId() + "/config/images/");
+                login =
+                        SWBPlatform.readFileFromWorkPath(rutaSite);
+                login =
+                        SWBPortal.UTIL.parseHTML(login, SWBPlatform.getWebWorkPath() + "/" + distributorParams.getWebPage().getWebSite().getId() + "/config/images/");
             } catch (Exception ignored)
             {
             }
             if (null == login || "".equals(login))
             {
                 login = SWBPlatform.readFileFromWorkPath(ruta);
-                login = SWBPortal.UTIL.parseHTML(login, SWBPlatform.getWebWorkPath() + "/config/images/");
+                login =
+                        SWBPortal.UTIL.parseHTML(login, SWBPlatform.getWebWorkPath() + "/config/images/");
             }
+
             login = login.replaceFirst("<WBVERSION>", SWBPlatform.getVersion());
         } catch (Exception e)
         {
@@ -249,6 +283,7 @@ public class Login implements InternalServlet
         {
             response.setStatus(403);
         }
+
         response.setContentType("text/html");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
@@ -260,6 +295,7 @@ public class Login implements InternalServlet
         {
             out.print("<script>alert('" + alert + "');</script>");
         }
+
         out.flush();
         out.close();
     }
