@@ -57,9 +57,12 @@ public class Login implements InternalServlet
             return;
         }
         UserRepository ur = dparams.getWebPage().getWebSite().getUserRepository();
-        String authMethod = ur.getProperty(UserRepository.SWBUR_AuthMethod);
-        String context = ur.getProperty(UserRepository.SWBUR_LoginContext);
-        String CBHClassName = ur.getProperty(UserRepository.SWBUR_CallBackHandlerClassName);
+        String authMethod = ur.getAuthMethod();
+        //String authMethod = ur.getProperty(UserRepository.SWBUR_AuthMethod);
+        String context = ur.getLoginContext();
+        //String context = ur.getProperty(UserRepository.SWBUR_LoginContext);
+        String CBHClassName = ur.getCallBackHandlerClassName();
+        //String CBHClassName = ur.getProperty(UserRepository.SWBUR_CallBackHandlerClassName);
         Subject subject = SWBPortal.getUserMgr().getSubject(request);
         HttpSession session = request.getSession(true);
         String enAuto = (String) session.getAttribute(VALSESS);
@@ -123,7 +126,7 @@ public class Login implements InternalServlet
                     session.setAttribute(CALLBACK, callbackHandler);
                 } catch (Exception ex)
                 {
-                    log.error("Can't Instanciate a CallBackHandler for UserRepository " + ur.getId(), ex);
+                    log.error("Can't Instanciate a CallBackHandler for UserRepository " + ur.getId()+"\n"+CBHClassName, ex);
                     response.sendError(500, "Authentication System failure!!!");
                     return;
                 }
