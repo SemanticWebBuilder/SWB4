@@ -64,14 +64,9 @@ public class WBASessionReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBASessionReport.class);
 
     private static final String S_REPORT_IDAUX = "_";
-    /*private static final ArrayList idaux = new ArrayList(1);*/
     private static final int I_REPORT_TYPE = 5;
     
     public String strRscType;
-    
-    /*static {
-        idaux.add(S_REPORT_IDAUX);            
-    }*/
 
     @Override
     public void init(){
@@ -137,12 +132,7 @@ public class WBASessionReport extends GenericResource {
         Resource base = getResourceBase();
         
         final int I_ACCESS = 0;
-        //StringBuffer sb_ret = new StringBuffer();
-        //String[] arr_month = DoArrMonth(paramsRequest);
-        //GregorianCalendar gc_now = new GregorianCalendar();
         HashMap hm_repository = new HashMap();
-        //boolean b_topic = false;
-        //String s_topic = null;
         String rtype;
 
         try {
@@ -272,7 +262,8 @@ public class WBASessionReport extends GenericResource {
                 out.println("   }");
                 out.println(" }");                
 
-                out.println(" function doBlockade() {");
+                out.println("function doBlockade() {");
+                out.println("  if(window.document.frmrep.wb_rep_type) {");
                 out.println("     if(window.document.frmrep.wb_rep_type[0].checked){");
                 out.println("       dojo.byId('wb_fecha1').disabled = false;");
                 out.println("       dojo.byId('wb_fecha11').disabled = true;");
@@ -283,7 +274,9 @@ public class WBASessionReport extends GenericResource {
                 out.println("       dojo.byId('wb_fecha11').disabled = false;");
                 out.println("       dojo.byId('wb_fecha12').disabled = false;");
                 out.println("     }");
-                out.println(" }");
+                out.println("  }");
+                out.println("}");
+
                 out.println("</script>");
                 
                 out.println("<div id=\"swbform\">");
@@ -292,7 +285,11 @@ public class WBASessionReport extends GenericResource {
                 
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-                out.println("<tr><td width=\"12%\"></td><td width=\"12%\"></td><td width=\"26%\"></td><td width=\"50%\"></td></tr>");
+                if(rtype.equals("0")) {
+                    out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
+                }else {
+                    out.println("<tr><td width=\"100\"></td><td width=\"196\"></td><td width=\"224\"></td><td width=\"364\"></td></tr>");
+                }
                 out.println("<tr>");
                 out.println("<td colspan=4>");
                 if(rtype.equals("0")){

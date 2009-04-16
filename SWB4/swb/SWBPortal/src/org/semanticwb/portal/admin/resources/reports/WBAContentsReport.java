@@ -29,7 +29,6 @@ public class WBAContentsReport extends GenericResource {
     
     private String strRscType;
     //private WebSiteSectionTree tree = new WebSiteSectionTree();
-    //private SelectTree tree = new SelectTree();
     
     private static Integer x;
     static{x=new Integer(0);}
@@ -96,8 +95,7 @@ public class WBAContentsReport extends GenericResource {
             params.put(name, request.getParameter(name));
         }
         SelectTree tree = new SelectTree(paramsRequest.getUser().getLanguage());
-        out.println(tree.renderXHTML(webSiteId, params, url.toString()));
-        
+        out.println(tree.renderXHTML(webSiteId, params, url.toString()));        
         out.flush();
     }
     
