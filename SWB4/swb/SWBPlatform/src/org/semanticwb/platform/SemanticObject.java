@@ -49,6 +49,8 @@ public class SemanticObject
     private static HashMap<String, Method> extGetMethods=new HashMap();
     private static HashMap<String, Method> extSetMethods=new HashMap();
 
+    private long lastaccess=System.currentTimeMillis();
+
     private static HashMap<Class,Class> wrapperToPrimitive = new HashMap();
 	static {
 		wrapperToPrimitive.put( Boolean.class, Boolean.TYPE );
@@ -72,6 +74,16 @@ public class SemanticObject
     }
 
     /**
+     * Contruye un SemanticObject virtual
+     *
+     * @param model
+     */
+    public SemanticObject()
+    {
+        this(null, null);
+    }
+
+    /**
      * Regresa instancia del SemanticObject si existe en Cache, de lo contrario
      * regresa null
      * @param uri
@@ -84,13 +96,50 @@ public class SemanticObject
         return ret;
     }
 
+    /**
+     * Regresa tiempo en milisegundos de la ultima consulta del objeto.
+     * @return
+     */
+    public long getLastAccess()
+    {
+        return lastaccess;
+    }
+
+    /**
+     * Regresa una instancia del GenericObject asociado
+     * Si ya existe una instancia la regresa, de lo contrario la crea
+     * @return
+     */
     public GenericObject createGenericInstance()
     {
-        if(m_genobj==null)
+        GenericObject gen=getGenericInstance();
+        if(gen==null)
         {
-            m_genobj=getSemanticClass().construcGenericInstance(this);
+            gen=getSemanticClass().construcGenericInstance(this);
+            setGenericInstance(gen);
         }
+        return gen;
+    }
+
+    /**
+     * Regresa una instancia del GenericObject asociado
+     * Si ya existe una instancia la regresa, de lo contrario regresa null
+     * @return
+     */
+    public GenericObject getGenericInstance()
+    {
+        lastaccess=System.currentTimeMillis();
         return m_genobj;
+    }
+
+    /**
+     * Regresa una instancia del GenericObject asociado
+     * Si ya existe una instancia la regresa, de lo contrario regresa null
+     * @return
+     */
+    private void setGenericInstance(GenericObject gen)
+    {
+        m_genobj=gen;
     }
 
 /**
@@ -137,7 +186,7 @@ public class SemanticObject
     }
 
     /**
-     * elimina cache
+     * Elimina cache de propiedades del objeto
      */
     public void resetCache()
     {
@@ -149,6 +198,10 @@ public class SemanticObject
         }
     }
 
+    /**
+     * Elimina el SemanticObject del cache
+     * param uri del SemanticObject a eliminar del cache
+     */
     public static void removeCache(String uri)
     {
         m_objs.remove(uri);
@@ -274,16 +327,6 @@ public class SemanticObject
         this.m_virtual = false;
         this.m_res = res;
         validateModel();
-    }
-
-    /**
-     * Contruye un SemanticObject virtual
-     *
-     * @param model
-     */
-    public SemanticObject()
-    {
-        this(null, null);
     }
 
     /**
@@ -1070,6 +1113,30 @@ public class SemanticObject
         }
     }
 
+    public void resetRelatedsCache()
+    {
+        //TODO:mejorar
+        Iterator<SemanticObject> rel=listRelatedObjects();
+        while(rel.hasNext())
+        {
+            SemanticObject obj=rel.next();
+            obj.resetCache();
+        }
+    }
+
+    public void dispose()
+    {
+        try
+        {
+            GenericObject gen=getGenericInstance();
+            if(gen!=null)gen.dispose();
+        }catch(Exception e){log.error(e);}
+
+        resetRelatedsCache();
+
+        removeCache(getURI());
+    }
+
     public void remove()
     {
         if(getModel().getModelObject().equals(this))    //es un modelo
@@ -1092,13 +1159,7 @@ public class SemanticObject
             }
             SWBPlatform.getSemanticMgr().notifyChange(this, null, "REMOVE");
 
-            //TODO:mejorar
-            Iterator<SemanticObject> rel=listRelatedObjects();
-            while(rel.hasNext())
-            {
-                SemanticObject obj=rel.next();
-                obj.resetCache();
-            }
+            resetRelatedsCache();
 
             //Eliminar dependencias
             removeDependencies();

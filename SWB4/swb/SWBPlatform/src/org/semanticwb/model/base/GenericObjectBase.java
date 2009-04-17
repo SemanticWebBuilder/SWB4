@@ -124,4 +124,8 @@ public class GenericObjectBase implements GenericObject
         return m_obj.getWorkPath();
     }
 
+    public void dispose() {
+        
+    }
+
 }
