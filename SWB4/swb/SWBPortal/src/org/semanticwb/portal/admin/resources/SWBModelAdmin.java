@@ -6,6 +6,7 @@ package org.semanticwb.portal.admin.resources;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -42,7 +43,7 @@ public class SWBModelAdmin extends GenericResource {
 
     private static Logger log = SWBUtils.getLogger(SWBImportWebSite.class);
     String PATH = SWBPlatform.getWorkPath() + "/";
-    String WEBPATH=SWBPlatform.getWebWorkPath()+"/sitetemplates/";
+    String WEBPATH = SWBPlatform.getWebWorkPath() + "/sitetemplates/";
     String MODELS = PATH + "models/";
     String ZIPDIRECTORY = PATH + "sitetemplates/";
 
@@ -190,7 +191,7 @@ public class SWBModelAdmin extends GenericResource {
                             iteraModels(node, smodels);
                         }
                     }
-                    
+
                     String newId = request.getParameter("wsid");
                     String newTitle = request.getParameter("wstitle");
 
@@ -224,13 +225,10 @@ public class SWBModelAdmin extends GenericResource {
                             }
                         } else { //TODO:Archivos rdf(modelos) y xml (siteinfo) y readme, eliminarlos
                             if (file.getName().endsWith(".rdf")) { //modelos
-
                             } else if (file.getName().endsWith(".xml")) { //Archivo siteinfo
-
                             }
                         }
                     }
-
 
                     //Parseo de nombre de NameSpace anteriores por nuevos
                     String newNs = "http://www." + newId + ".swb#";
@@ -238,8 +236,21 @@ public class SWBModelAdmin extends GenericResource {
                     String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
 
                     rdfcontent = rdfcontent.replaceAll(oldNamespace, newNs); //Reempplazar namespace anterior x nuevo
+
+                    //Reemplaza ids de repositorios de usuarios y documentos x nuevos
+                    rdfcontent = rdfcontent.replaceAll(oldIDModel + "_usr", newId + "_usr");
+                    rdfcontent = rdfcontent.replaceAll("http://user."+oldIDModel + ".swb#", "http://user."+newId + ".swb#");
+                    rdfcontent = rdfcontent.replaceAll(oldIDModel + "_rep", newId + "_rep");
+                    rdfcontent = rdfcontent.replaceAll("http://rep."+oldIDModel + ".swb#", "http://rep."+newId + ".swb#");
+
                     //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
-                    rdfcontent = parseRdfContent(rdfcontent, oldIDModel, newId, newNs);
+                    rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
+
+                    File filex = new File(MODELS + newId + "/" + newId + "_george_site.rdf");
+                    FileOutputStream outjx = new FileOutputStream(filex);
+                    outjx.write(rdfcontent.getBytes());
+                    outjx.flush();
+                    outjx.close();
 
                     //Mediante inputStream creado generar sitio
                     InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
@@ -248,27 +259,48 @@ public class SWBModelAdmin extends GenericResource {
                     website.setTitle(newTitle);
                     website.setDescription(oldDescription);
 
-                    String xmodelID=null, xmodelNS=null, xmodelTitle=null, xmodelDescr=null;
+                    String xmodelID = null, xmodelNS = null, xmodelTitle = null, xmodelDescr = null;
                     Iterator smodelsKeys = smodels.keySet().iterator();
                     while (smodelsKeys.hasNext()) { // Por c/submodelo que exista
                         String key = (String) smodelsKeys.next();
-                        System.out.println("key:"+key);
                         HashMap smodelValues = (HashMap) smodels.get(key);
                         Iterator itkVaues = smodelValues.keySet().iterator();
                         while (itkVaues.hasNext()) {
                             String kvalue = (String) itkVaues.next();
-                            System.out.println("kvalue:" + kvalue + ",value:" + smodelValues.get(kvalue));
-                            if(kvalue.equals("id")) xmodelID=(String)smodelValues.get(kvalue);
-                            if(kvalue.equals("namespace")) xmodelNS=(String)smodelValues.get(kvalue);
-                            if(kvalue.equals("title")) xmodelTitle=(String)smodelValues.get(kvalue);
-                            if(kvalue.equals("description")) xmodelDescr=(String)smodelValues.get(kvalue);
+                            if (kvalue.equals("id")) {
+                                xmodelID = (String) smodelValues.get(kvalue);
+                            }
+                            if (kvalue.equals("namespace")) {
+                                xmodelNS = (String) smodelValues.get(kvalue);
+                            }
+                            if (kvalue.equals("title")) {
+                                xmodelTitle = (String) smodelValues.get(kvalue);
+                            }
+                            if (kvalue.equals("description")) {
+                                xmodelDescr = (String) smodelValues.get(kvalue);
+                            }
                         }
                         //Buscar rdf del submodelo
                         frdfio = new FileInputStream(MODELS + newId + "/" + xmodelID + ".rdf");
                         String rdfmodel = SWBUtils.IO.readInputStream(frdfio);
-                        System.out.println("rdfmodel:"+rdfmodel);
-                    }
+                        if (key.endsWith("_usr")) { //Para los submodelos de usuarios y de documentos del modelo principal
+                            int pos = xmodelID.lastIndexOf("_usr");
+                            if (pos > -1) {
+                                xmodelID = xmodelID.substring(0, pos);
+                                System.out.println("remplaza:"+xmodelID+",newId:"+newId);
+                                rdfmodel = rdfmodel.replaceAll(xmodelID, newId);
 
+                                File file = new File(MODELS + newId + "/" + oldIDModel + "_george_usr.rdf");
+                                FileOutputStream outj = new FileOutputStream(file);
+                                outj.write(rdfmodel.getBytes());
+                                outj.flush();
+                                outj.close();
+
+                                io = SWBUtils.IO.getStreamFromString(rdfmodel);
+                                SWBPlatform.getSemanticMgr().createModelByRDF(xmodelID, "http://user." + newId + ".swb#", io);
+                            }
+                        }
+                    }
                     out.println("<script type=\"text/javascript\">");
                     out.println("hideDialog();");
                     out.println("addItemByURI(mtreeStore, null, '" + website.getURI() + "');");
@@ -277,12 +309,12 @@ public class SWBModelAdmin extends GenericResource {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error:"+e.getMessage());
+            System.out.println("ERROR J:"+e.getMessage());
             log.debug(e);
         }
     }
 
-    private String parseRdfContent(String rdfcontent, String oldName, String newName, String newNS) {
+    private String parseRdfContent(String rdfcontent, String oldName, String newName, String oldID, String newID, String newNS) {
         Document dom = null;
         try {
             dom = SWBUtils.XML.xmlToDom(rdfcontent);
@@ -292,8 +324,8 @@ public class SWBModelAdmin extends GenericResource {
                 NamedNodeMap nodeMap = nodeDescr.getAttributes();
                 for (int j = 0; j < nodeMap.getLength(); j++) {
                     String nvalue = nodeMap.item(j).getNodeValue();
-                    if (nvalue != null && nvalue.equalsIgnoreCase(newNS + oldName)) {
-                        nodeMap.item(j).setNodeValue(newNS + newName); //ver como tengo que poner el newName, si debe ser con minusculas
+                    if (nvalue != null && nvalue.equalsIgnoreCase(newNS + oldID)) {
+                        nodeMap.item(j).setNodeValue(newNS + newID); //ver como tengo que poner el newName, si debe ser con minusculas
                         NodeList nlist = nodeDescr.getChildNodes();
                         for (int k = 0; k < nlist.getLength(); k++) {
                             if (nlist.item(k).getNodeName().endsWith("title")) {
@@ -305,15 +337,15 @@ public class SWBModelAdmin extends GenericResource {
                 NodeList nlist = nodeDescr.getChildNodes();
                 for (int k = 0; k < nlist.getLength(); k++) {
                     Node node = nlist.item(k);
-                    if (node.getPrefix() != null && node.getPrefix().equals(oldName)) {
-                        node.setPrefix(newName);
+                    if (node.getPrefix() != null && node.getPrefix().equals(oldID)) {
+                        node.setPrefix(newID);
                     }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return SWBUtils.TEXT.replaceFirstIgnoreCase(SWBUtils.XML.domToXml(dom), "xmlns:" + oldName, "xmlns:" + newName);
+        return SWBUtils.TEXT.replaceFirstIgnoreCase(SWBUtils.XML.domToXml(dom), "xmlns:" + oldID, "xmlns:" + newID);
     }
 
     /**
