@@ -68,8 +68,8 @@ public class SWBImportWebSite extends GenericResource {
                     if (usrRep != null) {
                         if (usrRep.equals("0")) { //Utilizara un repositorio exclusivo
                             newUsrRep = SWBContext.createUserRepository(id + "_usr", "http://user." + id + ".swb#");
-                            newUsrRep.setTitle("Repositorio de usuarios(" + title + ")", "es");
-                            newUsrRep.setTitle("Users Repository(" + title + ")", "en");
+                            newUsrRep.setTitle("Repositorio de usuarios(" + id + ")", "es");
+                            newUsrRep.setTitle("Users Repository(" + id + ")", "en");
                             newUsrRep.setUndeleteable(true);
 //                            //TODO: cambiar a semantic prop
 //                            newUsrRep.setProperty(UserRepository.SWBUR_AuthMethod, "FORM"); //BASIC
