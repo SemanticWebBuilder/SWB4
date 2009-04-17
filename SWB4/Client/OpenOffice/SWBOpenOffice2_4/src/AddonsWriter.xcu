@@ -6,8 +6,8 @@
             <node oor:name="org.semanticwb.openoffice.writer.wb4writeraddon" oor:op="replace">
                 <prop oor:name="Title" oor:type="xs:string">
                     <value/>
-                    <value xml:lang="es">Semantic WebBuilder Writer</value>
-                    <value xml:lang="en">Semantic WebBuilder Writer</value>
+                    <value xml:lang="es">SemanticWebBuilder</value>
+                    <value xml:lang="en">SemanticWebBuilder</value>
                 </prop>
                 <prop oor:name="Target" oor:type="xs:string">
                     <value>_self</value>
