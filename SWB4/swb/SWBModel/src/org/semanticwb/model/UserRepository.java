@@ -136,7 +136,7 @@ public class UserRepository extends UserRepositoryBase
         }
         if (null != Active)
         {
-            queryString += "?x swb:active " + Active + "\n";
+            queryString += "?x swb:active " + Active + ".\n";
         }
         if (!"".equals(_usrFirstName))
         {
@@ -163,7 +163,7 @@ public class UserRepository extends UserRepositoryBase
 
                 "}";
 
-        //    System.out.println(queryString);
+          //  System.out.println(queryString);
         Query query = QueryFactory.create(queryString);
 
         // System.out.println(getId());
