@@ -3,10 +3,10 @@ package org.semanticwb.portal.resources.sem;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
 import java.util.Iterator;
 import javax.servlet.http.*;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
 public class SWBBookmark extends org.semanticwb.portal.resources.sem.base.SWBBookmarkBase
@@ -70,13 +70,18 @@ public class SWBBookmark extends org.semanticwb.portal.resources.sem.base.SWBBoo
             }
             response.setMode(response.Mode_VIEW);
         } else if (mode.equals("DELETE")) {
-            System.out.println("--->>deleting: ");
-            System.out.print(request.getParameter("title"));
-            System.out.print(request.getParameter("created"));
-            System.out.print(request.getParameter("url"));
-            System.out.print(request.getParameter("desc"));
-            System.out.print(request.getParameter("tags"));
-            System.out.print(request.getParameter("rank"));
+            System.out.println("--->>deleting id: " + request.getParameter("id"));
+            BookmarkEntry temp = getEntriById(request.getParameter("id"));
+
+            if (temp!=null) {
+                System.out.print(temp.getTitle());
+                System.out.print(temp.getCreated());
+                System.out.print(temp.getUrl());
+                System.out.print(temp.getDescription());
+                System.out.print(temp.getTags());
+                System.out.print(temp.getRank());
+            }
+            removeEntry(temp);
             response.setMode(response.Mode_VIEW);
         } else {
             super.processAction(request, response);
@@ -89,7 +94,6 @@ public class SWBBookmark extends org.semanticwb.portal.resources.sem.base.SWBBoo
         PrintWriter out=response.getWriter();
         Iterator<BookmarkEntry> entries = listEntrys();
         SWBResourceURL url = paramRequest.getRenderUrl();
-        int regNumber = 0;
 
         out.println("<div class=\"soria\" id=\"mainmenu\">");
         url.setMode("ADDNEW");
@@ -104,33 +108,22 @@ public class SWBBookmark extends org.semanticwb.portal.resources.sem.base.SWBBoo
         out.println("<table>");
         while(entries.hasNext()) {
             BookmarkEntry en = entries.next();
-            String eId = getId();
-            String title = en.getTitle();
-            Date created = en.getCreated();
-            String eurl = en.getUrl();
-            String desc = en.getDescription();
-            String tgs = en.getTags();
-            Double rnk = en.getRank();
+            String eId = en.getSemanticObject().getId();
 
-            out.println("<tr id = \""+ eId + "entry\">");
-            out.print("<td id =\""+ eId +"title\"><a href=\"" +  en.getUrl() + "\">" + en.getTitle() + "</a></td>");
-            out.println("<td>-</td><td id=\""+ eId +"url\">" + en.getUrl() + 
-                    "</td><td>-</td><td id=\""+ eId +"date\">" + en.getCreated().toString() + "</td>");
-            out.print("<td>[</td><td id=\""+ eId +"tags\">" + en.getTags().replace(",", "").trim() + "</td>");
+            out.println("<tr class = \"entry\">");
+            out.print("<td class=\"title\"><a href=\"" +  en.getUrl() + "\">" + en.getTitle() + "</a></td>");
+            out.println("<td>-</td><td class=\"url\">" + en.getUrl() +
+                    "</td><td>-</td><td class=\"date\">" + en.getCreated().toString() + "</td>");
+            out.print("<td>[</td><td class=\"tags\">" + en.getTags().replace(",", "").trim() + "</td>");
             out.print("<td>-</td>");
-            out.print("<td id=\""+ eId +"desc\">" + en.getDescription() + "</td><td>]</td>");
-            out.println("<td id=\""+ eId +"rank\">"+ en.getRank() + "</td>");
+            out.print("<td class=\"desc\">" + en.getDescription() + "</td><td>]</td>");
+            out.println("<td class=\"rank\">"+ en.getRank() + "</td>");
             url.setMode(url.Mode_EDIT);
-            out.print("<td id=\""+ eId +"aedit\"><a href=\"" + url +"\">" + paramRequest.getLocaleString("edit") + "</a></td><td>-</td>");
+            out.print("<td class=\"aedit\"><a href=\"" + url +"\">" + paramRequest.getLocaleString("edit") + "</a></td><td>-</td>");
             url = paramRequest.getActionUrl();
             url.setMode("DELETE");
-            url.setParameter("title", title);
-            url.setParameter("created", created.toString());
-            url.setParameter("url", eurl);
-            url.setParameter("desc", desc);
-            url.setParameter("tags", tgs);
-            url.setParameter("rank", String.valueOf(rnk));
-            out.print("<td id=\""+ eId +"adel\"><a href=\"" + url +"\">" + paramRequest.getLocaleString("delete") + "</a></td>");
+            url.setParameter("id", eId);
+            out.print("<td class=\"adel\"><a href=\"" + url +"\">" + paramRequest.getLocaleString("delete") + "</a></td>");
             out.println("</tr>");
         }
         out.println("</table>");
@@ -140,8 +133,14 @@ public class SWBBookmark extends org.semanticwb.portal.resources.sem.base.SWBBoo
     public void doAddNew(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         SWBResourceURL url = paramRequest.getActionUrl();
+
+        SWBFormMgr mgr=new SWBFormMgr(BookmarkEntry.sclass, getSemanticObject(), null);
+        mgr.setAction(paramRequest.getActionUrl().toString());
+        //mgr.addButton("<button label=\"Reset\"/>");
+        String ret = mgr.renderForm(request);
+        out.println(ret);
         //TODO: Cambiar por un FormManager
-        out.print("<form id=\""+ getResourceBase().getId() + "/bookmark\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
+        /*out.print("<form id=\""+ getResourceBase().getId() + "/bookmark\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         out.println("action=\"" + url + "\" method=\"POST\">");
         out.println("<label for=\"title\">"+ paramRequest.getLocaleString("title") +"</label>");
         out.println("<input type=\"text\" name=\"title\" id=\"title\" /><br>");
@@ -153,7 +152,7 @@ public class SWBBookmark extends org.semanticwb.portal.resources.sem.base.SWBBoo
         out.println("<input type=\"text\" name=\"tags\" id=\"tags\" /><br>");
         out.println("<label for=\"score\">"+ paramRequest.getLocaleString("score") +"</label>");
         out.println("<input type=\"text\" name=\"score\" id=\"score\" /><br>");
-        out.println("<button dojoType='dijit.form.Button' type=\"submit\">" + paramRequest.getLocaleString("add") + "</button>\n");
+        out.println("<button dojoType='dijit.form.Button' type=\"submit\">" + paramRequest.getLocaleString("add") + "</button>\n");*/
     }
 
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -181,5 +180,18 @@ public class SWBBookmark extends org.semanticwb.portal.resources.sem.base.SWBBoo
         url = paramRequest.getRenderUrl();
         url.setMode(url.Mode_VIEW);
         out.println("<a href=\"" + url.toString() + "\">" + paramRequest.getLocaleString("no") + "</a>");
+    }
+
+    public BookmarkEntry getEntriById(String id) {
+        Iterator<BookmarkEntry> entries = listEntrys();
+
+        while (entries.hasNext()) {
+            BookmarkEntry en = entries.next();
+
+            if(en.getSemanticObject().getId().equals(id)) {
+                return en;
+            }
+        }
+        return null;
     }
 }
