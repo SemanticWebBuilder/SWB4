@@ -348,7 +348,7 @@ public class SWBRecHits_
                     date = new GregorianCalendar(year,i+1,1,0,0,0);
                     st.setTimestamp(4, new Timestamp(date.getTimeInMillis()));
                     if(objid != null) {
-                        st.setString(2, objid);
+                        st.setString(5, objid);
                     }
                     SWBRecHit detail;
                     ResultSet rs = st.executeQuery();
