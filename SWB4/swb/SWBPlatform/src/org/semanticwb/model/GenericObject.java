@@ -37,4 +37,9 @@ public interface GenericObject
      * @return String con la ruta relativa al directorio work
      */    
     public String getWorkPath();
+
+    /**
+     * Se invoca cuando la instancia del objeto es eliminado de cache
+     */
+    public void dispose();
 }

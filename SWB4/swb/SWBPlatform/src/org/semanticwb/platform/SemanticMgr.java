@@ -18,6 +18,8 @@ import com.hp.hpl.jena.sdb.SDBFactory;
 import com.hp.hpl.jena.sdb.StoreDesc;
 import com.hp.hpl.jena.sdb.Store;
 import com.hp.hpl.jena.query.Dataset;
+import com.hp.hpl.jena.rdf.model.NodeIterator;
+import com.hp.hpl.jena.rdf.model.NsIterator;
 import com.hp.hpl.jena.sdb.sql.SDBConnection;
 import com.hp.hpl.jena.sdb.sql.SDBConnection_SWB;
 import com.hp.hpl.jena.util.FileManager;
@@ -340,6 +342,7 @@ public class SemanticMgr implements SWBInstanceObject
         Model model=loadRDFDBModel(name);
         if(name.equals(SWBAdmin) && !SWBPlatform.getEnv("swb/adminDev", "false").equalsIgnoreCase("true"))
         {
+            System.out.println("Loading Admin...");
             OntModel omodel=ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM,model);
             try
             {
@@ -349,6 +352,19 @@ public class SemanticMgr implements SWBInstanceObject
                 omodel.addSubModel(m,true);
             }catch(Exception e){log.warn(e.getMessage());}
             model=omodel;
+        }else if(name.equals(SWBAdmin))
+        {
+            NsIterator it=model.listNameSpaces();
+            if(!it.hasNext())
+            {
+                System.out.println("Importing Admin...");
+                it.close();
+                try
+                {
+                    FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/adminFile", "/swbadmin/rdf/SWBAdmin.rdf"));
+                    model.read(in, null);
+                }catch(Exception e){log.warn(e.getMessage());}
+            }
         }
         SemanticModel m=new SemanticModel(name, model);
         //TODO:notify this
