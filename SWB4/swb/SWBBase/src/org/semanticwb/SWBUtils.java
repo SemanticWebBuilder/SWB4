@@ -114,17 +114,15 @@ public class SWBUtils {
     private void init() {
         LOCALE_SERVICES = "locale_services";
     }
-    
+
     public static long sizeOf(Iterator it) {
         long size = 0;
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             it.next();
             size++;
-        }        
+        }
         return size;
     }
-    
-    
 
     /*
      * Regresa ruta fisica de la Aplicacion WEB
@@ -193,6 +191,7 @@ public class SWBUtils {
 
         private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
         //version 1.3
+
         /**
          * Remplaza en una cadena (str) las coincidencias encontradas (match) con otra cadena (replace).
          * Raplace match words in a String object
@@ -217,8 +216,7 @@ public class SWBUtils {
             }
             return str;
         }
-           
-        
+
         /**
          * @param str
          * @param match
@@ -239,12 +237,12 @@ public class SWBUtils {
             while (i >= 0) {
                 str = str.substring(0, i) + replace + str.substring(i + match.length());
                 y = i + replace.length();
-                i = str.toLowerCase().indexOf(match.toLowerCase(), y);            
+                i = str.toLowerCase().indexOf(match.toLowerCase(), y);
             }
             return str;
         }
 
-         /**
+        /**
          * @param str
          * @param match
          * @param replace
@@ -265,8 +263,6 @@ public class SWBUtils {
             }
             return str;
         }
-        
-        
 
         public static String iso8601DateFormat(Date date) {
             return iso8601dateFormat.format(date);
@@ -1132,10 +1128,12 @@ public class SWBUtils {
          * @throws java.io.IOException
          */
         public static final void zip(File directory, File base, ZipOutputStream zos) throws IOException {
-            if(directory==null || !directory.exists()) return;
+            if (directory == null || !directory.exists()) {
+                return;
+            }
             byte[] buffer = new byte[8192];
             int read = 0;
-            File[] files=directory.listFiles();
+            File[] files = directory.listFiles();
             for (int i = 0, n = files.length; i < n; i++) {
                 if (files[i].isDirectory()) {
                     zip(files[i], base, zos);
@@ -1149,7 +1147,7 @@ public class SWBUtils {
                     zos.closeEntry();
                     in.close();
                 }
-            }            
+            }
         }
 
         /**
@@ -1216,7 +1214,6 @@ public class SWBUtils {
             tempFile.delete();
         }
 
-        
         /**
          * @param zip
          * @Autor:Jorge Jiménez
@@ -1224,10 +1221,9 @@ public class SWBUtils {
          * @throws java.io.IOException
          */
         public static final void unzip(File zip, File extractTo) throws IOException {
-            unzip(zip,extractTo,new ArrayList(), null, null);
+            unzip(zip, extractTo, new ArrayList(), null, null);
         }
-        
-        
+
         /**
          * @param zip
          * @Autor:Jorge Jiménez
@@ -1263,17 +1259,68 @@ public class SWBUtils {
                     }
 
                     //Writes content
-                    try{
+                    try {
                         FileOutputStream out = new FileOutputStream(file);
                         copyStream(getStreamFromString(content), out);
                         out.close();
                         in.close();
-                    } catch(Exception ex){
+                    } catch (Exception ex) {
                         log.debug(ex);
                     }
                 }
             }
             archive.close();
+        }
+
+        public static final Iterator<ZipEntry> readZip(String zipName) {
+            ArrayList itFiles = new ArrayList();
+            ZipFile zf = null;
+            try {
+                zf = new ZipFile(zipName);
+                java.util.Enumeration enu = zf.entries();
+                while (enu.hasMoreElements()) {
+                    ZipEntry zen = (ZipEntry) enu.nextElement();
+                    if (zen.isDirectory()) {
+                        continue;
+                    } else {
+                        itFiles.add(zen);
+                    }
+                }
+            } catch (Exception ex) {
+                log.equals(ex);
+            } finally {
+                if (zf != null) {
+                    try {
+                        zf.close();
+                    } catch (Exception ex1) {
+                    }
+                }
+            }
+            return itFiles.iterator();
+        }
+
+        public static final String readFileFromZip(String zipName, String file2Read) {
+            String content = null;
+            try {
+                ZipFile zip = new ZipFile(new File(zipName));
+                for (Enumeration e = zip.entries(); e.hasMoreElements();) {
+                    ZipEntry entry = (ZipEntry) e.nextElement();
+                    if (entry.getName() != null && entry.getName().equals(file2Read)) {
+                        InputStream is = zip.getInputStream(entry);
+                        InputStreamReader isr = new InputStreamReader(is);
+
+                        char[] buffer = new char[1024];
+                        while (isr.read(buffer, 0, buffer.length) != -1) {
+                            String s = new String(buffer);
+                            content = s.trim();
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                log.debug(e);
+            }
+            return content;
         }
     }
 
@@ -1654,7 +1701,7 @@ public class SWBUtils {
                 dom = db.newDocument();
             } catch (Exception e) {
                 log.error(e);
-                //throw new SWBException("Error getting new XML Document", e);
+            //throw new SWBException("Error getting new XML Document", e);
             }
             return dom;
         }
@@ -2040,24 +2087,21 @@ public class SWBUtils {
         /** Returns a DBConnectionPool
          * @return a DBConnectionPool
          */
-        public static DBConnectionPool getPool(String name)
-        {
-            return (DBConnectionPool)getConnectionManager().getPools().get(name);
+        public static DBConnectionPool getPool(String name) {
+            return (DBConnectionPool) getConnectionManager().getPools().get(name);
         }
 
         /** Returns a default DBConnectionPool
          * @return a default DBConnectionPool
          */
-        public static DBConnectionPool getDefaultPool()
-        {
-            return (DBConnectionPool)getConnectionManager().getPools().get(defaultPoolName);
+        public static DBConnectionPool getDefaultPool() {
+            return (DBConnectionPool) getConnectionManager().getPools().get(defaultPoolName);
         }
 
         /** Returns a ConnectionPoolName
          * @return a ConnectionPoolName
          */
-        public static String getDefaultPoolName()
-        {
+        public static String getDefaultPoolName() {
             return defaultPoolName;
         }
 
@@ -2144,7 +2188,7 @@ public class SWBUtils {
         public static int getFreeConnections(String poolName) {
             return getConnectionManager().getFreeConnections(poolName);
         }
-        
+
         /**
          * Obtains the DBConnectionManager's PoolConnectionTimeLock.
          * @return a reference to the PoolConnectionTimeLock used by the DBConnectionManager
@@ -2209,19 +2253,15 @@ public class SWBUtils {
         }
     }
 
+    public static class Collections {
 
-    public static class Collections
-    {
-        public static List copyIterator(Iterator it)
-        {
-            ArrayList ret=new ArrayList();
-            while(it.hasNext())
-            {
-                Object ref=it.next();
+        public static List copyIterator(Iterator it) {
+            ArrayList ret = new ArrayList();
+            while (it.hasNext()) {
+                Object ref = it.next();
                 ret.add(ref);
             }
             return ret;
         }
     }
-
 }
