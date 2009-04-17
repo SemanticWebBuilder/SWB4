@@ -74,8 +74,7 @@ public class SWBExportWebSite extends GenericResource {
                 File file = new File(zipdirectory + "siteInfo.xml");
                 FileOutputStream out = new FileOutputStream(file);
                 try {
-                    strbr.append("<siteinfo>\n");
-                    strbr.append("<model>");
+                    strbr.append("<model>\n");
                     strbr.append("<id>"+site.getId()+"</id>\n");
                     strbr.append("<namespace>"+site.getNameSpace()+"</namespace>\n");
                     strbr.append("<title>"+site.getTitle()+"</title>\n");
@@ -96,7 +95,8 @@ public class SWBExportWebSite extends GenericResource {
                         directory = new File(modelspath + sObj.getId() + "/");
                         org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
                         //Genera datos de c/summodelo en archivo siteInfo.xml
-                        strbr.append("<model>");
+                        strbr.append("<model>\n");
+                        strbr.append("<type>"+sObj.getSemanticClass()+"</type>\n");
                         //if(obj.instanceOf(WebSite.sclass)) //Que datos saco si es un rep de usuarios o de documentos y como los parseo despues
                         strbr.append("<id>"+sObj.getId()+"</id>\n");
                         strbr.append("<namespace>"+sObj.getModel().getNameSpace()+"</namespace>\n");
@@ -105,7 +105,6 @@ public class SWBExportWebSite extends GenericResource {
                         strbr.append("</model>");
                     }
                     strbr.append("</model>");
-                    strbr.append("</siteinfo>");
                     out.write(strbr.toString().getBytes("utf-8"));
                     out.flush();
                     out.close();
