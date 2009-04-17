@@ -49,9 +49,9 @@ public class SWBModelAdmin extends GenericResource {
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("viewmodel")) {
-            doViewModell(request, response, paramRequest);
+            doViewModel(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("installmodel")) {
-            doInstallModell(request, response, paramRequest);
+            doInstallModel(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -120,7 +120,7 @@ public class SWBModelAdmin extends GenericResource {
         }
     }
 
-    public void doViewModell(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doViewModel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         out.println("<table>");
         for (Iterator<ZipEntry> itfiles = SWBUtils.IO.readZip(request.getParameter("zipName")); itfiles.hasNext();) {
@@ -130,7 +130,7 @@ public class SWBModelAdmin extends GenericResource {
         out.println("</table>");
     }
 
-    public void doInstallModell(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doInstallModel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             PrintWriter out = response.getWriter();
             SWBResourceURL url = paramRequest.getRenderUrl();
@@ -190,17 +190,7 @@ public class SWBModelAdmin extends GenericResource {
                             iteraModels(node, smodels);
                         }
                     }
-                    Iterator smodelsKeys = smodels.keySet().iterator();
-                    while (smodelsKeys.hasNext()) {
-                        String key = (String) smodelsKeys.next();
-                        HashMap smodelValues = (HashMap) smodels.get(key);
-                        Iterator itkVaues = smodelValues.keySet().iterator();
-                        while (itkVaues.hasNext()) {
-                            String kvalue = (String) itkVaues.next();
-                            System.out.println("kvalue:" + kvalue + ",value:" + smodelValues.get(kvalue));
-                        }
-                    }
-
+                    
                     String newId = request.getParameter("wsid");
                     String newTitle = request.getParameter("wstitle");
 
@@ -234,7 +224,9 @@ public class SWBModelAdmin extends GenericResource {
                             }
                         } else { //TODO:Archivos rdf(modelos) y xml (siteinfo) y readme, eliminarlos
                             if (file.getName().endsWith(".rdf")) { //modelos
+
                             } else if (file.getName().endsWith(".xml")) { //Archivo siteinfo
+
                             }
                         }
                     }
@@ -247,13 +239,35 @@ public class SWBModelAdmin extends GenericResource {
 
                     rdfcontent = rdfcontent.replaceAll(oldNamespace, newNs); //Reempplazar namespace anterior x nuevo
                     //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
-                    rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, newNs);
+                    rdfcontent = parseRdfContent(rdfcontent, oldIDModel, newId, newNs);
 
                     //Mediante inputStream creado generar sitio
                     InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
-                    SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newTitle, newNs, io);
+                    SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newId, newNs, io);
                     WebSite website = SWBContext.getWebSite(model.getName());
+                    website.setTitle(newTitle);
                     website.setDescription(oldDescription);
+
+                    String xmodelID=null, xmodelNS=null, xmodelTitle=null, xmodelDescr=null;
+                    Iterator smodelsKeys = smodels.keySet().iterator();
+                    while (smodelsKeys.hasNext()) { // Por c/submodelo que exista
+                        String key = (String) smodelsKeys.next();
+                        System.out.println("key:"+key);
+                        HashMap smodelValues = (HashMap) smodels.get(key);
+                        Iterator itkVaues = smodelValues.keySet().iterator();
+                        while (itkVaues.hasNext()) {
+                            String kvalue = (String) itkVaues.next();
+                            System.out.println("kvalue:" + kvalue + ",value:" + smodelValues.get(kvalue));
+                            if(kvalue.equals("id")) xmodelID=(String)smodelValues.get(kvalue);
+                            if(kvalue.equals("namespace")) xmodelNS=(String)smodelValues.get(kvalue);
+                            if(kvalue.equals("title")) xmodelTitle=(String)smodelValues.get(kvalue);
+                            if(kvalue.equals("description")) xmodelDescr=(String)smodelValues.get(kvalue);
+                        }
+                        //Buscar rdf del submodelo
+                        frdfio = new FileInputStream(MODELS + newId + "/" + xmodelID + ".rdf");
+                        String rdfmodel = SWBUtils.IO.readInputStream(frdfio);
+                        System.out.println("rdfmodel:"+rdfmodel);
+                    }
 
                     out.println("<script type=\"text/javascript\">");
                     out.println("hideDialog();");
@@ -263,6 +277,7 @@ public class SWBModelAdmin extends GenericResource {
                 }
             }
         } catch (Exception e) {
+            System.out.println("Error:"+e.getMessage());
             log.debug(e);
         }
     }
