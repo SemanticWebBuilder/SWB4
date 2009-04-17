@@ -1672,7 +1672,14 @@ public class BaseNode extends BaseNodeBase
                     }
                     else
                     {
-                        uri = namespace + "#" + values[1];
+                        if(namespace.endsWith("#"))
+                        {
+                            uri = namespace + values[1];
+                        }
+                        else
+                        {
+                            uri = namespace + "#" + values[1];
+                        }
                     }
                 }
                 break;
