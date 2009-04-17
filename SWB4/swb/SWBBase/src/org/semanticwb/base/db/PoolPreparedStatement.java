@@ -424,8 +424,9 @@ public class PoolPreparedStatement implements java.sql.PreparedStatement
         return st.getParameterMetaData();
     }
 
-//********************************** version 1.5    
-/*
+//********************************** version 1.6
+/**
+
     public void setPoolable(boolean poolable) throws SQLException {
         st.setPoolable(poolable);
     }
@@ -441,6 +442,101 @@ public class PoolPreparedStatement implements java.sql.PreparedStatement
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return st.isWrapperFor(iface);
     }
-*/
+
+    public void setAsciiStream(int parameterIndex, InputStream x, long length) throws SQLException
+    {
+        st.setAsciiStream(parameterIndex, x, length);
+    }
+
+    public void setAsciiStream(int parameterIndex, InputStream x) throws SQLException
+    {
+        st.setAsciiStream(parameterIndex, x);
+    }
+
+    public void setBinaryStream(int parameterIndex, InputStream x, long length) throws SQLException
+    {
+        st.setBinaryStream(parameterIndex, x, length);
+    }
+
+    public void setBinaryStream(int parameterIndex, InputStream x) throws SQLException
+    {
+        st.setBinaryStream(parameterIndex, x);
+    }
+
+    public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException
+    {
+        st.setBlob(parameterIndex, inputStream, length);
+    }
+
+    public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException
+    {
+        st.setBlob(parameterIndex, inputStream);
+    }
+
+    public void setCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException
+    {
+        st.setCharacterStream(parameterIndex, reader, length);
+    }
+
+    public void setCharacterStream(int parameterIndex, Reader reader) throws SQLException
+    {
+        st.setCharacterStream(parameterIndex, reader);
+    }
+
+    public void setClob(int parameterIndex, Reader reader, long length) throws SQLException
+    {
+        st.setClob(parameterIndex, reader, length);
+    }
+
+    public void setClob(int parameterIndex, Reader reader) throws SQLException
+    {
+        st.setClob(parameterIndex, reader);
+    }
+
+    public void setNCharacterStream(int parameterIndex, Reader value, long length) throws SQLException
+    {
+        st.setNCharacterStream(parameterIndex, value, length);
+    }
+
+    public void setNCharacterStream(int parameterIndex, Reader value) throws SQLException
+    {
+        st.setNCharacterStream(parameterIndex, value);
+    }
+
+    public void setNClob(int parameterIndex, NClob value) throws SQLException
+    {
+        st.setNClob(parameterIndex, value);
+    }
+
+    public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException
+    {
+        st.setNClob(parameterIndex, reader, length);
+    }
+
+    public void setNClob(int parameterIndex, Reader reader) throws SQLException
+    {
+        st.setNClob(parameterIndex, reader);
+    }
+
+    public void setNString(int parameterIndex, String value) throws SQLException
+    {
+        st.setNString(parameterIndex, value);
+    }
+
+    public void setRowId(int parameterIndex, RowId x) throws SQLException
+    {
+        st.setRowId(parameterIndex, x);
+    }
+
+    public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException
+    {
+        st.setSQLXML(parameterIndex, xmlObject);
+    }
+
+
+
+
 //*/
+
+
 }
