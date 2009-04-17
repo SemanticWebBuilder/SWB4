@@ -361,6 +361,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
             model.removeRow(0);
         }
     }
+
     public void loadProperties(Map<PropertyInfo, Object> properties)
     {
         DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
@@ -374,35 +375,59 @@ public class PanelPropertyEditor extends javax.swing.JPanel
         }
         for (PropertyInfo property : properties.keySet())
         {
-            Object value=properties.get(property);
-            if(property.type.equalsIgnoreCase("boolean"))
+            Object value = properties.get(property);
+            if (property.type.equalsIgnoreCase("boolean"))
             {
                 try
                 {
-                    value=Boolean.parseBoolean(value.toString());
+                    value = Boolean.parseBoolean(value.toString());
+                    Object[] data =
+                    {
+                        property, value
+                    };
+                    model.addRow(data);
                 }
-                catch(NumberFormatException nfe)
+                catch (NumberFormatException nfe)
                 {
                     nfe.printStackTrace();
+                    Object[] data =
+                    {
+                        property, null
+                    };
+                    model.addRow(data);
                 }
             }
-            if(property.type.equalsIgnoreCase("integer"))
+            else if (property.type.equalsIgnoreCase("integer"))
             {
                 try
                 {
-                    value=Boolean.parseBoolean(value.toString());
+                    Boolean.parseBoolean(value.toString());
+                    Object[] data =
+                    {
+                        property, value
+                    };
+                    model.addRow(data);
                 }
-                catch(NumberFormatException nfe)
+                catch (NumberFormatException nfe)
                 {
                     nfe.printStackTrace();
+                    Object[] data =
+                    {
+                        property, null
+                    };
+                    model.addRow(data);
                 }
             }
-            Object[] data =
+            else
             {
-                property, value
-            };
-            model.addRow(data);
-            
+                Object[] data =
+                {
+                    property, value
+                };
+                model.addRow(data);
+            }
+
+
         }
     }
 
