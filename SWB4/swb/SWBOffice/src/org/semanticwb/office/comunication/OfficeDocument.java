@@ -901,7 +901,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             for(PropertyInfo prop : properties)
             {
                 String value=values[i];
-                Iterator<SemanticProperty> semanticProperties=resource.getSemanticObject().getSemanticClass().listProperties();
+                Iterator<SemanticProperty> semanticProperties=officeResource.getSemanticObject().getSemanticClass().listProperties();
                 while(semanticProperties.hasNext())
                 {
                     SemanticProperty semanticProperty=semanticProperties.next();
