@@ -374,11 +374,35 @@ public class PanelPropertyEditor extends javax.swing.JPanel
         }
         for (PropertyInfo property : properties.keySet())
         {
+            Object value=properties.get(property);
+            if(property.type.equalsIgnoreCase("boolean"))
+            {
+                try
+                {
+                    value=Boolean.parseBoolean(value.toString());
+                }
+                catch(NumberFormatException nfe)
+                {
+                    nfe.printStackTrace();
+                }
+            }
+            if(property.type.equalsIgnoreCase("integer"))
+            {
+                try
+                {
+                    value=Boolean.parseBoolean(value.toString());
+                }
+                catch(NumberFormatException nfe)
+                {
+                    nfe.printStackTrace();
+                }
+            }
             Object[] data =
             {
-                property, properties.get(property)
+                property, value
             };
             model.addRow(data);
+            
         }
     }
 
