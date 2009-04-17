@@ -218,8 +218,8 @@ public class PoolStatement implements java.sql.Statement
         return st.getGeneratedKeys();
     }
 
-//********************************** version 1.5    
-/*
+//********************************** version 1.6
+/**
     public void setPoolable(boolean poolable) throws SQLException {
         st.setPoolable(poolable);
     }
@@ -235,6 +235,6 @@ public class PoolStatement implements java.sql.Statement
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return st.isWrapperFor(iface);
     }
-*/
+
 //*/
 }

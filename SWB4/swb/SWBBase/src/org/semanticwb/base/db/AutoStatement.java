@@ -306,23 +306,27 @@ public class AutoStatement implements java.sql.Statement
         return st.getGeneratedKeys();
     }
 
-//********************************** version 1.5    
+//********************************** version 1.6
 /*
     public void setPoolable(boolean poolable) throws SQLException {
+        checkStatement();
         st.setPoolable(poolable);
     }
 
     public boolean isPoolable() throws SQLException {
+        checkStatement();
         return st.isPoolable();
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
+        checkStatement();
         return st.unwrap(iface);
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        checkStatement();
         return st.isWrapperFor(iface);
     }
-*/
+
 //*/
 }

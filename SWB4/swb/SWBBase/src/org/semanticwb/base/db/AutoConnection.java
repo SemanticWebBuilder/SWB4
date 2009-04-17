@@ -5,13 +5,8 @@
 
 package org.semanticwb.base.db;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.Properties;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
@@ -380,57 +375,70 @@ public class AutoConnection implements Connection
 //********************************* JAVA 1.6
 /*
     public Clob createClob() throws SQLException {
+        checkConnection();
         return con.createClob();
     }
 
     public Blob createBlob() throws SQLException {
+        checkConnection();
         return con.createBlob();
     }
 
     public NClob createNClob() throws SQLException {
+        checkConnection();
         return con.createNClob();
     }
 
     public SQLXML createSQLXML() throws SQLException {
+        checkConnection();
         return con.createSQLXML();
     }
 
     public boolean isValid(int timeout) throws SQLException {
+        checkConnection();
         return con.isValid(timeout);
     }
 
     public void setClientInfo(String name, String value) throws SQLClientInfoException {
+        checkConnection();
         con.setClientInfo(name, value);
     }
 
     public void setClientInfo(Properties properties) throws SQLClientInfoException {
+        checkConnection();
         con.setClientInfo(properties);
     }
 
     public String getClientInfo(String name) throws SQLException {
+        checkConnection();
         return con.getClientInfo(name);
     }
 
     public Properties getClientInfo() throws SQLException {
+        checkConnection();
         return con.getClientInfo();
     }
 
     public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+        checkConnection();
         return con.createArrayOf(typeName, elements);
     }
 
     public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+        checkConnection();
         return con.createStruct(typeName, attributes);
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
+        checkConnection();
         return con.unwrap(iface);
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        checkConnection();
         return con.isWrapperFor(iface);
     }
-*/
+
 
 //*/
 }

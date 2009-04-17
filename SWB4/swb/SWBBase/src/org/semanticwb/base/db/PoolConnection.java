@@ -438,7 +438,7 @@ public class PoolConnection implements java.sql.Connection
     }
     
 //********************************* JAVA 1.6   
-/*
+/**
     public Clob createClob() throws SQLException {
         return con.createClob();
     }
@@ -490,7 +490,7 @@ public class PoolConnection implements java.sql.Connection
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return con.isWrapperFor(iface);
     }
-*/    
+    
    
 //*/
 }
