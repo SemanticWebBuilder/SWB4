@@ -445,7 +445,6 @@
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="SWBSemanticResource">
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.model.SWBPortalElement</swb:className>
   </owl:Class>
@@ -479,7 +478,6 @@
     >org.semanticwb.model.User</swb:className>
     <rdfs:subClassOf rdf:resource="#Traceable"/>
     <rdfs:subClassOf rdf:resource="#Activeable"/>
-    <rdfs:subClassOf rdf:resource="#Calendarable"/>
     <rdfs:label xml:lang="en">User</rdfs:label>
     <rdfs:subClassOf rdf:resource="#UserGroupable"/>
     <rdfs:label xml:lang="es">Usuario</rdfs:label>
@@ -564,6 +562,7 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Viewable"/>
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="Rankable">
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -572,7 +571,6 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Viewable"/>
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="Indexable">
         <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
