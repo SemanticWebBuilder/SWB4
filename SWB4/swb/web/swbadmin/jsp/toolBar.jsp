@@ -49,7 +49,14 @@
 <!--    <span dojoType="dijit.Tooltip" connectId="semwblogo">Semantic WebBuilder</span>-->
 
 <%
-    WebPage wp=SWBContext.getAdminWebSite().getWebPage("WBAd_mnu_Main");
+    String model=request.getParameter("model");
+    String id=request.getParameter("id");
+    if(model==null)model=SWBContext.WEBSITE_ADMIN;
+    if(id==null)id="WBAd_mnu_Main";
+    System.out.println("model:"+model);
+    System.out.println("id:"+id);
+
+    WebPage wp=SWBContext.getWebSite(model).getWebPage(id);
     Iterator<WebPage> it=wp.listVisibleChilds(lang);
     while(it.hasNext())
     {
