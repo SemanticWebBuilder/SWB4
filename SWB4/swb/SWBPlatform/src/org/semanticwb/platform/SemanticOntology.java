@@ -13,6 +13,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -32,6 +33,7 @@ public class SemanticOntology
 
     private OntModel m_ontology;
     private String m_name;
+    private ArrayList<SemanticModel> subModels=new ArrayList();
 
     public SemanticOntology(String name, OntModel ontology)
     {
@@ -56,12 +58,19 @@ public class SemanticOntology
     
     public void addSubModel(SemanticModel model, boolean rebind)
     {
+        subModels.add(model);
         m_ontology.addSubModel(model.getRDFModel(),rebind);
     }
 
     public void removeSubModel(SemanticModel model, boolean rebind)
     {
+        subModels.remove(model);
         m_ontology.removeSubModel(model.getRDFModel(),rebind);
+    }
+
+    public Iterator<SemanticModel> listSubModels()
+    {
+        return subModels.iterator();
     }
     
     public void rebind()

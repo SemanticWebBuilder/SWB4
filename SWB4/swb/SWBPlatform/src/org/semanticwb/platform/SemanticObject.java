@@ -361,17 +361,40 @@ public class SemanticObject
             return null;
         }
         id = getURI();
-        int x = id.indexOf('#');
-        if (x > -1)
+        if(id!=null)
         {
-            id=id.substring(x + 1);
-            x = id.indexOf(':');
+            int x = id.indexOf('#');
             if (x > -1)
             {
                 id=id.substring(x + 1);
+                x = id.indexOf(':');
+                if (x > -1)
+                {
+                    id=id.substring(x + 1);
+                }
             }
         }
         return id;
+    }
+
+    public String getPrefix()
+    {
+        return m_res.getModel().getNsURIPrefix(m_res.getNameSpace());
+    }
+
+    public String getResId()
+    {
+        String ret=null;
+        String pref=getPrefix();
+        if(pref!=null)
+        {
+            ret=pref+":"+m_res.getLocalName();
+        }else
+        {
+            ret=m_res.getLocalName();
+        }
+        if(ret==null || ret.length()==0)ret=getId();
+        return ret;
     }
 
 //    /**
