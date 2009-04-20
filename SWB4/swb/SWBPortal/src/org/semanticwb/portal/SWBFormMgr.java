@@ -285,7 +285,7 @@ public class SWBFormMgr
                 {
                     ret.append("<tr><td align=\"right\">");
                 }
-                ret.append(label.replaceAll(" ", "&nbsp;"));
+                ret.append(label);
                 ret.append("</td><td>");
                 ret.append(element);
                 ret.append("</td></tr>");
