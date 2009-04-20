@@ -496,7 +496,16 @@
               reloadTreeNode(store,item);
           }else if(action.name=="newTab")
           {
-              addNewTab(item.id, action.value, item.title);
+              //alert("id1"+item.id);
+              var id=""+item.id;
+              var ind=id.indexOf('|');
+              //alert("ind"+ind);
+              if(ind>0)
+              {
+                  id=id.substring(0,ind);
+              }
+              //alert("id2"+id);
+              addNewTab(id, action.value, item.title);
           }else if(action.name=="showDialog")
           {
                 showDialog(action.value, action.target);
