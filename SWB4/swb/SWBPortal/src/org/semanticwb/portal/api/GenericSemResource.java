@@ -169,4 +169,8 @@ public class GenericSemResource extends GenericResource implements org.semanticw
         return getResourceBase().getWorkPath();
     }
 
+    public void dispose() {
+        
+    }
+
 }
