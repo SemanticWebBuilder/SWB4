@@ -80,7 +80,9 @@ html, body, #main{
 .swbIconWorkspaceU,
 .swbIconMenuItems,
 .swbIconMenuItem,
-.swbIconMenuItemU
+.swbIconMenuItemU,
+.swbIconClass,
+.swbIconClassU
 {
 	background-repeat: no-repeat; 
 	width:20px;
@@ -123,7 +125,8 @@ html, body, #main{
 .swbIconPFlows      { background-position: -120px -0px; }
 .swbIconPFlow       { background-position: -120px -18px; }
 .swbIconPFlowU      { background-position: -120px -36px; }
-
+.swbIconClass       { background-position: -380px -18px; }
+.swbIconClassU       { background-position: -380px -36px; }
 
 
 /*  48x48 */
