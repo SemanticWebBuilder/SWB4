@@ -93,6 +93,23 @@ public class SWBComparator implements Comparator
         return set.iterator();
     }
 
+    public static Iterator<SemanticProperty> sortSermanticProperties(Iterator<SemanticProperty> it)
+    {
+        TreeSet set=new TreeSet(new Comparator<SemanticProperty>()
+        {
+            public int compare(SemanticProperty obj1, SemanticProperty obj2)
+            {
+                return obj1.getName().compareTo(obj2.getName());
+            }
+        });
+        while(it.hasNext())
+        {
+            set.add(it.next());
+        }
+        return set.iterator();
+    }
+
+
     public static Iterator sortSortableObject(Iterator it)
     {
         TreeSet set=new TreeSet(new Comparator()
