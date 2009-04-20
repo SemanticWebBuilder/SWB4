@@ -5,6 +5,7 @@
 
 package org.semanticwb.platform;
 
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -344,7 +345,18 @@ public class SemanticProperty
         Statement stm=m_prop.getProperty(m_prop.getModel().getProperty(SemanticVocabulary.RDFS_DOMAIN));
         if(stm!=null)
         {
-            ret=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+            String domclsid=stm.getResource().getURI();
+            if(domclsid!=null)
+            {
+                ret=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(domclsid);
+                //TODO: eliminar esto cuando se separe el vocabulario por ontologia
+                if(ret==null)
+                {
+                    ret=new SemanticClass(((OntModel)stm.getResource().getModel()).getOntClass(domclsid));
+                    SWBPlatform.getSemanticMgr().getVocabulary().registerClass(ret);
+                }
+            }
+
         }
         return ret;    
     }

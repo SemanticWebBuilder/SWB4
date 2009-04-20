@@ -1,6 +1,14 @@
 
 package org.semanticwb;
 
+import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntProperty;
+import com.hp.hpl.jena.ontology.OntResource;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,12 +17,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Properties;
 import javax.servlet.ServletContext;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.platform.IDGenerator;
+import org.semanticwb.platform.SemanticVocabulary;
 
 
 /**
@@ -557,4 +568,219 @@ public class SWBPlatform
     {
         return client;
     }
+
+    public static class JENA_UTIL
+    {
+        //public static String PATH_VIEW=SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp";
+
+        public static String getTextLocaled(Resource res, Property label)
+        {
+            String ret="";
+            Iterator<Statement> it=res.listProperties(label);
+            while(it.hasNext())
+            {
+                Statement st=it.next();
+                ret=ret+st.getString();
+                if(st.getLanguage()!=null)ret+="("+st.getLanguage()+")";
+                if(it.hasNext())ret+=", ";
+            }
+            return ret;
+        }
+
+        public static String getId(Resource res)
+        {
+            String ret="";
+            ret+=res.getModel().getNsURIPrefix(res.getNameSpace());
+            ret+=":";
+            ret+=res.getLocalName();
+            return ret;
+        }
+
+        public static String getLink(Resource res, String pathView)
+        {
+            return getLink(res,null, pathView);
+        }
+
+        public static String getLink(Resource res, String text, String pathView)
+        {
+            String val=text;
+            if(val==null)val=getId(res);
+            return "<a href=\"#\" onClick=\"addNewTab('"+res.getURI()+"', '"+pathView+"', '"+val+"');\">"+val+"</a>";
+        }
+
+        public static String getObjectId(Resource res, Property ptype, Model model)
+        {
+            String type="";
+            Statement stm=res.getProperty(ptype);
+            if(stm!=null)
+            {
+                type=model.getNsURIPrefix(stm.getResource().getNameSpace())+":"+stm.getResource().getLocalName();
+            }
+            return type;
+        }
+
+        public static String getObjectLink(Resource res, Property ptype, Model model, String pathView)
+        {
+            return getObjectLink(res, ptype, model, null, pathView);
+        }
+
+        public static String getObjectLink(Resource res, Property ptype, Model model, String text, String pathView)
+        {
+            String val=text;
+            if(val==null)val=getObjectId(res, ptype, model);
+            Statement stm=res.getProperty(ptype);
+            if(stm!=null)
+            {
+                Resource res2=stm.getResource();
+                return "<a href=\"#\" onClick=\"addNewTab('"+res2.getURI()+"', '"+pathView+"', '"+val+"');\">"+val+"</a>";
+            }
+            return val;
+        }
+
+        public static boolean isInBaseModel(Resource res, OntModel ont)
+        {
+            Property type=ont.getProperty(SemanticVocabulary.RDF_TYPE);
+            return ont.getBaseModel().contains(res, type);
+        }
+
+
+
+        public static void addFilteredClass(OntClass cls, ArrayList arr)
+        {
+            boolean filtered=false;
+            Iterator<OntClass> it=arr.iterator();
+            //System.out.println("filter:"+cls);
+            while(it.hasNext())
+            {
+                OntClass aux=it.next();
+                if(aux.equals(cls))
+                {
+                    filtered=true;
+                }else if(cls.hasSuperClass(aux))
+                {
+                    //System.out.println("remove:"+aux);
+                    it.remove();
+                }else if(aux.hasSubClass(cls))
+                {
+                    filtered=true;
+                }
+            }
+            if(!filtered)
+            {
+                arr.add(cls);
+                //System.out.println("add:"+cls);
+            }
+        }
+
+        public static Iterator<Property> getClassProperties(Resource res, OntModel model)
+        {
+            OntResource ores=model.getOntResource(res);
+            ArrayList<Property> arr=new ArrayList();
+            //Se agregan Propiedades de defautl
+            Property ptype=model.getProperty(SemanticVocabulary.RDF_TYPE);
+            if(ores!=null && ores.isClass())
+            {
+                arr.add(model.getProperty(SemanticVocabulary.RDFS_LABEL));
+                arr.add(model.getProperty(SemanticVocabulary.RDFS_COMMENT));
+                arr.add(model.getProperty(SemanticVocabulary.RDFS_SUBCLASSOF));
+                arr.add(model.getProperty(SemanticVocabulary.OWL_URI+"equivalentClass"));
+                arr.add(model.getProperty(SemanticVocabulary.OWL_URI+"disjointWith"));
+            }else if(ores!=null && ores.isProperty())
+            {
+                arr.add(model.getProperty(SemanticVocabulary.RDFS_LABEL));
+                arr.add(model.getProperty(SemanticVocabulary.RDFS_COMMENT));
+                arr.add(model.getProperty(SemanticVocabulary.RDFS_SUBPROPERTYOF));
+                arr.add(model.getProperty(SemanticVocabulary.RDFS_DOMAIN));
+                arr.add(model.getProperty(SemanticVocabulary.RDFS_RANGE));
+                arr.add(model.getProperty(SemanticVocabulary.OWL_URI+"equivalentProperty"));
+                arr.add(model.getProperty(SemanticVocabulary.OWL_URI+"inverseOf"));
+            }
+            //System.out.println("ptype:"+ptype);
+
+            Iterator<Statement> it=res.listProperties(ptype);
+            while(it.hasNext())
+            {
+                Statement st=it.next();
+                //System.out.println("res:"+st.getSubject()+" "+st.getPredicate()+" "+st.getObject());
+                OntClass ocls=model.getOntClass(st.getResource().getURI());
+                //System.out.println("cls:"+ocls);
+                //System.out.println("ocls1:"+ocls);
+
+                if(ocls!=null)
+                {
+                    //addFilteredClass(ocls, types);
+                    //System.out.println("ocls2:"+ocls);
+
+                    //SemanticClass cls=new SemanticClass(ocls);
+                    Iterator<OntProperty> it2=ocls.listDeclaredProperties();
+                    while(it2.hasNext())
+                    {
+                        OntProperty prop=it2.next();
+                        if(!arr.contains(prop))
+                        {
+                            OntResource rd=prop.getDomain();
+                            if(rd!=null)
+                            {
+                                OntClass dom=rd.asClass();
+                                if(dom!=null && (dom.equals(ocls) || dom.hasSuperClass(ocls)))
+                                {
+                                    arr.add(prop);
+                                    //System.out.println("prop:"+prop);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            //Se agregan propiedades adicionales
+            Iterator<Statement> itp=res.listProperties();
+            while(itp.hasNext())
+            {
+                Statement stmt=itp.next();
+                Property p=stmt.getPredicate();
+                if(!arr.contains(p))
+                {
+                    arr.add(p);
+                    //System.out.println("prop:"+prop);
+                }
+            }
+            arr.remove(ptype);
+            arr.add(ptype);
+
+            return arr.iterator();
+        }
+
+        public static Resource getBaseModelResource(String uri, OntModel ont)
+        {
+            Resource res=ont.getResource(uri);
+            Property type=ont.getProperty(SemanticVocabulary.RDF_TYPE);
+            Model base=ont.getBaseModel();
+            if(base.contains(res, type))
+            {
+                res=base.getResource(uri);
+            }else
+            {
+                Iterator<Model> it=ont.listSubModels();
+                while(it.hasNext())
+                {
+                    Model model=it.next();
+                    if(model instanceof OntModel)model=((OntModel)model).getBaseModel();
+                    //System.out.println("sub:"+model.getGraph().size());
+                    if(model!=base)
+                    {
+                        if(model.contains(res, type))
+                        {
+                            res=model.getResource(uri);
+                            break;
+                        }
+                    }
+                }
+            }
+            return res;
+        }
+
+    }
+
 }

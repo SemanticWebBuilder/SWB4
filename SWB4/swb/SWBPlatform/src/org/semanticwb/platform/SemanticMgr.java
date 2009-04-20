@@ -194,9 +194,14 @@ public class SemanticMgr implements SWBInstanceObject
         m_ontology.rebind();
     }
     
-    private Model loadRDFFileModel(String path)
+    public Model loadRDFFileModel(String path)
     {
         return FileManager.get().loadModel(path);
+    }
+
+    public Model loadRDFFileModel(String path, String baseUri)
+    {
+        return FileManager.get().loadModel(path,baseUri,null);
     }
 
     public SemanticModel readRDFFile(String name, String path)
