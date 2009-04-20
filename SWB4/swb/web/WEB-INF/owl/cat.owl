@@ -8,34 +8,103 @@
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
   xml:base="http://www.semanticwb.org/catalogs">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
   <owl:Class rdf:ID="SWBCatalogs">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
   </owl:Class>
-  <rdf:Property rdf:ID="countryName">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain>
-      <swb:Class rdf:ID="Country">
-        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.catalogs.Country</swb:className>
-        <rdfs:subClassOf rdf:resource="#SWBCatalogs"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
-  </rdf:Property>
-  <owl:DatatypeProperty rdf:ID="countryCode">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Country"/>
-  </owl:DatatypeProperty>
-  <swb:Model rdf:ID="Catalogs">
+  <owl:Class rdf:ID="Country">
+    <rdfs:subClassOf rdf:resource="#SWBCatalogs"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.catalogs.Country</swb:className>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Catalogs">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBModel"/>
     <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.catalogs.Catalogs</swb:className>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBModel"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Model>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="hasSubordinado">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="jefe">
+    <owl:inverseOf rdf:resource="#hasSubordinado"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="Empleado">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Roleable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >demo.wb.Empleado</swb:className>
+        <rdfs:subClassOf>
+          <swb:Class rdf:ID="Persona">
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >demo.wb.Persona</swb:className>
+            <rdfs:subClassOf rdf:resource="#SWBCatalogs"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </rdfs:subClassOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#Empleado"/>
+  </owl:ObjectProperty>
+  <rdf:Property rdf:ID="countryName">
+    <rdfs:domain rdf:resource="#Country"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Property>
+  <owl:DatatypeProperty rdf:ID="countryCode">
+    <rdfs:domain rdf:resource="#Country"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="numemp">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Empleado"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="phone">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Persona"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="name">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Persona"/>
+  </owl:DatatypeProperty>
+  <swbc:Empleado rdf:ID="Marco">
+    <swbc:phone rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >56242800</swbc:phone>
+    <swbc:numemp rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >10</swbc:numemp>
+    <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Marco</swbc:name>
+  </swbc:Empleado>
+  <swbc:Country rdf:ID="Country_1">
+    <swbc:countryName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Mexico</swbc:countryName>
+    <swbc:countryCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MX</swbc:countryCode>
+  </swbc:Country>
+  <swbc:Empleado rdf:ID="Alejandro">
+    <swbc:phone rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >56242800</swbc:phone>
+    <swbc:jefe rdf:resource="#Marco"/>
+    <swbc:numemp rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >2</swbc:numemp>
+    <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Alejandro</swbc:name>
+  </swbc:Empleado>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
