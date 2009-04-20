@@ -1,5 +1,5 @@
-<%@page contentType="text/html"%><%@page pageEncoding="ISO-8859-1"%>
-<%@page import="org.json.*,org.semanticwb.*,org.semanticwb.model.*,org.semanticwb.platform.*,java.util.*"%>
+<%@page import="org.json.*,org.semanticwb.*,org.semanticwb.model.*,org.semanticwb.platform.*,java.util.*,com.hp.hpl.jena.ontology.*,com.hp.hpl.jena.*,com.hp.hpl.jena.util.*,com.hp.hpl.jena.rdf.model.Model" %>
+<%@page contentType="text/html" %><%@page pageEncoding="ISO-8859-1" %>
 <%!
     int nullnode=0;
     String lang="es";
@@ -524,8 +524,115 @@
         }
     }
 
+/****************************************************************************/
+
+    public void addClasses(JSONArray arr, SemanticOntology ont)  throws JSONException
+    {
+        Iterator<OntClass> it=ont.getRDFOntModel().listHierarchyRootClasses();
+        while(it.hasNext())
+        {
+            OntClass cls=it.next();
+            addClass(arr, cls, ont);
+        }
+        addClass(arr, ont.getRDFOntModel().getOntClass(SemanticVocabulary.RDF_PROPERTY), ont);
+        addClass(arr, ont.getRDFOntModel().getOntClass(SemanticVocabulary.OWL_CLASS), ont);
+    }
+
+    public void addClass(JSONArray arr, OntClass cls, SemanticOntology ont) throws JSONException
+    {
+        boolean base=SWBPlatform.JENA_UTIL.isInBaseModel(cls, ont.getRDFOntModel());
+        String icon="swbIconClass";
+        if(!base)icon+="U";
+        JSONObject jobj=getNode(cls.getURI()+"|"+(nullnode++), SWBPlatform.JENA_UTIL.getId(cls), "Class", icon);
+        arr.put(jobj);
+
+        //hijos
+        JSONArray childs=new JSONArray();
+        jobj.putOpt("children", childs);
+
+        //eventos
+        JSONArray events=new JSONArray();
+        jobj.putOpt("events", events);
+        events.put(getEvent("onDblClick", getAction("newTab", SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp", null)));
+        //events.put(getEvent("onClick", getAction("getHtml", SWBPlatform.getContextPath()+"/swbadmin/jsp/viewProps.jsp?id="+obj.getEncodedURI(), "vprop")));
+
+        Iterator<OntClass> it=cls.listSubClasses(true);
+        while(it.hasNext())
+        {
+            OntClass ccls=it.next();
+            addClass(childs, ccls,ont);
+        }
+    }
+
+    public void addProperties(JSONArray arr, SemanticOntology ont)  throws JSONException
+    {
+        Iterator<OntProperty> it=ont.getRDFOntModel().listOntProperties();
+        while(it.hasNext())
+        {
+            OntProperty prop=it.next();
+            addProperty(arr, prop, ont);
+        }
+    }
+
+    public void addProperty(JSONArray arr, OntProperty prop, SemanticOntology ont) throws JSONException
+    {
+        boolean base=SWBPlatform.JENA_UTIL.isInBaseModel(prop, ont.getRDFOntModel());
+                //isInBaseModel(prop);
+        String icon="swbIconClass";
+        if(!base)icon+="U";
+        JSONObject jobj=getNode(prop.getURI()+"|"+(nullnode++), SWBPlatform.JENA_UTIL.getId(prop), "Property", icon);
+        arr.put(jobj);
+
+        //hijos
+        JSONArray childs=new JSONArray();
+        jobj.putOpt("children", childs);
+
+        //eventos
+        JSONArray events=new JSONArray();
+        jobj.putOpt("events", events);
+        events.put(getEvent("onDblClick", getAction("newTab", SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp", null)));
+        //events.put(getEvent("onClick", getAction("getHtml", SWBPlatform.getContextPath()+"/swbadmin/jsp/viewProps.jsp?id="+obj.getEncodedURI(), "vprop")));
+
+        Iterator<OntProperty> it=prop.listSubProperties(true);
+        while(it.hasNext())
+        {
+            OntProperty cprop=it.next();
+            addProperty(childs, cprop,ont);
+        }
+    }
+
+
     
 %><%
+    SemanticOntology sont=(SemanticOntology)session.getAttribute("ontology");
+    if(sont==null)
+    {
+        OntDocumentManager mgr=com.hp.hpl.jena.ontology.OntDocumentManager.getInstance();
+        Model m=SWBPlatform.getSemanticMgr().loadRDFFileModel("file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl");
+        mgr.addModel("http://www.semanticwebbuilder.org/swb4/ontology", m);
+
+        //mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/ontology", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl");
+        mgr.addAltEntry("http://www.semanticwb.org/catalogs", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/cat.owl");
+
+        //String swbowl="file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/cat.owl";
+        //java.io.File owlf=new java.io.File(swbowl);
+        //SemanticModel base=SWBPlatform.getSemanticMgr().readRDFFile(owlf.getName(),swbowl);
+        //sont=new SemanticOntology("", com.hp.hpl.jena.rdf.model.ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF,base.getRDFModel()));
+        //sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwb.org/catalogs", OntModelSpec.OWL_MEM_RDFS_INF));
+        sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/ontology", OntModelSpec.OWL_MEM_RDFS_INF));
+/*
+        swbowl="file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl";
+        owlf=new java.io.File(swbowl);
+        SemanticModel model=SWBPlatform.getSemanticMgr().readRDFFile(owlf.getName(),swbowl);
+        sont.addSubModel(model, false);
+*/
+        session.setAttribute("ontology", sont);
+
+        //System.out.println("Base:"+base.getRDFModel().size());
+        //System.out.println("SWB:"+model.getRDFModel().size());
+        //System.out.println("Ont:"+sont.getRDFOntModel().size());
+    }
+
     String id=request.getParameter("id");
     if(id==null)id="mtree";
     //System.out.println(new Date()+" Tree1");
@@ -548,6 +655,8 @@
         if(id.equals("mfavo"))addFavorites(items);
         if(id.equals("mtra")) addWebSitesTrash(items);
         if(id.equals("mdoc")) addDocRepositories(items);
+        if(id.equals("mclass")) addClasses(items,sont);
+        if(id.equals("mprop")) addProperties(items,sont);
         out.print(obj.toString());
         //System.out.print(id);
     }else
