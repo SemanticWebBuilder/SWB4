@@ -27,7 +27,7 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement
     private boolean closed = false;
     private String query=null;
     private String args="";
-    private boolean debug=true;
+    private boolean debug=false;
 
     private AutoConnection aconn;
     private Connection conn;
