@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.Logger;
-import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.nlp.Lexicon;
 import org.semanticwb.nlp.tTranslator;
@@ -27,18 +25,29 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
 /**
  *
- * @author juan.fernandez
+ * @author haxdai
  */
 public class SWBADBNatural extends GenericResource {
 
-    private Logger log = SWBUtils.getLogger(SWBADBSparql.class);
     private tTranslator tr;
+
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String mode = paramRequest.getMode();
+        if (mode.equals("SUGGEST")) {
+            doSuggest(request, response, paramRequest);
+        } else {
+            super.processRequest(request, response, paramRequest);
+        }
+    }
 
     /**
      * @param request
@@ -51,7 +60,7 @@ public class SWBADBNatural extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         StringBuffer ret = new StringBuffer();
-        SWBResourceURL url = paramRequest.getActionUrl();
+        SWBResourceURL url = paramRequest.getRenderUrl();
         String query = request.getParameter("naturalQuery");
         String errCount = request.getParameter("errCode");
         String sparqlQuery = request.getParameter("sparqlQuery");
@@ -62,220 +71,46 @@ public class SWBADBNatural extends GenericResource {
         } else {
             query = query.trim();
         }
-
-        url.setParameter("lang", lang);
-
+        
+        url.setMode("SUGGEST");
         ret.append("<script type=\"text/javascript\">\n" +
-                "dojo.require(\"dojo.parser\");\n" +
-                "dojo.require(\"dijit.layout.ContentPane\");\n"+
                 "dojo.require(\"dijit.form.Form\");\n" +
                 "dojo.require(\"dijit.form.Button\");\n" +
                 "</script>\n");
-        ret.append("<script src=\"" + SWBPlatform.getContextPath() +"/swbadmin/js/acTextArea.js\"></script>");
         ret.append("<script type=\"text/javascript\">\n" +
                 "dojo.addOnLoad(function () {\n" +
-                    "dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyDown');\n" +
-                    "dojo.connect(dojo.byId('naturalQuery'), 'onkeyup', 'queryOnKeyUp');\n" +
-                    "dojo.connect(dojo.byId('naturalQuery'), 'onblur', function () {\n" +
-                        "clearSuggestions();\n" +
-                    "});\n" +
+                "dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyDown');\n" +
+                "dojo.connect(dojo.byId('naturalQuery'), 'onkeyup', 'queryOnKeyUp');\n" +
+                "dojo.connect(dojo.byId('naturalQuery'), 'onblur', function () {\n" +
+                "clearSuggestions();\n" +
                 "});\n" +
-                "var source =\"" + SWBPlatform.getContextPath() + "/swbadmin/jsp/acTextAreaStore.jsp\";\n" +
+                "});\n" +
+                "var source =\"" + url.toString() + "\";\n" +
                 "var lang =\"" + paramRequest.getUser().getLanguage() + "\";\n" +
-            //    "var displayed = false;\n" +
-          //      "var pdisplayed = false;\n" +
-            "</script>\n");
- 
-        /*ret.append("<script type=\"text/javascript\"> function clearSuggestions() {\n" +
-                        "if (dojo.byId('results')) {\n" +
-                            "dojo.byId('results').innerHTML = \"\";\n" +
-                        "}\n" +
-                        "displayed = false;\n" +
-                        "curSelected = 0;\n" +
-                        "dojo.byId('naturalQuery').focus();\n" +
-                    "}\n");
-
-        ret.append("function setSelection(selected, prep) {\n" +
-                        "var word = getCurrentWord('naturalQuery');\n" +
-                        "var newText = dojo.byId('id' + selected).innerHTML.replace(/<(.|\\n)+?>/g, \"\");\n" +
-                        "newText = prep + \"[\" + newText + \"]\";\n" +
-                        "var valText = dojo.byId('naturalQuery').value;\n" +
-                        "dojo.byId('naturalQuery').value = valText.substring(0, word.startP) + \n" +
-                        "newText + valText.substring(word.endP, valText.length);\n" +
-                    "}\n");
-
-        ret.append("function highLightSelection(id, high) {\n" +
-                        "var ele = dojo.byId('id' + id);\n" +
-                        "if (high) {\n" +
-                            "dojo.style(ele, {\n" +
-                                "\"background\":\"LightBlue\"\n" +
-                            "});\n" +
-                        "} else {\n" +
-                            "dojo.style(ele, {\n" +
-                            "\"background\":\"white\"\n" +
-                            "});\n" +
-                        "}\n" +
-                    "}\n");
-
-        ret.append("function getHtml (url, tagid) {\n" +
-                        "dojo.xhrGet ({\n" +
-                            "url: url,\n" +
-                            "load: function(response, ioArgs) {\n" +
-                            "var tag = dojo.byId(tagid);\n" +
-                            "if (tag) {\n" +
-                                "tag.innerHTML = response;\n" +
-                            "} else {\n" +
-                                "alert('No existe ningún elemento con id ' + tagid);\n" +
-                            "}\n" +
-                            "highLightSelection(0, true);\n" +
-                            "return response;\n" +
-                        "},\n" +
-                        "error: function(response, ioArgs) {\n" +
-                            "if (dojo.byId(tagid)) {\n" +
-                                "dojo.byId(tagid).innerHTML =\n" +
-                                "\"<font color='red'>Cannot load suggestions, try again</font>\";\n" +
-                            "} else {\n" +
-                                "alert('No existe ningún elemento con id ' + tagid);\n" +
-                            "}\n" +
-                            "return response;\n" +
-                            "},\n" +
-                                "handleAs: \"text\",\n" +
-                                "timeout: 5000\n" +
-                        "});\n" +
-                    "}\n");
-
-        ret.append("function getSuggestions(word, src, clear, props) {\n" +
-                        "if (clear) {\n" +
-                            "clearSuggestions();\n" +
-                        "}\n" +
-                        "if(word.word == '') {\n" +
-                            "return;\n" +
-                        "}\n" +
-                        "if (dojo.byId('results') && word.word != '') {\n" +
-                                "dojo.byId('results').innerHTML = \"<font color='Green'>Loading...</font>\";" +
-                        "}\n" +
-                        "getHtml(src + \"?word=\" + word.word + \"&lang=\" + lang + \"&props=\" + props, 'results');\n" +
-                        "displayed = true;\n" +
-                    "}\n");
-
-        ret.append("function getCaretPos(elm) {\n" +
-                        "var pos;\n" +
-                         "if (dojo.doc.selection) {\n" +
-                                "var Sel = document.selection.createRange();\n" +
-                                "var SelLength = document.selection.createRange().text.length;\n" +
-                                "Sel.moveStart ('character', -dojo.byId(elm).value.length);\n" +
-                                "pos = Sel.text.length - SelLength;\n" +
-                         "} else if (typeof dojo.byId(elm).selectionStart != undefined) {\n" +
-                                "pos = dojo.byId(elm).selectionStart;\n" +
-                         "}\n" +
-                        "return pos;\n" +
-                    "}\n");
-                    
-        ret.append("function getCurrentWord(elm) {\n" +
-                        "var cPos = getCaretPos(elm);\n" +
-                        "var txt = dojo.byId(elm).value;\n" +
-                        "var prevBlank = -1;\n" +
-                        "var aftBlank = -1;\n" +
-                        "var found = false;\n" +
-                        "var wd = null;\n" +
-                        "var wo = \"undefined\";\n" +
-                        "var delimiters = \"\\n\\t \";" +
-                        "if (txt != '') {\n" +
-                            "for (var i = 0; i < txt.length; i++) {\n" +
-                                "if (delimiters.indexOf(txt.charAt(i)) != -1 && cPos > i) {\n" +
-                                    "prevBlank = i;\n" +
-                                "}\n" +
-                        "}\n" +
-                        "for (i = cPos; i < txt.length && !found; i++) {\n" +
-                            "if (delimiters.indexOf(txt.charAt(i)) != -1) {\n" +
-                                "aftBlank = i;\n" +
-                                "found = true;\n" +
-                            "}\n" +
-                        "}\n" +
-                        "if (prevBlank == -1) {\n" +
-                            "if (aftBlank == -1) {\n" +
-                                "wd = txt;\n" +
-                                "wo = {\n" +
-                                "word: wd,\n" +
-                                "startP: 0,\n" +
-                                "endP: txt.length\n" +
-                            "};\n" +
-                        "} else {\n" +
-                            "wd = txt.substring(0, aftBlank);\n" +
-                            "wo = {\n" +
-                                "word: wd,\n" +
-                                "startP: 0,\n" +
-                                "endP: aftBlank\n" +
-                            "};\n" +
-                        "}\n" +
-                    "} else if (aftBlank == -1) {\n" +
-                        "wd = txt.substring(prevBlank + 1, txt.length);\n" +
-                         "wo = {\n" +
-                            "word: wd,\n" +
-                            "startP: prevBlank + 1,\n" +
-                            "endP: txt.length\n" +
-                        "};\n" +
-                    "} else {\n" +
-                        "wd = txt.substring(prevBlank + 1, aftBlank);\n" +
-                        "wo = {\n" +
-                            "word: wd,\n" +
-                            "startP: prevBlank + 1,\n" +
-                            "endP: aftBlank\n" +
-                        "};\n" +
+                "var displayed;\n" +
+                "var pdisplayed;\n" +
+                "</script>\n");
+        /**
+         * Clears the suggestions list and gives focus to the textarea.
+         */
+        ret.append("<script type=\"text/javascript\">" +
+                "function clearSuggestions() {\n" +
+                    "if (dojo.byId('results')) {\n" +
+                        "dojo.byId('results').innerHTML = \"\";\n" +
                     "}\n" +
-                "}\n" +
-                "return wo;\n" +
-            "}\n");
-
-        ret.append("function queryOnKeyUp (evt) {\n" +
-                        "var wd = getCurrentWord('naturalQuery');\n" +
-                        "if (evt.target.value == '' || wd.word.length < 3) {\n" +
-                            "clearSuggestions();\n" +
-                            "return;\n" +
-                        "}\n" +
-                        "if (!displayed && !pdisplayed && wd.word == \"con\") {\n" +
-                            "var pwd = getPreviousName(wd);\n" +
-                            "if (pwd != \"undefined\") {\n" +
-                                "getSuggestions(getPreviousName(wd), source, true, true);\n" +
-                                "pdisplayed = true;\n" +
-                            "} else if (!displayed && pdisplayed && wd.word != \"con\") {\n" +
-                                "clearSuggestions();\n" +
-                                "pdisplayed = false;\n" +
-                            "} else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.ESCAPE) {\n" +
-                                "clearSuggestions();\n" +
-                                "pdisplayed = false;\n" +
-                            "}\n" +
-                            "else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.UP_ARROW) {\n" +
-                                "dojo.query('.resultEntry').style('background', 'white');\n" +
-                                "curSelected--;\n" +
-                                "if (curSelected < 0) {\n" +
-                                    "curSelected = 0;\n" +
-                                "}\n" +
-                                "highLightSelection(curSelected, true);\n" +
-                                "dojo.byId('resultlist').scrollTop = dojo.coords(dojo.byId('id' + curSelected)).t;\n" +
-                                "dojo.byId('naturalQuery').focus();\n" +
-                                "dojo.stopEvent(evt);\n" +
-                            "} else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.DOWN_ARROW) {\n" +
-                                "dojo.query('.resultEntry').style('background', 'white');\n" +
-                                "curSelected++;\n" +
-                                "if (curSelected > dojo.byId('resultlist').childNodes.length - 2) {\n" +
-                                    "curSelected = dojo.byId('resultlist').childNodes.length - 2;\n" +
-                                "}\n" +
-                                "highLightSelection(curSelected, true);\n" +
-                                "dojo.byId('resultlist').scrollTop = dojo.coords(dojo.byId('id'+curSelected)).t;\n" +
-                                "dojo.byId('naturalQuery').focus();\n" +
-                                "dojo.stopEvent(evt);\n" +
-                            "}\n" +
-                        "}}\n");
+                    "displayed = false;\n" +
+                    "curSelected = 0;\n" +
+                    "dojo.byId('naturalQuery').focus();\n" +
+                "}\n");
 
         ret.append("function queryOnKeyDown (evt) {\n" +
                         "var wd = getCurrentWord('naturalQuery');\n" +
-                        "console.log('down');\n" +
                         "if (evt.target.value == '' || wd.word.length < 3) {\n" +
                             "clearSuggestions();\n" +
                             "return;\n" +
                         "}\n" +
-                        "if (evt.ctrlKey && evt.keyCode == dojo.keys.SPACE) {\n" +
+                        //Tecla CTRL+SHIFT+SPACE
+                        "if (evt.ctrlKey && evt.shiftKey && evt.keyCode == dojo.keys.SPACE) {\n" +
                             "getSuggestions(wd, source, true, false);\n" +
                             "dojo.stopEvent(evt);\n" +
                         "} else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.ENTER) {\n" +
@@ -286,46 +121,226 @@ public class SWBADBNatural extends GenericResource {
                         "}\n" +
                     "}\n");
 
-        ret.append("function getPreviousName (word) {\n" +
-                        "var pName = \"\";\n" +
-                        "var prevBrk = -1;\n" +
-                        "var firstBrk = -1;\n" +
-                        "var txt = dojo.byId('naturalQuery').value;\n" +
-                        "var cPos = word.startP;\n" +
-                        "var wd = null;\n" +
-                        "var wo = \"undefined\";\n" +
-                        "var found = false;\n" +
-
-                        "for (var i = cPos; i >= 0 && !found; i--) {\n" +
-                            "if (txt.charAt(i) == ']') {\n" +
-                                "prevBrk = i;\n" +
-                                "found = true;\n" +
+        ret.append("function queryOnKeyUp (evt) {\n" +
+                        "var wd = getCurrentWord('naturalQuery');\n" +
+                        "if (evt.target.value == '' || wd.word.length < 3) {\n" +
+                            "clearSuggestions();\n" +
+                            "return;\n" +
+                        "}\n" +
+                        "if((displayed || pdisplayed) && evt.keyCode == dojo.keys.ENTER) {\n" +
+                        "} else if (!displayed && !pdisplayed && wd.word == \"con\") {\n" +
+                            "var pwd = getPreviousName(wd);\n" +
+                            "if (pwd != \"undefined\") {\n" +
+                                "getSuggestions(getPreviousName(wd), source, true, true);\n" +
+                                "pdisplayed = true;\n" +
                             "}\n" +
+                        "} else if (!displayed && pdisplayed && wd.word != \"con\") {\n" +
+                            "clearSuggestions();\n" +
+                            "pdisplayed = false;\n" +
+                        "} else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.ESCAPE) {\n" +
+                            "clearSuggestions();\n" +
+                            "pdisplayed = false;\n" +
+                        "}" +
+                        //Flecha ARRIBA
+                        "else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.UP_ARROW) {\n" +
+                            "dojo.query('.resultEntry').style('background', 'white');\n" +
+                            "curSelected--;\n" +
+                            "if (curSelected < 0) {\n" +
+                                "curSelected = 0;\n" +
+                            "}" +
+                            "console.log(curSelected);\n" +
+                            "highLightSelection(curSelected, true);\n" +
+                            "dojo.byId('resultlist').scrollTop = dojo.coords(dojo.byId('id' + curSelected)).t;\n" +
+                            "dojo.byId('naturalQuery').focus();\n" +
+                            "dojo.stopEvent(evt);\n" +
+                            //Flecha ABAJO
+                        "} else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.DOWN_ARROW) {\n" +
+                            "dojo.query('.resultEntry').style('background', 'white');\n" +
+                            "curSelected++;\n" +
+                            "if (curSelected > dojo.byId('resultlist').childNodes.length - 2) {\n" +
+                                "curSelected = dojo.byId('resultlist').childNodes.length - 2;\n" +
+                            "}\n" +
+                            "console.log(curSelected);\n" +
+                            "highLightSelection(curSelected, true);\n" +
+                            "dojo.byId('resultlist').scrollTop = dojo.coords(dojo.byId('id'+curSelected)).t;\n" +
+                            "dojo.byId('naturalQuery').focus();\n" +
+                            "dojo.stopEvent(evt);\n" +
                         "}\n" +
-                        "found = false;\n" +
-                        "for (i = prevBrk; i > 0 && !found; i--) {\n" +
-                            "if (txt.charAt(i) == '[') {\n" +
-                                "firstBrk = i;\n" +
-                                "found = true;\n" +
-                        "}\n" +
-                    "}\n" +
-                    "if (prevBrk == -1) {\n" +
-                        "return wo;\n" +
-                    "}\n" +
-                    "firstBrk++;\n" +
-                    "wd = txt.substring((firstBrk==0)?++firstBrk:firstBrk, prevBrk);\n" +
-                    "wo = {\n" +
-                        "word: wd,\n" +
-                        "startP: firstBrk,\n" +
-                        "endP: prevBrk\n" +
-                    "};\n" +
-                    "return wo;\n" +
-                "}\n");
-        ret.append("</script>");*/
+                    "}\n");
 
+                    /**
+                    * Gets the word at current cursor position in a textarea.
+                    * @param elm textarea to extract word from.
+                    */
+        ret.append("function getCurrentWord(elm) {" +
+                        "var cPos = getCaretPos(elm);" +
+                        "var txt = dojo.byId(elm).value;" +
+                        "var prevBlank = -1;" +
+                        "var aftBlank = -1;" +
+                        "var found = false;" +
+                        "var wd = null;" +
+                        "var wo = \"undefined\";" +
+                        "var delimiters = \"\\n\\t \";" +
+                        "if (txt != '') {" +
+                            "for (var i = 0; i < txt.length; i++) {" +
+                                "if (delimiters.indexOf(txt.charAt(i)) != -1 && cPos > i) {" +
+                                    "prevBlank = i;" +
+                                "}" +
+                        "}" +
+                        "for (i = cPos; i < txt.length && !found; i++) {" +
+                            "if (delimiters.indexOf(txt.charAt(i)) != -1) {" +
+                                "aftBlank = i;" +
+                                "found = true;" +
+                            "}" +
+                        "}" +
+                        "if (prevBlank == -1) {" +
+                            "if (aftBlank == -1) {" +
+                            "wd = txt;" +
+                            "wo = {" +
+                                "word: wd," +
+                                "startP: 0," +
+                                "endP: txt.length" +
+                            "};" +
+                        "} else {" +
+                            "wd = txt.substring(0, aftBlank);" +
+                            "wo = {" +
+                                "word: wd," +
+                                "startP: 0," +
+                                "endP: aftBlank" +
+                            "};" +
+                        "}" +
+                    "} else if (aftBlank == -1) {" +
+                        "wd = txt.substring(prevBlank + 1, txt.length);" +
+                            "wo = {" +
+                                "word: wd," +
+                                "startP: prevBlank + 1," +
+                                "endP: txt.length" +
+                            "};" +
+                    "} else {" +
+                        "wd = txt.substring(prevBlank + 1, aftBlank);" +
+                        "wo = {" +
+                            "word: wd," +
+                            "startP: prevBlank + 1," +
+                            "endP: aftBlank" +
+                        "};" +
+                    "}" +
+                "}" +
+                "return wo;" +
+            "}");
+
+        /**
+         * Gets cursor current position in a textarea.
+         * @param elm textarea to calculate caret position from.
+         */
+        ret.append("function getCaretPos(elm) {" +
+                        "var pos;" +
+                        "if (dojo.doc.selection) {" +
+                            "var Sel = document.selection.createRange();" +
+                            "var SelLength = document.selection.createRange().text.length;" +
+                            "Sel.moveStart ('character', -dojo.byId(elm).value.length);" +
+                            "pos = Sel.text.length - SelLength;" +
+                        "} else if (typeof dojo.byId(elm).selectionStart != undefined) {" +
+                            "pos = dojo.byId(elm).selectionStart;" +
+                        "}" +
+                        "return pos;" +
+                    "}");
+
+        /**
+         * Creates a suggestion list based on word at current cursor position.
+         * @param word word at cursor position
+         * @param src url of dataStore
+         * @param clear wheter or not to clear previous list
+         * @param props wheter or not to get properties of the current word as SemanticClass
+         */
+        ret.append("function getSuggestions(word, src, clear, props) {" +
+                        "if (clear) {" +
+                            "clearSuggestions();" +
+                        "}" +
+                        "if(word.word == '') {" +
+                           "return;" +
+                        "}" +
+                        "if (dojo.byId('results') && word.word != '') {" +
+                            "dojo.byId('results').innerHTML = '<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\" width=\"20\" height=\"20\"/>" + paramRequest.getLocaleString("loading") + "...';" +
+                        "}" +
+                        "getHtml(src + \"?word=\" + word.word + \"&lang=\" + lang + \"&props=\" + props, 'results');" +
+                        "displayed = true;" +
+                        "highLightSelection(0, true);" +
+                    "}");
+
+        /**
+         * Highlights an option in the suggestions list.
+         * @param id identifier of the list item to highlight
+         * @param high toggles highlight color.
+        */
+        ret.append("function highLightSelection(id, high) {" +
+                        "var ele = dojo.byId('id' + id);" +
+                        "console.log('buscando id' + id);"+
+                        "if (high) {" +
+                            "dojo.style(ele, {" +
+                                "\"background\":\"LightBlue\"" +
+                            "});" +
+                        "} else {" +
+                            "dojo.style(ele, {" +
+                                "\"background\":\"white\"" +
+                            "});" +
+                        "}" +
+                    "}");
+
+        ret.append("function getPreviousName (word) {" +
+                        "var pName = \"\";" +
+                        "var prevBrk = -1;" +
+                        "var firstBrk = -1;" +
+                        "var txt = dojo.byId('naturalQuery').value;" +
+                        "var cPos = word.startP;" +
+                        "var wd = null;" +
+                        "var wo = \"undefined\";" +
+                        "var found = false;" +
+                        "for (var i = cPos; i >= 0 && !found; i--) {" +
+                            "if (txt.charAt(i) == ']') {" +
+                                "prevBrk = i;" +
+                                "found = true;" +
+                            "}" +
+                        "}" +
+                        "found = false;" +
+                        "for (i = prevBrk; i > 0 && !found; i--) {" +
+                            "if (txt.charAt(i) == '[') {" +
+                                "firstBrk = i;" +
+                                "found = true;" +
+                            "}" +
+                        "}" +
+                        "if (prevBrk == -1) {" +
+                            "return wo;" +
+                        "}" +
+                        "firstBrk++;" +
+                        "wd = txt.substring((firstBrk==0)?++firstBrk:firstBrk, prevBrk);" +
+                        "wo = {" +
+                            "word: wd," +
+                            "startP: firstBrk," +
+                            "endP: prevBrk" +
+                        "};" +
+                        "return wo;" +
+                    "}");
+        /**
+         * Replaces the current word in the textarea with the selected word from the
+         * suggestions list.
+         * @param selected index of current selected item
+         * @param prep
+         */
+        ret.append("function setSelection(selected, prep) {" +
+                        "var word = getCurrentWord('naturalQuery');" +
+                        "var newText = dojo.byId('id' + selected).innerHTML.replace(/<(.|\\n)+?>/g, \"\");" +
+                        "newText = prep + \"[\" + newText + \"]\";" +
+                        "var valText = dojo.byId('naturalQuery').value;" +
+                        "dojo.byId('naturalQuery').value = valText.substring(0, word.startP) +" +
+                            "newText + valText.substring(word.endP, valText.length);" +
+                    "}");
+        ret.append("</script>");
+
+        url = paramRequest.getActionUrl();
+        url.setParameter("lang", lang);
         ret.append("<form id=\"" + getResourceBase().getId() + "/natural\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
-        ret.append("action=\"" + url + "\" method=\"POST\"");
-        ret.append("onSubmit=\"submitForm('" + getResourceBase().getId() + "/natural'); return false;\" method=\"POST\">");
+        ret.append("action=\"" + url.toString() + "\" method=\"post\" ");
+        ret.append("onsubmit=\"submitForm('" + getResourceBase().getId() + "/natural'); return false;\">");
         ret.append("<fieldset>Natural Language Query Examples");
         ret.append("<PRE>");
         ret.append("1. [User] con [Activo]=true, [Primer Apellido]\n");
@@ -333,7 +348,7 @@ public class SWBADBNatural extends GenericResource {
         ret.append("3. [Creación], [Correo Electrónico] de [User] con [Usuario] = \"admin\"\n");
         ret.append("4. todo de [User] con [Creación] < \"2009-04-02T13:36:21.409\"\n");
         ret.append("5. todo de [Página Web] con [Usuario Creador] con [Usuario] = \"admin\"\n");
-        ret.append("*Type a word and use CTRL + SPACE to show suggestions, ESC to hide suggestions.");
+        ret.append("*Type a word and use CTRL + SHIFT + SPACE to show suggestions, ESC to hide suggestions.");
         ret.append("</PRE>");
         ret.append("Natural Language Query:<BR>");
         ret.append("<textarea id=\"naturalQuery\" name=\"naturalQuery\" rows=5 cols=70>");
@@ -367,59 +382,59 @@ public class SWBADBNatural extends GenericResource {
                         ret.append("<tr>");
 
                         if (rs.hasNext()) {
-                        Iterator<String> itcols = rs.getResultVars().iterator();
-                        while (itcols.hasNext()) {
-                            ret.append("<th>");
-                            ret.append(itcols.next());
-                            ret.append("</th>");
-                        }
-                        ret.append("</tr>");
-                        ret.append("</thead>");
-                        ret.append("<tbody>");
-
-                        boolean odd = true;
-                        while (rs.hasNext()) {
-                            odd = !odd;
-                            QuerySolution rb = rs.nextSolution();
-
-                            if (odd) {
-                                ret.append("<tr bgcolor=\"#EFEDEC\">");
-                            } else {
-                                ret.append("<tr>");
-                            }
-
-                            Iterator<String> it = rs.getResultVars().iterator();
-                            boolean first = true;
-                            while (it.hasNext()) {
-                                String name = it.next();
-                                RDFNode x = rb.get(name);
-                                ret.append("<td >");
-                                SemanticObject so = SemanticObject.createSemanticObject(x.toString());
-
-                                if (so != null) {
-                                    if (first) {
-                                        ret.append("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI() + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '" + so.getDisplayName(lang) + "');\">" + so.getDisplayName(lang) + "</a>");
-                                        first = false;
-                                    } else {
-                                        SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
-                                        if (tt != null) {
-                                            ret.append(tt.getDisplayName(lang));
-                                        } else {
-                                            SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
-                                            ret.append(stt.getDisplayName(lang));
-                                        }
-                                    }
-                                } else {
-                                    if (x != null) {
-                                        ret.append(x);
-                                    } else {
-                                        ret.append(" - ");
-                                    }
-                                }
-                                ret.append("</td>");
+                            Iterator<String> itcols = rs.getResultVars().iterator();
+                            while (itcols.hasNext()) {
+                                ret.append("<th>");
+                                ret.append(itcols.next());
+                                ret.append("</th>");
                             }
                             ret.append("</tr>");
-                        }
+                            ret.append("</thead>");
+                            ret.append("<tbody>");
+
+                            boolean odd = true;
+                            while (rs.hasNext()) {
+                                odd = !odd;
+                                QuerySolution rb = rs.nextSolution();
+
+                                if (odd) {
+                                    ret.append("<tr bgcolor=\"#EFEDEC\">");
+                                } else {
+                                    ret.append("<tr>");
+                                }
+
+                                Iterator<String> it = rs.getResultVars().iterator();
+                                boolean first = true;
+                                while (it.hasNext()) {
+                                    String name = it.next();
+                                    RDFNode x = rb.get(name);
+                                    ret.append("<td >");
+                                    SemanticObject so = SemanticObject.createSemanticObject(x.toString());
+
+                                    if (so != null) {
+                                        if (first) {
+                                            ret.append("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI() + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '" + so.getDisplayName(lang) + "');\">" + so.getDisplayName(lang) + "</a>");
+                                            first = false;
+                                        } else {
+                                            SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
+                                            if (tt != null) {
+                                                ret.append(tt.getDisplayName(lang));
+                                            } else {
+                                                SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
+                                                ret.append(stt.getDisplayName(lang));
+                                            }
+                                        }
+                                    } else {
+                                        if (x != null) {
+                                            ret.append(x);
+                                        } else {
+                                            ret.append(" - ");
+                                        }
+                                    }
+                                    ret.append("</td>");
+                                }
+                                ret.append("</tr>");
+                            }
                         } else {
                             ret.append("<font color='red'>No se encontraron coincidencias</font>");
                             ret.append("</tr>");
@@ -466,5 +481,145 @@ public class SWBADBNatural extends GenericResource {
         response.setRenderParameter("sparqlQuery", queryString);
         response.setRenderParameter("naturalQuery", query);
         response.setMode(SWBResourceURL.Mode_VIEW);
+    }
+
+    public void doSuggest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+
+        SortedSet objOptions = new TreeSet();
+        SortedSet proOptions = new TreeSet();
+        String word = request.getParameter("word");
+        String lang = request.getParameter("lang");
+        boolean props = Boolean.parseBoolean(request.getParameter("props"));
+        String tempcDn = "";
+        boolean lPar = false;
+        boolean rPar = false;
+        int idCounter = 0;
+        Lexicon lex = new Lexicon(lang);
+
+        if (lang == null || lang == "") {
+            lang = "es";
+        }
+        if (word.indexOf("(") != -1) {
+            lPar = true;
+            word = word.replace("(", "");
+        }
+        if (word.indexOf(")") != -1) {
+            rPar = true;
+            word = word.replace(")", "");
+        }
+
+        word = word.replace("[", "");
+        word = word.replace("]", "");
+        word = word.trim();
+
+        if (!props) {
+            Iterator<SemanticClass> cit = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
+
+            while (cit.hasNext()) {
+                SemanticClass tempc = cit.next();
+                tempcDn = tempc.getDisplayName(lang);
+
+                if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
+                    objOptions.add(tempcDn);
+                }
+
+                Iterator<SemanticProperty> sit = tempc.listProperties();
+                while (sit.hasNext()) {
+                    SemanticProperty tempp = sit.next();
+                    tempcDn = tempp.getDisplayName(lang);
+
+                    if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
+                        proOptions.add(tempcDn);
+                    }
+                }
+            }
+
+            if (proOptions.size() != 0 || objOptions.size() != 0) {
+                idCounter = 0;
+                int index;
+                Iterator<String> rit = objOptions.iterator();
+
+                out.println("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
+                        "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
+                        "200px;width:300px;border:1px solid #a0a0ff;\">");
+                while (rit.hasNext()) {
+                    String tempi = (String) rit.next();
+                    index = tempi.toLowerCase().indexOf(word.toLowerCase());
+
+                    out.print("<li id=\"id" + idCounter + "\" class=\"resultEntry\" " +
+                            "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
+                            "highLightSelection(" + idCounter + ",true); curSelected = " + idCounter + ";\" " +
+                            "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
+                            "onmousedown=\"setSelection(" + idCounter + ", '');dojo.byId('results').innerHTML='';" +
+                            "dojo.byId('naturalQuery').focus();displayed=false;pdisplayed=false\">" + (lPar ? "(" : "") +
+                            "<font color=\"red\">" + tempi + "</font>" +
+                            (lPar ? ")" : "") + "</li>");
+                    idCounter++;
+                }
+
+                rit = proOptions.iterator();
+                while (rit.hasNext()) {
+                    String tempi = (String) rit.next();
+                    index = tempi.toLowerCase().indexOf(word.toLowerCase());
+
+                    out.print("<li id=\"id" + idCounter + "\" class=\"resultEntry\" " +
+                            "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
+                            "highLightSelection(" + idCounter + ",true); curSelected = " + idCounter + ";\" " +
+                            "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
+                            "onmousedown=\"setSelection(" + idCounter + ", '');dojo.byId('results').innerHTML='';" +
+                            "dojo.byId('naturalQuery').focus();displayed=false;pdisplayed=false;\">" + (lPar ? "(" : "") +
+                            "<font color=\"blue\">" + tempi + "</font>" +
+                            (lPar ? ")" : "") + "</li>");
+                    idCounter++;
+                }
+                out.println("</ul>");
+            }
+        } else {
+            String tag = lex.getObjWordTag(word).getObjId();
+
+            out.println("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
+                    "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
+                    "200px;width:300px;border:1px solid #a0a0ff;\">");
+
+            if (!tag.equals("")) {
+                SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
+                idCounter = 0;
+                Iterator<SemanticProperty> sit = sc.listProperties();
+                while (sit.hasNext()) {
+                    SemanticProperty t = sit.next();
+                    out.print("<li id=\"id" + idCounter + "\" class=\"resultEntry\" " +
+                            "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
+                            "highLightSelection(" + idCounter + ",true); curSelected = " + idCounter + ";\" " +
+                            "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
+                            "onmousedown=\"setSelection(" + idCounter + ", 'con ');pdisplayed=false;dojo.byId('results').innerHTML='';" +
+                            "dojo.byId('naturalQuery').focus();displayed=false;\">" + (lPar ? "(" : "") +
+                            "<font color=\"red\">" + t.getDisplayName(lang) + "</font>" +
+                            (lPar ? ")" : "") + "</li>");
+                    idCounter++;
+                }
+            } else {
+                tag = lex.getPropWordTag(word).getRangeClassId();
+                if (!tag.equals("")) {
+                    SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
+                    idCounter = 0;
+                    Iterator<SemanticProperty> sit = sc.listProperties();
+                    while (sit.hasNext()) {
+                        SemanticProperty t = sit.next();
+                        out.print("<li id=\"id" + idCounter + "\" class=\"resultEntry\" " +
+                                "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
+                                "highLightSelection(" + idCounter + ",true); curSelected = " + idCounter + ";\" " +
+                                "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
+                                "onmousedown=\"setSelection(" + idCounter + ", 'con ');pdisplayed=false;dojo.byId('results').innerHTML='';" +
+                                "dojo.byId('naturalQuery').focus();displayed=false;\">" + (lPar ? "(" : "") +
+                                "<font color=\"red\">" + t.getDisplayName(lang) + "</font>" +
+                                (lPar ? ")" : "") + "</li>");
+                        idCounter++;
+                    }
+                }
+
+            }
+            out.println("</ul>");
+        }
     }
 }
