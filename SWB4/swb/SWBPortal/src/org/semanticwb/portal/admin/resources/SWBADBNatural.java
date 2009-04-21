@@ -33,7 +33,7 @@ import org.semanticwb.platform.SemanticProperty;
 
 /**
  *
- * @author haxdai
+ * @author Hasdai Pacheco {haxdai(at)gmail.com}
  */
 public class SWBADBNatural extends GenericResource {
 
@@ -348,7 +348,7 @@ public class SWBADBNatural extends GenericResource {
         ret.append("3. [Creación], [Correo Electrónico] de [User] con [Usuario] = \"admin\"\n");
         ret.append("4. todo de [User] con [Creación] < \"2009-04-02T13:36:21.409\"\n");
         ret.append("5. todo de [Página Web] con [Usuario Creador] con [Usuario] = \"admin\"\n");
-        ret.append("*Type a word and use CTRL + SHIFT + SPACE to show suggestions, ESC to hide suggestions.");
+        ret.append(paramRequest.getLocaleString("prompt"));
         ret.append("</PRE>");
         ret.append("Natural Language Query:<BR>");
         ret.append("<textarea id=\"naturalQuery\" name=\"naturalQuery\" rows=5 cols=70>");
@@ -356,7 +356,7 @@ public class SWBADBNatural extends GenericResource {
         ret.append("</textarea><div id=\"results\"></div>");
         ret.append("</fieldset>");
         ret.append("<fieldset>");
-        ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Enviar</button>\n");
+        ret.append("<button dojoType='dijit.form.Button' type=\"submit\">"+paramRequest.getLocaleString("send")+"</button>\n");
         ret.append("</fieldset>");
 
         if (errCount != null) {
@@ -436,7 +436,7 @@ public class SWBADBNatural extends GenericResource {
                                 ret.append("</tr>");
                             }
                         } else {
-                            ret.append("<font color='red'>No se encontraron coincidencias</font>");
+                            ret.append("<font color='red'>"+ paramRequest.getLocaleString("nofound") +"</font>");
                             ret.append("</tr>");
                             ret.append("</thead>");
                         }
@@ -444,14 +444,14 @@ public class SWBADBNatural extends GenericResource {
                         ret.append("</table>");
                         ret.append("</fieldset>");
                         ret.append("<fieldset>");
-                        ret.append("<p aling=\"center\">Execution Time:" + (System.currentTimeMillis() - time) + "ms." + "</p>");
+                        ret.append("<p aling=\"center\">" + paramRequest.getLocaleString("exectime") + (System.currentTimeMillis() - time) + "ms." + "</p>");
                         ret.append("</fieldset>");
                     } finally {
                         qexec.close();
                     }
                 } catch (Exception e) {
                     if (tr.getErrCode() != 0) {
-                        ret.append("<script language=\"javascript\" type=\"text/javascript\">alert('La consulta no pudo ser traducida.');</script>");
+                        ret.append("<script language=\"javascript\" type=\"text/javascript\">alert('"+ paramRequest.getLocaleString("failmsg") +"');</script>");
                     }
                 }
             } else {
