@@ -1,0 +1,484 @@
+<rdf:RDF
+    xmlns:j.0="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:owled="http://www.owled.swb#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:j.1="http://www.semanticwebbuilder.org/swb4/ontology#" > 
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:Search">
+    <j.1:created>2009-04-17T19:38:29.328</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.Search</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.Search</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.1:resourceMode>
+    <j.1:title>Search</j.1:title>
+    <j.1:updated>2009-04-17T19:38:30.062</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:14">
+    <j.1:created>2009-04-17T19:38:42.218</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcParent rdf:resource="http://www.owled.swb#swb_Device:12"/>
+    <j.1:dvcUserAgent>MMP</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>MMP</j.1:title>
+    <j.1:updated>2009-04-17T19:38:42.828</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:6">
+    <j.1:created>2009-04-17T19:38:34.796</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcParent rdf:resource="http://www.owled.swb#swb_Device:5"/>
+    <j.1:dvcUserAgent>BlackBerry</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>BlackBerry</j.1:title>
+    <j.1:updated>2009-04-17T19:38:35.406</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:QueryResource">
+    <j.1:created>2009-04-17T19:38:15.203</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.QueryResource</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.QueryResource</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</j.1:resourceMode>
+    <j.1:title>QueryResource</j.1:title>
+    <j.1:updated>2009-04-17T19:38:16.187</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#counter:swb_Device">
+    <owled:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">15</owled:counter>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Reference:1">
+    <j.1:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.1:active>
+    <j.1:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.1:priority>
+    <j.1:template rdf:resource="http://www.owled.swb#Template:1"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:10">
+    <j.1:created>2009-04-17T19:38:38.609</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcParent rdf:resource="http://www.owled.swb#swb_Device:9"/>
+    <j.1:dvcUserAgent>Mozilla AvantGo</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>AvantGo</j.1:title>
+    <j.1:updated>2009-04-17T19:38:39.062</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:Banner">
+    <j.1:created>2009-04-17T19:38:08.093</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.Banner</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.Banner</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</j.1:resourceMode>
+    <j.1:title>Banner</j.1:title>
+    <j.1:updated>2009-04-17T19:38:09.203</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:5">
+    <j.1:created>2009-04-17T19:38:34.046</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>PDA</j.1:title>
+    <j.1:updated>2009-04-17T19:38:34.359</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#counter:Template">
+    <owled:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</owled:counter>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:TematicIndexXSL">
+    <j.1:created>2009-04-17T19:38:22.593</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.TematicIndexXSL</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.TematicIndexXSL</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.1:resourceMode>
+    <j.1:title>TematicIndexXSL</j.1:title>
+    <j.1:updated>2009-04-17T19:38:23.234</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_VersionInfo:1">
+    <j.1:created>2009-04-17T19:52:51.015</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:updated>2009-04-17T19:55:13.906</j.1:updated>
+    <j.1:versionFile>template.html</j.1:versionFile>
+    <j.1:versionNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.1:versionNumber>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:3">
+    <j.1:created>2009-04-17T19:38:32.265</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcParent rdf:resource="http://www.owled.swb#swb_Device:1"/>
+    <j.1:dvcUserAgent>Mozilla Firefox</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>Mozilla FireFox</j.1:title>
+    <j.1:updated>2009-04-17T19:38:32.750</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#counter:swb_TemplateGroup">
+    <owled:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</owled:counter>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:WBSiteMap">
+    <j.1:created>2009-04-17T19:38:12.578</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.WBSiteMap</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.WBSiteMap</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.1:resourceMode>
+    <j.1:title>WBSiteMap</j.1:title>
+    <j.1:updated>2009-04-17T19:38:13.687</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:15">
+    <j.1:created>2009-04-17T19:38:43.062</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcParent rdf:resource="http://www.owled.swb#swb_Device:12"/>
+    <j.1:dvcUserAgent>Opera Mobi</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>Opera Mobi</j.1:title>
+    <j.1:updated>2009-04-17T19:38:44.125</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#Template:1">
+    <j.1:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.1:active>
+    <j.1:actualVersion rdf:resource="http://www.owled.swb#swb_VersionInfo:1"/>
+    <j.1:created>2009-04-17T19:52:50.734</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:lastVersion rdf:resource="http://www.owled.swb#swb_VersionInfo:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:templateGroup rdf:resource="http://www.owled.swb#swb_TemplateGroup:1"/>
+    <j.1:title>Home</j.1:title>
+    <j.1:updated>2009-04-17T19:53:01.015</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Template"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#counter:swb_VersionInfo">
+    <owled:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</owled:counter>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:Promo">
+    <j.1:created>2009-04-17T19:38:09.343</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.Promo</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.Promo</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</j.1:resourceMode>
+    <j.1:title>Promo</j.1:title>
+    <j.1:updated>2009-04-17T19:38:10.156</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:Window">
+    <j.1:created>2009-04-17T19:38:11.062</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.Window</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.Window</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</j.1:resourceMode>
+    <j.1:title>Window</j.1:title>
+    <j.1:updated>2009-04-17T19:38:11.656</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:8">
+    <j.1:created>2009-04-17T19:38:36.375</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcParent rdf:resource="http://www.owled.swb#swb_Device:5"/>
+    <j.1:dvcUserAgent>Mozilla Windows CE</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>Windows CE</j.1:title>
+    <j.1:updated>2009-04-17T19:38:37.093</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:Recommend">
+    <j.1:created>2009-04-17T19:38:13.890</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.Recommend</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.Recommend</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</j.1:resourceMode>
+    <j.1:title>Recommend</j.1:title>
+    <j.1:updated>2009-04-17T19:38:14.968</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:WBUrlContent">
+    <j.1:created>2009-04-17T19:38:28.343</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.WBUrlContent</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.WBUrlContent</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.1:resourceMode>
+    <j.1:title>WBUrlContent</j.1:title>
+    <j.1:updated>2009-04-17T19:38:29.140</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:11">
+    <j.1:created>2009-04-17T19:38:39.234</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcParent rdf:resource="http://www.owled.swb#swb_Device:9"/>
+    <j.1:dvcUserAgent>Mozilla PalmOS EudoraWeb</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>EudoraWeb</j.1:title>
+    <j.1:updated>2009-04-17T19:38:39.781</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:Poll">
+    <j.1:created>2009-04-17T19:38:17.406</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.Poll</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.Poll</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</j.1:resourceMode>
+    <j.1:title>Poll</j.1:title>
+    <j.1:updated>2009-04-17T19:38:18.578</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:1">
+    <j.1:created>2009-04-17T19:38:30.328</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcUserAgent>Mozilla</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>PC</j.1:title>
+    <j.1:updated>2009-04-17T19:38:30.953</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:WBMenuNivel">
+    <j.1:created>2009-04-17T19:38:19.968</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.WBMenuNivel</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.WBMenuNivel</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</j.1:resourceMode>
+    <j.1:title>WBMenuNivel</j.1:title>
+    <j.1:updated>2009-04-17T19:38:20.937</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:RecommendSwf">
+    <j.1:created>2009-04-17T19:38:16.468</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.RecommendSwf</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.RecommendSwf</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</j.1:resourceMode>
+    <j.1:title>RecommendSwf</j.1:title>
+    <j.1:updated>2009-04-17T19:38:17.203</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:WBMenuMap">
+    <j.1:created>2009-04-17T19:38:18.859</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.WBMenuMap</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.WBMenuMap</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</j.1:resourceMode>
+    <j.1:title>WBMenuMap</j.1:title>
+    <j.1:updated>2009-04-17T19:38:19.796</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#WebPage:home">
+    <j.1:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.1:active>
+    <j.1:created>2009-04-17T19:38:07.078</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:hasTemplateRef rdf:resource="http://www.owled.swb#swb_Reference:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>Home</j.1:title>
+    <j.1:undeleteable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.1:undeleteable>
+    <j.1:updated>2009-04-17T19:55:48.843</j.1:updated>
+    <j.1:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">120</j.1:views>
+    <j.1:webPageSortName>z</j.1:webPageSortName>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_TemplateGroup:1">
+    <j.1:created>2009-04-17T19:38:07.812</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>Default</j.1:title>
+    <j.1:updated>2009-04-17T19:38:07.953</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:12">
+    <j.1:created>2009-04-17T19:38:40.109</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>Phone</j.1:title>
+    <j.1:updated>2009-04-17T19:38:40.390</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:4">
+    <j.1:created>2009-04-17T19:38:33.000</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcParent rdf:resource="http://www.owled.swb#swb_Device:1"/>
+    <j.1:dvcUserAgent>Mozilla Safari</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>Safari</j.1:title>
+    <j.1:updated>2009-04-17T19:38:33.781</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#owled">
+    <j.1:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.1:active>
+    <j.1:created>2009-04-17T19:38:04.671</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:homePage rdf:resource="http://www.owled.swb#WebPage:home"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>OWLEditor</j.1:title>
+    <j.1:updated>2009-04-17T19:38:54.828</j.1:updated>
+    <j.1:userRepository rdf:resource="http://www.semanticwb.org/uradm#uradm"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:2">
+    <j.1:created>2009-04-17T19:38:31.187</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcParent rdf:resource="http://www.owled.swb#swb_Device:1"/>
+    <j.1:dvcUserAgent>Mozilla MSIE</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>Internet Explorer</j.1:title>
+    <j.1:updated>2009-04-17T19:38:32.031</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#counter:swb_Reference">
+    <owled:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</owled:counter>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Language:en">
+    <j.1:created>2009-04-17T19:38:45.187</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title xml:lang="es">Ingles</j.1:title>
+    <j.1:title xml:lang="en">English</j.1:title>
+    <j.1:updated>2009-04-17T19:38:45.500</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Language"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:IFrameContent">
+    <j.1:created>2009-04-17T19:38:24.906</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.IFrameContent</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.IFrameContent</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.1:resourceMode>
+    <j.1:title>IFrameContent</j.1:title>
+    <j.1:updated>2009-04-17T19:38:25.890</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:FrameContent">
+    <j.1:created>2009-04-17T19:38:23.421</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.FrameContent</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.FrameContent</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</j.1:resourceMode>
+    <j.1:title>FrameContent</j.1:title>
+    <j.1:updated>2009-04-17T19:38:24.687</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:13">
+    <j.1:created>2009-04-17T19:38:40.859</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcParent rdf:resource="http://www.owled.swb#swb_Device:12"/>
+    <j.1:dvcUserAgent>MIDP</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>MIDP</j.1:title>
+    <j.1:updated>2009-04-17T19:38:42.000</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:9">
+    <j.1:created>2009-04-17T19:38:37.484</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcParent rdf:resource="http://www.owled.swb#swb_Device:5"/>
+    <j.1:dvcUserAgent>Mozilla PalmOS</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>PalmOS</j.1:title>
+    <j.1:updated>2009-04-17T19:38:38.312</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Language:es">
+    <j.1:created>2009-04-17T19:38:44.359</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title xml:lang="es">Español</j.1:title>
+    <j.1:title xml:lang="en">Spanish</j.1:title>
+    <j.1:updated>2009-04-17T19:38:45.015</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Language"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:RemoteWebApp">
+    <j.1:created>2009-04-17T19:38:27.062</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.RemoteWebApp</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.RemoteWebApp</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.1:resourceMode>
+    <j.1:title>RemoteWebApp</j.1:title>
+    <j.1:updated>2009-04-17T19:38:28.125</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:Print">
+    <j.1:created>2009-04-17T19:38:10.312</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.Print</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.Print</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</j.1:resourceMode>
+    <j.1:title>Print</j.1:title>
+    <j.1:updated>2009-04-17T19:38:10.921</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#WebPage:Menus">
+    <j.1:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.1:active>
+    <j.1:created>2009-04-17T20:00:47.890</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>Menús</j.1:title>
+    <j.1:updated>2009-04-17T20:01:06.625</j.1:updated>
+    <j.1:webPageParent rdf:resource="http://www.owled.swb#WebPage:home"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:StaticText">
+    <j.1:created>2009-04-17T19:38:11.812</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.StaticText</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.StaticText</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</j.1:resourceMode>
+    <j.1:title>StaticText</j.1:title>
+    <j.1:updated>2009-04-17T19:38:12.390</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:CommentSwf">
+    <j.1:created>2009-04-17T19:38:26.078</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.CommentSwf</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.CommentSwf</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</j.1:resourceMode>
+    <j.1:title>CommentSwf</j.1:title>
+    <j.1:updated>2009-04-17T19:38:26.875</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#WebPage:mnu_File">
+    <j.1:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.1:active>
+    <j.1:created>2009-04-17T20:01:58.375</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:mnuItemShowIFrame>CONTENT</j.1:mnuItemShowIFrame>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>Archivo</j.1:title>
+    <j.1:updated>2009-04-17T20:02:09.968</j.1:updated>
+    <j.1:webPageParent rdf:resource="http://www.owled.swb#WebPage:Menus"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_Device:7">
+    <j.1:created>2009-04-17T19:38:35.687</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:dvcParent rdf:resource="http://www.owled.swb#swb_Device:5"/>
+    <j.1:dvcUserAgent>Mozilla iPhone Safari</j.1:dvcUserAgent>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:title>iPhone</j.1:title>
+    <j.1:updated>2009-04-17T19:38:36.203</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Device"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.owled.swb#swb_ResourceType:JSPResource">
+    <j.1:created>2009-04-17T19:38:21.187</j.1:created>
+    <j.1:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <j.1:resourceBundle>org.semanticwb.portal.resources.JSPResource</j.1:resourceBundle>
+    <j.1:resourceClassName>org.semanticwb.portal.resources.JSPResource</j.1:resourceClassName>
+    <j.1:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</j.1:resourceMode>
+    <j.1:title>JSPResource</j.1:title>
+    <j.1:updated>2009-04-17T19:38:22.343</j.1:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+</rdf:RDF>

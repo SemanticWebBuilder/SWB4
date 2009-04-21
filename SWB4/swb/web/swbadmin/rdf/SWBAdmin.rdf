@@ -269,8 +269,9 @@
     <swb:title>Related Objects</swb:title>
     <swb:updated>2009-02-17T17:20:06.093</swb:updated>
     <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swb:valid>
-    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">5</swb:views>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</swb:views>
     <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</swb:views>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ResourceCopy">
@@ -314,8 +315,9 @@
     <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</swb:views>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#counter:swb_Reference">
-    <SWBAdmin:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">19</SWBAdmin:counter>
+    <SWBAdmin:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">20</SWBAdmin:counter>
     <SWBAdmin:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">16</SWBAdmin:counter>
+    <SWBAdmin:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">19</SWBAdmin:counter>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
@@ -362,10 +364,11 @@
     <swb:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:JSPResource"/>
     <swb:title>Information</swb:title>
     <swb:updated>2009-02-02T17:04:08.156</swb:updated>
-    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">91</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">103</swb:views>
     <swb:xml>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;resource&gt;&lt;jsppath&gt;/swbadmin/jsp/SemObjectEditor.jsp&lt;/jsppath&gt;&lt;/resource&gt;</swb:xml>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">56</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">91</swb:views>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_Reference:12">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
@@ -1034,10 +1037,11 @@
     <swb:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:2"/>
     <swb:title>Información</swb:title>
     <swb:updated>2009-02-02T17:04:08.593</swb:updated>
-    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">91</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">99</swb:views>
     <swb:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
     <swb:webPageSortName>10</swb:webPageSortName>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">91</swb:views>
     <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">56</swb:views>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_WFFamily">
@@ -1138,9 +1142,10 @@
     <swb:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:SemObjPropRefEditor"/>
     <swb:title>Templates</swb:title>
     <swb:updated>2009-02-02T17:04:14.015</swb:updated>
-    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">22</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">25</swb:views>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">22</swb:views>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_TemplateGroup">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
@@ -1335,8 +1340,9 @@
     <swb:title>Create Site</swb:title>
     <swb:updated>2009-02-03T14:48:11.687</swb:updated>
     <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swb:valid>
-    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">6</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">7</swb:views>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">6</swb:views>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_WebBuilderPage">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
@@ -1679,6 +1685,12 @@
     <swb:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Content"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_Reference:20">
+    <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
+    <swb:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</swb:priority>
+    <swb:template rdf:resource="http://www.semanticwb.org/SWBAdmin#Template:3"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Template:3">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
     <swb:actualVersion rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_VersionInfo:3"/>
@@ -1721,9 +1733,10 @@
     <swb:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:Logs"/>
     <swb:title>Logs</swb:title>
     <swb:updated>2009-02-02T17:04:27.109</swb:updated>
-    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</swb:views>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</swb:views>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ContentAdd">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
@@ -1765,13 +1778,14 @@
     <swb:title>Plantillas</swb:title>
     <swb:updated>2009-02-02T21:34:05.953</swb:updated>
     <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swb:valid>
-    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">21</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">35</swb:views>
     <swb:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
     <swb:webPageSortName>25</swb:webPageSortName>
     <swbxf:behaviorParams>sprop=swb:hasTemplateRef&amp;spropref=swb:template</swbxf:behaviorParams>
     <swbxf:behaviorRefreshOnShow rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swbxf:behaviorRefreshOnShow>
     <swbxf:interface rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#TemplateRefable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">21</swb:views>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:mnu_DBNatural">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
@@ -1947,6 +1961,18 @@
     <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swb:valid>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:55">
+    <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
+    <swb:created>2009-04-21T16:42:53.596</swb:created>
+    <swb:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <swb:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <swb:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</swb:priority>
+    <swb:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:AdminFilters"/>
+    <swb:title>Admin Filters</swb:title>
+    <swb:updated>2009-04-21T16:43:01.349</swb:updated>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</swb:views>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_Reference:8">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
     <swb:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</swb:priority>
@@ -2053,6 +2079,18 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
     <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">3</swb:views>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:bh_editFlow">
+    <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
+    <swb:created>2009-04-21T16:28:38.838</swb:created>
+    <swb:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <swb:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:54"/>
+    <swb:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <swb:title>Editar Flujo</swb:title>
+    <swb:updated>2009-04-21T16:41:38.510</swb:updated>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">2</swb:views>
+    <swb:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:ObjectBehavior"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_TopicTitleVariantAdd">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
     <swb:created>2006-12-31T14:37:35.000</swb:created>
@@ -2143,8 +2181,9 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#counter:Resource">
-    <SWBAdmin:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">52</SWBAdmin:counter>
+    <SWBAdmin:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">55</SWBAdmin:counter>
     <SWBAdmin:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">50</SWBAdmin:counter>
+    <SWBAdmin:counter rdf:datatype="http://www.w3.org/2001/XMLSchema#long">52</SWBAdmin:counter>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_RuleRemove">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
@@ -2229,9 +2268,10 @@
     <swb:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:WebPageContents"/>
     <swb:title>Contents</swb:title>
     <swb:updated>2009-02-02T17:04:09.640</swb:updated>
-    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">70</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">74</swb:views>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
     <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">51</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">70</swb:views>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_UserAdd">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
@@ -2406,8 +2446,9 @@
     <swb:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:ModelAdmin"/>
     <swb:title>Model Admin</swb:title>
     <swb:updated>2009-04-20T20:00:39.667</swb:updated>
-    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">5</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">6</swb:views>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">5</swb:views>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_TopicTitleAdd">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
@@ -2547,6 +2588,17 @@
     <swb:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</swb:resourceMode>
     <swb:title>LoginReport</swb:title>
     <swb:updated>2009-04-16T17:28:03.972</swb:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:PublishFlow">
+    <swb:created>2009-04-21T16:26:24.358</swb:created>
+    <swb:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <swb:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <swb:resourceBundle>org.semanticwb.portal.admin.resources.SWBAWorkflow</swb:resourceBundle>
+    <swb:resourceClassName>org.semanticwb.portal.admin.resources.SWBAWorkflow</swb:resourceClassName>
+    <swb:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</swb:resourceMode>
+    <swb:title>PublishFlow</swb:title>
+    <swb:updated>2009-04-21T16:27:09.560</swb:updated>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Topic">
@@ -2834,6 +2886,17 @@
     <swb:updated>2009-02-02T17:15:47.875</swb:updated>
     <swb:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_SiteMonitoring"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:AdminFilters">
+    <swb:created>2009-04-21T16:27:25.112</swb:created>
+    <swb:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <swb:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <swb:resourceBundle>org.semanticwb.portal.admin.resources.SWBAFilters</swb:resourceBundle>
+    <swb:resourceClassName>org.semanticwb.portal.admin.resources.SWBAFilters</swb:resourceClassName>
+    <swb:resourceMode rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</swb:resourceMode>
+    <swb:title>AdminFilters</swb:title>
+    <swb:updated>2009-04-21T16:41:02.748</swb:updated>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceType"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_TemplateGroup:1">
     <swb:created>2009-02-02T17:03:52.390</swb:created>
@@ -3549,14 +3612,20 @@
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_UFilters">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
     <swb:created>2006-12-31T14:37:35.000</swb:created>
+    <swb:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
     <swb:deleted rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swb:deleted>
+    <swb:hasResource rdf:resource="http://www.semanticwb.org/SWBAdmin#Resource:55"/>
+    <swb:hasTemplateRef rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_Reference:20"/>
     <swb:hidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swb:hidden>
+    <swb:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
     <swb:title xml:lang="es">Filtros de administración</swb:title>
     <swb:title xml:lang="pt">Filtros de administração</swb:title>
     <swb:title xml:lang="en">Administration filters</swb:title>
-    <swb:updated>2009-02-02T17:15:36.750</swb:updated>
+    <swb:updated>2009-04-21T16:44:31.471</swb:updated>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</swb:views>
     <swb:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_Filters"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
+    <swb:updated>2009-02-02T17:15:36.750</swb:updated>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:bh_RolesDirect">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
@@ -3869,6 +3938,18 @@
     <swb:webPageParent rdf:resource="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_ResourceSubtype"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#Resource:54">
+    <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
+    <swb:created>2009-04-21T16:41:38.025</swb:created>
+    <swb:creator rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <swb:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
+    <swb:priority rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</swb:priority>
+    <swb:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:PublishFlow"/>
+    <swb:title>Publish Flow</swb:title>
+    <swb:updated>2009-04-21T16:41:42.511</swb:updated>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</swb:views>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:bh_Roles">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
     <swb:created>2009-02-02T17:04:20.593</swb:created>
@@ -3941,8 +4022,9 @@
     <swb:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:TemplateEdit"/>
     <swb:title>TemplateEdit</swb:title>
     <swb:updated>2009-04-20T19:44:34.943</swb:updated>
-    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10</swb:views>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">11</swb:views>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
+    <swb:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">10</swb:views>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:WBAd_mnui_DNSRemove">
     <swb:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:active>
