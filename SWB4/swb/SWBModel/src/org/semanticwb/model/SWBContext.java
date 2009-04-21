@@ -16,6 +16,7 @@ public class SWBContext extends SWBContextBase
     private static Logger log=SWBUtils.getLogger(SWBContext.class);
     
     public static String WEBSITE_ADMIN="SWBAdmin";
+    public static String WEBSITE_ONTEDITOR="owled";
     public static String WEBSITE_GLOBAL="SWBGlobal";
     public static String USERREPOSITORY_DEFAULT="urswb";
     public static String USERREPOSITORY_ADMIN="uradm";
@@ -38,6 +39,11 @@ public class SWBContext extends SWBContextBase
     public static WebSite getAdminWebSite()
     {
         return getWebSite(WEBSITE_ADMIN);
+    }
+    
+    public static WebSite getOntEditor()
+    {
+        return getWebSite(WEBSITE_ONTEDITOR);
     }
     
     public static WebSite getGlobalWebSite()
