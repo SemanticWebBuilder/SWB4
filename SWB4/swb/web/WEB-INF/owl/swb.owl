@@ -2399,6 +2399,11 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#UserRepository"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pfiVersion">
+    <rdfs:label>version</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#PFlowInstance"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrSecurityQuestion">
     <rdfs:label>securityQuestion</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
