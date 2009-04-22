@@ -221,7 +221,7 @@ public class SWBAWorkflow extends GenericResource {
         Vector users = new Vector();
         //TODO: Cambiar en version 3.1
         //WebSite map=TopicMgr.getInstance().getTopicMap(tm);
-        WebSite map = SWBContext.getAdminWebSite();
+        WebSite map = SWBContext.getWebSite(tm);//AdminWebSite();
         Iterator<User> it = map.getUserRepository().listUsers();
         while (it.hasNext()) {
             User user = it.next();
@@ -406,9 +406,10 @@ public class SWBAWorkflow extends GenericResource {
             } else if (cmd.equals("getcatUsers")) {
                 getCatalogUsers(res, tm);
             } else if (cmd.equals("getWorkflow")) {
+
+
                 getWorkflow(res, tm, src);
-            }
-            else if (cmd.equals("update")) {
+            } else if (cmd.equals("update")) {
                 update(res, src, user, tm, paramRequest, request);
             }
         } catch (Exception e) {
@@ -565,6 +566,7 @@ public class SWBAWorkflow extends GenericResource {
         PrintWriter out = response.getWriter();
         ServletInputStream in = request.getInputStream();
         Document dom = SWBUtils.XML.xmlToDom(in);
+//        System.out.println("gateway: " + SWBUtils.XML.domToXml(dom));
         if (!dom.getFirstChild().getNodeName().equals("req")) {
             response.sendError(404, request.getRequestURI());
             return;
@@ -586,6 +588,7 @@ public class SWBAWorkflow extends GenericResource {
             } else {
                 ret = SWBUtils.XML.domToXml(res, true);
             }
+//            System.out.println("ret:" + ret);
         } catch (Exception e) {
             log.error(e);
         }
@@ -598,7 +601,9 @@ public class SWBAWorkflow extends GenericResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject go = ont.getGenericObject(id);
         PFlow pfgo = (PFlow) go;
+//        System.out.println("pf xml: " + pfgo.getXml());
         if (pfgo != null && (pfgo.getXml() == null || (pfgo.getXml() != null && pfgo.getXml().trim().length() == 0))) {
+//            System.out.println("pf xml es NULL");
             Document newdoc = SWBUtils.XML.getNewDocument();
             Element wfs = newdoc.createElement("workflows");
             Element wf = newdoc.createElement("workflow");
@@ -611,31 +616,50 @@ public class SWBAWorkflow extends GenericResource {
             wf.appendChild(edes);
             newdoc.appendChild(wfs);
             String xmlpflow = SWBUtils.XML.domToXml(newdoc);
+//            System.out.println("XML: " + xmlpflow);
             pfgo.setXml(xmlpflow);
+
         }
+
+//        System.out.println("XML AFTER: " + pfgo.getXml());
 
         String tm = pfgo.getWebSite().getId();
         try {
             User user = paramRequest.getUser();
             PrintWriter out = response.getWriter();
-            String act = "edit"; 
+            String act = "edit";
             if (request.getParameter("act") != null) {
                 act = request.getParameter("act");
-            } else if (act.equals("edit") && id != null) {
-                out.println("<APPLET id=\"apptree\" name=\"editrole\" code=\"applets.workflowadmin.EditWorkflow.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" ARCHIVE=\"swbadmin/lib/WorkFlowAdmin.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"350\">");
+            } else if (act.equals("edit") && id != null && user != null && tm != null) {
+
+//                System.out.println("Con OBJECT");
+//
+//                out.println("<OBJECT id=\"apptree\" name=\"editrole\" classid=\"clsid:CAFEEFAC-0014-0002-0000-ABCDEFFEDCBA\" ");
+//                out.println("width=\"100%\" height=\"350\" >");
+//                //out.println("codebase=\"http://java.sun.com/products/plugin/autodl/jinstall-1_4_2-windows-i586.cab#Version=1,4,2,0\"> ");
+//                out.println("<PARAM name=\"java_code\" value=\"applets.workflowadmin.EditWorkflow.class\">");
+//                out.println("<PARAM name=\"java_codebase\" value=\"" + SWBPlatform.getContextPath() + "\">");
+//                out.println("<PARAM name=\"java_archive\" value=\"swbadmin/lib/WorkFlowAdmin.jar, swbadmin/lib/WBCommons.jar\">");
+//
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setMode("gateway");
                 url.setCallMethod(SWBResourceURL.Call_DIRECT);
+//                out.println("<PARAM NAME =\"idworkflow\" VALUE=\"" + id + "\">");
+//                out.println("<PARAM NAME =\"cgipath\" VALUE=\"" + url + "\">");
+//                out.println("<PARAM NAME =\"locale\" VALUE=\"" + user.getLanguage() + "\">");
+//                out.println("<PARAM NAME =\"tm\" VALUE=\"" + tm + "\">");
+//                out.println("    No Java 2 SDK, Standard Edition v 1.5.0 support for APPLET!!");
+//                out.println("</OBJECT>");
+
+//                System.out.println("Con APPLET");
+
+                out.println("<APPLET id=\"apptree\" name=\"editrole\" code=\"applets.workflowadmin.EditWorkflow.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" ARCHIVE=\"swbadmin/lib/WorkFlowAdmin.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"350\">");
                 out.println("<PARAM NAME =\"idworkflow\" VALUE=\"" + id + "\">");
                 out.println("<PARAM NAME =\"cgipath\" VALUE=\"" + url + "\">");
                 out.println("<PARAM NAME =\"locale\" VALUE=\"" + user.getLanguage() + "\">");
                 out.println("<PARAM NAME =\"tm\" VALUE=\"" + tm + "\">");
-//                url=paramRequest.getRenderUrl();
-//                url.setMode("script");
-//                url.setCallMethod(url.Call_DIRECT);
-//                out.println("<PARAM NAME =\"script\" VALUE=\""+url+"\">");
                 out.println("</APPLET>");
-            } 
+            }
         } catch (Exception e) {
             e.printStackTrace(System.out);
             log.error(e);
@@ -692,9 +716,9 @@ public class SWBAWorkflow extends GenericResource {
                 Text etext = (Text) edesc.getFirstChild();
                 description = etext.getNodeValue();
             }
-            User user = SWBContext.getWebSite(tm).getUserRepository().getUser(userid);
+            //User user = SWBContext.getWebSite(tm).getUserRepository().getUser(userid);
             PFlow pflow = (PFlow) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(idpflow);
-            pflow.setCreator(user);
+            //pflow.setCreator(user);
             pflow.setUpdated(new Timestamp(System.currentTimeMillis()));
             pflow.setDescription(description);
             pflow.setTitle(name);
