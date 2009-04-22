@@ -1,16 +1,16 @@
 package org.semanticwb.portal.resources.sem.base;
 
 
-public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable
+public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
+    public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_Tags=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#Tags");
     public static final org.semanticwb.platform.SemanticProperty swb_reviews=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#reviews");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_bookmarkURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#bookmarkURL");
-    public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_hasTag=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#hasTag");
     public static final org.semanticwb.platform.SemanticProperty swb_rank=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#rank");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
@@ -116,6 +116,16 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
         getSemanticObject().setProperty(swb_title, title, lang);
     }
 
+    public String getTags()
+    {
+        return getSemanticObject().getProperty(swb_res_bkm_Tags);
+    }
+
+    public void setTags(String Tags)
+    {
+        getSemanticObject().setProperty(swb_res_bkm_Tags, Tags);
+    }
+
     public long getReviews()
     {
         return getSemanticObject().getLongProperty(swb_reviews);
@@ -144,33 +154,6 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     public void setBookmarkURL(String bookmarkURL)
     {
         getSemanticObject().setProperty(swb_res_bkm_bookmarkURL, bookmarkURL);
-    }
-
-    public java.util.Iterator<String> listTags()
-    {
-        java.util.ArrayList<String> values=new java.util.ArrayList<String>();
-        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(swb_res_bkm_hasTag);
-        while(it.hasNext())
-        {
-                org.semanticwb.platform.SemanticLiteral literal=it.next();
-                values.add(literal.getString());
-        }
-        return values.iterator();
-    }
-
-    public void addTag(String tag)
-    {
-        getSemanticObject().setProperty(swb_res_bkm_hasTag, tag);
-    }
-
-    public void removeAllTag()
-    {
-        getSemanticObject().removeProperty(swb_res_bkm_hasTag);
-    }
-
-    public void removeTag(String tag)
-    {
-        getSemanticObject().removeProperty(swb_res_bkm_hasTag,tag);
     }
 
     public double getRank()
