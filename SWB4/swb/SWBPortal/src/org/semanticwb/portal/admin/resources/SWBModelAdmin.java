@@ -181,14 +181,14 @@ public class SWBModelAdmin extends GenericResource {
                     out.println(paramRequest.getLocaleLogString("msgwsTitle"));
                     out.println("</td>");
                     out.append("<td>");
-                    out.println("<input type=\"text\" name=\"wstitle\" size=\"30\">");
+                    out.println("<input type=\"text\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\" >");
                     out.println("</td>");
                     out.append("</tr>");
                     out.append("<tr><td>");
                     out.println("ID:");
                     out.println("</td>");
                     out.append("<td>");
-                    out.println("<input type=\"text\" name=\"wsid\" size=\"30\">");
+                    out.println("<input id=\"swb_create_id\" type=\"text\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
                     out.println("</td>");
                     out.append("</tr>");
                     out.println("<td><button dojoType='dijit.form.Button' type=\"submit\">" + paramRequest.getLocaleLogString("send") + "</button>");
