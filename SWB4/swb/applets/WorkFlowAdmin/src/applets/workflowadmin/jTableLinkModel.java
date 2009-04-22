@@ -46,7 +46,7 @@ public class jTableLinkModel extends AbstractTableModel
     /** Creates a new instance of jTableActivities */
      public jTableLinkModel(Locale locale) {         
          columnNames[0]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableActivitiesModel",locale).getString("Actividad");
-         columnNames[1]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableActivitiesModel",locale).getString("Descripción");
+         columnNames[1]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableActivitiesModel",locale).getString("Descripcion");
          
     }
      public HashSet getLinks()
