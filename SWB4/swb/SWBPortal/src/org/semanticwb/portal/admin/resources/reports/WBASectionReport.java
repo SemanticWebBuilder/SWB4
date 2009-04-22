@@ -54,8 +54,8 @@ public class WBASectionReport extends GenericResource {
      */    
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
-        if(paramsRequest.getMode().equalsIgnoreCase("bind")) {
-            doBind(request,response,paramsRequest);
+        if(paramsRequest.getMode().equalsIgnoreCase("rendertree")) {
+            doRenderSectionTree(request,response,paramsRequest);
         }else if(paramsRequest.getMode().equalsIgnoreCase("graph")) {
             doGraph(request,response,paramsRequest);
         }else if(paramsRequest.getMode().equalsIgnoreCase("report_excel")) {
@@ -71,32 +71,31 @@ public class WBASectionReport extends GenericResource {
         }
     }
     
-    public void doBind(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+    public void doRenderSectionTree(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         
-        String webSiteId = request.getParameter("site");
-        
-        SWBResourceURL url=paramsRequest.getRenderUrl();
-        url.setCallMethod(url.Call_DIRECT);
-        url.setMode("bind");
-        
-        String section = request.getParameter("reptp");
-        if(section != null) {
-            out.println("<input type=\"hidden\" name=\"section\" id=\"section\" value=\""+section+"\" />");
-        }
-
         HashMap params = new HashMap();
         Enumeration<String> names = request.getParameterNames();
         while(names.hasMoreElements()) {
             String name = names.nextElement();
             params.put(name, request.getParameter(name));
         }
+        
+        SWBResourceURL url=paramsRequest.getRenderUrl();
+        url.setCallMethod(url.Call_DIRECT);
+        url.setMode("rendertree");
+        
+        String webSiteId = request.getParameter("site");
+        String section = request.getParameter("reptp");
+        if(section != null) {
+            out.println("<input type=\"hidden\" name=\"section\" id=\"section\" value=\""+section+"\" />");
+        }
+        
         SelectTree tree = new SelectTree(paramsRequest.getUser().getLanguage());
         out.println(tree.renderXHTML(webSiteId, params, url.toString()));
-        //out.println(tree.renderXHTML(webSiteId, request, paramsRequest.getUser(), url.toString()));
         out.flush();
     }
 
@@ -114,9 +113,7 @@ public class WBASectionReport extends GenericResource {
         response.setHeader("Pragma", "no-cache"); 
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
-        
-        ArrayList idaux = new ArrayList();
-        
+                
         final int I_ACCESS = 0;
 
         GregorianCalendar gc_now = new GregorianCalendar();
@@ -147,7 +144,7 @@ public class WBASectionReport extends GenericResource {
             if(hm_sites.size() > I_ACCESS){
                 String address = paramsRequest.getTopic().getUrl();
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
+                /*String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");*/
                 
                 /*int deleteFilter;
                 try {
@@ -180,14 +177,12 @@ public class WBASectionReport extends GenericResource {
                 
                 SWBResourceURL url=paramsRequest.getRenderUrl();
                 url.setCallMethod(url.Call_DIRECT);
-                url.setMode("bind");
 
-                out.println("<script type=\"text/javascript\">");
-                
+                out.println("<script type=\"text/javascript\">");                
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
                 out.println("dojo.require(\"dijit.form.ComboBox\");");
                 out.println("dojo.addOnLoad(doBlockade);");
-                out.println("dojo.addOnLoad(function(){getHtml('"+url.toString()+"'+'?site="+webSiteId+"','slave')});");
+                out.println("dojo.addOnLoad(function(){getHtml('"+url.setMode("rendertree")+"'+'?site="+webSiteId+"','slave')});");
                 
                 out.println("function getParams(accion) { ");
                 out.println("   var params = \"?\";");
@@ -242,35 +237,35 @@ public class WBASectionReport extends GenericResource {
                 out.println("function doXml(accion, size) { ");
                 out.println("   if(validate(accion)) {");
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml") + "\"+params,\"graphWindow\",size);");
+                out.println("      window.open(\"" + url.setMode("report_xml") + "\"+params,\"graphWindow\",size);");
                 out.println("   }");
                 out.println("}");
 
                 out.println("function doExcel(accion, size) { ");
                 out.println("   if(validate(accion)) {");
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel") + "\"+params,\"graphWindow\",size);");
+                out.println("      window.open(\"" + url.setMode("report_excel") + "\"+params,\"graphWindow\",size);");
                 out.println("   }");
                 out.println("}");
 
                 out.println("function doGraph(accion, size) { ");
                 out.println("   if(validate(accion)) {");
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph") + "\"+params,\"graphWindow\",size);");
+                out.println("      window.open(\"" + url.setMode("graph") + "\"+params,\"graphWindow\",size);");
                 out.println("   }");
                 out.println("}");
 
                 out.println("function doPdf(accion, size) { ");
                 out.println("   if(validate(accion)) {");
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf") + "\"+params,\"graphWindow\",size);");
+                out.println("      window.open(\"" + url.setMode("report_pdf") + "\"+params,\"graphWindow\",size);");
                 out.println("   }");
                 out.println("}");
 
                 out.println("function doRtf(accion, size) { ");
                 out.println("   if(validate(accion)) {");
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf") + "\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\"" + url.setMode("report_rtf") + "\"+params,\"graphWindow\",size);    ");
                 out.println("   }");
                 out.println("}");
 
@@ -308,7 +303,7 @@ public class WBASectionReport extends GenericResource {
                 out.println("</script>");
                 // javascript
                 
-                out.println("<div id=\"swbform\">");
+                out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>" + paramsRequest.getLocaleString("section_report") + "</legend>");
 
@@ -340,7 +335,7 @@ public class WBASectionReport extends GenericResource {
                 
                 out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("site") + ":</td>");
-                out.println("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" onchange=\"getHtml('"+url.toString()+"'+'?site='+this.value,'slave');\">");
+                out.println("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" onchange=\"getHtml('"+url.setMode("rendertree")+"'+'?site='+this.value,'slave');\">");
                 Iterator<String> itKeys = hm_sites.keySet().iterator();                    
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
@@ -417,7 +412,6 @@ public class WBASectionReport extends GenericResource {
                     if(request.getParameter("wb_rtype")==null || webSiteId==null ) {
                         out.println("&nbsp;");
                     }else {
-                        System.out.println("section="+request.getParameter("section"));
                         if(request.getParameter("section")!=null) {
                             out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
                             out.println("<tr>");
@@ -620,7 +614,8 @@ public class WBASectionReport extends GenericResource {
             int rtype = request.getParameter("wb_rtype")==null ? 0:Integer.parseInt(request.getParameter("wb_rtype"));            
             Iterator<SWBRecHit> itRecHits;
             if(rtype == 0) { // REPORTE DIARIO
-                filter = buildFilter(request, paramsRequest);            
+                filter = buildFilter(request, paramsRequest);
+                System.out.println("filter="+filter.toString());
                 int renglones = 0;
                 Element report = dom.createElement("GlobalReport");
                 dom.appendChild(report);
