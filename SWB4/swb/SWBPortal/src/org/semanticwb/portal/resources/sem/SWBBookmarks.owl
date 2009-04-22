@@ -74,6 +74,10 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#BookmarkEntry"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sortType">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#SWBBookmarks"/>
+  </owl:DatatypeProperty>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#description">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
