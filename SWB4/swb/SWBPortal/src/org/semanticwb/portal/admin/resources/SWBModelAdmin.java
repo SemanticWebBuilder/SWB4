@@ -67,8 +67,10 @@ public class SWBModelAdmin extends GenericResource {
             PrintWriter out = response.getWriter();
             if (request.getParameter("msgKey") != null) {
                 out.println("<script type=\"text/javascript\">");
-                out.println("addItemByURI(mtreeStore, null, '" + request.getParameter("wsUri") + "');");
-                out.println("showStatus('" + paramRequest.getLocaleLogString(request.getParameter("msgKey")) + "');");
+                if(request.getParameter("msgKey").equals("siteCreated")){
+                    out.println("parent.addItemByURI(parent.mtreeStore, null, '" + request.getParameter("wsUri") + "');");
+                }
+                out.println("parent.showStatus('" + paramRequest.getLocaleLogString(request.getParameter("msgKey")) + "');");
                 out.println("</script>");
             }
 
