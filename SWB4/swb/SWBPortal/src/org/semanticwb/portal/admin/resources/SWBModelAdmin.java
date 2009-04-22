@@ -173,7 +173,7 @@ public class SWBModelAdmin extends GenericResource {
             if (paramRequest.getAction().equals("form")) {
                 try {
                     urlAction.setAction("install");
-                    out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + urlAction.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');try{document.getElementById('csLoading').style.display='inline';}catch(noe){}return false;\" method=\"post\">");
+                    out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + urlAction.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');return false;\" method=\"post\">");
                     out.println("<fieldset>");
                     out.println("<legend>" + paramRequest.getLocaleLogString("newsitedata") + "</legend>");
                     out.println("<table>");
