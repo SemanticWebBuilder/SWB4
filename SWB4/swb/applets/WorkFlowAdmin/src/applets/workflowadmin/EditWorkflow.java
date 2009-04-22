@@ -646,6 +646,8 @@ public class EditWorkflow extends javax.swing.JApplet {
     }
     public boolean isValid()
     {
+//        System.out.println("isValid(): "+workflow);
+//        new Exception().printStackTrace();
         HashSet olinks=new HashSet();
         HashSet oends=new HashSet();
         boolean hasEnd=false;
@@ -941,8 +943,6 @@ public class EditWorkflow extends javax.swing.JApplet {
                     WBTreeNode eservicemail=elink.addNode();
                     eservicemail.setName("service");
                     eservicemail.setText("mail");        
-
-
 
                     if(activityTo instanceof AuthorActivity)
                     {
