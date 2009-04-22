@@ -50,6 +50,17 @@
       </swb:SemanticResource>
     </rdfs:domain>
   </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="tags">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_tags">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#BookmarkEntry"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="bookmarkURL">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
@@ -60,10 +71,6 @@
         >10</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#BookmarkEntry"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="hasTag">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#BookmarkEntry"/>
   </owl:DatatypeProperty>
