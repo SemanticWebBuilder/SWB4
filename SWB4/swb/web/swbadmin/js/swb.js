@@ -227,13 +227,13 @@
 
       function getContentPanel(reference)
       {
-          if(!reference)return null;
+          if(!reference || reference==null)return null;
           //alert("reference:"+reference.getAttribute("dojoType"));
           var att=reference.getAttribute("dojoType");
           if(att && (att=="dijit.layout.ContentPane" || att=="dojox.layout.ContentPane" || att=="dijit.TitlePane"))
           {
               var x=dijit.byNode(reference);
-              if(x)
+              if(x && x!=null)
               {
                 if(att=="dojox.layout.ContentPane")x.suportScripts=true;
               }
@@ -1023,12 +1023,23 @@ var oldreq="";
 var oldret=false;
 function canCreateSemanticObject(model, clsid, id)
 {
-    if(oldreq!=(model+clsid+id))
+    if(model)
     {
-        oldret=getJSON(context+'/swbadmin/jsp/canCreate.jsp?id='+id+'&clsid='+clsid+'&model='+model);
-        oldreq=(model+clsid+id);
+        var aux=model;
+        if(clsid)aux+=clsid;
+        if(id)aux+=clsid;
+
+        if(oldreq!=aux)
+        {
+            var url=context+'/swbadmin/jsp/canCreate.jsp?model='+model;
+            if(clsid)url+='&clsid='+clsid;
+            if(id)url+='&id='+id;
+            oldret=getJSON(url);
+            oldreq=aux;
+        }
+        return oldret;
     }
-    return oldret;
+    return false;
 }
 
 var oldlog="";
