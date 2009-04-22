@@ -298,7 +298,7 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("<tr><td width=\"100\"></td><td width=\"196\"></td><td width=\"224\"></td><td width=\"364\"></td></tr>");
                 }
                 out.println("<tr>");
-                out.println("<td colspan=4>");
+                out.println("<td colspan=\"4\">");
                 if(rtype.equals("0")){
                     out.println(paramsRequest.getLocaleString("description_daily"));
                 }
@@ -323,7 +323,7 @@ public class WBAGlobalReport extends GenericResource {
                 
                 out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("site") + ":</td>");
-                out.println("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\"> size=\"1\"");
+                out.println("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" size=\"1\">");
                 Iterator<String> itKeys = hm_sites.keySet().iterator();                    
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
@@ -351,14 +351,14 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("</label></td>");
                     out.println("<td colspan=\"2\">");
                     
-                    out.println("<input type=\"text\" name=\"wb_fecha1\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\">");
+                    out.println("<input type=\"text\" name=\"wb_fecha1\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\"/>");
                     //out.println("<input type=\"text\" id=\"wb_fecha1\" name=\"wb_fecha1\" size=\"10\" maxlength=\"10\" value=\"" + fecha1 + "\" />");                        
                     
                     out.println("</td>");
                     out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>");
                     out.println("</tr>");
                     out.println("<tr>");
-                    out.println("<td colspan=4>&nbsp;</td>");
+                    out.println("<td colspan=\"4\">&nbsp;</td>");
                     out.println("</tr>");
 
                     out.println("<tr>");
@@ -372,10 +372,10 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("&nbsp;" + paramsRequest.getLocaleString("by_interval_dates"));
                     out.println("</label></td>");
                     out.println("<td>");
-                    out.println("<input type=\"text\" name=\"wb_fecha11\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\">");
+                    out.println("<input type=\"text\" name=\"wb_fecha11\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\"/>");
                     out.println("</td>");
                     out.println("<td>");
-                    out.println("<input type=\"text\" name=\"wb_fecha12\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\">");
+                    out.println("<input type=\"text\" name=\"wb_fecha12\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\"/>");
                     out.println("</td>");
                     out.println("<td>&nbsp;</td>");
                     out.println("</tr>");
