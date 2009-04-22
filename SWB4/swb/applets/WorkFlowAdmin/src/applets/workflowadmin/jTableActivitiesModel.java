@@ -45,12 +45,12 @@ public class jTableActivitiesModel extends AbstractTableModel{
      public jTableActivitiesModel(JTable table,Locale locale) {         
          this.table=table;
          columnNames[0]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableActivitiesModel",locale).getString("Actividad");
-         columnNames[1]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableActivitiesModel",locale).getString("Descripción");
+         columnNames[1]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableActivitiesModel",locale).getString("Descripcion");
     }
     public jTableActivitiesModel(Locale locale) {         
          this.table=table;
          columnNames[0]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableActivitiesModel",locale).getString("Actividad");
-         columnNames[1]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableActivitiesModel",locale).getString("Descripción");
+         columnNames[1]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableActivitiesModel",locale).getString("Descripcion");
     }
     public String getColumnName(int col) {
         return columnNames[col].toString();
