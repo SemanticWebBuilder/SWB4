@@ -47,10 +47,10 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             url.setMode(url.Mode_VIEW);
         } else if (mode.equals("ADMIN")) {
 
-        } else if (mode.equals("DELALL")) {
+        } else */if (mode.equals("DELALL")) {
             doDelAll(request, response, paramRequest);
             url.setMode(url.Mode_VIEW);
-        } else */if (mode.equals("ADDNEW")) {
+        } else if (mode.equals("ADDNEW")) {
             doAddNew(request, response, paramRequest);
             url.setMode(url.Mode_VIEW);
         } else if (mode.equals("BYTAG")) {
@@ -71,7 +71,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         BookmarkGroup target = null;
 
         if (mode.equals("ADDNEW")) {
-            String tags [] = tgs.split(",");
+            String tags[] = tgs.split(",");
             BookmarkEntry temp = BookmarkEntry.createBookmarkEntry(model);
 
             temp.setTitle(request.getParameter("title"));
@@ -86,20 +86,20 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                     target.addEntry(temp);
                 }
                 response.setMode(response.Mode_VIEW);
-                return;
-            }
+            } else {
 
-            for (int i = 0; i < tags.length; i++) {
-                target = getGroupByName(tags[i].trim());
-                if (target == null) {
-                    BookmarkGroup tempg = BookmarkGroup.createBookmarkGroup(model);
-                    tempg.setTitle(tags[i].trim());
-                    tempg.addEntry(temp);
-                    addGroup(tempg);
-                    System.out.println(">>>>>>>>>>>>>>>Agregado " + temp.getTitle() + " a grupo " + tempg.getTitle());
-                } else {
-                    System.out.println(">>>>>>>>>>>>>>>Agregado " + temp.getTitle() + " a grupo " + target.getTitle());
-                    target.addEntry(temp);
+                for (int i = 0; i < tags.length; i++) {
+                    target = getGroupByName(tags[i].trim());
+                    if (target == null) {
+                        BookmarkGroup tempg = BookmarkGroup.createBookmarkGroup(model);
+                        tempg.setTitle(tags[i].trim());
+                        tempg.addEntry(temp);
+                        addGroup(tempg);
+                        System.out.println(">>>>>>>>>>>>>>>Agregado " + temp.getTitle() + " a grupo " + tempg.getTitle());
+                    } else {
+                        System.out.println(">>>>>>>>>>>>>>>Agregado " + temp.getTitle() + " a grupo " + target.getTitle());
+                        target.addEntry(temp);
+                    }
                 }
             }
             target = getGroupByName(getResourceBase().getId() + "/general");
@@ -112,31 +112,36 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             Iterator<BookmarkGroup> git = listGroups();
             while(git.hasNext()) {
                 BookmarkGroup grp = git.next();
+                System.out.println("<<<<--------->>>buscando " + request.getParameter("id") + " en grupo " + grp.getTitle());
                 BookmarkEntry temp = grp.getEntryById(request.getParameter("id"));
 
                 if (temp!=null) {
                     System.out.println(">>>>>>>>>>>>>>>Eliminando " + temp.getTitle() + " de grupo " + grp.getTitle());
                     grp.removeEntry(temp);
+                    if(grp.getEntryCount() == 0  && !grp.getTitle().equals(getResourceBase().getId() + "/general")) {
+                        System.out.println(">>>>>>>>>>>>>>>Grupo " + grp.getTitle() + " eliminado");
+                        removeGroup(grp);
+                    }
                 }
             }
             response.setMode(response.Mode_VIEW);
-        }/*else if (mode.equals("DELALL")) {
+        }else if (mode.equals("DELALL")) {
             //removeAllEntry();
-            Iterator<BookmarkEntry> entries = listEntrys();
+            Iterator<BookmarkGroup> groups = listGroups();
 
-            while (entries.hasNext()) {
-                BookmarkEntry en = entries.next();
-                removeEntry(en);
+            while (groups.hasNext()) {
+                BookmarkGroup grp = groups.next();
+                Iterator<BookmarkEntry> entries = grp.listEntrys();
+                while (entries.hasNext()) {
+                    BookmarkEntry en = entries.next();
+                    grp.removeEntry(en);
+                }
+                if (grp.getEntryCount() == 0 && !grp.getTitle().equals(getResourceBase().getId() + "/general")) {
+                    removeGroup(grp);
+                }
             }
             response.setMode(response.Mode_VIEW);
-        } else if (mode.equals("DELETE")) {
-            BookmarkEntry temp = getEntriById(request.getParameter("id"));
-
-            if (temp!=null) {
-                removeEntry(temp);
-            }
-            response.setMode(response.Mode_VIEW);
-        } else if (mode.equals(response.Mode_EDIT)) {
+        } /*else if (mode.equals(response.Mode_EDIT)) {
             BookmarkEntry temp = getEntriById(request.getParameter("id"));
 
             if (temp!=null) {
@@ -152,11 +157,24 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         }
     }
 
+    public void doDelAll(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        SWBResourceURL url = paramRequest.getActionUrl();
+
+        //TODO: cambiar por un dialogo
+        out.println("<PRE>Desea eliminar todos los registros?</PRE>");
+        out.println("<a href=\"" + url.toString() + "\">" + paramRequest.getLocaleString("yes") + "</a>");
+        url = paramRequest.getRenderUrl();
+        url.setMode(url.Mode_VIEW);
+        out.println("<a href=\"" + url.toString() + "\">" + paramRequest.getLocaleString("no") + "</a>");
+    }
+
     public void doDelete(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         SWBResourceURL url = paramRequest.getActionUrl();
         //TODO: cambiar por un diálogo
         out.println("<PRE>Desea eliminar el registro?</PRE>");
+        url.setParameter("id", request.getParameter("id"));
         out.println("<a href=\"" + url.toString() + "\">" + paramRequest.getLocaleString("yes") + "</a>");
         url = paramRequest.getRenderUrl();
         url.setMode(url.Mode_VIEW);
@@ -172,6 +190,12 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         BookmarkGroup generalGp = getGroupByName(getResourceBase().getId() + "/general");
         BookmarkGroup untagged = getGroupByName(getResourceBase().getId() + "/untagged");
 
+        Iterator<BookmarkGroup> git = listGroups();
+        while (git.hasNext()) {
+            BookmarkGroup grp = git.next();
+            System.out.println("["+grp.getTitle()+", "+ grp.getEntryCount() +"]");
+        }
+
         if(getSortType() == SORT_NOSORTED) {
             setSortType(SORT_BYDATE);
         }
@@ -181,24 +205,30 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             generalGp.setTitle(getResourceBase().getId() + "/general");
             generalGp.setDescription("Group with all entries in addition order");
             addGroup(generalGp);
+            System.out.println(">>>>>>>>Grupo general creado");
         }
         if (untagged == null) {
             untagged = BookmarkGroup.createBookmarkGroup(model);
             untagged.setTitle(getResourceBase().getId() + "/untagged");
             untagged.setDescription("Group with untagged entries");
             addGroup(untagged);
+            System.out.println(">>>>>>>>Grupo untagged creado");
         }
 
         out.println("<div class=\"soria\" id=\"mainmenu\">");
         url.setMode("BYTAG");
-        Iterator<BookmarkGroup> git = listGroups();
+        git = listGroups();
         while (git.hasNext()) {
             BookmarkGroup temp = git.next();
             if (!temp.getTitle().equals(getResourceBase().getId() + "/general")) {
                 url.setParameter("gid", temp.getSemanticObject().getId());
                 if (!temp.getTitle().equals(getResourceBase().getId() + "/untagged")) {
-                    out.println("<a href=\"" + url + "\">" + temp.getTitle() + "(" + temp.getEntryCount() + ")" + "</a><br>");
+                    if (temp.getEntryCount() > 0) {
+                        System.out.println(">>>>>>Desplegando elementos del grupo " + temp.getTitle());
+                        out.println("<a href=\"" + url + "\">" + temp.getTitle() + "(" + temp.getEntryCount() + ")" + "</a><br>");
+                    }
                 } else if (temp.getEntryCount() > 0) {
+                    System.out.println(">>>>>>Desplegando elementos del grupo " + temp.getTitle());
                     out.println("<a href=\"" + url + "\">" + paramRequest.getLocaleString("notags") + "(" + temp.getEntryCount() + ")" + "</a><br>");
                 }
             }
@@ -254,6 +284,8 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             sbf.append("</table>");
             sbf.append("</div>");
         }
+        url.setMode(url.Mode_VIEW);
+        sbf.append("<a href=\"" + url + "\">" + paramRequest.getLocaleString("back") + "</a><br>");
         out.println(sbf.toString());
     }
 
