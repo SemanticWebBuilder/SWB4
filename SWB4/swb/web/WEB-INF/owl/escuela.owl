@@ -1,0 +1,343 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:cur="http://www.curso.org/moprosoft.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.curso.org/moprosoft.owl">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Area">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Descriptable"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.demo.Area</swb:className>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Descriptable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.demo.Descriptable</swb:className>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Escuela">
+    <swb:hasClass>
+      <owl:Class rdf:ID="Periodo"/>
+    </swb:hasClass>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBModel"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
+    <swb:hasClass>
+      <owl:Class rdf:ID="Materia"/>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:ID="Grupo"/>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:ID="Salon"/>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:ID="Alumno"/>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:ID="Carrera"/>
+    </swb:hasClass>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.demo.Escuela</swb:className>
+    <swb:hasClass>
+      <owl:Class rdf:ID="Calificacion"/>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:ID="Profesor"/>
+    </swb:hasClass>
+    <swb:hasClass rdf:resource="#Area"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Periodo">
+    <rdfs:subClassOf rdf:resource="#Descriptable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.demo.Periodo</swb:className>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Profesor">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.demo.Profesor</swb:className>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="GeneralInformation"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Carrera">
+    <rdfs:subClassOf rdf:resource="#Descriptable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.demo.Carrera</swb:className>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Alumno">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.demo.Alumno</swb:className>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#GeneralInformation"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#GeneralInformation">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.demo.GeneralInformation</swb:className>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Salon">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.demo.Salon</swb:className>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Calificacion">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.demo.Calificacion</swb:className>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Grupo">
+    <rdfs:subClassOf rdf:resource="#Descriptable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.demo.Grupo</swb:className>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Materia">
+    <rdfs:subClassOf rdf:resource="#Descriptable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.demo.Materia</swb:className>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="hasAlmGrupo"/>
+  <owl:ObjectProperty rdf:ID="hasGroup">
+    <rdfs:range rdf:resource="#Grupo"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCarrera">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="carArea"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#Area"/>
+    <rdfs:range rdf:resource="#Carrera"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="grpMateria"/>
+  <owl:ObjectProperty rdf:ID="hasCalificacion">
+    <rdfs:domain rdf:resource="#Alumno"/>
+    <rdfs:range rdf:resource="#Calificacion"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="calAlumno"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasMatGrupo">
+    <rdfs:label>hasGrupo</rdfs:label>
+    <rdfs:domain rdf:resource="#Materia"/>
+    <rdfs:range rdf:resource="#Grupo"/>
+    <owl:inverseOf rdf:resource="#grpMateria"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="groupProf"/>
+  <owl:ObjectProperty rdf:about="#carArea">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_carArea">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label>area</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="calGrupo">
+    <rdfs:label>grupo</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasGrpAlumno">
+    <rdfs:domain rdf:resource="#Grupo"/>
+    <rdfs:range rdf:resource="#Alumno"/>
+    <owl:inverseOf rdf:resource="#hasAlmGrupo"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCarMateria">
+    <rdfs:domain rdf:resource="#Carrera"/>
+    <rdfs:range rdf:resource="#Materia"/>
+    <rdfs:label>hasMateria</rdfs:label>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasMatCarrera"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasGrpCalificacion">
+    <rdfs:domain rdf:resource="#Grupo"/>
+    <rdfs:range rdf:resource="#Calificacion"/>
+    <owl:inverseOf rdf:resource="#calGrupo"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasMatCarrera">
+    <rdfs:label>hasCarrera</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProfGroup">
+    <owl:inverseOf rdf:resource="#groupProf"/>
+    <rdfs:range rdf:resource="#Grupo"/>
+    <rdfs:domain rdf:resource="#Profesor"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#calAlumno">
+    <rdfs:label>alumno</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="nombre">
+    <rdfs:domain rdf:resource="#GeneralInformation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="telefono">
+    <rdfs:domain rdf:resource="#GeneralInformation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="titulo">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_titlulo">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <rdfs:label xml:lang="en">Title</rdfs:label>
+        <rdfs:label xml:lang="es">Título</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Descriptable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="direccion">
+    <rdfs:domain rdf:resource="#GeneralInformation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="semestre">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Alumno"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="calificacion">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#Calificacion"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="descripcion">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_description">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <rdfs:label xml:lang="en">Description</rdfs:label>
+        <rdfs:label xml:lang="es">Descripción</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Descriptable"/>
+  </owl:DatatypeProperty>
+  <cur:Grupo rdf:ID="SG09002">
+    <cur:groupProf>
+      <cur:Profesor rdf:ID="Javier_Solis">
+        <cur:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >96876877</cur:telefono>
+      </cur:Profesor>
+    </cur:groupProf>
+    <cur:hasGrpAlumno>
+      <cur:Alumno rdf:ID="Salvador_Sanchez">
+        <cur:nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Salvador Sanchez Romano</cur:nombre>
+        <cur:direccion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >San Fernando</cur:direccion>
+        <cur:hasAlmGrupo>
+          <cur:Grupo rdf:ID="SC09001">
+            <cur:groupProf rdf:resource="#Javier_Solis"/>
+            <cur:hasGrpAlumno>
+              <cur:Alumno rdf:ID="Rene_Jara">
+                <cur:nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >Rene Jara Sixtos</cur:nombre>
+                <cur:direccion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >Av Sna Fernando</cur:direccion>
+                <cur:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >898345</cur:telefono>
+                <cur:hasCalificacion>
+                  <cur:Calificacion rdf:ID="SC09001Rene">
+                    <cur:calGrupo rdf:resource="#SC09001"/>
+                    <cur:calificacion rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+                    >7</cur:calificacion>
+                  </cur:Calificacion>
+                </cur:hasCalificacion>
+              </cur:Alumno>
+            </cur:hasGrpAlumno>
+          </cur:Grupo>
+        </cur:hasAlmGrupo>
+        <cur:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >9879834534</cur:telefono>
+      </cur:Alumno>
+    </cur:hasGrpAlumno>
+    <cur:hasGrpAlumno>
+      <cur:Alumno rdf:ID="Alfredo_Castillo">
+        <cur:nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Alfredo Castillo</cur:nombre>
+        <cur:direccion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >San Fernando</cur:direccion>
+        <cur:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >232343324</cur:telefono>
+      </cur:Alumno>
+    </cur:hasGrpAlumno>
+  </cur:Grupo>
+  <cur:Materia rdf:ID="Computacion_I">
+    <cur:titulo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Comutacion I</cur:titulo>
+    <cur:hasMatGrupo rdf:resource="#SG09002"/>
+  </cur:Materia>
+  <cur:Area rdf:ID="Ingenieria">
+    <cur:hasCarrera>
+      <cur:Carrera rdf:ID="IngenieriaTelecomunicaciones">
+        <cur:hasCarMateria>
+          <cur:Materia rdf:ID="Matematicas_I">
+            <cur:hasMatGrupo rdf:resource="#SC09001"/>
+          </cur:Materia>
+        </cur:hasCarMateria>
+      </cur:Carrera>
+    </cur:hasCarrera>
+    <cur:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ingenieria</cur:descripcion>
+    <cur:titulo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ingenieria</cur:titulo>
+    <cur:hasCarrera>
+      <cur:Carrera rdf:ID="IngenieriaEnSystemas">
+        <cur:titulo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Ingenieria en Sistemas Computacionales</cur:titulo>
+        <cur:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Ingenieria en Sistemas Computacionales</cur:descripcion>
+        <cur:hasCarMateria rdf:resource="#Matematicas_I"/>
+        <cur:hasCarMateria rdf:resource="#Computacion_I"/>
+      </cur:Carrera>
+    </cur:hasCarrera>
+  </cur:Area>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
