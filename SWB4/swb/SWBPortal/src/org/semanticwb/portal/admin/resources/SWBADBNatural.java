@@ -109,7 +109,7 @@ public class SWBADBNatural extends GenericResource {
                             "clearSuggestions();\n" +
                             "return;\n" +
                         "}\n" +
-                        //Tecla CTRL+SHIFT+SPACE
+                        //CTRL+SHIFT+SPACE
                         "if (evt.ctrlKey && evt.shiftKey && evt.keyCode == dojo.keys.SPACE) {\n" +
                             "getSuggestions(wd, source, true, false);\n" +
                             "dojo.stopEvent(evt);\n" +
@@ -141,7 +141,7 @@ public class SWBADBNatural extends GenericResource {
                             "clearSuggestions();\n" +
                             "pdisplayed = false;\n" +
                         "}" +
-                        //Flecha ARRIBA
+                        //UP_ARROW
                         "else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.UP_ARROW) {\n" +
                             "dojo.query('.resultEntry').style('background', 'white');\n" +
                             "curSelected--;\n" +
@@ -153,7 +153,7 @@ public class SWBADBNatural extends GenericResource {
                             "dojo.byId('resultlist').scrollTop = dojo.coords(dojo.byId('id' + curSelected)).t;\n" +
                             "dojo.byId('naturalQuery').focus();\n" +
                             "dojo.stopEvent(evt);\n" +
-                            //Flecha ABAJO
+                        //DOWN_ARROW
                         "} else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.DOWN_ARROW) {\n" +
                             "dojo.query('.resultEntry').style('background', 'white');\n" +
                             "curSelected++;\n" +
@@ -497,7 +497,7 @@ public class SWBADBNatural extends GenericResource {
         int idCounter = 0;
         Lexicon lex = new Lexicon(lang);
 
-        if (lang == null || lang == "") {
+        if (lang == null || lang.equals("")) {
             lang = "es";
         }
         if (word.indexOf("(") != -1) {
