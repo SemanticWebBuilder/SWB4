@@ -257,7 +257,7 @@ public class WBADeviceReport extends GenericResource {
                 
                 out.println("   params = params + '&wb_rtype=' + dojo.byId('wb_rtype').value;");
                 out.println("   if(accion == 0) {");
-                out.println("       params = params + '&wb_rep_type=' + getTypeSelected();");                
+                out.println("       params = params + '&wb_rep_type=' + getTypeSelected();");
                 out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
                 out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
                 out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");                
