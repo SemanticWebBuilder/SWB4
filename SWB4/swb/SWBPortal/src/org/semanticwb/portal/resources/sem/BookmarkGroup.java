@@ -18,7 +18,7 @@ public class BookmarkGroup extends org.semanticwb.portal.resources.sem.base.Book
     {
         getSemanticObject().addObjectProperty(swb_res_bkm_hasEntry, bookmarkentry.getSemanticObject());
         setEntryCount(getEntryCount() + 1);
-        System.out.println(getTitle() + " is now in " + getEntryCount());
+        //System.out.println(getTitle() + " is now in " + getEntryCount());
     }
 
     @Override
@@ -33,7 +33,7 @@ public class BookmarkGroup extends org.semanticwb.portal.resources.sem.base.Book
     {
         getSemanticObject().removeObjectProperty(swb_res_bkm_hasEntry,bookmarkentry.getSemanticObject());
         setEntryCount(getEntryCount() - 1);
-        System.out.println(getTitle() + " reduced to " + getEntryCount());
+        //System.out.println(getTitle() + " reduced to " + getEntryCount());
     }
 
     /**
