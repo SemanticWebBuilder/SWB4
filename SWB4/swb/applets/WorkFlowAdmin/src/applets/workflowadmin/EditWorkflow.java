@@ -670,7 +670,7 @@ public class EditWorkflow extends javax.swing.JApplet {
         if(!hasEnd)
         {
             this.jTabbedPane1.setSelectedIndex(2);            
-            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("No_tiene_ninguna_actividad_que_permitar_terminar_con_el_flujo_de_publicación"),java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("No_tiene_ninguna_actividad_que_permitar_terminar_con_el_flujo_de_publicacion"),java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
             return false;
         }
         Iterator ends=oends.iterator();
@@ -736,7 +736,7 @@ public class EditWorkflow extends javax.swing.JApplet {
         {
             this.jTabbedPane1.setSelectedIndex(0);
             this.jTextAreaDescription.grabFocus();
-            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("Favor_de_indicar_la_descripción_del_flujo"),java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("title"),JOptionPane.ERROR_MESSAGE);            
+            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("Favor_de_indicar_la_descripcion_del_flujo"),java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
             return;
         }
         if(this.workflow.getActivitiesModel().size()==0)
@@ -757,7 +757,7 @@ public class EditWorkflow extends javax.swing.JApplet {
         if(!resselected)
         {
             this.jTabbedPane1.setSelectedIndex(1);            
-            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("Debe_indicar_a_que_tipos_de_recursos_aplica_el_flujo_de_publicación"),java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("Debe_indicar_a_que_tipos_de_recursos_aplica_el_flujo_de_publicacion"),java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
             return;
         }
         Iterator activities=this.workflow.getActivitiesModel().getActivities().iterator();
@@ -769,7 +769,7 @@ public class EditWorkflow extends javax.swing.JApplet {
                 if(activity.getLinks().size()==0)
                 {
                     this.jTabbedPane1.setSelectedIndex(2);            
-                    JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("La_actividad_")+ " \""+activity.getName()+"\" " +java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("_se_encuentra_aislada,_favor_de_indicar_actividades_de_aprovación_y_de_rechazo"),java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("La_actividad_")+ " \""+activity.getName()+"\" " +java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("_se_encuentra_aislada,_favor_de_indicar_actividades_de_aprovacion_y_de_rechazo"),java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if(activity.getLinks().size()==1)
@@ -784,7 +784,7 @@ public class EditWorkflow extends javax.swing.JApplet {
                     else
                     {
                         this.jTabbedPane1.setSelectedIndex(2);            
-                        JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("La_actividad_")+ " \""+activity.getName()+"\" " +java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("_no_tiene_actividad_en_caso_de_aprovación"),java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("La_actividad_")+ " \""+activity.getName()+"\" " +java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("_no_tiene_actividad_en_caso_de_aprovacion"),java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 

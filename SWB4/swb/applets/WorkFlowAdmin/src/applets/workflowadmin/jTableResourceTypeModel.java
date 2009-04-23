@@ -44,7 +44,7 @@ public class jTableResourceTypeModel extends AbstractTableModel implements Compa
      public jTableResourceTypeModel(Locale locale) {
          columnNames[0]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableResourceTypeModel",locale).getString("Tipo_de_recurso");
          columnNames[1]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableResourceTypeModel",locale).getString("mapa");
-         columnNames[2]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableResourceTypeModel",locale).getString("Descripción");
+         columnNames[2]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableResourceTypeModel",locale).getString("Descripcion");
          columnNames[3]=java.util.ResourceBundle.getBundle("applets/workflowadmin/jTableResourceTypeModel",locale).getString("Utilizar");
     }
      public Iterator iterator()
