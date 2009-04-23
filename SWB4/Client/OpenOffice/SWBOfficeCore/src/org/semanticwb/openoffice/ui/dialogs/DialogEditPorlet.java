@@ -56,7 +56,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         setLocationRelativeTo(null);
         this.jTableScheduler.getSelectionModel().addListSelectionListener(new ListSelectionListener()
         {
-
+            @Override
             public void valueChanged(ListSelectionEvent e)
             {
                 jButtonDeleteScheduler.setEnabled(false);
@@ -190,6 +190,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
 
         jButtonOK.setText("Aceptar");
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOKActionPerformed(evt);
             }
