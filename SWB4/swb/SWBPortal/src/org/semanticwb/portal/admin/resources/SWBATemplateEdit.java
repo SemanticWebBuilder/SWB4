@@ -59,9 +59,6 @@ public class SWBATemplateEdit extends GenericResource {
         {
             out.println("<script type=\"javascript\">");
             out.println(" hideDialog(); ");
-//            SWBResourceURL urlview = paramRequest.getRenderUrl();
-//            urlview.setParameter("suri", id);
-//            urlview.setParameter("act","");
             out.println(" reloadTab('"+id+"'); ");
             out.println("</script>");
         }
@@ -406,6 +403,8 @@ public class SWBATemplateEdit extends GenericResource {
             SemanticObject sobase = ont.getSemanticObject(id);
             SemanticObject soactual = ont.getSemanticObject(idval);
             sobase.setObjectProperty(Versionable.swb_actualVersion, soactual);
+            Template tmpl = (Template)go;
+            SWBPortal.getTemplateMgr().reloadTemplate(tmpl);
             response.setRenderParameter(act, "");
             response.setMode(response.Mode_VIEW);
         } else if ("remove".equals(act)) {
