@@ -83,6 +83,7 @@ public class SWBContext extends SWBContextBase
 
         public static String getIconClass(SemanticObject obj)
         {
+            //System.out.println("getIconClass:"+obj);
             String ret=null;
             SemanticClass cls=obj.getSemanticClass();
             if(cls.hasProperty(Iconable.swb_iconClass.getName()))
@@ -91,14 +92,45 @@ public class SWBContext extends SWBContextBase
             }
             if(ret==null)
             {
+                //System.out.println("getIconClass:1");
                 ret="swbIcon"+cls.getName();
                 if(cls.hasProperty(Activeable.swb_active.getName()))
                 {
                     if(!obj.getBooleanProperty(Activeable.swb_active))
                     {
                         ret+="U";
+                        return ret;
+                    }
+                    //System.out.println("getIconClass:2");
+                }
+/*
+                if(cls.hasProperty(RoleRefable.swb_hasRoleRef.getName()))
+                {
+                    if(obj.hasObjectProperty(RoleRefable.swb_hasRoleRef))
+                    {
+                        ret+="F";
+                        return ret;
+                    }
+                    //System.out.println("getIconClass:3");
+                }
+                if(cls.hasProperty(UserGroupRefable.swb_hasUserGroupRef.getName()))
+                {
+                    if(obj.hasObjectProperty(UserGroupRefable.swb_hasUserGroupRef))
+                    {
+                        ret+="F";
+                        return ret;
+                    }
+                    //System.out.println("getIconClass:4");
+                }
+                if(cls.hasProperty(RuleRefable.swb_hasRuleRef.getName()))
+                {
+                    if(obj.hasObjectProperty(RuleRefable.swb_hasRuleRef))
+                    {
+                        ret+="F";
+                        return ret;
                     }
                 }
+*/
             }
             return ret;
         }
