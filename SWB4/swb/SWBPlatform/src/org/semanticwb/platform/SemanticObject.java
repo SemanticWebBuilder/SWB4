@@ -287,6 +287,24 @@ public class SemanticObject
 //        System.out.println("hasObjectPropertyCache:"+this+" prop:"+prop+" obj:"+obj+" "+ret);
         return ret;
     }
+
+    private Boolean hasObjectPropertyCache(SemanticProperty prop)
+    {
+        Boolean ret=null;
+        ArrayList arr=(ArrayList)m_cacheprops.get(prop.getURI()+"|list");
+        if(arr!=null)
+        {
+//            Iterator it=arr.iterator();
+//            while(it.hasNext())
+//            {
+//                System.out.println("Ite:"+it.next());
+//            }
+            ret=!arr.isEmpty();
+        }
+        System.out.println("hasObjectPropertyCache:"+this+" prop:"+prop+" "+ret);
+        return ret;
+    }
+
     
 
     private Iterator<SemanticObject> setListObjectPropertyCache(SemanticProperty prop, Iterator<SemanticObject> list)
@@ -947,6 +965,40 @@ public class SemanticObject
         if(ret==null)ret=false;
         return ret;
     }
+
+    public boolean hasObjectProperty(SemanticProperty prop)
+    {
+
+        //System.out.println("hasObjectProperty:"+this+" prop:"+prop+" obj:"+obj);
+        if (m_virtual)
+        {
+            ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
+            if (list != null)
+            {
+                return !list.isEmpty();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        Boolean ret = hasObjectPropertyCache(prop);
+        if(ret==null)
+        {
+            if(hasPropertyCache)
+            {
+                listObjectProperties(prop);  //Cachar lista
+                ret=hasObjectPropertyCache(prop);
+            }else
+            {
+                ret=getRDFResource().hasProperty(prop.getRDFProperty());
+            }
+        }
+        if(ret==null)ret=false;
+        return ret;
+    }
+
 
     public SemanticObject getObjectProperty(SemanticProperty prop)
     {
