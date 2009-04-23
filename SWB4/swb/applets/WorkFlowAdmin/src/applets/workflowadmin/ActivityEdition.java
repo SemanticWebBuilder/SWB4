@@ -805,7 +805,7 @@ public class ActivityEdition extends javax.swing.JDialog {
         {
             this.jTabbedPane1.setSelectedIndex(0);
             this.jTextAreaDescription.grabFocus();
-            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/ActivityEdition",locale).getString("Favor_de_indicar_la_descripción_dela_actividad"),this.getTitle(),JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/ActivityEdition",locale).getString("Favor_de_indicar_la_descripcion_dela_actividad"),this.getTitle(),JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -854,7 +854,7 @@ public class ActivityEdition extends javax.swing.JDialog {
         if(!selected)
         {
             this.jTabbedPane1.setSelectedIndex(1);
-            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/ActivityEdition",locale).getString("No_seleccionó_rol_o_usuario_que_tenga_permisos_sobre_esta_actividad"),this.getTitle(),JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/ActivityEdition",locale).getString("No_selecciono_rol_o_usuario_que_tenga_permisos_sobre_esta_actividad"),this.getTitle(),JOptionPane.ERROR_MESSAGE);
             return;
         }
         if(this.jCheckBoxDuration.isSelected())
@@ -871,7 +871,7 @@ public class ActivityEdition extends javax.swing.JDialog {
             {
                 this.jTabbedPane1.setSelectedIndex(0);
                 this.jTextFieldDias.grabFocus();
-                JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/ActivityEdition",locale).getString("La_duración_de_la_actividad_es_cero,_favor_de_indicar_una_dureción_mayor_a_cero"),this.getTitle(),JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/workflowadmin/ActivityEdition",locale).getString("La_duracion_de_la_actividad_es_cero,_favor_de_indicar_una_durecion_mayor_a_cero"),this.getTitle(),JOptionPane.ERROR_MESSAGE);
                 return;
             }
             activity.setDuraction(dias,horas);           
