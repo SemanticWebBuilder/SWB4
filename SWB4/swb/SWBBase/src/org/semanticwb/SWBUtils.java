@@ -89,11 +89,13 @@ public class SWBUtils {
     public static String LOCALE_SERVICES = null;
     private static PrintWriter log2File = new PrintWriter(System.err);
 
+
     /** Creates new utils */
     private SWBUtils() {
         log.event("Initializing SemanticWebBuilder Base...");
         log.event("-->AppicationPath: " + applicationPath);
         init();
+
     }
 
     /** Get Instance.
@@ -1331,6 +1333,7 @@ public class SWBUtils {
     public static class EMAIL {
 
         private static String smtpserver = null;
+        private static String adminEmail = null;
 
         /**
          * Setter for property smtpserver
@@ -1347,6 +1350,16 @@ public class SWBUtils {
         public static String getSMTPServer() {
             return smtpserver;
         }
+
+         /**
+         * Setter for property smtpserver
+         * @param smtpserver
+         */
+        public static void setadminEmail(String adminEmail) {
+            EMAIL.adminEmail = adminEmail;
+        }
+
+
 
         /**
          * 
@@ -1458,6 +1471,15 @@ public class SWBUtils {
             return null;
         }
 
+
+        public static void sendBGEmail(String toEmail, String subject, String body) throws java.net.SocketException{
+             ArrayList acol=new ArrayList();
+             acol.add(toEmail);
+             EMAIL.sendBGEmail(adminEmail, null, acol, null, null, subject, null, body, null, null, null);
+        }
+
+        
+
         /**
          * Sends an email in background
          * @param message class
@@ -1472,6 +1494,7 @@ public class SWBUtils {
             message.setCcEmail(ccEmail);
             message.setBccEmail(bccEmail);
             message.setSubject(subject);
+            if(contentType==null) contentType="HTML";
             message.setContentType(contentType);
             message.setData(data);
             message.setLogin(login);
