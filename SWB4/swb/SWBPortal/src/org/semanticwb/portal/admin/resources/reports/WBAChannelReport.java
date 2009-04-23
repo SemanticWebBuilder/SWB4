@@ -33,20 +33,15 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.access.RecResHits;
 
 import org.semanticwb.portal.db.SWBRecHit;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import sun.security.krb5.internal.crypto.e;
 
 public class WBAChannelReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBAChannelReport.class);
-
-
-    private final int I_REPORT_TYPE = 3;   // Type 4 of reports "Channel access"
-    private final int I_START_DAY = 1;
+    private final int I_REPORT_TYPE = 3;   // Type 4 of reports "Channel access"    
     public String strRscType;
     private int i_index;
     private HashMap hmAc = null, hmCounted=null;
@@ -70,6 +65,7 @@ public class WBAChannelReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */
+    @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         if (paramsRequest.getMode().equals("graph")) {
             doGraph(request, response, paramsRequest);
@@ -90,49 +86,24 @@ public class WBAChannelReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         final int I_ACCESS = 0;
         Resource base = getResourceBase();
         StringBuffer sb_ret = new StringBuffer();
+
         ReportMgr rm = ReportMgr.getInstance();
-        if (null != rm && !rm.isRunning()) {
-            String[] arr_month = doArrMonth(paramsRequest);
-            GregorianCalendar gc_now = new GregorianCalendar();
+        if((null!=rm) && (!rm.isRunning())) {
             HashMap hm_sites = new HashMap();
-            HashMap hm_sites2 = new HashMap();
-            String address = null;
-            String s_site = null;
-            String s_tmid = null;
-            String s_tmtitle = null;
-            String s_value = null;
-            int i_key = 0;
-            int i_access = 0;
 
             String s_rfilter = request.getParameter("wb_rfilter");
             String s_level = request.getParameter("wb_showlevel");
             if (s_level == null) {
                 s_level = "1";
             }
-            s_site = request.getParameter("wb_site");
+            
             try {
                 // Evaluates if there are sites
-                /*Iterator it_topic = TopicMgr.getInstance().getTopicMaps();
-                while (it_topic.hasNext()) {
-                    TopicMap tm_map = (TopicMap) it_topic.next();
-                    //Evaluates if TopicMap is not Global
-                    if (!TopicMgr.getInstance().getGlobalTopicMap().toString().equals(tm_map.getDbdata().getId())) {
-                        //Get access level of this user on this topicmap and if level is greater than "0" then user have access
-                        i_access = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramsRequest.getUser(), tm_map.getDbdata().getId());
-                        if (I_ACCESS < i_access) {
-                            if (tm_map.getDbdata().getDeleted() == 0) {
-                                s_value = tm_map.getDbdata().getId() + "|" + tm_map.getDbdata().getTitle();
-                                hm_sites.put(Integer.toString(i_key), s_value);
-                                hm_sites2.put(tm_map.getDbdata().getId(), tm_map.getDbdata().getId());
-                                i_key++;
-                            }
-                        }
-                    }
-                }*/
                 Iterator<WebSite> webSites = SWBContext.listWebSites();
                 while(webSites.hasNext()) {
                     WebSite site = webSites.next();
@@ -149,11 +120,8 @@ public class WBAChannelReport extends GenericResource {
                     }
                 }
 
-
                 // If there are sites continue
                 if (hm_sites.size() > I_ACCESS) {
-                    address = paramsRequest.getTopic().getUrl();
-
                     String webSite = request.getParameter("wb_site");
 
                     int groupDates;
@@ -166,55 +134,59 @@ public class WBAChannelReport extends GenericResource {
                     String fecha11 = request.getParameter("wb_fecha11")==null ? "":request.getParameter("wb_fecha11");
                     String fecha12 = request.getParameter("wb_fecha12")==null ? "":request.getParameter("wb_fecha12");
 
-
-
-
                     sb_ret.append("<script type=\"text/javascript\">\n");
-                    sb_ret.append("function doXml(sizze) {\n");
-                    sb_ret.append("   var params = \"?\";\n");
-                    sb_ret.append("   params = params + \"wb_site=\" + window.document.frmrep.wb_site.value;\n");
-                    sb_ret.append("   params = params + \"&wb_year_1=\" +window.document.frmrep.wb_year_1.options[window.document.frmrep.wb_year_1.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_month_1=\" +window.document.frmrep.wb_month_1.options[window.document.frmrep.wb_month_1.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_day_1=\" +window.document.frmrep.wb_day_1.options[window.document.frmrep.wb_day_1.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_year_11=\" +window.document.frmrep.wb_year_11.options[window.document.frmrep.wb_year_11.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_month_11=\" +window.document.frmrep.wb_month_11.options[window.document.frmrep.wb_month_11.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_day_11=\" +window.document.frmrep.wb_day_11.options[window.document.frmrep.wb_day_11.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_year_12=\" +window.document.frmrep.wb_year_12.options[window.document.frmrep.wb_year_12.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_month_12=\" +window.document.frmrep.wb_month_12.options[window.document.frmrep.wb_month_12.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_day_12=\" +window.document.frmrep.wb_day_12.options[window.document.frmrep.wb_day_12.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_rep_type=\" + GetTypeSelected();\n");
-                    sb_ret.append("   params = params + \"&wb_rtype=\" + window.document.frmred.wb_rtype.value;\n");
-                    sb_ret.append("   params = params + \"&wb_showlevel=\" +window.document.frmrep.wb_showlevel.value;\n");
-                    sb_ret.append("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml") + "\"+params,\"graphWindow\",sizze);\n");
-                    sb_ret.append("}\n");
+                    sb_ret.append("dojo.addOnLoad(doBlockade);");
 
-                    sb_ret.append("function doExcel(sizze) {\n");
-                    sb_ret.append("   var params = \"?\";\n");
-                    sb_ret.append("   params = params + \"wb_site=\" + window.document.frmrep.wb_site.value;\n");
-                    sb_ret.append("   params = params + \"&wb_year_1=\" +window.document.frmrep.wb_year_1.options[window.document.frmrep.wb_year_1.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_month_1=\" +window.document.frmrep.wb_month_1.options[window.document.frmrep.wb_month_1.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_day_1=\" +window.document.frmrep.wb_day_1.options[window.document.frmrep.wb_day_1.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_year_11=\" +window.document.frmrep.wb_year_11.options[window.document.frmrep.wb_year_11.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_month_11=\" +window.document.frmrep.wb_month_11.options[window.document.frmrep.wb_month_11.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_day_11=\" +window.document.frmrep.wb_day_11.options[window.document.frmrep.wb_day_11.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_year_12=\" +window.document.frmrep.wb_year_12.options[window.document.frmrep.wb_year_12.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_month_12=\" +window.document.frmrep.wb_month_12.options[window.document.frmrep.wb_month_12.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_day_12=\" +window.document.frmrep.wb_day_12.options[window.document.frmrep.wb_day_12.selectedIndex].value;\n");
-                    sb_ret.append("   params = params + \"&wb_rep_type=\" + GetTypeSelected();\n");
-                    sb_ret.append("   params = params + \"&wb_rtype=\" + window.document.frmred.wb_rtype.value;\n");
-                    sb_ret.append("   params = params + \"&wb_showlevel=\" +window.document.frmrep.wb_showlevel.value;\n");
-                    sb_ret.append("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel") + "\"+params,\"graphWindow\",sizze);\n");
-                    sb_ret.append("}\n");
+                    sb_ret.append("function getParams() {");
+                    sb_ret.append("   var dp = null;");
+                    sb_ret.append("   var params = '?';");
+                    sb_ret.append("   params = params + 'wb_site=' + dojo.byId('wb_site').value;");
+                    sb_ret.append("   params = params + '&wb_rep_type=' + getTypeSelected();");
+                    sb_ret.append("   var fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                    sb_ret.append("   var fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                    sb_ret.append("   var fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                    sb_ret.append("   if(fecha1.length>0) {");
+                    sb_ret.append("      dp = fecha1.split('/');");
+                    sb_ret.append("      params = params + '&wb_fecha1=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                    sb_ret.append("   }");
+                    sb_ret.append("   if(fecha2.length>0) {");
+                    sb_ret.append("      dp = fecha2.split('/');");
+                    sb_ret.append("      params = params + '&wb_fecha11=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                    sb_ret.append("   }");
+                    sb_ret.append("   if(fecha3.length>0) {");
+                    sb_ret.append("      dp = fecha3.split('/');");
+                    sb_ret.append("      params = params + '&wb_fecha12=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
+                    sb_ret.append("   }");
+                    sb_ret.append("   return params;");
+                    sb_ret.append("}");
 
-                    sb_ret.append("function GetTypeSelected() {\n");
-                    sb_ret.append("   var strType = \"0\";\n");
-                    sb_ret.append("   for(i=0;i<window.document.frmrep.wb_rep_type.length;i++){\n");
-                    sb_ret.append("      if(window.document.frmrep.wb_rep_type[i].checked==true){\n");
-                    sb_ret.append("         strType=window.document.frmrep.wb_rep_type[i].value;\n");
-                    sb_ret.append("      }\n");
-                    sb_ret.append("   }\n");
-                    sb_ret.append("   return strType;\n");
-                    sb_ret.append("}\n");
+                    sb_ret.append("function validate() {");
+                    sb_ret.append("   var fecha1 = new String(dojo.byId('wb_fecha1').value);");
+                    sb_ret.append("   var fecha2 = new String(dojo.byId('wb_fecha11').value);");
+                    sb_ret.append("   var fecha3 = new String(dojo.byId('wb_fecha12').value);");
+                    sb_ret.append("   if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
+                    sb_ret.append("      alert('Especifique la fecha o el rango de fechas que desea consultar');");
+                    sb_ret.append("      return false;");
+                    sb_ret.append("   }");
+                    sb_ret.append("   return true;");
+                    sb_ret.append("}");
+
+                    sb_ret.append("function doXml(size) { ");
+                    sb_ret.append("   if(validate()) {");
+                    sb_ret.append("      var params = getParams();");
+                    sb_ret.append("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);");
+                    sb_ret.append("   }");
+                    sb_ret.append("}");
+
+                    sb_ret.append(" function getTypeSelected(){\n");
+                    sb_ret.append("     var strType = \"0\";\n");
+                    sb_ret.append("     for(i=0;i<window.document.frmrep.wb_rep_type.length;i++){\n");
+                    sb_ret.append("       if(window.document.frmrep.wb_rep_type[i].checked==true){\n");
+                    sb_ret.append("           strType=window.document.frmrep.wb_rep_type[i].value;\n");
+                    sb_ret.append("       }\n");
+                    sb_ret.append("     }\n");
+                    sb_ret.append("     return strType;\n");
+                    sb_ret.append(" }\n");
 
                     sb_ret.append("function doApply() {\n");
                     sb_ret.append("   tmp = window.document.frmrep.filename.value;\n");
@@ -228,68 +200,28 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("      window.document.frmrep.submit();\n");
                     sb_ret.append("   }\n");
                     sb_ret.append("}\n");
-
-                    sb_ret.append("function DoPaging(pag) {\n");
-                    sb_ret.append("   window.document.frmrep.wb_pagenum.value = pag;\n");
-                    sb_ret.append("   window.document.frmrep.submit();\n");
-                    sb_ret.append("}\n");
-
-                    sb_ret.append("function DoEvaluateYear(ind) {\n");
-                    sb_ret.append("   if(ind == 0) {\n");
-                    sb_ret.append("      window.document.frmrep.wb_month_1.disabled = true;\n");
-                    sb_ret.append("      window.document.frmrep.wb_day_1.disabled = true;\n");
-                    sb_ret.append("   }else {\n");
-                    sb_ret.append("      window.document.frmrep.wb_month_1.disabled = false;\n");
-                    sb_ret.append("      window.document.frmrep.wb_day_1.disabled = false;\n");
-                    sb_ret.append("   }\n");
-                    sb_ret.append("}");
-
-                    sb_ret.append("function DoEvaluateMonth(ind) {\n");
-                    sb_ret.append("   if(ind == 0){\n");
-                    sb_ret.append("      window.document.frmrep.wb_day_1.disabled = true;\n");
-                    sb_ret.append("   }else {\n");
-                    sb_ret.append("      window.document.frmrep.wb_day_1.disabled = false;\n");
-                    sb_ret.append("   }\n");
-                    sb_ret.append("}\n");
-
-                    sb_ret.append("function DoBlockade() {\n");
-                    sb_ret.append("       if(window.document.frmrep.wb_rep_type[0].checked){\n");
-                    sb_ret.append("           window.document.frmrep.wb_year_1.disabled = false;\n");
-                    sb_ret.append("           window.document.frmrep.wb_month_1.disabled = false;\n");
-                    sb_ret.append("           window.document.frmrep.wb_day_1.disabled = false;\n");
-                    sb_ret.append("           window.document.frmrep.wb_year_11.disabled = true;\n");
-                    sb_ret.append("           window.document.frmrep.wb_year_12.disabled = true;\n");
-                    sb_ret.append("           window.document.frmrep.wb_month_11.disabled = true;\n");
-                    sb_ret.append("           window.document.frmrep.wb_month_12.disabled = true;\n");
-                    sb_ret.append("           window.document.frmrep.wb_day_11.disabled = true;\n");
-                    sb_ret.append("           window.document.frmrep.wb_day_12.disabled = true;\n");
-                    sb_ret.append("       }\n");
-                    sb_ret.append("       if(window.document.frmrep.wb_rep_type[1].checked){\n");
-                    sb_ret.append("           window.document.frmrep.wb_year_1.disabled = true;\n");
-                    sb_ret.append("           window.document.frmrep.wb_month_1.disabled = true;\n");
-                    sb_ret.append("           window.document.frmrep.wb_day_1.disabled = true;\n");
-                    sb_ret.append("           window.document.frmrep.wb_year_11.disabled = false;\n");
-                    sb_ret.append("           window.document.frmrep.wb_year_12.disabled = false;\n");
-                    sb_ret.append("           window.document.frmrep.wb_month_11.disabled = false;\n");
-                    sb_ret.append("           window.document.frmrep.wb_month_12.disabled = false;\n");
-                    sb_ret.append("           window.document.frmrep.wb_day_11.disabled = false;\n");
-                    sb_ret.append("           window.document.frmrep.wb_day_12.disabled = false;\n");
-                    sb_ret.append("       }\n");
-                    sb_ret.append("   }\n");
                     
-                    sb_ret.append("function DoDownload(name,key){\n");
+                    sb_ret.append(" function doBlockade() {");
+                    sb_ret.append("   if(window.document.frmrep.wb_rep_type) {");
+                    sb_ret.append("     if(window.document.frmrep.wb_rep_type[0].checked){");
+                    sb_ret.append("       dojo.byId('wb_fecha1').disabled = false;");
+                    sb_ret.append("       dojo.byId('wb_fecha11').disabled = true;");
+                    sb_ret.append("       dojo.byId('wb_fecha12').disabled = true;");
+                    sb_ret.append("     }");
+                    sb_ret.append("     if(window.document.frmrep.wb_rep_type[1].checked){");
+                    sb_ret.append("       dojo.byId('wb_fecha1').disabled = true;");
+                    sb_ret.append("       dojo.byId('wb_fecha11').disabled = false;");
+                    sb_ret.append("       dojo.byId('wb_fecha12').disabled = false;");
+                    sb_ret.append("     }");
+                    sb_ret.append("   }");
+                    sb_ret.append(" }");
+                    
+                    sb_ret.append("function doDownload(name,key){\n");
                     sb_ret.append("   window.location='"+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("download")+"?filename='+name+'&key='+key;\n");
                     sb_ret.append("}\n");
 
                     sb_ret.append("</script>\n");
                     // javascript
-
-                    /*sb_ret.append("\n<form method=\"Post\" action=\"" + address + "\" id=\"frmred\" name=\"frmred\">");
-                    sb_ret.append("<input type=\"hidden\" name=\"wb_rtype\" value=\"\"><input type=\"hidden\" name=\"wb_rfilter\" value=\"" + s_rfilter + "\">");
-                    sb_ret.append("\n</form>");
-                    sb_ret.append("\n<form method=\"Post\" action=\"" + address + "\" id=\"frmret\" name=\"frmret\">");
-                    sb_ret.append("<input type=\"hidden\" name=\"wb_selectedfilter\" value=\"" + s_rfilter + "\"><input type=\"hidden\" name=\"wb_selectedsite\" value=\"" + s_site + "\">");
-                    sb_ret.append("\n</form>");*/
 
                     sb_ret.append("<div class=\"swbform\">\n");
                     sb_ret.append("<fieldset>\n");
@@ -299,70 +231,17 @@ public class WBAChannelReport extends GenericResource {
 
                     sb_ret.append("<form name=\"frmrep\" id=\"frmrep\" method=\"post\" action=\""+url+"\">\n");
                     sb_ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
-                    sb_ret.append("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>\n");
+                    sb_ret.append("<tr><td width=\"213\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"413\"></td></tr>\n");
 
-                    /*sb_ret.append("<tr>");
-                    sb_ret.append("<td colspan=\"4\">");
-                    sb_ret.append("<table width=\"100%\" border=\"0\">");
-                    sb_ret.append("<tr>");
-                    sb_ret.append("<td width=\"66\"><img src=\"" + WBUtils.getInstance().getWebPath() + "wbadmin/images/reportes.gif\" width=\"60\" height=\"55\"><span class=\"pietitulo\"></span>");
-                    sb_ret.append("</td>");
-                    sb_ret.append("<td width=\"893\"><p class=\"pietitulo Estilo15\"><span class=\"Estilo14\">" + paramsRequest.getLocaleString("step") + " 1 " + paramsRequest.getLocaleString("of") + " 1</span>");
-                    sb_ret.append("<br><br>");
-                    sb_ret.append("<span class=\"status Estilo16 Estilo15\">");
-                    sb_ret.append(paramsRequest.getLocaleString("description"));
-                    sb_ret.append("</span>");
-                    sb_ret.append("<br></p>");
-                    sb_ret.append("</td>");
-                    sb_ret.append("</tr>");
-                    sb_ret.append("\n</table>");
-                    sb_ret.append("</td>");
-                    sb_ret.append("</tr>");*/
-
-                    sb_ret.append("<tr>\n");
-                    sb_ret.append("<td colspan=\"4\">&nbsp;<input type=\"hidden\" name=\"wb_rfilter\" value=\"" + s_rfilter + "\"></td>\n");
-                    sb_ret.append("</tr>\n");
-
-                    /*sb_ret.append("\n<tr>");
-                    sb_ret.append("<td colspan=\"3\">&nbsp;</td>");
-                    sb_ret.append("<td>");
-                    sb_ret.append("<input type=\"button\" class=\"boton\" onClick=\"DoXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\">&nbsp;");
-                    sb_ret.append("<input type=\"button\" class=\"boton\" onClick=\"DoApply()\" value=\"" + paramsRequest.getLocaleString("apply") + "\" name=\"btnApply\">&nbsp;");
-                    sb_ret.append("</td>");
-                    sb_ret.append("\n</tr>");*/
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
                     sb_ret.append("<tr>\n");
                     sb_ret.append(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;\n");
                     sb_ret.append("   <input type=\"button\" onclick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;\n");
-                    sb_ret.append("   <input type=\"button\" onclick=\"doApply()\" value=\"" + paramsRequest.getLocaleString("apply") + "\" name=\"btnApply\" />\n");
+                    sb_ret.append("   <input type=\"button\" onclick=\"doApply()\" value=\""+paramsRequest.getLocaleString("apply")+"\" name=\"btnApply\" />\n");
+                    sb_ret.append("   <input type=\"hidden\" name=\"wb_rfilter\" value=\""+s_rfilter+"\"/>\n");
                     sb_ret.append(" </td>\n");
                     sb_ret.append("</tr>\n");
                     sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
 
-                    /*sb_ret.append("\n<tr>");
-                    sb_ret.append("<td>&nbsp;</td>");
-                    sb_ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("site") + "</td>");
-                    sb_ret.append("<td>");
-                    sb_ret.append("\n<select name=\"wb_site\">");
-                    for (int i = 0; i < hm_sites.size(); i++) {
-                        s_value = (String) hm_sites.get(Integer.toString(i));
-                        i_key = s_value.indexOf("|");
-                        s_tmid = s_value.substring(0, i_key);
-                        s_tmtitle = s_value.substring(i_key + 1, s_value.length());
-                        sb_ret.append("\n<option value=\"" + s_tmid + "\"");
-                        if (s_site != null) {
-                            if (s_site.equals(s_tmid)) {
-                                sb_ret.append(" selected");
-                            }
-                        }
-                        sb_ret.append(">" + s_tmtitle + "</option>");
-                    }
-                    sb_ret.append("\n</select>");
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("\n<td class=\"datos\">&nbsp;");
-                    sb_ret.append("\n<input type=hidden name=\"wb_showlevel\" value=\"10\">");
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("\n</tr>");*/
                     sb_ret.append("<tr>\n");
                     sb_ret.append("<td>" + paramsRequest.getLocaleString("site") + ":</td>\n");
                     sb_ret.append("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" size=\"1\">\n");
@@ -380,210 +259,6 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("<td>&nbsp;</td>\n");
                     sb_ret.append("</tr>\n");
 
-                    /*
-                    // Receive parameters
-                    String s_rep_type = request.getParameter("wb_rep_type");
-                    String s_year_1 = request.getParameter("wb_year_1");
-                    String s_month_1 = request.getParameter("wb_month_1");
-                    String s_day_1 = request.getParameter("wb_day_1");
-                    String s_year_11 = request.getParameter("wb_year_11");
-                    String s_month_11 = request.getParameter("wb_month_11");
-                    String s_day_11 = request.getParameter("wb_day_11");
-                    String s_year_12 = request.getParameter("wb_year_12");
-                    String s_month_12 = request.getParameter("wb_month_12");
-                    String s_day_12 = request.getParameter("wb_day_12");
-
-                    // Asign value to parameters
-                    if (s_rep_type == null) {
-                        s_rep_type = "0";
-                    }
-                    if (s_year_1 == null) {
-                        s_year_1 = Integer.toString(gc_now.get(Calendar.YEAR));
-                    }
-                    if (s_month_1 == null) {
-                        s_month_1 = Integer.toString(gc_now.get(Calendar.MONTH) + 1);
-                    }
-                    if (s_day_1 == null) {
-                        s_day_1 = Integer.toString(gc_now.get(Calendar.DAY_OF_MONTH));
-                    }
-                    if (s_year_11 == null) {
-                        s_year_11 = Integer.toString(gc_now.get(Calendar.YEAR));
-                    }
-                    if (s_month_11 == null) {
-                        s_month_11 = Integer.toString(gc_now.get(Calendar.MONTH) + 1);
-                    }
-                    if (s_day_11 == null) {
-                        s_day_11 = Integer.toString(I_START_DAY);
-                    }
-                    if (s_year_12 == null) {
-                        s_year_12 = Integer.toString(gc_now.get(Calendar.YEAR));
-                    }
-                    if (s_month_12 == null) {
-                        s_month_12 = Integer.toString(gc_now.get(Calendar.MONTH) + 1);
-                    }
-                    if (s_day_12 == null) {
-                        s_day_12 = Integer.toString(gc_now.get(Calendar.DAY_OF_MONTH));
-                    // Asign value to  parameters
-                    }
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("<td>&nbsp;</td>");
-                    sb_ret.append("<td colspan=\"3\" class=\"datos\"><input type=\"radio\" value=\"0\" name=\"wb_rep_type\" onclick=\"javascript: DoBlockade();\"");
-                    if (s_rep_type.equals("0")) {
-                        sb_ret.append(" checked");
-                    }
-                    sb_ret.append(">" + paramsRequest.getLocaleString("by_day") + "</td>");
-                    sb_ret.append("\n</tr>");
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("<td>&nbsp;</td>");
-                    sb_ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("year") + "&nbsp;<select name=\"wb_year_1\" onchange=\"javascript: DoEvaluateYear(this.selectedIndex);\"");
-                    if (s_rep_type.equals("1")) {
-                        sb_ret.append("disabled=\"true\"");
-                    }
-                    sb_ret.append("><option value=\"0\">" + paramsRequest.getLocaleString("all") + "</option>");
-                    for (int i = 2000; i < 2021; i++) {
-                        sb_ret.append("<option value=\"" + i + "\"");
-                        if ((Integer.parseInt(s_year_1) == i)) {
-                            sb_ret.append(" selected");
-                        }
-                        sb_ret.append(">" + i + "</option>");
-                    }
-                    sb_ret.append("\n</select>");
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("month") + "&nbsp;<select name=\"wb_month_1\" onchange=\"javascript: DoEvaluateMonth(this.selectedIndex);\"");
-                    if (s_rep_type.equals("1")) {
-                        sb_ret.append("disabled=\"true\"");
-                    }
-                    sb_ret.append("><option value=\"0\">" + paramsRequest.getLocaleString("all") + "</option>");
-                    for (int i = 0; i <= arr_month.length - 1; i++) {
-                        sb_ret.append("<option value=\"" + (i + 1) + "\"");
-                        if (Integer.parseInt(s_month_1) == (i + 1)) {
-                            sb_ret.append(" selected");
-                        }
-                        sb_ret.append(">" + arr_month[i] + "</option>");
-                    }
-                    sb_ret.append("\n</select>");
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("day") + "&nbsp;<select name=\"wb_day_1\"");
-                    if (s_rep_type.equals("1")) {
-                        sb_ret.append("disabled=\"true\"");
-                    }
-                    sb_ret.append("><option value=\"0\">" + paramsRequest.getLocaleString("all") + "</option>");
-                    for (int i = 1; i < 32; i++) {
-                        sb_ret.append("<option value=\"" + i + "\"");
-                        if (Integer.parseInt(s_day_1) == i) {
-                            sb_ret.append(" selected");
-                        }
-                        sb_ret.append(">" + i + "</option>");
-                    }
-                    sb_ret.append("\n</select>");
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("\n</tr>");
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("<td colspan=\"4\">&nbsp;</td>");
-                    sb_ret.append("\n</tr>");
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("<td>&nbsp;</td>");
-                    sb_ret.append("<td colspan=\"3\" class=\"datos\"><input type=\"radio\" value=\"1\" name=\"wb_rep_type\" onclick=\"javascript: DoBlockade();\"");
-                    if (s_rep_type.equals("1")) {
-                        sb_ret.append(" checked");
-                    }
-                    sb_ret.append(">" + paramsRequest.getLocaleString("by_interval_dates") + "</td>");
-                    sb_ret.append("\n</tr>");
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("<td>&nbsp;</td>");
-                    sb_ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("year") + "&nbsp;<select name=\"wb_year_11\"");
-                    if (s_rep_type.equals("0")) {
-                        sb_ret.append("disabled=\"true\"");
-                    }
-                    sb_ret.append(">");
-                    for (int i = 2000; i < 2021; i++) {
-                        sb_ret.append("<option value=\"" + i + "\"");
-                        if (Integer.parseInt(s_year_11) == i) {
-                            sb_ret.append(" selected");
-                        }
-                        sb_ret.append(">" + i + "</option>");
-                    }
-                    sb_ret.append("\n</select>");
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("\n<td class=\"datos\">" + paramsRequest.getLocaleString("month") + "&nbsp;<select name=\"wb_month_11\"");
-                    if (s_rep_type.equals("0")) {
-                        sb_ret.append("disabled=\"true\"");
-                    }
-                    sb_ret.append(">");
-                    for (int i = 0; i <= arr_month.length - 1; i++) {
-                        sb_ret.append("<option value=\"" + (i + 1) + "\"");
-                        if (Integer.parseInt(s_month_11) == (i + 1)) {
-                            sb_ret.append(" selected");
-                        }
-                        sb_ret.append(">" + arr_month[i] + "</option>");
-                    }
-                    sb_ret.append("\n</select>");
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("\n<td class=\"datos\">" + paramsRequest.getLocaleString("day") + "&nbsp;<select name=\"wb_day_11\"");
-                    if (s_rep_type.equals("0")) {
-                        sb_ret.append("disabled=\"true\"");
-                    }
-                    sb_ret.append(">");
-                    for (int i = 1; i < 32; i++) {
-                        sb_ret.append("<option value=\"" + i + "\"");
-                        if (Integer.parseInt(s_day_11) == i) {
-                            sb_ret.append(" selected");
-                        }
-                        sb_ret.append(">" + i + "</option>");
-                    }
-                    sb_ret.append("\n</select>");
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("\n</tr>");
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("<td>&nbsp;</td>");
-                    sb_ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("year") + "&nbsp;<select name=\"wb_year_12\"");
-                    if (s_rep_type.equals("0")) {
-                        sb_ret.append("disabled=\"true\"");
-                    }
-                    sb_ret.append(">");
-                    for (int i = 2000; i < 2021; i++) {
-                        sb_ret.append("<option value=\"" + i + "\"");
-                        if (Integer.parseInt(s_year_12) == i) {
-                            sb_ret.append(" selected");
-                        }
-                        sb_ret.append(">" + i + "</option>");
-                    }
-                    sb_ret.append("\n</select>");
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("month") + "&nbsp;<select name=\"wb_month_12\"");
-                    if (s_rep_type.equals("0")) {
-                        sb_ret.append("disabled=\"true\"");
-                    }
-                    sb_ret.append(">");
-                    for (int i = 0; i <= arr_month.length - 1; i++) {
-                        sb_ret.append("<option value=\"" + (i + 1) + "\"");
-                        if (Integer.parseInt(s_month_12) == (i + 1)) {
-                            sb_ret.append(" selected");
-                        }
-                        sb_ret.append(">" + arr_month[i] + "</option>");
-                    }
-                    sb_ret.append("\n</select>");
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("day") + "&nbsp;<select name=\"wb_day_12\"");
-                    if (s_rep_type.equals("0")) {
-                        sb_ret.append("disabled=\"true\"");
-                    }
-                    sb_ret.append(">");
-                    for (int i = 1; i < 32; i++) {
-                        sb_ret.append("<option value=\"" + i + "\"");
-                        if (Integer.parseInt(s_day_12) == i) {
-                            sb_ret.append(" selected");
-                        }
-                        sb_ret.append(">" + i + "</option>");
-                    }
-                    sb_ret.append("\n</select>");
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("\n</tr>");
-                    sb_ret.append("\n<tr>");
-                    sb_ret.append("\n<td class=datos align=right colspan=4>");
-                    sb_ret.append("\n&nbsp;");
-                    sb_ret.append("\n</td>");
-                    sb_ret.append("\n</tr>");*/
                     sb_ret.append("<tr>\n");
                     sb_ret.append("<td>\n");
                     sb_ret.append("<label>\n");
@@ -597,7 +272,6 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("<td colspan=\"2\">\n");
 
                     sb_ret.append("<input type=\"text\" name=\"wb_fecha1\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\"/>\n");
-                    //sb_ret.append("<input type=\"text\" id=\"wb_fecha1\" name=\"wb_fecha1\" size=\"10\" maxlength=\"10\" value=\"" + fecha1 + "\" />");
 
                     sb_ret.append("</td>\n");
                     sb_ret.append("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>\n");
@@ -623,55 +297,58 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("<td>&nbsp;</td>\n");
                     sb_ret.append("</tr>\n");
 
+                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
                     sb_ret.append("<tr>\n");
                     sb_ret.append("<td>\n");
                     sb_ret.append(paramsRequest.getLocaleString("reportName") + ":");
                     sb_ret.append("</td>\n");
                     sb_ret.append("<td colspan=\"3\">\n");
-                    sb_ret.append("<input type=text name=\"filename\" value=\"\">\n");
-                    sb_ret.append("&nbsp;<font size=1>* " + paramsRequest.getLocaleString("reportFileGenerated") + " (xls)</font>\n");
+                    sb_ret.append("<input type=\"text\" name=\"filename\" value=\"\"/>\n");
+                    sb_ret.append("&nbsp;<font size=\"1\">* " + paramsRequest.getLocaleString("reportFileGenerated") + " (xls)</font>\n");
                     sb_ret.append("</td>\n");
                     sb_ret.append("</tr>\n");
-
+                    
+                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
                     sb_ret.append("<tr>\n");
                     sb_ret.append("<td colspan=\"4\">\n");
                     sb_ret.append("<table border=\"0\" cellpadding=\"5\" cellspacing=\"0\" width=\"100%\">\n");
                     HashMap hm = getFileList(paramsRequest.getTopic());
                     if (hm.size() == 0) {
-                        sb_ret.append("<tr><td class=tabla>" + paramsRequest.getLocaleString("noGeneratedReports") + "</td></tr>\n");
+                        sb_ret.append("<caption align=\"top\">" + paramsRequest.getLocaleString("noGeneratedReports") + "</caption>\n");
                     } else {
-                        sb_ret.append("<tr><td class=tabla>" + paramsRequest.getLocaleString("listReports") + "</td></tr>\n");
-                        sb_ret.append("<tr class=tabla><td>" + paramsRequest.getLocaleString("tdAction") + "</td><td>" + paramsRequest.getLocaleString("tdFileName") + "</td><td>" + paramsRequest.getLocaleString("tdSite") + "</td><td>" + paramsRequest.getLocaleString("tdCreated") + "</td></tr>\n");
-                        String rowColor = "";
-                        boolean cambiaColor = true;
-                        Iterator itf = hm.keySet().iterator();
-                        while (itf.hasNext()) {
-                            String key = (String) itf.next();
-                            String sfn = (String) hm.get(key);
+                        sb_ret.append("<caption align=\"top\">" + paramsRequest.getLocaleString("listReports") + "</caption>\n");
+                        sb_ret.append("<tr><th width=\"15%\">" + paramsRequest.getLocaleString("tdAction") + "</th><th width=\"35%\">" + paramsRequest.getLocaleString("tdFileName") + "</th><th width=\"25%\">" + paramsRequest.getLocaleString("tdSite") + "</th><th width=\"25%\">" + paramsRequest.getLocaleString("tdCreated") + "</th></tr>\n");
+
+                        boolean toggleColor = true;
+                        SWBResourceURL urlDel = paramsRequest.getActionUrl().setAction("remove");
+                        /*Iterator<String> itf = hm.keySet().iterator();*/
+                        String[] arrhm = new String[hm.size()];
+                        Arrays.sort(hm.keySet().toArray(arrhm));//  hm.keySet()
+                        /*while (itf.hasNext()) {*/
+                        for(int i=0; i<arrhm.length; i++) {
+                            /*String key = itf.next();*/
+                            String key = arrhm[i];
+                            String sfn = (String)hm.get(key);
                             String site = sfn.substring(0, sfn.lastIndexOf("|"));
                             String filename = sfn.substring(sfn.lastIndexOf("|") + 1);
-                            if (null != hm_sites2.get(site)) {
-                                rowColor = "#EFEDEC";
-                                if (!cambiaColor) {
-                                    rowColor = "#FFFFFF";
-                                }
-                                cambiaColor = !(cambiaColor);
-                                sb_ret.append("<tr class=datos bgcolor=\"" + rowColor + "\">\n");
-                                SWBResourceURL urlDel = paramsRequest.getActionUrl();
-                                urlDel.setAction("remove");
+                            /*if(null != hm_sites2.get(site)) {*/                                
+                                sb_ret.append("<tr bgcolor=\""+(toggleColor?"#EFEDEC":"#FFFFFF")+"\">\n");
                                 urlDel.setParameter("key", key);
-                                sb_ret.append("<td><a href=\"" + urlDel + "\" onclick=\" if(confirm('" + paramsRequest.getLocaleString("alertRemoveFile") + "?')){return true;}else{return false};\"><img border=0 src=\"" + SWBPlatform.getContextPath() + "wbadmin/images/eliminar.gif\" alt=\"" + paramsRequest.getLocaleString("deleteReport") + "\"></a></td>\n");
-                                sb_ret.append("<td><a class=link href=\"javascript:DoDownload('" + filename + "','" + key + "');\" alt=\"Reporte: " + filename + "\">" + filename + "</a></td>\n");
-                                sb_ret.append("<td>" + site + "</td><td>" + SWBUtils.TEXT.iso8601DateFormat(new java.sql.Timestamp(Long.parseLong(key))) + "</td></tr>\n");
-                            }
+                                sb_ret.append("<td><a href=\""+urlDel+"\" onclick=\" if(confirm('" + paramsRequest.getLocaleString("alertRemoveFile") + "?')){return true;}else{return false};\"><img border=\"0\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" alt=\"" + paramsRequest.getLocaleString("deleteReport") + "\"></a></td>\n");
+                                sb_ret.append("<td><a href=\"javascript:doDownload('"+filename+"','"+key + "');\" alt=\"Reporte: "+filename+"\">"+filename+"</a></td>\n");
+                                sb_ret.append("<td>" + site + "</td>\n");
+                                sb_ret.append("<td>" + SWBUtils.TEXT.iso8601DateFormat(new java.sql.Timestamp(Long.parseLong(key)))+"</td>\n");
+                                sb_ret.append("</tr>\n");
+                                toggleColor = !(toggleColor);
+                            /*}*/
                         }
                     }
                     sb_ret.append("</table>\n");
                     sb_ret.append("</td></tr>\n");
-                    sb_ret.append("</td>\n");
-                    sb_ret.append("</tr>\n");
+                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
                     sb_ret.append("</table></form>\n");
-                } else {   // There are not sites and displays a message
+                    sb_ret.append("</fieldset></div>");
+                }else { // There are not sites and displays a message
                     sb_ret.append("<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">\n");
                     sb_ret.append("<table border=0 width=\"100%\">\n");
                     sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
@@ -687,37 +364,36 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
                     sb_ret.append("</table></form>\n");
                 }
-            } catch (Exception e) {
+            }catch(Exception e) {
                 log.error("Error on method DoView() resource " + " " + strRscType + " " + "with id" + " " + base.getId(),e);
             }
-        } else {
-
+        }else {
             DateFormat df = null;
 
             ReportGenerator rgen = ReportMgr.getInstance().getGenerator();
-            sb_ret.append("<table width=100% cellpadding=5 cellspacing=0 class=box>");
-            sb_ret.append("<tr><td class=tabla colspan=2>");
+            sb_ret.append("<table width=\"100%\" cellpadding=\"5\" cellspacing=\"0\">");
+            sb_ret.append("<tr><td colspan=\"2\">");
             sb_ret.append(paramsRequest.getLocaleString("msgTitleChRep"));
             sb_ret.append("</td></tr>");
-            sb_ret.append("<tr><td class=datos width=200 align=right>");
-            sb_ret.append(paramsRequest.getLocaleString("msgStatus") + ":</td><td class=valores>" + rgen.getStatus());
+            sb_ret.append("<tr><td width=\"200\" align=\"right\">");
+            sb_ret.append(paramsRequest.getLocaleString("msgStatus") + ":</td><td>" + rgen.getStatus());
             sb_ret.append("</td></tr>");
-            sb_ret.append("<tr><td class=datos width=200 align=right>");
+            sb_ret.append("<tr><td width=\"200\" align=\"right\">");
             Timestamp ts_time = new Timestamp(rgen.getInitTime());
             String s_time = "" + ts_time.getHours() + ":" + ts_time.getMinutes() + ":" + ts_time.getSeconds();
             df = DateFormat.getTimeInstance(DateFormat.FULL);
             s_time = df.format(ts_time);
-            sb_ret.append(paramsRequest.getLocaleString("msgSTime") + ":</td><td class=valores>" + s_time);
+            sb_ret.append(paramsRequest.getLocaleString("msgSTime") + ":</td><td>" + s_time);
             sb_ret.append("</td></tr>");
-            sb_ret.append("<tr><td class=datos width=200 align=right>");
-            sb_ret.append(paramsRequest.getLocaleString("msgProcTime") + ":</td><td class=valores>" + getAvailableTime(ts_time));
+            sb_ret.append("<tr><td width=\"200\" align=\"right\">");
+            sb_ret.append(paramsRequest.getLocaleString("msgProcTime") + ":</td><td>" + getAvailableTime(ts_time));
             sb_ret.append("</td></tr>");
-            sb_ret.append("<tr><td class=datos width=200 align=right>");
-            sb_ret.append(paramsRequest.getLocaleString("msgLogCounter") + ":</td><td class=valores>" + rgen.getCounter());
+            sb_ret.append("<tr><td width=\"200\" align=\"right\">");
+            sb_ret.append(paramsRequest.getLocaleString("msgLogCounter") + ":</td><td>" + rgen.getCounter());
             sb_ret.append("</td></tr>");
             sb_ret.append("</table>");
 
-            sb_ret.append("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"3;URL=" + paramsRequest.getRenderUrl().toString() + "\">");
+            sb_ret.append("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"3;URL="+paramsRequest.getRenderUrl()+"\">");
         }
         response.getWriter().print(sb_ret.toString());
     }
@@ -976,7 +652,6 @@ public class WBAChannelReport extends GenericResource {
      *
      */
     private long getAllHits(String tpid, WebSite tm) {
-        //System.out.println("tpid"+tpid);
         long acumulado = 0;
         if (tpid != null) {
             WebPage tp = tm.getWebPage(tpid);
@@ -1040,11 +715,6 @@ public class WBAChannelReport extends GenericResource {
         }
         return ret;
     }
-
-    /**
-     * @param request
-     * @return
-     */
 
     private ArrayList getReportResults(String idtm, int reportType, int _year1, int _month1, int _day1, int _year2, int _month2, int _day2) {
         Iterator<SWBRecHit> iterHits = null;
@@ -1122,7 +792,6 @@ public class WBAChannelReport extends GenericResource {
                 //PARA OBTENER HITS TOTALES DEL REPORTE
 //
                 long todos = getTotalHits(s_site, _year1,_month1,_day1,_year2,_month2,_day2, 3);
-                //System.out.println("Total hits por Canal: " + todos);
                 WebSite tm = SWBContext.getWebSite(s_site);
                 total_acumulado = getAllHits(tm.getHomePage().getId(),tm );
                 if(total_acumulado != todos)
@@ -1149,98 +818,31 @@ public class WBAChannelReport extends GenericResource {
 
     public void updateReport(HttpServletRequest request, WebPage topic) {
         Resource base = getResourceBase();
-        String s_site = null;
-
-        String s_level = request.getParameter("wb_showlevel");
-        if (s_level == null) {
-            s_level = "1";
+        String s_site = request.getParameter("wb_site");
+        /*String s_level = request.getParameter("wb_showlevel")==null?"1":request.getParameter("wb_showlevel");*/
+        int groupDates;
+        try {
+            groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
+        }catch(NumberFormatException e) {
+            groupDates = 0;
         }
-        s_site = request.getParameter("wb_site");
-
-        // Receive parameters
-        String s_rep_type = request.getParameter("wb_rep_type");
-        String s_filename = request.getParameter("filename");
-        /*String s_year_ini = request.getParameter("wb_year_1") != null ? request.getParameter("wb_year_1") : "0";
-        String s_month_ini = request.getParameter("wb_month_1") != null ? request.getParameter("wb_month_1") : "0";
-        String s_day_ini = request.getParameter("wb_day_1") != null ? request.getParameter("wb_day_1") : "0";
-        String s_year_fin = request.getParameter("wb_year_1") != null ? request.getParameter("wb_year_1") : "0";
-        String s_month_fin = request.getParameter("wb_month_1") != null ? request.getParameter("wb_month_1") : "0";
-        String s_day_fin = request.getParameter("wb_day_1") != null ? request.getParameter("wb_day_1") : "0";
-        
-
-        if("1".equals(s_rep_type)) {
-            s_year_ini = request.getParameter("wb_year_11");
-            s_month_ini = request.getParameter("wb_month_11");
-            s_day_ini = request.getParameter("wb_day_11");
-            s_year_fin = request.getParameter("wb_year_12");
-            s_month_fin = request.getParameter("wb_month_12");
-            s_day_fin = request.getParameter("wb_day_12");
-        }else if("0".equals(s_rep_type)) {
-
-                s_year_ini = request.getParameter("wb_year_1");
-            s_month_ini = request.getParameter("wb_month_1");
-            s_day_ini = request.getParameter("wb_day_1");
-            s_year_fin = s_year_ini;
-            s_month_fin = s_month_ini;
-            s_day_fin = s_day_ini;
-
-            if (s_day_ini != null && s_day_ini.equals("0")) {
-                HashMap hm = new HashMap();
-                hm.put("1", "31");
-                hm.put("2", "28");
-                hm.put("3", "31");
-                hm.put("4", "30");
-                hm.put("5", "31");
-                hm.put("6", "30");
-                hm.put("7", "31");
-                hm.put("8", "31");
-                hm.put("9", "30");
-                hm.put("10", "31");
-                hm.put("11", "30");
-                hm.put("12", "31");
-
-                if (s_month_fin != null && s_month_fin.equals("2")) {
-                    s_day_fin = (Integer.parseInt(s_year_fin) % 4) == 0 ? "29" : "28";
-                } else {
-                    s_day_fin = (String) hm.get(s_month_fin.trim());
-                }
-                s_month_fin = s_month_ini;
-                s_day_ini = "1";
-
-            }
-            else if (s_year_ini != null && s_year_ini.equals("0")) {
-                s_day_ini = "0";
-                s_month_ini = "0";
-                s_day_fin = "0";
-                s_month_fin = "0";
-            }
-            else if (s_year_ini != null && !s_year_ini.equals("0"))
-            {
-                s_day_ini = "1";
-                s_month_ini = "1";
-                s_day_fin = "31";
-                s_month_fin = "12";
-            }
-
-
-        }*/
-        String fechaIni;
-        String fecha1 = request.getParameter("wb_fecha1");
-        String fecha11 = request.getParameter("wb_fecha11");
-        String fechaFin = request.getParameter("wb_fecha12");
-        if("0".equalsIgnoreCase(s_rep_type)) {
-            fechaIni = fecha1;
-        }else {
-            fechaIni = fecha11;
-        }
+        String fecha1 = request.getParameter("wb_fecha1")==null ? "":request.getParameter("wb_fecha1");
+        String fecha11 = request.getParameter("wb_fecha11")==null ? "":request.getParameter("wb_fecha11");
+        String fecha12 = request.getParameter("wb_fecha12")==null ? "":request.getParameter("wb_fecha12");
+        String filenameLogic = request.getParameter("filename");
 
         // CODIGO PARA GENERAR LA LISTA DE ARCHIVOS EXISTENTES
         // LOS ARCHIVOS SE GENERAN EN /WORK/LOGS/
-        String archivo = Long.toString(System.currentTimeMillis());
-
+        String filename = Long.toString(System.currentTimeMillis());
         ReportMgr mgr = ReportMgr.getInstance();
-        ReportGenerator gen = new ReportGenerator(s_site, Integer.parseInt(s_rep_type), Integer.parseInt(fechaIni.substring(0,4)), Integer.parseInt(fechaIni.substring(5,7)), Integer.parseInt(fechaIni.substring(8)), Integer.parseInt(fechaFin.substring(0,4)), Integer.parseInt(fechaFin.substring(5,7)), Integer.parseInt(fechaFin.substring(8)), archivo);
+        ReportGenerator gen;
+        if(groupDates==0) {
+            gen = new ReportGenerator(s_site, Integer.parseInt(fecha1.substring(0,4)), Integer.parseInt(fecha1.substring(5,7)), Integer.parseInt(fecha1.substring(8)), filename);
+        }else {
+            gen = new ReportGenerator(s_site, Integer.parseInt(fecha11.substring(0,4)), Integer.parseInt(fecha11.substring(5,7)), Integer.parseInt(fecha11.substring(8)), Integer.parseInt(fecha12.substring(0,4)), Integer.parseInt(fecha12.substring(5,7)), Integer.parseInt(fecha12.substring(8)), filename);
+        }
         mgr.start(gen);
+
         String baseXML = null;
         try {
             baseXML = base.getData(topic);
@@ -1256,8 +858,8 @@ public class WBAChannelReport extends GenericResource {
                 dom.appendChild(files);
             }
             Element file = dom.createElement("file");
-            file.setAttribute("name", s_filename + ".xls");
-            file.setAttribute("id", archivo);
+            file.setAttribute("name", filenameLogic+".xls");
+            file.setAttribute("id", filename);
             file.setAttribute("site", s_site);
             files.appendChild(file);
 
@@ -1265,31 +867,6 @@ public class WBAChannelReport extends GenericResource {
         } catch (Exception edom) {
             log.error("Error al generar el DOM. ", edom);
         }
-    }
-
-    /**
-     * @param paramsRequest
-     * @return
-     */
-    public String[] doArrMonth(SWBParamRequest paramsRequest) {
-        String[] arr_month = new String[12];
-        try {
-            arr_month[0] = paramsRequest.getLocaleString("month_january");
-            arr_month[1] = paramsRequest.getLocaleString("month_february");
-            arr_month[2] = paramsRequest.getLocaleString("month_march");
-            arr_month[3] = paramsRequest.getLocaleString("month_april");
-            arr_month[4] = paramsRequest.getLocaleString("month_may");
-            arr_month[5] = paramsRequest.getLocaleString("month_june");
-            arr_month[6] = paramsRequest.getLocaleString("month_july");
-            arr_month[7] = paramsRequest.getLocaleString("month_august");
-            arr_month[8] = paramsRequest.getLocaleString("month_september");
-            arr_month[9] = paramsRequest.getLocaleString("month_october");
-            arr_month[10] = paramsRequest.getLocaleString("month_november");
-            arr_month[11] = paramsRequest.getLocaleString("month_december");
-        } catch (Exception e) {
-            log.error("Error on method doArrMonth() resource" + " " + strRscType + " " + "with id" + " " + getResourceBase().getId(), e);
-        }
-        return arr_month;
     }
 
     public HashMap getFileList(WebPage topic) {
@@ -1331,16 +908,17 @@ public class WBAChannelReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */
+    @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String filename = request.getParameter("filename");
         String key = request.getParameter("key");
         String act = response.getAction();
         WebPage topic = response.getTopic();
         Resource base = getResourceBase();
-        if (null == act) {
+        if(null == act) {
             act = "";
         }
-        if ("remove".equals(act)) {
+        if("remove".equalsIgnoreCase(act)) {
             try {
                 if (null != key && key.trim().length() > 0) {
                     Document dom = SWBUtils.XML.xmlToDom(base.getData(topic));
@@ -1380,8 +958,8 @@ public class WBAChannelReport extends GenericResource {
             } catch (Exception e) {
                 log.error("Error al eliminar un reporte por Canal",e);
             }
-        } else if ("".equals(act)) {
-            if (null != filename && filename.trim().length() > 0) {
+        }else if ("".equalsIgnoreCase(act)) {
+            if( null!=filename && filename.trim().length()>0 ) {
                 updateReport(request, topic);
             }
         }
@@ -1390,7 +968,7 @@ public class WBAChannelReport extends GenericResource {
         Enumeration en = request.getParameterNames();
         while (en.hasMoreElements()) {
             String element = (String) en.nextElement();
-            if (null != request.getParameter(element)) {
+            if(null!=request.getParameter(element)) {
                 response.setRenderParameter(element, request.getParameter(element));
             }
         }
@@ -1430,23 +1008,28 @@ public class WBAChannelReport extends GenericResource {
 class ReportGenerator extends Thread {
     private static Logger log = SWBUtils.getLogger(WBADeviceReport.class);
 
-    private int counter = 0;
-    private String status = null;
+    private final int type = 3;
+    private int i_index = 0;
+    private int counter;
+    private int year1,  month1,  day1,  year2,  month2,  day2;
     private long ini = 0;
     private long fin = 0;
-    private ReportMgr manager = null;
-    private int year1=2006,  month1 = 01,  day1 = 01,  year2 = 2006,  month2 = 12,  day2 = 31;
-    private String tms = "Test";
-    private String filename = null;
-    private int type = 3;
-    private int i_index = 0;
-    private HashMap hmAc = null, hmCounted=null;
     private long hitsUncountables = 0;
 
-    /** Creates a new instance of reporGenerator */
-    public ReportGenerator(String tms, int type, int year1, int month1, int day1, int year2, int month2, int day2, String filename) {
+    private String status;
+    private String tms = "Test";
+    private String filename = null;
+    
+    private ReportMgr manager = null;
+    private HashMap hmAc = null, hmCounted=null;
+    
+
+    public ReportGenerator(String tms, int year1, int month1, int day1, String filename) {
+        this(tms, year1, month1, day1, 0, 0, 0, filename);
+    }
+
+    public ReportGenerator(String tms, int year1, int month1, int day1, int year2, int month2, int day2, String filename) {
         this.tms = tms;
-        this.type = type;
         this.year1 = year1;
         this.month1 = month1;
         this.day1 = day1;
@@ -1456,22 +1039,54 @@ class ReportGenerator extends Thread {
         this.filename = filename;
         this.hmAc = new HashMap();
         this.hmCounted = new HashMap();
+        this.status = "Initializing...";
     }
 
-    private void getChildSections(WebPage p_topic, ArrayList p_array) {
-        Iterator<WebPage> it_son = p_topic.listChilds();
-        while(it_son.hasNext()) {
-            WebPage tp_child = it_son.next();
-            p_array.add(i_index, tp_child);
-            i_index++;
-            if (tp_child.listChilds().hasNext()) {
-                getChildSections(tp_child, p_array);
+    private void getChildSections(WebPage node, ArrayList sections) {
+        Iterator<WebPage> childs = node.listChilds();
+        while(childs.hasNext()) {
+            WebPage webPage = childs.next();
+            sections.add(webPage);
+            if(webPage.listChilds().hasNext()) {
+                getChildSections(webPage, sections);
             }
         }
     }
 
-    public long getTotalHits(String tmid, int y1,int m1,int d1, int y2,int m2,int d2, int reportType )
-    {
+    public long getTotalHits(String tmid, int year,int month,int day) {
+        long ret = 0;        
+        ResultSet rs = null;
+        PreparedStatement st = null;
+        Connection con = null;
+        GregorianCalendar date;
+        try{
+            con = SWBUtils.DB.getDefaultConnection();
+            String sql = "select SUM(hits)as hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<=?)";
+            st = con.prepareStatement(sql);
+            st.setString(1, tmid);
+            st.setInt(2, type);
+            date = new GregorianCalendar(year, month-1, day, 0, 0, 0);
+            st.setTimestamp(3, new Timestamp(date.getTimeInMillis()));
+            date = new GregorianCalendar(year,month-1,day,23,59,59);
+            st.setTimestamp(4, new Timestamp(date.getTimeInMillis()));
+            rs = st.executeQuery();
+            if(rs.next()) {
+                ret = rs.getLong("hits");
+            }
+        }catch(Exception se) {
+            log.error("Error al consultar los Hits a la DB. WBADeviceReport.getTotalHits()",se);
+        }finally {
+            try {
+                if(rs!=null) rs.close();
+                if(st!=null) st.close();
+                if(con!=null) con.close();
+            }catch(SQLException e){
+            }
+        }
+        return ret;
+    }
+
+    public long getTotalHits(String tmid, int y1,int m1,int d1, int y2,int m2,int d2, int reportType ) {
         long ret = 0;
         Connection con = null;
         PreparedStatement pst = null;
@@ -1519,100 +1134,152 @@ class ReportGenerator extends Thread {
         return ret;
     }
 
-    private Iterator getReportResults(String idtm, int reportType, int _year1, int _month1, int _day1, int _year2, int _month2, int _day2) {
-        Iterator<SWBRecHit> iterHits = null;
+    private Iterator getReportResults(final String siteId, final int year, final int month, final int day) {
+        Iterator<SWBRecHit> iterHits;
         ArrayList al_pag = new ArrayList();
-        WebSite tm_section = null;
-        Iterator<WebPage> it_child = null;
-        ArrayList<WebPage> arr_child = null;
-        /*RecResHits recResHits = null;*/
-        String s_site = idtm;
-        //int i_level = 10;
-        int i_len = 0;
+        WebSite webSite;
+        Iterator<WebPage> childs;
+        ArrayList<WebPage> sections;
         long l_allacumulated = 0;
-        long l_acumulated = 0;
-        long total_acumulado = 0;
 
         try {
-            tm_section = SWBContext.getWebSite(s_site);
-            if (tm_section != null) {
-                it_child = tm_section.getHomePage().listChilds();
-                arr_child = new ArrayList();
-                i_index = 0;
-                arr_child.add(i_index, tm_section.getHomePage());
-                i_index++;
-                while (it_child.hasNext()) {
-                    WebPage tp_child = it_child.next();
-                    arr_child.add(i_index, tp_child);
-                    i_index++;
-                    if (tp_child.listChilds().hasNext()) {
-                        getChildSections(tp_child, arr_child);
+            webSite = SWBContext.getWebSite(siteId);
+            if(webSite != null) {
+
+                childs = webSite.getHomePage().listChilds();
+                sections = new ArrayList();
+                sections.add(webSite.getHomePage());
+                while(childs.hasNext()) {
+                    WebPage webPage = childs.next();
+                    sections.add(webPage);
+                    if(webPage.listChilds().hasNext()) {
+                        getChildSections(webPage, sections);
                     }
                 }
-                i_len = arr_child.size();
-                l_allacumulated = 0;
-                for (int i = 0; i < i_len; i++) {
-                    WebPage t_section = arr_child.get(i);
-                    /*if (t_section.getDbdata().getSystem() == 0) {*/
-                        if (!t_section.isDeleted()) {
-                            if (reportType == 0) { // radio button was 0
-                                iterHits = SWBRecHits_.getInstance().getResHitsLog(s_site, t_section.getId(), 3, _year1, _month1, _day1).iterator();
-                            } else {                       // radio button was 1
-                                // Select between two dates
-                                iterHits = SWBRecHits_.getInstance().getResHitsLog(s_site, t_section.getId(), 3, _year1, _month1, _day1, _year2, _month2, _day2).iterator();
-                            }
-                            /*recResHits = null;*/
-                            l_acumulated = 0;
-                            while (iterHits.hasNext()) {
-                                counter++;
-                                SWBRecHit recResHits = iterHits.next();
-                                l_acumulated = l_acumulated + recResHits.getHits();
-                            }
-                            l_allacumulated = l_allacumulated + l_acumulated;
 
-                                String[] arr_data = new String[7];
-                                arr_data[0] = t_section.getDisplayName();
-                                arr_data[1] = Long.toString(l_acumulated);
-                                arr_data[2] = Long.toString(0);
-                                arr_data[3] = Integer.toString(t_section.getLevel());
-                                arr_data[4] = t_section.getId();                                
-                                arr_data[5] = Boolean.toString(t_section.isActive());
-                                arr_data[6] = SWBUtils.sizeOf(t_section.listChilds(null, true, true, true, true)) > 0 ? "true" : "false";
-                                al_pag.add(arr_data);
-                                hmAc.put(t_section.getId(), new Long(l_acumulated));
-
-                        }
-                    /*} else {
-                        log.error("Reporte por Canal. sección eliminada: " + t_section.getId());
-                    }*/
-                }
-                if (al_pag.size() > 0) {
-                    String[] arr_temp = (String[]) al_pag.get(0);
-                    arr_temp[2] = Long.toString(l_allacumulated);
-                    al_pag.add(0, arr_temp);
-                    al_pag.remove(1);
+                iterHits = SWBRecHits_.getInstance().getResHitsLog(siteId, type, year, month, day).iterator();
+                HashMap hits = new HashMap();
+                while(iterHits.hasNext()) {
+                    SWBRecHit recHits = iterHits.next();
+                    hits.put(recHits.getSection(), recHits);
                 }
 
-                //PARA OBTENER HITS TOTALES DEL REPORTE
-//
-                long todos = getTotalHits(s_site, _year1,_month1,_day1,_year2,_month2,_day2, 3);
-                //System.out.println("Total hits por Canal: " + todos);
-                WebSite tm = SWBContext.getWebSite(s_site);
-                total_acumulado = getAllHits(tm.getHomePage().getId(), tm);
-                if(total_acumulado != todos)
-                {
-                    hitsUncountables = Math.abs(todos-total_acumulado);
-
+                Iterator<WebPage> itsections = sections.iterator();
+                while(itsections.hasNext()) {
+                    WebPage section = itsections.next();
                     String[] arr_data = new String[7];
-                    arr_data[0] = "Secciones eliminadas";
-                    arr_data[1] = Long.toString(hitsUncountables);
-                    arr_data[2] = Long.toString(hitsUncountables);
-                    arr_data[3] = Integer.toString(1);
-                    arr_data[4] = "unknown";
-                    arr_data[5] = "false";
-                    arr_data[6] = "false";
+                    arr_data[0] = section.getDisplayName();
+
+                    if(hits.containsKey(section.getId())) {
+                        SWBRecHit recHit = (SWBRecHit)hits.get(section.getId());
+                        arr_data[1] = Long.toString(recHit.getHits(), 10);
+                        l_allacumulated += recHit.getHits();
+                        hits.remove(section.getId());
+                    }else {
+                        arr_data[1] = "0";
+                    }
+
+                    arr_data[2] = Long.toString(l_allacumulated);
+                    arr_data[3] = Integer.toString(section.getLevel());
+                    arr_data[4] = section.getId();
+                    arr_data[5] = Boolean.toString(section.isActive());
+                    arr_data[6] = SWBUtils.sizeOf(section.listChilds())>0 ? "true" : "false";
                     al_pag.add(arr_data);
-                    hmAc.put("unknown", new Long(hitsUncountables));
+                }
+                if(hits.size()>0) {
+                    Iterator<String> keys = hits.keySet().iterator();
+                    while(keys.hasNext()) {
+                        String key = keys.next();
+                        SWBRecHit recHit = (SWBRecHit)hits.get(key);
+
+                        String[] arr_data = new String[7];
+                        arr_data[0] = recHit.getSection();
+                        arr_data[1] = Long.toString(recHit.getHits(), 10);
+                        l_allacumulated += recHit.getHits();
+                        arr_data[2] = Long.toString(l_allacumulated, 10);
+                        arr_data[3] = "-1";
+                        arr_data[4] = recHit.getSection();
+                        arr_data[5] = "-";
+                        arr_data[6] = "-";
+                        al_pag.add(arr_data);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error on method ReportGenerator.getReportResults() ",e);
+        }
+        return al_pag.iterator();
+    }
+
+    private Iterator getReportResults(String siteId, int year1, int month1, int day1, int year2, int month2, int day2) {
+        Iterator<SWBRecHit> iterHits;
+        ArrayList al_pag = new ArrayList();
+        WebSite webSite;
+        Iterator<WebPage> childs;
+        ArrayList<WebPage> sections;
+        long l_allacumulated = 0;
+
+        try {
+            webSite = SWBContext.getWebSite(siteId);
+            if(webSite != null) {
+
+                childs = webSite.getHomePage().listChilds();
+                sections = new ArrayList();
+                sections.add(webSite.getHomePage());
+                while(childs.hasNext()) {
+                    WebPage webPage = childs.next();
+                    sections.add(webPage);
+                    if(webPage.listChilds().hasNext()) {
+                        getChildSections(webPage, sections);
+                    }
+                }
+
+                iterHits = SWBRecHits_.getInstance().getResHitsLog(siteId, type, year1, month1, day1, year2, month2, day2).iterator();
+                HashMap hits = new HashMap();
+                while(iterHits.hasNext()) {
+                    SWBRecHit recHits = iterHits.next();
+                    hits.put(recHits.getSection(), recHits);
+                }
+
+                Iterator<WebPage> itsections = sections.iterator();
+                while(itsections.hasNext()) {
+                    WebPage section = itsections.next();
+                    String[] arr_data = new String[7];
+                    arr_data[0] = section.getDisplayName();
+
+                    if(hits.containsKey(section.getId())) {
+                        SWBRecHit recHit = (SWBRecHit)hits.get(section.getId());
+                        arr_data[1] = Long.toString(recHit.getHits(), 10);
+                        l_allacumulated += recHit.getHits();
+                        hits.remove(section.getId());
+                    }else {
+                        arr_data[1] = "0";
+                    }
+
+                    arr_data[2] = Long.toString(l_allacumulated);
+                    arr_data[3] = Integer.toString(section.getLevel());
+                    arr_data[4] = section.getId();
+                    arr_data[5] = Boolean.toString(section.isActive());
+                    arr_data[6] = SWBUtils.sizeOf(section.listChilds())>0 ? "true" : "false";
+                    al_pag.add(arr_data);
+                }
+                if(hits.size()>0) {
+                    Iterator<String> keys = hits.keySet().iterator();
+                    while(keys.hasNext()) {
+                        String key = keys.next();
+                        SWBRecHit recHit = (SWBRecHit)hits.get(key);
+
+                        String[] arr_data = new String[7];
+                        arr_data[0] = recHit.getSection();
+                        arr_data[1] = Long.toString(recHit.getHits(), 10);
+                        l_allacumulated += recHit.getHits();
+                        arr_data[2] = Long.toString(l_allacumulated, 10);
+                        arr_data[3] = "-1";
+                        arr_data[4] = recHit.getSection();
+                        arr_data[5] = "-";
+                        arr_data[6] = "-";
+                        al_pag.add(arr_data);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -1625,38 +1292,35 @@ class ReportGenerator extends Thread {
      * Calcula el total de hits acumulado en las secciones hijas, incluyendo el tópico actual
      *
      */
-    private long getAllHits(String tpid, WebSite tm) {
+    private long getAllHits(String tpid, WebSite webSite) {
         long acumulado = 0;
-        if (tpid != null) {
-            WebPage tp = tm.getWebPage(tpid);
-            if(null!=tp)
-            {
-                hmCounted.put(tpid, tpid);
-                acumulado = ((Long) hmAc.get(tpid)).longValue();
-                Iterator<WebPage> it = tp.listChilds(null, true, true, true, true);
-                while (it.hasNext()) {
-                    WebPage tptmp = it.next();
-                    if (tptmp != null) {
-                        acumulado += (null!=hmAc.get(tptmp.getId()))?((Long) hmAc.get(tptmp.getId())).longValue():0;
-                    }
-                }
+        WebPage tp = webSite.getWebPage(tpid);
+        acumulado = ((Long) hmAc.get(tpid)).longValue();
+        hmCounted.put(tpid, tpid);
+        Iterator<WebPage> it = tp.listChilds(null, true, true, true, true);
+        while(it.hasNext()) {
+            WebPage tptmp = it.next();
+            if(tptmp != null) {
+                acumulado += (null!=hmAc.get(tptmp.getId()))?((Long)hmAc.get(tptmp.getId())).longValue():0;
             }
         }
         return acumulado;
     }
 
     public void run() {
-        status = "init";
+        status = "Initializing";
         manager.setRunning(true);
         try {
             WebSite tm = SWBContext.getWebSite(tms);
-            if (tm != null && (year1 != -1 && month1 != -1 && day1 != -1) && (year2 != -1 && month2 != -1 && day2 != -1)) {
-
+            if(tm != null) {
                 ini = System.currentTimeMillis();
-                status = "Start Report...";
-                hmCounted=new HashMap();
                 status = "Reading Logs";
-                Iterator iter = getReportResults(tms, type, year1, month1, day1, year2, month2, day2);
+                Iterator iter;
+                if(year2>0 && month2>0 && day2>0) {
+                    iter = getReportResults(tms, year1, month1, day1, year2, month2, day2);
+                }else {
+                    iter = getReportResults(tms, year1, month1, day1);
+                }
 
                 status = "Processing Logs";
                 File reportdir = new File(SWBPlatform.getWorkPath() + "/logs/reports/");
@@ -1664,11 +1328,11 @@ class ReportGenerator extends Thread {
                     reportdir.mkdirs();
                 }
 
-                status = "Writing Logs";
-                if (null == filename || (null != filename && filename.trim().length() == 0)) {
+                status = "Writing report";
+                if( null==filename || (null!=filename && filename.trim().length()== 0)) {
                     filename = "CReport";
                 }
-                hmCounted=new HashMap();
+                
 
                 PrintWriter out = new PrintWriter(new FileOutputStream(SWBPlatform.getWorkPath() + "/logs/reports/" + filename + ".xls"));
                 out.println("<table border=1>");
@@ -1688,58 +1352,40 @@ class ReportGenerator extends Thread {
                 out.println("</td><td bgcolor=\"gray\">");
                 out.println("<b>Level</b>");
                 out.println("</td></tr>");
+
                 while (iter.hasNext()) {
                     String[] arr_data = (String[]) iter.next();
                     String sectionTitle = arr_data[0];
                     String sectionHits = arr_data[1];
+                    String acumulate = arr_data[2];
                     String sectionLevel = arr_data[3];
                     String sectionID = arr_data[4];
                     String sectionActive = arr_data[5];
                     String sectionChilds = arr_data[6];
 
-                    if(hmCounted.get(sectionID)==null)
-                    {
-                        long allhits = 0;
-                        if(sectionID.equals("unknown"))
-                        {
-                            allhits = Long.parseLong(arr_data[2]);
-                        }
-                        else
-                        {
-                            allhits = getAllHits(sectionID, tm);
-                        }
-                        if(tm.getHomePage().getId().equals(sectionID))
-                        {
-                            allhits += hitsUncountables;
-                        }
-                        int nivel = sectionLevel.trim().length() > 0 ? Integer.parseInt(sectionLevel) : 0;
-                        out.print("<tr><td>");
-                        out.print(sectionID + "\t &nbsp;&nbsp;");
-                        out.print("</td><td>");
-                        for (int le = 0; le < nivel; le++) {
-                            out.print("\t &nbsp;&nbsp;");
-                        }
-                        out.print(sectionTitle + "\t");
-                        for (int le = nivel; le < nivel; le++) {
-                            out.print("\t &nbsp;&nbsp;");
-                        }
-                        out.print("</td><td>");
-                        out.print(sectionHits + "\t");
-                        out.print("</td><td>");
-                        out.print(allhits + "\t");
-                        out.print("</td><td>");
-                        out.println(sectionChilds);
-                        out.print("</td><td>");
-                        out.println(sectionActive);
-                        out.print("</td><td>");
-                        out.println(sectionLevel);
-                        out.print("</td></tr>");
+                    int nivel = Integer.parseInt(sectionLevel,10);
+                    out.print("<tr><td>");
+                    out.print(sectionID + "\t &nbsp;&nbsp;");
+                    out.print("</td><td>");
+                    for (int le = 0; le < nivel; le++) {
+                        out.print("\t &nbsp;&nbsp;");
                     }
+                    out.print(sectionTitle + "\t");
+                    out.print("</td><td>");
+                    out.print(sectionHits + "\t");
+                    out.print("</td><td>");
+                    out.print(acumulate + "\t");
+                    out.print("</td><td>");
+                    out.println(sectionChilds);
+                    out.print("</td><td>");
+                    out.println(sectionActive);
+                    out.print("</td><td>");
+                    out.println(sectionLevel);
+                    out.print("</td></tr>");
                 }
                 out.println("</table>");
                 out.flush();
                 out.close();
-
                 fin = System.currentTimeMillis();
             }
         } catch (Exception e) {            
@@ -1747,7 +1393,7 @@ class ReportGenerator extends Thread {
             manager.setRunning(false);
             return;
         }
-        status = "end";
+        status = "Finalized";
         manager.setRunning(false);
     }
 
@@ -1801,7 +1447,6 @@ class ReportGenerator extends Thread {
 }
 
 class ReportMgr {
-
     private static ReportMgr instance = null;
     private ReportGenerator gen = null;
     private boolean isRunning = false;
@@ -1818,21 +1463,17 @@ class ReportMgr {
     }
 
     public void start(ReportGenerator rgen) {
-            gen = rgen;
-            rgen.setManager(this);
-            gen.start();
+        gen = rgen;
+        gen.setManager(this);
+        gen.start();
     }
 
     public void stop() {
-        if (gen != null) {
+        if(gen != null) {
             gen = null;
         }
     }
 
-    /**
-     * Getter for property isRunning.
-     * @return Value of property isRunning.
-     */
     public boolean isRunning() {
         return isRunning;
     }
