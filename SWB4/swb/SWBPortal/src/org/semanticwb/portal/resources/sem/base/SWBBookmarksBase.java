@@ -1,6 +1,9 @@
 package org.semanticwb.portal.resources.sem.base;
 
-
+/**
+ *
+ * @author Hasdai Pacheco {haxdai(at)gmail.com}
+ */
 public class SWBBookmarksBase extends org.semanticwb.portal.api.GenericSemResource 
 {
     public static final org.semanticwb.platform.SemanticClass swb_res_bkm_BookmarkGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#BookmarkGroup");
