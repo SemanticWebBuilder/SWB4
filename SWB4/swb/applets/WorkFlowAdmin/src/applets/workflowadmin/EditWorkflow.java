@@ -644,10 +644,9 @@ public class EditWorkflow extends javax.swing.JApplet {
         }
         return ret.toString();
     }
-    public boolean isValid()
+
+    public boolean isCorrect()
     {
-//        System.out.println("isValid(): "+workflow);
-//        new Exception().printStackTrace();
         HashSet olinks=new HashSet();
         HashSet oends=new HashSet();
         boolean hasEnd=false;
@@ -792,7 +791,7 @@ public class EditWorkflow extends javax.swing.JApplet {
             }
         }
         
-        if(!isValid())
+        if(!isCorrect())
         {            
             return;
         }
