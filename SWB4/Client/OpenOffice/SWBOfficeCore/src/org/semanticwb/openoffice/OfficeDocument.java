@@ -670,7 +670,7 @@ public abstract class OfficeDocument
         }
     }
 
-    void SaveContentId(String contentId, String workspaceId) throws WBException
+    void saveContentId(String contentId, String workspaceId) throws WBException
     {
         this.contentID = contentId;
         HashMap<String, String> values = new HashMap<String, String>();
