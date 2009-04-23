@@ -10,6 +10,10 @@ import javax.servlet.http.*;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
 
+/**
+ *
+ * @author Hasdai Pacheco {haxdai(at)gmail.com}
+ */
 public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBookmarksBase 
 {
     public static final int SORT_NOSORTED = 0;
@@ -25,17 +29,11 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         }
     };
 
-    public SWBBookmarks()
-    {
-        //initProps();
-    }
+    public SWBBookmarks() { }
 
-    public SWBBookmarks(org.semanticwb.platform.SemanticObject base)
-    {
+    public SWBBookmarks(org.semanticwb.platform.SemanticObject base) {
         super(base);
-        //initProps();
     }
-
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -233,6 +231,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 }
             }
         }
+        url = paramRequest.getRenderUrl();
         url.setMode("ADDNEW");
         out.println("<a href=\"" + url + "\">" + paramRequest.getLocaleString("add") + "</a><br>");
         url.setMode("ADMIN");
