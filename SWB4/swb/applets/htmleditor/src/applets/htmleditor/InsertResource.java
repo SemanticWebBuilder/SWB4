@@ -333,12 +333,12 @@ public class InsertResource extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(this.jTextFieldName.getText().trim().equals(""))
-        {            
-            this.jTextFieldName.grabFocus();
-            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/htmleditor/InsertResource",locale).getString("indicar_titutlo"),java.util.ResourceBundle.getBundle("applets/htmleditor/InsertResource",locale).getString("title"),JOptionPane.ERROR_MESSAGE);            
-            return;
-        }
+//        if(this.jTextFieldName.getText().trim().equals(""))
+//        {
+//            this.jTextFieldName.grabFocus();
+//            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/htmleditor/InsertResource",locale).getString("indicar_titutlo"),java.util.ResourceBundle.getBundle("applets/htmleditor/InsertResource",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
         boolean selected=false;
         SelectableNode node=null;
         Object root=this.jTreeTipoRecurso.getModel().getRoot();
@@ -383,15 +383,22 @@ public class InsertResource extends javax.swing.JDialog {
         {
             innerText=this.node.getText();
         }
+
+        String nt="";
+        if(!this.jTextFieldName.getText().trim().equals(""))
+        {
+            nt="NAME=\""+ this.jTextFieldName.getText().trim() +"\" ";
+        }
+
         if(node instanceof ResourceType)
         {
             ResourceType res=(ResourceType)node;
             if(innerText==null || innerText.length()==0)
             {
-                this.tag="<RESOURCE NAME=\""+ this.jTextFieldName.getText().trim() +"\" TYPE=\""+ res.getName() +"\"/>";
+                this.tag="<RESOURCE "+nt+"TYPE=\""+ res.getID() +"\"/>";
             }else
             {
-                this.tag="<RESOURCE NAME=\""+ this.jTextFieldName.getText().trim() +"\" TYPE=\""+ res.getName() +"\">"+innerText+"</Resource>";
+                this.tag="<RESOURCE "+nt+"TYPE=\""+ res.getID() +"\">"+innerText+"</Resource>";
             }
             
         }
@@ -401,10 +408,10 @@ public class InsertResource extends javax.swing.JDialog {
             ResourceType res=(ResourceType)subres.getParent();
             if(innerText==null || innerText.length()==0)
             {
-                this.tag="<RESOURCE NAME=\""+ this.jTextFieldName.getText().trim() +"\" TYPE=\""+ res.getName() +"\" STYPE=\""+subres.getName()+"\"/>";
+                this.tag="<RESOURCE "+nt+"TYPE=\""+ res.getID() +"\" STYPE=\""+subres.getID()+"\"/>";
             }else
             {
-                this.tag="<RESOURCE NAME=\""+ this.jTextFieldName.getText().trim() +"\" TYPE=\""+ res.getName() +"\" STYPE=\""+subres.getName()+"\">"+innerText +"</Resource>";
+                this.tag="<RESOURCE "+nt+"TYPE=\""+ res.getID() +"\" STYPE=\""+subres.getID()+"\">"+innerText +"</Resource>";
             }
         }
         
