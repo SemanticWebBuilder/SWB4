@@ -67,14 +67,11 @@ public class WBAChannelReport extends GenericResource {
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        if (paramsRequest.getMode().equals("graph")) {
-            doGraph(request, response, paramsRequest);
-        }
-        else if (paramsRequest.getMode().equals("report_xml")) {
+        if(paramsRequest.getMode().equals("report_xml")) {
             doRepXml(request, response, paramsRequest);
-        } else if (paramsRequest.getMode().equals("download")) {
+        }else if(paramsRequest.getMode().equals("download")) {
             doDownload(request, response, paramsRequest);
-        } else {
+        }else {
             super.processRequest(request, response, paramsRequest);
         }
     }
@@ -447,17 +444,6 @@ public class WBAChannelReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */
-    public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        response.getWriter().print("");
-    }
-
-    /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
-     */
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         Resource base = paramsRequest.getResourceBase();
@@ -647,10 +633,6 @@ public class WBAChannelReport extends GenericResource {
         }
     }
 
-     /*
-     * Calcula el total de hits acumulado en las secciones hijas, incluyendo el tópico actual
-     *
-     */
     private long getAllHits(String tpid, WebSite tm) {
         long acumulado = 0;
         if (tpid != null) {
@@ -819,7 +801,7 @@ public class WBAChannelReport extends GenericResource {
     public void updateReport(HttpServletRequest request, WebPage topic) {
         Resource base = getResourceBase();
         String s_site = request.getParameter("wb_site");
-        /*String s_level = request.getParameter("wb_showlevel")==null?"1":request.getParameter("wb_showlevel");*/
+
         int groupDates;
         try {
             groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
@@ -831,8 +813,6 @@ public class WBAChannelReport extends GenericResource {
         String fecha12 = request.getParameter("wb_fecha12")==null ? "":request.getParameter("wb_fecha12");
         String filenameLogic = request.getParameter("filename");
 
-        // CODIGO PARA GENERAR LA LISTA DE ARCHIVOS EXISTENTES
-        // LOS ARCHIVOS SE GENERAN EN /WORK/LOGS/
         String filename = Long.toString(System.currentTimeMillis());
         ReportMgr mgr = ReportMgr.getInstance();
         ReportGenerator gen;
@@ -1009,12 +989,10 @@ class ReportGenerator extends Thread {
     private static Logger log = SWBUtils.getLogger(WBADeviceReport.class);
 
     private final int type = 3;
-    private int i_index = 0;
     private int counter;
     private int year1,  month1,  day1,  year2,  month2,  day2;
     private long ini = 0;
     private long fin = 0;
-    private long hitsUncountables = 0;
 
     private String status;
     private String tms = "Test";
@@ -1182,7 +1160,7 @@ class ReportGenerator extends Thread {
                     arr_data[2] = Long.toString(l_allacumulated);
                     arr_data[3] = Integer.toString(section.getLevel());
                     arr_data[4] = section.getId();
-                    arr_data[5] = Boolean.toString(section.isActive());
+                    arr_data[5] = section.isActive()?"Active":"Inactive";
                     arr_data[6] = SWBUtils.sizeOf(section.listChilds())>0 ? "true" : "false";
                     al_pag.add(arr_data);
                 }
@@ -1199,7 +1177,7 @@ class ReportGenerator extends Thread {
                         arr_data[2] = Long.toString(l_allacumulated, 10);
                         arr_data[3] = "-1";
                         arr_data[4] = recHit.getSection();
-                        arr_data[5] = "-";
+                        arr_data[5] = "Deleted";
                         arr_data[6] = "-";
                         al_pag.add(arr_data);
                     }
@@ -1259,7 +1237,7 @@ class ReportGenerator extends Thread {
                     arr_data[2] = Long.toString(l_allacumulated);
                     arr_data[3] = Integer.toString(section.getLevel());
                     arr_data[4] = section.getId();
-                    arr_data[5] = Boolean.toString(section.isActive());
+                    arr_data[5] = section.isActive()?"Active":"Inactive";
                     arr_data[6] = SWBUtils.sizeOf(section.listChilds())>0 ? "true" : "false";
                     al_pag.add(arr_data);
                 }
@@ -1276,7 +1254,7 @@ class ReportGenerator extends Thread {
                         arr_data[2] = Long.toString(l_allacumulated, 10);
                         arr_data[3] = "-1";
                         arr_data[4] = recHit.getSection();
-                        arr_data[5] = "-";
+                        arr_data[5] = "Deleted";
                         arr_data[6] = "-";
                         al_pag.add(arr_data);
                     }
@@ -1286,25 +1264,6 @@ class ReportGenerator extends Thread {
             log.error("Error on method ReportGenerator.getReportResults() ",e);
         }
         return al_pag.iterator();
-    }
-
-    /*
-     * Calcula el total de hits acumulado en las secciones hijas, incluyendo el tópico actual
-     *
-     */
-    private long getAllHits(String tpid, WebSite webSite) {
-        long acumulado = 0;
-        WebPage tp = webSite.getWebPage(tpid);
-        acumulado = ((Long) hmAc.get(tpid)).longValue();
-        hmCounted.put(tpid, tpid);
-        Iterator<WebPage> it = tp.listChilds(null, true, true, true, true);
-        while(it.hasNext()) {
-            WebPage tptmp = it.next();
-            if(tptmp != null) {
-                acumulado += (null!=hmAc.get(tptmp.getId()))?((Long)hmAc.get(tptmp.getId())).longValue():0;
-            }
-        }
-        return acumulado;
     }
 
     public void run() {
@@ -1348,7 +1307,7 @@ class ReportGenerator extends Thread {
                 out.println("</td><td bgcolor=\"gray\">");
                 out.println("<b>Have childs</b>");
                 out.println("</td><td bgcolor=\"gray\">");
-                out.println("<b>Active</b>");
+                out.println("<b>Status</b>");
                 out.println("</td><td bgcolor=\"gray\">");
                 out.println("<b>Level</b>");
                 out.println("</td></tr>");
