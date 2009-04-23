@@ -135,4 +135,20 @@ public class SWBRecHit implements java.io.Serializable {
     private void setDay(int day) {
         this.day = day;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("date="+date);
+        sb.append(", iditem="+iditem);
+        sb.append(", item="+item);
+        sb.append(", topicmap="+topicmap);
+        sb.append(", section="+section);
+        sb.append(", type="+type);
+        sb.append(", hits="+hits);
+        sb.append(", year="+year);
+        sb.append(", month="+month);
+        sb.append(", day="+day);
+        return sb.toString();
+    }
 }
