@@ -234,10 +234,10 @@ public class WebPage extends WebPageBase
             while (tp!=null)
             {
                 ret++;
+                if (home.equals(tp)) break;
                 if (arr.contains(tp)) break;
                 arr.add(tp);
                 tp = tp.getParent();
-                if (home.equals(tp)) break;
             }
         }
         return ret;
