@@ -1,19 +1,14 @@
 package org.semanticwb.portal.resources.sem.base;
 
-/**
- *
- * @author Hasdai Pacheco {haxdai(at)gmail.com}
- */
-public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+
+public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
-    public static final org.semanticwb.platform.SemanticProperty swb_reviews=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#reviews");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_bookmarkURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#bookmarkURL");
-    public static final org.semanticwb.platform.SemanticProperty swb_rank=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#rank");
     public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_tags=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#tags");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
@@ -119,16 +114,6 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
         getSemanticObject().setProperty(swb_title, title, lang);
     }
 
-    public long getReviews()
-    {
-        return getSemanticObject().getLongProperty(swb_reviews);
-    }
-
-    public void setReviews(long reviews)
-    {
-        getSemanticObject().setLongProperty(swb_reviews, reviews);
-    }
-
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
@@ -147,16 +132,6 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     public void setBookmarkURL(String bookmarkURL)
     {
         getSemanticObject().setProperty(swb_res_bkm_bookmarkURL, bookmarkURL);
-    }
-
-    public double getRank()
-    {
-        return getSemanticObject().getDoubleProperty(swb_rank);
-    }
-
-    public void setRank(double rank)
-    {
-        getSemanticObject().setDoubleProperty(swb_rank, rank);
     }
 
     public String getTags()

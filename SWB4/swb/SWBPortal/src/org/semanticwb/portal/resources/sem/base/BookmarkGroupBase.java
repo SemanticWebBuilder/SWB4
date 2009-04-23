@@ -1,9 +1,6 @@
 package org.semanticwb.portal.resources.sem.base;
 
-/**
- *
- * @author Hasdai Pacheco {haxdai(at)gmail.com}
- */
+
 public class BookmarkGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_entryCount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#entryCount");
