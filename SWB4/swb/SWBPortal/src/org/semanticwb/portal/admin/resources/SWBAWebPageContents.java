@@ -372,6 +372,9 @@ public class SWBAWebPageContents extends GenericResource {
             }
             SemanticClass clsprop = prop.getRangeClass();
             HashMap hmSO = new HashMap();
+
+
+
             Iterator<SemanticObject> ite_so = obj.listObjectProperties(prop);
             while (ite_so.hasNext()) {
                 SemanticObject so = ite_so.next();
@@ -391,6 +394,7 @@ public class SWBAWebPageContents extends GenericResource {
 
             // Lista de Tipo de portlet disponibles de Global, separados por contenido y sistema
 
+//            Iterator<SemanticObject> itgso = SWBComparator.sortSermanticObjects(SWBContext.getGlobalWebSite().getSemanticObject().getModel().listInstancesOfClass(clsprop),user.getLanguage());
             Iterator<SemanticObject> itgso = SWBContext.getGlobalWebSite().getSemanticObject().getModel().listInstancesOfClass(clsprop);
             HashMap<String, SemanticObject> hmContent = new HashMap();
             HashMap<String, SemanticObject> hmSystem = new HashMap();
@@ -410,7 +414,8 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("	<legend>Global</legend>");
             }
 
-            itgso = hmContent.values().iterator();
+            //itgso = hmContent.values().iterator();
+            itgso = SWBComparator.sortSermanticObjects(hmContent.values().iterator(),user.getLanguage());
             if (hmContent.size() > 0) {
                 out.println("<table width=\"98%\">");
                 out.println("<thead>");
@@ -452,7 +457,8 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("</tbody> ");
                 out.println("</table> ");
             }
-            itgso = hmSystem.values().iterator();
+            //itgso = hmSystem.values().iterator();
+            itgso = SWBComparator.sortSermanticObjects(hmSystem.values().iterator(),user.getLanguage());
             if (hmSystem.size() > 0) {
                 out.println("<table width=\"98%\">");
                 out.println("<thead>");
@@ -527,7 +533,8 @@ public class SWBAWebPageContents extends GenericResource {
                 }
             }
 
-            itso = hmContent.values().iterator();
+            //itso = hmContent.values().iterator();
+            itso = SWBComparator.sortSermanticObjects(hmContent.values().iterator(),user.getLanguage());
             if (hmContent.size() > 0) {
                 out.println("<table width=\"98%\">");
                 out.println("<thead>");
@@ -569,7 +576,10 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("</tbody> ");
                 out.println("</table> ");
             }
-            itso = hmSystem.values().iterator();
+            //itso = hmSystem.values().iterator();
+            
+            
+            itso = SWBComparator.sortSermanticObjects(hmSystem.values().iterator(),user.getLanguage());
             if (hmSystem.size() > 0) {
                 out.println("<table width=\"98%\">");
                 out.println("<thead>");
