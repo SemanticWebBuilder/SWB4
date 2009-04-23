@@ -147,7 +147,7 @@ public class SWBAEditor extends GenericResource
             //System.out.println("obj:"+obj.getDisplayName());
             if(obj.getResourceMode()==2 || obj.getResourceMode()==3)
             {
-                Element erole=addNode("resourceType",""+obj.getId(), obj.getTitle(), res);
+                Element erole=addNode("resourceType",obj.getId(), obj.getTitle(), res);
                 erole.setAttribute("topicmap",map.getId());
                 erole.setAttribute("topicmapname",map.getTitle());
                 //TODO:listar globales
