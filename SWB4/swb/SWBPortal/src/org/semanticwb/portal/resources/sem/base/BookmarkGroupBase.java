@@ -6,6 +6,7 @@ package org.semanticwb.portal.resources.sem.base;
  */
 public class BookmarkGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_entryCount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#entryCount");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticClass swb_res_bkm_BookmarkEntry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#BookmarkEntry");
     public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_hasEntry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#hasEntry");
@@ -54,6 +55,16 @@ public class BookmarkGroupBase extends org.semanticwb.model.SWBClass implements 
     public static boolean hasBookmarkGroup(String id, org.semanticwb.model.SWBModel model)
     {
         return (getBookmarkGroup(id, model)!=null);
+    }
+
+    public int getEntryCount()
+    {
+        return getSemanticObject().getIntProperty(swb_res_bkm_entryCount);
+    }
+
+    public void setEntryCount(int entryCount)
+    {
+        getSemanticObject().setLongProperty(swb_res_bkm_entryCount, entryCount);
     }
 
     public String getTitle()
