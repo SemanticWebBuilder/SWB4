@@ -8,9 +8,34 @@ import java.util.Iterator;
  */
 public class BookmarkGroup extends org.semanticwb.portal.resources.sem.base.BookmarkGroupBase 
 {
+    private int entCount = 0;
+
     public BookmarkGroup(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    @Override
+    public void addEntry(org.semanticwb.portal.resources.sem.BookmarkEntry bookmarkentry)
+    {
+        getSemanticObject().addObjectProperty(swb_res_bkm_hasEntry, bookmarkentry.getSemanticObject());
+        entCount++;
+        System.out.println(getTitle() + " is now in " + entCount);
+    }
+
+    @Override
+    public void removeAllEntry()
+    {
+        getSemanticObject().removeProperty(swb_res_bkm_hasEntry);
+        entCount = 0;
+    }
+
+    @Override
+    public void removeEntry(org.semanticwb.portal.resources.sem.BookmarkEntry bookmarkentry)
+    {
+        getSemanticObject().removeObjectProperty(swb_res_bkm_hasEntry,bookmarkentry.getSemanticObject());
+        entCount--;
+        System.out.println(getTitle() + " reduced to " + entCount);
     }
 
     /**
@@ -37,12 +62,6 @@ public class BookmarkGroup extends org.semanticwb.portal.resources.sem.base.Book
      * @return Number of entries in current group.
      */
     public int getEntryCount() {
-        int counter = 0;
-        Iterator<BookmarkEntry> entries = listEntrys();
-        while (entries.hasNext()) {
-            entries.next();
-            counter++;
-        }
-        return counter;
+        return entCount;
     }
 }
