@@ -367,26 +367,28 @@ public class WBAChannelReport extends GenericResource {
         }else {
             DateFormat df = null;
 
-            ReportGenerator rgen = ReportMgr.getInstance().getGenerator();
+            /*ReportGenerator rgen = ReportMgr.getInstance().getGenerator();*/
+            ReportMgr rmgr = ReportMgr.getInstance();
             sb_ret.append("<table width=\"100%\" cellpadding=\"5\" cellspacing=\"0\">");
             sb_ret.append("<tr><td colspan=\"2\">");
             sb_ret.append(paramsRequest.getLocaleString("msgTitleChRep"));
             sb_ret.append("</td></tr>");
             sb_ret.append("<tr><td width=\"200\" align=\"right\">");
-            sb_ret.append(paramsRequest.getLocaleString("msgStatus") + ":</td><td>" + rgen.getStatus());
+            sb_ret.append(paramsRequest.getLocaleString("msgStatus") + ":</td><td>" + rmgr.getStatus());
             sb_ret.append("</td></tr>");
             sb_ret.append("<tr><td width=\"200\" align=\"right\">");
-            Timestamp ts_time = new Timestamp(rgen.getInitTime());
-            String s_time = "" + ts_time.getHours() + ":" + ts_time.getMinutes() + ":" + ts_time.getSeconds();
+
+            GregorianCalendar gc = new GregorianCalendar();
+            gc.setTimeInMillis(rmgr.getInitTime());
             df = DateFormat.getTimeInstance(DateFormat.FULL);
-            s_time = df.format(ts_time);
+            String s_time = df.format(gc.getTime());
             sb_ret.append(paramsRequest.getLocaleString("msgSTime") + ":</td><td>" + s_time);
             sb_ret.append("</td></tr>");
             sb_ret.append("<tr><td width=\"200\" align=\"right\">");
-            sb_ret.append(paramsRequest.getLocaleString("msgProcTime") + ":</td><td>" + getAvailableTime(ts_time));
+            sb_ret.append(paramsRequest.getLocaleString("msgProcTime") + ":</td><td>" + getAvailableTime(new Timestamp(gc.getTimeInMillis())));
             sb_ret.append("</td></tr>");
             sb_ret.append("<tr><td width=\"200\" align=\"right\">");
-            sb_ret.append(paramsRequest.getLocaleString("msgLogCounter") + ":</td><td>" + rgen.getCounter());
+            sb_ret.append(paramsRequest.getLocaleString("msgLogCounter") + ":</td><td>" + rmgr.getCounter());
             sb_ret.append("</td></tr>");
             sb_ret.append("</table>");
 
@@ -463,53 +465,54 @@ public class WBAChannelReport extends GenericResource {
             String fecha11 = request.getParameter("wb_fecha11")==null ? "":request.getParameter("wb_fecha11");
             String fecha12 = request.getParameter("wb_fecha12")==null ? "":request.getParameter("wb_fecha12");
 
-            ReportGenerator gen;            
+            ReportMgr rmgr = ReportMgr.getInstance();
+            Iterator<String[]>itrechits;
             if(groupDates==0) {
-                gen = new ReportGenerator(websiteId, Integer.parseInt(fecha1.substring(0,4)), Integer.parseInt(fecha1.substring(5,7)), Integer.parseInt(fecha1.substring(8)));                
+                itrechits = rmgr.getReportResults(websiteId, Integer.parseInt(fecha1.substring(0,4)), Integer.parseInt(fecha1.substring(5,7)), Integer.parseInt(fecha1.substring(8)));
             }else {
-                gen = new ReportGenerator(websiteId, Integer.parseInt(fecha11.substring(0,4)), Integer.parseInt(fecha11.substring(5,7)), Integer.parseInt(fecha11.substring(8)), Integer.parseInt(fecha12.substring(0,4)), Integer.parseInt(fecha12.substring(5,7)), Integer.parseInt(fecha12.substring(8)));
+                itrechits = rmgr.getReportResults(websiteId, Integer.parseInt(fecha11.substring(0,4)), Integer.parseInt(fecha11.substring(5,7)), Integer.parseInt(fecha11.substring(8)), Integer.parseInt(fecha12.substring(0,4)), Integer.parseInt(fecha12.substring(5,7)), Integer.parseInt(fecha12.substring(8)));
             }
 
             int renglones = 0;
             Element report = dom.createElement("DeviceReport");
             dom.appendChild(report);
+            if(itrechits != null) {
+                while(itrechits.hasNext()) {
+                    String[] data = itrechits.next();
+                    String sectionTitle = data[0];
+                    String sectionHits = data[1];
+                    String acumulate = data[2];
+                    String sectionLevel = data[3];
+                    String sectionId = data[4];
+                    String sectionActive = data[5];
+                    String sectionChilds = data[6];
 
-            Iterator<String[]>itrechits = gen.getReportResults();
-            while(itrechits.hasNext()) {
-                String[] data = itrechits.next();
-                String sectionTitle = data[0];
-                String sectionHits = data[1];
-                String acumulate = data[2];
-                String sectionLevel = data[3];
-                String sectionId = data[4];
-                String sectionActive = data[5];
-                String sectionChilds = data[6];
-
-                Element row = dom.createElement("row");
-                row.appendChild(dom.createTextNode(""));
-                row.setAttribute("id",Integer.toString(++renglones));
-                report.appendChild(row);
-                Element title = dom.createElement("sectionTitle");
-                title.appendChild(dom.createTextNode(sectionTitle));
-                row.appendChild(title);
-                Element hits = dom.createElement("sectionHits");
-                hits.appendChild(dom.createTextNode(sectionHits));
-                row.appendChild(hits);
-                Element total = dom.createElement("acumulate");
-                total.appendChild(dom.createTextNode(acumulate));
-                row.appendChild(total);
-                Element level = dom.createElement("sectionLevel");
-                level.appendChild(dom.createTextNode(sectionLevel));
-                row.appendChild(level);
-                Element id = dom.createElement("sectionId");
-                id.appendChild(dom.createTextNode(sectionId));
-                row.appendChild(id);
-                Element active = dom.createElement("sectionActive");
-                active.appendChild(dom.createTextNode(sectionActive));
-                row.appendChild(active);
-                Element childs = dom.createElement("sectionChilds");
-                childs.appendChild(dom.createTextNode(sectionChilds));
-                row.appendChild(childs);
+                    Element row = dom.createElement("row");
+                    row.appendChild(dom.createTextNode(""));
+                    row.setAttribute("id",Integer.toString(++renglones));
+                    report.appendChild(row);
+                    Element title = dom.createElement("sectionTitle");
+                    title.appendChild(dom.createTextNode(sectionTitle));
+                    row.appendChild(title);
+                    Element hits = dom.createElement("sectionHits");
+                    hits.appendChild(dom.createTextNode(sectionHits));
+                    row.appendChild(hits);
+                    Element total = dom.createElement("acumulate");
+                    total.appendChild(dom.createTextNode(acumulate));
+                    row.appendChild(total);
+                    Element level = dom.createElement("sectionLevel");
+                    level.appendChild(dom.createTextNode(sectionLevel));
+                    row.appendChild(level);
+                    Element id = dom.createElement("sectionId");
+                    id.appendChild(dom.createTextNode(sectionId));
+                    row.appendChild(id);
+                    Element active = dom.createElement("sectionActive");
+                    active.appendChild(dom.createTextNode(sectionActive));
+                    row.appendChild(active);
+                    Element childs = dom.createElement("sectionChilds");
+                    childs.appendChild(dom.createTextNode(sectionChilds));
+                    row.appendChild(childs);
+                }
             }
             report.setAttribute("rows",Integer.toString(renglones));
         }catch (Exception e){
@@ -537,13 +540,15 @@ public class WBAChannelReport extends GenericResource {
 
         String filename = Long.toString(System.currentTimeMillis());
         ReportMgr mgr = ReportMgr.getInstance();
-        ReportGenerator gen;
+        /*ReportGenerator gen;*/
         if(groupDates==0) {
-            gen = new ReportGenerator(s_site, Integer.parseInt(fecha1.substring(0,4)), Integer.parseInt(fecha1.substring(5,7)), Integer.parseInt(fecha1.substring(8)), filename);
+            /*gen = new ReportGenerator(s_site, Integer.parseInt(fecha1.substring(0,4)), Integer.parseInt(fecha1.substring(5,7)), Integer.parseInt(fecha1.substring(8)), filename);*/
+            mgr.start(s_site, Integer.parseInt(fecha1.substring(0,4)), Integer.parseInt(fecha1.substring(5,7)), Integer.parseInt(fecha1.substring(8)), filename);
         }else {
-            gen = new ReportGenerator(s_site, Integer.parseInt(fecha11.substring(0,4)), Integer.parseInt(fecha11.substring(5,7)), Integer.parseInt(fecha11.substring(8)), Integer.parseInt(fecha12.substring(0,4)), Integer.parseInt(fecha12.substring(5,7)), Integer.parseInt(fecha12.substring(8)), filename);
+            /*gen = new ReportGenerator(s_site, Integer.parseInt(fecha11.substring(0,4)), Integer.parseInt(fecha11.substring(5,7)), Integer.parseInt(fecha11.substring(8)), Integer.parseInt(fecha12.substring(0,4)), Integer.parseInt(fecha12.substring(5,7)), Integer.parseInt(fecha12.substring(8)), filename);*/
+            mgr.start(s_site, Integer.parseInt(fecha11.substring(0,4)), Integer.parseInt(fecha11.substring(5,7)), Integer.parseInt(fecha11.substring(8)), Integer.parseInt(fecha12.substring(0,4)), Integer.parseInt(fecha12.substring(5,7)), Integer.parseInt(fecha12.substring(8)), filename);
         }
-        mgr.start(gen);
+        /*mgr.start(gen);*/
 
         String baseXML = null;
         try {
@@ -707,278 +712,16 @@ public class WBAChannelReport extends GenericResource {
     }
 }
 
-class ReportGenerator extends Thread {
-    private static Logger log = SWBUtils.getLogger(WBADeviceReport.class);
 
-    private final int type = 3;
-    private long counter;
-    private int year1,  month1,  day1,  year2,  month2,  day2;
-    private long ini = 0;
-    private long fin = 0;
 
-    private String status;
-    private String websiteId;
-    private String filename;
-    
-    private ReportMgr manager;
-    
-    public ReportGenerator(String websiteId, int year1, int month1, int day1) {
-        this(websiteId, year1, month1, day1, 0, 0, 0, null);
-    }
-    
-    public ReportGenerator(String websiteId, int year1, int month1, int day1, int year2, int month2, int day2) {
-        this(websiteId, year1, month1, day1, year2, month2, day2, null);
-    }
 
-    public ReportGenerator(String websiteId, int year1, int month1, int day1, String filename) {
-        this(websiteId, year1, month1, day1, 0, 0, 0, filename);
-    }
 
-    public ReportGenerator(String websiteId, int year1, int month1, int day1, int year2, int month2, int day2, String filename) {
-        this.websiteId = websiteId;
-        this.year1 = year1;
-        this.month1 = month1;
-        this.day1 = day1;
-        this.year2 = year2;
-        this.month2 = month2;
-        this.day2 = day2;
-        this.filename = filename;
-        this.status = "Initializing...";
-    }
-
-    private void getChildSections(WebPage node, ArrayList sections) {
-        Iterator<WebPage> childs = node.listChilds();
-        while(childs.hasNext()) {
-            WebPage webPage = childs.next();
-            sections.add(webPage);
-            if(webPage.listChilds().hasNext()) {
-                getChildSections(webPage, sections);
-            }
-        }
-    }
-
-    public Iterator<String[]> getReportResults() {
-        Iterator<SWBRecHit> iterHits;
-        ArrayList al_pag = new ArrayList();
-        WebSite webSite;
-        Iterator<WebPage> childs;
-        ArrayList<WebPage> sections;
-        long l_allacumulated = 0;
-
-        try {
-            webSite = SWBContext.getWebSite(websiteId);
-            if(webSite != null) {
-
-                childs = webSite.getHomePage().listChilds();
-                sections = new ArrayList();
-                sections.add(webSite.getHomePage());
-                while(childs.hasNext()) {
-                    WebPage webPage = childs.next();
-                    sections.add(webPage);
-                    if(webPage.listChilds().hasNext()) {
-                        getChildSections(webPage, sections);
-                    }
-                }
-
-                if(year2>0 && month2>0 && day2>0) {
-                    iterHits = SWBRecHits_.getInstance().getResHitsLog(websiteId, type, year1, month1, day1, year2, month2, day2).iterator();
-                }else {
-                    iterHits = SWBRecHits_.getInstance().getResHitsLog(websiteId, type, year1, month1, day1).iterator();
-                }
-                HashMap hits = new HashMap();
-                while(iterHits.hasNext()) {
-                    SWBRecHit recHits = iterHits.next();
-                    hits.put(recHits.getSection(), recHits);
-                }
-
-                Iterator<WebPage> itsections = sections.iterator();
-                while(itsections.hasNext()) {
-                    WebPage section = itsections.next();
-                    String[] arr_data = new String[7];
-                    arr_data[0] = section.getDisplayName();
-
-                    if(hits.containsKey(section.getId())) {
-                        SWBRecHit recHit = (SWBRecHit)hits.get(section.getId());
-                        arr_data[1] = Long.toString(recHit.getHits(), 10);
-                        l_allacumulated += recHit.getHits();
-                        hits.remove(section.getId());
-                    }else {
-                        arr_data[1] = "0";
-                    }
-
-                    arr_data[2] = Long.toString(l_allacumulated);
-                    arr_data[3] = Integer.toString(section.getLevel());
-                    arr_data[4] = section.getId();
-                    arr_data[5] = section.isActive()?"Active":"Inactive";
-                    arr_data[6] = SWBUtils.sizeOf(section.listChilds())>0 ? "true" : "false";
-                    al_pag.add(arr_data);
-                    counter = l_allacumulated;
-                }
-                if(hits.size()>0) {
-                    Iterator<String> keys = hits.keySet().iterator();
-                    while(keys.hasNext()) {
-                        String key = keys.next();
-                        SWBRecHit recHit = (SWBRecHit)hits.get(key);
-
-                        String[] arr_data = new String[7];
-                        arr_data[0] = recHit.getSection();
-                        arr_data[1] = Long.toString(recHit.getHits(), 10);
-                        l_allacumulated += recHit.getHits();
-                        arr_data[2] = Long.toString(l_allacumulated, 10);
-                        arr_data[3] = "-1";
-                        arr_data[4] = recHit.getSection();
-                        arr_data[5] = "Deleted";
-                        arr_data[6] = "-";
-                        al_pag.add(arr_data);
-                        counter = l_allacumulated;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            log.error("Error on method ReportGenerator.getReportResults() ",e);
-        }
-        return al_pag.iterator();
-    }
-
-    @Override
-    public void run() {
-        status = "Initializing";
-        manager.setRunning(true);
-        try {
-            if(SWBContext.getWebSite(websiteId) != null) {
-                ini = System.currentTimeMillis();
-                status = "Reading Logs";
-                Iterator<String[]> iter = getReportResults();
-                status = "Processing Logs";
-                File reportdir = new File(SWBPlatform.getWorkPath() + "/logs/reports/");
-                if (!reportdir.exists()) {
-                    reportdir.mkdirs();
-                }
-
-                status = "Writing report";
-                if( null==filename || (null!=filename && filename.trim().length()== 0)) {
-                    filename = "CReport";
-                }                
-
-                PrintWriter out = new PrintWriter(new FileOutputStream(SWBPlatform.getWorkPath() + "/logs/reports/" + filename + ".xls"));
-                out.println("<table border=1>");
-                out.println("<tr ><td colspan=7 align=center bgcolor=\"gray\"><b>Channel Report - "+websiteId+"</b></td></tr>");
-                out.println("<tr ><td bgcolor=\"gray\">");
-                out.println("<b>id</b>");
-                out.println("</td><td bgcolor=\"gray\">");
-                out.println("<b>Section title</b>");
-                out.println("</td><td bgcolor=\"gray\">");
-                out.println("<b>Hits</b>");
-                out.println("</td><td bgcolor=\"gray\">");
-                out.println("<b>Acumulate</b>");
-                out.println("</td><td bgcolor=\"gray\">");
-                out.println("<b>Have childs</b>");
-                out.println("</td><td bgcolor=\"gray\">");
-                out.println("<b>Status</b>");
-                out.println("</td><td bgcolor=\"gray\">");
-                out.println("<b>Level</b>");
-                out.println("</td></tr>");
-
-                while (iter.hasNext()) {
-                    String[] arr_data = iter.next();
-                    String sectionTitle = arr_data[0];
-                    String sectionHits = arr_data[1];
-                    String acumulate = arr_data[2];
-                    String sectionLevel = arr_data[3];
-                    String sectionID = arr_data[4];
-                    String sectionActive = arr_data[5];
-                    String sectionChilds = arr_data[6];
-
-                    int nivel = Integer.parseInt(sectionLevel,10);
-                    out.print("<tr><td>");
-                    out.print(sectionID + "\t &nbsp;&nbsp;");
-                    out.print("</td><td>");
-                    for (int le = 0; le < nivel; le++) {
-                        out.print("\t &nbsp;&nbsp;");
-                    }
-                    out.print(sectionTitle + "\t");
-                    out.print("</td><td>");
-                    out.print(sectionHits + "\t");
-                    out.print("</td><td>");
-                    out.print(acumulate + "\t");
-                    out.print("</td><td>");
-                    out.println(sectionChilds);
-                    out.print("</td><td>");
-                    out.println(sectionActive);
-                    out.print("</td><td>");
-                    out.println(sectionLevel);
-                    out.print("</td></tr>");
-                }
-                out.println("</table>");
-                out.flush();
-                out.close();
-                fin = System.currentTimeMillis();
-            }
-        } catch (Exception e) {            
-            status = "error\n" + e.getMessage();
-            manager.setRunning(false);
-            return;
-        }
-        status = "Finalized";
-        manager.setRunning(false);
-    }
-
-    /**
-     * Getter for property counter.
-     * @return Value of property counter.
-     */
-    public long getCounter() {
-        return counter;
-    }
-
-    /**
-     * Getter for property status.
-     * @return Value of property status.
-     */
-    public java.lang.String getStatus() {
-        return status;
-    }
-
-    /**
-     * Getter for property manager.
-     * @return Value of property manager.
-     */
-    public ReportMgr getManager() {
-        return manager;
-    }
-
-    /**
-     * Setter for property manager.
-     * @param manager New value of property manager.
-     */
-    public void setManager(ReportMgr manager) {
-        this.manager = manager;
-    }
-
-    /**
-     * Getter for property ini.
-     * @return Value of property ini.
-     */
-    public long getInitTime() {
-        return ini;
-    }
-
-    /**
-     * Getter for property fin.
-     * @return Value of property fin.
-     */
-    public long getEndTime() {
-        return fin;
-    }
-}
 
 class ReportMgr {
-    private static ReportMgr instance = null;
-    private ReportGenerator gen = null;
+    private static ReportMgr instance;
+    private ReportGenerator gen;
     private boolean isRunning = false;
 
-    /** Creates a new instance of ReportMgr
-     */
     private ReportMgr() {
     }
 
@@ -989,10 +732,57 @@ class ReportMgr {
         return instance;
     }
 
-    public void start(ReportGenerator rgen) {
+    /*public void start(ReportGenerator rgen) {
         gen = rgen;
         gen.setManager(this);
         gen.start();
+    }*/
+
+    public void start(String websiteId, int year, int month, int day, String filename) {
+        if(!isRunning) {
+            gen = new ReportGenerator(websiteId, year, month, day, filename);
+            gen.start();
+        }
+    }
+
+    public void start(String websiteId, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String filename) {
+        if(!isRunning) {
+            gen = new ReportGenerator(websiteId, yearI, monthI, dayI, yearF, monthF, dayF, filename);
+            gen.start();
+        }
+    }
+    
+    public Iterator<String[]> getReportResults(String websiteId, int year, int month, int day) {
+        if(!isRunning) {
+            if(gen == null) {
+                gen = new ReportGenerator(websiteId, year, month, day);
+            }else {
+                gen.setWebsiteId(websiteId);
+                gen.setYear1(year);
+                gen.setMonth1(month);
+                gen.setDay1(day);
+            }
+            return gen.getReportResults();
+        }
+        return null;
+    }
+
+    public Iterator<String[]> getReportResults(String websiteId, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF) {
+        if(!isRunning) {
+            if(gen == null) {
+                gen = new ReportGenerator(websiteId, yearI, monthI, dayI, yearF, monthF, dayF);
+            }else {
+                gen.setWebsiteId(websiteId);
+                gen.setYear1(yearI);
+                gen.setMonth1(monthI);
+                gen.setDay1(dayI);
+                gen.setYear1(yearF);
+                gen.setMonth1(monthF);
+                gen.setDay1(dayF);
+            }
+            return gen.getReportResults();
+        }
+        return null;
     }
 
     public void stop() {
@@ -1009,7 +799,7 @@ class ReportMgr {
      * Setter for property isRunning.
      * @param isRunning New value of property isRunning.
      */
-    void setRunning(boolean isRunning) {
+    private void setRunning(boolean isRunning) {
         this.isRunning = isRunning;
     }
 
@@ -1017,7 +807,332 @@ class ReportMgr {
      * Getter for property gen.
      * @return Value of property gen.
      */
-    public ReportGenerator getGenerator() {
+    /*public ReportGenerator getGenerator() {
         return gen;
+    }*/
+
+    public long getCounter() {
+        return gen.getCounter();
+    }
+
+    public String getStatus() {
+        return gen.getStatus();
+    }
+
+    public long getInitTime() {
+        return gen.getInitTime();
+    }
+
+    public long getEndTime() {
+        return gen.getEndTime();
+    }
+
+
+
+
+
+
+
+
+
+
+    private class ReportGenerator extends Thread {
+        /*private static Logger log = SWBUtils.getLogger(WBADeviceReport.class);*/
+        private Logger log = SWBUtils.getLogger(WBADeviceReport.class);
+
+        private final int type = 3;
+        private long counter;
+        private int year1,  month1,  day1,  year2,  month2,  day2;
+        private long ini = 0;
+        private long fin = 0;
+
+        private String status;
+        private String websiteId;
+        private String filename;
+
+        /*private ReportMgr manager;*/
+
+        public ReportGenerator(String websiteId, int year1, int month1, int day1) {
+            this(websiteId, year1, month1, day1, 0, 0, 0, null);
+        }
+
+        public ReportGenerator(String websiteId, int year1, int month1, int day1, int year2, int month2, int day2) {
+            this(websiteId, year1, month1, day1, year2, month2, day2, null);
+        }
+
+        public ReportGenerator(String websiteId, int year1, int month1, int day1, String filename) {
+            this(websiteId, year1, month1, day1, 0, 0, 0, filename);
+        }
+
+        public ReportGenerator(String websiteId, int year1, int month1, int day1, int year2, int month2, int day2, String filename) {
+            this.websiteId = websiteId;
+            this.year1 = year1;
+            this.month1 = month1;
+            this.day1 = day1;
+            this.year2 = year2;
+            this.month2 = month2;
+            this.day2 = day2;
+            this.filename = filename;
+            this.status = "Initializing...";
+        }
+
+        private void getChildSections(WebPage node, ArrayList sections) {
+            Iterator<WebPage> childs = node.listChilds();
+            while(childs.hasNext()) {
+                WebPage webPage = childs.next();
+                sections.add(webPage);
+                if(webPage.listChilds().hasNext()) {
+                    getChildSections(webPage, sections);
+                }
+            }
+        }
+
+        public synchronized Iterator<String[]> getReportResults() {
+            Iterator<SWBRecHit> iterHits;
+            ArrayList al_pag = new ArrayList();
+            WebSite webSite;
+            Iterator<WebPage> childs;
+            ArrayList<WebPage> sections;
+            long l_allacumulated = 0;
+
+            try {
+                webSite = SWBContext.getWebSite(websiteId);
+                if(webSite != null) {
+
+                    childs = webSite.getHomePage().listChilds();
+                    sections = new ArrayList();
+                    sections.add(webSite.getHomePage());
+                    while(childs.hasNext()) {
+                        WebPage webPage = childs.next();
+                        sections.add(webPage);
+                        if(webPage.listChilds().hasNext()) {
+                            getChildSections(webPage, sections);
+                        }
+                    }
+
+                    if(year2>0 && month2>0 && day2>0) {
+                        iterHits = SWBRecHits_.getInstance().getResHitsLog(websiteId, type, year1, month1, day1, year2, month2, day2).iterator();
+                    }else {
+                        iterHits = SWBRecHits_.getInstance().getResHitsLog(websiteId, type, year1, month1, day1).iterator();
+                    }
+                    HashMap hits = new HashMap();
+                    while(iterHits.hasNext()) {
+                        SWBRecHit recHits = iterHits.next();
+                        hits.put(recHits.getSection(), recHits);
+                    }
+
+                    Iterator<WebPage> itsections = sections.iterator();
+                    while(itsections.hasNext()) {
+                        WebPage section = itsections.next();
+                        String[] arr_data = new String[7];
+                        arr_data[0] = section.getDisplayName();
+
+                        if(hits.containsKey(section.getId())) {
+                            SWBRecHit recHit = (SWBRecHit)hits.get(section.getId());
+                            arr_data[1] = Long.toString(recHit.getHits(), 10);
+                            l_allacumulated += recHit.getHits();
+                            hits.remove(section.getId());
+                        }else {
+                            arr_data[1] = "0";
+                        }
+
+                        arr_data[2] = Long.toString(l_allacumulated);
+                        arr_data[3] = Integer.toString(section.getLevel());
+                        arr_data[4] = section.getId();
+                        arr_data[5] = section.isActive()?"Active":"Inactive";
+                        arr_data[6] = SWBUtils.sizeOf(section.listChilds())>0 ? "true" : "false";
+                        al_pag.add(arr_data);
+                        counter = l_allacumulated;
+                    }
+                    if(hits.size()>0) {
+                        Iterator<String> keys = hits.keySet().iterator();
+                        while(keys.hasNext()) {
+                            String key = keys.next();
+                            SWBRecHit recHit = (SWBRecHit)hits.get(key);
+
+                            String[] arr_data = new String[7];
+                            arr_data[0] = recHit.getSection();
+                            arr_data[1] = Long.toString(recHit.getHits(), 10);
+                            l_allacumulated += recHit.getHits();
+                            arr_data[2] = Long.toString(l_allacumulated, 10);
+                            arr_data[3] = "-1";
+                            arr_data[4] = recHit.getSection();
+                            arr_data[5] = "Deleted";
+                            arr_data[6] = "-";
+                            al_pag.add(arr_data);
+                            counter = l_allacumulated;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                log.error("Error on method ReportGenerator.getReportResults() ",e);
+            }
+            return al_pag.iterator();
+        }
+
+        @Override
+        public void run() {
+            status = "Initializing";
+            /*manager.setRunning(true);*/
+            setRunning(true);
+            try {
+                if(SWBContext.getWebSite(websiteId) != null) {
+                    ini = System.currentTimeMillis();
+                    status = "Reading Logs";
+                    Iterator<String[]> iter = getReportResults();
+                    status = "Processing Logs";
+                    File reportdir = new File(SWBPlatform.getWorkPath() + "/logs/reports/");
+                    if (!reportdir.exists()) {
+                        reportdir.mkdirs();
+                    }
+
+                    status = "Writing report";
+                    if( null==filename || (null!=filename && filename.trim().length()== 0)) {
+                        filename = "CReport";
+                    }
+
+                    PrintWriter out = new PrintWriter(new FileOutputStream(SWBPlatform.getWorkPath() + "/logs/reports/" + filename + ".xls"));
+                    out.println("<table border=1>");
+                    out.println("<tr ><td colspan=7 align=center bgcolor=\"gray\"><b>Channel Report - "+websiteId+"</b></td></tr>");
+                    out.println("<tr ><td bgcolor=\"gray\">");
+                    out.println("<b>id</b>");
+                    out.println("</td><td bgcolor=\"gray\">");
+                    out.println("<b>Section title</b>");
+                    out.println("</td><td bgcolor=\"gray\">");
+                    out.println("<b>Hits</b>");
+                    out.println("</td><td bgcolor=\"gray\">");
+                    out.println("<b>Acumulate</b>");
+                    out.println("</td><td bgcolor=\"gray\">");
+                    out.println("<b>Have childs</b>");
+                    out.println("</td><td bgcolor=\"gray\">");
+                    out.println("<b>Status</b>");
+                    out.println("</td><td bgcolor=\"gray\">");
+                    out.println("<b>Level</b>");
+                    out.println("</td></tr>");
+
+                    while (iter.hasNext()) {
+                        String[] arr_data = iter.next();
+                        String sectionTitle = arr_data[0];
+                        String sectionHits = arr_data[1];
+                        String acumulate = arr_data[2];
+                        String sectionLevel = arr_data[3];
+                        String sectionID = arr_data[4];
+                        String sectionActive = arr_data[5];
+                        String sectionChilds = arr_data[6];
+
+                        int nivel = Integer.parseInt(sectionLevel,10);
+                        out.print("<tr><td>");
+                        out.print(sectionID + "\t &nbsp;&nbsp;");
+                        out.print("</td><td>");
+                        for (int le = 0; le < nivel; le++) {
+                            out.print("\t &nbsp;&nbsp;");
+                        }
+                        out.print(sectionTitle + "\t");
+                        out.print("</td><td>");
+                        out.print(sectionHits + "\t");
+                        out.print("</td><td>");
+                        out.print(acumulate + "\t");
+                        out.print("</td><td>");
+                        out.println(sectionChilds);
+                        out.print("</td><td>");
+                        out.println(sectionActive);
+                        out.print("</td><td>");
+                        out.println(sectionLevel);
+                        out.print("</td></tr>");
+                    }
+                    out.println("</table>");
+                    out.flush();
+                    out.close();
+                    fin = System.currentTimeMillis();
+                }
+            } catch (Exception e) {
+                fin = System.currentTimeMillis();
+                status = "Hubo problemas. " + e.getMessage();
+                /*manager.setRunning(false);*/
+                setRunning(false);
+                return;
+            }
+            status = "Finalized";
+            /*manager.setRunning(false);*/
+            setRunning(false);
+        }
+        
+        /**
+         * Getter for property counter.
+         * @return Value of property counter.
+         */
+        public long getCounter() {
+            return counter;
+        }
+
+        /**
+         * Getter for property status.
+         * @return Value of property status.
+         */
+        public java.lang.String getStatus() {
+            return status;
+        }
+        
+        /**
+         * Getter for property ini.
+         * @return Value of property ini.
+         */
+        public long getInitTime() {
+            return ini;
+        }
+        
+        /**
+         * Getter for property fin.
+         * @return Value of property fin.
+         */
+        public long getEndTime() {
+            return fin;
+        }
+
+        public void setWebsiteId(String websiteId) {
+            this.websiteId = websiteId;
+        }
+
+        /**
+         * @param year1 the year1 to set
+         */
+        public void setYear1(int year1) {
+            this.year1 = year1;
+        }
+
+        /**
+         * @param month1 the month1 to set
+         */
+        public void setMonth1(int month1) {
+            this.month1 = month1;
+        }
+
+        /**
+         * @param day1 the day1 to set
+         */
+        public void setDay1(int day1) {
+            this.day1 = day1;
+        }
+
+        /**
+         * @param year2 the year2 to set
+         */
+        public void setYear2(int year2) {
+            this.year2 = year2;
+        }
+
+        /**
+         * @param month2 the month2 to set
+         */
+        public void setMonth2(int month2) {
+            this.month2 = month2;
+        }
+
+        /**
+         * @param day2 the day2 to set
+         */
+        public void setDay2(int day2) {
+            this.day2 = day2;
+        }
     }
 }
