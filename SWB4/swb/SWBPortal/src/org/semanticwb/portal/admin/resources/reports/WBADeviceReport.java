@@ -790,8 +790,6 @@ public class WBADeviceReport extends GenericResource {
         }
         out.print(SWBUtils.XML.domToXml(dom));
         out.flush();
-        
-        
     }
 
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{

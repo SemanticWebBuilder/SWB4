@@ -445,359 +445,81 @@ public class WBAChannelReport extends GenericResource {
      * @throws IOException
      */
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/xml;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
-        Resource base = paramsRequest.getResourceBase();
-        ArrayList ar_pag = null;
-        DocumentBuilderFactory dbf = null;
-        DocumentBuilder db = null;
-        Document dom = null;
-        String s_section = null;
-        String s_result = null;
-        String s_acumulated = null;
-        String s_site = null;
-        String s_level = null;
-        this.hmAc = new HashMap();
-        s_level = request.getParameter("wb_showlevel");
-        if (s_level == null) {
-            s_level = "1";
-        }
-        s_site = request.getParameter("wb_site");
 
-        // Receive parameters
-        String s_rep_type = request.getParameter("wb_rep_type");
-
-        String s_year_ini = request.getParameter("wb_year_1") != null ? request.getParameter("wb_year_1") : "0";
-        String s_month_ini = request.getParameter("wb_month_1") != null ? request.getParameter("wb_month_1") : "0";
-        String s_day_ini = request.getParameter("wb_day_1") != null ? request.getParameter("wb_day_1") : "0";
-        String s_year_fin = request.getParameter("wb_year_1") != null ? request.getParameter("wb_year_1") : "0";
-        String s_month_fin = request.getParameter("wb_month_1") != null ? request.getParameter("wb_month_1") : "0";
-        String s_day_fin = request.getParameter("wb_day_1") != null ? request.getParameter("wb_day_1") : "0";
-        String s_filename = request.getParameter("filename");
-
-        if ("1".equals(s_rep_type)) {
-            s_year_ini = request.getParameter("wb_year_11");
-            s_month_ini = request.getParameter("wb_month_11");
-            s_day_ini = request.getParameter("wb_day_11");
-            s_year_fin = request.getParameter("wb_year_12");
-            s_month_fin = request.getParameter("wb_month_12");
-            s_day_fin = request.getParameter("wb_day_12");
-        } else if ("0".equals(s_rep_type)) {
-
-                s_year_ini = request.getParameter("wb_year_1");
-            s_month_ini = request.getParameter("wb_month_1");
-            s_day_ini = request.getParameter("wb_day_1");
-            s_year_fin = s_year_ini;
-            s_month_fin = s_month_ini;
-            s_day_fin = s_day_ini;
-
-            if (s_day_ini != null && s_day_ini.equals("0")) {
-                HashMap hm = new HashMap();
-                hm.put("1", "31");
-                hm.put("2", "28");
-                hm.put("3", "31");
-                hm.put("4", "30");
-                hm.put("5", "31");
-                hm.put("6", "30");
-                hm.put("7", "31");
-                hm.put("8", "31");
-                hm.put("9", "30");
-                hm.put("10", "31");
-                hm.put("11", "30");
-                hm.put("12", "31");
-
-                if (s_month_fin != null && s_month_fin.equals("2")) {
-                    s_day_fin = (Integer.parseInt(s_year_fin) % 4) == 0 ? "29" : "28";
-                } else {
-                    s_day_fin = (String) hm.get(s_month_fin.trim());
-                }
-                s_month_fin = s_month_ini;
-                s_day_ini = "1";
-
-            }
-            else if (s_year_ini != null && s_year_ini.equals("0")) {
-                s_day_ini = "0";
-                s_month_ini = "0";
-                s_day_fin = "0";
-                s_month_fin = "0";
-            }
-            else if (s_year_ini != null && !s_year_ini.equals("0"))
-            {
-                s_day_ini = "1";
-                s_month_ini = "1";
-                s_day_fin = "31";
-                s_month_fin = "12";
-            }
-
-
-        }
-
-
-
-        hmCounted = new HashMap();
-        int i_size = 0;
-        try {
-            s_site = request.getParameter("wb_site");
-            ar_pag = getReportResults(s_site,I_REPORT_TYPE, Integer.parseInt(s_year_ini),Integer.parseInt(s_month_ini),Integer.parseInt(s_day_ini),Integer.parseInt(s_year_fin),Integer.parseInt(s_month_fin),Integer.parseInt(s_day_fin));
-            hmCounted = new HashMap();
-            //paramsRequest.getTopic().getMap().update2DB();
-            i_size = ar_pag.size();
-            //s_home = TopicMgr.getInstance().getTopicMap(s_site).getHome().getDisplayName();
-
-            WebSite tm = SWBContext.getWebSite(s_site);
-
-            // Starts xml document
-            dbf = DocumentBuilderFactory.newInstance();
-            db = dbf.newDocumentBuilder();
-            dom = db.newDocument();
-
-            Element report = dom.createElement("chn_report");
-            dom.appendChild(report);
-            report.setAttribute("total", Integer.toString(i_size));
-            for (int j = 0; j < i_size; j++) {
-                String[] arr_data = (String[]) ar_pag.get(j);
-                s_section = arr_data[0]; //displayname
-                s_result = arr_data[1]; // paginas
-                s_acumulated = arr_data[2]; //acumulado
-                s_level = arr_data[3]; // nivel
-                String s_sectionid = arr_data[4]; //section ID
-                String s_active = arr_data[5]; // Esta activo
-                String s_childs = arr_data[6]; // Tiene hijos
-
-
-                 if(hmCounted.get(s_sectionid)==null)
-                    {
-                    Element row = dom.createElement("row");
-                    row.appendChild(dom.createTextNode(""));
-                    row.setAttribute("id", Integer.toString(j + 1));
-                    report.appendChild(row);
-
-                    Element idsection = dom.createElement("id");
-                    idsection.appendChild(dom.createTextNode(s_sectionid));
-                    row.appendChild(idsection);
-
-                    Element section = dom.createElement("section");
-                    section.appendChild(dom.createTextNode(s_section));
-                    row.appendChild(section);
-
-                    long allhits = 0;
-                    if(s_sectionid.equals("unknown"))
-                    {
-                        allhits = Long.parseLong(arr_data[2]);
-                    }
-                    else
-                    {
-                        allhits = getAllHits(s_sectionid, tm);
-                    }
-                    if(tm.getHomePage().getId().equals(s_sectionid))
-                    {
-                        allhits += hitsUncountables;
-                    }
-                    Element pages = dom.createElement("pages");
-                    pages.appendChild(dom.createTextNode(s_result));
-                    row.appendChild(pages);
-
-                    Element acumulated = dom.createElement("acumulated");
-                    acumulated.appendChild(dom.createTextNode(Long.toString(allhits)));
-                    row.appendChild(acumulated);
-
-                    Element level = dom.createElement("level");
-                    level.appendChild(dom.createTextNode(s_level));
-                    row.appendChild(level);
-
-                    Element active = dom.createElement("active");
-                    active.appendChild(dom.createTextNode(s_active));
-                    row.appendChild(active);
-
-                    Element childs = dom.createElement("childs");
-                    childs.appendChild(dom.createTextNode(s_childs));
-                    row.appendChild(childs);
-
-                }
-            }
-            out.println(new String(SWBUtils.XML.domToXml(dom)));
-            out.close();
-        } catch (Exception e) {
-            log.error("Error on method doRepXml() resource" + " " + strRscType + " " + "with id" + " " + base.getId(), e);
-        }
-    }
-
-    public void getChildSections(WebPage p_topic, ArrayList<WebPage> p_array) {
-        Iterator<WebPage> it_son = p_topic.listChilds();
-        while (it_son.hasNext()) {
-            WebPage tp_child = it_son.next();
-            p_array.add(i_index, tp_child);
-            i_index++;
-            if (tp_child.listChilds().hasNext()) {
-                getChildSections(tp_child, p_array);
-            }
-        }
-    }
-
-    private long getAllHits(String tpid, WebSite tm) {
-        long acumulado = 0;
-        if (tpid != null) {
-            WebPage tp = tm.getWebPage(tpid);
-            hmCounted.put(tpid, tpid);
-            acumulado = ((Long) hmAc.get(tpid)).longValue();
-            Iterator<WebPage> it = tp.listChilds(null, true, true, true, true);
-            while(it.hasNext()) {
-                WebPage tptmp = it.next();
-                if(tptmp != null) {
-                    acumulado += ((Long) hmAc.get(tptmp.getId())).longValue();
-                }
-            }
-        }
-        return acumulado;
-    }
-
-    public long getTotalHits(String tmid, int y1,int m1,int d1, int y2,int m2,int d2, int reportType ) {
-        Connection con = null;
-        PreparedStatement st = null;
-        ResultSet rs = null;
-        long ret = 0;
+        Document dom = SWBUtils.XML.getNewDocument();
+        Resource base = getResourceBase();
 
         try{
-            con = SWBUtils.DB.getDefaultConnection();
-            String sql = "select SUM(hits) hits from swb_reshits where hits_type=? and hits_modelid=?";
-            if(d1>0&&y1>0&&m1>0)
-            {
-                sql += " and hits_date>=? and hits_date<=? ";
-            }
-            st = con.prepareStatement(sql);
-            st.setInt(1, reportType);
-            st.setString(2, tmid);
-
-            if(d1>0&&y1>0&&m1>0) {
-                Calendar calendario = Calendar.getInstance();
-                calendario.set(y1,m1-1,d1,0,0,0);
-                Timestamp tempIni  =  new java.sql.Timestamp(calendario.getTimeInMillis()) ;
-
-                Calendar calendariof = Calendar.getInstance();
-                calendariof.set(y2,m2-1,d2,23,59,59);
-                Timestamp tempFin  =  new java.sql.Timestamp(calendariof.getTimeInMillis()) ;
-
-                st.setTimestamp(3, tempIni);
-                st.setTimestamp(4, tempFin);
-            }
-
-            rs = st.executeQuery();
-            if(rs.next())
-            {
-                ret = rs.getLong("hits");
-            }
-        }catch(Exception se) {
-            log.error("Error al consultar los Hits a la DB. WBADeviceReport.getTotalHits()",se);
-        }finally {
+            String websiteId = request.getParameter("wb_site");
+            int groupDates;
             try {
-                if(rs!=null) rs.close();
-                if(st!=null) st.close();
-                if(con!=null) con.close();
-            }catch(SQLException e){
+                groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
+            }catch(NumberFormatException e) {
+                groupDates = 0;
             }
-        }
-        return ret;
-    }
+            String fecha1 = request.getParameter("wb_fecha1")==null ? "":request.getParameter("wb_fecha1");
+            String fecha11 = request.getParameter("wb_fecha11")==null ? "":request.getParameter("wb_fecha11");
+            String fecha12 = request.getParameter("wb_fecha12")==null ? "":request.getParameter("wb_fecha12");
 
-    private ArrayList getReportResults(String idtm, int reportType, int _year1, int _month1, int _day1, int _year2, int _month2, int _day2) {
-        Iterator<SWBRecHit> iterHits = null;
-        ArrayList al_pag = new ArrayList();
-        WebSite tm_section = null;
-        Iterator<WebPage> it_child = null;
-        ArrayList<WebPage> arr_child = null;
-        /*SWBRecHit recResHits = null;*/
-        String s_site = idtm;
-        //int i_level = 10;
-        int i_len = 0;
-        long l_allacumulated = 0;
-        long l_acumulated = 0;
-        long total_acumulado = 0;
-
-        try {
-            tm_section = SWBContext.getWebSite(s_site);
-            if(tm_section != null) {
-                it_child = tm_section.getHomePage().listChilds();
-                arr_child = new ArrayList();
-                i_index = 0;
-                arr_child.add(i_index, tm_section.getHomePage());
-                i_index++;
-                while (it_child.hasNext()) {
-                    WebPage tp_child = it_child.next();
-                    arr_child.add(i_index, tp_child);
-                    i_index++;
-                    if(tp_child.listChilds().hasNext()) {
-                        getChildSections(tp_child, arr_child);
-                    }
-                }
-                i_len = arr_child.size();
-                l_allacumulated = 0;
-                for (int i = 0; i < i_len; i++) {
-                    WebPage t_section = arr_child.get(i);
-                    /*if (t_section.getDbdata().getSystem() == 0) {*/
-                        if (!t_section.isDeleted()) {
-                            if(reportType == 0) { // radio button was 0
-                                iterHits = SWBRecHits_.getInstance().getResHitsLog(s_site, t_section.getId(), 3, _year1, _month1, _day1).iterator();
-                            } else { // radio button was 1... Select between two dates
-                                iterHits = SWBRecHits_.getInstance().getResHitsLog(s_site, t_section.getId(), 3, _year1, _month1, _day1, _year2, _month2, _day2).iterator();
-                            }
-                            /*recResHits = null;*/
-                            l_acumulated = 0;
-                            while (iterHits.hasNext()) {
-                                counter++;
-                                SWBRecHit recResHits = iterHits.next();
-                                l_acumulated = l_acumulated + recResHits.getHits();
-                            }
-                            l_allacumulated = l_allacumulated + l_acumulated;
-
-                                String[] arr_data = new String[7];
-                                arr_data[0] = t_section.getDisplayName();
-                                arr_data[1] = Long.toString(l_acumulated);
-                                arr_data[2] = Long.toString(0);
-                                arr_data[3] = Integer.toString(t_section.getLevel());
-                                arr_data[4] = t_section.getId();
-                                arr_data[5] = Boolean.toString(t_section.isActive());
-                                arr_data[6] = SWBUtils.sizeOf(t_section.listChilds(null, true, true, true, true))>0 ? "true" : "false";
-                                al_pag.add(arr_data);
-                                hmAc.put(t_section.getId(), new Long(l_acumulated));
-
-                        }
-                    /*} else {
-                        log.error("Reporte por Canal. sección eliminada: " + t_section.getId());
-                    }*/
-                }
-                if (al_pag.size() > 0) {
-                    String[] arr_temp = (String[]) al_pag.get(0);
-                    arr_temp[2] = Long.toString(l_allacumulated);
-                    al_pag.add(0, arr_temp);
-                    al_pag.remove(1);
-                }
-
-                //PARA OBTENER HITS TOTALES DEL REPORTE
-//
-                long todos = getTotalHits(s_site, _year1,_month1,_day1,_year2,_month2,_day2, 3);
-                WebSite tm = SWBContext.getWebSite(s_site);
-                total_acumulado = getAllHits(tm.getHomePage().getId(),tm );
-                if(total_acumulado != todos)
-                {
-                    hitsUncountables = Math.abs(todos-total_acumulado);
-
-                    String[] arr_data = new String[7];
-                    arr_data[0] = "Secciones eliminadas";
-                    arr_data[1] = Long.toString(hitsUncountables);
-                    arr_data[2] = Long.toString(hitsUncountables);
-                    arr_data[3] = Integer.toString(1);
-                    arr_data[4] = "unknown";
-                    arr_data[5] = "false";
-                    arr_data[6] = "false";
-                    al_pag.add(arr_data);
-                    hmAc.put("unknown", new Long(hitsUncountables));
-                }
+            ReportGenerator gen;            
+            if(groupDates==0) {
+                gen = new ReportGenerator(websiteId, Integer.parseInt(fecha1.substring(0,4)), Integer.parseInt(fecha1.substring(5,7)), Integer.parseInt(fecha1.substring(8)));                
+            }else {
+                gen = new ReportGenerator(websiteId, Integer.parseInt(fecha11.substring(0,4)), Integer.parseInt(fecha11.substring(5,7)), Integer.parseInt(fecha11.substring(8)), Integer.parseInt(fecha12.substring(0,4)), Integer.parseInt(fecha12.substring(5,7)), Integer.parseInt(fecha12.substring(8)));
             }
-        } catch (Exception e) {
-            log.error("Error on method ReportGenerator.getReportResults() ", e);
-        }
-        return al_pag;
-    }
 
+            int renglones = 0;
+            Element report = dom.createElement("DeviceReport");
+            dom.appendChild(report);
+
+            Iterator<String[]>itrechits = gen.getReportResults();
+            while(itrechits.hasNext()) {
+                String[] data = itrechits.next();
+                String sectionTitle = data[0];
+                String sectionHits = data[1];
+                String acumulate = data[2];
+                String sectionLevel = data[3];
+                String sectionId = data[4];
+                String sectionActive = data[5];
+                String sectionChilds = data[6];
+
+                Element row = dom.createElement("row");
+                row.appendChild(dom.createTextNode(""));
+                row.setAttribute("id",Integer.toString(++renglones));
+                report.appendChild(row);
+                Element title = dom.createElement("sectionTitle");
+                title.appendChild(dom.createTextNode(sectionTitle));
+                row.appendChild(title);
+                Element hits = dom.createElement("sectionHits");
+                hits.appendChild(dom.createTextNode(sectionHits));
+                row.appendChild(hits);
+                Element total = dom.createElement("acumulate");
+                total.appendChild(dom.createTextNode(acumulate));
+                row.appendChild(total);
+                Element level = dom.createElement("sectionLevel");
+                level.appendChild(dom.createTextNode(sectionLevel));
+                row.appendChild(level);
+                Element id = dom.createElement("sectionId");
+                id.appendChild(dom.createTextNode(sectionId));
+                row.appendChild(id);
+                Element active = dom.createElement("sectionActive");
+                active.appendChild(dom.createTextNode(sectionActive));
+                row.appendChild(active);
+                Element childs = dom.createElement("sectionChilds");
+                childs.appendChild(dom.createTextNode(sectionChilds));
+                row.appendChild(childs);
+            }
+            report.setAttribute("rows",Integer.toString(renglones));
+        }catch (Exception e){
+            log.error("Error on method doRepXml() resource " + strRscType + " with id " + base.getId(), e);
+        }
+        out.print(SWBUtils.XML.domToXml(dom));
+        out.flush();
+        out.close();
+    }
+    
     public void updateReport(HttpServletRequest request, WebPage topic) {
         Resource base = getResourceBase();
         String s_site = request.getParameter("wb_site");
@@ -989,25 +711,31 @@ class ReportGenerator extends Thread {
     private static Logger log = SWBUtils.getLogger(WBADeviceReport.class);
 
     private final int type = 3;
-    private int counter;
+    private long counter;
     private int year1,  month1,  day1,  year2,  month2,  day2;
     private long ini = 0;
     private long fin = 0;
 
     private String status;
-    private String tms = "Test";
-    private String filename = null;
+    private String websiteId;
+    private String filename;
     
-    private ReportMgr manager = null;
-    private HashMap hmAc = null, hmCounted=null;
+    private ReportMgr manager;
     
-
-    public ReportGenerator(String tms, int year1, int month1, int day1, String filename) {
-        this(tms, year1, month1, day1, 0, 0, 0, filename);
+    public ReportGenerator(String websiteId, int year1, int month1, int day1) {
+        this(websiteId, year1, month1, day1, 0, 0, 0, null);
+    }
+    
+    public ReportGenerator(String websiteId, int year1, int month1, int day1, int year2, int month2, int day2) {
+        this(websiteId, year1, month1, day1, year2, month2, day2, null);
     }
 
-    public ReportGenerator(String tms, int year1, int month1, int day1, int year2, int month2, int day2, String filename) {
-        this.tms = tms;
+    public ReportGenerator(String websiteId, int year1, int month1, int day1, String filename) {
+        this(websiteId, year1, month1, day1, 0, 0, 0, filename);
+    }
+
+    public ReportGenerator(String websiteId, int year1, int month1, int day1, int year2, int month2, int day2, String filename) {
+        this.websiteId = websiteId;
         this.year1 = year1;
         this.month1 = month1;
         this.day1 = day1;
@@ -1015,8 +743,6 @@ class ReportGenerator extends Thread {
         this.month2 = month2;
         this.day2 = day2;
         this.filename = filename;
-        this.hmAc = new HashMap();
-        this.hmCounted = new HashMap();
         this.status = "Initializing...";
     }
 
@@ -1031,88 +757,7 @@ class ReportGenerator extends Thread {
         }
     }
 
-    public long getTotalHits(String tmid, int year,int month,int day) {
-        long ret = 0;        
-        ResultSet rs = null;
-        PreparedStatement st = null;
-        Connection con = null;
-        GregorianCalendar date;
-        try{
-            con = SWBUtils.DB.getDefaultConnection();
-            String sql = "select SUM(hits)as hits from swb_reshits where hits_modelid=? and hits_type=? and (hits_date>=? and hits_date<=?)";
-            st = con.prepareStatement(sql);
-            st.setString(1, tmid);
-            st.setInt(2, type);
-            date = new GregorianCalendar(year, month-1, day, 0, 0, 0);
-            st.setTimestamp(3, new Timestamp(date.getTimeInMillis()));
-            date = new GregorianCalendar(year,month-1,day,23,59,59);
-            st.setTimestamp(4, new Timestamp(date.getTimeInMillis()));
-            rs = st.executeQuery();
-            if(rs.next()) {
-                ret = rs.getLong("hits");
-            }
-        }catch(Exception se) {
-            log.error("Error al consultar los Hits a la DB. WBADeviceReport.getTotalHits()",se);
-        }finally {
-            try {
-                if(rs!=null) rs.close();
-                if(st!=null) st.close();
-                if(con!=null) con.close();
-            }catch(SQLException e){
-            }
-        }
-        return ret;
-    }
-
-    public long getTotalHits(String tmid, int y1,int m1,int d1, int y2,int m2,int d2, int reportType ) {
-        long ret = 0;
-        Connection con = null;
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-        try{
-            con = SWBUtils.DB.getDefaultConnection();
-            String sql = "select SUM(hits) hits from swb_reshits where hits_type=? and hits_modelid=?";
-            if(d1>0&&y1>0&&m1>0)
-            {
-                sql += " and hits_date>=? and hits_date<=? ";
-            }
-            pst = con.prepareStatement(sql);
-            pst.setInt(1, reportType);
-            pst.setString(2, tmid);
-
-            if(d1>0&&y1>0&&m1>0)
-            {
-                Calendar calendario = Calendar.getInstance();
-                calendario.set(y1,m1-1,d1,0,0,0);
-                Timestamp tempIni  =  new java.sql.Timestamp(calendario.getTimeInMillis()) ;
-
-                Calendar calendariof = Calendar.getInstance();
-                calendariof.set(y2,m2-1,d2,23,59,59);
-                Timestamp tempFin  =  new java.sql.Timestamp(calendariof.getTimeInMillis()) ;
-
-                pst.setTimestamp(3, tempIni);
-                pst.setTimestamp(4, tempFin);
-            }
-
-            rs = pst.executeQuery();
-            if(rs.next())
-            {
-                ret = rs.getLong("hits");
-            }
-        }catch(Exception se) {
-            log.error("Error al consultar los Hits a la DB. WBADeviceReport.getTotalHits()",se);
-        }finally {
-            try {
-                if(rs!=null) rs.close();
-                if(pst!=null) pst.close();
-                if(con!=null) con.close();
-            }catch(SQLException e){
-            }
-        }
-        return ret;
-    }
-
-    private Iterator getReportResults(final String siteId, final int year, final int month, final int day) {
+    public Iterator<String[]> getReportResults() {
         Iterator<SWBRecHit> iterHits;
         ArrayList al_pag = new ArrayList();
         WebSite webSite;
@@ -1121,7 +766,7 @@ class ReportGenerator extends Thread {
         long l_allacumulated = 0;
 
         try {
-            webSite = SWBContext.getWebSite(siteId);
+            webSite = SWBContext.getWebSite(websiteId);
             if(webSite != null) {
 
                 childs = webSite.getHomePage().listChilds();
@@ -1135,7 +780,11 @@ class ReportGenerator extends Thread {
                     }
                 }
 
-                iterHits = SWBRecHits_.getInstance().getResHitsLog(siteId, type, year, month, day).iterator();
+                if(year2>0 && month2>0 && day2>0) {
+                    iterHits = SWBRecHits_.getInstance().getResHitsLog(websiteId, type, year1, month1, day1, year2, month2, day2).iterator();
+                }else {
+                    iterHits = SWBRecHits_.getInstance().getResHitsLog(websiteId, type, year1, month1, day1).iterator();
+                }
                 HashMap hits = new HashMap();
                 while(iterHits.hasNext()) {
                     SWBRecHit recHits = iterHits.next();
@@ -1163,6 +812,7 @@ class ReportGenerator extends Thread {
                     arr_data[5] = section.isActive()?"Active":"Inactive";
                     arr_data[6] = SWBUtils.sizeOf(section.listChilds())>0 ? "true" : "false";
                     al_pag.add(arr_data);
+                    counter = l_allacumulated;
                 }
                 if(hits.size()>0) {
                     Iterator<String> keys = hits.keySet().iterator();
@@ -1180,6 +830,7 @@ class ReportGenerator extends Thread {
                         arr_data[5] = "Deleted";
                         arr_data[6] = "-";
                         al_pag.add(arr_data);
+                        counter = l_allacumulated;
                     }
                 }
             }
@@ -1189,98 +840,15 @@ class ReportGenerator extends Thread {
         return al_pag.iterator();
     }
 
-    private Iterator getReportResults(String siteId, int year1, int month1, int day1, int year2, int month2, int day2) {
-        Iterator<SWBRecHit> iterHits;
-        ArrayList al_pag = new ArrayList();
-        WebSite webSite;
-        Iterator<WebPage> childs;
-        ArrayList<WebPage> sections;
-        long l_allacumulated = 0;
-
-        try {
-            webSite = SWBContext.getWebSite(siteId);
-            if(webSite != null) {
-
-                childs = webSite.getHomePage().listChilds();
-                sections = new ArrayList();
-                sections.add(webSite.getHomePage());
-                while(childs.hasNext()) {
-                    WebPage webPage = childs.next();
-                    sections.add(webPage);
-                    if(webPage.listChilds().hasNext()) {
-                        getChildSections(webPage, sections);
-                    }
-                }
-
-                iterHits = SWBRecHits_.getInstance().getResHitsLog(siteId, type, year1, month1, day1, year2, month2, day2).iterator();
-                HashMap hits = new HashMap();
-                while(iterHits.hasNext()) {
-                    SWBRecHit recHits = iterHits.next();
-                    hits.put(recHits.getSection(), recHits);
-                }
-
-                Iterator<WebPage> itsections = sections.iterator();
-                while(itsections.hasNext()) {
-                    WebPage section = itsections.next();
-                    String[] arr_data = new String[7];
-                    arr_data[0] = section.getDisplayName();
-
-                    if(hits.containsKey(section.getId())) {
-                        SWBRecHit recHit = (SWBRecHit)hits.get(section.getId());
-                        arr_data[1] = Long.toString(recHit.getHits(), 10);
-                        l_allacumulated += recHit.getHits();
-                        hits.remove(section.getId());
-                    }else {
-                        arr_data[1] = "0";
-                    }
-
-                    arr_data[2] = Long.toString(l_allacumulated);
-                    arr_data[3] = Integer.toString(section.getLevel());
-                    arr_data[4] = section.getId();
-                    arr_data[5] = section.isActive()?"Active":"Inactive";
-                    arr_data[6] = SWBUtils.sizeOf(section.listChilds())>0 ? "true" : "false";
-                    al_pag.add(arr_data);
-                }
-                if(hits.size()>0) {
-                    Iterator<String> keys = hits.keySet().iterator();
-                    while(keys.hasNext()) {
-                        String key = keys.next();
-                        SWBRecHit recHit = (SWBRecHit)hits.get(key);
-
-                        String[] arr_data = new String[7];
-                        arr_data[0] = recHit.getSection();
-                        arr_data[1] = Long.toString(recHit.getHits(), 10);
-                        l_allacumulated += recHit.getHits();
-                        arr_data[2] = Long.toString(l_allacumulated, 10);
-                        arr_data[3] = "-1";
-                        arr_data[4] = recHit.getSection();
-                        arr_data[5] = "Deleted";
-                        arr_data[6] = "-";
-                        al_pag.add(arr_data);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            log.error("Error on method ReportGenerator.getReportResults() ",e);
-        }
-        return al_pag.iterator();
-    }
-
+    @Override
     public void run() {
         status = "Initializing";
         manager.setRunning(true);
         try {
-            WebSite tm = SWBContext.getWebSite(tms);
-            if(tm != null) {
+            if(SWBContext.getWebSite(websiteId) != null) {
                 ini = System.currentTimeMillis();
                 status = "Reading Logs";
-                Iterator iter;
-                if(year2>0 && month2>0 && day2>0) {
-                    iter = getReportResults(tms, year1, month1, day1, year2, month2, day2);
-                }else {
-                    iter = getReportResults(tms, year1, month1, day1);
-                }
-
+                Iterator<String[]> iter = getReportResults();
                 status = "Processing Logs";
                 File reportdir = new File(SWBPlatform.getWorkPath() + "/logs/reports/");
                 if (!reportdir.exists()) {
@@ -1290,12 +858,11 @@ class ReportGenerator extends Thread {
                 status = "Writing report";
                 if( null==filename || (null!=filename && filename.trim().length()== 0)) {
                     filename = "CReport";
-                }
-                
+                }                
 
                 PrintWriter out = new PrintWriter(new FileOutputStream(SWBPlatform.getWorkPath() + "/logs/reports/" + filename + ".xls"));
                 out.println("<table border=1>");
-                out.println("<tr ><td colspan=7 align=center bgcolor=\"gray\"><b>Channel Report - " + tms + "</b></td></tr>");
+                out.println("<tr ><td colspan=7 align=center bgcolor=\"gray\"><b>Channel Report - "+websiteId+"</b></td></tr>");
                 out.println("<tr ><td bgcolor=\"gray\">");
                 out.println("<b>id</b>");
                 out.println("</td><td bgcolor=\"gray\">");
@@ -1313,7 +880,7 @@ class ReportGenerator extends Thread {
                 out.println("</td></tr>");
 
                 while (iter.hasNext()) {
-                    String[] arr_data = (String[]) iter.next();
+                    String[] arr_data = iter.next();
                     String sectionTitle = arr_data[0];
                     String sectionHits = arr_data[1];
                     String acumulate = arr_data[2];
@@ -1360,7 +927,7 @@ class ReportGenerator extends Thread {
      * Getter for property counter.
      * @return Value of property counter.
      */
-    public int getCounter() {
+    public long getCounter() {
         return counter;
     }
 
@@ -1410,12 +977,13 @@ class ReportMgr {
     private ReportGenerator gen = null;
     private boolean isRunning = false;
 
-    /** Creates a new instance of ReportMgr */
+    /** Creates a new instance of ReportMgr
+     */
     private ReportMgr() {
     }
 
     public static ReportMgr getInstance() {
-        if (instance == null) {
+        if(instance == null) {
             instance = new ReportMgr();
         }
         return instance;
