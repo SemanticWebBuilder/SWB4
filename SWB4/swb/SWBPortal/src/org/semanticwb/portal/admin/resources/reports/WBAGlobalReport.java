@@ -51,15 +51,10 @@ import org.w3c.dom.Element;
 public class WBAGlobalReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBAGlobalReport.class);
 
-    private static final String S_REPORT_IDAUX = "_";
-    //private static final ArrayList idaux = new ArrayList(1);
-    private static final int I_REPORT_TYPE = 0;
-
-    public String strRscType;
+    public static final String S_REPORT_IDAUX = "_";
+    public static final int I_REPORT_TYPE = 0;
+    private String strRscType;
     
-    /*static {
-        idaux.add(S_REPORT_IDAUX);            
-    }*/
 
     @Override
     public void init(){
@@ -92,6 +87,7 @@ public class WBAGlobalReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */    
+    @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         if(paramsRequest.getMode().equals("graph")) {
             doGraph(request,response,paramsRequest);
@@ -115,6 +111,7 @@ public class WBAGlobalReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */    
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache"); 
@@ -286,7 +283,7 @@ public class WBAGlobalReport extends GenericResource {
                 out.println(" }");
                 out.println("</script>");
                 
-                out.println("<div id=\"swbform\">");
+                out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>" + paramsRequest.getLocaleString("global_report") + "</legend>");
                 
@@ -308,7 +305,7 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("</td>");
                 out.println("</tr>");
                 
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");                
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr>");
                 out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
                 out.println("   <input type=\"button\" onclick=\"doXml('"+ rtype +"', 'width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;");
@@ -404,7 +401,7 @@ public class WBAGlobalReport extends GenericResource {
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
+                        /*out.println("<hr size=\"1\" noshade>");*/
                     }
                     out.println("</td>");
                     out.println("</tr>");
@@ -453,15 +450,20 @@ public class WBAGlobalReport extends GenericResource {
                         }
                         out.println("</td></tr>");                            
                         out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
+                        /*out.println("<hr size=\"1\" noshade>");*/
                     }
                     out.println("</td>");
                     out.println("</tr>");
                 }
+
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("</table></form>");
                 out.println("</fieldset></div>");
             }
             else{   // There are not sites and displays a message
+                out.println("<div class=\"swbform\">");
+                out.println("<fieldset>");
+                out.println("<legend>" + paramsRequest.getLocaleString("global_report") + "</legend>");
                 out.println("<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -476,6 +478,7 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("</table></form>");
+                out.println("</fieldset></div>");
             }
         }
         catch (Exception e){
@@ -483,6 +486,7 @@ public class WBAGlobalReport extends GenericResource {
         }
         /*response.getWriter().print(sb_ret.toString());*/
         out.flush();
+        out.close();
     }
 
     /**
@@ -683,6 +687,7 @@ public class WBAGlobalReport extends GenericResource {
         }
         out.print(SWBUtils.XML.domToXml(dom));
         out.flush();
+        out.close();
     }
     
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {

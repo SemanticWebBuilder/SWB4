@@ -41,12 +41,9 @@ import org.w3c.dom.NodeList;
 
 public class WBAChannelReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBAChannelReport.class);
-    private final int I_REPORT_TYPE = 3;   // Type 4 of reports "Channel access"    
-    public String strRscType;
-    private int i_index;
-    private HashMap hmAc = null, hmCounted=null;
-    private long hitsUncountables = 0;
-    private int counter = 0;
+
+    public static final int I_REPORT_TYPE = 3;
+    private String strRscType;
 
     @Override
     public void init(){
@@ -707,6 +704,7 @@ public class WBAChannelReport extends GenericResource {
                 }
                 fout.close();
                 out.flush();
+                out.close();
             }
         }
     }
@@ -731,12 +729,6 @@ class ReportMgr {
         }
         return instance;
     }
-
-    /*public void start(ReportGenerator rgen) {
-        gen = rgen;
-        gen.setManager(this);
-        gen.start();
-    }*/
 
     public void start(String websiteId, int year, int month, int day, String filename) {
         if(!isRunning) {
@@ -837,10 +829,9 @@ class ReportMgr {
 
 
     private class ReportGenerator extends Thread {
-        /*private static Logger log = SWBUtils.getLogger(WBADeviceReport.class);*/
         private Logger log = SWBUtils.getLogger(WBADeviceReport.class);
 
-        private final int type = 3;
+        public static final int I_REPORT_TYPE = 3;
         private long counter;
         private int year1,  month1,  day1,  year2,  month2,  day2;
         private long ini = 0;
@@ -911,9 +902,9 @@ class ReportMgr {
                     }
 
                     if(year2>0 && month2>0 && day2>0) {
-                        iterHits = SWBRecHits_.getInstance().getResHitsLog(websiteId, type, year1, month1, day1, year2, month2, day2).iterator();
+                        iterHits = SWBRecHits_.getInstance().getResHitsLog(websiteId, I_REPORT_TYPE, year1, month1, day1, year2, month2, day2).iterator();
                     }else {
-                        iterHits = SWBRecHits_.getInstance().getResHitsLog(websiteId, type, year1, month1, day1).iterator();
+                        iterHits = SWBRecHits_.getInstance().getResHitsLog(websiteId, I_REPORT_TYPE, year1, month1, day1).iterator();
                     }
                     HashMap hits = new HashMap();
                     while(iterHits.hasNext()) {

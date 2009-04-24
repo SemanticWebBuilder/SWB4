@@ -32,10 +32,6 @@ public class WBAContentsReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBASectionReport.class);
 
     private String strRscType;
-    //private WebSiteSectionTree tree = new WebSiteSectionTree();
-
-    private static Integer x;
-    static{x=new Integer(0);}
 
     /*ContentMonitor content_mon=null;*/
 
@@ -91,7 +87,7 @@ public class WBAContentsReport extends GenericResource {
         if(section != null) {
             out.println("<input type=\"hidden\" name=\"section\" id=\"section\" value=\""+section+"\" />");
         }
-        //out.println(tree.renderXHTML(webSiteId, request, paramsRequest.getUser(), url.toString()));
+
         HashMap params = new HashMap();
         Enumeration<String> names = request.getParameterNames();
         while(names.hasMoreElements()) {
@@ -101,6 +97,7 @@ public class WBAContentsReport extends GenericResource {
         SelectTree tree = new SelectTree(paramsRequest.getUser().getLanguage());
         out.println(tree.renderXHTML(webSiteId, params, url.toString()));
         out.flush();
+        out.close();
     }
 
     private void doFillReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
@@ -324,7 +321,7 @@ public class WBAContentsReport extends GenericResource {
                 out.println("</script>");
                 // javascript
 
-                out.println("<div id=\"swbform\">");
+                out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>" + paramsRequest.getLocaleString("contents_report") + "</legend>");
 
@@ -388,11 +385,13 @@ public class WBAContentsReport extends GenericResource {
                 out.println("</tr>");
 
                 out.println("<tr><td colspan=\"4\"><br /></td></tr>");
+                out.println("</table></form></fieldset></div>");
             }
         }catch (Exception e) {
             log.error("Error on method doView() resource " + strRscType + " with id " + base.getId(), e);
         }
         out.flush();
+        out.close();
     }
 
 
@@ -462,6 +461,7 @@ public class WBAContentsReport extends GenericResource {
         out.println("</body>");
         out.println("</html>");
         out.flush();
+        out.close();
     }
 
     private String getContentInHtml(Iterator<WebPage> childs) {
@@ -555,6 +555,7 @@ public class WBAContentsReport extends GenericResource {
 
         out.print(SWBUtils.XML.domToXml(dom));
         out.flush();
+        out.close();
     }
 
     private void getContentInXml(Document dom, Iterator<WebPage> childs) {

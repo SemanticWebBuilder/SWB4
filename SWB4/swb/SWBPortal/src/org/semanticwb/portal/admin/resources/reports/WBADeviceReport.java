@@ -64,9 +64,8 @@ import org.w3c.dom.Element;
 public class WBADeviceReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBADeviceReport.class);
     
-    private static final int I_REPORT_TYPE = 1;   // Type 1 of reports "Export"
-    
-    public String strRscType;
+    public static final int I_REPORT_TYPE = 1;
+    private String strRscType;
 
     public void init() {
         Resource base = getResourceBase();
@@ -143,6 +142,7 @@ public class WBADeviceReport extends GenericResource {
         PrintWriter out = response.getWriter();
         out.print(ret.toString());
         out.flush();
+        out.close();
     }
 
     private void renderSelect(ArrayList origList, Device node, StringBuilder ret, String space, String[] seldevs) {
@@ -177,7 +177,6 @@ public class WBADeviceReport extends GenericResource {
         Resource base = getResourceBase();
         
         final int I_ACCESS = 0;        
-        StringBuffer sb_ret = new StringBuffer();
         GregorianCalendar gc_now = new GregorianCalendar();
         HashMap hm_sites = new HashMap();
         String rtype = null;
@@ -365,7 +364,7 @@ public class WBADeviceReport extends GenericResource {
                 out.println("</script>");
                 // javascript
 
-                out.println("<div id=\"swb-admin\">");
+                out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>" + paramsRequest.getLocaleString("device_report") + "</legend>");
 
@@ -472,8 +471,6 @@ public class WBADeviceReport extends GenericResource {
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
                         out.println("<tr>");
                         out.println("<td>");
-                        response.getWriter().print(sb_ret.toString());
-                        sb_ret.delete(0,sb_ret.length());
 
                         WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                         JRDataSourceable dataDetail = new JRDeviceAccessDataDetail(filter);
@@ -492,7 +489,7 @@ public class WBADeviceReport extends GenericResource {
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
+                        /*out.println("<hr size=\"1\" noshade>");*/
                     }
                     out.println("</td>");
                     out.println("</tr>");
@@ -520,8 +517,6 @@ public class WBADeviceReport extends GenericResource {
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
                         out.println("<tr>");
                         out.println("<td>");
-                        response.getWriter().print(sb_ret.toString());
-                        sb_ret.delete(0,sb_ret.length());
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(webSiteId);
@@ -551,15 +546,19 @@ public class WBADeviceReport extends GenericResource {
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
+                        /*out.println("<hr size=\"1\" noshade>");*/
                     }
                     out.println("</td>");
                     out.println("</tr>");
                 }
-                out.println("</table>");                    
-                out.println("</form>");
+
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("</table></form>");
                 out.println("</fieldset></div>");
             }else {
+                out.println("<div class=\"swbform\">");
+                out.println("<fieldset>");
+                out.println("<legend>" + paramsRequest.getLocaleString("device_report") + "</legend>");
                 out.println("<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -574,11 +573,13 @@ public class WBADeviceReport extends GenericResource {
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("</table></form>");
+                out.println("</fieldset></div>");
             }
         } catch (Exception e) {
             log.error("Error on method DoView() resource " + strRscType + " with id " + base.getId(), e);
         }
-        response.getWriter().print(sb_ret.toString());
+        out.flush();
+        out.close();
     }
     
     /**
@@ -790,6 +791,7 @@ public class WBADeviceReport extends GenericResource {
         }
         out.print(SWBUtils.XML.domToXml(dom));
         out.flush();
+        out.close();
     }
 
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{

@@ -52,15 +52,10 @@ import org.w3c.dom.Element;
 public class WBALoginReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBALoginReport.class);
 
-    private static final String S_REPORT_IDAUX = "_";
-    /*private static final ArrayList idaux = new ArrayList(1);*/
-    private static final int I_REPORT_TYPE = 6;
+    public static final String S_REPORT_IDAUX = "_";
+    public static final int I_REPORT_TYPE = 6;
+    private String strRscType;
     
-    public String strRscType;
-    
-    /*static {
-        idaux.add(S_REPORT_IDAUX);            
-    }*/
 
     @Override
     public void init(){
@@ -125,7 +120,6 @@ public class WBALoginReport extends GenericResource {
         Resource base = getResourceBase();
         
         final int I_ACCESS = 0;        
-        //StringBuffer sb_ret = new StringBuffer();        
         HashMap hm_repository = new HashMap();
         int i_access = 0;
         String rtype;
@@ -280,7 +274,7 @@ public class WBALoginReport extends GenericResource {
                 out.println(" }");
                 out.println("</script>");
                 
-                out.println("<div id=\"swb-admin\">");
+                out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>" + paramsRequest.getLocaleString("login_report") + "</legend>");
                 
@@ -391,7 +385,7 @@ public class WBALoginReport extends GenericResource {
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
+                        /*out.println("<hr size=\"1\" noshade>");*/
                     }
                     out.println("</td>");
                     out.println("</tr>");
@@ -440,15 +434,20 @@ public class WBALoginReport extends GenericResource {
                         }
                         out.println("</td></tr>");                            
                         out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
+                        /*out.println("<hr size=\"1\" noshade>");*/
                     }
                     out.println("</td>");
                     out.println("</tr>");
                 }
+
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("</table></form>");
                 out.println("</fieldset></div>");
             }
             else {   // There are not sites and displays a message
+                out.println("<div class=\"swbform\">");
+                out.println("<fieldset>");
+                out.println("<legend>" + paramsRequest.getLocaleString("login_report") + "</legend>");
                 out.println("<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -463,12 +462,15 @@ public class WBALoginReport extends GenericResource {
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("</table></form>");
+                out.println("</table></form>");
+                out.println("</fieldset></div>");
             }
         }
         catch (Exception e){
             log.error("Error on method doView() resource " + strRscType +  " with id " + base.getId(), e);
         }
         out.flush();
+        out.close();
     }
 
     /**
@@ -669,6 +671,7 @@ public class WBALoginReport extends GenericResource {
         }
         out.print(SWBUtils.XML.domToXml(dom));
         out.flush();
+        out.close();
     }
     
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{

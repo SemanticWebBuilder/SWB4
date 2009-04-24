@@ -63,10 +63,9 @@ import org.w3c.dom.Element;
 public class WBASessionReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBASessionReport.class);
 
-    private static final String S_REPORT_IDAUX = "_";
-    private static final int I_REPORT_TYPE = 5;
-    
-    public String strRscType;
+    public static final String S_REPORT_IDAUX = "_";
+    public static final int I_REPORT_TYPE = 5;
+    private String strRscType;
 
     @Override
     public void init(){
@@ -279,7 +278,7 @@ public class WBASessionReport extends GenericResource {
 
                 out.println("</script>");
                 
-                out.println("<div id=\"swbform\">");
+                out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>" + paramsRequest.getLocaleString("session_report") + "</legend>");
                 
@@ -399,7 +398,7 @@ public class WBASessionReport extends GenericResource {
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
+                        /*out.println("<hr size=\"1\" noshade>");*/
                     }
                     out.println("</td>");
                     out.println("</tr>");
@@ -448,15 +447,20 @@ public class WBASessionReport extends GenericResource {
                         }
                         out.println("</td></tr>");                            
                         out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
+                        /*out.println("<hr size=\"1\" noshade>");*/
                     }
                     out.println("</td>");
                     out.println("</tr>");
                 }
+
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("</table></form>");
                 out.println("</fieldset></div>");
             }
             else { // There are not repositories and displays a message
+                out.println("<div class=\"swbform\">");
+                out.println("<fieldset>");
+                out.println("<legend>" + paramsRequest.getLocaleString("session_report") + "</legend>");
                 out.println("<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -471,12 +475,14 @@ public class WBASessionReport extends GenericResource {
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("</table></form>");
+                out.println("</fieldset></div>");
             }
         }
         catch (Exception e){
             log.error("Error on method DoView() resource " + strRscType + " with id " + base.getId(), e);
         }
         out.flush();
+        out.close();
     }
 
     /**
@@ -659,6 +665,7 @@ public class WBASessionReport extends GenericResource {
         }
         out.print(SWBUtils.XML.domToXml(dom));
         out.flush();
+        out.close();
     }
     
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
