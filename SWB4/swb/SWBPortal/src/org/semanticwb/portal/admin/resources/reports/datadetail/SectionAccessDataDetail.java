@@ -23,36 +23,28 @@ public class SectionAccessDataDetail extends SWBDataDetail{
     protected List doDataList(String site, String rfilter, int type, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
 //        HashMap labels=new HashMap();
-//        //if(rfilter.hasNext()) {
-//            resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, labels);
-//        //}
+//        resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, labels);
         return resumeRecHits;
     }
     
     protected List doDataList(String site, String rfilter, int type, int year, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
-        HashMap labels=new HashMap();
-        //if(rfilter.hasNext()) {
-            resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, year, labels);
-        //}
+        HashMap labels=new HashMap();        
+        resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, year, labels);
         return resumeRecHits;
     }
     
     protected List doDataList(String site, String rfilter, int type, int year, int month, int day, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();
-        //if(rfilter.hasNext()) {
-            resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, year, month, day, labels);
-        //}
+        resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, year, month, day, labels);
         return resumeRecHits;
     }
     
     protected List doDataList(String site, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();
-        //if(rfilter.hasNext()) {
-            resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, yearI, monthI, dayI, yearF, monthF, dayF, labels);
-        //}
+        resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, yearI, monthI, dayI, yearF, monthF, dayF, labels);
         return resumeRecHits;
     }
 }
