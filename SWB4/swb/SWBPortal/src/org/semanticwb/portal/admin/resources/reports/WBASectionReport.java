@@ -31,9 +31,8 @@ import org.w3c.dom.Element;
 public class WBASectionReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBASectionReport.class);
 
-    private final int I_REPORT_TYPE = 3;
-    public String strRscType;
-    //WebSiteSectionTree tree = new WebSiteSectionTree();
+    public static final int I_REPORT_TYPE = 3;
+    private String strRscType;
 
     @Override
     public void init(){
@@ -97,6 +96,7 @@ public class WBASectionReport extends GenericResource {
         SelectTree tree = new SelectTree(paramsRequest.getUser().getLanguage());
         out.println(tree.renderXHTML(webSiteId, params, url.toString()));
         out.flush();
+        out.close();
     }
 
     /**
@@ -144,14 +144,6 @@ public class WBASectionReport extends GenericResource {
             if(hm_sites.size() > I_ACCESS){
                 String address = paramsRequest.getTopic().getUrl();
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                /*String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");*/
-                
-                /*int deleteFilter;
-                try {
-                    deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
-                }catch(NumberFormatException e) {
-                    deleteFilter = 0;
-                }*/
                 
                 int groupDates;
                 try {
@@ -188,9 +180,6 @@ public class WBASectionReport extends GenericResource {
                 out.println("   var params = \"?\";");
                 out.println("   params = params + \"wb_site=\" + window.document.frmrep.wb_site.value;");
                 out.println("   params = params + \"&section=\" + dojo.byId('section').value;");
-                /*out.println("   if(document.getElementById('wb_deletefilter').checked) { ");
-                out.println("       params = params + \"&wb_deletefilter=\" + document.getElementById('wb_deletefilter').value; ");
-                out.println("   } ");*/
                 out.println("   params = params + \"&wb_rtype=\" + document.getElementById('wb_rtype').value;");
                 out.println("   if(accion == 0) {");                    
                 out.println("       params = params + \"&wb_rep_type=\" + getTypeSelected();");
@@ -210,10 +199,6 @@ public class WBASectionReport extends GenericResource {
                 out.println("           params = params + '&wb_fecha12=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
                 out.println("       }");
                 out.println("   }");
-                /*out.println("   else {");
-                out.println("       var year = new String(dojo.byId('wb_year13').value);");
-                out.println("       params = params + '&wb_year13=' + year;");
-                out.println("   }");*/
                 out.println("   return params;");
                 out.println("} ");
                 
@@ -357,12 +342,6 @@ public class WBASectionReport extends GenericResource {
 
                 out.println("<tr>");
                 out.println("<td colspan=\"4\">");
-                /*out.println(paramsRequest.getLocaleString("all_sections") + "&nbsp;&nbsp;");
-                out.println("<input type=\"checkbox\" id=\"wb_deletefilter\" name=\"wb_deletefilter\" value=\"1\" onclick=\"dojo.byId('wb_lang').disabled=!(dojo.byId('wb_lang').disabled);\"");*/
-                /*if(deleteFilter==1) {
-                    out.println(" checked=\"checked\"");
-                }
-                out.println(" />");*/
                 out.println("</td>");
                 out.println("</tr>");
                 
@@ -430,11 +409,10 @@ public class WBASectionReport extends GenericResource {
                             }catch (Exception e) {
                                 throw new javax.servlet.ServletException(e);
                             }
-
                             out.println("</td>");
                             out.println("</tr>");
                             out.println("</table>");
-                            out.println("<hr size=\"1\" noshade>");
+                            /*out.println("<hr size=\"1\" noshade>");*/
                         }
                     }
                     out.println("</td>");
@@ -498,10 +476,14 @@ public class WBASectionReport extends GenericResource {
                     out.println("</td>");
                     out.println("</tr>");
                 }*/
-                out.println("</table>");                    
-                out.println("</form>");
+
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("</table></form>");
                 out.println("</fieldset></div>");
             }else { // There are not sites and displays a message
+                out.println("<div class=\"swbform\">");
+                out.println("<fieldset>");
+                out.println("<legend>" + paramsRequest.getLocaleString("section_report") + "</legend>");
                 out.println("<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -516,11 +498,13 @@ public class WBASectionReport extends GenericResource {
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("</table></form>");
+                out.println("</fieldset></div>");
             }
         } catch (Exception e) {
             log.error("Error on method DoView() resource " + strRscType + " with id " + base.getId(), e);
         }
         out.flush();
+        out.close();
     }
 
     /**
@@ -659,6 +643,7 @@ public class WBASectionReport extends GenericResource {
         }
         out.print(SWBUtils.XML.domToXml(dom));
         out.flush();
+        out.close();
     }
 
     /**

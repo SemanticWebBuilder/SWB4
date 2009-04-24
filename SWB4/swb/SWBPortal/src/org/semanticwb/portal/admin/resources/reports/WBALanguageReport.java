@@ -62,9 +62,9 @@ import org.w3c.dom.Element;
 
 public class WBALanguageReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBALanguageReport.class);
-    private static final int I_REPORT_TYPE = 2;
 
-    public String strRscType;
+    public static final int I_REPORT_TYPE = 2;
+    private String strRscType;
         
     @Override
     public void init() {
@@ -122,6 +122,7 @@ public class WBALanguageReport extends GenericResource {
         }
         out.println("</select>");
         out.flush();
+        out.close();
     }
 
     /**
@@ -137,9 +138,7 @@ public class WBALanguageReport extends GenericResource {
         response.setHeader("Cache-Control", "no-cache"); 
         response.setHeader("Pragma", "no-cache"); 
         PrintWriter out = response.getWriter();
-        Resource base = getResourceBase();
-        
-        ArrayList idaux = new ArrayList();
+        Resource base = getResourceBase();        
         
         final int I_ACCESS = 0;        
         //StringBuffer sb_ret = new StringBuffer();
@@ -329,7 +328,7 @@ public class WBALanguageReport extends GenericResource {
                 out.println("</script>");
                 // javascript
 
-                out.println("<div id=\"swbform\">");
+                out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>" + paramsRequest.getLocaleString("language_report") + "</legend>");
 
@@ -469,7 +468,7 @@ public class WBALanguageReport extends GenericResource {
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
+                        /*out.println("<hr size=\"1\" noshade>");*/
                     }
                     out.println("</td>");
                     out.println("</tr>");
@@ -499,20 +498,9 @@ public class WBALanguageReport extends GenericResource {
                         out.println("<td>");
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(webSiteId);
-                        /*Iterator<Language> itLanguages = SWBContext.getWebSite(webSiteId).listLanguages();*/
                         if(deleteFilter==0) {
-                            /*while(itLanguages.hasNext()) {
-                                Language language = (Language)itLanguages.next();
-                                if(language.getId().equalsIgnoreCase(lang)) {                                        
-                                    idaux.add(language);
-                                    filter.setIdaux(idaux.iterator());
-                                    break;
-                                }
-                            }*/
                             filter.setIdaux(lang);
-                        }/*else {
-                            filter.setIdaux(itLanguages);
-                        }*/
+                        }
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(year13);
                         JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
@@ -530,15 +518,19 @@ public class WBALanguageReport extends GenericResource {
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
+                        /*out.println("<hr size=\"1\" noshade>");*/
                     }
                     out.println("</td>");
                     out.println("</tr>");
                 }
-                out.println("</table>");                    
-                out.println("</form>");
+
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("</table></form>");
                 out.println("</fieldset></div>");
             }else { // There are not sites and displays a message
+                out.println("<div class=\"swbform\">");
+                out.println("<fieldset>");
+                out.println("<legend>" + paramsRequest.getLocaleString("language_report") + "</legend>");
                 out.println("<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -553,12 +545,13 @@ public class WBALanguageReport extends GenericResource {
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("</table></form>");
+                out.println("</fieldset></div>");
             }
         } catch (Exception e) {
             log.error("Error on method DoView() resource " + strRscType + " with id " + base.getId(), e);
         }
         out.flush();
-        /*response.getWriter().print(sb_ret.toString());*/
+        out.close();
     }
     
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
@@ -801,6 +794,7 @@ public class WBALanguageReport extends GenericResource {
         }
         out.print(SWBUtils.XML.domToXml(dom));
         out.flush();
+        out.close();
     }
     
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {

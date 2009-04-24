@@ -59,8 +59,9 @@ import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRUserType
  */
 public class WBAUserReport extends GenericResource {
     private static Logger log = SWBUtils.getLogger(WBAUserReport.class);
-    private final int I_REPORT_TYPE = 4;   // Type 4 of reports "User type access"
-    public String strRscType;   
+
+    public final int I_REPORT_TYPE = 4;
+    private String strRscType;   
     
     @Override
     public void init() {
@@ -100,6 +101,7 @@ public class WBAUserReport extends GenericResource {
         }                    
         out.println("</select>");
         out.flush();
+        out.close();
     }
     
     /**
@@ -138,9 +140,7 @@ public class WBAUserReport extends GenericResource {
         response.setHeader("Pragma", "no-cache"); 
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
-        
-        ArrayList idaux = new ArrayList();        
-        
+                
         final int I_ACCESS = 0;
         
         HashMap hm_sites = new HashMap();
@@ -284,15 +284,15 @@ public class WBAUserReport extends GenericResource {
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 out.println("<tr><td width=\"100\"></td><td width=\"120\"></td><td></td><td></td></tr>");
-                out.println("<tr>");
+
+                /*out.println("<tr>");
                 out.println("<td colspan=\"4\">");
-                // Show report description
                 if(rtype.equals("0")) {
                     out.println(paramsRequest.getLocaleString("description_daily"));
                 }else {
                     out.println(paramsRequest.getLocaleString("description_monthly"));
                 }                    
-                out.println("</td></tr>");
+                out.println("</td></tr>");*/
 
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr>");
@@ -413,7 +413,7 @@ public class WBAUserReport extends GenericResource {
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
+                        /*out.println("<hr size=\"1\" noshade>");*/
                     }
                     out.println("</td>");
                     out.println("</tr>");
@@ -442,8 +442,6 @@ public class WBAUserReport extends GenericResource {
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
                         out.println("<tr>");
                         out.println("<td>");
-                        /*response.getWriter().print(sb_ret.toString());
-                        sb_ret.delete(0,sb_ret.length());*/
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(webSiteId);
@@ -478,15 +476,19 @@ public class WBAUserReport extends GenericResource {
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("</table>");
-                        out.println("<hr size=\"1\" noshade>");
+                        /*out.println("<hr size=\"1\" noshade>");*/
                     }
                     out.println("</td>");
                     out.println("</tr>");
                 }
-                out.println("</table>");                    
-                out.println("</form>");
+
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("</table></form>");
                 out.println("</fieldset></div>");
             }else { // There are not sites and displays a message
+                out.println("<div class=\"swbform\">");
+                out.println("<fieldset>");
+                out.println("<legend>" + paramsRequest.getLocaleString("user_report") + "</legend>");
                 out.println("<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -501,11 +503,13 @@ public class WBAUserReport extends GenericResource {
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("</table></form>");
+                out.println("</fieldset></div>");
             }
         } catch (Exception e) {
             log.error("Error on method DoView() resource " + strRscType + " with id " + base.getId(), e);
         }
         out.flush();
+        out.close();
     }
     
     /**
