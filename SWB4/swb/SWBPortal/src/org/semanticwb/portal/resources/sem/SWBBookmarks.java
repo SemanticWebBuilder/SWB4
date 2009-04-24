@@ -54,9 +54,6 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             url.setMode(url.Mode_VIEW);
         } else if (mode.equals("BYTAG")) {
             doByTag(request, response, paramRequest);
-        } else if (mode.equals("DELETE")) {
-            doDelete(request, response, paramRequest);
-            url.setMode(url.Mode_VIEW);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -92,10 +89,10 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                         group.setTitle(tags[i].trim());
                         group.addEntry(entry);
                         addGroup(group);
-                    //System.out.println(">>>>>>>>>>>>>>>Agregado " + entry.getTitle() + " a grupo " + group.getTitle());
+                    System.out.println(">>>>>>>>>>>>>>>Agregado " + entry.getTitle() + " a grupo " + group.getTitle());
                     } else {
                         target.addEntry(entry);
-                    //System.out.println(">>>>>>>>>>>>>>>Agregado " + entry.getTitle() + " a grupo " + target.getTitle());
+                    System.out.println(">>>>>>>>>>>>>>>Agregado " + entry.getTitle() + " a grupo " + target.getTitle());
                     }
                 }
             }
@@ -165,18 +162,6 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         out.println("<a href=\"" + url.toString() + "\">" + paramRequest.getLocaleString("no") + "</a>");
     }
 
-    public void doDelete(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
-        SWBResourceURL url = paramRequest.getActionUrl();
-        //TODO: cambiar por un diálogo
-        out.println("<PRE>Desea eliminar el registro?</PRE>");
-        url.setParameter("id", request.getParameter("id"));
-        out.println("<a href=\"" + url.toString() + "\">" + paramRequest.getLocaleString("yes") + "</a>");
-        url = paramRequest.getRenderUrl();
-        url.setMode(url.Mode_VIEW);
-        out.println("<a href=\"" + url.toString() + "\">" + paramRequest.getLocaleString("no") + "</a>");
-    }
-
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -220,7 +205,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 if (!temp.getTitle().equals(getResourceBase().getId() + "/untagged")) {
                     if (temp.getEntryCount() > 0) {
                         System.out.println(">>>>>>Desplegando elementos del grupo " + temp.getTitle());
-                        //out.println("<a href=\"" + url + "\">" + temp.getTitle() + "(" + temp.getEntryCount() + ")" + "</a><br>");
+                        out.println("<a href=\"" + url + "\">" + temp.getTitle() + "(" + temp.getEntryCount() + ")" + "</a><br>");
                     }
                 } else if (temp.getEntryCount() > 0) {
                     System.out.println(">>>>>>Desplegando elementos del grupo " + temp.getTitle());
@@ -272,10 +257,12 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 url.setMode(url.Mode_EDIT);
                 url.setParameter("id", eId);
                 sbf.append("<td class=\"aedit\"><a href=\"" + url + "\">" + paramRequest.getLocaleString("edit") + "</a></td><td>-</td>");
+                url = paramRequest.getActionUrl();
                 url.setMode("DELETE");
                 url.setParameter("id", eId);
+                sbf.append("<script type=\"text/javascript\">showDialog('"+ url +"','none');</script>");
                 //sbf.append("<td class=\"adel\"><a href=\"" + url + "\">" + paramRequest.getLocaleString("delete") + "</a></td>");
-                sbf.append("<td class=\"adel\"><a href=\"#\" onClick=\"showDialog('"+ url +"'); return false;\">" + paramRequest.getLocaleString("delete") + "</a></td>");
+                sbf.append("<td class=\"adel\"><a href=\"#\" onclick=\"if(confirm('"+ paramRequest.getLocaleString("msgRemove") +"')){location='"+ url +"'} else {return false;}\">" + paramRequest.getLocaleString("delete") + "</a></td>");
                 sbf.append("</tr>");
             }
             sbf.append("</table>");
@@ -303,13 +290,14 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         out.println("<label for=\"urllink\">" + link + "</label>");
         out.println("<input type=\"text\" name=\"urllink\" id=\"urllink\" value=\"http://\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + link + "\"></input><br>");
         out.println("<label for=\"description\">" + desc + "</label>");
-        out.println("<textarea name=\"description\" id=\"description\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + desc + "\"></input><br>");
+        out.println("<input type=\"text\" name=\"description\" id=\"description\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + desc + "\"></input><br>");
         out.println("<label for=\"tags\">" + tags + "</label>");
-        out.println("<input type=\"textarea\" name=\"tags\" id=\"tags\" dojoType=\"dijit.form.TextArea\" required=\"true\" promptMessage=\"Captura " + tags + "\"></input><br>");
+        out.println("<textarea name=\"tags\" id=\"tags\" dojoType=\"dijit.form.TextArea\" ></textarea><br>");
         out.println("<button dojoType='dijit.form.Button' type=\"submit\">" + paramRequest.getLocaleString("add") + "</button>\n");
         url = paramRequest.getRenderUrl();
         url.setMode(url.Mode_VIEW);
         out.println("<button dojoType='dijit.form.Button' onClick=\"location='" + url + "'\">" + paramRequest.getLocaleString("cancel") + "</button>\n");
+        out.println("</form>");
     }
 
     /**
