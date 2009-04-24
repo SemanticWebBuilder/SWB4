@@ -101,7 +101,7 @@ function votedPage(){
 
         PrintWriter out = response.getWriter();
         int rank = (int) Math.round(Math.floor(paramRequest.getTopic().getRank() * 10));
-        System.out.println("Rank:" + rank);
+        //System.out.println("Rank:" + rank);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("vote");
         url.setMode(SWBResourceURL.Mode_HELP);
@@ -140,21 +140,21 @@ function votedPage(){
     {
         Cookie[] cookies= request.getCookies();
         for (Cookie cookie: cookies){
-            System.out.println(cookie.getName());
+            //System.out.println(cookie.getName());
          if (cookie.getName().equals(response.getTopic().getId()+"_voted"))
          {
              response.setMode(SWBResourceURL.Mode_EDIT);
-             System.out.println("VotedOff ");
+             //System.out.println("VotedOff ");
              return;
          }
 
         }
         int vote = 0;
-        System.out.println("value got: "+request.getParameter("value"));
+        //System.out.println("value got: "+request.getParameter("value"));
         if (null!=request.getParameter("value")){
             try {vote = Integer.parseInt(request.getParameter("value"));} catch (Exception ne){}
         WebPage ws = response.getTopic();
-        System.out.println("ws: "+ws+" vote:"+vote);
+        //System.out.println("ws: "+ws+" vote:"+vote);
         double rank = ws.getRank();
         long rev = ws.getReviews();
         rank = rank * rev;
@@ -163,7 +163,7 @@ function votedPage(){
         rank = rank / rev;
         ws.setRank(rank);
         ws.setReviews(rev);
-        System.out.println("rev:"+rev+" rank:"+rank);
+        //System.out.println("rev:"+rev+" rank:"+rank);
         }
 
     }
