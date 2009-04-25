@@ -421,7 +421,7 @@ public class TestAdminWebSite {
     {
         WebSite site=SWBContext.getAdminWebSite();
         System.out.println("********"+SWBUtils.getApplicationPath());
-        File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin.rdf");
+        File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin2.rdf");
         try
         {
             System.out.println("file:"+file.getCanonicalPath());
@@ -431,7 +431,7 @@ public class TestAdminWebSite {
 
         site=SWBContext.getOntEditor();
         System.out.println("********"+SWBUtils.getApplicationPath());
-        file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBOntEdit.rdf");
+        file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBOntEdit2.rdf");
         try
         {
             System.out.println("file:"+file.getCanonicalPath());

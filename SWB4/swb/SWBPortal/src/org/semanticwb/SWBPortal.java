@@ -78,6 +78,13 @@ public class SWBPortal {
             SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin#");
         }
 
+        site = SWBContext.getOntEditor();
+        if (site == null)
+        {
+            log.event("Creating Ontology Editor WebSite...");
+            SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ONTEDITOR, "http://www.semanticwb.org/SWBOntEdit#");
+        }
+
         UserRepository urep = SWBContext.getAdminRepository();
         if (urep == null) {
             log.event("Creating Admin User Repository...");
