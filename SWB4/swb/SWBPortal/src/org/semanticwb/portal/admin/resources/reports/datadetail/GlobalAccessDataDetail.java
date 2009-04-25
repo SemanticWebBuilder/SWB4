@@ -2,11 +2,9 @@
 package org.semanticwb.portal.admin.resources.reports.datadetail;
 
 import java.util.List;
+import java.util.Iterator;
 import java.util.ArrayList;
 
-import java.util.HashMap;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.db.SWBRecHits_;
 import org.semanticwb.portal.admin.resources.reports.beans.*;
 
@@ -24,36 +22,21 @@ public class GlobalAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
-    public List doDataList(String site, String rfilter, int type, int year, String userLanguage) throws IncompleteFilterException {
+    public List doDataList(String site, String rfilter, int type, int year, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
-        HashMap labels=new HashMap();
-
-        WebSite ws=SWBContext.getWebSite(rfilter);
-        labels.put(ws.getId(), ws.getDisplayTitle(userLanguage));
-
-        resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, year, labels);
+        resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, year);
         return resumeRecHits;
     }
     
-    public List doDataList(String site, String rfilter, int type, int year, int month, int day, String userLanguage) throws IncompleteFilterException {
+    public List doDataList(String site, String rfilter, int type, int year, int month, int day, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
-        HashMap labels=new HashMap();
-
-        WebSite ws=SWBContext.getWebSite(rfilter);
-        labels.put(ws.getId(), ws.getDisplayTitle(userLanguage));
-
-        resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, year, month, day, labels);
+        resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, year, month, day);
         return resumeRecHits;
     }
     
-    public List doDataList(String site, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String userLanguage) throws IncompleteFilterException {
+    public List doDataList(String site, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
-        HashMap labels=new HashMap();
-
-        WebSite ws=SWBContext.getWebSite(rfilter);
-        labels.put(ws.getId(), ws.getDisplayTitle(userLanguage));
-
-        resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, yearI, monthI, dayI, yearF, monthF, dayF, labels);
+        resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, yearI, monthI, dayI, yearF, monthF, dayF);
         return resumeRecHits;
     }
 }
