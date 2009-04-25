@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swbc="http://www.semanticwb.org/swbcatalogs#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.semanticwb.org/swbcatalogs">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="PostalCode">
+    <rdfs:subClassOf>
+      <swb:Model rdf:ID="Catalogs">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBModel"/>
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.catalogs.Catalogs</swb:className>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Model>
+    </rdfs:subClassOf>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.catalogs.PostalCode</swb:className>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="County">
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.catalogs.County</swb:className>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="LocationEntity"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="City">
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.catalogs.City</swb:className>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#LocationEntity"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SWBCatalogs">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:about="#LocationEntity">
+    <rdfs:subClassOf rdf:resource="#Catalogs"/>
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.catalogs.LocationEntity</swb:className>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="State">
+    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.catalogs.State</swb:className>
+    <rdfs:subClassOf rdf:resource="#LocationEntity"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="stateBelongsTo">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasLocationEntity"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#State"/>
+    <rdfs:range rdf:resource="#LocationEntity"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="cityBelogsTo">
+    <owl:inverseOf rdf:resource="#hasLocationEntity"/>
+    <rdfs:domain rdf:resource="#City"/>
+    <rdfs:range rdf:resource="#LocationEntity"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="countyBelongsTo">
+    <owl:inverseOf rdf:resource="#hasLocationEntity"/>
+    <rdfs:domain rdf:resource="#County"/>
+    <rdfs:range rdf:resource="#LocationEntity"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCity">
+    <rdfs:range rdf:resource="#City"/>
+    <rdfs:domain rdf:resource="#PostalCode"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="countryCode">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain>
+      <swb:Class rdf:ID="Country">
+        <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.catalogs.Country</swb:className>
+        <rdfs:subClassOf rdf:resource="#LocationEntity"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="id">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#PostalCode"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="stateName">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#State"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cityName">
+    <rdfs:domain rdf:resource="#City"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="stateCode">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#State"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="countryName">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Country"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="countyName">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#County"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="countyCode">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#County"/>
+  </owl:DatatypeProperty>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
