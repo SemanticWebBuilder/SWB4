@@ -734,7 +734,7 @@ public class TemplateImp extends Template
             logbuf.append(user.getSemanticObject().getSemanticClass().getClassId());
             logbuf.append("|");
             if(user.getDevice()!=null)
-                logbuf.append(user.getDevice());
+                logbuf.append(user.getDevice().getId());
             else
                 logbuf.append("_");
             logbuf.append("|");
@@ -1162,7 +1162,7 @@ public class TemplateImp extends Template
             logbuf.append("|");
             logbuf.append(user.getSemanticObject().getSemanticClass().getClassId());
             logbuf.append("|");
-            logbuf.append(user.getDevice());
+            logbuf.append(user.getDevice().getId());
             logbuf.append("|");
             if (user.getLanguage() != null && user.getLanguage().length() > 0)
                 logbuf.append(user.getLanguage());
