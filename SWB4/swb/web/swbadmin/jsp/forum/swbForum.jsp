@@ -1,18 +1,18 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
+<%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.model.GenericIterator"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="org.semanticwb.forum.FrmCategory"%>
-<%@page import="org.semanticwb.forum.FrmUserThread"%>
-<%@page import="org.semanticwb.forum.FrmForum"%>
-<%@page import="org.semanticwb.forum.FrmThread"%>
-<%@page import="org.semanticwb.forum.FrmPost"%>
-<%@page import="org.semanticwb.forum.FrmAttachments"%>
-<%@page import="org.semanticwb.forum.FrmThreadTypeCat"%>
+<%@page import="org.semanticwb.portal.resources.sem.forum.UserFavThread"%>
+<%@page import="org.semanticwb.portal.resources.sem.forum.SWBForum"%>
+<%@page import="org.semanticwb.portal.resources.sem.forum.Thread"%>
+<%@page import="org.semanticwb.portal.resources.sem.forum.Post"%>
+<%@page import="org.semanticwb.portal.resources.sem.forum.Attachment"%>
+<%@page import="org.semanticwb.portal.resources.sem.forum.ThreadTypeCat"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.model.SWBModel"%>
@@ -21,15 +21,220 @@
 <table>
     <tr><td>
             <%
-        WebSite website = paramRequest.getTopic().getWebSite();
+        WebPage webpage = paramRequest.getTopic();
+        WebSite website = webpage.getWebSite();
         SWBResourceURL url = paramRequest.getRenderUrl();
         SWBResourceURL actionURL = paramRequest.getActionUrl();
-        User user=paramRequest.getUser();
+        User user = paramRequest.getUser();
         String lang = user.getLanguage();
         String action = (String) request.getAttribute("action");
-        if (action != null && action.equals("viewThreads")) {
-            url.setMode("addThread");
+
+        if (action != null && action.equals("viewPost")) {
+            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
+            Thread thread = Thread.getThread(semObject.getId(), website);
+            thread.setViewcount(thread.getViewcount() + 1);
+            url.setParameter("threadUri", thread.getURI());
             url.setParameter("forumUri", request.getParameter("forumUri"));
+            %>
+
+            <table border="1" width="95%" cellspacing="0" cellpadding="3" align="center">
+                <tr bgcolor="#666669">
+                    <td colspan="2"><font color="#FFFFFF">Autor</font></td>
+                    <td colspan="4" align="center"><font color="#FFFFFF">This topic has been viewed <%=thread.getViewcount()%> times and has <%=thread.getReplyCount()%> replies</font></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <%if (thread.getUser() != null) {%>
+                        <%=thread.getUser().getName()%>
+                        <%}%>
+                    </td>
+                    <td colspan="4">
+                        <%=thread.getTitle()%>
+                        <br/>
+                        <hr width="100%">
+                        <br/>
+                        <%=thread.getBody()%>
+                        <br/>
+                        <hr width="100%">
+                        <br/>
+                        <%=thread.getCreated()%>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                        <%url.setMode("replyPost");%>
+                        <a href="<%=url.toString()%>">replicar</a>/
+                        <%url.setMode("editPost");
+                url.setParameter("postUri", thread.getURI());
+                        %>
+                        <a href="<%=url.toString()%>">Editar</a>/
+                        <%url.setMode(url.Mode_VIEW);
+                url.setAction("removePost");
+                        %>
+                        <a href="<%=url.toString()%>&isthread=1">Eliminar Tema</a>
+                    </td>
+                </tr>
+                <%
+                GenericIterator<Post> itPost = thread.listPosts();
+                while (itPost.hasNext()) {
+                    Post post = itPost.next();
+                    url.setParameter("postUri", post.getURI());
+                %>
+                <tr>
+                    <td colspan="2">
+                        <%if (post.getCreator() != null) {%>
+                        <%=post.getCreator().getName()%>
+                        <%}%>
+                    </td>
+                    <td colspan="4">
+                        <%=thread.getTitle()%>
+                        <br/>
+                        <hr width="100%">
+                        <br/>
+                        <%=post.getBody()%>
+                        <br/>
+                        <hr width="100%">
+                        <br/>
+                        <%=post.getCreated()%>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                        <%url.setMode("replyPost");%>
+                        <a href="<%=url.toString()%>">replicar</a>/
+                        <%url.setMode("editPost");%>
+                        <a href="<%=url.toString()%>">Editar</a>/
+                        <%url.setMode(url.Mode_VIEW);
+                    url.setAction("removePost");%>
+                        <a href="<%=url.toString()%>">Eliminar Mensaje</a>
+                    </td>
+                </tr>
+                <%
+                }
+                %>
+            </table>
+
+            <%} else if (action != null && action.equals("removePost")) {
+                if (request.getParameter("isthread") != null) {
+                    SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
+                    Thread thread = Thread.getThread(soThread.getId(), website);
+                    actionURL.setAction("removeThread");
+            %>
+            <table>
+                <tr>
+                    <td colspan="2">Usted esta a punto de eliminar el siguiente tema:<%=thread.getTitle()%></td>
+                </tr>
+                <tr>
+                    <td>Cuerpo</td>
+                    <td><%=thread.getBody()%></td>
+                </tr>
+                <tr>
+                    <td>Autor</td>
+                    <td>
+                        <%if (thread.getCreator() != null) {%>
+                        <%=thread.getCreator().getName()%>
+                        <%}%>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>Número de Mensajes</td>
+                    <%
+                int postSize = 0;
+                GenericIterator<Post> itPost = thread.listPosts();
+                while (itPost.hasNext()) {
+                    itPost.next();
+                    postSize++;
+                }
+                    %>
+                    <td>
+                        <%=postSize%>
+                    </td>
+                </tr>
+                <form name="removeThread" action="<%=actionURL.toString()%>">
+                    <input type="hidden" name="threadUri" value="<%=thread.getURI()%>">
+                    <input type="hidden" name="forumUri" value="<%=request.getParameter("forumUri")%>">
+                    <tr><td><input type="submit" value="eliminar"></td>
+                        <td><input type="button" value="cancelar" onClick="retorna(this.form);"></td>
+                    </tr>
+                </form>
+            </table>
+            <%} else {
+                actionURL.setAction("removePost");
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                Post post = Post.getPost(semObject.getId(), paramRequest.getTopic().getWebSite());
+            %>
+            <table>
+                <tr>
+                    <td colspan="2">Usted esta a punto de eliminar el siguiente Mensaje:<%=post.getThread().getTitle(lang)%></td>
+                </tr>
+                <tr>
+                    <td>Cuerpo</td>
+                    <td><%=post.getBody()%></td>
+                </tr>
+                <tr>
+                    <td>Autor</td>
+                    <td>
+                        <%if (post.getCreator() != null) {%>
+                        <%=post.getCreator().getName()%>
+                        <%}%>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>Número de Respuestas</td>
+                    <%
+                int postSize = 0;
+                Iterator<Post> itPost = post.listchildPosts();
+                while (itPost.hasNext()) {
+                    itPost.next();
+                    postSize++;
+                }
+                    %>
+                    <td><%=postSize%></td>
+                </tr>
+                <tr>
+                    <td>Número de Archivos adjuntos</td>
+                    <%
+                int attchmentsSize = 0;
+                GenericIterator<Attachment> itattach = post.listAttachmentss();
+                while (itattach.hasNext()) {
+                    itattach.next();
+                    attchmentsSize++;
+                }
+                    %>
+                    <td>
+                        <%=attchmentsSize%>
+                    </td>
+                </tr>
+                <form name="removePost" action="<%=actionURL.toString()%>">
+                    <input type="hidden" name="postUri" value="<%=post.getURI()%>">
+                    <input type="hidden" name="threadUri" value="<%=request.getParameter("threadUri")%>">
+                    <tr><td><input type="submit" value="eliminar"></td>
+                        <td><input type="button" value="cancelar" onClick="retorna(this.form);"></td>
+                    </tr>
+                </form>
+            </table>
+            <%
+                }
+                url.setAction("viewPost");
+            %>
+            <script type="text/javascript">
+                function retorna(forma){
+                    forma.action="<%=url.toString()%>";
+                    forma.submit();
+                }
+            </script>
+            <%} else {
+
+                url.setMode("addThread");
+                url.setParameter("forumUri", request.getParameter("forumUri"));
             %>
             <a href="<%=url.toString()%>">Nuevo tema</a>
             <table border="1" width="95%" cellspacing="0" cellpadding="3" align="center">
@@ -44,26 +249,25 @@
                 <%
                 url.setMode(url.Mode_VIEW);
                 url.setAction("viewPost");
-                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("forumUri"));
-                FrmForum forum = FrmForum.getFrmForum(semObject.getId(), website);
-                Iterator<FrmThreadTypeCat> itThreadTypes = FrmThreadTypeCat.listFrmThreadTypeCats();
+                Iterator<ThreadTypeCat> itThreadTypes = ThreadTypeCat.listThreadTypeCats();
                 while (itThreadTypes.hasNext()) {
-                    FrmThreadTypeCat threadType = itThreadTypes.next();
-                    boolean flag=false;
-                    GenericIterator<FrmThread> itThreads = forum.listthreads();
+                    ThreadTypeCat threadType = itThreadTypes.next();
+                    boolean flag = false;
+                    GenericIterator<WebPage> itThreads = webpage.listChilds();
                     while (itThreads.hasNext()) {
-                        FrmThread thread = itThreads.next();
+                        WebPage wp = itThreads.next();
+                        Thread thread = (Thread) wp.getSemanticObject().createGenericInstance();
                         if (thread.getType().getURI().equals(threadType.getURI())) {
                             url.setParameter("threadUri", thread.getURI());
-                            if(!flag){
-                                flag=true;
+                            if (!flag) {
+                                flag = true;
                 %>
-                    <tr>
-                            <td colspan="6">
-                            <%=threadType.getTitle(lang)%>
-                            </td>
-                    </tr>
-                   <%}%>
+                <tr>
+                    <td colspan="6">
+                        <%=threadType.getTitle(lang)%>
+                    </td>
+                </tr>
+                <%}%>
                 <tr bgcolor="#C0C0C0" font-size="12px" font-weight="normal" ine-height="20px">
                     <td colspan="2"><a href="<%=url.toString()%>"><b><%=thread.getTitle()%></b></a><br/><%=thread.getBody()%>
                     <br/></td>
@@ -88,25 +292,28 @@
                     </td>
                     <td>
                         <%
-                            boolean isFavThread=false;
-                            Iterator <FrmUserThread> itFrmUserThread=FrmUserThread.listFrmUserThreads(website);
-                            while(itFrmUserThread.hasNext()){
-                                FrmUserThread usrThread=itFrmUserThread.next();
-                                if(usrThread.getThread().getURI().equals(thread.getURI()) && usrThread.getUser().getURI().equals(user.getURI()))
-                                {                                    
-                                    isFavThread=true;
-                                    break;
+
+                            System.out.println(user.isRegistered()+","+user.isSigned()+",uri:"+user.getURI());
+                            System.out.println(user.getLogin());
+                            if (user.isSigned()) {
+                                boolean isFavThread = false;
+                                Iterator<UserFavThread> itFrmUserThread = UserFavThread.listUserFavThreads();
+                                while (itFrmUserThread.hasNext()) {
+                                    UserFavThread usrThread = itFrmUserThread.next();
+                                    if (usrThread.getThread().getURI().equals(thread.getURI()) && usrThread.getUser().getURI().equals(user.getURI())) {
+                                        isFavThread = true;
+                                        break;
+                                    }
+                                }
+                                if (!isFavThread) {
+                                    actionURL.setAction("addFavoriteThread");
+                                    actionURL.setParameter("threadUri", thread.getURI());
+                        %>
+                        <a href="<%=actionURL.toString()%>">Favorito</a>
+                        <%
                                 }
                             }
-                            if(!isFavThread){
-                                actionURL.setAction("addFavoriteThread");
-                                actionURL.setParameter("forumUri", forum.getURI());
-                                actionURL.setParameter("threadUri", thread.getURI());
-                            %>
-                                <a href="<%=actionURL.toString()%>">Favorito</a>
-                            <%
-                                }
-                            %>
+                        %>
                     </td>
                 </tr>
                 <%
@@ -116,340 +323,7 @@
                 %>
             </table>
             <%
-            } else if (action != null && action.equals("viewPost")) {
-                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-                FrmThread thread = FrmThread.getFrmThread(semObject.getId(), website);
-                thread.setViewcount(thread.getViewcount()+1);
-                url.setParameter("threadUri", thread.getURI());
-                url.setParameter("forumUri",request.getParameter("forumUri"));
+            }
             %>
-
-            <table border="1" width="95%" cellspacing="0" cellpadding="3" align="center">
-                <tr bgcolor="#666669">
-                    <td colspan="2"><font color="#FFFFFF">Autor</font></td>
-                    <td colspan="4" align="center"><font color="#FFFFFF">This topic has been viewed <%=thread.getViewcount()%> times and has <%=thread.getReplyCount()%> replies</font></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <%if (thread.getUser() != null) {%>
-                        <%=thread.getUser().getName()%>
-                        <%}%>
-                    </td>
-                    <td colspan="4">
-                        <%=thread.getTitle()%>
-                        <br/>
-                        <hr width="100%">
-                        <br/>
-                        <%=thread.getBody()%>
-                        <br/>
-                        <hr width="100%">
-                        <br/>
-                        <%=thread.getCreated()%>
-                    </td>                  
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        &nbsp;
-                    </td>
-                    <td colspan="4">
-                    <%url.setMode("replyPost");%>
-                    <a href="<%=url.toString()%>">replicar</a>/
-                    <%url.setMode("editPost");
-                     url.setParameter("postUri", thread.getURI());
-                    %>
-                    <a href="<%=url.toString()%>">Editar</a>/
-                    <%url.setMode(url.Mode_VIEW);
-                    url.setAction("removePost");
-                    %>
-                    <a href="<%=url.toString()%>&isthread=1">Eliminar Tema</a>
-                    </td>
-                </tr>
-                <%
-                GenericIterator<FrmPost> itPost = thread.listPosts();
-                while (itPost.hasNext()) {
-                    FrmPost post = itPost.next();
-                    url.setParameter("postUri", post.getURI());
-                %>
-                <tr>
-                <td colspan="2">
-                    <%if(post.getCreator()!=null){%>
-                        <%=post.getCreator().getName()%>
-                    <%}%>
-                </td>
-                <td colspan="4">
-                    <%=thread.getTitle()%>
-                    <br/>
-                    <hr width="100%">
-                    <br/>
-                    <%=post.getBody()%>
-                    <br/>
-                    <hr width="100%">
-                    <br/>
-                    <%=post.getCreated()%>
-                </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        &nbsp;
-                    </td>
-                    <td colspan="4">
-                    <%url.setMode("replyPost");%>
-                    <a href="<%=url.toString()%>">replicar</a>/
-                    <%url.setMode("editPost");%>
-                    <a href="<%=url.toString()%>">Editar</a>/
-                    <%url.setMode(url.Mode_VIEW);
-                    url.setAction("removePost");%>
-                    <a href="<%=url.toString()%>">Eliminar Mensaje</a>
-                    </td>
-                </tr>
-                <%
-                }
-                %>
-            </table>
-
-            <%} else if (action != null && action.equals("removePost")) {
-                if(request.getParameter("isthread")!=null){
-                    SemanticObject soThread=SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-                    FrmThread thread = FrmThread.getFrmThread(soThread.getId(), paramRequest.getTopic().getWebSite());
-                    actionURL.setAction("removeThread");
-                    %>
-                    <table>
-                        <tr>
-                            <td colspan="2">Usted esta a punto de eliminar el siguiente tema:<%=thread.getTitle()%></td>
-                        </tr>
-                        <tr>
-                            <td>Cuerpo</td>
-                            <td><%=thread.getBody()%></td>
-                        </tr>
-                        <tr>
-                            <td>Autor</td>
-                            <td>
-                                <%if(thread.getCreator()!=null){%>
-                                    <%=thread.getCreator().getName()%>
-                                <%}%>
-                                &nbsp;
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Número de Mensajes</td>
-                            <%
-                            int postSize=0;
-                            GenericIterator <FrmPost> itPost=thread.listPosts();
-                            while(itPost.hasNext()){
-                                itPost.next();
-                                postSize++;
-                             }
-                            %>
-                            <td>
-                                <%=postSize%>
-                            </td>
-                        </tr>
-                        <form name="removeThread" action="<%=actionURL.toString()%>">
-                        <input type="hidden" name="threadUri" value="<%=thread.getURI()%>">
-                        <input type="hidden" name="forumUri" value="<%=request.getParameter("forumUri")%>">
-                         <tr><td><input type="submit" value="eliminar"></td>
-                             <td><input type="button" value="cancelar" onClick="retorna(this.form);"></td>
-                         </tr>
-                         </form>
-                    </table>
-                <%}else{
-                    actionURL.setAction("removePost");
-                    SemanticObject semObject=SemanticObject.createSemanticObject(request.getParameter("postUri"));
-                    FrmPost post = FrmPost.getFrmPost(semObject.getId(), paramRequest.getTopic().getWebSite());
-                    %>
-                    <table>
-                        <tr>
-                            <td colspan="2">Usted esta a punto de eliminar el siguiente Mensaje:<%=post.getThread().getTitle(lang)%></td>
-                        </tr>
-                        <tr>
-                            <td>Cuerpo</td>
-                            <td><%=post.getBody()%></td>
-                        </tr>
-                        <tr>
-                            <td>Autor</td>
-                            <td>
-                                <%if(post.getCreator()!=null){%>
-                                    <%=post.getCreator().getName()%>
-                                <%}%>
-                                &nbsp;
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Número de Respuestas</td>
-                            <%
-                            int postSize=0;
-                            Iterator <FrmPost> itPost=post.listchildPosts();
-                            while(itPost.hasNext()){
-                               itPost.next();
-                               postSize++;
-                            }
-                            %>
-                            <td><%=postSize%></td>
-                        </tr>
-                        <tr>
-                            <td>Número de Archivos adjuntos</td>
-                            <%
-                            int attchmentsSize=0;
-                            GenericIterator <FrmAttachments> itattach=post.listAttachmentss();
-                            while(itattach.hasNext()){
-                                itattach.next();
-                                attchmentsSize++;
-                            }
-                            %>
-                            <td>
-                                <%=attchmentsSize%>
-                            </td>
-                        </tr>
-                         <form name="removePost" action="<%=actionURL.toString()%>">
-                        <input type="hidden" name="postUri" value="<%=post.getURI()%>">
-                        <input type="hidden" name="threadUri" value="<%=request.getParameter("threadUri")%>">
-                         <tr><td><input type="submit" value="eliminar"></td>
-                             <td><input type="button" value="cancelar" onClick="retorna(this.form);"></td>
-                         </tr>
-                         </form>                         
-                    </table>
-                    <%
-                }
-                         url.setAction("viewPost");
-                %>
-                         <script type="text/javascript">
-                            function retorna(forma){
-                                forma.action="<%=url.toString()%>";
-                                forma.submit();
-                            }
-                         </script>
-            <%} else {
-            %>
-            <p align="center">
-                    <b>Foros</b>
-            </p>
-            <table border="1" width="95%" cellspacing="0" cellpadding="3" align="center">
-                <tr bgcolor="#666669">
-                    <td colspan="2"><font color="#FFFFFF">Foro/Descripción</font></td>
-                    <td align="center"><font color="#FFFFFF">Temas</font></td>
-                    <td align="center"><font color="#FFFFFF">Mensajes</font></td>
-                    <td align="center"><font color="#FFFFFF">Ultimo mensaje</font></td>
-                </tr>
-                <%
-                url.setAction("viewThreads");
-                Iterator<FrmCategory> itCategories = FrmCategory.listFrmCategorys(website);
-                while (itCategories.hasNext()) {
-                    FrmCategory category = itCategories.next();
-                    if(category.isActive()){
-                %>
-                <tr bgcolor="#C0C0C0" font-size="12px" font-weight="normal" ine-height="20px">
-                    <td colspan="5"><b><%=category.getName()%></b><br/><%=category.getDescription()%><br/></td>
-                </tr>
-                <%
-        GenericIterator<FrmForum> gitForums = category.listForums();
-        while (gitForums.hasNext()) {
-            FrmForum forum = gitForums.next();
-                    if(forum.isActive()){
-                %>
-                    <tr bgcolor="#FFFFFF" font-size="12px">                     
-                    <td width="20" align="center" nowrap="nowrap">&nbsp</td>
-                    <%url.setParameter("forumUri", forum.getURI());%>
-                    <td width="30%"><a href="<%=url.toString()%>"><b><%=forum.getTitle()%></b></a><br/>
-                        <%if (forum.getDescription() != null) {%>
-                    <%=forum.getDescription()%><br/></td>
-                    <%}%>
-                    <td align="center">
-                        <%=forum.getThreadcount()%>
-                    </td>
-                    <td align="center">
-                        <%=forum.getPostcount()%>
-                    </td>
-                    <td align="center">
-                        <%if (forum.getLastpostdate()!=null && forum.getModifiedBy() != null) {%>
-                        <%=forum.getLastpostdate()%>
-                        <%=forum.getModifiedBy().getName()%>
-                        <%}else{%> &nbsp; <%}%>
-                    </td>
-                    </tr>
-                <%
-                    }
-                  }
-                }
-                }
-                %>
-                </table>
-                <br/>
-                <p align="center">
-                    <b>Temas Favoritos</b>
-                </p>
-                <br/>
-                <table border="1">
-                <tr bgcolor="#666669">
-                    <td align="center">Nombre</td>
-                    <td align="center">Vistas</td>
-                    <td align="center">Replicas</td>
-                    <td align="center">Ultimo mensaje</td>
-                    <td align="center">Foro</td>
-                </tr>
-                <%
-                    HashMap hmapForos=getFavoriteThreads(user, website);
-                    Iterator itForos=hmapForos.keySet().iterator();
-                    while(itForos.hasNext()){
-                        String strForo=(String)itForos.next();
-                        Iterator <FrmThread>itThreads=((ArrayList)hmapForos.get(strForo)).iterator();
-                        while(itThreads.hasNext())
-                        {
-                        FrmThread frmThread=itThreads.next();
-                        FrmForum forum=frmThread.getForum();
-                        url.setParameter("forumUri", forum.getURI());
-                        url.setParameter("threadUri", frmThread.getURI());
-                        url.setAction("viewPost");
-                        %>
-
-                            <tr>
-                            <td align="center"><a href="<%=url.toString()%>"><%=frmThread.getTitle()%></a></td>
-                            <td align="center"><%=frmThread.getViewcount()%></td>
-                            <td align="center"><%=frmThread.getReplyCount()%></td>
-                            <td align="center">
-                                <%if (frmThread.getLastpostdate() != null) {%>
-                                <%=frmThread.getLastpostdate()%><br/> by
-                                <%}%>
-                                <%if (frmThread.getLastpostmember() != null) {%>
-                                <%=frmThread.getLastpostmember().getName()%>
-                                <%} else {%>&nbsp;<%}%>
-                            </td>
-                            <td align="center">
-                                <%url.setAction("viewThreads");%>
-                                <a href="<%=url.toString()%>"><%=forum.getTitle()%></a>
-                            </td>
-                            </tr>
-                        <%
-                        }
-                    }
-                    %>
-                    </table>
-                    <%
-                }
-              %>
     </td></tr>
 </table>
-
-<%!
-    private HashMap getFavoriteThreads(User user, SWBModel model){
-        HashMap hmapForos=new HashMap();
-        Iterator <FrmUserThread> itFrmUserThread=FrmUserThread.listFrmUserThreads(model);
-        while(itFrmUserThread.hasNext()){
-            FrmUserThread usrThread=itFrmUserThread.next();
-            if(usrThread.getUser().getURI().equals(user.getURI()))
-            {
-                SemanticObject semObject = SemanticObject.createSemanticObject(usrThread.getThread().getURI());
-                FrmThread favThread = FrmThread.getFrmThread(semObject.getId(), model);
-                FrmForum forum=favThread.getForum();
-                if(!hmapForos.containsKey(forum.getURI())){
-                    ArrayList <FrmThread> aThreads=new ArrayList();
-                    aThreads.add(favThread);
-                    hmapForos.put(forum.getURI(), aThreads);
-                }else{
-                    ArrayList aThreads=(ArrayList)hmapForos.get(forum.getURI());
-                    aThreads.add(favThread);
-                }
-            }
-        }
-        return hmapForos;
-    }
-%>
