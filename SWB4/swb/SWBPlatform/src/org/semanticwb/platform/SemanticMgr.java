@@ -50,6 +50,7 @@ public class SemanticMgr implements SWBInstanceObject
     public final static String SWB_PERSIST=SWBPlatform.getEnv("swb/triplepersist","default");
     public final static String SWBSystem="SWBSystem";
     public final static String SWBAdmin="SWBAdmin";
+    public final static String SWBOntEdit="SWBOntEdit";
     
     private SWBPlatform m_context;
     
@@ -347,7 +348,7 @@ public class SemanticMgr implements SWBInstanceObject
         Model model=loadRDFDBModel(name);
         if(name.equals(SWBAdmin) && !SWBPlatform.getEnv("swb/adminDev", "false").equalsIgnoreCase("true"))
         {
-            System.out.println("Loading Admin...");
+            log.info("Loading SWBAdmin...");
             OntModel omodel=ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM,model);
             try
             {
@@ -362,11 +363,36 @@ public class SemanticMgr implements SWBInstanceObject
             NsIterator it=model.listNameSpaces();
             if(!it.hasNext())
             {
-                System.out.println("Importing Admin...");
+                log.info("Importing SWBAdmin...");
                 it.close();
                 try
                 {
                     FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/adminFile", "/swbadmin/rdf/SWBAdmin.rdf"));
+                    model.read(in, null);
+                }catch(Exception e){log.warn(e.getMessage());}
+            }
+        }else if(name.equals(SWBOntEdit) && !SWBPlatform.getEnv("swb/adminDev", "false").equalsIgnoreCase("true"))
+        {
+            log.info("Loading SWBOntEdit...");
+            OntModel omodel=ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM,model);
+            try
+            {
+                Model m = ModelFactory.createDefaultModel() ;
+                FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/ontEditFile", "/swbadmin/rdf/SWBOntEdit.rdf"));
+                m.read(in, null);
+                omodel.addSubModel(m,true);
+            }catch(Exception e){log.warn(e.getMessage());}
+            model=omodel;
+        }else if(name.equals(SWBOntEdit))
+        {
+            NsIterator it=model.listNameSpaces();
+            if(!it.hasNext())
+            {
+                log.info("Importing Admin...");
+                it.close();
+                try
+                {
+                    FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/ontEditFile", "/swbadmin/rdf/SWBOntEdit.rdf"));
                     model.read(in, null);
                 }catch(Exception e){log.warn(e.getMessage());}
             }
