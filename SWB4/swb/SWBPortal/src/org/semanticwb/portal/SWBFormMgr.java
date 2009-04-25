@@ -9,7 +9,6 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
@@ -18,7 +17,6 @@ import org.semanticwb.model.GenericFormElement;
 import org.semanticwb.model.PropertyGroup;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.Undeleteable;
 import org.semanticwb.platform.*;
 
 /**
@@ -99,6 +97,7 @@ public class SWBFormMgr
         while(it.hasNext())
         {
             SemanticProperty prop=it.next();
+            //System.out.println("add:"+prop);
             addProperty(prop);
         }
     }
