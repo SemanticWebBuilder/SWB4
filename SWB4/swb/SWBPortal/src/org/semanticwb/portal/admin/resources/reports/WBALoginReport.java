@@ -139,7 +139,7 @@ public class WBALoginReport extends GenericResource {
             // If there are sites continue
             if(hm_repository.size() > I_ACCESS){
                 String address = paramsRequest.getTopic().getUrl();
-                String repositoryName = request.getParameter("wb_repository");
+                String repositoryId = request.getParameter("wb_repository");
                 int groupDates;
                 try {
                     groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
@@ -280,7 +280,12 @@ public class WBALoginReport extends GenericResource {
                 
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-                out.println("<tr><td width=\"100\"></td><td width=\"120\"></td><td></td><td></td></tr>");
+                if(rtype.equals("0")) {
+                    out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
+                }else {
+                    out.println("<tr><td width=\"100\"></td><td width=\"196\"></td><td width=\"224\"></td><td width=\"364\"></td></tr>");
+                }
+
                 out.println("<tr>");
                 out.println("<td colspan=4>");
                 if(rtype.equals("0")){
@@ -312,7 +317,7 @@ public class WBALoginReport extends GenericResource {
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
                     out.println("<option value=\""+ key + "\"");
-                        if(key.equalsIgnoreCase(repositoryName)) {
+                        if(key.equalsIgnoreCase(repositoryId)) {
                             out.println(" selected=\"selected\"");
                         }
                     out.println(">" + (String)hm_repository.get(key) + "</option>");
@@ -363,13 +368,14 @@ public class WBALoginReport extends GenericResource {
                     
                     out.println("<tr>");
                     out.println("<td colspan=\"4\" align=\"left\">");
-                    if(request.getParameter("wb_rtype")==null || repositoryName==null ) {
+                    if(request.getParameter("wb_rtype")==null || repositoryId==null ) {
                         out.println("&nbsp;");
                     }else {
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
                         out.println("<tr>");
                         out.println("<td>");
                         WBAFilterReportBean filter = buildFilter(request, paramsRequest);
+                        System.out.println("filter="+filter.toString());
                         JRDataSourceable dataDetail = new JRLoggedUserDataDetail(filter);
                         JasperTemplate jasperTemplate = JasperTemplate.USER_LOGGED_DAILY_HTML;
                         HashMap params = new HashMap();
@@ -409,14 +415,14 @@ public class WBALoginReport extends GenericResource {
                     
                     out.println("<tr>");
                     out.println("<td colspan=\"4\">");
-                    if(request.getParameter("wb_rtype")==null || repositoryName==null ) {
+                    if(request.getParameter("wb_rtype")==null || repositoryId==null ) {
                         out.println("&nbsp;");
                     }else {
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                         
                         out.println("<tr><td>\n");
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(repositoryName);
+                        filter.setSite(repositoryId);
                         filter.setIdaux(S_REPORT_IDAUX);
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(year13);                            
@@ -500,11 +506,11 @@ public class WBALoginReport extends GenericResource {
                     throw new javax.servlet.ServletException(e);
                 }
             }else { // REPORTE MENSUAL
-                String repositoryName = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");                
+                String repositoryId = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                params.put("site", repositoryName);
+                params.put("site", repositoryId);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                filter.setSite(repositoryName);
+                filter.setSite(repositoryId);
                 filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
@@ -552,11 +558,11 @@ public class WBALoginReport extends GenericResource {
                     throw new javax.servlet.ServletException(e);
                 }
             }else { // REPORTE MENSUAL
-                String repositoryName = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");                
+                String repositoryId = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                params.put("site", repositoryName);
+                params.put("site", repositoryId);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                filter.setSite(repositoryName);
+                filter.setSite(repositoryId);
                 filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
@@ -630,10 +636,10 @@ public class WBALoginReport extends GenericResource {
                     row.appendChild(pages);
                 }
             }else { // REPORTE MENSUAL
-                String repositoryName = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");                
+                String repositoryId = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 filter = new WBAFilterReportBean();
-                filter.setSite(repositoryName);
+                filter.setSite(repositoryId);
                 filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
@@ -694,11 +700,11 @@ public class WBALoginReport extends GenericResource {
                     throw new javax.servlet.ServletException(e);
                 }
             }else { // REPORTE MENSUAL
-                String repositoryName = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");                
+                String repositoryId = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                params.put("site", repositoryName);
+                params.put("site", repositoryId);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                filter.setSite(repositoryName);
+                filter.setSite(repositoryId);
                 filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
@@ -739,11 +745,11 @@ public class WBALoginReport extends GenericResource {
                     throw new javax.servlet.ServletException(e);
                 }
             }else { // REPORTE MENSUAL
-                String repositoryName = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");                
+                String repositoryId = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                params.put("site", repositoryName);
+                params.put("site", repositoryId);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                filter.setSite(repositoryName);
+                filter.setSite(repositoryId);
                 filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
@@ -770,7 +776,8 @@ public class WBALoginReport extends GenericResource {
      */
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;        
-        String repositoryName = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+        String repositoryId = request.getParameter("wb_repository");
+        System.out.println("rep="+request.getParameter("wb_repository"));
         int groupDates;
         try {
             groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
@@ -791,7 +798,7 @@ public class WBALoginReport extends GenericResource {
             if(groupDates==0) { // radio button was 0. Select only one date
                 String[] numFecha = fecha1.split("-");
                 filterReportBean = new WBAFilterReportBean();
-                filterReportBean.setSite(repositoryName);
+                filterReportBean.setSite(repositoryId);
                 filterReportBean.setIdaux(S_REPORT_IDAUX);
                 filterReportBean.setType(I_REPORT_TYPE);
                 filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
@@ -800,7 +807,7 @@ public class WBALoginReport extends GenericResource {
                 
             }else { // radio button was 1. Select between two dates
                 filterReportBean = new WBAFilterReportBean();
-                filterReportBean.setSite(repositoryName);
+                filterReportBean.setSite(repositoryId);
                 filterReportBean.setIdaux(S_REPORT_IDAUX);
                 filterReportBean.setType(I_REPORT_TYPE);
                 String[] numFecha = fecha11.split("-");
