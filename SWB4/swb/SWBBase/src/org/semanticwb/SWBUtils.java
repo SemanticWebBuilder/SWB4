@@ -2204,6 +2204,31 @@ public class SWBUtils {
             return ret;
         }
 
+        /** Tipo de base de datos.
+         * DataBase type
+         */
+        public static String getDatabaseType() {
+            return getDatabaseType(defaultPoolName);
+        }
+
+        /** Tipo de base de datos.
+         * DataBase type
+         *  @param poolName
+         * @return String nombre de la base de datos.
+         */
+        public static String getDatabaseType(String poolName) {
+            String ret = getDatabaseName(poolName);
+            if(ret.toLowerCase().indexOf("hsql")>-1)ret="HSQL";
+            else if(ret.toLowerCase().indexOf("hsqldb")>-1)ret="HSQLDB";
+            else if(ret.toLowerCase().indexOf("mysql")>-1)ret="MySQL";
+            else if(ret.toLowerCase().indexOf("mssql")>-1)ret="MsSQL";
+            else if(ret.toLowerCase().indexOf("oracle")>-1)ret="Oracle";
+            else if(ret.toLowerCase().indexOf("postgresql")>-1)ret="PostgreSQL";
+            else if(ret.toLowerCase().indexOf("dervy")>-1)ret="Dervy";
+            return ret;
+        }
+
+
         public static int getConnections(String poolName) {
             return getConnectionManager().getConnections(poolName);
         }
