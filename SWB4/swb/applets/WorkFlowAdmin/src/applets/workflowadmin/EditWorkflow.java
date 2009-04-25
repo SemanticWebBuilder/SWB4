@@ -58,6 +58,8 @@ public class EditWorkflow extends javax.swing.JApplet {
     /** Initializes the applet EditWorkflow */
     public Workflow workflow;
     Locale locale;
+    
+    @Override
     public void init() {        
         locale=Locale.getDefault();
         if(this.getParameter("locale")!=null && !this.getParameter("locale").equals(""))
