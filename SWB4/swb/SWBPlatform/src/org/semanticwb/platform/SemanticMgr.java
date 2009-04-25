@@ -84,7 +84,7 @@ public class SemanticMgr implements SWBInstanceObject
         String M_DB_URL         = pool.getURL();
         String M_DB_USER        = pool.getUser();
         String M_DB_PASSWD      = pool.getPassword();
-        String M_DB             = SWBUtils.DB.getDatabaseName(pool.getName());
+        String M_DB             = SWBUtils.DB.getDatabaseType(pool.getName());
 
         if(SWB_PERSIST.equalsIgnoreCase("sdb"))
         {
@@ -106,9 +106,9 @@ public class SemanticMgr implements SWBInstanceObject
 //        conn = new DBConnection(M_DB_URL, M_DB_USER, M_DB_PASSWD, M_DB);
 
             // Create database connection
-            conn = new DBConnection(SWBUtils.DB.getDefaultPool().newAutoConnection(), SWBUtils.DB.getDatabaseName());
+            conn = new DBConnection(SWBUtils.DB.getDefaultPool().newAutoConnection(), M_DB);
 
-            if(SWBUtils.DB.getDatabaseName().equalsIgnoreCase("mysql"))
+            if(M_DB.equals("MySQL"))
             {
                 IRDBDriver driver=new Driver_MySQL_SWB();
                 driver.setConnection(conn);
