@@ -102,8 +102,8 @@ public class PFlowManager
             while (instances.hasNext())
             {
                 PFlowInstance instance = instances.next();
-                Resource resource = instance.getPfinstResource();
-                if (resource.getCreator().equals(user))
+                Resource resource = instance.getPfinstResource();                
+                if (resource.getCreator()!=null && resource.getCreator().equals(user))
                 {
                     getContentsAtFlowOfUser.add(resource);
                 }
