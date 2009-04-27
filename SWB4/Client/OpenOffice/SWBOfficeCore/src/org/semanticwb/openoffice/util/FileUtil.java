@@ -140,6 +140,7 @@ public final class FileUtil
             }
             catch (Exception ex)
             {
+                ex.printStackTrace();
                 ErrorLog.log(ex);
             }
         }
@@ -175,6 +176,7 @@ public final class FileUtil
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             ErrorLog.log(ex);
         }
     }
@@ -189,6 +191,7 @@ public final class FileUtil
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             ErrorLog.log(ex);
         }
     }

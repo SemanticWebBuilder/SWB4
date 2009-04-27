@@ -157,7 +157,7 @@ private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }
     catch (Exception e)
     {
-        e.printStackTrace(System.out);
+        e.printStackTrace();
     }
     if (existe)
     {
@@ -187,7 +187,7 @@ private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             }
             catch (Exception e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace();
             }
         }
 

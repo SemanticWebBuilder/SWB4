@@ -86,6 +86,7 @@ public class Search extends WizardPage
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
     }
 
@@ -306,7 +307,7 @@ private void jComboBoxRepositorioActionPerformed(java.awt.event.ActionEvent evt)
             }
             for (CategoryInfo cat : OfficeApplication.getOfficeApplicationProxy().getAllCategories(rep))
             {
-                this.jComboBoxCategory.addItem(cat);                
+                this.jComboBoxCategory.addItem(cat);
             }
             CategoryInfo all = new CategoryInfo();
             all.UDDI = "*";
@@ -318,6 +319,7 @@ private void jComboBoxRepositorioActionPerformed(java.awt.event.ActionEvent evt)
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
     }
 }//GEN-LAST:event_jComboBoxRepositorioActionPerformed
@@ -376,20 +378,20 @@ private void jTableContentsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:
 
     private void addCategory(String repository, CategoryInfo category)
     {
-        if(category.childs>0)
+        if (category.childs > 0)
         {
-        try
-        {
-            for (CategoryInfo cat : OfficeApplication.getOfficeApplicationProxy().getCategories(repository, category.UDDI))
+            try
             {
-                this.jComboBoxCategory.addItem(cat);
-                addCategory(repository, cat);
+                for (CategoryInfo cat : OfficeApplication.getOfficeApplicationProxy().getCategories(repository, category.UDDI))
+                {
+                    this.jComboBoxCategory.addItem(cat);
+                    addCategory(repository, cat);
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
             }
         }
-        catch (Exception e)
-        {
-        }
-        }
     }
-
 }

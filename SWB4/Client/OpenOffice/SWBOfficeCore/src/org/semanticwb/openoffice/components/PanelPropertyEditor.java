@@ -84,6 +84,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                         }
                         catch (Exception e)
                         {
+                            e.printStackTrace();
                         }
                     }
                     else
@@ -104,6 +105,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                         }
                         catch (Exception e)
                         {
+                            e.printStackTrace();
                         }
                     }
                     else
@@ -124,6 +126,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                         }
                         catch (Exception e)
                         {
+                            e.printStackTrace();
                         }
                     }
                     else
@@ -474,6 +477,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                         }
                         catch (Exception e)
                         {
+                            e.printStackTrace();
                         }
                     }
                     else
@@ -493,6 +497,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                         }
                         catch (Exception e)
                         {
+                            e.printStackTrace();
                         }
                     }
                     else
@@ -512,6 +517,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                         }
                         catch (Exception e)
                         {
+                            e.printStackTrace();
                         }
                     }
                     else

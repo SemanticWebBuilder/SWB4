@@ -336,7 +336,7 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace();
         }
     }
     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -370,7 +370,7 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
     }
     catch (Exception e)
     {
-        e.printStackTrace(System.out);
+        e.printStackTrace();
     }
     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_jButtonDeletCategoryActionPerformed

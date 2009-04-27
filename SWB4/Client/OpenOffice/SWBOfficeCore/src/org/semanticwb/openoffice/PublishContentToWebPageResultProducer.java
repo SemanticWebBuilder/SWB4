@@ -16,6 +16,7 @@ import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
+import org.semanticwb.openoffice.ui.dialogs.DialogSelectFlow;
 import org.semanticwb.openoffice.ui.wizard.PublishVersion;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
@@ -53,6 +54,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
             this.title = title;
             this.description = description;
         }
+
         @Override
         public void start(Map wizardData, ResultProgressHandle progress)
         {
@@ -66,26 +68,48 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                 webpage.siteID = page.getSite();
                 String version = wizardData.get(PublishVersion.VERSION).toString();
                 HashMap<PropertyInfo, String> properties = (HashMap<PropertyInfo, String>) wizardData.get(ViewProperties.VIEW_PROPERTIES);
-                PropertyInfo[] propertiesToSend=new PropertyInfo[0];
-                String[] values=new String[0];
-                if(properties!=null)
+                PropertyInfo[] propertiesToSend = new PropertyInfo[0];
+                String[] values = new String[0];
+                if (properties != null)
                 {
-                    propertiesToSend=properties.keySet().toArray(new PropertyInfo[properties.keySet().size()]);
-                    values=new String[properties.keySet().size()];
-                }                
-                int i=0;
-                for(PropertyInfo prop : propertiesToSend)
+                    propertiesToSend = properties.keySet().toArray(new PropertyInfo[properties.keySet().size()]);
+                    values = new String[properties.keySet().size()];
+                }
+                int i = 0;
+                for (PropertyInfo prop : propertiesToSend)
                 {
-                    values[i]=properties.get(prop);
+                    values[i] = properties.get(prop);
                     i++;
                 }
-                ResourceInfo info = openOfficeDocument.publishToResourceContent(repositoryName, contentID, version, title, description, webpage,propertiesToSend,values);
-                int res = JOptionPane.showConfirmDialog(null, "¿Desea activar el contenido?", "Publicación de contenido", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-                if (res == JOptionPane.YES_OPTION)
+                ResourceInfo info = openOfficeDocument.publishToResourceContent(repositoryName, contentID, version, title, description, webpage, propertiesToSend, values);
+
+                if (openOfficeDocument.needsSendToPublish(info))
                 {
-                    openOfficeDocument.activateResource(info, true);
+                    int res = JOptionPane.showConfirmDialog(null, "El contenido necesita ser autorizado para presentarse en el sitio.\r\n¿Desea enviarlo a autorización?", "Publicación de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (res == JOptionPane.YES_OPTION)
+                    {
+                        DialogSelectFlow dialogSelectFlow=new DialogSelectFlow(info);
+                        dialogSelectFlow.setVisible(true);
+                        if(dialogSelectFlow.selected!=null)
+                        {
+                            openOfficeDocument.sendToAuthorize(info,dialogSelectFlow.selected,dialogSelectFlow.jTextAreaMessage.getText().trim());
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,"¡Para activar este contenido debe ser autorizado primero!","Publicación de contenido",JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
                 }
-                JOptionPane.showMessageDialog(null, "¡Se ha publicado el documento!", "Publicación de contenido", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                else
+                {
+                    int res = JOptionPane.showConfirmDialog(null, "¿Desea activar el contenido?", "Publicación de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (res == JOptionPane.YES_OPTION)
+                    {
+                        openOfficeDocument.activateResource(info, true);
+                        JOptionPane.showMessageDialog(null, "¡Se ha publicado el documento!", "Publicación de contenido", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+                
                 progress.finished(null);
             }
             catch (Exception e)
@@ -95,6 +119,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
 
         }
     }
+
     @Override
     public Object finish(Map map) throws WizardException
     {
@@ -105,6 +130,7 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
         }
         return new BackgroundResultCreator(title, description);
     }
+
     @Override
     public boolean cancel(Map arg0)
     {

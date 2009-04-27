@@ -56,6 +56,7 @@ public class DialogUpdateContent extends javax.swing.JDialog
             }
             catch (Exception e)
             {
+                e.printStackTrace();
                 JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Actualización de contenido", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             }
             finally
@@ -213,6 +214,7 @@ private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getLocalizedMessage(), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         }
 

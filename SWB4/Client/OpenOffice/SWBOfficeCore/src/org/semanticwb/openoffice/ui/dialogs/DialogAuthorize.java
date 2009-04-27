@@ -21,6 +21,7 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
  */
 public class DialogAuthorize extends java.awt.Dialog {
 
+    public boolean cancel=true;
     /** Creates new form DialogAuthorize */
     public DialogAuthorize(String title) {
         super((Frame) null, ModalityType.TOOLKIT_MODAL);
@@ -112,6 +113,7 @@ public class DialogAuthorize extends java.awt.Dialog {
             this.jTextAreaMessage.requestFocus();
             return;
         }
+        cancel=false;
         this.setVisible(false);
 
     }//GEN-LAST:event_jButtonOKActionPerformed
@@ -132,7 +134,7 @@ public class DialogAuthorize extends java.awt.Dialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextAreaMessage;
+    public javax.swing.JTextArea jTextAreaMessage;
     // End of variables declaration//GEN-END:variables
 
 }

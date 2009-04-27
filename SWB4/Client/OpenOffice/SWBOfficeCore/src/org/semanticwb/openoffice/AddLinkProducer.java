@@ -43,7 +43,7 @@ public class AddLinkProducer implements WizardResultProducer {
         }
         catch(Exception e)
         {
-            
+            e.printStackTrace();
         }
         return null;
     }

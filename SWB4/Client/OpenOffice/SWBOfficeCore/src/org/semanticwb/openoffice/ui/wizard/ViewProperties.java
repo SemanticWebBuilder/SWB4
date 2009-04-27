@@ -81,6 +81,7 @@ public class ViewProperties extends WizardPage
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage(), getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return WizardPanelNavResult.REMAIN_ON_PAGE;
         }
