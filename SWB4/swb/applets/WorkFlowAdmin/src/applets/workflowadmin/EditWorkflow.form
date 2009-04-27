@@ -265,6 +265,9 @@
                   </Constraints>
                 </Component>
                 <Component class="javax.swing.JTextField" name="jTextFieldName">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                  </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="150" y="210" width="-1" height="-1"/>
@@ -286,15 +289,6 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Container class="javax.swing.JPanel" name="jPanel6">
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="0" y="0" width="-1" height="-1"/>
-                    </Constraint>
-                  </Constraints>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
-                </Container>
                 <Component class="javax.swing.JLabel" name="jLabelVersion">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -347,6 +341,7 @@
                   <SubComponents>
                     <Component class="javax.swing.JTextArea" name="jTextAreaDescription">
                       <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
                         <Property name="lineWrap" type="boolean" value="true"/>
                         <Property name="wrapStyleWord" type="boolean" value="true"/>
                       </Properties>

@@ -58,9 +58,19 @@ public class EditWorkflow extends javax.swing.JApplet
     public Workflow workflow;
     Locale locale;
 
+   
     @Override
     public void init()
     {
+        try
+        {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception ue)
+        {
+            // No debe hacer nada
+            System.out.println(ue.getMessage());
+        }
         locale = Locale.getDefault();
         if (this.getParameter("locale") != null && !this.getParameter("locale").equals(""))
         {
@@ -109,6 +119,7 @@ public class EditWorkflow extends javax.swing.JApplet
         this.jTableActividades.addMouseListener(select);
         this.jScrollPaneActividades.addMouseListener(select);
         this.jTextFieldVersion.setText(workflow.getVersion());
+        
         this.jLabelDescription.setVisible(false);
         this.jTextAreaDescription.setVisible(false);
         this.jLabelName.setVisible(false);
@@ -230,7 +241,6 @@ public class EditWorkflow extends javax.swing.JApplet
         jLabelName = new javax.swing.JLabel();
         jTextFieldName = new javax.swing.JTextField();
         jLabelDescription = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
         jLabelVersion = new javax.swing.JLabel();
         jTextFieldVersion = new javax.swing.JTextField();
         jCheckBoxEdit = new javax.swing.JCheckBox();
@@ -376,6 +386,8 @@ public class EditWorkflow extends javax.swing.JApplet
         jLabelName.setText(bundle.getString("nombre")); // NOI18N
         jPanelPropiedades.add(jLabelName);
         jLabelName.setBounds(240, 210, 41, 14);
+
+        jTextFieldName.setEditable(false);
         jPanelPropiedades.add(jTextFieldName);
         jTextFieldName.setBounds(150, 210, 11, 19);
 
@@ -383,10 +395,6 @@ public class EditWorkflow extends javax.swing.JApplet
         jLabelDescription.setText(bundle.getString("Description")); // NOI18N
         jPanelPropiedades.add(jLabelDescription);
         jLabelDescription.setBounds(300, 220, 58, 14);
-
-        jPanel6.setLayout(new java.awt.BorderLayout());
-        jPanelPropiedades.add(jPanel6);
-        jPanel6.setBounds(0, 0, 0, 0);
 
         jLabelVersion.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabelVersion.setLabelFor(jTextFieldVersion);
@@ -404,6 +412,7 @@ public class EditWorkflow extends javax.swing.JApplet
         jPanelPropiedades.add(jCheckBoxEdit);
         jCheckBoxEdit.setBounds(10, 50, 235, 23);
 
+        jTextAreaDescription.setEditable(false);
         jTextAreaDescription.setLineWrap(true);
         jTextAreaDescription.setWrapStyleWord(true);
         jScrollPane2.setViewportView(jTextAreaDescription);
@@ -1116,7 +1125,6 @@ public class EditWorkflow extends javax.swing.JApplet
     private javax.swing.JMenuItem jMenuItemUP;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanelActividades;
     private javax.swing.JPanel jPanelDiseño;
     private javax.swing.JPanel jPanelPropiedades;
