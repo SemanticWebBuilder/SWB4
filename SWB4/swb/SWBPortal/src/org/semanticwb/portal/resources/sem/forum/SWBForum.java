@@ -271,9 +271,15 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
             Thread thread = Thread.getThread(semObject.getId(), website);
             //int threadReplyCount = thread.getReplyCount();
-            semObject.remove();
-            //Elimina fileSystem
+            //Elimina fileSystem de post asociados
+            GenericIterator<Post> itPost=thread.listPosts();
+            while(itPost.hasNext()){
+                Post post=itPost.next();
+                SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/replies/" + post.getId() + "/");
+            }
+            //Elimina filesystem de thread
             SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + base.getWorkPath() + "/threads/" + thread.getId() + "/");
+            semObject.remove();
             //Redirecciona
             response.setMode(response.Mode_VIEW);
         } else if (action.equals("removePost")) {
