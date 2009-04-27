@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SessionUser;
+import org.semanticwb.portal.PFlowManager;
 import org.semanticwb.portal.SWBMessageCenter;
 import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBResourceMgr;
@@ -46,6 +47,7 @@ public class SWBPortal {
     private static HashMap hAnchors = null;
     private static HashMap admFiles = new HashMap();
     private static SWBUserMgr usrMgr;
+    private static PFlowManager pflowMgr;
     private static SWBMonitor monitor = null;
     private static SWBResourceMgr resmgr = null;
     private static SWBTemplateMgr templatemgr = null;
@@ -204,6 +206,9 @@ public class SWBPortal {
         resmgr = new SWBResourceMgr();
         resmgr.init();
 
+        pflowMgr = new PFlowManager();
+        pflowMgr.init();
+
         templatemgr = new SWBTemplateMgr();
         templatemgr.init();
 
@@ -326,6 +331,10 @@ public class SWBPortal {
     public static SWBAccessLog getAccessLog()
     {
         return acclog;
+    }
+    public static PFlowManager getPFlowManager()
+    {
+        return pflowMgr;
     }
 
     public static SWBAccessIncrement getAccessIncrement()
