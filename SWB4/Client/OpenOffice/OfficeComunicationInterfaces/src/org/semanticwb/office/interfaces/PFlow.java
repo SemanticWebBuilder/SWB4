@@ -9,8 +9,7 @@ package org.semanticwb.office.interfaces;
  *
  * @author victor.lorenzana
  */
-public class FlowContentInformation {
-    public ResourceInfo resourceInfo;
+public class PFlow {
     public String id;
     public String title;
 
@@ -25,7 +24,7 @@ public class FlowContentInformation {
         {
             return false;
         }
-        final FlowContentInformation other = (FlowContentInformation) obj;
+        final PFlow other = (PFlow) obj;
         if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id))
         {
             return false;
@@ -36,18 +35,15 @@ public class FlowContentInformation {
     @Override
     public int hashCode()
     {
-        int hash = 3;
-        hash = 47 * hash + (this.id != null ? this.id.hashCode() : 0);
+        int hash = 5;
+        hash = 29 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
     }
-    public String step;
-    public int status;
 
     @Override
     public String toString()
     {
         return title.toString();
     }
-
 
 }
