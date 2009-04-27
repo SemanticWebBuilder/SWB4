@@ -83,10 +83,7 @@ public interface IOfficeApplication
     public FlowContentInformation[] getContentsForAuthorize(WebSiteInfo site) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.isReviewer")
-    public boolean isReviewer(ResourceInfo info) throws Exception;
-
-    @XmlRpcMethod(methodName = "OfficeApplication.sendContentToAuthorize")
-    public void sendContentToAuthorize(ResourceInfo resourceInfo, String message) throws Exception;
+    public boolean isReviewer(ResourceInfo info) throws Exception;   
 
     @XmlRpcMethod(methodName = "OfficeApplication.authorize")
     public void authorize(ResourceInfo resourceInfo, String message) throws Exception;
