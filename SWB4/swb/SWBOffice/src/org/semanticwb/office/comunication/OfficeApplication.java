@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -22,10 +23,10 @@ import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
-import org.semanticwb.model.PFlowInstance;
-import org.semanticwb.model.PFlowRef;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -41,6 +42,7 @@ import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
 import org.semanticwb.repository.RepositoryManagerLoader;
+import org.semanticwb.resource.office.sem.OfficeResource;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 
@@ -688,28 +690,27 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return getLimitOfVersions;
     }
 
-    public FlowContentInformation[] getContentsForAuthorize() throws Exception
+    public FlowContentInformation[] getMyContents(WebSiteInfo site) throws Exception
     {
-        ArrayList<FlowContentInformation> contents = new ArrayList<FlowContentInformation>();
-        Iterator<WebSite> sites = SWBContext.listWebSites();
-        while (sites.hasNext())
+        org.semanticwb.model.User wbuser = SWBContext.getAdminRepository().getUserByLogin(user);
+        HashSet<FlowContentInformation> contents = new HashSet<FlowContentInformation>();
+        for (Resource res : SWBPortal.getPFlowManager().getContentsAtFlowOfUser(wbuser, SWBContext.getWebSite(site.id)))
         {
-            WebSite site = sites.next();
-            Iterator<PFlowRef> pflows = site.listPFlowRefs();
-            while (pflows.hasNext())
+            if (res.getSemanticObject().getSemanticClass().isSubClass(OfficeResource.sclass) || res.getSemanticObject().getSemanticClass().equals(OfficeResource.sclass))
             {
-                PFlowRef pFlowRef = pflows.next();
-
-                Iterator<PFlowInstance> instances = pFlowRef.getPflow().listPFlowInstances();
-                while (instances.hasNext())
-                {
-                    PFlowInstance instance = instances.next();
-                    FlowContentInformation flowContentInformation = new FlowContentInformation();
-                    flowContentInformation.id = instance.getId();
-                    flowContentInformation.step = instance.getStep();
-                    flowContentInformation.status = instance.getStatus();
-                    flowContentInformation.title = instance.getPflow().getTitle();
-                }
+                OfficeResource officeResource = new OfficeResource(res.getSemanticObject());
+                FlowContentInformation flowContentInformation = new FlowContentInformation();
+                flowContentInformation.id = res.getPflowInstance().getId();
+                flowContentInformation.status = res.getPflowInstance().getStatus();
+                flowContentInformation.step = res.getPflowInstance().getStep();
+                flowContentInformation.title = res.getPflowInstance().getPflow().getTitle();
+                flowContentInformation.resourceInfo = new ResourceInfo();
+                flowContentInformation.resourceInfo.active = res.isActive();
+                flowContentInformation.resourceInfo.description = res.getDescription();
+                flowContentInformation.resourceInfo.id = res.getId();
+                flowContentInformation.resourceInfo.title = res.getTitle();
+                flowContentInformation.resourceInfo.version = officeResource.getVersionToShow();
+                contents.add(flowContentInformation);
             }
         }
         return contents.toArray(new FlowContentInformation[contents.size()]);
@@ -721,9 +722,73 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public void authorize(ResourceInfo resourceInfo, String message) throws Exception
     {
+        Resource resource=SWBContext.getWebSite(resourceInfo.page.site.id).getResource(resourceInfo.id);
+        org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
+        SWBPortal.getPFlowManager().approveResource(resource, wbuser, message);
     }
 
     public void reject(ResourceInfo resourceInfo, String message) throws Exception
     {
+        Resource resource=SWBContext.getWebSite(resourceInfo.page.site.id).getResource(resourceInfo.id);
+        org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
+        SWBPortal.getPFlowManager().rejectResource(resource, wbuser, message);
+    }
+
+    public FlowContentInformation[] getAllContents(WebSiteInfo site) throws Exception
+    {        
+        HashSet<FlowContentInformation> contents = new HashSet<FlowContentInformation>();
+        for (Resource res : SWBPortal.getPFlowManager().getContentsAtFlowAll(SWBContext.getWebSite(site.id)))
+        {
+            if (res.getSemanticObject().getSemanticClass().isSubClass(OfficeResource.sclass) || res.getSemanticObject().getSemanticClass().equals(OfficeResource.sclass))
+            {
+                OfficeResource officeResource = new OfficeResource(res.getSemanticObject());
+                FlowContentInformation flowContentInformation = new FlowContentInformation();
+                flowContentInformation.id = res.getPflowInstance().getId();
+                flowContentInformation.status = res.getPflowInstance().getStatus();
+                flowContentInformation.step = res.getPflowInstance().getStep();
+                flowContentInformation.title = res.getPflowInstance().getPflow().getTitle();
+                flowContentInformation.resourceInfo = new ResourceInfo();
+                flowContentInformation.resourceInfo.active = res.isActive();
+                flowContentInformation.resourceInfo.description = res.getDescription();
+                flowContentInformation.resourceInfo.id = res.getId();
+                flowContentInformation.resourceInfo.title = res.getTitle();
+                flowContentInformation.resourceInfo.version = officeResource.getVersionToShow();
+                contents.add(flowContentInformation);
+            }
+        }
+        return contents.toArray(new FlowContentInformation[contents.size()]);
+    }
+
+    public FlowContentInformation[] getContentsForAuthorize(WebSiteInfo site) throws Exception
+    {
+        org.semanticwb.model.User wbuser = SWBContext.getAdminRepository().getUserByLogin(user);
+        HashSet<FlowContentInformation> contents = new HashSet<FlowContentInformation>();
+        for (Resource res : SWBPortal.getPFlowManager().getContentsAtFlow(wbuser, SWBContext.getWebSite(site.id)))
+        {
+            if (res.getSemanticObject().getSemanticClass().isSubClass(OfficeResource.sclass) || res.getSemanticObject().getSemanticClass().equals(OfficeResource.sclass))
+            {
+                OfficeResource officeResource = new OfficeResource(res.getSemanticObject());
+                FlowContentInformation flowContentInformation = new FlowContentInformation();
+                flowContentInformation.id = res.getPflowInstance().getId();
+                flowContentInformation.status = res.getPflowInstance().getStatus();
+                flowContentInformation.step = res.getPflowInstance().getStep();
+                flowContentInformation.title = res.getPflowInstance().getPflow().getTitle();
+                flowContentInformation.resourceInfo = new ResourceInfo();
+                flowContentInformation.resourceInfo.active = res.isActive();
+                flowContentInformation.resourceInfo.description = res.getDescription();
+                flowContentInformation.resourceInfo.id = res.getId();
+                flowContentInformation.resourceInfo.title = res.getTitle();
+                flowContentInformation.resourceInfo.version = officeResource.getVersionToShow();
+                contents.add(flowContentInformation);
+            }
+        }
+        return contents.toArray(new FlowContentInformation[contents.size()]);
+    }
+
+    public boolean isReviewer(ResourceInfo resourceInfo) throws Exception
+    {
+        Resource resource=SWBContext.getWebSite(resourceInfo.page.site.id).getResource(resourceInfo.id);
+        org.semanticwb.model.User wbuser = SWBContext.getAdminRepository().getUserByLogin(user);
+        return SWBPortal.getPFlowManager().isReviewer(resource, wbuser);
     }
 }
