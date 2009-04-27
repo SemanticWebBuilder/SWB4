@@ -139,6 +139,15 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.setContentProperties")
     public void setContentProperties(String repositoryName, String contentID, PropertyInfo[] properties, String[] values) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.needsSendToPublish")
+    public boolean needsSendToPublish(ResourceInfo info);
+
+    @XmlRpcMethod(methodName = "OfficeDocument.getFlows")
+    public PFlow[] getFlows(ResourceInfo info);
+
+    @XmlRpcMethod(methodName = "OfficeDocument.sendToPublish")
+    public void sendToAuthorize(ResourceInfo info,PFlow flow,String message);
 }
 
 

@@ -72,8 +72,18 @@ public interface IOfficeApplication
     @XmlRpcMethod(methodName = "OfficeApplication.getLimitOfVersions")
     public int getLimitOfVersions() throws Exception;
 
+    @XmlRpcMethod(methodName = "OfficeApplication.getMyContents")
+    public FlowContentInformation[] getMyContents(WebSiteInfo site) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.getAllContents")
+    public FlowContentInformation[] getAllContents(WebSiteInfo site) throws Exception;
+
+
     @XmlRpcMethod(methodName = "OfficeApplication.getContentsForAuthorize")
-    public FlowContentInformation[] getContentsForAuthorize() throws Exception;
+    public FlowContentInformation[] getContentsForAuthorize(WebSiteInfo site) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.isReviewer")
+    public boolean isReviewer(ResourceInfo info) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.sendContentToAuthorize")
     public void sendContentToAuthorize(ResourceInfo resourceInfo, String message) throws Exception;
