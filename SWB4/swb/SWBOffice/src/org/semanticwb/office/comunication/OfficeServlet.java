@@ -37,6 +37,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
         log.event("Adding mappingType OfficeApplication...");
         addMappingType("OfficeApplication", OfficeApplication.class);
         RepositoryManagerLoader.getInstance();
+        OfficeDocument.registerContents();
     }
 
     private static String getPassword(String userpassDecoded) throws IOException
