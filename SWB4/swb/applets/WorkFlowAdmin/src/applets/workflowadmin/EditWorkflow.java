@@ -34,6 +34,7 @@ import java.io.*;
 import java.util.*;
 import java.awt.*;
 
+
 import applets.commons.*;
 
 /**
@@ -353,7 +354,7 @@ public class EditWorkflow extends javax.swing.JApplet
 
         jToolBar1.setFloatable(false);
 
-        jButtonSave.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jButtonSave.setFont(new java.awt.Font("Arial", 1, 12));
         jButtonSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/applets/workflowadmin/images/save.png"))); // NOI18N
         jButtonSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -368,82 +369,47 @@ public class EditWorkflow extends javax.swing.JApplet
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        jPanelPropiedades.setFont(new java.awt.Font("Arial", 0, 12));
+        jPanelPropiedades.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jPanelPropiedades.setLayout(null);
 
         jLabelName.setLabelFor(jTextFieldName);
         jLabelName.setText(bundle.getString("nombre")); // NOI18N
+        jPanelPropiedades.add(jLabelName);
+        jLabelName.setBounds(240, 210, 41, 14);
+        jPanelPropiedades.add(jTextFieldName);
+        jTextFieldName.setBounds(150, 210, 11, 19);
 
         jLabelDescription.setLabelFor(jTextAreaDescription);
         jLabelDescription.setText(bundle.getString("Description")); // NOI18N
+        jPanelPropiedades.add(jLabelDescription);
+        jLabelDescription.setBounds(300, 220, 58, 14);
 
         jPanel6.setLayout(new java.awt.BorderLayout());
+        jPanelPropiedades.add(jPanel6);
+        jPanel6.setBounds(0, 0, 0, 0);
 
         jLabelVersion.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabelVersion.setLabelFor(jTextFieldVersion);
         jLabelVersion.setText(bundle.getString("version")); // NOI18N
+        jPanelPropiedades.add(jLabelVersion);
+        jLabelVersion.setBounds(10, 20, 47, 15);
 
         jTextFieldVersion.setEditable(false);
         jTextFieldVersion.setText("1.0");
+        jPanelPropiedades.add(jTextFieldVersion);
+        jTextFieldVersion.setBounds(70, 20, 27, 19);
 
         java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow"); // NOI18N
         jCheckBoxEdit.setText(bundle1.getString("modificarContenido")); // NOI18N
+        jPanelPropiedades.add(jCheckBoxEdit);
+        jCheckBoxEdit.setBounds(10, 50, 235, 23);
 
         jTextAreaDescription.setLineWrap(true);
         jTextAreaDescription.setWrapStyleWord(true);
         jScrollPane2.setViewportView(jTextAreaDescription);
 
-        org.jdesktop.layout.GroupLayout jPanelPropiedadesLayout = new org.jdesktop.layout.GroupLayout(jPanelPropiedades);
-        jPanelPropiedades.setLayout(jPanelPropiedadesLayout);
-        jPanelPropiedadesLayout.setHorizontalGroup(
-            jPanelPropiedadesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanelPropiedadesLayout.createSequentialGroup()
-                .add(jPanelPropiedadesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanelPropiedadesLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jPanelPropiedadesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jPanelPropiedadesLayout.createSequentialGroup()
-                                .add(jLabelVersion, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .add(10, 10, 10)
-                                .add(jTextFieldVersion, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 60, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(jCheckBoxEdit, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 320, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jPanelPropiedadesLayout.createSequentialGroup()
-                                .add(jLabelName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 70, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jPanelPropiedadesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                    .add(jScrollPane2)
-                                    .add(jTextFieldName, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE))))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 114, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jPanelPropiedadesLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jLabelDescription, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 80, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanelPropiedadesLayout.setVerticalGroup(
-            jPanelPropiedadesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanelPropiedadesLayout.createSequentialGroup()
-                .add(20, 20, 20)
-                .add(jPanelPropiedadesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanelPropiedadesLayout.createSequentialGroup()
-                        .add(jPanelPropiedadesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabelVersion)
-                            .add(jTextFieldVersion, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(1, 1, 1)
-                        .add(jCheckBoxEdit)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jPanelPropiedadesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabelName)
-                            .add(jTextFieldName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(13, 13, 13))
-                    .add(jPanelPropiedadesLayout.createSequentialGroup()
-                        .add(21, 21, 21)
-                        .add(jPanel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 41, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .add(23, 23, 23)
-                .add(jPanelPropiedadesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 41, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabelDescription))
-                .addContainerGap(84, Short.MAX_VALUE))
-        );
+        jPanelPropiedades.add(jScrollPane2);
+        jScrollPane2.setBounds(70, 120, 102, 20);
 
         jTabbedPane1.addTab(bundle.getString("propiedades"), jPanelPropiedades); // NOI18N
 
