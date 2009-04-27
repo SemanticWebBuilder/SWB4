@@ -28,6 +28,7 @@ import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPage;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
+import org.semanticwb.openoffice.ui.dialogs.DialogDocumentsAuthorize;
 import org.semanticwb.openoffice.ui.dialogs.DialogHistory;
 import org.semanticwb.openoffice.ui.dialogs.DialogSaveDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogUpdateContent;
@@ -349,6 +350,11 @@ public abstract class OfficeDocument
         }
     }
 
+    public static final void showContentsInFlow()
+    {
+        DialogDocumentsAuthorize dialogDocumentsAuthorize=new DialogDocumentsAuthorize();
+        dialogDocumentsAuthorize.setVisible(true);
+    }
     public final void showDocumentInfo()
     {
         if (OfficeApplication.tryLogin())
