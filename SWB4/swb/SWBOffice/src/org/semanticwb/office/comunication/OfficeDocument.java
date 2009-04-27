@@ -91,6 +91,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
 
+    public static String[] getOfficeTypes()
+    {
+        String[] getOfficeTypes=new String[3];
+        getOfficeTypes[0]=WORD_RESOURCE_TYPE;
+        getOfficeTypes[1]=EXCEL_RESOURCE_TYPE;
+        getOfficeTypes[2]=PPT_RESOURCE_TYPE;
+        return getOfficeTypes;
+    }
     public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
     {
         Session session = null;
