@@ -10,6 +10,7 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.Cursor;
 import java.awt.Frame;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -40,16 +41,31 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
 
+            @Override
             public void valueChanged(ListSelectionEvent e)
             {
+                int index = e.getFirstIndex();
                 jButtonAuthorize.setEnabled(false);
                 jButtonReject.setEnabled(false);
                 jButtonSee.setEnabled(false);
                 if (e.getFirstIndex() != -1)
                 {
-                    jButtonAuthorize.setEnabled(true);
+                    DefaultTableModel model = (DefaultTableModel) jTableContents.getModel();
+                    ResourceInfo resourceInfo = (ResourceInfo) model.getValueAt(index, 0);
+                    try
+                    {
+                        if (OfficeApplication.getOfficeApplicationProxy().isReviewer(resourceInfo))
+                        {
+                            jButtonAuthorize.setEnabled(true);
+                            jButtonReject.setEnabled(true);
+                        }
+                    }
+                    catch (Exception ue)
+                    {
+                        ue.printStackTrace();
+                    }
                     jButtonSee.setEnabled(true);
-                    jButtonReject.setEnabled(true);
+                    
                 }
             }
         });
@@ -83,19 +99,60 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         }
         try
         {
-            for (FlowContentInformation flowContentInformation : OfficeApplication.getOfficeApplicationProxy().getContentsForAuthorize())
+            if (this.jComboBoxSites.getSelectedItem() != null)
             {
-                ResourceInfo resourceInfo = flowContentInformation.resourceInfo;
-                String version = flowContentInformation.resourceInfo.version;
-                if (version.equals("*"))
+                WebSiteInfo site = (WebSiteInfo) this.jComboBoxSites.getSelectedItem();
+                if (this.jRadioButtonMyContents.isSelected())
                 {
-                    version = "Mostrar la última version";
+                    for (FlowContentInformation flowContentInformation : OfficeApplication.getOfficeApplicationProxy().getMyContents(site))
+                    {
+                        ResourceInfo resourceInfo = flowContentInformation.resourceInfo;
+                        String version = flowContentInformation.resourceInfo.version;
+                        if (version.equals("*"))
+                        {
+                            version = "Mostrar la última version";
+                        }
+                        Object[] rowData =
+                        {
+                            resourceInfo, resourceInfo.page.site.title, resourceInfo.page.title, version
+                        };
+                        model.addRow(rowData);
+                    }
                 }
-                Object[] rowData =
+                if (this.jRadioButtonForAuthorize.isSelected())
                 {
-                    resourceInfo, resourceInfo.page.site.title, resourceInfo.page.title, version
-                };
-                model.addRow(rowData);
+                    for (FlowContentInformation flowContentInformation : OfficeApplication.getOfficeApplicationProxy().getContentsForAuthorize(site))
+                    {
+                        ResourceInfo resourceInfo = flowContentInformation.resourceInfo;
+                        String version = flowContentInformation.resourceInfo.version;
+                        if (version.equals("*"))
+                        {
+                            version = "Mostrar la última version";
+                        }
+                        Object[] rowData =
+                        {
+                            resourceInfo, resourceInfo.page.site.title, resourceInfo.page.title, version
+                        };
+                        model.addRow(rowData);
+                    }
+                }
+                if (this.jRadioButtonAll.isSelected())
+                {
+                    for (FlowContentInformation flowContentInformation : OfficeApplication.getOfficeApplicationProxy().getAllContents(site))
+                    {
+                        ResourceInfo resourceInfo = flowContentInformation.resourceInfo;
+                        String version = flowContentInformation.resourceInfo.version;
+                        if (version.equals("*"))
+                        {
+                            version = "Mostrar la última version";
+                        }
+                        Object[] rowData =
+                        {
+                            resourceInfo, resourceInfo.page.site.title, resourceInfo.page.title, version
+                        };
+                        model.addRow(rowData);
+                    }
+                }
             }
         }
         catch (Exception e)
@@ -123,9 +180,9 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         jPanelContents = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jComboBoxSites = new javax.swing.JComboBox();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        jRadioButtonAll = new javax.swing.JRadioButton();
+        jRadioButtonMyContents = new javax.swing.JRadioButton();
+        jRadioButtonForAuthorize = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableContents = new javax.swing.JTable();
 
@@ -203,15 +260,30 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
 
         jPanel4.setPreferredSize(new java.awt.Dimension(100, 30));
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setText("Todos");
+        buttonGroup1.add(jRadioButtonAll);
+        jRadioButtonAll.setText("Todos");
+        jRadioButtonAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonAllActionPerformed(evt);
+            }
+        });
 
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setSelected(true);
-        jRadioButton2.setText("Mis contenidos");
+        buttonGroup1.add(jRadioButtonMyContents);
+        jRadioButtonMyContents.setSelected(true);
+        jRadioButtonMyContents.setText("Mis contenidos");
+        jRadioButtonMyContents.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMyContentsActionPerformed(evt);
+            }
+        });
 
-        buttonGroup1.add(jRadioButton3);
-        jRadioButton3.setText("Por autorizar");
+        buttonGroup1.add(jRadioButtonForAuthorize);
+        jRadioButtonForAuthorize.setText("Por autorizar");
+        jRadioButtonForAuthorize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonForAuthorizeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -220,11 +292,11 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jComboBoxSites, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton1)
+                .addComponent(jRadioButtonAll)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton2)
+                .addComponent(jRadioButtonMyContents)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton3)
+                .addComponent(jRadioButtonForAuthorize)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -233,9 +305,9 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
                 .addGap(5, 5, 5)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxSites, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton3)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton1))
+                    .addComponent(jRadioButtonForAuthorize)
+                    .addComponent(jRadioButtonMyContents)
+                    .addComponent(jRadioButtonAll))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -260,6 +332,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
                 return canEdit [columnIndex];
             }
         });
+        jTableContents.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jTableContents);
 
         jPanelContents.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -282,30 +355,113 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
 
     private void jButtonSeeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonSeeActionPerformed
     {//GEN-HEADEREND:event_jButtonSeeActionPerformed
-        if(this.jTableContents.getSelectedRow()!=-1)
+        if (this.jTableContents.getSelectedRow() != -1)
         {
-            DefaultTableModel model=(DefaultTableModel)this.jTableContents.getModel();
-            ResourceInfo info=(ResourceInfo)model.getValueAt(this.jTableContents.getSelectedRow(), 0);
-            String version=info.version;
-            
+            DefaultTableModel model = (DefaultTableModel) this.jTableContents.getModel();
+            ResourceInfo info = (ResourceInfo) model.getValueAt(this.jTableContents.getSelectedRow(), 0);
+            String version = info.version;
+
         }
     }//GEN-LAST:event_jButtonSeeActionPerformed
 
     private void jButtonAuthorizeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAuthorizeActionPerformed
     {//GEN-HEADEREND:event_jButtonAuthorizeActionPerformed
-        if(this.jTableContents.getSelectedRow()!=-1)
+        if (this.jTableContents.getSelectedRow() != -1)
         {
-            DefaultTableModel model=(DefaultTableModel)this.jTableContents.getModel();
+            DefaultTableModel model = (DefaultTableModel) this.jTableContents.getModel();
+            int row=this.jTableContents.getSelectedRow();
+            ResourceInfo resourceInfo=(ResourceInfo)model.getValueAt(row, 0);
+            try
+            {
+                DialogAuthorize dialogAuthorize=new DialogAuthorize("Autorizar contenido");
+                dialogAuthorize.setVisible(true);
+                if(!dialogAuthorize.cancel)
+                {
+                    OfficeApplication.getOfficeApplicationProxy().authorize(resourceInfo, dialogAuthorize.jTextAreaMessage.getText().trim());
+                    loadContents();
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }//GEN-LAST:event_jButtonAuthorizeActionPerformed
 
     private void jButtonRejectActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonRejectActionPerformed
     {//GEN-HEADEREND:event_jButtonRejectActionPerformed
-        if(this.jTableContents.getSelectedRow()!=-1)
+        if (this.jTableContents.getSelectedRow() != -1)
         {
-            DefaultTableModel model=(DefaultTableModel)this.jTableContents.getModel();
+            DefaultTableModel model = (DefaultTableModel) this.jTableContents.getModel();
+            int row=this.jTableContents.getSelectedRow();
+            ResourceInfo resourceInfo=(ResourceInfo)model.getValueAt(row, 0);
+            try
+            {
+                DialogAuthorize dialogAuthorize=new DialogAuthorize("Rechazar contenido");
+                dialogAuthorize.setVisible(true);
+                if(!dialogAuthorize.cancel)
+                {
+                    OfficeApplication.getOfficeApplicationProxy().reject(resourceInfo, dialogAuthorize.jTextAreaMessage.getText().trim());
+                    loadContents();
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }//GEN-LAST:event_jButtonRejectActionPerformed
+
+    private void jRadioButtonAllActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jRadioButtonAllActionPerformed
+    {//GEN-HEADEREND:event_jRadioButtonAllActionPerformed
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        try
+        {
+            loadContents();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+    }//GEN-LAST:event_jRadioButtonAllActionPerformed
+
+    private void jRadioButtonMyContentsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jRadioButtonMyContentsActionPerformed
+    {//GEN-HEADEREND:event_jRadioButtonMyContentsActionPerformed
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        try
+        {
+            loadContents();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+    }//GEN-LAST:event_jRadioButtonMyContentsActionPerformed
+
+    private void jRadioButtonForAuthorizeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jRadioButtonForAuthorizeActionPerformed
+    {//GEN-HEADEREND:event_jRadioButtonForAuthorizeActionPerformed
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        try
+        {
+            loadContents();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+    }//GEN-LAST:event_jRadioButtonForAuthorizeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -318,9 +474,9 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
     private javax.swing.JPanel jPanelCommands;
     private javax.swing.JPanel jPanelContents;
     private javax.swing.JPanel jPanelTools;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
+    private javax.swing.JRadioButton jRadioButtonAll;
+    private javax.swing.JRadioButton jRadioButtonForAuthorize;
+    private javax.swing.JRadioButton jRadioButtonMyContents;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableContents;
     private javax.swing.JToolBar jToolBar1;

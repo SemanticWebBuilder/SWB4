@@ -84,6 +84,7 @@ public class SummaryPublish extends javax.swing.JPanel
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
 
     }

@@ -75,6 +75,7 @@ public class SelectVersionToOpen extends WizardPage
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
         this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }

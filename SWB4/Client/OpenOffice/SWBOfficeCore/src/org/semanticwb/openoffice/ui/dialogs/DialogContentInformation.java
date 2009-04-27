@@ -65,11 +65,13 @@ public class DialogContentInformation extends javax.swing.JDialog
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
         ListSelectionModel listSelectionModel = jTablePages.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
 
+            @Override
             public void valueChanged(ListSelectionEvent e)
             {
                 jButtonEdit.setEnabled(false);
@@ -88,7 +90,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         listSelectionModel = jTableSummary1.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
-
+            @Override
             public void valueChanged(ListSelectionEvent e)
             {
                 jButtonViewVersion.setEnabled(false);
@@ -112,6 +114,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             }
             catch (Exception e)
             {
+                e.printStackTrace();
                 date = "No fue posible obtener la fecha de actualización.";
             }
             this.jLabel1DisplayDateOfModification.setText(date);
@@ -229,6 +232,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             this.contentId = contentId;
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column)
         {
@@ -280,13 +284,14 @@ public class DialogContentInformation extends javax.swing.JDialog
                 String date = OfficeApplication.iso8601dateFormat.format(versionInfo.created);
                 Object[] rowData =
                 {
-                    versionInfo.nameOfVersion, date, versionInfo.user,versionInfo.published
+                    versionInfo.nameOfVersion, date, versionInfo.user, versionInfo.published
                 };
                 model.addRow(rowData);
             }
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
 
     }
@@ -717,6 +722,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage(), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -756,7 +762,30 @@ public class DialogContentInformation extends javax.swing.JDialog
                 boolean newactive = (Boolean) model.getValueAt(i, 3);
                 if (resourceInfo.active != newactive)
                 {
-                    OfficeApplication.getOfficeDocumentProxy().activateResource(resourceInfo, newactive);
+                    if (resourceInfo.active)
+                    {
+                        if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(resourceInfo))
+                        {
+                            int res = JOptionPane.showConfirmDialog(null, "El contenido necesita ser autorizado para presentarse en el sitio.\r\n¿Desea enviarlo a autorización?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            if (res == JOptionPane.YES_OPTION)
+                            {
+                                DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
+                                dialogSelectFlow.setVisible(true);
+                                if (dialogSelectFlow.selected != null)
+                                {
+                                    OfficeApplication.getOfficeDocumentProxy().sendToAuthorize(resourceInfo, dialogSelectFlow.selected, dialogSelectFlow.jTextAreaMessage.getText().trim());
+                                }
+                                else
+                                {
+                                    JOptionPane.showMessageDialog(null, "¡Para activar este contenido debe ser autorizado primero!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            OfficeApplication.getOfficeDocumentProxy().activateResource(resourceInfo, newactive);
+                        }
+                    }
                 }
 
                 if (model.getValueAt(i, 4) instanceof VersionInfo)
@@ -812,7 +841,7 @@ public class DialogContentInformation extends javax.swing.JDialog
             ResourceInfo porlet = (ResourceInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
             try
             {
-                int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la publicación del contenido con titulo " + porlet.title + " de la página " + porlet.page.title + "?", this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la publicación del contenido con titulo " + porlet.title + " de la página " + porlet.page.title + "?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
                     this.jButtonDeletePage.setEnabled(false);
@@ -943,16 +972,16 @@ public class DialogContentInformation extends javax.swing.JDialog
         {
             DefaultTableModel model = (DefaultTableModel) this.jTableSummary1.getModel();
             String versionInfo = (String) model.getValueAt(this.jTableSummary1.getSelectedRow(), 0);
-            boolean published=(Boolean) model.getValueAt(this.jTableSummary1.getSelectedRow(), 3);
-            if(published)
+            boolean published = (Boolean) model.getValueAt(this.jTableSummary1.getSelectedRow(), 3);
+            if (published)
             {
-                JOptionPane.showMessageDialog(this,"¡No se puede borrar una versión que ha sido publicada.!\r\nDebe borrar primero la publicación del contenido.","Borrado de versión de contenido",JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "¡No se puede borrar una versión que ha sido publicada.!\r\nDebe borrar primero la publicación del contenido.", "Borrado de versión de contenido", JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return;
             }
             try
             {
-                int res=JOptionPane.showConfirmDialog(this, "¿Desea borrar la versión "+ versionInfo +"?","Borrado de versión de contenido",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-                if(res==JOptionPane.YES_OPTION)
+                int res = JOptionPane.showConfirmDialog(this, "¿Desea borrar la versión " + versionInfo + "?", "Borrado de versión de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (res == JOptionPane.YES_OPTION)
                 {
                     try
                     {
@@ -960,7 +989,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                         OfficeApplication.getOfficeDocumentProxy().deleteVersionOfContent(repository, contentId, versionInfo);
                         loadVersions();
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         e.printStackTrace();
                     }
@@ -970,7 +999,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }

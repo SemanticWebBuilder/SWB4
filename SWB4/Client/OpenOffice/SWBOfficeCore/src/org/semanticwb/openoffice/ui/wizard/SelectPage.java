@@ -225,6 +225,7 @@ public class SelectPage extends WizardPage
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
     }
 

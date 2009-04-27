@@ -131,6 +131,7 @@ public final class ConfigurationListURI
                     }
                     catch (URISyntaxException ex)
                     {
+                        ex.printStackTrace();
                         ErrorLog.log(ex);
                     }
                 }

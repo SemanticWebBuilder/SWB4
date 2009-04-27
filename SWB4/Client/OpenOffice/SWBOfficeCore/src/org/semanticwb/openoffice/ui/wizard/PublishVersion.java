@@ -57,6 +57,7 @@ public class PublishVersion extends WizardPage
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
     }
 

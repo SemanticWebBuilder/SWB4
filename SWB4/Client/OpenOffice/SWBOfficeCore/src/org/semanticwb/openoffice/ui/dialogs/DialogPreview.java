@@ -255,6 +255,7 @@ public class DialogPreview extends java.awt.Dialog
                 }
                 catch (Exception e)
                 {
+                    e.printStackTrace();
                 }
 
             }

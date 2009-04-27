@@ -314,11 +314,11 @@ public class DialogEditPorlet extends javax.swing.JDialog
             boolean[] canEdit = new boolean [] {
                 false, true
             };
-
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
-
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
@@ -340,6 +340,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jButtonAddCalendar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonAddCalendar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButtonAddCalendar.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddCalendarActionPerformed(evt);
             }
@@ -354,6 +355,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jButtonEditEcheduler.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonEditEcheduler.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButtonEditEcheduler.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEditEchedulerActionPerformed(evt);
             }
@@ -368,6 +370,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
         jButtonDeleteScheduler.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonDeleteScheduler.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButtonDeleteScheduler.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteSchedulerActionPerformed(evt);
             }
@@ -424,6 +427,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     }
     catch(Exception e)
     {
+        e.printStackTrace();
         JOptionPane.showMessageDialog(this, e.getMessage(), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
         return;
     }
