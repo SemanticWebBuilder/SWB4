@@ -921,6 +921,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             resource.setResourceType(resourceType);
             officeResource.setContent(contentId);
             resource.setResourceType(resourceType);
+            org.semanticwb.model.User creator=SWBContext.getAdminRepository().getUserByLogin(user);
+            resource.setCreator(creator);
             officeResource.setRepositoryName(repositoryName);
             resource.setTitle(title);
             resource.setPriority(1);
