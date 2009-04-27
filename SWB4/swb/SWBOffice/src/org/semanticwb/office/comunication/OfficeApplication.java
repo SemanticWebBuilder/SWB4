@@ -715,11 +715,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return contents.toArray(new FlowContentInformation[contents.size()]);
     }
-
-    public void sendContentToAuthorize(ResourceInfo resourceInfo, String message) throws Exception
-    {
-    }
-
+    
     public void authorize(ResourceInfo resourceInfo, String message) throws Exception
     {
         Resource resource=SWBContext.getWebSite(resourceInfo.page.site.id).getResource(resourceInfo.id);
