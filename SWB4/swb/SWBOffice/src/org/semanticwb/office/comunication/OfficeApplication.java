@@ -697,8 +697,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         org.semanticwb.model.User wbuser = SWBContext.getAdminRepository().getUserByLogin(user);
         HashSet<FlowContentInformation> contents = new HashSet<FlowContentInformation>();
         for (Resource res : SWBPortal.getPFlowManager().getContentsAtFlowOfUser(wbuser, site))
-        {
-            OfficeResource r = new OfficeResource();
+        {            
             for (String type : OfficeDocument.getOfficeTypes())
             {
                 ResourceType resourceType = site.createResourceType(type);
