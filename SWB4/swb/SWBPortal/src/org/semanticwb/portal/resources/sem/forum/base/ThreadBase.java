@@ -11,6 +11,8 @@ public class ThreadBase extends org.semanticwb.model.WebPage implements org.sema
     public static final org.semanticwb.platform.SemanticProperty frm_thReplyCount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#thReplyCount");
     public static final org.semanticwb.platform.SemanticProperty frm_thLastPostDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#thLastPostDate");
     public static final org.semanticwb.platform.SemanticProperty frm_thBody=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#thBody");
+    public static final org.semanticwb.platform.SemanticClass frm_Attachment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Attachment");
+    public static final org.semanticwb.platform.SemanticProperty frm_hasThAttachments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#hasThAttachments");
     public static final org.semanticwb.platform.SemanticClass frm_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Post");
     public static final org.semanticwb.platform.SemanticProperty frm_hasPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#hasPost");
     public static final org.semanticwb.platform.SemanticClass frm_Thread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Thread");
@@ -139,6 +141,27 @@ public class ThreadBase extends org.semanticwb.model.WebPage implements org.sema
     public void setBody(String thBody)
     {
         getSemanticObject().setProperty(frm_thBody, thBody);
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachments()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment>(getSemanticObject().listObjectProperties(frm_hasThAttachments));
+    }
+
+    public boolean hasAttachment(org.semanticwb.portal.resources.sem.forum.Attachment attachment)
+    {
+        if(attachment==null)return false;        return getSemanticObject().hasObjectProperty(frm_hasThAttachments,attachment.getSemanticObject());
+    }
+
+    public org.semanticwb.portal.resources.sem.forum.Attachment getAttachment()
+    {
+         org.semanticwb.portal.resources.sem.forum.Attachment ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_hasThAttachments);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.portal.resources.sem.forum.Attachment)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> listPosts()
