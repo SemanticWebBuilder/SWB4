@@ -2507,7 +2507,7 @@
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_resourceOWL">
         <rdfs:label xml:lang="en">OWL File</rdfs:label>
-        <rdfs:label>Archivo OWL{@es)</rdfs:label>
+        <rdfs:label xml:lang="es">Archivo OWL</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >55</swb:index>
       </swbxf:DisplayProperty>
