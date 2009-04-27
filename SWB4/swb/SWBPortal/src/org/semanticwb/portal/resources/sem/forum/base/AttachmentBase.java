@@ -9,6 +9,8 @@ public class AttachmentBase extends org.semanticwb.model.SWBClass implements org
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticProperty frm_atFileSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#atFileSize");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+    public static final org.semanticwb.platform.SemanticClass frm_Thread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Thread");
+    public static final org.semanticwb.platform.SemanticProperty frm_atThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#atThread");
     public static final org.semanticwb.platform.SemanticProperty frm_atFileName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#atFileName");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticClass frm_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Post");
@@ -118,6 +120,27 @@ public class AttachmentBase extends org.semanticwb.model.SWBClass implements org
     public void setUpdated(java.util.Date updated)
     {
         getSemanticObject().setDateProperty(swb_updated, updated);
+    }
+
+    public void setThread(org.semanticwb.portal.resources.sem.forum.Thread thread)
+    {
+        getSemanticObject().setObjectProperty(frm_atThread, thread.getSemanticObject());
+    }
+
+    public void removeThread()
+    {
+        getSemanticObject().removeProperty(frm_atThread);
+    }
+
+    public org.semanticwb.portal.resources.sem.forum.Thread getThread()
+    {
+         org.semanticwb.portal.resources.sem.forum.Thread ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_atThread);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.portal.resources.sem.forum.Thread)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public String getFileName()
