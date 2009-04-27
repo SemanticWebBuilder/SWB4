@@ -159,6 +159,20 @@
                         <%=postSize%>
                     </td>
                 </tr>
+                <tr>
+                    <td class="catleft">Número de Archivos adjuntos</td>
+                    <%
+                int attchmentsSize = 0;
+                GenericIterator<Attachment> itattach = thread.listAttachments();
+                while (itattach.hasNext()) {
+                    itattach.next();
+                    attchmentsSize++;
+                }
+                    %>
+                    <td class="catleft">
+                        <%=attchmentsSize%>
+                    </td>
+                </tr>
                 <form name="removeThread" action="<%=actionURL.toString()%>">
                     <input type="hidden" name="threadUri" value="<%=thread.getURI()%>">
                     <input type="hidden" name="forumUri" value="<%=request.getParameter("forumUri")%>">
