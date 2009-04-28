@@ -421,7 +421,7 @@ public class TestAdminWebSite {
     {
         WebSite site=SWBContext.getAdminWebSite();
         System.out.println("********"+SWBUtils.getApplicationPath());
-        File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin2.rdf");
+        File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin.rdf");
         try
         {
             System.out.println("file:"+file.getCanonicalPath());
@@ -431,12 +431,36 @@ public class TestAdminWebSite {
 
         site=SWBContext.getOntEditor();
         System.out.println("********"+SWBUtils.getApplicationPath());
-        file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBOntEdit2.rdf");
+        file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBOntEdit.rdf");
         try
         {
             System.out.println("file:"+file.getCanonicalPath());
             FileOutputStream out=new FileOutputStream(file);
             site.getSemanticObject().getModel().write(out);
+        }catch(Exception e){e.printStackTrace();}
+    }
+
+    @Test
+    public void writeAdminNT()
+    {
+        WebSite site=SWBContext.getAdminWebSite();
+        System.out.println("********"+SWBUtils.getApplicationPath());
+        File file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBAdmin.nt");
+        try
+        {
+            System.out.println("file:"+file.getCanonicalPath());
+            FileOutputStream out=new FileOutputStream(file);
+            site.getSemanticObject().getModel().write(out,"N-TRIPLE");
+        }catch(Exception e){e.printStackTrace();}
+
+        site=SWBContext.getOntEditor();
+        System.out.println("********"+SWBUtils.getApplicationPath());
+        file=new File(SWBUtils.getApplicationPath()+"../web/swbadmin/rdf/SWBOntEdit.nt");
+        try
+        {
+            System.out.println("file:"+file.getCanonicalPath());
+            FileOutputStream out=new FileOutputStream(file);
+            site.getSemanticObject().getModel().write(out,"N-TRIPLE");
         }catch(Exception e){e.printStackTrace();}
     }
 

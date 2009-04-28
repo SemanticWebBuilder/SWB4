@@ -7,6 +7,7 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.db.DBConnection;
 import com.hp.hpl.jena.db.IDBConnection;
+import com.hp.hpl.jena.db.ModelRDB;
 import com.hp.hpl.jena.db.impl.Driver_MySQL_SWB;
 import com.hp.hpl.jena.db.impl.IRDBDriver;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -18,14 +19,16 @@ import com.hp.hpl.jena.sdb.SDBFactory;
 import com.hp.hpl.jena.sdb.StoreDesc;
 import com.hp.hpl.jena.sdb.Store;
 import com.hp.hpl.jena.query.Dataset;
-import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.NsIterator;
 import com.hp.hpl.jena.sdb.sql.SDBConnection;
-import com.hp.hpl.jena.sdb.sql.SDBConnection_SWB;
+import com.hp.hpl.jena.sdb.store.DatabaseType;
+import com.hp.hpl.jena.sdb.store.LayoutType;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,6 +40,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.db.DBConnectionPool;
+import org.semanticwb.rdf.RemoteGraph;
 
 /**
  *
@@ -89,7 +93,7 @@ public class SemanticMgr implements SWBInstanceObject
 
         if(SWB_PERSIST.equalsIgnoreCase("sdb"))
         {
-            StoreDesc sd=new StoreDesc("layout2", M_DB);
+            StoreDesc sd=new StoreDesc(LayoutType.LayoutTripleNodesHash,DatabaseType.fetch(M_DB));
             //SDBConnection con=new SDBConnection(M_DB_URL, M_DB_USER, M_DB_PASSWD);
             SDBConnection con=new SDBConnection(SWBUtils.DB.getDefaultPool().newAutoConnection());
             //SDBConnection con=new SDBConnection_SWB();
@@ -98,6 +102,7 @@ public class SemanticMgr implements SWBInstanceObject
             List list=store.getConnection().getTableNames();
             if(!list.contains("nodes") && !list.contains("triples") && !list.contains("quads"))
             {
+                log.event("Formating Database Tables...");
                 store.getTableFormatter().create();
             }            
         }else
@@ -192,7 +197,47 @@ public class SemanticMgr implements SWBInstanceObject
 //        if(SWBPlatform.isUseDB())m_ontology.addSubModel(m_system,false);
 
         loadDBModels();
+
+        loadRemoteModel("DBPedia", "http://dbpedia.org/sparql", "http://dbpedia.org/resource/",false);
+        loadRemoteModel("Books", "http://www.sparql.org/books", "http://example.org/book/",false);
+
         m_ontology.rebind();
+    }
+
+    public Model loadRDFRemoteModel(String uri)
+    {
+        Model model=null;
+        try
+        {
+            URLConnection u=new URL(uri).openConnection();
+            u.connect();
+            model=ModelFactory.createModelForGraph(new RemoteGraph(uri));
+            log.info("-->Loading Remote Model:"+uri);
+        }catch(Exception e)
+        {
+            log.warn("-->Can´t create remote model:"+uri);
+            //log.error("-->"+e.getMessage());
+        }
+        return model;
+    }
+
+    public SemanticModel loadRemoteModel(String name, String uri, String baseNS, boolean add2Ontology)
+    {
+        SemanticModel m=null;
+        Model model=loadRDFRemoteModel(uri);
+        if(model!=null)
+        {
+            m=new SemanticModel(name, model);
+            m.setNameSpace(baseNS);
+            //TODO:notify this
+            m_models.put(name, m);
+            m_nsmodels.put(baseNS, m);
+            log.debug("Add NS:"+baseNS+" "+m.getName());
+            m_imodels.put(m.getRDFModel(), m);
+            //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
+            if(add2Ontology)m_ontology.addSubModel(m,false);
+        }
+        return m;
     }
     
     public Model loadRDFFileModel(String path)
@@ -353,9 +398,10 @@ public class SemanticMgr implements SWBInstanceObject
             try
             {
                 Model m = ModelFactory.createDefaultModel() ;
-                FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/adminFile", "/swbadmin/rdf/SWBAdmin.rdf"));
-                m.read(in, null);
+                FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/adminFile", "/swbadmin/rdf/SWBAdmin.nt"));
+                m.read(in, null,"N-TRIPLE");
                 omodel.addSubModel(m,true);
+                in.close();
             }catch(Exception e){log.warn(e.getMessage());}
             model=omodel;
         }else if(name.equals(SWBAdmin))
@@ -367,8 +413,27 @@ public class SemanticMgr implements SWBInstanceObject
                 it.close();
                 try
                 {
-                    FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/adminFile", "/swbadmin/rdf/SWBAdmin.rdf"));
-                    model.read(in, null);
+                    FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/adminFile", "/swbadmin/rdf/SWBAdmin.nt"));
+                    if(model instanceof ModelRDB)
+                    {
+                        ModelRDB m=(ModelRDB)model;
+                        try
+                        {
+                            //m.setDoDuplicateCheck( false );
+                            m.begin();
+                            m.read(in, null, "N-TRIPLE");
+                            in.close();
+                        }catch(Exception e){log.error(e);}
+                        finally
+                        {
+                            m.commit();
+                            //m.setDoDuplicateCheck(true);
+                        }
+                    }else
+                    {
+                        model.read(in, null, "N-TRIPLE");
+                        in.close();
+                    }
                 }catch(Exception e){log.warn(e.getMessage());}
             }
         }else if(name.equals(SWBOntEdit) && !SWBPlatform.getEnv("swb/adminDev", "false").equalsIgnoreCase("true"))
@@ -378,9 +443,10 @@ public class SemanticMgr implements SWBInstanceObject
             try
             {
                 Model m = ModelFactory.createDefaultModel() ;
-                FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/ontEditFile", "/swbadmin/rdf/SWBOntEdit.rdf"));
-                m.read(in, null);
+                FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/ontEditFile", "/swbadmin/rdf/SWBOntEdit.nt"));
+                m.read(in, null, "N-TRIPLE");
                 omodel.addSubModel(m,true);
+                in.close();
             }catch(Exception e){log.warn(e.getMessage());}
             model=omodel;
         }else if(name.equals(SWBOntEdit))
@@ -392,8 +458,27 @@ public class SemanticMgr implements SWBInstanceObject
                 it.close();
                 try
                 {
-                    FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/ontEditFile", "/swbadmin/rdf/SWBOntEdit.rdf"));
-                    model.read(in, null);
+                    FileInputStream in=new FileInputStream(SWBUtils.getApplicationPath()+SWBPlatform.getEnv("swb/ontEditFile", "/swbadmin/rdf/SWBOntEdit.nt"));
+                    if(model instanceof ModelRDB)
+                    {
+                        ModelRDB m=(ModelRDB)model;
+                        try
+                        {
+                            //m.setDoDuplicateCheck( false );
+                            m.begin();
+                            m.read(in, null, "N-TRIPLE");
+                            in.close();
+                        }catch(Exception e){log.error(e);}
+                        finally
+                        {
+                            m.commit();
+                            //m.setDoDuplicateCheck(true);
+                        }
+                    }else
+                    {
+                        model.read(in, null, "N-TRIPLE");
+                        in.close();
+                    }
                 }catch(Exception e){log.warn(e.getMessage());}
             }
         }
@@ -422,8 +507,17 @@ public class SemanticMgr implements SWBInstanceObject
 
     public SemanticModel createModelByRDF(String name, String namespace, InputStream in)
     {
+        return createModelByRDF(name, namespace, in, null);
+    }
+
+    public SemanticModel createModelByRDF(String name, String namespace, InputStream in,String lang)
+    {
         SemanticModel ret=createModel(name, namespace);
-        ret.getRDFModel().read(in, "");
+        ret.getRDFModel().read(in, null,lang);
+        try
+        {
+            in.close();
+        }catch(Exception e){log.error(e);}
         return ret;
     }
      
@@ -435,7 +529,13 @@ public class SemanticMgr implements SWBInstanceObject
         m_nsmodels.remove(model.getNameSpace());
         m_imodels.remove(model.getRDFModel());
         m_ontology.removeSubModel(model,true);
-        maker.removeModel(name);
+        if(SWB_PERSIST.equals("sdb"))
+        {
+            model.getRDFModel().removeAll();
+        }else
+        {
+            maker.removeModel(name);
+        }
     }
         
     

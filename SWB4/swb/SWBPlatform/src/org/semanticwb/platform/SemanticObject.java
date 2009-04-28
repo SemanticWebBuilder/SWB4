@@ -170,15 +170,15 @@ public class SemanticObject
         SemanticObject ret=getSemanticObject(id);
         if(ret==null)
         {
-            //System.out.println("res1:"+res+" "+id);
-            //if(hasCache)
-            {
-                if(res.getURI()!=null && (res.getModel()==SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel() || res.getModel()==SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel()))
-                {
-                    res=SWBPlatform.getSemanticMgr().getOntology().getResource(res.getURI());
-                }
-            }
-            //System.out.println("res2:"+res+" "+id);
+//            //System.out.println("res1:"+res+" "+id);
+//            //if(hasCache)
+//            {
+//                if(res.getURI()!=null && (res.getModel()==SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel() || res.getModel()==SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel()))
+//                {
+//                    res=SWBPlatform.getSemanticMgr().getOntology().getResource(res.getURI());
+//                }
+//            }
+//            //System.out.println("res2:"+res+" "+id);
             ret=new SemanticObject(res);
             m_objs.put(id, ret);
         }

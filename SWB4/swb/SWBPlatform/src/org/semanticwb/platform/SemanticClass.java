@@ -429,6 +429,16 @@ public class SemanticClass
         }
     }
 
+    public Iterator<SemanticObject> listSchemaInstances()
+    {
+        return listSchemaInstances(false);
+    }
+
+    public Iterator<SemanticObject> listSchemaInstances(boolean direct)
+    {
+        return new SemanticObjectIterator(m_class.listInstances(direct));
+    }
+
     public Iterator listGenericInstances()
     {
         return listGenericInstances(false);
@@ -437,6 +447,16 @@ public class SemanticClass
     public Iterator listGenericInstances(boolean direct)
     {
         return new GenericIterator(listInstances(direct));
+    }
+
+    public Iterator listSchemaGenericInstances()
+    {
+        return listSchemaGenericInstances(false);
+    }
+
+    public Iterator listSchemaGenericInstances(boolean direct)
+    {
+        return new GenericIterator(listSchemaInstances(direct));
     }
 
     public SemanticProperty getProperty(String name)

@@ -148,15 +148,15 @@ public class SemanticOntology
         return ret;
     }
     
-    public SemanticClass getSemanticObjectClass(Resource res)
-    {
-        Statement stm=res.getRequiredProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
-        if(stm!=null)
-        {
-            return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
-        }
-        return null;
-    }    
+//    public SemanticClass getSemanticObjectClass(Resource res)
+//    {
+//        Statement stm=res.getRequiredProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
+//        if(stm!=null)
+//        {
+//            return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+//        }
+//        return null;
+//    }
     
     public SemanticObject getSemanticObject(String uri)
     {
