@@ -345,7 +345,7 @@ public class PFlowManager
                                                     long milliseconds = ((hours * 3600) + (days * 86400)) * 1000;
                                                     Date timestart = instance.getTime();
                                                     long timefirst = timestart.getTime() + milliseconds;
-                                                // TODO :Como controlar las altertas de tiempo
+                                                // TODO:Como controlar las altertas de tiempo
                                                     /*ControlFlow alert = new ControlFlow(occ, new java.util.Date(timefirst), activityName);
                                                 PFlowSrv.addControlFlow(alert);*/
                                                 }
