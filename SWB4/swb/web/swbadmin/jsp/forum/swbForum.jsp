@@ -43,10 +43,10 @@
 
         <table class="forumline" width="95%" cellspacing="3" cellpadding="3" align="center">
         <tr>
-    <th class="thtop" colspan="2"><font color="#FFFFFF">Autor</font></td>
-    <th class="thtop" colspan="4" align="center"><font color="#FFFFFF">This topic has been viewed <%=thread.getViewCount()%> times and has <%=thread.getReplyCount()%> replies</font></td>
-</tr>
-<tr>
+            <th class="thtop" colspan="2">Autor</th>
+            <th class="thtop" colspan="4" align="center"><%=paramRequest.getLocaleString("topicViews")%> <%=thread.getViewCount()%> times and has <%=thread.getReplyCount()%> replies</th>
+        </tr>
+    <tr>
     <td colspan="2" class="catleft">
         <%if (thread.getCreator() != null) {%>
         <%=thread.getCreator().getName()%>
@@ -63,31 +63,31 @@
         <br/>
         <%=thread.getCreated()%>
     </td>
-</tr>
-<tr>
+    </tr>
+    <tr>
     <td colspan="2" class="catleft">
         &nbsp;
     </td>
     <td colspan="4" class="catleft">
         <%url.setMode("replyPost");%>
-        <a href="<%=url.toString()%>">replicar</a>/
+        <a href="<%=url.toString()%>"><%=paramRequest.getLocaleString("reply")%></a>/
         <%url.setMode("editThread");
             url.setParameter("postUri", thread.getURI());
         %>
-        <a href="<%=url.toString()%>">Editar</a>/
+        <a href="<%=url.toString()%>"><%=paramRequest.getLocaleString("edit")%></a>/
         <%url.setMode(url.Mode_VIEW);
             url.setAction("removePost");
         %>
-        <a href="<%=url.toString()%>&isthread=1">Eliminar Tema</a>
+        <a href="<%=url.toString()%>&isthread=1"><%=paramRequest.getLocaleString("remove")%></a>
     </td>
-</tr>
+    </tr>
 <%
             GenericIterator<Post> itPost = thread.listPosts();
             while (itPost.hasNext()) {
                 Post post = itPost.next();
                 url.setParameter("postUri", post.getURI());
 %>
-<tr>
+    <tr>
     <td colspan="2" class="catleft">
         <%if (post.getCreator() != null) {%>
         <%=post.getCreator().getName()%>
@@ -104,25 +104,25 @@
         <br/>
         <%=post.getCreated()%>
     </td>
-</tr>
-<tr>
+    </tr>
+    <tr>
     <td colspan="2" class="catleft">
         &nbsp;
     </td>
     <td colspan="4" class="catleft">
         <%url.setMode("replyPost");%>
-        <a href="<%=url.toString()%>">replicar</a>/
+        <a href="<%=url.toString()%>"><%=paramRequest.getLocaleString("reply")%></a>/
         <%url.setMode("editPost");%>
-        <a href="<%=url.toString()%>">Editar</a>/
+        <a href="<%=url.toString()%>"><%=paramRequest.getLocaleString("edit")%></a>/
         <%url.setMode(url.Mode_VIEW);
     url.setAction("removePost");%>
-        <a href="<%=url.toString()%>">Eliminar Mensaje</a>
+        <a href="<%=url.toString()%>"><%=paramRequest.getLocaleString("remove")%></a>
     </td>
-</tr>
+    </tr>
 <%
             }
 %>
-</table>
+    </table>
 
 <%} else if (action != null && action.equals("removePost")) {
             if (request.getParameter("isthread") != null) {
@@ -132,14 +132,14 @@
 %>
 <table class="forumline" width="100%">
     <tr>
-        <th colspan="2" class="thtop">Tema:<%=thread.getTitle()%></th>
+        <th colspan="2" class="thtop"><%=paramRequest.getLocaleString("thread")%><%=thread.getTitle()%></th>
     </tr>
     <tr>
-        <td  class="catleft">Mensaje</td>
+        <td  class="catleft"><%=paramRequest.getLocaleString("msg")%></td>
         <td  class="catleft"><%=thread.getBody()%></td>
     </tr>
     <tr>
-        <td class="catleft">Autor</td>
+        <td class="catleft"><%=paramRequest.getLocaleString("autor")%></td>
         <td class="catleft">
             <%if (thread.getCreator() != null) {%>
             <%=thread.getCreator().getName()%>
@@ -148,7 +148,7 @@
         </td>
     </tr>
     <tr>
-        <td class="catleft">Número de Mensajes</td>
+        <td class="catleft"><%=paramRequest.getLocaleString("noMsgs")%></td>
         <%
     int postSize = 0;
     GenericIterator<Post> itPost = thread.listPosts();
@@ -162,7 +162,7 @@
         </td>
     </tr>
     <tr>
-        <td class="catleft">Número de Archivos adjuntos</td>
+        <td class="catleft"><%=paramRequest.getLocaleString("noAttachments")%></td>
         <%
     int attchmentsSize = 0;
     GenericIterator<Attachment> itattach = thread.listAttachments();
@@ -190,14 +190,14 @@
 %>
 <table>
     <tr>
-        <td colspan="2">Usted esta a punto de eliminar el siguiente Mensaje:<%=post.getThread().getTitle(lang)%></td>
+        <td colspan="2"><%=paramRequest.getLocaleString("msgRemove")%><%=post.getThread().getTitle(lang)%></td>
     </tr>
     <tr>
-        <td>Cuerpo</td>
+        <td><%=paramRequest.getLocaleString("body")%></td>
         <td><%=post.getBody()%></td>
     </tr>
     <tr>
-        <td>Autor</td>
+        <td><%=paramRequest.getLocaleString("autor")%></td>
         <td>
             <%if (post.getCreator() != null) {%>
             <%=post.getCreator().getName()%>
@@ -206,7 +206,7 @@
         </td>
     </tr>
     <tr>
-        <td>Número de Respuestas</td>
+        <td><%=paramRequest.getLocaleString("noResponse")%></td>
         <%
     int postSize = 0;
     Iterator<Post> itPost = post.listchildPosts();
@@ -218,7 +218,7 @@
         <td><%=postSize%></td>
     </tr>
     <tr>
-        <td>Número de Archivos adjuntos</td>
+        <td><%=paramRequest.getLocaleString("noAttachments")%></td>
         <%
     int attchmentsSize = 0;
     GenericIterator<Attachment> itattach = post.listAttachmentss();
@@ -260,17 +260,16 @@
             </td>
         </tr>
         <tr bgcolor="#666669">
-            <th class="thcornerl" nowrap="nowrap" colspan="2" height="25" align="center" valign="middle">Tema</th>
-            <th class="thtop" nowrap="nowrap" width="50">Autor</th>
-            <th class="thtop" nowrap="nowrap" width="50">Replicas</th>
-            <th class="thtop" nowrap="nowrap" width="50">Vistas</th>
-            <th class="thtop" nowrap="nowrap" width="50">Ultimo mensaje</th>
-            <th class="thtop" nowrap="nowrap" width="50">Favorito</th>
+            <th class="thcornerl" nowrap="nowrap" colspan="2" height="25" align="center" valign="middle"><%=paramRequest.getLocaleString("thread")%></th>
+            <th class="thtop" nowrap="nowrap" width="50"><%=paramRequest.getLocaleString("autor")%></th>
+            <th class="thtop" nowrap="nowrap" width="50"><%=paramRequest.getLocaleString("reply")%></th>
+            <th class="thtop" nowrap="nowrap" width="50"><%=paramRequest.getLocaleString("views")%></th>
+            <th class="thtop" nowrap="nowrap" width="50"><%=paramRequest.getLocaleString("lastMsg")%></th>
+            <th class="thtop" nowrap="nowrap" width="50"><%=paramRequest.getLocaleString("favorite")%></th>
         </tr>
         <%
             url.setMode(url.Mode_VIEW);
             url.setAction("viewPost");
-            boolean flag = false;
             GenericIterator<WebPage> itThreads = webpage.listChilds();
             while (itThreads.hasNext()) {
                 WebPage wp = itThreads.next();
@@ -319,7 +318,7 @@
                         actionURL.setAction("addFavoriteThread");
                         actionURL.setParameter("threadUri", thread.getURI());
                 %>
-                <a href="<%=actionURL.toString()%>">Favorito</a>
+                <a href="<%=actionURL.toString()%>"><%=paramRequest.getLocaleString("favorite")%></a>
                 <%
                     }
                 }
