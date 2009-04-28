@@ -370,7 +370,7 @@ public class SWBAWorkflow extends GenericResource
      */
     public void getResourceTypeCat(Element res, String tm)
     {
-        ////System.out.println("getResouceTypeCat....TM:"+tm+", res: "+res.toString());
+        HashSet<String> resources = new HashSet<String>();
         WebSite map = SWBContext.getWebSite(tm);
         Iterator<ResourceType> elements = map.listResourceTypes();
         while (elements.hasNext())
@@ -378,38 +378,18 @@ public class SWBAWorkflow extends GenericResource
             ResourceType obj = elements.next();
             if (obj.getResourceMode() == 1 || obj.getResourceMode() == 3)
             {
-                Element erole = addNode("resourceType", "" + obj.getId(), obj.getTitle(), res);
-                erole.setAttribute("topicmap", map.getId());
-                erole.setAttribute("topicmapname", map.getTitle());
-                String description = "_";
-                if (obj.getDescription() != null)
+                if (!resources.contains(obj.getId()))
                 {
-                    description = obj.getDescription();
-                }
-                addElement("description", description, erole);
-            }
-        }
-        if (!map.getId().equals(SWBContext.WEBSITE_GLOBAL))
-        {
-            map = SWBContext.getGlobalWebSite();
-            elements = map.listResourceTypes();
-            while (elements.hasNext())
-            {
-                ResourceType obj = elements.next();
-                if (obj.getWebSite().getId().equals(map.getId()))
-                {
-                    if (obj.getResourceMode() == 1 || obj.getResourceMode() == 3)
+                    resources.add(obj.getId());
+                    Element erole = addNode("resourceType", "" + obj.getId(), obj.getTitle(), res);
+                    erole.setAttribute("topicmap", map.getId());
+                    erole.setAttribute("topicmapname", map.getTitle());
+                    String description = "";
+                    if (obj.getDescription() != null)
                     {
-                        Element erole = addNode("resourceType", "" + obj.getId(), obj.getTitle(), res);
-                        erole.setAttribute("topicmap", map.getId());
-                        erole.setAttribute("topicmapname", map.getTitle());
-                        String description = "_";
-                        if (obj.getDescription() != null)
-                        {
-                            description = obj.getDescription();
-                        }
-                        this.addElement("description", description, erole);
+                        description = obj.getDescription();
                     }
+                    addElement("description", description, erole);
                 }
             }
         }
