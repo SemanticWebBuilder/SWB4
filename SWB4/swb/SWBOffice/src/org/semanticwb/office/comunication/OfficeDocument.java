@@ -832,7 +832,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             resourceType.setResourceMode(1);
             resourceType.setResourceClassName(ExcelResource.class.getCanonicalName());
             resourceType.setUpdated(new Date(System.currentTimeMillis()));
-            log.event("Resource  " + EXCEL_RESOURCE_TYPE + " registred in " + site.getTitle() + "...");
+            log.event("Resource  " + EXCEL_RESOURCE_TYPE + " registered in " + site.getTitle() + "...");
         }
         resourceType = site.getResourceType(PPT_RESOURCE_TYPE);
         if (resourceType == null)
@@ -845,7 +845,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             resourceType.setResourceMode(1);
             resourceType.setResourceClassName(PPTResource.class.getCanonicalName());
             resourceType.setUpdated(new Date(System.currentTimeMillis()));
-            log.event("Resource  " + PPT_RESOURCE_TYPE + " registred in " + site.getTitle() + "...");
+            log.event("Resource  " + PPT_RESOURCE_TYPE + " registered in " + site.getTitle() + "...");
         }
         resourceType = site.getResourceType(WORD_RESOURCE_TYPE);
         if (resourceType == null)
@@ -858,7 +858,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             resourceType.setResourceMode(1);
             resourceType.setResourceClassName(WordResource.class.getCanonicalName());
             resourceType.setUpdated(new Date(System.currentTimeMillis()));
-            log.event("Resource  " + WORD_RESOURCE_TYPE + " registred in " + site.getTitle() + "...");
+            log.event("Resource  " + WORD_RESOURCE_TYPE + " registered in " + site.getTitle() + "...");
         }
     }
 
