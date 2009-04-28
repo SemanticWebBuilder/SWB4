@@ -9,7 +9,7 @@
     <!-- ================================================================================== -->
     <target depends="-do-init" name="-uno-project-init">
         <property file="nbproject/project-uno.properties"/>
-        <property name="build.uno.version" value="2.0.3"/>
+        <property name="build.uno.version" value="2.0.4"/>
         <!-- set variablers from SDK and Office -->
         <echo message="setting up UNO environment ..."/>
         <property name="office.unopkg" value="${office.program.dir}${file.separator}unopkg"/>
