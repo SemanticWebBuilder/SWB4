@@ -61,12 +61,14 @@ import org.semanticwb.portal.api.SWBResourceURL;
  *
  * @author Victor Lorenzana
  */
-public class SWBAWorkflow extends GenericResource {
+public class SWBAWorkflow extends GenericResource
+{
 
     private Logger log = SWBUtils.getLogger(SWBAWorkflow.class);
 
     /** Creates a new instance of WBAWorkflow */
-    public SWBAWorkflow() {
+    public SWBAWorkflow()
+    {
     }
 
     /**
@@ -78,10 +80,14 @@ public class SWBAWorkflow extends GenericResource {
      * @throws IOException
      */
     @Override
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if (paramRequest.getMode().equals("gateway")) {
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        if (paramRequest.getMode().equals("gateway"))
+        {
             doGateway(request, response, paramRequest);
-        } else {
+        }
+        else
+        {
             super.processRequest(request, response, paramRequest);
         }
 
@@ -97,7 +103,8 @@ public class SWBAWorkflow extends GenericResource {
      * @param paramRequest
      * @return
      */
-    private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+    private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
+    {
         return getDocument(user, src, cmd, paramRequest, request);
     }
 
@@ -106,11 +113,13 @@ public class SWBAWorkflow extends GenericResource {
      * @param res
      * @param root
      */
-    public void getPermisosGral(Element res, WebPage root) {
+    public void getPermisosGral(Element res, WebPage root)
+    {
 
         ArrayList arr = new ArrayList((Collection) root.listChilds());
 
-        for (int i = 0; i < arr.size(); i++) {
+        for (int i = 0; i < arr.size(); i++)
+        {
             WebPage child = (WebPage) arr.get(i);
             Element etopic = addNode("topic", child.getId(), child.getDisplayName(), res);
             getPermisosGral(etopic, child);
@@ -122,14 +131,17 @@ public class SWBAWorkflow extends GenericResource {
      * @param res
      * @param tm
      */
-    public void getCatalogRoles(Element res, String tm) {
+    public void getCatalogRoles(Element res, String tm)
+    {
         ////System.out.println("getCatalogRoles...");
-        Vector roles = new Vector();
+        Vector<Role> roles = new Vector<Role>();
         //TODO: Cambiar en version 3.1
-        WebSite map = SWBContext.getWebSite(tm);
+        //WebSite map = SWBContext.getWebSite(tm);
+        WebSite map = SWBContext.getAdminWebSite();
 
         Iterator<Role> it = map.getUserRepository().listRoles();
-        while (it.hasNext()) {
+        while (it.hasNext())
+        {
             Role role = it.next();
             roles.add(role);
         ////System.out.println("role:"+role.getTitle());
@@ -137,7 +149,8 @@ public class SWBAWorkflow extends GenericResource {
         }
         Collections.sort(roles, new OrdenaRole());
         Iterator itRoles = roles.iterator();
-        while (itRoles.hasNext()) {
+        while (itRoles.hasNext())
+        {
             Role role = (Role) itRoles.next();
             Element erole = addNode("role", "" + role.getId(), role.getTitle(), res);
             erole.setAttribute("id", "" + role.getId());
@@ -182,13 +195,16 @@ public class SWBAWorkflow extends GenericResource {
      * @param tm
      * @param src
      */
-    public void getWorkflow(Element res, String tm, Document src) {
-        if (src.getElementsByTagName("id").getLength() > 0) {
+    public void getWorkflow(Element res, String tm, Document src)
+    {
+        if (src.getElementsByTagName("id").getLength() > 0)
+        {
             Element eid = (Element) src.getElementsByTagName("id").item(0);
             Text etext = (Text) eid.getFirstChild();
             String id = etext.getNodeValue();
             PFlow pflow = (PFlow) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(id);
-            try {
+            try
+            {
                 String xml = pflow.getXml();
 
                 Document doc = SWBUtils.XML.xmlToDom(xml);
@@ -203,11 +219,15 @@ public class SWBAWorkflow extends GenericResource {
 
                 Node eworkflow = res.getOwnerDocument().importNode(ele, true);
                 res.appendChild(eworkflow);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 e.printStackTrace(System.out);
                 addElement("err", e.getMessage(), res);
             }
-        } else {
+        }
+        else
+        {
             addElement("err", java.util.ResourceBundle.getBundle("org/semanticwb/portal/admin/resources/SWBAWorkflow").getString("err1"), res);
         }
     }
@@ -217,22 +237,29 @@ public class SWBAWorkflow extends GenericResource {
      * @param res
      * @param tm
      */
-    public void getCatalogUsers(Element res, String tm) {
-        Vector users = new Vector();
+    public void getCatalogUsers(Element res, String tm)
+    {
+        Vector<User> users = new Vector<User>();
         //TODO: Cambiar en version 3.1
         //WebSite map=TopicMgr.getInstance().getTopicMap(tm);
-        WebSite map = SWBContext.getWebSite(tm);//AdminWebSite();
+        //WebSite map = SWBContext.getWebSite(tm);//AdminWebSite();
+        WebSite map = SWBContext.getAdminWebSite();
         Iterator<User> it = map.getUserRepository().listUsers();
-        while (it.hasNext()) {
+        while (it.hasNext())
+        {
             User user = it.next();
-            if (map.getUserRepository().getId().equals(user.getUserRepository().getId())) {
-                try {
+            if (map.getUserRepository().getId().equals(user.getUserRepository().getId()))
+            {
+                try
+                {
                     //TODO: user.havePermission
                     //if(user.havePermission(SWBContext.getAdminWebSite().getWebPage("WBAd_per_Administrator")))
                     {
                         users.add(user);
                     }
-                } catch (Exception ue) {
+                }
+                catch (Exception ue)
+                {
                     ue.printStackTrace(System.out);
                     log.error(ue);
                 }
@@ -241,11 +268,15 @@ public class SWBAWorkflow extends GenericResource {
 
         Collections.sort(users, new OrdenaUsuarios());
         Iterator itUsers = users.iterator();
-        while (itUsers.hasNext()) {
+        while (itUsers.hasNext())
+        {
             User user = (User) itUsers.next();
-            try {
+            try
+            {
                 Element erole = addNode("user", "" + user.getId(), user.getName(), res);
-            } catch (Exception ue) {
+            }
+            catch (Exception ue)
+            {
                 ue.printStackTrace(System.out);
                 log.error(ue);
             }
@@ -303,8 +334,10 @@ public class SWBAWorkflow extends GenericResource {
      * @param paramRequest
      * @param request
      */
-    public void update(Element res, Document src, User user, String tm, SWBParamRequest paramRequest, HttpServletRequest request) {
-        try {
+    public void update(Element res, Document src, User user, String tm, SWBParamRequest paramRequest, HttpServletRequest request)
+    {
+        try
+        {
             Element wf = (Element) src.getElementsByTagName("workflow").item(0);
             String id = wf.getAttribute("id");
 //            if(id==null || id.trim().equals(""))
@@ -315,17 +348,22 @@ public class SWBAWorkflow extends GenericResource {
             {
                 String idpflow = wf.getAttribute("id");
 //                PFlowSrv sPFlowSrv=new PFlowSrv();
-                try {
+                try
+                {
                     WorkflowResponse wresp = updatePflow(tm, src, user.getId());
                     addElement("workflowid", idpflow, res);
                     addElement("version", String.valueOf(wresp.getVersion()), res);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     log.error(e);
                     e.printStackTrace(System.out);
                     addElement("err", java.util.ResourceBundle.getBundle("org/semanticwb/portal/admin/resources/SWBAWorkflow").getString("msg1"), res);
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error(e);
             e.printStackTrace(System.out);
             addElement("err", java.util.ResourceBundle.getBundle("org/semanticwb/portal/admin/resources/SWBAWorkflow").getString("msg1") + " error: " + e.getMessage(), res);
@@ -338,35 +376,44 @@ public class SWBAWorkflow extends GenericResource {
      * @param res
      * @param tm
      */
-    public void getResourceTypeCat(Element res, String tm) {
+    public void getResourceTypeCat(Element res, String tm)
+    {
         ////System.out.println("getResouceTypeCat....TM:"+tm+", res: "+res.toString());
         WebSite map = SWBContext.getWebSite(tm);
         Iterator<ResourceType> elements = map.listResourceTypes();
-        while (elements.hasNext()) {
+        while (elements.hasNext())
+        {
             ResourceType obj = elements.next();
-            if (obj.getResourceMode() == 1 || obj.getResourceMode() == 3) {
+            if (obj.getResourceMode() == 1 || obj.getResourceMode() == 3)
+            {
                 Element erole = addNode("resourceType", "" + obj.getId(), obj.getTitle(), res);
                 erole.setAttribute("topicmap", map.getId());
                 erole.setAttribute("topicmapname", map.getTitle());
                 String description = "_";
-                if (obj.getDescription() != null) {
+                if (obj.getDescription() != null)
+                {
                     description = obj.getDescription();
                 }
                 addElement("description", description, erole);
             }
         }
-        if (!map.getId().equals(SWBContext.WEBSITE_GLOBAL)) {
+        if (!map.getId().equals(SWBContext.WEBSITE_GLOBAL))
+        {
             map = SWBContext.getGlobalWebSite();
             elements = map.listResourceTypes();
-            while (elements.hasNext()) {
+            while (elements.hasNext())
+            {
                 ResourceType obj = elements.next();
-                if (obj.getWebSite().getId().equals(map.getId())) {
-                    if (obj.getResourceMode() == 1 || obj.getResourceMode() == 3) {
+                if (obj.getWebSite().getId().equals(map.getId()))
+                {
+                    if (obj.getResourceMode() == 1 || obj.getResourceMode() == 3)
+                    {
                         Element erole = addNode("resourceType", "" + obj.getId(), obj.getTitle(), res);
                         erole.setAttribute("topicmap", map.getId());
                         erole.setAttribute("topicmapname", map.getTitle());
                         String description = "_";
-                        if (obj.getDescription() != null) {
+                        if (obj.getDescription() != null)
+                        {
                             description = obj.getDescription();
                         }
                         this.addElement("description", description, erole);
@@ -385,11 +432,14 @@ public class SWBAWorkflow extends GenericResource {
      * @param request
      * @return
      */
-    public Document getDocument(User user, Document src, String cmd, SWBParamRequest paramRequest, HttpServletRequest request) {
+    public Document getDocument(User user, Document src, String cmd, SWBParamRequest paramRequest, HttpServletRequest request)
+    {
         Document dom = null;
-        try {
+        try
+        {
             String tm = null;
-            if (src.getElementsByTagName("tm").getLength() > 0) {
+            if (src.getElementsByTagName("tm").getLength() > 0)
+            {
                 Node etm = src.getElementsByTagName("tm").item(0);
                 Text etext = (Text) etm.getFirstChild();
                 tm = etext.getNodeValue();
@@ -399,20 +449,31 @@ public class SWBAWorkflow extends GenericResource {
             Element res = dom.createElement("res");
             dom.appendChild(res);
 
-            if (cmd.equals("getcatRoles")) {
+            if (cmd.equals("getcatRoles"))
+            {
                 getCatalogRoles(res, tm);
-            } else if (cmd.equals("getResourceTypeCat")) {
+            }
+            else if (cmd.equals("getResourceTypeCat"))
+            {
                 getResourceTypeCat(res, tm);
-            } else if (cmd.equals("getcatUsers")) {
+            }
+            else if (cmd.equals("getcatUsers"))
+            {
                 getCatalogUsers(res, tm);
-            } else if (cmd.equals("getWorkflow")) {
+            }
+            else if (cmd.equals("getWorkflow"))
+            {
 
 
                 getWorkflow(res, tm, src);
-            } else if (cmd.equals("update")) {
+            }
+            else if (cmd.equals("update"))
+            {
                 update(res, src, user, tm, paramRequest, request);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error(e);
             return getError(3);
         }
@@ -426,9 +487,11 @@ public class SWBAWorkflow extends GenericResource {
      * @param action
      * @return
      */
-    public Document getPath(User user, Document src, String action) {
+    public Document getPath(User user, Document src, String action)
+    {
         Document dom = null;
-        try {
+        try
+        {
             dom = SWBUtils.XML.getNewDocument();
             Element res = dom.createElement("res");
             dom.appendChild(res);
@@ -436,14 +499,16 @@ public class SWBAWorkflow extends GenericResource {
             StringTokenizer st = new StringTokenizer(action, ".");
             String cmd = st.nextToken();
 
-            if (cmd.equals("topic")) {
+            if (cmd.equals("topic"))
+            {
                 String tmid = st.nextToken();
                 String tpid = st.nextToken();
 
                 StringBuffer ret = new StringBuffer();
                 WebPage tp = SWBContext.getWebSite(tmid).getWebPage(tpid);
                 ret.append(tp.getId());
-                while (tp != tp.getWebSite().getHomePage()) {
+                while (tp != tp.getWebSite().getHomePage())
+                {
                     tp = tp.getParent();
                     ret.insert(0, tp.getId() + ".");
                 }
@@ -452,7 +517,9 @@ public class SWBAWorkflow extends GenericResource {
             }
 
 
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error(e);
             return getError(3);
         }
@@ -467,12 +534,15 @@ public class SWBAWorkflow extends GenericResource {
      * @param parent
      * @return
      */
-    private Element addNode(String node, String id, String name, Element parent) {
+    private Element addNode(String node, String id, String name, Element parent)
+    {
         Element ret = addElement(node, null, parent);
-        if (id != null) {
+        if (id != null)
+        {
             ret.setAttribute("id", id);
         }
-        if (name != null) {
+        if (name != null)
+        {
             ret.setAttribute("name", name);
         }
         return ret;
@@ -485,10 +555,12 @@ public class SWBAWorkflow extends GenericResource {
      * @param parent
      * @return
      */
-    private Element addElement(String name, String value, Element parent) {
+    private Element addElement(String name, String value, Element parent)
+    {
         Document doc = parent.getOwnerDocument();
         Element ele = doc.createElement(name);
-        if (value != null) {
+        if (value != null)
+        {
             ele.appendChild(doc.createTextNode(value));
         }
         parent.appendChild(ele);
@@ -500,55 +572,96 @@ public class SWBAWorkflow extends GenericResource {
      * @param id
      * @return
      */
-    private Document getError(int id) {
+    private Document getError(int id)
+    {
         Document dom = null;
-        try {
+        try
+        {
             dom = SWBUtils.XML.getNewDocument();
             Element res = dom.createElement("res");
             dom.appendChild(res);
             Element err = dom.createElement("err");
             res.appendChild(err);
             addElement("id", "" + id, err);
-            if (id == 0) {
+            if (id == 0)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_loginfail") + "...", err);
-            } else if (id == 1) {
+            }
+            else if (id == 1)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_nouser") + "...", err);
-            } else if (id == 2) {
+            }
+            else if (id == 2)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_noservice") + "...", err);
-            } else if (id == 3) {
+            }
+            else if (id == 3)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_serviceprocessfail") + "...", err);
-            } else if (id == 4) {
+            }
+            else if (id == 4)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_parametersprocessfail") + "...", err);
-            } else if (id == 5) {
+            }
+            else if (id == 5)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_noTopicmap") + "...", err);
-            } else if (id == 6) {
+            }
+            else if (id == 6)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_noTopic") + "...", err);
-            } else if (id == 7) {
+            }
+            else if (id == 7)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_usernopermiss") + "...", err);
-            } else if (id == 8) {
+            }
+            else if (id == 8)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_TopicAlreadyexist") + "...", err);
-            } else if (id == 9) {
+            }
+            else if (id == 9)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_byImplement") + "...", err);
-            } else if (id == 10) {
+            }
+            else if (id == 10)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_TopicMapAlreadyExist") + "...", err);
-            } else if (id == 11) {
+            }
+            else if (id == 11)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_FileNotFound") + "...", err);
-            } else if (id == 12) {
+            }
+            else if (id == 12)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_noversions") + "...", err);
-            } else if (id == 13) {
+            }
+            else if (id == 13)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getError_xmlinconsistencyversion") + "...", err);
-            } else if (id == 14) {
+            }
+            else if (id == 14)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getError_noResourcesinMemory") + "...", err);
-            } else if (id == 15) {
+            }
+            else if (id == 15)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getError_noTemplatesinMemory") + "...", err);
-            } else if (id == 16) {
+            }
+            else if (id == 16)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getError_TemplatenotRemovedfromFileSystem") + "...", err);
-            } else if (id == 17) {
+            }
+            else if (id == 17)
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getError_adminUsernotCreated") + "...", err);
-            } else {
+            }
+            else
+            {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_errornotfound") + "...", err);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error(SWBUtils.TEXT.getLocaleString("locale_Gateway", "error_Gateway_getService_documentError") + "...", e);
         }
         return dom;
@@ -562,47 +675,59 @@ public class SWBAWorkflow extends GenericResource {
      * @throws AFException
      * @throws IOException
      */
-    public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         PrintWriter out = response.getWriter();
         ServletInputStream in = request.getInputStream();
         Document dom = SWBUtils.XML.xmlToDom(in);
 //        System.out.println("gateway: " + SWBUtils.XML.domToXml(dom));
-        if (!dom.getFirstChild().getNodeName().equals("req")) {
+        if (!dom.getFirstChild().getNodeName().equals("req"))
+        {
             response.sendError(404, request.getRequestURI());
             return;
         }
         String cmd = null;
-        if (dom.getElementsByTagName("cmd").getLength() > 0) {
+        if (dom.getElementsByTagName("cmd").getLength() > 0)
+        {
             cmd = dom.getElementsByTagName("cmd").item(0).getFirstChild().getNodeValue();
         }
 
-        if (cmd == null) {
+        if (cmd == null)
+        {
             response.sendError(404, request.getRequestURI());
             return;
         }
         String ret = "";
-        try {
+        try
+        {
             Document res = getService(cmd, dom, paramRequest.getUser(), request, response, paramRequest);
-            if (res == null) {
+            if (res == null)
+            {
                 ret = SWBUtils.XML.domToXml(getError(3));
-            } else {
+            }
+            else
+            {
                 ret = SWBUtils.XML.domToXml(res, true);
             }
 //            System.out.println("ret:" + ret);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error(e);
         }
         out.print(new String(ret.getBytes()));
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         String id = request.getParameter("suri");
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject go = ont.getGenericObject(id);
         PFlow pfgo = (PFlow) go;
 //        System.out.println("pf xml: " + pfgo.getXml());
-        if (pfgo != null && (pfgo.getXml() == null || (pfgo.getXml() != null && pfgo.getXml().trim().length() == 0))) {
+        if (pfgo != null && (pfgo.getXml() == null || (pfgo.getXml() != null && pfgo.getXml().trim().length() == 0)))
+        {
 //            System.out.println("pf xml es NULL");
             Document newdoc = SWBUtils.XML.getNewDocument();
             Element wfs = newdoc.createElement("workflows");
@@ -624,13 +749,17 @@ public class SWBAWorkflow extends GenericResource {
 //        System.out.println("XML AFTER: " + pfgo.getXml());
 
         String tm = pfgo.getWebSite().getId();
-        try {
+        try
+        {
             User user = paramRequest.getUser();
             PrintWriter out = response.getWriter();
             String act = "edit";
-            if (request.getParameter("act") != null) {
+            if (request.getParameter("act") != null)
+            {
                 act = request.getParameter("act");
-            } else if (act.equals("edit") && id != null && user != null && tm != null) {
+            }
+            else if (act.equals("edit") && id != null && user != null && tm != null)
+            {
 
 //                System.out.println("Con OBJECT");
 //
@@ -660,14 +789,17 @@ public class SWBAWorkflow extends GenericResource {
                 out.println("<PARAM NAME =\"tm\" VALUE=\"" + tm + "\">");
                 out.println("</APPLET>");
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace(System.out);
             log.error(e);
             return;
         }
     }
 
-    private class OrdenaUsuarios implements Comparator {
+    private class OrdenaUsuarios implements Comparator
+    {
 
         /**
          *
@@ -675,8 +807,10 @@ public class SWBAWorkflow extends GenericResource {
          * @param o2
          * @return
          */
-        public int compare(Object o1, Object o2) {
-            if (o1 instanceof User && o2 instanceof User) {
+        public int compare(Object o1, Object o2)
+        {
+            if (o1 instanceof User && o2 instanceof User)
+            {
                 User u1 = (User) o1;
                 User u2 = (User) o2;
                 return u1.getName().trim().toLowerCase().compareTo(u2.getName().trim().toLowerCase());
@@ -685,7 +819,8 @@ public class SWBAWorkflow extends GenericResource {
         }
     }
 
-    private class OrdenaRole implements Comparator {
+    private class OrdenaRole implements Comparator
+    {
 
         /**
          *
@@ -693,8 +828,10 @@ public class SWBAWorkflow extends GenericResource {
          * @param o2
          * @return
          */
-        public int compare(Object o1, Object o2) {
-            if (o1 instanceof Role && o2 instanceof Role) {
+        public int compare(Object o1, Object o2)
+        {
+            if (o1 instanceof Role && o2 instanceof Role)
+            {
                 Role u1 = (Role) o1;
                 Role u2 = (Role) o2;
                 return u1.getTitle().trim().toLowerCase().compareTo(u2.getTitle().trim().toLowerCase());
@@ -703,15 +840,18 @@ public class SWBAWorkflow extends GenericResource {
         }
     }
 
-    public WorkflowResponse updatePflow(String tm, Document xml, String userid) throws SWBResourceException, Exception {
+    public WorkflowResponse updatePflow(String tm, Document xml, String userid) throws SWBResourceException, Exception
+    {
         //regreso inicial WorkflowResponse
-        if (xml.getElementsByTagName("workflow").getLength() > 0) {
+        if (xml.getElementsByTagName("workflow").getLength() > 0)
+        {
             Element wf = (Element) xml.getElementsByTagName("workflow").item(0);
             String idpflow = wf.getAttribute("id");
             wf.setAttribute("id", idpflow + "_" + tm);
             String name = wf.getAttribute("name");
             String description = "";
-            if (wf.getElementsByTagName("description").getLength() > 0) {
+            if (wf.getElementsByTagName("description").getLength() > 0)
+            {
                 Element edesc = (Element) wf.getElementsByTagName("description").item(0);
                 Text etext = (Text) edesc.getFirstChild();
                 description = etext.getNodeValue();
@@ -723,19 +863,23 @@ public class SWBAWorkflow extends GenericResource {
             pflow.setDescription(description);
             pflow.setTitle(name);
 
-            try {
+            try
+            {
                 Document docworkflows = SWBUtils.XML.xmlToDom(pflow.getXml());
-                if (docworkflows.getElementsByTagName("workflows").getLength() > 0) {
+                if (docworkflows.getElementsByTagName("workflows").getLength() > 0)
+                {
                     Element workflows = (Element) docworkflows.getElementsByTagName("workflows").item(0);
                     Element nodewf = (Element) docworkflows.importNode(wf, true);
                     nodewf = (Element) workflows.insertBefore(nodewf, docworkflows.getElementsByTagName("workflow").item(0));
-                    if (nodewf.getAttribute("version") != null && !nodewf.getAttribute("version").equals("")) {
+                    if (nodewf.getAttribute("version") != null && !nodewf.getAttribute("version").equals(""))
+                    {
                         String sversion = nodewf.getAttribute("version");
                         int iversion = (int) Double.parseDouble(sversion);
                         iversion++;
                         nodewf.setAttribute("version", iversion + ".0");
                     }
-                    try {
+                    try
+                    {
                         Document doc = SWBUtils.XML.getNewDocument();
                         doc.appendChild(doc.importNode(nodewf, true));
 
@@ -745,7 +889,8 @@ public class SWBAWorkflow extends GenericResource {
                         Document docenc = SWBUtils.XML.xmlToDom(pflow.getXml());
                         NodeList nlWorkflows = docenc.getElementsByTagName("workflow");
                         int l = nlWorkflows.getLength();
-                        switch (l) {
+                        switch (l)
+                        {
                             case 0:
                             default:
                                 Element oldworkflow = (Element) nlWorkflows.item(0);
@@ -755,19 +900,27 @@ public class SWBAWorkflow extends GenericResource {
                         }
                         pflow.setXml(SWBUtils.XML.domToXml(docworkflows));
                         return wresp;
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e)
+                    {
                         log.error(e);
                         e.printStackTrace(System.out);
                         throw e;
                     }
-                } else {
+                }
+                else
+                {
                     throw new SWBResourceException("The xml has not a workflows element (updatePflow)");
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 log.error(e);
                 throw e;
             }
-        } else {
+        }
+        else
+        {
             throw new SWBResourceException("The xml has not a workflow element (updatePflow)");
         }
 
