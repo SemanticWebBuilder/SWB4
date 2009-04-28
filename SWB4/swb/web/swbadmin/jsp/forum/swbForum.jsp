@@ -120,8 +120,13 @@
     </td>
     </tr>
 <%
-            }
+    }
 %>
+    <form name="removeThread" action="<%=actionURL.toString()%>">
+        <tr>
+            <td><input type="button" value="Regresar" onClick="history.go(-1);"></td>
+        </tr>
+    </form>
     </table>
 
 <%} else if (action != null && action.equals("removePost")) {
