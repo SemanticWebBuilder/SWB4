@@ -284,7 +284,7 @@ public abstract class OfficeDocument
         {
             if (isPublicated())
             {
-                int res = JOptionPane.showConfirmDialog(null, "¿Desea borrar el contenido?", "Borrado de contenido", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                int res = JOptionPane.showConfirmDialog(null, "¿Desea borrar el contenido?", "Borrado de contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
                     contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
@@ -352,9 +352,13 @@ public abstract class OfficeDocument
 
     public static final void showContentsInFlow()
     {
-        DialogDocumentsAuthorize dialogDocumentsAuthorize=new DialogDocumentsAuthorize();
-        dialogDocumentsAuthorize.setVisible(true);
+        if (OfficeApplication.tryLogin())
+        {
+            DialogDocumentsAuthorize dialogDocumentsAuthorize = new DialogDocumentsAuthorize();
+            dialogDocumentsAuthorize.setVisible(true);
+        }
     }
+
     public final void showDocumentInfo()
     {
         if (OfficeApplication.tryLogin())
@@ -365,7 +369,7 @@ public abstract class OfficeDocument
             if (contentId == null || rep == null)
             {
                 deleteAssociation(false);
-                int resp = JOptionPane.showConfirmDialog(null, "El contenido no ha sido publicado.\r\n¿Desea publicar el contenido?", "Mostrar información del contenido", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                int resp = JOptionPane.showConfirmDialog(null, "El contenido no ha sido publicado.\r\n¿Desea publicar el contenido?", "Mostrar información del contenido", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (resp == JOptionPane.YES_OPTION)
                 {
                     saveToSite();
@@ -584,7 +588,7 @@ public abstract class OfficeDocument
                 PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName, title, description);
                 WizardPage[] clazz = new WizardPage[]
                 {
-                    new SelectPage(siteid), new PublishVersion(contentID, repositoryName),new ViewProperties(repositoryName, contentID)
+                    new SelectPage(siteid), new PublishVersion(contentID, repositoryName), new ViewProperties(repositoryName, contentID)
                 };
                 Wizard wiz = WizardPage.createWizard("Asistente de publicación de contenido en página web", clazz, resultProducer);
                 wiz.show();
@@ -660,7 +664,7 @@ public abstract class OfficeDocument
                             PublishResultProducer resultProducer = new PublishResultProducer(this);
                             Class[] clazz = new Class[]
                             {
-                                SelectCategory.class, TitleAndDescription.class,ContentProperties.class
+                                SelectCategory.class, TitleAndDescription.class, ContentProperties.class
                             };
                             Wizard wiz = WizardPage.createWizard(TITLE_SAVE_CONTENT_SITE, clazz, resultProducer);
                             wiz.show();
@@ -697,7 +701,7 @@ public abstract class OfficeDocument
         }
         if (file.exists())
         {
-            int resultOption = JOptionPane.showConfirmDialog(null, "El archivo ya existe, ¿Desea sobre escribir?", TITLE_SAVE_CONTENT_SITE, JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+            int resultOption = JOptionPane.showConfirmDialog(null, "El archivo ya existe, ¿Desea sobre escribir?", TITLE_SAVE_CONTENT_SITE, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (resultOption != JOptionPane.NO_OPTION)
             {
                 try
