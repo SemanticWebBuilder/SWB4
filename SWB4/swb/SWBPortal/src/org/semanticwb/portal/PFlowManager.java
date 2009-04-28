@@ -4,6 +4,7 @@
  */
 package org.semanticwb.portal;
 
+import java.net.SocketException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -686,9 +687,15 @@ public class PFlowManager
                             msg += "\r\n\r\n" + resourceBundle.getString("title") + " " + resource.getTitle();
                             msg += "\r\n" + resourceBundle.getString("section") + " " + ((WebPage) resource.getResourceable()).getTitle();
                             msg += "\r\n" + resourceBundle.getString("site") + " " + resource.getWebSite().getTitle();
-                            msg += "\r\n" + resourceBundle.getString("mensaje") + " " + message;
-                        // TODO:
-                        //SWBUtils.EMAIL.sendBGEmail(to,subject,msg);
+                            msg += "\r\n" + resourceBundle.getString("mensaje") + " " + message;                        
+                            try
+                            {
+                                SWBUtils.EMAIL.sendBGEmail(to,subject,msg);
+                            }
+                            catch(SocketException se)
+                            {
+                                log.error(se);
+                            }
                         }
 
                     }
@@ -881,8 +888,8 @@ public class PFlowManager
                                     //msgMail += "\r\n" + bundle.getString("seccion") + ": " + otopic.getDisplayName(args) + ".\r\n";
                                     msgMail += "\r\n" + bundle.getString("seccion") + ": " + site.getTitle() + ".\r\n";
 
-                                //TODO:
-                                //SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg8"), msgMail);
+                                
+                                    SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg8"), msgMail);
                                 }
                                 else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity"))
                                 {
@@ -901,8 +908,8 @@ public class PFlowManager
                                     HashMap args = new HashMap();
                                     args.put("language", Locale.getDefault().getLanguage());
                                     msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
-                                //TODO:
-                                //SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg10") + "", msgMail);
+                                
+                                    SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg10") + "", msgMail);
                                 }
                                 else if (activity.getAttribute("type").equalsIgnoreCase("Activity"))
                                 {
@@ -989,8 +996,8 @@ public class PFlowManager
                                             //msgMail+=bundle.getString("url")+": "+ObjRes.getAdminUrl()+".\r\n";
                                             msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
                                             msgMail += "\r\n" + bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14");
-                                            //TODO:
-                                            //SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14"), msgMail);
+                                            
+                                            SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14"), msgMail);
 
                                             // avisa al los revisores de la expiración de la revisión delc ontenido
                                             msg += "\r\n" + bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14");
@@ -1002,8 +1009,8 @@ public class PFlowManager
                                                 msg += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
                                             }
                                         }
-                                    // TODO:
-                                    //SWBUtils.EMAIL.sendBGEmail(to, subject, msg);
+                                    
+                                        SWBUtils.EMAIL.sendBGEmail(to, subject, msg);
                                     }
                                 }
                             }
