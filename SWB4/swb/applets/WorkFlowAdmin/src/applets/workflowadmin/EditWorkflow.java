@@ -125,6 +125,7 @@ public class EditWorkflow extends javax.swing.JApplet
         this.jLabelName.setVisible(false);
         this.jTextFieldName.setVisible(false);
         this.jScrollPaneAreaDescription.setVisible(false);
+        this.jCheckBoxEdit.setVisible(false);
     }
 
     public void loadWorkflow(String id)
