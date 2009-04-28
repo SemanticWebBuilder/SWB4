@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -12,75 +12,6 @@
       var act_item;
       var act_store;
       var act_treeNode;
-
-      dojo.require("dijit.Menu");
-      dojo.require("dijit._Calendar");
-      dojo.require("dijit.ColorPalette");
-      dojo.require("dijit.ProgressBar");
-      dojo.require("dijit.TitlePane");
-      dojo.require("dijit.Tooltip");
-      dojo.require("dijit.Tree");
-
-      dojo.require("dojox.form.TimeSpinner");
-      dojo.require("dojox.layout.ContentPane");
-
-      // editor:
-      dojo.require("dijit.Editor");
-
-      // dnd:
-      dojo.require("dojo.dnd.Source");
-
-      // various Form elemetns
-      dojo.require("dijit.form.CheckBox");
-      dojo.require("dijit.form.Textarea");
-      dojo.require("dijit.form.FilteringSelect");
-      dojo.require("dijit.form.TextBox");
-      dojo.require("dijit.form.DateTextBox");
-      dojo.require("dijit.form.TimeTextBox");
-      dojo.require("dijit.form.Button");
-      dojo.require("dijit.InlineEditBox");
-      dojo.require("dijit.form.NumberSpinner");
-      dojo.require("dijit.form.Slider");
-
-      // layouts used in page
-      dojo.require("dijit.layout.AccordionContainer");
-      dojo.require("dijit.layout.ContentPane");
-      dojo.require("dijit.layout.TabContainer");
-      dojo.require("dijit.layout.BorderContainer");
-      dojo.require("dijit.Dialog");
-
-      // scan page for widgets and instantiate them
-      dojo.require("dojo.parser");
-
-      // humm?
-      dojo.require("dojo.date.locale");
-
-      // for the Tree
-      dojo.require("dojo.data.ItemFileWriteStore");
-      dojo.require("dojo.data.ItemFileReadStore");
-
-      dojo.require("dijit._tree.dndSource");
-
-      dojo.require("dojo.fx");
-      // for wipeTo
-      dojo.require("dojox.fx");
-
-      dojo.addOnLoad(function() {
-
-          var start = new Date().getTime();
-          //dojo.parser.parse(dojo.byId('container'));
-          console.info("Total parse time: " + (new Date().getTime() - start) + "ms");
-
-          //dojo.byId('loaderInner').innerHTML += " done.";
-          setTimeout(function hideLoader(){
-              var loader = dojo.byId('loader');
-              dojo.fadeOut({ node: loader, duration:500,
-                  onEnd: function(){
-                      loader.style.display = "none";
-                  }
-              }).play();
-          }, 250);
-      });
 
       function getHtml(url, tagid)
       {
@@ -116,7 +47,7 @@
               handleAs: "text"
           });
       }
-      
+
       function postHtml(url, tagid)
       {
           dojo.xhrPost({
@@ -174,7 +105,7 @@
           //alert(url+" "+ret);
           return ret;
       }
-      
+
       function postJSON(url)
       {
           var ret=[];
@@ -300,7 +231,7 @@
                     }
                 }
               } catch (ex) {}
-              
+
               //alert("entra2");
               dojo.xhrPost({
                   // The page that parses the POST request
@@ -815,22 +746,30 @@
         sy+=si;
         ele.style.bottom=sy+'px';
         if(sy>ini)setTimeout(scroll,t);
-        else ele.style.display = "none";
+        else
+        {
+            self.status="hidden";
+            ele.style.display="none";
+        }
+        //ele.style.display = "none";
      }
 
      function showError(msg)
      {
-        showStatus(msg);
+        showStatus(msg,"red");
      }
 
-     function showStatus(msg)
+     function showStatus(msg, bgcolor)
      {
+         if(!bgcolor)bgcolor="blue";
          var ele=dijit.byId('status');
+         ele.style.bgColor=bgcolor;
+         ele.domNode.style.display="block";
+         self.status="visible";
          ele.attr('content',msg);
          ele.innerHTML=msg;
          sy=ini;
          si=2;
-         ele.style.display = "block";
          scroll();
      }
 
@@ -1027,7 +966,7 @@ function canCreateSemanticObject(model, clsid, id)
     {
         var aux=model;
         if(clsid)aux+=clsid;
-        if(id)aux+=clsid;
+        if(id)aux+=id;
 
         if(oldreq!=aux)
         {
@@ -1055,7 +994,7 @@ function canAddLogin(model, slogin)
 }
 
 /**
- * value: texto 
+ * value: texto
  */
 function replaceChars4Id(value, lowercase)
 {

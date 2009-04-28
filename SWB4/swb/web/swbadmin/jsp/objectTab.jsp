@@ -6,22 +6,22 @@
     response.setHeader("Pragma", "no-cache"); 
     String id=request.getParameter("suri");
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
-    com.hp.hpl.jena.rdf.model.Resource res=ont.getResource(id);
+    SemanticObject obj=ont.getSemanticObject(id);
+    WebSite adm=SWBContext.getAdminWebSite();
     //System.out.println("suri:"+id);
-    if(res==null)return;
-    SemanticClass cls=ont.getSemanticObjectClass(res);
-    GenericObject obj=ont.getGenericObject(id,cls);
+    if(obj==null)return;
+    SemanticClass cls=obj.getSemanticClass();
 
     String loading="<BR/><center><img src='/swb/swbadmin/images/loading.gif'/><center>";
 
     //Div dummy para detectar evento de carga y modificar titulo
-    String icon=SWBContext.UTILS.getIconClass(obj.getSemanticObject());
-    out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+id+"','"+obj.getSemanticObject().getDisplayName(lang)+"','"+icon+"');\" _loadingMessage=\""+loading+"\" />");
+    String icon=SWBContext.UTILS.getIconClass(obj);
+    out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+id+"','"+obj.getDisplayName(lang)+"','"+icon+"');\" _loadingMessage=\""+loading+"\" />");
 
     out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" nested=\"true\" _selectedChild=\"btab1\" onLoad=\"alert('Hola');\">");
 
-    Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(ObjectBehavior.swbxf_ObjectBehavior.listGenericInstances(true));
-    //Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(new GenericIterator(ObjectBehavior.swbxf_ObjectBehavior, obj.getSemanticObject().getModel().listInstancesOfClass(ObjectBehavior.swbxf_ObjectBehavior)));
+    Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(ObjectBehavior.listObjectBehaviors(adm));
+    //Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(new GenericIterator(ObjectBehavior.swbxf_ObjectBehavior, obj.getModel().listInstancesOfClass(ObjectBehavior.swbxf_ObjectBehavior)));
     while(obit.hasNext())
     {
         ObjectBehavior ob=obit.next();
@@ -62,7 +62,7 @@
                 SemanticClass scls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(interf.getURI());
                 if(scls!=null)
                 {
-                    if(scls.getObjectClass().isInstance(obj))
+                    if(obj.instanceOf(scls))
                     {
                         addDiv=true;
                     }
