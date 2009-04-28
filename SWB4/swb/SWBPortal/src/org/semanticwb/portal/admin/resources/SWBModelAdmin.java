@@ -63,6 +63,7 @@ public class SWBModelAdmin extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        System.out.println("Entra a doView");
         try {
             PrintWriter out = response.getWriter();
             if (request.getParameter("msgKey") != null) {
@@ -88,12 +89,13 @@ public class SWBModelAdmin extends GenericResource {
             out.println("<form action=\"" + urlAction.toString() + "\" method=\"post\" enctype='multipart/form-data'>");
             out.println("<table width=\"75%\">");
             out.println("<tr align=\"left\">");
-            out.println("<td>" + paramRequest.getLocaleLogString("tpl") + "</td>");
-            out.println("<td>" + paramRequest.getLocaleLogString("size") + "</td>");
-            out.println("<td>" + paramRequest.getLocaleLogString("install") + "</td>");
-            out.println("<td>" + paramRequest.getLocaleLogString("download") + "</td>");
-             out.println("<td>" + paramRequest.getLocaleLogString("delete") + "</td>");
-            out.println("<td>" + paramRequest.getLocaleLogString("up2comunity") + "</td>");
+            out.println("<br>");
+            out.println("<td><b>" + paramRequest.getLocaleLogString("tpl") + "</b></td>");
+            out.println("<td><b>" + paramRequest.getLocaleLogString("size") + "</b></td>");
+            out.println("<td><b>"+paramRequest.getLocaleLogString("install") +"</b></td>");
+            out.println("<td><b>"+paramRequest.getLocaleLogString("download") + "</b></td>");
+            out.println("<td><b>"+paramRequest.getLocaleLogString("delete") + "</b></td>");
+            out.println("<td><b>" + paramRequest.getLocaleLogString("up2comunity") + "</b></td>");
             out.println("</tr>");
             for (int i = 0; i < files.length; i++) {
                 File filex = files[i];
@@ -112,16 +114,17 @@ public class SWBModelAdmin extends GenericResource {
                     out.println("</td>");
                     url.setMode("installmodel");
                     url.setAction("form");
-                    out.println("<td><a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\">" + paramRequest.getLocaleLogString("install") + "</a></td>");
-                    out.println("<td><a href=\"" + WEBPATH + filex.getName() + "\">" + paramRequest.getLocaleLogString("download") + "</a></td>");
+                    out.println("<td align=\"center\"><a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconinst.png\" alt=\""+paramRequest.getLocaleLogString("install") + "\"/></a></td>");
+                    out.println("<td align=\"center\"><a href=\"" + WEBPATH + filex.getName() + "\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/icondesin.png\" alt=\""+paramRequest.getLocaleLogString("download") + "\"/></a></td>");
                     urlAction.setParameter("zipName", filex.getAbsolutePath());
                     urlAction.setAction("delete");
-                    out.println("<td><a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\">" + paramRequest.getLocaleLogString("delete") + "</a></td>");
+                    out.println("<td align=\"center\"><a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconelim.png\" alt=\""+paramRequest.getLocaleLogString("delete") + "\"/></a></td>");
+                    out.println("<td align=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconsubcom.png\" alt=\""+paramRequest.getLocaleLogString("up2comunity") + "\"/></td>");
                     out.println("</tr>");
                 }
             }
             out.println("<tr><td colspan=\"2\">" + paramRequest.getLocaleLogString("upload") + "<input type=\"file\" name=\"zipmodel\" value=\"" + paramRequest.getLocaleLogString("new") + "\"/></td></tr>");
-            out.println("<tr><td colspan=\"2\"><button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\" value=\"" + paramRequest.getLocaleLogString("up") + "\"/><br/><br/></td></tr>");
+            out.println("<tr><td colspan=\"2\"><button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\">"+paramRequest.getLocaleLogString("up")+"</button><br/><br/></td></tr>");
             out.println("</table>");
             out.println("</form>");
             out.println("</fieldset>");
@@ -191,8 +194,8 @@ public class SWBModelAdmin extends GenericResource {
                     out.println("<input id=\"swb_create_id\" type=\"text\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
                     out.println("</td>");
                     out.append("</tr>");
-                    out.println("<td><button dojoType='dijit.form.Button' type=\"submit\">" + paramRequest.getLocaleLogString("send") + "</button>");
-                    out.println("<button id=\"send\" dojoType=\"dijit.form.Button\" value=\"" + paramRequest.getLocaleLogString("return") + "\" onClick=\"javascript:history.go(-1);\"/>");
+                    out.println("<td><button dojoType='dijit.form.Button' type=\"submit\" onClick=\"alert('submit');if(!dijit.byId('frmImport1').isValid()) return false;\">" + paramRequest.getLocaleLogString("send") + "</button>");
+                    out.println("<button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\">"+paramRequest.getLocaleLogString("return")+"</button>");
                     out.println("</td></tr>");
                     out.println("</table>");
                     out.println("</fieldset>");
