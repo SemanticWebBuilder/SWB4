@@ -384,7 +384,7 @@ public class SWBAWorkflow extends GenericResource
                     Element erole = addNode("resourceType", "" + obj.getId(), obj.getTitle(), res);
                     erole.setAttribute("topicmap", map.getId());
                     erole.setAttribute("topicmapname", map.getTitle());
-                    String description = "";
+                    String description = "_";
                     if (obj.getDescription() != null)
                     {
                         description = obj.getDescription();
