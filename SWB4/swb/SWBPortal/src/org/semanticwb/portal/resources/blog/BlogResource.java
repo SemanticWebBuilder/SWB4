@@ -1876,7 +1876,7 @@ public class BlogResource extends GenericResource
                     String repid = userid.substring(userid.indexOf("_")+1);
                     User recuser =UserRepository.getUserRepository(repid).getUser(uid);
 
-                    System.out.println("getComments: recuser: "+recuser);
+                    //System.out.println("getComments: recuser: "+recuser);
 
                     StringBuffer name = new StringBuffer("");
                     if ( recuser == null )
