@@ -28,6 +28,8 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
  */
 public class DialogDocumentsAuthorize extends java.awt.Dialog
 {
+    private static final String ALL = "*";
+    private static final String SHOW_LAST_VERSION = "Mostrar la última version";
 
     /** Creates new form DialogDocumentsAtuhorize */
     public DialogDocumentsAuthorize()
@@ -108,9 +110,9 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
                     {
                         ResourceInfo resourceInfo = flowContentInformation.resourceInfo;
                         String version = flowContentInformation.resourceInfo.version;
-                        if (version.equals("*"))
+                        if (version.equals(ALL))
                         {
-                            version = "Mostrar la última version";
+                            version = SHOW_LAST_VERSION;
                         }
                         Object[] rowData =
                         {
@@ -125,9 +127,9 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
                     {
                         ResourceInfo resourceInfo = flowContentInformation.resourceInfo;
                         String version = flowContentInformation.resourceInfo.version;
-                        if (version.equals("*"))
+                        if (version.equals(ALL))
                         {
-                            version = "Mostrar la última version";
+                            version = SHOW_LAST_VERSION;
                         }
                         Object[] rowData =
                         {
@@ -142,9 +144,9 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
                     {
                         ResourceInfo resourceInfo = flowContentInformation.resourceInfo;
                         String version = flowContentInformation.resourceInfo.version;
-                        if (version.equals("*"))
+                        if (version.equals(ALL))
                         {
-                            version = "Mostrar la última version";
+                            version = SHOW_LAST_VERSION;
                         }
                         Object[] rowData =
                         {
