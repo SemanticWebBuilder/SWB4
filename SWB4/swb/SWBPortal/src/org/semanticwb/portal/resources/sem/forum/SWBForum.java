@@ -31,6 +31,11 @@ import org.semanticwb.servlet.internal.UploadFormElement;
 public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWBForumBase
 {
 
+    public SWBForum()
+    {
+       
+    }
+
     public SWBForum(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
