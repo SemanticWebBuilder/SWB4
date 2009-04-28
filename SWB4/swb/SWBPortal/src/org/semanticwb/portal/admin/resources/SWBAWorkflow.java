@@ -132,11 +132,8 @@ public class SWBAWorkflow extends GenericResource
      * @param tm
      */
     public void getCatalogRoles(Element res, String tm)
-    {
-        ////System.out.println("getCatalogRoles...");
-        Vector<Role> roles = new Vector<Role>();
-        //TODO: Cambiar en version 3.1
-        //WebSite map = SWBContext.getWebSite(tm);
+    {        
+        Vector<Role> roles = new Vector<Role>();     
         WebSite map = SWBContext.getAdminWebSite();
 
         Iterator<Role> it = map.getUserRepository().listRoles();
@@ -144,8 +141,6 @@ public class SWBAWorkflow extends GenericResource
         {
             Role role = it.next();
             roles.add(role);
-        ////System.out.println("role:"+role.getTitle());
-
         }
         Collections.sort(roles, new OrdenaRole());
         Iterator itRoles = roles.iterator();
@@ -239,10 +234,7 @@ public class SWBAWorkflow extends GenericResource
      */
     public void getCatalogUsers(Element res, String tm)
     {
-        Vector<User> users = new Vector<User>();
-        //TODO: Cambiar en version 3.1
-        //WebSite map=TopicMgr.getInstance().getTopicMap(tm);
-        //WebSite map = SWBContext.getWebSite(tm);//AdminWebSite();
+        Vector<User> users = new Vector<User>();        
         WebSite map = SWBContext.getAdminWebSite();
         Iterator<User> it = map.getUserRepository().listUsers();
         while (it.hasNext())
