@@ -71,17 +71,8 @@ public class SWBPlatform
         log.event("-->SemanticWebBuilder Version: " + version);
         log.event("-->Java Version: " + System.getProperty("java.runtime.version"));
         log.event("-->Java Memory: " + Runtime.getRuntime().totalMemory());
-        
-        InputStream in = getClass().getResourceAsStream("/web.properties");
-        props = new SWBProperties();
-        try
-        {
-            props.load(in);
-            log.info("-->File web.properties found...");
-        } catch (Exception e)
-        {
-            log.warn("-->File web.properties not found...");
-        }
+
+        props=SWBUtils.TEXT.getPropertyFile("/web.properties");
 
         workPath = SWBPlatform.getEnv("swb/workPath");
         try {

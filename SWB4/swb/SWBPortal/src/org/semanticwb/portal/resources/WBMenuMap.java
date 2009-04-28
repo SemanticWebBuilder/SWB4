@@ -35,7 +35,7 @@ public class WBMenuMap extends GenericAdmResource
 
     javax.xml.transform.Templates tpl;
     String webWorkPath = "/work";
-    String path = SWBPlatform.getContextPath() +"swbadmin/xsl/WBMenuMap/";
+    String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBMenuMap/";
     //private int ancho=10;
     private int nsup=0;
     private int ninf=0;

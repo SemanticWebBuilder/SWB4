@@ -8,6 +8,11 @@ package org.semanticwb.platform;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntProperty;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -20,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.rdf.RemoteGraph;
 
 /**
  *
@@ -89,11 +95,12 @@ public class SemanticModel
     
     public SemanticObject getSemanticObject(String uri)
     {
+        Property type=m_model.getProperty(SemanticVocabulary.RDF_TYPE);
         SemanticObject ret=SemanticObject.getSemanticObject(uri);
         if(ret==null)
         {
             Resource res=m_model.getResource(uri);
-            if(m_model.containsResource(res))
+            if(m_model.contains(res,type))
             {
                 ret=SemanticObject.createSemanticObject(res);
             }
@@ -163,7 +170,12 @@ public class SemanticModel
     public void removeGenericObject(GenericObject obj)
     {
         removeSemanticObject(obj.getSemanticObject());
-    }       
+    }
+
+    public void setNameSpace(String ns)
+    {
+        m_nameSpace=ns;
+    }
     
     public String getNameSpace() 
     {
@@ -298,12 +310,28 @@ public class SemanticModel
      */
     public void write(OutputStream out)
     {
+        write(out,null);
+    }
+
+
+    /**
+     * <p>Write a serialization of this model as an XML document.
+     * </p>
+     * <p>The language in which to write the model is specified by the
+     * <code>lang</code> argument.  Predefined values are "RDF/XML",
+     * "RDF/XML-ABBREV", "N-TRIPLE" and "N3".  The default value is
+     * represented by <code>null</code> is "RDF/XML".</p>
+     * @param out The output stream to which the XML will be written
+     * @return This model
+     */
+    public void write(OutputStream out, String lang)
+    {
         if(m_model instanceof OntModel)
         {
-            ((OntModel)m_model).writeAll(out, null, null);
+            ((OntModel)m_model).writeAll(out, lang, null);
         }else
         {
-            m_model.write(out);
+            m_model.write(out,lang);
         }
     }
 
@@ -371,6 +399,20 @@ public class SemanticModel
         Resource res=getRDFModel().createResource(uri+":"+name);
         Property prop=getRDFModel().createProperty(uri);
         getRDFModel().remove(res, prop, null);
+    }
+
+    public QueryExecution sparQLQuery(String queryString)
+    {
+        QueryExecution ret=null;
+        Query query = QueryFactory.create(queryString);
+        if(m_model.getGraph() instanceof RemoteGraph)
+        {
+            ret=QueryExecutionFactory.sparqlService(((RemoteGraph)m_model.getGraph()).getUri(), query);
+        }else
+        {
+            ret=QueryExecutionFactory.create(query, m_model);
+        }
+        return ret;
     }
 
 }
