@@ -190,7 +190,7 @@ public class GoogleGadget extends GenericResource {
         SWBResourceURL urlChangeLang = paramsRequest.getRenderUrl();
         out.println("<td>Búscar gadgets en:<form action='" + urlChangeLang + "'><select onChange=\"javascript:this.form.submit();\" name='changelang'>");
         String lang = ( String ) request.getSession().getAttribute(LANGUAGE_ATTRIBUTE);
-        out.println("<option " + (lang.equals("es") ? "selected" : "") + " value='es'>Espa?ol</option>");
+        out.println("<option " + (lang.equals("es") ? "selected" : "") + " value='es'>Espa&ntilde;ol</option>");
         out.println("<option " + (lang.equals("en") ? "selected" : "") + " value='en'>Ingles</option>");
         out.println("</select></form></td>");
         if ( start != null )
