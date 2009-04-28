@@ -199,6 +199,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
 
         jButtonCancel.setText("Cerrar");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
             }
@@ -385,12 +386,6 @@ public class DialogEditPorlet extends javax.swing.JDialog
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-}//GEN-LAST:event_jRadioButton1ActionPerformed
-
-private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-}//GEN-LAST:event_jRadioButton2ActionPerformed
 
 private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
     isCancel = true;
