@@ -70,6 +70,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.base.util.SWBMailSender;
 import org.semanticwb.base.util.SWBMail;
+import org.semanticwb.base.util.SWBProperties;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 //import sun.misc.BASE64Encoder;
@@ -659,6 +660,32 @@ public class SWBUtils {
             }
             return map;
         }
+
+        /**
+         * Regresa un objeto Properties a partir de un nombre de archivo de propiedades enviado por parametro.
+         */
+        public static Properties getPropertyFile(String name)
+        {
+            Properties p=null;
+            try
+            {
+                p = new SWBProperties();
+                InputStream in = SWBUtils.class.getResourceAsStream(name);
+                try
+                {
+                    log.info("-->Loading Property File:"+name);
+                    p.load(in);
+                } catch (Exception e)
+                {
+                    log.error("Error reading property file:"+name,e);
+                }
+            } catch (Exception e)
+            {
+                log.error("Error loading property file:"+name,e);
+            }
+            return p;
+        }
+
     }
 
     /**
