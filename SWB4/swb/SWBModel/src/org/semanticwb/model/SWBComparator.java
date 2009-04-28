@@ -45,7 +45,7 @@ public class SWBComparator implements Comparator
         //System.out.println("cls1:"+cls1+" cls2:"+cls2);
         if(cls1!=null || cls2!=null)
         {
-            if(cls1.hasProperty(Sortable.swb_index.getName()) && cls2.hasProperty(Sortable.swb_index.getName()))
+            if(cls1!=null && cls2!=null && cls1.hasProperty(Sortable.swb_index.getName()) && cls2.hasProperty(Sortable.swb_index.getName()))
             {
                 return compareSortable(obj1, obj2);
             }
