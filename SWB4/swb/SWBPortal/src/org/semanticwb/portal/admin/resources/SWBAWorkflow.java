@@ -851,9 +851,9 @@ public class SWBAWorkflow extends GenericResource
             //User user = SWBContext.getWebSite(tm).getUserRepository().getUser(userid);
             PFlow pflow = (PFlow) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(idpflow);
             //pflow.setCreator(user);
-            pflow.setUpdated(new Timestamp(System.currentTimeMillis()));
-            pflow.setDescription(description);
-            pflow.setTitle(name);
+//            pflow.setUpdated(new Timestamp(System.currentTimeMillis()));
+//            pflow.setDescription(description);
+//            pflow.setTitle(name);
 
             try
             {
