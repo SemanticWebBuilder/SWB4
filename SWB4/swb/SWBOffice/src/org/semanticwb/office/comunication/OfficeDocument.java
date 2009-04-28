@@ -93,12 +93,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public static String[] getOfficeTypes()
     {
-        String[] getOfficeTypes=new String[3];
-        getOfficeTypes[0]=WORD_RESOURCE_TYPE;
-        getOfficeTypes[1]=EXCEL_RESOURCE_TYPE;
-        getOfficeTypes[2]=PPT_RESOURCE_TYPE;
+        String[] getOfficeTypes = new String[3];
+        getOfficeTypes[0] = WORD_RESOURCE_TYPE;
+        getOfficeTypes[1] = EXCEL_RESOURCE_TYPE;
+        getOfficeTypes[2] = PPT_RESOURCE_TYPE;
         return getOfficeTypes;
     }
+
     public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
     {
         Session session = null;
@@ -397,9 +398,21 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         Session session = null;
         try
         {
-            session = loader.openSession(repositoryName, this.user, this.password);
-            session.getNodeByUUID(contentId);
-            exists = true;
+            boolean existsRep = false;
+            for (String rep : loader.getRepositoryNames())
+            {
+                if (rep.equals(repositoryName))
+                {
+                    existsRep = true;
+                    break;
+                }
+            }
+            if (existsRep)
+            {
+                session = loader.openSession(repositoryName, this.user, this.password);
+                session.getNodeByUUID(contentId);
+                exists = true;
+            }
         }
         catch (WorkspaceNotFoudException wsnf)
         {
@@ -419,6 +432,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return exists;
 
     }
+
     public void delete(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
@@ -818,7 +832,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             resourceType.setResourceMode(1);
             resourceType.setResourceClassName(ExcelResource.class.getCanonicalName());
             resourceType.setUpdated(new Date(System.currentTimeMillis()));
-            log.event("Resource  "+EXCEL_RESOURCE_TYPE+" registred in "+ site.getTitle() +"...");
+            log.event("Resource  " + EXCEL_RESOURCE_TYPE + " registred in " + site.getTitle() + "...");
         }
         resourceType = site.getResourceType(PPT_RESOURCE_TYPE);
         if (resourceType == null)
@@ -831,7 +845,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             resourceType.setResourceMode(1);
             resourceType.setResourceClassName(PPTResource.class.getCanonicalName());
             resourceType.setUpdated(new Date(System.currentTimeMillis()));
-            log.event("Resource  "+PPT_RESOURCE_TYPE+" registred in "+ site.getTitle() +"...");
+            log.event("Resource  " + PPT_RESOURCE_TYPE + " registred in " + site.getTitle() + "...");
         }
         resourceType = site.getResourceType(WORD_RESOURCE_TYPE);
         if (resourceType == null)
@@ -844,7 +858,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             resourceType.setResourceMode(1);
             resourceType.setResourceClassName(WordResource.class.getCanonicalName());
             resourceType.setUpdated(new Date(System.currentTimeMillis()));
-            log.event("Resource  "+WORD_RESOURCE_TYPE+" registred in "+ site.getTitle() +"...");
+            log.event("Resource  " + WORD_RESOURCE_TYPE + " registred in " + site.getTitle() + "...");
         }
     }
 
@@ -929,7 +943,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             resource.setResourceType(resourceType);
             officeResource.setContent(contentId);
             resource.setResourceType(resourceType);
-            org.semanticwb.model.User creator=SWBContext.getAdminRepository().getUserByLogin(user);
+            org.semanticwb.model.User creator = SWBContext.getAdminRepository().getUserByLogin(user);
             resource.setCreator(creator);
             officeResource.setRepositoryName(repositoryName);
             resource.setTitle(title);
@@ -960,7 +974,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             catch (Exception e)
             {
                 log.error(e);
-            }            
+            }
             InputStream in = getContent(repositoryName, contentId, version);
             officeResource.loadContent(in);
             ResourceInfo info = getResourceInfo(officeResource);
@@ -1644,9 +1658,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         Resource resource = site.getResource(info.id);
         try
         {
-            needsSendToPublish=SWBPortal.getPFlowManager().needAnAuthorization(resource);
+            needsSendToPublish = SWBPortal.getPFlowManager().needAnAuthorization(resource);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
             log.error(e);
