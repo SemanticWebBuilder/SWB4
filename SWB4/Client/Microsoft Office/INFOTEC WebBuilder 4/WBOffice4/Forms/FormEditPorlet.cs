@@ -187,15 +187,22 @@ namespace WBOffice4.Forms
                     {
                         this.checkBoxActive.Checked = pageInformation.active;
                         DialogResult res=MessageBox.Show(this, "El contenido fue rechazado.\r\nPara activarlo necesita enviarlo a autorización de nuevo\r\n¿Desea enviarlo a autorización?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        FormSendToAutorize formSendToAutorize = new FormSendToAutorize(pageInformation);
-                        formSendToAutorize.ShowDialog();
-                        if (formSendToAutorize.DialogResult == DialogResult.OK)
+                        if (res == DialogResult.Yes)
                         {
-                            OfficeApplication.OfficeDocumentProxy.sendToAuthorize(pageInformation, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
+                            FormSendToAutorize formSendToAutorize = new FormSendToAutorize(pageInformation);
+                            formSendToAutorize.ShowDialog();
+                            if (formSendToAutorize.DialogResult == DialogResult.OK)
+                            {
+                                OfficeApplication.OfficeDocumentProxy.sendToAuthorize(pageInformation, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
+                            }
+                            else
+                            {
+                                MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
                         }
                         else
                         {
-                            MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);                            
                         }
                     }
                 }
