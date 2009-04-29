@@ -1683,10 +1683,21 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return flows.toArray(new PFlow[flows.size()]);
     }
 
-    public void sendToAuthorize(ResourceInfo info, org.semanticwb.office.interfaces.PFlow flow, String message)
+    public void sendToAuthorize(ResourceInfo info, org.semanticwb.office.interfaces.PFlow flow, String message) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         Resource resource = site.getResource(info.id);
+        if(resource.getPflowInstance()!=null)
+        {
+            if(resource.getPflowInstance().getStatus()==3 || resource.getPflowInstance().getStatus()==-1)
+            {
+                resource.getPflowInstance().remove();
+            }
+            else
+            {
+                throw new Exception("The content is in flow, and is nor rejected or aproveed");
+            }
+        }
         org.semanticwb.model.User wbuser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
         org.semanticwb.model.PFlow pflow = site.getPFlow(flow.id);
         SWBPortal.getPFlowManager().sendResourceToAuthorize(resource, pflow, message, wbuser);
