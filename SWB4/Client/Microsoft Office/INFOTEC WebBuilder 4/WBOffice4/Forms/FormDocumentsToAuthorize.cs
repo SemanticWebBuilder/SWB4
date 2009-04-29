@@ -16,6 +16,7 @@ namespace WBOffice4.Forms
         {
             InitializeComponent();
             loadSites();
+            loadContents();
         }
         private void loadSites()
         {
