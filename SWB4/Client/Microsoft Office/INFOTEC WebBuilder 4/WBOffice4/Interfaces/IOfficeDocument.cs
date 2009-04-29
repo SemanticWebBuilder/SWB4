@@ -144,6 +144,9 @@ namespace WBOffice4.Interfaces
 
         [XmlRpcMethod("OfficeDocument.isInFlow")]
         bool isInFlow(ResourceInfo info);
+
+        [XmlRpcMethod("OfficeDocument.isAuthorized")]
+        public boolean isAuthorized(ResourceInfo info);
         
     }
 }
