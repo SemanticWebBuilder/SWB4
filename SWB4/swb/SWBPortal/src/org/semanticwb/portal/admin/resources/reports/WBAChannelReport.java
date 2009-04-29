@@ -9,15 +9,10 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.semanticwb.Logger;
@@ -124,9 +119,13 @@ public class WBAChannelReport extends GenericResource {
                     }catch(NumberFormatException e) {
                         groupDates = 0;
                     }
-                    String fecha1 = request.getParameter("wb_fecha1")==null ? "":request.getParameter("wb_fecha1");
-                    String fecha11 = request.getParameter("wb_fecha11")==null ? "":request.getParameter("wb_fecha11");
-                    String fecha12 = request.getParameter("wb_fecha12")==null ? "":request.getParameter("wb_fecha12");
+
+                    GregorianCalendar cal = new GregorianCalendar();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String fecha1 = request.getParameter("wb_fecha1")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha1");
+                    String fecha11 = request.getParameter("wb_fecha11")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha11");
+                    cal.add(cal.DATE, cal.getActualMaximum(cal.DAY_OF_MONTH)-cal.get(cal.DAY_OF_MONTH));
+                    String fecha12 = request.getParameter("wb_fecha12")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha12");
 
                     sb_ret.append("<script type=\"text/javascript\">\n");
                     sb_ret.append("dojo.addOnLoad(doBlockade);");
@@ -218,23 +217,25 @@ public class WBAChannelReport extends GenericResource {
                     // javascript
 
                     sb_ret.append("<div class=\"swbform\">\n");
-                    sb_ret.append("<fieldset>\n");
-                    sb_ret.append("<legend>" + paramsRequest.getLocaleString("channel_report") + "</legend>\n");
-
+                    sb_ret.append("<fieldset\n>");
+                    sb_ret.append(paramsRequest.getLocaleString("description"));
+                    sb_ret.append("</fieldset\n>");
+                    
                     SWBResourceURL url = paramsRequest.getActionUrl();
-
                     sb_ret.append("<form name=\"frmrep\" id=\"frmrep\" method=\"post\" action=\""+url+"\">\n");
+                    sb_ret.append("<fieldset>\n");
+                    sb_ret.append("<legend>"+paramsRequest.getLocaleString("channel_report")+"</legend>\n");                    
                     sb_ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
                     sb_ret.append("<tr><td width=\"213\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"413\"></td></tr>\n");
 
-                    sb_ret.append("<tr>\n");
+                    /*sb_ret.append("<tr>\n");
                     sb_ret.append(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;\n");
                     sb_ret.append("   <input type=\"button\" onclick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;\n");
                     sb_ret.append("   <input type=\"button\" onclick=\"doApply()\" value=\""+paramsRequest.getLocaleString("apply")+"\" name=\"btnApply\" />\n");
                     sb_ret.append("   <input type=\"hidden\" name=\"wb_rfilter\" value=\""+s_rfilter+"\"/>\n");
                     sb_ret.append(" </td>\n");
                     sb_ret.append("</tr>\n");
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
+                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");*/
 
                     sb_ret.append("<tr>\n");
                     sb_ret.append("<td>" + paramsRequest.getLocaleString("site") + ":</td>\n");
@@ -270,7 +271,7 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("</td>\n");
                     sb_ret.append("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>\n");
                     sb_ret.append("</tr>\n");
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
+                    /*sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");*/
 
                     sb_ret.append("<tr>\n");
                     sb_ret.append("<td>\n");
@@ -291,7 +292,7 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("<td>&nbsp;</td>\n");
                     sb_ret.append("</tr>\n");
 
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
+                    /*sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");*/
                     sb_ret.append("<tr>\n");
                     sb_ret.append("<td>\n");
                     sb_ret.append(paramsRequest.getLocaleString("reportName") + ":");
@@ -301,8 +302,26 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("&nbsp;<font size=\"1\">* " + paramsRequest.getLocaleString("reportFileGenerated") + " (xls)</font>\n");
                     sb_ret.append("</td>\n");
                     sb_ret.append("</tr>\n");
+                    sb_ret.append("</table>\n");
+                    sb_ret.append("</fieldset>\n");
+
+                    sb_ret.append("<fieldset>\n");
+                    sb_ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
+                    sb_ret.append("<tr>\n");
+                    sb_ret.append(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;\n");
+                    sb_ret.append("   <button dojoType=\"dijit.form.Button\" onclick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;\n");
+                    sb_ret.append("   <button dojoType=\"dijit.form.Button\" onclick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>\n");
+                    sb_ret.append("   <input type=\"hidden\" name=\"wb_rfilter\" value=\""+s_rfilter+"\"/>\n");
+                    sb_ret.append(" </td>\n");
+                    sb_ret.append("</tr>\n");
+                    sb_ret.append("</table>\n");
+                    sb_ret.append("</fieldset>\n");
+
+                    sb_ret.append("</form>\n");                    
                     
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
+                    sb_ret.append("<fieldset>\n");
+                    sb_ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
+                    /*sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");*/
                     sb_ret.append("<tr>\n");
                     sb_ret.append("<td colspan=\"4\">\n");
                     sb_ret.append("<table border=\"0\" cellpadding=\"5\" cellspacing=\"0\" width=\"100%\">\n");
@@ -339,10 +358,14 @@ public class WBAChannelReport extends GenericResource {
                     }
                     sb_ret.append("</table>\n");
                     sb_ret.append("</td></tr>\n");
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
-                    sb_ret.append("</table></form>\n");
-                    sb_ret.append("</fieldset></div>");
+                    /*sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");*/
+                    sb_ret.append("</table>\n");
+                    sb_ret.append("</fieldset>\n");
+                    sb_ret.append("</div>\n");
                 }else { // There are not sites and displays a message
+                    sb_ret.append("<div class=\"swbform\">");
+                    sb_ret.append("<fieldset>");
+                    sb_ret.append("<legend>" + paramsRequest.getLocaleString("channel_report") + "</legend>");
                     sb_ret.append("<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">\n");
                     sb_ret.append("<table border=0 width=\"100%\">\n");
                     sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
@@ -357,6 +380,8 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
                     sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
                     sb_ret.append("</table></form>\n");
+                    sb_ret.append("</fieldset>\n");
+                    sb_ret.append("</div>\n");
                 }
             }catch(Exception e) {
                 log.error("Error on method DoView() resource " + " " + strRscType + " " + "with id" + " " + base.getId(),e);

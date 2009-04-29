@@ -238,7 +238,7 @@ public class WBAContentsReport extends GenericResource {
                 out.println("dojo.addOnLoad(function(){renderTreeSectionsSite('"+url.toString()+"', 'rendertree','"+webSiteId+"','slave')});");
 
                 out.println("function renderTreeSectionsSite(url, mode, site, canvasId) {");
-                out.println("   getHtml(url+'/_mod/'+mode+'?site='+site, canvasId);");
+                out.println("   postHtml(url+'/_mod/'+mode+'?site='+site, canvasId);");
                 out.println("}");
 
                 out.println("function fillGrid(grid, uri, mode, params) {");
@@ -323,18 +323,22 @@ public class WBAContentsReport extends GenericResource {
 
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
-                out.println("<legend>" + paramsRequest.getLocaleString("contents_report") + "</legend>");
+                out.println(paramsRequest.getLocaleString("description"));
+                out.println("</fieldset>");
 
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
+                out.println("<fieldset>");
+                out.println("<legend>" + paramsRequest.getLocaleString("contents_report") + "</legend>");
+                /*out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");*/
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 out.println("<tr><td width=\"100\"></td><td width=\"200\"></td><td width=\"224\"></td><td width=\"264\"></td></tr>");
-                out.println("<tr>");
-                out.println("<td colspan=\"4\">");
-                // Show report description
-                out.println(paramsRequest.getLocaleString("description"));
-                out.println("</td></tr>");
 
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                /*out.println("<tr>");
+                out.println("<td colspan=\"4\">");
+                out.println(paramsRequest.getLocaleString("description"));
+                out.println("</td></tr>");*/
+
+                /*out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr>");
                 out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
                 out.println("   <input type=\"button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;");
@@ -343,7 +347,7 @@ public class WBAContentsReport extends GenericResource {
                 out.println("   <input type=\"hidden\" name=\"tp\" id=\"tp\" />");
                 out.println(" </td>");
                 out.println("</tr>");
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");*/
 
                 out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("site") + ":</td>");
@@ -373,19 +377,39 @@ public class WBAContentsReport extends GenericResource {
                 out.println("<label for=\"wb_show_son\">"+paramsRequest.getLocaleString("descendant")+"</label>");
                 out.println("</td>");
                 out.println("</tr>");
+                out.println("<tr><td colspan=\"4\"><br /></td></tr>");
+                out.println("</table></fieldset>");
 
-                out.println("<tr><td colspan=\"4\" height=\"15\"><hr size=\"1\" noshade></td></tr>");
+                out.println("<fieldset>");
+                out.println("<table border=\"0\" width=\"95%\">");
+                out.println("<tr>");
+                out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
+                out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
+                out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">MS Excel</button>&nbsp;");
+                out.println("   <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
+                out.println("   <input type=\"hidden\" name=\"tp\" id=\"tp\" />");
+                out.println(" </td>");
+                out.println("</tr>");
+                out.println("</table>");
+                out.println("</fieldset>");
+                out.println("</form>");
 
+                /*out.println("<tr><td colspan=\"4\" height=\"15\"><hr size=\"1\" noshade></td></tr>");*/
+                out.println("<fieldset>");
+                out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 out.println("<tr>");
                 out.println("<td colspan=\"4\">");
-                out.println("<div id=\"ctnergrid\" style=\"height:250px; width:875px; margin: 2px; padding: 0px; border: 1px solid #DAE1FE;\">");
+                out.println("<div id=\"ctnergrid\" style=\"height:250px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
                 out.println("  <div id=\"gridMaster\"></div>");
                 out.println("</div>");
                 out.println("</td>");
                 out.println("</tr>");
+                out.println("</table>");
+                out.println("</fieldset>");
 
-                out.println("<tr><td colspan=\"4\"><br /></td></tr>");
-                out.println("</table></form></fieldset></div>");
+                /*out.println("<tr><td colspan=\"4\"><br /></td></tr>");
+                out.println("</table></form></fieldset>");*/
+                out.println("</div>");
             }
         }catch (Exception e) {
             log.error("Error on method doView() resource " + strRscType + " with id " + base.getId(), e);
