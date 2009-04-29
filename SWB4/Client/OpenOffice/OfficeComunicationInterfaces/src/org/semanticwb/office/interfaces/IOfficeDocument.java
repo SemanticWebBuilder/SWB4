@@ -147,7 +147,7 @@ public interface IOfficeDocument
     public PFlow[] getFlows(ResourceInfo info);
 
     @XmlRpcMethod(methodName = "OfficeDocument.sendToAuthorize")
-    public void sendToAuthorize(ResourceInfo info,PFlow flow,String message);
+    public void sendToAuthorize(ResourceInfo info,PFlow flow,String message) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.isInFlow")
     public boolean isInFlow(ResourceInfo info);
