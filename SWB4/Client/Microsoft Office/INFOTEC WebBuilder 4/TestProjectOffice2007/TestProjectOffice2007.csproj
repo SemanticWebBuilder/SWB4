@@ -70,8 +70,6 @@
   <ItemGroup>
     <Compile Include="Excel2007OfficeDocumentTest.cs" />
     <Compile Include="ExcelApplicationTest.cs" />
-    <Compile Include="IOfficeApplicationTest.cs" />
-    <Compile Include="IOfficeDocumentTest.cs" />
     <Compile Include="PPT2007OfficeDocumentTest.cs" />
     <Compile Include="PPTApplicationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
