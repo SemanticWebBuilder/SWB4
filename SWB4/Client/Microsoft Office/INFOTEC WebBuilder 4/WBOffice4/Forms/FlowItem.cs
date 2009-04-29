@@ -11,6 +11,7 @@ namespace WBOffice4.Forms
         private FlowContentInformation info;
         public FlowItem(FlowContentInformation info)
         {
+            this.info = info;
             this.Text = info.title;
             this.SubItems.Add(info.resourceInfo.page.title);
             this.SubItems.Add(info.step);
