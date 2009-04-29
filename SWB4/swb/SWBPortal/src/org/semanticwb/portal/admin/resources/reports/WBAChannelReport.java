@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -123,9 +124,23 @@ public class WBAChannelReport extends GenericResource {
                     GregorianCalendar cal = new GregorianCalendar();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String fecha1 = request.getParameter("wb_fecha1")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha1");
+                    try {
+                        sdf.parse(fecha1);
+                    }catch(ParseException pe){
+                        fecha1 = sdf.format(cal.getTime());
+                    }
                     String fecha11 = request.getParameter("wb_fecha11")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha11");
-                    cal.add(cal.DATE, cal.getActualMaximum(cal.DAY_OF_MONTH)-cal.get(cal.DAY_OF_MONTH));
+                    try {
+                        sdf.parse(fecha11);
+                    }catch(ParseException pe){
+                        fecha11 = sdf.format(cal.getTime());
+                    }
                     String fecha12 = request.getParameter("wb_fecha12")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha12");
+                    try {
+                        sdf.parse(fecha12);
+                    }catch(ParseException pe){
+                        fecha12 = sdf.format(cal.getTime());
+                    }
 
                     sb_ret.append("<script type=\"text/javascript\">\n");
                     sb_ret.append("dojo.addOnLoad(doBlockade);");
@@ -153,7 +168,7 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("   return params;");
                     sb_ret.append("}");
 
-                    sb_ret.append("function validate() {");
+                    /*sb_ret.append("function validate() {");
                     sb_ret.append("   var fecha1 = new String(dojo.byId('wb_fecha1').value);");
                     sb_ret.append("   var fecha2 = new String(dojo.byId('wb_fecha11').value);");
                     sb_ret.append("   var fecha3 = new String(dojo.byId('wb_fecha12').value);");
@@ -162,13 +177,13 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("      return false;");
                     sb_ret.append("   }");
                     sb_ret.append("   return true;");
-                    sb_ret.append("}");
+                    sb_ret.append("}");*/
 
                     sb_ret.append("function doXml(size) { ");
-                    sb_ret.append("   if(validate()) {");
+                    /*sb_ret.append("   if(validate()) {");*/
                     sb_ret.append("      var params = getParams();");
                     sb_ret.append("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);");
-                    sb_ret.append("   }");
+                    /*sb_ret.append("   }");*/
                     sb_ret.append("}");
 
                     sb_ret.append(" function getTypeSelected(){\n");
@@ -182,15 +197,15 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append(" }\n");
 
                     sb_ret.append("function doApply() {\n");
-                    sb_ret.append("   tmp = window.document.frmrep.filename.value;\n");
+                    sb_ret.append("   tmp = dojo.byId('filename').value;\n");
                     sb_ret.append("   tmp2=tmp.replace(/ /g,'');\n");
                     sb_ret.append("   if(tmp2.length==0) {\n");
                     sb_ret.append("      alert('" + paramsRequest.getLocaleString("fileName") + "')\n");
-                    sb_ret.append("      window.document.frmrep.filename.select();\n");
-                    sb_ret.append("      window.document.frmrep.filename.focus();\n");
+                    sb_ret.append("      dojo.byId('filename').select();\n");
+                    sb_ret.append("      dojo.byId('filename').focus();\n");
                     sb_ret.append("      return false;\n");
                     sb_ret.append("   }else {\n");
-                    sb_ret.append("      window.document.frmrep.submit();\n");
+                    sb_ret.append("      dojo.byId('frmrep').submit();\n");
                     sb_ret.append("   }\n");
                     sb_ret.append("}\n");
                     
@@ -227,16 +242,7 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("<legend>"+paramsRequest.getLocaleString("channel_report")+"</legend>\n");                    
                     sb_ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
                     sb_ret.append("<tr><td width=\"213\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"413\"></td></tr>\n");
-
-                    /*sb_ret.append("<tr>\n");
-                    sb_ret.append(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;\n");
-                    sb_ret.append("   <input type=\"button\" onclick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;\n");
-                    sb_ret.append("   <input type=\"button\" onclick=\"doApply()\" value=\""+paramsRequest.getLocaleString("apply")+"\" name=\"btnApply\" />\n");
-                    sb_ret.append("   <input type=\"hidden\" name=\"wb_rfilter\" value=\""+s_rfilter+"\"/>\n");
-                    sb_ret.append(" </td>\n");
-                    sb_ret.append("</tr>\n");
-                    sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");*/
-
+                    
                     sb_ret.append("<tr>\n");
                     sb_ret.append("<td>" + paramsRequest.getLocaleString("site") + ":</td>\n");
                     sb_ret.append("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" size=\"1\">\n");
@@ -266,7 +272,7 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("</label></td>\n");
                     sb_ret.append("<td colspan=\"2\">\n");
 
-                    sb_ret.append("<input type=\"text\" name=\"wb_fecha1\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\"/>\n");
+                    sb_ret.append("<input type=\"text\" name=\"wb_fecha1\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\"/>\n");
 
                     sb_ret.append("</td>\n");
                     sb_ret.append("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>\n");
@@ -284,10 +290,10 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("&nbsp;" + paramsRequest.getLocaleString("by_interval_dates"));
                     sb_ret.append("</label></td>\n");
                     sb_ret.append("<td>\n");
-                    sb_ret.append("<input type=\"text\" name=\"wb_fecha11\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\"/>\n");
+                    sb_ret.append("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\"/>\n");
                     sb_ret.append("</td>");
                     sb_ret.append("<td>");
-                    sb_ret.append("<input type=\"text\" name=\"wb_fecha12\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\"/>\n");
+                    sb_ret.append("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\"/>\n");
                     sb_ret.append("</td>\n");
                     sb_ret.append("<td>&nbsp;</td>\n");
                     sb_ret.append("</tr>\n");
@@ -298,7 +304,7 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append(paramsRequest.getLocaleString("reportName") + ":");
                     sb_ret.append("</td>\n");
                     sb_ret.append("<td colspan=\"3\">\n");
-                    sb_ret.append("<input type=\"text\" name=\"filename\" value=\"\"/>\n");
+                    sb_ret.append("<input type=\"text\" name=\"filename\" id=\"filename\" value=\"\"/>\n");
                     sb_ret.append("&nbsp;<font size=\"1\">* " + paramsRequest.getLocaleString("reportFileGenerated") + " (xls)</font>\n");
                     sb_ret.append("</td>\n");
                     sb_ret.append("</tr>\n");

@@ -26,6 +26,7 @@ package org.semanticwb.portal.admin.resources.reports;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.http.HttpServletResponse;
@@ -160,9 +161,23 @@ public class WBASessionReport extends GenericResource {
                 GregorianCalendar cal = new GregorianCalendar();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String fecha1 = request.getParameter("wb_fecha1")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha1");
+                try {
+                    sdf.parse(fecha1);
+                }catch(ParseException pe){
+                    fecha1 = sdf.format(cal.getTime());
+                }
                 String fecha11 = request.getParameter("wb_fecha11")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha11");
-                cal.add(cal.DATE, cal.getActualMaximum(cal.DAY_OF_MONTH)-cal.get(cal.DAY_OF_MONTH));
+                try {
+                    sdf.parse(fecha11);
+                }catch(ParseException pe){
+                    fecha11 = sdf.format(cal.getTime());
+                }
                 String fecha12 = request.getParameter("wb_fecha12")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha12");
+                try {
+                    sdf.parse(fecha12);
+                }catch(ParseException pe){
+                    fecha12 = sdf.format(cal.getTime());
+                }
                 
                 String topicId = paramsRequest.getTopic().getId();
                 if(topicId.lastIndexOf("Daily") != -1) {
@@ -197,7 +212,7 @@ public class WBASessionReport extends GenericResource {
                 out.println("   return params;");
                 out.println("}");
                 
-                out.println("function validate(accion) {");
+                /*out.println("function validate(accion) {");
                 out.println("    var fecha1 = null;");
                 out.println("    var fecha2 = null;");
                 out.println("    var fecha3 = null;");
@@ -211,41 +226,41 @@ public class WBASessionReport extends GenericResource {
                 out.println("       }");
                 out.println("    }");
                 out.println("    return true;");
-                out.println("}");
+                out.println("}");*/
                 
                 out.println("function doXml(accion, size) { ");
-                out.println("   if(validate(accion)) {");
+                /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);    ");
-                out.println("   }");
+                /*out.println("   }");*/
                 out.println("}");
                 
                 out.println("function doExcel(accion, size) { ");
-                out.println("   if(validate(accion)) {");
+                /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);    ");
-                out.println("   }");
+                /*out.println("   }");*/
                 out.println("}");
                 
                 out.println("function doGraph(accion, size) { ");
-                out.println("   if(validate(accion)) {");
+                /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);    ");
-                out.println("   }");
+                /*out.println("   }");*/
                 out.println(" }");
                 
                 out.println("function doPdf(accion, size) { ");
-                out.println("   if(validate(accion)) {");
+                /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf")+"\"+params,\"graphWindow\",size);    ");
-                out.println("   }");
+                /*out.println("   }");*/
                 out.println("}");
                 
                 out.println("function doRtf(accion, size) { ");
-                out.println("   if(validate(accion)) {");
+                /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf")+"\"+params,\"graphWindow\",size);    ");
-                out.println("   }");
+                /*out.println("   }");*/
                 out.println("}");
                 
                 out.println(" function getTypeSelected(){");
@@ -259,9 +274,9 @@ public class WBASessionReport extends GenericResource {
                 out.println(" }");
                 
                 out.println(" function doApply() { ");
-                out.println("   if(validate(dojo.byId('wb_rtype').value)) {");
-                out.println("      window.document.frmrep.submit(); ");
-                out.println("   }");
+                /*out.println("   if(validate(dojo.byId('wb_rtype').value)) {");*/
+                out.println("      dojo.byId('frmrep').submit(); ");
+                /*out.println("   }");*/
                 out.println(" }");                
 
                 out.println("function doBlockade() {");
@@ -328,11 +343,8 @@ public class WBASessionReport extends GenericResource {
                     out.println(" />");
                     out.println("&nbsp;" + paramsRequest.getLocaleString("by_day"));
                     out.println("</label></td>");
-                    out.println("<td colspan=\"2\">");
-                    
-                    out.println("<input type=\"text\" name=\"wb_fecha1\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\">");
-                    //out.println("<input type=\"text\" id=\"wb_fecha1\" name=\"wb_fecha1\" size=\"10\" maxlength=\"10\" value=\"" + fecha1 + "\" />");                        
-                    
+                    out.println("<td colspan=\"2\">");                    
+                    out.println("<input type=\"text\" name=\"wb_fecha1\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\">");
                     out.println("</td>");
                     out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>");
                     out.println("</tr>");
@@ -348,10 +360,10 @@ public class WBASessionReport extends GenericResource {
                     out.println("&nbsp;" + paramsRequest.getLocaleString("by_interval_dates"));
                     out.println("</label></td>");
                     out.println("<td>");
-                    out.println("<input type=\"text\" name=\"wb_fecha11\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\">");
+                    out.println("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\">");
                     out.println("</td>");
                     out.println("<td>");
-                    out.println("<input type=\"text\" name=\"wb_fecha12\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\">");
+                    out.println("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\">");
                     out.println("</td>");
                     out.println("<td>&nbsp;</td>");
                     out.println("</tr>");
@@ -780,17 +792,26 @@ public class WBASessionReport extends GenericResource {
         }catch(NumberFormatException e) {
             groupDates = 0;
         }
-        String fecha1 = request.getParameter("wb_fecha1");
-        System.out.println("fecha1="+fecha1);
-        String fecha11 = request.getParameter("wb_fecha11");
-        System.out.println("fecha11="+fecha11);
-        String fecha12 = request.getParameter("wb_fecha12");
-        System.out.println("fecha12="+fecha12);
-        if(groupDates==0 && fecha1==null) {
-            throw new IncompleteFilterException("Falta la fecha");
+
+        GregorianCalendar cal = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String fecha1 = request.getParameter("wb_fecha1")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha1");
+        try {
+            sdf.parse(fecha1);
+        }catch(ParseException pe){
+            fecha1 = sdf.format(cal.getTime());
         }
-        if(groupDates==1 && (fecha11==null || fecha12==null)) {
-            throw new IncompleteFilterException("Faltan las fechas");
+        String fecha11 = request.getParameter("wb_fecha11")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha11");
+        try {
+            sdf.parse(fecha11);
+        }catch(ParseException pe){
+            fecha11 = sdf.format(cal.getTime());
+        }
+        String fecha12 = request.getParameter("wb_fecha12")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha12");
+        try {
+            sdf.parse(fecha12);
+        }catch(ParseException pe){
+            fecha12 = sdf.format(cal.getTime());
         }
 
         try {
