@@ -32,7 +32,7 @@ namespace WBOffice4.Interfaces
      void delete(String repositoryName, String contentID) ;
 
     [XmlRpcMethod("OfficeDocument.exists")]
-     boolean exists(String repositoryName, String contentId) ;
+     bool exists(String repositoryName, String contentId) ;
 
     [XmlRpcMethod("OfficeDocument.updateContent")]
      String updateContent(String repositoryName, String contentId, String file) ;
@@ -65,7 +65,7 @@ namespace WBOffice4.Interfaces
      void deleteContentOfPage(ResourceInfo info) ;
 
     [XmlRpcMethod("OfficeDocument.activateResource")]
-     void activateResource(ResourceInfo info, boolean active) ;
+     void activateResource(ResourceInfo info, bool active) ;
 
     [XmlRpcMethod("OfficeDocument.getCategoryInfo")]
      CategoryInfo getCategoryInfo(String repositoryName, String contentid) ;
@@ -104,7 +104,7 @@ namespace WBOffice4.Interfaces
      void deleteCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo) ;
 
     [XmlRpcMethod("OfficeDocument.activeCalendar")]
-     void activeCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo, boolean active) ;
+     void activeCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo, bool active) ;
 
     [XmlRpcMethod("OfficeDocument.updatePorlet")]
      void updatePorlet(ResourceInfo resourceInfo) ;
@@ -113,7 +113,7 @@ namespace WBOffice4.Interfaces
      void deleteVersionOfContent(String repositoryName, String contentId, String versionName) ;
 
     [XmlRpcMethod("OfficeDocument.allVersionsArePublished")]
-     boolean allVersionsArePublished(String repositoryName, String contentId) ;
+     bool allVersionsArePublished(String repositoryName, String contentId) ;
 
     [XmlRpcMethod("OfficeDocument.validateViewValues")]
      void validateViewValues(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) ;
@@ -134,7 +134,7 @@ namespace WBOffice4.Interfaces
      void setContentProperties(String repositoryName, String contentID, PropertyInfo[] properties, String[] values) ;
 
     [XmlRpcMethod("OfficeDocument.needsSendToPublish")]
-     boolean needsSendToPublish(ResourceInfo info);
+     bool needsSendToPublish(ResourceInfo info);
 
     [XmlRpcMethod("OfficeDocument.getFlows")]
      PFlow[] getFlows(ResourceInfo info);
