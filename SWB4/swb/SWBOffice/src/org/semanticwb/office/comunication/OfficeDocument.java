@@ -1699,5 +1699,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return SWBPortal.getPFlowManager().isInFlow(resource);
 
     }
+
+    public boolean isAuthorized(ResourceInfo info)
+    {
+        WebSite site = SWBContext.getWebSite(info.page.site.id);
+        Resource resource = site.getResource(info.id);
+        return SWBPortal.getPFlowManager().isAuthorized(resource);
+    }
 }
 
