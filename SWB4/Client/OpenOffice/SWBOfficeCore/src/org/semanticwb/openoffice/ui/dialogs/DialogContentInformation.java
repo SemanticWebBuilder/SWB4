@@ -781,6 +781,10 @@ public class DialogContentInformation extends javax.swing.JDialog
                                 }
                             }
                         }
+                        else if(OfficeApplication.getOfficeDocumentProxy().isInFlow(resourceInfo))
+                        {
+                            JOptionPane.showMessageDialog(null, "¡Este contenido se encuentra en proceso de autorización, para activar este contenido debe terminar primero el proceso de autorización!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                        }
                         else
                         {
                             OfficeApplication.getOfficeDocumentProxy().activateResource(resourceInfo, newactive);
