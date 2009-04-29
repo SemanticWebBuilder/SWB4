@@ -378,10 +378,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Public classes dragram.cd" />
-    <None Include="General Diagram.cd" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\delete.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -486,7 +482,6 @@
     <None Include="Resources\splash1.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\icon_agregarpag32.png" />
   </ItemGroup>
   <ItemGroup>
