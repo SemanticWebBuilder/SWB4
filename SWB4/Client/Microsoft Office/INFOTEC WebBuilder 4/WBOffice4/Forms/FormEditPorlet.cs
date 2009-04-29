@@ -54,7 +54,7 @@ namespace WBOffice4.Forms
             obj = TypeFactory.getObject(props, "Propiedades de presentación");
             foreach (PropertyInfo prop in props)
             {
-                String value=OfficeApplication.OfficeDocumentProxy.getViewPropertyValue(this.pageInformation, prop);
+                String value = OfficeApplication.OfficeDocumentProxy.getViewPropertyValue(this.pageInformation, prop);
                 TypeFactory.setValue(prop, obj, value);
             }
             this.grid.SelectedObject = obj;
@@ -122,12 +122,53 @@ namespace WBOffice4.Forms
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
+            if (this.checkBoxActive.Checked)
+            {
+                if (this.pageInformation.active)
+                {
+                    OfficeApplication.OfficeDocumentProxy.activateResource(pageInformation, this.checkBoxActive.Checked);
+                }
+                else
+                {
+                    if (OfficeApplication.OfficeDocumentProxy.needsSendToPublish(pageInformation))
+                    {
+                        DialogResult res = MessageBox.Show(this, "El documento requiere una autorización para activarse\r\n¿Desea envíar a publicar el contenido?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (res == DialogResult.Yes)
+                        {
+                            FormSendToAutorize formSendToAutorize = new FormSendToAutorize(pageInformation);
+                            formSendToAutorize.ShowDialog();
+                            if (formSendToAutorize.DialogResult == DialogResult.OK)
+                            {
+                                OfficeApplication.OfficeDocumentProxy.sendToAuthorize(pageInformation, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
+                            }
+                            else
+                            {
+                                MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                this.checkBoxActive.Checked = false;
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            this.checkBoxActive.Checked = false;
+                        }
+                    }
+                    else
+                    {
+                        OfficeApplication.OfficeDocumentProxy.activateResource(pageInformation, this.checkBoxActive.Checked);
+                    }
+                }
+            }
+            else
+            {
+                OfficeApplication.OfficeDocumentProxy.activateResource(pageInformation, this.checkBoxActive.Checked);
+            }
             PropertyInfo[] properties = null;
             String[] values = null;
             if (obj != null)
             {
                 properties = OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
-                values = TypeFactory.getValues(properties,obj);
+                values = TypeFactory.getValues(properties, obj);
                 try
                 {
                     OfficeApplication.OfficeDocumentProxy.validateViewValues(repositoryName, contentID, properties, values);
