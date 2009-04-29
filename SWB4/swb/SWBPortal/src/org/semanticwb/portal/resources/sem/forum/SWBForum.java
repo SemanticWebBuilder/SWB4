@@ -101,10 +101,14 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
 
     public void doReplyPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
+        WebSite website=paramRequest.getTopic().getWebSite();
         SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
+        Thread thread = Thread.getThread(soThread.getId(), website);
         SemanticObject soPost = null;
+        Post post=null;
         if (request.getParameter("postUri") != null) {
             soPost = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+            post = Post.getPost(soPost.getId(), website);
         }
         SWBFormMgr mgr = null;
         if (soPost != null) {
@@ -123,6 +127,16 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         mgr.setType(mgr.TYPE_XHTML);
         url.setAction("replyPost");
         mgr.setAction(url.toString());
+
+        out.println("<link href=\"/swb/swbadmin/css/forum.css\" rel=\"stylesheet\" type=\"text/css\" />");
+        out.println("<table>");
+        out.println("<tr><td>"+paramRequest.getLocaleString("thread")+":</td><td><b>"+thread.getTitle()+"</b></td></tr>");
+        if(post!=null){
+            out.println("<tr><td>"+paramRequest.getLocaleString("msg")+":</td><td><b>"+post.getBody()+"</b></td></tr>");
+        }else {
+            out.println("<tr><td>"+paramRequest.getLocaleString("msg")+":</td><td><b>"+thread.getBody()+"</b></td></tr>");
+        }
+        out.println("</table>");
         out.println(mgr.renderForm(request));
     }
 
