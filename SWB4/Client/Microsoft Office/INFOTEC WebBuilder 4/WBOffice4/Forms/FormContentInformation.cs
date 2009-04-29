@@ -120,6 +120,7 @@ namespace WBOffice4.Forms
                 ResourceInfo portletInfo = (ResourceInfo)this.listViewPages.SelectedItems[0].Tag;
                 FormEditPorlet formEditPorlet = new FormEditPorlet(portletInfo, repositoryName, contentID);
                 formEditPorlet.ShowDialog();
+                loadPorlets();
             }
         }
 
