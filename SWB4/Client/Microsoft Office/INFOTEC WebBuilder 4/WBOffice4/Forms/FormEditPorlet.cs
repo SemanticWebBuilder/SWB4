@@ -181,7 +181,6 @@ namespace WBOffice4.Forms
                     }
                     else if (OfficeApplication.OfficeDocumentProxy.isAuthorized(pageInformation))
                     {
-
                         OfficeApplication.OfficeDocumentProxy.activateResource(pageInformation, this.checkBoxActive.Checked);
                     }
                     else
