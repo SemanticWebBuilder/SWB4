@@ -43,7 +43,7 @@
 	</field>
 
 		<background>
-			<band height="723"  isSplitAllowed="false" >
+			<band height="752"  isSplitAllowed="false" >
 				<staticText>
 					<reportElement
 						x="24"
@@ -137,7 +137,7 @@
 		</title>
 		<pageHeader>
 			<band height="26"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[$V{PAGE_NUMBER}.intValue()>1]]></printWhenExpression>
+				<printWhenExpression><![CDATA[new Boolean($V{PAGE_NUMBER}.intValue()>1)]]></printWhenExpression>
 				<line direction="TopDown">
 					<reportElement
 						x="0"
