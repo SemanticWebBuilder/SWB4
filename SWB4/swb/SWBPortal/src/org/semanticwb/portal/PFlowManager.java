@@ -839,7 +839,7 @@ public class PFlowManager
         Locale locale = Locale.getDefault();
         try
         {
-            ResourceBundle bundle = ResourceBundle.getBundle("com/infotec/wb/servlets/WorkflowWS", locale);
+            ResourceBundle bundle = ResourceBundle.getBundle("/org/semanticwb/portal/PFlowManager", locale);
             if (resource.getPflowInstance() != null)
             {
                 WebSite site = resource.getWebSite();
