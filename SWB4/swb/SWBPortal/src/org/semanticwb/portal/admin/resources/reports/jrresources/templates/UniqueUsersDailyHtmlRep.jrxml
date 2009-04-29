@@ -48,17 +48,18 @@
 			</band>
 		</background>
 		<title>
-			<band height="32"  isSplitAllowed="true" >
+			<band height="23"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						mode="Opaque"
 						x="0"
 						y="0"
 						width="552"
-						height="24"
+						height="23"
 						forecolor="#FFFFFF"
-						backcolor="#336600"
-						key="staticText-1"/>
+						backcolor="#336699"
+						key="staticText-7"
+						positionType="FixRelativeToBottom"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
@@ -67,23 +68,35 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Reporte de usuarios únicos firmados diario]]></text>
+				<text><![CDATA[Reporte de usuarios distintos firmados por día]]></text>
 				</staticText>
 			</band>
 		</title>
 		<pageHeader>
-			<band height="12"  isSplitAllowed="true" >
+			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</pageHeader>
 		<columnHeader>
 			<band height="23"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						x="0"
+						y="0"
+						width="552"
+						height="23"
+						backcolor="#C5E2FF"
+						key="rectangle-1"/>
+					<graphicElement stretchType="NoStretch">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+</graphicElement>
+				</rectangle>
 				<staticText>
 					<reportElement
-						x="36"
+						x="33"
 						y="3"
 						width="157"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-2"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -97,11 +110,11 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="210"
+						x="205"
 						y="3"
 						width="49"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-3"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -115,11 +128,11 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="275"
+						x="270"
 						y="3"
 						width="79"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-4"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -133,11 +146,11 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="414"
+						x="411"
 						y="3"
 						width="109"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-5"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -151,11 +164,11 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="361"
+						x="363"
 						y="3"
 						width="32"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-6"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -173,8 +186,8 @@
 			<band height="23"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="36"
-						y="3"
+						x="33"
+						y="2"
 						width="157"
 						height="18"
 						key="textField"/>
@@ -190,8 +203,8 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="210"
-						y="3"
+						x="205"
+						y="2"
 						width="49"
 						height="18"
 						key="textField"/>
@@ -207,8 +220,8 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="275"
-						y="3"
+						x="270"
+						y="2"
 						width="79"
 						height="18"
 						key="textField"/>
@@ -224,8 +237,8 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="414"
-						y="3"
+						x="411"
+						y="2"
 						width="109"
 						height="18"
 						key="textField"/>
@@ -241,8 +254,8 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="361"
-						y="3"
+						x="363"
+						y="2"
 						width="32"
 						height="18"
 						key="textField"/>
@@ -256,6 +269,16 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{day}]]></textFieldExpression>
 				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="21"
+						width="552"
+						height="0"
+						forecolor="#CCCCCC"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
 			</band>
 		</detail>
 		<columnFooter>
