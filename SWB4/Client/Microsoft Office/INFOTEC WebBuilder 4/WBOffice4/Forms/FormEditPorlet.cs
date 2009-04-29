@@ -29,8 +29,7 @@ namespace WBOffice4.Forms
             this.textBoxDescription.Text = pageInformation.description;
             this.checkBoxActive.Checked = pageInformation.active;
             this.labelSite.Text = pageInformation.page.site.title;
-            this.labelPage.Text = pageInformation.page.title;
-            //loadProperties();
+            this.labelPage.Text = pageInformation.page.title;            
             loadCalendars();
             VersionInfo info = new VersionInfo();
             info.nameOfVersion = "*";
@@ -122,6 +121,22 @@ namespace WBOffice4.Forms
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
+            if (String.IsNullOrEmpty(this.textBoxTitle.Text))
+            {
+                MessageBox.Show(this, "¡Debe indicar el título!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.textBoxTitle.Focus();
+                return;
+            }
+            if (String.IsNullOrEmpty(this.textBoxDescription.Text))
+            {
+                MessageBox.Show(this, "¡Debe indicar la descripción!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.textBoxDescription.Focus();
+                return;
+            }
+            pageInformation.title=this.textBoxTitle.Text;
+            pageInformation.description=this.textBoxDescription.Text;
+            pageInformation.version = ((VersionInfo)this.comboBoxVersiones.SelectedItem).nameOfVersion;
+            OfficeApplication.OfficeDocumentProxy.updatePorlet(pageInformation);
             if (this.checkBoxActive.Checked)
             {
                 if (this.pageInformation.active)
