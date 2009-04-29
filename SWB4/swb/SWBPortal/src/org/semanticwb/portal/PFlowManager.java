@@ -598,7 +598,6 @@ public class PFlowManager
                     log.error(e);
                 }
                 String messageType = "I";
-
                 mailToNotify(resource, activity, messageType, message);
             }
 
@@ -849,8 +848,6 @@ public class PFlowManager
                             }
                             if (activity.getAttribute("name").equalsIgnoreCase(activityName))
                             {
-
-
                                 if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity"))
                                 {
                                     User user = resource.getCreator();
@@ -871,31 +868,24 @@ public class PFlowManager
                                     }
                                     WebPage page = (WebPage) resource.getResourceable();
                                     HashMap args = new HashMap();
-                                    args.put("language", Locale.getDefault().getLanguage());
-                                    //msgMail += "\r\n" + bundle.getString("seccion") + ": " + otopic.getDisplayName(args) + ".\r\n";
-                                    msgMail += "\r\n" + bundle.getString("seccion") + ": " + site.getTitle() + ".\r\n";
-
-
+                                    args.put("language", Locale.getDefault().getLanguage());                                    
+                                    msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
                                     SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg8"), msgMail);
                                 }
                                 else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity"))
                                 {
                                     User user = resource.getCreator();
-                                    String msgMail = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg9") + ".";
-                                    //TopicMap omap = TopicMgr.getInstance().getTopicMap(ocontent.getTopicMapID());
-
+                                    String msgMail = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg9") + ".";                                    
                                     msgMail += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
                                     msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
                                     if (messageType.equalsIgnoreCase("N") && message != null && !message.equalsIgnoreCase(""))
                                     {
                                         msgMail += "\r\n" + bundle.getString("msg6") + ": " + message;
-                                    }
-                                    //Topic otopic = omap.getTopic(ocontent.topic);
+                                    }                                    
                                     WebPage page = (WebPage) resource.getResourceable();
                                     HashMap args = new HashMap();
                                     args.put("language", Locale.getDefault().getLanguage());
                                     msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
-
                                     SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg10") + "", msgMail);
                                 }
                                 else if (activity.getAttribute("type").equalsIgnoreCase("Activity"))
@@ -954,16 +944,9 @@ public class PFlowManager
                                     if (!to.equalsIgnoreCase(""))
                                     {
                                         String subject = bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg11");
-                                        String msg = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg12") + " '" + activityName + "'.\r\n";
-                                        //TopicMap omap = TopicMgr.getInstance().getTopicMap(ocontent.getTopicMapID());
-
+                                        String msg = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg12") + " '" + activityName + "'.\r\n";                                        
                                         msg += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
                                         msg += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
-
-
-
-
-                                        //Topic otopic = omap.getTopic(ocontent.topic);
                                         WebPage page = (WebPage) resource.getResourceable();
                                         HashMap args = new HashMap();
                                         args.put("language", Locale.getDefault().getLanguage());
