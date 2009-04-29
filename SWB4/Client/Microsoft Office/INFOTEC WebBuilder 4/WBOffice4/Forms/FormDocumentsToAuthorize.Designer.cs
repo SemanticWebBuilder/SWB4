@@ -34,17 +34,21 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.listView1 = new System.Windows.Forms.ListView();
             this.toolStripButtonSee = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonAuthorize = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonReject = new System.Windows.Forms.ToolStripButton();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.radioButtonForAuthorize = new System.Windows.Forms.RadioButton();
+            this.radioButtonMyDocuments = new System.Windows.Forms.RadioButton();
+            this.radioButtonAll = new System.Windows.Forms.RadioButton();
+            this.comboBoxSites = new System.Windows.Forms.ComboBox();
+            this.listViewFlows = new System.Windows.Forms.ListView();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -106,81 +110,6 @@
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.radioButton3);
-            this.panel3.Controls.Add(this.radioButton2);
-            this.panel3.Controls.Add(this.radioButton1);
-            this.panel3.Controls.Add(this.comboBox1);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(0, 26);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(477, 36);
-            this.panel3.TabIndex = 3;
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(363, 13);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(84, 17);
-            this.radioButton3.TabIndex = 3;
-            this.radioButton3.Text = "Por autorizar";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Checked = true;
-            this.radioButton2.Location = new System.Drawing.Point(255, 13);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(102, 17);
-            this.radioButton2.TabIndex = 2;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Mis documentos";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(193, 13);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(55, 17);
-            this.radioButton1.TabIndex = 1;
-            this.radioButton1.Text = "Todos";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(3, 9);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(183, 21);
-            this.comboBox1.TabIndex = 0;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // listView1
-            // 
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.Location = new System.Drawing.Point(0, 62);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(477, 194);
-            this.listView1.TabIndex = 4;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
-            // 
             // toolStripButtonSee
             // 
             this.toolStripButtonSee.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -190,6 +119,11 @@
             this.toolStripButtonSee.Name = "toolStripButtonSee";
             this.toolStripButtonSee.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonSee.Text = "toolStripButton1";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // toolStripButtonAuthorize
             // 
@@ -202,6 +136,11 @@
             this.toolStripButtonAuthorize.Text = "toolStripButton2";
             this.toolStripButtonAuthorize.Click += new System.EventHandler(this.toolStripButtonAuthorize_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
             // toolStripButtonReject
             // 
             this.toolStripButtonReject.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -213,6 +152,96 @@
             this.toolStripButtonReject.Text = "toolStripButton3";
             this.toolStripButtonReject.Click += new System.EventHandler(this.toolStripButtonReject_Click);
             // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.radioButtonForAuthorize);
+            this.panel3.Controls.Add(this.radioButtonMyDocuments);
+            this.panel3.Controls.Add(this.radioButtonAll);
+            this.panel3.Controls.Add(this.comboBoxSites);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(0, 26);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(477, 36);
+            this.panel3.TabIndex = 3;
+            // 
+            // radioButtonForAuthorize
+            // 
+            this.radioButtonForAuthorize.AutoSize = true;
+            this.radioButtonForAuthorize.Location = new System.Drawing.Point(363, 13);
+            this.radioButtonForAuthorize.Name = "radioButtonForAuthorize";
+            this.radioButtonForAuthorize.Size = new System.Drawing.Size(84, 17);
+            this.radioButtonForAuthorize.TabIndex = 3;
+            this.radioButtonForAuthorize.Text = "Por autorizar";
+            this.radioButtonForAuthorize.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonMyDocuments
+            // 
+            this.radioButtonMyDocuments.AutoSize = true;
+            this.radioButtonMyDocuments.Checked = true;
+            this.radioButtonMyDocuments.Location = new System.Drawing.Point(255, 13);
+            this.radioButtonMyDocuments.Name = "radioButtonMyDocuments";
+            this.radioButtonMyDocuments.Size = new System.Drawing.Size(102, 17);
+            this.radioButtonMyDocuments.TabIndex = 2;
+            this.radioButtonMyDocuments.TabStop = true;
+            this.radioButtonMyDocuments.Text = "Mis documentos";
+            this.radioButtonMyDocuments.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonAll
+            // 
+            this.radioButtonAll.AutoSize = true;
+            this.radioButtonAll.Location = new System.Drawing.Point(193, 13);
+            this.radioButtonAll.Name = "radioButtonAll";
+            this.radioButtonAll.Size = new System.Drawing.Size(55, 17);
+            this.radioButtonAll.TabIndex = 1;
+            this.radioButtonAll.Text = "Todos";
+            this.radioButtonAll.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxSites
+            // 
+            this.comboBoxSites.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSites.FormattingEnabled = true;
+            this.comboBoxSites.Location = new System.Drawing.Point(3, 9);
+            this.comboBoxSites.Name = "comboBoxSites";
+            this.comboBoxSites.Size = new System.Drawing.Size(183, 21);
+            this.comboBoxSites.TabIndex = 0;
+            this.comboBoxSites.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // listViewFlows
+            // 
+            this.listViewFlows.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4});
+            this.listViewFlows.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewFlows.Location = new System.Drawing.Point(0, 62);
+            this.listViewFlows.Name = "listViewFlows";
+            this.listViewFlows.Size = new System.Drawing.Size(477, 194);
+            this.listViewFlows.TabIndex = 4;
+            this.listViewFlows.UseCompatibleStateImageBehavior = false;
+            this.listViewFlows.View = System.Windows.Forms.View.Details;
+            this.listViewFlows.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Título";
+            this.columnHeader1.Width = 120;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Página";
+            this.columnHeader2.Width = 120;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Paso";
+            this.columnHeader3.Width = 120;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Version";
+            this.columnHeader4.Width = 100;
+            // 
             // FormDocumentsToAuthorize
             // 
             this.AcceptButton = this.buttonOk;
@@ -220,7 +249,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(477, 296);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.listViewFlows);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -253,12 +282,16 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton toolStripButtonReject;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.RadioButton radioButtonForAuthorize;
+        private System.Windows.Forms.RadioButton radioButtonMyDocuments;
+        private System.Windows.Forms.RadioButton radioButtonAll;
+        private System.Windows.Forms.ComboBox comboBoxSites;
+        private System.Windows.Forms.ListView listViewFlows;
         private System.Windows.Forms.Button buttonOk;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
     }
 }

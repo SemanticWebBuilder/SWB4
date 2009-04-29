@@ -30,11 +30,11 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAuthorize));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonok = new System.Windows.Forms.Button();
+            this.buttonCancel = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.buttonCancel = new System.Windows.Forms.Button();
-            this.buttonok = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -48,6 +48,27 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(292, 35);
             this.panel1.TabIndex = 0;
+            // 
+            // buttonok
+            // 
+            this.buttonok.Location = new System.Drawing.Point(133, 6);
+            this.buttonok.Name = "buttonok";
+            this.buttonok.Size = new System.Drawing.Size(75, 23);
+            this.buttonok.TabIndex = 1;
+            this.buttonok.Text = "Aceptar";
+            this.buttonok.UseVisualStyleBackColor = true;
+            this.buttonok.Click += new System.EventHandler(this.buttonok_Click);
+            // 
+            // buttonCancel
+            // 
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Location = new System.Drawing.Point(214, 6);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.TabIndex = 0;
+            this.buttonCancel.Text = "Cencelar";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // panel2
             // 
@@ -76,27 +97,6 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(292, 128);
             this.textBox1.TabIndex = 2;
-            // 
-            // buttonCancel
-            // 
-            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(214, 6);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 0;
-            this.buttonCancel.Text = "Cencelar";
-            this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
-            // 
-            // buttonok
-            // 
-            this.buttonok.Location = new System.Drawing.Point(133, 6);
-            this.buttonok.Name = "buttonok";
-            this.buttonok.Size = new System.Drawing.Size(75, 23);
-            this.buttonok.TabIndex = 1;
-            this.buttonok.Text = "Aceptar";
-            this.buttonok.UseVisualStyleBackColor = true;
-            this.buttonok.Click += new System.EventHandler(this.buttonok_Click);
             // 
             // FormAuthorize
             // 
@@ -128,8 +128,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonok;
+        public System.Windows.Forms.TextBox textBox1;
     }
 }
