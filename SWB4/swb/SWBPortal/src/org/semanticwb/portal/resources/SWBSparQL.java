@@ -5,6 +5,7 @@
 
 package org.semanticwb.portal.resources;
 
+import com.hp.hpl.jena.graph.Node;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -279,8 +280,16 @@ public class SWBSparQL extends GenericResource {
                         {
                             String name=it.next();
                             RDFNode x = rb.get(name) ;
+                            String val=x.toString();
+                            if(x.isLiteral())
+                            {
+                                Node n=x.asNode();
+                                val=n.getLiteralLexicalForm();
+                                String l=n.getLiteralLanguage();
+                                if(l!=null && l.length()>0)val+="{@"+l+"}";
+                            }
                             out.println("<td >");
-                            out.println(x!=null?x:" - ");
+                            out.println(x!=null?val:" - ");
                             out.println("</td>");
                         }
                         out.println("</tr>");
