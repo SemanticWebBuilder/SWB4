@@ -15,7 +15,14 @@ namespace WBOffice4.Forms
             this.Text = info.title;
             this.SubItems.Add(info.resourceInfo.page.title);
             this.SubItems.Add(info.step);
-            this.SubItems.Add(info.resourceInfo.version);
+            if (info.resourceInfo.version == "")
+            {
+                this.SubItems.Add("Mostrar la última version");
+            }
+            else
+            {
+                this.SubItems.Add(info.resourceInfo.version);
+            }
         }
         public FlowContentInformation FlowContentInformation
         {

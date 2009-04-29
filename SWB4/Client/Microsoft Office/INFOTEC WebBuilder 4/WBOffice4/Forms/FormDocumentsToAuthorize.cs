@@ -31,6 +31,9 @@ namespace WBOffice4.Forms
         }
         private void loadContents()
         {
+            this.toolStripButtonSee.Enabled = false;
+            this.toolStripButtonAuthorize.Enabled = false;
+            this.toolStripButtonReject.Enabled = false;
             this.listViewFlows.Items.Clear();
             if(this.comboBoxSites.SelectedItem is WebSiteInfo)
             {
