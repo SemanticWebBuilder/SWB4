@@ -31,6 +31,7 @@ namespace WBOffice4.Steps
             {
                 MessageBox.Show(this, "¡Debe indicar una categoria!", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 e.Cancel = true;
+                return;
             }
             RepositoryInfo rep = (RepositoryInfo)this.Wizard.Data[REPOSITORY_ID];
             if (rep.exclusive)

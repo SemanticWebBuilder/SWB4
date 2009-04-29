@@ -5,7 +5,7 @@ using System.Text;
 using XmlRpcLibrary;
 namespace WBOffice4.Interfaces
 {
-    interface IOfficeApplication : IXmlRpcProxy
+    public interface IOfficeApplication : IXmlRpcProxy
     {
         //static int version = "1.0";
         [XmlRpcMethod("OfficeApplication.isValidVersion")]
