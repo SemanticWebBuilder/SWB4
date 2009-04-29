@@ -724,33 +724,40 @@ public class PFlowManager
 
     public boolean isAuthorized(Resource resource)
     {
-        PFlowInstance instance = resource.getPflowInstance();
-        if (instance != null)
-        {
-            if (instance.getStatus() == 2)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    public boolean isInFlow(Resource resource)
-    {
-        if( resource.getPflowInstance()==null)
+        if (needAnAuthorization(resource) || isInFlow(resource))
         {
             return false;
         }
         else
         {
-            if(resource.getPflowInstance().getStep()!=null)
+            PFlowInstance instance = resource.getPflowInstance();
+            if (instance != null)
+            {
+                if (instance.getStatus() == 2)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
+
+    public boolean isInFlow(Resource resource)
+    {
+        if (resource.getPflowInstance() == null)
+        {
+            return false;
+        }
+        else
+        {
+            if (resource.getPflowInstance().getStep() != null)
             {
                 return true;
             }
@@ -879,20 +886,20 @@ public class PFlowManager
                                     }
                                     WebPage page = (WebPage) resource.getResourceable();
                                     HashMap args = new HashMap();
-                                    args.put("language", Locale.getDefault().getLanguage());                                    
+                                    args.put("language", Locale.getDefault().getLanguage());
                                     msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
                                     SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg8"), msgMail);
                                 }
                                 else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity"))
                                 {
                                     User user = resource.getCreator();
-                                    String msgMail = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg9") + ".";                                    
+                                    String msgMail = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg9") + ".";
                                     msgMail += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
                                     msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
                                     if (messageType.equalsIgnoreCase("N") && message != null && !message.equalsIgnoreCase(""))
                                     {
                                         msgMail += "\r\n" + bundle.getString("msg6") + ": " + message;
-                                    }                                    
+                                    }
                                     WebPage page = (WebPage) resource.getResourceable();
                                     HashMap args = new HashMap();
                                     args.put("language", Locale.getDefault().getLanguage());
@@ -955,7 +962,7 @@ public class PFlowManager
                                     if (!to.equalsIgnoreCase(""))
                                     {
                                         String subject = bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg11");
-                                        String msg = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg12") + " '" + activityName + "'.\r\n";                                        
+                                        String msg = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg12") + " '" + activityName + "'.\r\n";
                                         msg += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
                                         msg += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
                                         WebPage page = (WebPage) resource.getResourceable();
