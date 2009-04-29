@@ -744,7 +744,18 @@ public class PFlowManager
 
     public boolean isInFlow(Resource resource)
     {
-        return resource.getPflowInstance() != null;
+        if( resource.getPflowInstance()==null)
+        {
+            return false;
+        }
+        else
+        {
+            if(resource.getPflowInstance().getStep()!=null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean needSendtoPublish(Resource resource)
