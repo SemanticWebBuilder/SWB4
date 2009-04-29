@@ -26,11 +26,10 @@ package org.semanticwb.portal.admin.resources.reports;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -157,9 +156,13 @@ public class WBASessionReport extends GenericResource {
                 }catch(NumberFormatException e) {
                     groupDates = 0;
                 }
-                String fecha1 = request.getParameter("wb_fecha1")==null ? "":request.getParameter("wb_fecha1");
-                String fecha11 = request.getParameter("wb_fecha11")==null ? "":request.getParameter("wb_fecha11"); 
-                String fecha12 = request.getParameter("wb_fecha12")==null ? "":request.getParameter("wb_fecha12");
+
+                GregorianCalendar cal = new GregorianCalendar();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String fecha1 = request.getParameter("wb_fecha1")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha1");
+                String fecha11 = request.getParameter("wb_fecha11")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha11");
+                cal.add(cal.DATE, cal.getActualMaximum(cal.DAY_OF_MONTH)-cal.get(cal.DAY_OF_MONTH));
+                String fecha12 = request.getParameter("wb_fecha12")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha12");
                 
                 String topicId = paramsRequest.getTopic().getId();
                 if(topicId.lastIndexOf("Daily") != -1) {
@@ -280,38 +283,22 @@ public class WBASessionReport extends GenericResource {
                 
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
-                out.println("<legend>" + paramsRequest.getLocaleString("session_report") + "</legend>");
-                
+                if(rtype.equals("0")) {
+                    out.println(paramsRequest.getLocaleString("description_daily"));
+                }else {
+                    out.println(paramsRequest.getLocaleString("description_monthly"));
+                }
+                out.println("</fieldset>");
+
                 out.println("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"" + address + "\">");
+                out.println("<fieldset>");
+                out.println("<legend>"+paramsRequest.getLocaleString("session_report")+"</legend>");                
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 if(rtype.equals("0")) {
                     out.println("<tr><td width=\"183\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"443\"></td></tr>");
                 }else {
                     out.println("<tr><td width=\"100\"></td><td width=\"196\"></td><td width=\"224\"></td><td width=\"364\"></td></tr>");
                 }
-                out.println("<tr>");
-                out.println("<td colspan=4>");
-                if(rtype.equals("0")){
-                    out.println(paramsRequest.getLocaleString("description_daily"));
-                }
-                else{
-                    out.println(paramsRequest.getLocaleString("description_monthly"));
-                }
-                out.println("</td>");
-                out.println("</tr>");
-                               
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");                
-                out.println("<tr>");
-                out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
-                out.println("   <input type=\"button\" onclick=\"doXml('"+ rtype +"', 'width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;");
-                out.println("   <input type=\"button\" onclick=\"doExcel('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"Excel\" name=\"btnExcel\" />&nbsp;");                
-                out.println("   <input type=\"button\" onclick=\"doPdf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"PDF\" name=\"btnPdf\" />&nbsp;");
-                out.println("   <input type=\"button\" onclick=\"doRtf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"RTF\" name=\"btnRtf\" />&nbsp;");                
-                out.println("   <input type=\"button\" onclick=\"doGraph('"+ rtype +"','width=600, height=550, scrollbars, resizable')\" value=\"" + paramsRequest.getLocaleString("graph") + "\" name=\"btnGraph\" />&nbsp;");
-                out.println("   <input type=\"button\" onclick=\"doApply()\" value=\"" + paramsRequest.getLocaleString("apply") + "\" name=\"btnApply\" />");
-                out.println(" </td>");
-                out.println("</tr>");                
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 
                 out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("repository") + ":</td>");
@@ -349,9 +336,6 @@ public class WBASessionReport extends GenericResource {
                     out.println("</td>");
                     out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>");
                     out.println("</tr>");
-                    out.println("<tr>");
-                    out.println("<td colspan=4>&nbsp;</td>");
-                    out.println("</tr>");
 
                     out.println("<tr>");
                     out.println("<td>");
@@ -371,13 +355,25 @@ public class WBASessionReport extends GenericResource {
                     out.println("</td>");
                     out.println("<td>&nbsp;</td>");
                     out.println("</tr>");
-                    
+                    out.println("</table></fieldset>");
+
+                    out.println("<fieldset>");
+                    out.println("<table border=\"0\" width=\"95%\">");
                     out.println("<tr>");
-                    out.println("<td colspan=\"4\" align=\"left\">");
-                    if(request.getParameter("wb_rtype")==null || repositoryName==null ) {
-                        out.println("&nbsp;");
-                    }
-                    else{
+                    out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doXml('"+ rtype +"', 'width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doExcel('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">MS Excel</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doPdf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">PDF</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doRtf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">RTF</button>");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doGraph('"+ rtype +"','width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
+                    out.println(" </td>");
+                    out.println("</tr>");
+                    out.println("</table>");
+                    out.println("</fieldset>");
+                    out.println("</form>");
+                    if(request.getParameter("wb_rtype")!=null && repositoryName!=null ) {
+                        out.println("<fieldset>");
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
                         out.println("<tr>");
                         out.println("<td>");
@@ -393,15 +389,13 @@ public class WBASessionReport extends GenericResource {
                             jrResource.exportReport(response);                            
                         }catch (Exception e) {
                             throw new javax.servlet.ServletException(e);
-                        }
-                                                
+                        }                                                
                         out.println("</td>");
                         out.println("</tr>");
+                        out.println("<tr><td>&nbsp;</td></tr>");
                         out.println("</table>");
-                        /*out.println("<hr size=\"1\" noshade>");*/
+                        out.println("</fieldset>");
                     }
-                    out.println("</td>");
-                    out.println("</tr>");
                 }else { // REPORTE MENSUAL
                     GregorianCalendar gc_now = new GregorianCalendar();
                     int year13 = request.getParameter("wb_year13")==null ? gc_now.get(Calendar.YEAR):Integer.parseInt(request.getParameter("wb_year13"));
@@ -419,13 +413,25 @@ public class WBASessionReport extends GenericResource {
                     out.println("</td>");                    
                     out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"1\" /></td>");                        
                     out.println("</tr>");
-                    
+                    out.println("</table></fieldset>");
+
+                    out.println("<fieldset>");
+                    out.println("<table border=\"0\" width=\"95%\">");
                     out.println("<tr>");
-                    out.println("<td colspan=\"4\">");
-                    if(request.getParameter("wb_rtype")==null || repositoryName==null ) {
-                        out.println("&nbsp;");
-                    }
-                    else{
+                    out.println(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doXml('"+ rtype +"', 'width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doExcel('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">MS Excel</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doPdf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">PDF</button>&nbsp;");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doRtf('"+ rtype +"','width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">RTF</button>");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doGraph('"+ rtype +"','width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>");
+                    out.println("   <button dojoType=\"dijit.form.Button\" onclick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
+                    out.println(" </td>");
+                    out.println("</tr>");
+                    out.println("</table>");
+                    out.println("</fieldset>");
+                    out.println("</form>");
+                    if(request.getParameter("wb_rtype")!=null && repositoryName!=null ) {
+                        out.println("<fieldset>");
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");
                         out.println("<tr><td>");
                         WBAFilterReportBean filter = new WBAFilterReportBean();
@@ -445,17 +451,13 @@ public class WBASessionReport extends GenericResource {
                         }catch (Exception e) {
                             throw new javax.servlet.ServletException(e);
                         }
-                        out.println("</td></tr>");                            
+                        out.println("</td></tr>");
+                        out.println("<tr><td>&nbsp;</td></tr>");
                         out.println("</table>");
-                        /*out.println("<hr size=\"1\" noshade>");*/
+                        out.println("</fieldset>");
                     }
-                    out.println("</td>");
-                    out.println("</tr>");
                 }
-
-                out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                out.println("</table></form>");
-                out.println("</fieldset></div>");
+                out.println("</div>");
             }
             else { // There are not repositories and displays a message
                 out.println("<div class=\"swbform\">");
