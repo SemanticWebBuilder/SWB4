@@ -378,94 +378,7 @@ public class DialogEditPorlet extends javax.swing.JDialog
             return;
         }
 
-        if (this.jCheckBoxActive.isSelected())
-        {
-            if (this.pageInformation.active)
-            {
-                try
-                {
-                    OfficeApplication.getOfficeDocumentProxy().activateResource(pageInformation, this.jCheckBoxActive.isSelected());
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-            else
-            {
-                try
-                {
-                    if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(pageInformation))
-                    {
-                        this.jCheckBoxActive.setSelected(pageInformation.active);
-                        int res = JOptionPane.showConfirmDialog(this, "El documento requiere una autorización para activarse\r\n¿Desea envíar a publicar el contenido?", this.getTitle(), JOptionPane.YES_NO_OPTION);
-                        if (res == JOptionPane.YES_OPTION)
-                        {
-                            DialogSelectFlow formSendToAutorize = new DialogSelectFlow(pageInformation);
-                            formSendToAutorize.setVisible(true);
-                            if (formSendToAutorize.selected!=null)
-                            {
-                                OfficeApplication.getOfficeDocumentProxy().sendToAuthorize(pageInformation, formSendToAutorize.selected, formSendToAutorize.jTextAreaMessage.getText());
-                            }
-                            else
-                            {
-                                JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
-                            }
-                        }
-                        else
-                        {
-                            JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
-                        }
-                    }
-                    else if (OfficeApplication.getOfficeDocumentProxy().isInFlow(pageInformation))
-                    {
-                        this.jCheckBoxActive.setSelected(pageInformation.active);
-                        JOptionPane.showMessageDialog(this, "El contenido se encuentra en proceso de ser autorizado.\r\nPara activarlo necesita terminar el proceso de autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
-                    }
-                    else if (OfficeApplication.getOfficeDocumentProxy().isAuthorized(pageInformation))
-                    {
-                        OfficeApplication.getOfficeDocumentProxy().activateResource(pageInformation, this.jCheckBoxActive.isSelected());
-                    }
-                    else
-                    {
-                        this.jCheckBoxActive.setSelected(pageInformation.active);
-                        int res = JOptionPane.showConfirmDialog(this, "El contenido fue rechazado.\r\nPara activarlo necesita enviarlo a autorización de nuevo\r\n¿Desea enviarlo a autorización?", this.getTitle(), JOptionPane.YES_NO_OPTION);
-                        if (res == JOptionPane.YES_OPTION)
-                        {
-                            DialogSelectFlow formSendToAutorize = new DialogSelectFlow(pageInformation);
-                            formSendToAutorize.setVisible(true);
-                            if (formSendToAutorize.selected!=null)
-                            {
-                                OfficeApplication.getOfficeDocumentProxy().sendToAuthorize(pageInformation, formSendToAutorize.selected, formSendToAutorize.jTextAreaMessage.getText());
-                            }
-                            else
-                            {
-                                JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
-                            }
-                        }
-                        else
-                        {
-                            JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else
-        {
-            try
-            {
-                OfficeApplication.getOfficeDocumentProxy().activateResource(pageInformation, this.jCheckBoxActive.isSelected());
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
+
         // validate view properties
         Map<PropertyInfo, String> properties = panelPropertyEditor1.getProperties();
         PropertyInfo[] props = properties.keySet().toArray(new PropertyInfo[properties.keySet().size()]);
@@ -510,6 +423,94 @@ public class DialogEditPorlet extends javax.swing.JDialog
                     {
                         // update
                         OfficeApplication.getOfficeDocumentProxy().updateCalendar(pageInformation, cal);
+                    }
+                }
+                if (this.jCheckBoxActive.isSelected())
+                {
+                    if (this.pageInformation.active)
+                    {
+                        try
+                        {
+                            OfficeApplication.getOfficeDocumentProxy().activateResource(pageInformation, this.jCheckBoxActive.isSelected());
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(pageInformation))
+                            {
+                                this.jCheckBoxActive.setSelected(pageInformation.active);
+                                res = JOptionPane.showConfirmDialog(this, "El documento requiere una autorización para activarse\r\n¿Desea envíar a publicar el contenido?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                                if (res == JOptionPane.YES_OPTION)
+                                {
+                                    DialogSelectFlow formSendToAutorize = new DialogSelectFlow(pageInformation);
+                                    formSendToAutorize.setVisible(true);
+                                    if (formSendToAutorize.selected != null)
+                                    {
+                                        OfficeApplication.getOfficeDocumentProxy().sendToAuthorize(pageInformation, formSendToAutorize.selected, formSendToAutorize.jTextAreaMessage.getText());
+                                    }
+                                    else
+                                    {
+                                        JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                    }
+                                }
+                                else
+                                {
+                                    JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                }
+                            }
+                            else if (OfficeApplication.getOfficeDocumentProxy().isInFlow(pageInformation))
+                            {
+                                this.jCheckBoxActive.setSelected(pageInformation.active);
+                                JOptionPane.showMessageDialog(this, "El contenido se encuentra en proceso de ser autorizado.\r\nPara activarlo necesita terminar el proceso de autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                            }
+                            else if (OfficeApplication.getOfficeDocumentProxy().isAuthorized(pageInformation))
+                            {
+                                OfficeApplication.getOfficeDocumentProxy().activateResource(pageInformation, this.jCheckBoxActive.isSelected());
+                            }
+                            else
+                            {
+                                this.jCheckBoxActive.setSelected(pageInformation.active);
+                                res = JOptionPane.showConfirmDialog(this, "El contenido fue rechazado.\r\nPara activarlo necesita enviarlo a autorización de nuevo\r\n¿Desea enviarlo a autorización?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                                if (res == JOptionPane.YES_OPTION)
+                                {
+                                    DialogSelectFlow formSendToAutorize = new DialogSelectFlow(pageInformation);
+                                    formSendToAutorize.setVisible(true);
+                                    if (formSendToAutorize.selected != null)
+                                    {
+                                        OfficeApplication.getOfficeDocumentProxy().sendToAuthorize(pageInformation, formSendToAutorize.selected, formSendToAutorize.jTextAreaMessage.getText());
+                                    }
+                                    else
+                                    {
+                                        JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                    }
+                                }
+                                else
+                                {
+                                    JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        OfficeApplication.getOfficeDocumentProxy().activateResource(pageInformation, this.jCheckBoxActive.isSelected());
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
                     }
                 }
                 // update view properties
