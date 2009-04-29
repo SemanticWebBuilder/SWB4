@@ -23,6 +23,10 @@ namespace WBOffice4.Forms
             {
                 this.comboBoxSites.Items.Add(site);
             }
+            if (this.comboBoxSites.Items.Count < 0)
+            {
+                this.comboBoxSites.SelectedIndex = 0;
+            }
         }
         private void loadContents()
         {
