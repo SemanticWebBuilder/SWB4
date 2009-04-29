@@ -141,5 +141,9 @@ namespace WBOffice4.Interfaces
 
         [XmlRpcMethod("OfficeDocument.sendToAuthorize")]
         void sendToAuthorize(ResourceInfo info, PFlow flow, String message);
+
+        [XmlRpcMethod("OfficeDocument.isInFlow")]
+        bool isInFlow(ResourceInfo info);
+        
     }
 }

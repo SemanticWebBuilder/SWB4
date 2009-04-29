@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEditPorlet));
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonOK = new System.Windows.Forms.Button();
@@ -57,6 +58,7 @@
             this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             this.tabControlProperties.SuspendLayout();
             this.tabPageInformation.SuspendLayout();
@@ -239,7 +241,7 @@
             this.tabPageProperties.Location = new System.Drawing.Point(4, 22);
             this.tabPageProperties.Name = "tabPageProperties";
             this.tabPageProperties.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageProperties.Size = new System.Drawing.Size(411, 260);
+            this.tabPageProperties.Size = new System.Drawing.Size(411, 218);
             this.tabPageProperties.TabIndex = 1;
             this.tabPageProperties.Text = "Propiedades de publicación";
             this.tabPageProperties.UseVisualStyleBackColor = true;
@@ -250,7 +252,7 @@
             this.tabPageCalendar.Controls.Add(this.toolStripCalendar);
             this.tabPageCalendar.Location = new System.Drawing.Point(4, 22);
             this.tabPageCalendar.Name = "tabPageCalendar";
-            this.tabPageCalendar.Size = new System.Drawing.Size(411, 260);
+            this.tabPageCalendar.Size = new System.Drawing.Size(411, 218);
             this.tabPageCalendar.TabIndex = 2;
             this.tabPageCalendar.Text = "Calendarización";
             this.tabPageCalendar.UseVisualStyleBackColor = true;
@@ -263,7 +265,7 @@
             this.listViewCalendar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewCalendar.Location = new System.Drawing.Point(0, 25);
             this.listViewCalendar.Name = "listViewCalendar";
-            this.listViewCalendar.Size = new System.Drawing.Size(411, 235);
+            this.listViewCalendar.Size = new System.Drawing.Size(411, 193);
             this.listViewCalendar.TabIndex = 1;
             this.listViewCalendar.UseCompatibleStateImageBehavior = false;
             this.listViewCalendar.View = System.Windows.Forms.View.Details;
@@ -390,5 +392,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonEdit;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

@@ -41,7 +41,14 @@ namespace WBOffice4.Forms
             }
             VersionInfo selected = new VersionInfo();
             selected.nameOfVersion = pageInformation.version;
-
+            if (OfficeApplication.OfficeDocumentProxy.needsSendToPublish(pageInformation))
+            {
+                this.toolTip1.SetToolTip(this.checkBoxActive, "Necesita enviar a flujo el contenido para activarlo");
+            }
+            if (OfficeApplication.OfficeDocumentProxy.isInFlow(pageInformation))
+            {
+                this.toolTip1.SetToolTip(this.checkBoxActive, "El contenido se encuentra en proceso de ser autorizado, para activarlo, necesita terminar este proceso");
+            }
             comboBoxVersiones.SelectedItem = selected;
             loadProperties();
         }
@@ -166,6 +173,11 @@ namespace WBOffice4.Forms
                         {
                             MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);                            
                         }
+                    }
+                    else if (OfficeApplication.OfficeDocumentProxy.isInFlow(pageInformation))
+                    {
+                        this.checkBoxActive.Checked = pageInformation.active;
+                        MessageBox.Show(this, "El contenido se encuentra en proceso de ser autorizado.\r\nPara activarlo necesita terminar el proceso de autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);                                
                     }
                     else
                     {
