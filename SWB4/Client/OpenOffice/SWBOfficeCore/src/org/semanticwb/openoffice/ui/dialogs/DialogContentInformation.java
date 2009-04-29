@@ -785,10 +785,31 @@ public class DialogContentInformation extends javax.swing.JDialog
                         {
                             JOptionPane.showMessageDialog(null, "¡Este contenido se encuentra en proceso de autorización, para activar este contenido debe terminar primero el proceso de autorización!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                         }
-                        else
+                        else if(OfficeApplication.getOfficeDocumentProxy().isAuthorized(resourceInfo))
                         {
                             OfficeApplication.getOfficeDocumentProxy().activateResource(resourceInfo, newactive);
                         }
+                        else
+                        {
+                            int res = JOptionPane.showConfirmDialog(null, "El contenido fue rechazado.\r\nPara activarlo necesita enviarlo a autorización de nuevo\r\n¿Desea enviarlo a autorización?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            if (res == JOptionPane.YES_OPTION)
+                            {
+                                DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(resourceInfo);
+                                dialogSelectFlow.setVisible(true);
+                                if (dialogSelectFlow.selected != null)
+                                {
+                                    OfficeApplication.getOfficeDocumentProxy().sendToAuthorize(resourceInfo, dialogSelectFlow.selected, dialogSelectFlow.jTextAreaMessage.getText().trim());
+                                }
+                                else
+                                {
+                                    JOptionPane.showMessageDialog(null, "¡Para activar este contenido debe ser autorizado primero!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        OfficeApplication.getOfficeDocumentProxy().activateResource(resourceInfo, newactive);
                     }
                 }
 
