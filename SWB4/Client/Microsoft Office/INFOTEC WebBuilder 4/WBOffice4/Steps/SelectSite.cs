@@ -41,7 +41,7 @@ namespace WBOffice4.Steps
         private void addHomePage(TreeNode siteNode, WebSiteInfo site)
         {
             WebPageInfo home=OfficeApplication.OfficeApplicationProxy.getHomePage(site);
-            TreeNode homeNode = new TreeNode(home.title,1,1);
+            TreeNode homeNode = new TreeNode(home.title,0,0);
             homeNode.Tag = home;
             homeNode.ToolTipText = home.description;
             siteNode.Nodes.Add(homeNode);
@@ -56,7 +56,7 @@ namespace WBOffice4.Steps
         {
             foreach (WebPageInfo childPage in OfficeApplication.OfficeApplicationProxy.getPages(page))
             {
-                TreeNode childPageNode = new TreeNode(childPage.title,1,1);
+                TreeNode childPageNode = new TreeNode(childPage.title,2,2);
                 childPageNode.Tag = childPage;
                 childPageNode.ToolTipText = childPage.description;
                 pageNode.Nodes.Add(childPageNode);                
