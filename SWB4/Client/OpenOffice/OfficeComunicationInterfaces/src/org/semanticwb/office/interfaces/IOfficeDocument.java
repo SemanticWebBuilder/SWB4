@@ -151,6 +151,10 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.isInFlow")
     public boolean isInFlow(ResourceInfo info);
+
+    @XmlRpcMethod(methodName = "OfficeDocument.isAuthorized")
+    public boolean isAuthorized(ResourceInfo info);
+
 }
 
 
