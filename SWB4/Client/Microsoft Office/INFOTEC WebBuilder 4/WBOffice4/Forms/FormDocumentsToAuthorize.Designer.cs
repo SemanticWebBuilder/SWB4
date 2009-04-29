@@ -214,7 +214,9 @@
             this.columnHeader3,
             this.columnHeader4});
             this.listViewFlows.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewFlows.FullRowSelect = true;
             this.listViewFlows.Location = new System.Drawing.Point(0, 62);
+            this.listViewFlows.MultiSelect = false;
             this.listViewFlows.Name = "listViewFlows";
             this.listViewFlows.Size = new System.Drawing.Size(477, 194);
             this.listViewFlows.TabIndex = 4;
