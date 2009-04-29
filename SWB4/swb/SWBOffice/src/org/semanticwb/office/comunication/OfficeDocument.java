@@ -399,7 +399,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         try
         {
             boolean existsRep = false;
-            for (String rep : loader.getRepositoryNames())
+            for (String rep : loader.getWorkspaces())
             {
                 if (rep.equals(repositoryName))
                 {
