@@ -9,5 +9,10 @@ namespace WBOffice4.Interfaces
     {
         public String title;
         public String id;
+
+        public override string ToString()
+        {
+            return title.ToString();
+        }
     }
 }
