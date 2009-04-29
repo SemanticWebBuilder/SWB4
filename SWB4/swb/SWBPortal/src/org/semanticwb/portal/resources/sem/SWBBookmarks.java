@@ -217,59 +217,27 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             //System.out.println(">>>>>>>>Grupo untagged creado");
         }
 
-        out.println("<div class=\"soria\" id=\"ordermenu\">");
+        out.println("<div id=\"container\">");
+        out.print("<div id=\"header\"><h1>"+ paramRequest.getLocaleString("manage") +"</h1><div id=\"navmenu\">");
         url.setMode("ORDER");
         url.setParameter("oType", String.valueOf(SORT_BYNAME));
-        out.println((sType==SORT_BYNAME)?"<b>":"<a href=\""+ url +"\">");
-        out.println(paramRequest.getLocaleString("byname"));
-        out.println((sType==SORT_BYNAME)?"</b> |":"</a> |");
+        out.print((sType==SORT_BYNAME)?"<b>":"<a href=\""+ url +"\">");
+        out.print(paramRequest.getLocaleString("byname"));
+        out.print((sType==SORT_BYNAME)?"</b> |":"</a> |");
         url.setParameter("oType", String.valueOf(SORT_BYDATE));
-        out.println((sType==SORT_BYDATE)?"<b>":"<a href=\""+ url +"\">");
-        out.println(paramRequest.getLocaleString("bydate"));
-        out.println((sType==SORT_BYDATE)?"</b> |":"</a> |");
+        out.print((sType==SORT_BYDATE)?"<b>":"<a href=\""+ url +"\">");
+        out.print(paramRequest.getLocaleString("bydate"));
+        out.print((sType==SORT_BYDATE)?"</b> |":"</a> |");
         url.setParameter("oType", String.valueOf(SORT_BYTAGS));
-        out.println((sType==SORT_BYTAGS)?"<b>":"<a href=\""+ url +"\">");
-        out.println(paramRequest.getLocaleString("bytag"));
-        out.println((sType==SORT_BYTAGS)?"</b> |":"</a> |");
+        out.print((sType==SORT_BYTAGS)?"<b>":"<a href=\""+ url +"\">");
+        out.print(paramRequest.getLocaleString("bytag"));
+        out.print((sType==SORT_BYTAGS)?"</b> |":"</a> |");
         url = paramRequest.getRenderUrl();
         url.setMode("EXIT");
-        out.println("<a href=\""+ url +"\">" + paramRequest.getLocaleString("exit") + "</a>");
-        out.println("</div>");
-        out.println("<div class=\"soria\" id=\"mainmenu\">");
-        
-        //url.setMode("NOTHING");
-        //out.println("<a href=\"#\">da click</a>");
-        out.println("<div id=\"menutags\">");
-        url.setMode("BYTAG");
-        while (groups.hasNext()) {
-            BookmarkGroup group = groups.next();
-            if (!group.getTitle().equals(generalName)) {
-                url.setParameter("gid", group.getSemanticObject().getId());
-                if (!group.getTitle().equals(untaggedName)) {
-                    if (group.getEntryCount() > 0) {
-                        //System.out.println(">>>>>>Desplegando elementos del grupo " + group.getTitle());
-                        out.println("<a href=\"" + url + "\">" + group.getTitle() + "(" + group.getEntryCount() + ")" + "</a><br>");
-                    }
-                } else if (group.getEntryCount() > 0) {
-                    //System.out.println(">>>>>>Desplegando elementos del grupo " + group.getTitle());
-                    out.println("<a href=\"" + url + "\">" + paramRequest.getLocaleString("notags") + "(" + group.getEntryCount() + ")" + "</a><br>");
-                }
-            }
-        }
-        out.println("</div>");
-
-        url = paramRequest.getRenderUrl();
-        url.setParameter("level","admin");
-        url.setMode("ADDNEW");
-        out.println("<a href=\"" + url + "\">" + paramRequest.getLocaleString("add") + "</a><br>");
-        url.setMode("ADMIN");
-        out.println("<a href=\"" + url + "\">" + paramRequest.getLocaleString("manage") + "</a><br>");
-        if (generalGp.getEntryCount() > 0) {
-            url = paramRequest.getActionUrl();
-            url.setMode("DELALL");
-            out.println("<a href=\"#\" onclick=\"if(confirm('"+ paramRequest.getLocaleString("msgRemoveAll") +"')){location='"+ url +"'} else {return false;}\">" + paramRequest.getLocaleString("delall") + "</a>");
-        }
-        out.println("</div>");
+        out.print("<a href=\""+ url +"\">" + paramRequest.getLocaleString("exit") + "</a>");
+        out.println("</div></div>");
+        out.println("<div id=\"wrapper\">");
+        out.println("<div id=\"content\">");
         if (getSortType() != SORT_BYTAGS) {
             out.println(listEntriesByGroup(getSortType(), generalGp.getId(), paramRequest));
         } else {
@@ -287,6 +255,38 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 }
             }
         }
+        out.println("</div></div>");
+        out.println("<div id=\"navigation\">");
+        url.setMode("BYTAG");
+        while (groups.hasNext()) {
+            BookmarkGroup group = groups.next();
+            if (!group.getTitle().equals(generalName)) {
+                url.setParameter("gid", group.getSemanticObject().getId());
+                if (!group.getTitle().equals(untaggedName)) {
+                    if (group.getEntryCount() > 0) {
+                        //System.out.println(">>>>>>Desplegando elementos del grupo " + group.getTitle());
+                        out.println("<b><a href=\"" + url + "\">" + group.getTitle() + "(" + group.getEntryCount() + ")" + "</a></b><br>");
+                    }
+                } else if (group.getEntryCount() > 0) {
+                    //System.out.println(">>>>>>Desplegando elementos del grupo " + group.getTitle());
+                    out.println("<b><a href=\"" + url + "\">" + paramRequest.getLocaleString("notags") + "(" + group.getEntryCount() + ")" + "</a></b><br>");
+                }
+            }
+        }
+        out.println("</div>");
+        out.println("<div id=\"extra\">");
+        url = paramRequest.getRenderUrl();
+        url.setParameter("level","admin");
+        url.setMode("ADDNEW");
+        out.println("<a href=\"" + url + "\">" + paramRequest.getLocaleString("add") + "</a><br>");
+        url.setMode("ADMIN");
+        out.println("<a href=\"" + url + "\">" + paramRequest.getLocaleString("manage") + "</a><br>");
+        if (generalGp.getEntryCount() > 0) {
+            url = paramRequest.getActionUrl();
+            url.setMode("DELALL");
+            out.println("<a href=\"#\" onclick=\"if(confirm('"+ paramRequest.getLocaleString("msgRemoveAll") +"')){location='"+ url +"'} else {return false;}\">" + paramRequest.getLocaleString("delall") + "</a>");
+        }
+        out.println("</div>");
     }
 
     public void doByTag(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -296,12 +296,15 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         SWBResourceURL url = paramRequest.getRenderUrl();
 
         if (group != null) {
-            out.println("<h1>" + group.getTitle() + "</h1><br>");
+            out.println("<div id=\"header\"><h1>" + group.getTitle() + "</h1></div>");
         }
-        
+        out.println("<div id=\"wrapper\">");
+        out.println("<div id=\"content\">");
         out.println(listEntriesByGroup(getSortType(), gid, paramRequest));
+        out.println("</div></div><div id=\"footer\">");
         url.setMode("MANAGE");
         out.println("<br><a href=\"" + url + "\">" + paramRequest.getLocaleString("back") + "</a>");
+        out.println("</div>");
     }
 
     public void doAddNew(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -453,7 +456,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             }
         }
 
-        sbf.append("<div class=\"soria\" id =\"rview\">\n");
+        sbf.append("<div id =\"rview\">\n");
         sbf.append("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n");
         sbf.append("<tbody>");
         entries = sEntries.iterator();
