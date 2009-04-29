@@ -103,8 +103,8 @@ public class PFlowManager
             while (instances.hasNext())
             {
                 PFlowInstance instance = instances.next();
-                Resource resource = instance.getPfinstResource();                
-                if (resource.getCreator()!=null && resource.getCreator().equals(user))
+                Resource resource = instance.getPfinstResource();
+                if (resource.getCreator() != null && resource.getCreator().equals(user))
                 {
                     getContentsAtFlowOfUser.add(resource);
                 }
@@ -687,12 +687,12 @@ public class PFlowManager
                             msg += "\r\n\r\n" + resourceBundle.getString("title") + " " + resource.getTitle();
                             msg += "\r\n" + resourceBundle.getString("section") + " " + ((WebPage) resource.getResourceable()).getTitle();
                             msg += "\r\n" + resourceBundle.getString("site") + " " + resource.getWebSite().getTitle();
-                            msg += "\r\n" + resourceBundle.getString("mensaje") + " " + message;                        
+                            msg += "\r\n" + resourceBundle.getString("mensaje") + " " + message;
                             try
                             {
-                                SWBUtils.EMAIL.sendBGEmail(to,subject,msg);
+                                SWBUtils.EMAIL.sendBGEmail(to, subject, msg);
                             }
-                            catch(SocketException se)
+                            catch (SocketException se)
                             {
                                 log.error(se);
                             }
@@ -888,7 +888,7 @@ public class PFlowManager
                                     //msgMail += "\r\n" + bundle.getString("seccion") + ": " + otopic.getDisplayName(args) + ".\r\n";
                                     msgMail += "\r\n" + bundle.getString("seccion") + ": " + site.getTitle() + ".\r\n";
 
-                                
+
                                     SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg8"), msgMail);
                                 }
                                 else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity"))
@@ -908,7 +908,7 @@ public class PFlowManager
                                     HashMap args = new HashMap();
                                     args.put("language", Locale.getDefault().getLanguage());
                                     msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
-                                
+
                                     SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg10") + "", msgMail);
                                 }
                                 else if (activity.getAttribute("type").equalsIgnoreCase("Activity"))
@@ -996,7 +996,7 @@ public class PFlowManager
                                             //msgMail+=bundle.getString("url")+": "+ObjRes.getAdminUrl()+".\r\n";
                                             msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
                                             msgMail += "\r\n" + bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14");
-                                            
+
                                             SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14"), msgMail);
 
                                             // avisa al los revisores de la expiración de la revisión delc ontenido
@@ -1009,7 +1009,7 @@ public class PFlowManager
                                                 msg += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
                                             }
                                         }
-                                    
+
                                         SWBUtils.EMAIL.sendBGEmail(to, subject, msg);
                                     }
                                 }
@@ -1034,7 +1034,7 @@ public class PFlowManager
         {
             WebSite site = resource.getWebSite();
             PFlowInstance instance = resource.getPflowInstance();
-            PFlow.removePFlow(instance.getId(), site);
+        //instance.re
 
         }
         catch (Exception e)
@@ -1045,51 +1045,33 @@ public class PFlowManager
 
     public void noauthorizeWebService(Resource resource)
     {
-
+        PFlowInstance instance = resource.getPflowInstance();
         try
         {
-            PFlowInstance instance = resource.getPflowInstance();
             instance.setStatus(3);
-            try
+            String activityName = instance.getStep();
+            int version = instance.getVersion();
+            PFlow pflow = instance.getPflow();
+            Document docdef = SWBUtils.XML.xmlToDom(pflow.getXml());
+            NodeList workflows = docdef.getElementsByTagName("workflow");
+            for (int iworkflow = 0; iworkflow < workflows.getLength(); iworkflow++)
             {
-                if (instance != null)
+                Element eworkflow = (Element) workflows.item(iworkflow);
+                if (eworkflow.getAttribute("version").equals(version + ".0"))
                 {
-                    String activityName = instance.getStep();
-                    int version = instance.getVersion();
-                    PFlow pflow = instance.getPflow();
-                    Document docdef = SWBUtils.XML.xmlToDom(pflow.getXml());
-                    NodeList workflows = docdef.getElementsByTagName("workflow");
-                    for (int iworkflow = 0; iworkflow < workflows.getLength(); iworkflow++)
+                    NodeList activities = eworkflow.getElementsByTagName("activity");
+                    for (int i = 0; i < activities.getLength(); i++)
                     {
-                        Element eworkflow = (Element) workflows.item(iworkflow);
-                        if (eworkflow.getAttribute("version").equals(version + ".0"))
+                        Element activity = (Element) activities.item(i);
+                        if (activity.getAttribute("name").equalsIgnoreCase(activityName))
                         {
-                            NodeList activities = eworkflow.getElementsByTagName("activity");
-                            for (int i = 0; i < activities.getLength(); i++)
+                            if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity"))
                             {
-                                Element activity = (Element) activities.item(i);
-                                if (activity.getAttribute("name").equalsIgnoreCase(activityName))
-                                {
-                                    if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity"))
-                                    {
-                                        PFlowInstance.removePFlowInstance(instance.getId(), resource.getWebSite());
-                                    }
-                                }
+                                //PFlowInstance.removePFlowInstance(instance.getId(), resource.getWebSite());
+                                instance.remove();
                             }
                         }
                     }
-
-                }
-                else
-                {
-                    PFlowInstance.removePFlowInstance(instance.getId(), resource.getWebSite());
-                }
-            }
-            catch (Exception e)
-            {
-                if (instance != null)
-                {
-                    PFlowInstance.removePFlowInstance(instance.getId(), resource.getWebSite());
                 }
             }
 
