@@ -250,7 +250,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                     } else if (!group.getTitle().equals(untaggedName)){
                         out.println("<h1>" + group.getTitle() + "</h1>");
                     }
-                    System.out.println("listando elementos de " + group.getTitle() + ":" + group.getSemanticObject().getId() + "->" + group.getEntryCount());
+                    //System.out.println("listando elementos de " + group.getTitle() + ":" + group.getSemanticObject().getId() + "->" + group.getEntryCount());
                     out.println(listEntriesByGroup(SORT_BYDATE, group.getSemanticObject().getId(), paramRequest));
                 }
             }
@@ -463,7 +463,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         while (entries.hasNext()) {
             BookmarkEntry entry = entries.next();
             String eId = entry.getSemanticObject().getId();
-            System.out.println("--" + entry.getTitle());
+            //System.out.println("--" + entry.getTitle());
             sbf.append("<tr class = \"entry\" id=\"r_entry_"+ eId +"\">\n");
             sbf.append("<td><a title=\""+ entry.getBookmarkURL() +"\" href=\"" + entry.getBookmarkURL() + "\">" + entry.getTitle() + "</a>");
             sbf.append("&nbsp;-&nbsp;" + entry.getBookmarkURL() + "&nbsp;-&nbsp;" + formatter.format(entry.getCreated()) + "&nbsp;");
