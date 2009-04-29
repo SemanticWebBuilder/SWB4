@@ -23,6 +23,8 @@
 	<import value="net.sf.jasperreports.engine.*" />
 	<import value="net.sf.jasperreports.engine.data.*" />
 
+	<parameter name="swb" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="site" isForPrompting="false" class="java.lang.String"/>
 
 	<field name="topicmap" class="java.lang.String">
 		<fieldDescription><![CDATA[topicmap]]></fieldDescription>
@@ -52,48 +54,28 @@
 						width="505"
 						height="201"
 						forecolor="#EAEAF6"
-						key="staticText-8"/>
+						key="staticText-6"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 </box>
-					<textElement>
-						<font fontName="MS Reference Sans Serif" pdfFontName="Helvetica-Bold" size="80" isBold="true"/>
+					<textElement textAlignment="Center">
+						<font fontName="MS Reference Sans Serif" pdfFontName="Helvetica-Bold" size="165" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Infotec      WebBuilder]]></text>
+				<text><![CDATA[SWB]]></text>
 				</staticText>
 			</band>
 		</background>
 		<title>
-			<band height="340"  isSplitAllowed="true" >
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="0"
-						y="0"
-						width="552"
-						height="24"
-						forecolor="#FFFFFF"
-						backcolor="#336600"
-						key="staticText-1"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Reporte de usuarios firmados por mes]]></text>
-				</staticText>
+			<band height="364"  isSplitAllowed="true" >
 				<barChart>
 					<chart evaluationTime="Report"  hyperlinkTarget="Self" >
 					<reportElement
 						x="0"
-						y="37"
+						y="108"
 						width="552"
-						height="303"
+						height="253"
 						key="element-1"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -130,21 +112,121 @@
 						</valueAxisFormat>
 					</barPlot>
 				</barChart>
+				<image  hAlign="Left" isUsingCache="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="552"
+						height="50"
+						key="image-1"
+						stretchType="RelativeToBandHeight"/>
+					<box></box>
+					<graphicElement stretchType="RelativeToBandHeight"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{swb}]]></imageExpression>
+				</image>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="52"
+						width="552"
+						height="0"
+						key="line-2"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="57"
+						width="552"
+						height="18"
+						forecolor="#336699"
+						key="textField-2"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="14" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{site}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="76"
+						width="552"
+						height="24"
+						forecolor="#FFFFFF"
+						backcolor="#336699"
+						key="staticText-7"
+						positionType="FixRelativeToBottom"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Reporte de usuarios firmados por mes]]></text>
+				</staticText>
 			</band>
 		</title>
 		<pageHeader>
-			<band height="12"  isSplitAllowed="true" >
+			<band height="26"  isSplitAllowed="true" >
+				<printWhenExpression><![CDATA[new Boolean($V{PAGE_NUMBER}.intValue()>1)]]></printWhenExpression>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="3"
+						width="552"
+						height="14"
+						forecolor="#336699"
+						key="textField-3"/>
+					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" size="11" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{site} + " - Reporte de usuarios firmados por mes"]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="21"
+						width="552"
+						height="0"
+						key="line-3"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
 			</band>
 		</pageHeader>
 		<columnHeader>
 			<band height="23"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						x="0"
+						y="0"
+						width="552"
+						height="23"
+						backcolor="#C5E2FF"
+						key="rectangle-1"/>
+					<graphicElement stretchType="NoStretch">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+</graphicElement>
+				</rectangle>
 				<staticText>
 					<reportElement
-						x="49"
+						x="33"
 						y="3"
 						width="157"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-2"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -158,11 +240,11 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="223"
+						x="214"
 						y="3"
 						width="49"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-3"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -176,11 +258,11 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="288"
+						x="287"
 						y="3"
 						width="88"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-4"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -194,11 +276,11 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="393"
+						x="399"
 						y="3"
 						width="109"
 						height="17"
-						forecolor="#006699"
+						forecolor="#336699"
 						key="staticText-5"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -216,8 +298,8 @@
 			<band height="23"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="49"
-						y="3"
+						x="33"
+						y="2"
 						width="157"
 						height="18"
 						key="textField"/>
@@ -233,8 +315,8 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="223"
-						y="3"
+						x="214"
+						y="2"
 						width="49"
 						height="18"
 						key="textField"/>
@@ -250,8 +332,8 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="288"
-						y="3"
+						x="287"
+						y="2"
 						width="88"
 						height="18"
 						key="textField"/>
@@ -267,8 +349,8 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="393"
-						y="3"
+						x="399"
+						y="2"
 						width="109"
 						height="18"
 						key="textField"/>
@@ -282,6 +364,16 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.Long"><![CDATA[$F{hits}]]></textFieldExpression>
 				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="21"
+						width="552"
+						height="0"
+						forecolor="#CCCCCC"
+						key="line-4"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
 			</band>
 		</detail>
 		<columnFooter>
@@ -293,7 +385,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="225"
-						y="8"
+						y="7"
 						width="103"
 						height="13"
 						forecolor="#999999"
@@ -311,7 +403,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="4"
+						y="3"
 						width="552"
 						height="0"
 						forecolor="#CCCCCC"
