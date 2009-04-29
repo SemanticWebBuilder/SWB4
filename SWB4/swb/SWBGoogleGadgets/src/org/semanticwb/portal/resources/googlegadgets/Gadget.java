@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.semanticwb.resources;
+package org.semanticwb.portal.resources.googlegadgets;
 
 import java.io.IOException;
 import java.net.URI;
