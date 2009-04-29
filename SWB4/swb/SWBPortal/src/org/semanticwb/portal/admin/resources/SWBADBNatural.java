@@ -74,8 +74,7 @@ public class SWBADBNatural extends GenericResource {
         } else {
             query = query.trim();
         }
-
-        response.setContentType("text/html; charset=ISO-8859-1");
+        
         url.setMode("SUGGEST");
         ret.append("<script type=\"text/javascript\">\n" +
                 "dojo.require(\"dijit.form.Form\");\n" +
@@ -489,6 +488,7 @@ public class SWBADBNatural extends GenericResource {
 
     public void doSuggest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
+
         SortedSet objOptions = new TreeSet();
         SortedSet proOptions = new TreeSet();
         String word = request.getParameter("word");
@@ -501,8 +501,6 @@ public class SWBADBNatural extends GenericResource {
         Lexicon lex = new Lexicon(lang);
 
         response.setContentType("text/html; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
 
         if (lang == null || lang.equals("")) {
             lang = "es";
