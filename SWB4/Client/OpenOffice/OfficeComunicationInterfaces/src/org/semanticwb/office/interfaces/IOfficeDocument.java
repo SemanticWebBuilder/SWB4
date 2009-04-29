@@ -148,6 +148,9 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.sendToAuthorize")
     public void sendToAuthorize(ResourceInfo info,PFlow flow,String message);
+
+    @XmlRpcMethod(methodName = "OfficeDocument.isInFlow")
+    public boolean isInFlow(ResourceInfo info);
 }
 
 
