@@ -1691,5 +1691,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         org.semanticwb.model.PFlow pflow = site.getPFlow(flow.id);
         SWBPortal.getPFlowManager().sendResourceToAuthorize(resource, pflow, message, wbuser);
     }
+
+    public boolean isInFlow(ResourceInfo info)
+    {
+        WebSite site = SWBContext.getWebSite(info.page.site.id);
+        Resource resource = site.getResource(info.id);
+        return SWBPortal.getPFlowManager().isInFlow(resource);
+
+    }
 }
 
