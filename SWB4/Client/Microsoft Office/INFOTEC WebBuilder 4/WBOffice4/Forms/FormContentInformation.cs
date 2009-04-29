@@ -80,7 +80,7 @@ namespace WBOffice4.Forms
                 item.SubItems.Add(portletInfo.page.site.title);
                 item.SubItems.Add(portletInfo.active.ToString());
                 String version = portletInfo.version;
-                if (portletInfo.version == "")
+                if (portletInfo.version == "*")
                 {
                     version = "Mostrar la última version";
                 }
