@@ -506,6 +506,7 @@ namespace WBOffice4
         internal void SaveContentProperties(string contentId, String repositoryName)
         {
             this.contentID = contentId;
+            this.reporitoryID = repositoryName;
             Dictionary<String, String> values = new Dictionary<string, string>();
             values[CONTENT_ID_NAME]=contentId.ToString(CultureInfo.InvariantCulture);
             values[REPOSITORY_ID_NAME]= repositoryName.ToString(CultureInfo.InvariantCulture);
