@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
 using WBOffice4.Interfaces;
+using WBOffice4.Forms;
 
 namespace WBOffice4.Steps
 {
@@ -36,12 +37,33 @@ namespace WBOffice4.Steps
                 PropertyInfo[] properties = (PropertyInfo[])this.Wizard.Data[ViewProperties.VIEW_PROPERTIES];
                 String[] values = (String[])this.Wizard.Data[ViewProperties.VIEW_PROPERTIES_VALUES];
                 ResourceInfo portletInfo = OfficeApplication.OfficeDocumentProxy.publishToResourceContent(repositoryName, contentID, version, title, description, webpage,properties,values);
-                DialogResult res = MessageBox.Show(this, "¿Desea activar el contenido?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (res == DialogResult.Yes)
+                if (OfficeApplication.OfficeDocumentProxy.needsSendToPublish(portletInfo))
                 {
-                    OfficeApplication.OfficeDocumentProxy.activateResource(portletInfo, true);
+                    DialogResult res = MessageBox.Show(this, "Para activar el contenido, se necesita que sea autorizado primero\r\n¿Desea enviar el contenido a autorizar?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (res == DialogResult.Yes)
+                    {
+                        FormSendToAutorize formSendToAutorize = new FormSendToAutorize(portletInfo);
+                        formSendToAutorize.Show();
+                        if (formSendToAutorize.DialogResult == DialogResult.OK)
+                        {
+                            OfficeApplication.OfficeDocumentProxy.sendToAuthorize(portletInfo, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(this, "Para activar el conteneido deberá enviar primero esta publicación a autorizar", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
-                MessageBox.Show(this, "Se ha publicado correctamente el contenido en la página web", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                {
+                    DialogResult res = MessageBox.Show(this, "¿Desea activar el contenido?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (res == DialogResult.Yes)
+                    {
+                        OfficeApplication.OfficeDocumentProxy.activateResource(portletInfo, true);
+                        MessageBox.Show(this, "Se ha publicado correctamente el contenido en la página web", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                
                 this.Wizard.Close();
             }
             else
