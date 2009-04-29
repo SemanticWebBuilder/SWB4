@@ -32,6 +32,11 @@ import org.w3c.dom.NodeList;
 /**
  *
  * @author victor.lorenzana
+ * Si status es -1= enviado al autor del contenido, es como si no fuera enviado
+ * Si status es 0 = no enviado ninguna vez
+ * Si status es 1= aprovado, pero no necesariamnete autorizado
+ * Si status es 2= autorizado // fin de ejecución del
+ * Si status es 3 = rechazado   // fin de ejecución, rechazado, no hay que volver a envíar
  */
 public class PFlowManager
 {
@@ -366,19 +371,20 @@ public class PFlowManager
                                     {
                                         String messageType = "N";
                                         String newactivityName = instance.getStep();
-                                        mailWebService(resource, newactivityName, messageType, msg);
+                                        mailToNotify(resource, newactivityName, messageType, msg);
                                     }
                                     else if (serviceName.equals("authorize"))
                                     {
-                                        authorizeWebService(resource);
+                                        resource.getPflowInstance().setStatus(2);
+                                        resource.getPflowInstance().setStep(null);
                                     }
                                     else if (serviceName.equals("noauthorize"))
                                     {
-                                        noauthorizeWebService(resource);
+                                        noauthorizeContent(resource);
                                     }
                                     else if (serviceName.equals("publish"))
                                     {
-                                        publishWebService(resource);
+                                        resource.setActive(true);
                                     }
                                 }
 
@@ -387,18 +393,6 @@ public class PFlowManager
                     }
                 }
             }
-        }
-    }
-
-    public void publishWebService(Resource resource)
-    {
-        try
-        {
-            resource.setActive(true);
-        }
-        catch (Exception e)
-        {
-            log.error(e);
         }
     }
 
@@ -489,22 +483,22 @@ public class PFlowManager
                             {
                                 String messageType = "N";
                                 String newactivityName = instance.getStep();
-                                mailWebService(resource, newactivityName, messageType, msgReject);
+                                mailToNotify(resource, newactivityName, messageType, msgReject);
                             }
                             else if (serviceName.equals("authorize"))
                             {
-                                authorizeWebService(resource);
+                                resource.getPflowInstance().setStatus(2);
+                                resource.getPflowInstance().setStep(null);
                             }
                             else if (serviceName.equals("noauthorize"))
                             {
-                                noauthorizeWebService(resource);
+                                noauthorizeContent(resource);
                             }
                             else if (serviceName.equals("publish"))
                             {
-                                publishWebService(resource);
+                                resource.setActive(true);
                             }
                         }
-
                     }
                 }
             }
@@ -517,16 +511,13 @@ public class PFlowManager
         PFlowInstance instance = resource.getPflowInstance();
         if (instance != null && instance.getStatus() > 0)
         {
-            int version = instance.getVersion();
             if (this.isReviewer(resource, user))
             {
                 String activityName = instance.getStep();
                 try
                 {
-
                     rejectContent(resource, activityName, instance.getPflow(), msg);
                     PFlow pflow = instance.getPflow();
-                    WebPage page = (WebPage) resource.getResourceable();
                     sendNotificationReject(msg, resource, pflow, String.valueOf(instance.getVersion()), activityName, user);
 
                 }
@@ -608,7 +599,7 @@ public class PFlowManager
                 }
                 String messageType = "I";
 
-                mailWebService(resource, activity, messageType, message);
+                mailToNotify(resource, activity, messageType, message);
             }
 
         }
@@ -732,10 +723,6 @@ public class PFlowManager
         }
     }
 
-    public void authorize(Resource resource)
-    {
-    }
-
     public boolean isAuthorized(Resource resource)
     {
         PFlowInstance instance = resource.getPflowInstance();
@@ -833,7 +820,7 @@ public class PFlowManager
         return false;
     }
 
-    private void mailWebService(Resource resource, String activityName, String messageType, String message)
+    private void mailToNotify(Resource resource, String activityName, String messageType, String message)
     {
         User wbuser = resource.getCreator();
         Locale locale = Locale.getDefault();
@@ -1028,53 +1015,46 @@ public class PFlowManager
         }
     }
 
-    public void authorizeWebService(Resource resource)
-    {
-        try
-        {
-            WebSite site = resource.getWebSite();
-            PFlowInstance instance = resource.getPflowInstance();
-        //instance.re
-
-        }
-        catch (Exception e)
-        {
-            log.error(e);
-        }
-    }
-
-    public void noauthorizeWebService(Resource resource)
+    public void noauthorizeContent(Resource resource)
     {
         PFlowInstance instance = resource.getPflowInstance();
+
         try
         {
             instance.setStatus(3);
             String activityName = instance.getStep();
             int version = instance.getVersion();
             PFlow pflow = instance.getPflow();
-            Document docdef = SWBUtils.XML.xmlToDom(pflow.getXml());
-            NodeList workflows = docdef.getElementsByTagName("workflow");
-            for (int iworkflow = 0; iworkflow < workflows.getLength(); iworkflow++)
+            if (instance.getStep() != null)
             {
-                Element eworkflow = (Element) workflows.item(iworkflow);
-                if (eworkflow.getAttribute("version").equals(version + ".0"))
+                Document docdef = SWBUtils.XML.xmlToDom(pflow.getXml());
+                NodeList workflows = docdef.getElementsByTagName("workflow");
+                for (int iworkflow = 0; iworkflow < workflows.getLength(); iworkflow++)
                 {
-                    NodeList activities = eworkflow.getElementsByTagName("activity");
-                    for (int i = 0; i < activities.getLength(); i++)
+                    Element eworkflow = (Element) workflows.item(iworkflow);
+                    if (eworkflow.getAttribute("version").equals(version + ".0"))
                     {
-                        Element activity = (Element) activities.item(i);
-                        if (activity.getAttribute("name").equalsIgnoreCase(activityName))
+                        NodeList activities = eworkflow.getElementsByTagName("activity");
+                        for (int i = 0; i < activities.getLength(); i++)
                         {
-                            if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity"))
+                            Element activity = (Element) activities.item(i);
+                            if (activity.getAttribute("name").equalsIgnoreCase(activityName))
                             {
-                                //PFlowInstance.removePFlowInstance(instance.getId(), resource.getWebSite());
-                                instance.remove();
+                                if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity"))
+                                {
+                                    instance.setStep(null);
+                                    instance.setStatus(-1);
+                                }
                             }
                         }
                     }
                 }
             }
-
+            else
+            {
+                instance.setStep(null);
+                instance.setStatus(0);
+            }
         }
         catch (Exception e)
         {
