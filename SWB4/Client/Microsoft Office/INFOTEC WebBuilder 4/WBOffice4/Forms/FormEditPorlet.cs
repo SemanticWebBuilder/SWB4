@@ -179,9 +179,25 @@ namespace WBOffice4.Forms
                         this.checkBoxActive.Checked = pageInformation.active;
                         MessageBox.Show(this, "El contenido se encuentra en proceso de ser autorizado.\r\nPara activarlo necesita terminar el proceso de autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);                                
                     }
+                    else if (OfficeApplication.OfficeDocumentProxy.isAuthorized(pageInformation))
+                    {
+
+                        OfficeApplication.OfficeDocumentProxy.activateResource(pageInformation, this.checkBoxActive.Checked);
+                    }
                     else
                     {
-                        OfficeApplication.OfficeDocumentProxy.activateResource(pageInformation, this.checkBoxActive.Checked);
+                        this.checkBoxActive.Checked = pageInformation.active;
+                        DialogResult res=MessageBox.Show(this, "El contenido fue rechazado.\r\nPara activarlo necesita enviarlo a autorización de nuevo\r\n¿Desea enviarlo a autorización?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        FormSendToAutorize formSendToAutorize = new FormSendToAutorize(pageInformation);
+                        formSendToAutorize.ShowDialog();
+                        if (formSendToAutorize.DialogResult == DialogResult.OK)
+                        {
+                            OfficeApplication.OfficeDocumentProxy.sendToAuthorize(pageInformation, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
+                        }
+                        else
+                        {
+                            MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
                 }
             }
