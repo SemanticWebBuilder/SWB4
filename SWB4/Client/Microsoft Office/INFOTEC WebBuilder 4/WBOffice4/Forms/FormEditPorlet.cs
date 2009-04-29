@@ -147,7 +147,7 @@ namespace WBOffice4.Forms
                 {
                     if (OfficeApplication.OfficeDocumentProxy.needsSendToPublish(pageInformation))
                     {
-                        this.checkBoxActive.Checked = false;
+                        this.checkBoxActive.Checked = pageInformation.active;
                         DialogResult res = MessageBox.Show(this, "El documento requiere una autorización para activarse\r\n¿Desea envíar a publicar el contenido?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                         if (res == DialogResult.Yes)
                         {
