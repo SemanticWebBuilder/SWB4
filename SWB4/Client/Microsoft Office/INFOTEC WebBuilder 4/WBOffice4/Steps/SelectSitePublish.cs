@@ -43,7 +43,7 @@ namespace WBOffice4.Steps
                     if (res == DialogResult.Yes)
                     {
                         FormSendToAutorize formSendToAutorize = new FormSendToAutorize(portletInfo);
-                        formSendToAutorize.Show();
+                        formSendToAutorize.ShowDialog();
                         if (formSendToAutorize.DialogResult == DialogResult.OK)
                         {
                             OfficeApplication.OfficeDocumentProxy.sendToAuthorize(portletInfo, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
