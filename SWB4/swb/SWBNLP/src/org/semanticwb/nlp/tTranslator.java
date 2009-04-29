@@ -89,7 +89,7 @@ public class tTranslator {
 
         List<CommonTree> child = root.getChildren();
         if (child != null) {
-            res = "SELECT ";
+            res = "SELECT DISTINCT ";
             Iterator<CommonTree> cit = child.iterator();
             while (cit.hasNext()) {
                 CommonTree t = cit.next();
