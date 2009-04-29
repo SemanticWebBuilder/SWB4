@@ -147,6 +147,7 @@ namespace WBOffice4.Forms
                 {
                     if (OfficeApplication.OfficeDocumentProxy.needsSendToPublish(pageInformation))
                     {
+                        this.checkBoxActive.Checked = false;
                         DialogResult res = MessageBox.Show(this, "El documento requiere una autorización para activarse\r\n¿Desea envíar a publicar el contenido?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                         if (res == DialogResult.Yes)
                         {
@@ -158,14 +159,12 @@ namespace WBOffice4.Forms
                             }
                             else
                             {
-                                MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                this.checkBoxActive.Checked = false;
+                                MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);                                
                             }
                         }
                         else
                         {
-                            MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            this.checkBoxActive.Checked = false;
+                            MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);                            
                         }
                     }
                     else

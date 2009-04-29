@@ -67,6 +67,9 @@ namespace WBOffice4.Forms
         }
         private void loadPorlets()
         {
+            this.toolStripButtonEdit.Enabled = false;
+            this.toolStripButtonSeePage.Enabled = false;
+            this.toolStripButtonDeletePage.Enabled = false;
             listViewPages.Items.Clear();
             foreach (ResourceInfo portletInfo in OfficeApplication.OfficeDocumentProxy.listResources(repositoryName, contentID))
             {
