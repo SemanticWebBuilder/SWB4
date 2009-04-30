@@ -28,6 +28,7 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
  */
 public class DialogDocumentsAuthorize extends java.awt.Dialog
 {
+
     private static final String ALL = "*";
     private static final String SHOW_LAST_VERSION = "Mostrar la última version";
 
@@ -50,9 +51,9 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
                 jButtonAuthorize.setEnabled(false);
                 jButtonReject.setEnabled(false);
                 jButtonSee.setEnabled(false);
-                if (e.getFirstIndex() != -1)
+                DefaultTableModel model = (DefaultTableModel) jTableContents.getModel();
+                if (index >= 0 && model.getRowCount() > 1)
                 {
-                    DefaultTableModel model = (DefaultTableModel) jTableContents.getModel();
                     ResourceInfo resourceInfo = (ResourceInfo) model.getValueAt(index, 0);
                     try
                     {
@@ -67,7 +68,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
                         ue.printStackTrace();
                     }
                     jButtonSee.setEnabled(true);
-                    
+
                 }
             }
         });
@@ -116,7 +117,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
                         }
                         Object[] rowData =
                         {
-                            resourceInfo, resourceInfo.page.site.title, resourceInfo.page.title, version
+                            resourceInfo, resourceInfo.page.title, flowContentInformation.step, version
                         };
                         model.addRow(rowData);
                     }
@@ -133,7 +134,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
                         }
                         Object[] rowData =
                         {
-                            resourceInfo, resourceInfo.page.site.title, resourceInfo.page.title, version
+                            resourceInfo, resourceInfo.page.title, flowContentInformation.step, version
                         };
                         model.addRow(rowData);
                     }
@@ -150,7 +151,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
                         }
                         Object[] rowData =
                         {
-                            resourceInfo, resourceInfo.page.site.title, resourceInfo.page.title, version
+                            resourceInfo, resourceInfo.page.title, flowContentInformation.step, version
                         };
                         model.addRow(rowData);
                     }
@@ -371,19 +372,19 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         if (this.jTableContents.getSelectedRow() != -1)
         {
             DefaultTableModel model = (DefaultTableModel) this.jTableContents.getModel();
-            int row=this.jTableContents.getSelectedRow();
-            ResourceInfo resourceInfo=(ResourceInfo)model.getValueAt(row, 0);
+            int row = this.jTableContents.getSelectedRow();
+            ResourceInfo resourceInfo = (ResourceInfo) model.getValueAt(row, 0);
             try
             {
-                DialogAuthorize dialogAuthorize=new DialogAuthorize("Autorizar contenido");
+                DialogAuthorize dialogAuthorize = new DialogAuthorize("Autorizar contenido");
                 dialogAuthorize.setVisible(true);
-                if(!dialogAuthorize.cancel)
+                if (!dialogAuthorize.cancel)
                 {
                     OfficeApplication.getOfficeApplicationProxy().authorize(resourceInfo, dialogAuthorize.jTextAreaMessage.getText().trim());
                     loadContents();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -395,19 +396,19 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         if (this.jTableContents.getSelectedRow() != -1)
         {
             DefaultTableModel model = (DefaultTableModel) this.jTableContents.getModel();
-            int row=this.jTableContents.getSelectedRow();
-            ResourceInfo resourceInfo=(ResourceInfo)model.getValueAt(row, 0);
+            int row = this.jTableContents.getSelectedRow();
+            ResourceInfo resourceInfo = (ResourceInfo) model.getValueAt(row, 0);
             try
             {
-                DialogAuthorize dialogAuthorize=new DialogAuthorize("Rechazar contenido");
+                DialogAuthorize dialogAuthorize = new DialogAuthorize("Rechazar contenido");
                 dialogAuthorize.setVisible(true);
-                if(!dialogAuthorize.cancel)
+                if (!dialogAuthorize.cancel)
                 {
                     OfficeApplication.getOfficeApplicationProxy().reject(resourceInfo, dialogAuthorize.jTextAreaMessage.getText().trim());
                     loadContents();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -421,7 +422,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         {
             loadContents();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -438,7 +439,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         {
             loadContents();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -455,7 +456,7 @@ public class DialogDocumentsAuthorize extends java.awt.Dialog
         {
             loadContents();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
