@@ -4,18 +4,18 @@
 	<form name="frmWBBanner" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
                 <fieldset>
-		<statictext name="txtLocal">Banner local o externo:</statictext>
-		<input type="RADIO" name="local" label="Externo" value="1"/>
-		<input type="RADIO" name="local" label="Local" value="0"/>
+		<statictext name="txtLocal">Banner local o externo-J5:</statictext>
+		<input type="RADIO" id="local1" name="local" label="Externo" value="1"/>
+		<input type="RADIO" id="local2" name="local" label="Local" value="0"/>
 		<textarea name="code" label="*1 Código:" rows="5" cols="50" wrap="virtual"/>
-		<input type="FILE" name="img" label="*2 Banner:" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|swf" isshowfiletype="true" />
-		<input type="TEXT" name="alt" label="Texto alterno:" size="50"/>
-		<input type="TEXT" name="width" label="Ancho (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-		<input type="TEXT" name="height" label="Alto (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-		<input type="TEXT" name="url" label="Dirección web" size="50"/>
+		<input type="FILE" id="img" name="img" label="*2 Banner:" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|swf" isshowfiletype="true" />
+		<input type="TEXT" id="alt" name="alt" label="Texto alterno:" size="50"/>
+		<input type="TEXT" id="width" name="width" label="Ancho (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" id="height" name="height" label="Alto (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" id="url" name="url" label="Dirección web" size="50"/>
 		<statictext name="txtTarget">En una nueva ventana:</statictext>
-		<input type="RADIO" name="target" label="Sí" value="1"/>
-		<input type="RADIO" name="target" label="No" value="0"/>
+		<input type="RADIO" id="target1" name="target" label="Sí" value="1"/>
+		<input type="RADIO" id="target2" name="target" label="No" value="0"/>
                 </fieldset>
                 <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
@@ -38,31 +38,36 @@
 	</statictext>
 	<script language="JavaScript">
 		<![CDATA[
-			if(!document.frmWBBanner.local[0].checked && !document.frmWBBanner.local[1].checked)
+            if(!document.frmWBBanner.local[0].checked && !document.frmWBBanner.local[1].checked){
 				document.frmWBBanner.local[1].checked=true;
-			if(!document.frmWBBanner.target[0].checked && !document.frmWBBanner.target[1].checked)
-				document.frmWBBanner.target[1].checked=true;
+            }
+			if(!document.frmWBBanner.target[0].checked && !document.frmWBBanner.target[1].checked){
+          		document.frmWBBanner.target[1].checked=true;
+            }
 			function jsValida(frm)
 			{
-				if(frm.local[1].checked)
+                alert("valorJ:"+document.getElementById('local2'));
+                alert("valorJ1:"+dijit.byId('local2'));
+                alert("valorJ2:"+dojo.byId('local2'));
+                if(document.getElementById('local2').checked)
 				{
-					if(frm.wbfile_img==undefined && (frm.img.value==null || frm.img.value=='' || frm.img.value==' '))
+					if(document.getElementById('wbfile_img')==undefined && (document.getElementById('img').value==null || document.getElementById('img').value=='' || document.getElementById('img').value==' '))
 					{
-						alert('Especifique una imagen para el banner.');
-						frm.img.focus();
+						alert('Informe uma imagem para o banner.');
+						document.getElementById('img').focus();
+						return false;
+					}
+              	}
+                if(document.getElementById('local1').checked)
+				{
+                   if(document.getElementById('code').value==null || document.getElementById('code').value=='')
+					{
+						alert('Defina o código para incluir a publicidade externa.');
+						document.getElementById('code').focus();
 						return false;
 					}
 				}
-				if(frm.local[0].checked)
-				{
-					if(frm.code.value==null || frm.code.value=='' || frm.code.value==' ')
-					{
-						alert('Defina la codificación para incluir la publicidad externa.');
-						frm.code.focus();
-						return false;
-					}
-				}			
-				return true;
+                return true;
 			}
 		]]>			
 	</script>

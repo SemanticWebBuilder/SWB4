@@ -180,7 +180,11 @@ public class AppletFE extends WBContainerFE
                 if(root!=null) dom.appendChild(root);
                 Element child=dom.createElement("applet");
                 if(accesskey!=null) child.setAttribute("accesskey",accesskey);
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(code!=null) child.setAttribute("code",code);
                 if(codebase!=null) child.setAttribute("codebase",codebase);
                 if(archive!=null) child.setAttribute("archive",archive);                
@@ -227,6 +231,7 @@ public class AppletFE extends WBContainerFE
                     if(attrValue!=null && !attrValue.equals("")){
                         //defecto
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+                        if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         else if(attrName.equalsIgnoreCase("style")) style=attrValue;
                         else if(attrName.equalsIgnoreCase("class")) styleclass=attrValue;
                         else if(attrName.equalsIgnoreCase("moreattr")) moreattr=attrValue;

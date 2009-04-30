@@ -299,7 +299,12 @@ public class FileFE extends WBJsInputFEAbs
                 if(input!=null) root.appendChild(input);
                 Element child=dom.createElement("input");
                 child.setAttribute("type", "file");
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
+                if(id!=null) child.setAttribute("id",id);
                 if(size!=-1) child.setAttribute("size",String.valueOf(size));
                 if(maxlength!=-1) child.setAttribute("maxlength",String.valueOf(maxlength));
                 if(value!=null) child.setAttribute("value",value);
@@ -342,6 +347,7 @@ public class FileFE extends WBJsInputFEAbs
                 {
                        child=dom.createElement("input");
                        child.setAttribute("type", "hidden");
+                       child.setAttribute("id", "wbfile_"+name);
                        child.setAttribute("name", "wbfile_"+name);
                        child.setAttribute("value", dbconnmgr.getAttribute(name));
                        root.appendChild(child);
@@ -361,6 +367,7 @@ public class FileFE extends WBJsInputFEAbs
                        {
                            child=dom.createElement("input");
                            child.setAttribute("type", "hidden");
+                           child.setAttribute("id", "wbReplacefile_"+name);
                            child.setAttribute("name", "wbReplacefile_"+name);
                            child.setAttribute("value", dbconnmgr.getAttribute(name));
                            root.appendChild(child);
@@ -377,6 +384,7 @@ public class FileFE extends WBJsInputFEAbs
             }
         } 
         catch(Exception e) { log.error(e); }
+        System.out.println("file Xml:"+xml);
         return xml;              
     }
     
@@ -403,6 +411,7 @@ public class FileFE extends WBJsInputFEAbs
                     if(attrValue!=null && !attrValue.equals("")){
                         //defecto
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+                        else if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         else if(attrName.equalsIgnoreCase("style")) style=attrValue;
                         else if(attrName.equalsIgnoreCase("class")) styleclass=attrValue;
                         else if(attrName.equalsIgnoreCase("moreattr")) moreattr=attrValue;

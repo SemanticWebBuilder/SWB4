@@ -159,7 +159,11 @@ public class CalendarFE extends WBAdmResourceAbs
                 Element child=dom.createElement("calendar");
                 
                 // Attributes for the input tag
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(dbconnmgr!=null && dbconnmgr.getAttribute(name)!=null) child.setAttribute("value",dbconnmgr.getAttribute(name));
                 else if(value!=null) child.setAttribute("value",value);
                 if(accesskey!=null) child.setAttribute("accesskey",accesskey);
@@ -231,110 +235,109 @@ public class CalendarFE extends WBAdmResourceAbs
                     {
                         name = attrValue;
                         continue;
-                    }
-                    if(attrName.equalsIgnoreCase("value"))
+                    }else if(attrName.equalsIgnoreCase("id")) id=attrValue;
+                    else if(attrName.equalsIgnoreCase("value"))
                     {
                         value = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("accesskey"))
+                    else if(attrName.equalsIgnoreCase("accesskey"))
                     {
                         accesskey = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("disabled"))
+                    else if(attrName.equalsIgnoreCase("disabled"))
                     {
                         isdisabled = Boolean.valueOf(attrValue).booleanValue();
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("readonly"))
+                    else if(attrName.equalsIgnoreCase("readonly"))
                     {
                         isreadonly = Boolean.valueOf(attrValue).booleanValue();
                         continue;
                     }  
-                    if(attrName.equalsIgnoreCase("size"))
+                    else if(attrName.equalsIgnoreCase("size"))
                     {
                         size = Integer.parseInt(attrValue);
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("maxlength"))
+                    else if(attrName.equalsIgnoreCase("maxlength"))
                     {
                         maxlength = Integer.parseInt(attrValue);
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("style"))
+                    else if(attrName.equalsIgnoreCase("style"))
                     {
                         style = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("class"))
+                    else if(attrName.equalsIgnoreCase("class"))
                     {
                         styleclass = attrValue;
                         continue;
                     }                    
                     // Attributes for the img tag                    
-                    if(attrName.equalsIgnoreCase("src"))
+                    else if(attrName.equalsIgnoreCase("src"))
                     {
                         src = attrValue;
                         if(src.toLowerCase().startsWith("{@webpath}"))
                             src=SWBPlatform.getContextPath() + src.substring(10);
                         continue;
                     }                    
-                    if(attrName.equalsIgnoreCase("align"))
+                    else if(attrName.equalsIgnoreCase("align"))
                     {
                         align = attrValue;
                         continue;
                     }                  
-                    if(attrName.equalsIgnoreCase("alt"))
+                    else if(attrName.equalsIgnoreCase("alt"))
                     {
                         alt = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("border"))
+                    else if(attrName.equalsIgnoreCase("border"))
                     {
                         border = Integer.parseInt(attrValue);
                         continue;
                     }
-                  
-                    if(attrName.equalsIgnoreCase("hspace"))
+                    else if(attrName.equalsIgnoreCase("hspace"))
                     {
                         hspace = Integer.parseInt(attrValue);
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("vspace"))
+                    else if(attrName.equalsIgnoreCase("vspace"))
                     {
                         vspace = Integer.parseInt(attrValue);
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("width"))
+                    else if(attrName.equalsIgnoreCase("width"))
                     {
                         width = Integer.parseInt(attrValue);
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("height"))
+                    else if(attrName.equalsIgnoreCase("height"))
                     {
                         height = Integer.parseInt(attrValue);
                         continue;
                     }                       
-                    if(attrName.equalsIgnoreCase("onclick"))
+                    else if(attrName.equalsIgnoreCase("onclick"))
                     {
                         onclick = attrValue;
                         continue;
                     } 
-                    if(attrName.equalsIgnoreCase("moreattr"))
+                    else if(attrName.equalsIgnoreCase("moreattr"))
                     {
                         moreattr = attrValue;
                         continue;
                     }
                     // Attributes for the script tag
-                    if(attrName.equalsIgnoreCase("script"))
+                    else if(attrName.equalsIgnoreCase("script"))
                     {
                         script = attrValue;
                         if(script.toLowerCase().startsWith("{@webpath}"))
                             script=SWBPlatform.getContextPath() + script.substring(10);
                         continue;
                     }                    
-                    if(attrName.equalsIgnoreCase("language"))
+                    else if(attrName.equalsIgnoreCase("language"))
                     {
                         language = attrValue;
                         continue;

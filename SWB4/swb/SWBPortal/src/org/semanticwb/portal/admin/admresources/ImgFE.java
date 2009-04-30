@@ -72,7 +72,11 @@ public class ImgFE extends ImageFE
                 }
                 if(root!=null) dom.appendChild(root);
                 Element child=dom.createElement("img");
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(src!=null) child.setAttribute("src",src);
                 if(usemap!=null) child.setAttribute("usemap",usemap);
                 if(border!=-1) child.setAttribute("border",String.valueOf(border));

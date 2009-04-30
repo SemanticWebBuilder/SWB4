@@ -93,10 +93,12 @@ public class Js_FileTypeFE extends WBJsValidationsFEAbs {
         if(field != null)
         {
             String bundle=getClass().getName();
+
             strb.append("\n   pCaracter=");
-            if(formfeName != null)
-                strb.append(formfeName + ".");
-            strb.append(field + ".value;");
+            //if(formfeName != null)
+            //    strb.append("document."+formfeName + ".");
+            //strb.append(field + ".value;");
+            strb.append("document.getElementById(\""+field+"\").value;");
             strb.append("\n var pExt=\'"+filetypes+"\';");
             strb.append("\n   if(pCaracter.length > 0)");
             strb.append("\n   {");

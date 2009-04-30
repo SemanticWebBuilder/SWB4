@@ -265,7 +265,11 @@ public class ImageFE extends WBAdmResourceAbs
                 if(root!=null) dom.appendChild(root);
                 Element child=dom.createElement("input");
                 child.setAttribute("type", "image");
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(src!=null) child.setAttribute("src",src);
                 if(usemap!=null) child.setAttribute("usemap",usemap);
                 if(border!=-1) child.setAttribute("border",String.valueOf(border));
@@ -313,89 +317,89 @@ public class ImageFE extends WBAdmResourceAbs
                     String attrValue = nnodemap.item(i).getNodeValue();
                     if(attrValue == null || attrValue.equals(""))
                         continue;
-                    if(attrName.equalsIgnoreCase("name"))
+                    else if(attrName.equalsIgnoreCase("name"))
                     {
                         name = attrValue;
                         continue;
-                    }
-                    if(attrName.equalsIgnoreCase("label"))
+                    } else if(attrName.equalsIgnoreCase("id")) id=attrValue;
+                    else if(attrName.equalsIgnoreCase("label"))
                     {
                         label = attrValue;
                         continue;
                     }                    
-                    if(attrName.equalsIgnoreCase("style"))
+                    else if(attrName.equalsIgnoreCase("style"))
                     {
                         style = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("class"))
+                    else if(attrName.equalsIgnoreCase("class"))
                     {
                         styleclass = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("moreattr"))
+                    else if(attrName.equalsIgnoreCase("moreattr"))
                     {
                         moreattr = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("accesskey"))
+                    else if(attrName.equalsIgnoreCase("accesskey"))
                     {
                         accesskey = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("align"))
+                    else if(attrName.equalsIgnoreCase("align"))
                     {
                         align = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("alt"))
+                    else if(attrName.equalsIgnoreCase("alt"))
                     {
                         alt = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("border"))
+                    else if(attrName.equalsIgnoreCase("border"))
                     {
                         border = Integer.parseInt(attrValue);
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("disabled"))
+                    else if(attrName.equalsIgnoreCase("disabled"))
                     {
                         isdisabled = Boolean.valueOf(attrValue).booleanValue();
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("hspace"))
+                    else if(attrName.equalsIgnoreCase("hspace"))
                     {
                         hspace = Integer.parseInt(attrValue);
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("src"))
+                    else if(attrName.equalsIgnoreCase("src"))
                     {
                         src = attrValue;
                         if(src.toLowerCase().startsWith("{@webpath}"))
                             src=SWBPlatform.getContextPath() + src.substring(10);
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("usemap"))
+                    else if(attrName.equalsIgnoreCase("usemap"))
                     {
                         usemap = attrValue;
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("vspace"))
+                    else if(attrName.equalsIgnoreCase("vspace"))
                     {
                         vspace = Integer.parseInt(attrValue);
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("width"))
+                    else if(attrName.equalsIgnoreCase("width"))
                     {
                         width = Integer.parseInt(attrValue);
                         continue;
                     }
-                    if(attrName.equalsIgnoreCase("height"))
+                    else if(attrName.equalsIgnoreCase("height"))
                     {
                         height = Integer.parseInt(attrValue);
                         continue;
                     }                   
-                    if(attrName.equalsIgnoreCase("value"))
+                    else if(attrName.equalsIgnoreCase("value"))
                         value = attrValue;
                 }
 

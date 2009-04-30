@@ -125,7 +125,11 @@ public class ParamAppletFE extends WBAdmResourceAbs
                 }
                 if(root!=null) dom.appendChild(root);
                 Element child=dom.createElement("param");
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(input!=null && (dbconnmgr!=null && dbconnmgr.getAttribute(input)!=null && !dbconnmgr.getAttribute(input).trim().equals(""))) 
                 {
                     String obj=dbconnmgr.getAttribute(input).trim();
@@ -165,6 +169,7 @@ public class ParamAppletFE extends WBAdmResourceAbs
                     if(attrValue!=null && !attrValue.equals("")){
                         //defecto
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+                        else if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         else if(attrName.equalsIgnoreCase("style")) style=attrValue;
                         else if(attrName.equalsIgnoreCase("class")) styleclass=attrValue;
                         else if(attrName.equalsIgnoreCase("moreattr")) moreattr=attrValue;

@@ -97,7 +97,11 @@ public class SubmitFE extends ButtonFE
                 }
 
                 child.setAttribute("type", "submit");
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 //if(value!=null) child.setAttribute("value",value);
                 if(align!=null) child.setAttribute("align",align);
                 if(isdisabled) child.setAttribute("disabled","true");

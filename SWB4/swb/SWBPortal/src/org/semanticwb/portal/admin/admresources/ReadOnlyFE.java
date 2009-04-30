@@ -121,7 +121,11 @@ public class ReadOnlyFE extends WBAdmResourceAbs
                 if(root!=null) dom.appendChild(root);
                 Element child=dom.createElement("input");
                 child.setAttribute("type", "readonly");
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(value!=null) child.setAttribute("value",value);
                 if(size!=-1) child.setAttribute("size",String.valueOf(size));
                 if(maxlength!=-1) child.setAttribute("maxlength",String.valueOf(maxlength));
@@ -158,6 +162,7 @@ public class ReadOnlyFE extends WBAdmResourceAbs
                     if(attrValue!=null && !attrValue.equals("")){
                         //defecto
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+                        else if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         else if(attrName.equalsIgnoreCase("style")) style=attrValue;
                         else if(attrName.equalsIgnoreCase("class")) styleclass=attrValue;
                         else if(attrName.equalsIgnoreCase("moreattr")) moreattr=attrValue;

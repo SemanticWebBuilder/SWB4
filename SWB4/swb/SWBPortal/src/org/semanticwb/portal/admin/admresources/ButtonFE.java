@@ -187,7 +187,11 @@ public class ButtonFE extends WBAdmResourceAbs
                 if(root!=null) dom.appendChild(root);
                 Element child=dom.createElement("input");
                 child.setAttribute("type", "button");
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(value!=null) child.setAttribute("value",value);
                 if(align!=null) child.setAttribute("align",align);
                 if(isdisabled) child.setAttribute("disabled","true");
@@ -240,7 +244,7 @@ public class ButtonFE extends WBAdmResourceAbs
                     {
                         name = attrValue;
                         continue;
-                    }
+                    }else if(attrName.equalsIgnoreCase("id")) id=attrValue;
                     else if(attrName.equalsIgnoreCase("style"))
                     {
                         style = attrValue;

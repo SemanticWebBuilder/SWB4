@@ -132,9 +132,10 @@ public class Js_ConfValFE extends WBJsValidationsFEAbs
             if(validchars != null)
             {
                 strb.append("\n   pCaracter=");
-                if(formfeName != null)
-                    strb.append(formfeName + ".");
-                strb.append(field + ".value;");
+//                if(formfeName != null)
+//                    strb.append("document."+formfeName + ".");
+//                strb.append(field + ".value;");
+                strb.append("document.getElementById(\""+field+"\").value;");
                 strb.append("\n   var valid = \"" + validchars + " \";");
                 strb.append("\n   var ok = true;");
                 strb.append("\n for (i = 0; i < pCaracter.length; i++) { ");
@@ -151,17 +152,19 @@ public class Js_ConfValFE extends WBJsValidationsFEAbs
                 strb.append("\n alert('"+ SWBUtils.TEXT.getLocaleString(bundle, "msgFormatRequired", locale));
                 if(isshowchars) strb.append(" "+ validchars);
                 strb.append(SWBUtils.TEXT.getLocaleString(bundle, "msgLengthRequired", locale)+" "+ minsize + "'); ");
-                if(formfeName != null) strb.append("\n     " + formfeName + ".");
-                strb.append(field + ".focus();");
+                //if(formfeName != null) strb.append("\n     " + "document."+formfeName + ".");
+                //strb.append(field + ".focus();");
+                strb.append("document.getElementById(\""+field+"\").focus();");
                 strb.append("\n     return false;");
                 strb.append("\n } ");
             } else
             if(invalidchars != null)
             {
-                strb.append("\n   pCaracter=");
-                if(formfeName != null)
-                    strb.append(formfeName + ".");
-                strb.append(field + ".value");
+//                strb.append("\n   pCaracter=");
+//                if(formfeName != null)
+//                    strb.append("document."+formfeName + ".");
+//                strb.append(field + ".value");
+                strb.append("document.getElementById(\""+field+"\").value;");
                 strb.append("\n   var invalid = \"" + invalidchars + " \";");
                 strb.append("\n   var ok = true;");
                 strb.append("\n for (i = 0; i < pCaracter.length; i++) { ");
@@ -179,9 +182,10 @@ public class Js_ConfValFE extends WBJsValidationsFEAbs
                 if(isshowchars)
                     strb.append(":" + invalidchars);
                 strb.append(SWBUtils.TEXT.getLocaleString(bundle, "msgLengthRequired", locale)+" " + minsize + "'); ");
-                if(formfeName != null)
-                    strb.append("\n     " + formfeName + ".");
-                strb.append(field + ".focus();");
+//                if(formfeName != null)
+//                    strb.append("\n     " + "document."+formfeName + ".");
+//                strb.append(field + ".focus();");
+                strb.append("document.getElementById(\""+field+"\").focus();");
                 strb.append("\n     return false;");
                 strb.append("\n } ");
             }
