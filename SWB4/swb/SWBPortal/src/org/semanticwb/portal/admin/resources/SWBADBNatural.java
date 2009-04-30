@@ -488,7 +488,6 @@ public class SWBADBNatural extends GenericResource {
 
     public void doSuggest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-
         SortedSet objOptions = new TreeSet();
         SortedSet proOptions = new TreeSet();
         String word = request.getParameter("word");
@@ -499,6 +498,7 @@ public class SWBADBNatural extends GenericResource {
         boolean rPar = false;
         int idCounter = 0;
         Lexicon lex = new Lexicon(lang);
+        StringBuffer sbf = new StringBuffer();
 
         response.setContentType("text/html; charset=ISO-8859-1");
 
@@ -545,14 +545,14 @@ public class SWBADBNatural extends GenericResource {
                 int index;
                 Iterator<String> rit = objOptions.iterator();
 
-                out.println("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
+                sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                         "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
                         "200px;width:300px;border:1px solid #a0a0ff;\">");
                 while (rit.hasNext()) {
                     String tempi = (String) rit.next();
                     index = tempi.toLowerCase().indexOf(word.toLowerCase());
 
-                    out.print("<li id=\"id" + idCounter + "\" class=\"resultEntry\" " +
+                    sbf.append("<li id=\"id" + idCounter + "\" class=\"resultEntry\" " +
                             "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
                             "highLightSelection(" + idCounter + ",true); curSelected = " + idCounter + ";\" " +
                             "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
@@ -568,7 +568,7 @@ public class SWBADBNatural extends GenericResource {
                     String tempi = (String) rit.next();
                     index = tempi.toLowerCase().indexOf(word.toLowerCase());
 
-                    out.print("<li id=\"id" + idCounter + "\" class=\"resultEntry\" " +
+                    sbf.append("<li id=\"id" + idCounter + "\" class=\"resultEntry\" " +
                             "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
                             "highLightSelection(" + idCounter + ",true); curSelected = " + idCounter + ";\" " +
                             "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
@@ -578,12 +578,12 @@ public class SWBADBNatural extends GenericResource {
                             (lPar ? ")" : "") + "</li>");
                     idCounter++;
                 }
-                out.println("</ul>");
+                sbf.append("</ul>");
             }
         } else {
             String tag = lex.getObjWordTag(word).getObjId();
 
-            out.println("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
+            sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                     "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
                     "200px;width:300px;border:1px solid #a0a0ff;\">");
 
@@ -593,7 +593,7 @@ public class SWBADBNatural extends GenericResource {
                 Iterator<SemanticProperty> sit = sc.listProperties();
                 while (sit.hasNext()) {
                     SemanticProperty t = sit.next();
-                    out.print("<li id=\"id" + idCounter + "\" class=\"resultEntry\" " +
+                    sbf.append("<li id=\"id" + idCounter + "\" class=\"resultEntry\" " +
                             "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
                             "highLightSelection(" + idCounter + ",true); curSelected = " + idCounter + ";\" " +
                             "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
@@ -611,7 +611,7 @@ public class SWBADBNatural extends GenericResource {
                     Iterator<SemanticProperty> sit = sc.listProperties();
                     while (sit.hasNext()) {
                         SemanticProperty t = sit.next();
-                        out.print("<li id=\"id" + idCounter + "\" class=\"resultEntry\" " +
+                        sbf.append("<li id=\"id" + idCounter + "\" class=\"resultEntry\" " +
                                 "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
                                 "highLightSelection(" + idCounter + ",true); curSelected = " + idCounter + ";\" " +
                                 "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
@@ -624,7 +624,8 @@ public class SWBADBNatural extends GenericResource {
                 }
 
             }
-            out.println("</ul>");
+            sbf.append("</ul>");
         }
+        out.println(sbf.toString());
     }
 }
