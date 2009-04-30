@@ -1070,7 +1070,7 @@ public class SemanticObject
             {
                 String pre="get";
                 if(prop.isBoolean())pre="is";
-                String name = prop.getLabel();
+                String name = prop.getPropertyCodeName();
                 if (name == null)
                 {
                     name = prop.getName();
@@ -1111,7 +1111,7 @@ public class SemanticObject
             Method method=extSetMethods.get(cls.getName()+"-"+prop.getURI());
             if(method==null)
             {
-                String name = prop.getLabel();
+                String name = prop.getPropertyCodeName();
                 if (name == null)
                 {
                     name = prop.getName();

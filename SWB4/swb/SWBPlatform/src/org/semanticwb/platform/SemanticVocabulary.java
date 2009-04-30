@@ -81,7 +81,9 @@ public class SemanticVocabulary
     public static final String SWB_PROP_INHERITPROPERTY=URI+"inheritProperty";
 //    public static final String SWB_PROP_PROPGROUP=URI+"propGroup";
 //    public static final String SWB_PROP_PROPINDEX=URI+"propIndex";
-    public static final String SWB_ANNOT_CLASSNAME=URI+"className";
+    //public static final String SWB_ANNOT_CLASSNAME=URI+"className";
+    public static final String SWB_ANNOT_PROPERTYCODENAME=URI+"propertyCodeName";
+    public static final String SWB_ANNOT_CLASSCODENAME=URI+"classCodeName";
     public static final String SWB_ANNOT_AUTOGENID=URI+"autogenId";
     public static final String SWB_ANNOT_CANUSEDASNAME=URI+"canUsedAsName";
     public static final String SWB_PROP_CLASSID=URI+"classID";
@@ -136,7 +138,7 @@ public class SemanticVocabulary
         classes.put(tpc.getURI(), tpc);
         String clsid=tpc.getClassId();
         if(clsid!=null)clsbyid.put(clsid, tpc);
-        String clsname=tpc.getClassName();
+        String clsname=tpc.get_ClassName();
         if(clsname!=null)clsbyname.put(clsname, tpc);
     }
     
@@ -236,7 +238,7 @@ public class SemanticVocabulary
     
     public void registerClass(SemanticClass cls)
     {
-        log.trace("Registering SemanticClass:"+cls+" --> "+cls.getClassName());
+        log.trace("Registering SemanticClass:"+cls+" --> "+cls.get_ClassName());
         addSemanticClass(cls);
         Iterator<SemanticProperty> propit=cls.listProperties();
         while(propit.hasNext())
