@@ -34,6 +34,7 @@ public class SemanticProperty
     private Boolean isRequired=null;
     private Boolean isUsedAsName=null;
     private Boolean isLocaleable=null;
+    private String m_propertyCodeName=null;
 
     private SemanticObject displayProperty=null;
     private boolean dispProperty=false;
@@ -79,7 +80,7 @@ public class SemanticProperty
         return getPrefix()+":"+getName();
     }
     
-    public String getLabel()
+    public String get_Label()
     {
         String ret=null;
         if(m_prop instanceof OntProperty)
@@ -87,6 +88,25 @@ public class SemanticProperty
             ret=((OntProperty)m_prop).getLabel(null);
         }
         return ret;
+    }
+
+    public String getPropertyCodeName()
+    {
+        if(m_propertyCodeName==null)
+        {
+            try
+            {
+                Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_ANNOT_PROPERTYCODENAME).getRDFProperty();
+                //System.out.println("Class:"+m_class+" ->"+className);
+                m_propertyCodeName=m_prop.getRequiredProperty(prop).getString();
+                //System.out.println("Class:"+m_class+" ->"+className);
+                if(m_propertyCodeName==null)m_propertyCodeName=SemanticObject.class.getName();
+            } catch (Exception pnf){
+                m_propertyCodeName=getName();
+            }
+            //log.trace("getClassName:"+m_className);
+        }
+        return m_propertyCodeName;
     }
     
     public String getURI()
@@ -289,7 +309,7 @@ public class SemanticProperty
             }
             if(ret==null)ret=obj.getProperty(obj.getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL));
         }
-        if(ret==null)ret=getLabel();
+        if(ret==null)ret=get_Label();
         if(ret==null)ret=getName();
         //System.out.println("Prop:"+obj+" "+ret);
         return ret;
@@ -395,7 +415,7 @@ public class SemanticProperty
     {
         if(!cardinalityCheck)
         {
-            String n=getLabel();
+            String n=getPropertyCodeName();
             if(n==null)n=getName();
             if(n.startsWith("has"))
             {
