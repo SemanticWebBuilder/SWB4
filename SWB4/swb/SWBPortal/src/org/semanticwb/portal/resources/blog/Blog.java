@@ -15,6 +15,7 @@ import org.jdom.CDATA;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.User;
@@ -192,7 +193,8 @@ public class Blog
         blog.setAttribute("id", String.valueOf(this.blogID));
         blog.setAttribute("deleteimage", deleteimage);
         blog.setAttribute("editimage", editimage);
-        blog.setAttribute("addimage", addimage);        
+        blog.setAttribute("addimage", addimage);
+        blog.setAttribute("webpath", SWBPlatform.getContextPath());
         if ( addURL != null )
         {
             blog.setAttribute("add", addURL);

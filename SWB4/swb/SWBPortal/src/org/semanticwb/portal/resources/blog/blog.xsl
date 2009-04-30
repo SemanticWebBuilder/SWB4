@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:output method="html" version="1.0" encoding="ISO-8859-1" omit-xml-declaration="yes" />
+<xsl:output method="html" version="1.0" encoding="ISO-8859-1" omit-xml-declaration="yes" />
+
     <!-- Esta plantilla requiere DOJO para su funcionamiento -->
     <xsl:template match="/">
 
-        <!--link rel="stylesheet" href="/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css" type="text/css" media="screen" id="themeCss"></link>
-        <SCRIPT TYPE="text/javascript" SRC="/swbadmin/js/dojo/dojo/dojo.js"></SCRIPT>
-        <link rel="stylesheet" href="/swbadmin/js/dojo/dojo/resources/dojo.css" type="text/css" media="screen" id="themeCss"></link>
-		<link rel="stylesheet" href="/swbadmin/js/dojo/dijit/themes/dijit.css" type="text/css" media="screen" id="themeCss"></link>
-		<link rel="stylesheet" href="/swbadmin/js/dojo/dojox/layout/resources/FloatingPane.css" type="text/css" media="screen" id="themeCss"></link>
-		<link rel="stylesheet" href="/swbadmin/js/dojo/dojox/layout/resources/ResizeHandle.css" type="text/css" media="screen" id="themeCss"></link>
-        <link rel="stylesheet" href="/swbadmin/js/dojo/dojox/grid/_grid/nihiloGrid.css" type="text/css" media="screen" id="themeCss"></link>
+        <link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css" type="text/css" media="screen" id="themeCss"></link>
+        <!-- script TYPE="text/javascript" SRC="{blog/@webpath}/swbadmin/js/dojo/dojo/dojo.js"></script -->
+        <link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dojo/resources/dojo.css" type="text/css" media="screen" id="themeCss"></link>
+		<link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dijit/themes/dijit.css" type="text/css" media="screen" id="themeCss"></link>
+		<link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dojox/layout/resources/FloatingPane.css" type="text/css" media="screen" id="themeCss"></link>
+		<link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dojox/layout/resources/ResizeHandle.css" type="text/css" media="screen" id="themeCss"></link>
+        <link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dojox/grid/_grid/nihiloGrid.css" type="text/css" media="screen" id="themeCss"></link>
                 
                 
                 
@@ -31,50 +33,96 @@
                     dojo.require("dijit._editor.plugins.FontChoice");
                     dojo.require("dijit._editor.plugins.TextColor");
                     dojo.require("dojo.parser");
-                    //dojo.require("dojo.io");
                     dojo.require("dojox.xml.parser");
                 </script>                
                 
                 <style>
+                    body
+                    {
+                        font-family: Verdana, "Times New Roman", serif;
+                    }
+
                     .postDate
                     {
-                    color: #800000;
-                    font-size: 14px;
-                    font-family: Georgia, "Times New Roman", serif;
+                        color: #800000;
+                        font-size: 10px;
+                        font-weight: normal;
+                        font-style:italic;
                     }
+                    .postAutor
+                    {
+                        color: gray;
+                        font-size: 11px;
+                        font-weight: normal;
+                        font-style:italic;
+                    }
+
                     .postDescription
                     {
-                    color: #000000;
-                    font-size: 14px;
-                    font-family: sans-serif,"Verdana";
-                    font-style: oblique;
+                        font-size: 12px;
+                        font-weight: normal;
                     }
+
+                    .postTitle
+                    {
+                        color: #000000;
+                        font-size: 20px;
+                    }
+                    .commentDate
+                    {
+                        color: #800000;
+                        font-size: 10px;
+                        font-weight: normal;
+                        font-style:italic;
+                    }
+
+                    .commentUser
+                    {
+                        color: gray;
+                        font-size: 11px;
+                        font-weight: normal;
+                        font-style:italic;
+                    }
+
+                    .commentText
+                    {
+                        font-size: 12px;
+                        font-weight: normal;
+                    }
+
                     .titleBlog
                     {
-                    color: #005C89;
-                    text-align: center;
-                    font-size: 30px;
-                    font-family: Georgia, "Times New Roman", serif;
+                        color: #005C89;
+                        text-align: center;
+                        font-size: 24px;
+                        font-family: Verdana, "Times New Roman", serif;
                     }
-                    .titlepost
+
+                    fieldset
                     {
-                    color: #000000;
-                    font-size: 26px;
-                    font-family: Georgia, "Times New Roman", serif;
-                    }                    
-                    .author { 
-                    color: #005C89;
-                    font-family: Georgia, "Times New Roman", serif;
-                    font-size: 14px;
+                        border-style: solid;
+                        border-color: silver;
+                        border-width: thin;
+                        margin:2em;
+                        padding-left:1em;
+                        padding-right:1em;
+                        padding-bottom:1em;
+                        padding-top:1em;
+                        text-align:justify;
                     }
-                    .labelform
-                    {                    
-                    font-family: Georgia, "Times New Roman", serif;
-                    font-size: 20px;
+
+                    a
+                    {
+                        font-weight:lighter;
+                        color:teal;
+                        text-decoration:none;
+                        font-size:11px;
+                        font-style:italic;
                     }
+
                 </style>
             
-                <script type="text/javascript" language="javascript">                      
+                <script type="text/javascript">                      
                     function cancel()
                     {
                        resetForma();
@@ -144,7 +192,7 @@
                     }
                     function showForm()
                     {
-                        dojo.byId('forma').style.display='';                        
+                        dojo.byId('forma').style.display='inline';
                     }
                     function hideForm()
                     {
@@ -204,10 +252,7 @@
 			
 		    
 		    });
-					 
-	            
-		    
-                    
+
                     
                     function validaForma()
                     {
@@ -234,137 +279,90 @@
                         dojo.byId('frmaddpost').submit();
                     }
                     }                        
-                </script -->
-                <xsl:for-each select="blog">
-                    <table width="100%">
-                        <tr>
-                            <td align="center">
-                                <h1><xsl:value-of select='@name' /></h1>                    
-                            </td>
-                            <xsl:if test="@level = '3'">
-                                <td>
-                                    <xsl:element name="a">
-                                            <xsl:attribute name="href">javascript:addPost();</xsl:attribute>
-                                            <img alt="Agregar Entrada" border="0">
-                                                <xsl:attribute name="src"><xsl:value-of select='/blog/@addimage' /></xsl:attribute>
-                                            </img>
-                                        </xsl:element> 
-                                </td>
-                            </xsl:if>    
-                        </tr>
-                    </table>
+                </script>
+        <xsl:for-each select="blog">
+            <span class="titleBlog" style="margin:2em;"><xsl:value-of select='@name' /><br/>
+                <xsl:if test="@level = '3'">
+                    <span style="margin:2em;">
+                        <xsl:element name="a">
+                            <xsl:attribute name="href">javascript:addPost();</xsl:attribute>
+                            <!--img alt="Agregar Entrada" border="0">
+                                <xsl:attribute name="src"><xsl:value-of select='/blog/@addimage' /></xsl:attribute>
+                            </img-->
+                            &#160;&#160;[ Agregar Entrada ]
+                        </xsl:element>
+                    </span>
+                </xsl:if>
+            </span>
+            <xsl:if test="@level = '3'">
+                <div id="forma" align="center" style="display:none;">
+                    <form id="frmaddpost" method="post" action="" >
+                        <input type="hidden" id="description" name="description"></input>
+                        <input type="hidden" id="mode" name="mode" value="create"></input>
+                        <input type="hidden" id="postid" name="postid" value=""></input>
+                        <input type="hidden" id="title" name="title" value=""></input>
+                        <fieldset>
+                            <div class="nihilo" id="text">
+                                <input type="text" id="_title"  name="title" size="80" maxlength="255" value="Título de la entrada"></input>
+                            </div>
+                            <div class="nihilo" id="editor3"  >
+                                <textarea id="editor" name="editor" rows="50" cols="30">Nueva entrada del blog
+                                </textarea>
+                            </div>
+                            <div class="nihilo">
+                                <button id="buttonsubmit" type="button" onClick="javascript:validaForma()">
+                                    Guardar
+                                </button>
+                                <button id="buttoncancel" type="button" onClick="javascript:cancel()">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </xsl:if>
+        </xsl:for-each>
+        <xsl:for-each select="blog/post">
+        <fieldset>
+            <!--xsl:if test="/blog/@level  &gt; 0"-->
+                <span class="titleBlog"><xsl:value-of select='@name' /></span><br/>
+                <a><xsl:attribute name="href"><xsl:value-of select='@url' /></xsl:attribute><xsl:value-of select='@name' /></a>
                     
-                    
-                    <xsl:if test="@level = '3'">                        
-                        <div id="forma" align="center" style="display:none;">                            
-                            <form id="frmaddpost" method="post" action="" >  
-                                <input type="hidden" id="description" name="description"></input>
-                                <input type="hidden" id="mode" name="mode" value="create"></input>
-                                <input type="hidden" id="postid" name="postid" value=""></input>
-                                <input type="hidden" id="title" name="title" value=""></input>
-                                <fieldset>                                    
-                                    <table width="100%">                                        
-                                        <tr>                                            
-                                            <td>                                                                                                    
-                                                    <div class="nihilo" id="text">
-						       <input id="_title" style="width:500px;height:20px" name="title" size="80" maxlength="255" value="Título de la entrada"></input>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>                                                
-                                                <div class="nihilo" id="editor3" style="width:500px;height:200px;border: 1px solid #ccc " >
-                                                    <textarea id="editor" name="editor" rows="50" cols="30">Nueva entrada del blog
-                                                    </textarea>
-                                                </div>                                                
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="1" align="center">
-                                                <div class="nihilo">
-                                                    <button id="buttonsubmit" type="button" onClick="javascript:validaForma()">
-                                                        Guardar
-                                                    </button>
-                                                    <button id="buttoncancel" type="button" onClick="javascript:cancel()">
-                                                        Cancelar
-                                                    </button>
-                                                </div>
-                                            </td>                                        
-                                        </tr>                                    
-                                    </table>
-                                </fieldset>
-                            </form>
-                        </div>             
-                    </xsl:if>    
-                </xsl:for-each> 
-                <table width="100%" cellpadding="0" cellspacing="0">
-                    <xsl:for-each select="blog/post">                        
-                        <xsl:if test="/blog/@level  &gt; 0">
-                            <tr>
-                                <td colspan="3">
-                                	 <table width="100%">
-						<tr>
-						<td>
-							<h2><xsl:value-of select='@author' /></h2>
-						</td>
-						<td valign="bottom" align="right">
-							<div class="postDate" ><xsl:value-of select='@date' /></div>                    
-						</td>
-						</tr>
-						</table> 
-                                    
-                                </td>
-                            </tr>                            
-                            <tr>
-                                <td align="center">                                    
-                                    <h2><xsl:value-of select='@title' /></h2>
-                                </td>
-                                <xsl:if test="/blog/@level= '3'">
-                                    <td valign="middle" align="right">                                                                            
-                                        <xsl:element name="a">
-                                            <xsl:attribute name="href">javascript:editPost('<xsl:value-of select='@id' />');</xsl:attribute>
-                                            <img alt="Editar Entrada" border="0">
-                                                <xsl:attribute name="src"><xsl:value-of select='/blog/@editimage' /></xsl:attribute>
-                                            </img>
-                                        </xsl:element>  
-                                    </td>
-                                </xsl:if>
-                                <xsl:if test="/blog/@level= '3'">
-                                    <td valign="middle" align="right">                                                                            
-                                        <xsl:element name="a">
-                                            <xsl:attribute name="href">javascript:deletePost('<xsl:value-of select='@id' />','<xsl:value-of select='@blogid' />');</xsl:attribute>
-                                            <img alt="Borrar Entrada" border="0">
-                                                <xsl:attribute name="src"><xsl:value-of select='/blog/@deleteimage' /></xsl:attribute>
-                                            </img>
-                                        </xsl:element>  
-                                    </td>
-                                </xsl:if>
-                            </tr>
-                                                      
-                            <tr>
-                                <td colspan="3">                                                                        
-                                    <p><xsl:value-of select='description' /></p>
-                                </td>    
-                            </tr>                            
-                            <xsl:if test="/blog/@level &gt; '1'">
-                                <tr>
-                                    <td align="center" colspan="3">      
-                                        <br></br>
-                                        <xsl:element name="a">
-                                            <xsl:attribute name="href">javascript:viewComents('<xsl:value-of select='@id' />','<xsl:value-of select='@blogid' />');</xsl:attribute>
-                                            Ver comentarios (<xsl:value-of select='@comments' />)
-                                        </xsl:element>
-                                    </td>
-                                </tr>
-                            </xsl:if>                                    
-                            <tr>
-                                <td align="center" colspan="3">      
-                                    <hr></hr>                                   
-                                </td>
-                            </tr>
+                        <span class="postTitle" ><xsl:value-of select='@title' /></span><br/><br/>
+                        <span class="postAutor" >Entrada publicada por <span style="color:black;font-weight:bold;"><xsl:value-of select='@author' /></span></span><br/>
+                        <span class="postDate" ><xsl:value-of select='@date' /></span><br/>
+                        <xsl:if test="/blog/@level &gt; '1'">
+                            <br/>
+                            <xsl:element name="a">
+                                <xsl:attribute name="href">javascript:viewComents('<xsl:value-of select='@id' />','<xsl:value-of select='@blogid' />');</xsl:attribute>
+                                comentarios(<xsl:value-of select='@comments' />)&#160;&#160;
+                            </xsl:element>
                         </xsl:if>
-                    </xsl:for-each>
-                </table>                       
-           
+                        <xsl:if test="/blog/@level= '3'">
+                            [
+                            <xsl:element name="a">
+                                <xsl:attribute name="href">javascript:editPost('<xsl:value-of select='@id' />');</xsl:attribute>
+                                <!--img alt="Editar Entrada" border="0">
+                                    <xsl:attribute name="src"><xsl:value-of select='/blog/@editimage' /></xsl:attribute>
+                                </img-->
+                                Editar
+                            </xsl:element>
+                        |
+                            <xsl:element name="a">
+                                <xsl:attribute name="href">javascript:deletePost('<xsl:value-of select='@id' />','<xsl:value-of select='@blogid' />');</xsl:attribute>
+                                <!--img alt="Borrar Entrada" border="0">
+                                    <xsl:attribute name="src"><xsl:value-of select='/blog/@deleteimage' /></xsl:attribute>
+                                </img-->
+                                Borrar
+                            </xsl:element>
+                            ]
+                        </xsl:if>
+
+                        <p class="postDescription"><xsl:value-of select='description' /></p>
+
+                
+            <!-- /xsl:if -->
+            </fieldset>
+        </xsl:for-each>
     </xsl:template>
 </xsl:stylesheet>

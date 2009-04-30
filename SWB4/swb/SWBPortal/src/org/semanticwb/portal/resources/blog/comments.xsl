@@ -1,39 +1,103 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:output method="html" version="1.0" encoding="ISO-8859-1" omit-xml-declaration="yes" />
-    <xsl:output method="html"/>
 
     <xsl:template match="/">
-        <html>
-            <head>
+
+        <link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css" type="text/css" media="screen" id="themeCss"></link>
+        <!-- script TYPE="text/javascript" SRC="{blog/@webpath}/swbadmin/js/dojo/dojo/dojo.js"></script -->
+        <link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dojo/resources/dojo.css" type="text/css" media="screen" id="themeCss"></link>
+		<link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dijit/themes/dijit.css" type="text/css" media="screen" id="themeCss"></link>
+		<link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dojox/layout/resources/FloatingPane.css" type="text/css" media="screen" id="themeCss"></link>
+		<link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dojox/layout/resources/ResizeHandle.css" type="text/css" media="screen" id="themeCss"></link>
+        <link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dojox/grid/_grid/nihiloGrid.css" type="text/css" media="screen" id="themeCss"></link>
+        
+
                 <style>
+                    body
+                    {
+                        font-family: Verdana, "Times New Roman", serif;
+                    }
+
                     .postDate
                     {
-                    color: #800000;
-                    font-size: 12px;
-                    font-weight: normal
-                    font-family: Georgia, "Times New Roman", serif;
+                        color: #800000;
+                        font-size: 10px;
+                        font-weight: normal;
+                        font-style:italic;
                     }
+                    .postAutor
+                    {
+                        color: gray;
+                        font-size: 11px;
+                        font-weight: normal;
+                        font-style:italic;
+                    }
+
                     .postDescription
                     {
-                    color: #000000;
-                    font-size: 14px;
-                    font-family: sans-serif,"Verdana";
-                    font-style: oblique;
+                        font-size: 12px;
+                        font-weight: normal;
                     }
+
+                    .postTitle
+                    {
+                        color: #000000;
+                        font-size: 20px;
+                    }
+                    .commentDate
+                    {
+                        color: #800000;
+                        font-size: 10px;
+                        font-weight: normal;
+                        font-style:italic;
+                    }
+
+                    .commentUser
+                    {
+                        color: gray;
+                        font-size: 11px;
+                        font-weight: normal;
+                        font-style:italic;
+                    }
+
+                    .commentText
+                    {
+                        font-size: 12px;
+                        font-weight: normal;
+                    }
+
                     .titleBlog
                     {
-                    color: #005C89;
-                    text-align: center;
-                    font-size: 30px;
-                    font-family: Georgia, "Times New Roman", serif;
+                        color: #005C89;
+                        text-align: center;
+                        font-size: 24px;
+                        font-family: Verdana, "Times New Roman", serif;
                     }
-                    .titlepost
+
+                    fieldset
                     {
-                    color: #000000;
-                    font-size: 26px;
-                    font-family: Georgia, "Times New Roman", serif;
-                    }                                        
+                        border-style: solid;
+                        border-color: silver;
+                        border-width: thin;
+                        margin:2em;
+                        padding-left:1em;
+                        padding-right:1em;
+                        padding-bottom:1em;
+                        padding-top:1em;
+                        text-align:justify;
+                    }
+
+                    a
+                    {
+                        font-weight:lighter;
+                        color:teal;
+                        text-decoration:none;
+                        font-size:11px;
+                        font-style:italic;
+                    }
+
                 </style>
                 <script>                                         
                     function EnviaComentarioPost(forma)
@@ -47,83 +111,28 @@
                     forma.submit();
                     }
                 </script>
-                <title>comments.xsl</title>                
-                <xsl:for-each select="comments">                    
-                    <table width="100%">
-                        <tr>
-                            <td>
-                                <table width="100%">
-                                    <tr>                                                                        
-                                        <td align="center">
-                                            <a>
-                                                <xsl:attribute name="href"><xsl:value-of select='@url' /></xsl:attribute>
-                                            <h1><xsl:value-of select='@name' /></h1></a>
-                                        </td>                                    
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2"> 
-                                            <table width="100%">
-						<tr>
-						<td>
-							<h2><xsl:value-of select='@author' /></h2>
-						</td>
-						<td align="right">
-							<div class="postDate" ><xsl:value-of select='@date' /></div>
-						</td>
-						</tr>
-						</table> 	                        
-                                            
-                                        </td>
-                                    </tr>                                     
-                                    <tr>                                                                        
-                                        <td align="center">
-                                            <h2><xsl:value-of select='@title' /></h2>
-                                        </td>                                    
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>                                
-                                <p><xsl:value-of select='description' /></p>                                                                                            
-                            </td>
-                        </tr>                        
-                    </table> 
-                    <hr></hr>
+
+                <xsl:for-each select="comments">
+                    <span class="titleBlog" style="margin:2em;"><xsl:value-of select='@name' /><br/><span style="margin:2em;"><a><xsl:attribute name="href"><xsl:value-of select='@url' /></xsl:attribute>Ver todas las entradas</a></span></span>
+                    <fieldset> 
+                        <span class="postTitle" ><xsl:value-of select='@title' /></span><br/><br/>
+                        <span class="postAutor" >Entrada publicada por <span style="color:black;font-weight:bold;"><xsl:value-of select='@author' /></span></span><br/>
+                        <span class="postDate" ><xsl:value-of select='@date' /></span><br/>
+                        <p class="postDescription"><xsl:value-of select='description' /></p>
+                    </fieldset>
                 </xsl:for-each>
-                <center><h3>Comentarios</h3></center>
-                <xsl:for-each select="comments/comment">                    
-                    <table width="100%">
-                        <tr>
-                            <td>
-                            	<table width="100%">
-                            	<tr>
-                            	<td>
-                            		<h3><xsl:value-of select='@user' /></h3>
-                            	</td>
-                            	<td align="right">
-                            		<div class="postDate"><xsl:value-of select='@date' /></div>	
-                            	</td>
-                            	</tr>
-                            	</table>
-                                
-                                
-                            </td>
-                        </tr>                        
-                        <tr>
-                            <td>                                
-                                <p><xsl:value-of select='.' /></p>
-                            </td>
-                        </tr>
-                        
-                    </table>                                        
-                    <hr></hr>
+                <xsl:for-each select="comments/comment">
+                <fieldset style="background-color:#F2F2F2">
+                    <span class="commentUser">Comentario publicado por <span style="color:black;font-weight:bold;"><xsl:value-of select='@user' /></span></span><br/>
+                    <span class="commentDate"><xsl:value-of select='@date' /></span><br/>
+                    <p class="commentText"><xsl:value-of select='.' /></p>
+                </fieldset>
                 </xsl:for-each>                   
                 <xsl:if test="/comments/@viewall != ''">
-                    <center><p><a name="viewallcomments" > 
+                    <span style="margin:2em;"><a name="viewallcomments" >
                                 <xsl:attribute name="href"><xsl:value-of select='/comments/@viewall' /></xsl:attribute>
                                 Ver todos los comentarios
-                    </a></p></center>
+                    </a></span>
                 </xsl:if>
                 <form action="" method="post">
                     <xsl:for-each select="comments">
@@ -135,35 +144,11 @@
                         </input>    
                     </xsl:for-each>                    
                     <fieldset>
-                        <legend>Agregar un comentario:</legend>
-                        <table  width="100%">
-                            <tr>
-                                <td align="center">
-                                    <table  width="100%">
-                                        <tr>
-                                            <td>
-                                                <p><label>Comentario:</label></p>
-                                            </td>
-                                            <td>
-                                                <textarea rows="10" cols="30" name="comment"></textarea>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                
-                            </tr>
-                            <tr>
-                                <td align="center">
-                                    <input type="button" onClick="javascript:EnviaComentarioPost(this.form);" name="save" value="Agregar comentario"></input>
-                                </td>
-                            </tr>                        
-                        </table>
+                        <legend>Nuevo comentario</legend>
+                            <textarea id="comment" rows="10" cols="50" name="comment"></textarea><br/>
+                            <button type="button" onClick="javascript:EnviaComentarioPost(this.form);" name="save">Agregar</button>
                     </fieldset>
                 </form>
-            </head>
-            <body>
-            </body>
-        </html>
     </xsl:template>
     
 </xsl:stylesheet>
