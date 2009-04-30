@@ -27,20 +27,20 @@
         WebPage webpage = paramRequest.getTopic();
         Resource base = paramRequest.getResourceBase();
         WebSite website = webpage.getWebSite();
-        SWBResourceURL urlp = paramRequest.getRenderUrl();
+        SWBResourceURL urlthread = paramRequest.getRenderUrl();
         SWBResourceURL url = paramRequest.getRenderUrl();
         SWBResourceURL actionURL = paramRequest.getActionUrl();
         User user = paramRequest.getUser();
         String lang = user.getLanguage();
-        String action = (String) request.getAttribute("action");
+        String action = paramRequest.getAction();
         if (action != null && action.equals("viewPost")) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
             Thread thread = Thread.getThread(semObject.getId(), website);
             thread.setViewCount(thread.getViewCount() + 1);
             url.setParameter("threadUri", thread.getURI());
-            url.setParameter("forumUri", request.getParameter("forumUri"));
-            urlp.setParameter("threadUri", thread.getURI());
-            urlp.setParameter("forumUri", request.getParameter("forumUri"));
+            //url.setParameter("forumUri", request.getParameter("forumUri"));
+            urlthread.setParameter("threadUri", thread.getURI());
+            //urlp.setParameter("forumUri", request.getParameter("forumUri"));
         %>
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
     <tr>
@@ -49,13 +49,13 @@
         	<table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td><!-- start newtopic.thtml -->
-                    <%urlp.setMode("addThread");%>
-<a href="<%=urlp.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_newtopic.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("newthread")%>" TITLE="<%=paramRequest.getLocaleString("newthread")%>"></a>
+                    <%urlthread.setMode("addThread");%>
+<a href="<%=urlthread.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_newtopic.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("newthread")%>" TITLE="<%=paramRequest.getLocaleString("newthread")%>"></a>
 <!-- end newtopic.thtml --></td>
                     <td><!-- start replytopic.thtml -->
 <!-- Post Reply -->
-<%urlp.setMode("replyPost");%>
-<a href="<%=urlp.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_reply.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("replyPost")%>" TITLE="P<%=paramRequest.getLocaleString("replyPost")%>"></a>
+<%urlthread.setMode("replyPost");%>
+<a href="<%=urlthread.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_reply.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("replyPost")%>" TITLE="P<%=paramRequest.getLocaleString("replyPost")%>"></a>
 <!-- end replytopic.thtml --></td>
                 </tr>
             </table>
@@ -93,7 +93,27 @@
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
                                 <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                <td nowrap>&nbsp;<%=thread.getCreated()%> &nbsp;(<%=paramRequest.getLocaleString("read")%> <%=thread.getViewCount()%> <%=paramRequest.getLocaleString("times")%>) &nbsp;</td>
+                                <td nowrap>&nbsp;<%=thread.getCreated()%> &nbsp;(<%=paramRequest.getLocaleString("read")%> <%=thread.getViewCount()%> <%=paramRequest.getLocaleString("times")%>) &nbsp;
+                                <%
+                                if(userThread!=null && user.getURI().equals(userThread.getURI())){ //imprimir combo de edición y eliminar
+                                url.setParameter("threadUri", thread.getURI());
+                                %>
+                                    <form name="admActions">
+                                    <select name="admAction">
+                                        <option value="0">Editar</option>
+                                        <option value="1">Eliminar</option>
+                                    </select>
+                                    <button type="submit" onclick="redirect(this.form);">ir kkk</button>
+                                    </form>
+                                    <script type="text/javascript">
+                                        function redirect(forma){
+                                            alert(forma.admAction.selectedIndex);
+                                       }
+                                    </script>
+                                <%
+                                }
+                                %>
+                                </td>
                                 <td class="alignright">
                                     <div style="vertical-align:top; padding-top:2px;" class="alignright">
 
@@ -198,7 +218,9 @@
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
                                 <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                <td nowrap>&nbsp;<%=post.getCreated()%> &nbsp;&nbsp;</td>
+                                <td nowrap>&nbsp;<%=post.getCreated()%> &nbsp;&nbsp;
+                                 
+                               </td>
                                 <td class="alignright">
                                     <div style="vertical-align:top; padding-top:2px;" class="alignright">
 
@@ -284,13 +306,13 @@
         	<table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td><!-- start newtopic.thtml -->
-                    <%urlp.setMode("addThread");%>
-<a href="<%=urlp.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_newtopic.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("newthread")%>" TITLE="<%=paramRequest.getLocaleString("newthread")%>"></a>
+                    <%urlthread.setMode("addThread");%>
+<a href="<%=urlthread.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_newtopic.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("newthread")%>" TITLE="<%=paramRequest.getLocaleString("newthread")%>"></a>
 <!-- end newtopic.thtml --></td>
                     <td><!-- start replytopic.thtml -->
 <!-- Post Reply -->
-<%urlp.setMode("replyPost");%>
-<a href="<%=urlp.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_reply.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("replyPost")%>" TITLE="P<%=paramRequest.getLocaleString("replyPost")%>"></a>
+<%urlthread.setMode("replyPost");%>
+<a href="<%=urlthread.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/post_reply.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("replyPost")%>" TITLE="P<%=paramRequest.getLocaleString("replyPost")%>"></a>
 <!-- end replytopic.thtml --></td>
                 </tr>
             </table>
