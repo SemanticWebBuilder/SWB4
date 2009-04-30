@@ -168,22 +168,52 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         }
     }
 
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        SWBResourceURL url = paramRequest.getRenderUrl();
+        SWBResourceURL rUrl = paramRequest.getRenderUrl();
         String urlString = paramRequest.getTopic().getRealUrl();
+        System.out.println(">>>>>>>>>>>" + paramRequest.getTopic().getWebPageURL());
+        StringBuffer sbf = new StringBuffer();
 
-        url.setMode("ADDNEW");
-        url.setParameter("url", urlString);
-        out.println("<a href=\""+ url +"\">"+ paramRequest.getLocaleString("mark") +"</a> ");
-        url.setMode("MANAGE");
-        url.setParameter("level", "admin");
-        out.println("<a href=\""+ url +"\">" + paramRequest.getLocaleString("manage") + "</a>");
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
+        rUrl.setMode("ADDNEW");
+        sbf.append("<script type=\"text/javascript\">\n");
+        sbf.append("dojo.require(\"dijit.Dialog\");\n" +
+                    "var dojoDlg;\n" +
+                    "dojo.addOnLoad(function () {\n" +
+                        "dojoDlg = new dijit.Dialog({\n" +
+                        "title: \"dialog\"\n" +
+                        "})\n" +
+                    "});\n");
+        sbf.append("function showDialog() {\n" +
+                        "dojo.xhrGet({\n" +
+                            "url: '" + rUrl +"',\n" +
+                            "load:function(response){\n" +
+                                "dojoDlg.attr(\"content\", response);\n" +
+                                "dojoDlg.show();\n" +
+                            "},\n" +
+                            "error: function(response) {\nreturn response;\n},\nhandleAs: \"text\"\n" +
+                        "});\n" +
+                    "}\n");
+        sbf.append("</script>");
+
+        sbf.append("<a href=\"#\" onclick=\"showDialog();\">Dialog</a> ");
+        rUrl.setParameter("url", urlString);
+        sbf.append("<a href=\""+ rUrl +"\">"+ paramRequest.getLocaleString("mark") +"</a> ");
+        rUrl.setMode("MANAGE");
+        rUrl.setParameter("level", "admin");
+        sbf.append("<a href=\""+ rUrl +"\">" + paramRequest.getLocaleString("manage") + "</a>");
+        out.println(sbf.toString());
     }
 
     public void doManage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        SWBResourceURL url = paramRequest.getActionUrl();
+        SWBResourceURL aUrl = paramRequest.getActionUrl();
+        SWBResourceURL rUrl = paramRequest.getRenderUrl();
         WebSite model = paramRequest.getTopic().getWebSite();
         String untaggedName = getResourceBase().getId() + "/untagged";
         String generalName = getResourceBase().getId() + "/general";
@@ -191,7 +221,11 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         BookmarkGroup untagged = getGroupByName(untaggedName);
         Iterator<BookmarkGroup> groups = listGroups();
         int sType = getSortType();
-        
+        StringBuffer sbf = new StringBuffer();
+
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         /*
         while (groups.hasNext()) {
             BookmarkGroup grp = groups.next();
@@ -217,27 +251,27 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             //System.out.println(">>>>>>>>Grupo untagged creado");
         }
 
-        out.println("<div id=\"container\">");
-        out.print("<div id=\"header\"><h1>"+ paramRequest.getLocaleString("manage") +"</h1><div id=\"navmenu\">");
-        url.setMode("ORDER");
-        url.setParameter("oType", String.valueOf(SORT_BYNAME));
-        out.print((sType==SORT_BYNAME)?"<b>":"<a href=\""+ url +"\">");
-        out.print(paramRequest.getLocaleString("byname"));
-        out.print((sType==SORT_BYNAME)?"</b> |":"</a> |");
-        url.setParameter("oType", String.valueOf(SORT_BYDATE));
-        out.print((sType==SORT_BYDATE)?"<b>":"<a href=\""+ url +"\">");
-        out.print(paramRequest.getLocaleString("bydate"));
-        out.print((sType==SORT_BYDATE)?"</b> |":"</a> |");
-        url.setParameter("oType", String.valueOf(SORT_BYTAGS));
-        out.print((sType==SORT_BYTAGS)?"<b>":"<a href=\""+ url +"\">");
-        out.print(paramRequest.getLocaleString("bytag"));
-        out.print((sType==SORT_BYTAGS)?"</b> |":"</a> |");
-        url = paramRequest.getRenderUrl();
-        url.setMode("EXIT");
-        out.print("<a href=\""+ url +"\">" + paramRequest.getLocaleString("exit") + "</a>");
-        out.println("</div></div>");
-        out.println("<div id=\"wrapper\">");
-        out.println("<div id=\"content\">");
+        sbf.append("<div id=\"container\">");
+        sbf.append("<div id=\"header\"><h1>"+ paramRequest.getLocaleString("manage") +"</h1><div id=\"navmenu\">");
+        aUrl.setMode("ORDER");
+        aUrl.setParameter("oType", String.valueOf(SORT_BYNAME));
+        sbf.append((sType==SORT_BYNAME)?"<b>":"<a href=\""+ aUrl +"\">");
+        sbf.append(paramRequest.getLocaleString("byname"));
+        sbf.append((sType==SORT_BYNAME)?"</b> |":"</a> |");
+        aUrl.setParameter("oType", String.valueOf(SORT_BYDATE));
+        sbf.append((sType==SORT_BYDATE)?"<b>":"<a href=\""+ aUrl +"\">");
+        sbf.append(paramRequest.getLocaleString("bydate"));
+        sbf.append((sType==SORT_BYDATE)?"</b> |":"</a> |");
+        aUrl.setParameter("oType", String.valueOf(SORT_BYTAGS));
+        sbf.append((sType==SORT_BYTAGS)?"<b>":"<a href=\""+ aUrl +"\">");
+        sbf.append(paramRequest.getLocaleString("bytag"));
+        sbf.append((sType==SORT_BYTAGS)?"</b> |":"</a> |");
+        rUrl.setMode("EXIT");
+        sbf.append("<a href=\""+ rUrl +"\">" + paramRequest.getLocaleString("exit") + "</a>");
+        sbf.append("</div></div>");
+        sbf.append("<div id=\"wrapper\">");
+        sbf.append("<div id=\"content\">");
+
         if (getSortType() != SORT_BYTAGS) {
             out.println(listEntriesByGroup(getSortType(), generalGp.getId(), paramRequest));
         } else {
@@ -257,138 +291,144 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         }
         out.println("</div></div>");
         out.println("<div id=\"navigation\">");
-        url.setMode("BYTAG");
+        rUrl.setMode("BYTAG");
         while (groups.hasNext()) {
             BookmarkGroup group = groups.next();
             if (!group.getTitle().equals(generalName)) {
-                url.setParameter("gid", group.getSemanticObject().getId());
+                rUrl.setParameter("gid", group.getSemanticObject().getId());
                 if (!group.getTitle().equals(untaggedName)) {
                     if (group.getEntryCount() > 0) {
                         //System.out.println(">>>>>>Desplegando elementos del grupo " + group.getTitle());
-                        out.println("<b><a href=\"" + url + "\">" + group.getTitle() + "(" + group.getEntryCount() + ")" + "</a></b><br>");
+                        sbf.append("<b><a href=\"" + rUrl + "\">" + group.getTitle() + "(" + group.getEntryCount() + ")" + "</a></b><br>");
                     }
                 } else if (group.getEntryCount() > 0) {
                     //System.out.println(">>>>>>Desplegando elementos del grupo " + group.getTitle());
-                    out.println("<b><a href=\"" + url + "\">" + paramRequest.getLocaleString("notags") + "(" + group.getEntryCount() + ")" + "</a></b><br>");
+                    sbf.append("<b><a href=\"" + rUrl + "\">" + paramRequest.getLocaleString("notags") + "(" + group.getEntryCount() + ")" + "</a></b><br>");
                 }
             }
         }
-        out.println("</div>");
-        out.println("<div id=\"extra\">");
-        url = paramRequest.getRenderUrl();
-        url.setParameter("level","admin");
-        url.setMode("ADDNEW");
-        out.println("<a href=\"" + url + "\">" + paramRequest.getLocaleString("add") + "</a><br>");
-        url.setMode("ADMIN");
-        out.println("<a href=\"" + url + "\">" + paramRequest.getLocaleString("manage") + "</a><br>");
+        sbf.append("</div>");
+        sbf.append("<div id=\"extra\">");
+        rUrl.setParameter("level","admin");
+        rUrl.setMode("ADDNEW");
+        sbf.append("<a href=\"" + rUrl + "\">" + paramRequest.getLocaleString("add") + "</a><br>");
         if (generalGp.getEntryCount() > 0) {
-            url = paramRequest.getActionUrl();
-            url.setMode("DELALL");
-            out.println("<a href=\"#\" onclick=\"if(confirm('"+ paramRequest.getLocaleString("msgRemoveAll") +"')){location='"+ url +"'} else {return false;}\">" + paramRequest.getLocaleString("delall") + "</a>");
+            aUrl.setMode("DELALL");
+            sbf.append("<a href=\"#\" onclick=\"if(confirm('"+ paramRequest.getLocaleString("msgRemoveAll") +"')){location='"+ aUrl +"'} else {return false;}\">" + paramRequest.getLocaleString("delall") + "</a>");
         }
-        out.println("</div>");
+        sbf.append("</div>");
+        out.println(sbf.toString());
     }
 
     public void doByTag(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String gid = request.getParameter("gid");
         BookmarkGroup group = getGroupById(gid);
-        SWBResourceURL url = paramRequest.getRenderUrl();
+        SWBResourceURL rUrl = paramRequest.getRenderUrl();
+        StringBuffer sbf = new StringBuffer();
 
-        if (group != null) {
-            out.println("<div id=\"header\"><h1>" + group.getTitle() + "</h1></div>");
+        if (group == null) {
+            return;
         }
+
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
+        sbf.append("<div id=\"header\"><h1>" + group.getTitle() + "</h1></div>");
         out.println("<div id=\"wrapper\">");
         out.println("<div id=\"content\">");
         out.println(listEntriesByGroup(getSortType(), gid, paramRequest));
         out.println("</div></div><div id=\"footer\">");
-        url.setMode("MANAGE");
-        out.println("<br><a href=\"" + url + "\">" + paramRequest.getLocaleString("back") + "</a>");
+        rUrl.setMode("MANAGE");
+        out.println("<br><a href=\"" + rUrl + "\">" + paramRequest.getLocaleString("back") + "</a>");
         out.println("</div>");
     }
 
     public void doAddNew(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        SWBResourceURL url = paramRequest.getActionUrl();
+        SWBResourceURL aUrl = paramRequest.getActionUrl();
         String lang = paramRequest.getUser().getLanguage();
         String title = BookmarkEntry.swb_title.getDisplayName(lang);
         String link = BookmarkEntry.swb_res_bkm_bookmarkURL.getDisplayName(lang);
         String desc = BookmarkEntry.swb_description.getDisplayName(lang);
         String tags = BookmarkEntry.swb_res_bkm_tags.getDisplayName(lang);
+        StringBuffer sbf = new StringBuffer();
 
-        if(request.getParameter("level") != null && request.getParameter("level").equals("admin")) {
-            url.setMode("MANAGE");
-        } else {
-            url.setMode(url.Mode_VIEW);
-        }
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
+        sbf.append("<script type=\"text/javascript\">");
+        sbf.append("dojo.require(\"dijit.form.Form\");");
+        sbf.append("dojo.require(\"dijit.form.Button\");");
+        sbf.append("</script>");
+
+        aUrl.setMode("ADDNEW");
         //TODO: Cambiar por un FormManager
-        out.println("<div class=\"swbform\">");
-        out.print("<form id=\"" + getResourceBase().getId() + "/bookmark\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
-        out.println("action=\"" + url + "\" method=\"post\">");
-        out.println("<fieldset><b>"+ paramRequest.getLocaleString("add") + " " + BookmarkEntry.sclass.getDisplayName(lang) +"</b></fieldset>");
-        out.println("<fieldset>");
-        out.println("<label for=\"title\">" + title + "</label>");
-        out.println("<input type=\"text\" name=\"title\" id=\"title\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + title + "\"></input><br>");
-        out.println("<label for=\"urllink\">" + link + "</label>");
-        out.println("<input type=\"text\" name=\"urllink\" id=\"urllink\" value=\""+ ((request.getParameter("url")==null)?"http://":request.getParameter("url")) +"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + link + "\"></input><br>");
-        out.println("<label for=\"description\">" + desc + "</label>");
-        out.println("<input type=\"text\" name=\"description\" id=\"description\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + desc + "\"></input><br>");
-        out.println("<label for=\"tags\">" + tags + "</label>");
-        out.println("<textarea name=\"tags\" id=\"tags\" dojoType=\"dijit.form.TextArea\" ></textarea><br>");
-        out.println("</fieldset>");
-        out.println("<fieldset>");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("add") + "</button>");
-        url = paramRequest.getRenderUrl();
-        if(request.getParameter("level") != null && request.getParameter("level").equals("admin")) {
-            url.setMode("MANAGE");
-        } else {
-            url.setMode(url.Mode_VIEW);
-        }
-        out.println("<button dojoType=\"dijit.form.Button\" onClick=\"location='" + url + "'\">" + paramRequest.getLocaleString("cancel") + "</button>");
-        out.println("</fieldset>");
-        out.println("</form>");
-        out.println("</div>");
+        sbf.append("<div class=\"swbform\">");
+        sbf.append("<form id=\"" + getResourceBase().getId() + "/bookmark\" dojoType=\"dijit.form.Form\" ");
+        sbf.append("action=\"" + aUrl + "\" method=\"post\">");
+        sbf.append("<fieldset><b>"+ paramRequest.getLocaleString("add") + " " + BookmarkEntry.sclass.getDisplayName(lang) +"</b></fieldset>");
+        sbf.append("<fieldset>");
+        sbf.append("<label for=\"title\">" + title + "</label>");
+        sbf.append("<input type=\"text\" name=\"title\" id=\"title\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + title + "\"></input><br>");
+        sbf.append("<label for=\"urllink\">" + link + "</label>");
+        sbf.append("<input type=\"text\" name=\"urllink\" id=\"urllink\" value=\""+ ((request.getParameter("url")==null)?"http://":request.getParameter("url")) +"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + link + "\"></input><br>");
+        sbf.append("<label for=\"description\">" + desc + "</label>");
+        sbf.append("<input type=\"text\" name=\"description\" id=\"description\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + desc + "\"></input><br>");
+        sbf.append("<label for=\"tags\">" + tags + "</label>");
+        sbf.append("<textarea name=\"tags\" id=\"tags\" dojoType=\"dijit.form.TextArea\" ></textarea><br>");
+        sbf.append("</fieldset>");
+        sbf.append("<fieldset>");
+        sbf.append("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("add") + "</button>");
+        sbf.append("</fieldset>");
+        sbf.append("</form>");
+        sbf.append("</div>");
+        out.println(sbf.toString());
     }
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        SWBResourceURL url = paramRequest.getActionUrl();
+        SWBResourceURL aUrl = paramRequest.getActionUrl();
         String lang = paramRequest.getUser().getLanguage();
         String title = BookmarkEntry.swb_title.getDisplayName(lang);
         String link = BookmarkEntry.swb_res_bkm_bookmarkURL.getDisplayName(lang);
         String desc = BookmarkEntry.swb_description.getDisplayName(lang);
         String tags = BookmarkEntry.swb_res_bkm_tags.getDisplayName(lang);
         BookmarkGroup generalGp = getGroupByName(getResourceBase().getId() + "/general");
+        StringBuffer sbf = new StringBuffer();
 
         if(generalGp == null) {
             return;
         }
 
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
         BookmarkEntry entry = generalGp.getEntryById(request.getParameter("id"));
-        url.setMode(url.Mode_EDIT);
+        aUrl.setMode(aUrl.Mode_EDIT);
         //TODO: Cambiar por un FormManager
-        out.print("<form id=\"" + getResourceBase().getId() + "/bookmark\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
-        out.println("action=\"" + url + "\" method=\"post\">");
-        out.println("<fieldset><b>"+ paramRequest.getLocaleString("edit") + " " + BookmarkEntry.sclass.getDisplayName(lang) +"</b></fieldset>");
-        out.println("<fieldset>");
-        out.println("<label for=\"title\">" + title + "</label>");
-        out.println("<input type=\"text\" name=\"title\" id=\"title\" value=\""+ entry.getTitle() +"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + title + "\"></input><br>");
-        out.println("<label for=\"urllink\">" + link + "</label>");
-        out.println("<input type=\"text\" name=\"urllink\" id=\"urllink\" value=\""+ entry.getBookmarkURL() +"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + link + "\"></input><br>");
-        out.println("<label for=\"description\">" + desc + "</label>");
-        out.println("<input type=\"text\" name=\"description\" id=\"description\" value=\""+ entry.getDescription() +"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + desc + "\"></input><br>");
-        out.println("<label for=\"tags\">" + tags + "</label>");
-        out.println("<textarea name=\"tags\" id=\"tags\" dojoType=\"dijit.form.TextArea\" >"+ entry.getTags() +"</textarea><br>");
-        out.println("</fieldset>");
-        out.println("<fieldset>");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("ok") + "</button>");
-        url = paramRequest.getRenderUrl();
-        url.setMode("MANAGE");
-        url.setParameter("id", request.getParameter("id"));
-        out.println("<button dojoType=\"dijit.form.Button\" onClick=\"location='" + url + "'\">" + paramRequest.getLocaleString("cancel") + "</button>");
-        out.println("</fieldset>");
-        out.println("</form>");
+        sbf.append("<form id=\"" + getResourceBase().getId() + "/bookmark\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
+        sbf.append("action=\"" + aUrl + "\" method=\"post\">");
+        sbf.append("<fieldset><b>"+ paramRequest.getLocaleString("edit") + " " + BookmarkEntry.sclass.getDisplayName(lang) +"</b></fieldset>");
+        sbf.append("<fieldset>");
+        sbf.append("<label for=\"title\">" + title + "</label>");
+        sbf.append("<input type=\"text\" name=\"title\" id=\"title\" value=\""+ entry.getTitle() +"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + title + "\"></input><br>");
+        sbf.append("<label for=\"urllink\">" + link + "</label>");
+        sbf.append("<input type=\"text\" name=\"urllink\" id=\"urllink\" value=\""+ entry.getBookmarkURL() +"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + link + "\"></input><br>");
+        sbf.append("<label for=\"description\">" + desc + "</label>");
+        sbf.append("<input type=\"text\" name=\"description\" id=\"description\" value=\""+ entry.getDescription() +"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura " + desc + "\"></input><br>");
+        sbf.append("<label for=\"tags\">" + tags + "</label>");
+        sbf.append("<textarea name=\"tags\" id=\"tags\" dojoType=\"dijit.form.TextArea\" >"+ entry.getTags() +"</textarea><br>");
+        sbf.append("</fieldset>");
+        sbf.append("<fieldset>");
+        sbf.append("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("ok") + "</button>");
+        sbf.append("</fieldset>");
+        sbf.append("</form>");
+        out.println(sbf.toString());
     }
 
 
@@ -430,7 +470,9 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     public String listEntriesByGroup(int sortType, String groupId, SWBParamRequest paramRequest) throws SWBResourceException {
         StringBuffer sbf = new StringBuffer();
-        SWBResourceURL url = paramRequest.getRenderUrl();
+        SWBResourceURL rUrl = paramRequest.getRenderUrl();
+        SWBResourceURL aUrl = paramRequest.getActionUrl();
+
         ArrayList<BookmarkEntry> sEntries = new ArrayList<BookmarkEntry>();
         BookmarkGroup group = getGroupById(groupId);
         Format formatter = new SimpleDateFormat("dd MMM");
@@ -467,24 +509,22 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             sbf.append("<tr class = \"entry\" id=\"r_entry_"+ eId +"\">\n");
             sbf.append("<td><a title=\""+ entry.getBookmarkURL() +"\" href=\"" + entry.getBookmarkURL() + "\">" + entry.getTitle() + "</a>");
             sbf.append("&nbsp;-&nbsp;" + entry.getBookmarkURL() + "&nbsp;-&nbsp;" + formatter.format(entry.getCreated()) + "&nbsp;");
-            url.setMode(url.Mode_EDIT);
-            url.setParameter("id", eId);
-            sbf.append("<a title=\""+ paramRequest.getLocaleString("edit") +"\" href=\"" + url + "\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\""+paramRequest.getLocaleString("edit")+"\"></a>&nbsp;");
-            url = paramRequest.getActionUrl();
-            url.setMode("DELETE");
-            url.setParameter("id", eId);
-            sbf.append("<a title=\""+ paramRequest.getLocaleString("delete") +"\" href=\"#\" onclick=\"if(confirm('"+ paramRequest.getLocaleString("msgRemove") +"')){location='"+ url +"'} else {return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\""+paramRequest.getLocaleString("delete")+"\"></a>");
+            rUrl.setMode(rUrl.Mode_EDIT);
+            rUrl.setParameter("id", eId);
+            sbf.append("<a title=\""+ paramRequest.getLocaleString("edit") +"\" href=\"" + rUrl + "\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\""+paramRequest.getLocaleString("edit")+"\"></a>&nbsp;");
+            aUrl.setMode("DELETE");
+            aUrl.setParameter("id", eId);
+            sbf.append("<a title=\""+ paramRequest.getLocaleString("delete") +"\" href=\"#\" onclick=\"if(confirm('"+ paramRequest.getLocaleString("msgRemove") +"')){location='"+ aUrl +"'} else {return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\""+paramRequest.getLocaleString("delete")+"\"></a>");
             sbf.append("</td></tr>\n");
             sbf.append("<tr class=\"entry\" id=\"r_info_"+ eId +"\">\n<td>");
             String tags[] = entry.getTags().split(",");
             sbf.append("<div>[");
-            url = paramRequest.getRenderUrl();
             for (int i = 0; i < tags.length; i++) {
                 group = getGroupByName(tags[i].trim());
                 if (group != null) {
-                    url.setMode("BYTAG");
-                    url.setParameter("gid", group.getSemanticObject().getId());
-                    sbf.append("<a href=\"" + url + "\">" + group.getTitle() + "</a>");
+                    rUrl.setMode("BYTAG");
+                    rUrl.setParameter("gid", group.getSemanticObject().getId());
+                    sbf.append("<a href=\"" + rUrl + "\">" + group.getTitle() + "</a>");
                     if (i < tags.length - 1) {
                         sbf.append(", ");
                     }
