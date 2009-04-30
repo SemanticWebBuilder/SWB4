@@ -156,7 +156,11 @@ public class CheckBoxFE extends WBAdmResourceAbs
                 if(root!=null) dom.appendChild(root);
                 Element child=dom.createElement("input");
                 child.setAttribute("type", "checkbox");
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(value!=null) child.setAttribute("value",value);
                 if(align!=null) child.setAttribute("align",align);
                 if(isdisabled) child.setAttribute("disabled","true");
@@ -199,6 +203,7 @@ public class CheckBoxFE extends WBAdmResourceAbs
                     if(attrValue!=null && !attrValue.equals("")){
                         //defecto
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+                        else if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         else if(attrName.equalsIgnoreCase("style")) style=attrValue;
                         else if(attrName.equalsIgnoreCase("class")) styleclass=attrValue;
                         else if(attrName.equalsIgnoreCase("moreattr")) moreattr=attrValue;

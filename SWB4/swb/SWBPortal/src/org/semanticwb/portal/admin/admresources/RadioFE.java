@@ -153,6 +153,7 @@ public class RadioFE extends WBAdmResourceAbs
                 if(root!=null) dom.appendChild(root);
                 Element child=dom.createElement("input");
                 child.setAttribute("type", "radio");
+                if(id!=null) child.setAttribute("id",id);
                 if(name!=null) child.setAttribute("name",name);
                 if(value!=null) child.setAttribute("value",value);
                 if(align!=null) child.setAttribute("align",align);
@@ -194,6 +195,7 @@ public class RadioFE extends WBAdmResourceAbs
                     if(attrValue!=null && !attrValue.equals("")){
                         //defecto
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+                        else if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         else if(attrName.equalsIgnoreCase("style")) style=attrValue;
                         else if(attrName.equalsIgnoreCase("class")) styleclass=attrValue;
                         else if(attrName.equalsIgnoreCase("moreattr")) moreattr=attrValue;

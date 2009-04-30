@@ -158,6 +158,7 @@ public class HtmlFE extends WBAdmResourceAbs
                     if(attrValue!=null && !attrValue.equals(""))
                     {
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+                        else if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         else if(attrName.equalsIgnoreCase("language")) language=attrValue;
                         else if(attrName.equalsIgnoreCase("src"))
                         {

@@ -64,9 +64,10 @@ public class Js_EmailValFE extends WBJsValidationsFEAbs
             String bundle=getClass().getName();
             strb.append("\n   var swOK=2;");
             strb.append("\n   pCaracter=");
-            if(formfeName != null)
-                strb.append(formfeName + ".");
-            strb.append(field + ".value.replace(\" \",\"\000\");");
+//            if(formfeName != null)
+//                strb.append("document."+formfeName + ".");
+//            strb.append(field + ".value.replace(\" \",\"\000\");");
+            strb.append("document.getElementById(\""+field+"\").value.replace(\" \",\"\000\");");
             strb.append("\n   for (var i = 0; i < pCaracter.length; i++)");
             strb.append("\n   {");
             strb.append("\n      var sByte = pCaracter.substring(i, i + 1);");
@@ -75,8 +76,9 @@ public class Js_EmailValFE extends WBJsValidationsFEAbs
             strb.append("\n   if (swOK > 0 || pCaracter.length<" + minsize + " || pCaracter.charAt(0) == '@' || pCaracter.charAt(0) == '.' || pCaracter.charAt(pCaracter.length-1)=='@' || pCaracter.charAt(pCaracter.length-1)=='.' || pCaracter.charAt(pCaracter.indexOf(\"@\")+1)=='.' || pCaracter.indexOf(\"@\") == -1)");
             strb.append("\n   {");
             strb.append("\n      alert('"+ SWBUtils.TEXT.getLocaleString(bundle, "msgEmailRequired", locale) +" " + minsize + " "+ SWBUtils.TEXT.getLocaleString(bundle, "msgCharacters", locale) +"'); ");
-            if(formfeName != null) strb.append("\n      " + formfeName + ".");
-            strb.append(field + ".focus();");
+//            if(formfeName != null) strb.append("\n      " + "document."+formfeName + ".");
+//            strb.append(field + ".focus();");
+            strb.append("document.getElementById(\""+field+"\").focus();");
             strb.append("\n      return false;");
             strb.append("\n   }");
         }

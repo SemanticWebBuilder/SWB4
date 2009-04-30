@@ -92,9 +92,10 @@ public class Js_PatronFE extends WBJsValidationsFEAbs {
         {
             String bundle=getClass().getName();            
             strb.append("\n   pCaracter=");
-            if(formfeName != null)
-                strb.append(formfeName + ".");
-            strb.append(field + ".value;");
+//            if(formfeName != null)
+//                strb.append("document."+formfeName + ".");
+//            strb.append(field + ".value;");
+            strb.append("document.getElementById(\""+field+"\").value;");
             strb.append("var patron="+patron+";");
             strb.append("\n   if (pCaracter.length>0) ");
             strb.append("     { ");
@@ -105,9 +106,10 @@ public class Js_PatronFE extends WBJsValidationsFEAbs {
                 strb.append(" "+patron);
             }
             strb.append(" ');");
-            if(formfeName != null)
-                strb.append("\n     " + formfeName + ".");
-            strb.append(field + ".focus();");
+//            if(formfeName != null)
+//                strb.append("\n     " + "document."+formfeName + ".");
+//            strb.append(field + ".focus();");
+            strb.append("document.getElementById(\""+field+"\").focus();");
             strb.append("\n     return false;");
             strb.append("\n      } ");
             strb.append("\n   } ");

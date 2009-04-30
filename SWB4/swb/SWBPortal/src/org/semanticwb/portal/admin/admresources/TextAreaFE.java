@@ -192,7 +192,11 @@ public class TextAreaFE extends WBJsInputFEAbs
                 }
                 if(root!=null) dom.appendChild(root);
                 Element child=dom.createElement("textarea");
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(rows > 0) child.setAttribute("rows",String.valueOf(rows));
                 if(cols > 0) child.setAttribute("cols",String.valueOf(cols));
                 if(wrap!=null) child.setAttribute("wrap",wrap);
@@ -244,6 +248,7 @@ public class TextAreaFE extends WBJsInputFEAbs
                     if(attrValue!=null && !attrValue.equals("")){
                         //defecto
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+                        else if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         else if(attrName.equalsIgnoreCase("style")) style=attrValue;
                         else if(attrName.equalsIgnoreCase("class")) styleclass=attrValue;
                         else if(attrName.equalsIgnoreCase("moreattr")) moreattr=attrValue;

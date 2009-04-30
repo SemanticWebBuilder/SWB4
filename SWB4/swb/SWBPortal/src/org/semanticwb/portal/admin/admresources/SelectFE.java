@@ -213,7 +213,11 @@ public class SelectFE extends WBContainerFE
             if(dom!=null)
             {
                 Element child=dom.createElement("select");
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(ismultiple) child.setAttribute("multiple","true");
                 if(size!=-1) child.setAttribute("size",String.valueOf(size));
                 if(width!=-1) child.setAttribute("width",String.valueOf(width));
@@ -260,6 +264,7 @@ public class SelectFE extends WBContainerFE
                     if(attrValue!=null && !attrValue.equals("")){
                         //defecto
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+                        else if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         else if(attrName.equalsIgnoreCase("style")) style=attrValue;
                         else if(attrName.equalsIgnoreCase("class")) styleclass=attrValue;
                         else if(attrName.equalsIgnoreCase("moreattr")) moreattr=attrValue;

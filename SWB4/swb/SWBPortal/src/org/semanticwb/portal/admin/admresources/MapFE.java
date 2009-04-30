@@ -111,7 +111,11 @@ public class MapFE extends WBContainerFE
             {
                 Element child=dom.createElement("map");
                 if(accesskey!=null) child.setAttribute("accesskey",accesskey);
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
                 
                 Document area=SWBUtils.XML.xmlToDom("<map>"+show()+"</map>");
@@ -145,6 +149,7 @@ public class MapFE extends WBContainerFE
                     if(attrValue!=null && !attrValue.equals("")){
                         //defecto
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+
                         else if(attrName.equalsIgnoreCase("style")) style=attrValue;
                         else if(attrName.equalsIgnoreCase("class")) styleclass=attrValue;
                         else if(attrName.equalsIgnoreCase("moreattr")) moreattr=attrValue;

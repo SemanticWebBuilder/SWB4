@@ -354,7 +354,7 @@ public class SWBImportWebSite extends GenericResource {
     private void getStep1(PrintWriter out, SWBResourceURL url, SWBParamRequest paramRequest) {
         try {
 
-            out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');try{document.getElementById('csLoading').style.display='inline';}catch(noe){}return false;\" method=\"post\">");
+            out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');return false;\" method=\"post\">");
             out.println("<fieldset>");
             out.println("<table>");
             out.append("<tr><td>");

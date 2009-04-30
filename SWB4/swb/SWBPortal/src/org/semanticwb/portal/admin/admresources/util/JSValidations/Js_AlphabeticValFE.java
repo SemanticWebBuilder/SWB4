@@ -67,10 +67,11 @@ public class Js_AlphabeticValFE extends WBJsValidationsFEAbs
         {
             String bundle=getClass().getName();
             strb.append("\n   pCaracter=");
-            if(formfeName != null) {
-                strb.append(formfeName + ".");
-            }
-            strb.append(field + ".value");
+           // if(formfeName != null) {
+           //     strb.append("document."+formfeName + ".");
+           // }
+            //strb.append(field + ".value");
+            strb.append("document.getElementById(\""+field+"\").value;");
             strb.append("\n   var valid = \"ABCDEFGHIJKLMN\321OPQRSTUVWXYZ\301\311\315\323\332abcdefghijklmn\361opqrstuvwxyz\341\351\355\363\372 \";");
             strb.append("\n   var ok = true;");
             strb.append("\n for (i = 0; i < pCaracter.length; i++) { ");
@@ -87,10 +88,11 @@ public class Js_AlphabeticValFE extends WBJsValidationsFEAbs
             strb.append("\n alert('"+ SWBUtils.TEXT.getLocaleString(bundle, "msgDataRequired", locale) +" ");
             strb.append(minsize);
             strb.append(" "+  SWBUtils.TEXT.getLocaleString(bundle, "msgCharacters", locale) +"'); ");
-            if(formfeName != null) {
-                strb.append("\n     " + formfeName + ".");
-            }
-            strb.append(field + ".focus();");
+            //if(formfeName != null) {
+            //    strb.append("\n     " + "document."+formfeName + ".");
+            //}
+            //strb.append(field + ".focus();");
+            strb.append("document.getElementById(\""+field+"\").focus();");
             strb.append("\n     return false;");
             strb.append("\n } ");
         }

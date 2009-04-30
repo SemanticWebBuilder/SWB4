@@ -179,7 +179,13 @@ public class FormFE extends WBContainerFE
             {
                 Element child=dom.createElement("form");
                 if(id!=null) child.setAttribute("id",id);
-                if(name!=null) child.setAttribute("name",name);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) {
+                        id=name;
+                        child.setAttribute("id",id);
+                    }
+                }
                 if(action!=null) child.setAttribute("action",action);
                 else {
                     //child.setAttribute("action","#");
@@ -193,11 +199,14 @@ public class FormFE extends WBContainerFE
                 if(styleclass!=null) child.setAttribute("class",styleclass);
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
 
+                setJsFrameworkAttributes(child);
+
                 dom.appendChild(child);
 
                 xml=SWBUtils.XML.domToXml(dom, "ISO-8859-1", true);
                 if(xml!=null && !"".equals(xml.trim())) xml=xml.substring(xml.indexOf("<form"), xml.indexOf("/>", xml.indexOf("<form"))) + ">";
                 else xml="";
+                System.out.println("xml form:"+xml);
             }
         }
         catch(Exception e) { log.error(e); }
@@ -336,8 +345,8 @@ public class FormFE extends WBContainerFE
                     String attrValue=nnodemap.item(i).getNodeValue();
                     if(attrValue!=null && !attrValue.equals("")){
                         //defecto
-                        if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+                        if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         else if(attrName.equalsIgnoreCase("style")) style=attrValue;
                         else if(attrName.equalsIgnoreCase("class")) styleclass=attrValue;
                         else if(attrName.equalsIgnoreCase("moreattr")) moreattr=attrValue;
@@ -360,6 +369,21 @@ public class FormFE extends WBContainerFE
                 }
             }
         }
+    }
+
+
+    /**
+     * Manejo de Frameworks de JavaScript
+     * @param child
+     */
+    private void setJsFrameworkAttributes(Element child){
+            String jsFramework=getJsFrameWork();
+            if(jsFramework!=null){
+                if(jsFramework.equalsIgnoreCase("dojo")){
+                    child.setAttribute("dojoType","dijit.form.Form");
+                }
+                child.setAttribute("onsubmit","submitForm('"+id+"');return false;");
+            }
     }
 
 }

@@ -74,7 +74,11 @@ public class PasswordFE extends TextFE
                 if(root!=null) dom.appendChild(root);
                 Element child=dom.createElement("input");
                 child.setAttribute("type", "password");
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(size!=-1) child.setAttribute("size",String.valueOf(size));
                 if(maxlength!=-1) child.setAttribute("maxlength",String.valueOf(maxlength));
                 if(width!=-1) child.setAttribute("width",String.valueOf(width));

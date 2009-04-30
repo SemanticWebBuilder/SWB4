@@ -104,7 +104,11 @@ public class HiddenFE extends WBAdmResourceAbs
             {
                 Element child=dom.createElement("input");
                 child.setAttribute("type", "hidden");
-                if(name!=null) child.setAttribute("name",name);
+                if(id!=null) child.setAttribute("id",id);
+                if(name!=null) {
+                    child.setAttribute("name",name);
+                    if(id==null) child.setAttribute("id",name);
+                }
                 if(value!=null) child.setAttribute("value",value);
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
                 dom.appendChild(child);
@@ -115,6 +119,7 @@ public class HiddenFE extends WBAdmResourceAbs
             }
         } 
         catch(Exception e) { log.error(e); }
+        System.out.println("Name:"+name+",xml hidden:"+xml);
         return xml;            
     }
      
@@ -132,6 +137,7 @@ public class HiddenFE extends WBAdmResourceAbs
                     if(attrValue!=null && !attrValue.equals("")){
                         //defecto
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
+                        else if(attrName.equalsIgnoreCase("id")) id=attrValue;
                         else if(attrName.equalsIgnoreCase("style")) style=attrValue;
                         else if(attrName.equalsIgnoreCase("class")) styleclass=attrValue;
                         else if(attrName.equalsIgnoreCase("moreattr")) moreattr=attrValue;
