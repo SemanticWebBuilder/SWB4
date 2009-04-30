@@ -109,7 +109,7 @@ public class PFlowManager
             {
                 PFlowInstance instance = instances.next();
                 Resource resource = instance.getPfinstResource();
-                if (resource.getCreator() != null && resource.getCreator().equals(user))
+                if (isInFlow(resource) && resource.getCreator() != null && resource.getCreator().equals(user))
                 {
                     getContentsAtFlowOfUser.add(resource);
                 }
@@ -130,7 +130,10 @@ public class PFlowManager
             {
                 PFlowInstance instance = instances.next();
                 Resource resource = instance.getPfinstResource();
-                getContentsAtFlowAll.add(resource);
+                if(isInFlow(resource))
+                {
+                    getContentsAtFlowAll.add(resource);
+                }
             }
         }
         return getContentsAtFlowAll.toArray(new Resource[getContentsAtFlowAll.size()]);
@@ -148,7 +151,7 @@ public class PFlowManager
             {
                 PFlowInstance instance = instances.next();
                 Resource resource = instance.getPfinstResource();
-                if (resource.getCreator().equals(user) && this.isReviewer(resource, user))
+                if (isInFlow(resource) && resource.getCreator().equals(user) && this.isReviewer(resource, user))
                 {
                     getContentsAtFlow.add(resource);
                 }
@@ -165,7 +168,10 @@ public class PFlowManager
         {
             PFlowInstance instance = instances.next();
             Resource resource = instance.getPfinstResource();
-            getContentsAtFlow.add(resource);
+            if(isInFlow(resource))
+            {
+                getContentsAtFlow.add(resource);
+            }
         }
         return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
     }
@@ -196,7 +202,7 @@ public class PFlowManager
             Resource[] resources = getContentsAtFlowAll(site);
             for (Resource resource : resources)
             {
-                if (isReviewer(resource, user))
+                if (isInFlow(resource) && isReviewer(resource, user))
                 {
                     getContentsAtFlow.add(resource);
                 }
@@ -215,7 +221,10 @@ public class PFlowManager
             Resource[] resources = getContentsAtFlowAll(site);
             for (Resource resource : resources)
             {
-                getContentsAtFlow.add(resource);
+                if(isInFlow(resource))
+                {
+                    getContentsAtFlow.add(resource);
+                }
             }
         }
         return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
@@ -757,7 +766,7 @@ public class PFlowManager
         }
         else
         {
-            if (resource.getPflowInstance().getStep() != null)
+            if (!(resource.getPflowInstance().getStatus()==3 || resource.getPflowInstance().getStatus()==2 || resource.getPflowInstance().getStep()==null))
             {
                 return true;
             }
@@ -843,7 +852,15 @@ public class PFlowManager
         Locale locale = Locale.getDefault();
         try
         {
-            ResourceBundle bundle = ResourceBundle.getBundle("/org/semanticwb/portal/PFlowManager", locale);
+            ResourceBundle bundle =null;
+            try
+            {
+                bundle=ResourceBundle.getBundle("/org/semanticwb/portal/PFlowManager", locale);
+            }
+            catch(Exception e)
+            {
+                bundle=ResourceBundle.getBundle("/org/semanticwb/portal/PFlowManager");
+            }
             if (resource.getPflowInstance() != null)
             {
                 WebSite site = resource.getWebSite();
