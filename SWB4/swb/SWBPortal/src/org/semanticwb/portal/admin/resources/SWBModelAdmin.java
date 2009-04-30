@@ -63,7 +63,6 @@ public class SWBModelAdmin extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("Entra a doView");
         try {
             PrintWriter out = response.getWriter();
             if (request.getParameter("msgKey") != null) {
@@ -74,7 +73,6 @@ public class SWBModelAdmin extends GenericResource {
                 out.println("parent.showStatus('" + paramRequest.getLocaleLogString(request.getParameter("msgKey")) + "');");
                 out.println("</script>");
             }
-
             SWBResourceURL url = paramRequest.getRenderUrl();
             SWBResourceURL urlAction = paramRequest.getActionUrl();
             StringBuffer strbf = new StringBuffer();
@@ -176,7 +174,7 @@ public class SWBModelAdmin extends GenericResource {
             if (paramRequest.getAction().equals("form")) {
                 try {
                     urlAction.setAction("install");
-                    out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + urlAction.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');return false;\" method=\"post\">");
+                    out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + urlAction.toString() + "\" dojoType=\"dijit.form.Form\" method=\"post\">");
                     out.println("<fieldset>");
                     out.println("<legend>" + paramRequest.getLocaleLogString("newsitedata") + "</legend>");
                     out.println("<table>");
@@ -194,7 +192,7 @@ public class SWBModelAdmin extends GenericResource {
                     out.println("<input id=\"swb_create_id\" type=\"text\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
                     out.println("</td>");
                     out.append("</tr>");
-                    out.println("<td><button dojoType='dijit.form.Button' type=\"submit\" onClick=\"alert('submit');if(!dijit.byId('frmImport1').isValid()) return false;\">" + paramRequest.getLocaleLogString("send") + "</button>");
+                    out.println("<td><button dojoType='dijit.form.Button' type=\"submit\" onClick=\"if(!dijit.byId('frmImport1').isValid()) return false;\">" + paramRequest.getLocaleLogString("send") + "</button>");
                     out.println("<button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\">"+paramRequest.getLocaleLogString("return")+"</button>");
                     out.println("</td></tr>");
                     out.println("</table>");
