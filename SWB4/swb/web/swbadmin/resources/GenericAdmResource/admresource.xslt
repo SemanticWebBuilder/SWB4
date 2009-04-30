@@ -34,6 +34,7 @@
 	<xsl:if test="string-length( @id     ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
 	<xsl:if test="string-length( @name   ) &gt; 0"> name=&quot;<xsl:value-of select="@name" />&quot;</xsl:if>
 	<xsl:if test="string-length( @title  ) &gt; 0"> title=&quot;<xsl:value-of select="@title" />&quot;</xsl:if>
+    <xsl:if test="string-length( @dojoType ) &gt; 0"> dojoType=&quot;<xsl:value-of select="@dojoType" />&quot;</xsl:if>
 	<xsl:if test="string-length( @method ) &gt; 0"> method=&quot;<xsl:value-of select="@method" />&quot;</xsl:if>
 	<xsl:if test="string-length( @enctype) &gt; 0"> enctype=&quot;<xsl:value-of select="@enctype" />&quot;</xsl:if>
 	<xsl:if test="string-length( @action ) &gt; 0"> action=&quot;<xsl:value-of select="@action" />&quot;</xsl:if>
