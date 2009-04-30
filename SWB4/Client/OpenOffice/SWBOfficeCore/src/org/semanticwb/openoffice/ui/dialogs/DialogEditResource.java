@@ -21,6 +21,7 @@ import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
+import org.semanticwb.openoffice.components.PanelPropertyEditor;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
@@ -30,6 +31,7 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
 public class DialogEditResource extends javax.swing.JDialog
 {
 
+    private PanelPropertyEditor panelPropertyEditor1 = new PanelPropertyEditor();
     private String repositoryName,  contentID;
     private ResourceInfo pageInformation;
     public boolean isCancel = true;
@@ -40,6 +42,7 @@ public class DialogEditResource extends javax.swing.JDialog
     {
         super((Frame) null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.jPanelInformation.add(panelPropertyEditor1);
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
         this.pageInformation = pageInformation;
@@ -53,9 +56,24 @@ public class DialogEditResource extends javax.swing.JDialog
         loadProperties();
         loadCalendars();
         setLocationRelativeTo(null);
+
+        jButtonSendToAuthorize.setVisible(false);
+        try
+        {
+            if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(pageInformation))
+            {
+                jButtonSendToAuthorize.setVisible(true);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
         this.jTableScheduler.getSelectionModel().addListSelectionListener(new ListSelectionListener()
         {
 
+            @Override
             public void valueChanged(ListSelectionEvent e)
             {
                 jButtonDeleteScheduler.setEnabled(false);
@@ -86,6 +104,29 @@ public class DialogEditResource extends javax.swing.JDialog
         {
             e.printStackTrace();
         }
+        try
+        {
+            if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(pageInformation))
+            {
+                this.jCheckBoxActive.setToolTipText("El contenido debe ser autorizado antes de activarse");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        try
+        {
+            if (OfficeApplication.getOfficeDocumentProxy().isInFlow(pageInformation))
+            {
+                this.jCheckBoxActive.setToolTipText("El contenido esta en proceso de autorización, debe ser autorizado antes de activarse");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     private void loadCalendars()
@@ -152,6 +193,7 @@ public class DialogEditResource extends javax.swing.JDialog
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanelOptions = new javax.swing.JPanel();
+        jButtonSendToAuthorize = new javax.swing.JButton();
         jButtonOK = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -170,7 +212,6 @@ public class DialogEditResource extends javax.swing.JDialog
         jLabel8 = new javax.swing.JLabel();
         jComboBoxVersion = new javax.swing.JComboBox();
         jPanelInformation = new javax.swing.JPanel();
-        panelPropertyEditor1 = new org.semanticwb.openoffice.components.PanelPropertyEditor();
         jPanelSchedule = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableScheduler = new javax.swing.JTable();
@@ -186,6 +227,14 @@ public class DialogEditResource extends javax.swing.JDialog
         setResizable(false);
 
         jPanelOptions.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        jButtonSendToAuthorize.setText("Enviar a autorización");
+        jButtonSendToAuthorize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSendToAuthorizeActionPerformed(evt);
+            }
+        });
+        jPanelOptions.add(jButtonSendToAuthorize);
 
         jButtonOK.setText("Aceptar");
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
@@ -292,8 +341,6 @@ public class DialogEditResource extends javax.swing.JDialog
         jTabbedPane1.addTab("Información", jPanel2);
 
         jPanelInformation.setLayout(new java.awt.BorderLayout());
-        jPanelInformation.add(panelPropertyEditor1, java.awt.BorderLayout.CENTER);
-
         jTabbedPane1.addTab("Propiedades de publicación", jPanelInformation);
 
         jPanelSchedule.setLayout(new java.awt.BorderLayout());
@@ -406,7 +453,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         jTextAreaDescription.requestFocus();
         return;
     }
-    int res = JOptionPane.showConfirmDialog(this, "Se va a realizar los cambios de la información de publicación.\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+    int res = JOptionPane.showConfirmDialog(this, "Se va a realizar los cambios de la información de publicación.\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
     if (res == JOptionPane.YES_OPTION)
     {
         pageInformation.title = this.jTextFieldTitle.getText();
@@ -416,6 +463,94 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         try
         {
             OfficeApplication.getOfficeDocumentProxy().updatePorlet(pageInformation);
+            if (this.jCheckBoxActive.isSelected())
+            {
+                if (this.pageInformation.active)
+                {
+                    try
+                    {
+                        OfficeApplication.getOfficeDocumentProxy().activateResource(pageInformation, this.jCheckBoxActive.isSelected());
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(pageInformation))
+                        {
+                            this.jCheckBoxActive.setSelected(pageInformation.active);
+                            res = JOptionPane.showConfirmDialog(this, "El documento requiere una autorización para activarse\r\n¿Desea envíar a publicar el contenido?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                            if (res == JOptionPane.YES_OPTION)
+                            {
+                                DialogSelectFlow formSendToAutorize = new DialogSelectFlow(pageInformation);
+                                formSendToAutorize.setVisible(true);
+                                if (formSendToAutorize.selected != null)
+                                {
+                                    OfficeApplication.getOfficeDocumentProxy().sendToAuthorize(pageInformation, formSendToAutorize.selected, formSendToAutorize.jTextAreaMessage.getText());
+                                }
+                                else
+                                {
+                                    JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                }
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        }
+                        else if (OfficeApplication.getOfficeDocumentProxy().isInFlow(pageInformation))
+                        {
+                            this.jCheckBoxActive.setSelected(pageInformation.active);
+                            JOptionPane.showMessageDialog(this, "El contenido se encuentra en proceso de ser autorizado.\r\nPara activarlo necesita terminar el proceso de autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else if (OfficeApplication.getOfficeDocumentProxy().isAuthorized(pageInformation))
+                        {
+                            OfficeApplication.getOfficeDocumentProxy().activateResource(pageInformation, this.jCheckBoxActive.isSelected());
+                        }
+                        else
+                        {
+                            this.jCheckBoxActive.setSelected(pageInformation.active);
+                            res = JOptionPane.showConfirmDialog(this, "El contenido fue rechazado.\r\nPara activarlo necesita enviarlo a autorización de nuevo\r\n¿Desea enviarlo a autorización?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+                            if (res == JOptionPane.YES_OPTION)
+                            {
+                                DialogSelectFlow formSendToAutorize = new DialogSelectFlow(pageInformation);
+                                formSendToAutorize.setVisible(true);
+                                if (formSendToAutorize.selected != null)
+                                {
+                                    OfficeApplication.getOfficeDocumentProxy().sendToAuthorize(pageInformation, formSendToAutorize.selected, formSendToAutorize.jTextAreaMessage.getText());
+                                }
+                                else
+                                {
+                                    JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                                }
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(this, "El contenido no se activo, ya que se requiere una autorización", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            else
+            {
+                try
+                {
+                    OfficeApplication.getOfficeDocumentProxy().activateResource(pageInformation, this.jCheckBoxActive.isSelected());
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
             DefaultTableModel model = (DefaultTableModel) jTableScheduler.getModel();
             for (int i = 0; i < jTableScheduler.getRowCount(); i++)
             {
@@ -506,7 +641,7 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
 {//GEN-HEADEREND:event_jButtonDeleteSchedulerActionPerformed
     if (jTableScheduler.getSelectedRow() != -1)
     {
-        int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la calendarización?", this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+        int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la calendarización?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (res == JOptionPane.YES_OPTION)
         {
             CalendarInfo cal = (CalendarInfo) jTableScheduler.getModel().getValueAt(jTableScheduler.getSelectedRow(), 0);
@@ -537,6 +672,24 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
     }
 }//GEN-LAST:event_jButtonDeleteSchedulerActionPerformed
 
+private void jButtonSendToAuthorizeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonSendToAuthorizeActionPerformed
+{//GEN-HEADEREND:event_jButtonSendToAuthorizeActionPerformed
+    DialogSelectFlow dialogSelectFlow=new DialogSelectFlow(pageInformation);
+    dialogSelectFlow.setVisible(true);
+    if(dialogSelectFlow.selected!=null)
+    {
+        try
+        {
+            OfficeApplication.getOfficeDocumentProxy().sendToAuthorize(pageInformation, dialogSelectFlow.selected, dialogSelectFlow.jTextAreaMessage.getText());
+            this.jButtonSendToAuthorize.setVisible(true);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+}//GEN-LAST:event_jButtonSendToAuthorizeActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonAddCalendar;
@@ -544,6 +697,7 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
     private javax.swing.JButton jButtonDeleteScheduler;
     private javax.swing.JButton jButtonEditEcheduler;
     private javax.swing.JButton jButtonOK;
+    private javax.swing.JButton jButtonSendToAuthorize;
     private javax.swing.JCheckBox jCheckBoxActive;
     private javax.swing.JComboBox jComboBoxVersion;
     private javax.swing.JLabel jLabel1;
@@ -568,6 +722,5 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
     private javax.swing.JTextArea jTextAreaDescription;
     private javax.swing.JTextField jTextFieldTitle;
     private javax.swing.JToolBar jToolBar1;
-    private org.semanticwb.openoffice.components.PanelPropertyEditor panelPropertyEditor1;
     // End of variables declaration//GEN-END:variables
 }

@@ -43,6 +43,14 @@
         <Property name="alignment" type="int" value="2"/>
       </Layout>
       <SubComponents>
+        <Component class="javax.swing.JButton" name="jButtonSendToAuthorize">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Enviar a autorizaci&#xf3;n"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSendToAuthorizeActionPerformed"/>
+          </Events>
+        </Component>
         <Component class="javax.swing.JButton" name="jButtonOK">
           <Properties>
             <Property name="text" type="java.lang.String" value="Aceptar"/>
@@ -243,15 +251,6 @@
           </Constraints>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
-          <SubComponents>
-            <Component class="org.semanticwb.openoffice.components.PanelPropertyEditor" name="panelPropertyEditor1">
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                  <BorderConstraints direction="Center"/>
-                </Constraint>
-              </Constraints>
-            </Component>
-          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanelSchedule">
           <Constraints>
