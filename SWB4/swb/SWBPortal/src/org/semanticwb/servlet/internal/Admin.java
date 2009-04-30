@@ -76,7 +76,7 @@ public class Admin implements InternalServlet
         {
             response.sendError(404, path);
             return;
-        }else if(path !=null && path.equals("/swbadmin"))
+        }else if(path !=null && (path.equals("/swbadmin")||path.equals("/swbadmin/")))
         {
             WebPage aux=SWBContext.getAdminWebSite().getHomePage();
             if (asegurar)
