@@ -39,7 +39,7 @@ public class SemanticClass
     private Boolean m_isSWBModel=null;
     private Boolean m_isSWBFormElement=null;
     private Boolean m_isSWBSemanticResource=null;
-    private String m_className=null;
+    private String m_classCodeName=null;
     private Boolean m_autogenId=null;
     private Class m_cls=null;
     private Constructor m_constructor=null;
@@ -95,7 +95,7 @@ public class SemanticClass
             m_props.put( p.getName(), p);
         }
         //System.out.println("m_props:"+m_props.size());
-        log.trace("SemanticClass:"+getName()+" "+getClassName()+" "+m_class.getNameSpace()+" "+getPrefix());
+        log.trace("SemanticClass:"+getName()+" "+getClassCodeName()+" "+m_class.getNameSpace()+" "+getPrefix());
         //System.out.println("Name:"+getName()+" "+getClassName()+" "+m_class.getNameSpace()+" "+getPrefix());
     }
 
@@ -109,23 +109,39 @@ public class SemanticClass
         return m_class.getOntModel().getNsURIPrefix(m_class.getNameSpace());
     }
 
-    public String getClassName()
+    /**
+     * Regresa nombre de la clase con paquete
+     * @return
+     */
+    public String get_ClassName()
     {
-        if(m_className==null)
+        //TODO
+        return null;
+    }
+
+
+    /**
+     * Regresa nombre de la clase definida por la ontologia
+     * Nombre de la clase sin paquete
+     * @return
+     */
+    public String getClassCodeName()
+    {
+        if(m_classCodeName==null)
         {
             try
             {
-                Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_ANNOT_CLASSNAME).getRDFProperty();
+                Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_ANNOT_CLASSCODENAME).getRDFProperty();
                 //System.out.println("Class:"+m_class+" ->"+className);
-                m_className=m_class.getRequiredProperty(prop).getString();
+                m_classCodeName=m_class.getRequiredProperty(prop).getString();
                 //System.out.println("Class:"+m_class+" ->"+className);
-                if(m_className==null)m_className=SemanticObject.class.getName();
+                //if(m_classCodeName==null)m_classCodeName=SemanticObject.class.getName();
             } catch (Exception pnf){
-                m_className=getName();
+                m_classCodeName=getName();
             }
-            //log.trace("getClassName:"+m_className);
+            //log.trace("getClassCodeName:"+m_classCodeName);
         }
-        return m_className;
+        return m_classCodeName;
     }
 
     public boolean isAutogenId()
@@ -343,7 +359,7 @@ public class SemanticClass
         {
             try
             {
-                m_cls=Class.forName(getClassName());
+                m_cls=Class.forName(get_ClassName());
                 //System.out.println("createClass:"+getClassName()+" "+m_cls);
             }catch(Exception e){log.error(e);}
         }
