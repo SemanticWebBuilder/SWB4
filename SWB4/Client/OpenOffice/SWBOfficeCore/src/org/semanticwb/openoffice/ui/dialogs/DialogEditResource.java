@@ -674,16 +674,38 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
 
 private void jButtonSendToAuthorizeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonSendToAuthorizeActionPerformed
 {//GEN-HEADEREND:event_jButtonSendToAuthorizeActionPerformed
-    DialogSelectFlow dialogSelectFlow=new DialogSelectFlow(pageInformation);
+    DialogSelectFlow dialogSelectFlow = new DialogSelectFlow(pageInformation);
     dialogSelectFlow.setVisible(true);
-    if(dialogSelectFlow.selected!=null)
+    if (dialogSelectFlow.selected != null)
     {
         try
         {
             OfficeApplication.getOfficeDocumentProxy().sendToAuthorize(pageInformation, dialogSelectFlow.selected, dialogSelectFlow.jTextAreaMessage.getText());
-            this.jButtonSendToAuthorize.setVisible(true);
+            this.jButtonSendToAuthorize.setVisible(false);
+            try
+            {
+                if (OfficeApplication.getOfficeDocumentProxy().needsSendToPublish(pageInformation))
+                {
+                    this.jCheckBoxActive.setToolTipText("El contenido debe ser autorizado antes de activarse");
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            try
+            {
+                if (OfficeApplication.getOfficeDocumentProxy().isInFlow(pageInformation))
+                {
+                    this.jCheckBoxActive.setToolTipText("El contenido esta en proceso de autorización, debe ser autorizado antes de activarse");
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
