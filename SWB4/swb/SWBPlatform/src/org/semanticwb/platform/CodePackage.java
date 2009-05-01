@@ -21,7 +21,7 @@ public class CodePackage
             
     public CodePackage()
     {
-        HashMap map=new HashMap();
+        map=new HashMap();
     }
 
     public String getPackage(String prefix)
