@@ -1079,9 +1079,9 @@ public class CodeGenerator
             javaClassContent.append("    }" + ENTER);
 
             javaClassContent.append(ENTER);
-            javaClassContent.append("    public " + tpc.getCodePackage() + "." + tpc.getClassCodeName() + " create" + toUpperCase(tpc.getClassCodeName()) + "(String id)" + ENTER);
+            javaClassContent.append("    public " + tpc.getCodePackage() + "." + toUpperCase(tpc.getClassCodeName()) + " create" + toUpperCase(tpc.getClassCodeName()) + "(String id)" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return " + tpc.getCodePackage() + "." + tpc.getClassCodeName() + ".create" + toUpperCase(tpc.getClassCodeName()) + "(id,this);" + ENTER);
+            javaClassContent.append("        return " + tpc.getCodePackage() + "." + toUpperCase(tpc.getClassCodeName()) + ".create" + toUpperCase(tpc.getClassCodeName()) + "(id,this);" + ENTER);
             javaClassContent.append("    }" + ENTER);
 
             if (tpc.isAutogenId())
