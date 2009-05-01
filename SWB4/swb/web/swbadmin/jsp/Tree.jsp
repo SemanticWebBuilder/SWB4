@@ -108,7 +108,7 @@
         //System.out.println("user uri:"+user.getURI());
         if(user!=null && user.getURI()!=null)
         {
-            UserFavorites fav=user.getUserFavorites();
+            UserFavorite fav=user.getUserFavorite();
             if(fav!=null)
             {
                 //System.out.println("user fav:"+user.getURI());

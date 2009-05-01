@@ -32,11 +32,11 @@
     {
         if(act.equals("active"))
         {
-            UserFavorites fav=user.getUserFavorites();
+            UserFavorite fav=user.getUserFavorite();
             if(fav==null)
             {
-                fav=user.getUserRepository().createUserFavorites();
-                user.setUserFavorites(fav);
+                fav=user.getUserRepository().createUserFavorite();
+                user.setUserFavorite(fav);
             }
             fav.addObject(obj);
             out.println(obj.getSemanticClass().getDisplayName(lang)+" fue agregado...");
@@ -46,7 +46,7 @@
             out.println("</script>");
         }else
         {
-            UserFavorites fav=user.getUserFavorites();
+            UserFavorite fav=user.getUserFavorite();
             if(fav!=null)
             {
                 fav.removeObject(obj);
