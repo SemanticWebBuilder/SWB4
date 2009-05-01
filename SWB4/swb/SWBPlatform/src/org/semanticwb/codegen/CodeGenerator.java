@@ -88,8 +88,9 @@ public class CodeGenerator
         return letter.toUpperCase() + data.substring(1);
     }
 
-    public void generateCodeByNamespace(String namespace, boolean createSWBcontent, String pPackage, File pDirectory) throws CodeGeneratorException
+    public void generateCodeByNamespace(String namespace, boolean createSWBcontent, File pDirectory) throws CodeGeneratorException
     {
+        String prefix=null;
         SemanticMgr mgr = SWBPlatform.getSemanticMgr();
         Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
         while (tpcit.hasNext())
@@ -112,6 +113,7 @@ public class CodeGenerator
                     strnamespace += tpc.getName();
                     if (tpc.getURI().equals(strnamespace.toString()))
                     {
+                        prefix=tpc.getPrefix();
                         create = true;
                     }
                 }
@@ -146,8 +148,11 @@ public class CodeGenerator
         }
         if (createSWBcontent)
         {
-            createSWBContextBase(pPackage, pDirectory);
-            createSWBContext(pPackage, pDirectory);
+            if(prefix!=null)
+            {
+                createSWBContextBase(prefix, pDirectory);
+                createSWBContext(prefix,pDirectory);
+            }
         }
     }
 
