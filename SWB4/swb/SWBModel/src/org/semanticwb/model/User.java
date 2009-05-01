@@ -302,10 +302,10 @@ public class User extends UserBase implements Principal, java.io.Serializable
     public boolean hasFavorite(SemanticObject obj)
     {
         boolean ret=false;
-        UserFavorites fav=getUserFavorites();
+        UserFavorite fav=getUserFavorite();
         if(fav!=null)
         {
-            ret=fav.getSemanticObject().hasObjectProperty(fav.swb_usrfHasObjects, obj);
+            ret=fav.getSemanticObject().hasObjectProperty(fav.swb_usrfHasObject, obj);
         }
         return ret;
     }

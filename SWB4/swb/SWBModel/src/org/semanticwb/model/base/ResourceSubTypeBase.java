@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
+public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -9,7 +9,7 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
-    public static final org.semanticwb.platform.SemanticProperty swb_hasPSTResources=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPSTResources");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasPSTResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPSTResource");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
     public static final org.semanticwb.platform.SemanticProperty swb_PSTType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#PSTType");
@@ -122,18 +122,18 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(getSemanticObject().listObjectProperties(swb_hasPSTResources));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(getSemanticObject().listObjectProperties(swb_hasPSTResource));
     }
 
     public boolean hasResource(org.semanticwb.model.Resource resource)
     {
-        if(resource==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPSTResources,resource.getSemanticObject());
+        if(resource==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPSTResource,resource.getSemanticObject());
     }
 
     public org.semanticwb.model.Resource getResource()
     {
          org.semanticwb.model.Resource ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPSTResources);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPSTResource);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.Resource)obj.createGenericInstance();

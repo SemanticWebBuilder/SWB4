@@ -12,8 +12,8 @@ public interface Versionable extends org.semanticwb.model.GenericObject
     public static final org.semanticwb.platform.SemanticClass mix_Versionable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.jcp.org/jcr/mix/1.0#versionable");
     public String getUuid();
     public void setUuid(String uuid);
-    public boolean isCheckedOut();
-    public void setCheckedOut(boolean isCheckedOut);
+    public boolean isIsCheckedOut();
+    public void setIsCheckedOut(boolean isCheckedOut);
 
     public void setVersionHistory(org.semanticwb.repository.VersionHistory versionhistory);
 

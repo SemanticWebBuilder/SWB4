@@ -7,25 +7,14 @@ import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.repository.File;
-import org.semanticwb.repository.FrozenNode;
-import org.semanticwb.repository.Unstructured;
-import org.semanticwb.repository.BaseNode;
-import org.semanticwb.repository.HierarchyNode;
-import org.semanticwb.repository.VersionLabels;
-import org.semanticwb.repository.VersionHistory;
-import org.semanticwb.repository.Resource;
-import org.semanticwb.repository.Folder;
-import org.semanticwb.repository.Version;
-import org.semanticwb.repository.Workspace;
 public class SWBContextBase
 {
     private static SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
     public static final SemanticClass swb_WebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
 
-    public static WebSite getWebSite(String name)
+    public static org.semanticwb.model.WebSite getWebSite(String name)
     {
-        return WebSite.getWebSite(name);
+        return org.semanticwb.model.WebSite.getWebSite(name);
     }
 
     public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites()
@@ -35,18 +24,18 @@ public class SWBContextBase
 
     public static void removeWebSite(String name)
     {
-        WebSite.removeWebSite(name);
+        org.semanticwb.model.WebSite.removeWebSite(name);
     }
 
-    public static WebSite createWebSite(String name, String namespace)
+    public static org.semanticwb.model.WebSite createWebSite(String name, String namespace)
     {
-       return WebSite.createWebSite(name, namespace);
+       return org.semanticwb.model.WebSite.createWebSite(name, namespace);
     }
     public static final SemanticClass swb_UserRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserRepository");
 
-    public static UserRepository getUserRepository(String name)
+    public static org.semanticwb.model.UserRepository getUserRepository(String name)
     {
-        return UserRepository.getUserRepository(name);
+        return org.semanticwb.model.UserRepository.getUserRepository(name);
     }
 
     public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositorys()
@@ -56,18 +45,18 @@ public class SWBContextBase
 
     public static void removeUserRepository(String name)
     {
-        UserRepository.removeUserRepository(name);
+        org.semanticwb.model.UserRepository.removeUserRepository(name);
     }
 
-    public static UserRepository createUserRepository(String name, String namespace)
+    public static org.semanticwb.model.UserRepository createUserRepository(String name, String namespace)
     {
-       return UserRepository.createUserRepository(name, namespace);
+       return org.semanticwb.model.UserRepository.createUserRepository(name, namespace);
     }
     public static final SemanticClass swbrep_Workspace=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/repository#Workspace");
 
-    public static Workspace getWorkspace(String name)
+    public static org.semanticwb.repository.Workspace getWorkspace(String name)
     {
-        return Workspace.getWorkspace(name);
+        return org.semanticwb.repository.Workspace.getWorkspace(name);
     }
 
     public static java.util.Iterator<org.semanticwb.repository.Workspace> listWorkspaces()
@@ -77,11 +66,11 @@ public class SWBContextBase
 
     public static void removeWorkspace(String name)
     {
-        Workspace.removeWorkspace(name);
+        org.semanticwb.repository.Workspace.removeWorkspace(name);
     }
 
-    public static Workspace createWorkspace(String name, String namespace)
+    public static org.semanticwb.repository.Workspace createWorkspace(String name, String namespace)
     {
-       return Workspace.createWorkspace(name, namespace);
+       return org.semanticwb.repository.Workspace.createWorkspace(name, namespace);
     }
 }

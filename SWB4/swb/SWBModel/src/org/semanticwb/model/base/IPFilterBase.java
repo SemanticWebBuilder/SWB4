@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable
+public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -125,12 +125,12 @@ public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.s
         getSemanticObject().setDateProperty(swb_updated, updated);
     }
 
-    public String getIpNumber()
+    public String getIpFilterNumber()
     {
         return getSemanticObject().getProperty(swb_ipFilterNumber);
     }
 
-    public void setIpNumber(String ipFilterNumber)
+    public void setIpFilterNumber(String ipFilterNumber)
     {
         getSemanticObject().setProperty(swb_ipFilterNumber, ipFilterNumber);
     }
@@ -145,12 +145,12 @@ public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.s
         getSemanticObject().setBooleanProperty(swb_active, active);
     }
 
-    public int getAction()
+    public int getIpFilterAction()
     {
         return getSemanticObject().getIntProperty(swb_ipFilterAction);
     }
 
-    public void setAction(int ipFilterAction)
+    public void setIpFilterAction(int ipFilterAction)
     {
         getSemanticObject().setLongProperty(swb_ipFilterAction, ipFilterAction);
     }

@@ -121,31 +121,14 @@ public class BaseNodeBase extends org.semanticwb.model.base.GenericObjectBase
          return ret;
     }
 
-    public java.util.Iterator<String> listMixinTypes()
+    public String getMixinTypes()
     {
-        java.util.ArrayList<String> values=new java.util.ArrayList<String>();
-        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(jcr_mixinTypes);
-        while(it.hasNext())
-        {
-                org.semanticwb.platform.SemanticLiteral literal=it.next();
-                values.add(literal.getString());
-        }
-        return values.iterator();
+        return getSemanticObject().getProperty(jcr_mixinTypes);
     }
 
-    public void addMixinType(String mixintype)
+    public void setMixinTypes(String mixinTypes)
     {
-        getSemanticObject().setProperty(jcr_mixinTypes, mixintype);
-    }
-
-    public void removeAllMixinType()
-    {
-        getSemanticObject().removeProperty(jcr_mixinTypes);
-    }
-
-    public void removeMixinType(String mixintype)
-    {
-        getSemanticObject().removeProperty(jcr_mixinTypes,mixintype);
+        getSemanticObject().setProperty(jcr_mixinTypes, mixinTypes);
     }
 
     public void remove()
