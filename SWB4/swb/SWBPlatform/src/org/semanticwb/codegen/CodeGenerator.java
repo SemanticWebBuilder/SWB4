@@ -1569,7 +1569,7 @@ public class CodeGenerator
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
             }
 
-
+/*
             javaClassContent.append(ENTER);
             javaClassContent.append("   public static Iterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> list" + toUpperCase(tpc.getClassCodeName()) + "By" + toUpperCase(tpp.getPropertyCodeName()) + "(" + toUpperCase(tpc.getClassCodeName()) + " " + tpc.getClassCodeName().toLowerCase() + ",SWBModel model)" + ENTER);
             javaClassContent.append("   {" + ENTER);
@@ -1583,7 +1583,7 @@ public class CodeGenerator
             javaClassContent.append("       GenericIterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> it=new GenericIterator(" + tpc.getClassCodeName().toLowerCase() + ".getSemanticObject().getModel().listSubjects(" + tpp.getPrefix() + "_" + tpp.getName() + "," + tpc.getClassCodeName().toLowerCase() + ".getSemanticObject()));" + ENTER);
             javaClassContent.append("       return it;" + ENTER);
             javaClassContent.append("   }" + ENTER);
-
+*/
             javaClassContent.append(ENTER);
             javaClassContent.append(PUBLIC + pack + "." + valueToReturn + " get" + objectName + "()" + ENTER);
             javaClassContent.append(OPEN_BLOCK + ENTER);
