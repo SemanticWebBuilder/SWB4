@@ -228,12 +228,13 @@
     <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:label>Calendar</rdfs:label>
+    <rdfs:label xml:lang="en">Calendar</rdfs:label>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Activeable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#XMLable"/>
     <rdfs:comment>Object Calendar</rdfs:comment>
+    <rdfs:label xml:lang="es">Calendario</rdfs:label>
     <rdfs:subClassOf rdf:resource="#Traceable"/>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
@@ -242,16 +243,20 @@
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="UserFavorites">
+    <rdfs:label xml:lang="en">Favorites</rdfs:label>
+    <rdfs:label xml:lang="es">Favoritos</rdfs:label>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="AdminFilter">
-    <rdfs:subClassOf rdf:resource="#Undeleteable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:label xml:lang="en">Admin Filter</rdfs:label>
     <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
     <rdfs:subClassOf rdf:resource="#XMLable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:label xml:lang="es">Filtro de Administración</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Undeleteable"/>
     <rdfs:subClassOf rdf:resource="#Traceable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -273,6 +278,8 @@
     <rdf:type rdf:resource="#FormElement"/>
   </owl:Class>
   <owl:Class rdf:ID="ResourceFilter">
+    <rdfs:label xml:lang="en">resource Filter</rdfs:label>
+    <rdfs:label xml:lang="es">Filtro de Recurso</rdfs:label>
     <rdfs:subClassOf rdf:resource="#Traceable"/>
     <rdfs:subClassOf rdf:resource="#XMLable"/>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
@@ -341,6 +348,9 @@
   <owl:Class rdf:ID="Calendarable">
     <rdfs:subClassOf rdf:resource="#SWBInterface"/>
     <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="CodePackage">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
   </owl:Class>
   <owl:Class rdf:ID="User">
     <rdfs:subClassOf rdf:resource="#Roleable"/>
@@ -695,6 +705,7 @@
             <swb:title xml:lang="es">Reglas</swb:title>
             <swbxf:heClass>
               <swb:Class rdf:ID="Rule">
+                <rdfs:label xml:lang="es">Regla</rdfs:label>
                 <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
                 <rdfs:subClassOf rdf:resource="#SWBClass"/>
                 <rdfs:subClassOf rdf:resource="#XMLable"/>
@@ -703,6 +714,7 @@
                 <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
                 >true</swb:autogenId>
                 <rdfs:subClassOf rdf:resource="#Versionable"/>
+                <rdfs:label xml:lang="en">Rule</rdfs:label>
                 <rdfs:subClassOf rdf:resource="#Calendarable"/>
               </swb:Class>
             </swbxf:heClass>
@@ -767,6 +779,8 @@
         </swb:hasClass>
         <swb:hasClass>
           <swb:Class rdf:ID="IPFilter">
+            <rdfs:label xml:lang="en">IP Filters</rdfs:label>
+            <rdfs:label xml:lang="es">Filtros de IP</rdfs:label>
             <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swb:autogenId>
             <rdfs:subClassOf rdf:resource="#SWBClass"/>
@@ -1706,6 +1720,12 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="package">
+    <rdfs:domain rdf:resource="#CodePackage"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >package</swb:propertyCodeName>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrPasswordChanged">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >passwordChanged</swb:propertyCodeName>
@@ -2254,6 +2274,12 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaCols">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >cols</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="description">
     <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:localeable>
@@ -2276,12 +2302,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaCols">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >cols</swb:propertyCodeName>
-    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="versionNumber">
     <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:canUsedAsName>
@@ -2297,6 +2317,10 @@
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#doDispatcher">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="prefix">
+    <rdfs:domain rdf:resource="#CodePackage"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="classID">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -2429,22 +2453,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="views">
-    <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:noObservable>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
-    <rdfs:domain rdf:resource="#Viewable"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_views">
-        <rdfs:label xml:lang="en">Views</rdfs:label>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >80</swb:index>
-        <rdfs:label xml:lang="es">Apariciones</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:externalInvocation>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrPassword">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >password</swb:propertyCodeName>
@@ -2465,6 +2473,22 @@
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >110</swb:index>
         <rdfs:label xml:lang="en">Password</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="views">
+    <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:noObservable>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:domain rdf:resource="#Viewable"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_views">
+        <rdfs:label xml:lang="en">Views</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >80</swb:index>
+        <rdfs:label xml:lang="es">Apariciones</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -2587,6 +2611,12 @@
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:FormElement>
+  <swb:CodePackage rdf:ID="cpkg_swb">
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swb</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model</swb:package>
+  </swb:CodePackage>
   <owl:AnnotationProperty rdf:ID="propertyCodeName">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
@@ -2619,6 +2649,12 @@
     <swb:title xml:lang="es">Campañas</swb:title>
     <swb:title xml:lang="en">Camps</swb:title>
   </swbxf:HerarquicalNode>
+  <swb:CodePackage rdf:ID="cpkg_swbxf">
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbxf</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model</swb:package>
+  </swb:CodePackage>
   <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Resources">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >70</swb:index>
