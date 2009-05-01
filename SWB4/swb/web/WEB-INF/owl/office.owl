@@ -46,6 +46,9 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.jcp.org/jcr/nt/1.0#base">
+    <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">BaseNode</swb:classCodeName>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org/office#OfficeDocument">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/office#Traceable"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
