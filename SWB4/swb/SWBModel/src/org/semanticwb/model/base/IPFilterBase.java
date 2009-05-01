@@ -125,12 +125,12 @@ public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.s
         getSemanticObject().setDateProperty(swb_updated, updated);
     }
 
-    public String getIpFilterNumber()
+    public String getIpNumber()
     {
         return getSemanticObject().getProperty(swb_ipFilterNumber);
     }
 
-    public void setIpFilterNumber(String ipFilterNumber)
+    public void setIpNumber(String ipFilterNumber)
     {
         getSemanticObject().setProperty(swb_ipFilterNumber, ipFilterNumber);
     }
@@ -145,12 +145,12 @@ public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.s
         getSemanticObject().setBooleanProperty(swb_active, active);
     }
 
-    public int getIpFilterAction()
+    public int getAction()
     {
         return getSemanticObject().getIntProperty(swb_ipFilterAction);
     }
 
-    public void setIpFilterAction(int ipFilterAction)
+    public void setAction(int ipFilterAction)
     {
         getSemanticObject().setLongProperty(swb_ipFilterAction, ipFilterAction);
     }
