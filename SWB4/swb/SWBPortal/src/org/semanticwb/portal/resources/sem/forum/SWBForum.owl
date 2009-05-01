@@ -15,14 +15,10 @@
   </owl:Ontology>
   <owl:Class rdf:ID="SWBForum">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.portal.resources.sem.forum.SWBForum</swb:className>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
   </owl:Class>
   <owl:Class rdf:ID="UserFavThread">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.portal.resources.sem.forum.UserFavThread</swb:className>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -30,8 +26,6 @@
   </owl:Class>
   <owl:Class rdf:ID="Attachment">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.portal.resources.sem.forum.Attachment</swb:className>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -39,8 +33,6 @@
   </owl:Class>
   <owl:Class rdf:ID="Post">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.portal.resources.sem.forum.Post</swb:className>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -48,8 +40,6 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Thread">
-    <swb:className rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.portal.resources.sem.forum.Thread</swb:className>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -58,13 +48,15 @@
   <owl:ObjectProperty rdf:ID="ftUser">
     <rdfs:domain rdf:resource="#UserFavThread"/>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
-    <rdfs:label>User</rdfs:label>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >user</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="atThread">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >thread</swb:propertyCodeName>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasThAttachments"/>
     </owl:inverseOf>
-    <rdfs:label>Thread</rdfs:label>
     <rdfs:range rdf:resource="#Thread"/>
     <rdfs:domain rdf:resource="#Attachment"/>
   </owl:ObjectProperty>
@@ -89,7 +81,8 @@
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasPost"/>
     </owl:inverseOf>
-    <rdfs:label>Thread</rdfs:label>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >thread</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasthAttachments">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -101,17 +94,19 @@
     <swb:displayProperty rdf:resource="#dp_FileUpload"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="thLastPostMember">
-    <rdfs:label>LastPostMember</rdfs:label>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >lastPostMember</swb:propertyCodeName>
     <rdfs:domain rdf:resource="#Thread"/>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="thForum">
-    <rdfs:domain rdf:resource="#Thread"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >forum</swb:propertyCodeName>
     <rdfs:range rdf:resource="#SWBForum"/>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasThreads"/>
     </owl:inverseOf>
-    <rdfs:label>Forum</rdfs:label>
+    <rdfs:domain rdf:resource="#Thread"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="pstParentPost">
     <rdfs:domain rdf:resource="#Post"/>
@@ -119,7 +114,8 @@
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="haschildPost"/>
     </owl:inverseOf>
-    <rdfs:label>ParentPost</rdfs:label>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >parentPost</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasPost">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -130,18 +126,19 @@
     >true</swb:removeDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="ftThread">
-    <rdfs:domain rdf:resource="#UserFavThread"/>
     <rdfs:range rdf:resource="#Thread"/>
-    <rdfs:label>Thread</rdfs:label>
+    <rdfs:domain rdf:resource="#UserFavThread"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="atPost">
     <rdfs:range rdf:resource="#Post"/>
     <rdfs:domain rdf:resource="#Attachment"/>
-    <rdfs:label>Post</rdfs:label>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >post</swb:propertyCodeName>
     <owl:inverseOf rdf:resource="#hasAttachments"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasThAttachments">
-    <rdfs:label>hasAttachment</rdfs:label>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasAttachment</swb:propertyCodeName>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
     <swb:displayProperty rdf:resource="#dp_FileUpload"/>
@@ -160,48 +157,62 @@
         <rdfs:label xml:lang="es">Mensaje</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label>Body</rdfs:label>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >body</swb:propertyCodeName>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="atFileName">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Attachment"/>
-    <rdfs:label>FileName</rdfs:label>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="thViewCount">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#Thread"/>
-    <rdfs:label>ViewCount</rdfs:label>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >fileName</swb:propertyCodeName>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="atFileSize">
     <rdfs:domain rdf:resource="#Attachment"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:label>FileSize</rdfs:label>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >fileSize</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="thViewCount">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Thread"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >viewCount</swb:propertyCodeName>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="atMimeType">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Attachment"/>
-    <rdfs:label>MimeType</rdfs:label>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mimeType</swb:propertyCodeName>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="thBody">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >body</swb:propertyCodeName>
     <rdfs:domain rdf:resource="#Thread"/>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
     <swb:displayProperty rdf:resource="#dp_pstBody"/>
-    <rdfs:label>Body</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="thReplyCount">
-    <rdfs:domain rdf:resource="#Thread"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >replyCount</swb:propertyCodeName>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:label>ReplyCount</rdfs:label>
+    <rdfs:domain rdf:resource="#Thread"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="thLastPostDate">
-    <rdfs:label>LastPostDate</rdfs:label>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >lastPostDate</swb:propertyCodeName>
     <rdfs:domain rdf:resource="#Thread"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </owl:DatatypeProperty>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >frm</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem.forum</swb:package>
+  </swb:CodePackage>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
