@@ -110,13 +110,17 @@ public class SemanticClass
     }
 
     /**
-     * Regresa nombre de la clase con paquete
+     * Regresa nombre de la clase con paquete, siempre y cuendo sea del tipo swb:Class
      * @return
      */
     public String get_ClassName()
     {
-        //TODO
-        return null;
+        return getCodePackage()+"."+getClassCodeName();
+    }
+
+    public String getCodePackage()
+    {
+        return SWBPlatform.getSemanticMgr().getCodePackage().getPackage(getPrefix());
     }
 
 

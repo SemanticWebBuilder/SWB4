@@ -74,10 +74,14 @@ public class SemanticMgr implements SWBInstanceObject
 
     private ArrayList<SemanticObserver> m_observers=null;
 
+    private CodePackage codepkg=null;
+
     public void init(SWBPlatform context) 
     {
         log.event("Initializing SemanticMgr...");
         this.m_context=context;
+
+        codepkg=new CodePackage();
         
         m_models=new HashMap();                     //Arreglo de SemanticModel por name
         m_nsmodels=new HashMap();                   //Arreglo de SemanticModel por NS
@@ -597,5 +601,10 @@ public class SemanticMgr implements SWBInstanceObject
                 }catch(Exception e){log.error(e);}
             }
         }
+    }
+
+    public CodePackage getCodePackage()
+    {
+        return codepkg;
     }
 }
