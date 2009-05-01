@@ -1141,7 +1141,7 @@ public class CodeGenerator
 
     private void insertDataTypeProperty(SemanticClass tpc, SemanticProperty tpp, StringBuilder javaClassContent, String semanticObject)
     {
-        String objectName = tpp.getPropertyCodeName(); //tpp.getLabel();
+        String objectName = tpp.getPropertyCodeName();
         if (objectName == null)
         {
             objectName = tpp.getName();
