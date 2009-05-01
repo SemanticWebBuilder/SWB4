@@ -113,7 +113,7 @@ public class SemanticClass
      * Regresa nombre de la clase con paquete, siempre y cuendo sea del tipo swb:Class
      * @return
      */
-    public String get_ClassName()
+    public String getClassName()
     {
         return getCodePackage()+"."+getClassCodeName();
     }
@@ -363,7 +363,7 @@ public class SemanticClass
         {
             try
             {
-                m_cls=Class.forName(get_ClassName());
+                m_cls=Class.forName(getClassName());
                 //System.out.println("createClass:"+getClassName()+" "+m_cls);
             }catch(Exception e){log.error(e);}
         }

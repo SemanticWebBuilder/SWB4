@@ -80,7 +80,7 @@ public class SemanticProperty
         return getPrefix()+":"+getName();
     }
     
-    public String get_Label()
+    public String getLabel()
     {
         String ret=null;
         if(m_prop instanceof OntProperty)
@@ -309,7 +309,7 @@ public class SemanticProperty
             }
             if(ret==null)ret=obj.getProperty(obj.getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL));
         }
-        if(ret==null)ret=get_Label();
+        if(ret==null)ret=getLabel();
         if(ret==null)ret=getName();
         //System.out.println("Prop:"+obj+" "+ret);
         return ret;
