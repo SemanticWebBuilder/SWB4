@@ -56,9 +56,9 @@ public class CodeGeneratorRepository
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
             File dir = new File(path + "../../src");
             String sPakage = "org.semanticwb.repository";
-            CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
-            codeGeneration.generateCode("nt", false);
-            codeGeneration.generateCode("swbrep", false);
+            CodeGenerator codeGeneration = new CodeGenerator();
+            codeGeneration.generateCode("nt", false,dir);
+            codeGeneration.generateCode("swbrep", false,dir);
             System.out.println("Generación de clases completa");
         }
         catch (CodeGeneratorException cge)
