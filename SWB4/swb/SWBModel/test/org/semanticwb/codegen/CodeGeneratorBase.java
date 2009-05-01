@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticwb.SWBPlatform;
 import static org.junit.Assert.*;
@@ -46,38 +47,19 @@ public class CodeGeneratorBase
     {
     }
 
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    //@Test
-    public void generateCode()
-    {
-        try
-        {
-            String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"../../src");
-            String sPakage = "org.semanticwb.model";
-            CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
-            codeGeneration.generateCode();
-            System.out.println("Generación de clases completa");
-        }
-        catch ( CodeGeneratorException cge )
-        {
-            fail(cge.getMessage());
-        }
-    }
-
+    
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
+    //@Ignore
     public void generateCodeSwb()
     {
         try
         {
             String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"../../src");
-            String sPakage = "org.semanticwb.model";
-            CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
-            codeGeneration.generateCode("swb");
+            File dir = new File(path+"../../src");            
+            CodeGenerator codeGeneration = new CodeGenerator();
+            codeGeneration.generateCode("swb",true,dir);
             System.out.println("Generación de clases completa");
         }
         catch ( CodeGeneratorException cge )
@@ -86,16 +68,15 @@ public class CodeGeneratorBase
         }
     }
 
-    @Test
+    @Test    
     public void generateCodeSwbxf()
     {
         try
         {
             String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"../../../SWBModel/src");
-            String sPakage = "org.semanticwb.model";
-            CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
-            codeGeneration.generateCode("swbxf");
+            File dir = new File(path+"../../../SWBModel/src");            
+            CodeGenerator codeGeneration = new CodeGenerator();
+            codeGeneration.generateCode("swbxf",false,dir);
             System.out.println("Generación de clases completa");
         }
         catch ( CodeGeneratorException cge )
