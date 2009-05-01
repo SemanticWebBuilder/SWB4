@@ -50,9 +50,9 @@ public class CodeGeneratorOffice {
         {
             String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
             File dir = new File(path+"../../../SWBOffice/src");
-            String sPakage = "org.semanticwb.repository.office";
-            CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
-            codeGeneration.generateCode("swboffice",false);
+            //String sPakage = "org.semanticwb.repository.office";
+            CodeGenerator codeGeneration = new CodeGenerator();
+            codeGeneration.generateCode("swboffice",false,dir);
             System.out.println("Generación de clases completa");
         }
         catch ( CodeGeneratorException cge )
