@@ -141,7 +141,7 @@ public class SemanticVocabulary
         classes.put(tpc.getURI(), tpc);
         String clsid=tpc.getClassId();
         if(clsid!=null)clsbyid.put(clsid, tpc);
-        String clsname=tpc.get_ClassName();
+        String clsname=tpc.getClassName();
         if(clsname!=null)clsbyname.put(clsname, tpc);
     }
     
@@ -241,7 +241,7 @@ public class SemanticVocabulary
     
     public void registerClass(SemanticClass cls)
     {
-        log.trace("Registering SemanticClass:"+cls+" --> "+cls.get_ClassName());
+        log.trace("Registering SemanticClass:"+cls+" --> "+cls.getClassName());
         addSemanticClass(cls);
         Iterator<SemanticProperty> propit=cls.listProperties();
         while(propit.hasNext())
