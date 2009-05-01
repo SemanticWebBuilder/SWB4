@@ -48,15 +48,16 @@ public class CodeGeneratorResources {
     public void tearDown() {
     }
 
-    public Iterator<SemanticModel> getModels(String sPakage, String models[], File basepath) {
+    public Iterator<SemanticModel> getModels(String models[], File basepath) {
         ArrayList arr = new ArrayList();
         for (int i = 0; i < models.length; i++) {
             String m = models[i];
+            String pref = models[i];
             File mf = null;
             if (m.startsWith("/")) {
                 mf = new File(basepath, m);
             } else {
-                mf = new File(basepath, SWBUtils.TEXT.replaceAll(sPakage, ".", "/") + "/" + m);
+                mf = new File(basepath, SWBUtils.TEXT.replaceAll(m, ".", "/"));
             }
             System.out.println("OWL File:" + mf.toString());
             SemanticModel model = SWBPlatform.getSemanticMgr().readRDFFile(m, mf.toString());
@@ -74,15 +75,12 @@ public class CodeGeneratorResources {
     public void generateCP() {
 
         try {
-
-            String sPakage = "org.semanticwb.portal.resources.sem.forum";
-            String models[] = {"SWBForum.owl"};
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
-            //System.out.println("path:"+path);
             File dir = new File(path + "../../src");
-            //System.out.println("dir:"+dir);
 
-            Iterator<SemanticModel> it = getModels(sPakage, models, dir);
+            String models[] = {"/org/semanticwb/portal/resources/sem/forum/SWBForum.owl"};
+
+            Iterator<SemanticModel> it = getModels(models, dir);
             while (it.hasNext()) {
                 SemanticModel model = it.next();
                 SWBPlatform.getSemanticMgr().getSchema().addSubModel(model, false);
@@ -95,10 +93,9 @@ public class CodeGeneratorResources {
 
                 String nsb = model.getNameSpace();
                 System.out.println(nsb);
-                CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
-                codeGeneration.generateCodeByNamespace(nsb, false);
+                CodeGenerator codeGeneration = new CodeGenerator();
+                codeGeneration.generateCodeByNamespace(nsb, false, dir);
             }
-
 //            CodeGenerator codeGeneration = new CodeGenerator(dir, sPakage);
 //            codeGeneration.generateCode("swbres",false);
             System.out.println("Generación de clases completa");
