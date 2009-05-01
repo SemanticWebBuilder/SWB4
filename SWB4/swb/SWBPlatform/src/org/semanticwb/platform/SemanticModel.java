@@ -176,7 +176,7 @@ public class SemanticModel
     {
         m_nameSpace=ns;
     }
-    
+
     public String getNameSpace() 
     {
         if(m_nameSpace==null)
