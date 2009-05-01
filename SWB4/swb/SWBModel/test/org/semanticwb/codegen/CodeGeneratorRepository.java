@@ -57,6 +57,7 @@ public class CodeGeneratorRepository
             File dir = new File(path + "../../src");            
             CodeGenerator codeGeneration = new CodeGenerator();
             codeGeneration.generateCode("nt", false,dir);
+            codeGeneration.generateCode("mix", false,dir);
             codeGeneration.generateCode("swbrep", false,dir);
             System.out.println("Generación de clases completa");
         }
