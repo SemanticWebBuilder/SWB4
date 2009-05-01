@@ -54,8 +54,7 @@ public class CodeGeneratorRepository
         try
         {
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path + "../../src");
-            String sPakage = "org.semanticwb.repository";
+            File dir = new File(path + "../../src");            
             CodeGenerator codeGeneration = new CodeGenerator();
             codeGeneration.generateCode("nt", false,dir);
             codeGeneration.generateCode("swbrep", false,dir);
