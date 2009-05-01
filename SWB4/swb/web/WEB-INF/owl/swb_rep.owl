@@ -260,9 +260,10 @@
     <rdfs:label>parent</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasNodes">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasNode</swb:propertyCodeName>
     <swbrep:internal rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swbrep:internal>
-    <rdfs:label>hasNode</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.jcp.org/jcr/1.0#predecessors">
     <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"

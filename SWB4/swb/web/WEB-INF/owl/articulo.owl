@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:jcr="http://www.jcp.org/jcr/1.0#"
+    xmlns:swbrep="http://www.semanticwebbuilder.org/swb4/repository#"
+    xmlns:content="http://www.semanticwb.org.mx/swb4/content#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:demo="http://www.semanticwebbuilder.org/demo/articulodemo#"
+    xmlns="http://www.semanticwebbuilder.org/demo/articulo.owl#"
+    xmlns:mix="http://www.jcp.org/jcr/mix/1.0#"
+  xml:base="http://www.semanticwebbuilder.org/demo/articulo.owl">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/office.owl"/>
+  </owl:Ontology>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org/office#Author">
+    <rdfs:domain>
+      <swb:Class rdf:about="http://www.semanticwebbuilder.org/demo/articulodemo#Articulo">
+        <rdfs:label xml:lang="en">Demo</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/office#OfficeContent"/>
+        <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >mix:referenceable</jcr:supertypes>
+        <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >mix:lockable</jcr:supertypes>
+        <rdfs:label xml:lang="es">Articulo demostración</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#versionable"/>
+        <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#lockable"/>
+        <mix:mixin rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</mix:mixin>
+        <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
+        <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
+        <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >mix:versionable</jcr:supertypes>
+      </swb:Class>
+    </rdfs:domain>
+  </rdf:Description>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
