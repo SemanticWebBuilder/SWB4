@@ -250,14 +250,15 @@
     <rdfs:domain rdf:resource="#Workspace"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="parentNode">
-    <swbrep:internal rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swbrep:internal>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >parent</swb:propertyCodeName>
     <rdfs:range rdf:resource="http://www.jcp.org/jcr/nt/1.0#base"/>
     <rdfs:domain rdf:resource="http://www.jcp.org/jcr/nt/1.0#base"/>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasNodes"/>
     </owl:inverseOf>
-    <rdfs:label>parent</rdfs:label>
+    <swbrep:internal rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbrep:internal>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasNodes">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
