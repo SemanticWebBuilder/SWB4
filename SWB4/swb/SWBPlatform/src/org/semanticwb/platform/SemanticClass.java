@@ -143,6 +143,11 @@ public class SemanticClass
             } catch (Exception pnf){
                 m_classCodeName=getName();
             }
+            //TODO:corregir modelo para no hacer esto
+            if(m_classCodeName!=null)
+            {
+                m_classCodeName=(""+m_classCodeName.charAt(0)).toUpperCase()+m_classCodeName.substring(1);
+            }
             //log.trace("getClassCodeName:"+m_classCodeName);
         }
         return m_classCodeName;
