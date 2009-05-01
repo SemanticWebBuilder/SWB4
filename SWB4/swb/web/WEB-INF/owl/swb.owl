@@ -2602,7 +2602,17 @@
     >40</swbxf:textAreaCols>
   </swbxf:RichText>
   <owl:AnnotationProperty rdf:ID="classCodeName">
-    <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdfs:Class rdf:about="#Class"/>
+          <rdfs:Class rdf:about="#Model"/>
+          <rdfs:Class rdf:about="#Interface"/>
+          <rdfs:Class rdf:about="#FormElement"/>
+          <rdfs:Class rdf:about="#SemanticResource"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:AnnotationProperty>
   <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SecurityQuestion">
@@ -2614,8 +2624,18 @@
     <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </owl:AnnotationProperty>
   <owl:AnnotationProperty rdf:ID="classCodePackage">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdfs:Class rdf:about="#Class"/>
+          <rdfs:Class rdf:about="#Model"/>
+          <rdfs:Class rdf:about="#Interface"/>
+          <rdfs:Class rdf:about="#FormElement"/>
+          <rdfs:Class rdf:about="#SemanticResource"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </owl:AnnotationProperty>
   <owl:AnnotationProperty rdf:ID="canUsedAsName">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
