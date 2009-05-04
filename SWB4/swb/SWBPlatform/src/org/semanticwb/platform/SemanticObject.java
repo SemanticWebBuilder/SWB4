@@ -301,7 +301,7 @@ public class SemanticObject
 //            }
             ret=!arr.isEmpty();
         }
-        System.out.println("hasObjectPropertyCache:"+this+" prop:"+prop+" "+ret);
+        //System.out.println("hasObjectPropertyCache:"+this+" prop:"+prop+" "+ret);
         return ret;
     }
 
