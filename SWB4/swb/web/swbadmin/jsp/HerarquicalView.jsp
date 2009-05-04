@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page pageEncoding="ISO-8859-1"%>
+<%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*"%>
 <%@page import="org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%@page import="org.semanticwb.nlp.*,java.io.StringWriter" %>
@@ -33,7 +33,7 @@
     }
 
     
-    String q = "[Página Web] con [Usuario Creador]";
+    String q = "[PÃ¡gina Web] con [Usuario Creador]";
     out.println("<form><fieldset title='query:'>" + q + "</fieldset>");
     tTranslator tr = new tTranslator(lex);
     String query = lex.getPrefixString() + tr.translateSentence(q);

@@ -52,8 +52,9 @@
                 SemanticClass scls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(clsid);
                 String uri=m.getObjectUri(id, scls);
                 //out.println(uri);
-                SemanticObject obj=SemanticObject.createSemanticObject(uri);
-                if(obj!=null)
+                boolean con=m.getRDFModel().contains(m.getRDFModel().getResource(uri), null);
+                //SemanticObject obj=SemanticObject.createSemanticObject(uri);
+                if(con)
                 {
                     out.println("false");
                     //System.out.println("false");

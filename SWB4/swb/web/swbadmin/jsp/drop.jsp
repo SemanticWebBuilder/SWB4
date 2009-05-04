@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page pageEncoding="ISO-8859-1"%>
+<%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <!--
     String lang="es";
@@ -81,7 +81,7 @@
         }
         if(ret)
         {
-            out.println("Elemento fué movido...");
+            out.println("Elemento fuÃ© movido...");
             return;
         }
     }
@@ -169,7 +169,7 @@
         }
         if(ret)
         {
-            out.println("Elemento fué movido...");
+            out.println("Elemento fuÃ© movido...");
             return;
         }
     }
@@ -213,7 +213,7 @@
             }
             if(ret)
             {
-                out.println("Elelemento fué movido...");
+                out.println("Elelemento fuÃ© movido...");
                 return;
             }
         }

@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page pageEncoding="ISO-8859-1"%>
+<%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 
 <%
@@ -40,7 +40,7 @@
     out.println("updateTreeNodeByURI('"+suri+"');");
     out.println("reloadTab('"+suri+"');");
     String icon=SWBContext.UTILS.getIconClass(obj);
-    out.println("setTabTitle('"+obj.getURI()+"','"+obj.getDisplayName(lang)+"','"+icon+"');");
+    //out.println("setTabTitle('"+obj.getURI()+"','"+obj.getDisplayName(lang)+"','"+icon+"');");
     out.println("</script>");
     //out.println(obj.getDisplayName(lang)+" "+act);
 %>

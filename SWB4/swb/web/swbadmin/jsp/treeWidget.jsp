@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*"%>
 <%-- 
     Document   : treeWidget
@@ -12,7 +13,6 @@
     String model=id+"Model";
     String menu=id+"Menu";
 %>
-<%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
 <!-- menu -->
 <ul dojoType="dijit.Menu" id="<%=menu%>" style="display: none;" onOpen="hideApplet(true);" onClose="hideApplet(false);"></ul>
 <!-- data for tree and combobox -->

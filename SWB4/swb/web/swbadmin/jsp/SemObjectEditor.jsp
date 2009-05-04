@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page pageEncoding="ISO-8859-1"%>
+<%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <%
     User user=SWBPortal.getSessionUser();
@@ -101,7 +101,7 @@ try
             out.println("updateTreeNodeByURI('"+obj.getURI()+"');");
 
             String icon=SWBContext.UTILS.getIconClass(obj);
-            out.println("setTabTitle('"+obj.getURI()+"','"+obj.getDisplayName(lang)+"','"+icon+"');");
+            //out.println("setTabTitle('"+obj.getURI()+"','"+obj.getDisplayName(lang)+"','"+icon+"');");
             Iterator<SemanticObject> it2=obj.listRelatedObjects();
             while(it2.hasNext())
             {
