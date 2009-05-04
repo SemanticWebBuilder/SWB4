@@ -152,20 +152,26 @@ public class Login implements InternalServlet
             LoginContext lc;
             try
             {
+                log.trace("1er callback "+callbackHandler);
                 request.getSession(true).invalidate();
                 subject = SWBPortal.getUserMgr().getSubject(request);
+                log.trace("es null??? "+((SWB4CallbackHandler) callbackHandler).getRequest()+" y es SWB4 " + (callbackHandler instanceof SWB4CallbackHandler));
                 if (callbackHandler instanceof SWB4CallbackHandler && null == ((SWB4CallbackHandler) callbackHandler).getRequest())
                 {
+                    log.trace("intentando...");
                     ((SWB4CallbackHandler) callbackHandler).setRequest(request);
                     ((SWB4CallbackHandler) callbackHandler).setResponse(response);
-                    try
+                    
+                }
+                try
                     {
-                        ((SWB4CallbackHandler) callbackHandler).getRequest().getParameter("wb_username");
+                    log.trace("testing for null: "+
+                        ((SWB4CallbackHandler) callbackHandler).getRequest().getParameter("wb_username"));
                     } catch (NullPointerException npe)
                     {
                         try
                         {
-                            log.debug("re Build callbackHandler...");
+                            log.trace("re Build callbackHandler...");
                             Constructor[] constructor = Class.forName(CBHClassName).getConstructors();
                             int method = 0;
                             for (int i = 0; i < constructor.length; i++)
@@ -185,7 +191,7 @@ public class Login implements InternalServlet
                             return;
                         }
                     }
-                }
+                log.trace("2o callback "+callbackHandler);
                 lc = new LoginContext(context, subject, callbackHandler);
                 lc.login();
             // session.removeAttribute(VALSESS);

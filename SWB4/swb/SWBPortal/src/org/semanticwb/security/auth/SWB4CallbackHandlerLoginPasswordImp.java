@@ -21,6 +21,7 @@ import org.semanticwb.servlet.internal.DistributorParams;
  */
 public class SWB4CallbackHandlerLoginPasswordImp extends SWB4CallbackHandler {
 private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordImp.class);
+    private static final long serialVersionUID = 12896L;
     private HttpServletRequest request;
     private HttpServletResponse response;
     private String authType;
