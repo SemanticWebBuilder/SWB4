@@ -96,7 +96,7 @@ public class SWBUtils {
         log.event("Initializing SemanticWebBuilder Base...");
         log.event("-->AppicationPath: " + applicationPath);
         init();
-
+        log.event("-->Default Encoding: "+TEXT.getDafaultEncoding());
     }
 
     /** Get Instance.
@@ -194,6 +194,37 @@ public class SWBUtils {
 
         private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
         //version 1.3
+
+        public static String CHARSET_ISO8859_1="ISO8859_1";
+        public static String CHARSET_UTF8="UTF8";
+
+        private static String defencoding=null;
+
+        /**
+         * Homologa los codigos de caracter a uno solo por tipo
+         * Ejemplo: ISO-8859-1, ISO8859-1, 8859-1 = ISO8859_1
+         * @param charset
+         * @return
+         */
+        public static String getHomCharSet(String charset)
+        {
+            String ret=CHARSET_ISO8859_1;
+            if(charset.toUpperCase().indexOf("UTF")>-1)
+            {
+                ret=CHARSET_UTF8;
+            }
+            return ret;
+        }
+
+        public static String getDafaultEncoding()
+        {
+            if(defencoding==null)
+            {
+                OutputStreamWriter out = new OutputStreamWriter(new ByteArrayOutputStream());
+                defencoding=out.getEncoding();
+            }
+            return defencoding;
+        }
 
         /**
          * Remplaza en una cadena (str) las coincidencias encontradas (match) con otra cadena (replace).
@@ -684,6 +715,51 @@ public class SWBUtils {
                 log.error("Error loading property file:"+name,e);
             }
             return p;
+        }
+
+        public static String encodeExtendedCharacters(String str)
+        {
+            StringBuffer ret = new StringBuffer();
+            for(int x = 0; x < str.length(); x++)
+            {
+                char ch = str.charAt(x);
+                if (ch > 255) {
+                    ret.append("&#" + (int)ch + ";");
+                } else {
+                    ret.append(ch);
+                }
+            }
+            return ret.toString();
+        }
+
+        public static String decodeExtendedCharacters(String str)
+        {
+            StringBuffer ret = new StringBuffer();
+            int l=str.length();
+            for (int x = 0; x < l; x++)
+            {
+                char ch = str.charAt(x);
+                boolean addch=false;
+                if (ch == '&' && (x+1)<l && str.charAt(x+1)=='#')
+                {
+                    int i = str.indexOf(";", x);
+                    if (i > 2)
+                    {
+                        try
+                        {
+                            int v = Integer.parseInt(str.substring(x + 2, i));
+                            if(v>255)
+                            {
+                                ret.append((char)v);
+                                x = i;
+                                addch=true;
+                            }
+                        }catch(NumberFormatException e){}
+                    }
+                }
+                if(!addch)ret.append(ch);
+            }
+            return ret.toString();
         }
 
     }
