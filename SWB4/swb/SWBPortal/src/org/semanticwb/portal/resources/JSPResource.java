@@ -73,6 +73,7 @@ public class JSPResource extends GenericAdmResource
                 } else {
                     dispatcher.include(request, response);
                 }
+                //new Exception().printStackTrace();
             }
         } catch (Exception e) {
             log.error(paramRequest.getLocaleLogString("Process_Error") + "..." + path, e);
