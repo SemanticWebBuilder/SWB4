@@ -165,6 +165,7 @@ public class GenericFormElement extends FormElementBase
     //                    + " propercase=\"true\""
                         + " promptMessage=\""+pmsg+"\""
                         + " invalidMessage=\""+imsg+"\""
+                        + " style=\"width:100px;\""
                         + " " + getAttributes()
     //                    + " trim=\"true\""
                         + ext
@@ -192,6 +193,7 @@ public class GenericFormElement extends FormElementBase
     //                    + " propercase=\"true\""
                         + " promptMessage=\""+pmsg+"\""
                         + " invalidMessage=\""+imsg+"\""
+                        + " style=\"width:300px;\""
                         + " " + getAttributes()
                         + " trim=\"true\""
                         + ext
