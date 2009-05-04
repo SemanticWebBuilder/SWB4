@@ -162,7 +162,6 @@ public class SelectOne extends SelectOneBase
                 ret+="</select>";
             }
         }
-
         return ret;
     }
 

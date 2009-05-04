@@ -3,6 +3,7 @@ package org.semanticwb.model.base;
 
 public class TextBase extends org.semanticwb.model.base.FormElementBase 
 {
+    public static final org.semanticwb.platform.SemanticProperty swbxf_textRegExp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textRegExp");
     public static final org.semanticwb.platform.SemanticClass swbxf_Text=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#Text");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#Text");
 
@@ -41,6 +42,16 @@ public class TextBase extends org.semanticwb.model.base.FormElementBase
     public static boolean hasText(String id, org.semanticwb.model.SWBModel model)
     {
         return (getText(id, model)!=null);
+    }
+
+    public String getRegExp()
+    {
+        return getSemanticObject().getProperty(swbxf_textRegExp);
+    }
+
+    public void setRegExp(String textRegExp)
+    {
+        getSemanticObject().setProperty(swbxf_textRegExp, textRegExp);
     }
 
     public void remove()
