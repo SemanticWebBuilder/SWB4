@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page pageEncoding="ISO-8859-1"%>
+<%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,java.util.*,org.semanticwb.base.util.*,com.hp.hpl.jena.ontology.*,com.hp.hpl.jena.rdf.model.*"%>
 <%
     String lang="es";
@@ -32,7 +32,7 @@
 
     out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" nested=\"true\">");
 
-    out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\"Información\" refreshOnShow=\"true\" href=\"/swb/swbadmin/jsp/resourceInfo.jsp?suri="+eid+"\" >");
+    out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\"InformaciÃ³n\" refreshOnShow=\"true\" href=\"/swb/swbadmin/jsp/resourceInfo.jsp?suri="+eid+"\" >");
     out.println("</div>");
     if(isClass)
     {

@@ -596,7 +596,7 @@
               jsonNode=getJSON(context+"/swbadmin/jsp/Tree.jsp?suri="+encodeURIComponent(item.id))[0];
           }
 
-          store.setValues(item, "title", jsonNode.title);
+          store.setValues(item, "title", decodeExtendedCharacters(jsonNode.title));
           store.setValues(item, "type", jsonNode.type);
           store.setValues(item, "icon", jsonNode.icon);
 

@@ -1,5 +1,5 @@
 <%@page import="org.json.*,org.semanticwb.*,org.semanticwb.model.*,org.semanticwb.platform.*,java.util.*,com.hp.hpl.jena.ontology.*,com.hp.hpl.jena.*,com.hp.hpl.jena.util.*,com.hp.hpl.jena.rdf.model.Model" %>
-<%@page contentType="text/html" %><%@page pageEncoding="ISO-8859-1" %>
+<%@page contentType="text/html" %><%@page pageEncoding="UTF-8" %>
 <%!
     int nullnode=0;
     String lang="es";

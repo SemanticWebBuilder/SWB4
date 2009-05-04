@@ -1,3 +1,5 @@
+<%@page contentType="text/html"%>
+<%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*,org.semanticwb.portal.api.*"%><%
     String lang="es";
     response.setHeader("Cache-Control", "no-cache"); 

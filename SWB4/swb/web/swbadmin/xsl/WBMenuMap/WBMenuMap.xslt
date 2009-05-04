@@ -4,7 +4,7 @@
 
 <xsl:template name="nodetpl">
 	<TR><TD class="wmn_data" >
-		<img src="/wbadmin/icons/trans.gif" alt="" height="1">
+		<img src="/swbadmin/icons/trans.gif" alt="" height="1">
 			<xsl:attribute name="width"><xsl:value-of select="@level * 10"/></xsl:attribute>
 		</img>
                 <xsl:if test="@inPath = 'true'">

@@ -83,6 +83,22 @@
           });
       }
 
+      function getSyncHtml(url)
+      {
+          var ret=[];
+          var obj=dojo.xhrGet({
+              url: url,
+              sync: true,
+              load: function(data){
+                  ret=data;
+              },
+              error: function(data){
+                  alert("An error occurred, with response: " + data);
+              }
+          });
+          return ret;
+      }
+
       function getJSON(url)
       {
           //alert("load:"+url);
@@ -277,9 +293,57 @@
           }
       }
 
+      function encodeExtendedCharacters(str)
+      {
+          str=""+str;
+          alert("ini:"+str);
+          var ret="";
+          for(x=0;x<str.length;x++)
+          {
+              alert("x:"+x);
+              var ch=str.charAt(x);
+              var chc=str.charCodeAt(x);
+              alert(x+":"+ch+" "+chc);
+              if(chc>255)
+              {
+                  ret+="&#"+chc+";";
+              }else
+              {
+                  ret+=ch;
+              }
+          }
+          alert("end:"+ret);
+          return ret;
+      }
+
+      function decodeExtendedCharacters(str)
+      {
+          var ret="";
+          for(x=0;x<str.length;x++)
+          {
+              var ch=str.charAt(x);
+              if(ch=='&')
+              {
+                  var i=str.indexOf(";",x);
+                  if(i>2 && str.charAt(x+1)=='#')
+                  {
+                      //alert("x:"+x+" "+i);
+                      var v=parseInt(str.substring(x+2,i));
+                      //alert(v);
+                      //str.replace(x,i+1,""+(char)v);
+                      ret+=String.fromCharCode(v);
+                      x=i;
+                  }else ret+=ch;
+              }else ret+=ch;
+          }
+          return ret;
+      }
+
+      //alert("hola:"+decodeExtendedCharacters("á&#27721;é"));
+
         function selectTab(id,url,title,tabName)
         {
-
+          //if(title)title=encodeExtendedCharacters(title);
           var objid=id+CONST_TAB;
           var newTab = dijit.byId(objid);
           if(!url)url=context+"/swbadmin/jsp/objectTab.jsp";
@@ -359,6 +423,8 @@
 
       function addNewTab(id, url, title)
       {
+          //alert("addNewTab:"+title);
+          //if(title)title=encodeExtendedCharacters(title);
           var objid=id+CONST_TAB;
           var newTab = dijit.byId(objid);
           if(!url)url=context+"/swbadmin/jsp/objectTab.jsp";
@@ -499,6 +565,7 @@
       //recargo nodo sin hijos de todos los stores
       function updateTreeNodeByURI(uri)
       {
+          var refreshTitle=true;
           for(x=0;x<trees.length;x++)
           {
               var s=trees[x].model.store;
@@ -506,19 +573,20 @@
               var n=getItem(s,uri);
               if(n)
               {
-                 updateTreeNode(s,n);
+                 updateTreeNode(s,n,null,refreshTitle);
+                 if(refreshTitle==true)refreshTitle=false;
               }
           }
       }
 
       //recarga nodo sin hijos
-      function updateTreeNode(store, item, jsonNode)
+      function updateTreeNode(store, item, jsonNode, refreshTabTitle)
       {
           //alert("Store:"+store+" "+act_store.jsId);
           if(!store)store=act_store;
           if(!item)item=act_item;
           var onlyNode=false;
-          if(!jsonNode)
+          if(!jsonNode || jsonNode==null)
           {
               onlyNode=true;
               jsonNode=getJSON(context+"/swbadmin/jsp/Tree.jsp?suri="+encodeURIComponent(item.id))[0];
@@ -527,6 +595,11 @@
           store.setValues(item, "title", jsonNode.title);
           store.setValues(item, "type", jsonNode.type);
           store.setValues(item, "icon", jsonNode.icon);
+
+          if(refreshTabTitle && refreshTabTitle==true)
+          {
+              setTabTitle(item.id, jsonNode.title, jsonNode.icon);
+          }
 
           if(jsonNode.parent)
           {
@@ -842,6 +915,8 @@
 
       function setTabTitle(uri,title,icon)
       {
+          //alert("setTabTitle:"+title);
+          //if(title)title=encodeExtendedCharacters(title);
           var objid=uri+CONST_TAB;
           var tab = dijit.byId(objid);
           if(tab!=null)
