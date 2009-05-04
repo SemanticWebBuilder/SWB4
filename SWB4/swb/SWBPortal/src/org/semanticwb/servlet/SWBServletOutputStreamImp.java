@@ -21,6 +21,8 @@ public class SWBServletOutputStreamImp extends javax.servlet.ServletOutputStream
     {
         this.out=out;
     }
+
+    int x=0;
     
     public void write(int b) throws java.io.IOException
     {

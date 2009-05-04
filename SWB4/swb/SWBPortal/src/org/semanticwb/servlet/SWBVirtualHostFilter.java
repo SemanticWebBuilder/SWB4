@@ -129,10 +129,11 @@ public class SWBVirtualHostFilter implements Filter
                     {
                         dparams = new DistributorParams(_request, auri);
                     }
-                    if (catchErrors)
+                    if (catchErrors && serv instanceof Distributor)
                     {
                         SWBHttpServletResponseWrapper resp = new SWBHttpServletResponseWrapper(_response);
                         resp.setTrapSendError(true);
+                        resp.setTrapContentType(false);
                         serv.doProcess(_request, resp, dparams);
                         if (resp.isSendError())
                         {

@@ -45,6 +45,8 @@ public class TemplateImp extends Template
     private String actPath;
     private String actWorkPath;
     private String actRelWorkPath;
+
+    private String contentType=null;
     
     public TemplateImp(Template base)
     {
@@ -941,6 +943,17 @@ public class TemplateImp extends Template
                                         
                                         SWBPortal.getResourceMgr().getResourceTraceMgr().renderTraced(wbres, req, res, resParams);
                                         out.print(res.toString());
+
+//                                        byte arr[]=res.toByteArray();
+//                                        String r=res.toString();
+//                                        int ri=r.indexOf("Jei ");
+//                                        String f=r.substring(ri,ri+10);
+//                                        System.out.println("res:"+f);
+//                                        for(int x=0;x<f.length();x++)
+//                                        {
+//                                            System.out.println(" "+(int)f.charAt(x)+" "+arr[ri+x]);
+//                                        }
+//                                        //System.out.println("res:"+new String(res.toByteArray(),"UTF-8"));
                                         
                                         String intraBR=(String)args.get("intrabr");
                                         if(it.hasNext() && (intraBR==null || intraBR.equalsIgnoreCase("true")))
@@ -1475,11 +1488,17 @@ public class TemplateImp extends Template
                     if(val instanceof String && !key.equals("method"))
                     {
                         String value=(String)val;
-                        try
+                        if(key.equalsIgnoreCase("content-Type"))
                         {
-                            //System.out.println(AFUtils.toUpperCaseFL(key)+":"+value);
-                            response.setHeader(SWBUtils.TEXT.toUpperCaseFL(key),value);
-                        }catch(Exception e){log.error(e);}
+                            contentType=value;
+                        }else
+                        {
+                            try
+                            {
+                                //System.out.println(AFUtils.toUpperCaseFL(key)+":"+value);
+                                response.setHeader(SWBUtils.TEXT.toUpperCaseFL(key),value);
+                            }catch(Exception e){log.error(e);}
+                        }
                     }
                 } 
             }
@@ -1525,6 +1544,14 @@ public class TemplateImp extends Template
     public void reload()
     {
         SWBPortal.getTemplateMgr().reloadTemplate(this);
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
     
 }

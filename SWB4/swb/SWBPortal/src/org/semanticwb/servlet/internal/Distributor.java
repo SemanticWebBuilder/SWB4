@@ -158,6 +158,7 @@ public class Distributor implements InternalServlet
             }
 
             String content = null;
+            String resContentType = null;
 
             if (dparams.getAccType() == DistributorParams.ACC_TYPE_RENDER) // es un recurso
             {
@@ -231,6 +232,7 @@ public class Distributor implements InternalServlet
                         resParams.setOnlyContent(onlyContent);
                         SWBPortal.getResourceMgr().getResourceTraceMgr().renderTraced(currResource, request, res, resParams);
                         content = res.toString();
+                        resContentType=res.getContentType();
                         if(res.isSendRedirect())
                         {
                             return false;
@@ -303,9 +305,11 @@ public class Distributor implements InternalServlet
 
                 boolean gzip = false;
                 if (agzip) {
-                    if (request.getHeader("Via") != null
+                    if (request.getHeader("Via") != null 
                             || request.getHeader("X-Forwarded-For") != null
-                            || request.getHeader("Cache-Control") != null) {
+                            //|| request.getHeader("Cache-Control") != null
+                        )
+                    {
                         //using proxy -> no zip
                     } else {
                         String accept = request.getHeader("Accept-Encoding");
@@ -341,13 +345,26 @@ public class Distributor implements InternalServlet
                     return false;
                 }
                 
-
                 if(res.isSendRedirect())
                 {
                     return false;
                 }
 
-                //response.setContentType("text/html");
+                if(resContentType!=null)resContentType=res.getContentType();
+                String tplContentType=currTemplate.getContentType();
+                //System.out.println("resContentType: "+resContentType+" tplContentType"+tplContentType);
+                String contentType="text/html; charset=ISO-8859-1";
+                if(tplContentType!=null)
+                {
+                    contentType=tplContentType;
+                }
+                else if(resContentType!=null)
+                {
+                    contentType=resContentType;
+                }
+                response.setContentType(contentType);
+                log.debug("dist: contentType:"+contentType);
+
                 java.util.zip.GZIPOutputStream garr = null;
                 PrintWriter out = null;
                 
@@ -358,11 +375,22 @@ public class Distributor implements InternalServlet
                 } else {
                     out = response.getWriter();
                 }                
+                //System.out.println("gzip:"+gzip);
 
-                //out.println("\n<!--Time: " + (System.currentTimeMillis() - tini) + "ms - " + webpage + "--> ");  //TODO encontrar una forma de configurar esto...
-                out.print(res.toString());
+                String rescharset=SWBUtils.TEXT.getHomCharSet(response.getCharacterEncoding());
+                String defcharset=SWBUtils.TEXT.getHomCharSet(SWBUtils.TEXT.getDafaultEncoding());
+                log.debug("rescharset:"+rescharset+" default:"+defcharset);
+                String resp=res.toString();
+                //System.out.println("resp:"+resp);
+                if(rescharset.equals(defcharset))
+                {
+                    out.print(resp);
+                }else
+                {
+                    out.print(SWBUtils.TEXT.encode(resp, rescharset));
+                }
                 long tfin = System.currentTimeMillis() - tini;
-                out.println("\n<!--Time: " + tfin + "ms - " + webpage + "--> ");  //TODO: encontrar una forma de configurar esto...
+                out.println("\n<!--Time: " + tfin + "ms - SemanticWebBuilder: " + webpage + "--> ");  //TODO: encontrar una forma de configurar esto...
 
                 //if (gzip)
                 {

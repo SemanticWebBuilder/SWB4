@@ -7,6 +7,7 @@ package org.semanticwb.servlet;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -22,18 +23,26 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
 {
 
     static Logger log = SWBUtils.getLogger(SWBHttpServletResponseWrapper.class);
+
     ByteArrayOutputStream bout = new ByteArrayOutputStream(1024);
     ServletOutputStream sout = new SWBServletOutputStreamImp(bout);
-    PrintWriter out = new PrintWriter(bout);
+    PrintWriter out = null;
     private String sendRedirect = null;
     private int err = -1;
     private String errMessage = null;
     private boolean trapSendError = false;
+    private boolean trapContentType = true;
+
+    private String contentType=null;
 
     /** Creates a new instance of WBHttpServletResponseWrapper */
     public SWBHttpServletResponseWrapper(HttpServletResponse response)
     {
         super(response);
+        try
+        {
+            out = new PrintWriter(new OutputStreamWriter(sout,SWBUtils.TEXT.CHARSET_UTF8));
+        }catch(Exception e){log.error(e);}
     }
 
     @Override
@@ -95,8 +104,13 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         {
             log.error(e);
         }
-        log.trace("WBResponse:out:" + bout.toString());
-        return bout.toString();
+        String ret=bout.toString();
+        try
+        {
+            ret=SWBUtils.TEXT.decode(ret,SWBUtils.TEXT.CHARSET_UTF8);
+        }catch(Exception e){log.error(e);}
+        //log.trace("WBResponse:out:" + ret);
+        return ret;
     }
 
     public byte[] toByteArray()
@@ -110,7 +124,7 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         {
             log.error(e);
         }
-        log.trace("WBResponse:out:" + bout.toString());
+        //log.trace("WBResponse:out:" + bout.toString());
         return bout.toByteArray();
     }
 
@@ -179,4 +193,31 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     {
         this.trapSendError = trapSendError;
     }
+
+    @Override
+    public void setContentType(String type) 
+    {
+        log.debug("contentType:"+type+" trapContentType:"+trapContentType);
+        contentType=type;
+        if(!trapContentType)
+        {
+            super.setContentType(type);
+        }
+    }
+
+    public String getContentType()
+    {
+        return contentType;
+    }
+
+    public void setTrapContentType(boolean trapContentType)
+    {
+        this.trapContentType = trapContentType;
+    }
+
+    public boolean getTrapContentType()
+    {
+        return this.trapContentType;
+    }
+
 }
