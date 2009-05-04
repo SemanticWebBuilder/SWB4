@@ -57,6 +57,11 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
                 {
                     if(value.length()>0 && !value.equals(old))
                     {
+                        System.out.println("old:"+old+" value:"+value);
+                        for(int x=0;x<value.length();x++)
+                        {
+                            System.out.print((int)value.charAt(x)+" ");
+                        }
                         if(prop.isFloat())obj.setFloatProperty(prop, Float.parseFloat(value));
                         if(prop.isDouble())obj.setDoubleProperty(prop, Double.parseDouble(value));
                         if(prop.isInt() || prop.isShort() || prop.isByte())obj.setIntProperty(prop, Integer.parseInt(value));
