@@ -14,9 +14,9 @@
     OntProperty p=ont.getRDFOntModel().getOntProperty(prop);
     res.setComment(val, "es");
 
-    System.out.println("suri:"+suri);
-    System.out.println("prop:"+prop);
-    System.out.println("hash:s"+hash);
-    System.out.println("val:"+val);
+    //System.out.println("suri:"+suri);
+    //System.out.println("prop:"+prop);
+    //System.out.println("hash:s"+hash);
+    //System.out.println("val:"+val);
 %>
 OK
