@@ -25,11 +25,11 @@
     response.setHeader("Pragma", "no-cache");
     String login=request.getParameter("login");
     String model=request.getParameter("model");
-    System.out.println("login:"+login+" model:"+model);
+    //System.out.println("login:"+login+" model:"+model);
     if(login==null || login.length()==0 || login.indexOf(' ')>-1 || model==null)
     {
         out.println("false");
-        System.out.println("false");
+        //System.out.println("false");
     }else
     {
         if(isValidId(login))
@@ -39,16 +39,16 @@
             if(obj!=null)
             {
                 out.println("false");
-                System.out.println("false");
+                //System.out.println("false");
             }else
             {
                 out.println("true");
-                System.out.println("true");
+                //System.out.println("true");
             }
         }else
         {
             out.println("false");
-            System.out.println("false");
+            //System.out.println("false");
         }
     }
 %>

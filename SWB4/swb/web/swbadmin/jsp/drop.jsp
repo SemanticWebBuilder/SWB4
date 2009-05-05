@@ -97,7 +97,7 @@
     SemanticObject newp=ont.getSemanticObject(request.getParameter("newp"));
     SemanticObject oldp=ont.getSemanticObject(request.getParameter("oldp"));
 
-    System.out.println("suri;"+obj+" newp:"+newp+" oldp:"+oldp);
+    //System.out.println("suri;"+obj+" newp:"+newp+" oldp:"+oldp);
 
 
     SemanticProperty oprop=null;
@@ -120,7 +120,7 @@
             nprop=prop;
         }
     }
-    System.out.println("oprop:"+oprop+" nprop:"+nprop);
+    //System.out.println("oprop:"+oprop+" nprop:"+nprop);
 
     if(oprop!=null && nprop!=null)
     {
