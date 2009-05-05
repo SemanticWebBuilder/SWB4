@@ -50,30 +50,25 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             doAddThread(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("replyPost")) {
             doReplyPost(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals("editPost")) {
-            doEditPost(request, response, paramRequest);
-        } else {
+        }else {
             super.processRequest(request, response, paramRequest);
         }
     }
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String admAction=request.getParameter("admAction");
+        if(admAction!=null && admAction.equals("editThread")){
+            doEditThread(request, response, paramRequest);
+            return;
+        }else if(admAction!=null && admAction.equals("editPost")){
+            doEditPost(request, response, paramRequest);
+            return;
+        }
         try {
             request.setAttribute("paramRequest", paramRequest);
             RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/forum/swbForum.jsp");
             rd.include(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        try {
-            request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/forum/swbForumAdm1.jsp");
-            rd.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -174,7 +169,6 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
 
     public void doEditThread(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
         SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
         if (paramRequest.getUser() != null) {
@@ -249,7 +243,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             SemanticObject semObj = mgr.processForm(request);
 
             Post newPost = Post.getPost(semObj.getId(), website);
-            //newPost.setForum(thread.getForum());
+
             newPost.setThread(thread);
             if (post != null) {
                 newPost.setParentPost(post);
@@ -425,6 +419,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
                     frmAttachment.setFileName(value);
                     frmAttachment.setFileSize(fileSize);
                     frmAttachment.setMimeType(item.getContentType());
+
                     if(sobj.instanceOf(Thread.sclass)){
                         Thread thread=(Thread)sobj.createGenericInstance();
                         frmAttachment.setThread(thread);
@@ -440,6 +435,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
                     }
                 }
             }
+            request.getSession().setAttribute(UploadFormElement.FILES_UPLOADED, null);
         }
     }
 
