@@ -53,8 +53,8 @@
     String id=request.getParameter("id");
     if(model==null)model=SWBContext.WEBSITE_ADMIN;
     if(id==null)id="WBAd_mnu_Main";
-    System.out.println("model:"+model);
-    System.out.println("id:"+id);
+    //System.out.println("model:"+model);
+    //System.out.println("id:"+id);
 
     WebPage wp=SWBContext.getWebSite(model).getWebPage(id);
     Iterator<WebPage> it=wp.listVisibleChilds(lang);
