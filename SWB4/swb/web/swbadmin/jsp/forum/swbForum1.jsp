@@ -143,7 +143,7 @@
                 FrmThread thread = FrmThread.getFrmThread(semObject.getId(), website);
                 thread.setViewcount(thread.getViewcount() + 1);
                 url.setParameter("threadUri", thread.getURI());
-                System.out.println("threadUri:"+thread.getURI());
+                //System.out.println("threadUri:"+thread.getURI());
             %>
 
             <table border="1" width="95%" cellspacing="0" cellpadding="3" align="center">
