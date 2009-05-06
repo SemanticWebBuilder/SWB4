@@ -89,13 +89,14 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
             }
             //Página ejemplo de implementación:http://blog.tremend.ro/2007/03/01/ajax-file-upload-monitoring-monitor-your-file-upload-with-dwr-and-commons-fileupload/
             //Fecha de implemetación:26/Febrero/2009
+            //TODO:Haecer que este Bloque solo sea puesto una vez, independientemente de cuantos fileuploads tiene mi forma
             ret = "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"/swb/swbadmin/css/upload/upload.css\"/>\n"+
                   "<script type='text/javascript' src=\"/swb/dwr/util.js\"></script>\n"+
                   "<script type='text/javascript' src=\"/swb/dwr/engine.js\"></script>\n"+
                   "<script type=\"text/javascript\" src=\"/swb/dwr/interface/uploadProxy.js\"></script>\n"+
                   "<script type='text/javascript' src=\"/swb/swbadmin/js/upload/upload.js\"></script>\n";
-
-            ret += "<iframe id='target_upload_"+name+"' name='target_upload_"+name+"' src='' style='display: none'></iframe><br/>" +
+                  //TODO:Haecer que esta linea solo sea puesta una vez, independientemente de cuantos fileuploads tiene mi forma
+            ret += "<iframe id='target_upload_"+name+"' name='target_upload_"+name+"' src='' style='display: none'></iframe><br/>" +  //
                     attchMsg+
                     "<input id=\""+name+"\" name=\""+name+"\" type=\"file\"> <br/>" +
                     "<input type=\"hidden\" name=\"uniqueFileIdentifier\" value=\"1234\"/>\n" +
