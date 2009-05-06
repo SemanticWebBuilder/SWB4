@@ -173,8 +173,8 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("</th>");
                 inheritHeader.append("</th>");
             }
-            sptemp = hmprop.get(Priorityable.swb_priority);
-            if (hmprop.get(Priorityable.swb_priority) != null) {
+            sptemp = hmprop.get(Sortable.swb_index);
+            if (hmprop.get(Sortable.swb_index) != null) {
                 propname = sptemp.getName();
                 try {
                     propname = sptemp.getDisplayName(user.getLanguage());
@@ -264,8 +264,8 @@ public class SWBAWebPageContents extends GenericResource {
                     out.println(getValueSemProp(sobj, semprop));
                     out.println("</td>");
                 }
-                if (hmprop.get(Priorityable.swb_priority) != null) {
-                    semprop = (SemanticProperty) hmprop.get(Priorityable.swb_priority);
+                if (hmprop.get(Sortable.swb_index) != null) {
+                    semprop = (SemanticProperty) hmprop.get(Sortable.swb_index);
                     out.println("<td align=\"center\">");
                     SWBResourceURL urlu = paramRequest.getRenderUrl();
                     urlu.setMode(Mode_Action);
@@ -348,8 +348,8 @@ public class SWBAWebPageContents extends GenericResource {
                             out.println(getValueSemProp(sobj, semprop));
                             out.println("</td>");
                         }
-                        if (hmprop.get(Priorityable.swb_priority) != null) {
-                            semprop = (SemanticProperty) hmprop.get(Priorityable.swb_priority);
+                        if (hmprop.get(Sortable.swb_index) != null) {
+                            semprop = (SemanticProperty) hmprop.get(Sortable.swb_index);
                             out.println("<td align=\"center\">");
                             out.println(getValueSemProp(sobj, semprop));
                             out.println("</td>");
