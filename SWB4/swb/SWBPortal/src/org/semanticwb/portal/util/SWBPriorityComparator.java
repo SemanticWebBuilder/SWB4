@@ -41,8 +41,8 @@ public class SWBPriorityComparator implements Comparator
         
         if(content)
         {
-            x = ((SWBResource) obj).getResourceBase().getPriority();
-            y = ((SWBResource) obj1).getResourceBase().getPriority();
+            x = ((SWBResource) obj).getResourceBase().getIndex();
+            y = ((SWBResource) obj1).getResourceBase().getIndex();
         }else
         {
             x = ((SWBResource) obj).getResourceBase().getRandPriority();
