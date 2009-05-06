@@ -48,17 +48,18 @@
 			</band>
 		</background>
 		<title>
-			<band height="32"  isSplitAllowed="true" >
+			<band height="23"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						mode="Opaque"
 						x="0"
 						y="0"
 						width="552"
-						height="24"
+						height="23"
 						forecolor="#FFFFFF"
-						backcolor="#336600"
-						key="staticText-1"/>
+						backcolor="#336699"
+						key="staticText-7"
+						positionType="FixRelativeToBottom"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
@@ -67,16 +68,28 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Reporte de sesiones por día]]></text>
+				<text><![CDATA[Reporte de accesos por sesiones por dï¿½a]]></text>
 				</staticText>
 			</band>
 		</title>
 		<pageHeader>
-			<band height="12"  isSplitAllowed="true" >
+			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</pageHeader>
 		<columnHeader>
 			<band height="23"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						x="0"
+						y="0"
+						width="552"
+						height="23"
+						backcolor="#C5E2FF"
+						key="rectangle-1"/>
+					<graphicElement stretchType="NoStretch">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+</graphicElement>
+				</rectangle>
 				<staticText>
 					<reportElement
 						x="30"
@@ -111,7 +124,7 @@
 					<textElement textAlignment="Left">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Año]]></text>
+				<text><![CDATA[Aï¿½o]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -165,7 +178,7 @@
 					<textElement>
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Día]]></text>
+				<text><![CDATA[Dï¿½a]]></text>
 				</staticText>
 			</band>
 		</columnHeader>
