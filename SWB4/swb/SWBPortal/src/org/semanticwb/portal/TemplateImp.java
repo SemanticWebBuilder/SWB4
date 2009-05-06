@@ -1203,7 +1203,7 @@ public class TemplateImp extends Template
                 {
                     SWBResource wbres = (SWBResource) it.next();
                     //System.out.println("tpl id:"+wbres.getResourceBase().getId()+" prt:"+wbres.getResourceBase().getPriority()+" "+wbres.getResourceBase().getRandPriority());
-                    if (!(!first && wbres.getResourceBase().getPriority() <= 0))
+                    if (!(!first && wbres.getResourceBase().getIndex() <= 0))
                     {
                         //System.out.println("tpl ok");
                         //out.print(SWBResourceMgr.getInstance().getResourceTraceMgr().getHtmlTraced(wbres, request, response, user, topic, args));
