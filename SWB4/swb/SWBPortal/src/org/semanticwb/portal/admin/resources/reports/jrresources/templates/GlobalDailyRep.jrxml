@@ -409,7 +409,7 @@
 			</band>
 		</pageFooter>
 		<summary>
-			<band height="36"  isSplitAllowed="true" >
+			<band height="20"  isSplitAllowed="true" >
 			</band>
 		</summary>
 </jasperReport>
