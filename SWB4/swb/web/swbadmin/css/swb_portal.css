@@ -585,3 +585,17 @@ div.sitesectiontree ul.treeres {
 	font-size: 12px;
 }
 /*------------------- select tree  ----*/
+
+div#swb-bkm-content{margin-left: 200px; padding:10px}
+div#swb-bkm-header{background: url(../images/swbform-fieldset.png) left bottom repeat-x; border-top:1px solid blue;}
+div#swb-bkm-navigation{background:#E6EDF9;width:200px}
+div#swb-bkm-navbarmain{border-right:1px solid blue;}
+div#swb-bkm-navigation{float:left;}
+div#swb-bkm-navmenu{float:right;width:35%;}
+div#swb-bkm-extra{background:white;}
+div#swb-bkm-footer{background: url(../images/swbform-fieldset.png) left bottom repeat-x;}
+div#swb-bkm-wrapper{float:right;width:100%;margin-left:-200px}
+div#swb-bkm-extra{float:left;clear:left;}
+div#swb-bkm-footer{clear:both;width:100%}
+/*--------------bookmarks-------------*/
+
