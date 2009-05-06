@@ -48,6 +48,10 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("addThread")) {
             doAddThread(request, response, paramRequest);
+        } else if (paramRequest.getMode().equals("editThread")) {
+            doEditThread(request, response, paramRequest);
+        } else if (paramRequest.getMode().equals("editPost")) {
+            doEditPost(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("replyPost")) {
             doReplyPost(request, response, paramRequest);
         }else {
@@ -57,14 +61,6 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String admAction=request.getParameter("admAction");
-        if(admAction!=null && admAction.equals("editThread")){
-            doEditThread(request, response, paramRequest);
-            return;
-        }else if(admAction!=null && admAction.equals("editPost")){
-            doEditPost(request, response, paramRequest);
-            return;
-        }
         try {
             request.setAttribute("paramRequest", paramRequest);
             RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/forum/swbForum.jsp");
