@@ -963,7 +963,6 @@ public class SWBPortal {
             g.clearRect(0, 0, 150, 40);
             g.setColor(new Color(0, 0, 0));
             Font f = new Font("Serif",Font.BOLD,25);
-            //g.setFont(g.getFont().deriveFont(Font.ROMAN_BASELINE, 25.0f));
             g.setFont(f);
             g.drawString(cadena, 15, 30);
 
