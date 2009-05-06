@@ -127,9 +127,12 @@ public class SelectOne extends SelectOneBase
                 while(it.hasNext())
                 {
                     SemanticObject sob=it.next();
-                    ret+="<option value=\""+sob.getURI()+"\" ";
-                    if(sob.getURI().equals(uri))ret+="selected";
-                    ret+=">"+sob.getDisplayName(lang)+"</option>";
+                    if(sob.getURI()!=null)
+                    {
+                        ret+="<option value=\""+sob.getURI()+"\" ";
+                        if(sob.getURI().equals(uri))ret+="selected";
+                        ret+=">"+sob.getDisplayName(lang)+"</option>";
+                    }
                 }
                 ret+="</select>";
             }else if(mode.equals("view"))
