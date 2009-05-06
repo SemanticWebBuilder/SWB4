@@ -4,7 +4,6 @@ package org.semanticwb.portal.resources.sem.forum;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
