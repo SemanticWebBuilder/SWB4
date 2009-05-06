@@ -1006,7 +1006,7 @@ public class PFlowManager
         }
     }
 
-    public void noauthorizeContent(Resource resource)
+    private void noauthorizeContent(Resource resource)
     {
         PFlowInstance instance = resource.getPflowInstance();
 
