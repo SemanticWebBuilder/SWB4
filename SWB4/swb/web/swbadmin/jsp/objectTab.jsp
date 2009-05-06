@@ -28,6 +28,9 @@
         //System.out.println("ob:"+ob);
         if(!ob.isVisible())continue;
 
+        //TODO: validar esto en otra clase
+        if(!SWBObjectFilter.filter(obj, ob.getPropertyFilter()))continue;
+
         String title=ob.getDisplayName(lang);
         //DisplayObject dpobj=ob.getDisplayObject();
         SemanticObject interf=ob.getInterface();
