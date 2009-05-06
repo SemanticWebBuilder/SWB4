@@ -47,25 +47,6 @@
 
 		<background>
 			<band height="752"  isSplitAllowed="true" >
-				<printWhenExpression><![CDATA[new Boolean($V{PAGE_NUMBER}.intValue()>1)]]></printWhenExpression>
-				<staticText>
-					<reportElement
-						x="24"
-						y="-450"
-						width="505"
-						height="201"
-						forecolor="#EAEAF6"
-						key="staticText-8"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement>
-						<font fontName="MS Reference Sans Serif" pdfFontName="Helvetica-Bold" size="80" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Infotec      WebBuilder]]></text>
-				</staticText>
 				<staticText>
 					<reportElement
 						x="24"
@@ -73,7 +54,7 @@
 						width="505"
 						height="201"
 						forecolor="#EAEAF6"
-						key="staticText-9"/>
+						key="staticText-7"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
@@ -161,7 +142,7 @@
 						height="24"
 						forecolor="#FFFFFF"
 						backcolor="#336699"
-						key="staticText-10"
+						key="staticText-8"
 						positionType="FixRelativeToBottom"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -171,7 +152,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Reporte de accesos por sección por día]]></text>
+				<text><![CDATA[Reporte de accesos por sesiones por día]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -212,7 +193,7 @@
 					<textElement textAlignment="Right">
 						<font fontName="Arial" size="11" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{site} + " - Reporte de accesos por sección por día"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{site} + " - Reporte de accesos por sesiones por día"]]></textFieldExpression>
 				</textField>
 				<line direction="TopDown">
 					<reportElement
