@@ -3,11 +3,11 @@ package org.semanticwb.portal.resources.sem.base;
 
 public class BookmarkGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_entryCount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#entryCount");
-    public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticClass swb_res_bkm_BookmarkEntry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#BookmarkEntry");
     public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_hasEntry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#hasEntry");
+    public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
+    public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_entryCount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#entryCount");
     public static final org.semanticwb.platform.SemanticClass swb_res_bkm_BookmarkGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#BookmarkGroup");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#BookmarkGroup");
 
@@ -54,41 +54,6 @@ public class BookmarkGroupBase extends org.semanticwb.model.SWBClass implements 
         return (getBookmarkGroup(id, model)!=null);
     }
 
-    public int getEntryCount()
-    {
-        return getSemanticObject().getIntProperty(swb_res_bkm_entryCount);
-    }
-
-    public void setEntryCount(int entryCount)
-    {
-        getSemanticObject().setLongProperty(swb_res_bkm_entryCount, entryCount);
-    }
-
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-    public void setTitle(String title)
-    {
-        getSemanticObject().setProperty(swb_title, title);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.BookmarkEntry> listEntrys()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.BookmarkEntry>(getSemanticObject().listObjectProperties(swb_res_bkm_hasEntry));
@@ -125,6 +90,31 @@ public class BookmarkGroupBase extends org.semanticwb.model.SWBClass implements 
          return ret;
     }
 
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+    public void setTitle(String title)
+    {
+        getSemanticObject().setProperty(swb_title, title);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
     public String getDescription()
     {
         return getSemanticObject().getProperty(swb_description);
@@ -148,5 +138,15 @@ public class BookmarkGroupBase extends org.semanticwb.model.SWBClass implements 
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public int getEntryCount()
+    {
+        return getSemanticObject().getIntProperty(swb_res_bkm_entryCount);
+    }
+
+    public void setEntryCount(int entryCount)
+    {
+        getSemanticObject().setLongProperty(swb_res_bkm_entryCount, entryCount);
     }
 }
