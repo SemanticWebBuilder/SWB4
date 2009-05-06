@@ -547,17 +547,9 @@ public class PFlowManager
             //throw new AFException("The resource "+occurrence.getId()+" is not in flow","RejectOccurrence");
         }
     }
+    
 
-    public void resetOcurrences(PFlow pflow, WebPage page)
-    {
-    }
-
-    public boolean isContentinflow(Resource resource)
-    {
-        return resource.getPflowInstance() != null;
-    }
-
-    public void initContent(Resource resource, PFlow pflow, String message)
+    private void initContent(Resource resource, PFlow pflow, String message)
     {
         PFlowInstance instance = resource.getPflowInstance();
         String version = String.valueOf(instance.getVersion());
@@ -613,7 +605,7 @@ public class PFlowManager
         }
     }
 
-    public void sendNotificationReject(String message, Resource resource, PFlow pflow, String version, String activityName, User wbUser)
+    private void sendNotificationReject(String message, Resource resource, PFlow pflow, String version, String activityName, User wbUser)
     {
         Document docworkflow = SWBUtils.XML.xmlToDom(pflow.getXml());
         NodeList workflows = docworkflow.getElementsByTagName("workflow");
@@ -773,26 +765,7 @@ public class PFlowManager
         }
         return false;
     }
-
-    public boolean needSendtoPublish(Resource resource)
-    {
-        PFlowInstance instance = resource.getPflowInstance();
-        if (instance != null)
-        {
-            if ((instance.getStatus() == -1 || instance.getStatus() == 0) && needAnAuthorization(resource))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
+    
 
     public boolean needAnAuthorization(Resource resource)
     {
