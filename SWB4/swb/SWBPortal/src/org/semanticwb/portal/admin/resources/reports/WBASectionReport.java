@@ -240,38 +240,48 @@ public class WBASectionReport extends GenericResource {
                 out.println("}");*/
 
                 out.println("function doXml(accion, size) { ");
-                /*out.println("   if(validate(accion)) {");*/
+                out.println("   if(dojo.byId('section')) {");
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\"" + url.setMode("report_xml") + "\"+params,\"graphWindow\",size);");
-                /*out.println("   }");*/
+                out.println("   }else {");
+                out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doExcel(accion, size) { ");
-                /*out.println("   if(validate(accion)) {");*/
+                out.println("   if(dojo.byId('section')) {");
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\"" + url.setMode("report_excel") + "\"+params,\"graphWindow\",size);");
-                /*out.println("   }");*/
+                out.println("   }else {");
+                out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doGraph(accion, size) { ");
-                /*out.println("   if(validate(accion)) {");*/
+                out.println("   if(dojo.byId('section')) {");
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\"" + url.setMode("graph") + "\"+params,\"graphWindow\",size);");
-                /*out.println("   }");*/
+                out.println("   }else {");
+                out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doPdf(accion, size) { ");
-                /*out.println("   if(validate(accion)) {");*/
+                out.println("   if(dojo.byId('section')) {");
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\"" + url.setMode("report_pdf") + "\"+params,\"graphWindow\",size);");
-                /*out.println("   }");*/
+                out.println("   }else {");
+                out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doRtf(accion, size) { ");
-                /*out.println("   if(validate(accion)) {");*/
+                out.println("   if(dojo.byId('section')) {");
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\"" + url.setMode("report_rtf") + "\"+params,\"graphWindow\",size);    ");
-                /*out.println("   }");*/
+                out.println("   }else {");
+                out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function getTypeSelected() { ");
@@ -285,9 +295,11 @@ public class WBASectionReport extends GenericResource {
                 out.println("}");
 
                 out.println("function doApply() { ");
-                /*out.println("   if(validate(dojo.byId('wb_rtype').value)) {");*/
+                out.println("   if(dojo.byId('section')) {");
                 out.println("      dojo.byId('frmrep').submit(); ");
-                /*out.println("   }");*/
+                out.println("   }else {");
+                out.println("      alert('Para poder mostrarle el resumen de contenido, primero debe seleccionar una sección');");
+                out.println("   }");
                 out.println("}");
 
                 out.println("function doBlockade() {");
@@ -532,8 +544,11 @@ public class WBASectionReport extends GenericResource {
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.SECTION_DAILY_GRAPH;
+                HashMap params = new HashMap();
+                params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+                params.put("site", filter.getSite());
                 try {
-                    JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                    JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                     jrResource.prepareReport();
                     jrResource.exportReport(response);                            
                 }catch (Exception e) {
@@ -569,7 +584,10 @@ public class WBASectionReport extends GenericResource {
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.SECTION_DAILY;
-                JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());                        
+                HashMap params = new HashMap();
+                params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+                params.put("site", filter.getSite());
+                JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 try {
                     jrResource.prepareReport();
                     jrResource.exportReport(response);                            
@@ -673,8 +691,11 @@ public class WBASectionReport extends GenericResource {
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.SECTION_DAILY;
+                HashMap params = new HashMap();
+                params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+                params.put("site", filter.getSite());
                 try {
-                    JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());
+                    JRResource jrResource = new JRPdfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                     jrResource.prepareReport();
                     jrResource.exportReport(response);                            
                 }catch (Exception e) {
@@ -710,7 +731,10 @@ public class WBASectionReport extends GenericResource {
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRSectionAccessDataDetail(filter);
                 JasperTemplate jasperTemplate = JasperTemplate.SECTION_DAILY;
-                JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), dataDetail.orderJRReport());                        
+                HashMap params = new HashMap();
+                params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
+                params.put("site", filter.getSite());
+                JRResource jrResource = new JRRtfResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                 try {
                     jrResource.prepareReport();
                     jrResource.exportReport(response);                            
