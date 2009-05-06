@@ -95,8 +95,10 @@
                                 <td nowrap>&nbsp;<%=thread.getCreated()%> &nbsp;(<%=paramRequest.getLocaleString("read")%> <%=thread.getViewCount()%> <%=paramRequest.getLocaleString("times")%>) &nbsp;
                                     <%
                 if (userThread != null && user.getURI() != null && user.getURI().equals(userThread.getURI())) { //imprimir combo de edición y eliminar
-                    urlthread.setMode(urlthread.Mode_VIEW);
-                    urlthread.setAction("removePost");
+                                    urlthread.setMode(urlthread.Mode_VIEW);
+                                    urlthread.setMode("editThread");
+                                    SWBResourceURL urlthread1 = paramRequest.getRenderUrl();
+                                    urlthread1.setAction("removePost");
                                     %>
                                     <form name="admActions" action="<%=urlthread.toString()%>">
                                         <input type="hidden" name="threadUri" value="<%=thread.getURI()%>">
@@ -105,8 +107,19 @@
                                             <option value="editThread">Editar</option>
                                             <option value="removePost">Eliminar</option>
                                         </select>
-                                        <input type="submit" value="ir"/>
+                                        <button onclick="redirect(this.form);">ir</button>
                                     </form>
+                                    <script type="text/javascript">
+                                        function redirect(forma){
+                                            if(forma.admAction.selectedIndex==1){
+                                              forma.action="<%=urlthread1.toString()%>";
+                                              forma.submit();
+                                            }else{
+                                                forma.submit();
+                                            }
+                                            return true;
+                                        }
+                                    </script>
                                     <%
                 }
                                     %>
@@ -220,18 +233,31 @@
                                 <td nowrap>&nbsp;<%=post.getCreated()%> &nbsp;&nbsp;
                                     <%
                     if (userPost != null && user.getURI() != null && user.getURI().equals(userPost.getURI())) { //imprimir combo de edición y eliminar
-                        url.setMode(urlthread.Mode_VIEW);
-                        url.setAction("removePost");
+                                    url.setMode(urlthread.Mode_VIEW);
+                                    url.setMode("editPost");
+                                    SWBResourceURL urlpost = paramRequest.getRenderUrl();
+                                    urlpost.setAction("removePost");
                                     %>
-                                    <form name="admActions" action="<%=urlthread.toString()%>">
+                                    <form name="admActions" action="<%=url.toString()%>">
                                         <input type="hidden" name="threadUri" value="<%=thread.getURI()%>">
                                         <input type="hidden" name="postUri" value="<%=post.getURI()%>">
                                         <select name="admAction">
                                             <option value="editPost">Editar</option>
                                             <option value="removePost">Eliminar</option>
                                         </select>
-                                        <input type="submit" value="ir"/>
+                                        <button onclick="redirect(this.form);">ir</button>
                                     </form>
+                                    <script type="text/javascript">
+                                        function redirect(forma){
+                                            if(forma.admAction.selectedIndex==1){
+                                              forma.action="<%=urlpost.toString()%>";
+                                              forma.submit();
+                                            }else{
+                                                forma.submit();
+                                            }
+                                            return true;
+                                        }
+                                    </script>
                                     <%
                     }
                                     %>
@@ -655,10 +681,10 @@
                                     <td>
                                         <table width="100%" border="0" cellspacing="1" cellpadding="2" class="pluginSolidOutline">
                                             <tr>
-                                                <td colspan="2" class="aligncenter pluginCellSubTitle">&nbsp;   &nbsp;<%=paramRequest.getLocaleString("thread")%><br><a href=""><img src="http://www.linuxparatodos.net/portal/layout/FactorEvolucion2008/forum/image_set/asc.gif" border="0"></a>&nbsp;<a href=""><img src="http://www.linuxparatodos.net/portal/layout/FactorEvolucion2008/forum/image_set/desc.gif" border="0"></a></td>
-                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("views")%><br><a href="index.php?forum=27&amp;order=0&amp;sort=2"><img src="http://www.linuxparatodos.net/portal/layout/FactorEvolucion2008/forum/image_set/asc.gif" border="0"></a>&nbsp;<a href="index.php?forum=27&amp;order=1&amp;sort=2"><img src="http://www.linuxparatodos.net/portal/layout/FactorEvolucion2008/forum/image_set/desc.gif" border="0"></a></td>
-                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("replies")%><br><a href="index.php?forum=27&amp;order=0&amp;sort=3"><img src="http://www.linuxparatodos.net/portal/layout/FactorEvolucion2008/forum/image_set/asc.gif" border="0"></a>&nbsp;<a href="index.php?forum=27&amp;order=1&amp;sort=3"><img src="http://www.linuxparatodos.net/portal/layout/FactorEvolucion2008/forum/image_set/desc.gif" border="0"></a></td>
-                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("lastMsg")%><br><a href="index.php?forum=27&amp;order=0&amp;sort=5"><img src="http://www.linuxparatodos.net/portal/layout/FactorEvolucion2008/forum/image_set/asc.gif" border="0"></a>&nbsp;<a href="index.php?forum=27&amp;order=1&amp;sort=5"><img src="http://www.linuxparatodos.net/portal/layout/FactorEvolucion2008/forum/image_set/desc_on.gif" border="0"></a></td>
+                                                <td colspan="2" class="aligncenter pluginCellSubTitle">&nbsp;   &nbsp;<%=paramRequest.getLocaleString("thread")%><br><a href=""><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/asc.gif" border="0"></a>&nbsp;<a href=""><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/desc.gif" border="0"></a></td>
+                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("views")%><br><a href="index.php?forum=27&amp;order=0&amp;sort=2"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/asc.gif" border="0"></a>&nbsp;<a href="index.php?forum=27&amp;order=1&amp;sort=2"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/desc.gif" border="0"></a></td>
+                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("replies")%><br><a href="index.php?forum=27&amp;order=0&amp;sort=3"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/asc.gif" border="0"></a>&nbsp;<a href="index.php?forum=27&amp;order=1&amp;sort=3"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/desc.gif" border="0"></a></td>
+                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("lastMsg")%><br><a href="index.php?forum=27&amp;order=0&amp;sort=5"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/asc.gif" border="0"></a>&nbsp;<a href="index.php?forum=27&amp;order=1&amp;sort=5"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/desc_on.gif" border="0"></a></td>
                                             </tr>
                                             <%
                 String autor = "";
@@ -676,7 +702,7 @@
                         }
                                             %>
                                             <tr class="pluginRollOut" onMouseOver="className='pluginRollOver';" onMouseOut="className='pluginRollOut pluginLinks';">
-                                                <td width="25" class="aligncenter pluginCol"><img src="http://www.linuxparatodos.net/portal/layout/FactorEvolucion2008/forum/image_set/newposts.png" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("replyPost")%>" TITLE="P<%=paramRequest.getLocaleString("replyPost")%>">
+                                                <td width="25" class="aligncenter pluginCol"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/newposts.png" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("replyPost")%>" TITLE="P<%=paramRequest.getLocaleString("replyPost")%>">
                                                 <td width="65%" onMouseOver="this.style.cursor='pointer';" onclick="window.location.href='<%=url.toString()%>'">
                                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                         <tr class="pluginLinks">
