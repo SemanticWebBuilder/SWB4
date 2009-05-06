@@ -565,7 +565,7 @@
                         attchmentsSize++;
                     }
                     int noAttach = attchmentsSize;
-
+                    System.out.println("entra a Integersss");
                     int postSize = 0;
                     String postandAttach = "0/0";
                     Iterator<Post> itPost = post.listchildPosts();
@@ -749,6 +749,7 @@
 
 <%!
     private String getPostAndAttachments(Post post, String posattach) {
+        System.out.println("entra a getPostAndAttachments");
         String[] posattachX = posattach.split("/");
         int postCount = Integer.parseInt(posattachX[0]);
         int AttachCount = Integer.parseInt(posattachX[1]);
