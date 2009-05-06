@@ -112,9 +112,7 @@ public class WBALanguageReport extends GenericResource {
         PrintWriter out = response.getWriter();
         
         String webSiteId = request.getParameter("site");
-        System.out.println("websiteid= "+webSiteId);
         WebSite webSite = SWBContext.getWebSite(webSiteId);        
-        System.out.println("website= "+webSite.toString());
         
         out.println("<select id=\"wb_lang\" name=\"wb_lang\" size=\"1\">");
         Iterator<Language> itLanguages = webSite.listLanguages();
