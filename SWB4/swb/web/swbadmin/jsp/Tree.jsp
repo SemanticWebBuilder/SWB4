@@ -398,7 +398,7 @@
         
         //TODO:validar treeController
         //System.out.println("type:"+type);
-        if(type.equals("swb_ResourceType"))
+        if(cls.equals(ResourceType.sclass))
         {
             addResourceType(arr,obj,addChilds,addDummy);
             return;
@@ -432,19 +432,25 @@
         JSONArray menus=new JSONArray();
         jobj.putOpt("menus", menus);
 
-        Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
-        while(pit.hasNext())
+        //TODO:separar treeController
+        if(!cls.equals(WebSite.sclass))
         {
-            SemanticProperty prop=pit.next();
-            SemanticClass rcls=prop.getRangeClass();
-            menus.put(getMenuItem("Agregar "+rcls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+rcls.getDisplayName(lang))));
-            dropacc.put(rcls.getClassId());
-            Iterator<SemanticClass> it=rcls.listSubClasses();
-            while(it.hasNext())
+            //menus creacion
+            Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
+            while(pit.hasNext())
             {
-                SemanticClass scls=it.next();
-                menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+scls.getDisplayName(lang))));
-                dropacc.put(scls.getClassId());
+                SemanticProperty prop=pit.next();
+                SemanticClass rcls=prop.getRangeClass();
+                menus.put(getMenuItem("Agregar "+rcls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+rcls.getDisplayName(lang))));
+                dropacc.put(rcls.getClassId());
+                //add subclasess
+                //Iterator<SemanticClass> it=rcls.listSubClasses();
+                //while(it.hasNext())
+                //{
+                //)    SemanticClass scls=it.next();
+                //    menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+scls.getDisplayName(lang))));
+                //    dropacc.put(scls.getClassId());
+                //}
             }
         }
         
@@ -463,6 +469,7 @@
             }
         }
 
+        //menu remove
         menus.put(getMenuItem("Editar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
         if(!obj.instanceOf(Undeleteable.swb_Undeleteable) ||  (obj.instanceOf(Undeleteable.swb_Undeleteable) && obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false))
         {
@@ -470,6 +477,7 @@
         }
         menus.put(getMenuSeparator());
 
+        //menu favoritos
         User user=SWBPortal.getSessionUser();
         boolean isfavo=user.hasFavorite(obj);
         if(!isfavo)
@@ -479,6 +487,7 @@
         {
             menus.put(getMenuItem("Eliminar de Favoritos", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
         }
+        //menu recargar
         menus.put(getMenuItem("Recargar", "dijitEditorIcon dijitEditorIconCut", getReloadAction()));
 
         //eventos
