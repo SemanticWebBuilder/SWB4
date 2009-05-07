@@ -322,6 +322,74 @@ body {
 	border:#336699 solid 0.06em;
 }
 /*------------------- Comentarios  ----*/
+
+
+/*------------------- Comentarios semánticos  ----*/
+.cmnts {
+	padding:0px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	border: 1px solid #CCCCCC;
+}
+
+.cmntimg {
+	background-color:#FFFFFF;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	text-align:center;
+	vertical-align:middle;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #CCCCCC;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #CCCCCC;
+}
+
+.cmnt {
+	background-color:#FFFFFF;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	text-align:justify;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #CCCCCC;
+	padding-left: 8px;
+}
+
+.creacmnt {
+	background-color:#F8F8FA;
+	width:640px;	
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #CCCCCC;
+	padding: 8px;
+}
+
+.limcmnt {
+	border: 1px solid #CCCCCC;
+}
+
+.espcmnt {
+	background-color:#FFFFFF;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	text-align:center;
+	vertical-align:middle;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #CCCCCC;
+}
+/*------------------- Comentarios semánticos  ----*/
+
+
 /*------------------- PROMO        ----*/
 #swb-promo {
 	width: 21.3em;
