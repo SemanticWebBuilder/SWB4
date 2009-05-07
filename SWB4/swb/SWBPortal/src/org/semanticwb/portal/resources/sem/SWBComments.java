@@ -1,7 +1,6 @@
 package org.semanticwb.portal.resources.sem;
 
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -10,7 +9,6 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.*;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
@@ -224,8 +222,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
             ret.append("  <td class=\"cmntimg\" width=\"30\" height=\"30\">\n");
             ret.append("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/status_online.png\" alt=\"user comment\" />\n");
             ret.append("  </td>\n");
-            ret.append("  <td class=\"cmnt\">"+(ordinal--)+". <strong>"+(comment.getCreator().getFullName().equalsIgnoreCase("")?"Desconocido":comment.getCreator().getFullName())+" escribió</strong> el "+sdf.format(comment.getCreated())+"<br />"+comment.getComment()+"</td>\n");
-            //ret.append("  <td class=\"cmnt\">"+(ordinal++)+". <strong>"+"Un Usuario"+" escribió</strong> el "+sdf.format(comment.getCreated())+"<br />"+comment.getComment()+"</td>\n");
+            ret.append("  <td class=\"cmnt\">"+(ordinal++)+". <strong>"+(comment.getCreator().getFullName().equalsIgnoreCase("")?"Desconocido":comment.getCreator().getFullName())+" escribió</strong> el "+sdf.format(comment.getCreated())+"<br />"+comment.getComment()+"</td>\n");
             ret.append("</tr>\n");
         }
 
