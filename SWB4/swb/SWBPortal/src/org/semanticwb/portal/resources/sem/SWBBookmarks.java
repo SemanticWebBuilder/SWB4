@@ -126,9 +126,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             }
             if(request.getParameter("level") != null && request.getParameter("level").equals("admin")) {
                 response.setMode("MANAGE");
-                System.out.println("<<<Se va a amanage");
             } else {
-                System.out.println("<<<Se va view");
                 response.setMode(response.Mode_VIEW);
             }
         } else if (mode.equals("DELETE")) {
@@ -388,7 +386,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         //TODO: Cambiar por un FormManager
         sbf.append("<div class=\"swbform\">");
         sbf.append("<form id=\"" + getResourceBase().getId() + "/bookmark\" dojoType=\"dijit.form.Form\" ");
-        sbf.append("action=\"" + aUrl + "\" method=\"post\">");
+        sbf.append("action=\"" + aUrl + "\" method=\"post\" onsubmit=\"submitForm('"+ getResourceBase().getId() + "/bookmark" +"'); return false;\">");
         //sbf.append("<fieldset><b>"+ paramRequest.getLocaleString("add") + " " + BookmarkEntry.sclass.getDisplayName(lang) +"</b></fieldset>");
         sbf.append("<fieldset>");
         sbf.append("<table>");
