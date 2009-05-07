@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.platform.SemanticModel;
 
 
@@ -38,6 +39,9 @@ import org.semanticwb.platform.SemanticModel;
 public class SWBSparQL extends GenericResource {
 
     private static Logger log=SWBUtils.getLogger(SWBSparQL.class);
+
+    private org.semanticwb.util.Encryptor encryptor = null;
+
     static public final String NL = System.getProperty("line.separator") ;
 
     public static final String PRM_QUERY="query";
@@ -48,11 +52,18 @@ public class SWBSparQL extends GenericResource {
     public static final String OT_ONTOLOGY="ontology";
     public static final String OT_ONTRDFINF="ontrdfinf";
 
+    public static final String DPL_HEAD="dplheader";
+    public static final String DPL_ITERATOR="dpliterator";
+    public static final String DPL_FOOT="dplfoot";
+
     private SemanticModel model=null;
-    
+
     /** Creates a new instance of WBADBQuery */
     public SWBSparQL()
     {
+        //pedir llave en la administracion
+//        byte key[] = new java.math.BigInteger("05fe858d86df4b909a8c87cb8d9ad596", 16).toByteArray();
+//        encryptor = new org.semanticwb.util.Encryptor(key);
     }
 
     public void createSemanticModel()
@@ -82,7 +93,7 @@ public class SWBSparQL extends GenericResource {
         }
 
 
-        
+
     }
 
     public SemanticModel getSemanticModel()
@@ -104,6 +115,15 @@ public class SWBSparQL extends GenericResource {
         String query=getResourceBase().getAttribute(PRM_QUERY);
         String onttype=getResourceBase().getAttribute(PRM_ONTTYPE);
         String smodels=getResourceBase().getAttribute(PRM_MODELS);
+
+        String dplhead=getResourceBase().getAttribute(DPL_HEAD);
+        String dpliterator=getResourceBase().getAttribute(DPL_ITERATOR);
+        String dplfoot=getResourceBase().getAttribute(DPL_FOOT);
+
+        if(null==dplhead) dplhead="";
+        if(null==dplfoot) dplfoot="";
+        if(null==dpliterator) dpliterator="";
+
         ArrayList<String> amodels=new ArrayList();
         if(smodels!=null)
         {
@@ -132,6 +152,12 @@ public class SWBSparQL extends GenericResource {
                 if((x+1)<models.length)smodels+="|";
             }
             getResourceBase().setAttribute(PRM_MODELS, smodels);
+            dplhead=request.getParameter(DPL_HEAD);
+            getResourceBase().setAttribute(DPL_HEAD, dplhead);
+            dpliterator=request.getParameter(DPL_ITERATOR);
+            getResourceBase().setAttribute(DPL_ITERATOR, dpliterator);
+            dplfoot=request.getParameter(DPL_FOOT);
+            getResourceBase().setAttribute(DPL_FOOT, dplfoot);
             try
             {
                 System.out.println("oy:"+onttype+" sm:"+smodels+" q:"+query);
@@ -206,8 +232,48 @@ public class SWBSparQL extends GenericResource {
         out.print(query);
         out.println("</textarea>");
         out.println("<br/>");
+        out.println("</fieldset>");
+        out.println("<fieldset>");
+        out.println("<legend>Configuracion Despliegue</legend>");
+        out.println("<br/>");
+        out.println("Encabezado:");
+        out.println("<br/>");
+        out.print("<textarea name=\""+DPL_HEAD+"\" rows=10 cols=80>");
+        out.print(dplhead);
+        out.println("</textarea>");
+        out.println("<br/>");
+        out.println("Iteración:");
+        out.println("<br/>");
+        out.print("<textarea name=\""+DPL_ITERATOR+"\" rows=10 cols=80>");
+        out.print(dpliterator);
+        out.println("</textarea>");
+        out.println("<br/>");
+        out.println("Pie:");
+        out.println("<br/>");
+        out.print("<textarea name=\""+DPL_FOOT+"\" rows=10 cols=80>");
+        out.print(dplfoot);
+        out.println("</textarea>");
         //out.println("</td></tr>");
         //out.println("</table>");
+        out.println("<br/>");
+        out.println("<font style=\"color: #428AD4; font-family: Verdana; font-size: 10px;\">");
+		out.println("		<b>Tags:</b><BR>");
+        out.println("       &nbsp;&nbsp;{user.login}<BR>");
+        out.println("       &nbsp;&nbsp;{user.email}<BR>");
+        out.println("       &nbsp;&nbsp;{user.language}<BR>");
+        out.println("       &nbsp;&nbsp;{getEnv(\"XXXXX\")}<BR>");
+        out.println("       &nbsp;&nbsp;{request.getParameter(\"XXXXX\")}<BR>");
+        out.println("       &nbsp;&nbsp;{session.getAttribute(\"XXXXX\")}<BR>");
+        out.println("       &nbsp;&nbsp;{encode(\"XXXXX\")}<BR>");
+        out.println("       &nbsp;&nbsp;{encodeB64(\"XXXXX\")}<BR>");
+        out.println("       <BR>&nbsp;&nbsp;<b>Note:</b> XXXXX=Text<BR><BR>");
+        out.println("       <B>Samples:</B><BR>");
+        out.println("       &nbsp;&nbsp;");//Single Sign-ON with Basic Authorization<BR>
+        out.println("       &nbsp;&nbsp;Headers: Authorization=Basic {encodeB64(\"user:password\")}<BR>");
+		out.println("	</font>");
+
+
+
         out.println("</fieldset>");
         out.println("<fieldset>");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submit/btnSend\" >"+paramRequest.getLocaleString("send")+"</button>");
@@ -225,7 +291,7 @@ public class SWBSparQL extends GenericResource {
      * @param paramRequest
      * @throws AFException
      * @throws IOException
-     */    
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out=response.getWriter();
@@ -247,62 +313,64 @@ public class SWBSparQL extends GenericResource {
                     //log.debug("cols:"+col);
                     out.println("<thead>");
                     out.println("<tr>");
-                    
-                    Iterator<String> itcols=rs.getResultVars().iterator();
-                    while(itcols.hasNext())
-                    {
-                        out.println("<th>");
-                        out.println(itcols.next());
-                        out.println("</th>");
-                    }
+                    out.println(getResourceBase().getAttribute(DPL_HEAD));
+
                     out.println("</tr>");
                     out.println("</thead>");
                     out.println("<tbody>");
                     int ch=0;
-                    // The order of results is undefined. 
-                    for ( ; rs.hasNext() ; )
+                    int rows=0;
+                    // The order of results is undefined.
+                    if(DPL_ITERATOR!=null)
                     {
-                        QuerySolution rb = rs.nextSolution() ;
-                        if(ch==0)
+                        for ( ; rs.hasNext() ; )
                         {
-                            ch=1;
-                            out.println("<tr bgcolor=\"#EFEDEC\">");
-                        }
-                        else
-                        {
-                            ch=0;
-                            out.println("<tr>");
-                        }
-
-
-                        Iterator<String> it=rs.getResultVars().iterator();
-                        while(it.hasNext())
-                        {
-                            String name=it.next();
-                            RDFNode x = rb.get(name) ;
-                            String val=x.toString();
-                            if(x.isLiteral())
+                            QuerySolution rb = rs.nextSolution() ;
+                            if(ch==0)
                             {
-                                Node n=x.asNode();
-                                val=n.getLiteralLexicalForm();
-                                String l=n.getLiteralLanguage();
-                                if(l!=null && l.length()>0)val+="{@"+l+"}";
+                                ch=1;
+                                out.println("<tr bgcolor=\"#EFEDEC\">");
                             }
-                            out.println("<td >");
-                            out.println(x!=null?val:" - ");
-                            out.println("</td>");
+                            else
+                            {
+                                ch=0;
+                                out.println("<tr>");
+                            }
+
+                            out.println(replaceTags(getResourceBase().getAttribute(DPL_ITERATOR),request,paramRequest,rb));
+    //                        Iterator<String> it=rs.getResultVars().iterator();
+    //                        while(it.hasNext())
+    //                        {
+    //                            String name=it.next();
+    //                            RDFNode x = rb.get(name) ;
+    //                            String val=x.toString();
+    //                            if(x.isLiteral())
+    //                            {
+    //                                Node n=x.asNode();
+    //                                val=n.getLiteralLexicalForm();
+    //                                String l=n.getLiteralLanguage();
+    //                                if(l!=null && l.length()>0)val+="{@"+l+"}";
+    //                            }
+    //                            out.println("<td >");
+    //                            out.println(replaceTags(getResourceBase().getAttribute(DPL_FOOT),request,paramRequest,null)
+    //                            out.println(x!=null?val:" - ");
+    //                            out.println("</td>");
+    //                        }
+                            out.println("</tr>");
+                            rows++;
                         }
-                        out.println("</tr>");
-
-
                     }
+                    request.setAttribute("rowsnum", Integer.toString(rows));
+                    out.println("<tr>");
+                    out.println(replaceTags(getResourceBase().getAttribute(DPL_FOOT),request,paramRequest,null));
+                    out.println("</tr>");
                     out.println("</tbody>");
-                    
+
                 }
                 finally
                 {
-                    // QueryExecution objects should be closed to free any system resources 
-                    
+                    // QueryExecution objects should be closed to free any system resources
+
                     qexec.close() ;
                 }
 
@@ -323,6 +391,144 @@ public class SWBSparQL extends GenericResource {
         }
     }
 
-    
-    
+
+    public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest, QuerySolution qs)
+    {
+        //System.out.print("\nstr:"+str+"-->");
+        if(str==null || str.trim().length()==0)return null;
+        str=str.trim();
+        //TODO: codificar cualquier atributo o texto
+        Iterator it=SWBUtils.TEXT.findInterStr(str, "{encode(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{encode(\""+s+"\")}", encryptor.encode(replaceTags(s,request,paramRequest,qs)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{encodeB64(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{encodeB64(\""+s+"\")}", SFBase64.encodeString(replaceTags(s,request,paramRequest,qs)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{request.getParameter(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{request.getParameter(\""+s+"\")}", request.getParameter(replaceTags(s,request,paramRequest,qs)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{session.getAttribute(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{session.getAttribute(\""+s+"\")}", (String)request.getSession().getAttribute(replaceTags(s,request,paramRequest,qs)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{getEnv(\"", "\")}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{getEnv(\""+s+"\")}", SWBPlatform.getEnv(replaceTags(s,request,paramRequest,qs)));
+        }
+
+        it=SWBUtils.TEXT.findInterStr(str, "{?", "}");
+        while(it.hasNext())
+        {
+            String s=(String)it.next();
+            str=SWBUtils.TEXT.replaceAll(str, "{?"+s+"}", qs.get(s).toString());
+        }
+
+        str=SWBUtils.TEXT.replaceAll(str, "{rows.number}", (String)request.getAttribute("rowsnum"));
+        str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
+        //System.out.println(str);
+        return str;
+    }
+
+
+    public String cropStr(String initext, String endtext, String content)
+    {
+        if(initext==null && endtext==null)return content;
+        //ini
+        if(initext!=null)
+        {
+            StringTokenizer st = new StringTokenizer(initext, ";,");
+            while (st.hasMoreTokens())
+            {
+                String a1;
+                String a2;
+                String wp = st.nextToken();
+                int i=wp.indexOf("|");
+                if(i>-1)
+                {
+                    a1=wp.substring(0,i);
+                    a2=wp.substring(i+1);
+                }else
+                {
+                    a1=wp;
+                    a2="";
+                }
+                int ini=content.indexOf(a1);
+                if(ini>=0)
+                {
+                    content=a2+content.substring(ini+a1.length());
+                    break;
+                }
+            }
+        }
+        //end
+        if(endtext!=null)
+        {
+            StringTokenizer st = new StringTokenizer(endtext, ";,");
+            while (st.hasMoreTokens())
+            {
+                String a1;
+                String a2;
+                String wp = st.nextToken();
+                int i=wp.indexOf("|");
+                if(i>-1)
+                {
+                    a1=wp.substring(0,i);
+                    a2=wp.substring(i+1);
+                }else
+                {
+                    a1=wp;
+                    a2="";
+                }
+                int end=content.indexOf(a1);
+                if(end>=0)
+                {
+                    content=content.substring(0,end)+a2;
+                    break;
+                }
+            }
+        }
+        return content;
+    }
+
+    public String replaceStr(String replace, String content)
+    {
+        if(replace==null)return content;
+        StringTokenizer st = new StringTokenizer(replace, ";,");
+        while (st.hasMoreTokens())
+        {
+            String wp = st.nextToken();
+            int i=wp.indexOf("|");
+            if(i>-1)
+            {
+                String a1=wp.substring(0,i);
+                String a2=wp.substring(i+1);
+                content = content.replaceAll(a1, a2);
+            }else
+            {
+                content = content.replaceAll(wp, "");
+            }
+        }
+        return content;
+    }
+
 }
+
