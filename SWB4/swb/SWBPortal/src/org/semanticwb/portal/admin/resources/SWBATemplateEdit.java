@@ -257,7 +257,7 @@ public class SWBATemplateEdit extends GenericResource {
             urlb.setMode(SWBResourceURL.Mode_VIEW);
             urlb.setParameter("act", "");
             urlb.setParameter("suri", id);
-            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlb + "',this.domNode); return false;\">Cancelar</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"hideDialog(); return false;\">Cancelar</button>"); //submitUrl('" + urlb + "',this.domNode); hideDialog();
             out.println("</filedset>");
             out.println("</form>");
             out.println("</div>");
