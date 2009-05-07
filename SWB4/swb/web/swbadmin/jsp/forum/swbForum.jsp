@@ -66,7 +66,7 @@
                 <tr>
                     <td class="pluginBreadCrumbs alignleft" style="padding-left:5px;" nowrap></td>
                     <td width="90%" class="alignright pluginBreadCrumbs" nowrap><!-- start subscribe.thtml -->
-                        <a href="">Subscribirse</a>
+                        <a href=""><%=paramRequest.getLocaleString("track")%></a>
                     <!-- end subscribe.thtml --></td>
                     <td class="pluginBreadCrumbs" nowrap>&nbsp;|&nbsp;</td>
                     <td class="pluginBreadCrumbs" style="padding-right:5px;" nowrap><!-- start print.thtml -->
@@ -667,7 +667,7 @@
                                     <td class="pluginBreadCrumbs alignleft" style="padding-left:5px;" nowrap><div class="pagenav">Primero | Anterior | <b>1</b> <a href="">2</a> | <a href="">Siguiente</a> | <a href="">Ultimo</a></div></td>
                                     <td width="80%" class="pluginBreadCrumbs alignright" style="padding-right:5px;" nowrap>&nbsp;<!-- start subscribe_forum.thtml -->
 
-                                        <a href="">Track this forum</a>
+                                        <a href=""><%=paramRequest.getLocaleString("track")%></a>
                                         <!--   Alternative layout to use Images -->
 <!--
 <a href="http://www.linuxparatodos.net/portal/forum/index.php?op=subscribe&amp;forum=27"><img src="http://www.linuxparatodos.net/portal/layout/FactorEvolucion2008/forum/image_set/forumnotify_on.gif" border="0" align="absmiddle" alt="Track this forum" TITLE="Track this forum"></a>
