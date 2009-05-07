@@ -120,9 +120,32 @@ public class SWBSparQL extends GenericResource {
         String dpliterator=getResourceBase().getAttribute(DPL_ITERATOR);
         String dplfoot=getResourceBase().getAttribute(DPL_FOOT);
 
-        if(null==dplhead) dplhead="";
-        if(null==dplfoot) dplfoot="";
-        if(null==dpliterator) dpliterator="";
+        if(null==dplhead)
+        {
+            dplhead="<table style=\"font-family:verdana; font-size:10px;\">\n" +
+                    "<thead>\n" +
+                    "<tr style=\"background-color:blue; color:white;\"><th>Título</th><th>Descripción</th></tr>\n" +
+                    "</thead>\n";
+        }
+        if(null==dplfoot) 
+        {
+            dplfoot="<tfoot style=\"background-color:blue; color:white;\">\n"+
+                    "<tr><td>Registros encontrados: </td><td>{rows.number}</td></tr>\n"+
+                    "<tr><td>Tiempo de ejecución: </td><td>{exec.time} milisegundos</td></tr>\n"+
+                    "</tfoot>\n";
+        }
+        if(null==dpliterator) 
+        {
+            dpliterator="<tr style=\"color:blue;\"><td>{?title}</td><td>{?desc}</td></tr>"; 
+        }
+        if(null==query)
+        {
+            query   =   "PREFIX  swb:  <http://www.semanticwebbuilder.org/swb4/ontology#>\n"+
+                        "PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"+
+                        "PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n\n"+
+                        "SELECT ?title ?desc WHERE {?x swb:title ?title. ?x rdf:type swb:WebPage. ?x swb:description ?desc}";
+        }
+
 
         ArrayList<String> amodels=new ArrayList();
         if(smodels!=null)
@@ -174,11 +197,7 @@ public class SWBSparQL extends GenericResource {
         out.println("<input type=\"hidden\" name=\"act\" value=\"upd\">");
 
         out.println("<fieldset>");
-        //out.println("<table border=\"0\" cellspacing=\"2\" cellpadding=\"0\" >");
-        //out.println("<tr><td >");
         out.println("SPARQL Example:");
-        //out.println("</td></tr>");
-        //out.println("<tr><td >");
         out.println("<PRE >");
         out.println("PREFIX  swb:  &lt;http://www.semanticwebbuilder.org/swb4/ontology#&gt;");
         out.println("PREFIX  rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;");
@@ -186,8 +205,6 @@ public class SWBSparQL extends GenericResource {
         out.println("<br>");
         out.println("SELECT ?title ?desc WHERE {?x swb:title ?title. ?x rdf:type swb:WebPage. ?x swb:description ?desc}");
         out.println("</PRE>");
-        //out.println("</td></tr>");
-        //out.println("<tr><td class=\"tabla\">");
         out.println("Ontology Type:");
         out.println("<br/>");
         out.println("<select name='"+PRM_ONTTYPE+"'>");
@@ -215,19 +232,11 @@ public class SWBSparQL extends GenericResource {
             if(amodels.contains(key))sel="selected";
             out.println("<option value='"+key+"' "+sel+">"+key+"</option>");
         }
-        //out.println("<option value='remote'>Remote</option>");
         out.println("</select>");
         out.println("<br/>");
 
-        //out.println("Remote URL (SparQL EndPoint):");
-        //out.println("<br/>");
-        //out.println("<input type=>");
-
-
         out.println("SPARQL:");
         out.println("<br/>");
-        //out.println("</td></tr>");
-        //out.println("<tr><td>");
         out.print("<textarea name=\""+PRM_QUERY+"\" rows=10 cols=80>");
         out.print(query);
         out.println("</textarea>");
@@ -253,14 +262,15 @@ public class SWBSparQL extends GenericResource {
         out.print("<textarea name=\""+DPL_FOOT+"\" rows=10 cols=80>");
         out.print(dplfoot);
         out.println("</textarea>");
-        //out.println("</td></tr>");
-        //out.println("</table>");
         out.println("<br/>");
         out.println("<font style=\"color: #428AD4; font-family: Verdana; font-size: 10px;\">");
-		out.println("		<b>Tags:</b><BR>");
+		out.println("		<b>Tags:</b><br/>");
+        out.println("       &nbsp;&nbsp;{?XXXXXX} Para la parte iteración.<BR>");
         out.println("       &nbsp;&nbsp;{user.login}<BR>");
         out.println("       &nbsp;&nbsp;{user.email}<BR>");
         out.println("       &nbsp;&nbsp;{user.language}<BR>");
+        out.println("       &nbsp;&nbsp;{rows.number} Para la parte del pie.<BR>");
+        out.println("       &nbsp;&nbsp;{exec.time}  Para la parte del pie.<BR>");
         out.println("       &nbsp;&nbsp;{getEnv(\"XXXXX\")}<BR>");
         out.println("       &nbsp;&nbsp;{request.getParameter(\"XXXXX\")}<BR>");
         out.println("       &nbsp;&nbsp;{session.getAttribute(\"XXXXX\")}<BR>");
@@ -270,20 +280,15 @@ public class SWBSparQL extends GenericResource {
         out.println("       <B>Samples:</B><BR>");
         out.println("       &nbsp;&nbsp;");//Single Sign-ON with Basic Authorization<BR>
         out.println("       &nbsp;&nbsp;Headers: Authorization=Basic {encodeB64(\"user:password\")}<BR>");
+        out.println("       &nbsp;&nbsp;Iteración: {?title} {?description} <br/>");
 		out.println("	</font>");
-
-
-
         out.println("</fieldset>");
         out.println("<fieldset>");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submit/btnSend\" >"+paramRequest.getLocaleString("send")+"</button>");
-        //out.println("<input type=\"submit\" name=\"submit\" value=\""+paramRequest.getLocaleString("send")+"\">");
         out.println("</fieldset>");
         out.println("</form>");
         out.println("</div>");
     }
-
-
 
     /**
      * @param request
@@ -297,6 +302,7 @@ public class SWBSparQL extends GenericResource {
         PrintWriter out=response.getWriter();
         String queryString=getResourceBase().getAttribute("query");
         long time=System.currentTimeMillis();
+        long extime = 0;
         try
         {
             if(queryString!=null && queryString.length()>0)
@@ -310,62 +316,22 @@ public class SWBSparQL extends GenericResource {
                     // Assumption: it's a SELECT query.
                     ResultSet rs = qexec.execSelect() ;
                     int col = rs.getResultVars().size();
-                    //log.debug("cols:"+col);
-                    out.println("<thead>");
-                    out.println("<tr>");
-                    out.println(getResourceBase().getAttribute(DPL_HEAD));
-
-                    out.println("</tr>");
-                    out.println("</thead>");
-                    out.println("<tbody>");
-                    int ch=0;
+                    out.println(replaceTags(getResourceBase().getAttribute(DPL_HEAD),request,paramRequest,null));
                     int rows=0;
                     // The order of results is undefined.
-                    if(DPL_ITERATOR!=null)
+                    if(DPL_ITERATOR!=null&&DPL_ITERATOR.trim().length()>0)
                     {
                         for ( ; rs.hasNext() ; )
                         {
                             QuerySolution rb = rs.nextSolution() ;
-                            if(ch==0)
-                            {
-                                ch=1;
-                                out.println("<tr bgcolor=\"#EFEDEC\">");
-                            }
-                            else
-                            {
-                                ch=0;
-                                out.println("<tr>");
-                            }
-
                             out.println(replaceTags(getResourceBase().getAttribute(DPL_ITERATOR),request,paramRequest,rb));
-    //                        Iterator<String> it=rs.getResultVars().iterator();
-    //                        while(it.hasNext())
-    //                        {
-    //                            String name=it.next();
-    //                            RDFNode x = rb.get(name) ;
-    //                            String val=x.toString();
-    //                            if(x.isLiteral())
-    //                            {
-    //                                Node n=x.asNode();
-    //                                val=n.getLiteralLexicalForm();
-    //                                String l=n.getLiteralLanguage();
-    //                                if(l!=null && l.length()>0)val+="{@"+l+"}";
-    //                            }
-    //                            out.println("<td >");
-    //                            out.println(replaceTags(getResourceBase().getAttribute(DPL_FOOT),request,paramRequest,null)
-    //                            out.println(x!=null?val:" - ");
-    //                            out.println("</td>");
-    //                        }
-                            out.println("</tr>");
                             rows++;
                         }
                     }
+                    extime = System.currentTimeMillis()-time;
+                    request.setAttribute("extime", Long.toString(extime));
                     request.setAttribute("rowsnum", Integer.toString(rows));
-                    out.println("<tr>");
                     out.println(replaceTags(getResourceBase().getAttribute(DPL_FOOT),request,paramRequest,null));
-                    out.println("</tr>");
-                    out.println("</tbody>");
-
                 }
                 finally
                 {
@@ -373,12 +339,6 @@ public class SWBSparQL extends GenericResource {
 
                     qexec.close() ;
                 }
-
-                out.println("</table>");
-                out.println("</fieldset>");
-                out.println("<fieldset>");
-                out.println("<p aling=\"center\">Execution Time:"+(System.currentTimeMillis()-time)+"</p>");
-                out.println("</fieldset>");
             }
         }catch(Exception e)
         {
@@ -390,7 +350,6 @@ public class SWBSparQL extends GenericResource {
             out.println("</fieldset>");
         }
     }
-
 
     public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest, QuerySolution qs)
     {
@@ -440,7 +399,8 @@ public class SWBSparQL extends GenericResource {
             str=SWBUtils.TEXT.replaceAll(str, "{?"+s+"}", qs.get(s).toString());
         }
 
-        str=SWBUtils.TEXT.replaceAll(str, "{rows.number}", (String)request.getAttribute("rowsnum"));
+        str=SWBUtils.TEXT.replaceAll(str, "{rows.number}", request.getAttribute("rowsnum")!=null?(String)request.getAttribute("rowsnum"):"N/A");
+        str=SWBUtils.TEXT.replaceAll(str, "{exec.time}", (String)request.getAttribute("extime"));
         str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
         str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
         str=SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
