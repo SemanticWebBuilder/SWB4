@@ -88,7 +88,7 @@ public class PFlowManager
     public PFlow[] getFlows(WebPage page)
     {
         HashSet<PFlow> flows = new HashSet<PFlow>();
-        GenericIterator<PFlowRef> refs = page.listPFlowRefs();
+        GenericIterator<PFlowRef> refs = page.listInheritPFlowRefs();
         while (refs.hasNext())
         {
             PFlowRef ref = refs.next();
@@ -776,7 +776,7 @@ public class PFlowManager
             if (resourceable instanceof WebPage)
             {
                 WebPage page = (WebPage) resourceable;
-                Iterator<PFlowRef> refs = page.listPFlowRefs();
+                Iterator<PFlowRef> refs = page.listInheritPFlowRefs();
                 while (refs.hasNext())
                 {
                     PFlowRef ref = refs.next();
