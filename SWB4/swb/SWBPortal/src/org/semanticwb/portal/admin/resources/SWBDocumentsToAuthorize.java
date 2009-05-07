@@ -4,7 +4,6 @@
  */
 package org.semanticwb.portal.admin.resources;
 
-import com.sun.org.apache.regexp.internal.REUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
