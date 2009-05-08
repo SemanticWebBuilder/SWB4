@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dir="http://www.semanticwebbuilder.org/portal/resources/Directory#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.semanticwebbuilder.org/portal/resources/Directory">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <owl:ObjectProperty rdf:ID="classBase">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_classBase">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain>
+      <swb:SemanticResource rdf:ID="Directory">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="range">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_range">
+        <swbxf:propSelectValues xml:lang="en">Global</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="es">Global</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="en">Model</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="es">Modelo</swbxf:propSelectValues>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Directory"/>
+  </owl:DatatypeProperty>
+  <rdf:Description rdf:ID="dp_class">
+    <rdfs:label xml:lang="es">Clase</rdfs:label>
+    <rdfs:label xml:lang="en">Class</rdfs:label>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
+  </rdf:Description>
+  <swb:CodePackage rdf:ID="pgk">
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >dir</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem.directory</swb:package>
+  </swb:CodePackage>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
