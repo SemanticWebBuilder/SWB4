@@ -99,7 +99,6 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
             ret += "<iframe id='target_upload_"+name+"' name='target_upload_"+name+"' src='' style='display: none'></iframe><br/>" +  //
                     attchMsg+
                     "<input id=\""+name+"\" name=\""+name+"\" type=\"file\"> <br/>" +
-                    "<input type=\"hidden\" name=\"uniqueFileIdentifier\" value=\"1234\"/>\n" +
                     "<a href=\"#\" onClick=\"javascript:if(uploadjs_"+name+"(document.forms[0])) {return startUploadMonitoring('"+name+"');}\">Subir</a>\n" + 
                     "<div id=\"uploadStatus_"+name+"\" style=\"width:230px\">\n" +
                     "   <div id=\"uploadProgressBar_"+name+"\" style=\"width:200px; height: 2px; border: 0px solid #BBB; text-align: center; float: left;\">\n" +
