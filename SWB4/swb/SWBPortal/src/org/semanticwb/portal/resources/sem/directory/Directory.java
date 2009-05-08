@@ -120,7 +120,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
             semObject.remove();
         }else if(action.equals(response.Action_ADD)){
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("objUri"));
-            SWBFormMgr mgr = new SWBFormMgr(semObject.getSemanticClass(), response.getTopic().getSemanticObject(), null);
+            SWBFormMgr mgr = new SWBFormMgr(semObject.getSemanticClass(), response.getTopic().getWebSite().getSemanticObject(), null);
             mgr.processForm(request);
         }
         response.setMode(response.Mode_VIEW);
