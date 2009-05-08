@@ -92,7 +92,10 @@ public class PFlowManager
         while (refs.hasNext())
         {
             PFlowRef ref = refs.next();
-            flows.add(ref.getPflow());
+            if(ref.isActive())
+            {
+                flows.add(ref.getPflow());
+            }
         }
         return flows.toArray(new PFlow[flows.size()]);
     }
@@ -130,7 +133,7 @@ public class PFlowManager
             {
                 PFlowInstance instance = instances.next();
                 Resource resource = instance.getPfinstResource();
-                if(isInFlow(resource))
+                if (isInFlow(resource))
                 {
                     getContentsAtFlowAll.add(resource);
                 }
@@ -168,7 +171,7 @@ public class PFlowManager
         {
             PFlowInstance instance = instances.next();
             Resource resource = instance.getPfinstResource();
-            if(isInFlow(resource))
+            if (isInFlow(resource))
             {
                 getContentsAtFlow.add(resource);
             }
@@ -221,7 +224,7 @@ public class PFlowManager
             Resource[] resources = getContentsAtFlowAll(site);
             for (Resource resource : resources)
             {
-                if(isInFlow(resource))
+                if (isInFlow(resource))
                 {
                     getContentsAtFlow.add(resource);
                 }
@@ -547,7 +550,6 @@ public class PFlowManager
             //throw new AFException("The resource "+occurrence.getId()+" is not in flow","RejectOccurrence");
         }
     }
-    
 
     private void initContent(Resource resource, PFlow pflow, String message)
     {
@@ -758,14 +760,13 @@ public class PFlowManager
         }
         else
         {
-            if (!(resource.getPflowInstance().getStatus()==3 || resource.getPflowInstance().getStatus()==2 || resource.getPflowInstance().getStep()==null))
+            if (!(resource.getPflowInstance().getStatus() == 3 || resource.getPflowInstance().getStatus() == 2 || resource.getPflowInstance().getStep() == null))
             {
                 return true;
             }
         }
         return false;
     }
-    
 
     public boolean needAnAuthorization(Resource resource)
     {
@@ -780,34 +781,37 @@ public class PFlowManager
                 while (refs.hasNext())
                 {
                     PFlowRef ref = refs.next();
-                    PFlow pflow = ref.getPflow();
-                    if (pflow != null)
+                    if (ref.isActive())
                     {
-                        String typeresource = resource.getResourceType().getId();
-                        Document docflow = SWBUtils.XML.xmlToDom(pflow.getXml());
-                        Element workflow = (Element) docflow.getElementsByTagName("workflow").item(0);
-                        NodeList resourceTypes = workflow.getElementsByTagName("resourceType");
-                        for (int ires = 0; ires < resourceTypes.getLength(); ires++)
+                        PFlow pflow = ref.getPflow();
+                        if (pflow != null)
                         {
-                            Element eres = (Element) resourceTypes.item(ires);
-                            String iresw = eres.getAttribute("id");
-
-                            if (iresw.equals(typeresource))
+                            String typeresource = resource.getResourceType().getId();
+                            Document docflow = SWBUtils.XML.xmlToDom(pflow.getXml());
+                            Element workflow = (Element) docflow.getElementsByTagName("workflow").item(0);
+                            NodeList resourceTypes = workflow.getElementsByTagName("resourceType");
+                            for (int ires = 0; ires < resourceTypes.getLength(); ires++)
                             {
-                                if (resource.getPflowInstance() == null)
+                                Element eres = (Element) resourceTypes.item(ires);
+                                String iresw = eres.getAttribute("id");
+
+                                if (iresw.equals(typeresource))
                                 {
-                                    return true;
-                                }
-                                else
-                                {
-                                    PFlowInstance instance = resource.getPflowInstance();
-                                    switch (instance.getStatus())
+                                    if (resource.getPflowInstance() == null)
                                     {
-                                        case -1:
-                                        case 0: //no enviado
-                                            return true;
-                                        case 3: //rechazado
-                                            return true;
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        PFlowInstance instance = resource.getPflowInstance();
+                                        switch (instance.getStatus())
+                                        {
+                                            case -1:
+                                            case 0: //no enviado
+                                                return true;
+                                            case 3: //rechazado
+                                                return true;
+                                        }
                                     }
                                 }
                             }
@@ -825,14 +829,14 @@ public class PFlowManager
         Locale locale = Locale.getDefault();
         try
         {
-            ResourceBundle bundle =null;
+            ResourceBundle bundle = null;
             try
             {
-                bundle=ResourceBundle.getBundle("/org/semanticwb/portal/PFlowManager", locale);
+                bundle = ResourceBundle.getBundle("/org/semanticwb/portal/PFlowManager", locale);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                bundle=ResourceBundle.getBundle("/org/semanticwb/portal/PFlowManager");
+                bundle = ResourceBundle.getBundle("/org/semanticwb/portal/PFlowManager");
             }
             if (resource.getPflowInstance() != null)
             {
