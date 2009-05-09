@@ -20,7 +20,7 @@
 <link href="/swb/swbadmin/css/directory.css" rel="stylesheet" type="text/css" />
 
 <%!
-private final int I_PAGE_SIZE = 10;
+private final int I_PAGE_SIZE = 20;
 private final int I_INIT_PAGE = 1;
 %>
 
@@ -68,14 +68,14 @@ if (sobj != null) {
             }
             String strResTypes[] = getCatSortArray(sobj, actualPage);
 
-            String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":");
+            String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
             int iIniPage = Integer.parseInt(pageParams[0]);
             int iFinPage = Integer.parseInt(pageParams[1]);
             int iTotPage = Integer.parseInt(pageParams[2]);
             if (iFinPage == strResTypes.length) {
                 iFinPage = iFinPage - 1;
             }
-
+           
             if (actualPage > 1) {
                  int gotop = (actualPage - 1);
                  urlPag.setParameter("actualPage", ""+gotop);
@@ -102,11 +102,11 @@ if (sobj != null) {
 
              for (int i = iIniPage; i < iFinPage; i++)
              {
-                String[] strFields = strResTypes[i].toString().split(":");
+                String[] strFields = strResTypes[i].toString().split(":swbp4g1:");
                 String title = strFields[0];
                 String description = strFields[1];
                 String uri = strFields[2];
-                url.setParameter("objInstUri", uri.replace("|", ":"));
+                url.setParameter("objInstUri", uri);
                             %>
                             <tr class="K2BWorkWithGridOdd"><td valign=top align="CENTER">
                                 <%url.setMode(url.Mode_VIEW+"2");%>
@@ -161,7 +161,7 @@ private String[] getCatSortArray(SemanticObject sobj, int actualPage) {
         int cont=0;
         while(itSObjs.hasNext()){
             SemanticObject semObj=(SemanticObject)itSObjs.next();
-            String value=semObj.getProperty(Descriptiveable.swb_title)+":"+semObj.getProperty(Descriptiveable.swb_description)+":"+semObj.getURI().replace(":", "|");
+            String value=semObj.getProperty(Descriptiveable.swb_title)+":swbp4g1:"+semObj.getProperty(Descriptiveable.swb_description)+":swbp4g1:"+semObj.getURI();
             strArray[cont]=value;
             cont++;
         }
@@ -193,6 +193,6 @@ private String[] getCatSortArray(SemanticObject sobj, int actualPage) {
         if (iSize < I_PAGE_SIZE * iPage) {
             iFinPage = iSize;
         }
-        return iIniPage + ":" + iFinPage + ":" + iTotPage;
+        return iIniPage + ":swbp4g1:" + iFinPage + ":swbp4g1:" + iTotPage;
     }
 %>
