@@ -78,7 +78,7 @@ public class CodeGeneratorResources {
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
             File dir = new File(path + "../../src");
 
-            String models[] = {"/org/semanticwb/portal/resources/sem/forum/SWBForum.owl"};
+            String models[] = {"/org/semanticwb/portal/resources/sem/directory/Directory.owl"};
 
             Iterator<SemanticModel> it = getModels(models, dir);
             while (it.hasNext()) {
