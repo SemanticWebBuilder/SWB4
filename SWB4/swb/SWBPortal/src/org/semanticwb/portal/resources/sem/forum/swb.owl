@@ -1,0 +1,2704 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:swbl="http://www.semanticwebbuilder.org/swb4/language/ontology#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.semanticwebbuilder.org/swb4/ontology">
+  <owl:Ontology rdf:about="">
+    <rdfs:comment>SemanticWebBuilder Ontology</rdfs:comment>
+    <rdfs:comment>SemanticWebBuilder Default Ontology</rdfs:comment>
+    <rdfs:label>SemanticWebBuilder Default Ontology</rdfs:label>
+  </owl:Ontology>
+  <rdfs:Class rdf:ID="Model">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdfs:Class>
+  <rdfs:Class rdf:ID="FormElement">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdfs:Class>
+  <rdfs:Class rdf:ID="Class">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdfs:Class>
+  <rdfs:Class rdf:ID="SemanticResource">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdfs:Class>
+  <rdfs:Class rdf:ID="Property">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdfs:Class>
+  <rdfs:Class rdf:ID="Interface">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdfs:Class>
+  <rdfs:Class rdf:ID="ViewReferenceProperty">
+    <rdfs:subClassOf rdf:resource="#Property"/>
+  </rdfs:Class>
+  <owl:Class rdf:ID="SWBFormElement"/>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#PasswordUpdate">
+    <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <rdf:type rdf:resource="#FormElement"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty">
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Sortable">
+        <rdfs:subClassOf>
+          <owl:Class rdf:ID="SWBInterface"/>
+        </rdfs:subClassOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="SWBClass">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Reference"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Text">
+    <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <rdf:type rdf:resource="#FormElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="TemplateGroup">
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Descriptiveable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Traceable"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="#Class"/>
+    <rdfs:label xml:lang="es">Grupo de Plantillas</rdfs:label>
+    <rdfs:label xml:lang="en">Template Group</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Filterable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode">
+    <rdfs:subClassOf rdf:resource="#Filterable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Iconable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Sortable"/>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Traceable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="UserGroup">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Grupo de Usuarios</rdfs:label>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_UserGroup">
+        <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >2</swbxf:dropMatchLevel>
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:dragSupport>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Undeleteable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="en">User Group</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdf:type rdf:resource="#Class"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="#Filterable"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="WebPage"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Iconable"/>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Roleable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ResourceSubType">
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <rdfs:subClassOf rdf:resource="#Filterable"/>
+    <rdfs:label xml:lang="en">Resource Subtype</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:label xml:lang="es">Subtipo de Recurso</rdfs:label>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Permission">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Priorityable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="VersionInfo">
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PFlow">
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <rdf:type rdf:resource="#Class"/>
+    <rdfs:label xml:lang="es">Flujo de Publicación</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Activeable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="XMLable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="en">Publish Flow</rdfs:label>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Trashable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Versionable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectAction">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#WebPage"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Iconable"/>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PFlowable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Localeable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PFlowInstance">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#PFlowable"/>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Calendar">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="en">Calendar</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Activeable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#XMLable"/>
+    <rdfs:comment>Object Calendar</rdfs:comment>
+    <rdfs:label xml:lang="es">Calendario</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Deviceable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="AdminFilter">
+    <rdfs:label xml:lang="en">Admin Filter</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="#XMLable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:label xml:lang="es">Filtro de Administración</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Undeleteable"/>
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#CodeEditor">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="#FormElement"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree">
+    <rdfs:subClassOf>
+      <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne">
+        <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:FormElement>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="#FormElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ResourceFilter">
+    <rdfs:label xml:lang="en">resource Filter</rdfs:label>
+    <rdfs:label xml:lang="es">Filtro de Recurso</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <rdfs:subClassOf rdf:resource="#XMLable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="UserGroupable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Reference">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Activeable"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Validable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="XMLConfable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Role">
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdf:type rdf:resource="#Class"/>
+    <rdfs:subClassOf rdf:resource="#Undeleteable"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_Role">
+        <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >2</swbxf:dropMatchLevel>
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:dragSupport>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:label xml:lang="en">Role</rdfs:label>
+    <rdfs:label xml:lang="es">Rol</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="PFlowRefable">
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Referensable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SWBSemanticResource"/>
+  <owl:Class rdf:about="#Activeable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Viewable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Calendarable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="CodePackage">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="User">
+    <rdfs:subClassOf rdf:resource="#Roleable"/>
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <rdfs:subClassOf rdf:resource="#Activeable"/>
+    <rdfs:label xml:lang="en">User</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#UserGroupable"/>
+    <rdfs:label xml:lang="es">Usuario</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#PropertyGroup">
+    <rdfs:subClassOf rdf:resource="#Sortable"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdf:type rdf:resource="#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Inheritable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea">
+    <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <rdf:type rdf:resource="#FormElement"/>
+  </owl:Class>
+  <owl:Class rdf:about="#WebPage">
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="RoleRefable">
+        <rdfs:subClassOf rdf:resource="#Referensable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Hiddenable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Undeleteable"/>
+    <rdfs:subClassOf rdf:resource="#Trashable"/>
+    <rdfs:subClassOf rdf:resource="#PFlowRefable"/>
+    <rdfs:subClassOf rdf:resource="#Activeable"/>
+    <rdfs:subClassOf rdf:resource="#Calendarable"/>
+    <rdf:type rdf:resource="#Class"/>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage">
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:dragSupport>
+        <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >2</swbxf:dropMatchLevel>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:autogenId>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="TemplateRefable">
+        <rdfs:subClassOf rdf:resource="#Referensable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="RuleRefable">
+        <rdfs:subClassOf rdf:resource="#Referensable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Viewable"/>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Rankable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Indexable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <swb:classID rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >WebPage</swb:classID>
+    <rdfs:label xml:lang="en">Web Page</rdfs:label>
+    <rdfs:label xml:lang="es">Página Web</rdfs:label>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Resourceable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="UserGroupRefable">
+        <rdfs:subClassOf rdf:resource="#Referensable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Filterable"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="displayProperty">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#heClass">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hClass</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#Class"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode"/>
+    <rdfs:comment>Tipo de clase hija del nodo</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="PSTType">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >type</swb:propertyCodeName>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasPTSubType"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#ResourceSubType"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="ResourceType">
+        <rdfs:subClassOf rdf:resource="#Traceable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <rdfs:label xml:lang="es">Tipo de Recurso</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:label xml:lang="en">Resource Type</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="#Filterable"/>
+      </swb:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="camp">
+    <rdfs:domain>
+      <swb:Interface rdf:ID="Campable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:domain>
+    <rdfs:range>
+      <swb:Class rdf:ID="Camp">
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <rdfs:label xml:lang="es">Campaña</rdfs:label>
+        <rdfs:label xml:lang="en">Campain</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Activeable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:subClassOf rdf:resource="#Calendarable"/>
+        <rdfs:subClassOf>
+          <swb:Interface rdf:ID="Ruleable">
+            <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Interface>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="#Roleable"/>
+        <rdfs:subClassOf rdf:resource="#Trashable"/>
+        <rdfs:subClassOf rdf:resource="#Filterable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="#Traceable"/>
+      </swb:Class>
+    </rdfs:range>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_camp">
+        <swbxf:formElement>
+          <swbxf:SelectOne rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank">
+            <swbxf:so_blankSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:so_blankSuport>
+            <swbxf:so_globalScope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:so_globalScope>
+          </swbxf:SelectOne>
+        </swbxf:formElement>
+        <rdfs:label xml:lang="es">Campaña</rdfs:label>
+        <rdfs:label xml:lang="en">Camp</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasUserGroup">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasGroupedUser"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#UserGroup"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_userGroup">
+        <rdfs:label xml:lang="es">Grupo(s)</rdfs:label>
+        <rdfs:label xml:lang="en">Group(s)</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#UserGroupable"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="userRepository">
+    <rdfs:range>
+      <swb:Model rdf:ID="UserRepository">
+        <rdfs:subClassOf rdf:resource="#Undeleteable"/>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Roles">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >25</swb:index>
+            <swb:title xml:lang="en">Roles</swb:title>
+            <swb:title xml:lang="es">Roles</swb:title>
+            <swbxf:heClass rdf:resource="#Role"/>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconRoles</swb:iconClass>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <swb:hasClass>
+          <swb:Class rdf:ID="UserFavorite">
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+            <rdfs:subClassOf rdf:resource="#SWBClass"/>
+            <rdfs:label xml:lang="es">Favoritos</rdfs:label>
+            <rdfs:label xml:lang="en">Favorites</rdfs:label>
+          </swb:Class>
+        </swb:hasClass>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:subClassOf rdf:resource="#Traceable"/>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_UserGroups">
+            <swbxf:heClass rdf:resource="#UserGroup"/>
+            <swb:title xml:lang="en">User Groups</swb:title>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconUserGroups</swb:iconClass>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >27</swb:index>
+            <swb:title xml:lang="es">Grupos de Usuarios</swb:title>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <rdfs:subClassOf>
+          <swb:Class rdf:ID="SWBModel">
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </rdfs:subClassOf>
+        <swb:hasClass rdf:resource="#Role"/>
+        <swb:hasClass rdf:resource="#UserGroup"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <swb:hasClass rdf:resource="#User"/>
+        <rdfs:subClassOf rdf:resource="#Filterable"/>
+      </swb:Model>
+    </rdfs:range>
+    <rdfs:domain>
+      <swb:Model rdf:ID="WebSite">
+        <swb:hasClass rdf:resource="#PFlow"/>
+        <swb:hasClass>
+          <swb:Class rdf:ID="Resource">
+            <rdfs:subClassOf>
+              <swb:Interface rdf:ID="Hitable">
+                <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Interface>
+            </rdfs:subClassOf>
+            <swb:classID rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Resource</swb:classID>
+            <rdfs:subClassOf rdf:resource="#UserGroupRefable"/>
+            <rdfs:subClassOf rdf:resource="#Trashable"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+            <rdfs:subClassOf rdf:resource="#Viewable"/>
+            <rdfs:subClassOf rdf:resource="#Calendarable"/>
+            <rdfs:subClassOf rdf:resource="#RoleRefable"/>
+            <swb:displayObject>
+              <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_Resource">
+                <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                >3</swbxf:dropMatchLevel>
+                <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</swbxf:dragSupport>
+                <swbxf:doDispatcher rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >/swbadmin/jsp/do_Resource.jsp</swbxf:doDispatcher>
+              </swbxf:DisplayObject>
+            </swb:displayObject>
+            <rdfs:subClassOf rdf:resource="#Indexable"/>
+            <rdfs:subClassOf rdf:resource="#XMLConfable"/>
+            <rdfs:subClassOf rdf:resource="#XMLable"/>
+            <rdfs:subClassOf rdf:resource="#Priorityable"/>
+            <rdfs:subClassOf rdf:resource="#Traceable"/>
+            <rdfs:label xml:lang="es">Recurso</rdfs:label>
+            <rdfs:subClassOf rdf:resource="#RuleRefable"/>
+            <rdfs:subClassOf rdf:resource="#SWBClass"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+            <rdfs:subClassOf rdf:resource="#Localeable"/>
+            <rdfs:subClassOf rdf:resource="#Campable"/>
+            <rdfs:subClassOf rdf:resource="#Activeable"/>
+            <rdfs:label xml:lang="en">Resource</rdfs:label>
+          </swb:Class>
+        </swb:hasClass>
+        <swb:hasClass>
+          <swb:Class rdf:ID="Device">
+            <rdfs:subClassOf rdf:resource="#SWBClass"/>
+            <rdfs:label xml:lang="en">Device</rdfs:label>
+            <swb:displayObject>
+              <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_Device">
+                <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                >2</swbxf:dropMatchLevel>
+                <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</swbxf:dragSupport>
+              </swbxf:DisplayObject>
+            </swb:displayObject>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="#Traceable"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+            <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+            <rdfs:label xml:lang="es">Dispositivo</rdfs:label>
+          </swb:Class>
+        </swb:hasClass>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconResources</swb:iconClass>
+            <swbxf:hePropertyFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >resourceMode=1</swbxf:hePropertyFilter>
+            <swbxf:heClass rdf:resource="#ResourceType"/>
+            <swb:title xml:lang="en">Content Compinents</swb:title>
+            <swb:title xml:lang="es">Componentes de Contenido</swb:title>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >77</swb:index>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:hasClass>
+          <swb:Class rdf:ID="TemplateRef">
+            <rdfs:subClassOf rdf:resource="#Priorityable"/>
+            <rdfs:subClassOf rdf:resource="#Reference"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="#Inheritable"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </swb:hasClass>
+        <swb:hasClass rdf:resource="#TemplateGroup"/>
+        <swb:hasClass>
+          <swb:Class rdf:ID="RuleRef">
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="#Reference"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </swb:hasClass>
+        <rdfs:subClassOf rdf:resource="#Trashable"/>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >10</swb:index>
+            <swbxf:heClass rdf:resource="#TemplateGroup"/>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconTemplates</swb:iconClass>
+            <swb:title xml:lang="en">Templates</swb:title>
+            <swb:title xml:lang="es">Plantillas</swb:title>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Rules">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >20</swb:index>
+            <swb:title xml:lang="en">Rules</swb:title>
+            <swb:title xml:lang="es">Reglas</swb:title>
+            <swbxf:heClass>
+              <swb:Class rdf:ID="Rule">
+                <rdfs:label xml:lang="es">Regla</rdfs:label>
+                <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+                <rdfs:subClassOf rdf:resource="#SWBClass"/>
+                <rdfs:subClassOf rdf:resource="#XMLable"/>
+                <rdfs:subClassOf rdf:resource="#Traceable"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</swb:autogenId>
+                <rdfs:subClassOf rdf:resource="#Versionable"/>
+                <rdfs:label xml:lang="en">Rule</rdfs:label>
+                <rdfs:subClassOf rdf:resource="#Calendarable"/>
+              </swb:Class>
+            </swbxf:heClass>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconRules</swb:iconClass>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:hasClass>
+          <swb:Class rdf:ID="Template">
+            <swb:classID rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Template</swb:classID>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <swb:displayObject>
+              <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_Template">
+                <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                >2</swbxf:dropMatchLevel>
+                <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</swbxf:dragSupport>
+              </swbxf:DisplayObject>
+            </swb:displayObject>
+            <rdfs:subClassOf rdf:resource="#UserGroupRefable"/>
+            <rdfs:label xml:lang="es">Plantilla</rdfs:label>
+            <rdfs:label xml:lang="en">Template</rdfs:label>
+            <rdfs:subClassOf rdf:resource="#RuleRefable"/>
+            <rdfs:subClassOf rdf:resource="#Deviceable"/>
+            <rdfs:subClassOf rdf:resource="#RoleRefable"/>
+            <rdfs:subClassOf rdf:resource="#Activeable"/>
+            <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+            <rdfs:subClassOf rdf:resource="#Trashable"/>
+            <rdfs:subClassOf rdf:resource="#Traceable"/>
+            <rdfs:subClassOf rdf:resource="#Versionable"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+            <rdfs:subClassOf rdf:resource="#SWBClass"/>
+            <rdfs:subClassOf rdf:resource="#Localeable"/>
+            <rdfs:subClassOf rdf:resource="#Calendarable"/>
+          </swb:Class>
+        </swb:hasClass>
+        <swb:hasClass rdf:resource="#WebPage"/>
+        <swb:hasClass rdf:resource="#Permission"/>
+        <swb:hasClass rdf:resource="#Camp"/>
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <swb:hasClass rdf:resource="#ResourceFilter"/>
+        <swb:hasClass rdf:resource="#ResourceSubType"/>
+        <rdfs:subClassOf rdf:resource="#Activeable"/>
+        <rdfs:subClassOf rdf:resource="#SWBModel"/>
+        <swb:hasClass rdf:resource="#Calendar"/>
+        <swb:hasClass rdf:resource="#Rule"/>
+        <rdfs:subClassOf rdf:resource="#Localeable"/>
+        <swb:hasClass rdf:resource="#ResourceType"/>
+        <swb:hasClass>
+          <swb:Class rdf:ID="Language">
+            <rdfs:label xml:lang="en">Language</rdfs:label>
+            <rdfs:label xml:lang="es">Lenguaje</rdfs:label>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+            <rdfs:subClassOf rdf:resource="#SWBClass"/>
+            <rdfs:subClassOf rdf:resource="#Traceable"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </swb:hasClass>
+        <swb:hasClass>
+          <swb:Class rdf:ID="IPFilter">
+            <rdfs:label xml:lang="en">IP Filters</rdfs:label>
+            <rdfs:label xml:lang="es">Filtros de IP</rdfs:label>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="#SWBClass"/>
+            <rdfs:subClassOf rdf:resource="#Activeable"/>
+            <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+            <rdfs:subClassOf rdf:resource="#Traceable"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </swb:hasClass>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >50</swb:index>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconDevices</swb:iconClass>
+            <swb:title xml:lang="es">Dispositivos</swb:title>
+            <swb:title xml:lang="en">Devices</swb:title>
+            <swbxf:heClass rdf:resource="#Device"/>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTSystems">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconResources</swb:iconClass>
+            <swbxf:hePropertyFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >resourceMode=3</swbxf:hePropertyFilter>
+            <swbxf:heClass rdf:resource="#ResourceType"/>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >75</swb:index>
+            <swb:title xml:lang="en">System Components</swb:title>
+            <swb:title xml:lang="es">Componentes de Sistema</swb:title>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <rdfs:subClassOf rdf:resource="#Undeleteable"/>
+        <swb:hasClass>
+          <swb:Class rdf:ID="Community">
+            <rdfs:subClassOf rdf:resource="#Filterable"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+            <rdfs:subClassOf rdf:resource="#SWBClass"/>
+            <rdfs:subClassOf rdf:resource="#Traceable"/>
+            <rdfs:subClassOf rdf:resource="#Activeable"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </swb:hasClass>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconResources</swb:iconClass>
+            <swbxf:hePropertyFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >resourceMode=2</swbxf:hePropertyFilter>
+            <swbxf:heClass rdf:resource="#ResourceType"/>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >70</swb:index>
+            <swb:title xml:lang="es">Componentes de Estrategia</swb:title>
+            <swb:title xml:lang="en">Startegy Componentes</swb:title>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:hasClass>
+          <swb:Class rdf:ID="RoleRef">
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="#Reference"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </swb:hasClass>
+        <rdfs:subClassOf rdf:resource="#Traceable"/>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >60</swb:index>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconDnss</swb:iconClass>
+            <swbxf:heClass>
+              <swb:Class rdf:ID="Dns">
+                <rdfs:subClassOf>
+                  <swb:Interface rdf:ID="WebPageable">
+                    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                  </swb:Interface>
+                </rdfs:subClassOf>
+                <rdfs:subClassOf rdf:resource="#SWBClass"/>
+                <rdfs:subClassOf rdf:resource="#Traceable"/>
+                <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</swb:autogenId>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </swbxf:heClass>
+            <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >DNS</swb:title>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:hasClass>
+          <swb:Class rdf:ID="ResourceRef">
+            <rdfs:subClassOf rdf:resource="#Priorityable"/>
+            <rdfs:subClassOf rdf:resource="#Reference"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </swb:hasClass>
+        <swb:hasClass rdf:resource="#AdminFilter"/>
+        <rdfs:subClassOf rdf:resource="#Filterable"/>
+        <swb:hasClass rdf:resource="#Dns"/>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >40</swb:index>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconLanguages</swb:iconClass>
+            <swb:title xml:lang="es">Lenguajes</swb:title>
+            <swb:title xml:lang="en">Lenguages</swb:title>
+            <swbxf:heClass rdf:resource="#Language"/>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:hasClass>
+          <swb:Class rdf:ID="PFlowRef">
+            <rdfs:subClassOf rdf:resource="#Reference"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="#PFlowable"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </swb:hasClass>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PFlows">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >30</swb:index>
+            <swb:title xml:lang="es">Flujos de Publicación</swb:title>
+            <swb:title xml:lang="en">Publish Flows</swb:title>
+            <swbxf:heClass rdf:resource="#PFlow"/>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconPFlows</swb:iconClass>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:hasClass rdf:resource="#VersionInfo"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Model>
+    </rdfs:domain>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_userRepository">
+        <rdfs:label xml:lang="es">Repositorio de Usuarios</rdfs:label>
+        <rdfs:label xml:lang="en">User Repository</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <swbxf:formElement>
+          <swbxf:SelectOne rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal">
+            <swbxf:so_globalScope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:so_globalScope>
+            <swbxf:so_blankSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:so_blankSuport>
+          </swbxf:SelectOne>
+        </swbxf:formElement>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="language">
+    <rdfs:domain rdf:resource="#Localeable"/>
+    <rdfs:range rdf:resource="#Language"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_language">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+        <rdfs:label xml:lang="es">Lenguaje</rdfs:label>
+        <rdfs:label xml:lang="en">Language</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="nextVersion">
+    <rdfs:range rdf:resource="#VersionInfo"/>
+    <rdfs:domain rdf:resource="#VersionInfo"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="pfiPFlow">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >pflow</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#PFlowInstance"/>
+    <rdfs:range rdf:resource="#PFlow"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasPFlowInstance"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="displayObject">
+    <rdfs:range>
+      <swb:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject">
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#Class"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCalendar">
+    <rdfs:domain rdf:resource="#Calendarable"/>
+    <rdfs:range rdf:resource="#Calendar"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="creator">
+    <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:noObservable>
+    <rdfs:range rdf:resource="#User"/>
+    <rdfs:domain rdf:resource="#Traceable"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_creator">
+        <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swbxf:propDisabled>
+        <rdfs:label xml:lang="es">Usuario Creador</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >210</swb:index>
+        <rdfs:label xml:lang="en">Creator User</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasWebPageVirtualChild"/>
+  <owl:ObjectProperty rdf:ID="hasFormViewRefInv">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasReference"/>
+  <owl:ObjectProperty rdf:ID="versionLockedBy">
+    <rdfs:domain rdf:resource="#VersionInfo"/>
+    <rdfs:range rdf:resource="#User"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTemplateRefInv">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="actualVersion">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_actualVersion">
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propHidden>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Versionable"/>
+    <rdfs:range rdf:resource="#VersionInfo"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasViewProperty">
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:domain>
+      <swb:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView">
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="roleParent">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >parent</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#Role"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasRoleChild"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#Role"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="pflowInstance">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="pfinstResource"/>
+    </owl:inverseOf>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_pflowInstance">
+        <rdfs:label>resource</rdfs:label>
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propHidden>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Resource"/>
+    <rdfs:range rdf:resource="#PFlowInstance"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPermission">
+    <rdfs:domain rdf:resource="#Role"/>
+    <rdfs:range rdf:resource="#Permission"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasHerarquicalNode">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode"/>
+    <rdfs:domain rdf:resource="#Model"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSubModel">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="parentWebSite"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#WebSite"/>
+    <rdfs:range rdf:resource="#Model"/>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="usrgrpParent">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >parent</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#UserGroup"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasUsrGrpChild"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#UserGroup"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTemplateRef">
+    <swb:inheritProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:inheritProperty>
+    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
+    <rdfs:range rdf:resource="#TemplateRef"/>
+    <rdfs:domain rdf:resource="#TemplateRefable"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="device">
+    <rdfs:domain rdf:resource="#Deviceable"/>
+    <rdfs:range rdf:resource="#Device"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_device">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <rdfs:label xml:lang="es">Dispositivo</rdfs:label>
+        <rdfs:label xml:lang="en">Device</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasGroupedUser">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasUser</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="dvcParent">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >parent</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#Device"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasDvcChild"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#Device"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="lastVersion">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_lastVersion">
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propHidden>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#VersionInfo"/>
+    <rdfs:domain rdf:resource="#Versionable"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasPFlowInstance">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#resParamValue">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >value</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasResourceRef">
+    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
+    <rdfs:range rdf:resource="#ResourceRef"/>
+    <rdfs:domain>
+      <swb:Interface rdf:ID="ResourceRefable">
+        <rdfs:subClassOf rdf:resource="#Referensable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="propertyRef">
+    <rdfs:domain rdf:resource="#ViewReferenceProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasClass">
+    <rdfs:domain rdf:resource="#Model"/>
+    <rdfs:range rdf:resource="#Class"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="userGroup">
+    <rdfs:range rdf:resource="#UserGroup"/>
+    <rdfs:domain>
+      <swb:Class rdf:ID="UserGroupRef">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="#Reference"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="template">
+    <owl:inverseOf rdf:resource="#hasTemplateRefInv"/>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+    <rdfs:range rdf:resource="#Template"/>
+    <rdfs:domain rdf:resource="#TemplateRef"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="resourceFilter">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceFilter">
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propHidden>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#ResourceFilter"/>
+    <rdfs:domain rdf:resource="#Resource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasRoleRef">
+    <swb:inheritProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:inheritProperty>
+    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
+    <rdfs:range rdf:resource="#RoleRef"/>
+    <rdfs:domain rdf:resource="#RoleRefable"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="resource">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasResourceRefInv"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#Resource"/>
+    <rdfs:domain rdf:resource="#ResourceRef"/>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTemplate">
+    <rdfs:domain>
+      <swb:Interface rdf:ID="Templateable">
+        <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#Template"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="templateGroup">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >group</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#Template"/>
+    <rdfs:range rdf:resource="#TemplateGroup"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_templateGroup">
+        <rdfs:label xml:lang="en">Group</rdfs:label>
+        <rdfs:label xml:lang="es">Grupo</rdfs:label>
+        <swbxf:formElement>
+          <swbxf:SelectOne rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel">
+            <swbxf:so_globalScope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:so_globalScope>
+            <swbxf:so_blankSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:so_blankSuport>
+          </swbxf:SelectOne>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasGroupedTemplate"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="previousVersion">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:range rdf:resource="#VersionInfo"/>
+    <rdfs:domain rdf:resource="#VersionInfo"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasRole">
+    <rdfs:domain rdf:resource="#Roleable"/>
+    <rdfs:range rdf:resource="#Role"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="userFavorite">
+    <rdfs:range rdf:resource="#UserFavorite"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasCreateProperty">
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasResource">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasResourceable"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#Resourceable"/>
+    <rdfs:range rdf:resource="#Resource"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="resourceData">
+    <rdfs:range rdf:resource="#SWBSemanticResource"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:domain rdf:resource="#Resource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="homePage">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_homePage">
+        <rdfs:label xml:lang="es">Página Inicial</rdfs:label>
+        <rdfs:label xml:lang="en">Home Page</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#WebPage"/>
+    <rdfs:domain rdf:resource="#WebSite"/>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPSTResource">
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasResource</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPFlowRef">
+    <swb:inheritProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:inheritProperty>
+    <rdfs:range rdf:resource="#PFlowRef"/>
+    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
+    <rdfs:domain rdf:resource="#PFlowRefable"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasDvcChild">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasChild</swb:propertyCodeName>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasPTSubType">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasSubType</swb:propertyCodeName>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="webPage">
+    <rdfs:domain rdf:resource="#WebPageable"/>
+    <rdfs:range rdf:resource="#WebPage"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_webPage">
+        <swbxf:formElement>
+          <swbxf:SelectTree rdf:ID="SelectTree_Model">
+            <swbxf:so_blankSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:so_blankSuport>
+            <swbxf:so_globalScope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:so_globalScope>
+          </swbxf:SelectTree>
+        </swbxf:formElement>
+        <rdfs:label xml:lang="es">Página Web</rdfs:label>
+        <rdfs:label xml:lang="en">WebPage</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement">
+    <rdfs:range rdf:resource="#SWBFormElement"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="webPageParent">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >parent</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#WebPage"/>
+    <rdfs:domain rdf:resource="#WebPage"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasWebPageChild"/>
+    </owl:inverseOf>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_webPageParent">
+        <rdfs:label xml:lang="es">Pagina Web Padre</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >25</swb:index>
+        <rdfs:label xml:lang="en">Parent WebPage</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasUsrGrpChild">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasChild</swb:propertyCodeName>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasRoleChild">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasChild</swb:propertyCodeName>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="rule">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasRuleRefInv"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#Rule"/>
+    <rdfs:domain rdf:resource="#RuleRef"/>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasRoleRefInv">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="usrfHasObject">
+    <rdfs:range rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasObject</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#UserFavorite"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="formView">
+    <owl:inverseOf rdf:resource="#hasFormViewRefInv"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="resourceType">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceType">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >160</swb:index>
+        <rdfs:label xml:lang="en">Resource Type</rdfs:label>
+        <rdfs:label xml:lang="es">Tipo de Recurso</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasPTResource"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#ResourceType"/>
+    <rdfs:domain rdf:resource="#Resource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="resourceSubType">
+    <owl:inverseOf rdf:resource="#hasPSTResource"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_resourceSubType">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >150</swb:index>
+        <rdfs:label xml:lang="en">Resource Subtype</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+        <rdfs:label xml:lang="es">Subtipo de Resource</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Resource"/>
+    <rdfs:range rdf:resource="#ResourceSubType"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasEditProperty">
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasRule">
+    <rdfs:domain rdf:resource="#Ruleable"/>
+    <rdfs:range rdf:resource="#Rule"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#propGroup">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >group</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#PropertyGroup"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasWebPageChild">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasChild</swb:propertyCodeName>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasUserGroupRef">
+    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:inheritProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:inheritProperty>
+    <rdfs:range rdf:resource="#UserGroupRef"/>
+    <rdfs:domain rdf:resource="#UserGroupRefable"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasWebPageVirtualParent">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasVirtualParent</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#WebPage"/>
+    <rdfs:range rdf:resource="#WebPage"/>
+    <owl:inverseOf rdf:resource="#hasWebPageVirtualChild"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasRuleRefInv">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasGroupedTemplate">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasTemplate</swb:propertyCodeName>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="modifiedBy">
+    <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:noObservable>
+    <rdfs:domain rdf:resource="#Traceable"/>
+    <rdfs:range rdf:resource="#User"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_modifiedBy">
+        <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swbxf:propDisabled>
+        <rdfs:label xml:lang="es">Modificado por</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >230</swb:index>
+        <rdfs:label xml:lang="en">Modified by</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasPTResource">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasResource</swb:propertyCodeName>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#heModel">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >model</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#SWBModel"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasResourceRefInv">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#interface">
+    <rdfs:range rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_interface">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >25</swb:index>
+        <rdfs:label xml:lang="en">Interface</rdfs:label>
+        <rdfs:label xml:lang="es">Interface</rdfs:label>
+        <swbxf:formElement>
+          <swbxf:SelectOne rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobalWithBlank">
+            <swbxf:so_blankSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:so_blankSuport>
+            <swbxf:so_globalScope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:so_globalScope>
+          </swbxf:SelectOne>
+        </swbxf:formElement>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasRuleRef">
+    <swb:inheritProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:inheritProperty>
+    <rdfs:subPropertyOf rdf:resource="#hasReference"/>
+    <rdfs:range rdf:resource="#RuleRef"/>
+    <rdfs:domain rdf:resource="#RuleRefable"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPFlowRefInv">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="pflow">
+    <owl:inverseOf rdf:resource="#hasPFlowRefInv"/>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+    <rdfs:range rdf:resource="#PFlow"/>
+    <rdfs:domain rdf:resource="#PFlowRef"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="role">
+    <owl:inverseOf rdf:resource="#hasRoleRefInv"/>
+    <rdfs:range rdf:resource="#Role"/>
+    <rdfs:domain rdf:resource="#RoleRef"/>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasAdminFilter">
+    <rdfs:domain rdf:resource="#User"/>
+    <rdfs:range rdf:resource="#AdminFilter"/>
+  </owl:ObjectProperty>
+  <rdf:Property rdf:ID="autogenId">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#Class"/>
+  </rdf:Property>
+  <owl:DatatypeProperty rdf:ID="usrLastName">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >lastName</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrLastName">
+        <rdfs:label xml:lang="es">Primer Apellido</rdfs:label>
+        <rdfs:label xml:lang="en">Last Name</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >160</swb:index>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_PersonalData">
+            <rdfs:label xml:lang="es">Datos Personales</rdfs:label>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >20</swb:index>
+            <rdfs:label xml:lang="en">Personal Data</rdfs:label>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorParams">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="inherit">
+    <rdfs:domain rdf:resource="#Inheritable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_inherit">
+        <swbxf:propSelectValues xml:lang="en">1:Actual and Children|2:Only Actual|3:Only Children</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="es">1:Actual e Hijos|2:Solo actual|3:Solos Hijos</swbxf:propSelectValues>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="dnsDefault">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >default</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#Dns"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="versionComment">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#VersionInfo"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="webPageTarget">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >target</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_webPageTarget">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >75</swb:index>
+        <rdfs:label>Target</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#WebPage"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="usrSecondLastName">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >secondLastName</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrSecondLastName">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >170</swb:index>
+        <rdfs:label xml:lang="en">Family name</rdfs:label>
+        <rdfs:label xml:lang="es">Segundo Apellido</rdfs:label>
+        <swbxf:propGroup rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_PersonalData"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="webPageURL">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#WebPage"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_webPageURL">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >70</swb:index>
+        <rdfs:label>URL</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="resourceCache">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceCache">
+        <rdfs:label xml:lang="en">Cache (sec)</rdfs:label>
+        <rdfs:label xml:lang="es">Cache (seg)</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#ResourceType"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_globalScope">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >globalScope</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileMaxSize">
+    <rdfs:domain>
+      <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload">
+        <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:FormElement>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="updated">
+    <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:noObservable>
+    <rdfs:domain rdf:resource="#Traceable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_updated">
+        <rdfs:label xml:lang="es">Última Act.</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >220</swb:index>
+        <rdfs:label xml:lang="en">Last Update</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="webPageSortName">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >sortName</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#WebPage"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_WebPageSortName">
+        <rdfs:label xml:lang="es">Nombre de Ordenamiento</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >25</swb:index>
+        <rdfs:label xml:lang="en">Sort Name</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="package">
+    <rdfs:domain rdf:resource="#CodePackage"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >package</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="usrPasswordChanged">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >passwordChanged</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#User"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrPasswordChanged">
+        <rdfs:label xml:lang="es">Contraseña actualizada en</rdfs:label>
+        <rdfs:label xml:lang="en">Password updated on</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pfiStatus">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >status</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#PFlowInstance"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="dvcUserAgent">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >userAgent</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_dvcUserAgent">
+        <rdfs:label xml:lang="en">User Agent</rdfs:label>
+        <rdfs:label xml:lang="es">Agente de Usuario</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Device"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="dns">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_dns">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <rdfs:label>Dns</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Dns"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hits">
+    <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:noObservable>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:domain rdf:resource="#Hitable"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_hits">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >90</swb:index>
+        <rdfs:label>Hits</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rank">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rank">
+        <rdfs:label xml:lang="es">Calificación</rdfs:label>
+        <rdfs:label xml:lang="en">Rank</rdfs:label>
+        <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propDisabled>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >87</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+    <rdfs:domain rdf:resource="#Rankable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="webPageDiskUsage">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >diskUsage</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_webPageDiskUsage">
+        <rdfs:label xml:lang="es">Espacio Usado</rdfs:label>
+        <rdfs:label xml:lang="en">Used Disk Space</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >250</swb:index>
+        <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propDisabled>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:domain rdf:resource="#WebPage"/>
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#actGroup">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectAction"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="ipFilterAction">
+    <rdfs:domain rdf:resource="#IPFilter"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >action</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="versionValue">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#VersionInfo"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="resourceWindow">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceWindow">
+        <rdfs:label xml:lang="en">Function Window</rdfs:label>
+        <rdfs:label xml:lang="es">Ventana de Funciones</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >45</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Resource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#propInvalidMessage">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >invalidMessage</swb:propertyCodeName>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorRefreshOnShow">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >refreshOnShow</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileFilter">
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="iconClass">
+    <rdfs:domain rdf:resource="#Iconable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="removeDependency">
+    <rdfs:comment>Si se elminia el objeto de dominio de la propiedad, tambien se elimina el objeto del rango</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="externalInvocation">
+    <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="title">
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_title">
+        <rdfs:label xml:lang="en">Title</rdfs:label>
+        <rdfs:label xml:lang="es">Titulo</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="deleted">
+    <rdfs:domain rdf:resource="#Trashable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_deleted">
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propHidden>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pfiStep">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >step</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#PFlowInstance"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="resourceClassName">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceClassName">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+        <rdfs:label xml:lang="en">Class Name</rdfs:label>
+        <rdfs:label xml:lang="es">Nombre de la Clase</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ResourceType"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dropMatchLevel">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="formMode">
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_formMode">
+        <swbxf:propSelectValues rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >edit|create|view</swbxf:propSelectValues>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="propertyMode">
+    <rdfs:domain rdf:resource="#ViewReferenceProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_propertyMode">
+        <swbxf:propSelectValues rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >edit|create|view</swbxf:propSelectValues>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#codeEditorLanguage">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >language</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#CodeEditor"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#propDisabled">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >disabled</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="mnuItemShowIFrame">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >showAs</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_mnuItemShowAs">
+        <swbxf:propSelectValues xml:lang="en">CONTENT:Content|IFRAME:IFrame|DIALOG:Dialog</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="es">CONTENT:Contenido|IFRAME:IFrame|DIALOG:Dialogo</swbxf:propSelectValues>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <rdfs:label xml:lang="en">Show As</rdfs:label>
+        <rdfs:label xml:lang="es">Mostrar Como</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain>
+      <swb:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem">
+        <rdfs:subClassOf rdf:resource="#Iconable"/>
+        <rdfs:subClassOf rdf:resource="#WebPage"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="valid">
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#SWBClass"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="usrLastLogin">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >lastLogin</swb:propertyCodeName>
+    <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:noObservable>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrLastLogin">
+        <rdfs:label xml:lang="es">Fecha del último acceso</rdfs:label>
+        <rdfs:label xml:lang="en">Last access date</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaRows">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >rows</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#doTreeController">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >treeController</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="localeable">
+    <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#propSelectValues">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >selectValues</swb:propertyCodeName>
+    <rdfs:comment>Valores posibles a seleccionar ejemplo: 1:baja|2:media|3:alta</rdfs:comment>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pfiTime">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >time</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#PFlowInstance"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="index">
+    <rdfs:domain rdf:resource="#Sortable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="passUpdVerify">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >verifyText</swb:propertyCodeName>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#PasswordUpdate"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="reviews">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_reviews">
+        <rdfs:label xml:lang="es">Número Votos</rdfs:label>
+        <rdfs:label xml:lang="en">Reviews</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >88</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:domain rdf:resource="#Rankable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="priority">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_priority">
+        <rdfs:label xml:lang="en">Priority</rdfs:label>
+        <rdfs:label xml:lang="es">Prioridad</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <swbxf:propSelectValues xml:lang="es">1:Default|2:Baja|3:Media|4:Alta|5:Prioritaria</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="en">1:Default|2:Low|3:Medium|4:High|5:High Priority</swbxf:propSelectValues>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Priorityable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="maxHits">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_maxHits">
+        <rdfs:label xml:lang="en">Max Hits</rdfs:label>
+        <rdfs:label xml:lang="es">Hits Máximos</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >95</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:domain rdf:resource="#Hitable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hidden">
+    <rdfs:domain rdf:resource="#Hiddenable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_hidden">
+        <rdfs:label xml:lang="es">Oculto</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+        <rdfs:label xml:lang="en">Hidden</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="undeleteable">
+    <rdfs:domain rdf:resource="#Undeleteable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="xml">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_xml">
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propHidden>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#XMLable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#propHidden">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hidden</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="ipFilterNumber">
+    <rdfs:domain rdf:resource="#IPFilter"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ipNumber</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="userRepCallBackHandlerClassName">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >callBackHandlerClassName</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_userRepCallBackHandlerClassName">
+        <rdfs:label xml:lang="es">CallBackHandler (JAAS)</rdfs:label>
+        <rdfs:label xml:lang="en">CallBackHandler (JAAS)</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >310</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#UserRepository"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="active">
+    <rdfs:domain rdf:resource="#Activeable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_active">
+        <rdfs:label xml:lang="es">Activo</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <rdfs:label xml:lang="en">Active</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="resourceMode">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_resourceMode">
+        <rdfs:label xml:lang="es">Modo de Recurso</rdfs:label>
+        <rdfs:label xml:lang="en">Resource Mode</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swbxf:propSelectValues xml:lang="es">1:Contenido|2:Estrategia|3:Sistema</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="en">1:Content|2:Strategy|3:System</swbxf:propSelectValues>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swbxf:propDisabled>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#ResourceType"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="usrEmail">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >email</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrEmail">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >120</swb:index>
+        <rdfs:label xml:lang="en">eMail</rdfs:label>
+        <rdfs:label xml:lang="es">Correo Electrónico</rdfs:label>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_Identity">
+            <rdfs:label xml:lang="es">Identidad</rdfs:label>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >10</swb:index>
+            <rdfs:label xml:lang="en">Identity</rdfs:label>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="required">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >required</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#heTreeController">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >treeController</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#propPromptMessage">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >promptMessage</swb:propertyCodeName>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="herarquicalRelation">
+    <rdfs:comment>La propiedad se utilizara como relacion padre hijo para la herarquia del arbol de administracion</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="webPageURLType">
+    <rdfs:domain rdf:resource="#WebPage"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_webPageURLType">
+        <swbxf:propSelectValues xml:lang="es">1:Redirección|2:Ruta Amigable</swbxf:propSelectValues>
+        <rdfs:label xml:lang="en">URL Type</rdfs:label>
+        <rdfs:label xml:lang="es">Tipo de URL</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <swbxf:propSelectValues xml:lang="en">1:Redirect|2:Friendly URL</swbxf:propSelectValues>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="userRepAuthMethod">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >authMethod</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_userRepAuthMethod">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >300</swb:index>
+        <swbxf:propSelectValues rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >FORM:FORM|BASIC:BASIC</swbxf:propSelectValues>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <rdfs:label xml:lang="en">Authentication Method</rdfs:label>
+        <rdfs:label xml:lang="es">Método de Autenticación</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#UserRepository"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pfiVersion">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >version</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#PFlowInstance"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="usrSecurityQuestion">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >securityQuestion</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrSecurityQuestion">
+        <swbxf:formElement>
+          <swbxf:SecurityQuestion rdf:ID="SecurityQuestionDefault"/>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >192</swb:index>
+        <rdfs:label xml:lang="es">Pregunta de seguridad</rdfs:label>
+        <rdfs:label xml:lang="en">Security question</rdfs:label>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_Recovey">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >80</swb:index>
+            <rdfs:label xml:lang="en">Identity Recognition</rdfs:label>
+            <rdfs:label xml:lang="es">Reconocimiento de Identidad</rdfs:label>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaCols">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >cols</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="description">
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Descriptiveable"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_description">
+        <rdfs:label xml:lang="es">Descripción</rdfs:label>
+        <rdfs:label xml:lang="en">Description</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+        <swbxf:formElement>
+          <swbxf:TextArea rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description">
+            <swbxf:textAreaRows rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >5</swbxf:textAreaRows>
+            <swbxf:textAreaCols rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >40</swbxf:textAreaCols>
+          </swbxf:TextArea>
+        </swbxf:formElement>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="versionNumber">
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+    <rdfs:domain rdf:resource="#VersionInfo"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_blankSuport">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >blankSuport</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#doDispatcher">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="prefix">
+    <rdfs:domain rdf:resource="#CodePackage"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="classID">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Class"/>
+    <rdfs:comment>Usado para identificar al objeto en el URL (webpage:home)</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="usrSecurityAnswer">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >securityAnswer</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrSecurityAnswer">
+        <swbxf:propGroup rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_Recovey"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >194</swb:index>
+        <rdfs:label xml:lang="es">Respuesta de seguridad</rdfs:label>
+        <rdfs:label xml:lang="en">Security Answer</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="maxViews">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_maxViews">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >85</swb:index>
+        <rdfs:label xml:lang="es">Apariciones Máximas</rdfs:label>
+        <rdfs:label xml:lang="en">Max Views</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:domain rdf:resource="#Viewable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="resourceOWL">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ResourceType"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_resourceOWL">
+        <rdfs:label xml:lang="en">OWL File</rdfs:label>
+        <rdfs:label xml:lang="es">Archivo OWL</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >55</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="userRepLoginContext">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >loginContext</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_userRepLoginContext">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >320</swb:index>
+        <rdfs:label xml:lang="en">Login Context (JAAS)</rdfs:label>
+        <rdfs:label xml:lang="es">Contexto de Login (JAAS)</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#UserRepository"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorURL">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >behaviorURL</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#actionURL">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectAction"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="versionFile">
+    <rdfs:domain rdf:resource="#VersionInfo"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="resourceBundle">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_resourceBundle">
+        <rdfs:label xml:lang="es">Archivo de Propiedades</rdfs:label>
+        <rdfs:label xml:lang="en">Resource Bundle</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ResourceType"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hePropertyFilter">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >propertyFilter</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="inheritProperty">
+    <rdfs:comment>Si es true la propiedad es heredada por la plataforma</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="noObservable">
+    <rdfs:comment>Si esta activo la propiedad no es monitoreada (SWBServiceMgr)</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="usrFirstName">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >firstName</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrFirstName">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >150</swb:index>
+        <rdfs:label xml:lang="en">First Name</rdfs:label>
+        <rdfs:label xml:lang="es">Nombre(s)</rdfs:label>
+        <swbxf:propGroup rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_PersonalData"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#User"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="created">
+    <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:noObservable>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:domain rdf:resource="#Traceable"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_created">
+        <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swbxf:propDisabled>
+        <rdfs:label xml:lang="en">Creation Date</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+        <rdfs:label xml:lang="es">Creación</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="views">
+    <swb:noObservable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:noObservable>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:domain rdf:resource="#Viewable"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_views">
+        <rdfs:label xml:lang="en">Views</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >80</swb:index>
+        <rdfs:label xml:lang="es">Apariciones</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="usrPassword">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >password</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrPassword">
+        <swbxf:formElement>
+          <swbxf:PasswordUpdate rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#usrPassword">
+            <swb:passUpdVerify xml:lang="en">Verify Password</swb:passUpdVerify>
+            <swb:passUpdVerify xml:lang="es">Verificar Contraseña</swb:passUpdVerify>
+          </swbxf:PasswordUpdate>
+        </swbxf:formElement>
+        <swbxf:propGroup rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_Identity"/>
+        <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:required>
+        <rdfs:label xml:lang="es">Contraseña</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >110</swb:index>
+        <rdfs:label xml:lang="en">Password</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="usrLanguage">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >language</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrLanguage">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >180</swb:index>
+        <rdfs:label xml:lang="es">Idioma</rdfs:label>
+        <rdfs:label xml:lang="en">Language</rdfs:label>
+        <swbxf:propSelectValues xml:lang="es">es:Español|en:Ingles</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="en">es:Spanish|en:English</swbxf:propSelectValues>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dragSupport">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="indexable">
+    <rdfs:domain rdf:resource="#Indexable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_indexable">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+        <rdfs:label>Indexable</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="xmlConf">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_xmlConf">
+        <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:propHidden>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#XMLConfable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="usrLogin">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >login</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#User"/>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrLogin">
+        <rdfs:label xml:lang="es">Id Usuario</rdfs:label>
+        <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:required>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+        <rdfs:label xml:lang="en">User Id</rdfs:label>
+        <swbxf:propGroup rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_Identity"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="userRepSecurityQuestionList">
+    <rdfs:domain rdf:resource="#UserRepository"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Lista de preguntas de seguridad. Ejemplo: (1|Color favorito:2|Marca de auto:3|licencia de conducir)</rdfs:comment>
+  </owl:DatatypeProperty>
+  <swb:ViewReferenceProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#vrp_views_view">
+    <swb:propertyMode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >view</swb:propertyMode>
+    <swb:propertyRef rdf:resource="#views"/>
+  </swb:ViewReferenceProperty>
+  <swbxf:CodeEditor rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#CodeEditorTest">
+    <swbxf:codeEditorLanguage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >JSP</swbxf:codeEditorLanguage>
+    <swbxf:textAreaCols rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >80</swbxf:textAreaCols>
+    <swbxf:textAreaRows rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >40</swbxf:textAreaRows>
+  </swbxf:CodeEditor>
+  <swbxf:FormView rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#resourceMode1">
+    <swbxf:hasEditProperty rdf:resource="#hits"/>
+    <swbxf:hasEditProperty rdf:resource="#title"/>
+  </swbxf:FormView>
+  <swbxf:FormView rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#resourceMode2">
+    <swbxf:hasEditProperty rdf:resource="#hits"/>
+    <swbxf:hasEditProperty rdf:resource="#description"/>
+    <swbxf:hasEditProperty rdf:resource="#active"/>
+  </swbxf:FormView>
+  <swbxf:ObjectAction rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#act_Edit">
+    <swb:title xml:lang="en">Edit</swb:title>
+    <swb:title xml:lang="es">Editar</swb:title>
+  </swbxf:ObjectAction>
+  <swb:CodePackage rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pkg">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbxf</swb:prefix>
+  </swb:CodePackage>
+  <swbxf:FileUpload rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML">
+    <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >.gif,.jpg,.bmp,.jpeg,.png</swbxf:fileFilter>
+    <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+    >10000000</swbxf:fileMaxSize>
+  </swbxf:FileUpload>
+  <swbxf:RichText rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichTextEditor">
+    <swbxf:textAreaRows rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >10</swbxf:textAreaRows>
+    <swbxf:textAreaCols rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >40</swbxf:textAreaCols>
+  </swbxf:RichText>
+  <owl:AnnotationProperty rdf:ID="classCodeName">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdfs:Class rdf:about="#Class"/>
+          <rdfs:Class rdf:about="#Model"/>
+          <rdfs:Class rdf:about="#Interface"/>
+          <rdfs:Class rdf:about="#FormElement"/>
+          <rdfs:Class rdf:about="#SemanticResource"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:AnnotationProperty>
+  <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SecurityQuestion">
+    <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
+  <owl:AnnotationProperty rdf:ID="propertyCodeName">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </owl:AnnotationProperty>
+  <owl:AnnotationProperty rdf:ID="classCodePackage">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdfs:Class rdf:about="#Class"/>
+          <rdfs:Class rdf:about="#Model"/>
+          <rdfs:Class rdf:about="#Interface"/>
+          <rdfs:Class rdf:about="#FormElement"/>
+          <rdfs:Class rdf:about="#SemanticResource"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:AnnotationProperty>
+  <owl:AnnotationProperty rdf:ID="canUsedAsName">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:comment>Si puede usarse esta propiedad como nombre de despliegue del objeto al que pertenece</rdfs:comment>
+  </owl:AnnotationProperty>
+  <swbxf:ObjectAction rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#act_Create">
+    <swb:title xml:lang="es">Crear</swb:title>
+    <swb:title xml:lang="en">Create</swb:title>
+  </swbxf:ObjectAction>
+  <swb:Permission rdf:ID="PermSU">
+    <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Super User</swb:title>
+    <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Super User Permission</swb:description>
+  </swb:Permission>
+  <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HtmlElement">
+    <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.model</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swb</swb:prefix>
+  </swb:CodePackage>
+  <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Camps">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >90</swb:index>
+    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbIconCamps</swb:iconClass>
+    <swbxf:heClass rdf:resource="#Camp"/>
+    <swb:title xml:lang="es">Campañas</swb:title>
+    <swb:title xml:lang="en">Camps</swb:title>
+  </swbxf:HerarquicalNode>
+  <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Resources">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >70</swb:index>
+    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbIconResources</swb:iconClass>
+    <swbxf:heClass rdf:resource="#ResourceType"/>
+    <swb:title>Resources</swb:title>
+  </swbxf:HerarquicalNode>
+  <swbxf:ObjectAction rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#act_Delete">
+    <swb:title xml:lang="es">Crear</swb:title>
+    <swb:title xml:lang="en">Create</swb:title>
+  </swbxf:ObjectAction>
+  <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichText">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
+  <swb:Permission rdf:ID="PermAdmin">
+    <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Administrator</swb:title>
+    <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Administrator Permission</swb:description>
+  </swb:Permission>
+  <swbxf:FormViewRef rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#vr_info_view">
+    <swb:formMode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >view</swb:formMode>
+  </swbxf:FormViewRef>
+  <swbxf:PropertyGroup rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_General">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >90</swb:index>
+    <rdfs:label xml:lang="es">Datos Generales</rdfs:label>
+    <rdfs:label xml:lang="en">General Data</rdfs:label>
+  </swbxf:PropertyGroup>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
