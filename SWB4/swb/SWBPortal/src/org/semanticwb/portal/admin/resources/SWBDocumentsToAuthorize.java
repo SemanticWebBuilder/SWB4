@@ -272,7 +272,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
             else
             {
                 out.println("<div class=\"swbform\">");
-                out.println("<p>No hay contenidos por autorizar</p>");
+                out.println("<p>"+paramRequest.getLocaleString("messageNoContents")+"</p>");
                 out.println("</div>");
 
             }
