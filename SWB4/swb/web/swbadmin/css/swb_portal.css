@@ -654,16 +654,55 @@ div.sitesectiontree ul.treeres {
 }
 /*------------------- select tree  ----*/
 
-div#swb-bkm-content{margin-left: 200px; padding:10px}
-div#swb-bkm-header{background: url(../images/swbform-fieldset.png) left bottom repeat-x; border-top:1px solid blue;}
-div#swb-bkm-navigation{background:#E6EDF9;width:200px}
-div#swb-bkm-navbarmain{border-right:1px solid blue;}
-div#swb-bkm-navigation{float:left;}
-div#swb-bkm-navmenu{float:right;width:35%;}
-div#swb-bkm-extra{background:white;}
-div#swb-bkm-footer{background: url(../images/swbform-fieldset.png) left bottom repeat-x;}
-div#swb-bkm-wrapper{float:right;width:100%;margin-left:-200px}
-div#swb-bkm-extra{float:left;clear:left;}
-div#swb-bkm-footer{clear:both;width:100%}
 /*--------------bookmarks-------------*/
-
+.swb-bkm-form {
+	font-size: 1.1em;
+	color: #333;
+    font: normal 100% "Lucida Grande", Helvetica, Verdana, Arial;
+    background: url(../images/swbform-fieldset.png) left bottom repeat-x;
+    width:300px;
+}
+.swb-bmk-form form fieldset {
+    border:white;
+}
+.swb-bkm-content{margin-left: 200px; padding:10px}
+.swb-bkm-header{background: url(../images/swbform-fieldset.png) left bottom repeat-x; border-top:1px solid blue;}
+.swb-bkm-navigation{background:#E6EDF9;width:200px}
+.swb-bkm-navbarmain{border-right:1px solid blue;}
+.swb-bkm-navigation{float:left;}
+.swb-bkm-navmenu{float:right;width:35%;}
+.swb-bkm-extra{background:white;}
+.swb-bkm-footer{background: url(../images/swbform-fieldset.png) left bottom repeat-x;}
+.swb-bkm-wrapper{float:right;width:100%;margin-left:-200px}
+.swb-bkm-extra{float:left;clear:left;}
+.swb-bkm-footer{clear:both;width:100%}
+.swb-bkm-frmButton {
+	border: 1px solid #8ba0bd;
+	border-bottom:1px solid #657c9c;
+	padding: 0.1em 0.2em 0.2em 0.2em;
+	background: #bcd5f0 url("../images/bookmarks/buttonEnabled.png") repeat-x top left;
+    text-align: center;
+}
+.swb-bkm-frmButton hover {
+	color:#243C5F;
+	background:#acc5e2 url("../images/bookmarks/buttonHover.png") repeat-x top left;
+}
+.swb-bkm-textBox {
+    margin: 0em 0.1em;
+    background:#fff url("../images/bookmarks/validationInputBg.gif") repeat-x top left;
+	border:1px solid #8ba0bd;
+	line-height: normal;
+}
+.swb-bkm-textBox:focus {
+    border-color:#406b9b;
+}
+.swb-bkm-textArea {
+    margin: 0em 0.1em;
+    background:#fff url("../images/bookmarks/validationInputBg.gif") repeat-x top left;
+	border:1px solid #8ba0bd;
+	line-height: normal;
+}
+.swb-bkm-textArea:focus {
+    border-color:#406b9b;
+}
+/*--------------bookmarks-------------*/
