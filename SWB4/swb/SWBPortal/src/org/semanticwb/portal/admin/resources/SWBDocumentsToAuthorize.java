@@ -90,6 +90,19 @@ public class SWBDocumentsToAuthorize extends GenericResource
         }
         User user = paramRequest.getUser();
         PrintWriter out = response.getWriter();
+        Iterator<WebSite> sites = SWBContext.listWebSites();
+        while (sites.hasNext())
+        {
+            WebSite site = sites.next();
+            if (!(site.getId().equals(SWBContext.WEBSITE_ADMIN) || site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ONTEDITOR)))
+            {
+                if (sitetoShow == null)
+                {
+                    sitetoShow = site;
+
+                }
+            }
+        }
         if (sitetoShow != null)
         {
 
@@ -103,7 +116,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
             out.println("<form class=\"swbform\" method='post'>");
             out.println("<fieldset>");
             out.println("<select name='site' dojoType=\"dojox.form.DropDownSelect\" autocomplete=\"false\">");
-            Iterator<WebSite> sites = SWBContext.listWebSites();
+            sites = SWBContext.listWebSites();
             while (sites.hasNext())
             {
                 WebSite site = sites.next();
@@ -135,20 +148,20 @@ public class SWBDocumentsToAuthorize extends GenericResource
             {
                 selected = "checked";
             }
-            out.println("<label for=\"id='show1'\">" + paramRequest.getLocaleString("mydocuments") + "</label><input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show1' name='show' value='1'>" + paramRequest.getLocaleString("all") + "");
+            out.println("<input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show1' name='show' value='1'>" + paramRequest.getLocaleString("all") + "");
             selected = "";
             if (show == 2)
             {
                 selected = "checked";
             }
-            out.println("<label for=\"id='show2'\">" + paramRequest.getLocaleString("mydocuments") + "</label><input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show2'  name='show' value='2'>" + paramRequest.getLocaleString("mydocuments") + "");
+            out.println("<input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show2'  name='show' value='2'>" + paramRequest.getLocaleString("mydocuments") + "");
             selected = "";
             if (show == 3)
             {
                 selected = "checked";
             }
 
-            out.println("<label for=\"id='show3'\">" + paramRequest.getLocaleString("mydocuments") + "</label><input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show3' name='show' value='3'>" + paramRequest.getLocaleString("forauthorize") + "");
+            out.println("<input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show3' name='show' value='3'>" + paramRequest.getLocaleString("forauthorize") + "");
             out.println("<label for=\"id='s'\">" + paramRequest.getLocaleString("see") + "</label><button dojoType=\"dijit.form.Button\" type='submit' id='s' name='s'>" + paramRequest.getLocaleString("see") + "</button>");
             out.println("</fieldset>");
             out.println("</form>");
@@ -186,32 +199,55 @@ public class SWBDocumentsToAuthorize extends GenericResource
             out.println(paramRequest.getLocaleString("step"));
             out.println("</th>");
             out.println("</tr>");
-            for (Resource resource : resources)
+            if (resources.length > 0)
+            {
+                for (Resource resource : resources)
+                {
+                    out.println("<tr>");
+                    out.println("<td>");
+                    out.println("<input dojoType=\"dijit.form.RadioButton\" type=\"radio\" name=\"res\" value\"" + resource.getId() + "\">" + resource.getId() + "</input>");
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println(resource.getTitle());
+                    out.println("</td>");
+                    out.println("<td>");
+                    Iterator<Resourceable> resourceables = resource.listResourceables();
+                    while (resourceables.hasNext())
+                    {
+                        Resourceable resourceable = resourceables.next();
+                        if (resourceable instanceof WebPage)
+                        {
+                            out.println(((WebPage) resourceable).getTitle());
+                            break;
+                        }
+                    }
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println(resource.getPflowInstance().getStep());
+                    out.println("</td>");
+                    out.println("</tr>");
+                }
+            }
+            else
             {
                 out.println("<tr>");
-                out.println("<td>");
-                out.println("<input dojoType=\"dijit.form.RadioButton\" type=\"radio\" name=\"res\" value\"" + resource.getId() + "\">" + resource.getId() + "</input>");
-                out.println("</td>");
-                out.println("<td>");
-                out.println(resource.getTitle());
-                out.println("</td>");
-                out.println("<td>");
-                Iterator<Resourceable> resourceables = resource.listResourceables();
-                while (resourceables.hasNext())
-                {
-                    Resourceable resourceable = resourceables.next();
-                    if (resourceable instanceof WebPage)
-                    {
-                        out.println(((WebPage) resourceable).getTitle());
-                        break;
-                    }
-                }
-                out.println("</td>");
-                out.println("<td>");
-                out.println(resource.getPflowInstance().getStep());
+                out.println("<td colspan='4' align='center'>");
+                out.println("<p>No hay contenidos por autorizar</p>");
                 out.println("</td>");
                 out.println("</tr>");
             }
+
+            out.println("<tr>");
+            out.println("<td>");
+            out.println("&nbsp;");
+            out.println("</td>");
+            out.println("</tr>");
+
+
+            out.println("</table>");
+            out.println("<fieldset>");
+            out.println("</form>");
+
             out.println("<tr>");
             out.println("<td colspan='3'>");
             out.println("<textarea dojoType=\"dijit.form.Textarea\" name=\"msg\" rows=\"2\" cols=\"50\">");
