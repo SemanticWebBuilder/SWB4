@@ -61,7 +61,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
         mgr.setType(mgr.TYPE_XHTML);
         if(paramRequest.getAction().equals(paramRequest.Action_REMOVE))
         {
-            mgr.addButton("<button type=\"submit\">Eliminar</button>");
+            mgr.addButton("<button type=\"submit\"><%=paramRequest.getLocaleString(\"remove\")%></button>");
             SWBResourceURL url = paramRequest.getActionUrl();
             url.setParameter("objInstUri", semObject.getURI());
             url.setAction(url.Action_REMOVE);
