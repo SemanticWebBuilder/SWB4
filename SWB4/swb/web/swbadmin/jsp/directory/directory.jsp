@@ -174,8 +174,8 @@ if (sobj != null) {
                                 <%url.setMode(url.Mode_EDIT);%>
                                 <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridupdate.gif" title="<%=paramRequest.getLocaleString("edit")%>" class="K2BWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
                                 <td valign=top align="CENTER">
-                                <%url.setMode(url.Mode_VIEW+"2");url.setAction(url.Action_REMOVE);%>
-                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/griddelete.gif" title="<%=paramRequest.getLocaleString("remove")%>" class="K2BWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
+                                <%url.setMode(url.Mode_VIEW+"2");%>
+                                <a href="<%=url.setAction(url.Action_REMOVE).toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/griddelete.gif" title="<%=paramRequest.getLocaleString("remove")%>" class="K2BWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
                                 <td valign=top align="RIGHT" style="display:none;" >
                                 <td valign=top align="LEFT">
                                 <span id="" class="ReadonlyK2BGridAttribute"><%=title%></span></td>
@@ -183,7 +183,7 @@ if (sobj != null) {
                                 <span id="span_CUENTACONTABLEDESCRIPCION_0001" class="ReadonlyK2BGridAttribute">
                                     <%if(description!=null && !description.equals("null")){%>
                                     <%=description%>
-                                <%}%>
+                                <%}url.setAction("add");%>
                                 </span>
                                 </td>
                             </tr>
