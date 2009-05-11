@@ -663,8 +663,9 @@ div.sitesectiontree ul.treeres {
     width:300px;
 }
 .swb-bmk-form form fieldset {
-    border:white;
+    border:1px solid red;
 }
+
 .swb-bkm-content{margin-left: 200px; padding:10px}
 .swb-bkm-header{background: url(../images/swbform-fieldset.png) left bottom repeat-x; border-top:1px solid blue;}
 .swb-bkm-navigation{background:#E6EDF9;width:200px}
