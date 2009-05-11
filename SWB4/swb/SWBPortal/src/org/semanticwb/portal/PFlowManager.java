@@ -92,7 +92,7 @@ public class PFlowManager
         while (refs.hasNext())
         {
             PFlowRef ref = refs.next();
-            if(ref.isActive())
+            if (ref.isActive())
             {
                 flows.add(ref.getPflow());
             }
@@ -103,18 +103,21 @@ public class PFlowManager
     public Resource[] getContentsAtFlowOfUser(User user, WebSite site)
     {
         HashSet<Resource> getContentsAtFlowOfUser = new HashSet<Resource>();
-        Iterator<PFlow> flows = site.listPFlows();
-        while (flows.hasNext())
+        if (site != null)
         {
-            PFlow flow = flows.next();
-            Iterator<PFlowInstance> instances = flow.listPFlowInstances();
-            while (instances.hasNext())
+            Iterator<PFlow> flows = site.listPFlows();
+            while (flows.hasNext())
             {
-                PFlowInstance instance = instances.next();
-                Resource resource = instance.getPfinstResource();
-                if (isInFlow(resource) && resource.getCreator() != null && resource.getCreator().equals(user))
+                PFlow flow = flows.next();
+                Iterator<PFlowInstance> instances = flow.listPFlowInstances();
+                while (instances.hasNext())
                 {
-                    getContentsAtFlowOfUser.add(resource);
+                    PFlowInstance instance = instances.next();
+                    Resource resource = instance.getPfinstResource();
+                    if (isInFlow(resource) && resource.getCreator() != null && resource.getCreator().equals(user))
+                    {
+                        getContentsAtFlowOfUser.add(resource);
+                    }
                 }
             }
         }
@@ -124,18 +127,21 @@ public class PFlowManager
     public Resource[] getContentsAtFlowAll(WebSite site)
     {
         HashSet<Resource> getContentsAtFlowAll = new HashSet<Resource>();
-        Iterator<PFlow> flows = site.listPFlows();
-        while (flows.hasNext())
+        if (site != null)
         {
-            PFlow flow = flows.next();
-            Iterator<PFlowInstance> instances = flow.listPFlowInstances();
-            while (instances.hasNext())
+            Iterator<PFlow> flows = site.listPFlows();
+            while (flows.hasNext())
             {
-                PFlowInstance instance = instances.next();
-                Resource resource = instance.getPfinstResource();
-                if (isInFlow(resource))
+                PFlow flow = flows.next();
+                Iterator<PFlowInstance> instances = flow.listPFlowInstances();
+                while (instances.hasNext())
                 {
-                    getContentsAtFlowAll.add(resource);
+                    PFlowInstance instance = instances.next();
+                    Resource resource = instance.getPfinstResource();
+                    if (isInFlow(resource))
+                    {
+                        getContentsAtFlowAll.add(resource);
+                    }
                 }
             }
         }
@@ -145,18 +151,21 @@ public class PFlowManager
     public Resource[] getContentsAtFlow(User user, WebSite site)
     {
         HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
-        Iterator<PFlow> flows = site.listPFlows();
-        while (flows.hasNext())
+        if (site != null)
         {
-            PFlow flow = flows.next();
-            Iterator<PFlowInstance> instances = flow.listPFlowInstances();
-            while (instances.hasNext())
+            Iterator<PFlow> flows = site.listPFlows();
+            while (flows.hasNext())
             {
-                PFlowInstance instance = instances.next();
-                Resource resource = instance.getPfinstResource();
-                if (isInFlow(resource) && resource.getCreator().equals(user) && this.isReviewer(resource, user))
+                PFlow flow = flows.next();
+                Iterator<PFlowInstance> instances = flow.listPFlowInstances();
+                while (instances.hasNext())
                 {
-                    getContentsAtFlow.add(resource);
+                    PFlowInstance instance = instances.next();
+                    Resource resource = instance.getPfinstResource();
+                    if (isInFlow(resource) && resource.getCreator().equals(user) && this.isReviewer(resource, user))
+                    {
+                        getContentsAtFlow.add(resource);
+                    }
                 }
             }
         }
@@ -182,14 +191,17 @@ public class PFlowManager
     public Resource[] getContentsAtFlow(PFlow pflow, WebSite site)
     {
         HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
-        Iterator<PFlowInstance> instances = pflow.listPFlowInstances();
-        while (instances.hasNext())
+        if (site != null)
         {
-            PFlowInstance instance = instances.next();
-            if (instance.getPflow().getWebSite().equals(site))
+            Iterator<PFlowInstance> instances = pflow.listPFlowInstances();
+            while (instances.hasNext())
             {
-                Resource resource = instance.getPfinstResource();
-                getContentsAtFlow.add(resource);
+                PFlowInstance instance = instances.next();
+                if (instance.getPflow().getWebSite().equals(site))
+                {
+                    Resource resource = instance.getPfinstResource();
+                    getContentsAtFlow.add(resource);
+                }
             }
         }
         return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
