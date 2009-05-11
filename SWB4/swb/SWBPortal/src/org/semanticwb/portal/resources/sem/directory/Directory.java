@@ -45,7 +45,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
             RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/directory/directory.jsp");
             rd.include(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.debug(e);
         }
     }
 
