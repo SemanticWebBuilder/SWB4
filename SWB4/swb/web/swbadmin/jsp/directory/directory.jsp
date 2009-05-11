@@ -39,7 +39,7 @@ if (sobj != null) {
                             </tr>
                             <%
                             int actualPage = 1;
-                            String strResTypes[] = getCatSortArray(sobj, actualPage);
+                            String strResTypes[] = getCatSortArray(sobj, actualPage, request.getParameter("txtFind"));
                             String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
                             int iIniPage = Integer.parseInt(pageParams[0]);
                             int iFinPage = Integer.parseInt(pageParams[1]);
@@ -82,15 +82,20 @@ if (sobj != null) {
 <link href="/swb/swbadmin/css/directory.css" rel="stylesheet" type="text/css" />
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
     <tr>
-        <td align="left" valign="top"  height="25" class="block-title">&nbsp;</td>
+        <td align="left" valign="top"  height="25" class="block-title">
+            <form action="<%=url.toString()%>">
+                <%=paramRequest.getLocaleString("find")%>:<input type="text" name="txtFind"/><button type="submit"><%=paramRequest.getLocaleString("go")%></button>
+            </form>
+        </td>
         <td nowrap>
-            <table width="90%" border="0" cellspacing="0" cellpadding="0">
+            <table width="60%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td align="right">
                         <%url.setMode("add");%>
                         <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/nueva_version.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("addInstance")%>" TITLE="<%=paramRequest.getLocaleString("addInstance")%>"></a>
                         <%url.setCallMethod(url.Call_DIRECT);
                         url.setAction("excel");
+                        url.setParameter("txtFind", request.getParameter("txtFind"));
                         url.setMode(url.Mode_VIEW);%>
                         <a href="<%=url.toString()%>"><img width="21" height="21" src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/Excel-32.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("exportExcel")%>" TITLE="<%=paramRequest.getLocaleString("exportExcel")%>"></a>
                     </td>
@@ -119,7 +124,7 @@ if (sobj != null) {
             if (request.getParameter("actualPage") != null) {
                 actualPage = Integer.parseInt(request.getParameter("actualPage"));
             }
-            String strResTypes[] = getCatSortArray(sobj, actualPage);
+            String strResTypes[] = getCatSortArray(sobj, actualPage, request.getParameter("txtFind"));
 
             String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
             int iIniPage = Integer.parseInt(pageParams[0]);
@@ -159,6 +164,7 @@ if (sobj != null) {
                 String title = strFields[0];
                 String description = strFields[1];
                 String uri = strFields[2];
+                url.setCallMethod(url.Call_CONTENT);
                 url.setParameter("objInstUri", uri);
                             %>
                             <tr class="K2BWorkWithGridOdd"><td valign=top align="CENTER">
@@ -199,14 +205,20 @@ if (sobj != null) {
 
 
 <%!
-private String[] getCatSortArray(SemanticObject sobj, int actualPage) {
+private String[] getCatSortArray(SemanticObject sobj, int actualPage, String txtFind) {
         Vector vRO = new Vector();
-
         SemanticClass swbClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
         Iterator<SemanticObject> itSebObj = swbClass.listInstances();
         while (itSebObj.hasNext()) {
              SemanticObject semObj = itSebObj.next();
-             vRO.add(semObj);
+             if(txtFind!=null && txtFind.trim().length()>0){
+                 String title=semObj.getProperty(Descriptiveable.swb_title).toLowerCase();
+                 if(title.startsWith(txtFind.toLowerCase())){
+                     vRO.add(semObj);
+                 }
+             }else{
+                 vRO.add(semObj);
+             }
         }
 
         String[] strArray = new String[vRO.size() + 1];
