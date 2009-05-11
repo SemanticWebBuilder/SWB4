@@ -90,169 +90,179 @@ public class SWBDocumentsToAuthorize extends GenericResource
         }
         User user = paramRequest.getUser();
         PrintWriter out = response.getWriter();
-        /*out.println("<script type=\"text/javascript\">\n" +
-                "           dojo.require(\"dojo.parser\");\n" +
-                //"                   dojo.require(\"dijit.layout.ContentPane\");\n" +
-                "                   dojo.require(\"dojox.form.DropDownSelect\");\n" +
-                //"                   dojo.require(\"dijit.form.RadioButton\");\n" +
-                "                   dojo.require(\"dijit.form.Textarea\");\n" +
-                "        </script>\n");*/
-        out.println("<form class=\"swbform\" method='post'>");
-        out.println("<fieldset>");
-        out.println("<select name='site' dojoType=\"dojox.form.DropDownSelect\" autocomplete=\"false\">");
-        Iterator<WebSite> sites = SWBContext.listWebSites();
-        while (sites.hasNext())
+        if (sitetoShow != null)
         {
-            WebSite site = sites.next();
-            if (!(site.getId().equals(SWBContext.WEBSITE_ADMIN) || site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ONTEDITOR)))
+
+            /*out.println("<script type=\"text/javascript\">\n" +
+            "           dojo.require(\"dojo.parser\");\n" +
+            //"                   dojo.require(\"dijit.layout.ContentPane\");\n" +
+            "                   dojo.require(\"dojox.form.DropDownSelect\");\n" +
+            //"                   dojo.require(\"dijit.form.RadioButton\");\n" +
+            "                   dojo.require(\"dijit.form.Textarea\");\n" +
+            "        </script>\n");*/
+            out.println("<form class=\"swbform\" method='post'>");
+            out.println("<fieldset>");
+            out.println("<select name='site' dojoType=\"dojox.form.DropDownSelect\" autocomplete=\"false\">");
+            Iterator<WebSite> sites = SWBContext.listWebSites();
+            while (sites.hasNext())
             {
-                if (sitetoShow == null)
+                WebSite site = sites.next();
+                if (!(site.getId().equals(SWBContext.WEBSITE_ADMIN) || site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ONTEDITOR)))
                 {
-                    sitetoShow = site;
-                    out.println("<option selected value='" + site.getId() + "'>" + site.getTitle() + "</option>");
-                }
-                else
-                {
-                    if (sitetoShow.getId().equals(site.getId()))
+                    if (sitetoShow == null)
                     {
+                        sitetoShow = site;
                         out.println("<option selected value='" + site.getId() + "'>" + site.getTitle() + "</option>");
                     }
                     else
                     {
-                        out.println("<option value='" + site.getId() + "'>" + site.getTitle() + "</option>");
+                        if (sitetoShow.getId().equals(site.getId()))
+                        {
+                            out.println("<option selected value='" + site.getId() + "'>" + site.getTitle() + "</option>");
+                        }
+                        else
+                        {
+                            out.println("<option value='" + site.getId() + "'>" + site.getTitle() + "</option>");
+                        }
+
                     }
 
                 }
-
             }
-        }
-        out.println("</select>");
-        String selected = "";
-        if (show == 1)
-        {
-            selected = "checked";
-        }
-        out.println("<label for=\"id='show1'\">"+paramRequest.getLocaleString("mydocuments")+"</label><input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show1' name='show' value='1'>" + paramRequest.getLocaleString("all") + "");
-        selected = "";
-        if (show == 2)
-        {
-            selected = "checked";
-        }
-        out.println("<label for=\"id='show2'\">"+paramRequest.getLocaleString("mydocuments")+"</label><input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show2'  name='show' value='2'>" + paramRequest.getLocaleString("mydocuments") + "");
-        selected = "";
-        if (show == 3)
-        {
-            selected = "checked";
-        }
-        
-        out.println("<label for=\"id='show3'\">"+paramRequest.getLocaleString("mydocuments")+"</label><input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show3' name='show' value='3'>" + paramRequest.getLocaleString("forauthorize") + "");
-        out.println("<label for=\"id='s'\">"+paramRequest.getLocaleString("see")+"</label><button dojoType=\"dijit.form.Button\" type='submit' id='s' name='s'>"+paramRequest.getLocaleString("see")+"</button>");
-        out.println("</fieldset>");
-        out.println("</form>");
+            out.println("</select>");
+            String selected = "";
+            if (show == 1)
+            {
+                selected = "checked";
+            }
+            out.println("<label for=\"id='show1'\">" + paramRequest.getLocaleString("mydocuments") + "</label><input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show1' name='show' value='1'>" + paramRequest.getLocaleString("all") + "");
+            selected = "";
+            if (show == 2)
+            {
+                selected = "checked";
+            }
+            out.println("<label for=\"id='show2'\">" + paramRequest.getLocaleString("mydocuments") + "</label><input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show2'  name='show' value='2'>" + paramRequest.getLocaleString("mydocuments") + "");
+            selected = "";
+            if (show == 3)
+            {
+                selected = "checked";
+            }
 
-        Resource[] resources;
-        if (show == 1)
-        {
-            resources = SWBPortal.getPFlowManager().getContentsAtFlowAll(sitetoShow);
-        }
-        else if (show == 3)
-        {
-            resources = SWBPortal.getPFlowManager().getContentsAtFlow(user, sitetoShow);
+            out.println("<label for=\"id='show3'\">" + paramRequest.getLocaleString("mydocuments") + "</label><input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show3' name='show' value='3'>" + paramRequest.getLocaleString("forauthorize") + "");
+            out.println("<label for=\"id='s'\">" + paramRequest.getLocaleString("see") + "</label><button dojoType=\"dijit.form.Button\" type='submit' id='s' name='s'>" + paramRequest.getLocaleString("see") + "</button>");
+            out.println("</fieldset>");
+            out.println("</form>");
+
+            Resource[] resources;
+            if (show == 1)
+            {
+                resources = SWBPortal.getPFlowManager().getContentsAtFlowAll(sitetoShow);
+            }
+            else if (show == 3)
+            {
+                resources = SWBPortal.getPFlowManager().getContentsAtFlow(user, sitetoShow);
+            }
+            else
+            {
+                resources = SWBPortal.getPFlowManager().getContentsAtFlowOfUser(user, sitetoShow);
+            }
+
+            out.println("<form class=\"swbform\" name='swbfrmResourcesAuhotrize' method='post' action='" + paramRequest.getActionUrl() + "'>");
+            out.println("<fieldset>");
+            out.println("<input type='hidden' name='action' value=''></input>");
+            out.println("<input type='hidden' name='site' value='" + sitetoShow.getId() + "'></input>");
+            out.println("<table>");
+            out.println("<tr>");
+            out.println("<th>");
+            out.println(paramRequest.getLocaleString("select"));
+            out.println("</th>");
+            out.println("<th>");
+            out.println(paramRequest.getLocaleString("title"));
+            out.println("</th>");
+            out.println("<th>");
+            out.println(paramRequest.getLocaleString("page"));
+            out.println("</th>");
+            out.println("<th>");
+            out.println(paramRequest.getLocaleString("step"));
+            out.println("</th>");
+            out.println("</tr>");
+            for (Resource resource : resources)
+            {
+                out.println("<tr>");
+                out.println("<td>");
+                out.println("<input dojoType=\"dijit.form.RadioButton\" type=\"radio\" name=\"res\" value\"" + resource.getId() + "\">" + resource.getId() + "</input>");
+                out.println("</td>");
+                out.println("<td>");
+                out.println(resource.getTitle());
+                out.println("</td>");
+                out.println("<td>");
+                Iterator<Resourceable> resourceables = resource.listResourceables();
+                while (resourceables.hasNext())
+                {
+                    Resourceable resourceable = resourceables.next();
+                    if (resourceable instanceof WebPage)
+                    {
+                        out.println(((WebPage) resourceable).getTitle());
+                        break;
+                    }
+                }
+                out.println("</td>");
+                out.println("<td>");
+                out.println(resource.getPflowInstance().getStep());
+                out.println("</td>");
+                out.println("</tr>");
+            }
+            out.println("<tr>");
+            out.println("<td colspan='3'>");
+            out.println("<textarea dojoType=\"dijit.form.Textarea\" name=\"msg\" rows=\"2\" cols=\"50\">");
+            out.println("</textarea>");
+            out.println("</td>");
+            out.println("</tr>");
+
+            out.println("<tr>");
+            out.println("<td>");
+            out.println("<button dojoType=\"dijit.form.Button\" OnClick=\"authorize()\">" + paramRequest.getLocaleString("authorize") + "</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" OnClick=\"reject()\">" + paramRequest.getLocaleString("reject") + "</button>");
+            out.println("</td>");
+            out.println("</tr>");
+            out.println("</table>");
+            out.println("<fieldset>");
+            out.println("</form>");
+
+
+            out.println("<script>");
+            out.println("function authorize()");
+            out.println("{");
+            out.println("   if(swbfrmResourcesAuhotrize.msg.value=='')");
+            out.println("   {");
+            out.println("       alert('" + paramRequest.getLocaleString("messageRequired") + "');");
+            out.println("       return;");
+            out.println("   }");
+            out.println("   swbfrmResourcesAuhotrize.action.value='a';");
+            out.println("   swbfrmResourcesAuhotrize.submit();");
+            out.println("}");
+            out.println("</script>");
+
+            out.println("<script>");
+            out.println("function reject()");
+            out.println("{");
+            out.println("   if(swbfrmResourcesAuhotrize.msg.value=='')");
+            out.println("   {");
+            out.println("       alert('" + paramRequest.getLocaleString("messageRequired") + "');");
+            out.println("       return;");
+            out.println("   }");
+            out.println("   swbfrmResourcesAuhotrize.action.value='r';");
+            out.println("   swbfrmResourcesAuhotrize.submit();");
+            out.println("}");
+            out.println("</script>");
+
         }
         else
         {
-            resources = SWBPortal.getPFlowManager().getContentsAtFlowOfUser(user, sitetoShow);
+            out.println("<div class=\"swbform\">");
+            out.println("<p>" + paramRequest.getLocaleString("messageNoSites") + "</p>");
+            out.println("</div>");
         }
-        
-        out.println("<form class=\"swbform\" name='swbfrmResourcesAuhotrize' method='post' action='" + paramRequest.getActionUrl() + "'>");
-        out.println("<fieldset>");
-        out.println("<input type='hidden' name='action' value=''></input>");
-        out.println("<input type='hidden' name='site' value='" + sitetoShow.getId() + "'></input>");
-        out.println("<table>");
-        out.println("<tr>");
-        out.println("<th>");
-        out.println(paramRequest.getLocaleString("select"));
-        out.println("</th>");
-        out.println("<th>");
-        out.println(paramRequest.getLocaleString("title"));
-        out.println("</th>");
-        out.println("<th>");
-        out.println(paramRequest.getLocaleString("page"));
-        out.println("</th>");
-        out.println("<th>");
-        out.println(paramRequest.getLocaleString("step"));
-        out.println("</th>");
-        out.println("</tr>");
-        for (Resource resource : resources)
-        {
-            out.println("<tr>");
-            out.println("<td>");
-            out.println("<input dojoType=\"dijit.form.RadioButton\" type=\"radio\" name=\"res\" value\"" + resource.getId() + "\">"+resource.getId()+"</input>");
-            out.println("</td>");
-            out.println("<td>");
-            out.println(resource.getTitle());
-            out.println("</td>");
-            out.println("<td>");
-            Iterator<Resourceable> resourceables = resource.listResourceables();
-            while (resourceables.hasNext())
-            {
-                Resourceable resourceable = resourceables.next();
-                if (resourceable instanceof WebPage)
-                {
-                    out.println(((WebPage) resourceable).getTitle());
-                    break;
-                }
-            }
-            out.println("</td>");
-            out.println("<td>");
-            out.println(resource.getPflowInstance().getStep());
-            out.println("</td>");
-            out.println("</tr>");
-        }
-        out.println("<tr>");
-        out.println("<td colspan='3'>");
-        out.println("<textarea dojoType=\"dijit.form.Textarea\" name=\"msg\" rows=\"2\" cols=\"50\">");
-        out.println("</textarea>");
-        out.println("</td>");
-        out.println("</tr>");
-
-        out.println("<tr>");
-        out.println("<td>");
-        out.println("<button dojoType=\"dijit.form.Button\" OnClick=\"authorize()\">"+paramRequest.getLocaleString("authorize")+"</button>");
-        out.println("<button dojoType=\"dijit.form.Button\" OnClick=\"reject()\">"+paramRequest.getLocaleString("reject")+"</button>");
-        out.println("</td>");
-        out.println("</tr>");
-        out.println("</table>");
-        out.println("<fieldset>");
-        out.println("</form>");
-        
-
-        out.println("<script>");
-        out.println("function authorize()");
-        out.println("{");
-        out.println("   if(swbfrmResourcesAuhotrize.msg.value=='')");
-        out.println("   {");
-        out.println("       alert('" + paramRequest.getLocaleString("messageRequired") + "');");
-        out.println("       return;");
-        out.println("   }");
-        out.println("   swbfrmResourcesAuhotrize.action.value='a';");
-        out.println("   swbfrmResourcesAuhotrize.submit();");
-        out.println("}");
-        out.println("</script>");
-
-        out.println("<script>");
-        out.println("function reject()");
-        out.println("{");
-        out.println("   if(swbfrmResourcesAuhotrize.msg.value=='')");
-        out.println("   {");
-        out.println("       alert('" + paramRequest.getLocaleString("messageRequired") + "');");
-        out.println("       return;");
-        out.println("   }");
-        out.println("   swbfrmResourcesAuhotrize.action.value='r';");
-        out.println("   swbfrmResourcesAuhotrize.submit();");
-        out.println("}");
-        out.println("</script>");
-
         out.close();
     }
 }
