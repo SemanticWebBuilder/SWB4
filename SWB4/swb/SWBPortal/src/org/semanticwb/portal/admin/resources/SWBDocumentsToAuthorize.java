@@ -105,15 +105,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
         }
         if (sitetoShow != null)
         {
-
-            /*out.println("<script type=\"text/javascript\">\n" +
-            "           dojo.require(\"dojo.parser\");\n" +
-            //"                   dojo.require(\"dijit.layout.ContentPane\");\n" +
-            "                   dojo.require(\"dojox.form.DropDownSelect\");\n" +
-            //"                   dojo.require(\"dijit.form.RadioButton\");\n" +
-            "                   dojo.require(\"dijit.form.Textarea\");\n" +
-            "        </script>\n");*/
-            out.println("<form class=\"swbform\" method='post'>");
+            out.println("<form class=\"swbform\" name='frmseecontentsToAuthorize' action='" + paramRequest.getRenderUrl() + "' method='post'>");
             out.println("<fieldset>");
             out.println("<select name='site' dojoType=\"dojox.form.DropDownSelect\" autocomplete=\"false\">");
             sites = SWBContext.listWebSites();
@@ -148,21 +140,20 @@ public class SWBDocumentsToAuthorize extends GenericResource
             {
                 selected = "checked";
             }
-            out.println("<input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show1' name='show' value='1'>" + paramRequest.getLocaleString("all") + "");
+            out.println("<input " + selected + " onClick='frmseecontentsToAuthorize.submit();' dojoType=\"dijit.form.RadioButton\" type='radio' id='show1' name='show' value='1'>" + paramRequest.getLocaleString("all") + "");
             selected = "";
             if (show == 2)
             {
                 selected = "checked";
             }
-            out.println("<input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show2'  name='show' value='2'>" + paramRequest.getLocaleString("mydocuments") + "");
+            out.println("<input " + selected + " onClick='frmseecontentsToAuthorize.submit();' dojoType=\"dijit.form.RadioButton\" type='radio' id='show2'  name='show' value='2'>" + paramRequest.getLocaleString("mydocuments") + "");
             selected = "";
             if (show == 3)
             {
                 selected = "checked";
             }
 
-            out.println("<input " + selected + " dojoType=\"dijit.form.RadioButton\" type='radio' id='show3' name='show' value='3'>" + paramRequest.getLocaleString("forauthorize") + "");
-            out.println("<button dojoType=\"dijit.form.Button\" type='submit' id='s' name='s'>" + paramRequest.getLocaleString("see") + "</button>");
+            out.println("<input " + selected + "  onClick='frmseecontentsToAuthorize.submit();' dojoType=\"dijit.form.RadioButton\" type='radio' id='show3' name='show' value='3'>" + paramRequest.getLocaleString("forauthorize") + "");
             out.println("</fieldset>");
             out.println("</form>");
 
@@ -236,7 +227,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
 
 
                 out.println("<tr>");
-                out.println("<td colspan='3'>");
+                out.println("<td colspan='4' align='center'>");
                 out.println("<textarea dojoType=\"dijit.form.Textarea\" name=\"msg\" rows=\"2\" cols=\"50\">");
                 out.println("</textarea>");
                 out.println("</td>");
