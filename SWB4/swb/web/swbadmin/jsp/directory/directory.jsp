@@ -17,20 +17,69 @@
 <%@page import="org.semanticwb.platform.SemanticClass"%>
 
 
-<link href="/swb/swbadmin/css/directory.css" rel="stylesheet" type="text/css" />
-
 <%!
 private final int I_PAGE_SIZE = 20;
 private final int I_INIT_PAGE = 1;
 %>
 
 <%
+String action=paramRequest.getAction();
 SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
 if (sobj != null) {
+    if(action.equals("excel")){
+        %>
+        <table>
+            <tr><td>
+                <table>
+                    <tr><td>
+                        <table>
+                            <tr>
+                            <th><%=paramRequest.getLocaleString("code")%></th>
+                                <th><%=paramRequest.getLocaleString("description")%></th>
+                            </tr>
+                            <%
+                            int actualPage = 1;
+                            String strResTypes[] = getCatSortArray(sobj, actualPage);
+                            String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
+                            int iIniPage = Integer.parseInt(pageParams[0]);
+                            int iFinPage = Integer.parseInt(pageParams[1]);
+                            int iTotPage = Integer.parseInt(pageParams[2]);
+                            if (iFinPage == strResTypes.length) {
+                                iFinPage = iFinPage - 1;
+                            }
+                            for (int i = iIniPage; i < strResTypes.length-1; i++)
+                             {
+                                try{
+                                    String[] strFields = strResTypes[i].toString().split(":swbp4g1:");
+                                    String title = strFields[0];
+                                    String description = strFields[1];
+                            %>
+                            <tr>
+                                <td><%=title%></td>
+                                <td>
+                                <%if(description!=null && !description.equals("null")){%>
+                                    <%=description%>
+                                <%}%>
+                                </td>
+                            </tr>
+                            <%
+                            }catch(Exception e){
+                            }
+                           }
+                            %>
+                </table>
+             </td>
+           </tr>
+         </table>
+      </td>
+    </tr>
+</table>
+<%
+    }else{
     SWBResourceURL url=paramRequest.getRenderUrl();
     url.setParameter("objUri", sobj.getURI());
 %>
-
+<link href="/swb/swbadmin/css/directory.css" rel="stylesheet" type="text/css" />
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
     <tr>
         <td align="left" valign="top"  height="25" class="block-title">&nbsp;</td>
@@ -39,7 +88,11 @@ if (sobj != null) {
                 <tr>
                     <td align="right">
                         <%url.setMode("add");%>
-                        <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/nueva_version.gif" border="0" align="absmiddle" alt="Agregar instancia" TITLE="Agregar instancia"></a>
+                        <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/nueva_version.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("addInstance")%>" TITLE="<%=paramRequest.getLocaleString("addInstance")%>"></a>
+                        <%url.setCallMethod(url.Call_DIRECT);
+                        url.setAction("excel");
+                        url.setMode(url.Mode_VIEW);%>
+                        <a href="<%=url.toString()%>"><img width="21" height="21" src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/Excel-32.gif" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("exportExcel")%>" TITLE="<%=paramRequest.getLocaleString("exportExcel")%>"></a>
                     </td>
                 </tr>
             </table>
@@ -56,8 +109,8 @@ if (sobj != null) {
                         <th align="CENTER" width=14px class="K2BWorkWithGridTitle"></th>
                         <th align="CENTER" width=14px class="K2BWorkWithGridTitle"></th>
                         <th align="CENTER" width=14px class="K2BWorkWithGridTitle"></th>
-                        <th align="LEFT" width=125px class="K2BWorkWithGridTitle">Código</th>
-                        <th align="LEFT" nowrap class="K2BWorkWithGridTitle">Descripción</th>
+                        <th align="LEFT" width=125px class="K2BWorkWithGridTitle"><%=paramRequest.getLocaleString("code")%></th>
+                        <th align="LEFT" nowrap class="K2BWorkWithGridTitle"><%=paramRequest.getLocaleString("description")%></th>
                     </tr>
         <%
             //Empieza paginación
@@ -110,13 +163,13 @@ if (sobj != null) {
                             %>
                             <tr class="K2BWorkWithGridOdd"><td valign=top align="CENTER">
                                 <%url.setMode(url.Mode_VIEW+"2");%>
-                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridopen.gif" title="Abrir" class="K2BWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
+                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridopen.gif" title="<%=paramRequest.getLocaleString("open")%>" class="K2BWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
                                 <td valign=top align="CENTER">
                                 <%url.setMode(url.Mode_EDIT);%>
-                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridupdate.gif" title="Modificar" class="K2BWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
+                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridupdate.gif" title="<%=paramRequest.getLocaleString("edit")%>" class="K2BWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
                                 <td valign=top align="CENTER">
                                 <%url.setMode(url.Mode_VIEW+"2");url.setAction(url.Action_REMOVE);%>
-                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/griddelete.gif" title="Eliminar" class="K2BWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
+                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/griddelete.gif" title="<%=paramRequest.getLocaleString("remove")%>" class="K2BWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
                                 <td valign=top align="RIGHT" style="display:none;" >
                                 <td valign=top align="LEFT">
                                 <span id="" class="ReadonlyK2BGridAttribute"><%=title%></span></td>
@@ -140,7 +193,8 @@ if (sobj != null) {
     </TR>
 </table>
 <%
-}
+    }
+ }
 %>
 
 
