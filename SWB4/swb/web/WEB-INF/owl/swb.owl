@@ -2049,14 +2049,10 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="index">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_index">
-        <rdfs:label xml:lang="en">Index</rdfs:label>
-        <rdfs:label xml:lang="es">Orden</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:domain rdf:resource="#Sortable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Sortable"/>
+    <rdfs:label xml:lang="es">Orden</rdfs:label>
+    <rdfs:label xml:lang="en">Index</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="passUpdVerify">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -2671,6 +2667,10 @@
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:FormElement>
+  <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Location">
+    <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
   <owl:AnnotationProperty rdf:ID="propertyCodeName">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
@@ -2698,6 +2698,10 @@
     <swb:title xml:lang="es">Crear</swb:title>
     <swb:title xml:lang="en">Create</swb:title>
   </swbxf:ObjectAction>
+  <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Date">
+    <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
   <swb:Permission rdf:ID="PermSU">
     <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Super User</swb:title>
