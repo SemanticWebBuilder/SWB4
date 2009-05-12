@@ -489,15 +489,18 @@ public class SWBUtils {
             return aux;
         }
 
-        public static String getLocaleString(String Bundle, String key) {
+        public static String getLocaleString(String Bundle, String key)
+        {
             return getLocaleString(Bundle, key, locale);
         }
 
-        public static String getLocaleString(String Bundle, String key, Locale locale) {
+        public static String getLocaleString(String Bundle, String key, Locale locale)
+        {
             return getLocaleString(Bundle, key, locale, null);
         }
 
-        public static String getLocaleString(String Bundle, String key, Locale locale, ClassLoader loader) {
+        public static String getLocaleString(String Bundle, String key, Locale locale, ClassLoader loader)
+        {
             String cad = "";
             try {
                 if (loader == null) {
@@ -1436,6 +1439,8 @@ public class SWBUtils {
     public static class EMAIL {
 
         private static String smtpserver = null;
+        private static String smtpuser = null;
+        private static String smtppassword = null;
         private static String adminEmail = null;
 
         /**
@@ -1458,7 +1463,7 @@ public class SWBUtils {
          * Setter for property smtpserver
          * @param smtpserver
          */
-        public static void setadminEmail(String adminEmail) {
+        public static void setAdminEmail(String adminEmail) {
             EMAIL.adminEmail = adminEmail;
         }
 
@@ -1619,6 +1624,15 @@ public class SWBUtils {
             swbMailSender.addEMail(message);
             swbMailSender.run();
         }
+
+        public static void setSMTPUser(String smtpuser) {
+            EMAIL.smtpuser = smtpuser;
+        }
+
+        public static void setSMTPPassword(String smtppassword) {
+            EMAIL.smtppassword = smtppassword;
+        }
+
     }
 
     /**
