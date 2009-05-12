@@ -706,4 +706,7 @@ div.sitesectiontree ul.treeres {
 .swb-bkm-textArea:focus {
     border-color:#406b9b;
 }
+.swb-bkm-boldElement {
+    font-weight: bold;
+}
 /*--------------bookmarks-------------*/
