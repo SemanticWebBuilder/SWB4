@@ -91,7 +91,7 @@ public class SWBALogs extends GenericResource {
 
         String pagesHistory = "5";
         String showPages = "1";
-        String tipo = "";
+//        String tipo = "";
 
         String id = request.getParameter("suri");
 
@@ -116,9 +116,9 @@ public class SWBALogs extends GenericResource {
         if (base.getAttribute("showPages") != null) {
             showPages = base.getAttribute("showPages");
         }
-        if (base.getAttribute("tipo") != null) {
-            tipo = base.getAttribute("tipo");
-        }
+//        if (base.getAttribute("tipo") != null) {
+//            tipo = base.getAttribute("tipo");
+//        }
 
         SWBResourceURL urlu = paramRequest.getActionUrl();
         urlu.setAction("update");
@@ -499,7 +499,7 @@ public class SWBALogs extends GenericResource {
                     out.println("</tr>");
                 }
                 if (cuenta >= rangoFin) {
-                    break;
+                    //break;
                 }
             }
         } catch (Exception e) {
