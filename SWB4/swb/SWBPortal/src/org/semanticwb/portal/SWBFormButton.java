@@ -105,4 +105,9 @@ public class SWBFormButton
         return new SWBFormButton().setTitle("Eliminar", "es").setTitle("Delete", "en");
     }
 
+    public static SWBFormButton newResetButton()
+    {
+        return new SWBFormButton().setTitle("Restaurar", "es").setTitle("Reset", "en").setAttribute("type", "reset");
+    }
+
 }
