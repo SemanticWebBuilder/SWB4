@@ -32,7 +32,7 @@
 try
 {
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
-    if(suri==null) //es una creacion
+    if(suri== null) //es una creacion
     {
         SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(scls);
         SemanticObject ref=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(sref);
