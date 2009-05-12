@@ -279,6 +279,21 @@ public class WB4WriterTest
 
     @Test
     @Ignore
+    public void showContentsInFlowTest()
+    {
+        try
+        {
+            WB4Writer writer = new WB4Writer(this.xContext);
+            WB4Writer.showContentsInFlow();
+        }
+        catch (Throwable wbe)
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
+    @Test
+    @Ignore
     public void saveToSiteTest()
     {
         try
@@ -324,7 +339,7 @@ public class WB4WriterTest
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void showDocumentInfoTest()
     {
         try
