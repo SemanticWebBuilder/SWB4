@@ -655,15 +655,33 @@ div.sitesectiontree ul.treeres {
 /*------------------- select tree  ----*/
 
 /*--------------bookmarks-------------*/
+
+.swb-bkm-fieldset {
+    border:1px solid black;
+    width:300px;
+    margin:0px;
+    padding:0px;
+}
+
 .swb-bkm-form {
 	font-size: 1.1em;
 	color: #333;
     font: normal 100% "Lucida Grande", Helvetica, Verdana, Arial;
     background: url(../images/swbform-fieldset.png) left bottom repeat-x;
     width:300px;
+    margin:0px;
+    padding:0px;
 }
-.swb-bmk-form form fieldset {
-    border:1px solid red;
+
+.swb-bkm-form form {
+    margin:0px;
+    padding:0px;
+}
+
+.swb-bkm-form table {
+    width:300px;
+    margin:0px;
+    padding:0px;
 }
 
 .swb-bkm-content{margin-left: 200px; padding:10px}
