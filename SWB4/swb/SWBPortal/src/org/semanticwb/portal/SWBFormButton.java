@@ -62,7 +62,7 @@ public class SWBFormButton
 
     public SWBFormButton setAttribute(String name, String value)
     {
-        attributes.put(name, value);
+        attributes.put(name.toLowerCase(), value);
         return this;
     }
 
