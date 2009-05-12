@@ -10,6 +10,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Dns;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceSubType;
@@ -114,7 +115,10 @@ public class SWBServiceMgr implements SemanticObserver {
                         {
                             SWBPlatform.writeFileToWorkPath(tpl.getWorkPath()+"/1/"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr.getURI());
                         }catch(Exception e){log.error(e);}
-
+                    }
+                    if(obj.instanceOf(Dns.sclass))
+                    {
+                        Dns.refresh();
                     }
                 } else //REMOVES
                 {
@@ -127,6 +131,10 @@ public class SWBServiceMgr implements SemanticObserver {
                     } else if (obj.instanceOf(Resource.sclass)) // Removes Resource
                     {
                         SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() + obj.getWorkPath());
+                    }
+                    if(obj.instanceOf(Dns.sclass))
+                    {
+                        Dns.refresh();
                     }
                 }
             } else if (prop instanceof SemanticProperty)
@@ -147,7 +155,10 @@ public class SWBServiceMgr implements SemanticObserver {
                         }
                     }
                 }
-
+                if(obj.instanceOf(Dns.sclass)&& prop.equals(Dns.swb_dns))
+                {
+                    Dns.refresh();
+                }
             }else
             {
                 //TODO: SemanticClass

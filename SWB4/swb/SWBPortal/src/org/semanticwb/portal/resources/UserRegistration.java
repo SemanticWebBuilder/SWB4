@@ -373,7 +373,8 @@ public class UserRegistration extends GenericAdmResource
                 }
                 SemanticObject dp = sp.getDisplayProperty();
 //                System.out.println("Processing... " + sp.getDisplayName());
-                fm.processElement(request, sp, "update");
+                //fm.processElement(request, sp, "update");
+                fm.processElement(request, sp);
             }
             ArrayList<String> utypessel = new ArrayList<String>();
             String[] lista = request.getParameterValues("wb_usr_type");
@@ -434,7 +435,8 @@ public class UserRegistration extends GenericAdmResource
                 SemanticProperty sp = itprop.next();
                 SemanticObject dp = sp.getDisplayProperty();
 //                System.out.println("Processing... " + sp.getDisplayName());
-                fm.processElement(request, sp, "update");
+                //fm.processElement(request, sp, "update");
+                fm.processElement(request, sp);
             }
             Iterator<String> itur = userRep.getUserTypes();
             while (itur.hasNext())
@@ -446,7 +448,8 @@ public class UserRegistration extends GenericAdmResource
                     SemanticProperty sp = itprop.next();
                     SemanticObject dp = sp.getDisplayProperty();
 //                    System.out.println("Processing... " + sp.getDisplayName());
-                    fm.processElement(request, sp, "update");
+                    //fm.processElement(request, sp, "update");
+                    fm.processElement(request, sp);
                 }
             }
             if (null != super.getResourceBase().getAttribute("destiny"))
