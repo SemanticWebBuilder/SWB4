@@ -84,9 +84,6 @@
     <rdfs:label xml:lang="en">Allow to download the presentation</rdfs:label>
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</swb:index>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/repository#hasNodes">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hasNode</swb:propertyCodeName>
-  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org/office#Author">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
