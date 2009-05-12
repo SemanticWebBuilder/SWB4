@@ -19,6 +19,7 @@ import org.semanticwb.model.Versionable;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
+import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -234,6 +235,17 @@ public class SWBAVersionInfo extends GenericResource {
             fm.addHiddenParameter("psuri", id);
             fm.addHiddenParameter("sobj", so.getURI());
             fm.setAction(urla.toString());
+
+            fm.setSubmitByAjax(true);
+            fm.addButton(SWBFormButton.newSaveButton());
+            SWBResourceURL urlback = paramRequest.getRenderUrl();
+            urlback.setMode(SWBResourceURL.Mode_VIEW);
+            urlback.setParameter("suri", id);
+            urlback.setParameter("psuri", id);
+            if(null!=so)urlback.setParameter("sobj", so.getURI());
+            fm.addButton(SWBFormButton.newCancelButton().setAttribute("onclick", "submitUrl('"+urlback+"',this.domNode);return false;"));
+            fm.setType(SWBFormMgr.TYPE_DOJO);
+
 
             out.println(fm.renderForm(request));
         }

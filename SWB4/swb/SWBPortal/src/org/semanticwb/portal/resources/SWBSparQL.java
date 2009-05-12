@@ -183,7 +183,7 @@ public class SWBSparQL extends GenericResource {
             getResourceBase().setAttribute(DPL_FOOT, dplfoot);
             try
             {
-                System.out.println("oy:"+onttype+" sm:"+smodels+" q:"+query);
+                //System.out.println("oy:"+onttype+" sm:"+smodels+" q:"+query);
                 getResourceBase().updateAttributesToDB();
             }catch(Exception e){log.error(e);}
             createSemanticModel();
@@ -409,86 +409,86 @@ public class SWBSparQL extends GenericResource {
     }
 
 
-    public String cropStr(String initext, String endtext, String content)
-    {
-        if(initext==null && endtext==null)return content;
-        //ini
-        if(initext!=null)
-        {
-            StringTokenizer st = new StringTokenizer(initext, ";,");
-            while (st.hasMoreTokens())
-            {
-                String a1;
-                String a2;
-                String wp = st.nextToken();
-                int i=wp.indexOf("|");
-                if(i>-1)
-                {
-                    a1=wp.substring(0,i);
-                    a2=wp.substring(i+1);
-                }else
-                {
-                    a1=wp;
-                    a2="";
-                }
-                int ini=content.indexOf(a1);
-                if(ini>=0)
-                {
-                    content=a2+content.substring(ini+a1.length());
-                    break;
-                }
-            }
-        }
-        //end
-        if(endtext!=null)
-        {
-            StringTokenizer st = new StringTokenizer(endtext, ";,");
-            while (st.hasMoreTokens())
-            {
-                String a1;
-                String a2;
-                String wp = st.nextToken();
-                int i=wp.indexOf("|");
-                if(i>-1)
-                {
-                    a1=wp.substring(0,i);
-                    a2=wp.substring(i+1);
-                }else
-                {
-                    a1=wp;
-                    a2="";
-                }
-                int end=content.indexOf(a1);
-                if(end>=0)
-                {
-                    content=content.substring(0,end)+a2;
-                    break;
-                }
-            }
-        }
-        return content;
-    }
-
-    public String replaceStr(String replace, String content)
-    {
-        if(replace==null)return content;
-        StringTokenizer st = new StringTokenizer(replace, ";,");
-        while (st.hasMoreTokens())
-        {
-            String wp = st.nextToken();
-            int i=wp.indexOf("|");
-            if(i>-1)
-            {
-                String a1=wp.substring(0,i);
-                String a2=wp.substring(i+1);
-                content = content.replaceAll(a1, a2);
-            }else
-            {
-                content = content.replaceAll(wp, "");
-            }
-        }
-        return content;
-    }
+//    public String cropStr(String initext, String endtext, String content)
+//    {
+//        if(initext==null && endtext==null)return content;
+//        //ini
+//        if(initext!=null)
+//        {
+//            StringTokenizer st = new StringTokenizer(initext, ";,");
+//            while (st.hasMoreTokens())
+//            {
+//                String a1;
+//                String a2;
+//                String wp = st.nextToken();
+//                int i=wp.indexOf("|");
+//                if(i>-1)
+//                {
+//                    a1=wp.substring(0,i);
+//                    a2=wp.substring(i+1);
+//                }else
+//                {
+//                    a1=wp;
+//                    a2="";
+//                }
+//                int ini=content.indexOf(a1);
+//                if(ini>=0)
+//                {
+//                    content=a2+content.substring(ini+a1.length());
+//                    break;
+//                }
+//            }
+//        }
+//        //end
+//        if(endtext!=null)
+//        {
+//            StringTokenizer st = new StringTokenizer(endtext, ";,");
+//            while (st.hasMoreTokens())
+//            {
+//                String a1;
+//                String a2;
+//                String wp = st.nextToken();
+//                int i=wp.indexOf("|");
+//                if(i>-1)
+//                {
+//                    a1=wp.substring(0,i);
+//                    a2=wp.substring(i+1);
+//                }else
+//                {
+//                    a1=wp;
+//                    a2="";
+//                }
+//                int end=content.indexOf(a1);
+//                if(end>=0)
+//                {
+//                    content=content.substring(0,end)+a2;
+//                    break;
+//                }
+//            }
+//        }
+//        return content;
+//    }
+//
+//    public String replaceStr(String replace, String content)
+//    {
+//        if(replace==null)return content;
+//        StringTokenizer st = new StringTokenizer(replace, ";,");
+//        while (st.hasMoreTokens())
+//        {
+//            String wp = st.nextToken();
+//            int i=wp.indexOf("|");
+//            if(i>-1)
+//            {
+//                String a1=wp.substring(0,i);
+//                String a2=wp.substring(i+1);
+//                content = content.replaceAll(a1, a2);
+//            }else
+//            {
+//                content = content.replaceAll(wp, "");
+//            }
+//        }
+//        return content;
+//    }
 
 }
 

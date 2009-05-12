@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.portal.PFlowManager;
+import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
@@ -55,6 +57,14 @@ public class SWBAWebPageContents extends GenericResource {
         String idp = request.getParameter("sprop");
         String idptype = request.getParameter("sproptype");
 
+        if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
+            out.println("<script type=\"javascript\">");
+            out.println(" hideDialog(); ");
+            out.println(" reloadTab('" + id + "'); ");
+            out.println("</script>");
+            return;
+        }
+
         String action = request.getParameter("act");
 
         if (id == null) {
@@ -72,8 +82,7 @@ public class SWBAWebPageContents extends GenericResource {
         out.println("<script type=\"text/javascript\">");
         if (request.getParameter("nsuri") != null && request.getParameter("nsuri").trim().length() > 0) {
             SemanticObject snobj = ont.getSemanticObject(request.getParameter("nsuri"));
-            if (snobj != null)
-            {
+            if (snobj != null) {
                 log.debug("addNewTab");
                 out.println("  addNewTab('" + snobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + snobj.getDisplayName() + "');");
             }
@@ -85,7 +94,7 @@ public class SWBAWebPageContents extends GenericResource {
         }
 
         if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
-            log.debug("closeTab..."+request.getParameter("closetab"));
+            log.debug("closeTab..." + request.getParameter("closetab"));
             out.println("   closeTab('" + request.getParameter("closetab") + "');");
         }
         out.println("</script>");
@@ -113,7 +122,7 @@ public class SWBAWebPageContents extends GenericResource {
             inheritHeader.append("<table width=\"98%\">");
             inheritHeader.append("<thead>");
             inheritHeader.append("<tr>");
-            inheritHeader.append("<tr>");
+            //inheritHeader.append("<tr>");
             out.println("<tr>");
             out.println("<th>");
             out.println(paramRequest.getLocaleString("th_action"));
@@ -206,7 +215,15 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("</thead>");
             out.println("<tbody>");
 
+
+            PFlowManager pfmgr = SWBPortal.getPFlowManager();
+            Resource res = null;
             boolean isInherit = true;
+            boolean isInFlow = false;
+            boolean isAuthorized = false;
+            boolean needAuthorization = false;
+            boolean activeButton = false;
+            boolean send2Flow = false;
             SemanticProperty semprop = null;
             SemanticProperty sem_p = ont.getSemanticProperty(idp);
             SemanticObject so = obj.getObjectProperty(sem_p);
@@ -215,6 +232,40 @@ public class SWBAWebPageContents extends GenericResource {
                 SemanticObject sobj = itso.next();
                 SemanticClass clsobj = sobj.getSemanticClass();
                 log.debug("Clase:" + clsobj.getName());
+
+                // revisando contenido en flujo de publicación
+                // validacion de botones en relación a los flujos
+
+                isInFlow = false;
+                isAuthorized = false;
+                needAuthorization = false;
+                activeButton = true;
+                send2Flow = false;
+
+                res = (Resource) sobj.getGenericInstance();
+
+                isInFlow = pfmgr.isInFlow(res);
+                needAuthorization = pfmgr.needAnAuthorization(res);
+
+                if (!isInFlow && !needAuthorization) {
+                    activeButton = true;
+                }
+                if (!isInFlow && needAuthorization) {
+                    activeButton = false;
+                    send2Flow = true;
+                }
+
+                if (isInFlow) {
+                    isAuthorized = pfmgr.isAuthorized(res);
+                    if (!isAuthorized) {
+                        activeButton = false;
+                    }
+                    if (isAuthorized) {
+                        activeButton = true;
+                    }
+                }
+
+                // fin validación de botones en relacion a flujos
 
                 String stitle = getDisplaySemObj(sobj, user.getLanguage());
                 out.println("<tr>");
@@ -233,11 +284,35 @@ public class SWBAWebPageContents extends GenericResource {
                 urlpre.setParameter("sprop", idp);
                 urlpre.setParameter("act", "");
                 urlpre.setParameter("sval", sobj.getURI());
-                if(idptype!=null)urlpre.setParameter("sproptype", idptype);
+                if (idptype != null) {
+                    urlpre.setParameter("sproptype", idptype);
+                }
                 urlpre.setParameter("preview", "true");
                 out.println("<a href=\"#\" title=\"Vista Preliminar\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/SEARCH.png\" border=0></a>");
 
                 out.println("<a href=\"#\"  title=\"Administrar\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/Portlet.png\" border=0></a>");
+
+                if (send2Flow) {
+                    String pfid = null;
+                    PFlow[] arrPf = pfmgr.getFlowsToSendContent(res);
+                    if (arrPf.length == 1) {
+                        pfid = arrPf[0].getId();
+                    }
+                    SWBResourceURL url2flow = paramRequest.getRenderUrl();
+                    url2flow.setParameter("suri", id);
+                    url2flow.setParameter("sprop", idp);
+                    url2flow.setMode("doPflowMsg");
+                    url2flow.setParameter("sval", sobj.getURI());
+                    url2flow.setParameter("pfid", pfid);
+                    if (idptype != null) {
+                        url2flow.setParameter("sproptype", idptype);
+                    }
+                    out.println("<a href=\"#\" title=\"Enviar a flujo\" onclick=\"showDialog('" + url2flow + "','Comentario flujo'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\"></a>");
+                } else if (isInFlow&&!isAuthorized) {
+                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/espera_autorizacion.gif\" border=\"0\" alt=\"En espera de autorización\">");
+                } else if (isInFlow&&isAuthorized) {
+                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enlinea.gif\" border=\"0\" alt=\"Contenido Autorizado\">");
+                }
                 out.println("</td>");
                 out.println("<td>");
                 SWBResourceURL urlchoose = paramRequest.getRenderUrl();
@@ -247,7 +322,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlchoose.setParameter("act", "edit");
                 out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\">" + stitle + "</a>");
                 out.println("</td>");
-                 if (hmprop.get(Resource.swb_resourceType) != null) {
+                if (hmprop.get(Resource.swb_resourceType) != null) {
                     semprop = (SemanticProperty) hmprop.get(Resource.swb_resourceType);
                     out.println("<td>");
                     out.println(sobj.getObjectProperty(semprop).getDisplayName(user.getLanguage()));
@@ -290,13 +365,17 @@ public class SWBAWebPageContents extends GenericResource {
                         activo = true;
                         isInherit = false;
                     }
-                    SWBResourceURL urlu = paramRequest.getRenderUrl();
-                    urlu.setMode(Mode_Action);
-                    urlu.setParameter("suri", id);
-                    urlu.setParameter("sprop", idp);
-                    urlu.setParameter("sval", sobj.getURI());
-                    urlu.setParameter("act", "updstatus");
-                    out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"showStatusURL('" + urlu + "&val='+this.checked,true);\"  " + (activo ? "checked='checked'" : "") + "/>");
+                    if (activeButton) {
+                        SWBResourceURL urlu = paramRequest.getRenderUrl();
+                        urlu.setMode(Mode_Action);
+                        urlu.setParameter("suri", id);
+                        urlu.setParameter("sprop", idp);
+                        urlu.setParameter("sval", sobj.getURI());
+                        urlu.setParameter("act", "updstatus");
+                        out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"showStatusURL('" + urlu + "&val='+this.checked,true);\"  " + (activo ? "checked='checked'" : "") + " />");
+                    } else {
+                        out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + prop.getName() + sobj.getURI() + "\" " + (activo ? "checked='checked'" : "") + " disabled=\"true\">");
+                    }
                     out.println("</td>");
                 }
                 out.println("</tr>");
@@ -410,13 +489,13 @@ public class SWBAWebPageContents extends GenericResource {
                     hmSystem.put(sobj.getId(), sobj);
                 }
             }
-            if (hmContent.size() > 0 || hmSystem.size()>0) {
+            if (hmContent.size() > 0 || hmSystem.size() > 0) {
                 out.println("<fieldset>");
                 out.println("	<legend>Global</legend>");
             }
 
             //itgso = hmContent.values().iterator();
-            itgso = SWBComparator.sortSermanticObjects(hmContent.values().iterator(),user.getLanguage());
+            itgso = SWBComparator.sortSermanticObjects(hmContent.values().iterator(), user.getLanguage());
             if (hmContent.size() > 0) {
                 out.println("<table width=\"98%\">");
                 out.println("<thead>");
@@ -459,7 +538,7 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("</table> ");
             }
             //itgso = hmSystem.values().iterator();
-            itgso = SWBComparator.sortSermanticObjects(hmSystem.values().iterator(),user.getLanguage());
+            itgso = SWBComparator.sortSermanticObjects(hmSystem.values().iterator(), user.getLanguage());
             if (hmSystem.size() > 0) {
                 out.println("<table width=\"98%\">");
                 out.println("<thead>");
@@ -501,12 +580,11 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("</tbody> ");
                 out.println("</table> ");
             }
-            if (hmContent.size() > 0 || hmSystem.size()>0)
-            {
+            if (hmContent.size() > 0 || hmSystem.size() > 0) {
                 out.println("</fieldset>");
             }
 
-            // Lista de tipo de portlets disponibles del sitio, separados por contenido y sistema 
+            // Lista de tipo de portlets disponibles del sitio, separados por contenido y sistema
 
             out.println("<fieldset>");
             out.println("	<legend>" + obj.getModel().getModelObject().getDisplayName() + "</legend>");
@@ -535,7 +613,7 @@ public class SWBAWebPageContents extends GenericResource {
             }
 
             //itso = hmContent.values().iterator();
-            itso = SWBComparator.sortSermanticObjects(hmContent.values().iterator(),user.getLanguage());
+            itso = SWBComparator.sortSermanticObjects(hmContent.values().iterator(), user.getLanguage());
             if (hmContent.size() > 0) {
                 out.println("<table width=\"98%\">");
                 out.println("<thead>");
@@ -578,9 +656,9 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("</table> ");
             }
             //itso = hmSystem.values().iterator();
-            
-            
-            itso = SWBComparator.sortSermanticObjects(hmSystem.values().iterator(),user.getLanguage());
+
+
+            itso = SWBComparator.sortSermanticObjects(hmSystem.values().iterator(), user.getLanguage());
             if (hmSystem.size() > 0) {
                 out.println("<table width=\"98%\">");
                 out.println("<thead>");
@@ -639,9 +717,9 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("<tbody>");
             out.println("<tr>");
             out.println("<td>");
-            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('" + id + "/WPContent'); return false;\">"+paramRequest.getLocaleString("btn_send")+"</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('" + id + "/WPContent'); return false;\">" + paramRequest.getLocaleString("btn_send") + "</button>");
             if (id != null && idp != null && idptype != null) {
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlBack + "',document.getElementById('" + id + "/WPContent')); return false;\">"+paramRequest.getLocaleString("btn_back")+"</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlBack + "',document.getElementById('" + id + "/WPContent')); return false;\">" + paramRequest.getLocaleString("btn_back") + "</button>");
             }
             out.println("</td>");
             out.println("</tr>");
@@ -670,6 +748,15 @@ public class SWBAWebPageContents extends GenericResource {
             SWBFormMgr fmgr = new SWBFormMgr(Resource.swb_Resource, obj, null);
             fmgr.setLang(user.getLanguage());
             fmgr.setAction(urlPA.toString());
+            fmgr.setSubmitByAjax(true);
+            fmgr.addButton(SWBFormButton.newSaveButton());
+            SWBResourceURL urlback = paramRequest.getRenderUrl();
+            urlback.setMode(SWBResourceURL.Mode_VIEW);
+            urlback.setParameter("suri", id);
+            if(null!=idp)urlback.setParameter("sprop", idp);
+            if(null!=idptype)urlback.setParameter("sproptype", idptype);
+            fmgr.addButton(SWBFormButton.newCancelButton().setAttribute("onclick", "submitUrl('"+urlback+"',this.domNode);return false;"));
+            fmgr.setType(SWBFormMgr.TYPE_DOJO);
 
             log.debug("new: suri: " + id);
             log.debug("new: sprop: " + idp);
@@ -684,42 +771,95 @@ public class SWBAWebPageContents extends GenericResource {
             out.println(fmgr.renderForm(request));
         }
 
-        if(request.getParameter("preview")!=null&&request.getParameter("preview").equals("true"))
-        {
-            //out.println("<div class=\"swbform\">");
-            out.println("<fieldset>");
-            out.println("<legend>Preview</legend>");
-            if(request.getParameter("sval")!=null)
-                try
-                {
-                    doPreview(request,response,paramRequest);
-                }
-                catch(Exception e)
-                {
+        if (request.getParameter("preview") != null && request.getParameter("preview").equals("true")) {
+            if (request.getParameter("sval") != null) {
+                try {
+                    doPreview(request, response, paramRequest);
+                } catch (Exception e) {
                     out.println("Preview not available...");
                 }
-            else
+            } else {
                 out.println("Preview not available...");
-            out.println("</fieldset>");
-            //out.println("</div>");
+            }
         }
     }
 
-
     public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String id=request.getParameter("sval");
+        String id = request.getParameter("sval");
         PrintWriter out = response.getWriter();
         out.println("<fieldset >");
         out.println("<legend>Previsualizar</legend>");
-        try{
-            SWBResource res=SWBPortal.getResourceMgr().getResource(id);
+        try {
+            SWBResource res = SWBPortal.getResourceMgr().getResource(id);
             res.render(request, response, paramRequest);
-        }catch(Exception e){
-            log.error("Error while getting content string ,id:"+id , e);        }
+        } catch (Exception e) {
+            log.error("Error while getting content string ,id:" + id, e);
+        }
         out.println("</fieldset>");
     }
 
+    public void doPFlowMessage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String id = request.getParameter("suri"); // id recurso
+        String resid = request.getParameter("sval"); // id recurso
+        String idp = request.getParameter("sprop"); // id recurso
+        PrintWriter out = response.getWriter();
 
+        User user = paramRequest.getUser();
+
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        PFlowManager pfmgr = SWBPortal.getPFlowManager();
+        Resource res = (Resource) ont.getGenericObject(resid);
+
+        String pfid = "";
+        SemanticObject soref = ont.getSemanticObject(id);
+        PFlow[] arrPf = pfmgr.getFlowsToSendContent(res);
+        if (arrPf.length == 1) {
+            pfid = arrPf[0].getId();
+        }
+        SWBResourceURL url2flow = paramRequest.getActionUrl();
+        url2flow.setAction("send2flow");
+
+        out.println("<div class=\"swbform\">");
+        out.println("<form id=\"" + resid + "/" + getResourceBase().getId() + "/PFComment\" action=\"" + url2flow + "\" method=\"post\" onsubmit=\"submitForm('" + resid + "/" + getResourceBase().getId() + "/PFComment');return false;\">"); //reloadTab('" + id + "');
+        out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
+        out.println("<input type=\"hidden\" name=\"sval\" value=\"" + resid + "\">");
+        out.println("<input type=\"hidden\" name=\"sprop\" value=\"" + idp + "\">");
+        out.println("<fieldset>");
+        out.println("<table>");
+        out.println("<tbody>");
+        out.println("<tr>");
+        out.println("<td>");
+        out.println("Comentario");
+        out.println("</td>");
+        out.println("<td>");
+        out.println("<input type=\"text\" name=\"usrmsg\" value=\"\" dojoType=\"dijit.form.TextBox\" required=\"true\"	");
+        out.println(" promptMessage=\"Comentario para el enviar el documento al flujo. \"  />");
+        out.println("</td>");
+        out.println("</tr>");
+        out.println("<tr>");
+        out.println("<td>");
+        out.println("Flujo de publicación");
+        out.println("</td>");
+        out.println("<td>");
+        out.println("<select name=\"pfid\">");
+        for (int i = 0; i < arrPf.length; i++) {
+            out.println("<option value=\"" + arrPf[i].getURI() + "\" " + (i == 0 ? "selected" : "") + ">" + arrPf[i].getTitle() + "</option>");
+        }
+        out.println("</select>");
+        out.println("</td>");
+        out.println("</tr>");
+        out.println("</tbody>");
+        out.println("</table>");
+        out.println("</filedset>");
+        out.println("<filedset>");
+
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >Enviar</button>"); //_onclick=\"submitForm('"+id+"/"+idvi+"/"+base.getId()+"/FVIComment');return false;\"
+
+        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"hideDialog(); return false;\">Cancelar</button>"); //submitUrl('" + urlb + "',this.domNode); hideDialog();
+        out.println("</filedset>");
+        out.println("</form>");
+        out.println("</div>");
+    }
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -727,6 +867,8 @@ public class SWBAWebPageContents extends GenericResource {
         String sprop = request.getParameter("sprop");
         String sproptype = request.getParameter("sproptype");
         String action = response.getAction();
+
+        //System.out.println("Action: "+action);
 
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject obj = ont.getSemanticObject(id); //WebPage
@@ -795,20 +937,29 @@ public class SWBAWebPageContents extends GenericResource {
                     break;
                 }
             }
-
-            if (id != null) {
-                response.setRenderParameter("suri", id);
-            }
-            if (sprop != null) {
-                response.setRenderParameter("sprop", sprop);
-            }
             if (sproptype != null) {
                 response.setRenderParameter("sproptype", sproptype);
             }
-            log.debug("remove-closetab:"+sval);
+            log.debug("remove-closetab:" + sval);
             response.setRenderParameter("closetab", sval);
             response.setRenderParameter("statmsg", response.getLocaleString("statmsg2"));
             response.setMode(response.Mode_EDIT);
+        } else if ("send2flow".equals(action)) {
+            PFlowManager pfmgr = SWBPortal.getPFlowManager();
+            String sval = request.getParameter("sval"); // id resource
+            String pfid = request.getParameter("pfid"); // id pflow
+            String usermessage = request.getParameter("usrmsg"); // mensaje del usuario
+            PFlow pf = (PFlow) ont.getGenericObject(pfid);
+            Resource res = (Resource) ont.getGenericObject(sval);
+            pfmgr.sendResourceToAuthorize(res, pf, usermessage, response.getUser());
+            response.setRenderParameter("dialog","close");
+            response.setMode(response.Mode_EDIT);
+        }
+        if (id != null) {
+            response.setRenderParameter("suri", id);
+        }
+        if (sprop != null) {
+            response.setRenderParameter("sprop", sprop);
         }
     }
 
@@ -823,7 +974,7 @@ public class SWBAWebPageContents extends GenericResource {
         String sprop = request.getParameter("sprop");
         String sproptype = request.getParameter("sproptype");
         String action = request.getParameter("act");
-        String errormsg = "", actmsg="";
+        String errormsg = "", actmsg = "";
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject obj = ont.getSemanticObject(id); //WebPage
         SemanticClass cls = obj.getSemanticClass();
@@ -859,7 +1010,7 @@ public class SWBAWebPageContents extends GenericResource {
                                 if (prop.isFloat()) {
                                     obj.setFloatProperty(prop, Float.parseFloat(value));
                                 }
-                                
+
                             } else {
                                 obj.removeProperty(prop);
                             }
@@ -867,9 +1018,8 @@ public class SWBAWebPageContents extends GenericResource {
                     }
                 }
                 so = obj;
-                actmsg=paramRequest.getLocaleString("upd_priority");
-            } catch (Exception e)
-            {
+                actmsg = paramRequest.getLocaleString("upd_priority");
+            } catch (Exception e) {
                 log.error(e);
                 errormsg = paramRequest.getLocaleString("statERRORmsg1");
             }
@@ -885,25 +1035,22 @@ public class SWBAWebPageContents extends GenericResource {
 
                 SemanticClass scls = sobj.getSemanticClass();
                 log.debug("doAction(updstatus):" + scls.getClassName() + ": " + value);
-                so=sobj;
-                actmsg=(value.equals("true") ? paramRequest.getLocaleString("upd_active") : paramRequest.getLocaleString("upd_unactive"));
+                so = sobj;
+                actmsg = (value.equals("true") ? paramRequest.getLocaleString("upd_active") : paramRequest.getLocaleString("upd_unactive"));
             } catch (Exception e) {
                 log.error(e);
-                errormsg = (value.equals("true") ? paramRequest.getLocaleString("statERRORmsg2") : paramRequest.getLocaleString("statERRORmsg3")) ;
+                errormsg = (value.equals("true") ? paramRequest.getLocaleString("statERRORmsg2") : paramRequest.getLocaleString("statERRORmsg3"));
             }
         } // revisar para agregar nuevo semantic object
 
-        if(errormsg.length()==0)
-        {
+        if (errormsg.length() == 0) {
             out.println("<script type=\"text/javascript\">");
             out.println(" reloadTab('" + so.getURI() + "');");
             out.println(" setTabTitle('" + so.getURI() + "','" + so.getDisplayName(user.getLanguage()) + "','" + SWBContext.UTILS.getIconClass(so) + "')");
             out.println("</script>");
             out.println(actmsg);
-        }
-        else
-        {
-           out.println(errormsg);
+        } else {
+            out.println(errormsg);
         }
     }
 
@@ -952,7 +1099,10 @@ public class SWBAWebPageContents extends GenericResource {
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if (paramRequest.getMode().equals(Mode_Action)) {
+
+        if (paramRequest.getMode().equals("doPflowMsg")) {
+            doPFlowMessage(request, response, paramRequest);
+        } else if (paramRequest.getMode().equals(Mode_Action)) {
             doAction(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
     <form name="frmQueryResource" action="true" method="POST" enctype="multipart/form-data">
@@ -18,88 +18,14 @@
 				</font>
 			]]>
         </statictext>
-        <input type="TEXT"
-               name="dbcon"
-               label="* Connection name:"
-               size="50"
-               jsrequired="true"
-               moreattr="class=&#34;datos&#34;"/>
-        <textarea name="query"
-                  label="* Query criteria:"
-                  rows="5"
-                  cols="50"
-                  wrap="virtual"
-                  jsrequired="true"
-                  moreattr="class=&#34;datos&#34;"/>
-        <input type="FILE"
-               name="template"
-               label="Template (xsl, xslt):"
-               showfile="true"
-               msg="Current template "
-               bydefault="{@webpath}/swbadmin/xsl/QueryResource/QueryResource.xslt"
-               msgbydefault="Template by default "
-               filetype="xsl|xslt"
-               isshowfiletype="true"
-               size="40"/>
+        <textarea name="query"  label="* Query criteria:" rows="20" cols="100" wrap="virtual" jsrequired="true" moreattr="class=&#34;datos&#34;"/>
+        <input type="TEXT" name="rows" label="Rows for each page:" size="5" jsrequired="true" value="20"/>
+        <input type="TEXT" name="pages" label="Pages numbers to show?:" size="5" jsrequired="true" value="5"/>
+        <input type="CHECKBOX" name="showPages" label="Shows pages numbers?:"  value="1" checked="true"/>
+        <input type="FILE" name="template" label="Template (xsl, xslt):" showfile="true" msg="Current template " bydefault="{@webpath}/swbadmin/xsl/SparqlQueryResource/SparqlQueryResource.xslt" msgbydefault="Template by default " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
                </fieldset>
                <fieldset>
-        <input type="SUBMIT" name="btnSave" value="Save"/>
+        <input type="SUBMIT" name="btnSave" value="Save" label="Save"/>
         </fieldset>
     </form>
-    <statictext name="required">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 * Required information
-			</font>
-		]]>
-    </statictext>
-    <statictext name="args">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				Arguments:
-			</font>
-		]]>
-    </statictext>
-    <statictext name="user">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				{userid} - User identifier
-			</font>
-		]]>
-    </statictext>
-    <statictext name="attribute">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				{getUserAttribute(x)} - Returns user attribute
-			</font>
-		]]>
-    </statictext>
-    <statictext name="topicmap">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				{topicmap} -  Site identifier
-			</font>
-		]]>
-    </statictext>
-    <statictext name="topicid">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				{topicid} -  Section identifier
-			</font>
-		]]>
-    </statictext>
-    <statictext name="argument">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				{getArgument(x)} -  Returns the argument obtained from the template
-			</font>
-		]]>
-    </statictext>
-    <statictext name="parameter">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				{getParameter(x)} -  Returns the arguments obtained from the request
-			</font>
-		]]>
-    </statictext>
 </admresource>

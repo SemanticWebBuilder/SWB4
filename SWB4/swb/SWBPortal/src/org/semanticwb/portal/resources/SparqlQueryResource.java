@@ -20,7 +20,9 @@ import org.semanticwb.portal.api.SWBResourceException;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+//import java.util.HashMap;
 import java.util.Iterator;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 /**
  *
@@ -90,11 +92,40 @@ public class SparqlQueryResource extends GenericAdmResource {
             throws SWBResourceException {
 
         Resource base = getResourceBase();
+        String excelFile = (String) request.getAttribute("excelFile");
+        boolean excelf = false;
+        if (excelFile != null && "yes".equalsIgnoreCase(excelFile)) {
+            excelf = true;
+        }
+        String rowsHistory = "20";
+        String pagesHistory = "5";
+        String showPages = "1";
+        if (base.getAttribute("rows") != null) {
+            rowsHistory = base.getAttribute("rows");
+        }
+        if (base.getAttribute("pages") != null) {
+            pagesHistory = base.getAttribute("pages");
+        }
+        if (base.getAttribute("showPages") != null) {
+            showPages = base.getAttribute("showPages");
+        }
         Document doc = null;
         //ByteArrayOutputStream bout = new ByteArrayOutputStream();
         String _query = parse(base.getAttribute("query"), request, paramsRequest);
         String dbcon = "";
-        base.getAttribute("dbcon");
+        int maximo = 5;
+        if (pagesHistory != null) {
+            maximo = Integer.parseInt(pagesHistory);
+        }
+        int maxRows = 10;
+        if (rowsHistory != null) {
+            maxRows = Integer.parseInt(rowsHistory);
+        }
+        int actualPage = 1;
+        if (request.getParameter("actualPage") != null) {
+            actualPage = Integer.parseInt(request.getParameter("actualPage"));
+        }
+        //base.getAttribute("dbcon");
         if (_query != null) {
             try {
                 doc = SWBUtils.XML.getNewDocument();
@@ -140,26 +171,153 @@ public class SparqlQueryResource extends GenericAdmResource {
                         equery.appendChild(eresult);
                         // The order of results is undefined.
 
-                        for (; rs.hasNext();) {
+                        int cuenta = 0;
+                        if (request.getParameter("actualPage") != null) {
+                            actualPage = Integer.parseInt(request.getParameter("actualPage"));
+                        }
+                        int rangoIni = 1;
+                        int rangoFin = maxRows * actualPage;
+                        if (actualPage > 1) {
+                            rangoIni = (maxRows * (actualPage - 1)) + 1;
+                        }
+
+                        int numReg = 0; // número de registros
+
+                        // Reporte
+                        while (rs.hasNext()) {
                             QuerySolution rb = rs.nextSolution();
+                            numReg++;
+                            cuenta++;
+                            if (cuenta >= rangoIni && cuenta <= rangoFin && !excelf) {
+                                Element erow = doc.createElement("row");
+                                eresult.appendChild(erow);
 
-                            Element erow = doc.createElement("row");
-                            eresult.appendChild(erow);
+                                Iterator<String> it = rs.getResultVars().iterator();
+                                while (it.hasNext()) {
+                                    String name = it.next();
+                                    RDFNode x_node = rb.get(name);
+                                    String sval = (x_node != null ? x_node.toString() : " - ");
+                                    Element ecol = addElem(doc, erow, "col", sval);
+                                }
+                            } else if(excelf) {
+                                Element erow = doc.createElement("row");
+                                eresult.appendChild(erow);
 
-                            Iterator<String> it = rs.getResultVars().iterator();
-                            while (it.hasNext()) {
-                                String name = it.next();
-                                RDFNode x_node = rb.get(name);
-                                String sval = (x_node != null ? x_node.toString() : " - ");
-                                Element ecol = addElem(doc, erow, "col", sval);
-
+                                Iterator<String> it = rs.getResultVars().iterator();
+                                while (it.hasNext()) {
+                                    String name = it.next();
+                                    RDFNode x_node = rb.get(name);
+                                    String sval = (x_node != null ? x_node.toString() : " - ");
+                                    Element ecol = addElem(doc, erow, "col", sval);
+                                }
                             }
+                            
+                        }
+                        equery.setAttribute("nrow", "" + numReg);
 
+
+                        // Paginación
+                        if (!excelf) {
+                            Element epages = doc.createElement("pages");
+                            equery.appendChild(epages);
+
+                            int numTotPages = (int) Math.round(numReg / maxRows);
+                            if ((numReg % maxRows) > 0) {
+                                numTotPages++;
+                            }
+                            maximo = maximo - 1;
+                            StringBuffer numeros = new StringBuffer("");
+                            if (showPages != null) {
+                                if (showPages.equals("1")) {
+                                    int numPages = 1;
+                                    //estableciendo rangos para mostrar las paginas correspondientes
+                                    int rInicio = 1;
+                                    int rFinal = maximo;
+                                    if (numTotPages >= (actualPage + maximo)) {
+                                        rInicio = actualPage;
+                                        rFinal = actualPage + maximo;
+                                    } else {
+                                        if (numTotPages < (actualPage + maximo)) {
+                                            rInicio = numTotPages - maximo;
+                                            rFinal = numTotPages;
+                                        }
+                                    }
+                                    if (rInicio < 1) {
+                                        rInicio = 1;
+                                    }
+                                    // armando números de páginas
+
+                                    for (int i = 1; i <= numTotPages; i++) {
+
+                                        SWBResourceURL urlNums = paramsRequest.getRenderUrl().setMode(paramsRequest.Mode_VIEW);
+                                        urlNums.setParameter("actualPage", Integer.toString(i));
+                                        if (i >= rInicio && i <= rFinal) {
+
+                                            Element epage = doc.createElement("page");
+                                            epages.appendChild(epage);
+
+                                            numPages++;
+                                            if (i != actualPage) {
+                                                epage.setAttribute("link", "<a href=\"" + urlNums.toString() + "\" >" + i + "</a>");
+                                            //numeros.append("<a href=\"#\" onclick=\"submitUrl('" + urlNums.toString() + "',this); return false;\" >" + i + "</a>");
+                                            } else {
+                                                epage.setAttribute("link", "" + i + "");
+                                            //numeros.append("" + i + "");
+                                            }
+                                        }
+                                        if (i < numTotPages) {
+                                            //numeros.append("&nbsp;");
+                                        }
+                                    }
+                                //numeros.append("&nbsp;");
+                                }
+                            }
+                            SWBResourceURL urlBack = paramsRequest.getRenderUrl().setMode(paramsRequest.Mode_VIEW);
+                            int tmpBack = actualPage;
+                            if (actualPage > 1) {
+                                tmpBack--;
+                            }
+                            urlBack.setParameter("actualPage", Integer.toString(tmpBack));
+
+                            SWBResourceURL urlNext = paramsRequest.getRenderUrl().setMode(paramsRequest.Mode_VIEW);
+                            urlNext.setParameter("actualPage", Integer.toString(actualPage + 1));
+                            String nextHistory = paramsRequest.getLocaleString("defaultValueNext");
+                            String backHistory = paramsRequest.getLocaleString("defaultValuePrevious");
+                            if (numReg <= maxRows) {
+                            } else {
+                                //out.println("<fieldset>");
+                                //out.println("<div align=\"center\">");
+                                if (actualPage == 1) {
+                                    Element epagenext = doc.createElement("pagenext");
+                                    epages.appendChild(epagenext);
+                                    epagenext.setAttribute("link", urlNext.toString());
+                                    epagenext.setAttribute("texto", nextHistory);
+                                //out.println(numeros + "<a href=\"#\" onclick=\"submitUrl('" + urlNext + "',this); return false;\" >" + nextHistory + "</a>");
+                                } else if (actualPage == numTotPages) {
+                                    Element epageback = doc.createElement("pageback");
+                                    epages.appendChild(epageback);
+                                    epageback.setAttribute("link", urlBack.toString());
+                                    epageback.setAttribute("texto", backHistory);
+//
+                                //out.println("<a href=\"#\" onclick=\"submitUrl('" + urlBack + "',this); return false;\" >" + backHistory + "</a>&nbsp;" + numeros);
+                                } else {
+                                    Element epageback = doc.createElement("pageback");
+                                    epages.appendChild(epageback);
+                                    epageback.setAttribute("link", urlBack.toString());
+                                    epageback.setAttribute("texto", backHistory);
+                                    Element epagenext = doc.createElement("pagenext");
+                                    epages.appendChild(epagenext);
+                                    epagenext.setAttribute("link", urlNext.toString());
+                                    epagenext.setAttribute("texto", nextHistory);
+                                //out.println("<a href=\"#\" onclick=\"submitUrl('" + urlBack + "',this); return false;\" >" + backHistory + "</a>&nbsp;" + numeros + "<a href=\"#\" onclick=\"submitUrl('" + urlNext + "',this); return false;\" >" + nextHistory + "</a>");
+                                }
+                            //out.println("</div>");
+                            //out.println("</fieldset>");
+                            }
                         }
 
                     } finally {
                         // QueryExecution objects should be closed to free any system resources
-
                         qexec.close();
                     }
 
@@ -214,6 +372,15 @@ public class SparqlQueryResource extends GenericAdmResource {
                     SWBParamRequest.Call_DIRECT).setMode("excel_file") + "\">" + paramsRequest.getLocaleLogString("usrmsg_ExcelFile") + "</a>");
         }
     }
+
+    @Override
+    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+
+        PrintWriter out = response.getWriter();
+        out.println(SWBUtils.XML.domToXml(getDom(request, response, paramRequest),true));
+    }
+
+
 
     /**
      * Adds element to the document received as child of the specified element
