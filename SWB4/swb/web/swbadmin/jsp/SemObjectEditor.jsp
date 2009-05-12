@@ -39,7 +39,7 @@ try
         SWBFormMgr frm=new SWBFormMgr(cls,ref,null);
         frm.addHiddenParameter("sprop", sprop);
         frm.setSubmitByAjax(true);
-        frm.setType( );
+        frm.setType(SWBFormMgr.TYPE_DOJO);
 
         SemanticObject obj=frm.processForm(request);
         if(obj!=null)
