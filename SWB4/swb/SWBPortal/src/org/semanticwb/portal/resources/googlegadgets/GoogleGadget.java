@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.portal.resources.googlegadgets;
 
 import java.io.IOException;
@@ -31,7 +30,8 @@ import org.semanticwb.portal.api.SWBResourceURL;
  *
  * @author victor.lorenzana
  */
-public class GoogleGadget extends GenericResource {
+public class GoogleGadget extends GenericResource
+{
 
     private static final String COUNTRY_ATTRIBUTE = "country";
     private static final String GOOGLE_URL = "http://www.google.com";
@@ -50,7 +50,7 @@ public class GoogleGadget extends GenericResource {
 
         String url = request.getParameter(URL_ATTRIBUTE);
 
-        if ( url != null && !url.equals("") )
+        if (url != null && !url.equals(""))
         {
             try
             {
@@ -62,37 +62,45 @@ public class GoogleGadget extends GenericResource {
                     String name = names.next();
                     this.getResourceBase().setAttribute(name, null);
                 }
-                this.getResourceBase().setAttribute(URL_ATTRIBUTE, urlgadget.toString());                
+                this.getResourceBase().setAttribute(URL_ATTRIBUTE, urlgadget.toString());
+                try
+                {
+                    this.getResourceBase().updateAttributesToDB();
+                }
+                catch (Exception e)
+                {
+                    log.error(e);
+                }
                 response.setMode(response.Mode_ADMIN);
             }
-            catch ( MalformedURLException mfe )
+            catch (MalformedURLException mfe)
             {
                 log.error(mfe);
-                //AFUtils.log(mfe);
+            //AFUtils.log(mfe);
             }
         }
         String title = request.getParameter("title");
-        if ( title != null && !title.equals("") )
+        if (title != null && !title.equals(""))
         {
             this.getResourceBase().setAttribute(LANGUAGE_ATTRIBUTE, response.getUser().getLanguage());
             this.getResourceBase().setAttribute(COUNTRY_ATTRIBUTE, "ALL");
             Enumeration names = request.getParameterNames();
             while (names.hasMoreElements())
             {
-                String name = ( String ) names.nextElement();
-                if ( !name.equals("savechanges") )
+                String name = (String) names.nextElement();
+                if (!name.equals("savechanges"))
                 {
                     String value = request.getParameter(name);
-                    if ( value != null && !value.equals("") )
+                    if (value != null && !value.equals(""))
                     {
-                        if ( !(name.equals(LANGUAGE_ATTRIBUTE) || name.equals("w") || name.equals("h") || name.equals("title")) )
+                        if (!(name.equals(LANGUAGE_ATTRIBUTE) || name.equals("w") || name.equals("h") || name.equals("title")))
                         {
                             name = "up_" + name;
                         }
-                        if ( name.equals(LANGUAGE_ATTRIBUTE) )
+                        if (name.equals(LANGUAGE_ATTRIBUTE))
                         {
                             int pos = value.indexOf("-");
-                            if ( pos == -1 )
+                            if (pos == -1)
                             {
                                 this.getResourceBase().setAttribute(LANGUAGE_ATTRIBUTE, value);
                                 this.getResourceBase().setAttribute(COUNTRY_ATTRIBUTE, "ALL");
@@ -109,7 +117,14 @@ public class GoogleGadget extends GenericResource {
                     }
                 }
             }
-            //this.getResourceBase().updateAttributesToDB();
+            try
+            {
+                this.getResourceBase().updateAttributesToDB();
+            }
+            catch (Exception e)
+            {
+                log.error(e);
+            }
             response.setMode(response.Mode_ADMIN);
         }
     }
@@ -118,15 +133,15 @@ public class GoogleGadget extends GenericResource {
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) throws IOException, SWBResourceException
     {
-        if ( paramsRequest.getMode().equals("changeConfig") )
+        if (paramsRequest.getMode().equals("changeConfig"))
         {
             doChangeConfig(request, response, paramsRequest);
         }
-        else if ( paramsRequest.getMode().equals("changeGadget") )
+        else if (paramsRequest.getMode().equals("changeGadget"))
         {
             doChangeGadget(request, response, paramsRequest);
         }
-        else if ( paramsRequest.getMode().equals("addFromList") )
+        else if (paramsRequest.getMode().equals("addFromList"))
         {
             doAddFromList(request, response, paramsRequest);
         }
@@ -142,11 +157,11 @@ public class GoogleGadget extends GenericResource {
         PrintWriter out = response.getWriter();
         String start = request.getParameter("start");
         String sa = request.getParameter("sa");
-        if ( request.getSession().getAttribute(LANGUAGE_ATTRIBUTE) == null )
+        if (request.getSession().getAttribute(LANGUAGE_ATTRIBUTE) == null)
         {
             request.getSession().setAttribute(LANGUAGE_ATTRIBUTE, paramsRequest.getUser().getLanguage());
         }
-        if ( request.getParameter("changelang") != null )
+        if (request.getParameter("changelang") != null)
         {
             request.getSession().setAttribute(LANGUAGE_ATTRIBUTE, request.getParameter("changelang"));
             start = null;
@@ -154,7 +169,7 @@ public class GoogleGadget extends GenericResource {
         }
         Locale localeUser = new Locale(request.getSession().getAttribute(LANGUAGE_ATTRIBUTE).toString());
         String directoryURL = URL_DIRECTORY;
-        if ( start != null && sa != null )
+        if (start != null && sa != null)
         {
             directoryURL += "&start=" + start + "&sa=" + sa;
         }
@@ -179,7 +194,7 @@ public class GoogleGadget extends GenericResource {
         out.println("<tr><td align='center'><a href='" + urlback + "'>" + paramsRequest.getLocaleString("back") + "</a></td></tr></table><br>");
         out.println("<table width='100%'>");
         out.println("<tr>");
-        if ( start == null )
+        if (start == null)
         {
             out.println("<td><a href='" + paramsRequest.getRenderUrl() + "?start=" + gadgets.size() + "&sa=N'>Siguiente</a></td>");
         }
@@ -189,11 +204,11 @@ public class GoogleGadget extends GenericResource {
         }
         SWBResourceURL urlChangeLang = paramsRequest.getRenderUrl();
         out.println("<td>Búscar gadgets en:<form action='" + urlChangeLang + "'><select onChange=\"javascript:this.form.submit();\" name='changelang'>");
-        String lang = ( String ) request.getSession().getAttribute(LANGUAGE_ATTRIBUTE);
+        String lang = (String) request.getSession().getAttribute(LANGUAGE_ATTRIBUTE);
         out.println("<option " + (lang.equals("es") ? "selected" : "") + " value='es'>Espa&ntilde;ol</option>");
         out.println("<option " + (lang.equals("en") ? "selected" : "") + " value='en'>Ingles</option>");
         out.println("</select></form></td>");
-        if ( start != null )
+        if (start != null)
         {
             out.println("<td><a href='" + paramsRequest.getRenderUrl() + "?start=" + (Integer.parseInt(start) - gadgets.size()) + "&sa=N'>Anterior</a></td>");
         }
@@ -202,7 +217,7 @@ public class GoogleGadget extends GenericResource {
         out.println("</table>");
         out.println("<table width='100%'>");
         int i = 0;
-        for ( URL urlgadget : gadgets )
+        for (URL urlgadget : gadgets)
         {
             String title = null;
             String imgsrc = null;
@@ -214,17 +229,17 @@ public class GoogleGadget extends GenericResource {
                 imgsrc = gadget.getSrcImage(localeUser);
                 correct = true;
             }
-            catch ( Exception e )
+            catch (Exception e)
             {
                 title = null;
                 imgsrc = null;
                 //AFUtils.log(e);
                 log.error(e);
             }
-            if ( correct && title != null && imgsrc != null )
+            if (correct && title != null && imgsrc != null)
             {
                 i++;
-                if ( i % 3 == 1 ) // primero
+                if (i % 3 == 1) // primero
                 {
                     out.println("<tr><td align='center'>");
                 }
@@ -237,7 +252,7 @@ public class GoogleGadget extends GenericResource {
                 out.println("<tr><td align='center'><img width='120' height='60' src=\"" + imgsrc + "\" border=0></td></tr>");
                 out.println("<tr><td align='center'><a href=\"" + paramsRequest.getActionUrl() + "?url=" + urlgadget + "\">Agregar</a></td></tr>");
                 out.println("</table>");
-                if ( i % 3 == 0 ) // ultimo
+                if (i % 3 == 0) // ultimo
                 {
                     out.println("</td></tr>");
                     out.println("<tr><td colspan='3'>&nbsp;</td></tr>");
@@ -248,7 +263,7 @@ public class GoogleGadget extends GenericResource {
                 }
             }
         }
-        if ( i % 3 != 2 )
+        if (i % 3 != 2)
         {
             out.println("</td></tr>");
         }
@@ -262,7 +277,7 @@ public class GoogleGadget extends GenericResource {
         while (pos != -1)
         {
             int pos2 = html.indexOf(endText, pos);
-            if ( pos2 != -1 && pos2 > pos )
+            if (pos2 != -1 && pos2 > pos)
             {
                 html.replace(pos, pos2 + endText.length(), replace);
                 pos = html.indexOf(endText);
@@ -289,12 +304,12 @@ public class GoogleGadget extends GenericResource {
     {
 
         SWBResourceURL urlaction = paramsRequest.getActionUrl();
-        String parameters = "synd=trogedit&num=9&hl=" + paramsRequest.getUser().getLanguage() + "&iframeId=tr_moduleDirectory-iframegoog_1221086410332";        
-        if ( request.getParameter("q") != null )
+        String parameters = "synd=trogedit&num=9&hl=" + paramsRequest.getUser().getLanguage() + "&iframeId=tr_moduleDirectory-iframegoog_1221086410332";
+        if (request.getParameter("q") != null)
         {
             parameters += "&q=" + request.getParameter("q");
         }
-        if ( request.getQueryString() != null && request.getParameter("wblastversion") == null && request.getParameter("tpcomm") == null && request.getParameter("tm") == null )
+        if (request.getQueryString() != null && request.getParameter("wblastversion") == null && request.getParameter("tpcomm") == null && request.getParameter("tm") == null)
         {
             parameters = request.getQueryString();
         }
@@ -302,7 +317,7 @@ public class GoogleGadget extends GenericResource {
         URL urlPage = new URL(url);
         URLConnection con = urlPage.openConnection();
         InputStream in = con.getInputStream();
-        String html2 =  SWBUtils.IO.readInputStream(in); //AFUtils.getInstance().readInputStream(in);
+        String html2 = SWBUtils.IO.readInputStream(in); //AFUtils.getInstance().readInputStream(in);
         StringBuffer html = new StringBuffer(html2);
         replace(html, "<html>", "");
         replace(html, "</html>", "");
@@ -314,19 +329,19 @@ public class GoogleGadget extends GenericResource {
         int pos = html.indexOf("/ig/f/ZtcZ_UMr1Ww/ig.js");
         /*if(pos==-1)
         {
-            pos = html.indexOf("/ig/f/s-9mlIkxfvs/ig.js");
+        pos = html.indexOf("/ig/f/s-9mlIkxfvs/ig.js");
         }
         if(pos==-1)
         {
-            pos = html.indexOf("/ig/f/C0R-Dtev__A/ig.js");
+        pos = html.indexOf("/ig/f/C0R-Dtev__A/ig.js");
         }*/
-        if(pos==-1)
+        if (pos == -1)
         {
             pos = html.indexOf("<script src=\"/ig/f/");
         }
-        if ( pos != -1 )
+        if (pos != -1)
         {
-            html.insert(pos+13, GOOGLE_URL);
+            html.insert(pos + 13, GOOGLE_URL);
             String pathTofound = "\"" + PATH_DIRECTORY;
             replace(html, pathTofound, "\"");
             pathTofound = GOOGLE_URL + PATH_DIRECTORY + "?";
@@ -335,16 +350,16 @@ public class GoogleGadget extends GenericResource {
             PrintWriter out = response.getWriter();
             out.println("<div>");
             String urlGadget = this.getResourceBase().getAttribute("url");
-            if ( urlGadget != null && !urlGadget.equals("") )
+            if (urlGadget != null && !urlGadget.equals(""))
             {
                 out.println("<table width='100%'  border='0' cellpadding='5' cellspacing='0'> ");
                 SWBResourceURL urlback = paramsRequest.getRenderUrl();
                 urlback.setMode(urlback.Mode_ADMIN);
-                out.println("<tr><td align='right'><form name='frmback' method='post' action='" + urlback + "'><input type='hidden' name='back' value='" + paramsRequest.getLocaleString("back") + "'></input><button dojoType=\"dijit.form.Button\" type='button' onClick='frmback.submit();'>"+paramsRequest.getLocaleString("back")+"</button></form></td></tr>");
+                out.println("<tr><td align='right'><form name='frmback' method='post' action='" + urlback + "'><input type='hidden' name='back' value='" + paramsRequest.getLocaleString("back") + "'></input><button dojoType=\"dijit.form.Button\" type='button' onClick='frmback.submit();'>" + paramsRequest.getLocaleString("back") + "</button></form></td></tr>");
                 out.println("<tr><td ><HR size='1' noshade/></td></tr>");
                 out.println("</table>");
             }
-            out.println(html.toString());            
+            out.println(html.toString());
             out.println("</div>");
 
             out.close();
@@ -363,9 +378,9 @@ public class GoogleGadget extends GenericResource {
 
         while (pos != -1)
         {
-            html = html.substring(pos + URL_TO_FIND.length()-4);
+            html = html.substring(pos + URL_TO_FIND.length() - 4);
             int posFin = html.indexOf(".xml");
-            if ( posFin != -1 )
+            if (posFin != -1)
             {
                 String url = html.substring(0, posFin + 4);
                 url = url.replaceAll("%3A", ":");
@@ -374,10 +389,10 @@ public class GoogleGadget extends GenericResource {
                     URL tryURL = new URL(url);
                     getGadgets.add(tryURL);
                 }
-                catch ( MalformedURLException mfe )
+                catch (MalformedURLException mfe)
                 {
                     log.error(mfe);
-                    //AFUtils.log(mfe);
+                //AFUtils.log(mfe);
                 }
             }
             pos = html.indexOf(URL_TO_FIND);
@@ -394,7 +409,7 @@ public class GoogleGadget extends GenericResource {
         out.println("{");
         out.println("if(frmasigngadget.url.value=='')");
         out.println("{");
-        out.println("alert('"+ paramsRequest.getLocaleString("msg1") +"');");
+        out.println("alert('" + paramsRequest.getLocaleString("msg1") + "');");
         out.println("return;");
         out.println("}");
         out.println("frmasigngadget.submit();");
@@ -428,17 +443,17 @@ public class GoogleGadget extends GenericResource {
         out.println("{");
         out.println("if(formaChangeConfig.title.value=='')");
         out.println("{");
-        out.println("alert('"+ paramsRequest.getLocaleString("msg2") +"');");
+        out.println("alert('" + paramsRequest.getLocaleString("msg2") + "');");
         out.println("return;");
         out.println("}");
         out.println("if(formaChangeConfig.h.value=='')");
         out.println("{");
-        out.println("alert('"+ paramsRequest.getLocaleString("msg3") +"');");
+        out.println("alert('" + paramsRequest.getLocaleString("msg3") + "');");
         out.println("return;");
         out.println("}");
         out.println("if(formaChangeConfig.w.value=='')");
         out.println("{");
-        out.println("alert('"+ paramsRequest.getLocaleString("msg4") +"');");
+        out.println("alert('" + paramsRequest.getLocaleString("msg4") + "');");
         out.println("return;");
         out.println("}");
         out.println("formaChangeConfig.submit();");
@@ -447,16 +462,16 @@ public class GoogleGadget extends GenericResource {
         out.println("<fieldset name=\"frmAdmin\"><table width='100%' cellpadding='5' cellspacing='0'>");
         String title = this.getResourceBase().getAttribute("title", "");
         Gadget gadget = new Gadget(url);
-        if ( title.equals("") )
+        if (title.equals(""))
         {
             try
             {
                 title = gadget.getTitle(localeUser);
             }
-            catch ( Exception e )
+            catch (Exception e)
             {
                 log.error(e);
-                //AFUtils.log(e);
+            //AFUtils.log(e);
             }
         }
         String w = this.getResourceBase().getAttribute("w", gadget.getWidth());
@@ -464,19 +479,19 @@ public class GoogleGadget extends GenericResource {
         out.println("<tr><td class=\"valores\">" + paramsRequest.getLocaleString("titleOfGadget") + ":</td><td><input type='text' size='50'  maxlength='100' name='title' value='" + title + "'></td></tr>");
         out.println("<tr><td class=\"valores\">" + paramsRequest.getLocaleString("width") + ":</td><td><input  type='text' size='3' maxlength='3' name='w' value='" + w + "'></td></tr>");
         out.println("<tr><td class=\"valores\">" + paramsRequest.getLocaleString("height") + ":</td><td><input type='text' size='3' maxlength='3' name='h' value='" + h + "'></td></tr>");
-        if ( url != null && !url.toString().equals("") )
+        if (url != null && !url.toString().equals(""))
         {
             Set<String> languages = gadget.getLanguages();
-            if ( languages.size() > 0 )
+            if (languages.size() > 0)
             {
                 String userlanguage = paramsRequest.getUser().getLanguage();
                 out.println("<tr><td class=\"valores\">" + paramsRequest.getLocaleString("language") + ":</td><td>");
                 out.println("<select  class=\"valores\" name='lang'>");
-                for ( String lang : languages )
+                for (String lang : languages)
                 {
                     Locale locale;
                     int pos = lang.indexOf("-");
-                    if ( pos == -1 )
+                    if (pos == -1)
                     {
                         locale = new Locale(lang);
                     }
@@ -487,7 +502,7 @@ public class GoogleGadget extends GenericResource {
                         locale = new Locale(language, country);
                     }
                     boolean selected = false;
-                    if ( userlanguage.equals(lang) )
+                    if (userlanguage.equals(lang))
                     {
                         selected = true;
                     }
@@ -498,32 +513,32 @@ public class GoogleGadget extends GenericResource {
             }
             try
             {
-                for ( String name : gadget.getParameterNames() )
+                for (String name : gadget.getParameterNames())
                 {
                     String label = gadget.getDisplayName(name, localeUser);
                     String defaultValue = gadget.getDefaultValue(name, localeUser);
                     String dataType = gadget.getDataType(name);
-                    if ( dataType == null && gadget.isRequired(name) )
+                    if (dataType == null && gadget.isRequired(name))
                     {
                         out.println("<tr><td >" + label + "</td><td>");
                         out.println("<input  type='text' size='10' name='" + name + "' value='" + defaultValue + "'>");
                         out.println("</td></tr>");
                     }
-                    if ( dataType != null && gadget.isEnum(name) )
+                    if (dataType != null && gadget.isEnum(name))
                     {
                         out.println("<tr><td class=\"valores\">" + label + "</td><td>");
                         out.println("<select  name='" + name + "'>");
 
                         Hashtable<String, String> values = gadget.getValues(name, localeUser);
-                        for ( String value : values.keySet() )
+                        for (String value : values.keySet())
                         {
                             boolean selected = false;
                             String displayValue = values.get(value);
-                            if ( defaultValue != null && !defaultValue.equals("") && displayValue.equals(defaultValue) )
+                            if (defaultValue != null && !defaultValue.equals("") && displayValue.equals(defaultValue))
                             {
                                 selected = true;
                             }
-                            if ( this.getResourceBase().getAttribute("up_" + name, "").equals(value) )
+                            if (this.getResourceBase().getAttribute("up_" + name, "").equals(value))
                             {
                                 selected = true;
                             }
@@ -535,15 +550,15 @@ public class GoogleGadget extends GenericResource {
 
                 }
             }
-            catch ( Exception e )
+            catch (Exception e)
             {
                 log.error(e);
-                //AFUtils.log(e);
+            //AFUtils.log(e);
             }
         }
         SWBResourceURL urlback = paramsRequest.getRenderUrl();
         urlback.setMode(urlback.Mode_ADMIN);
-        out.println("</table></fieldset><fieldset><table width='100%'  border='0' cellpadding='5' cellspacing='0'><tr><td colspan='2'><button type='button' dojoType=\"dijit.form.Button\" class='boton' Onclick='javascript:validData()' name='savechanges' value='" + paramsRequest.getLocaleString("changeConfiguration") + "'>"+paramsRequest.getLocaleString("changeConfiguration")+"</button>&nbsp;&nbsp;&nbsp;<button dojoType=\"dijit.form.Button\" class='boton' type='button' name='back' onClick=\" javascript:document.location='"+ urlback +"';\" value='" + paramsRequest.getLocaleString("back") + "'>"+paramsRequest.getLocaleString("back")+"</button></form></fieldset></td></tr>");
+        out.println("</table></fieldset><fieldset><table width='100%'  border='0' cellpadding='5' cellspacing='0'><tr><td colspan='2'><button type='button' dojoType=\"dijit.form.Button\" class='boton' Onclick='javascript:validData()' name='savechanges' value='" + paramsRequest.getLocaleString("changeConfiguration") + "'>" + paramsRequest.getLocaleString("changeConfiguration") + "</button>&nbsp;&nbsp;&nbsp;<button dojoType=\"dijit.form.Button\" class='boton' type='button' name='back' onClick=\" javascript:document.location='" + urlback + "';\" value='" + paramsRequest.getLocaleString("back") + "'>" + paramsRequest.getLocaleString("back") + "</button></form></fieldset></td></tr>");
         out.println("</table></fieldset>");
         out.println("</div>");
         out.close();
@@ -553,7 +568,7 @@ public class GoogleGadget extends GenericResource {
     {
         Locale localeUser = new Locale(paramsRequest.getUser().getLanguage());
         String url = this.getResourceBase().getAttribute(URL_ATTRIBUTE);
-        if ( url != null && !url.equals("") )
+        if (url != null && !url.equals(""))
         {
             try
             {
@@ -563,15 +578,15 @@ public class GoogleGadget extends GenericResource {
                 String h = this.getResourceBase().getAttribute("h", gadget.getHeight());
                 out.println("<iframe scrolling=\"no\" frameborder=\"0\" width=\"" + w + "px\" height=\"" + h + "px\" src=\"" + URL_FRAME + "?url=" + url + parameters + "\"></iframe>");
             }
-            catch ( IllegalArgumentException e )
+            catch (IllegalArgumentException e)
             {
                 log.error(e);
-                //AFUtils.log(e);
+            //AFUtils.log(e);
             }
-            catch ( MalformedURLException e )
+            catch (MalformedURLException e)
             {
                 log.error(e);
-                //AFUtils.log(e);
+            //AFUtils.log(e);
             }
 
         }
@@ -592,20 +607,28 @@ public class GoogleGadget extends GenericResource {
     {
         Locale localeUser = new Locale(paramsRequest.getUser().getLanguage());
         String url = this.getResourceBase().getAttribute(URL_ATTRIBUTE);
-        if ( url != null && !url.equals("") )
+        if (url != null && !url.equals(""))
         {
             try
             {
                 new Gadget(new URL(url));
             }
-            catch ( IllegalArgumentException iae )
+            catch (IllegalArgumentException iae)
             {
                 this.getResourceBase().setAttribute(URL_ATTRIBUTE, null);
+                try
+                {
+                    this.getResourceBase().updateAttributesToDB();
+                }
+                catch (Exception e)
+                {
+                    log.error(e);
+                }
                 url = null;
             }
 
         }
-        if ( url != null && !url.equals("") )
+        if (url != null && !url.equals(""))
         {
             PrintWriter out = response.getWriter();
             out.println("<div class=\"swbform\"><table width='100%'  border='0' cellpadding='5' cellspacing='0'> ");
@@ -622,19 +645,19 @@ public class GoogleGadget extends GenericResource {
                 out.println("<tr><td class='valores' colspan='2'>&nbsp;</td></tr>");
 
             }
-            catch ( Exception ex )
+            catch (Exception ex)
             {
                 log.error(ex);
-                //AFUtils.log(ex);
+            //AFUtils.log(ex);
             }
 
             out.println("<tr><td >" + paramsRequest.getLocaleString("orign") + ":</td><td ><a href='" + url + "' target='_blank'>" + url + "</a></td></tr>");
-            if ( gadget.getAuthor() != null )
+            if (gadget.getAuthor() != null)
             {
                 out.println("<tr><td >" + paramsRequest.getLocaleString("author") + ":</td><td >" + gadget.getAuthor() + "</td><td>");
             }
 
-            if ( gadget.getAuthor_Location() != null )
+            if (gadget.getAuthor_Location() != null)
             {
                 out.println("<tr><td >" + paramsRequest.getLocaleString("location") + ":</td><td >" + gadget.getAuthor_Location() + "</td><td>");
             }
@@ -648,11 +671,11 @@ public class GoogleGadget extends GenericResource {
             SWBResourceURL urladdFromList = paramsRequest.getRenderUrl();
             urladdFromList.setMode("addFromList");
             urladdFromList.setCallMethod(urladdFromList.Call_CONTENT);
-            out.println("<tr><td><form name='frmcambgad' action='" + urladdFromList + "' method='post'><input type='hidden' name='cambgad' value='"+ paramsRequest.getLocaleString("addFromList") +"'></input><button dojoType=\"dijit.form.Button\" onClick=\"frmcambgad.submit();\" >"+paramsRequest.getLocaleString("addFromList")+"</button></form></td><td><form name=\"frmurlchangeConfig\" action='" + urlchangeConfig + "' method='post'><input type='hidden' name='cambgad' value='" + paramsRequest.getLocaleString("changeConfiguration") + "'></input><button onClick=\"frmurlchangeConfig.submit();\" type='button' dojoType=\"dijit.form.Button\">"+paramsRequest.getLocaleString("changeConfiguration")+"</button></form></td></tr>");
+            out.println("<tr><td><form name='frmcambgad' action='" + urladdFromList + "' method='post'><input type='hidden' name='cambgad' value='" + paramsRequest.getLocaleString("addFromList") + "'></input><button dojoType=\"dijit.form.Button\" onClick=\"frmcambgad.submit();\" >" + paramsRequest.getLocaleString("addFromList") + "</button></form></td><td><form name=\"frmurlchangeConfig\" action='" + urlchangeConfig + "' method='post'><input type='hidden' name='cambgad' value='" + paramsRequest.getLocaleString("changeConfiguration") + "'></input><button onClick=\"frmurlchangeConfig.submit();\" type='button' dojoType=\"dijit.form.Button\">" + paramsRequest.getLocaleString("changeConfiguration") + "</button></form></td></tr>");
             out.println("</table></div>");
             out.close();
         }
-        if ( url == null || url.equals("") )
+        if (url == null || url.equals(""))
         {
             doAddFromList(request, response, paramsRequest);
         }
