@@ -102,7 +102,7 @@ public class SWBFormButton
 
     public static SWBFormButton newDeleteButton()
     {
-        return new SWBFormButton().setTitle("Eliminar", "es").setTitle("Delete", "en");
+        return new SWBFormButton().setTitle("Eliminar", "es").setTitle("Delete", "en").setAttribute("type", "submit");
     }
 
     public static SWBFormButton newResetButton()
