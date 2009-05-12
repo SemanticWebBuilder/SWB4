@@ -7,10 +7,14 @@ package org.semanticwb.model.base;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.FormElement;
+import org.semanticwb.model.FormElementURL;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.platform.SemanticObject;
@@ -22,6 +26,8 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class FormElementBase extends GenericObjectBase implements FormElement, GenericObject
 {
+    private static Logger log = SWBUtils.getLogger(FormElementBase.class);
+
     protected HashMap attributes=null;
 
     public FormElementBase(SemanticObject obj)
@@ -30,12 +36,12 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         attributes=new HashMap();
     }
 
-    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) throws FormValidateException 
+    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) throws FormValidateException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+
     }
 
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
     {
         //System.out.println("process...:"+obj.getURI()+" "+prop.getURI());
         if(prop.getDisplayProperty()==null)return;
@@ -120,11 +126,13 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         return ret;
     }
 
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void setAttribute(String name, String value) {
+    public void setAttribute(String name, String value)
+    {
         attributes.put(name, value);
     }
 
@@ -140,5 +148,31 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         }
         return ret.toString();
     }
+
+    public FormElementURL getRenderURL(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    {
+        return new FormElementURL(this,obj, prop, FormElementURL.URLTYPE_RENDER,type, mode, lang);
+    }
+
+    public FormElementURL getValidateURL(SemanticObject obj, SemanticProperty prop)
+    {
+        return new FormElementURL(this,obj, prop, FormElementURL.URLTYPE_RENDER,null, null, null);
+    }
+
+    public FormElementURL getProcessURL(SemanticObject obj, SemanticProperty prop)
+    {
+        return new FormElementURL(this,obj, prop, FormElementURL.URLTYPE_RENDER,null, null, null);
+    }
+
+    public String getLocaleString(String key, String lang)
+    {
+        String ret=null;
+        try
+        {
+            ret=SWBUtils.TEXT.getLocaleString(this.getClass().getName(), key, new Locale(lang),this.getClass().getClassLoader());
+        }catch(Exception e){log.error(e);}
+        return ret;
+    }
+
 
 }
