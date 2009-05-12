@@ -20,6 +20,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -76,10 +77,13 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
+        mgr.setSubmitByAjax(true);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("addThread");
         mgr.setAction(url.toString());
+        mgr.addButton(SWBFormButton.newSaveButton());
+        mgr.addButton(SWBFormButton.newCancelButton());
         out.println(mgr.renderForm(request));
     }
 
@@ -108,6 +112,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
+        mgr.setSubmitByAjax(true);
         mgr.setType(mgr.TYPE_XHTML);
         url.setAction("replyPost");
         mgr.setAction(url.toString());
@@ -121,6 +126,8 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             out.println("<tr><td>"+paramRequest.getLocaleString("msg")+":</td><td><b>"+thread.getBody()+"</b></td></tr>");
         }
         out.println("</table>");
+        mgr.addButton(SWBFormButton.newSaveButton());
+        mgr.addButton(SWBFormButton.newCancelButton());
         out.println(mgr.renderForm(request));
     }
 
@@ -132,6 +139,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
+        mgr.setSubmitByAjax(true);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("threadUri", request.getParameter("threadUri"));
@@ -159,6 +167,8 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         if (count > 0) {
             request.setAttribute("attachCount", "" + count);
         }
+        mgr.addButton(SWBFormButton.newSaveButton());
+        mgr.addButton(SWBFormButton.newCancelButton());
         out.println(mgr.renderForm(request));
     }
 
@@ -170,6 +180,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
+        mgr.setSubmitByAjax(true);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("threadUri", semObject.getURI());
@@ -196,7 +207,8 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         if (count > 0) {
             request.setAttribute("attachCount", "" + count);
         }
-        
+        mgr.addButton(SWBFormButton.newSaveButton());
+        mgr.addButton(SWBFormButton.newCancelButton());
         out.println(mgr.renderForm(request));
     }
 
