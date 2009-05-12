@@ -72,7 +72,8 @@ public class SWBPortal {
     }
     //Initialize context
 
-    private void init() {
+    private void init() 
+    {
         WebSite site = SWBContext.getAdminWebSite();
         if (site == null)
         {
