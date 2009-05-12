@@ -16,9 +16,9 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
     }
 
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
     {
-        super.process(request, obj, prop, type, mode, lang);
+        super.process(request, obj, prop);
     }
 
     @Override

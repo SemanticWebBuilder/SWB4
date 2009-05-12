@@ -97,7 +97,7 @@ public class PasswordUpdate extends PasswordUpdateBase
     }
 
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
     {
         if (prop.isDataTypeProperty())
         {
