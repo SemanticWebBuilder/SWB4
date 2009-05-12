@@ -17,28 +17,17 @@ public class SelectOne extends SelectOneBase
     }
 
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    {
         if(obj==null)obj=new SemanticObject();
-        String ret="";
+        boolean IPHONE=false;
+        boolean XHTML=false;
+        boolean DOJO=false;
+        if(type.equals("iphone"))IPHONE=true;
+        else if(type.equals("xhtml"))XHTML=true;
+        else if(type.equals("dojo"))DOJO=true;
 
-        if(type.endsWith("iphone"))
-        {
-            ret=renderIphone(request, obj, prop, type, mode, lang);
-        }else
-        {
-            ret=renderXHTML(request, obj, prop, type, mode, lang);
-        }
-        return ret;
-    }
-
-    public String renderIphone(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
-    {
-        return "";
-    }
-
-    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
-    {
-        String ret="";
+        StringBuffer ret=new StringBuffer();
         String name=prop.getName();
         String label=prop.getDisplayName(lang);
         SemanticObject sobj=prop.getDisplayProperty();
@@ -56,31 +45,34 @@ public class SelectOne extends SelectOneBase
             disabled=dobj.isDisabled();
         }
 
-        if(imsg==null)
+        if(DOJO)
         {
-            if(required)
+            if(imsg==null)
             {
-                imsg=label+" es requerido.";
-                if(lang.equals("en"))
+                if(required)
                 {
-                    imsg=label+" is required.";
-                }
-            }else
-            {
-                imsg="Dato invalido.";
-                if(lang.equals("en"))
+                    imsg=label+" es requerido.";
+                    if(lang.equals("en"))
+                    {
+                        imsg=label+" is required.";
+                    }
+                }else
                 {
-                    imsg="Invalid data.";
+                    imsg="Dato invalido.";
+                    if(lang.equals("en"))
+                    {
+                        imsg="Invalid data.";
+                    }
                 }
             }
-        }
 
-        if(pmsg==null)
-        {
-            pmsg="Captura "+label+".";
-            if(lang.equals("en"))
+            if(pmsg==null)
             {
-                pmsg="Enter "+label+".";
+                pmsg="Captura "+label+".";
+                if(lang.equals("en"))
+                {
+                    pmsg="Enter "+label+".";
+                }
             }
         }
 
@@ -106,9 +98,11 @@ public class SelectOne extends SelectOneBase
             }
             if(mode.equals("edit") || mode.equals("create") )
             {
-                ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\" "+ext+">";
+                ret.append("<select name=\""+name+"\"");
+                if(DOJO)ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\"");
+                ret.append(" "+ext+">");
                 //onChange="dojo.byId('oc1').value=arguments[0]"
-                if(isBlankSuport())ret+="<option value=\"\"></option>";
+                if(isBlankSuport())ret.append("<option value=\"\"></option>");
                 SemanticClass cls=prop.getRangeClass();
                 Iterator<SemanticObject> it=null;
                 if(isGlobalScope())
@@ -129,15 +123,15 @@ public class SelectOne extends SelectOneBase
                     SemanticObject sob=it.next();
                     if(sob.getURI()!=null)
                     {
-                        ret+="<option value=\""+sob.getURI()+"\" ";
-                        if(sob.getURI().equals(uri))ret+="selected";
-                        ret+=">"+sob.getDisplayName(lang)+"</option>";
+                        ret.append("<option value=\""+sob.getURI()+"\" ");
+                        if(sob.getURI().equals(uri))ret.append("selected");
+                        ret.append(">"+sob.getDisplayName(lang)+"</option>");
                     }
                 }
-                ret+="</select>";
+                ret.append("</select>");
             }else if(mode.equals("view"))
             {
-                ret="<span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
+                ret.append("<span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>");
             }
         }else
         {
@@ -145,7 +139,9 @@ public class SelectOne extends SelectOneBase
             {
                 String value=request.getParameter(prop.getName());
                 if(value==null)value=obj.getProperty(prop);
-                ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\" "+ext+">";
+                ret.append("<select name=\""+name+"\"");
+                if(DOJO)ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\"");
+                ret.append(" "+ext+">");
                 StringTokenizer st=new StringTokenizer(selectValues,"|");
                 while(st.hasMoreTokens())
                 {
@@ -158,14 +154,14 @@ public class SelectOne extends SelectOneBase
                         id=tok.substring(0,ind);
                         val=tok.substring(ind+1);
                     }
-                    ret+="<option value=\""+id+"\" ";
-                    if(id.equals(value))ret+="selected";
-                    ret+=">"+val+"</option>";
+                    ret.append("<option value=\""+id+"\" ");
+                    if(id.equals(value))ret.append("selected");
+                    ret.append(">"+val+"</option>");
                 }
-                ret+="</select>";
+                ret.append("</select>");
             }
         }
-        return ret;
+        return ret.toString();
     }
 
 }

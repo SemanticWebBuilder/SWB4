@@ -32,9 +32,17 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
     }
 
     @Override
-    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
-        String ret="";
+        if(obj==null)obj=new SemanticObject();
+        boolean IPHONE=false;
+        boolean XHTML=false;
+        boolean DOJO=false;
+        if(type.equals("iphone"))IPHONE=true;
+        else if(type.equals("xhtml"))XHTML=true;
+        else if(type.equals("dojo"))DOJO=true;
+
+        StringBuffer ret=new StringBuffer();
         String name=prop.getName();
         String label=prop.getDisplayName(lang);
         SemanticObject sobj=prop.getDisplayProperty();
@@ -50,24 +58,27 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
             selectValues=dobj.getSelectValues(lang);
         }
 
-        if(imsg==null)
+        if(DOJO)
         {
-            if(required)
+            if(imsg==null)
             {
-                imsg=label+" es requerido.";
-                if(lang.equals("en"))
+                if(required)
                 {
-                    imsg=label+" is required.";
+                    imsg=label+" es requerido.";
+                    if(lang.equals("en"))
+                    {
+                        imsg=label+" is required.";
+                    }
                 }
             }
-        }
 
-        if(pmsg==null)
-        {
-            pmsg="Captura "+label+".";
-            if(lang.equals("en"))
+            if(pmsg==null)
             {
-                pmsg="Enter "+label+".";
+                pmsg="Captura "+label+".";
+                if(lang.equals("en"))
+                {
+                    pmsg="Enter "+label+".";
+                }
             }
         }
 
@@ -86,9 +97,10 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
             }
             if(mode.equals("edit") || mode.equals("create") )
             {
-                ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">";
+                ret.append("<select name=\""+name+"\"");
+                if(DOJO)ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">");
                 //onChange="dojo.byId('oc1').value=arguments[0]"
-                if(isBlankSuport())ret+="<option value=\"\"></option>";
+                if(isBlankSuport())ret.append("<option value=\"\"></option>");
                 SemanticClass cls=prop.getRangeClass();
                 Iterator<SemanticObject> it=null;
                 if(cls!=WebPage.sclass)
@@ -109,9 +121,9 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
                     while(it.hasNext())
                     {
                         SemanticObject sob=it.next();
-                        ret+="<option value=\""+sob.getURI()+"\" ";
-                        if(sob.getURI().equals(uri))ret+="selected";
-                        ret+=">"+sob.getDisplayName(lang)+"</option>";
+                        ret.append("<option value=\""+sob.getURI()+"\" ");
+                        if(sob.getURI().equals(uri))ret.append("selected");
+                        ret.append(">"+sob.getDisplayName(lang)+"</option>");
                     }
                 }else
                 {
@@ -119,13 +131,13 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
                     if(site!=null)
                     {
                         WebPage home=site.getHomePage();
-                        ret+=addPage(home, uri, lang, ">");
+                        ret.append(addPage(home, uri, lang, ">"));
                     }
                 }
-                ret+="</select>";
+                ret.append("</select>");
             }else if(mode.equals("view"))
             {
-                ret="<span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
+                ret.append("<span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>");
             }
         }else
         {
@@ -133,7 +145,8 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
             {
                 String value=request.getParameter(prop.getName());
                 if(value==null)value=obj.getProperty(prop);
-                ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">";
+                ret.append("<select name=\""+name+"\"");
+                if(DOJO)ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">");
                 StringTokenizer st=new StringTokenizer(selectValues,"|");
                 while(st.hasMoreTokens())
                 {
@@ -146,15 +159,15 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
                         id=tok.substring(0,ind);
                         val=tok.substring(ind+1);
                     }
-                    ret+="<option value=\""+id+"\" ";
-                    if(id.equals(value))ret+="selected";
-                    ret+=">"+val+"</option>";
+                    ret.append("<option value=\""+id+"\" ");
+                    if(id.equals(value))ret.append("selected");
+                    ret.append(">"+val+"</option>");
                 }
-                ret+="</select>";
+                ret.append("</select>");
             }
         }
 
-        return ret;
+        return ret.toString();
     }
 
 

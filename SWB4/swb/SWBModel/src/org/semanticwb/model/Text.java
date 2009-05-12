@@ -15,28 +15,19 @@ public class Text extends TextBase
         super(base);
     }
 
+
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
-        if (obj == null) {
-            obj = new SemanticObject();
-        }
-        String ret = "";
+        if(obj==null)obj=new SemanticObject();
+        boolean IPHONE=false;
+        boolean XHTML=false;
+        boolean DOJO=false;
+        if(type.equals("iphone"))IPHONE=true;
+        else if(type.equals("xhtml"))XHTML=true;
+        else if(type.equals("dojo"))DOJO=true;
 
-        if (type.endsWith("iphone")) {
-            ret = renderIphone(request, obj, prop, type, mode, lang);
-        } else {
-            ret = renderXHTML(request, obj, prop, type, mode, lang);
-        }
-        return ret;
-    }
-
-    public String renderIphone(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
-        return "";
-    }
-
-    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
-        StringBuffer ret = new StringBuffer();
+        StringBuffer ret=new StringBuffer();
         String name = prop.getName();
         String label = prop.getDisplayName(lang);
         SemanticObject sobj = prop.getDisplayProperty();
@@ -51,19 +42,22 @@ public class Text extends TextBase
             disabled=dobj.isDisabled();
         }
 
-        if (imsg == null) {
-            if (required) {
-                imsg = label + " es requerido.";
-                if (lang.equals("en")) {
-                    imsg = label + " is required.";
+        if(DOJO)
+        {
+            if (imsg == null) {
+                if (required) {
+                    imsg = label + " es requerido.";
+                    if (lang.equals("en")) {
+                        imsg = label + " is required.";
+                    }
                 }
             }
-        }
 
-        if (pmsg == null) {
-            pmsg = "Captura " + label + ".";
-            if (lang.equals("en")) {
-                pmsg = "Enter " + label + ".";
+            if (pmsg == null) {
+                pmsg = "Captura " + label + ".";
+                if (lang.equals("en")) {
+                    pmsg = "Enter " + label + ".";
+                }
             }
         }
 
@@ -89,14 +83,14 @@ public class Text extends TextBase
         if (mode.equals("edit") || mode.equals("create"))
         {
             ret.append("<input name=\""+name+"\" size=\"30\" value=\""+value+"\"");
-            ret.append(" dojoType=\"dijit.form.ValidationTextBox\"");
-            ret.append(" required=\""+required+"\"");
+            if(DOJO)ret.append(" dojoType=\"dijit.form.ValidationTextBox\"");
+            if(DOJO)ret.append(" required=\""+required+"\"");
 //            ret.append(" propercase=\"true\"");
-            ret.append(" promptMessage=\""+pmsg+"\"");
-            ret.append(((getRegExp()!=null)?(" regExp=\""+getRegExp()+"\""):""));
-            ret.append(" invalidMessage=\""+imsg+"\"");
+            if(DOJO)ret.append(" promptMessage=\""+pmsg+"\"");
+            if(DOJO)ret.append(((getRegExp()!=null)?(" regExp=\""+getRegExp()+"\""):""));
+            if(DOJO)ret.append(" invalidMessage=\""+imsg+"\"");
             ret.append(" " + getAttributes());
-            ret.append(" trim=\"true\"");
+            if(DOJO)ret.append(" trim=\"true\"");
             ret.append(ext);
             ret.append("/>");
 
