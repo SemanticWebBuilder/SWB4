@@ -310,12 +310,23 @@ public class GoogleGadget extends GenericResource {
         replace(html, "More information for developers", "");
         replace(html, "<a href=\"javascript:openAddByUrl();\">", "</a>", "");
 
-        //int pos = html.indexOf("/ig/f/ZtcZ_UMr1Ww/ig.js");
-        int pos = html.indexOf("/ig/f/C0R-Dtev__A/ig.js");
 
+        int pos = html.indexOf("/ig/f/ZtcZ_UMr1Ww/ig.js");
+        /*if(pos==-1)
+        {
+            pos = html.indexOf("/ig/f/s-9mlIkxfvs/ig.js");
+        }
+        if(pos==-1)
+        {
+            pos = html.indexOf("/ig/f/C0R-Dtev__A/ig.js");
+        }*/
+        if(pos==-1)
+        {
+            pos = html.indexOf("<script src=\"/ig/f/");
+        }
         if ( pos != -1 )
         {
-            html.insert(pos, GOOGLE_URL);
+            html.insert(pos+13, GOOGLE_URL);
             String pathTofound = "\"" + PATH_DIRECTORY;
             replace(html, pathTofound, "\"");
             pathTofound = GOOGLE_URL + PATH_DIRECTORY + "?";
@@ -606,7 +617,9 @@ public class GoogleGadget extends GenericResource {
                 String description = gadget.getDescription(localeUser);
                 String image = gadget.getSrcImage(localeUser);
                 out.println("<tr><td class='valores'>" + paramsRequest.getLocaleString("googleTitle") + ":</td><td >" + title + "</td></tr>");
+                out.println("<tr><td class='valores' colspan='2'>&nbsp;</td></tr>");
                 out.println("<tr><td class='valores'><img width='120' height='60' src=\"" + image + "\"></td><td >" + description + "</td></tr>");
+                out.println("<tr><td class='valores' colspan='2'>&nbsp;</td></tr>");
 
             }
             catch ( Exception ex )
@@ -635,7 +648,7 @@ public class GoogleGadget extends GenericResource {
             SWBResourceURL urladdFromList = paramsRequest.getRenderUrl();
             urladdFromList.setMode("addFromList");
             urladdFromList.setCallMethod(urladdFromList.Call_CONTENT);
-            out.println("<tr><td align='right'><form name='frmcambgad' action='" + urladdFromList + "' method='post'><input type='hidden' name='cambgad' value='"+ paramsRequest.getLocaleString("addFromList") +"'></input><button dojoType=\"dijit.form.Button\" onClick=\"frmcambgad.submit();\" >"+paramsRequest.getLocaleString("addFromList")+"</button></form></td><td align='right'><form name=\"frmurlchangeConfig\" action='" + urlchangeConfig + "' method='post'><input type='hidden' name='cambgad' value='" + paramsRequest.getLocaleString("changeConfiguration") + "'></input><button onClick=\"frmurlchangeConfig.submit();\" type='button' dojoType=\"dijit.form.Button\">"+paramsRequest.getLocaleString("changeConfiguration")+"</button></form></td></tr>");
+            out.println("<tr><td><form name='frmcambgad' action='" + urladdFromList + "' method='post'><input type='hidden' name='cambgad' value='"+ paramsRequest.getLocaleString("addFromList") +"'></input><button dojoType=\"dijit.form.Button\" onClick=\"frmcambgad.submit();\" >"+paramsRequest.getLocaleString("addFromList")+"</button></form></td><td><form name=\"frmurlchangeConfig\" action='" + urlchangeConfig + "' method='post'><input type='hidden' name='cambgad' value='" + paramsRequest.getLocaleString("changeConfiguration") + "'></input><button onClick=\"frmurlchangeConfig.submit();\" type='button' dojoType=\"dijit.form.Button\">"+paramsRequest.getLocaleString("changeConfiguration")+"</button></form></td></tr>");
             out.println("</table></div>");
             out.close();
         }
