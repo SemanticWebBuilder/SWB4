@@ -75,6 +75,11 @@ public class SWBPlatform
         props=SWBUtils.TEXT.getPropertyFile("/web.properties");
 
         workPath = SWBPlatform.getEnv("swb/workPath");
+
+        SWBUtils.EMAIL.setSMTPServer(getEnv("swb/smtpServer"));
+        SWBUtils.EMAIL.setSMTPUser(getEnv("swb/smtpUser"));
+        SWBUtils.EMAIL.setSMTPPassword(getEnv("swb/smtpPassword"));
+
         try {
             //TODO:revisar sincronizacion
             //if (confCS.equalsIgnoreCase("Client")) remoteWorkPath = (String) AFUtils.getInstance().getEnv("swb/remoteWorkPath");

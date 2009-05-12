@@ -19,9 +19,17 @@ public interface FormElement extends GenericObject
 
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
 
-    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) throws FormValidateException;
+    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) throws FormValidateException;
 
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop);
 
     public void setAttribute(String name, String value);
+
+    public FormElementURL getRenderURL(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
+
+    public FormElementURL getValidateURL(SemanticObject obj, SemanticProperty prop);
+
+    public FormElementURL getProcessURL(SemanticObject obj, SemanticProperty prop);
+
+    public String getLocaleString(String key, String lang);
 }
