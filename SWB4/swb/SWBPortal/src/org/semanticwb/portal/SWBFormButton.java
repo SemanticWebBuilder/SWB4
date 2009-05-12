@@ -97,17 +97,22 @@ public class SWBFormButton
 
     public static SWBFormButton newCancelButton()
     {
-        return new SWBFormButton().setTitle("Cancelar", "es").setTitle("Cancel", "en").setAttribute("onclick", "history.back();");
+        return new SWBFormButton().setTitle("Cancelar", "es").setTitle("Cancel", "en");
+    }
+
+    public static SWBFormButton newBackButton()
+    {
+        return new SWBFormButton().setTitle("Regresar", "es").setTitle("Return", "en").setAttribute("onclick", "history.back();");
     }
 
     public static SWBFormButton newDeleteButton()
     {
-        return new SWBFormButton().setTitle("Eliminar", "es").setTitle("Delete", "en").setAttribute("type", "submit");
+        return new SWBFormButton().setTitle("Eliminar", "es").setTitle("Delete", "en");
     }
 
     public static SWBFormButton newResetButton()
     {
-        return new SWBFormButton().setTitle("Restaurar", "es").setTitle("Reset", "en").setAttribute("type", "reset");
+        return new SWBFormButton().setTitle("Restaurar", "es").setTitle("Reset", "en");
     }
 
 }
