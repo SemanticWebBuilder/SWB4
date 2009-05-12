@@ -10,6 +10,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
@@ -58,16 +59,17 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
+        mgr.setSubmitByAjax(true);
         mgr.setType(mgr.TYPE_XHTML);
         if(paramRequest.getAction().equals(paramRequest.Action_REMOVE))
         {
-            mgr.addButton("<button type=\"submit\"><%=paramRequest.getLocaleString(\"remove\")%></button>");
+            mgr.addButton(SWBFormButton.newDeleteButton());
             SWBResourceURL url = paramRequest.getActionUrl();
             url.setParameter("objInstUri", semObject.getURI());
             url.setAction(url.Action_REMOVE);
             mgr.setAction(url.toString());
         }
-
+        mgr.addButton(SWBFormButton.newCancelButton());
         out.println(mgr.renderForm(request));
     }
 
@@ -81,12 +83,14 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
+        mgr.setSubmitByAjax(true);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("objInstUri", semObject.getURI());
         url.setAction(url.Action_EDIT);
         mgr.setAction(url.toString());
-
+        mgr.addButton(SWBFormButton.newSaveButton());
+        mgr.addButton(SWBFormButton.newCancelButton());
         out.println(mgr.renderForm(request));
     }
 
@@ -100,12 +104,15 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
+        mgr.setSubmitByAjax(true);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("objUri", cls.getURI());
         url.setAction(url.Action_ADD);
         mgr.setAction(url.toString());
 
+        mgr.addButton(SWBFormButton.newSaveButton());
+        mgr.addButton(SWBFormButton.newCancelButton());
         out.println(mgr.renderForm(request));
     }
 
