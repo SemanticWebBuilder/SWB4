@@ -359,7 +359,7 @@ public class DistributorParams
             }
         }else
         {
-            Dns dns=null;//=(Dns)Dns.  webpage.getWebSite().getDns(request.getServerName());
+            Dns dns=Dns.getDns(request.getServerName());
             //System.out.println("dns:"+dns);
             if (dns == null)
             {
