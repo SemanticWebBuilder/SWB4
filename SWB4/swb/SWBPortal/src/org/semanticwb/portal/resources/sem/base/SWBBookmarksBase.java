@@ -3,6 +3,7 @@ package org.semanticwb.portal.resources.sem.base;
 
 public class SWBBookmarksBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_displayMode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#displayMode");
     public static final org.semanticwb.platform.SemanticClass swb_res_bkm_BookmarkGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#BookmarkGroup");
     public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_hasGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#hasGroup");
     public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_sortType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#sortType");
@@ -17,6 +18,16 @@ public class SWBBookmarksBase extends org.semanticwb.portal.api.GenericSemResour
         super(base);
     }
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#SWBBookmarks");
+
+    public int getDisplayMode()
+    {
+        return getSemanticObject().getIntProperty(swb_res_bkm_displayMode);
+    }
+
+    public void setDisplayMode(int displayMode)
+    {
+        getSemanticObject().setLongProperty(swb_res_bkm_displayMode, displayMode);
+    }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.BookmarkGroup> listGroups()
     {
