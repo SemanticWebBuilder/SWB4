@@ -842,7 +842,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     /**
      * Displays the list of tags ordered as deined by sortType.
      * @param sortType Sort type for the group to display.
-     * @param groupId ID ide
+     * @param groupId ID 
      * @param paramRequest
      * @return
      * @throws org.semanticwb.portal.api.SWBResourceException
