@@ -365,6 +365,9 @@
     <rdfs:subClassOf rdf:resource="#SWBInterface"/>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
+  <owl:Class rdf:ID="Tagable">
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+  </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea">
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
     <rdf:type rdf:resource="#FormElement"/>
@@ -2543,6 +2546,10 @@
         <rdfs:label>Indexable</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="tags">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Tagable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="xmlConf">
     <swb:displayProperty>
