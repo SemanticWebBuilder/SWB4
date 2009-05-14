@@ -111,13 +111,26 @@ public class WBALanguageReport extends GenericResource {
         PrintWriter out = response.getWriter();
         
         String webSiteId = request.getParameter("site");
-        WebSite webSite = SWBContext.getWebSite(webSiteId);        
+        WebSite webSite = SWBContext.getWebSite(webSiteId);
+
+        String langId = request.getParameter("wb_lang")==null? "0":request.getParameter("wb_lang");
+        String lang = paramsRequest.getUser().getLanguage();
         
         out.println("<select id=\"wb_lang\" name=\"wb_lang\" size=\"1\">");
+        out.println("<option value=\"0\" ");
+        if(langId.equalsIgnoreCase("0")) {
+            out.print(" selected=\"selected\" ");
+        }
+        out.print(">"+paramsRequest.getLocaleString("all")+"</option>");
+
         Iterator<Language> itLanguages = webSite.listLanguages();
         while (itLanguages.hasNext()) {
             Language language = itLanguages.next();
-            out.println("<option value=\"" + language.getId() + "\">"+language.getDisplayTitle(paramsRequest.getUser().getLanguage())+"</option>");
+            out.println("<option value=\""+language.getId()+"\" ");
+            if(langId.equalsIgnoreCase(language.getId())) {
+                out.print(" selected=\"selected\" ");
+            }
+            out.print(">"+language.getDisplayTitle(lang)+"</option>");
         }
         out.println("</select>");
         out.flush();
@@ -168,14 +181,7 @@ public class WBALanguageReport extends GenericResource {
             if(hm_sites.size() > I_ACCESS) {
                 String address = paramsRequest.getTopic().getUrl();
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String lang = request.getParameter("wb_lang");
-                
-                int deleteFilter;
-                try {
-                    deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
-                }catch(NumberFormatException e) {
-                    deleteFilter = 0;
-                }
+                String langId = request.getParameter("wb_lang")==null? "0":request.getParameter("wb_lang");
                 
                 int groupDates;
                 try {
@@ -225,19 +231,14 @@ public class WBALanguageReport extends GenericResource {
                 
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
                 out.println("dojo.addOnLoad(doBlockade);");
-                out.println("dojo.addOnLoad(function(){getHtml('"+url+"'+'?site="+webSiteId+"'");
-                if(lang != null) {
-                    out.print("+'&wb_lang="+lang+"'");
-                }
-                out.print(",'slave')});");
+                System.out.println("\n\nlangId="+langId);
+                System.out.println("dojo.addOnLoad(function(){getHtml('"+url+"'+'?site="+webSiteId+"'+'&wb_lang="+langId+"','slave')});");
+                out.println("dojo.addOnLoad(function(){getHtml('"+url+"'+'?site="+webSiteId+"'+'&wb_lang="+langId+"','slave')});");
                 
                 out.println("function getParams(accion) { ");
                 out.println("   var params = \"?\";");
                 out.println("   params = params + \"wb_site=\" + dojo.byId('wb_site').value;");
                 out.println("   params = params + \"&wb_lang=\" + document.getElementById('wb_lang').options[document.getElementById('wb_lang').selectedIndex].value;");
-                out.println("   if(document.getElementById('wb_deletefilter').checked) { ");
-                out.println("       params = params + \"&wb_deletefilter=\" + document.getElementById('wb_deletefilter').value; ");
-                out.println("   } ");
                 out.println("   params = params + \"&wb_rtype=\" + document.getElementById('wb_rtype').value;");
                 out.println("   if(accion == 0) {");
                 out.println("       params = params + \"&wb_rep_type=\" + getTypeSelected();");
@@ -263,52 +264,29 @@ public class WBALanguageReport extends GenericResource {
                 out.println("   return params;");
                 out.println("} ");
                 
-                /*out.println("function validate(accion) {");
-                out.println("    if(accion=='0') {");
-                out.println("       var fecha1 = new String(dojo.byId('wb_fecha1').value);");
-                out.println("       var fecha2 = new String(dojo.byId('wb_fecha11').value);");
-                out.println("       var fecha3 = new String(dojo.byId('wb_fecha12').value);");
-                out.println("       if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
-                out.println("          alert('Especifique la fecha o el rango de fechas que desea consultar');");
-                out.println("          return false;");
-                out.println("       }");
-                out.println("    }");
-                out.println("    return true;");
-                out.println("}");*/
-
                 out.println("function doXml(accion, size) { ");
-                /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml") + "\"+params,\"graphWindow\",size);");
-                /*out.println("   }");*/
                 out.println("}");
 
                 out.println("function doExcel(accion, size) { ");
-                /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel") + "\"+params,\"graphWindow\",size);");
-                /*out.println("   }");*/
                 out.println("}");
 
                 out.println("function doGraph(accion, size) { ");
-                /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph") + "\"+params,\"graphWindow\",size);");
-                /*out.println("   }");*/
                 out.println("}");
 
                 out.println("function doPdf(accion, size) { ");
-                /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_pdf") + "\"+params,\"graphWindow\",size);");
-                /*out.println("   }");*/
                 out.println("}");
 
                 out.println("function doRtf(accion, size) { ");
-                /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
                 out.println("      window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_rtf") + "\"+params,\"graphWindow\",size);    ");
-                /*out.println("   }");*/
                 out.println("}");
 
                 out.println("function getTypeSelected() { ");
@@ -322,9 +300,7 @@ public class WBALanguageReport extends GenericResource {
                 out.println("}");
 
                 out.println("function doApply() { ");
-                /*out.println("   if(validate(dojo.byId('wb_rtype').value)) {");*/
                 out.println("      window.document.frmrep.submit(); ");
-                /*out.println("   }");*/
                 out.println("}");
 
                 out.println("function doBlockade() {");
@@ -384,22 +360,8 @@ public class WBALanguageReport extends GenericResource {
                 out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("language") + ":</td>");                
                 out.println("<td colspan=\"2\"><div id=\"slave\"></div>");
-                if(deleteFilter==1) {                    
-                    out.println("<script type=\"text/javascript\">dojo.byId('wb_lang').disabled=true;</script>");
-                }
                 out.println("</td>");
                 out.println("<td>&nbsp;</td>");
-                out.println("</tr>");
-
-                out.println("<tr>");
-                out.println("<td colspan=\"4\">");
-                out.println(paramsRequest.getLocaleString("all_languages") + "&nbsp;&nbsp;");
-                out.println("<input type=\"checkbox\" id=\"wb_deletefilter\" name=\"wb_deletefilter\" value=\"1\" onclick=\"dojo.byId('wb_lang').disabled=!(dojo.byId('wb_lang').disabled);\"");
-                if(deleteFilter==1) {
-                    out.println(" checked=\"checked\"");
-                }
-                out.println(" />");
-                out.println("</td>");
                 out.println("</tr>");
                 
                 if(rtype.equals("0")) { // REPORTE DIARIO
@@ -520,8 +482,8 @@ public class WBALanguageReport extends GenericResource {
                         out.println("<td>");
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(webSiteId);
-                        if(deleteFilter==0) {
-                            filter.setIdaux(lang);
+                        if( !langId.equalsIgnoreCase("0") ) {
+                            filter.setIdaux(langId);
                         }
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(year13);
@@ -587,30 +549,13 @@ public class WBALanguageReport extends GenericResource {
                 jrResource.exportReport(response);
             }else { // REPORTE MENSUAL                
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
-                int deleteFilter;
-                try {
-                    deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
-                }catch(NumberFormatException e) {
-                    deleteFilter = 0;
-                }
+                String langId = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                /*Iterator<Language> itLanguages = paramsRequest.getTopic().getWebSite().listLanguages();*/
-                if(deleteFilter == 0) {                                
-                    /*while(itLanguages.hasNext()) {
-                        Language language = itLanguages.next();
-                        if(language.getId().equalsIgnoreCase(lang)) {                                        
-                            idaux.add(language);
-                            filter.setIdaux(idaux.iterator());
-                            break;
-                        }
-                    }*/
-                    filter.setIdaux(lang);
-                }/*else {
-                    filter.setIdaux(itLanguages);                             
-                }*/
+                if( !langId.equalsIgnoreCase("0") ) {
+                    filter.setIdaux(langId);
+                }
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
 
@@ -651,30 +596,13 @@ public class WBALanguageReport extends GenericResource {
                 jrResource.exportReport(response);
             }else { // by month                
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
-                int deleteFilter;
-                try {
-                    deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
-                }catch(NumberFormatException e) {
-                    deleteFilter = 0;
-                }
+                String langId = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                /*Iterator<Language> itLanguages = paramsRequest.getTopic().getWebSite().listLanguages();*/
-                if(deleteFilter == 0) {                                
-                    /*while(itLanguages.hasNext()) {
-                        Language language = itLanguages.next();
-                        if(language.getId().equalsIgnoreCase(lang)) {                                        
-                            idaux.add(language);
-                            filter.setIdaux(idaux.iterator());
-                            break;
-                        }
-                    }*/
-                    filter.setIdaux(lang);
-                }/*else {
-                    filter.setIdaux(itLanguages);                             
-                }*/
+                if( !langId.equalsIgnoreCase("0") ) {
+                    filter.setIdaux(langId);
+                }
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 System.out.println("por mes. filtro="+filter.toString());
@@ -749,30 +677,13 @@ public class WBALanguageReport extends GenericResource {
                 }
             }else { // REPORTE MENSUAL
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
-                int deleteFilter;
-                try {
-                    deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
-                }catch(NumberFormatException e) {
-                    deleteFilter = 0;
-                }
+                String langId = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                /*Iterator<Language> itLanguages = paramsRequest.getTopic().getWebSite().listLanguages();*/
-                if(deleteFilter == 0) {                                
-                    /*while(itLanguages.hasNext()) {
-                        Language language = itLanguages.next();
-                        if(language.getId().equalsIgnoreCase(lang)) {                                        
-                            idaux.add(language);
-                            filter.setIdaux(idaux.iterator());
-                            break;
-                        }
-                    }*/
-                    filter.setIdaux(lang);
-                }/*else {
-                    filter.setIdaux(itLanguages);                             
-                }*/
+                if( !langId.equalsIgnoreCase("0") ) {
+                    filter.setIdaux(langId);
+                }
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRLanguageAccessDataDetail(filter);
@@ -831,30 +742,13 @@ public class WBALanguageReport extends GenericResource {
                 jrResource.exportReport(response);
             }else { // by month                
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
-                int deleteFilter;
-                try {
-                    deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
-                }catch(NumberFormatException e) {
-                    deleteFilter = 0;
-                }
+                String langId = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                /*Iterator<Language> itLanguages = paramsRequest.getTopic().getWebSite().listLanguages();*/
-                if(deleteFilter == 0) {                                
-                    /*while(itLanguages.hasNext()) {
-                        Language language = itLanguages.next();
-                        if(language.getId().equalsIgnoreCase(lang)) {                                        
-                            idaux.add(language);
-                            filter.setIdaux(idaux.iterator());
-                            break;
-                        }
-                    }*/
-                    filter.setIdaux(lang);
-                }/*else {
-                    filter.setIdaux(itLanguages);                             
-                }*/
+                if( !langId.equalsIgnoreCase("0") ) {
+                    filter.setIdaux(langId);
+                }
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 System.out.println("por mes. filtro="+filter.toString());
@@ -889,30 +783,13 @@ public class WBALanguageReport extends GenericResource {
                 jrResource.exportReport(response);
             }else { // by month                
                 String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
-                int deleteFilter;
-                try {
-                    deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
-                }catch(NumberFormatException e) {
-                    deleteFilter = 0;
-                }
+                String langId = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                /*Iterator<Language> itLanguages = paramsRequest.getTopic().getWebSite().listLanguages();*/
-                if(deleteFilter == 0) {                                
-                    /*while(itLanguages.hasNext()) {
-                        Language language = itLanguages.next();
-                        if(language.getId().equalsIgnoreCase(lang)) {                                        
-                            idaux.add(language);
-                            filter.setIdaux(idaux.iterator());
-                            break;
-                        }
-                    }*/
-                    filter.setIdaux(lang);
-                }/*else {
-                    filter.setIdaux(itLanguages);                             
-                }*/
+                if( !langId.equalsIgnoreCase("0") ) {
+                    filter.setIdaux(langId);
+                }
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 System.out.println("por mes. filtro="+filter.toString());
@@ -935,13 +812,7 @@ public class WBALanguageReport extends GenericResource {
         /*ArrayList idaux = new ArrayList();*/
         
         String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-        String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
-        int deleteFilter;
-        try {
-            deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
-        }catch(NumberFormatException e) {
-            deleteFilter = 0;
-        }
+        String langId = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");
         int groupDates;
         try {
             groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
@@ -971,21 +842,13 @@ public class WBALanguageReport extends GenericResource {
         }
         
         try {
-            if(deleteFilter==0) {
-                /*Iterator<Language> itLanguages = SWBContext.getWebSite(webSiteId).listLanguages();
-                while(itLanguages.hasNext()) {
-                    Language language = itLanguages.next();
-                    if(language.getId().equalsIgnoreCase(lang)) {
-                        idaux.add(language);
-                        break;
-                    }
-                }*/
+            if( !langId.equalsIgnoreCase("0") ) {
                 if(groupDates==0) { // radio button was 0. Select only one date
                     String[] numFecha = fecha1.split("-");
                     filterReportBean = new WBAFilterReportBean();
                     filterReportBean.setSite(webSiteId);
                     /*filterReportBean.setIdaux(idaux.iterator());*/
-                    filterReportBean.setIdaux(lang);
+                    filterReportBean.setIdaux(langId);
                     filterReportBean.setType(I_REPORT_TYPE);                    
                     filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
                     filterReportBean.setMonthI(Integer.parseInt(numFecha[1]));
@@ -994,7 +857,7 @@ public class WBALanguageReport extends GenericResource {
                     filterReportBean = new WBAFilterReportBean();
                     filterReportBean.setSite(webSiteId);
                     /*filterReportBean.setIdaux(idaux.iterator());*/
-                    filterReportBean.setIdaux(lang);
+                    filterReportBean.setIdaux(langId);
                     filterReportBean.setType(I_REPORT_TYPE);
                     
                     String[] numFecha = fecha11.split("-");
