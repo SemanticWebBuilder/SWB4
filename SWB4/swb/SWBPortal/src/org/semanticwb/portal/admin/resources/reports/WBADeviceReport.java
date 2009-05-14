@@ -253,7 +253,7 @@ public class WBADeviceReport extends GenericResource {
                 }
                 
                 SWBResourceURL url=paramsRequest.getRenderUrl();
-                url.setCallMethod(url.Call_DIRECT);                
+                url.setCallMethod(url.Call_DIRECT);
 
                 out.println("<script type=\"text/javascript\">");                
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
