@@ -12,85 +12,146 @@
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
   xml:base="http://www.semanticwebbuilder.org/filerepository">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/repository"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/repository"/>
   </owl:Ontology>
   <owl:Class rdf:ID="Traceable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
   </owl:Class>
+  <owl:Class rdf:ID="RepositoryResource">
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#resource"/>
+    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mix:referenceable</jcr:supertypes>
+    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mix:versionable</jcr:supertypes>
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
+  </owl:Class>
   <owl:Class rdf:ID="Notifiable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
   </owl:Class>
-  <owl:Class rdf:ID="RepositoryFile">
-    <rdfs:subClassOf rdf:resource="#Notifiable"/>
-    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#file"/>
+  <owl:Class rdf:ID="SemanticRepositoryFile">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
+  </owl:Class>
+  <owl:Class rdf:ID="RepositoryFolder">
+    <jcr:childNodeDefinition>
+      <nt:childNodeDefinition>
+        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:autoCreated>
+        <jcr:defaultPrimaryType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbfilerep:RepositoryFile</jcr:defaultPrimaryType>
+        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbfilerep:RepositoryFile</jcr:requiredPrimaryTypes>
+        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:mandatory>
+        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >*</jcr:name>
+        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IGNORE</jcr:onParentVersion>
+        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:protected>
+        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:sameNameSiblings>
+      </nt:childNodeDefinition>
+    </jcr:childNodeDefinition>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <jcr:childNodeDefinition>
+      <nt:childNodeDefinition>
+        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >*</jcr:name>
+        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IGNORE</jcr:onParentVersion>
+        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:autoCreated>
+        <jcr:defaultPrimaryType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbfilerep:RepositoryFile</jcr:defaultPrimaryType>
+        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:mandatory>
+        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:protected>
+        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbfilerep:RepositoryFile</jcr:requiredPrimaryTypes>
+        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:sameNameSiblings>
+      </nt:childNodeDefinition>
+    </jcr:childNodeDefinition>
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#folder"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mix:referenceable</jcr:supertypes>
+    <rdfs:subClassOf rdf:resource="#Notifiable"/>
   </owl:Class>
   <owl:DatatypeProperty rdf:ID="see">
+    <rdfs:domain rdf:resource="#SemanticRepositoryFile"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain>
-      <swb:SemanticResource rdf:ID="SemanticRepositoryFile">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:SemanticResource>
-    </rdfs:domain>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="userid">
-    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</jcr:mandatory>
+    <rdfs:domain rdf:resource="#Traceable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >COPY</jcr:onParentVersion>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Traceable"/>
+    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</jcr:mandatory>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="useFolders">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#SemanticRepositoryFile"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="admin">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SemanticRepositoryFile"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="hasRoleId">
-    <rdfs:domain rdf:resource="#Notifiable"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</jcr:multiple>
     <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >IGNORE</jcr:onParentVersion>
+    <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</jcr:multiple>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Notifiable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="deleted">
+    <rdfs:domain>
+      <swb:Class rdf:ID="RepositoryFile">
+        <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >mix:referenceable</jcr:supertypes>
+        <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
+        <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#file"/>
+        <rdfs:subClassOf rdf:resource="#Notifiable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#RepositoryFile"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="modify">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SemanticRepositoryFile"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="msgcrated">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SemanticRepositoryFile"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="hasUserId">
-    <rdfs:domain rdf:resource="#Notifiable"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</jcr:multiple>
     <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >IGNORE</jcr:onParentVersion>
+    <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</jcr:multiple>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Notifiable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="comment">
     <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</jcr:multiple>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_comment">
-        <swbxf:propPromptMessage xml:lang="en">Add comment</swbxf:propPromptMessage>
-        <swbxf:propPromptMessage xml:lang="es">Agregar comentario</swbxf:propPromptMessage>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
-        <rdfs:label xml:lang="es">Comentario</rdfs:label>
         <rdfs:label xml:lang="en">Comment</rdfs:label>
+        <rdfs:label xml:lang="es">Comentario</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <swbxf:propPromptMessage xml:lang="es">Agregar comentario</swbxf:propPromptMessage>
+        <swbxf:propPromptMessage xml:lang="en">Add comment</swbxf:propPromptMessage>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -102,147 +163,89 @@
     <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</jcr:mandatory>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain>
-      <swbrep:Node rdf:ID="RepositoryResource">
-        <rdfs:subClassOf rdf:resource="#Traceable"/>
-        <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >mix:versionable</jcr:supertypes>
-        <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >mix:referenceable</jcr:supertypes>
-        <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#resource"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swbrep:Node>
-    </rdfs:domain>
+    <rdfs:domain rdf:resource="#RepositoryResource"/>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="msgdeleted">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SemanticRepositoryFile"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="msgupdated">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SemanticRepositoryFile"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="filesize">
-    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</jcr:mandatory>
+    <rdfs:domain rdf:resource="#RepositoryResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
     <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >COPY</jcr:onParentVersion>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
-    <rdfs:domain rdf:resource="#RepositoryResource"/>
+    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</jcr:mandatory>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="hasUserGroupId">
-    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</jcr:mandatory>
+    <rdfs:domain rdf:resource="#Notifiable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</jcr:multiple>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Notifiable"/>
+    <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</jcr:mandatory>
   </owl:DatatypeProperty>
-  <swb:Class rdf:ID="RepositoryFolder">
-    <rdfs:subClassOf rdf:resource="#Notifiable"/>
-    <rdfs:subClassOf rdf:resource="#Traceable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-    <jcr:childNodeDefinition>
-      <nt:childNodeDefinition>
-        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:sameNameSiblings>
-        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:protected>
-        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >IGNORE</jcr:onParentVersion>
-        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >*</jcr:name>
-        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:mandatory>
-        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbfilerep:RepositoryFile</jcr:requiredPrimaryTypes>
-        <jcr:defaultPrimaryType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbfilerep:RepositoryFile</jcr:defaultPrimaryType>
-        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:autoCreated>
-      </nt:childNodeDefinition>
-    </jcr:childNodeDefinition>
-    <jcr:childNodeDefinition>
-      <nt:childNodeDefinition>
-        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:sameNameSiblings>
-        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbfilerep:RepositoryFile</jcr:requiredPrimaryTypes>
-        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:protected>
-        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:mandatory>
-        <jcr:defaultPrimaryType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbfilerep:RepositoryFile</jcr:defaultPrimaryType>
-        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:autoCreated>
-        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >IGNORE</jcr:onParentVersion>
-        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >*</jcr:name>
-      </nt:childNodeDefinition>
-    </jcr:childNodeDefinition>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
-    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#folder"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
   <swb:Class rdf:ID="RepositoryNode">
     <rdfs:subClassOf rdf:resource="#Notifiable"/>
+    <jcr:childNodeDefinition>
+      <nt:childNodeDefinition>
+        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:autoCreated>
+        <jcr:defaultPrimaryType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbfilerep:FileRepository</jcr:defaultPrimaryType>
+        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:mandatory>
+        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >*</jcr:name>
+        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IGNORE</jcr:onParentVersion>
+        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:sameNameSiblings>
+        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</jcr:protected>
+        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbfilerep:RepositoryFolder</jcr:requiredPrimaryTypes>
+      </nt:childNodeDefinition>
+    </jcr:childNodeDefinition>
+    <jcr:childNodeDefinition>
+      <nt:childNodeDefinition>
+        <jcr:defaultPrimaryType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbfilerep:RepositoryFolder</jcr:defaultPrimaryType>
+        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbfilerep:RepositoryFolder</jcr:requiredPrimaryTypes>
+        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:mandatory>
+        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:autoCreated>
+        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >*</jcr:name>
+        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IGNORE</jcr:onParentVersion>
+        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:protected>
+        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:sameNameSiblings>
+      </nt:childNodeDefinition>
+    </jcr:childNodeDefinition>
     <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >mix:referenceable</jcr:supertypes>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#folder"/>
     <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <jcr:childNodeDefinition>
-      <nt:childNodeDefinition>
-        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:sameNameSiblings>
-        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:protected>
-        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >IGNORE</jcr:onParentVersion>
-        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >*</jcr:name>
-        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:autoCreated>
-        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:mandatory>
-        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbfilerep:RepositoryFolder</jcr:requiredPrimaryTypes>
-        <jcr:defaultPrimaryType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbfilerep:RepositoryFolder</jcr:defaultPrimaryType>
-      </nt:childNodeDefinition>
-    </jcr:childNodeDefinition>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
-    <jcr:childNodeDefinition>
-      <nt:childNodeDefinition>
-        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbfilerep:RepositoryFolder</jcr:requiredPrimaryTypes>
-        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</jcr:protected>
-        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:sameNameSiblings>
-        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >IGNORE</jcr:onParentVersion>
-        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >*</jcr:name>
-        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:mandatory>
-        <jcr:defaultPrimaryType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbfilerep:FileRepository</jcr:defaultPrimaryType>
-        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</jcr:autoCreated>
-      </nt:childNodeDefinition>
-    </jcr:childNodeDefinition>
   </swb:Class>
   <swb:CodePackage rdf:ID="cpkg_filerep">
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >swbfilerep</swb:prefix>
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.resources.filerepository</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbfilerep</swb:prefix>
   </swb:CodePackage>
 </rdf:RDF>
 
