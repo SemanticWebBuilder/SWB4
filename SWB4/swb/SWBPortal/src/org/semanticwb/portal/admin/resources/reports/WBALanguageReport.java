@@ -87,8 +87,8 @@ public class WBALanguageReport extends GenericResource {
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        if(paramsRequest.getMode().equalsIgnoreCase("bind")) {
-            doBind(request,response,paramsRequest);
+        if(paramsRequest.getMode().equalsIgnoreCase("fillLangSel")) {
+            doRenderLang(request,response,paramsRequest);
         }else if(paramsRequest.getMode().equalsIgnoreCase("graph")) {
             doGraph(request,response,paramsRequest);
         }else if(paramsRequest.getMode().equalsIgnoreCase("report_excel")) {
@@ -104,8 +104,7 @@ public class WBALanguageReport extends GenericResource {
         }
     }
     
-    public void doBind(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        System.out.println("inicia doBind");
+    public void doRenderLang(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/json;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -220,13 +219,13 @@ public class WBALanguageReport extends GenericResource {
                 
                 SWBResourceURL url=paramsRequest.getRenderUrl();
                 url.setCallMethod(url.Call_DIRECT);
-                url.setMode("bind");
+                url.setMode("fillLangSel");
 
                 out.println("<script type=\"text/javascript\">");
                 
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
                 out.println("dojo.addOnLoad(doBlockade);");
-                out.println("dojo.addOnLoad(function(){getHtml('"+url.toString()+"'+'?site="+webSiteId+"'");
+                out.println("dojo.addOnLoad(function(){getHtml('"+url+"'+'?site="+webSiteId+"'");
                 if(lang != null) {
                     out.print("+'&wb_lang="+lang+"'");
                 }
