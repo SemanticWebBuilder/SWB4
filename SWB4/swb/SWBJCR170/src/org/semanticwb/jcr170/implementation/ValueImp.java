@@ -8,10 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import javax.jcr.Node;
@@ -30,7 +27,8 @@ public class ValueImp implements Value
 {
 
     static Logger log = SWBUtils.getLogger(ValueImp.class);
-    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    //private static SimpleDateFormat iso8601dateFormat =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    //private static SimpleDateFormat iso8601dateFormat =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private final int type;
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     Object value;
@@ -78,7 +76,8 @@ public class ValueImp implements Value
         }
         if (value instanceof Calendar)
         {
-            valueString = iso8601dateFormat.format(((Calendar) value).getTime());
+            //valueString = iso8601dateFormat.format(((Calendar) value).getTime());
+            valueString = SWBUtils.TEXT.iso8601DateFormat(((Calendar) value).getTime());
         }
         return valueString;
     }
@@ -145,7 +144,7 @@ public class ValueImp implements Value
             String stringDate = getString();
             try
             {
-                Date date = iso8601dateFormat.parse(stringDate);
+                Date date = SWBUtils.TEXT.iso8601DateParse(stringDate);
                 calendar = Calendar.getInstance();
                 calendar.setTime(date);
             }
