@@ -52,7 +52,7 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
      */
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
         log.trace("Tipo de Autenticacion: " + authType);
-        log.trace("has request: "+request);
+        log.trace("has request: "+(null!=request));
         if ("BASIC".equalsIgnoreCase(authType)) {
             getBasicCredentials(callbacks);
         }

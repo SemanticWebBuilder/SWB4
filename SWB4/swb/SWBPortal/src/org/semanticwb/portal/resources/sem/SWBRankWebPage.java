@@ -186,6 +186,12 @@ function votedPage(){
              out.print("Not OK");
     }
 
+    @Override
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+
+    }
+
 
 
 }
