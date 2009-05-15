@@ -100,7 +100,7 @@ try
         SWBFormMgr frm=new SWBFormMgr(obj, view,mode);
         frm.setLang(lang);
         frm.setSubmitByAjax(true);
-        //frm.setType(SWBFormMgr.TYPE_DOJO);
+        frm.setType(SWBFormMgr.TYPE_DOJO);
 
         if(smode!=null)
         {
