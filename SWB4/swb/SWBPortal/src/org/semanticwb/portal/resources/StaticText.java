@@ -76,17 +76,17 @@ public class StaticText extends GenericAdmResource {
         
         PrintWriter out = response.getWriter();
         
-        out.println("<script type=\"text/javascript\">");
+//        out.println("<script type=\"text/javascript\">");
+//
+//        out.println("  function editableTextOnChange(id, arg) {");
+//        out.println("    postHtml('"+url.toString()+"'+'?val='+arg, id);");
+//        out.println("  }");
+//
+//        out.println("</script>");
 
-        out.println("  function editableTextOnChange(id, arg) {");
-        out.println("    postHtml('"+url.toString()+"'+'?val='+arg, id);");
-        out.println("  }");
-
-        out.println("</script>");
-
-        out.println("<div id=\"stext_"+base.getId()+" \" dojoType=\"dijit.InlineEditBox\" onChange=\"editableTextOnChange(this.id,arguments[0])\" autoSave=\"true\">");
+//        out.println("<div id=\"stext_"+base.getId()+"\" dojoType=\"dijit.InlineEditBox\" onChange=\"editableTextOnChange(this.id,arguments[0])\" autoSave=\"true\">");
         out.println(staticText);
-        out.println("</div>");
+//        out.println("</div>");
         out.flush();
     }
 
