@@ -22,6 +22,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 //import java.util.HashMap;
 import java.util.Iterator;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.api.SWBResourceURL;
 
 /**
@@ -142,15 +143,12 @@ public class SparqlQueryResource extends GenericAdmResource {
 
                 try {
 
-                    Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+                    //Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+                    SemanticModel model = SWBPlatform.getSemanticMgr().getModel("DBPedia");
 
                     String queryString = _query;
 
-                    Query query = QueryFactory.create(queryString);
-                    query.serialize(); //new IndentedWriter(response.getOutputStream(),true)) ;
-                    // Create a single execution of this query, apply to a model
-                    // which is wrapped up as a Dataset
-                    QueryExecution qexec = QueryExecutionFactory.create(query, model);
+                    QueryExecution qexec = model.sparQLQuery(queryString);
                     // Or QueryExecutionFactory.create(queryString, model) ;
                     try {
                         // Assumption: it's a SELECT query.
@@ -197,6 +195,16 @@ public class SparqlQueryResource extends GenericAdmResource {
                                     String name = it.next();
                                     RDFNode x_node = rb.get(name);
                                     String sval = (x_node != null ? x_node.toString() : " - ");
+
+                                    if(x_node.isLiteral())
+                                    {
+                                        sval=x_node.asNode().getLiteralValue().toString();
+                                    }else if(x_node.isResource())
+                                    {
+                                        sval=x_node.asNode().getLocalName();
+                                    }
+
+
                                     Element ecol = addElem(doc, erow, "col", sval);
                                 }
                             } else if(excelf) {
