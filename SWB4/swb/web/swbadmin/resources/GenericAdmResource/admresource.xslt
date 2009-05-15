@@ -159,7 +159,7 @@
     			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
    		</xsl:if>
     </xsl:template>
-    <xsl:template match="button">
+    <xsl:template match="button[@type = 'submit' or @type = 'reset']">
     		<xsl:if test="@type = 'submit'">
 			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD colspan="2" align="right"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
