@@ -90,7 +90,7 @@ public class Js_PatronFE extends WBJsValidationsFEAbs {
         StringBuffer strb = new StringBuffer();
         if(field != null)
         {
-            String bundle=getClass().getName();            
+            String bundle=getClass().getName();
             strb.append("\n   pCaracter=");
 //            if(formfeName != null)
 //                strb.append("document."+formfeName + ".");

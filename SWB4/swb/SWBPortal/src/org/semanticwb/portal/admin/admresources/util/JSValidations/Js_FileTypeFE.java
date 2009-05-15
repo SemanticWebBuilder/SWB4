@@ -93,7 +93,6 @@ public class Js_FileTypeFE extends WBJsValidationsFEAbs {
         if(field != null)
         {
             String bundle=getClass().getName();
-
             strb.append("\n   pCaracter=");
             //if(formfeName != null)
             //    strb.append("document."+formfeName + ".");

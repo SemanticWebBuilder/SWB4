@@ -111,6 +111,7 @@ public class SubmitFE extends ButtonFE
                 if(style!=null) child.setAttribute("style",style);
                 if(styleclass!=null) child.setAttribute("class",styleclass);
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
+                
                 if(formfe != null && formfe.getSizeJsFE() > 0)
                 {
                     String sonClick="";
@@ -119,6 +120,7 @@ public class SubmitFE extends ButtonFE
                     child.setAttribute("onclick","if(valida_"+formfe.getName()+"()) { "+sonClick+"} else return false;");
                 }
                 if(formfe != null && formfe.getSizeJsFE() < 1 && onClick!=null) child.setAttribute("onclick", onClick);
+                
 
                 setJsFrameworkAttributes(child);
 

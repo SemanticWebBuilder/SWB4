@@ -4,23 +4,23 @@
 	<form name="frmWBBanner" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
                 <fieldset>
-		<statictext name="txtLocal">Banner local o externo-J5:</statictext>
+		<statictext name="txtLocal">Banner local o externo:</statictext>
 		<input type="RADIO" id="local1" name="local" label="Externo" value="1"/>
 		<input type="RADIO" id="local2" name="local" label="Local" value="0"/>
 		<textarea name="code" label="*1 Código:" rows="5" cols="50" wrap="virtual"/>
-		<input type="FILE" id="img" name="img" label="*2 Banner:" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|swf" isshowfiletype="true" />
+		<input type="FILE" id="img" name="img" label="*2 Banner:" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|swf|png" isshowfiletype="true" />
 		<input type="TEXT" id="alt" name="alt" label="Texto alterno:" size="50"/>
-		<input type="TEXT" id="width" name="width" label="Ancho (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+		<input type="TEXT" id="width" name="width" label="Ancho (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers" promptMessage="prueba" invalidMessage="invalido"/>
 		<input type="TEXT" id="height" name="height" label="Alto (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
 		<input type="TEXT" id="url" name="url" label="Dirección web" size="50"/>
 		<statictext name="txtTarget">En una nueva ventana:</statictext>
 		<input type="RADIO" id="target1" name="target" label="Sí" value="1"/>
 		<input type="RADIO" id="target2" name="target" label="No" value="0"/>
-                </fieldset>
-                <fieldset>
+        </fieldset>
+        <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
 		<input type="RESET"  name="btnReset" value="Cancelar"/>
-                </fieldset>
+        </fieldset>
 	</form>
 	<statictext name="txtNote1">
 		<![CDATA[
@@ -46,14 +46,11 @@
             }
 			function jsValida(frm)
 			{
-                alert("valorJ:"+document.getElementById('local2'));
-                alert("valorJ1:"+dijit.byId('local2'));
-                alert("valorJ2:"+dojo.byId('local2'));
                 if(document.getElementById('local2').checked)
 				{
-					if(document.getElementById('wbfile_img')==undefined && (document.getElementById('img').value==null || document.getElementById('img').value=='' || document.getElementById('img').value==' '))
+                	if(document.getElementById('wbfile_img')==undefined && (document.getElementById('img').value==null || document.getElementById('img').value=='' || document.getElementById('img').value==' '))
 					{
-						alert('Informe uma imagem para o banner.');
+						alert('Especifique una imagen para el banner');
 						document.getElementById('img').focus();
 						return false;
 					}
@@ -62,7 +59,7 @@
 				{
                    if(document.getElementById('code').value==null || document.getElementById('code').value=='')
 					{
-						alert('Defina o código para incluir a publicidade externa.');
+						alert('Defina la codificación para incluir la publicidad externa.');
 						document.getElementById('code').focus();
 						return false;
 					}

@@ -237,7 +237,7 @@ public class FileFE extends WBJsInputFEAbs
                 Document dom=SWBUtils.XML.getNewDocument(); 
                 String xml="";
                 String filename=dbconnmgr.getAttribute(name);
-                if(filename.endsWith(".gif") || filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".swf"))
+                if(filename.endsWith(".gif") || filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".swf") || filename.endsWith(".png"))
                 {
                     xml=admResUtils.displayImage(base, filename, width, height);
                     dom=SWBUtils.XML.xmlToDom(xml); 
@@ -384,7 +384,6 @@ public class FileFE extends WBJsInputFEAbs
             }
         } 
         catch(Exception e) { log.error(e); }
-        System.out.println("file Xml:"+xml);
         return xml;              
     }
     
