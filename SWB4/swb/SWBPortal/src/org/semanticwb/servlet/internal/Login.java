@@ -166,7 +166,7 @@ public class Login implements InternalServlet
                 try
                     {
                     log.trace("testing for null: "+
-                        ((SWB4CallbackHandler) callbackHandler).getRequest().getParameter("wb_username"));
+                        ((SWB4CallbackHandler) callbackHandler).getRequest());
                     } catch (NullPointerException npe)
                     {
                         try

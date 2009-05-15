@@ -352,7 +352,7 @@ public class UserRegistration extends GenericAdmResource
 //                System.out.println("*************** "+user.isActive());
             } else
             {
-                if (!user.getLogin().equalsIgnoreCase(usrLogin) && null != userRep.getUserByLogin(usrLogin))
+                if (user.getLogin()!=null && !user.getLogin().equalsIgnoreCase(usrLogin) && null != userRep.getUserByLogin(usrLogin))
                 {
                     //TODO report Error, Loging Already Exists!
                     return;
