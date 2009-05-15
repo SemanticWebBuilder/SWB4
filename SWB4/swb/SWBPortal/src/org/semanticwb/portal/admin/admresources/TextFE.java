@@ -296,15 +296,22 @@ public class TextFE extends WBJsInputFEAbs
                 }
                 if(minsize>0) setJsMinSize(minsize); 
                 if(required) setJsIsRequired(true); 
-                if(svaltype!=null) setJsValType(svaltype);
                 if(sjsvalchars!=null) setJsValidChars(isvalchars,sjsvalchars, isshowchars);
-                if(sjspatron!=null) setJsPatron(sjspatron,isshowpatron);
                 if(regExp!=null){
                     if(regExp.equals("\\d+")){ //Expresión regular para números
                         setJsValType("js_numbers");
                     }else if(regExp.equals("\\w+")){ //Expresión regular para alfanuméricos
                         setJsValType("js_alphabetic");
                     }
+                }
+                if(svaltype!=null) {
+                    setJsValType(svaltype);
+                    if(svaltype.equals("js_numbers")) regExp="\\d+";
+                    else if(svaltype.equals("js_alphabetic")) regExp="\\w+";
+                }
+                if(sjspatron!=null) {
+                    setJsPatron(sjspatron,isshowpatron);
+                    regExp=sjspatron;
                 }
             }
         }
@@ -331,14 +338,7 @@ public class TextFE extends WBJsInputFEAbs
                     if(trim){
                         child.setAttribute("trim","true");
                     }
-                    if(regExp!=null || sjspatron!=null){
-                        if(regExp!=null) child.setAttribute("regExp",regExp);
-                        if(sjspatron!=null) child.setAttribute("regExp",sjspatron);
-                    }else if(svaltype!=null && svaltype.equalsIgnoreCase("js_numbers")) {
-                        if(regExp!=null) child.setAttribute("regExp","\\d+");
-                    }else if(svaltype!=null && svaltype.equalsIgnoreCase("js_alphabetic")) {
-                        if(regExp!=null) child.setAttribute("regExp","\\w+");
-                    }
+                    if(regExp!=null) child.setAttribute("regExp",regExp);
                 }
             }
     }
