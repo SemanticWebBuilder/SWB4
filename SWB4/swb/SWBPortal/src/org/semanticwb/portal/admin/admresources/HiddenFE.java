@@ -119,7 +119,6 @@ public class HiddenFE extends WBAdmResourceAbs
             }
         } 
         catch(Exception e) { log.error(e); }
-        System.out.println("Name:"+name+",xml hidden:"+xml);
         return xml;            
     }
      

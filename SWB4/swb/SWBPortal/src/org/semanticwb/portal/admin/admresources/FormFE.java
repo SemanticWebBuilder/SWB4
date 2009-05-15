@@ -199,14 +199,13 @@ public class FormFE extends WBContainerFE
                 if(styleclass!=null) child.setAttribute("class",styleclass);
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
 
-                setJsFrameworkAttributes(child);
+                //setJsFrameworkAttributes(child);
 
                 dom.appendChild(child);
 
                 xml=SWBUtils.XML.domToXml(dom, "ISO-8859-1", true);
                 if(xml!=null && !"".equals(xml.trim())) xml=xml.substring(xml.indexOf("<form"), xml.indexOf("/>", xml.indexOf("<form"))) + ">";
                 else xml="";
-                System.out.println("xml form:"+xml);
             }
         }
         catch(Exception e) { log.error(e); }
