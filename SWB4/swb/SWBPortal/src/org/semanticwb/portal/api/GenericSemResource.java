@@ -22,6 +22,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 
 /**
@@ -73,6 +74,9 @@ public class GenericSemResource extends GenericResource implements org.semanticw
         PrintWriter out=response.getWriter();
         out.println("<div id=\""+getSemanticObject().getURI()+"/admform\" dojoType=\"dijit.layout.ContentPane\">");
         SWBFormMgr mgr=new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+        mgr.setSubmitByAjax(true);
+        mgr.addButton(SWBFormButton.newSaveButton());
+        mgr.setType(mgr.TYPE_DOJO);
         if("update".equals(paramRequest.getAction()))
         {
             mgr.processForm(request);
