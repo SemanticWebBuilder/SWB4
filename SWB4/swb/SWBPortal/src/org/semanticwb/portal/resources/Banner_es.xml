@@ -3,14 +3,14 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmWBBanner" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
-                <fieldset>
+        <fieldset>
 		<statictext name="txtLocal">Banner local o externo:</statictext>
 		<input type="RADIO" id="local1" name="local" label="Externo" value="1"/>
 		<input type="RADIO" id="local2" name="local" label="Local" value="0"/>
 		<textarea name="code" label="*1 Código:" rows="5" cols="50" wrap="virtual"/>
 		<input type="FILE" id="img" name="img" label="*2 Banner:" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|swf|png" isshowfiletype="true" />
 		<input type="TEXT" id="alt" name="alt" label="Texto alterno:" size="50"/>
-		<input type="TEXT" id="width" name="width" label="Ancho (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers" promptMessage="prueba" invalidMessage="invalido"/>
+		<input type="TEXT" id="width" name="width" label="Ancho (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
 		<input type="TEXT" id="height" name="height" label="Alto (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
 		<input type="TEXT" id="url" name="url" label="Dirección web" size="50"/>
 		<statictext name="txtTarget">En una nueva ventana:</statictext>
