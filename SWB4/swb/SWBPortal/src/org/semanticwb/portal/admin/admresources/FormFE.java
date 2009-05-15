@@ -57,6 +57,7 @@ public class FormFE extends WBContainerFE
     private ArrayList ajsfe=new ArrayList();
     private Node tag=null;
     private Resource base=null;
+    //TODO:Detectar el navegador, Para el caso de que sea firefox hacer que el jsframework no sea dojo
     private String jsframework="dojo";
 
 
@@ -224,7 +225,9 @@ public class FormFE extends WBContainerFE
         strb.append("\n<script  language=\"JavaScript\">");
         strb.append("\n<![CDATA[");
         strb.append("\nfunction valida_"+getName()+"(forma) {");
+        strb.append("alert(\"entra a validar forma-1\");");
         strb.append("\n     "+getJsFE());
+        strb.append("alert(\"entra a validar forma-2\");");
         strb.append("\n     return true;");
         strb.append("\n}");
         strb.append("\n]]>");
