@@ -30,6 +30,9 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     public static final int SORT_BYTAGS = 2;
     /**Date-based sorting constant*/
     public static final int SORT_BYDATE = 3;
+    public static final int DISPLAY_LIST = 4;
+    public static final int DISPLAY_TREE = 5;
+    public static final int DISPLAY_CLOUD = 6;
     /**BookmarkEntry date-based comparator.*/
     public static final Comparator DATE_ORDER_ASC = new Comparator() {
 
@@ -125,11 +128,13 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             if (group != null) {
                 group.addEntry(entry);
             }
-            if(request.getParameter("level") != null &&
-                    request.getParameter("level").equals("admin")) {
-                response.setMode("MANAGE");
-            } else {
-                response.setMode(response.Mode_VIEW);
+            response.setCallMethod(response.Call_CONTENT);
+            if(request.getParameter("level") != null) {
+                if (request.getParameter("level").equals("manage")) {
+                    response.setMode("MANAGE");
+                } else if (request.getParameter("level").equals("view")) {
+                    response.setMode(response.Mode_VIEW);
+                }
             }
         } else if (mode.equals("DELETE")) {
             while (groups.hasNext()) {
@@ -146,7 +151,14 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 }
             }
             response.setCallMethod(response.Call_CONTENT);
-            response.setMode("MANAGE");
+            if(request.getParameter("level") != null) {
+                if (request.getParameter("level").equals("manage")) {
+                    response.setMode("MANAGE");
+                } else if (request.getParameter("level").equals("view")) {
+                    response.setMode(response.Mode_VIEW);
+                }
+            }
+            //response.setMode("MANAGE");
         } else if (mode.equals("DELALL")) {
             while (groups.hasNext()) {
                 group = groups.next();
@@ -161,8 +173,13 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                     removeGroup(group);
                 }
             }
-            response.setCallMethod(response.Call_CONTENT);
-            response.setMode("MANAGE");
+            if(request.getParameter("level") != null) {
+                if (request.getParameter("level").equals("manage")) {
+                    response.setMode("MANAGE");
+                } else if (request.getParameter("level").equals("view")) {
+                    response.setMode(response.Mode_VIEW);
+                }
+            }
         } else if (mode.equals(response.Mode_EDIT)) {
             group = getGroupByName(generalName);
             String title = stripHtmlTags(request.getParameter("title"));
@@ -181,7 +198,13 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 }
             }
             response.setCallMethod(response.Call_CONTENT);
-            response.setMode("MANAGE");
+            if(request.getParameter("level") != null) {
+                if (request.getParameter("level").equals("manage")) {
+                    response.setMode("MANAGE");
+                } else if (request.getParameter("level").equals("view")) {
+                    response.setMode(response.Mode_VIEW);
+                }
+            }
         } else if (mode.equals("ORDER")) {
             setSortType(Integer.parseInt(request.getParameter("oType")));
             response.setMode("MANAGE");
@@ -193,42 +216,36 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
+        BookmarkGroup generalGp = getGroupByName(getResourceBase().getId() + "/general");
+        Iterator<BookmarkGroup> groups = listGroups();
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
         StringBuffer sbf = new StringBuffer();
+        User user = paramRequest.getUser();
         String lang = "es";
 
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         
-        if (paramRequest.getUser() != null) {
-            lang = paramRequest.getUser().getLanguage();
+        if (user != null) {
+            lang = user.getLanguage();
         }
-
+        sbf.append("<script type=\"text/javascript\" " +
+                   "src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/dojo/dojo/dojo.js\"" +
+                   "djConfig=\"parseOnLoad: true, isDebug: false\">" +
+                   "</script>\n" +
+                   "<script type=\"text/javascript\" " +
+                   "src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb.js\">" +
+                   "</script>\n");
         sbf.append("<script type=\"text/javascript\">\n" +
                    "  dojo.require(\"dijit.form.Form\");\n" +
                    "  dojo.require(\"dijit.form.Button\");\n" +
                    "  dojo.require(\"dijit.form.ValidationTextBox\");\n" +
+                   "  dojo.require(\"dijit.form.FilteringSelect\");\n" +
                    "  dojo.require(\"dijit.Dialog\");\n" +
                    "  dojo.require(\"dojox.layout.ContentPane\");\n" +
                    "  dojo.require(\"dojo.parser\");\n\n" +
                    "  var eCount;\n" +
-                 /*  "  function showDialog(url, title) {\n" +
-                   "    dojo.xhrGet({\n" +
-                   "      url: url,\n" +
-                   "      load: function(response) {\n" +
-                   "        dijit.byId('swbDialogImp').attr('content',response);\n" +
-                   "        dijit.byId('swbDialog').show();\n" +
-                   "        if (title) {\n" +
-                   "          dijit.byId('swbDialog').titleNode.innerHTML=title;\n" +
-                   "        }\n" +
-                   "      }," +
-                   "      error: function(response) {\n" +
-                   "        return response;\n" +
-                   "      }," +
-                   "      handleAs: \"text\"\n" +
-                   "    });\n" +
-                   "  }\n\n" +*/
                    "  function isEmpty(objid) {\n" +
                    "    var obj = dojo.byId(objid);\n" +
                    "    if (obj == null || obj.value == '' \n" +
@@ -254,14 +271,57 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         rUrl.setCallMethod(rUrl.Call_DIRECT);
         rUrl.setMode("ADDNEW");
         rUrl.setParameter("url", paramRequest.getTopic().getRealUrl());
-        sbf.append(" <a href=\"#\" onclick=\"showDialog('" + rUrl + "', '" +
-                paramRequest.getLocaleString("add") + " " + BookmarkEntry.sclass.getDisplayName(lang) + "'); return false;\">" +
-                   paramRequest.getLocaleString("mark") + "</a>\n");
-        
-        rUrl = paramRequest.getRenderUrl();
-        rUrl.setMode("MANAGE");
-        sbf.append("<a href=\""+ rUrl +"\">" +
-                   paramRequest.getLocaleString("manage") + "</a>");
+        rUrl.setParameter("level", "view");
+        sbf.append("<div class=\"swb-bkm-box\">\n" +
+                   "  <div class=\"titleBar\">\n" +
+                   "    <span class=\"title\">\n" +
+                   "      " + SWBBookmarks.sclass.getDisplayName(lang) + "\n" +
+                   "    </span>\n" +
+                   "  </div>\n" +
+                   "  <div class=\"content\">\n" +
+                   "    <div class=\"contentPane\">\n" +
+                   "      <a class=\"button\" href=\"#\" onclick=\"showDialog('" +
+                          rUrl + "', '" + paramRequest.getLocaleString("add") +
+                          " " + BookmarkEntry.sclass.getDisplayName(lang) +
+                          "'); return false;\">" +
+                          paramRequest.getLocaleString("mark") +
+                          "</a>\n");
+            rUrl = paramRequest.getRenderUrl();
+            rUrl.setMode("MANAGE");
+            rUrl.setParameter("level", "manage");
+            sbf.append("      <a class=\"button\" href=\""+ rUrl +"\">" +
+                              paramRequest.getLocaleString("manage") + "</a>\n" +
+                       "      <div class=\"bookmarksList\">\n" +
+                       "        <form>\n" +
+                       "          <label for=\"" + getSemanticObject().getId() + "bkm-selector\">\n" +
+                                  BookmarkGroup.sclass.getDisplayName(lang) + " :" +
+                       "          </label>\n" +
+                       "          <select id=\"\" dojoType=\"dijit.form.FilteringSelect\"" +
+                                  "autoComplete=\"false\">\n");
+            while (groups.hasNext()) {
+                BookmarkGroup group = groups.next();
+                       sbf.append("            <option value=\"");
+                       if (group.getTitle().equals(getResourceBase().getId() + "/general")) {
+                            sbf.append(group.getSemanticObject().getId() + "\">" +
+                            paramRequest.getLocaleString("showAll"));
+                       } else if (group.getTitle().equals(getResourceBase().getId() + "/untagged")
+                               && group.getEntryCount() > 0) {
+                           System.out.println("<<<<<<<<<<<<<<count: " + group.getEntryCount());
+                            sbf.append(group.getSemanticObject().getId() + "\">" +
+                            paramRequest.getLocaleString("notags"));
+                       } else if (group.getEntryCount() > 0) {
+                           sbf.append(group.getSemanticObject().getId() + "\">" +
+                            group.getTitle());
+                       }
+                       sbf.append("            </option>");
+            }
+            sbf.append("          </select>\n" +
+                       "        </form>\n" +
+                                listEntriesByGroup(SORT_BYDATE, generalGp.getSemanticObject().getId(), false, "view", paramRequest) +
+                       "      </div>\n" +
+                       "    </div>\n");
+        sbf.append("  </div>\n" +
+                       "</div>\n");
         out.println(sbf.toString());
     }
 
@@ -274,18 +334,12 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         String generalName = getResourceBase().getId() + "/general";
         BookmarkGroup generalGp = getGroupByName(generalName);
         BookmarkGroup untagged = getGroupByName(untaggedName);
-        Iterator<BookmarkGroup> groups = listGroups();
         int sType = getSortType();
         StringBuffer sbf = new StringBuffer();
 
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        /*
-        while (groups.hasNext()) {
-            BookmarkGroup grp = groups.next();
-            System.out.println("[" + grp.getTitle() + ", " + grp.getEntryCount() + "]");
-        }*/
 
         if (sType == SORT_NOSORTED) {
             setSortType(SORT_BYDATE);
@@ -305,7 +359,13 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             addGroup(untagged);
             //System.out.println(">>>>>>>>Grupo untagged creado");
         }
-
+		sbf.append("<script type=\"text/javascript\" " +
+                   "src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/dojo/dojo/dojo.js\"" +
+                   "djConfig=\"parseOnLoad: true, isDebug: false\">" +
+                   "</script>\n" +
+                   "<script type=\"text/javascript\" " +
+                   "src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb.js\">" +
+                   "</script>\n");
         sbf.append("<script type=\"text/javascript\">\n" +
                    "  dojo.require(\"dijit.form.Form\");\n" +
                    "  dojo.require(\"dijit.form.Button\");\n" +
@@ -314,22 +374,6 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                    "  dojo.require(\"dojox.layout.ContentPane\");\n" +
                    "  dojo.require(\"dojo.parser\");\n\n" +
                    "  var eCount;\n" +
-                   /*"  function showDialog(url, title) {\n" +
-                   "    dojo.xhrGet({\n" +
-                   "      url: url,\n" +
-                   "      load: function(response) {\n" +
-                   "        dijit.byId('swbDialogImp').attr('content',response);\n" +
-                   "        dijit.byId('swbDialog').show();\n" +
-                   "        if (title) {\n" +
-                   "          dijit.byId('swbDialog').titleNode.innerHTML=title;\n" +
-                   "        }\n" +
-                   "      }," +
-                   "      error: function(response) {\n" +
-                   "        return response;\n" +
-                   "      }," +
-                   "      handleAs: \"text\"\n" +
-                   "    });\n" +
-                   "  }\n\n" +*/
                    "  function isEmpty(objid) {\n" +
                    "    var obj = dojo.byId(objid);\n" +
                    "    if (obj == null || obj.value == '' \n" +
@@ -375,7 +419,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                    "    </div>");
         sbf.append("    <div class=\"swb-bkm-wrapper\">\n");
         sbf.append("      <div class=\"swb-bkm-content\" id=\"swb-bkm-content\">\n");
-        sbf.append(renderContent(getSortType(), generalGp.getId(), paramRequest));
+        sbf.append(renderContent(getSortType(), generalGp.getId(), "manage", paramRequest));
         sbf.append("      </div>\n" +
                    "    </div>\n");
         sbf.append(renderMenu(paramRequest));
@@ -399,7 +443,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         
-        out.println(listEntriesByGroup(getSortType(), gid, paramRequest));
+        out.println(listEntriesByGroup(getSortType(), gid, true, "manage", paramRequest));
     }
 
     public void doAddNew(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -407,6 +451,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         SWBResourceURL aUrl = paramRequest.getActionUrl();
         String lang = "es";       
         String url = request.getParameter("url");
+        String level = request.getParameter("level");
         StringBuffer sbf = new StringBuffer();
 
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -423,10 +468,8 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         String tags = SWBUtils.TEXT.replaceSpecialCharacters(BookmarkEntry.swb_res_bkm_tags.getDisplayName(lang), false);
 
         aUrl.setMode("ADDNEW");
-        if (url == null) {
-            aUrl.setParameter("level", "admin");
-        }
-        aUrl.setCallMethod(aUrl.Call_CONTENT);
+        aUrl.setParameter("level", level);
+        //aUrl.setCallMethod(aUrl.Call_CONTENT);
         //TODO: Cambiar por un FormManager
         sbf.append("  <div class=\"swbform\">\n" +
                    "    <form dojoType=\"dijit.form.Form\" id=\"" + getResourceBase().getId() + "/bookmark\" " +
@@ -499,14 +542,13 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         PrintWriter out = response.getWriter();
         BookmarkGroup generalGp = getGroupByName(getResourceBase().getId() + "/general");
 
-        out.println(renderContent(getSortType(), generalGp.getId(), paramRequest));
+        out.println(renderContent(getSortType(), generalGp.getId(), request.getParameter("level"), paramRequest));
     }
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         SWBResourceURL aUrl = paramRequest.getActionUrl();
-        SWBResourceURL rUrl = paramRequest.getRenderUrl();
         String id = request.getParameter("id");
         String lang = "es";        
         BookmarkGroup generalGp = getGroupByName(getResourceBase().getId() + "/general");
@@ -531,11 +573,8 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
         BookmarkEntry entry = generalGp.getEntryById(id);
         aUrl.setMode(aUrl.Mode_EDIT);
-        rUrl.setMode("REPLACE");
-        rUrl.setParameter("id", id);
         aUrl.setParameter("id", id);
-        aUrl.setParameter("replace", "true");
-        
+        aUrl.setParameter("level", request.getParameter("level"));
         sbf.append("  <div class=\"swbform\">\n" +
                    "    <form dojoType=\"dijit.form.Form\" id=\"" + getResourceBase().getId() + "/bookmark\" " +
                         "action=\"" + aUrl + "\" method=\"post\" " +
@@ -649,7 +688,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
      * @return HTML String with the list of Bookmarks in BookmarkGroup.
      * @throws org.semanticwb.portal.api.SWBResourceException
      */
-    public String listEntriesByGroup(int sortType, String groupId, SWBParamRequest paramRequest) throws SWBResourceException {
+    public String listEntriesByGroup(int sortType, String groupId, boolean fullView, String level, SWBParamRequest paramRequest) throws SWBResourceException {
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
         SWBResourceURL aUrl = paramRequest.getActionUrl();
         StringBuffer sbf = new StringBuffer();
@@ -698,55 +737,59 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                        "              <a title=\""+ entry.getBookmarkURL() +
                                     "\" href=\"" + entry.getBookmarkURL() +
                                     "\">" + entry.getTitle() +
-                                 "</a>" +
-                                 "&nbsp;-&nbsp;" + entry.getBookmarkURL() +
-                                 "&nbsp;-&nbsp;" + formatter.format(entry.getCreated()) +
-                                 "&nbsp;");
-            rUrl.setCallMethod(rUrl.Call_DIRECT);
-            rUrl.setMode(rUrl.Mode_EDIT);
-            rUrl.setParameter("id", eId);
-            sbf.append("<a title=\""+ paramRequest.getLocaleString("edit") +
-                                    "\" href=\"#\" onclick=\"showDialog('" + rUrl +
-                                    "', '" + paramRequest.getLocaleString("edit") + 
-                                    " " + BookmarkEntry.sclass.getDisplayName(lang) +
-                                    "');\"><img src=\"" +
-                                     SWBPlatform.getContextPath() +
-                                     "/swbadmin/icons/editar_1.gif\" border=\"0\" " +
-                                     "alt=\""+paramRequest.getLocaleString("edit") +
-                                     "\"></a>&nbsp;");
-            aUrl.setMode("DELETE");
-            aUrl.setParameter("id", eId);
-            sbf.append("<a title=\""+ paramRequest.getLocaleString("delete") +
-                                    "\" href=\"#\" onclick=\"if(confirm('"+
-                                    paramRequest.getLocaleString("msgRemove") +
-                                    "')){location='"+ aUrl +"'} else {return false;}" +
-                                    "\"><img src=\"" + SWBPlatform.getContextPath() +
-                                    "/swbadmin/images/delete.gif\" border=\"0\" " +
-                                    "alt=\""+paramRequest.getLocaleString("delete")+
-                                    "\"></a><br>");
-            String tags[] = entry.getTags().split(",");
-            sbf.append("[");
-            for (int i = 0; i < tags.length; i++) {
-                group = getGroupByName(tags[i].trim());
-                if (group != null) {
-                    rUrl.setCallMethod(rUrl.Call_DIRECT);
-                    rUrl.setMode("BYTAG");
-                    rUrl.setParameter("gid", group.getSemanticObject().getId());
-                    sbf.append("<a href=\"#\" " +
-                               "onclick=\"dojo.query('.swb-bkm-menuOpt').removeClass('swb-bkm-boldElement');" +
-                               "dojo.addClass(dojo.byId('" + group.getSemanticObject().getId() + 
-                               "'), 'swb-bkm-boldElement');getHtml('" + rUrl +
-                               "', 'swb-bkm-content');\">" + group.getTitle() + "</a>");
-                    if (i < tags.length - 1) {
-                        sbf.append(", ");
+                                    "</a>");
+            if (fullView) {
+                sbf.append("&nbsp;-&nbsp;" + entry.getBookmarkURL() +
+                        "&nbsp;-&nbsp;" + formatter.format(entry.getCreated()));
+                sbf.append("&nbsp;");
+                rUrl.setCallMethod(rUrl.Call_DIRECT);
+                rUrl.setMode(rUrl.Mode_EDIT);
+                rUrl.setParameter("id", eId);
+                rUrl.setParameter("level", level);
+                sbf.append("<a title=\"" + paramRequest.getLocaleString("edit") +
+                        "\" href=\"#\" onclick=\"showDialog('" + rUrl +
+                        "', '" + paramRequest.getLocaleString("edit") +
+                        " " + BookmarkEntry.sclass.getDisplayName(lang) +
+                        "');\"><img src=\"" +
+                        SWBPlatform.getContextPath() +
+                        "/swbadmin/icons/editar_1.gif\" border=\"0\" " +
+                        "alt=\"" + paramRequest.getLocaleString("edit") +
+                        "\"></a>&nbsp;");
+                aUrl.setMode("DELETE");
+                aUrl.setParameter("id", eId);
+                aUrl.setParameter("level", level);
+                sbf.append("<a title=\"" + paramRequest.getLocaleString("delete") +
+                        "\" href=\"#\" onclick=\"if(confirm('" +
+                        paramRequest.getLocaleString("msgRemove") +
+                        "')){location='" + aUrl + "'} else {return false;}" +
+                        "\"><img src=\"" + SWBPlatform.getContextPath() +
+                        "/swbadmin/images/delete.gif\" border=\"0\" " +
+                        "alt=\"" + paramRequest.getLocaleString("delete") +
+                        "\"></a><br>");
+                String tags[] = entry.getTags().split(",");
+                sbf.append("[");
+                for (int i = 0; i < tags.length; i++) {
+                    group = getGroupByName(tags[i].trim());
+                    if (group != null) {
+                        rUrl.setCallMethod(rUrl.Call_DIRECT);
+                        rUrl.setMode("BYTAG");
+                        rUrl.setParameter("gid", group.getSemanticObject().getId());
+                        sbf.append("<a href=\"#\" " +
+                                "onclick=\"dojo.query('.swb-bkm-menuOpt').removeClass('swb-bkm-boldElement');" +
+                                "dojo.addClass(dojo.byId('" + group.getSemanticObject().getId() +
+                                "'), 'swb-bkm-boldElement');getHtml('" + rUrl +
+                                "', 'swb-bkm-content');\">" + group.getTitle() + "</a>");
+                        if (i < tags.length - 1) {
+                            sbf.append(", ");
+                        }
                     }
                 }
+                rUrl.setCallMethod(rUrl.Call_CONTENT);
+                sbf.append(" - ");
+                sbf.append(entry.getDescription());
+                sbf.append("]\n");
             }
-            rUrl.setCallMethod(rUrl.Call_CONTENT);
-            sbf.append(" - ");
-            sbf.append(entry.getDescription());
-            sbf.append("]\n" +
-                       "            </div>\n" +
+            sbf.append("            </div>\n" +
                        "          </td>\n" +
                        "        </tr>\n");
         }
@@ -806,9 +849,8 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                              " getHtml('" + rUrl + "', 'swb-bkm-content');\">" +
                              paramRequest.getLocaleString("showAll") + "</a>" +
                    "      <br>\n");
-
         rUrl.setMode("ADDNEW");
-        rUrl.setParameter("level","admin");
+        rUrl.setParameter("level", "manage");
         sbf.append("      <a href=\"#\" onclick=\"showDialog('" + rUrl + "', '" +
                     paramRequest.getLocaleString("add") + " " +
                     BookmarkEntry.sclass.getDisplayName(lang) + "'); return false;\">" +
@@ -816,7 +858,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                    BookmarkEntry.sclass.getDisplayName(lang) + "</a><br>\n");
         if (generalGp.getEntryCount() > 0) {
             aUrl.setMode("DELALL");
-            //rUrl.setCallMethod(rUrl.Call_CONTENT);
+            aUrl.setParameter("level", "manage");
             sbf.append("      <a href=\"#\" onclick=\"if(confirm('"+
                     paramRequest.getLocaleString("msgRemoveAll") +
                     "')){location='"+ aUrl +"'} else {return false;}\">" +
@@ -847,7 +889,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
      * @return
      * @throws org.semanticwb.portal.api.SWBResourceException
      */
-    public String renderContent(int sortType, String groupId, SWBParamRequest paramRequest) throws SWBResourceException {
+    public String renderContent(int sortType, String groupId, String level, SWBParamRequest paramRequest) throws SWBResourceException {
         StringBuffer sbf = new StringBuffer();
         String generalName = getResourceBase().getId() + "/general";
         String untaggedName = getResourceBase().getId() + "/untagged";
@@ -855,7 +897,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
 
         if (sortType != SORT_BYTAGS) {
-            sbf.append(listEntriesByGroup(sortType, groupId, paramRequest));
+            sbf.append(listEntriesByGroup(sortType, groupId, true, level, paramRequest));
         } else {
             groups = listGroups();
             while (groups.hasNext()) {
@@ -866,8 +908,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                     } else if (!group.getTitle().equals(untaggedName)){
                         sbf.append("        <h1>" + group.getTitle() + "</h1>\n");
                     }
-                    //System.out.println("listando elementos de " + group.getTitle() + ":" + group.getSemanticObject().getId() + "->" + group.getEntryCount());
-                    sbf.append(listEntriesByGroup(SORT_BYDATE, group.getSemanticObject().getId(), paramRequest));
+                    sbf.append(listEntriesByGroup(SORT_BYDATE, group.getSemanticObject().getId(), true, level, paramRequest));
                 }
             }
         }
@@ -925,5 +966,18 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 }
             }
         }
+    }
+
+    public String renderContentList(int sortType, String groupId, SWBParamRequest paramRequest) {
+        StringBuffer sbf = new StringBuffer();
+        String lang = "es";
+
+        if (paramRequest.getUser() != null) {
+            lang = paramRequest.getUser().getLanguage();
+        }
+
+        
+
+        return sbf.toString();
     }
 }
