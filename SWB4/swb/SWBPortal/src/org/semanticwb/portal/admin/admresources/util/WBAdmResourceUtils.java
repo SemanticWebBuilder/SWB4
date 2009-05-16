@@ -26,6 +26,7 @@ package org.semanticwb.portal.admin.admresources.util;
 //import gnu.regexp.REException;
 import java.io.*;
 import java.util.*;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.model.Resource;
 import javax.xml.transform.*;
 import org.semanticwb.Logger;
@@ -213,7 +214,7 @@ public class WBAdmResourceUtils {
         if (xml == null) {
             return null;
         }
-        return transformAdmResourceByXml(user, xml, redirect, base, form);
+        return transformAdmResourceByXml(user, xml, redirect, base, form, null);
     }
 
     public String transformAdmResource(User user, String path, String redirect, Resource base, Templates plt) {
@@ -245,15 +246,16 @@ public class WBAdmResourceUtils {
             return null;
         }
         Document dom = null;
-        dom = transformAdmResourceByXml(user, xml, redirect, base, new String());
+        dom = transformAdmResourceByXml(user, xml, redirect, base, new String(), null);
         return dom;
     }
 
-    public Document transformAdmResourceByXml(User user, String xml, String redirect, Resource base, String form) {
+    public Document transformAdmResourceByXml(User user, String xml, String redirect, Resource base, String form, HttpServletRequest request) {
         if (xml == null || base == null) {
             return null;
         }
         AdmResourceMgr mgr = new AdmResourceMgr(user);
+        mgr.setRequest(request);
         mgr.setXml(xml, base, redirect);
         if (form != null && !form.trim().equals("")) {
             xml = mgr.show(form);
@@ -269,19 +271,26 @@ public class WBAdmResourceUtils {
         return SWBUtils.XML.xmlToDom(xml);
     }
 
+     public String transformAdmResourceByXml(User user, String xml, String redirect, Resource base, Templates plt, HttpServletRequest request) {
+        if (xml == null || base == null || plt == null) {
+            return null;
+        }
+        return transformAdmResourceByXml(user, xml, redirect, base, plt, null, request);
+    }
+
     public String transformAdmResourceByXml(User user, String xml, String redirect, Resource base, Templates plt) {
         if (xml == null || base == null || plt == null) {
             return null;
         }
-        return transformAdmResourceByXml(user, xml, redirect, base, plt, null);
+        return transformAdmResourceByXml(user, xml, redirect, base, plt, null, null);
     }
 
-    public String transformAdmResourceByXml(User user, String xml, String redirect, Resource base, Templates plt, String form) {
+    public String transformAdmResourceByXml(User user, String xml, String redirect, Resource base, Templates plt, String form, HttpServletRequest request) {
         if (xml == null || base == null || plt == null) {
             return null;
         }
         StringBuffer ret = new StringBuffer();
-        Document dom = transformAdmResourceByXml(user, xml, redirect, base, form);
+        Document dom = transformAdmResourceByXml(user, xml, redirect, base, form, request);
         if (dom == null) {
             return null;
         }

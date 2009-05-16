@@ -148,7 +148,6 @@ public class SWBServiceMgr implements SemanticObserver {
                     {
                         ResourceSubType sub=res.getResourceSubType();
                         //System.out.println("sub:"+sub);
-                        new Exception().printStackTrace();
                         if(sub!=null)
                         {
                             res.setResourceType(sub.getType());

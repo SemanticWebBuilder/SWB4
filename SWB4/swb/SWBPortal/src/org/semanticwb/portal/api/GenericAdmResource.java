@@ -120,7 +120,7 @@ public class GenericAdmResource extends GenericResource
         {
             url.setAction("update");
             xml=bundle.getBundle(getClass().getName(), new java.util.Locale(paramsRequest.getUser().getLanguage()));
-            if(xml!=null && xml.trim().length()>0) ret.append(adResUtils.transformAdmResourceByXml(paramsRequest.getUser(), xml, url.toString(),base, plt));
+            if(xml!=null && xml.trim().length()>0) ret.append(adResUtils.transformAdmResourceByXml(paramsRequest.getUser(), xml, url.toString(),base, plt, request));
         }
         else  if(action.equals("update") || action.equals("remove"))
         {
@@ -180,7 +180,7 @@ public class GenericAdmResource extends GenericResource
         {
             url.setAction("update");
             xml=bundle.getBundle(getClass().getName(), new java.util.Locale(paramsRequest.getUser().getLanguage()));
-            if(xml!=null && xml.trim().length()>0) ret.append(adResUtils.transformAdmResourceByXml(paramsRequest.getUser(), xml, url.toString(),base, plt));
+            if(xml!=null && xml.trim().length()>0) ret.append(adResUtils.transformAdmResourceByXml(paramsRequest.getUser(), xml, url.toString(),base, plt, request));
         }
         else  if(action.equals("update") || action.equals("remove"))
         {

@@ -14,8 +14,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticClassIterator;
 import org.semanticwb.platform.SemanticModel;
