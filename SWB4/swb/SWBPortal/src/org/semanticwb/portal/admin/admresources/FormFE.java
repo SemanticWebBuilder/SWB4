@@ -25,6 +25,7 @@
 package org.semanticwb.portal.admin.admresources;
 
 import java.util.*;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
@@ -57,6 +58,7 @@ public class FormFE extends WBContainerFE
     private ArrayList ajsfe=new ArrayList();
     private Node tag=null;
     private Resource base=null;
+    HttpServletRequest request=null;
     //TODO:Detectar el navegador, Para el caso de que sea firefox hacer que el jsframework no sea dojo
     private String jsframework="dojo";
 
@@ -71,6 +73,7 @@ public class FormFE extends WBContainerFE
     public FormFE(String name,String action) {
         this.name=name;
         this.action=action;
+        detectBrowser();
     }
 
     /** Creates a new instance of FormFE with default values*/
@@ -79,6 +82,17 @@ public class FormFE extends WBContainerFE
         this.base=base;
         this.redirect=redirect;
         setAttributes();
+        detectBrowser();
+    }
+
+    /** Creates a new instance of FormFE with default values*/
+    public FormFE(Node tag, Resource base,String redirect, HttpServletRequest request) {
+        this.tag=tag;
+        this.base=base;
+        this.redirect=redirect;
+        setAttributes();
+        this.request=request;
+        detectBrowser();
     }
 
     //Sets
@@ -119,6 +133,10 @@ public class FormFE extends WBContainerFE
 
     public void setJsFrameWork(String jsframework){
         this.jsframework=jsframework;
+    }
+
+    public void setRequest(HttpServletRequest request){
+        this.request=request;
     }
 
     //gets
@@ -225,9 +243,7 @@ public class FormFE extends WBContainerFE
         strb.append("\n<script  language=\"JavaScript\">");
         strb.append("\n<![CDATA[");
         strb.append("\nfunction valida_"+getName()+"(forma) {");
-        strb.append("alert(\"entra a validar forma-1\");");
         strb.append("\n     "+getJsFE());
-        strb.append("alert(\"entra a validar forma-2\");");
         strb.append("\n     return true;");
         strb.append("\n}");
         strb.append("\n]]>");
@@ -386,6 +402,16 @@ public class FormFE extends WBContainerFE
                 }
                 child.setAttribute("onsubmit","submitForm('"+id+"');return false;");
             }
+    }
+
+
+    private void detectBrowser(){
+        if(request!=null){
+           String browser=request.getHeader("User-Agent");
+           if(browser!=null && browser.indexOf("Firefox")>0) { //Ya que dojo no funciona en Firefox, TODO:Revisar si hay más navegadores con este problema
+               jsframework="";
+           }
+        }
     }
 
 }

@@ -24,6 +24,7 @@
 
 package org.semanticwb.portal.admin.admresources;
 
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.portal.admin.admresources.ImgFE;
 import org.semanticwb.portal.admin.admresources.MapFE;
 import org.semanticwb.portal.admin.admresources.OptionSelectFE;
@@ -64,6 +65,7 @@ public class AdmResourceMgr extends WBContainerFE
     private Resource base;
     String strRes;
     String redirect;
+    HttpServletRequest request=null;
     
     
     /**
@@ -107,6 +109,10 @@ public class AdmResourceMgr extends WBContainerFE
         this.base = base;
         this.redirect=redirect;
         createHtmlObjs();
+    }
+
+    public void setRequest(HttpServletRequest request){
+        this.request=request;
     }
     
     
@@ -166,7 +172,7 @@ public class AdmResourceMgr extends WBContainerFE
     private FormFE createObj(Node tag, FormFE forma) {
         if(tag.getNodeName().equalsIgnoreCase("FORM"))
         {
-            forma = new FormFE(tag, base,redirect);
+            forma = new FormFE(tag, base,redirect,request);
             if(user!=null) forma.setLocale(new java.util.Locale(user.getLanguage()));
             else forma.setLocale(SWBUtils.TEXT.getLocale());
         }
