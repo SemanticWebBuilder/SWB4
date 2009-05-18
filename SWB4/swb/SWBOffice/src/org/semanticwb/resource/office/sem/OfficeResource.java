@@ -12,6 +12,7 @@ import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.*;
@@ -34,10 +35,11 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
     }
+
     public void validateViewPropertyValues(HashMap<SemanticProperty, Object> valuesToValidate) throws Exception
     {
-
     }
+
     public static void clean(String dir)
     {
         File fdir = new File(SWBPlatform.getWorkPath() + dir);
@@ -157,5 +159,23 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
             }
         }
 
+    }
+
+    public static org.semanticwb.resource.office.sem.OfficeResource getOfficeResource(String id, org.semanticwb.model.SWBModel model)
+    {
+        GenericObject obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+        if (obj == null)
+        {
+            obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, WordResource.sclass), WordResource.sclass);
+            if (obj == null)
+            {
+                obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, ExcelResource.sclass), ExcelResource.sclass);
+                if (obj == null)
+                {
+                    obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, PPTResource.sclass), PPTResource.sclass);
+                }
+            }
+        }
+        return (org.semanticwb.resource.office.sem.OfficeResource)obj;
     }
 }
