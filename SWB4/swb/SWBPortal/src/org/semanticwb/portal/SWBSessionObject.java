@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
+import org.semanticwb.SWBPortal;
 
 /**
  *
@@ -29,12 +30,14 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
 
     public void valueBound(HttpSessionBindingEvent arg0) 
     {
+        System.out.println("SWBSessionObject.valueBound:"+arg0+" "+subject);
         
     }
 
     public void valueUnbound(HttpSessionBindingEvent arg0) 
     {
-        
+        System.out.println("SWBSessionObject.valueUnbound:"+arg0+" "+subject);
+        SWBPortal.getUserMgr().unboundSessionObject(arg0.getSession().getId());
     }
     
 

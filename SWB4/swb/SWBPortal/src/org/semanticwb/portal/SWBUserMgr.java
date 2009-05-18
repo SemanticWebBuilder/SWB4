@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Device;
 import org.semanticwb.model.SWBContext;
@@ -66,7 +67,13 @@ public class SWBUserMgr
             }
         }
         return  sessobj.getSubject();
-    }    
+    }
+
+    public void unboundSessionObject(String sessID)
+    {
+        sessionobjects.remove(sessID);
+        sessions.remove(sessID);
+    }
     
     public User getUser(HttpServletRequest request, WebSite site)
     {
@@ -101,6 +108,25 @@ public class SWBUserMgr
                 ret.setDevice(dev);
             }
             ret.setIp(request.getRemoteAddr());
+
+            //User session log
+            {
+                StringBuffer logbuf=new StringBuffer();
+                logbuf.append("ses|");
+                logbuf.append(request.getRemoteAddr());
+                logbuf.append("|");
+                logbuf.append(SWBPortal.getMessageCenter().getAddress());
+                logbuf.append("|");
+                logbuf.append(ret.getSemanticObject().getModel().getName());
+                logbuf.append("|");
+                String lg=ret.getLogin();
+                if(lg==null)lg="_";
+                logbuf.append(lg);
+                logbuf.append("|");
+                logbuf.append(""+request.getSession(true).hashCode());
+                SWBPortal.getMessageCenter().sendMessage(logbuf.toString());
+            }
+            
         }
         return ret;
     }

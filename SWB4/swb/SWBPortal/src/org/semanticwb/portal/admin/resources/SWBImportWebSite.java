@@ -67,7 +67,7 @@ public class SWBImportWebSite extends GenericResource {
                             newUsrRep.setCreator(user);
                         }
                         site.setUserRepository(newUsrRep);
-                        site.addSubModel(newUsrRep.getSemanticObject());
+                        site.addSubModel(newUsrRep);
                     } else { //Utilizara un repositorio existente
                         UserRepository exitUsrRep = SWBContext.getUserRepository(usrRep);
                         site.setUserRepository(exitUsrRep);
@@ -80,7 +80,7 @@ public class SWBImportWebSite extends GenericResource {
                 workspace.setTitle("Documents Repository(" + title + ")", "en");
                 //TODO: undeleted repository
                 //workspace.setUn
-                site.addSubModel(workspace.getSemanticObject());
+                site.addSubModel(workspace);
 
                 WebPage home = site.createWebPage("home");
                 site.setHomePage(home);

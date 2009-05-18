@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import javax.servlet.http.*;
+import org.semanticwb.model.FormValidateException;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
@@ -55,8 +56,15 @@ public class SWBComment extends org.semanticwb.portal.resources.sem.base.SWBComm
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         SWBFormMgr mgr=new SWBFormMgr(CmtComment.sclass, getSemanticObject(), null);
-        SemanticObject obj=mgr.processForm(request);
-        addComment((CmtComment)obj.createGenericInstance());
+        try
+        {
+            SemanticObject obj=mgr.processForm(request);
+            addComment((CmtComment)obj.createGenericInstance());
+        }catch(FormValidateException e)
+        {
+            e.printStackTrace();
+            //Validar error
+        }
         response.setMode(response.Mode_VIEW);
     }
 

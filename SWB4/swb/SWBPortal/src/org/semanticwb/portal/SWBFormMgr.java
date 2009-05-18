@@ -12,6 +12,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
+import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.FormView;
 import org.semanticwb.model.GenericFormElement;
 import org.semanticwb.model.PropertyGroup;
@@ -319,8 +320,8 @@ public class SWBFormMgr
                 ret.append("	    <tr><td align=\"right\">\n");
                 ret.append("                <label>"+sid+" <em>*</em></label>\n");
                 ret.append("        </td><td>\n");
-                if(DOJO)ret.append("                <input type=\"text\" id=\"swb_create_id\" name=\""+PRM_ID+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject('"+model+"','"+clsid+"',this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\"/>\n");
-                else ret.append("                <input type=\"text\" id=\"swb_create_id\" name=\""+PRM_ID+"\"/>\n");
+                if(DOJO)ret.append("                <input type=\"text\" id=\"swb_create_id\" name=\""+PRM_ID+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject('"+model+"','"+clsid+"',this.textbox.value);\" invalidMessage=\"Identificador invalido.\" style=\"width:300px;\" trim=\"true\"/>\n");
+                else ret.append("                <input type=\"text\" id=\"swb_create_id\" style=\"width:300px;\" name=\""+PRM_ID+"\"/>\n");
                 ret.append("	    </td></tr>\n");
             }
             //ret.append("        <tr><td align=\"center\" colspan=\"2\"><hr/></td></tr>");
@@ -350,10 +351,25 @@ public class SWBFormMgr
         return ret.toString();
     }
 
-
-
-    public SemanticObject processForm(HttpServletRequest request)
+    public SemanticObject validateForm(HttpServletRequest request) throws FormValidateException
     {
+        SemanticObject ret=m_obj;
+        String smode=request.getParameter(PRM_MODE);
+        if(smode!=null)
+        {
+            Iterator<SemanticProperty> it=m_cls.listProperties();
+            while(it.hasNext())
+            {
+                SemanticProperty prop=it.next();
+                validateElement(request, prop);
+            }
+        }
+        return ret;
+    } 
+
+    public SemanticObject processForm(HttpServletRequest request) throws FormValidateException
+    {
+        validateForm(request);
         SemanticObject ret=m_obj;
         String smode=request.getParameter(PRM_MODE);
         if(smode!=null)
@@ -494,6 +510,12 @@ public class SWBFormMgr
         //System.out.println("obj:"+obj+" prop:"+prop+" ele:"+ele);
         if(ele==null)ele=new GenericFormElement();
         return ele;
+    }
+
+    public void validateElement(HttpServletRequest request, SemanticProperty prop) throws FormValidateException
+    {
+        FormElement ele=getFormElement(prop);
+        ele.validate(request, m_obj, prop);
     }
     
     public void processElement(HttpServletRequest request, SemanticProperty prop)

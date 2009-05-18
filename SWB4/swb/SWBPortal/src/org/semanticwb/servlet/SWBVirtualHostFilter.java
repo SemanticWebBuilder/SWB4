@@ -21,6 +21,7 @@ import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
 import org.semanticwb.servlet.internal.EditFile;
+import org.semanticwb.servlet.internal.FrmProcess;
 import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.Login;
 import org.semanticwb.servlet.internal.Upload;
@@ -262,6 +263,10 @@ public class SWBVirtualHostFilter implements Filter
         InternalServlet UploadFormElement = new UploadFormElement();
         intServlets.put("Upload", UploadFormElement);
         UploadFormElement.init(filterConfig.getServletContext());
+
+        InternalServlet frmprocess = new FrmProcess();
+        intServlets.put("frmprocess", frmprocess);
+        frmprocess.init(filterConfig.getServletContext());
 
         //TODO:Admin servlet
         InternalServlet admin = new Admin();

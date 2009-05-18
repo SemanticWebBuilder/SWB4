@@ -14,6 +14,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
@@ -222,16 +223,23 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         String action = response.getAction();
         if (action.equals("addThread")) {
             SWBFormMgr mgr = new SWBFormMgr(Thread.frm_Thread, website.getSemanticObject(), null);
-            SemanticObject semObj = mgr.processForm(request);
-            Thread th=(Thread)semObj.createGenericInstance();
-            Thread thread = Thread.getThread(th.getId(), website);
-            thread.setParent(page);
-            if (user != null && user.isSigned()) {
-                thread.setCreator(user);
-            }
-            thread.setForum(this);
+            try
+            {
+                SemanticObject semObj = mgr.processForm(request);
+                Thread th=(Thread)semObj.createGenericInstance();
+                Thread thread = Thread.getThread(th.getId(), website);
+                thread.setParent(page);
+                if (user != null && user.isSigned()) {
+                    thread.setCreator(user);
+                }
+                thread.setForum(this);
 
-            processFiles(request, response, thread.getSemanticObject());
+                processFiles(request, response, thread.getSemanticObject());
+            }catch(FormValidateException e)
+            {
+                //TODO:Validar
+                log.error(e);
+            }
 
             response.setMode(response.Mode_VIEW);
             response.setAction("viewThreads");
@@ -247,21 +255,28 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             }
 
             SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, page.getSemanticObject(), null);
-            SemanticObject semObj = mgr.processForm(request);
+            try
+            {
+                SemanticObject semObj = mgr.processForm(request);
 
-            Post newPost = Post.getPost(semObj.getId(), website);
+                Post newPost = Post.getPost(semObj.getId(), website);
 
-            newPost.setThread(thread);
-            if (post != null) {
-                newPost.setParentPost(post);
-            }
+                newPost.setThread(thread);
+                if (post != null) {
+                    newPost.setParentPost(post);
+                }
 
-            processFiles(request, response, newPost.getSemanticObject());
+                processFiles(request, response, newPost.getSemanticObject());
 
-            thread.setReplyCount(thread.getReplyCount() + 1);
-            thread.setLastPostDate(date);
-            if (user != null && user.isSigned()) {
-                thread.setLastPostMember(user);
+                thread.setReplyCount(thread.getReplyCount() + 1);
+                thread.setLastPostDate(date);
+                if (user != null && user.isSigned()) {
+                    thread.setLastPostMember(user);
+                }
+            }catch(FormValidateException e)
+            {
+                //TODO:Validar
+                log.error(e);
             }
             response.setMode(response.Mode_VIEW);
             response.setAction("viewPost");
@@ -269,14 +284,21 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         } else if (action.equals("editPost")) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
             SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
-            SemanticObject semObj = mgr.processForm(request);
+            try
+            {
+                SemanticObject semObj = mgr.processForm(request);
 
-            Post newPost = Post.getPost(semObj.getId(), website);
+                Post newPost = Post.getPost(semObj.getId(), website);
 
-            processFiles(request, response, newPost.getSemanticObject());
+                processFiles(request, response, newPost.getSemanticObject());
 
-            response.setMode(response.Mode_VIEW);
-            response.setRenderParameter("threadUri", request.getParameter("threadUri"));
+                response.setMode(response.Mode_VIEW);
+                response.setRenderParameter("threadUri", request.getParameter("threadUri"));
+            }catch(FormValidateException e)
+            {
+                //TODO:Validar
+                log.error(e);
+            }
             response.setAction("viewPost");
         } else if (action.equals("removeThread")) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
@@ -331,11 +353,17 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
             SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
 
-            SemanticObject semObj = mgr.processForm(request);
-            Thread thread = Thread.getThread(semObj.getId(), website);
+            try
+            {
+                SemanticObject semObj = mgr.processForm(request);
+                Thread thread = Thread.getThread(semObj.getId(), website);
 
-            processFiles(request, response, thread.getSemanticObject());
-
+                processFiles(request, response, thread.getSemanticObject());
+            }catch(FormValidateException e)
+            {
+                //TODO:Validar
+                log.error(e);
+            }
             response.setMode(response.Mode_VIEW);
             response.setRenderParameter("threadUri", request.getParameter("threadUri"));
             response.setAction("viewPost");
