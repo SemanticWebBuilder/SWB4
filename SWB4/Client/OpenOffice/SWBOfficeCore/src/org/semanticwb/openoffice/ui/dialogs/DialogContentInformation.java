@@ -682,6 +682,7 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private void jButtonPublishActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonPublishActionPerformed
     {//GEN-HEADEREND:event_jButtonPublishActionPerformed
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         document.publish();
         this.repaint();
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
