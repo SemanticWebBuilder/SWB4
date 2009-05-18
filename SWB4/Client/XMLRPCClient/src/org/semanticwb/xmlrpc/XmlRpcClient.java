@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.io.*;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Proxy.Type;
@@ -57,7 +58,7 @@ class XmlRpcClient
         return responseProperties;
     }
 
-    public Response execute(Class clazz, String methodName, Object[] parameters, Set<Attachment> attachments) throws XmlRpcException, HttpException
+    public Response execute(Class clazz, String methodName, Object[] parameters, Set<Attachment> attachments) throws XmlRpcException, HttpException,ConnectException
     {
         for (Attachment attachment : attachments)
         {
@@ -71,13 +72,7 @@ class XmlRpcClient
             }
         }
         Document requestDoc = serializeRequest(methodName, parameters);
-        XmlResponse response = request(requestDoc, attachments);
-        /*try
-        {
-        XMLOutputter out=new XMLOutputter();
-        out.output(responseDoc, System.out);
-        }
-        catch(Exception e){}*/
+        XmlResponse response = request(requestDoc, attachments);        
         try
         {
 
@@ -162,7 +157,7 @@ class XmlRpcClient
         return encoded;
     }
 
-    private XmlResponse request(Document requestDoc, Set<Attachment> attachments) throws XmlRpcException, HttpException
+    private XmlResponse request(Document requestDoc, Set<Attachment> attachments) throws XmlRpcException, HttpException,ConnectException
     {
         OutputStream out = null;
         try
@@ -224,6 +219,10 @@ class XmlRpcClient
         catch (MalformedURLException mfe)
         {
             throw new XmlRpcException(mfe);
+        }
+        catch (ConnectException ce)
+        {
+            throw ce;
         }
         catch (IOException ioe)
         {
