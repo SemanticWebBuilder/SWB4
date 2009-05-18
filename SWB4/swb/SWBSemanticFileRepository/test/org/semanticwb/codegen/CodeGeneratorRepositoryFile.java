@@ -26,8 +26,10 @@ public class CodeGeneratorRepositoryFile {
     @BeforeClass
     public static void setUpClass() throws Exception
     {
-        //SWBPlatform.setUseDB(false);
+        SWBPlatform.setUseDB(false);
+        //SWBPlatform.setUseWebProperties(false);
         SWBPlatform.createInstance(null);
+        
     }
 
     @AfterClass
