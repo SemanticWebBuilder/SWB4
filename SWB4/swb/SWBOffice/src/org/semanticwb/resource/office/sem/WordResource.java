@@ -113,5 +113,10 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                 log.error(e);
             }
     }
+    public static org.semanticwb.resource.office.sem.WordResource createWordResource(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.resource.office.sem.WordResource)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
 
 }
