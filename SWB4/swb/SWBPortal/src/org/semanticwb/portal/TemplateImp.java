@@ -716,8 +716,7 @@ public class TemplateImp extends Template
             String sess=request.getSession().getId();
             if(sess!=null)
             {
-                int p=sess.length()-10;
-                if(p>-1)sess=sess.substring(p);
+                sess=""+sess.hashCode();
             }else sess="_";
             logbuf.append(sess);
             logbuf.append("|");

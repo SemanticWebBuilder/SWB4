@@ -50,6 +50,27 @@ public class Login implements InternalServlet
         this.handleError = handleError;
     }
 
+    public void sendLoginLog(HttpServletRequest request, User usr) {
+        //User session log
+        {
+            StringBuffer logbuf = new StringBuffer();
+            logbuf.append("lgn|");
+            logbuf.append(request.getRemoteAddr());
+            logbuf.append("|");
+            logbuf.append(SWBPortal.getMessageCenter().getAddress());
+            logbuf.append("|");
+            logbuf.append(usr.getSemanticObject().getModel().getName());
+            logbuf.append("|");
+            String lg=usr.getLogin();
+            if(lg==null)lg="_";
+            logbuf.append(lg);
+            logbuf.append("|");
+            logbuf.append(""+request.getSession(true).hashCode());
+            SWBPortal.getMessageCenter().sendMessage(logbuf.toString());
+        }
+    }
+
+
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException
     {
         if (null == dparams.getWebPage())

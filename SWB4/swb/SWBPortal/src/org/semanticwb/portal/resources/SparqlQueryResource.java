@@ -203,6 +203,10 @@ public class SparqlQueryResource extends GenericAdmResource {
                                     {
                                         sval=x_node.asNode().getLocalName();
                                     }
+                                    if(sval.trim().length()==0)
+                                    {
+                                        sval=x_node.toString();
+                                    }
 
 
                                     Element ecol = addElem(doc, erow, "col", sval);

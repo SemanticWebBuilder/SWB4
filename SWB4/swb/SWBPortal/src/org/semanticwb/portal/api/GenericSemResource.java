@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.platform.SemanticClass;
@@ -79,7 +80,10 @@ public class GenericSemResource extends GenericResource implements org.semanticw
         mgr.setType(mgr.TYPE_DOJO);
         if("update".equals(paramRequest.getAction()))
         {
-            mgr.processForm(request);
+            try
+            {
+                mgr.processForm(request);
+            }catch(FormValidateException e){log.error(e);}
             response.sendRedirect(paramRequest.getRenderUrl().setAction(null).toString());
         }else
         {

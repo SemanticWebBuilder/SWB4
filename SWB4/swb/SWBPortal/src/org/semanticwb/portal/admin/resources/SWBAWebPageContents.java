@@ -889,28 +889,32 @@ public class SWBAWebPageContents extends GenericResource {
             wpage = ont.getSemanticObject(id);
 
             SWBFormMgr fmgr = new SWBFormMgr(Resource.swb_Resource, wpage, null);
-            SemanticObject nso = fmgr.processForm(request);
+            try
+            {
+                SemanticObject nso = fmgr.processForm(request);
+ 
+                SemanticObject ptype = ont.getSemanticObject(sobj);
+                nso.setObjectProperty(Resource.swb_resourceType, ptype);
 
-            SemanticObject ptype = ont.getSemanticObject(sobj);
-            nso.setObjectProperty(Resource.swb_resourceType, ptype);
-
-            if (prop.getName().startsWith("has")) {
-                obj.addObjectProperty(prop, nso);
-            } else {
-                obj.setObjectProperty(prop, nso);
-            }
-            if (id != null) {
-                response.setRenderParameter("suri", id);
-            }
-            if (sprop != null) {
-                response.setRenderParameter("sprop", sprop);
-            }
-            if (sproptype != null) {
-                response.setRenderParameter("sproptype", sproptype);
-            }
-            if (nso != null) {
-                response.setRenderParameter("nsuri", nso.getURI());
-            }
+                if (prop.getName().startsWith("has")) {
+                    obj.addObjectProperty(prop, nso);
+                } else {
+                    obj.setObjectProperty(prop, nso);
+                }
+                if (id != null) {
+                    response.setRenderParameter("suri", id);
+                }
+                if (sprop != null) {
+                    response.setRenderParameter("sprop", sprop);
+                }
+                if (sproptype != null) {
+                    response.setRenderParameter("sproptype", sproptype);
+                }
+                if (nso != null) {
+                    response.setRenderParameter("nsuri", nso.getURI());
+                }
+            }catch(FormValidateException e){throw new SWBResourceException("Error ro process form...",e);}
+            
             response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
             response.setMode(response.Mode_EDIT);
             response.setRenderParameter("act", "");

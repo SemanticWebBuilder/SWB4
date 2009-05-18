@@ -7,6 +7,7 @@ import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -122,14 +123,28 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
         if(action.equals(response.Action_EDIT)){
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("objInstUri"));
             SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
-            mgr.processForm(request);
+            try
+            {
+                mgr.processForm(request);
+            }catch(FormValidateException e)
+            {
+                log.event(e);
+                //TODO: Validar error
+            }
         }else if(action.equals(response.Action_REMOVE)){
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("objInstUri"));
             semObject.remove();
         }else if(action.equals(response.Action_ADD)){
             SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("objUri"));
             SWBFormMgr mgr = new SWBFormMgr(cls, response.getTopic().getWebSite().getSemanticObject(), null);
-            mgr.processForm(request);
+            try
+            {
+                mgr.processForm(request);
+            }catch(FormValidateException e)
+            {
+                log.event(e);
+                //TODO: Validar error
+            }
         }
         response.setMode(response.Mode_VIEW);
     }
