@@ -60,8 +60,8 @@ public class FormElementURL
     {
         StringBuffer ret=new StringBuffer();
         ret.append(SWBPlatform.getContextPath()+"/frmprocess");
-        ret.append("?_swb_frmele="+URLEncoder.encode(frmele.getClass().getName()));
-        ret.append("$_swb_obj="+obj.getEncodedURI());
+        ret.append("?_swb_frmele="+frmele.getSemanticObject().getEncodedURI());
+        if(obj!=null)ret.append("&_swb_obj="+obj.getEncodedURI());
         ret.append("&_swb_prop="+prop.getEncodedURI());
         ret.append("&_swb_urltp="+URLEncoder.encode(urltype));
         if(codetype!=null)ret.append("&_swb_codetp="+URLEncoder.encode(codetype));

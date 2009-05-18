@@ -16,6 +16,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.GenericObject;
 import org.w3c.dom.Document;
@@ -273,6 +274,7 @@ public class SemanticObject
 
     private Boolean hasObjectPropertyCache(SemanticProperty prop, SemanticObject obj)
     {
+        if(obj==null)return false;
         Boolean ret=null;
         ArrayList arr=(ArrayList)m_cacheprops.get(prop.getURI()+"|list");
         if(arr!=null)
@@ -328,7 +330,7 @@ public class SemanticObject
         {
             //System.out.println("ns:"+ns+" "+m_res.getURI());
             Resource aux=SWBPlatform.getSemanticMgr().getOntology().getResource(m_res.getURI());
-            if(aux==null)throw new NullPointerException("Resource not Found:"+m_res.getURI());
+            if(aux==null)throw new SWBRuntimeException("Resource not Found:"+m_res.getURI());
             m_res = aux;
             m_model = null;
         }
