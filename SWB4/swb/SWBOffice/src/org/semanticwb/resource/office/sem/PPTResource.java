@@ -79,4 +79,8 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
             log.error(e);
         }
     }
+    public static org.semanticwb.resource.office.sem.PPTResource createPPTResource(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.resource.office.sem.PPTResource)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
 }
