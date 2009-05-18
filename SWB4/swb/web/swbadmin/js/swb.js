@@ -714,6 +714,53 @@
           }
       }
 
+
+//      getParentIds : function(/* string */ id, /* string[] */ list)
+//      {
+//          list.push(id);
+//          // Iterate through each ReverseReference.
+//          for (var i in this._store._getItemByIdentity(id)._RRM)
+//          {
+//              this.getParentIds(i, list);
+//          }
+//      }
+//
+//      function focusNodeByURI(uri)
+//      {
+//          for(x=0;x<trees.length;x++)
+//          {
+//              var s=trees[x];
+//              try
+//              {
+//                var n=s._itemNodeMap[uri];
+//                //printObjProp(node);
+//                if(n && n!=null)
+//                {
+//                    //s.focusNode(node);
+//
+//                    // Begin here.  "id" is the identity value you're looking for.  This code assumes it does exist.
+//                    var list = [];
+//                    getParentIds(uri, list);
+//                    printObjProp(list);
+//                    var node;
+//                    // Walk through the list (in reverse) so you're expanding from the top down.
+//                    for (var i = list.length - 1; i > 0; i--)
+//                    {
+//                        node = s._itemNodeMap[list[i]];
+//
+//                        if (node.isExpandable)
+//                        {
+//                             s._expandNode(node);
+//                        }
+//                    }
+//                }
+//              }catch(e)
+//              {
+//                //printObjProp(e);
+//              }
+//          }
+//      }
+
       //recarca nodo e hijos
       function reloadTreeNode(store, item)
       {
@@ -744,7 +791,9 @@
           var item=arr[0];
           addItem(store,item,parent);
           store.save();
+          //printObjProp(store);
           setDefaultCursor();
+//          focusNodeByURI(uri);
       }
 
       function addItem(store, item, parent)
@@ -821,7 +870,7 @@
         if(sy>ini)setTimeout(scroll,t);
         else
         {
-            self.status="hidden";
+            //self.status="hidden";
             ele.style.display="none";
         }
         //ele.style.display = "none";
@@ -838,7 +887,7 @@
          var ele=dijit.byId('status');
          ele.style.bgColor=bgcolor;
          ele.domNode.style.display="block";
-         self.status="visible";
+         //self.status="visible";
          ele.attr('content',msg);
          ele.innerHTML=msg;
          sy=ini;
@@ -1006,7 +1055,43 @@
           return ret;
       }
 
-function selectAll(name,val)
+      //RELOAD ON CLICK TAB
+      var _oldTabButton;
+      function onLoadTab(tab)
+      {
+          if(!tab.controlButton.tab)
+          {
+              //alert("connect:"+tab+" "+tab.controlButton);
+              dojo.connect(tab.controlButton, 'onClick', onClickTab);
+              _oldTabButton=tab.controlButton;
+              _oldTabButton.tab=tab;
+          }
+      }
+      function onClickTab(e)
+      {
+          var button=dijit.byId(e.target.id);
+          //alert("onclick:"+button+" "+button.tab);
+          if(_oldTabButton==button)
+          {
+              //printObjProp(button);
+              button.tab._prepareLoad();
+          }
+          _oldTabButton=button;
+      }
+
+        function printObjProp(obj)
+        {
+            var ret="";
+            for (property in obj) {
+                ret+=property+"="+obj[property]+", ";
+            }
+            //console.log(ret);
+            alert(ret);
+        }
+
+
+
+   function selectAll(name,val)
    {
       var field = document.getElementsByName(name);
       for (i = 0; i < field.length; i++)
@@ -1033,6 +1118,27 @@ function include_dom(script_filename) {
     return false;
 }
 
+var oldvalreq="";
+var oldvalret=false;
+function validateElement(pname,url,value)
+{
+    var ret=false;
+    if(pname && url && value)
+    {
+        url=url+"&"+pname+"="+encodeURIComponent(value);
+        if(url!=oldvalreq)
+        {
+            ret=getJSON(url);
+            oldvalret=ret;
+            oldvalreq=url;
+        }else
+        {
+            ret=oldvalret;
+        }
+    }
+    return ret;
+}
+
 var oldreq="";
 var oldret=false;
 function canCreateSemanticObject(model, clsid, id)
@@ -1045,7 +1151,7 @@ function canCreateSemanticObject(model, clsid, id)
 
         if(oldreq!=aux)
         {
-            var url=context+'/swbadmin/jsp/canCreate.jsp?model='+model;
+            var url=context+'/frmprocess/canCreate?model='+model;
             if(clsid)url+='&clsid='+clsid;
             if(id)url+='&id='+id;
             oldret=getJSON(url);

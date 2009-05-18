@@ -7,8 +7,13 @@
 --%>
 <%
     String id=request.getParameter("id");
+    String showRoot=request.getParameter("showRoot");
+    String rootLabel=request.getParameter("rootLabel");
     //System.out.println("id:"+id);
     if(id==null)id="tree";
+    if(showRoot==null)showRoot="false";
+    if(rootLabel!=null)rootLabel="rootLabel=\""+rootLabel+"\"";
+    else rootLabel="";
     String store=id+"Store";
     String model=id+"Model";
     String menu=id+"Menu";
@@ -18,9 +23,9 @@
 <!-- data for tree and combobox -->
 <div dojoType="dojo.data.ItemFileWriteStore" jsId="<%=store%>" url="/swb/swbadmin/jsp/Tree.jsp?id=<%=id%>"></div>
 <div dojoType="dijit.tree.ForestStoreModel" jsId="<%=model%>"
-  store="<%=store%>" rootId="root" rootLabel="Root" childrenAttrs="children"></div>
+  store="<%=store%>" rootId="root" <%=rootLabel%> childrenAttrs="children"></div>
 <!-- tree widget -->
-<div dojoType="dijit.Tree" id="<%=id%>" model="<%=model%>" dndController="dijit._tree.dndSource" betweenThreshold="8" persist="false" showRoot="false">
+<div dojoType="dijit.Tree" id="<%=id%>" model="<%=model%>" dndController="dijit._tree.dndSource" betweenThreshold="8" persist="false" showRoot="<%=showRoot%>">
     <script type="dojo/method" event="onClick" args="item, node">
         if(item)
         {
@@ -196,7 +201,11 @@
             try
             {
                 return <%=store%>.getValue(item, "icon");
-            }catch(err){}
+            }catch(err)
+            {
+                //return (!item||this.model.mayHaveChildren(item))?(opened?"dijitFolderOpened":"dijitFolderClosed"):"dijitLeaf";
+                return "swbIconTemplateGroup";
+            }
         }
     </script>
 <!--
