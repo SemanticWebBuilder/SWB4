@@ -213,7 +213,7 @@ public class WBAAccessLogReport extends GenericResource {
             String[] cols = records.next();
             JSONObject obj = new JSONObject();
             try {
-                obj.put("detail", "<a onClick=\"doDetail('width=850, height=550, scrollbars, resizable, alwaysRaised, menubar','"+cols[0]+"')\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/SEARCH.png\" border=\"0\" alt=\"detail\"></a>&nbsp;");
+                obj.put("detail", "<a onClick=\"doDetail('width=860, height=580, scrollbars, resizable, alwaysRaised, menubar','"+cols[0]+"')\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/SEARCH.png\" border=\"0\" alt=\"detail\"></a>&nbsp;");
                 //obj.put("ssheet", "<a onClick=\"doDetail('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar','"+cols[0]+"')\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/SEARCH.png\" border=\"0\" alt=\"detail\"></a>&nbsp;");
                 obj.put("date", cols[0]);
                 obj.put("agregate", cols[1]);
@@ -682,7 +682,7 @@ public class WBAAccessLogReport extends GenericResource {
         out.println("@import \""+SWBPlatform.getContextPath()+"/swbadmin/js/dojo/dojox/grid/resources/Grid.css\";");
         
         out.println("   .dojoxGrid table {");
-        out.println("       margin: 5px;");
+        out.println("       margin: 0x;");
         out.println("   }");
         out.println("</style>");
 
