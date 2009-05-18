@@ -610,7 +610,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             WebSiteInfo info = new WebSiteInfo();
             info.title = site.getTitle();
             info.id = site.getId();
-            if (!(info.id.equals(SWBContext.WEBSITE_ADMIN) || info.id.equals(SWBContext.WEBSITE_GLOBAL)))
+            if (!(info.id.equals(SWBContext.WEBSITE_ADMIN) || info.id.equals(SWBContext.WEBSITE_GLOBAL) || info.id.equals(SWBContext.WEBSITE_ONTEDITOR)))
             {
                 websites.add(info);
             }
