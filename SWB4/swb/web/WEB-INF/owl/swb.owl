@@ -333,6 +333,10 @@
     <rdfs:subClassOf rdf:resource="#SWBInterface"/>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ClassElement">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Text"/>
+    <rdf:type rdf:resource="#FormElement"/>
+  </owl:Class>
   <owl:Class rdf:ID="Viewable">
     <rdfs:subClassOf rdf:resource="#SWBInterface"/>
     <rdf:type rdf:resource="#Interface"/>
@@ -1074,11 +1078,11 @@
       <owl:ObjectProperty rdf:ID="parentWebSite"/>
     </owl:inverseOf>
     <rdfs:domain rdf:resource="#WebSite"/>
-    <rdfs:range rdf:resource="#Model"/>
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <rdfs:range rdf:resource="#SWBModel"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="usrgrpParent">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1936,10 +1940,15 @@
         >40</swb:index>
         <rdfs:label xml:lang="en">Class Name</rdfs:label>
         <rdfs:label xml:lang="es">Nombre de la Clase</rdfs:label>
+        <swbxf:formElement>
+          <swbxf:ClassElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ClassElement_Field"/>
+        </swbxf:formElement>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#ResourceType"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dropMatchLevel">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
@@ -2605,6 +2614,7 @@
     <swbxf:hasEditProperty rdf:resource="#language"/>
     <swbxf:hasEditProperty rdf:resource="#creator"/>
     <swbxf:hasEditProperty rdf:resource="#updated"/>
+    <swbxf:hasEditProperty rdf:resource="#resourceWindow"/>
     <swbxf:hasEditProperty rdf:resource="#maxViews"/>
     <swbxf:hasEditProperty rdf:resource="#views"/>
     <swbxf:hasEditProperty rdf:resource="#description"/>
@@ -2618,6 +2628,7 @@
   </swbxf:FormView>
   <swbxf:FormView rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#resourceMode2">
     <swbxf:hasEditProperty rdf:resource="#updated"/>
+    <swbxf:hasEditProperty rdf:resource="#resourceWindow"/>
     <swbxf:hasEditProperty rdf:resource="#active"/>
     <swbxf:hasEditProperty rdf:resource="#resourceSubType"/>
     <swbxf:hasEditProperty rdf:resource="#resourceType"/>
@@ -2760,6 +2771,10 @@
     <swb:formMode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >view</swb:formMode>
   </swbxf:FormViewRef>
+  <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#LoginElement">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Text"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
   <swbxf:PropertyGroup rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_General">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >90</swb:index>
