@@ -804,9 +804,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 SemanticObject obj = it.next();
                 if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                 {
-                    OfficeResource officeResource = new OfficeResource(obj);
+                    OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                     if (officeResource.getRepositoryName().equals(repositoryName))
                     {
+                        Resource base=site.getResource(obj.getId());
+                        officeResource.setResourceBase(base);
                         ResourceInfo info = getResourceInfo(officeResource);
                         if (info != null)
                         {
@@ -892,7 +894,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             OfficeResource officeResource = null;
             if (type.equalsIgnoreCase("EXCEL"))
             {
-                officeResource = new ExcelResource();
+                officeResource = ExcelResource.createExcelResource(id, site);
                 resourceType = site.getResourceType(EXCEL_RESOURCE_TYPE);
                 if (resourceType == null)
                 {
@@ -908,7 +910,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             else if (type.equalsIgnoreCase("PPT"))
             {
-                officeResource = new PPTResource();
+                officeResource = PPTResource.createPPTResource(id, site);
                 resourceType = site.getResourceType(PPT_RESOURCE_TYPE);
                 if (resourceType == null)
                 {
@@ -924,7 +926,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             else
             {
-                officeResource = new WordResource();
+                officeResource = WordResource.createWordResource(id, site);
 
                 resourceType = site.getResourceType(WORD_RESOURCE_TYPE);
                 if (resourceType == null)
