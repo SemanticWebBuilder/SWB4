@@ -215,7 +215,7 @@ public class WBAAccessLogReport extends GenericResource {
             JSONObject obj = new JSONObject();
             try {
                 obj.put("detail", "<a onClick=\"doDetail('width=850, height=550, scrollbars, resizable, alwaysRaised, menubar','"+cols[0]+"')\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/SEARCH.png\" border=\"0\" alt=\"detail\"></a>&nbsp;");
-                obj.put("ssheet", "<a onClick=\"doDetail('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar','"+cols[0]+"')\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/SEARCH.png\" border=\"0\" alt=\"detail\"></a>&nbsp;");
+                //obj.put("ssheet", "<a onClick=\"doDetail('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar','"+cols[0]+"')\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/SEARCH.png\" border=\"0\" alt=\"detail\"></a>&nbsp;");
                 obj.put("date", cols[0]);
                 obj.put("agregate", cols[1]);
                 jarr.put(obj);
@@ -236,7 +236,7 @@ public class WBAAccessLogReport extends GenericResource {
         }
 
         /*getReportResults(request, paramsRequest);*/
-        String s_key = request.getParameter("key");
+        String s_key = (String)request.getSession(true).getAttribute("alfilter");
 
         if(null!=hm_detail) {
             if(null!=s_key) {
@@ -368,7 +368,7 @@ public class WBAAccessLogReport extends GenericResource {
 
 
                 sb_ret.append("function fillGrid(grid, uri, mode, params) {\n");
-                sb_ret.append("   grid.store = new dojo.data.ItemFileReadStore({url: uri+'/_mod/'+mode+'?'+params});\n");
+                sb_ret.append("   grid.store = new dojo.data.ItemFileReadStore({url: uri+'/_mod/'+mode+params});\n");
                 sb_ret.append("   grid._refresh();\n");
                 sb_ret.append("}\n");
 
@@ -380,7 +380,7 @@ public class WBAAccessLogReport extends GenericResource {
                 sb_ret.append("dojo.addOnLoad(function() {\n");
                 sb_ret.append("   layout= [\n");
                 sb_ret.append("      { field:\"detail\", width:\"5%\", name:\"Ver Detalle\" },\n");
-                sb_ret.append("      { field:\"ssheet\", width:\"5%\", name:\"MS Excel\" },\n");
+                //sb_ret.append("      { field:\"ssheet\", width:\"5%\", name:\"MS Excel\" },\n");
                 sb_ret.append("      { field:\"date\", width:\"33%\", name:\"Fecha\" },\n");
                 sb_ret.append("      { field:\"agregate\", width:\"33%\", name:\"Total Agregado\" },\n");
                 sb_ret.append("   ];\n");
@@ -394,56 +394,8 @@ public class WBAAccessLogReport extends GenericResource {
                 sb_ret.append("   gridMaster.startup();\n");
                 sb_ret.append("});\n");
 
-                sb_ret.append("function doApply() {\n");                
-                sb_ret.append("   var params = 'siteid='+dojo.byId('wb_site').value;\n");
-                sb_ret.append("   params += '&fecha11='+dojo.byId('wb_fecha11').value;\n");
-                sb_ret.append("   params += '&t11='+dojo.byId('wb_t11').value;\n");
-                sb_ret.append("   params += '&fecha12='+dojo.byId('wb_fecha12').value;\n");
-                sb_ret.append("   params += '&t12='+dojo.byId('wb_t12').value;\n");
-                sb_ret.append("   if(dojo.byId('wb_ipuser').value) {\n");
-                sb_ret.append("      params += '&ipuser='+dojo.byId('wb_ipuser').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_ipserver').value) {\n");
-                sb_ret.append("      params += '&ipserver='+dojo.byId('wb_ipserver').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_sectid').value) {\n");
-                sb_ret.append("      params += '&sectid='+dojo.byId('wb_sectid').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_userid').value) {\n");
-                sb_ret.append("      params += '&userid='+dojo.byId('wb_userid').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_usertype').value) {\n");
-                sb_ret.append("      params += '&usertype='+dojo.byId('wb_usertype').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_devid').value) {\n");
-                sb_ret.append("      params += '&devid='+dojo.byId('wb_devid').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_langid').value) {\n");
-                sb_ret.append("      params += '&langid='+dojo.byId('wb_langid').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_resid').value) {\n");
-                sb_ret.append("      params += '&resid='+dojo.byId('wb_resid').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_sessid').value) {\n");
-                sb_ret.append("      params += '&sessid='+dojo.byId('wb_sessid').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   params += '&agregate='+getAgregate();\n");
-                sb_ret.append("   var grid = dijit.byId('gridMaster');\n");
-                sb_ret.append("   fillGrid(grid, '"+url+"', 'fillGridAgrd', params);\n");
-                //sb_ret.append("   postHtml('"+url+"'+'/_mod/fillGridAgrd'+'?'+params,'gridMaster');");
-                sb_ret.append("}\n");
-                
-                sb_ret.append("function getAgregate() {\n");
-                sb_ret.append("   var agrd = \"2\";\n");
-                sb_ret.append("   for(i=0; i<window.document.frmrep.wb_agregate.length; i++) {\n");
-                sb_ret.append("      if(window.document.frmrep.wb_agregate[i].checked==true) {\n");
-                sb_ret.append("         strType = window.document.frmrep.wb_agregate[i].value;\n");
-                sb_ret.append("      }\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   return strType;\n");
-                sb_ret.append("}\n");
 
-                sb_ret.append("function doDetail(size, key) { \n");
+                sb_ret.append("function getParams() {\n");
                 sb_ret.append("   var params = '?';\n");
                 sb_ret.append("   params += 'siteid='+dojo.byId('wb_site').value;\n");
                 sb_ret.append("   params += '&fecha11='+dojo.byId('wb_fecha11').value;\n");
@@ -477,13 +429,42 @@ public class WBAAccessLogReport extends GenericResource {
                 sb_ret.append("   if(dojo.byId('wb_sessid').value) {\n");
                 sb_ret.append("      params += '&sessid='+dojo.byId('wb_sessid').value;\n");
                 sb_ret.append("   }\n");
-                sb_ret.append("   params += '&agregate='+getAgregate();\n");
-                sb_ret.append("   params += '&key='+key;\n");
-                sb_ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_detail")+"\"+params,\"detailWindow\",size);\n");
+                sb_ret.append("   params += '&agregate='+getAgregate();\n");                
+                sb_ret.append("   return params;\n");
                 sb_ret.append("}\n");
 
-                sb_ret.append("function doExcel(size, key){    ");
-                sb_ret.append("}");
+                sb_ret.append("function doApply() {\n");                
+                sb_ret.append("   var params = getParams();\n");
+                sb_ret.append("   var grid = dijit.byId('gridMaster');\n");
+                sb_ret.append("   fillGrid(grid, '"+url+"', 'fillGridAgrd', params);\n");
+                //sb_ret.append("   postHtml('"+url+"'+'/_mod/fillGridAgrd'+params,'gridMaster');");
+                sb_ret.append("}\n");
+                
+                sb_ret.append("function getAgregate() {\n");
+                sb_ret.append("   var agrd = \"2\";\n");
+                sb_ret.append("   for(i=0; i<window.document.frmrep.wb_agregate.length; i++) {\n");
+                sb_ret.append("      if(window.document.frmrep.wb_agregate[i].checked==true) {\n");
+                sb_ret.append("         strType = window.document.frmrep.wb_agregate[i].value;\n");
+                sb_ret.append("      }\n");
+                sb_ret.append("   }\n");
+                sb_ret.append("   return strType;\n");
+                sb_ret.append("}\n");
+
+                sb_ret.append("function doDetail(size, key) { \n");
+                sb_ret.append("   var params = getParams();\n");
+                sb_ret.append("   params += '&key='+key;\n");
+                sb_ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_detail")+"\"+params,\"detailWindow\", size);\n");
+                sb_ret.append("}\n");
+
+                sb_ret.append("function doXml(accion, size) {\n");
+                sb_ret.append("   var params = getParams();\n");
+                sb_ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);\n");
+                sb_ret.append("}\n");
+
+                sb_ret.append("function doExcel(accion, size) {\n");
+                sb_ret.append("   var params = getParams();\n");
+                sb_ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);\n");
+                sb_ret.append("}\n");
 
                 sb_ret.append("</script>\n");
 
@@ -622,10 +603,10 @@ public class WBAAccessLogReport extends GenericResource {
                 sb_ret.append("<table border=\"0\" width=\"95%\">\n");
                 sb_ret.append(" <tr>\n");
                 sb_ret.append("     <td colspan=\"4\">&nbsp;&nbsp;&nbsp;\n");
-                sb_ret.append("     <input type=\"button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"XML\" name=\"btnXml\" />&nbsp;\n");
-                sb_ret.append("     <input type=\"button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\" value=\"Excel\" name=\"btnExcel\" />&nbsp;\n");
-                sb_ret.append("     <input type=\"button\" onClick=\"doGraph('width=600, height=550, scrollbars, resizable')\" value=\"" + paramsRequest.getLocaleString("graph") + "\" name=\"btnGraph\" />&nbsp;\n");
-                sb_ret.append("     <input type=\"button\" onClick=\"doApply()\" value=\"" + paramsRequest.getLocaleString("apply") + "\" name=\"btnApply\" />\n");
+                sb_ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;\n");
+                sb_ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">MS Excel</button>&nbsp;\n");
+                sb_ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>&nbsp;\n");
+                sb_ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>\n");
                 sb_ret.append("     </td>\n");
                 sb_ret.append(" </tr>\n");
                 sb_ret.append("</table>\n");
@@ -645,103 +626,7 @@ public class WBAAccessLogReport extends GenericResource {
                 sb_ret.append("</fieldset>\n");
 
                 sb_ret.append("</div>\n");
-
-
-                if(request.getParameter("wb_rep_type") == null)
-                {
-                    sb_ret.append("&nbsp;");
-                }
-                else
-                {
-                    /*ArrayList ar_pag = getReportResults(request, paramsRequest);
-                    int i_page = I_INIT_PAGE;
-                    String s_page = request.getParameter("wb_pagenum");
-                    if(s_page != null)
-                    {
-                        i_page = Integer.parseInt(s_page);
-                    }
-
-                    int i_totpage = I_INIT_PAGE + 1;
-                    int i_size = ar_pag.size();
-                    if(i_size > I_PAGE_SIZE)
-                    {
-                        i_totpage = i_size / I_PAGE_SIZE;
-                        int i_ret = i_size % I_PAGE_SIZE;
-                        if(i_ret > 0)
-                        {
-                            i_totpage = i_totpage + 1;
-                        }
-                    }
-
-                    int i_inipage =  I_PAGE_SIZE * i_page;
-                    int i_finpage = i_size;
-                    if((i_inipage + I_PAGE_SIZE) < i_finpage)
-                    {
-                        i_finpage = i_inipage + I_PAGE_SIZE;
-                    }
-
-                    if(i_size > 0)
-                    {
-                        sb_ret.append("\n<input type=\"hidden\" name=\"wb_pagenum\" value=\"" + I_INIT_PAGE + "\">");
-                        sb_ret.append("\n<table border=\"0\" cellpadding=\"5\" cellspacing=\"0\" width=\"100%\">");
-                        sb_ret.append("\n<tr><td colspan=\"3\">&nbsp;</td></tr>");
-                        sb_ret.append("\n<tr>");
-                        sb_ret.append("\n<td align=\"left\" class=\"datos\">" + paramsRequest.getLocaleString("page") + " " + (i_page + 1)+ " " + paramsRequest.getLocaleString("of") + " " + i_totpage + "</td>");
-                        sb_ret.append("\n<td colspan=\"2\" align=\"right\">&nbsp;");
-                        if(i_page > 0)
-                        {
-                            sb_ret.append("<a href=\"javascript:DoPaging(" + (i_page - 1) + ");\" class=\"link\">" + paramsRequest.getLocaleString("previous") + "</a>&nbsp;");
-                        }
-                        if(i_totpage > (i_page + 1))
-                        {
-                            sb_ret.append("<a href=\"javascript:DoPaging(" + (i_page + 1) +");\" class=\"link\">" + paramsRequest.getLocaleString("next") + "</a>");
-                        }
-                        sb_ret.append("\n</td>");
-                        sb_ret.append("\n</tr>");
-                        sb_ret.append("\n<tr class=\"tabla\">");
-                        sb_ret.append("<td>" + paramsRequest.getLocaleString("date") + "</td>");
-                        sb_ret.append("<td>" + paramsRequest.getLocaleString("access") + "</td>");
-                        sb_ret.append("<td>" + paramsRequest.getLocaleString("action") + "</td>");
-                        sb_ret.append("\n</tr>");
-
-                        for(int j=i_inipage;j<i_finpage;j++)
-                        {
-                            if((j % 2) == 0)
-                            {
-                                s_color ="#EFEDEC";
-                            }
-                            else
-                            {
-                                s_color ="#FFFFFF";
-                            }
-                            String[] arr_data = (String[])ar_pag.get(j);
-                            sb_ret.append("\n<tr bgcolor=\"" + s_color + "\">");
-                            sb_ret.append("<td class=\"valores\">" + arr_data[0] + "</td>");
-                            sb_ret.append("<td class=\"valores\">" + arr_data[1] + "</td>");
-                            sb_ret.append("<td class=\"valores\">");
-                            sb_ret.append("<a onClick=\"DoDetail('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar','"+arr_data[0] +"')\">");
-                            sb_ret.append("<img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/SEARCH.png\" border=\"0\" alt=\"detail\">");
-                            sb_ret.append("</a>&nbsp;");
-                            sb_ret.append("<a onClick=\"DoDetailExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar','"+arr_data[0] +"')\">");
-                            sb_ret.append("<img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/PFlow.png\" border=\"0\" alt=\"detail in excel format\">");
-                            sb_ret.append("</a>");
-                            sb_ret.append("</td>");
-                            sb_ret.append("\n</tr>");
-                        }
-                        sb_ret.append("\n</table>");
-                        sb_ret.append("<hr size=\"1\" noshade>");
-                    }
-                    else
-                    {           // There are not records
-                        sb_ret.append("\n<center><font class=\"datos\">" + paramsRequest.getLocaleString("no_records_found") + "</font></center>");
-                    }*/
-                }
-                /*sb_ret.append("\n</td>");
-                sb_ret.append("\n</tr>");
-                sb_ret.append("\n</table></form>");*/
-            }
-            else
-            {   // There are not sites and displays a message
+            }else { // There are not sites and displays a message
                 sb_ret.append("\n<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 sb_ret.append("\n<table border=0 width=\"100%\">");
                 sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -783,8 +668,9 @@ public class WBAAccessLogReport extends GenericResource {
         url.setParameter("langid", request.getParameter("langid"));
         url.setParameter("resid", request.getParameter("resid"));
         url.setParameter("sessid", request.getParameter("sessid"));
-        url.setParameter("agregate", request.getParameter("agregate"));*/
-        url.setParameter("key", request.getParameter("key"));
+        url.setParameter("agregate", request.getParameter("agregate"));
+        url.setParameter("key", request.getParameter("key"));*/
+        request.getSession(true).setAttribute("alfilter", request.getParameter("key"));
 
         out.println("<html>");
         out.println("<head>");
@@ -861,8 +747,7 @@ public class WBAAccessLogReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */
-    public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
-    {
+    public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         StringBuffer sb_ret = new StringBuffer();
         StringBuffer sb_app = new StringBuffer();
         Resource base = paramsRequest.getResourceBase();
@@ -971,62 +856,119 @@ public class WBAAccessLogReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */
-    public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
-    {
+    public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "inline; filename=\"alr.xls\"");
+        
+        Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
-        Resource base = paramsRequest.getResourceBase();
-        Iterator<String[]> ar_pag = null;
-        long l_hits = 0;
-        int i_len = 0;
-
-        try
-        {
-            response.setContentType("application/vnd.ms-excel");
-            out.println("\n<html>");
-            out.println("\n<head>");
-            out.println("\n<title>" + paramsRequest.getLocaleString("access_log_report") + "</title>");
-            out.println("\n</head>");
-            out.println("\n<body>");
-            out.println("\n<table border=\"0\" width=\"550\">");
-            out.println("\n<tr>");
-            out.println("\n<td colpsan=\"3\" align=\"center\">");
-            out.println(""+ paramsRequest.getLocaleString("access_log_report") +"");
-            out.println("</td>");
-            out.println("\n</tr>");
-            out.println("\n<tr>");
-            out.println("\n<td colpsan=\"3\">");
-            ar_pag = getReportResults(request, paramsRequest);
-            /*i_len = ar_pag.size();*/
-            if(ar_pag.hasNext())
-            {
-                out.println("\n<table border=\"0\" width=\"100%\">");
-                out.println("\n<tr><td colspan=\"2\">&nbsp;</td></tr>");
-                out.println("\n<tr>");
-                out.println("\n<th align=\"center\">" + paramsRequest.getLocaleString("date") + "</th>");
-                out.println("\n<th align=\"center\">" + paramsRequest.getLocaleString("access") + "</th>");
-                out.println("\n</tr>");
-                while(ar_pag.hasNext())
-                /*for(int j=0;j<i_len;j++)*/
-                {
+        
+        try {
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>" + paramsRequest.getLocaleString("access_log_report") + "</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("  <table border=\"1\" width=\"550\">");
+            out.println("    <caption align=\"top\">");
+            out.println(paramsRequest.getLocaleString("access_log_report"));
+            out.println("    </caption>");
+            out.println("    <tr>");
+            out.println("      <th width=\"40%\" scope=\"col\">" + paramsRequest.getLocaleString("date") + "</th>");
+            out.println("      <th width=\"60%\" scope=\"col\">" + paramsRequest.getLocaleString("access") + "</th>");
+            out.println("    </tr>");
+            Iterator<String[]> ar_pag = getReportResults(request, paramsRequest);
+            if(ar_pag.hasNext()) {
+                while(ar_pag.hasNext()) {
                     String[] arr_data = ar_pag.next();
-                    out.println("\n<tr><td align=\"center\">" + arr_data[0] + "</td>");
-                    out.println("\n<td align=\"center\">" + arr_data[1] + "</td></tr>");
+                    out.println("<tr>");
+                    out.println("<td align=\"center\">" + arr_data[0] + "</td>");
+                    out.println("<td align=\"center\">" + arr_data[1] + "</td>");
+                    out.println("</tr>");
                 }
-                out.println("\n</table>");
+            }else { // There are not records
+                out.println("<center><br><font color=\"black\">" + paramsRequest.getLocaleString("no_records_found") + "</font></center>");
             }
-            else
-            {           // There are not records
-                out.println("\n<center><br><font color=\"black\">" + paramsRequest.getLocaleString("no_records_found") + "</font></center>");
+            out.println("</table>");
+            
+            String key = (String)request.getSession(true).getAttribute("alfilter");
+            if( hm_detail.containsKey(key) ) {
+                out.println("<br />");
+                out.println("<table border=\"1\" width=\"850\">");
+                out.println("    <caption align=\"top\">");
+                out.println("Detalle de Accesos - "+key);
+                out.println("    </caption>");
+                out.println("<tr>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_Num")+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_Date")+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_IPuser")+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_IPserver")+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_IDsession")+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_TopicMap")+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_Topic")+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_Repository")+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_User")+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_UserType")+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_Device")+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_Language")+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_Time")+" (ms.)"+"</td>");
+                out.println("<td>"+paramsRequest.getLocaleString("th_Resource")+"</td>");
+                out.println("</tr>");
+            
+                Vector vec_rep = (Vector) hm_detail.get(key);
+                /*if( null!=vec_rep && !vec_rep.isEmpty() ) {*/
+                Iterator<String> ite_rep = vec_rep.iterator();
+                int i=1;
+                while(ite_rep.hasNext()) {
+                    StringTokenizer s_token = new StringTokenizer(ite_rep.next(),"|");
+                    String s_date = s_token.nextToken();
+                    String s_ipuser = s_token.nextToken();
+                    String s_ipserver = s_token.nextToken();
+                    String s_session = s_token.nextToken();
+                    String s_tm = s_token.nextToken();
+                    String s_tp = s_token.nextToken();
+                    String s_repo = s_token.nextToken();
+                    String s_iduser = s_token.nextToken();
+                    String s_usrtype = s_token.nextToken();
+                    String s_device = s_token.nextToken();
+                    String s_language = s_token.nextToken();
+                    int time = Integer.parseInt(s_token.nextToken(),10);
+                    String s_rec = "";
+
+                    while(s_token.hasMoreTokens()) {
+                        s_rec += s_token.nextToken();
+                        if(s_token.hasMoreTokens())
+                            s_rec += ", ";
+                    }
+
+                    out.println("<tr>");
+                    out.println("<td>"+i+"</td>");
+                    out.println("<td>"+s_date+"</td>");
+                    out.println("<td>"+s_ipuser+"</td>");
+                    out.println("<td>"+s_ipserver+"</td>");
+                    out.println("<td>"+s_session+"</td>");
+                    out.println("<td>"+s_tm+"</td>");
+                    out.println("<td>"+s_tp+"</td>");
+                    out.println("<td>"+s_repo+"</td>");
+                    out.println("<td>"+s_iduser+"</td>");
+                    out.println("<td>"+s_usrtype+"</td>");
+                    out.println("<td>"+s_device+"</td>");
+                    out.println("<td>"+s_language+"</td>");
+                    out.println("<td>"+time+"</td>");
+                    out.println("<td>"+s_rec+"</td>");
+                    out.println("</tr>");
+                    i++;
+                }
+                /*}*/
             }
-            out.println("\n</td>");
-            out.println("\n</tr>");
-            out.println("\n</table>");
-            out.println("\n</body>");
-            out.println("\n</html>");
-            out.close();
-        }catch (Exception e) {
-            log.error("Error on method doRepExcel() resource " + strRscType + " with id " + base.getId(), e);
+            out.println("</table>");
+            out.println("</body>");
+            out.println("</html>");
+        }catch (Exception ex) {
+            log.error("Error on method doRepExcel() resource " + strRscType + " with id " + base.getId(), ex);
         }
+        out.flush();
+        out.close();
     }
 
     /**
@@ -1036,61 +978,127 @@ public class WBAAccessLogReport extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */
-    public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
-    {
+    public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/xml;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
-        Resource base = paramsRequest.getResourceBase();
-        DocumentBuilderFactory dbf = null;
-        DocumentBuilder db = null;
-        Document dom = null;
-        Iterator<String[]> ar_pag = null;
-        String rtype = null;
-        int i_len = 0;
 
-        try
-        {
-            // Starts xml document
-            dbf=DocumentBuilderFactory.newInstance();
-            db=dbf.newDocumentBuilder();
-            dom=db.newDocument();
+        Document dom = SWBUtils.XML.getNewDocument();
+        Resource base = getResourceBase();
 
-            Element report = dom.createElement("access_log_report");
+        try {
+            Element report = dom.createElement("AccessLogReport");
             dom.appendChild(report);
 
-            ar_pag = getReportResults(request, paramsRequest);
-            /*i_len = ar_pag.size();*/
-            report.setAttribute("total",Integer.toString(i_len));
-            int j=0;
-            while(ar_pag.hasNext())
-            /*for(int j=0;j<i_len;j++)*/
-            {
+            Element agregate = dom.createElement("agregate");
+            agregate.appendChild(dom.createTextNode(""));
+            report.appendChild(agregate);
+            
+            Iterator<String[]> ar_pag = getReportResults(request, paramsRequest);
+            int renglones = 0;
+            while(ar_pag.hasNext()) {
                 String[] arr_data = ar_pag.next();
+                
                 Element row = dom.createElement("row");
-                row.appendChild(dom.createTextNode(""));
-                row.setAttribute("id",Integer.toString(j+1));
-                report.appendChild(row);
-
+                row.appendChild(dom.createTextNode("")); 
+                row.setAttribute("id",Integer.toString(++renglones));
                 Element date = dom.createElement("date");
                 date.appendChild(dom.createTextNode(arr_data[0]));
-                row.appendChild(date);
-
+                row.appendChild(date);                
                 Element access = dom.createElement("access");
                 access.appendChild(dom.createTextNode(arr_data[1]));
-                row.appendChild(access);
-                j++;
+                row.appendChild(access);                
+                agregate.appendChild(row);                
             }
-            out.println(SWBUtils.XML.domToXml(dom));
-            out.close();
-        }catch (Exception e) {
+            agregate.setAttribute("rows",Integer.toString(renglones));
+
+            String key = (String)request.getSession(true).getAttribute("alfilter");
+            if( hm_detail.containsKey(key) ) {
+                Element detail = dom.createElement("detail");
+                detail.appendChild(dom.createTextNode(""));
+                report.appendChild(detail);
+
+                Vector vec_rep = (Vector) hm_detail.get(key);
+                Iterator<String> ite_rep = vec_rep.iterator();
+                renglones = 0;
+                while(ite_rep.hasNext()) {
+                    StringTokenizer s_token = new StringTokenizer(ite_rep.next(),"|");
+                    String datetime = s_token.nextToken();
+                    String ipuser = s_token.nextToken();
+                    String ipserv = s_token.nextToken();
+                    String sessId = s_token.nextToken();
+                    String siteId = s_token.nextToken();
+                    String sectId = s_token.nextToken();
+                    String repId = s_token.nextToken();
+                    String userId = s_token.nextToken();
+                    String usertype = s_token.nextToken();
+                    String devId = s_token.nextToken();
+                    String langId = s_token.nextToken();
+                    int time = Integer.parseInt(s_token.nextToken(),10);
+                    String res = "";
+
+                    while(s_token.hasMoreTokens()) {
+                        res += s_token.nextToken();
+                        if(s_token.hasMoreTokens())
+                            res += ", ";
+                    }
+
+                    Element row = dom.createElement("row");
+                    row.appendChild(dom.createTextNode(""));
+                    row.setAttribute("id",Integer.toString(++renglones));
+                    Element date = dom.createElement("date");
+                    date.appendChild(dom.createTextNode(datetime));
+                    row.appendChild(date);
+                    Element ipclient = dom.createElement("ipuser");
+                    ipclient.appendChild(dom.createTextNode(ipuser));
+                    row.appendChild(ipclient);
+                    Element ipserver = dom.createElement("ipserver");
+                    ipserver.appendChild(dom.createTextNode(ipserv));
+                    row.appendChild(ipserver);
+                    Element session = dom.createElement("sessId");
+                    session.appendChild(dom.createTextNode(sessId));
+                    row.appendChild(session);
+                    Element site = dom.createElement("siteId");
+                    site.appendChild(dom.createTextNode(siteId));
+                    row.appendChild(site);
+                    Element section = dom.createElement("sectId");
+                    section.appendChild(dom.createTextNode(sectId));
+                    row.appendChild(section);
+                    Element rep = dom.createElement("rep");
+                    rep.appendChild(dom.createTextNode(repId));
+                    row.appendChild(rep);
+                    Element user = dom.createElement("user");
+                    user.appendChild(dom.createTextNode(userId));
+                    row.appendChild(user);
+                    Element usrtype = dom.createElement("usertype");
+                    usrtype.appendChild(dom.createTextNode(usertype));
+                    row.appendChild(usrtype);
+                    Element dev = dom.createElement("devId");
+                    dev.appendChild(dom.createTextNode(devId));
+                    row.appendChild(dev);
+                    Element lang = dom.createElement("langId");
+                    lang.appendChild(dom.createTextNode(langId));
+                    row.appendChild(lang);
+                    Element t = dom.createElement("time");
+                    t.appendChild(dom.createTextNode(Integer.toString(time)));
+                    row.appendChild(t);
+
+                    detail.appendChild(row);
+                }
+                detail.setAttribute("rows",Integer.toString(renglones));
+            }                       
+        }catch (Exception e){
             log.error("Error on method doRepXml() resource " + strRscType + " with id " + base.getId(), e);
         }
+        out.print(SWBUtils.XML.domToXml(dom));
+        out.flush();
+        out.close();
     }
 
     /**
      * @param paramsRequest
      * @return
      */
-    public String[] DoArrMonth(SWBParamRequest paramsRequest)
+    /*public String[] DoArrMonth(SWBParamRequest paramsRequest)
     {
         String[] arr_month = new String[12];
         try
@@ -1111,7 +1119,7 @@ public class WBAAccessLogReport extends GenericResource {
             log.error("Error on method DoArrMonth() resource " + strRscType + " with id " + getResourceBase().getId(), e);
         }
         return arr_month;
-    }
+    }*/
 
     /**
      * @param request
@@ -1284,22 +1292,20 @@ public class WBAAccessLogReport extends GenericResource {
         WebPage o_tp = null;
 
         GregorianCalendar now = new GregorianCalendar();
-
-        GregorianCalendar cal = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String fecha11 = request.getParameter("fecha11")==null ? sdf.format(cal.getTime()):request.getParameter("fecha11");
+        String fecha11 = request.getParameter("fecha11")==null ? sdf.format(now.getTime()):request.getParameter("fecha11");
         try {
             sdf.parse(fecha11);
         }catch(ParseException pe){
-            fecha11 = sdf.format(cal.getTime());
+            fecha11 = sdf.format(now.getTime());
         }
         String t11 = request.getParameter("t11")==null ? "00:00":request.getParameter("t11");
 
-        String fecha12 = request.getParameter("fecha12")==null ? sdf.format(cal.getTime()):request.getParameter("fecha12");
+        String fecha12 = request.getParameter("fecha12")==null ? sdf.format(now.getTime()):request.getParameter("fecha12");
         try {
             sdf.parse(fecha12);
         }catch(ParseException pe){
-            fecha12 = sdf.format(cal.getTime());
+            fecha12 = sdf.format(now.getTime());
         }
         String t12 = request.getParameter("t12")==null ? "23:59":request.getParameter("t12");
 
