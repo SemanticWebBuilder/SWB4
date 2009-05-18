@@ -84,6 +84,7 @@ public class SemanticVocabulary
     //public static final String SWB_ANNOT_CLASSNAME=URI+"className";
     public static final String SWB_ANNOT_PROPERTYCODENAME=URI+"propertyCodeName";
     public static final String SWB_ANNOT_CLASSCODENAME=URI+"classCodeName";
+    public static final String SWB_ANNOT_CLASSCODEPACKAGE=URI+"classCodePackage";
     public static final String SWB_ANNOT_AUTOGENID=URI+"autogenId";
     public static final String SWB_ANNOT_CANUSEDASNAME=URI+"canUsedAsName";
     public static final String SWB_PROP_CLASSID=URI+"classID";

@@ -40,6 +40,7 @@ public class SemanticClass
     private Boolean m_isSWBFormElement=null;
     private Boolean m_isSWBSemanticResource=null;
     private String m_classCodeName=null;
+    private String m_classCodePackage=null;
     private Boolean m_autogenId=null;
     private Class m_cls=null;
     private Constructor m_constructor=null;
@@ -120,7 +121,17 @@ public class SemanticClass
 
     public String getCodePackage()
     {
-        return SWBPlatform.getSemanticMgr().getCodePackage().getPackage(getPrefix());
+        if(m_classCodePackage==null)
+        {
+            try
+            {
+                Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_ANNOT_CLASSCODEPACKAGE).getRDFProperty();
+                m_classCodePackage=m_class.getRequiredProperty(prop).getString();
+            } catch (Exception pnf){
+                m_classCodePackage=SWBPlatform.getSemanticMgr().getCodePackage().getPackage(getPrefix());
+            }
+        }
+        return m_classCodePackage;
     }
 
 
