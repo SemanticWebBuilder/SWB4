@@ -181,6 +181,12 @@ public abstract class OfficeApplication
                     setProxy();
                 }
             }
+            catch (ConnectException e)
+            {
+                JOptionPane.showMessageDialog(null, "No se puede conectar al servidor\r\nDetalle: "+e.getLocalizedMessage(), "Error de acceso", JOptionPane.OK_OPTION |
+                            JOptionPane.ERROR_MESSAGE);
+                throw new WBException("No se puede conectar al servidor\r\nDetalle: "+e.getLocalizedMessage(), e);
+            }
             catch (HttpException e)
             {
                 if (e.getCode() == 403)
