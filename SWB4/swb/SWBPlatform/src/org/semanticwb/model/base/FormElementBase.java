@@ -63,11 +63,11 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
                 {
                     if(value.length()>0 && !value.equals(old))
                     {
-                        System.out.println("old:"+old+" value:"+value);
-                        for(int x=0;x<value.length();x++)
-                        {
-                            System.out.print((int)value.charAt(x)+" ");
-                        }
+//                        System.out.println("old:"+old+" value:"+value);
+//                        for(int x=0;x<value.length();x++)
+//                        {
+//                            System.out.print((int)value.charAt(x)+" ");
+//                        }
                         if(prop.isFloat())obj.setFloatProperty(prop, Float.parseFloat(value));
                         if(prop.isDouble())obj.setDoubleProperty(prop, Double.parseDouble(value));
                         if(prop.isInt() || prop.isShort() || prop.isByte())obj.setIntProperty(prop, Integer.parseInt(value));
@@ -133,7 +133,13 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
 
     public void setAttribute(String name, String value)
     {
-        attributes.put(name, value);
+        if(value!=null)
+        {
+            attributes.put(name, value);
+        }else
+        {
+            attributes.remove(name);
+        }
     }
 
     public String getAttributes()
@@ -156,12 +162,12 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
 
     public FormElementURL getValidateURL(SemanticObject obj, SemanticProperty prop)
     {
-        return new FormElementURL(this,obj, prop, FormElementURL.URLTYPE_RENDER,null, null, null);
+        return new FormElementURL(this,obj, prop, FormElementURL.URLTYPE_VALIDATE,null, null, null);
     }
 
     public FormElementURL getProcessURL(SemanticObject obj, SemanticProperty prop)
     {
-        return new FormElementURL(this,obj, prop, FormElementURL.URLTYPE_RENDER,null, null, null);
+        return new FormElementURL(this,obj, prop, FormElementURL.URLTYPE_PROCESS,null, null, null);
     }
 
     public String getLocaleString(String key, String lang)
