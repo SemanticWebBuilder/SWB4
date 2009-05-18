@@ -211,7 +211,6 @@ public class WBAAccessLogReport extends GenericResource {
 
         while(records.hasNext()) {
             String[] cols = records.next();
-            System.out.println(Arrays.toString(cols));
             JSONObject obj = new JSONObject();
             try {
                 obj.put("detail", "<a onClick=\"doDetail('width=850, height=550, scrollbars, resizable, alwaysRaised, menubar','"+cols[0]+"')\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/SEARCH.png\" border=\"0\" alt=\"detail\"></a>&nbsp;");
@@ -240,8 +239,6 @@ public class WBAAccessLogReport extends GenericResource {
 
         if(null!=hm_detail) {
             if(null!=s_key) {
-                System.out.println("doFillReportDetalled... s_key="+s_key);
-
                 Vector vec_rep = (Vector) hm_detail.get(s_key);
                 if( null!=vec_rep && !vec_rep.isEmpty() ) {
                     Iterator<String> ite_rep = vec_rep.iterator();
@@ -1194,7 +1191,6 @@ public class WBAAccessLogReport extends GenericResource {
                 }
             }
         }
-        System.out.println("archivos="+Arrays.toString(files.toArray()));
         return files.iterator();
     }
 
@@ -1466,7 +1462,6 @@ public class WBAAccessLogReport extends GenericResource {
                                         s_datefile = s_aux;
                                     }else {
                                         b_result = false;
-                                        System.out.println("no pasa fecha");
                                     }
                                     gc_datefile = null;
                                 }
@@ -1484,7 +1479,6 @@ public class WBAAccessLogReport extends GenericResource {
                                         }
                                         else {
                                             b_result = false;
-                                            System.out.println("no pasa user ip");
                                         }
                                     }
 
@@ -1500,7 +1494,6 @@ public class WBAAccessLogReport extends GenericResource {
                                         }
                                         else {
                                             b_result = false;
-                                            System.out.println("no pasa server ip");
                                         }
                                     }
 
@@ -1516,7 +1509,6 @@ public class WBAAccessLogReport extends GenericResource {
                                         }
                                         else {
                                             b_result = false;
-                                            System.out.println("no pasa session id");
                                         }
                                     }
 
@@ -1539,7 +1531,6 @@ public class WBAAccessLogReport extends GenericResource {
                                         }
                                         else {
                                             b_result = false;
-                                            System.out.println("no pasa section id");
                                         }
                                     }
 
@@ -1568,7 +1559,6 @@ public class WBAAccessLogReport extends GenericResource {
                                         }
                                         else {
                                             b_result = false;
-                                            System.out.println("no pasa user id");
                                         }
                                     }
                                     i_len = i_len + s_aux.length() + I_ONE;
@@ -1583,7 +1573,6 @@ public class WBAAccessLogReport extends GenericResource {
                                         }
                                         else {
                                             b_result = false;
-                                            System.out.println("no pasa user type");
                                         }
                                     }
                                     i_len = i_len + s_aux.length() + I_ONE;
@@ -1598,7 +1587,6 @@ public class WBAAccessLogReport extends GenericResource {
                                         }
                                         else {
                                             b_result = false;
-                                            System.out.println("no pasa device id");
                                         }
                                     }
                                     i_len = i_len + s_aux.length() + I_ONE;
@@ -1613,7 +1601,6 @@ public class WBAAccessLogReport extends GenericResource {
                                         }
                                         else {
                                             b_result = false;
-                                            System.out.println("no pasa lang");
                                         }
                                     }
                                     i_len = i_len + s_aux.length() + I_ONE;
@@ -1622,7 +1609,6 @@ public class WBAAccessLogReport extends GenericResource {
                                     if((b_result) && (i_row == I_TEN) )
                                     {
                                         s_timeaux = st_line.nextToken();
-                                        System.out.println("time="+s_timeaux);
                                         if(!s_timeaux.equals(null) && b_time)
                                         {
                                             if(s_timeaux.equals(s_time.trim()))
@@ -1631,7 +1617,6 @@ public class WBAAccessLogReport extends GenericResource {
                                             }
                                             else {
                                                 b_result = false;
-                                                System.out.println("no pasa resource");
                                             }
                                         }
                                         if((b_resourceid) && (s_line.length() >= i_len - I_ONE))
@@ -1816,7 +1801,6 @@ public class WBAAccessLogReport extends GenericResource {
                                     }
 
                                     s_key = s_line.substring(0,13) + ":00-"+s_hourfin;
-                                    System.out.println("generating... s_key="+s_key);
                                 }
 
                                 vec_rep = (Vector) hm_detail.get(s_key);
@@ -1846,8 +1830,6 @@ public class WBAAccessLogReport extends GenericResource {
                             {
                                 i_hourini = Integer.parseInt(s_datedefault.substring(11,13));
 
-                                System.out.println("hourini="+i_hourini);
-
                                 i_hourfin = i_hourini + 1 ;
                                 if(i_hourfin == I_TWENTYFOUR)
                                 {
@@ -1861,12 +1843,8 @@ public class WBAAccessLogReport extends GenericResource {
                                         s_hourfin = "0" + s_hourfin;
                                     }
                                     s_hourfin = s_hourfin + ":00";
-                                }
-                                System.out.println("hourfin="+i_hourfin+" s_hourfin="+s_hourfin);
-                                
+                                }                                
                                 arr_data[0] = s_datedefault.substring(0,13) + ":00-" + s_hourfin;
-                                System.out.println("arr_data[0]="+arr_data[0]);
-
                             }
                             arr_data[1] = Long.toString(l_count);
 
@@ -1883,9 +1861,7 @@ public class WBAAccessLogReport extends GenericResource {
 
 
             //If it should display by year or month then filter data here
-            if(s_typedisplay.equals("1") || s_typedisplay.equals("2"))
-            {
-                System.out.println("...........................");
+            if(s_typedisplay.equals("1") || s_typedisplay.equals("2")) {
                 i_start = 0;
                 s_year = null;
                 ArrayList al_aux = new ArrayList();
