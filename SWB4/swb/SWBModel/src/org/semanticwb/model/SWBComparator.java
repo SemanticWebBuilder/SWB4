@@ -88,7 +88,8 @@ public class SWBComparator implements Comparator
         TreeSet set=new TreeSet(new SWBComparator());
         while(it.hasNext())
         {
-            set.add(it.next());
+            Object obj=it.next();
+            if(obj!=null)set.add(obj);
         }
         return set.iterator();
     }
