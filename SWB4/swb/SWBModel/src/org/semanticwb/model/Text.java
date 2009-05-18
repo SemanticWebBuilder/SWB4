@@ -1,9 +1,7 @@
 package org.semanticwb.model;
 
-import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -91,6 +89,7 @@ public class Text extends TextBase
             if(DOJO)ret.append(" invalidMessage=\""+imsg+"\"");
             ret.append(" " + getAttributes());
             if(DOJO)ret.append(" trim=\"true\"");
+            ret.append(" style=\"width:300px;\"");
             ret.append(ext);
             ret.append("/>");
 
