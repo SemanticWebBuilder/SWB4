@@ -19,7 +19,7 @@
     String icon=SWBContext.UTILS.getIconClass(obj);
     out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+id+"','"+obj.getDisplayName(lang)+"','"+icon+"');\" _loadingMessage=\""+loading+"\" />");
 
-    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" nested=\"true\" _selectedChild=\"btab1\" onLoad=\"alert('Hola');\">");
+    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" nested=\"true\" _selectedChild=\"btab1\" onButtonClick=\"alert('click');\" onLoad=\"alert('Hola');\">");
 
     Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(ObjectBehavior.listObjectBehaviors(adm));
     //Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(new GenericIterator(ObjectBehavior.swbxf_ObjectBehavior, obj.getModel().listInstancesOfClass(ObjectBehavior.swbxf_ObjectBehavior)));
@@ -77,9 +77,16 @@
         {
             //out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" _style=\"display:true;padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\">");
             //System.out.println("url:"+url+"?"+params);
-            out.println("<div id=\""+obj.getURI()+"/"+ob.getId()+"\" dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" _loadingMessage=\""+loading+"\" _onLoad=\"alert('test');\">");
+            out.println("<div id=\""+obj.getURI()+"/"+ob.getId()+"\" dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" _loadingMessage=\""+loading+"\" onLoad=\"onLoadTab(this);\">");
+            //out.println("    <script type=\"dojo/connect\">");
+            //out.println("       dojo.connect(this.controlButton, \"onClick\", onClickTab);");
+            //out.println("    </script>");
             //request.getRequestDispatcher((url+"?"+params).substring(4)).include(request, response);
             out.println("</div>");
+            out.println("    <script type=\"dojo/connect\">");
+            //out.println("       dojo.connect(this.controlButton, \"onClick\", onClickTab);");
+            out.println("       alert(\"hola\");");
+            out.println("    </script>");
         }
     }
 

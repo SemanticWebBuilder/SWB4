@@ -43,6 +43,7 @@
             out.println("<script type=\"text/javascript\">");
             out.println("   addItemByURI(mfavoStore, null, '"+obj.getURI()+"');");
             out.println("   updateTreeNodeByURI('"+suri+"');");
+            //out.println("   mfavo.rootNode.expand();");
             out.println("</script>");
         }else
         {
