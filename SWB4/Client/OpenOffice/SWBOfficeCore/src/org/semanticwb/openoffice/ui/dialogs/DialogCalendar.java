@@ -32,8 +32,10 @@ public class DialogCalendar extends java.awt.Dialog
     DialogRegularPeriods dialogRegularPeriods = new DialogRegularPeriods();
     boolean isCanceled = true;
     private static final String DATE_FORMAT = "dd/MM/yyyy";
+    private static final String DATE_FORMAT_XML = "MM/dd/yyyy";
     private static final String TIME_FORMAT = "HH:mm:ss";
     private static final SimpleDateFormat DATE_SIMPLEFORMAT = new SimpleDateFormat(DATE_FORMAT);
+    private static final SimpleDateFormat DATE_SIMPLEFORMAT_XML = new SimpleDateFormat(DATE_FORMAT_XML);
     private static final SimpleDateFormat TIME_SIMPLEFORMAT = new SimpleDateFormat(TIME_FORMAT);
 
     /** Creates new form DialogCalendar */
@@ -77,7 +79,7 @@ public class DialogCalendar extends java.awt.Dialog
                 }
                 if (xml.getElementsByTagName("inidate").getLength() > 0)
                 {
-                    Date date = DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("inidate").item(0)).getTextContent());
+                    Date date = DATE_SIMPLEFORMAT_XML.parse(((org.w3c.dom.Element) xml.getElementsByTagName("inidate").item(0)).getTextContent());
                     this.jSpinnerInitDate.setValue(date);
                 }
                 if (xml.getElementsByTagName("enddate").getLength() == 0)
@@ -87,7 +89,7 @@ public class DialogCalendar extends java.awt.Dialog
                 }
                 else
                 {
-                    Date date = DATE_SIMPLEFORMAT.parse(((org.w3c.dom.Element) xml.getElementsByTagName("enddate").item(0)).getTextContent());
+                    Date date = DATE_SIMPLEFORMAT_XML.parse(((org.w3c.dom.Element) xml.getElementsByTagName("enddate").item(0)).getTextContent());
                     this.jSpinnerEndDate.setValue(date);
                     jRadioButtonNotEndDate.setSelected(false);
                     jRadioButtonEndSelect.setSelected(true);
@@ -480,12 +482,12 @@ public class DialogCalendar extends java.awt.Dialog
         doc.setRootElement(resource);
 
         Element inidate = new Element("inidate");
-        String date = DATE_SIMPLEFORMAT.format(((Date) jSpinnerInitDate.getValue()));
+        String date = DATE_SIMPLEFORMAT_XML.format(((Date) jSpinnerInitDate.getValue()));
         inidate.setText(date);
         resource.addContent(inidate);
         if (jRadioButtonEndSelect.isSelected())
         {
-            date = DATE_SIMPLEFORMAT.format(((Date) jSpinnerEndDate.getValue()));
+            date = DATE_SIMPLEFORMAT_XML.format(((Date) jSpinnerEndDate.getValue()));
             Element enddate = new Element("enddate");
             enddate.setText(date);
             resource.addContent(enddate);
