@@ -13,6 +13,7 @@ package org.semanticwb.openoffice.ui.dialogs;
 import java.awt.Frame;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
@@ -38,7 +39,7 @@ public class DialogCalendar extends java.awt.Dialog
     /** Creates new form DialogCalendar */
     public DialogCalendar()
     {
-        super((Frame)null, ModalityType.TOOLKIT_MODAL);
+        super((Frame) null, ModalityType.TOOLKIT_MODAL);
         initComponents();
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
@@ -394,7 +395,9 @@ public class DialogCalendar extends java.awt.Dialog
         if (this.jCheckBoxByTime.isSelected())
         {
             Date timeInit = (Date) this.jSpinnerInitTime.getValue();
+            timeInit=resetDate(timeInit);
             Date timeEnd = (Date) this.jSpinnerEndTime.getValue();
+            timeEnd=resetDate(timeEnd);
             if (timeInit.after(timeEnd))
             {
                 JOptionPane.showMessageDialog(this, "¡La hora de inicio es mayor que la hora de terminación!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
@@ -411,7 +414,9 @@ public class DialogCalendar extends java.awt.Dialog
         if (this.jRadioButtonEndSelect.isSelected())
         {
             Date dateInit = (Date) this.jSpinnerInitDate.getValue();
+            dateInit=resetTime(dateInit);
             Date dateEnd = (Date) this.jSpinnerEndDate.getValue();
+            dateEnd=resetTime(dateEnd);
             if (dateInit.after(dateEnd))
             {
                 JOptionPane.showMessageDialog(this, "¡La fecha de inicio es mayor que la fecha de terminación!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
@@ -419,9 +424,10 @@ public class DialogCalendar extends java.awt.Dialog
                 return;
             }
             Date now = new Date(System.currentTimeMillis());
+            now=resetTime(now);
             if (dateInit.before(now))
             {
-                int res = JOptionPane.showConfirmDialog(this, "¡La fecha de inicio es anterior al día de hoy!\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                int res = JOptionPane.showConfirmDialog(this, "¡La fecha de inicio es anterior al día de hoy!\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.NO_OPTION)
                 {
                     jSpinnerInitDate.requestFocus();
@@ -430,7 +436,7 @@ public class DialogCalendar extends java.awt.Dialog
             }
             if (dateEnd.before(now))
             {
-                int res = JOptionPane.showConfirmDialog(this, "¡La fecha de terminación es anterior al día de hoy!\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                int res = JOptionPane.showConfirmDialog(this, "¡La fecha de terminación es anterior al día de hoy!\r\n¿Desea continuar?", this.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.NO_OPTION)
                 {
                     jSpinnerEndDate.requestFocus();
@@ -446,6 +452,26 @@ public class DialogCalendar extends java.awt.Dialog
     {//GEN-HEADEREND:event_jRadioButtonEndSelectStateChanged
         jRadioButtonNotEndDateStateChanged(null);
     }//GEN-LAST:event_jRadioButtonEndSelectStateChanged
+    private Date resetDate(Date date)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.YEAR, 2009);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.MONTH, 1);
+        return cal.getTime();
+    }
+    private Date resetTime(Date date)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.MINUTE, 1);
+        cal.set(Calendar.HOUR, 1);
+        cal.set(Calendar.SECOND, 1);
+        cal.set(Calendar.MILLISECOND, 1);
+        return cal.getTime();
+    }
+
     public Document getDocument()
     {
         Document doc = new Document();
