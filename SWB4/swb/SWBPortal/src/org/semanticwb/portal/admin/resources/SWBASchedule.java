@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.*;
@@ -418,8 +419,8 @@ public class SWBASchedule extends GenericResource {
                 active = SWBUtils.XML.getAttribute(doc, "active");
                 createdate = SWBUtils.XML.getAttribute(doc, "createdate");
                 usercreate = SWBUtils.XML.getAttribute(doc, "usercreate");
-                inidate = SWBUtils.XML.getAttribute(doc, "inidate");
-                enddate = SWBUtils.XML.getAttribute(doc, "enddate");
+                inidate = cambiaFormato(SWBUtils.XML.getAttribute(doc, "inidate"),2);
+                enddate = cambiaFormato(SWBUtils.XML.getAttribute(doc, "enddate"),2);
                 if(null!=enddate) sendselect = "endselect";
                 starthour = SWBUtils.XML.getAttribute(doc, "starthour");
                 endhour = SWBUtils.XML.getAttribute(doc, "endhour");
@@ -633,7 +634,7 @@ public class SWBASchedule extends GenericResource {
             out.println("    </td>");
             out.println("  </tr>");
             out.println("  <tr><td><hr size=\"1\" noshade></td></tr>");
-            String endselect1 = "checked", endselect2 = "", endselectd="";
+            String endselect1 = "checked", endselect2 = "", endselectd="false";
             if("add".equals(action)||("edit".equals(action)&&(enddate!=null&&enddate.trim().length()>0)))
             {
                 endselect1 = "checked";
@@ -1267,7 +1268,10 @@ public class SWBASchedule extends GenericResource {
                     Element interval = doc.createElement("interval");
                     doc.appendChild(interval);
                     //addElem(doc, interval, "title", request.getParameter("title"));
-                    addElem(doc, interval, "inidate", request.getParameter(id+"/inidate"));
+
+                    String fechaIni = request.getParameter(id+"/inidate");
+
+                    addElem(doc, interval, "inidate", cambiaFormato(fechaIni,1));
                     addElem(doc, interval, "active", strActive);
                     addElem(doc, interval, "createdate", strCreateDate);
                     addElem(doc, interval, "usercreate", strUserCreate);
@@ -1275,7 +1279,8 @@ public class SWBASchedule extends GenericResource {
                     addElem(doc, interval, "usermod", user.getId());
                     String endselect = request.getParameter(id+"/endselect");
                     if (endselect != null && endselect.equals("enddate")) {
-                        addElem(doc, interval, "enddate", request.getParameter(id+"/enddate"));
+                        String fechaFin = request.getParameter(id+"/enddate");
+                        addElem(doc, interval, "enddate", cambiaFormato(fechaFin,1));
                     }
                     if (request.getParameter(id+"/time") != null) {
                         String starthour = request.getParameter(id+"/starthour");
@@ -1487,6 +1492,37 @@ public class SWBASchedule extends GenericResource {
             ret = "Not set";
         }
         return ret;
+    }
+
+    private String cambiaFormato(String fecha,int formato)
+    {
+        String nf = fecha;
+        String y = "";
+        String m = "";
+        String d = "";
+        if(formato==1)
+        {
+            StringTokenizer st = new StringTokenizer(fecha,"-");
+            if(st.hasMoreTokens())
+            {
+                y = st.nextToken();
+                if(st.hasMoreTokens()) m = st.nextToken();
+                if(st.hasMoreTokens()) d = st.nextToken();
+                nf=m+"/"+d+"/"+y;
+            }
+        }
+        else if(formato==2)
+        {
+            StringTokenizer st = new StringTokenizer(fecha,"/");
+            if(st.hasMoreTokens())
+            {
+                m = st.nextToken();
+                if(st.hasMoreTokens()) d = st.nextToken();
+                if(st.hasMoreTokens()) y = st.nextToken();
+                nf=y+"-"+m+"-"+d;
+            }
+        }
+        return nf;
     }
 }
 
