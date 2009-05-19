@@ -11,13 +11,14 @@ import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.DisplayProperty;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.RepositoryInfo;
 import org.semanticwb.office.interfaces.SiteInfo;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticIterator;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.repository.office.OfficeCategory;
@@ -111,12 +112,13 @@ public class SWBOfficeManager implements OfficeManager
         while (sites.hasNext())
         {
             WebSite site = sites.next();
-            SemanticIterator<SemanticObject> models = site.listSubModels();
+            GenericIterator<SWBModel> models = site.listSubModels();
             while (models.hasNext())
             {
-                SemanticObject model = models.next();
-                if (model.getSemanticClass().equals(Workspace.sclass) || model.getSemanticClass().isSubClass(Workspace.sclass))
+                SWBModel model = models.next();
+                if (model.getSemanticObject().getSemanticClass().equals(Workspace.sclass) || model.getSemanticObject().getSemanticClass().isSubClass(Workspace.sclass))
                 {
+                    
                     String name = model.getId() + "@" + manager.getName();
                     RepositoryInfo info = new RepositoryInfo(name);
                     info.exclusive = true;
