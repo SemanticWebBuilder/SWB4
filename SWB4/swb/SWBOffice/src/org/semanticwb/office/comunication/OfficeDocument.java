@@ -1017,9 +1017,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         ArrayList<CalendarInfo> getCalendarInfo = new ArrayList<CalendarInfo>();
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
-        Resource resource = site.getResource(resourceInfo.id);
-        OfficeResource officeResource = new OfficeResource();
-        officeResource.setResourceBase(resource);
+        Resource resource = site.getResource(resourceInfo.id);                
         Iterator<org.semanticwb.model.Calendar> calendars = resource.listCalendars();
         while (calendars.hasNext())
         {
@@ -1514,6 +1512,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         cal.setCreated(new Date(System.currentTimeMillis()));
         cal.setUpdated(new Date(System.currentTimeMillis()));
         CalendarInfo info = new CalendarInfo();
+        Resource resource=site.getResource(resourceInfo.id);
+        resource.addCalendar(cal);
         info.title = title;
         info.id = cal.getId();
         info.active = cal.isActive();
