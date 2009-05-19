@@ -586,9 +586,11 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 }
                 OfficeApplication.getOfficeDocumentProxy().setResourceProperties(pageInformation, prop, value);
             }
+            JOptionPane.showMessageDialog(this, "¡Se ha guardado la información correctamente!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e)
         {
+            JOptionPane.showMessageDialog(this, "¡Existe un error la guardar la información!\r\nDetalle: "+e.getLocalizedMessage(),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         finally
