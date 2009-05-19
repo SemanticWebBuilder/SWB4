@@ -639,7 +639,7 @@ private void jButtonEditEchedulerActionPerformed(java.awt.event.ActionEvent evt)
                 XMLOutputter out = new XMLOutputter();
                 document = dialogCalendar.getDocument();
                 cal.xml = out.outputString(document);
-                loadCalendars();
+                //loadCalendars();
             }
         }
         catch (Exception e)
