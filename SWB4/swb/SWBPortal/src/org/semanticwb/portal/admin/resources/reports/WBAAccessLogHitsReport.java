@@ -31,8 +31,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class WBAAccessLogReport extends GenericResource {
-    private static Logger log = SWBUtils.getLogger(WBAAccessLogReport.class);
+public class WBAAccessLogHitsReport extends GenericResource {
+    private static Logger log = SWBUtils.getLogger(WBAAccessLogHitsReport.class);
 
     public String strRscType;
     private HashMap hm_detail = null;
@@ -43,7 +43,7 @@ public class WBAAccessLogReport extends GenericResource {
         try {
             strRscType = base.getResourceType().getResourceClassName();
         }catch (Exception e) {
-            strRscType = "WBAAccessLogReport";
+            strRscType = "WBAAccessLogHitsReport";
         }
     }
 
@@ -244,43 +244,35 @@ public class WBAAccessLogReport extends GenericResource {
                     int i=1;
                     while(ite_rep.hasNext()) {
                         StringTokenizer s_token = new StringTokenizer(ite_rep.next(),"|");
-                        String s_date = s_token.nextToken();
-                        String s_ipuser = s_token.nextToken();
-                        String s_ipserver = s_token.nextToken();
-                        String s_session = s_token.nextToken();
-                        String s_tm = s_token.nextToken();
-                        String s_tp = s_token.nextToken();
-                        String s_repo = s_token.nextToken();
-                        String s_iduser = s_token.nextToken();
-                        String s_usrtype = s_token.nextToken();
-                        String s_device = s_token.nextToken();
-                        String s_language = s_token.nextToken();
-                        int time = Integer.parseInt(s_token.nextToken(),10);
-                        String s_rec = "";
-
-                        while(s_token.hasMoreTokens())
-                        {
-                            s_rec += s_token.nextToken();
-                            if(s_token.hasMoreTokens())
-                                s_rec += ", ";
-                        }
+                        String date = s_token.nextToken();
+                        String ipuser = s_token.nextToken();
+                        String ipserver = s_token.nextToken();
+                        String sessionId = s_token.nextToken();
+                        String siteId = s_token.nextToken();
+                        String sectionId = s_token.nextToken();
+                        String repId = s_token.nextToken();
+                        String userId = s_token.nextToken();
+                        String usertypeId = s_token.nextToken();
+                        String deviceId = s_token.nextToken();
+                        String languageId = s_token.nextToken();
+                        String resId = s_token.nextToken();
+                        
 
                         JSONObject obj = new JSONObject();
                         try {
                             obj.put("serial", i);
-                            obj.put("date", s_date);
-                            obj.put("ipuser", s_ipuser);
-                            obj.put("ipserver", s_ipserver);
-                            obj.put("sessid", s_session);
-                            obj.put("siteid", s_tm);
-                            obj.put("sectid", s_tp);
-                            obj.put("rep", s_repo);
-                            obj.put("user", s_iduser);
-                            obj.put("usertype", s_usrtype);
-                            obj.put("devid", s_device);
-                            obj.put("langid", s_language);
-                            obj.put("time", time);
-                            obj.put("resid", s_rec);
+                            obj.put("date", date);
+                            obj.put("ipuser", ipuser);
+                            obj.put("ipserver", ipserver);
+                            obj.put("sessid", sessionId);
+                            obj.put("siteid", siteId);
+                            obj.put("sectid", sectionId);
+                            obj.put("rep", repId);
+                            obj.put("user", userId);
+                            obj.put("usertype", usertypeId);
+                            obj.put("devid", deviceId);
+                            obj.put("langid", languageId);
+                            obj.put("resid", resId);
                             jarr.put(obj);
                         }catch (JSONException jsone) {
                         }
@@ -715,7 +707,7 @@ public class WBAAccessLogReport extends GenericResource {
         out.println("    <thead>");
         out.println("        <tr>");
         out.println("            <th width=\"5%\" field=\"serial\">"+paramsRequest.getLocaleString("th_Num")+"</th>");
-        out.println("            <th width=\"9%\" field=\"date\">"+paramsRequest.getLocaleString("th_Date")+"</th>");
+        out.println("            <th width=\"14%\" field=\"date\">"+paramsRequest.getLocaleString("th_Date")+"</th>");
         out.println("            <th width=\"7%\" field=\"ipuser\">"+paramsRequest.getLocaleString("th_IPuser")+"</th>");
         out.println("            <th width=\"7%\" field=\"ipserver\">"+paramsRequest.getLocaleString("th_IPserver")+"</th>");
         out.println("            <th width=\"7%\" field=\"sessid\">"+paramsRequest.getLocaleString("th_IDsession")+"</th>");
@@ -726,7 +718,6 @@ public class WBAAccessLogReport extends GenericResource {
         out.println("            <th width=\"7%\" field=\"usertype\">"+paramsRequest.getLocaleString("th_UserType")+"</th>");
         out.println("            <th width=\"7%\" field=\"devid\">"+paramsRequest.getLocaleString("th_Device")+"</th>");
         out.println("            <th width=\"7%\" field=\"langid\">"+paramsRequest.getLocaleString("th_Language")+"</th>");
-        out.println("            <th width=\"5%\" field=\"time\">"+paramsRequest.getLocaleString("th_Time")+"</th>");
         out.println("            <th width=\"7%\" field=\"resid\">"+paramsRequest.getLocaleString("th_Resource")+"</th>");
         out.println("        </tr>");
         out.println("    </thead>");
@@ -910,52 +901,43 @@ public class WBAAccessLogReport extends GenericResource {
                 out.println("<td>"+paramsRequest.getLocaleString("th_UserType")+"</td>");
                 out.println("<td>"+paramsRequest.getLocaleString("th_Device")+"</td>");
                 out.println("<td>"+paramsRequest.getLocaleString("th_Language")+"</td>");
-                out.println("<td>"+paramsRequest.getLocaleString("th_Time")+" (ms.)"+"</td>");
                 out.println("<td>"+paramsRequest.getLocaleString("th_Resource")+"</td>");
                 out.println("</tr>");
             
                 Vector vec_rep = (Vector) hm_detail.get(key);
                 Iterator<String> ite_rep = vec_rep.iterator();
-                int i=1;
+                int i=0;
                 while(ite_rep.hasNext()) {
-                    StringTokenizer s_token = new StringTokenizer(ite_rep.next(),"|");
-                    String s_date = s_token.nextToken();
-                    String s_ipuser = s_token.nextToken();
-                    String s_ipserver = s_token.nextToken();
-                    String s_session = s_token.nextToken();
-                    String s_tm = s_token.nextToken();
-                    String s_tp = s_token.nextToken();
-                    String s_repo = s_token.nextToken();
-                    String s_iduser = s_token.nextToken();
-                    String s_usrtype = s_token.nextToken();
-                    String s_device = s_token.nextToken();
-                    String s_language = s_token.nextToken();
-                    int time = Integer.parseInt(s_token.nextToken(),10);
-                    String s_rec = "";
-
-                    while(s_token.hasMoreTokens()) {
-                        s_rec += s_token.nextToken();
-                        if(s_token.hasMoreTokens())
-                            s_rec += ", ";
-                    }
+                    StringTokenizer token = new StringTokenizer(ite_rep.next(),"|");
+                    String date = token.nextToken();
+                    String ipuser = token.nextToken();
+                    String ipserver = token.nextToken();
+                    String sessionId = token.nextToken();
+                    String siteId = token.nextToken();
+                    String sectionId = token.nextToken();
+                    String repId = token.nextToken();
+                    String userId = token.nextToken();
+                    String usertypeId = token.nextToken();
+                    String deviceId = token.nextToken();
+                    String languageId = token.nextToken();
+                    String resId = token.nextToken();
 
                     out.println("<tr>");
-                    out.println("<td>"+i+"</td>");
-                    out.println("<td>"+s_date+"</td>");
-                    out.println("<td>"+s_ipuser+"</td>");
-                    out.println("<td>"+s_ipserver+"</td>");
-                    out.println("<td>"+s_session+"</td>");
-                    out.println("<td>"+s_tm+"</td>");
-                    out.println("<td>"+s_tp+"</td>");
-                    out.println("<td>"+s_repo+"</td>");
-                    out.println("<td>"+s_iduser+"</td>");
-                    out.println("<td>"+s_usrtype+"</td>");
-                    out.println("<td>"+s_device+"</td>");
-                    out.println("<td>"+s_language+"</td>");
-                    out.println("<td>"+time+"</td>");
-                    out.println("<td>"+s_rec+"</td>");
+                    out.println("<td>"+(i++)+"</td>");
+                    out.println("<td>"+date+"</td>");
+                    out.println("<td>"+ipuser+"</td>");
+                    out.println("<td>"+ipserver+"</td>");
+                    out.println("<td>"+sessionId+"</td>");
+                    out.println("<td>"+siteId+"</td>");
+                    out.println("<td>"+sectionId+"</td>");
+                    out.println("<td>"+repId+"</td>");
+                    out.println("<td>"+userId+"</td>");
+                    out.println("<td>"+usertypeId+"</td>");
+                    out.println("<td>"+deviceId+"</td>");
+                    out.println("<td>"+languageId+"</td>");
+                    out.println("<td>"+resId+"</td>");
                     out.println("</tr>");
-                    i++;
+                    //i++;
                 }
             }
             out.println("</table>");
@@ -1018,26 +1000,19 @@ public class WBAAccessLogReport extends GenericResource {
                 Iterator<String> ite_rep = vec_rep.iterator();
                 renglones = 0;
                 while(ite_rep.hasNext()) {
-                    StringTokenizer s_token = new StringTokenizer(ite_rep.next(),"|");
-                    String datetime = s_token.nextToken();
-                    String ipuser = s_token.nextToken();
-                    String ipserv = s_token.nextToken();
-                    String sessId = s_token.nextToken();
-                    String siteId = s_token.nextToken();
-                    String sectId = s_token.nextToken();
-                    String repId = s_token.nextToken();
-                    String userId = s_token.nextToken();
-                    String usertype = s_token.nextToken();
-                    String devId = s_token.nextToken();
-                    String langId = s_token.nextToken();
-                    int time = Integer.parseInt(s_token.nextToken(),10);
-                    String res = "";
-
-                    while(s_token.hasMoreTokens()) {
-                        res += s_token.nextToken();
-                        if(s_token.hasMoreTokens())
-                            res += ", ";
-                    }
+                    StringTokenizer token = new StringTokenizer(ite_rep.next(),"|");
+                    String datetime = token.nextToken();
+                    String ipuser = token.nextToken();
+                    String ipserv = token.nextToken();
+                    String sessId = token.nextToken();
+                    String siteId = token.nextToken();
+                    String sectId = token.nextToken();
+                    String repId = token.nextToken();
+                    String userId = token.nextToken();
+                    String usertype = token.nextToken();
+                    String devId = token.nextToken();
+                    String langId = token.nextToken();
+                    String resId = token.nextToken();
 
                     Element row = dom.createElement("row");
                     row.appendChild(dom.createTextNode(""));
@@ -1075,9 +1050,9 @@ public class WBAAccessLogReport extends GenericResource {
                     Element lang = dom.createElement("langId");
                     lang.appendChild(dom.createTextNode(langId));
                     row.appendChild(lang);
-                    Element t = dom.createElement("time");
-                    t.appendChild(dom.createTextNode(Integer.toString(time)));
-                    row.appendChild(t);
+                    Element res = dom.createElement("res");
+                    res.appendChild(dom.createTextNode(resId));
+                    row.appendChild(res);
 
                     detail.appendChild(row);
                 }
@@ -1136,7 +1111,7 @@ public class WBAAccessLogReport extends GenericResource {
         GregorianCalendar last  = new GregorianCalendar(year12, month12-1, day12, hour12, minute12);
 
         if(siteId!=null) {
-            String realpath = path + accessLogPath + "_" + siteId + "_acc.";
+            String realpath = path + accessLogPath + "_" + siteId + "_hit.";
 
             if(period.equalsIgnoreCase("daily")) {
                 sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -1218,7 +1193,7 @@ public class WBAAccessLogReport extends GenericResource {
         boolean b_devicesel = false;
         boolean b_usersel = false;
         boolean b_resourceid = false;
-        boolean b_result = true;
+        //boolean b_result = true;
         boolean b_sessionid = false;
 
         long l_count = 0;
@@ -1359,7 +1334,7 @@ public class WBAAccessLogReport extends GenericResource {
 
                             //s_aux receives user ip
                             s_aux = token.nextToken();
-                            if((b_result) && ((col == I_ONE) && b_ipadduser)) {
+                            if( col==I_ONE && b_ipadduser ) {
                                 if(!s_aux.equalsIgnoreCase(ipadduser)) {
                                     continue;
                                 }
@@ -1369,7 +1344,7 @@ public class WBAAccessLogReport extends GenericResource {
 
                             //s_aux receives server ip
                             s_aux = token.nextToken();
-                            if((b_result) && ((col == I_TWO) && b_ipaddserver)) {
+                            if( col==I_TWO && b_ipaddserver ) {
                                 if(!s_aux.equalsIgnoreCase(ipaddserver)) {
                                     continue;
                                 }
@@ -1379,7 +1354,7 @@ public class WBAAccessLogReport extends GenericResource {
 
                             //s_aux receives session id
                             s_aux = token.nextToken();
-                            if((b_result) && ((col == I_THREE) && b_sessionid)) {
+                            if( col==I_THREE && b_sessionid ) {
                                 if(!s_aux.equalsIgnoreCase(sessionId)) {
                                     continue;
                                 }
@@ -1393,7 +1368,7 @@ public class WBAAccessLogReport extends GenericResource {
                             //s_aux receives section id
                             s_aux = token.nextToken();
                             webpage = website.getWebPage(s_aux);
-                            if(((b_result) && ((col == I_FOUR) && b_topicid))) {
+                            if( col==I_FOUR && b_topicid ) {
                                 if( !s_aux.equalsIgnoreCase(sectionId) && ( !b_subsection || null==webpage || !sectionParent.isParentof(webpage)) ) {
                                     continue;
                                 }
@@ -1402,13 +1377,14 @@ public class WBAAccessLogReport extends GenericResource {
                             col++;
 
                             //s_aux receives repository id
+                            // I_FIVE column
                             s_aux = token.nextToken();
                             i_len = i_len + s_aux.length() + I_ONE;
                             col++;
 
                             //s_aux receives user id
                             s_aux = token.nextToken();
-                            if((b_result) && ((col == I_SIX) && b_userid)) {
+                            if( col==I_SIX && b_userid ) {
                                 if(!s_aux.equalsIgnoreCase(userId)) {
                                     continue;
                                 }
@@ -1418,7 +1394,7 @@ public class WBAAccessLogReport extends GenericResource {
 
                             //s_aux receives user type
                             s_aux = token.nextToken();
-                            if((b_result) && ((col == I_SEVEN) && b_usersel)) {
+                            if( col==I_SEVEN && b_usersel ) {
                                 if(!s_aux.equalsIgnoreCase(usertypeId)) {
                                     continue;
                                 }
@@ -1428,7 +1404,7 @@ public class WBAAccessLogReport extends GenericResource {
 
                             //s_aux receives device type
                             s_aux = token.nextToken();
-                            if((b_result) && ((col == I_EIGHT) && b_devicesel)) {
+                            if( col==I_EIGHT && b_devicesel ) {
                                 if(!s_aux.equalsIgnoreCase(deviceId)) {
                                     continue;
                                 }
@@ -1438,7 +1414,7 @@ public class WBAAccessLogReport extends GenericResource {
 
                             //s_aux receives language
                             s_aux = token.nextToken();
-                            if((b_result) && ((col == I_NINE) && b_languagesel)) {
+                            if( col==I_NINE && b_languagesel ) {
                                 if(!s_aux.equalsIgnoreCase(languageId)) {
                                     continue;
                                 }
@@ -1446,145 +1422,97 @@ public class WBAAccessLogReport extends GenericResource {
                             i_len = i_len + s_aux.length() + I_ONE;
                             col++;
 
-                            //s_aux receives time in miliseconds, this value no matter
-                            if((b_result) && (col == I_TEN) ) {
-                                token.nextToken();
-                            }
-
-                            // seek for resource id
-                            if((b_resourceid) && (line.length() >= i_len - I_ONE)) {
-                                i_new = 1;
-                                s_aux = line.substring(i_len);
-                                int i_pos = s_aux.indexOf("|");
-                                b_result = false;
-                                if(i_pos != I_LESSONE) {
-                                    s_resource = s_aux.substring(i_pos + I_ONE);
-                                    //Evaluates resources
-                                    StringTokenizer st_resource = new StringTokenizer(s_resource,"|");
-                                    while(st_resource.hasMoreElements()) {
-                                        s_auxresourceid = (String)st_resource.nextElement();
-                                        if(resourceId.equalsIgnoreCase(s_auxresourceid)) {
-                                            b_result = true;
-                                            break;
-                                        }
-                                    }
+                            //s_aux receives resource
+                            s_aux = token.nextToken();
+                            if( col==I_TEN && b_resourceid ) {
+                                if(!s_aux.equalsIgnoreCase(resourceId)) {
+                                    continue;
                                 }
                             }
 
                             //Evaluates if record passes
-                            if(b_result) {
-                                if(agregateId.equalsIgnoreCase("1")) {
-                                    //Display by year
-                                    datedisplay = new GregorianCalendar(Integer.parseInt(yearinfile),Integer.parseInt(monthinfile),Integer.parseInt(dayinfile));
-                                    if(datedefault == null) {
-                                        datedefault = datedisplay;
-                                        s_datedefault = dateinfile;
-                                    }
-                                    int i_yeardisplay = datedisplay.get(Calendar.YEAR);
-                                    int i_yeardefault = datedefault.get(Calendar.YEAR);
-
-                                    if(i_yeardisplay == i_yeardefault) {
-                                        l_count++;
-                                        i_new = 0;
-                                    }else {
-                                        arr_data = new String[2];
-                                        arr_data[0] = s_datedefault.substring(0,4);
-                                        arr_data[1] = Long.toString(l_count);
-                                        l_count = 1;
-                                        datedefault = datedisplay;
-                                        s_datedefault = dateinfile;
-
-                                        al_pag.add(arr_data);
-                                        i_new = 1;
-                                    }
-                                }else if(agregateId.equalsIgnoreCase("2")) {
-                                    //Display by month
-                                    datedisplay = new GregorianCalendar(Integer.parseInt(yearinfile),Integer.parseInt(monthinfile),Integer.parseInt(dayinfile));
-                                    if(datedefault == null) {
-                                        datedefault = datedisplay;
-                                        s_datedefault = dateinfile;
-                                    }
-                                    int i_monthdisplay = datedisplay.get(Calendar.MONTH);
-                                    int i_monthdefault = datedefault.get(Calendar.MONTH);
-                                    if(i_monthdisplay == i_monthdefault) {
-                                        l_count++;
-                                        i_new = 0;
-                                    }else {
-                                        arr_data = new String[2];
-                                        arr_data[0] = s_datedefault.substring(0,7);
-                                        arr_data[1] = Long.toString(l_count);
-                                        l_count = 1;
-                                        datedefault = datedisplay;
-                                        s_datedefault = dateinfile;
-
-                                        al_pag.add(arr_data);
-                                        i_new = 1;
-                                    }
-                                }else if(agregateId.equalsIgnoreCase("3")) {
-                                    //Display by day
-                                    datedisplay = new GregorianCalendar(Integer.parseInt(yearinfile),Integer.parseInt(monthinfile),Integer.parseInt(dayinfile));
-                                    if(datedefault == null) {
-                                        datedefault = datedisplay;
-                                        s_datedefault = dateinfile;
-                                    }
-                                    if(datedisplay.equals(datedefault)) {
-                                        l_count++;
-                                        i_new = 0;
-                                    }else {
-                                        arr_data = new String[2];
-                                        arr_data[0] = s_datedefault.substring(0,10);
-                                        arr_data[1] = Long.toString(l_count);
-                                        l_count = 1;
-                                        datedefault = datedisplay;
-                                        s_datedefault = dateinfile;
-
-                                        al_pag.add(arr_data);
-                                        i_new = 1;
-                                    }
-                                }else if(agregateId.equalsIgnoreCase("4")) {
-                                    //Display by hour
-                                    datedisplay = new GregorianCalendar(Integer.parseInt(yearinfile),Integer.parseInt(monthinfile),Integer.parseInt(dayinfile),Integer.parseInt(hourinfile),0);
-
-                                    if(datedefault == null) {
-                                        datedefault = datedisplay;
-                                        s_datedefault = dateinfile;
-                                    }
-                                    if(datedisplay.equals(datedefault)) {
-                                        l_count++;
-                                        i_new = 0;
-                                    }else {
-                                        arr_data = new String[2];
-                                        i_hourini = Integer.parseInt(s_datedefault.substring(11,13));
-                                        i_hourfin = i_hourini + 1 ;
-                                        if(i_hourfin == I_TWENTYFOUR) {
-                                            i_hourfin = 0;
-                                            s_hourfin = Integer.toString(i_hourfin) + "0:00";
-                                        }else {
-                                            s_hourfin = Integer.toString(i_hourfin);
-                                            if(s_hourfin.length() == I_ONE) s_hourfin = "0" + s_hourfin;
-                                            s_hourfin = s_hourfin + ":00";
-                                        }
-                                        arr_data[0] = s_datedefault.substring(0,13) + ":00-" + s_hourfin;
-                                        arr_data[1] = Long.toString(l_count);
-                                        l_count = 1;
-                                        datedefault = datedisplay;
-                                        s_datedefault = dateinfile;
-
-                                        al_pag.add(arr_data);
-                                        i_new = 1;
-                                    }
-
+                            /*if(b_result) {*/
+                            if(agregateId.equalsIgnoreCase("1")) {
+                                //Display by year
+                                datedisplay = new GregorianCalendar(Integer.parseInt(yearinfile),Integer.parseInt(monthinfile),Integer.parseInt(dayinfile));
+                                if(datedefault == null) {
+                                    datedefault = datedisplay;
+                                    s_datedefault = dateinfile;
                                 }
+                                int i_yeardisplay = datedisplay.get(Calendar.YEAR);
+                                int i_yeardefault = datedefault.get(Calendar.YEAR);
 
-                                // GENERATES the detail of the report
-                                s_key="";
-                                if(agregateId.equalsIgnoreCase("1")) {
-                                    s_key = line.substring(0,4);
-                                }else if(agregateId.equalsIgnoreCase("2")) {
-                                    s_key = line.substring(0,7);
-                                }else if(agregateId.equalsIgnoreCase("3")) {
-                                    s_key = line.substring(0,10);
-                                }else if(agregateId.equalsIgnoreCase("4")) {
+                                if(i_yeardisplay == i_yeardefault) {
+                                    l_count++;
+                                    i_new = 0;
+                                }else {
+                                    arr_data = new String[2];
+                                    arr_data[0] = s_datedefault.substring(0,4);
+                                    arr_data[1] = Long.toString(l_count);
+                                    l_count = 1;
+                                    datedefault = datedisplay;
+                                    s_datedefault = dateinfile;
+
+                                    al_pag.add(arr_data);
+                                    i_new = 1;
+                                }
+                            }else if(agregateId.equalsIgnoreCase("2")) {
+                                //Display by month
+                                datedisplay = new GregorianCalendar(Integer.parseInt(yearinfile),Integer.parseInt(monthinfile),Integer.parseInt(dayinfile));
+                                if(datedefault == null) {
+                                    datedefault = datedisplay;
+                                    s_datedefault = dateinfile;
+                                }
+                                int i_monthdisplay = datedisplay.get(Calendar.MONTH);
+                                int i_monthdefault = datedefault.get(Calendar.MONTH);
+                                if(i_monthdisplay == i_monthdefault) {
+                                    l_count++;
+                                    i_new = 0;
+                                }else {
+                                    arr_data = new String[2];
+                                    arr_data[0] = s_datedefault.substring(0,7);
+                                    arr_data[1] = Long.toString(l_count);
+                                    l_count = 1;
+                                    datedefault = datedisplay;
+                                    s_datedefault = dateinfile;
+
+                                    al_pag.add(arr_data);
+                                    i_new = 1;
+                                }
+                            }else if(agregateId.equalsIgnoreCase("3")) {
+                                //Display by day
+                                datedisplay = new GregorianCalendar(Integer.parseInt(yearinfile),Integer.parseInt(monthinfile),Integer.parseInt(dayinfile));
+                                if(datedefault == null) {
+                                    datedefault = datedisplay;
+                                    s_datedefault = dateinfile;
+                                }
+                                if(datedisplay.equals(datedefault)) {
+                                    l_count++;
+                                    i_new = 0;
+                                }else {
+                                    arr_data = new String[2];
+                                    arr_data[0] = s_datedefault.substring(0,10);
+                                    arr_data[1] = Long.toString(l_count);
+                                    l_count = 1;
+                                    datedefault = datedisplay;
+                                    s_datedefault = dateinfile;
+
+                                    al_pag.add(arr_data);
+                                    i_new = 1;
+                                }
+                            }else if(agregateId.equalsIgnoreCase("4")) {
+                                //Display by hour
+                                datedisplay = new GregorianCalendar(Integer.parseInt(yearinfile),Integer.parseInt(monthinfile),Integer.parseInt(dayinfile),Integer.parseInt(hourinfile),0);
+
+                                if(datedefault == null) {
+                                    datedefault = datedisplay;
+                                    s_datedefault = dateinfile;
+                                }
+                                if(datedisplay.equals(datedefault)) {
+                                    l_count++;
+                                    i_new = 0;
+                                }else {
+                                    arr_data = new String[2];
                                     i_hourini = Integer.parseInt(s_datedefault.substring(11,13));
                                     i_hourfin = i_hourini + 1 ;
                                     if(i_hourfin == I_TWENTYFOUR) {
@@ -1592,20 +1520,51 @@ public class WBAAccessLogReport extends GenericResource {
                                         s_hourfin = Integer.toString(i_hourfin) + "0:00";
                                     }else {
                                         s_hourfin = Integer.toString(i_hourfin);
-                                        if(s_hourfin.length() == I_ONE) {
-                                            s_hourfin = "0" + s_hourfin;
-                                        }
+                                        if(s_hourfin.length() == I_ONE) s_hourfin = "0" + s_hourfin;
                                         s_hourfin = s_hourfin + ":00";
                                     }
-                                    s_key = line.substring(0,13) + ":00-"+s_hourfin;
+                                    arr_data[0] = s_datedefault.substring(0,13) + ":00-" + s_hourfin;
+                                    arr_data[1] = Long.toString(l_count);
+                                    l_count = 1;
+                                    datedefault = datedisplay;
+                                    s_datedefault = dateinfile;
+
+                                    al_pag.add(arr_data);
+                                    i_new = 1;
                                 }
-                                vec_rep = (Vector) hm_detail.get(s_key);
-                                if(null == vec_rep) {
-                                    vec_rep=new Vector();
-                                }
-                                vec_rep.add(line);
-                                hm_detail.put(s_key,vec_rep);
+
                             }
+
+                            // GENERATES the detail of the report
+                            s_key="";
+                            if(agregateId.equalsIgnoreCase("1")) {
+                                s_key = line.substring(0,4);
+                            }else if(agregateId.equalsIgnoreCase("2")) {
+                                s_key = line.substring(0,7);
+                            }else if(agregateId.equalsIgnoreCase("3")) {
+                                s_key = line.substring(0,10);
+                            }else if(agregateId.equalsIgnoreCase("4")) {
+                                i_hourini = Integer.parseInt(s_datedefault.substring(11,13));
+                                i_hourfin = i_hourini + 1 ;
+                                if(i_hourfin == I_TWENTYFOUR) {
+                                    i_hourfin = 0;
+                                    s_hourfin = Integer.toString(i_hourfin) + "0:00";
+                                }else {
+                                    s_hourfin = Integer.toString(i_hourfin);
+                                    if(s_hourfin.length() == I_ONE) {
+                                        s_hourfin = "0" + s_hourfin;
+                                    }
+                                    s_hourfin = s_hourfin + ":00";
+                                }
+                                s_key = line.substring(0,13) + ":00-"+s_hourfin;
+                            }
+                            vec_rep = (Vector) hm_detail.get(s_key);
+                            if(null == vec_rep) {
+                                vec_rep=new Vector();
+                            }
+                            vec_rep.add(line);
+                            hm_detail.put(s_key,vec_rep);
+                            /*}*/
                         }// line in file
 
                         if((i_new == I_ONE) | (l_count != I_ZERO)) {
