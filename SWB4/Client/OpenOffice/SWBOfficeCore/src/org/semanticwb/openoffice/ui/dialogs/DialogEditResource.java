@@ -555,15 +555,19 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
             for (int i = 0; i < jTableScheduler.getRowCount(); i++)
             {
                 CalendarInfo cal = (CalendarInfo) model.getValueAt(i, 0);
+                boolean active=(Boolean)model.getValueAt(i, 1);
                 if (cal.id == null)
                 {
                     // insert
-                    OfficeApplication.getOfficeDocumentProxy().insertCalendar(pageInformation, cal.title, cal.xml);
+                    CalendarInfo calinfo=OfficeApplication.getOfficeDocumentProxy().insertCalendar(pageInformation, cal.title, cal.xml);
+                    OfficeApplication.getOfficeDocumentProxy().activeCalendar(pageInformation, calinfo, active);
+                    cal.id=calinfo.id;
                 }
                 else
                 {
                     // update
                     OfficeApplication.getOfficeDocumentProxy().updateCalendar(pageInformation, cal);
+                    OfficeApplication.getOfficeDocumentProxy().activeCalendar(pageInformation, cal, active);
                 }
             }
 
