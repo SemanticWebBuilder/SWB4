@@ -215,6 +215,7 @@ public class Login implements InternalServlet
                 log.trace("2o callback "+callbackHandler);
                 lc = new LoginContext(context, subject, callbackHandler);
                 lc.login();
+                sendLoginLog(request,user);
             // session.removeAttribute(VALSESS);
             // session.removeAttribute(CALLBACK);
             //   System.out.println(subject.toString());
