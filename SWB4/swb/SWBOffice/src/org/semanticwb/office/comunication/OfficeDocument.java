@@ -1525,6 +1525,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
         org.semanticwb.model.Calendar cal = site.getCalendar(calendarInfo.id);
+        site.getResource(resourceInfo.id).removeCalendar(cal);
         cal.remove();
     }
 
