@@ -466,7 +466,7 @@ public class DialogCalendar extends java.awt.Dialog
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.MINUTE, 1);
-        cal.set(Calendar.HOUR, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 1);
         cal.set(Calendar.SECOND, 1);
         cal.set(Calendar.MILLISECOND, 1);
         return cal.getTime();
