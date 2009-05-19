@@ -5,6 +5,7 @@
  */
 package org.semanticwb.openoffice.ui.dialogs;
 
+import java.awt.Cursor;
 import java.awt.Frame;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -462,6 +463,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         pageInformation.active = this.jCheckBoxActive.isSelected();
         try
         {
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
             OfficeApplication.getOfficeDocumentProxy().updatePorlet(pageInformation);
             if (this.jCheckBoxActive.isSelected())
             {
@@ -560,6 +562,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 {
                     // insert
                     CalendarInfo calinfo=OfficeApplication.getOfficeDocumentProxy().insertCalendar(pageInformation, cal.title, cal.xml);
+                    added.remove(cal);
                     OfficeApplication.getOfficeDocumentProxy().activeCalendar(pageInformation, calinfo, active);
                     cal.id=calinfo.id;
                 }
@@ -570,6 +573,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     OfficeApplication.getOfficeDocumentProxy().activeCalendar(pageInformation, cal, active);
                 }
             }
+
 
             for (PropertyInfo prop : this.panelPropertyEditor1.getProperties().keySet())
             {
@@ -586,6 +590,10 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         catch (Exception e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
