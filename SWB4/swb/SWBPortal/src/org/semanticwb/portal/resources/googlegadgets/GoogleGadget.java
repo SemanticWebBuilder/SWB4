@@ -680,4 +680,16 @@ public class GoogleGadget extends GenericResource
             doAddFromList(request, response, paramsRequest);
         }
     }
+    public void asignGoogleGadget(String url)
+    {
+        this.getResourceBase().setAttribute(URL_ATTRIBUTE,url);
+        try
+        {
+            this.getResourceBase().updateAttributesToDB();
+        }
+        catch(Exception e)
+        {
+            log.error(e);
+        }
+    }
 }
