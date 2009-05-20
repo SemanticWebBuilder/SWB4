@@ -1211,6 +1211,51 @@ public class BlogResource extends GenericResource
 
     }
 
+    public void createBlog(String name,boolean asign)
+    {
+        Connection con = SWBUtils.DB.getDefaultConnection();
+        try
+        {
+            int blogid = 0;
+            PreparedStatement pt = con.prepareStatement("select max(blogid) as maximo from wbblog");
+            ResultSet rs = pt.executeQuery();
+            if ( rs.next() )
+            {
+                blogid = rs.getInt("maximo");
+            }
+            rs.close();
+            pt.close();
+            blogid++;
+            pt = con.prepareStatement("insert into wbblog(blogid,blogname) values(?,?)");
+            pt.setInt(1, blogid);
+            pt.setString(2, name);
+            pt.executeUpdate();
+            pt.close();
+            if ( asign )
+            {
+                asignBlog(blogid);
+            }
+
+        }
+        catch ( SQLException sqle )
+        {
+            log.error(sqle);
+        }
+        finally
+        {
+            if ( con != null )
+            {
+                try
+                {
+                    con.close();
+                }
+                catch ( SQLException sqle )
+                {
+                    log.error(sqle);
+                }
+            }
+        }
+    }
     private synchronized void createBlog(HttpServletRequest request, SWBActionResponse response, String name, boolean asign)
     {
         Connection con = SWBUtils.DB.getDefaultConnection();
@@ -1258,6 +1303,18 @@ public class BlogResource extends GenericResource
         }
     }
 
+    public void asignBlog(int blogid)
+    {
+        this.getResourceBase().setAttribute("blogid", String.valueOf(blogid));
+        try
+        {
+            this.getResourceBase().updateAttributesToDB();
+        }
+        catch ( SWBException afe )
+        {
+            log.error(afe);
+        }
+    }
     public void asignBlog(HttpServletRequest request, SWBActionResponse response, int blogid)
     {
         this.getResourceBase().setAttribute("blogid", String.valueOf(blogid));
