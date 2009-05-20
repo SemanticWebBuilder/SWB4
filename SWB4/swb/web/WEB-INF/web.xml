@@ -34,7 +34,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Connector</servlet-name>
-        <url-pattern>/resources/scripts/fckeditor/editor/filemanager/connectors/*</url-pattern>
+        <url-pattern>/swbadmin/js/fckeditor/editor/filemanager/connectors/*</url-pattern>
     </servlet-mapping>
     <!--WB-->
     <session-config>
