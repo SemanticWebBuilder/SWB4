@@ -78,7 +78,14 @@ namespace WBOffice4.Forms
                 ListViewItem item = new ListViewItem(portletInfo.title);
                 item.SubItems.Add(portletInfo.page.title);
                 item.SubItems.Add(portletInfo.page.site.title);
-                item.SubItems.Add(portletInfo.active.ToString());
+                if (portletInfo.active)
+                {
+                    item.SubItems.Add("Sí");
+                }
+                else
+                {
+                    item.SubItems.Add("No");
+                }
                 String version = portletInfo.version;
                 if (portletInfo.version == "*")
                 {
