@@ -34,7 +34,7 @@ namespace WBOffice4.Steps
             {
                 String repositoryName = this.Wizard.Data[SelectCategory.REPOSITORY_ID].ToString();
                 ContentType type = ((ContentType)this.Wizard.Data[TitleAndDescription.NODE_TYPE]);
-                PropertyInfo[] props = OfficeApplication.OfficeDocumentProxy.getContentProperties(repositoryName, type.id);
+                PropertyInfo[] props = OfficeApplication.OfficeDocumentProxy.getContentProperties(repositoryName, type.id);                
                 obj = TypeFactory.getObject(props, type.title);
             }
             this.grid.SelectedObject = obj;

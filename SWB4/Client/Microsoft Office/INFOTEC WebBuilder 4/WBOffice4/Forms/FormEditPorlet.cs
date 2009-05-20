@@ -72,16 +72,12 @@ namespace WBOffice4.Forms
 
             foreach (CalendarInfo info in OfficeApplication.OfficeDocumentProxy.getCalendars(pageInformation))
             {
-                ListViewItem item = new ListViewItem(info.title);
-                item.Tag = info;
-                item.SubItems.Add(info.active.ToString());
+                CalendarItem item = new CalendarItem(info);                
                 listViewCalendar.Items.Add(item);
             }
             foreach (CalendarInfo info in added)
             {
-                ListViewItem item = new ListViewItem(info.title);
-                item.Tag = info;
-                item.SubItems.Add(info.active.ToString());
+                CalendarItem item = new CalendarItem(info); 
                 listViewCalendar.Items.Add(item);
             }
 
@@ -106,8 +102,7 @@ namespace WBOffice4.Forms
                 CalendarInfo cal = new CalendarInfo();
                 cal.xml = xmlCalendar.OuterXml;
                 cal.title = frmPeriodicidad.textBoxTitle.Text;
-                ListViewItem item = new ListViewItem(cal.title);
-                item.SubItems.Add("sí");
+                CalendarItem item = new CalendarItem(cal);                
                 listViewCalendar.Items.Add(item);
             }
         }
@@ -116,7 +111,7 @@ namespace WBOffice4.Forms
         {
             if (this.listViewCalendar.SelectedItems.Count > 0)
             {
-                CalendarInfo cal = (CalendarInfo)this.listViewCalendar.SelectedItems[0].Tag;
+                CalendarInfo cal = ((CalendarItem)this.listViewCalendar.SelectedItems[0]).CalendarInfo;
                 FrmPeriodicidad frmPeriodicidad = new FrmPeriodicidad(listViewCalendar);
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(cal.xml);
@@ -140,118 +135,165 @@ namespace WBOffice4.Forms
                 this.textBoxDescription.Focus();
                 return;
             }
-            pageInformation.title=this.textBoxTitle.Text;
-            pageInformation.description=this.textBoxDescription.Text;
-            pageInformation.version = ((VersionInfo)this.comboBoxVersiones.SelectedItem).nameOfVersion;
-            OfficeApplication.OfficeDocumentProxy.updatePorlet(pageInformation);
-            if (this.checkBoxActive.Checked)
+            DialogResult res = MessageBox.Show(this, "Se va a realizar los cambios de la información de publicación.\r\n¿Desea continuar?", this.getTitle(), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (res == DialogResult.Yes)
             {
-                if (this.pageInformation.active)
+                pageInformation.title = this.textBoxTitle.Text;
+                pageInformation.description = this.textBoxDescription.Text;
+                pageInformation.version = ((VersionInfo)this.comboBoxVersiones.SelectedItem).nameOfVersion;
+                OfficeApplication.OfficeDocumentProxy.updatePorlet(pageInformation);
+                if (this.checkBoxActive.Checked)
                 {
-                    OfficeApplication.OfficeDocumentProxy.activateResource(pageInformation, this.checkBoxActive.Checked);
-                }
-                else
-                {
-                    if (OfficeApplication.OfficeDocumentProxy.needsSendToPublish(pageInformation))
-                    {
-                        this.checkBoxActive.Checked = pageInformation.active;
-                        DialogResult res = MessageBox.Show(this, "El documento requiere una autorización para activarse\r\n¿Desea envíar a publicar el contenido?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        if (res == DialogResult.Yes)
-                        {
-                            FormSendToAutorize formSendToAutorize = new FormSendToAutorize(pageInformation);
-                            formSendToAutorize.ShowDialog();
-                            if (formSendToAutorize.DialogResult == DialogResult.OK)
-                            {
-                                OfficeApplication.OfficeDocumentProxy.sendToAuthorize(pageInformation, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
-                            }
-                            else
-                            {
-                                MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);                                
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);                            
-                        }
-                    }
-                    else if (OfficeApplication.OfficeDocumentProxy.isInFlow(pageInformation))
-                    {
-                        this.checkBoxActive.Checked = pageInformation.active;
-                        MessageBox.Show(this, "El contenido se encuentra en proceso de ser autorizado.\r\nPara activarlo necesita terminar el proceso de autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);                                
-                    }
-                    else if (OfficeApplication.OfficeDocumentProxy.isAuthorized(pageInformation))
+                    if (this.pageInformation.active)
                     {
                         OfficeApplication.OfficeDocumentProxy.activateResource(pageInformation, this.checkBoxActive.Checked);
                     }
                     else
                     {
-                        this.checkBoxActive.Checked = pageInformation.active;
-                        DialogResult res=MessageBox.Show(this, "El contenido fue rechazado.\r\nPara activarlo necesita enviarlo a autorización de nuevo\r\n¿Desea enviarlo a autorización?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        if (res == DialogResult.Yes)
+                        if (OfficeApplication.OfficeDocumentProxy.needsSendToPublish(pageInformation))
                         {
-                            FormSendToAutorize formSendToAutorize = new FormSendToAutorize(pageInformation);
-                            formSendToAutorize.ShowDialog();
-                            if (formSendToAutorize.DialogResult == DialogResult.OK)
+                            this.checkBoxActive.Checked = pageInformation.active;
+                            DialogResult res = MessageBox.Show(this, "El documento requiere una autorización para activarse\r\n¿Desea envíar a publicar el contenido?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            if (res == DialogResult.Yes)
                             {
-                                OfficeApplication.OfficeDocumentProxy.sendToAuthorize(pageInformation, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
+                                FormSendToAutorize formSendToAutorize = new FormSendToAutorize(pageInformation);
+                                formSendToAutorize.ShowDialog();
+                                if (formSendToAutorize.DialogResult == DialogResult.OK)
+                                {
+                                    OfficeApplication.OfficeDocumentProxy.sendToAuthorize(pageInformation, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
+                                }
+                                else
+                                {
+                                    MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
                             }
                             else
                             {
                                 MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                         }
+                        else if (OfficeApplication.OfficeDocumentProxy.isInFlow(pageInformation))
+                        {
+                            this.checkBoxActive.Checked = pageInformation.active;
+                            MessageBox.Show(this, "El contenido se encuentra en proceso de ser autorizado.\r\nPara activarlo necesita terminar el proceso de autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else if (OfficeApplication.OfficeDocumentProxy.isAuthorized(pageInformation))
+                        {
+                            OfficeApplication.OfficeDocumentProxy.activateResource(pageInformation, this.checkBoxActive.Checked);
+                        }
                         else
                         {
-                            MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);                            
+                            this.checkBoxActive.Checked = pageInformation.active;
+                            res = MessageBox.Show(this, "El contenido fue rechazado.\r\nPara activarlo necesita enviarlo a autorización de nuevo\r\n¿Desea enviarlo a autorización?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            if (res == DialogResult.Yes)
+                            {
+                                FormSendToAutorize formSendToAutorize = new FormSendToAutorize(pageInformation);
+                                formSendToAutorize.ShowDialog();
+                                if (formSendToAutorize.DialogResult == DialogResult.OK)
+                                {
+                                    OfficeApplication.OfficeDocumentProxy.sendToAuthorize(pageInformation, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
+                                }
+                                else
+                                {
+                                    MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show(this, "El contenido no se activo, ya que se requiere una autorización", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                OfficeApplication.OfficeDocumentProxy.activateResource(pageInformation, this.checkBoxActive.Checked);
-            }
-            PropertyInfo[] properties = null;
-            String[] values = null;
-            if (obj != null)
-            {
-                properties = OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
-                values = TypeFactory.getValues(properties, obj);
+                else
+                {
+                    OfficeApplication.OfficeDocumentProxy.activateResource(pageInformation, this.checkBoxActive.Checked);
+                }
+                foreach (ListViewItem calendar in this.listViewCalendar.Items)
+                {
+                    CalendarItem calendarItem = (CalendarItem)calendar;
+                    CalendarInfo cal = (CalendarInfo)calendarItem.CalendarInfo;
+                    bool active = cal.active;
+                    if (cal.id == null)
+                    {
+                        // insert
+                        CalendarInfo calinfo = OfficeApplication.OfficeDocumentProxy.insertCalendar(pageInformation, cal.title, cal.xml);
+                        added.Remove(cal);
+                        OfficeApplication.OfficeDocumentProxy.activeCalendar(pageInformation, calinfo, active);
+                        cal.id = calinfo.id;
+                    }
+                    else
+                    {
+                        // update
+                        OfficeApplication.OfficeDocumentProxy.updateCalendar(pageInformation, cal);
+                        OfficeApplication.OfficeDocumentProxy.activeCalendar(pageInformation, cal, active);
+                    }
+
+                }
+
+                PropertyInfo[] properties = null;
+                String[] values = null;
+                if (obj != null)
+                {
+                    properties = OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
+                    values = TypeFactory.getValues(properties, obj);
+                    try
+                    {
+                        OfficeApplication.OfficeDocumentProxy.validateViewValues(repositoryName, contentID, properties, values);
+                    }
+                    catch (Exception ue)
+                    {
+                        MessageBox.Show(this, ue.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        tabPageProperties.Focus();
+                        return;
+                    }
+                }
                 try
                 {
-                    OfficeApplication.OfficeDocumentProxy.validateViewValues(repositoryName, contentID, properties, values);
+                    this.Cursor = Cursors.WaitCursor;
+                    if (properties != null && values != null)
+                    {
+                        int i = 0;
+                        foreach (PropertyInfo prop in properties)
+                        {
+                            String value = values[i];
+                            OfficeApplication.OfficeDocumentProxy.setViewPropertyValue(this.pageInformation, prop, value);
+                            i++;
+                        }
+                    }
                 }
                 catch (Exception ue)
                 {
                     MessageBox.Show(this, ue.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    tabPageProperties.Focus();
-                    return;
                 }
-            }
-            try
-            {
-                this.Cursor = Cursors.WaitCursor;
-                if (properties != null && values != null)
+                finally
                 {
-                    int i = 0;
-                    foreach (PropertyInfo prop in properties)
-                    {
-                        String value = values[i];
-                        OfficeApplication.OfficeDocumentProxy.setViewPropertyValue(this.pageInformation, prop, value);
-                        i++;
-                    }
+                    this.Cursor = Cursors.Default;
                 }
-            }
-            catch (Exception ue)
-            {
-                MessageBox.Show(this, ue.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
             }
 
             this.DialogResult = DialogResult.OK;
         }
+
+        private void toolStripButtonDelete_Click(object sender, EventArgs e)
+        {
+            if (this.listViewCalendar.SelectedItems.Count > 0)
+            {
+                CalendarInfo cal = ((CalendarItem)this.listViewCalendar.SelectedItems[0]).CalendarInfo;
+                if (cal.id == null) // Es nuevo
+                {
+                    added.Remove(cal);
+                    loadCalendars();
+                }
+                else 
+                {
+                    OfficeApplication.OfficeDocumentProxy.deleteCalendar(this.pageInformation, cal);
+                    loadCalendars();
+
+                }
+            }
+        }
+
+        
     }
 }
