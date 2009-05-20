@@ -15,7 +15,7 @@
     SWBResourceURL url = paramRequest.getRenderUrl();
     url.setCallMethod(SWBResourceURL.Call_CONTENT);
     url.setMode("saveContent");
-    String action = (request.getParameter("operation") != null) ? request.getParameter("operation") : "";
+    String action = (request.getParameter("tmpPath") != null) ? "tmp" : "";  //request.getParameter("tmpPath")
     int version = (request.getParameter("version") != null && !"".equals(request.getParameter("version")))
                      ? Integer.parseInt(request.getParameter("version"))
                      : 0;
@@ -67,7 +67,11 @@
       function callUpload() {
         var f = document.frames ? document.frames["EditorDefault___Frame"] : document.getElementById("EditorDefault___Frame");
         var p = f.contentWindow || f.document;
-        //alert('location: ' + p.location);
+        var vscr = window.frames["EditorDefault___Frame"].document.getElementsByTagName("script");
+        /*/for (var i = 0; i < vscr.length; i++) {
+            alert(vscr.innerHTML);
+        }*/
+        
         //Esta liga abre el cuadro de dialogo para cargar archivos con los programas de FCKEditor
         //p.FCKDialog.OpenDialog('FCKDialog_UploadFile', 'UploadFile', '/swb/resources/scripts/fckeditor/editor/dialog/fck_HTMLfile.html', 450, 390, null, this.window, false);
         p.FCKDialog.OpenDialog('FCKDialog_UploadFile', 'UploadFile', '<%=urlNewVersion.toString()%>', 450, 390, null, this.window, false);
@@ -142,24 +146,3 @@
     <form name="newFileForm" id="newFileForm" method="post" action="<%=url.toString()%>">
         <input type="hidden" name="tmpPath" value="<%=portletWorkPath%>" />
     </form>
-    <p><a href="javascript:void(0);findForms();">Ejecuta funcion</a></p>
-<%
-    if (showApplet) {
-        String clientFilePath = (String) request.getAttribute("clientFilePath");
-        String strAttaches = (String) request.getAttribute("strAttaches");
-        //String portletWorkPath = SWBPlatform.getWorkPath() + base.getWorkPath()
-        //        + "/" + version + "/";
-%>
-    <APPLET WIDTH="100%" HEIGHT="100%" CODE="applets.dragdrop.DragDrop.class" codebase="<%=SWBPlatform.getContextPath()%>" archive="swbadmin/lib/DragDrop.jar, swbadmin/lib/WBCommons.jar" border=0>
-    <PARAM NAME="webpath" VALUE="<%=SWBPlatform.getContextPath()%>/">
-    <PARAM NAME="foreground" VALUE="000000">
-    <PARAM NAME="background" VALUE="979FC3">
-    <PARAM NAME="foregroundSelection" VALUE="ffffff">
-    <PARAM NAME="backgroundSelection" VALUE="666699">
-    <PARAM NAME="path" value="<%=portletWorkPath%>images/">
-    <PARAM NAME="clientpath" value="<%=clientFilePath%>">
-    <PARAM NAME="files" value="<%=strAttaches%>">
-    </APPLET>
-<%
-   }
-%>
