@@ -263,12 +263,14 @@
             this.columnHeader1,
             this.columnHeader2});
             this.listViewCalendar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewCalendar.FullRowSelect = true;
             this.listViewCalendar.Location = new System.Drawing.Point(0, 25);
             this.listViewCalendar.Name = "listViewCalendar";
             this.listViewCalendar.Size = new System.Drawing.Size(411, 193);
             this.listViewCalendar.TabIndex = 1;
             this.listViewCalendar.UseCompatibleStateImageBehavior = false;
             this.listViewCalendar.View = System.Windows.Forms.View.Details;
+            this.listViewCalendar.SelectedIndexChanged += new System.EventHandler(this.listViewCalendar_SelectedIndexChanged);
             // 
             // columnHeader1
             // 

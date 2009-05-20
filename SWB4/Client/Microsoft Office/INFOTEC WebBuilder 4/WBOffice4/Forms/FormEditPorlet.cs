@@ -294,6 +294,17 @@ namespace WBOffice4.Forms
             }
         }
 
+        private void listViewCalendar_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.toolStripButtonDelete.Enabled = false;
+            this.toolStripButtonEdit.Enabled = false;
+            if (this.listViewCalendar.SelectedItems.Count > 0)
+            {
+                this.toolStripButtonDelete.Enabled = true;
+                this.toolStripButtonEdit.Enabled = true;
+            }
+        }
+
         
     }
 }
