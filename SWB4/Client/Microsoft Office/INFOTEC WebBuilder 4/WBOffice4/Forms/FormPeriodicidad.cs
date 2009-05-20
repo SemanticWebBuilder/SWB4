@@ -477,6 +477,10 @@ namespace WBOffice4.Forms
                         String sdate = "";
                         if (siteminterval[0] != null)
                         {
+                            if (!siteminterval[0].StartsWith("/"))
+                            {
+                                siteminterval[0] = "/" + siteminterval[0];
+                            }
                             sdate = siteminterval[0].Substring(1);
                             int pos = sdate.IndexOf("/");
                             String mes = sdate.Substring(0, pos);
@@ -486,12 +490,17 @@ namespace WBOffice4.Forms
                             String dia = sdate.Substring(0, pos);
                             sdate = sdate.Substring(pos + 1);
                             String ano = sdate;
-
-                            this.dateTimeInitDate.Value = System.Convert.ToDateTime(dia + "/" + mes + "/" + ano);
+                            
+                            //this.dateTimeInitDate.Value = System.Convert.ToDateTime(dia + "/" + mes + "/" + ano);
+                            this.dateTimeInitDate.Value = new DateTime(int.Parse(ano), int.Parse(mes), int.Parse(dia));
                         }
 
                         if (siteminterval[1] != null)
                         {
+                            if (!siteminterval[1].StartsWith("/"))
+                            {
+                                siteminterval[1] = "/" + siteminterval[0];
+                            }
                             sdate = siteminterval[1].Substring(1);
                             int pos = sdate.IndexOf("/");
                             String mes = sdate.Substring(0, pos);
@@ -504,7 +513,8 @@ namespace WBOffice4.Forms
                             String ano = sdate;
 
                             this.endselect.Checked = true;
-                            this.dateTimeendDate.Value = System.Convert.ToDateTime(dia + "/" + mes + "/" + ano);
+                            //this.dateTimeendDate.Value = System.Convert.ToDateTime(dia + "/" + mes + "/" + ano);
+                            this.dateTimeendDate.Value = new DateTime(int.Parse(ano), int.Parse(mes), int.Parse(dia));
                         }
                         else
                         {
