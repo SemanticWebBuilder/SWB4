@@ -123,6 +123,7 @@ namespace WBOffice4.Forms
                 if (res == DialogResult.OK)
                 {
                     cal.xml = frmPeriodicidad.Document.OuterXml;
+                    calendarItem.Title = frmPeriodicidad.textBoxTitle.Text;
                     calendarItem.Active=frmPeriodicidad.isActive();
                 }
 
