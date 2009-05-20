@@ -368,7 +368,7 @@
     <j.1:resourceType rdf:resource="http://www.semanticwb.org/SWBAdmin#swb_ResourceType:JSPResource"/>
     <j.1:title>Information</j.1:title>
     <j.1:updated>2009-02-02T17:04:08.156</j.1:updated>
-    <j.1:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">577</j.1:views>
+    <j.1:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">578</j.1:views>
     <j.1:xml>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;resource&gt;&lt;jsppath&gt;/swbadmin/jsp/SemObjectEditor.jsp&lt;/jsppath&gt;&lt;/resource&gt;</j.1:xml>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
   </rdf:Description>
@@ -641,7 +641,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#swb_Reference:16">
-    <j.1:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.1:active>
+    <j.1:active rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</j.1:active>
     <j.1:userGroup rdf:resource="http://www.semanticwb.org/uradm#swb_UserGroup:admin"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef"/>
   </rdf:Description>
@@ -1269,7 +1269,7 @@
     <j.1:title>Grupos</j.1:title>
     <j.1:updated>2009-02-09T22:30:14.531</j.1:updated>
     <j.1:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</j.1:valid>
-    <j.1:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">54</j.1:views>
+    <j.1:views rdf:datatype="http://www.w3.org/2001/XMLSchema#long">55</j.1:views>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resource"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwb.org/SWBAdmin#WebPage:bh_PFlows">
