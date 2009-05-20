@@ -96,7 +96,7 @@ public class HTMLContent extends GenericResource {
                 } else { //cuando se carga el archivo temporal
                     System.out.println("Carga desde tmpPath: " + SWBPlatform.getWorkPath() + tmpPath);
                     content = SWBUtils.IO.readInputStream(
-                            SWBPlatform.getFileFromWorkPath(tmpPath));
+                            SWBPlatform.getFileFromWorkPath(tmpPath + "index.html"));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -164,6 +164,8 @@ public class HTMLContent extends GenericResource {
         Resource resource = paramRequest.getResourceBase();
         String contentPath = (String) request.getSession().getAttribute("directory");
         String textToSave = request.getParameter("EditorDefault");
+        boolean deleteTmp = (request.getParameter("operation") != null) 
+                            ? true : false;
         String filename = null;
         boolean textSaved = false;
         VersionInfo version = new VersionInfo(resource.getSemanticObject());
@@ -197,6 +199,13 @@ public class HTMLContent extends GenericResource {
                 //resource.setActualVersion(version);
                 //resource.setLastVersion(version);
                 textSaved = true;
+                if (deleteTmp) {
+                    //eliminar el directorio tmp de la version anterior
+                    SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() 
+                            + resource.getWorkPath() + "/"
+                            + (versionNumber > 1 ? versionNumber - 1 : versionNumber)
+                            + "/tmp");
+                }
             } catch (Exception e) {
                 log.error("Al escribir el archivo", e);
             }
@@ -230,8 +239,21 @@ public class HTMLContent extends GenericResource {
         String fileContent = null;
         VersionInfo version = new VersionInfo(resource.getSemanticObject());
         //request.getSession().setAttribute("directory", null);
+        String portletWorkPath = SWBPlatform.getWorkPath()
+                + resource.getWorkPath() + "/" 
+                + (version.getVersionNumber() > 1
+                   ? version.getVersionNumber() - 1 : 1)
+                + "/tmp/";
         String clientFilePath = "";
         String filename = null;
+        File file = new File(portletWorkPath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        File fileTmp = new File(portletWorkPath + "index.html");
+        if (fileTmp.exists()) {
+            fileTmp.delete();
+        }
         WBFileUpload fUpload = new WBFileUpload();
         fUpload.getFiles(request);
         filename = fUpload.getFileName("NewFile");
@@ -244,15 +266,6 @@ public class HTMLContent extends GenericResource {
         i = filename.lastIndexOf("/");
         if (i != -1) {
             filename = filename.substring(i + 1);
-        }
-        String portletWorkPath = SWBPlatform.getWorkPath()
-                + resource.getWorkPath() + "/" 
-                + (version.getVersionNumber() > 1
-                   ? version.getVersionNumber() - 1 : 1)
-                + "/tmp/";
-        File file = new File(portletWorkPath);
-        if (!file.exists()) {
-            file.mkdirs();
         }
         fUpload.saveFile("NewFile", portletWorkPath);
         String strAttaches = fUpload.FindAttaches("NewFile");
@@ -512,7 +525,7 @@ public class HTMLContent extends GenericResource {
         output.append("\n        function fillHiddenPath() { ");
         output.append("\n          var localName = document.frmUpload.NewFile.value; ");
         output.append("\n          document.frmUpload.hiddenPath.value = localName.substring(0, localName.lastIndexOf(\"\\\\\"));");
-        output.append("\n          alert('hiddenPath: ' + document.frmUpload.hiddenPath.value + '\\nNewFile: ' + document.frmUpload.NewFile.value); ");
+        output.append("\n          //alert('hiddenPath: ' + document.frmUpload.hiddenPath.value + '\\nNewFile: ' + document.frmUpload.NewFile.value); ");
         output.append("\n        } ");
         output.append("\n	</script>");
         output.append("\n</head>");
