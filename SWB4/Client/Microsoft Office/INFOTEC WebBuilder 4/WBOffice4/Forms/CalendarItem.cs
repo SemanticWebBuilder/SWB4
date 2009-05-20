@@ -13,13 +13,39 @@ namespace WBOffice4.Forms
         {
             this.info = info;
             this.Text = info.title;
-            this.SubItems.Add(info.active.ToString());
+            if (info.active)
+            {
+                this.SubItems.Add("Si");
+            }
+            else
+            {
+                this.SubItems.Add("No");
+            }
         }
         public CalendarInfo CalendarInfo
         {
             get
             {
                 return info;
+            }
+        }
+        public bool Active
+        {
+            get
+            {
+                return info.active;
+            }
+            set
+            {
+                info.active = value;
+                if (info.active)
+                {
+                    this.SubItems[0].Text="Si";
+                }
+                else
+                {
+                    this.SubItems[0].Text = "No";
+                }
             }
         }
     }
