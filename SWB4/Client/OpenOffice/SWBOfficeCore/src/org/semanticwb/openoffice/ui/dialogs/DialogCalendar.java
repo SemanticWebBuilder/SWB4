@@ -97,7 +97,7 @@ public class DialogCalendar extends java.awt.Dialog
                 }
                 if (xml.getElementsByTagName("iterations").getLength() > 0)
                 {
-                    this.jButtonRegularPeriods.setText("Ver periodos regualres activados");
+                    this.jButtonRegularPeriods.setText("Ver periodos regulares activados");
                 }
             }
             catch (ParseException pe)
