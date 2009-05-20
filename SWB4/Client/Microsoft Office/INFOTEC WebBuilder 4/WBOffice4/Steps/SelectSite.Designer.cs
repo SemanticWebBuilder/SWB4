@@ -47,7 +47,7 @@
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "home.png");
-            this.imageList1.Images.SetKeyName(1, "site.ico");
+            this.imageList1.Images.SetKeyName(1, "site.png");
             this.imageList1.Images.SetKeyName(2, "page.png");
             // 
             // toolStrip1
