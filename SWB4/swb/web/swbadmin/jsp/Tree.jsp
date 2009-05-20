@@ -451,13 +451,13 @@
                 menus.put(getMenuItem("Agregar "+rcls.getDisplayName(getUserLanguage()), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+rcls.getDisplayName(getUserLanguage()))));
                 dropacc.put(rcls.getClassId());
                 //add subclasess
-                //Iterator<SemanticClass> it=rcls.listSubClasses();
-                //while(it.hasNext())
-                //{
-                //)    SemanticClass scls=it.next();
-                //    menus.put(getMenuItem("Agregar "+scls.getDisplayName(getUserLanguage()), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+scls.getDisplayName(getUserLanguage()))));
-                //    dropacc.put(scls.getClassId());
-                //}
+                Iterator<SemanticClass> it=rcls.listSubClasses();
+                while(it.hasNext())
+                {
+                    SemanticClass scls=it.next();
+                    menus.put(getMenuItem("Agregar "+scls.getDisplayName(getUserLanguage()), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+scls.getDisplayName(getUserLanguage()))));
+                    dropacc.put(scls.getClassId());
+                }
             }
         }
         
