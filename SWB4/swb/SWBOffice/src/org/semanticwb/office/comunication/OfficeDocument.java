@@ -266,7 +266,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                         {
                             OfficeResource officeResource = new OfficeResource(obj);
-                            if (officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow().equals("*"))
+                            if (officeResource.getRepositoryName()!=null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow().equals("*"))
                             {
                                 InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
                                 officeResource.loadContent(in);
@@ -363,7 +363,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                         {
                             OfficeResource officeResource = new OfficeResource(obj);
-                            if (officeResource.getRepositoryName().equals(repositoryName))
+                            if (officeResource.getRepositoryName()!=null && officeResource.getRepositoryName().equals(repositoryName))
                             {
                                 InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
                                 officeResource.loadContent(in);
@@ -585,7 +585,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                             if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                             {
                                 OfficeResource officeResource = new OfficeResource(obj);
-                                if (officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow() != null)
+                                if (officeResource.getRepositoryName()!=null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow() != null)
                                 {
                                     if (officeResource.getVersionToShow().equals("*"))
                                     {
