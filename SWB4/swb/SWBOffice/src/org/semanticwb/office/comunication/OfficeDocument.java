@@ -805,7 +805,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                 {
                     OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
-                    if (officeResource.getRepositoryName().equals(repositoryName))
+                    if (officeResource.getRepositoryName()!=null && officeResource.getRepositoryName().equals(repositoryName))
                     {
                         Resource base=site.getResource(obj.getId());
                         officeResource.setResourceBase(base);
