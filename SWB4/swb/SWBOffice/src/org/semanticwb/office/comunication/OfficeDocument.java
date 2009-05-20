@@ -265,7 +265,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         SemanticObject obj = it.next();
                         if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                         {
-                            OfficeResource officeResource = new OfficeResource(obj);
+                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                             if (officeResource.getRepositoryName()!=null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow().equals("*"))
                             {
                                 InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
@@ -356,13 +356,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 Iterator<WebSite> sites = SWBContext.listWebSites();
                 while (sites.hasNext())
                 {
-                    Iterator<SemanticObject> it = sites.next().getSemanticObject().getModel().listSubjects(prop_content, contentId);
+                    WebSite site=sites.next();
+                    Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(prop_content, contentId);
                     while (it.hasNext())
                     {
                         SemanticObject obj = it.next();
                         if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                         {
-                            OfficeResource officeResource = new OfficeResource(obj);
+                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                             if (officeResource.getRepositoryName()!=null && officeResource.getRepositoryName().equals(repositoryName))
                             {
                                 InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
@@ -451,7 +452,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     SemanticObject obj = it.next();
                     if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                     {
-                        OfficeResource officeResource = new OfficeResource(obj);
+                        OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                         site.removeResource(officeResource.getId());
                     }
                 }
@@ -574,17 +575,18 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     Iterator<WebSite> sites = SWBContext.listWebSites();
                     while (sites.hasNext())
                     {
+                        WebSite site=sites.next();
                         if (info.published)
                         {
                             break;
                         }
-                        Iterator<SemanticObject> itSubjects = sites.next().getSemanticObject().getModel().listSubjects(prop_content, contentId);
+                        Iterator<SemanticObject> itSubjects = site.getSemanticObject().getModel().listSubjects(prop_content, contentId);
                         while (itSubjects.hasNext())
                         {
                             SemanticObject obj = itSubjects.next();
                             if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                             {
-                                OfficeResource officeResource = new OfficeResource(obj);
+                                OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                                 if (officeResource.getRepositoryName()!=null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow() != null)
                                 {
                                     if (officeResource.getVersionToShow().equals("*"))
@@ -1418,8 +1420,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         Resource resource = site.getResource(info.id);
-
-        OfficeResource officeResource = new OfficeResource();
+        OfficeResource officeResource = OfficeResource.getOfficeResource(info.id, site);
         officeResource.setResourceBase(resource);
         officeResource.setVersionToShow(newVersion);
         InputStream in = getContent(officeResource.getRepositoryName(), officeResource.getContent(), newVersion);
@@ -1461,7 +1462,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         Resource resource = site.getResource(info.id);
-        OfficeResource officeResource = new OfficeResource();
+        OfficeResource officeResource = OfficeResource.getOfficeResource(info.id, site);
         officeResource.setResourceBase(resource);
         try
         {
@@ -1481,7 +1482,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         Resource resource = site.getResource(info.id);
-        OfficeResource officeResource = new OfficeResource();
+        OfficeResource officeResource = OfficeResource.getOfficeResource(info.id, site);
         officeResource.setResourceBase(resource);
         return officeResource.getVersionToShow();
     }
