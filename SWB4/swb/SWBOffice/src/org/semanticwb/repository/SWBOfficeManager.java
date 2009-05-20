@@ -118,7 +118,7 @@ public class SWBOfficeManager implements OfficeManager
                 SWBModel model = models.next();
                 if (model.getSemanticObject().getSemanticClass().equals(Workspace.sclass) || model.getSemanticObject().getSemanticClass().isSubClass(Workspace.sclass))
                 {
-                    
+
                     String name = model.getId() + "@" + manager.getName();
                     RepositoryInfo info = new RepositoryInfo(name);
                     info.exclusive = true;
@@ -209,34 +209,36 @@ public class SWBOfficeManager implements OfficeManager
             while (propertiesClazz.hasNext())
             {
                 SemanticProperty prop = propertiesClazz.next();
-
-                if (prop.isDataTypeProperty() && !prop.isBinary() && prop.getPrefix() != null)
+                if (!prop.getURI().equals(OfficeContent.swboffice_description.getURI()) && !prop.getURI().equals(OfficeContent.swboffice_title.getURI()))
                 {
-
-                    SemanticObject displayObj = prop.getDisplayProperty();
-                    if (displayObj != null)
+                    if (prop.isDataTypeProperty() && !prop.isBinary() && prop.getPrefix() != null)
                     {
-                        DisplayProperty propDisplay = new DisplayProperty(displayObj);
-                        if (!propDisplay.isHidden())
+
+                        SemanticObject displayObj = prop.getDisplayProperty();
+                        if (displayObj != null)
                         {
-                            PropertyInfo info = new PropertyInfo();
-                            info.id = prop.getPrefix() + ":" + prop.getName();
-                            info.isRequired = prop.isRequired();
-                            info.title = prop.getDisplayName();
-                            if (prop.isString())
+                            DisplayProperty propDisplay = new DisplayProperty(displayObj);
+                            if (!propDisplay.isHidden())
                             {
-                                info.type = "String";
-                                properties.add(info);
-                            }
-                            else if (prop.isBoolean())
-                            {
-                                info.type = "Boolean";
-                                properties.add(info);
-                            }
-                            else if (prop.isInt())
-                            {
-                                info.type = "Integer";
-                                properties.add(info);
+                                PropertyInfo info = new PropertyInfo();
+                                info.id = prop.getPrefix() + ":" + prop.getName();
+                                info.isRequired = prop.isRequired();
+                                info.title = prop.getDisplayName();
+                                if (prop.isString())
+                                {
+                                    info.type = "String";
+                                    properties.add(info);
+                                }
+                                else if (prop.isBoolean())
+                                {
+                                    info.type = "Boolean";
+                                    properties.add(info);
+                                }
+                                else if (prop.isInt())
+                                {
+                                    info.type = "Integer";
+                                    properties.add(info);
+                                }
                             }
                         }
                     }
