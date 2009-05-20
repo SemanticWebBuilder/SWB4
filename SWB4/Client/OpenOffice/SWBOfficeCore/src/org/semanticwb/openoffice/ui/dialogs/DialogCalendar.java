@@ -481,35 +481,38 @@ public class DialogCalendar extends java.awt.Dialog
         Element resource = new Element("Resource");
         doc.setRootElement(resource);
 
+        Element interval = new Element("interval");
+        resource.addContent(interval);
+
         Element inidate = new Element("inidate");
         String date = DATE_SIMPLEFORMAT_XML.format(((Date) jSpinnerInitDate.getValue()));
         inidate.setText(date);
-        resource.addContent(inidate);
+        interval.addContent(inidate);
         if (jRadioButtonEndSelect.isSelected())
         {
             date = DATE_SIMPLEFORMAT_XML.format(((Date) jSpinnerEndDate.getValue()));
             Element enddate = new Element("enddate");
             enddate.setText(date);
-            resource.addContent(enddate);
+            interval.addContent(enddate);
         }
         if (jCheckBoxByTime.isSelected())
         {
             Element starthour = new Element("starthour");
             date = TIME_SIMPLEFORMAT.format(((Date) jSpinnerInitTime.getValue()));
             starthour.setText(date);
-            resource.addContent(starthour);
+            interval.addContent(starthour);
 
             Element endhour = new Element("endhour");
             date = TIME_SIMPLEFORMAT.format(((Date) jSpinnerEndTime.getValue()));
             endhour.setText(date);
 
-            resource.addContent(endhour);
+            interval.addContent(endhour);
 
         }
         Element periods = this.dialogRegularPeriods.getElement();
         if (periods != null)
         {
-            resource.addContent(periods);
+            interval.addContent(periods);
         }
         return doc;
     }
