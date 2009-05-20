@@ -40,11 +40,11 @@ namespace WBOffice4.Forms
                 info.active = value;
                 if (info.active)
                 {
-                    this.SubItems[0].Text="Si";
+                    this.SubItems[1].Text="Si";
                 }
                 else
                 {
-                    this.SubItems[0].Text = "No";
+                    this.SubItems[1].Text = "No";
                 }
             }
         }
