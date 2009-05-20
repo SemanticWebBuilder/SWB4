@@ -306,6 +306,7 @@ namespace WBOffice4.Forms
         private void toolStripButtonPublish_Click(object sender, EventArgs e)
         {
             document.Publish();
+            loadPorlets();
         }
         
     }
