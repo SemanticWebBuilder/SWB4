@@ -99,6 +99,7 @@ namespace WBOffice4.Forms
         private NumericUpDown yday;
         private NumericUpDown yyear;
         private NumericUpDown mmonth2;
+        private CheckBox checkBoxActive;
 		ListView list;
 		/// <summary>
 		/// Constructor de forma para configurar periodicidad
@@ -106,7 +107,7 @@ namespace WBOffice4.Forms
 		/// <param name="item">Peridiocidad a cambiar</param>
 		/// <param name="user">Usuario</param>
 		/// <param name="list">Lista de periodicidades</param>
-		public FrmPeriodicidad(ListView list)
+		public FrmPeriodicidad(ListView list,bool active)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -114,7 +115,12 @@ namespace WBOffice4.Forms
 			InitializeComponent();
             this.list=list;
             buttonAvanzado_Click(null, null);
+            this.checkBoxActive.Checked = active;
 		}
+        public bool isActive()
+        {
+            return this.checkBoxActive.Checked;
+        }
         public XmlDocument Document
         {
             get
@@ -499,7 +505,7 @@ namespace WBOffice4.Forms
                         {
                             if (!siteminterval[1].StartsWith("/"))
                             {
-                                siteminterval[1] = "/" + siteminterval[0];
+                                siteminterval[1] = "/" + siteminterval[1];
                             }
                             sdate = siteminterval[1].Substring(1);
                             int pos = sdate.IndexOf("/");
@@ -765,6 +771,7 @@ namespace WBOffice4.Forms
             this.periodicidad = new System.Windows.Forms.CheckBox();
             this.buttonCancelar = new System.Windows.Forms.Button();
             this.buttonAceptar = new System.Windows.Forms.Button();
+            this.checkBoxActive = new System.Windows.Forms.CheckBox();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox9.SuspendLayout();
@@ -1318,6 +1325,7 @@ namespace WBOffice4.Forms
             // 
             // groupBox11
             // 
+            this.groupBox11.Controls.Add(this.checkBoxActive);
             this.groupBox11.Controls.Add(this.label3);
             this.groupBox11.Controls.Add(this.textBoxTitle);
             this.groupBox11.Controls.Add(this.groupBox6);
@@ -1398,6 +1406,12 @@ namespace WBOffice4.Forms
             resources.ApplyResources(this.buttonAceptar, "buttonAceptar");
             this.buttonAceptar.Name = "buttonAceptar";
             this.buttonAceptar.Click += new System.EventHandler(this.buttonAceptar_Click);
+            // 
+            // checkBoxActive
+            // 
+            resources.ApplyResources(this.checkBoxActive, "checkBoxActive");
+            this.checkBoxActive.Name = "checkBoxActive";
+            this.checkBoxActive.UseVisualStyleBackColor = true;
             // 
             // FrmPeriodicidad
             // 

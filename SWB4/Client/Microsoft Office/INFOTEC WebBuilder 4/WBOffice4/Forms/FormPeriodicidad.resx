@@ -319,7 +319,7 @@
     <value>groupBox11</value>
   </data>
   <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <metadata name="groupBox1.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -1099,6 +1099,9 @@
     <value>1</value>
   </data>
   <metadata name="groupBox8.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="mmonth2.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="mmonth2.Location" type="System.Drawing.Point, System.Drawing">
@@ -2058,6 +2061,36 @@
   <metadata name="groupBox11.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <metadata name="checkBoxActive.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="checkBoxActive.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="checkBoxActive.Location" type="System.Drawing.Point, System.Drawing">
+    <value>477, 16</value>
+  </data>
+  <data name="checkBoxActive.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
+  </data>
+  <data name="checkBoxActive.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="checkBoxActive.Text" xml:space="preserve">
+    <value>Activar</value>
+  </data>
+  <data name="&gt;&gt;checkBoxActive.Name" xml:space="preserve">
+    <value>checkBoxActive</value>
+  </data>
+  <data name="&gt;&gt;checkBoxActive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBoxActive.Parent" xml:space="preserve">
+    <value>groupBox11</value>
+  </data>
+  <data name="&gt;&gt;checkBoxActive.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <metadata name="label3.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -2086,7 +2119,7 @@
     <value>groupBox11</value>
   </data>
   <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <metadata name="textBoxTitle.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -2098,7 +2131,7 @@
     <value>50</value>
   </data>
   <data name="textBoxTitle.Size" type="System.Drawing.Size, System.Drawing">
-    <value>480, 20</value>
+    <value>400, 20</value>
   </data>
   <data name="textBoxTitle.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2113,7 +2146,7 @@
     <value>groupBox11</value>
   </data>
   <data name="&gt;&gt;textBoxTitle.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <metadata name="groupBox6.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -2290,7 +2323,7 @@
     <value>groupBox11</value>
   </data>
   <data name="&gt;&gt;groupBox6.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <metadata name="periodicidad.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -2323,7 +2356,7 @@
     <value>groupBox11</value>
   </data>
   <data name="&gt;&gt;periodicidad.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="groupBox11.Location" type="System.Drawing.Point, System.Drawing">
     <value>8, 0</value>

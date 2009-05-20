@@ -94,12 +94,13 @@ namespace WBOffice4.Forms
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
-            FrmPeriodicidad frmPeriodicidad = new FrmPeriodicidad(listViewCalendar);
+            FrmPeriodicidad frmPeriodicidad = new FrmPeriodicidad(listViewCalendar,false);
             frmPeriodicidad.ShowDialog(this);
             if (frmPeriodicidad.DialogResult == DialogResult.OK)
             {
                 XmlDocument xmlCalendar = frmPeriodicidad.Document;
                 CalendarInfo cal = new CalendarInfo();
+                cal.active = frmPeriodicidad.isActive();
                 cal.xml = xmlCalendar.OuterXml;
                 cal.title = frmPeriodicidad.textBoxTitle.Text;
                 CalendarItem item = new CalendarItem(cal);                
@@ -111,13 +112,20 @@ namespace WBOffice4.Forms
         {
             if (this.listViewCalendar.SelectedItems.Count > 0)
             {
-                CalendarInfo cal = ((CalendarItem)this.listViewCalendar.SelectedItems[0]).CalendarInfo;
-                FrmPeriodicidad frmPeriodicidad = new FrmPeriodicidad(listViewCalendar);
+                CalendarItem calendarItem = (CalendarItem)this.listViewCalendar.SelectedItems[0];
+                CalendarInfo cal = calendarItem.CalendarInfo;
+                FrmPeriodicidad frmPeriodicidad = new FrmPeriodicidad(listViewCalendar,cal.active);
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(cal.xml);
                 frmPeriodicidad.textBoxTitle.Text = cal.title;
                 frmPeriodicidad.Document = doc;
-                frmPeriodicidad.ShowDialog(this);
+                DialogResult res=frmPeriodicidad.ShowDialog(this);
+                if (res == DialogResult.OK)
+                {
+                    cal.xml = frmPeriodicidad.Document.OuterXml;
+                    calendarItem.Active=frmPeriodicidad.isActive();
+                }
+
             }
         }
 
