@@ -135,7 +135,7 @@ namespace WBOffice4.Forms
                 this.textBoxDescription.Focus();
                 return;
             }
-            DialogResult res = MessageBox.Show(this, "Se va a realizar los cambios de la información de publicación.\r\n¿Desea continuar?", this.getTitle(), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult res = MessageBox.Show(this, "Se va a realizar los cambios de la información de publicación.\r\n¿Desea continuar?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (res == DialogResult.Yes)
             {
                 pageInformation.title = this.textBoxTitle.Text;
@@ -153,7 +153,7 @@ namespace WBOffice4.Forms
                         if (OfficeApplication.OfficeDocumentProxy.needsSendToPublish(pageInformation))
                         {
                             this.checkBoxActive.Checked = pageInformation.active;
-                            DialogResult res = MessageBox.Show(this, "El documento requiere una autorización para activarse\r\n¿Desea envíar a publicar el contenido?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            res = MessageBox.Show(this, "El documento requiere una autorización para activarse\r\n¿Desea envíar a publicar el contenido?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                             if (res == DialogResult.Yes)
                             {
                                 FormSendToAutorize formSendToAutorize = new FormSendToAutorize(pageInformation);

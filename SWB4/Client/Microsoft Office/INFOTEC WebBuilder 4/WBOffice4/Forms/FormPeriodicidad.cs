@@ -149,12 +149,12 @@ namespace WBOffice4.Forms
 
 
                 elem = doc.CreateElement("inidate");
-                elem.InnerText = "/" + this.dateTimeInitDate.Value.Month + "/" + this.dateTimeInitDate.Value.Day + "/" + this.dateTimeInitDate.Value.Year;
+                elem.InnerText = this.dateTimeInitDate.Value.Month + "/" + this.dateTimeInitDate.Value.Day + "/" + this.dateTimeInitDate.Value.Year;
                 interval.AppendChild(elem);
                 if (this.endselect.Checked)
                 {
                     elem = doc.CreateElement("enddate");
-                    elem.InnerText = "/" + this.dateTimeendDate.Value.Month + "/" + this.dateTimeendDate.Value.Day + "/" + this.dateTimeendDate.Value.Year;
+                    elem.InnerText = this.dateTimeendDate.Value.Month + "/" + this.dateTimeendDate.Value.Day + "/" + this.dateTimeendDate.Value.Year;
                     interval.AppendChild(elem);
                 }
                 if (this.periodicidad.Checked)
