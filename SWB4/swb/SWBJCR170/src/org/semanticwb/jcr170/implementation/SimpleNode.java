@@ -67,11 +67,11 @@ import org.semanticwb.repository.Versionable;
 public class SimpleNode implements Node
 {
 
-    private static Logger log = SWBUtils.getLogger(SimpleNode.class);    
+    private static Logger log = SWBUtils.getLogger(SimpleNode.class);
     private String id;
-    private boolean modified = false;    
+    private boolean modified = false;
     protected static final String NOT_SUPPORTED_YET = "Not supported yet.";
-    protected static final String WAS_NOT_FOUND = " was not found";    
+    protected static final String WAS_NOT_FOUND = " was not found";
     private static final ValueFactoryImp factory = new ValueFactoryImp();
     protected BaseNode node;
     private final HashSet<SemanticClass> mixins = new HashSet<SemanticClass>();
@@ -86,6 +86,7 @@ public class SimpleNode implements Node
     protected final NodeDefinitionImp nodeDefinition;
     protected VersionHistoryImp versionHistory = null;
     private String path;
+
     SimpleNode(SessionImp session, String name, SemanticClass clazz, SimpleNode parent, int index, String id) throws RepositoryException
     {
         this.id = id;
@@ -95,14 +96,14 @@ public class SimpleNode implements Node
         this.session = session;
         this.index = index;
         this.parent = parent;
-        this.path=parent.getPath();
-        if(path.endsWith("/"))
+        this.path = parent.getPath();
+        if (path.endsWith("/"))
         {
-            path+=name;
+            path += name;
         }
         else
         {
-            path+="/"+name;
+            path += "/" + name;
         }
         if (parent != null && !parent.childs.containsKey(id))
         {
@@ -194,23 +195,23 @@ public class SimpleNode implements Node
         this.session = session;
         nodeDefinition = this.getNodeDefinition(node, node.getSemanticObject().getSemanticClass(), node.getName(), session);
         this.clazz = node.getSemanticObject().getSemanticClass();
-        this.index = getIndexInParent();        
+        this.index = getIndexInParent();
         session.addSimpleNode(this);
         this.name = node.getName();
-        if(node.getParent()==null || this.getParent().getPath()==null)
+        if (node.getParent() == null || this.getParent().getPath() == null)
         {
-            this.path="/";
+            this.path = "/";
         }
         else
         {
-            String parentPath=this.getParent().getPath();
-            if(parentPath.endsWith("/"))
+            String parentPath = this.getParent().getPath();
+            if (parentPath.endsWith("/"))
             {
-                this.path=parentPath+this.name+"["+index+"]";
+                this.path = parentPath + this.name + "[" + index + "]";
             }
             else
             {
-                this.path=parentPath+"/"+this.name+"["+index+"]";
+                this.path = parentPath + "/" + this.name + "[" + index + "]";
             }
         }
         Iterator<SemanticClass> classes = node.getSemanticObject().listSemanticClasses();
@@ -287,8 +288,8 @@ public class SimpleNode implements Node
     }
 
     private NodeDefinitionImp getNodeDefinition(BaseNode node, SemanticClass clazz, String name, SessionImp session)
-    {        
-        if(node!=null)
+    {
+        if (node != null)
         {
             return new NodeDefinitionImp(node.getSemanticObject(), session);
         }
@@ -355,8 +356,6 @@ public class SimpleNode implements Node
 
     }
 
-    
-
     public BaseNode getBaseNode()
     {
         return node;
@@ -407,10 +406,17 @@ public class SimpleNode implements Node
         boolean hasNode = false;
         SessionImp.checkRelPath(relPath);
         relPath = SessionImp.normalize(relPath, this);
-        Item item = session.getItem(relPath);
-        if (item != null && item.isNode())
+        try
         {
-            hasNode = true;
+            Item item = session.getItem(relPath);
+            if (item != null && item.isNode())
+            {
+                hasNode = true;
+            }
+        }
+        catch (PathNotFoundException pnf)
+        {
+            hasNode = false;
         }
         return hasNode;
     }
@@ -768,7 +774,7 @@ public class SimpleNode implements Node
 
     public String getPath() throws RepositoryException
     {
-        return path;        
+        return path;
     }
 
     private int getIndexInParent()
@@ -1320,20 +1326,20 @@ public class SimpleNode implements Node
     {
         SessionImp.checkRelPath(relPath);
         if (primaryNodeTypeName == null)
-        {            
-            if(node!=null)
+        {
+            if (node != null)
             {
-                SemanticObject childNodeDefinition=BaseNode.getChildNodeDefinition(node.getSemanticObject().getSemanticClass(),relPath);
-                if(childNodeDefinition!=null)
+                SemanticObject childNodeDefinition = BaseNode.getChildNodeDefinition(node.getSemanticObject().getSemanticClass(), relPath);
+                if (childNodeDefinition != null)
                 {
-                    primaryNodeTypeName=childNodeDefinition.getProperty(ChildNodeDefinition.jcr_defaultPrimaryType);
-                    if(primaryNodeTypeName==null)
+                    primaryNodeTypeName = childNodeDefinition.getProperty(ChildNodeDefinition.jcr_defaultPrimaryType);
+                    if (primaryNodeTypeName == null)
                     {
                         throw new ConstraintViolationException("The node can not be added without a primaryNodeTypeName");
                     }
                 }
             }
-            
+
         }
         relPath = SessionImp.normalize(relPath, this);
         String nameNode = SessionImp.getNodeName(relPath);
@@ -1389,7 +1395,7 @@ public class SimpleNode implements Node
             {
                 SemanticClass primaryNodeClazz = session.getRootBaseNode().getSemanticClass(primaryNodeTypeName);
                 SimpleNode tmp = new SimpleNode(session, nameNode, primaryNodeClazz, this, 0, UUID.randomUUID().toString());
-                modified = true;                
+                modified = true;
                 return tmp;
             }
             catch (SWBException swbe)
@@ -1670,7 +1676,7 @@ public class SimpleNode implements Node
     }
 
     public NodeIterator getNodes(String namePattern) throws RepositoryException
-    {        
+    {
         ArrayList<SimpleNode> childsToReturn = new ArrayList<SimpleNode>();
         for (SimpleNode child : this.getSimpleNodes())
         {
