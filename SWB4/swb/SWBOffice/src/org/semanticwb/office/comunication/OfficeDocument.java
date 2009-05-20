@@ -1540,7 +1540,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
         Resource resource = site.getResource(resourceInfo.id);
-        OfficeResource officeResource = OfficeResource.getOfficeResource(user, site);
+        OfficeResource officeResource = OfficeResource.getOfficeResource(resourceInfo.id, site);
         officeResource.setResourceBase(resource);
         resource.setTitle(resourceInfo.title);
         resource.setDescription(resourceInfo.description);
