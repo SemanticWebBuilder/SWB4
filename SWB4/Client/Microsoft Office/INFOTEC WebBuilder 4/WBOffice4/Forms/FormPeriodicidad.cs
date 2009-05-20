@@ -113,6 +113,7 @@ namespace WBOffice4.Forms
 			//
 			InitializeComponent();
             this.list=list;
+            buttonAvanzado_Click(null, null);
 		}
         public XmlDocument Document
         {

@@ -394,6 +394,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\EditableListView.Designer.cs" />
+    <Compile Include="Forms\CalendarItem.cs" />
     <Compile Include="Forms\FlowItem.cs" />
     <Compile Include="Forms\FormAddLink.cs">
       <SubType>Form</SubType>
