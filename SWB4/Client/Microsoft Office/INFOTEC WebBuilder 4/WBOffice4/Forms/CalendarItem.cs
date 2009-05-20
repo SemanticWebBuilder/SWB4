@@ -48,5 +48,17 @@ namespace WBOffice4.Forms
                 }
             }
         }
+        public string title
+        {
+            get
+            {
+                return info.title;
+            }
+            set
+            {
+                info.title = value;
+                this.SubItems[0].Text = info.title;                
+            }
+        }
     }
 }
