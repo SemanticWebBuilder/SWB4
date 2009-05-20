@@ -5,7 +5,6 @@
 
 package org.semanticwb.portal.resources;
 
-import com.hp.hpl.jena.graph.Node;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +16,7 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import com.hp.hpl.jena.query.*;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.sparql.util.CollectionUtils;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
@@ -29,8 +24,6 @@ import java.util.TreeSet;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.platform.SemanticModel;
-
-
 
 /**
  *
@@ -310,7 +303,7 @@ public class SWBSparQL extends GenericResource {
                 out.println("<fieldset>");
                 out.println("<table border=0>");
 
-                QueryExecution qexec = getSemanticModel().sparQLQuery(queryString);
+                QueryExecution qexec = getSemanticModel().sparQLQuery(replaceTags(queryString,request,paramRequest,null));
                 // Or QueryExecutionFactory.create(queryString, model) ;
                 try {
                     // Assumption: it's a SELECT query.
