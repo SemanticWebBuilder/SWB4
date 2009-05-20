@@ -48,7 +48,7 @@ namespace WBOffice4.Forms
                 }
             }
         }
-        public string title
+        public string Title
         {
             get
             {
