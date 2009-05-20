@@ -85,7 +85,7 @@ public class TestDBPedia2 {
             "PREFIX dbpedia:      <http://dbpedia.org/resource/> " +
             "PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " +
             //"DESCRIBE  ?x " +
-            "DESCRIBE  dbpedia:Mexico ";
+            "DESCRIBE  dbpedia:Tampico ";
     		//"WHERE  " +
             //"{?x rdf:type <http://dbpedia.org/class/yago/OECDMemberEconomies>}";
        	String url = "http://dbpedia.org/sparql";
