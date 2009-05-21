@@ -1,11 +1,11 @@
 package org.semanticwb.model.catalogs.base;
 
 
-public class CountryBase extends org.semanticwb.model.catalogs.LocationEntity 
+public class CountryBase extends org.semanticwb.model.catalogs.LocationEntity implements org.semanticwb.model.catalogs.GeoTaggable,org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Calendarable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable
 {
-    public static final org.semanticwb.platform.SemanticProperty swbc_countryCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/swbcatalogs#countryCode");
     public static final org.semanticwb.platform.SemanticClass swbc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/swbcatalogs#State");
     public static final org.semanticwb.platform.SemanticProperty swbc_hasStateInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/swbcatalogs#hasStateInv");
+    public static final org.semanticwb.platform.SemanticProperty swbc_countryCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/swbcatalogs#countryCode");
     public static final org.semanticwb.platform.SemanticClass swbc_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/swbcatalogs#Country");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/swbcatalogs#Country");
 
@@ -46,16 +46,6 @@ public class CountryBase extends org.semanticwb.model.catalogs.LocationEntity
         return (getCountry(id, model)!=null);
     }
 
-    public String getCountryCode()
-    {
-        return getSemanticObject().getProperty(swbc_countryCode);
-    }
-
-    public void setCountryCode(String countryCode)
-    {
-        getSemanticObject().setProperty(swbc_countryCode, countryCode);
-    }
-
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.catalogs.State> listStates()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.catalogs.State>(getSemanticObject().listObjectProperties(swbc_hasStateInv));
@@ -75,5 +65,15 @@ public class CountryBase extends org.semanticwb.model.catalogs.LocationEntity
              ret=(org.semanticwb.model.catalogs.State)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public String getCountryCode()
+    {
+        return getSemanticObject().getProperty(swbc_countryCode);
+    }
+
+    public void setCountryCode(String countryCode)
+    {
+        getSemanticObject().setProperty(swbc_countryCode, countryCode);
     }
 }

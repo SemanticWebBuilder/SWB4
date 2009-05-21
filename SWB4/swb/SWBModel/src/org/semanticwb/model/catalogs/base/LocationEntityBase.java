@@ -1,12 +1,15 @@
 package org.semanticwb.model.catalogs.base;
 
 
-public class LocationEntityBase extends org.semanticwb.model.SWBClass 
+public class LocationEntityBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.catalogs.GeoTaggable,org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Calendarable,org.semanticwb.model.Hiddenable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swbc_LocationEntity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/swbcatalogs#LocationEntity");
     public static final org.semanticwb.platform.SemanticProperty swbc_belongsTo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/swbcatalogs#belongsTo");
+    public static final org.semanticwb.platform.SemanticProperty swbc_longitud=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/swbcatalogs#longitud");
+    public static final org.semanticwb.platform.SemanticProperty swbc_latitud=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/swbcatalogs#latitud");
     public static final org.semanticwb.platform.SemanticProperty swbc_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/swbcatalogs#name");
     public static final org.semanticwb.platform.SemanticProperty swbc_hasLocation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/swbcatalogs#hasLocation");
+    public static final org.semanticwb.platform.SemanticProperty swbc_altitud=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/swbcatalogs#altitud");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/swbcatalogs#LocationEntity");
 
     public LocationEntityBase(org.semanticwb.platform.SemanticObject base)
@@ -46,6 +49,26 @@ public class LocationEntityBase extends org.semanticwb.model.SWBClass
         return (getLocationEntity(id, model)!=null);
     }
 
+    public String getLongitud()
+    {
+        return getSemanticObject().getProperty(swbc_longitud);
+    }
+
+    public void setLongitud(String longitud)
+    {
+        getSemanticObject().setProperty(swbc_longitud, longitud);
+    }
+
+    public String getLatitud()
+    {
+        return getSemanticObject().getProperty(swbc_latitud);
+    }
+
+    public void setLatitud(String latitud)
+    {
+        getSemanticObject().setProperty(swbc_latitud, latitud);
+    }
+
     public String getName()
     {
         return getSemanticObject().getProperty(swbc_name);
@@ -75,5 +98,15 @@ public class LocationEntityBase extends org.semanticwb.model.SWBClass
              ret=(org.semanticwb.model.catalogs.LocationEntity)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public String getAltitud()
+    {
+        return getSemanticObject().getProperty(swbc_altitud);
+    }
+
+    public void setAltitud(String altitud)
+    {
+        getSemanticObject().setProperty(swbc_altitud, altitud);
     }
 }
