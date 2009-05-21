@@ -510,6 +510,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         PrintWriter out = response.getWriter();
         StringBuffer sbf = new StringBuffer();
         String lang = "es";
+        User user = paramRequest.getUser();
         
         response.setContentType("text/html");
         response.setHeader("Cache-control", "no-cache");
@@ -527,8 +528,8 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         }
 
         //Get user language
-        if (paramRequest.getUser() != null) {
-            lang = paramRequest.getUser().getLanguage();
+        if (user != null) {
+            lang = user.getLanguage();
         }
 
         //Add necesary scripting
@@ -580,8 +581,10 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                           "</span>\n" +
                    "    </div>\n" +
                    "    <div class=\"content\">\n" +
-                   "      <div class=\"contentPane\">\n" +
-                   "        <a href=\"#\" onclick=\"showDialog('" + rUrl + 
+                   "      <div class=\"contentPane\">\n");
+                   if (user.isSigned()) {
+
+                   sbf.append("        <a href=\"#\" onclick=\"showDialog('" + rUrl +
                             "', '" + paramRequest.getLocaleString("add") + 
                             " " + BookmarkEntry.sclass.getDisplayName(lang) +
                             "'); return false;\">" +
@@ -634,8 +637,12 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                    "          <div id=\"" + createId("bookmarksList") + "\">\n" +
                    listEntriesByGroup(generalGp.getSemanticObject().getId(), "view", getSortType(), paramRequest) +
                    "          </div>\n" +
-                   "        </div>\n" +
-                   "      </div>\n" +
+                   "        </div>\n");
+
+                   } else {
+                        sbf.append(paramRequest.getLocaleString("msgNotLogged"));
+                   }
+                   sbf.append("      </div>\n" +
                    "    </div>\n" +
                    "  </div>\n");
         out.print(sbf.toString());
