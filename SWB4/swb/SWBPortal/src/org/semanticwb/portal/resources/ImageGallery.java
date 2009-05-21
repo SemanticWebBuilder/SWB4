@@ -44,6 +44,7 @@ public class ImageGallery extends GenericAdmResource {
      * @throws AFException
      * @throws IOException
      */
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
@@ -65,7 +66,7 @@ public class ImageGallery extends GenericAdmResource {
             out.println("        slideduration: 500 //duration of slide up animation to reveal panel ");
             out.println("    }; ");
             
-            out.println("    var mygallery=new simpleGallery({ ");
+            out.println("   var mygallery=new simpleGallery({ ");
             out.println("	wrapperid: 'imggallery_"+ base.getId()+"', //ID of main gallery container, ");
             out.println("	dimensions: ["+base.getAttribute("imgwidth","220")+", "+base.getAttribute("imgheight","150")+"], //width/height of gallery in pixels. Should reflect dimensions of the images exactly ");
             out.println("	imagearray: [ ");
@@ -103,6 +104,9 @@ public class ImageGallery extends GenericAdmResource {
             out.println("<p>"+base.getAttribute("title","")+"</p>");
             out.println("<span><div id=\"imggallery_"+base.getId()+"\" style=\"position:relative; visibility:hidden\" /></span> ");
             out.println("</div>");
+
+
+            out.println("<p><a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a></p>");
         }catch(Exception e) {
             log.error(e);
         }
@@ -327,6 +331,11 @@ public class ImageGallery extends GenericAdmResource {
             
             ret.append("\n</form>  ");
             ret.append("\n* " + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_required"));
+
+
+            ret.append("<p><a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW) + "\">regresar</a></p>");
+
+
             ret.append("\n</div>  ");
             
             ret.append("\n<script type=\"text/javascript\"> ");
