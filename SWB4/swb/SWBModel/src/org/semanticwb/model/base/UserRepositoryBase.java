@@ -1,13 +1,13 @@
 package org.semanticwb.model.base;
 
 
-public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
+public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
-    public static final org.semanticwb.platform.SemanticProperty swb_userRepLoginContext=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepLoginContext");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
+    public static final org.semanticwb.platform.SemanticProperty swb_userRepLoginContext=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepLoginContext");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepAuthMethod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepAuthMethod");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepSecurityQuestionList=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepSecurityQuestionList");
@@ -106,16 +106,6 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
          return ret;
     }
 
-    public String getLoginContext()
-    {
-        return getSemanticObject().getProperty(swb_userRepLoginContext);
-    }
-
-    public void setLoginContext(String userRepLoginContext)
-    {
-        getSemanticObject().setProperty(swb_userRepLoginContext, userRepLoginContext);
-    }
-
     public String getTitle()
     {
         return getSemanticObject().getProperty(swb_title);
@@ -139,6 +129,16 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+    public String getLoginContext()
+    {
+        return getSemanticObject().getProperty(swb_userRepLoginContext);
+    }
+
+    public void setLoginContext(String userRepLoginContext)
+    {
+        getSemanticObject().setProperty(swb_userRepLoginContext, userRepLoginContext);
     }
 
     public String getAuthMethod()
@@ -169,6 +169,21 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
     public void setUserRepSecurityQuestionList(String userRepSecurityQuestionList)
     {
         getSemanticObject().setProperty(swb_userRepSecurityQuestionList, userRepSecurityQuestionList);
+    }
+
+    public String getUserRepSecurityQuestionList(String lang)
+    {
+        return getSemanticObject().getProperty(swb_userRepSecurityQuestionList, null, lang);
+    }
+
+    public String getDisplayUserRepSecurityQuestionList(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_userRepSecurityQuestionList, lang);
+    }
+
+    public void setUserRepSecurityQuestionList(String userRepSecurityQuestionList, String lang)
+    {
+        getSemanticObject().setProperty(swb_userRepSecurityQuestionList, userRepSecurityQuestionList, lang);
     }
 
     public String getCallBackHandlerClassName()

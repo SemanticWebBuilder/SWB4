@@ -4,8 +4,8 @@ package org.semanticwb.model.base;
 public class DisplayObjectBase extends org.semanticwb.model.SWBClass 
 {
     public static final org.semanticwb.platform.SemanticProperty swbxf_doDispatcher=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doDispatcher");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_dragSupport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#dragSupport");
     public static final org.semanticwb.platform.SemanticProperty swbxf_doTreeController=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doTreeController");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_dragSupport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#dragSupport");
     public static final org.semanticwb.platform.SemanticProperty swbxf_dropMatchLevel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#dropMatchLevel");
     public static final org.semanticwb.platform.SemanticClass swbxf_DisplayObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject");
@@ -57,16 +57,6 @@ public class DisplayObjectBase extends org.semanticwb.model.SWBClass
         getSemanticObject().setProperty(swbxf_doDispatcher, doDispatcher);
     }
 
-    public boolean isDragSupport()
-    {
-        return getSemanticObject().getBooleanProperty(swbxf_dragSupport);
-    }
-
-    public void setDragSupport(boolean dragSupport)
-    {
-        getSemanticObject().setBooleanProperty(swbxf_dragSupport, dragSupport);
-    }
-
     public String getTreeController()
     {
         return getSemanticObject().getProperty(swbxf_doTreeController);
@@ -75,6 +65,16 @@ public class DisplayObjectBase extends org.semanticwb.model.SWBClass
     public void setTreeController(String doTreeController)
     {
         getSemanticObject().setProperty(swbxf_doTreeController, doTreeController);
+    }
+
+    public boolean isDragSupport()
+    {
+        return getSemanticObject().getBooleanProperty(swbxf_dragSupport);
+    }
+
+    public void setDragSupport(boolean dragSupport)
+    {
+        getSemanticObject().setBooleanProperty(swbxf_dragSupport, dragSupport);
     }
 
     public int getDropMatchLevel()
