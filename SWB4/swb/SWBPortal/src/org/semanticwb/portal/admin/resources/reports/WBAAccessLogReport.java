@@ -812,7 +812,6 @@ public class WBAAccessLogReport extends GenericResource {
                     ret.append("<param name=\"label"+ndata+"\" value=\""+data[0]+"\">\n");
                     ret.append("<param name=\"data"+ndata+"\"  value=\""+data[1]+"\">\n");
                     ndata++;
-                    System.out.println("data[0]=" + data[0] + " data[1]=" + data[1]);
                 }
                 String title = paramsRequest.getLocaleString("access_log_report");
                 ret.append("<param name=\"Title\" value=\"" + title + "\">\n");
@@ -822,7 +821,7 @@ public class WBAAccessLogReport extends GenericResource {
                 ret.append("<param name=\"zoom\" value=\"true\">\n");
                 ret.append("</APPLET>\n");
             }else {
-                ret.append("<center><br><br><br><br><br><br><br><br><font color=\"black\">" + paramsRequest.getLocaleString("no_records_found") + "</font></center>\n");
+                ret.append(paramsRequest.getLocaleString("no_records_found"));
             }
 
             ret.append("</td>\n");
