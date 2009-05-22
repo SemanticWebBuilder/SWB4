@@ -59,11 +59,11 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                     if (path.endsWith("/"))
                     {
                         path = path.substring(0, path.length() - 1);
-                        path += getResourceBase().getWorkPath() + "\\" + file;
+                        path += getResourceBase().getWorkPath() + "/" + file;
                     }
                     else
                     {
-                        path += getResourceBase().getWorkPath() + "\\" + file;
+                        path += getResourceBase().getWorkPath() + "/" + file;
                     }
 
                     File filecontent = new File(path);
