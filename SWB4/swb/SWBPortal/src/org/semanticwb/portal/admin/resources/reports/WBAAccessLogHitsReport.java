@@ -912,7 +912,7 @@ public class WBAAccessLogHitsReport extends GenericResource {
                     String resId = token.nextToken();
 
                     out.println("<tr>");
-                    out.println("<td>"+(i++)+"</td>");
+                    out.println("<td>"+(++i)+"</td>");
                     out.println("<td>"+date+"</td>");
                     out.println("<td>"+ipuser+"</td>");
                     out.println("<td>"+ipserver+"</td>");
@@ -926,8 +926,8 @@ public class WBAAccessLogHitsReport extends GenericResource {
                     out.println("<td>"+languageId+"</td>");
                     out.println("<td>"+resId+"</td>");
                     out.println("</tr>");
-                    //i++;
                 }
+                out.println("</table>\n");
             }
             out.println("</table>");
             out.println("</body>");

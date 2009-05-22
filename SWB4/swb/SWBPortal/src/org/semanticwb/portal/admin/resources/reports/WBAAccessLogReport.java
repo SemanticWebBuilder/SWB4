@@ -885,9 +885,9 @@ public class WBAAccessLogReport extends GenericResource {
             if( hm_detail.containsKey(key) ) {
                 out.println("<br />");
                 out.println("<table border=\"1\" width=\"850\">");
-                out.println("    <caption align=\"top\">");
+                out.println("<caption align=\"top\">");
                 out.println("Detalle de Accesos - "+key);
-                out.println("    </caption>");
+                out.println("</caption>");
                 out.println("<tr>");
                 out.println("<td>"+paramsRequest.getLocaleString("th_Num")+"</td>");
                 out.println("<td>"+paramsRequest.getLocaleString("th_Date")+"</td>");
@@ -948,6 +948,7 @@ public class WBAAccessLogReport extends GenericResource {
                     out.println("</tr>");
                     i++;
                 }
+                out.println("</table>\n");
             }
             out.println("</table>");
             out.println("</body>");

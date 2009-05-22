@@ -147,7 +147,7 @@ public class WBASessionReport extends GenericResource {
 //                }
             }
             // If there are repositories it continues
-            if(hm_repository.size() > I_ACCESS){
+            if(hm_repository.size() > I_ACCESS) {
                 String address = paramsRequest.getRenderUrl().toString();
                 String repositoryName = request.getParameter("wb_repository");
                 
@@ -317,7 +317,8 @@ public class WBASessionReport extends GenericResource {
                 
                 out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("repository") + ":</td>");
-                out.println("<td colspan=\"2\"><select id=\"wb_repository\" name=\"wb_repository\" size=\"1\">");
+                out.println("<td colspan=\"2\">");
+                out.println("<select id=\"wb_repository\" name=\"wb_repository\" size=\"1\">");
                 Iterator<String> itKeys = hm_repository.keySet().iterator();
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
