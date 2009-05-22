@@ -124,6 +124,7 @@ public class TematicIndexXSL extends GenericAdmResource
             Element fathertitle = dom.createElement("fathertitle");
             fathertitle.appendChild(dom.createTextNode(paramRequest.getTopic().getDisplayName(usrlanguage)));
             father.setAttribute("path", path);
+            father.setAttribute("id", paramRequest.getTopic().getId());
             father.appendChild(fathertitle);
             
             if(usrlanguage!=null){
@@ -160,6 +161,7 @@ public class TematicIndexXSL extends GenericAdmResource
                     //son.setAttribute("sonref",webpath+dist+"/"+tm.getId()+"/"+hijo.getId());
                     son.setAttribute("sonref",hijo.getUrl());
                     son.setAttribute("path", path);
+                    son.setAttribute("id", hijo.getId());
                     Element sontitle = dom.createElement("sontitle");
                     sontitle.appendChild(dom.createTextNode(hijo.getDisplayName(usrlanguage)));
                     son.appendChild(sontitle);
@@ -199,6 +201,7 @@ public class TematicIndexXSL extends GenericAdmResource
                             //grandson.setAttribute("grandsonref",webpath+dist+"/"+tm.getId()+"/"+nieto.getId());
                             grandson.setAttribute("grandsonref",nieto.getUrl());
                             grandson.setAttribute("path", path);
+                            grandson.setAttribute("id", nieto.getId());
                             Element grandsontitle = dom.createElement("grandsontitle");
                             grandsontitle.appendChild(dom.createTextNode(nieto.getDisplayName(usrlanguage)));
                             grandson.appendChild(grandsontitle);
