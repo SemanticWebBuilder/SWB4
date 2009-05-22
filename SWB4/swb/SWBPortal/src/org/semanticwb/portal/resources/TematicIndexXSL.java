@@ -84,7 +84,7 @@ public class TematicIndexXSL extends GenericAdmResource
         {
             try 
             { 
-                //tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim())); 
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim())); 
                 path=workpath + "/";
             }
             catch(Exception e) { log.error("Error while loading resource template: "+base.getId(), e); }
@@ -92,7 +92,7 @@ public class TematicIndexXSL extends GenericAdmResource
         if(tpl==null)
         {
             try { 
-                //tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/TematicIndexXSL/TematicIndexXSL.xslt"));                 
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/TematicIndexXSL/IndiceTematicoXSL.xslt"));
             }
             catch(Exception e) { log.error("Error while loading default resource template: "+base.getId(), e); }
         }
@@ -122,7 +122,7 @@ public class TematicIndexXSL extends GenericAdmResource
             father.appendChild(dom.createTextNode(""));
             out.appendChild(father);
             Element fathertitle = dom.createElement("fathertitle");
-            fathertitle.appendChild(dom.createTextNode(paramRequest.getTopic().getTitle(usrlanguage)));
+            fathertitle.appendChild(dom.createTextNode(paramRequest.getTopic().getDisplayName(usrlanguage)));
             father.setAttribute("path", path);
             father.appendChild(fathertitle);
             
@@ -161,7 +161,7 @@ public class TematicIndexXSL extends GenericAdmResource
                     son.setAttribute("sonref",hijo.getUrl());
                     son.setAttribute("path", path);
                     Element sontitle = dom.createElement("sontitle");
-                    sontitle.appendChild(dom.createTextNode(hijo.getTitle(usrlanguage)));
+                    sontitle.appendChild(dom.createTextNode(hijo.getDisplayName(usrlanguage)));
                     son.appendChild(sontitle);
                     father.appendChild(son);
                     
@@ -252,7 +252,7 @@ public class TematicIndexXSL extends GenericAdmResource
         {
             org.w3c.dom.Document dom=getDom(request, response, paramRequest);
             if(dom!=null) {
-                response.getWriter().println(SWBUtils.XML.domToXml(dom));
+                response.getWriter().println(SWBUtils.XML.domToXml(dom,true));
             }
         }
         catch(Exception e){ log.error(e); }        
@@ -272,7 +272,7 @@ public class TematicIndexXSL extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        System.out.println("Entra a TematicIndex/doView");
+        //System.out.println("Entra a TematicIndex/doView");
         try
         {
             Document dom =getDom(request, response, paramRequest);
