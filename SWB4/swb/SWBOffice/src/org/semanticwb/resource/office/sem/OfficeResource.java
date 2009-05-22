@@ -93,8 +93,8 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
             if (in != null)
             {
                 String name = UUID.randomUUID().toString() + ".zip";
-                SWBPlatform.writeFileToWorkPath(getResourceBase().getWorkPath() + "\\" + name, in, "");
-                zipFile = new File(SWBPlatform.getWorkPath() + getResourceBase().getWorkPath() + "\\" + name);
+                SWBPlatform.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + name, in, "");
+                zipFile = new File(SWBPlatform.getWorkPath() + getResourceBase().getWorkPath() + "/" + name);
                 ZipFile zip = new ZipFile(zipFile);
                 Enumeration entries = zip.entries();
                 while (entries.hasMoreElements())
@@ -103,7 +103,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                     if (!entry.isDirectory())
                     {
                         InputStream inEntry = zip.getInputStream(entry);
-                        SWBPlatform.writeFileToWorkPath(getResourceBase().getWorkPath() + "\\" + entry.getName(), inEntry, "");
+                        SWBPlatform.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + entry.getName(), inEntry, "");
                     }
                 }
                 zip.close();
@@ -131,8 +131,8 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
             if (in != null)
             {
                 String name = UUID.randomUUID().toString() + ".zip";
-                SWBPlatform.writeFileToWorkPath(dir + "\\" + name, in, "");
-                zipFile = new File(SWBPlatform.getWorkPath() + dir + "\\" + name);
+                SWBPlatform.writeFileToWorkPath(dir + "/" + name, in, "");
+                zipFile = new File(SWBPlatform.getWorkPath() + dir + "/" + name);
                 ZipFile zip = new ZipFile(zipFile);
                 Enumeration entries = zip.entries();
                 while (entries.hasMoreElements())
@@ -141,7 +141,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                     if (!entry.isDirectory())
                     {
                         InputStream inEntry = zip.getInputStream(entry);
-                        SWBPlatform.writeFileToWorkPath(dir + "\\" + entry.getName(), inEntry, "");
+                        SWBPlatform.writeFileToWorkPath(dir + "/" + entry.getName(), inEntry, "");
                     }
                 }
                 zip.close();
