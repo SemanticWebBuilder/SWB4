@@ -111,8 +111,8 @@ public class SemanticSearch extends GenericResource {
          */
         sbf.append("<script type=\"text/javascript\">\n" +
                 "  function clearSuggestions() {\n" +
-                "    if (dojo.byId('" + createId("results") + "')) {\n" +
-                "      dojo.byId('" + createId("results") + "').innerHTML = \"\";\n" +
+                "    if (dojo.byId('" + createId("busca-ayuda-ok") + "')) {\n" +
+                "      dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML = \"\";\n" +
                 "    }\n" +
                 "    displayed = false;\n" +
                 "    curSelected = 0;\n" +
@@ -274,10 +274,10 @@ public class SemanticSearch extends GenericResource {
                 "    if(word.word == '') {\n" +
                 "      return;\n" +
                 "    }\n" +
-                "    if (dojo.byId('" + createId("results") + "') && word.word != '') {\n" +
-                "      dojo.byId('" + createId("results") + "').innerHTML = '<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\" width=\"20\" height=\"20\"/>" + paramRequest.getLocaleString("loading") + "...';\n" +
+                "    if (dojo.byId('" + createId("busca-ayuda-ok") + "') && word.word != '') {\n" +
+                "      dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML = '<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\" width=\"20\" height=\"20\"/>" + paramRequest.getLocaleString("loading") + "...';\n" +
                 "    }\n" +
-                "    getHtml(src + \"?word=\" + word.word + \"&lang=\" + lang + \"&props=\" + props, '" + createId("results") + "');\n" +
+                "    getHtml(src + \"?word=\" + word.word + \"&lang=\" + lang + \"&props=\" + props, '" + createId("busca-ayuda-ok") + "');\n" +
                 "    displayed = true;\n" +
                 "    highLightSelection(0, true);\n" +
                 "  }\n\n");
@@ -398,11 +398,10 @@ public class SemanticSearch extends GenericResource {
                 "<input type=\"text\" dojoType=\"dijit.form.TextBox\" class=\"busca-txt-top\" " +
                 "id=\"" + createId("naturalQuery") + "\" " +
                 "name=\"" + createId("naturalQuery") + "\" value=\"" + query + "\" ></input>\n" +
-                "<div id=\"" + createId("results") + "\"></div>\n" +
-                "<button dojoType='dijit.form.Button' type=\"submit\" " +
-                "onclick=\"submitParams('" + rUrl + "');\">" +
-                paramRequest.getLocaleString("send") + "</button>\n" +
-                "</form>\n");
+                "<input type=\"submit\" class=\"busca-btn-top\"" +
+                "onclick=\"submitParams('" + rUrl + "');\"></input>\n" +
+                "</form>\n" +
+                "<div id=\"" + createId("busca-ayuda-ok") + "\"></div>\n");
         response.getWriter().print(sbf.toString());
     }
 
@@ -414,7 +413,7 @@ public class SemanticSearch extends GenericResource {
         String lang = "es";
         WebSite site = paramRequest.getTopic().getWebSite();
 
-        response.setContentType("text/html");
+        response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
@@ -609,7 +608,7 @@ public class SemanticSearch extends GenericResource {
                             "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
                             "highLightSelection(" + idCounter + ",true); curSelected = " + idCounter + ";\" " +
                             "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
-                            "onmousedown=\"setSelection(" + idCounter + ", '');dojo.byId('" + createId("results") + "').innerHTML='';" +
+                            "onmousedown=\"setSelection(" + idCounter + ", '');dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML='';" +
                             "dojo.byId('" + createId("naturalQuery") + "').focus();displayed=false;pdisplayed=false\">" + (lPar ? "(" : "") +
                             "<font color=\"red\">" + tempi + "</font>" +
                             (lPar ? ")" : "") + "</li>");
@@ -625,7 +624,7 @@ public class SemanticSearch extends GenericResource {
                             "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
                             "highLightSelection(" + idCounter + ",true); curSelected = " + idCounter + ";\" " +
                             "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
-                            "onmousedown=\"setSelection(" + idCounter + ", '');dojo.byId('" + createId("results") + "').innerHTML='';" +
+                            "onmousedown=\"setSelection(" + idCounter + ", '');dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML='';" +
                             "dojo.byId('" + createId("naturalQuery") + "').focus();displayed=false;pdisplayed=false;\">" + (lPar ? "(" : "") +
                             "<font color=\"blue\">" + tempi + "</font>" +
                             (lPar ? ")" : "") + "</li>");
@@ -650,7 +649,7 @@ public class SemanticSearch extends GenericResource {
                             "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
                             "highLightSelection(" + idCounter + ",true); curSelected = " + idCounter + ";\" " +
                             "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
-                            "onmousedown=\"setSelection(" + idCounter + ", 'con ');pdisplayed=false;dojo.byId('" + createId("results") + "').innerHTML='';" +
+                            "onmousedown=\"setSelection(" + idCounter + ", 'con ');pdisplayed=false;dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML='';" +
                             "dojo.byId('" + createId("naturalQuery") + "').focus();displayed=false;\">" + (lPar ? "(" : "") +
                             "<font color=\"red\">" + t.getDisplayName(lang) + "</font>" +
                             (lPar ? ")" : "") + "</li>");
@@ -668,7 +667,7 @@ public class SemanticSearch extends GenericResource {
                                 "onmouseover=\"dojo.query('.resultEntry').style('background', 'white'); " +
                                 "highLightSelection(" + idCounter + ",true); curSelected = " + idCounter + ";\" " +
                                 "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
-                                "onmousedown=\"setSelection(" + idCounter + ", 'con ');pdisplayed=false;dojo.byId('" + createId("results") + "').innerHTML='';" +
+                                "onmousedown=\"setSelection(" + idCounter + ", 'con ');pdisplayed=false;dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML='';" +
                                 "dojo.byId('" + createId("naturalQuery") + "').focus();displayed=false;\">" + (lPar ? "(" : "") +
                                 "<font color=\"red\">" + t.getDisplayName(lang) + "</font>" +
                                 (lPar ? ")" : "") + "</li>");
