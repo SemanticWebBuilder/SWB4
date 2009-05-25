@@ -280,6 +280,7 @@ public class TematicIndexXSL extends GenericAdmResource
         {
             Document dom =getDom(request, response, paramRequest);
             //System.out.println(AFUtils.getInstance().DomtoXml(dom));
+            if(tpl==null) setResourceBase(getResourceBase());
             if(dom != null) {
                 response.getWriter().println(SWBUtils.XML.transformDom(tpl, dom));
             }
