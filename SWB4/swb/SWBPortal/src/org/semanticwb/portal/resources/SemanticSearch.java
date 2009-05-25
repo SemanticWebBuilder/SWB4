@@ -23,19 +23,14 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Descriptiveable;
-import org.semanticwb.model.ObjectBehavior;
-import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SWBObjectFilter;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -78,7 +73,7 @@ public class SemanticSearch extends GenericResource {
         String query = request.getParameter(createId("naturalQuery"));
         String lang = paramRequest.getUser().getLanguage();
 
-        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setContentType("text/html");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
@@ -95,8 +90,6 @@ public class SemanticSearch extends GenericResource {
                 "  dojo.require(\"dijit.form.Form\");\n" +
                 "  dojo.require(\"dijit.form.Button\");\n" +
                 "  dojo.require(\"dijit.form.TextBox\");\n" +
-                "  dojo.require(\"dojox.layout.ContentPane\");\n" +
-                "  dojo.require(\"dijit.Dialog\");\n" +
                 "</script>\n");
         sbf.append("<script type=\"text/javascript\">\n" +
                 "  dojo.addOnLoad(function () {\n" +
@@ -136,7 +129,7 @@ public class SemanticSearch extends GenericResource {
                 "        getSuggestions(wd, source, true, false);\n" +
                 "        dojo.stopEvent(evt);\n" +
                 "      } else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.ENTER) {\n" +
-                "        setSelection(curSelected, (wd.word == \"" + paramRequest.getLocaleString("with") + "\")?\"" + paramRequest.getLocaleString("with") + " \":\"\");\n" +
+                "        setSelection(curSelected, (wd.word == \"" + paramRequest.getLocaleString("with").toLowerCase() + "\")?\"" + paramRequest.getLocaleString("with").toLowerCase() + " \":\"\");\n" +
                 "        clearSuggestions();\n" +
                 "        pdisplayed = false;\n" +
                 "        dojo.stopEvent(evt);\n" +
@@ -358,12 +351,41 @@ public class SemanticSearch extends GenericResource {
                 "  }\n\n");
 
         sbf.append("  function submitParams(url) {\n" +
-                "    var loc = url+'&" + createId("naturalQuery") + "=' + dijit.byId('" + createId("naturalQuery") + "').value;" +
-                "    var h_wnd = window.open(loc,'" + paramRequest.getLocaleString("sResults") + "','width=800,height=600,menubar=yes');\n" +
-                "    dojo.byId('" + createId("natural") + "').target=h_wnd;" +
-                "    dojo.byId('" + createId("natural") + "').submit();" +
-                "}\n" +
-                "</script>\n\n");
+                   "    var loc = url+'&" + createId("naturalQuery") + "=' + dijit.byId('" + createId("naturalQuery") + "').value;" +
+                   "    var h_wnd = window.open(loc,'" + paramRequest.getLocaleString("sResults") + "','width=800,height=600,menubar=yes');\n" +
+                   "    dojo.byId('" + createId("natural") + "').target=h_wnd;" +
+                   "    dojo.byId('" + createId("natural") + "').submit();" +
+                   "  }\n\n" +
+                   "  function getHtml(url, tagid) {\n" +
+                   "    dojo.xhrGet({\n" +
+                   "    url: url,\n" +
+                   "    load: function(response)\n" +
+                   "    {\n" +
+                   "      var tag=dojo.byId(tagid);\n" +
+                   "      if(tag) {\n" +
+                   "        var pan=dijit.byId(tagid);\n" +
+                   "        if(pan && pan.attr) {\n" +
+                   "          pan.attr('content',response);\n" +
+                   "        } else {\n" +
+                   "          tag.innerHTML = response;\n" +
+                   "        }\n" +
+                   "      } else {\n" +
+                   "        alert(\"No existe ningún elemento con id \" + tagid);\n" +
+                   "      }\n" +
+                   "      return response;\n" +
+                   "    },\n" +
+                   "    error: function(response) {\n" +
+                   "      if(dojo.byId(tagid)) {\n" +
+                   "        dojo.byId(tagid).innerHTML = \"<p>Ocurrió un error con respuesta:<br />\" + response + \"</p>\";\n" +
+                   "      } else {\n" +
+                   "        alert(\"No existe ningún elemento con id \" + tagid);\n" +
+                   "      }\n" +
+                   "      return response;\n" +
+                   "    },\n" +
+                   "    handleAs: \"text\"\n" +
+                   "  });\n" +
+                   "}" +
+                   "</script>\n\n");
 
 
         //Add language parameter to the action url string
@@ -371,9 +393,10 @@ public class SemanticSearch extends GenericResource {
         rUrl.setMode("SEARCH");
         rUrl.setParameter("lang", lang);
 
-        sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" class=\"swbform\" " +
+        sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" " +
                 "action=\"" + paramRequest.getTopic().getUrl() + "\" method=\"post\">\n" +
-                "<input type=\"text\" dojoType=\"dijit.form.TextBox\" style=\"width:300px\" id=\"" + createId("naturalQuery") + "\" " +
+                "<input type=\"text\" dojoType=\"dijit.form.TextBox\" class=\"busca-txt-top\" " +
+                "id=\"" + createId("naturalQuery") + "\" " +
                 "name=\"" + createId("naturalQuery") + "\" value=\"" + query + "\" ></input>\n" +
                 "<div id=\"" + createId("results") + "\"></div>\n" +
                 "<button dojoType='dijit.form.Button' type=\"submit\" " +
@@ -391,7 +414,7 @@ public class SemanticSearch extends GenericResource {
         String lang = "es";
         WebSite site = paramRequest.getTopic().getWebSite();
 
-        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setContentType("text/html");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
@@ -528,7 +551,7 @@ public class SemanticSearch extends GenericResource {
         Lexicon lex = new Lexicon(lang);
         StringBuffer sbf = new StringBuffer();
 
-       response.setContentType("text/html; charset=ISO-8859-1");
+        response.setContentType("text/html");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
@@ -661,14 +684,5 @@ public class SemanticSearch extends GenericResource {
 
     private String createId(String suffix) {
         return getResourceBase().getId() + "/" + suffix;
-    }
-
-    private HashMap<SemanticProperty, SemanticProperty> getPropertyMap(SemanticClass cls) {
-        HashMap<SemanticProperty, SemanticProperty> res = new HashMap();
-
-        Iterator<SemanticProperty> props = cls.listProperties();
-
-        return res;
-
     }
 }
