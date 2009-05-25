@@ -57,7 +57,7 @@ public class Miselect extends GenericAdmResource {
         //out.println("dojo.addOnLoad(function(){postHtml('"+url+"','munctnr')});");
         out.println("</script>");
 
-        WebPage wp = paramRequest.getTopic();
+        WebPage wp = paramRequest.getTopic().getWebSite().getWebPage("MX");
         String lang = paramRequest.getUser().getLanguage();
         Iterator<WebPage> webpages = wp.listVisibleChilds(lang);
 
