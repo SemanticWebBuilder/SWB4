@@ -31,14 +31,21 @@ if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY){ //Es invocado como
 if(request.getAttribute("events")==null) return;
 %>
 <table>
+    <tr>
+        <td><a href="/swb/swb/wiki/Eventos">Agenda Municipal</a></td>
+    </tr>
 <%
 int cont=0;
 GenericIterator gitEvents=(GenericIterator)request.getAttribute("events");
 while(gitEvents.hasNext()){
 Event event=(Event)gitEvents.next();
+url.setMode(url.Mode_VIEW+"2");
+url.setCallMethod(url.Call_DIRECT);
+url.setParameter("EventUri", event.getURI());
+url.setParameter("closewindow", "1");
 %>
 <tr class="pluginLinks">
-   <td nowrap width="30%"><a class="tooltip" style="text-decoration:none;" href="<%=url.toString()%>"><%=event.getTitle()%>
+   <td nowrap width="30%"><a class="tooltip" style="text-decoration:none;" href="javascript:openWindow()" onclick="openWindow();">><%=event.getTitle()%>
    <span style="left:50px;"><b>Fecha:<%=event.getDate()%><br/>Lugar:<%=event.getPlace()%>&nbsp;</b><br/><%=event.getDescription()%></span></a></td>
 </tr>
 <%
@@ -47,6 +54,11 @@ if(cont>=5) break;
 }
 %>
 </table>
+<script type="text/javascript">
+    function openWindow(){
+        window.open ("<%=url.toString()%>","_new","location=1,resizable=1, status=1,scrollbars=1,width=500,height=500");
+    }
+</script>
 <%
 }else{ //Es invocado como contenido, poner todos los eventos y si es un usuario de tipo admin poner editar y borrar eventos
     if(action.equals("excel")){
