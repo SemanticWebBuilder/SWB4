@@ -86,7 +86,11 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
             url.setAction(url.Action_REMOVE);
             mgr.setAction(url.toString());
         }
-        mgr.addButton(SWBFormButton.newBackButton());
+        if(request.getParameter("closewindow")!=null){
+            mgr.addButton(SWBFormButton.newCloseButton());
+        }else{
+            mgr.addButton(SWBFormButton.newBackButton());
+        }
         out.println(mgr.renderForm(request));
     }
 
