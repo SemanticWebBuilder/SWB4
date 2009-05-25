@@ -95,6 +95,11 @@ public class SWBFormButton
         return new SWBFormButton().setTitle("Cancelar", "es").setTitle("Cancel", "en").setAttribute("onclick", "dijit.byId('swbDialog').hide();");
     }
 
+    public static SWBFormButton newCloseButton()
+    {
+        return new SWBFormButton().setTitle("Cerrar", "es").setTitle("Close", "en").setAttribute("onclick", "window.close();");
+    }
+
     public static SWBFormButton newCancelButton()
     {
         return new SWBFormButton().setTitle("Cancelar", "es").setTitle("Cancel", "en");
