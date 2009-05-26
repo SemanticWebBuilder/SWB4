@@ -8,6 +8,7 @@ public class EventBase extends org.semanticwb.model.SWBClass implements org.sema
     public static final org.semanticwb.platform.SemanticProperty eve_EventResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/Events#EventResource");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
+    public static final org.semanticwb.platform.SemanticProperty eve_EventTopic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/Events#EventTopic");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty eve_EventDescr=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/Events#EventDescr");
     public static final org.semanticwb.platform.SemanticProperty eve_EventTarget=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/Events#EventTarget");
@@ -111,6 +112,16 @@ public class EventBase extends org.semanticwb.model.SWBClass implements org.sema
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public String getEventTopic()
+    {
+        return getSemanticObject().getProperty(eve_EventTopic);
+    }
+
+    public void setEventTopic(String EventTopic)
+    {
+        getSemanticObject().setProperty(eve_EventTopic, EventTopic);
     }
 
     public java.util.Date getUpdated()
