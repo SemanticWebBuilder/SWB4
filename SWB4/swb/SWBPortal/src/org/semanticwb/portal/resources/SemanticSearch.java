@@ -32,6 +32,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.admin.resources.SWBAListRelatedObjects;
 
@@ -426,6 +427,7 @@ public class SemanticSearch extends GenericResource {
                    "  <input type=\"text\" class=\"busca-txt-top\" id=\"" + createId("naturalQuery") + "\" " +
                       "name=\"" + createId("naturalQuery") + "\" value=\"" + query + "\" />" +                   
                    "  <input type=\"submit\" class=\"busca-btn-top\" />\n" +
+                   "  <div id=\"" + createId("busca-ayuda-ok") + "\" class=\"busca-ayuda-ok\" ></div>" +
                    "</form>\n");
 
         if (errCount != null) {
@@ -445,12 +447,7 @@ public class SemanticSearch extends GenericResource {
                         sbf.append("<tr>");
 
                         if (rs.hasNext()) {
-                            Iterator<String> itcols = rs.getResultVars().iterator();
-                            while (itcols.hasNext()) {
-                                sbf.append("<th>");
-                                sbf.append(itcols.next());
-                                sbf.append("</th>");
-                            }
+                            sbf.append("<th>Title</th><th>Description</th>");
                             sbf.append("</tr>");
                             sbf.append("</thead>");
                             sbf.append("<tbody>");
@@ -472,22 +469,37 @@ public class SemanticSearch extends GenericResource {
                                     String name = it.next();
                                     RDFNode x = rb.get(name);
                                     sbf.append("<td >");
-                                    SemanticObject so = SemanticObject.createSemanticObject(x.toString());
-                                    System.out.println(so.getProperty(Descriptiveable.swb_title));
-                                    System.out.println(so.getProperty(Descriptiveable.swb_description));
-                                    System.out.println("----------------------------------------------");
+                                    SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+                                    SemanticObject so = ont.getSemanticObject(x.toString());
 
                                     if (so != null) {
                                         if (first) {
                                             sbf.append(so.getDisplayName(lang));
+                                            sbf.append("</td><td>");
+                                            if (so.getProperty(Descriptiveable.swb_description) != null) {
+                                                sbf.append(so.getProperty(Descriptiveable.swb_description));
+                                            } else {
+                                                sbf.append("--");
+                                            }
+                                            sbf.append("</td>");
                                             first = false;
                                         } else {
                                             SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
                                             if (tt != null) {
                                                 sbf.append(tt.getDisplayName(lang));
+                                                sbf.append("</td><td>");
+                                            if (so.getProperty(Descriptiveable.swb_description) != null) {
+                                                sbf.append(so.getProperty(Descriptiveable.swb_description));
+                                            } else {
+                                                sbf.append("--");
+                                            }
+                                            sbf.append("</td>");
                                             } else {
                                                 SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
                                                 sbf.append(stt.getDisplayName(lang));
+                                                sbf.append("</td><td>");
+                                                sbf.append("--");
+                                                sbf.append("</td>");
                                             }
                                         }
                                     } else {
@@ -497,7 +509,6 @@ public class SemanticSearch extends GenericResource {
                                             sbf.append(" - ");
                                         }
                                     }
-                                    sbf.append("</td>");
                                 }
                                 sbf.append("</tr>");
                             }
@@ -508,7 +519,7 @@ public class SemanticSearch extends GenericResource {
                         }
                         sbf.append("</tbody>");
                         sbf.append("</table>");
-                        sbf.append("<p aling=\"center\">" + paramRequest.getLocaleString("exectime") + (System.currentTimeMillis() - time) + "ms." + "</p>");
+                        sbf.append("<p aling=\"center\">" + paramRequest.getLocaleString("exectime") + ": " + (System.currentTimeMillis() - time) + "ms." + "</p>");
                     } finally {
                         qexec.close();
                     }
@@ -523,8 +534,7 @@ public class SemanticSearch extends GenericResource {
                 sbf.append("</script>");
             }
         }
-        sbf.append("</div>" +
-        "  <div id=\"" + createId("busca-ayuda-ok") + "\" class=\"busca-ayuda-ok\" ></div>");
+        sbf.append("</div>");
         out.print(sbf.toString());
     }
 
