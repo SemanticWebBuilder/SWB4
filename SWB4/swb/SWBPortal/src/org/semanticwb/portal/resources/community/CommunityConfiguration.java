@@ -41,7 +41,7 @@ public class CommunityConfiguration extends GenericResource
     public static final String BLOG_RESOURCE_TYPE_ID = "BlogResource";
     public static final String WIKI_RESOURCE_TYPE_ID = "Wiki";
     public static final String GOOGLE_RESOURCE_TYPE_ID = "GoogleGadget";
-    public static final String CONFIGURATION_RESOURCE_TYPE_ID = "Configuration";
+    public static final String CONFIGURATION_RESOURCE_TYPE_ID = "CommunityConfiguration";
 
 
     static
