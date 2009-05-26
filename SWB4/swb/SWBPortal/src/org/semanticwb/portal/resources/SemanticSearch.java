@@ -94,6 +94,7 @@ public class SemanticSearch extends GenericResource {
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
         SWBResourceURL aUrl = paramRequest.getActionUrl();
         String query = request.getParameter(createId("naturalQuery"));
+        String query2 = request.getParameter(createId("h_naturalQuery"));
         String errCount = request.getParameter("errCode");
         String sparqlQuery = request.getParameter("sparqlQuery");
         String lang = paramRequest.getUser().getLanguage();
@@ -425,7 +426,9 @@ public class SemanticSearch extends GenericResource {
                    "action=\"" + aUrl + "\" method=\"post\" >\n" +
                       paramRequest.getLocaleString("prompt") + "<br>\n" +
                    "  <input type=\"text\" class=\"busca-txt-top\" id=\"" + createId("naturalQuery") + "\" " +
-                      "name=\"" + createId("naturalQuery") + "\" value=\"" + query + "\" />" +                   
+                      "name=\"" + createId("naturalQuery") + "\" value=\"" + query + "\" />" +
+                   "  <input type=\"hidden\" id=\"" + createId("h_naturalQuery") + "\" " +
+                   "  name=\"" + createId("h_naturalQuery") + "\" value=\"" + query2 + "\" />" +
                    "  <input type=\"submit\" class=\"busca-btn-top\" />\n" +
                    "  <div id=\"" + createId("busca-ayuda-ok") + "\" class=\"busca-ayuda-ok\" ></div>" +
                    "</form>\n");
