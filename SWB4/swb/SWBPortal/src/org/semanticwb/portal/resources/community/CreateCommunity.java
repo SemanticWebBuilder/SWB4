@@ -28,14 +28,14 @@ public class CreateCommunity extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        //doAdmin(request, response, paramRequest);
+        doAdmin(request, response, paramRequest);
     }
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        WebPage currentWebPage = paramRequest.getTopic();
 
+        WebPage currentWebPage = paramRequest.getTopic();
         PrintWriter out = response.getWriter();
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
