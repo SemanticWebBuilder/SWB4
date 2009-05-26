@@ -47,6 +47,7 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         }
     }
 
+    
      public void doAdd(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
 
@@ -64,6 +65,7 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
 
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newBackButton());
+
         out.println(mgr.renderForm(request));
     }
 
