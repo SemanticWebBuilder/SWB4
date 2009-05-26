@@ -335,12 +335,16 @@ public class SWBSparQL extends GenericResource {
             }
         }catch(Exception e)
         {
-            out.println("<fieldset>");
-            out.println("Error: <BR>");
-            out.println("<textarea name=\"query\" rows=20 cols=80>");
-            e.printStackTrace(out);
-            out.println("</textarea>");
-            out.println("</fieldset>");
+
+            //Comentado para que no  muestre nada en caso de no recibir el parametro o
+            //que este mal definida la expresión de sparql
+
+//            out.println("<fieldset>");
+//            out.println("Error: <BR>");
+//            out.println("<textarea name=\"query\" rows=20 cols=80>");
+//            e.printStackTrace(out);
+//            out.println("</textarea>");
+//            out.println("</fieldset>");
         }
     }
 
