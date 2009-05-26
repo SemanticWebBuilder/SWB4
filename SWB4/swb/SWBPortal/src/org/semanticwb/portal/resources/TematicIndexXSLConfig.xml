@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmIndiceTematicoXSL" action="true" method="POST" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+                <fieldset>
+		<input type="FILE" name="template" label="Plantilla (xsl, xslt):" jsrequired="false" showfile="true" msg="Plantilla actual " bydefault="{@webpath}wbadmin/xsl/IndiceTematicoXSL/IndiceTematicoXSL.xslt" msgbydefault="Plantilla por defecto " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+        <input type="TEXT" name="inisection" label="Id de la página:" size="20" jsrequired="false" value=""/>
+        <input type="CHECKBOX" name="sendparams" label="Reenvio de parámetros:"  value="true" checked="false"/>
+                </fieldset>
+                <fieldset>
+		<input type="SUBMIT" name="btnSave"  value="Guardar"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+                </fieldset>
+	</form>
+</admresource>
