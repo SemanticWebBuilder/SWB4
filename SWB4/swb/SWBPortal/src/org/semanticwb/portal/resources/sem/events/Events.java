@@ -124,15 +124,23 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         if(action.equals(response.Action_EDIT)){
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("EventUri"));
             SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
-            mgr.processForm(request);
+            try{
+                mgr.processForm(request);
+            }catch(Exception e){
+                
+            }
         }else if(action.equals(response.Action_REMOVE)){
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("EventUri"));
             semObject.remove();
         }else if(action.equals(response.Action_ADD)){
             SWBFormMgr mgr = new SWBFormMgr(Event.eve_Event, response.getResourceBase().getSemanticObject(), null);
-            SemanticObject semObj = mgr.processForm(request);
-            Event newEvent = Event.getEvent(semObj.getId(), response.getTopic().getWebSite());
-            newEvent.setEventResource(this);
+             try{
+                SemanticObject semObj = mgr.processForm(request);
+                Event newEvent = Event.getEvent(semObj.getId(), response.getTopic().getWebSite());
+                newEvent.setEventResource(this);
+             }catch(Exception e){
+
+             }
         }
         response.setMode(response.Mode_VIEW);
     }
