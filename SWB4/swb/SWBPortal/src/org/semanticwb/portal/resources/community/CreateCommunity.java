@@ -110,6 +110,7 @@ public class CreateCommunity extends GenericResource
                         }
                         catch (Exception e)
                         {
+                            e.printStackTrace();
                             out.println(e.getMessage());
                         }
                     }
@@ -159,6 +160,7 @@ public class CreateCommunity extends GenericResource
                     }
                     catch (Exception e)
                     {
+                        e.printStackTrace();
                         out.println(e.getMessage());
                     }
 
@@ -201,6 +203,7 @@ public class CreateCommunity extends GenericResource
                         }
                         catch (Exception e)
                         {
+                            e.printStackTrace();
                             out.println(e.getMessage());
                         }
                     }
