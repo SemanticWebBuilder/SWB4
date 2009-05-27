@@ -164,7 +164,7 @@ public class CreateCommunity extends GenericResource
                 if (request.getParameter("title") == null)
                 {
                     out.println("<div>");
-                    out.println("<form name='frmselecttype' method='post' action=''>");
+                    out.println("<form name='frmselecttype' method='post' action='"+ paramRequest.getActionUrl() +"'>");
                     out.println("<fieldset><label for='title'>Indique el nombre de la persona:</label>");
                     out.println("<input type='text' name='title' id='title'>");
                     out.println("<input type='hidden' name='selecttype' value='" + type + "'>");
@@ -195,7 +195,7 @@ public class CreateCommunity extends GenericResource
                     if (request.getParameter("title") == null)
                     {
                         out.println("<div>");
-                        out.println("<form name='frmselecttype' method='post' action=''>");
+                        out.println("<form name='frmselecttype' method='post' action='"+ paramRequest.getActionUrl() +"'>");
                         out.println("<fieldset><label for='title'>Indique el nombre organización:</label>");
                         out.println("<input type='text' name='title' id='title'>");
                         out.println("<input type='hidden' name='selecttype' value='" + type + "'>");
