@@ -99,12 +99,19 @@ public class CreateCommunity extends GenericResource
                 {
                     if (currentWebPage.getParent() != null && currentWebPage.getParent().getParent() != null && currentWebPage.getParent().getParent().getParent() != null && currentWebPage.getParent().getParent().getParent().getId().equals(TEMAS_TOPIC_ID))
                     {
-                        WebSite site = paramRequest.getTopic().getWebSite();
-                        String title = request.getParameter("title");
-                        LocationEntity entity = LocationEntity.getLocationEntity(WEBPAGE_TOPIC_LOCATION, site);
-                        WebPage topic = currentWebPage;
-                        String resByDefault = request.getParameter("resbydefault");
-                        CommunityConfiguration.createCommunityTopic(site, title, entity, topic, resByDefault);
+                        try
+                        {
+                            WebSite site = paramRequest.getTopic().getWebSite();
+                            String title = request.getParameter("title");
+                            LocationEntity entity = LocationEntity.getLocationEntity(WEBPAGE_TOPIC_LOCATION, site);
+                            WebPage topic = currentWebPage;
+                            String resByDefault = request.getParameter("resbydefault");
+                            CommunityConfiguration.createCommunityTopic(site, title, entity, topic, resByDefault);
+                        }
+                        catch (Exception e)
+                        {
+                            out.println(e.getMessage());
+                        }
                     }
                 }
             }
@@ -146,7 +153,14 @@ public class CreateCommunity extends GenericResource
                     LocationEntity entity = LocationEntity.getLocationEntity("Tlalpan", site);
                     WebPage topic = null;
                     String resByDefault = request.getParameter("resbydefault");
-                    CommunityConfiguration.createComunnityPerson(site, title, entity, topic, resByDefault);
+                    try
+                    {
+                        CommunityConfiguration.createComunnityPerson(site, title, entity, topic, resByDefault);
+                    }
+                    catch (Exception e)
+                    {
+                        out.println(e.getMessage());
+                    }
 
                 }
                 if (type.equals("o"))
@@ -176,12 +190,19 @@ public class CreateCommunity extends GenericResource
                     }
                     else
                     {
-                        WebSite site = paramRequest.getTopic().getWebSite();
-                        String title = request.getParameter("title");
-                        LocationEntity entity = LocationEntity.getLocationEntity("Tlalpan", site);
-                        WebPage topic = null;
-                        String resByDefault = request.getParameter("resbydefault");
-                        CommunityConfiguration.createComunnityOrganization(site, title, entity, topic, resByDefault);
+                        try
+                        {
+                            WebSite site = paramRequest.getTopic().getWebSite();
+                            String title = request.getParameter("title");
+                            LocationEntity entity = LocationEntity.getLocationEntity("Tlalpan", site);
+                            WebPage topic = null;
+                            String resByDefault = request.getParameter("resbydefault");
+                            CommunityConfiguration.createComunnityOrganization(site, title, entity, topic, resByDefault);
+                        }
+                        catch (Exception e)
+                        {
+                            out.println(e.getMessage());
+                        }
                     }
                 }
             }
