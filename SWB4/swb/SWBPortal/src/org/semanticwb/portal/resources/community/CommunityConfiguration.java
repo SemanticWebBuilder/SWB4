@@ -72,14 +72,14 @@ public class CommunityConfiguration extends GenericResource
 
         
 
-        WebPage google = createGoogleGadget(site, title, pageTopic, resourceByDefault);
-        google.setParent(pageTopic);
-        WebPage foro = createForo(site, title, pageTopic, resourceByDefault);
-        foro.setParent(pageTopic);
-        WebPage blog = createBlog(site, title, pageTopic, resourceByDefault);
-        blog.setParent(pageTopic);
-        WebPage wiki = createWiki(site, title, pageTopic, resourceByDefault);
-        wiki.setParent(pageTopic);
+        createGoogleGadget(site, title, pageTopic, resourceByDefault);
+        //google.setParent(pageTopic);
+        createForo(site, title, pageTopic, resourceByDefault);
+        //foro.setParent(pageTopic);
+        createBlog(site, title, pageTopic, resourceByDefault);
+        //blog.setParent(pageTopic);
+        createWiki(site, title, pageTopic, resourceByDefault);
+        //wiki.setParent(pageTopic);
     }
 
     public static void createComunnityOrganization(WebSite site, String title, LocationEntity locationentity, WebPage topic, String resourceByDefault)
@@ -101,13 +101,13 @@ public class CommunityConfiguration extends GenericResource
         pageTopic.setParent(communityContainer);
         pageTopic.setTitle(title);
         WebPage google = createGoogleGadget(site, title, pageTopic, resourceByDefault);
-        google.setParent(pageTopic);
-        WebPage foro = createForo(site, title, pageTopic, resourceByDefault);
-        foro.setParent(pageTopic);
-        WebPage blog = createBlog(site, title, pageTopic, resourceByDefault);
-        blog.setParent(pageTopic);
-        WebPage wiki = createWiki(site, title, pageTopic, resourceByDefault);
-        wiki.setParent(pageTopic);
+        
+        createForo(site, title, pageTopic, resourceByDefault);
+        
+        createBlog(site, title, pageTopic, resourceByDefault);
+        
+        createWiki(site, title, pageTopic, resourceByDefault);
+        
     }
 
     public static void createCommunityTopic(WebSite site, String title, LocationEntity locationentity, WebPage topic, String resourceByDefault)
@@ -127,14 +127,14 @@ public class CommunityConfiguration extends GenericResource
 
         pageTopic.setParent(communityContainer);
         pageTopic.setTitle(title);
-        WebPage google = createGoogleGadget(site, title, pageTopic, resourceByDefault);
-        google.setParent(pageTopic);
-        WebPage foro = createForo(site, title, pageTopic, resourceByDefault);
-        foro.setParent(pageTopic);
-        WebPage blog = createBlog(site, title, pageTopic, resourceByDefault);
-        blog.setParent(pageTopic);
-        WebPage wiki = createWiki(site, title, pageTopic, resourceByDefault);
-        wiki.setParent(pageTopic);
+        createGoogleGadget(site, title, pageTopic, resourceByDefault);
+        
+        createForo(site, title, pageTopic, resourceByDefault);
+        
+        createBlog(site, title, pageTopic, resourceByDefault);
+        
+        createWiki(site, title, pageTopic, resourceByDefault);
+        
     }
 
     public static WebPage createForo(WebSite site, String title, WebPage parent, String resourceByDefault)
