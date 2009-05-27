@@ -402,7 +402,7 @@ public class CommunityConfiguration extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        doView(request, response, paramRequest);
+        doAdmin(request, response, paramRequest);
     }
 
     public HashSet<Resource> getResources(WebPage page)
