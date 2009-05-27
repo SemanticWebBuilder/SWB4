@@ -1,0 +1,412 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:ontology="http://dbpedia.org/ontology/"
+    xmlns:swbc="http://www.semanticwb.org/swbcatalogs#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:emex="http://www.semanticwebbuilder.org/emexcatalog.owl#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.semanticwebbuilder.org/emexcatalog.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwb.org/swbcatalogs"/>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="school">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >school</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="EducationalInstitution"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="College">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >College</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#EducationalInstitution"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#EducationalInstitution">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Educational institution</rdfs:label>
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="Organisation">
+        <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Organization</swb:classCodeName>
+        <rdfs:label xml:lang="en">Organización</rdfs:label>
+        <rdfs:label xml:lang="en">Organisation</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="university">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >university</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#EducationalInstitution"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="location">
+    <rdfs:range rdf:resource="http://www.semanticwb.org/swbcatalogs#LocationEntity"/>
+    <rdfs:label xml:lang="es">Ubicación</rdfs:label>
+    <rdfs:label xml:lang="en">Location</rdfs:label>
+    <rdfs:domain rdf:resource="#Organisation"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >location</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="phoneNumber">
+    <rdfs:label xml:lang="en">Phone number</rdfs:label>
+    <rdfs:label xml:lang="es">Número telefónico</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Organisation"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >phoneNumber</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="name">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Nombre</rdfs:label>
+    <rdfs:label xml:lang="en">Name</rdfs:label>
+    <rdfs:domain rdf:resource="#Organisation"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >name</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="address">
+    <rdfs:label xml:lang="en">Dirección</rdfs:label>
+    <rdfs:label xml:lang="en">Address</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Organisation"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >address</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <swbc:County rdf:ID="Burgos">
+    <rdfs:label xml:lang="en">Burgos</rdfs:label>
+    <rdfs:label xml:lang="es">Burgos</rdfs:label>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >24.948787</swbc:latitud>
+    <swbc:state>
+      <swbc:State rdf:ID="Tamaulipas">
+        <swbc:stateCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >28</swbc:stateCode>
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-98.563332</swbc:longitud>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >24.287222</swbc:latitud>
+        <swbc:country>
+          <swbc:Country rdf:ID="Mexico">
+            <swbc:name xml:lang="es">México</swbc:name>
+            <swbc:name xml:lang="en">Mexico</swbc:name>
+            <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >-99.366669</swbc:longitud>
+            <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >19.049999</swbc:latitud>
+            <swbc:countryCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >52</swbc:countryCode>
+            <rdfs:label xml:lang="es">México</rdfs:label>
+            <rdfs:label xml:lang="en">Mexico</rdfs:label>
+          </swbc:Country>
+        </swbc:country>
+        <rdfs:label xml:lang="en">Tamaulipas</rdfs:label>
+        <rdfs:label xml:lang="es">Tamaulipas</rdfs:label>
+      </swbc:State>
+    </swbc:state>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5</swbc:countyCode>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-98.800478</swbc:longitud>
+  </swbc:County>
+  <swb:Class rdf:ID="Cinemark">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinemark</rdfs:label>
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="Cinema">
+        <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Cinema</swb:classCodeName>
+        <rdfs:label xml:lang="es">Cine</rdfs:label>
+        <rdfs:label xml:lang="en">Cinema</rdfs:label>
+        <rdfs:subClassOf>
+          <swb:Class rdf:ID="Company">
+            <rdfs:label xml:lang="es">Compañía</rdfs:label>
+            <rdfs:label xml:lang="en">Company</rdfs:label>
+            <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Company</swb:classCodeName>
+            <rdfs:subClassOf rdf:resource="#Organisation"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </rdfs:subClassOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swbc:State rdf:ID="AguasCalientes">
+    <rdfs:label xml:lang="es">Aguascalientes</rdfs:label>
+    <rdfs:label xml:lang="en">Aguascalientes</rdfs:label>
+    <swbc:country rdf:resource="#Mexico"/>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >22.021667</swbc:latitud>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-102.356392</swbc:longitud>
+    <swbc:stateCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >1</swbc:stateCode>
+  </swbc:State>
+  <swb:Class rdf:ID="Cinepolis">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinepolis</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Cinema"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swbc:County rdf:ID="Cosio">
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-102.300003</swbc:longitud>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >22.366667</swbc:latitud>
+    <swbc:state rdf:resource="#AguasCalientes"/>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >4</swbc:countyCode>
+    <rdfs:label xml:lang="es">Cosío</rdfs:label>
+    <rdfs:label xml:lang="en">Cosio</rdfs:label>
+  </swbc:County>
+  <emex:Lumiere rdf:ID="Lumiere_coapa">
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556066365</emex:phoneNumber>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinemas Lumiere Prado Coapa</emex:name>
+    <emex:location>
+      <swbc:County rdf:ID="Tlalpan">
+        <swbc:state>
+          <swbc:State rdf:ID="Mexico_DF">
+            <rdfs:label xml:lang="en">Mexico DF</rdfs:label>
+            <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >-99.130699</swbc:longitud>
+            <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >19.409500</swbc:latitud>
+            <rdfs:label xml:lang="es">México D.F.</rdfs:label>
+            <swbc:country rdf:resource="#Mexico"/>
+            <swbc:altitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >7349</swbc:altitud>
+            <swbc:stateCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >9</swbc:stateCode>
+          </swbc:State>
+        </swbc:state>
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-99.316666</swbc:longitud>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >19.316668</swbc:latitud>
+        <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >12</swbc:countyCode>
+        <rdfs:label xml:lang="en">Tlalpan</rdfs:label>
+        <rdfs:label xml:lang="es">Tlalpan</rdfs:label>
+      </swbc:County>
+    </emex:location>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Prol. Div. del Norte 4515, Col. Prado Coapa, CP 14370, Tlalpan, D.F.</emex:address>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Lumiere_coapa</rdfs:label>
+  </emex:Lumiere>
+  <swbc:County rdf:ID="Asientos">
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >2</swbc:countyCode>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-102.083336</swbc:longitud>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >22.233334</swbc:latitud>
+    <swbc:state rdf:resource="#AguasCalientes"/>
+    <rdfs:label xml:lang="en">Asientos</rdfs:label>
+    <rdfs:label xml:lang="es">Asientos</rdfs:label>
+  </swbc:County>
+  <swbc:County rdf:ID="Miguel_hidalgo">
+    <rdfs:label xml:lang="en">Miguel Hidalgo</rdfs:label>
+    <rdfs:label xml:lang="es">Miguel Hidalgo</rdfs:label>
+    <swbc:state rdf:resource="#Mexico_DF"/>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-99.191523</swbc:longitud>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >19.406819</swbc:latitud>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >16</swbc:countyCode>
+  </swbc:County>
+  <swbc:County rdf:ID="Cordoba">
+    <rdfs:label xml:lang="es">Córdoba</rdfs:label>
+    <rdfs:label xml:lang="en">Cordoba</rdfs:label>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >18.894167</swbc:latitud>
+    <swbc:state>
+      <swbc:State rdf:ID="Veracruz">
+        <swbc:stateCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >30</swbc:stateCode>
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-96.383057</swbc:longitud>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >19.434723</swbc:latitud>
+        <swbc:country rdf:resource="#Mexico"/>
+        <rdfs:label xml:lang="es">Veracrúz</rdfs:label>
+        <rdfs:label xml:lang="en">Veracruz</rdfs:label>
+      </swbc:State>
+    </swbc:state>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >44</swbc:countyCode>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-96.934723</swbc:longitud>
+  </swbc:County>
+  <swb:Class rdf:ID="Lumiere">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Lumiere</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Cinema"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swbc:County rdf:ID="Altamira">
+    <swbc:state rdf:resource="#Tamaulipas"/>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-97.936249</swbc:longitud>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >22.395594</swbc:latitud>
+    <rdfs:label xml:lang="en">Altamira</rdfs:label>
+    <rdfs:label xml:lang="es">Altamira</rdfs:label>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >3</swbc:countyCode>
+  </swbc:County>
+  <swbc:County rdf:ID="Las_minas">
+    <rdfs:label xml:lang="es">Las minas</rdfs:label>
+    <rdfs:label xml:lang="en">Las minas</rdfs:label>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >19.690435</swbc:latitud>
+    <swbc:state rdf:resource="#Veracruz"/>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >107</swbc:countyCode>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-97.147894</swbc:longitud>
+  </swbc:County>
+  <swb:Class rdf:ID="Theatre">
+    <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Theatre</swb:classCodeName>
+    <rdfs:label xml:lang="es">Teatro</rdfs:label>
+    <rdfs:label xml:lang="en">Theatre</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Company"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swbc:County rdf:ID="Abasolo">
+    <rdfs:label xml:lang="en">Abasolo</rdfs:label>
+    <rdfs:label xml:lang="es">Abasolo</rdfs:label>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-98.367012</swbc:longitud>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >24.057907</swbc:latitud>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >1</swbc:countyCode>
+    <swbc:state rdf:resource="#Tamaulipas"/>
+  </swbc:County>
+  <emex:Cinepolis rdf:ID="Cinepolis_ajusco">
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >55 30 89 46 52</emex:phoneNumber>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinépolis Ajusco</emex:name>
+    <emex:location rdf:resource="#Tlalpan"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Carretera Picacho Ajusco 175 Col. Héroes de Padierna C.P. 14200 Delegación Tlalpan México D.F.</emex:address>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinepolis Ajusco</rdfs:label>
+  </emex:Cinepolis>
+  <swbc:County rdf:ID="Actopan">
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-96.602118</swbc:longitud>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >19.504663</swbc:latitud>
+    <swbc:state rdf:resource="#Veracruz"/>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >4</swbc:countyCode>
+    <rdfs:label xml:lang="en">Actopan</rdfs:label>
+    <rdfs:label xml:lang="es">Actopan</rdfs:label>
+  </swbc:County>
+  <swbc:County rdf:ID="Atoyac">
+    <rdfs:label xml:lang="en">Atoyac</rdfs:label>
+    <rdfs:label xml:lang="es">Atoyac</rdfs:label>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >18.91603</swbc:latitud>
+    <swbc:state rdf:resource="#Veracruz"/>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >21</swbc:countyCode>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-96.780195</swbc:longitud>
+  </swbc:County>
+  <swbc:County rdf:ID="Alvaro_Obregon">
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >10</swbc:countyCode>
+    <swbc:state rdf:resource="#Mexico_DF"/>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-99.199891</swbc:longitud>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >19.399988</swbc:latitud>
+    <rdfs:label xml:lang="es">Alvaro Obregón</rdfs:label>
+    <rdfs:label xml:lang="en">Alvaro Obregon</rdfs:label>
+  </swbc:County>
+  <swbc:County rdf:ID="Aldama">
+    <swbc:state rdf:resource="#Tamaulipas"/>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-98.077269</swbc:longitud>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >22.917725</swbc:latitud>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >2</swbc:countyCode>
+    <rdfs:label xml:lang="en">Aldama</rdfs:label>
+    <rdfs:label xml:lang="es">Aldama</rdfs:label>
+  </swbc:County>
+  <emex:Cinemark rdf:ID="Cinemark_obregon">
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5552801878</emex:phoneNumber>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinemark Alvaro Obregón</emex:name>
+    <emex:location rdf:resource="#Alvaro_Obregon"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >AVENIDA SAN JERONIMO 263 B, PUEBLO TIZAPAN, C.P. 01090, ALVARO OBREGON, D.F.</emex:address>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinemark_obregon</rdfs:label>
+  </emex:Cinemark>
+  <swbc:County rdf:ID="Xochimilco">
+    <rdfs:label xml:lang="en">Xochimilco</rdfs:label>
+    <rdfs:label xml:lang="es">Xochimilco</rdfs:label>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >19.263000</swbc:latitud>
+    <swbc:state rdf:resource="#Mexico_DF"/>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >13</swbc:countyCode>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-99.102997</swbc:longitud>
+  </swbc:County>
+  <emex:Cinepolis rdf:ID="Cinepolis_pericoapa">
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >52801878</emex:phoneNumber>
+    <emex:name xml:lang="en">Cinépolis pericoapa</emex:name>
+    <emex:name xml:lang="es">Cinépolis pericoapa</emex:name>
+    <emex:location rdf:resource="#Tlalpan"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Avenida Canal de miramontes 3163, Municipio de Tlalpan, México D.F.</emex:address>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinepolis_pericoapa</rdfs:label>
+  </emex:Cinepolis>
+  <swbc:County rdf:ID="Aguascalientes">
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-102.356392</swbc:longitud>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >22.021667</swbc:latitud>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >1</swbc:countyCode>
+    <swbc:state rdf:resource="#AguasCalientes"/>
+    <rdfs:label xml:lang="en">Aguascalientes</rdfs:label>
+    <rdfs:label xml:lang="es">Aguascalientes</rdfs:label>
+  </swbc:County>
+  <swbc:County rdf:ID="Calvillo">
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-102.716667</swbc:longitud>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >21.850000</swbc:latitud>
+    <swbc:state rdf:resource="#AguasCalientes"/>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >3</swbc:countyCode>
+    <rdfs:label xml:lang="es">Calvillo</rdfs:label>
+    <rdfs:label xml:lang="en">Calvillo</rdfs:label>
+  </swbc:County>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
