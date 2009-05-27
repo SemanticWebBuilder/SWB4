@@ -30,16 +30,20 @@ public class CreateCommunity extends GenericResource
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         WebPage currentWebPage = response.getTopic();
+        System.out.println(request.getParameter("selecttype"));
         if (request.getParameter("selecttype") != null && request.getParameter("title") != null)
         {
+            
             String type = request.getParameter("selecttype");
             String title = request.getParameter("title");
+            System.out.println(request.getParameter("title"));
             if (type.equals("t"))
             {
                 if (currentWebPage.getParent() != null && currentWebPage.getParent().getParent() != null && currentWebPage.getParent().getParent().getParent() != null && currentWebPage.getParent().getParent().getParent().getId().equals(TEMAS_TOPIC_ID))
                 {
                     try
                     {
+                        System.out.println("Creando comunidad");
                         WebSite site = response.getTopic().getWebSite();
                         LocationEntity entity = LocationEntity.getLocationEntity(WEBPAGE_TOPIC_LOCATION, site);
                         WebPage topic = currentWebPage;
