@@ -58,6 +58,7 @@ public class CommunityConfiguration extends GenericResource
     {
         WebPage communityContainer = site.getWebPage(COMMUNITY_CONTAINER_ID);
         PersonalComm pageTopic = PersonalComm.createPersonalComm(UUID.randomUUID().toString(), site);
+        pageTopic.setParent(communityContainer);
         pageTopic.setTitle(title);
         pageTopic.setLocatedIn(locationentity);
         pageTopic.setAbout(topic);
@@ -69,7 +70,7 @@ public class CommunityConfiguration extends GenericResource
         resource.setResourceType(resourcetype);
 
 
-        pageTopic.setParent(communityContainer);
+        
 
         WebPage google = createGoogleGadget(site, title, pageTopic, resourceByDefault);
         google.setParent(pageTopic);
