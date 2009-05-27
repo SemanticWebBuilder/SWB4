@@ -49,7 +49,7 @@ public class CreateCommunity extends GenericResource
                 {
                     try
                     {
-                        System.out.println("Creando comunidad");                        
+                        System.out.println("Creando comunidad...");
                         LocationEntity entity = LocationEntity.getLocationEntity(WEBPAGE_TOPIC_LOCATION, site);
                         WebPage topic = currentWebPage;
                         String resByDefault = request.getParameter("resbydefault");
