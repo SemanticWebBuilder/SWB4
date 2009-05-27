@@ -27,6 +27,6 @@ public class CreateComunityLink extends GenericResource{
         PrintWriter out=response.getWriter();
 
         WebPage comunityContainer=WebPage.getWebPage(CommunityConfiguration.COMMUNITY_CONTAINER_ID, paramRequest.getTopic().getWebSite());
-        out.print("<a href=\"/swb/swb/Tlalpan/Comunidades?selecttype=t&swbtp="+ comunityContainer.getId() +"\" class=\"categoria\"><span class=\"listadocompleto\">Crear una comunidad</span></a>");
+        out.print("<a href=\""+comunityContainer.getUrl()+"?selecttype=t&swbtp="+ paramRequest.getTopic().getId() +"\" class=\"categoria\"><span class=\"listadocompleto\">Crear una comunidad</span></a>");
     }
 }
