@@ -85,6 +85,7 @@ public class CreateCommunity extends GenericResource
                 }
             }
         }
+        response.setMode(response.Mode_VIEW);
     }
 
     @Override
