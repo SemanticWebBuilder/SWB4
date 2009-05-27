@@ -12,6 +12,7 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.catalogs.LocationEntity;
 import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -24,6 +25,67 @@ public class CreateCommunity extends GenericResource
 
     public static final String WEBPAGE_TOPIC_LOCATION = "Tlalpan";
     private static final String TEMAS_TOPIC_ID = "Temas";
+
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
+    {
+        WebPage currentWebPage = response.getTopic();
+        if (request.getParameter("selecttype") != null && request.getParameter("title") != null)
+        {
+            String type = request.getParameter("selecttype");
+            String title = request.getParameter("title");
+            if (type.equals("t"))
+            {
+                if (currentWebPage.getParent() != null && currentWebPage.getParent().getParent() != null && currentWebPage.getParent().getParent().getParent() != null && currentWebPage.getParent().getParent().getParent().getId().equals(TEMAS_TOPIC_ID))
+                {
+                    try
+                    {
+                        WebSite site = response.getTopic().getWebSite();
+                        LocationEntity entity = LocationEntity.getLocationEntity(WEBPAGE_TOPIC_LOCATION, site);
+                        WebPage topic = currentWebPage;
+                        String resByDefault = request.getParameter("resbydefault");
+                        CommunityConfiguration.createCommunityTopic(site, title, entity, topic, resByDefault);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if (type.equals("p"))
+            {
+                WebSite site = response.getTopic().getWebSite();
+
+                LocationEntity entity = LocationEntity.getLocationEntity("Tlalpan", site);
+                WebPage topic = null;
+                String resByDefault = request.getParameter("resbydefault");
+                try
+                {
+                    CommunityConfiguration.createComunnityPerson(site, title, entity, topic, resByDefault);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+
+                }
+            }
+            if (type.equals("o"))
+            {
+                try
+                {
+                    WebSite site = response.getTopic().getWebSite();
+                    LocationEntity entity = LocationEntity.getLocationEntity("Tlalpan", site);
+                    WebPage topic = null;
+                    String resByDefault = request.getParameter("resbydefault");
+                    CommunityConfiguration.createComunnityOrganization(site, title, entity, topic, resByDefault);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -68,7 +130,7 @@ public class CreateCommunity extends GenericResource
                 if (request.getParameter("title") == null)
                 {
                     out.println("<div>");
-                    out.println("<form name='frmselecttype' method='post' action=''>");
+                    out.println("<form name='frmselecttype' method='post' action='" + paramRequest.getActionUrl() + "'>");
                     out.println("<fieldset><label for='title'>Indique el tema a crear:</label>");
                     out.println("<input type='text' name='title' id='title'>");
                     out.println("<input type='hidden' name='selecttype' value='" + type + "'><br>");
@@ -77,8 +139,8 @@ public class CreateCommunity extends GenericResource
                     out.println("<option value='" + CommunityConfiguration.BLOG_RESOURCE_TYPE_ID + "'>Blog");
                     out.println("<option value='" + CommunityConfiguration.FORO_RESOURCE_TYPE_ID + "'>Foro");
                     out.println("<option value='" + CommunityConfiguration.WIKI_RESOURCE_TYPE_ID + "'>Wiki");
-                    out.println("<option value=''>Ninguno");
-                    out.println("</select name='resbydefault'>");
+                    out.println("<option value='n'>Ninguno");
+                    out.println("</select>");
                     out.println("<input type='button' onClick='ValidaTitulo()' name='enviar' value='Crear'>");
                     out.println("</fieldset>");
                     out.println("</form>");
@@ -95,26 +157,7 @@ public class CreateCommunity extends GenericResource
                     out.println("}");
                     out.println("</script>");
                 }
-                else
-                {
-                    if (currentWebPage.getParent() != null && currentWebPage.getParent().getParent() != null && currentWebPage.getParent().getParent().getParent() != null && currentWebPage.getParent().getParent().getParent().getId().equals(TEMAS_TOPIC_ID))
-                    {
-                        try
-                        {
-                            WebSite site = paramRequest.getTopic().getWebSite();
-                            String title = request.getParameter("title");
-                            LocationEntity entity = LocationEntity.getLocationEntity(WEBPAGE_TOPIC_LOCATION, site);
-                            WebPage topic = currentWebPage;
-                            String resByDefault = request.getParameter("resbydefault");
-                            CommunityConfiguration.createCommunityTopic(site, title, entity, topic, resByDefault);
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                            out.println(e.getMessage());
-                        }
-                    }
-                }
+
             }
             if (type.equals("p"))
             {
@@ -129,8 +172,8 @@ public class CreateCommunity extends GenericResource
                     out.println("<option value='" + CommunityConfiguration.BLOG_RESOURCE_TYPE_ID + "'>Blog");
                     out.println("<option value='" + CommunityConfiguration.FORO_RESOURCE_TYPE_ID + "'>Foro");
                     out.println("<option value='" + CommunityConfiguration.WIKI_RESOURCE_TYPE_ID + "'>Wiki");
-                    out.println("<option value=''>Ninguno");
-                    out.println("</select name='resbydefault'>");
+                    out.println("<option value='n'>Ninguno");
+                    out.println("</select>");
                     out.println("<input type='button' onClick='ValidaTitulo()' name='enviar' value='Crear'>");
                     out.println("</fieldset>");
                     out.println("</form>");
@@ -146,24 +189,6 @@ public class CreateCommunity extends GenericResource
                     out.println("   frmselecttype.submit();");
                     out.println("}");
                     out.println("</script>");
-                }
-                else
-                {
-                    WebSite site = paramRequest.getTopic().getWebSite();
-                    String title = request.getParameter("title");
-                    LocationEntity entity = LocationEntity.getLocationEntity("Tlalpan", site);
-                    WebPage topic = null;
-                    String resByDefault = request.getParameter("resbydefault");
-                    try
-                    {
-                        CommunityConfiguration.createComunnityPerson(site, title, entity, topic, resByDefault);
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                        out.println(e.getMessage());
-                    }
-
                 }
                 if (type.equals("o"))
                 {
@@ -189,23 +214,6 @@ public class CreateCommunity extends GenericResource
                         out.println("   frmselecttype.submit();");
                         out.println("}");
                         out.println("</script>");
-                    }
-                    else
-                    {
-                        try
-                        {
-                            WebSite site = paramRequest.getTopic().getWebSite();
-                            String title = request.getParameter("title");
-                            LocationEntity entity = LocationEntity.getLocationEntity("Tlalpan", site);
-                            WebPage topic = null;
-                            String resByDefault = request.getParameter("resbydefault");
-                            CommunityConfiguration.createComunnityOrganization(site, title, entity, topic, resByDefault);
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                            out.println(e.getMessage());
-                        }
                     }
                 }
             }
