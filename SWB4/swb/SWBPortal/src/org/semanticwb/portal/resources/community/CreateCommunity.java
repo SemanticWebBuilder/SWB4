@@ -51,6 +51,10 @@ public class CreateCommunity extends GenericResource
                         e.printStackTrace();
                     }
                 }
+                else
+                {
+                    System.out.println("La página web no es un tema");
+                }
             }
             if (type.equals("p"))
             {
