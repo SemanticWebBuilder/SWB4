@@ -295,7 +295,7 @@ public class WBAAccessLogHitsReport extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         final int I_ACCESS = 0;
         Resource base = paramsRequest.getResourceBase();
-        StringBuilder sb_ret = new StringBuilder();
+        StringBuilder ret = new StringBuilder();
 
         HashMap hm_sites = new HashMap();
 
@@ -329,317 +329,317 @@ public class WBAAccessLogHitsReport extends GenericResource {
                 url.setCallMethod(url.Call_DIRECT);
 
                 // javascript
-                sb_ret.append("<script type=\"text/javascript\">\n");
+                ret.append("<script type=\"text/javascript\">\n");
 
-                sb_ret.append("dojo.require(\"dojox.grid.DataGrid\");\n");
-                sb_ret.append("dojo.require(\"dojo.data.ItemFileReadStore\");\n");
-                sb_ret.append("dojo.require(\"dijit.form.TimeTextBox\");\n");
+                ret.append("dojo.require(\"dojox.grid.DataGrid\");\n");
+                ret.append("dojo.require(\"dojo.data.ItemFileReadStore\");\n");
+                ret.append("dojo.require(\"dijit.form.TimeTextBox\");\n");
                 
-                sb_ret.append("dojo.addOnLoad(refresh);\n");
+                ret.append("dojo.addOnLoad(refresh);\n");
 
-                sb_ret.append("function refresh() {\n");
-                sb_ret.append("    postHtml('"+url+"'+'/_mod/fillDevSel'+'?site='+dojo.byId('wb_site').options[dojo.byId('wb_site').selectedIndex].value,'dev_cntr');\n");
-                sb_ret.append("    postHtml('"+url+"'+'/_mod/fillLangSel'+'?site='+dojo.byId('wb_site').options[dojo.byId('wb_site').selectedIndex].value,'lang_cntr');\n");
-                sb_ret.append("    postHtml('"+url+"'+'/_mod/fillUTSel'+'?site='+dojo.byId('wb_site').options[dojo.byId('wb_site').selectedIndex].value,'ut_cntr');\n");
-                sb_ret.append("}\n");
+                ret.append("function refresh() {\n");
+                ret.append("    postHtml('"+url+"'+'/_mod/fillDevSel'+'?site='+dojo.byId('wb_site').options[dojo.byId('wb_site').selectedIndex].value,'dev_cntr');\n");
+                ret.append("    postHtml('"+url+"'+'/_mod/fillLangSel'+'?site='+dojo.byId('wb_site').options[dojo.byId('wb_site').selectedIndex].value,'lang_cntr');\n");
+                ret.append("    postHtml('"+url+"'+'/_mod/fillUTSel'+'?site='+dojo.byId('wb_site').options[dojo.byId('wb_site').selectedIndex].value,'ut_cntr');\n");
+                ret.append("}\n");
 
-                sb_ret.append("dojo.addOnLoad(function(){\n");
-                sb_ret.append("   var t = new Date();\n");
-                sb_ret.append("   var t1 = new dijit.form.TimeTextBox({name:\"t1\", value:new Date(t.getFullYear(), t.getMonth(), t.getDate(), 0, 0),\n");
-                sb_ret.append("                constraints:{timePattern:'HH:mm', clickableIncrement:'T00:15:00', visibleIncrement:'T00:15:00', visibleRange:'T02:00:00'}\n");
-                sb_ret.append("   }, \"wb_t11\");\n");
+                ret.append("dojo.addOnLoad(function(){\n");
+                ret.append("   var t = new Date();\n");
+                ret.append("   var t1 = new dijit.form.TimeTextBox({name:\"t1\", value:new Date(t.getFullYear(), t.getMonth(), t.getDate(), 0, 0),\n");
+                ret.append("                constraints:{timePattern:'HH:mm', clickableIncrement:'T00:15:00', visibleIncrement:'T00:15:00', visibleRange:'T02:00:00'}\n");
+                ret.append("   }, \"wb_t11\");\n");
 
-                sb_ret.append("   var t2 = new dijit.form.TimeTextBox({name:\"t2\", value:new Date(t.getFullYear(), t.getMonth(), t.getDate(), 23, 59),\n");
-                sb_ret.append("                constraints:{timePattern:'HH:mm', clickableIncrement:'T00:15:00', visibleIncrement:'T00:15:00', visibleRange:'T02:00:00'}\n");
-                sb_ret.append("   }, \"wb_t12\");\n");
-                sb_ret.append("});\n");
+                ret.append("   var t2 = new dijit.form.TimeTextBox({name:\"t2\", value:new Date(t.getFullYear(), t.getMonth(), t.getDate(), 23, 59),\n");
+                ret.append("                constraints:{timePattern:'HH:mm', clickableIncrement:'T00:15:00', visibleIncrement:'T00:15:00', visibleRange:'T02:00:00'}\n");
+                ret.append("   }, \"wb_t12\");\n");
+                ret.append("});\n");
 
 
-                sb_ret.append("function fillGrid(grid, uri, mode, params) {\n");
-                sb_ret.append("   grid.store = new dojo.data.ItemFileReadStore({url: uri+'/_mod/'+mode+params});\n");
-                sb_ret.append("   grid._refresh();\n");
-                sb_ret.append("}\n");
+                ret.append("function fillGrid(grid, uri, mode, params) {\n");
+                ret.append("   grid.store = new dojo.data.ItemFileReadStore({url: uri+'/_mod/'+mode+params});\n");
+                ret.append("   grid._refresh();\n");
+                ret.append("}\n");
 
-                sb_ret.append("var layout= null;\n");
-                sb_ret.append("var jStrMaster = null;\n");
-                sb_ret.append("var gridMaster = null;\n");
-                sb_ret.append("var gridResources = null;\n");
+                ret.append("var layout= null;\n");
+                ret.append("var jStrMaster = null;\n");
+                ret.append("var gridMaster = null;\n");
+                ret.append("var gridResources = null;\n");
                 
-                sb_ret.append("dojo.addOnLoad(function() {\n");
-                sb_ret.append("   layout= [\n");
-                sb_ret.append("      { field:\"detail\", width:\"5%\", name:\"Ver Detalle\" },\n");
-                sb_ret.append("      { field:\"date\", width:\"33%\", name:\"Fecha\" },\n");
-                sb_ret.append("      { field:\"agregate\", width:\"33%\", name:\"Total Agregado\" },\n");
-                sb_ret.append("   ];\n");
+                ret.append("dojo.addOnLoad(function() {\n");
+                ret.append("   layout= [\n");
+                ret.append("      { field:\"detail\", width:\"5%\", name:\"Ver Detalle\" },\n");
+                ret.append("      { field:\"date\", width:\"33%\", name:\"Fecha\" },\n");
+                ret.append("      { field:\"agregate\", width:\"33%\", name:\"Total Agregado\" },\n");
+                ret.append("   ];\n");
 
-                sb_ret.append("   gridMaster = new dojox.grid.DataGrid({\n");
-                sb_ret.append("      id: \"gridMaster\",\n");
-                sb_ret.append("      structure: layout,\n");
-                sb_ret.append("      rowSelector: \"10px\",\n");
-                sb_ret.append("      rowsPerPage: \"15\"\n");
-                sb_ret.append("   }, \"gridMaster\");\n");
-                sb_ret.append("   gridMaster.startup();\n");
-                sb_ret.append("});\n");
+                ret.append("   gridMaster = new dojox.grid.DataGrid({\n");
+                ret.append("      id: \"gridMaster\",\n");
+                ret.append("      structure: layout,\n");
+                ret.append("      rowSelector: \"10px\",\n");
+                ret.append("      rowsPerPage: \"15\"\n");
+                ret.append("   }, \"gridMaster\");\n");
+                ret.append("   gridMaster.startup();\n");
+                ret.append("});\n");
 
 
-                sb_ret.append("function getParams() {\n");
-                sb_ret.append("   var params = '?';\n");
-                sb_ret.append("   params += 'siteid='+dojo.byId('wb_site').value;\n");
-                sb_ret.append("   params += '&fecha11='+dojo.byId('wb_fecha11').value;\n");
-                sb_ret.append("   params += '&t11='+dojo.byId('wb_t11').value;\n");
-                sb_ret.append("   params += '&fecha12='+dojo.byId('wb_fecha12').value;\n");
-                sb_ret.append("   params += '&t12='+dojo.byId('wb_t12').value;\n");
-                sb_ret.append("   if(dojo.byId('wb_ipuser').value) {\n");
-                sb_ret.append("      params += '&ipuser='+dojo.byId('wb_ipuser').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_ipserver').value) {\n");
-                sb_ret.append("      params += '&ipserver='+dojo.byId('wb_ipserver').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_sectid').value) {\n");
-                sb_ret.append("      params += '&sectid='+dojo.byId('wb_sectid').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_subsect').checked) {\n");
-                sb_ret.append("      params += '&subsection=true';\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_userid').value) {\n");
-                sb_ret.append("      params += '&userid='+dojo.byId('wb_userid').value;\n");
-                sb_ret.append("   }\n");                
-                sb_ret.append("   if(dojo.byId('wb_usertype').value) {\n");
-                sb_ret.append("      params += '&usertype='+dojo.byId('wb_usertype').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_devid').value) {\n");
-                sb_ret.append("      params += '&devid='+dojo.byId('wb_devid').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_langid').value) {\n");
-                sb_ret.append("      params += '&langid='+dojo.byId('wb_langid').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_resid').value) {\n");
-                sb_ret.append("      params += '&resid='+dojo.byId('wb_resid').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   if(dojo.byId('wb_sessid').value) {\n");
-                sb_ret.append("      params += '&sessid='+dojo.byId('wb_sessid').value;\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   params += '&agregate='+getAgregate();\n");                
-                sb_ret.append("   return params;\n");
-                sb_ret.append("}\n");
+                ret.append("function getParams() {\n");
+                ret.append("   var params = '?';\n");
+                ret.append("   params += 'siteid='+dojo.byId('wb_site').value;\n");
+                ret.append("   params += '&fecha11='+dojo.byId('wb_fecha11').value;\n");
+                ret.append("   params += '&t11='+dojo.byId('wb_t11').value;\n");
+                ret.append("   params += '&fecha12='+dojo.byId('wb_fecha12').value;\n");
+                ret.append("   params += '&t12='+dojo.byId('wb_t12').value;\n");
+                ret.append("   if(dojo.byId('wb_ipuser').value) {\n");
+                ret.append("      params += '&ipuser='+dojo.byId('wb_ipuser').value;\n");
+                ret.append("   }\n");
+                ret.append("   if(dojo.byId('wb_ipserver').value) {\n");
+                ret.append("      params += '&ipserver='+dojo.byId('wb_ipserver').value;\n");
+                ret.append("   }\n");
+                ret.append("   if(dojo.byId('wb_sectid').value) {\n");
+                ret.append("      params += '&sectid='+dojo.byId('wb_sectid').value;\n");
+                ret.append("   }\n");
+                ret.append("   if(dojo.byId('wb_subsect').checked) {\n");
+                ret.append("      params += '&subsection=true';\n");
+                ret.append("   }\n");
+                ret.append("   if(dojo.byId('wb_userid').value) {\n");
+                ret.append("      params += '&userid='+dojo.byId('wb_userid').value;\n");
+                ret.append("   }\n");
+                ret.append("   if(dojo.byId('wb_usertype').value) {\n");
+                ret.append("      params += '&usertype='+dojo.byId('wb_usertype').value;\n");
+                ret.append("   }\n");
+                ret.append("   if(dojo.byId('wb_devid').value) {\n");
+                ret.append("      params += '&devid='+dojo.byId('wb_devid').value;\n");
+                ret.append("   }\n");
+                ret.append("   if(dojo.byId('wb_langid').value) {\n");
+                ret.append("      params += '&langid='+dojo.byId('wb_langid').value;\n");
+                ret.append("   }\n");
+                ret.append("   if(dojo.byId('wb_resid').value) {\n");
+                ret.append("      params += '&resid='+dojo.byId('wb_resid').value;\n");
+                ret.append("   }\n");
+                ret.append("   if(dojo.byId('wb_sessid').value) {\n");
+                ret.append("      params += '&sessid='+dojo.byId('wb_sessid').value;\n");
+                ret.append("   }\n");
+                ret.append("   params += '&agregate='+getAgregate();\n");
+                ret.append("   return params;\n");
+                ret.append("}\n");
 
-                sb_ret.append("function doApply() {\n");                
-                sb_ret.append("   var params = getParams();\n");
-                sb_ret.append("   var grid = dijit.byId('gridMaster');\n");
-                sb_ret.append("   fillGrid(grid, '"+url+"', 'fillGridAgrd', params);\n");
-                sb_ret.append("}\n");
+                ret.append("function doApply() {\n");
+                ret.append("   var params = getParams();\n");
+                ret.append("   var grid = dijit.byId('gridMaster');\n");
+                ret.append("   fillGrid(grid, '"+url+"', 'fillGridAgrd', params);\n");
+                ret.append("}\n");
                 
-                sb_ret.append("function getAgregate() {\n");
-                sb_ret.append("   var agrd = \"2\";\n");
-                sb_ret.append("   for(i=0; i<window.document.frmrep.wb_agregate.length; i++) {\n");
-                sb_ret.append("      if(window.document.frmrep.wb_agregate[i].checked==true) {\n");
-                sb_ret.append("         strType = window.document.frmrep.wb_agregate[i].value;\n");
-                sb_ret.append("      }\n");
-                sb_ret.append("   }\n");
-                sb_ret.append("   return strType;\n");
-                sb_ret.append("}\n");
+                ret.append("function getAgregate() {\n");
+                ret.append("   var agrd = \"2\";\n");
+                ret.append("   for(i=0; i<window.document.frmrep.wb_agregate.length; i++) {\n");
+                ret.append("      if(window.document.frmrep.wb_agregate[i].checked==true) {\n");
+                ret.append("         strType = window.document.frmrep.wb_agregate[i].value;\n");
+                ret.append("      }\n");
+                ret.append("   }\n");
+                ret.append("   return strType;\n");
+                ret.append("}\n");
 
-                sb_ret.append("function doDetail(size, key) { \n");
-                sb_ret.append("   var params = getParams();\n");
-                sb_ret.append("   params += '&key='+key;\n");
-                sb_ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_detail")+"\"+params,\"detailWindow\", size);\n");
-                sb_ret.append("}\n");
+                ret.append("function doDetail(size, key) { \n");
+                ret.append("   var params = getParams();\n");
+                ret.append("   params += '&key='+key;\n");
+                ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_detail")+"\"+params,\"detailWindow\", size);\n");
+                ret.append("}\n");
                 
-                sb_ret.append("function doGraph(accion, size) {\n");
-                sb_ret.append("   var params = getParams();\n");
-                sb_ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);\n");
-                sb_ret.append("}\n");
+                ret.append("function doGraph(accion, size) {\n");
+                ret.append("   var params = getParams();\n");
+                ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);\n");
+                ret.append("}\n");
 
-                sb_ret.append("function doExcel(accion, size) {\n");
-                sb_ret.append("   var params = getParams();\n");
-                sb_ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);\n");
-                sb_ret.append("}\n");
+                ret.append("function doExcel(accion, size) {\n");
+                ret.append("   var params = getParams();\n");
+                ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_excel")+"\"+params,\"graphWindow\",size);\n");
+                ret.append("}\n");
 
-                sb_ret.append("function doXml(accion, size) {\n");
-                sb_ret.append("   var params = getParams();\n");
-                sb_ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);\n");
-                sb_ret.append("}\n");
+                ret.append("function doXml(accion, size) {\n");
+                ret.append("   var params = getParams();\n");
+                ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);\n");
+                ret.append("}\n");
 
-                sb_ret.append("</script>\n");
+                ret.append("</script>\n");
 
-                sb_ret.append("<div class=\"swbform\">\n");
-                sb_ret.append("<fieldset>");
-                sb_ret.append(paramsRequest.getLocaleString("description_1"));
-                sb_ret.append("</fieldset>\n");
+                ret.append("<div class=\"swbform\">\n");
+                ret.append("<fieldset>");
+                ret.append(paramsRequest.getLocaleString("description_1"));
+                ret.append("</fieldset>\n");
 
-                sb_ret.append("<form method=\"Post\" class=\"box\" action=\"" + address + "\" id=\"frmrep\" name=\"frmrep\">\n");
-                sb_ret.append("<fieldset>\n");
-                sb_ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
-                sb_ret.append("<tr><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td></tr>\n");
+                ret.append("<form method=\"Post\" class=\"box\" action=\"" + address + "\" id=\"frmrep\" name=\"frmrep\">\n");
+                ret.append("<fieldset>\n");
+                ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
+                ret.append("<tr><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td></tr>\n");
 
-                sb_ret.append("<tr>\n");
-                sb_ret.append("<td><label for=\"wb_site\">" + paramsRequest.getLocaleString("site") + ":</label></td>\n");
-                sb_ret.append("<td>\n");
-                sb_ret.append("<select name=\"wb_site\" id=\"wb_site\" onChange=\"refresh();\" >\n");
+                ret.append("<tr>\n");
+                ret.append("<td><label for=\"wb_site\">" + paramsRequest.getLocaleString("site") + ":</label></td>\n");
+                ret.append("<td>\n");
+                ret.append("<select name=\"wb_site\" id=\"wb_site\" onChange=\"refresh();\" >\n");
                 Iterator<String> itKeys = hm_sites.keySet().iterator();
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
-                    sb_ret.append("<option value=\""+key+"\">"+(String)hm_sites.get(key)+"</option>\n");
+                    ret.append("<option value=\""+key+"\">"+(String)hm_sites.get(key)+"</option>\n");
                 }
-                sb_ret.append("</select>\n");
-                sb_ret.append("</td>\n");
-                sb_ret.append("<td>&nbsp;</td>\n");
-                sb_ret.append("<td>&nbsp;</td>\n");
-                sb_ret.append("</tr>\n");
+                ret.append("</select>\n");
+                ret.append("</td>\n");
+                ret.append("<td>&nbsp;</td>\n");
+                ret.append("<td>&nbsp;</td>\n");
+                ret.append("</tr>\n");
                 
-                sb_ret.append("<tr>\n");
-                sb_ret.append("<td>"+paramsRequest.getLocaleString("by_interval_date")+":&nbsp;</td>\n");
-                sb_ret.append("<td>&nbsp;</td>\n");
-                sb_ret.append("<td>&nbsp;</td>\n");
-                sb_ret.append("<td>&nbsp;</td>\n");
-                sb_ret.append("</tr>\n");
+                ret.append("<tr>\n");
+                ret.append("<td>"+paramsRequest.getLocaleString("by_interval_date")+":&nbsp;</td>\n");
+                ret.append("<td>&nbsp;</td>\n");
+                ret.append("<td>&nbsp;</td>\n");
+                ret.append("<td>&nbsp;</td>\n");
+                ret.append("</tr>\n");
 
-                sb_ret.append("<tr>\n");
-                sb_ret.append("<td>&nbsp;</td>\n");
-                sb_ret.append("<td align=\"left\" colspan=\"2\">\n");
-                sb_ret.append("<label for=\"wb_fecha11\">Del:&nbsp;</label>\n");
-                sb_ret.append("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
-                /*sb_ret.append("</td>\n");
-                sb_ret.append("<td>\n");*/
-                sb_ret.append("&nbsp;&nbsp;");
-                sb_ret.append("<label for=\"wb_t11\">Tiempo:&nbsp;</label>\n");
-                sb_ret.append("<input type=\"text\" name=\"wb_t11\" id=\"wb_t11\" size=\"6\" style=\"width:40px;\" />\n");
-                sb_ret.append("</td>\n");
-                sb_ret.append("<td></td>\n");
-                sb_ret.append("</tr>\n");
+                ret.append("<tr>\n");
+                ret.append("<td>&nbsp;</td>\n");
+                ret.append("<td align=\"left\" colspan=\"2\">\n");
+                ret.append("<label for=\"wb_fecha11\">Del:&nbsp;</label>\n");
+                ret.append("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
+                /*ret.append("</td>\n");
+                ret.append("<td>\n");*/
+                ret.append("&nbsp;&nbsp;");
+                ret.append("<label for=\"wb_t11\">Tiempo:&nbsp;</label>\n");
+                ret.append("<input type=\"text\" name=\"wb_t11\" id=\"wb_t11\" size=\"6\" style=\"width:40px;\" />\n");
+                ret.append("</td>\n");
+                ret.append("<td></td>\n");
+                ret.append("</tr>\n");
 
-                sb_ret.append("<tr>\n");
-                sb_ret.append("<td>&nbsp;</td>\n");
-                sb_ret.append("<td align=\"left\" colspan=\"2\">\n");
-                sb_ret.append("<label for=\"wb_fecha12\">&nbsp;&nbsp;Al:&nbsp;</label>\n");
-                sb_ret.append("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
-                /*sb_ret.append("</td>\n");
-                sb_ret.append("<td>\n");*/
-                sb_ret.append("&nbsp;&nbsp;");
-                sb_ret.append("<label for=\"wb_t12\">Tiempo:&nbsp;</label>\n");
-                sb_ret.append("<input name=\"wb_t12\" id=\"wb_t12\" />\n");
-                sb_ret.append("</td>\n");
-                sb_ret.append("<td></td>\n");
-                sb_ret.append("</tr>\n");
+                ret.append("<tr>\n");
+                ret.append("<td>&nbsp;</td>\n");
+                ret.append("<td align=\"left\" colspan=\"2\">\n");
+                ret.append("<label for=\"wb_fecha12\">&nbsp;&nbsp;Al:&nbsp;</label>\n");
+                ret.append("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
+                /*ret.append("</td>\n");
+                ret.append("<td>\n");*/
+                ret.append("&nbsp;&nbsp;");
+                ret.append("<label for=\"wb_t12\">Tiempo:&nbsp;</label>\n");
+                ret.append("<input name=\"wb_t12\" id=\"wb_t12\" />\n");
+                ret.append("</td>\n");
+                ret.append("<td></td>\n");
+                ret.append("</tr>\n");
 
-                sb_ret.append("<tr>\n");
-                sb_ret.append("<td><label for=\"wb_ipuser\">"+paramsRequest.getLocaleString("ipaddress_user")+":&nbsp;</label></td>\n");
-                sb_ret.append("<td><input type=\"text\" name=\"wb_ipuser\" id=\"wb_ipuser\" size=\"20\" /></td>\n");
-                sb_ret.append("<td><label for=\"wb_ipserver\">"+paramsRequest.getLocaleString("ipaddress_server")+":&nbsp;</label></td>\n");
-                sb_ret.append("<td><input type=\"text\" name=\"wb_ipserver\" id=\"wb_ipserver\" size=\"20\" /></td>\n");
-                sb_ret.append("</tr>\n");
+                ret.append("<tr>\n");
+                ret.append("<td><label for=\"wb_ipuser\">"+paramsRequest.getLocaleString("ipaddress_user")+":&nbsp;</label></td>\n");
+                ret.append("<td><input type=\"text\" name=\"wb_ipuser\" id=\"wb_ipuser\" size=\"20\" /></td>\n");
+                ret.append("<td><label for=\"wb_ipserver\">"+paramsRequest.getLocaleString("ipaddress_server")+":&nbsp;</label></td>\n");
+                ret.append("<td><input type=\"text\" name=\"wb_ipserver\" id=\"wb_ipserver\" size=\"20\" /></td>\n");
+                ret.append("</tr>\n");
 
-                sb_ret.append("<tr>\n");
-                sb_ret.append("<td><label for=\"wb_sectid\">"+paramsRequest.getLocaleString("sectionid")+":&nbsp;</label></td>\n");
-                sb_ret.append("<td>\n");
-                sb_ret.append("<input type=\"text\" name=\"wb_sectid\" id=\"wb_sectid\" size=\"20\" />");
-                sb_ret.append("</td>\n");
-                sb_ret.append("<td><label for=\"wb_subsect\">"+paramsRequest.getLocaleString("subsections")+":&nbsp;</label></td>\n");
-                sb_ret.append("<td>\n");
-                sb_ret.append("<input type=\"checkbox\" name=\"wb_subsect\" id=\"wb_subsect\" value=\"true\" />\n");
-                sb_ret.append("</td>\n");
-                sb_ret.append("</tr>\n");
+                ret.append("<tr>\n");
+                ret.append("<td><label for=\"wb_sectid\">"+paramsRequest.getLocaleString("sectionid")+":&nbsp;</label></td>\n");
+                ret.append("<td>\n");
+                ret.append("<input type=\"text\" name=\"wb_sectid\" id=\"wb_sectid\" size=\"20\" />");
+                ret.append("</td>\n");
+                ret.append("<td><label for=\"wb_subsect\">"+paramsRequest.getLocaleString("subsections")+":&nbsp;</label></td>\n");
+                ret.append("<td>\n");
+                ret.append("<input type=\"checkbox\" name=\"wb_subsect\" id=\"wb_subsect\" value=\"true\" />\n");
+                ret.append("</td>\n");
+                ret.append("</tr>\n");
 
-                sb_ret.append("<tr>\n");
-                sb_ret.append("<td><label for=\"wb_userid\">"+paramsRequest.getLocaleString("user")+":&nbsp;</label></td>\n");
-                sb_ret.append("<td><input type=\"text\" name=\"wb_userid\" id=\"wb_userid\" size=\"20\" /></td>\n");
-                sb_ret.append("<td><label for=\"wb_usertype\">"+paramsRequest.getLocaleString("user_type")+":&nbsp;</td>\n");
-                sb_ret.append("<td>\n");
-                sb_ret.append("<div id=\"ut_cntr\"></div>\n");
-                sb_ret.append("</td>\n");
-                sb_ret.append("</tr>\n");
+                ret.append("<tr>\n");
+                ret.append("<td><label for=\"wb_userid\">"+paramsRequest.getLocaleString("user")+":&nbsp;</label></td>\n");
+                ret.append("<td><input type=\"text\" name=\"wb_userid\" id=\"wb_userid\" size=\"20\" /></td>\n");
+                ret.append("<td><label for=\"wb_usertype\">"+paramsRequest.getLocaleString("user_type")+":&nbsp;</td>\n");
+                ret.append("<td>\n");
+                ret.append("<div id=\"ut_cntr\"></div>\n");
+                ret.append("</td>\n");
+                ret.append("</tr>\n");
 
-                sb_ret.append("<tr>\n");
+                ret.append("<tr>\n");
                 // DEVICES
-                sb_ret.append("<td><label for=\"wb_devid\">"+paramsRequest.getLocaleString("device")+":&nbsp;</label></td>\n");
-                sb_ret.append("<td>\n");
-                sb_ret.append("<div id=\"dev_cntr\"></div>\n");
-                sb_ret.append("</td>\n");
+                ret.append("<td><label for=\"wb_devid\">"+paramsRequest.getLocaleString("device")+":&nbsp;</label></td>\n");
+                ret.append("<td>\n");
+                ret.append("<div id=\"dev_cntr\"></div>\n");
+                ret.append("</td>\n");
                 // LANGUAGES
-                sb_ret.append("<td><label for=\"wb_langid\">"+paramsRequest.getLocaleString("language")+":&nbsp;</label></td>\n");
-                sb_ret.append("<td>\n");
-                sb_ret.append("<div id=\"lang_cntr\"></div>\n");
-                sb_ret.append("</td>\n");
-                sb_ret.append("</tr>\n");
+                ret.append("<td><label for=\"wb_langid\">"+paramsRequest.getLocaleString("language")+":&nbsp;</label></td>\n");
+                ret.append("<td>\n");
+                ret.append("<div id=\"lang_cntr\"></div>\n");
+                ret.append("</td>\n");
+                ret.append("</tr>\n");
 
-                sb_ret.append("<tr>\n");
+                ret.append("<tr>\n");
                 // RESOURCE
-                sb_ret.append("<td><label for=\"wb_resid\">"+paramsRequest.getLocaleString("id_resource")+":&nbsp;</label></td>\n");
-                sb_ret.append("<td><input type=\"text\" name=\"wb_resid\" id=\"wb_resid\" size=\"20\" maxlength=\"4\" /></td>\n");
+                ret.append("<td><label for=\"wb_resid\">"+paramsRequest.getLocaleString("id_resource")+":&nbsp;</label></td>\n");
+                ret.append("<td><input type=\"text\" name=\"wb_resid\" id=\"wb_resid\" size=\"20\" maxlength=\"4\" /></td>\n");
                 // SESSION
-                sb_ret.append("<td><label for=\"wb_sessid\">"+paramsRequest.getLocaleString("session")+":&nbsp;</label></td>\n");
-                sb_ret.append("<td><input type=\"text\" name=\"wb_sessid\" id=\"wb_sessid\" size=\"20\" /></td>\n");
-                sb_ret.append("</tr>\n");
+                ret.append("<td><label for=\"wb_sessid\">"+paramsRequest.getLocaleString("session")+":&nbsp;</label></td>\n");
+                ret.append("<td><input type=\"text\" name=\"wb_sessid\" id=\"wb_sessid\" size=\"20\" /></td>\n");
+                ret.append("</tr>\n");
 
-                sb_ret.append("<tr>\n");
+                ret.append("<tr>\n");
                 // USER REPOSITORY
-                sb_ret.append("<td><label for=\"wb_urepid\">"+paramsRequest.getLocaleString("repository")+":&nbsp;</label></td>\n");
-                sb_ret.append("<td>\n");
-                sb_ret.append("<input type=\"text\" name=\"wb_urepid\" id=\"wb_urepid\" value=\""+repositoryName+"\" readonly=\"readonly\" />\n");
-                sb_ret.append("</td>\n");
-                sb_ret.append("<td></td>\n");
-                sb_ret.append("<td></td>\n");
-                sb_ret.append("</tr>\n");
+                ret.append("<td><label for=\"wb_urepid\">"+paramsRequest.getLocaleString("repository")+":&nbsp;</label></td>\n");
+                ret.append("<td>\n");
+                ret.append("<input type=\"text\" name=\"wb_urepid\" id=\"wb_urepid\" value=\""+repositoryName+"\" readonly=\"readonly\" />\n");
+                ret.append("</td>\n");
+                ret.append("<td></td>\n");
+                ret.append("<td></td>\n");
+                ret.append("</tr>\n");
 
-                sb_ret.append("<tr>\n");
-                sb_ret.append("<td height=\"25px\">"+paramsRequest.getLocaleString("agregate_by")+":&nbsp;</td>\n");
-                sb_ret.append("<td colspan=\"3\" height=\"25px\">\n");
-                sb_ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"1\" />"+paramsRequest.getLocaleString("by_year")+"</label>&nbsp;&nbsp;\n");
-                sb_ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"2\" checked=\"checked\" />"+paramsRequest.getLocaleString("by_month")+"</label>&nbsp;&nbsp;\n");
-                sb_ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"3\" />"+paramsRequest.getLocaleString("by_day")+"</label>&nbsp;&nbsp;\n");
-                sb_ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"4\" />"+paramsRequest.getLocaleString("by_hour")+"</label>\n");
-                sb_ret.append("</td>\n");
-                sb_ret.append("</tr>\n");
-                sb_ret.append("</table>\n");
-                sb_ret.append("</fieldset>\n");
+                ret.append("<tr>\n");
+                ret.append("<td height=\"25px\">"+paramsRequest.getLocaleString("agregate_by")+":&nbsp;</td>\n");
+                ret.append("<td colspan=\"3\" height=\"25px\">\n");
+                ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"1\" />"+paramsRequest.getLocaleString("by_year")+"</label>&nbsp;&nbsp;\n");
+                ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"2\" checked=\"checked\" />"+paramsRequest.getLocaleString("by_month")+"</label>&nbsp;&nbsp;\n");
+                ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"3\" />"+paramsRequest.getLocaleString("by_day")+"</label>&nbsp;&nbsp;\n");
+                ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"4\" />"+paramsRequest.getLocaleString("by_hour")+"</label>\n");
+                ret.append("</td>\n");
+                ret.append("</tr>\n");
+                ret.append("</table>\n");
+                ret.append("</fieldset>\n");
 
-                sb_ret.append("<fieldset>\n");
-                sb_ret.append("<table border=\"0\" width=\"95%\">\n");
-                sb_ret.append(" <tr>\n");
-                sb_ret.append("     <td colspan=\"4\">&nbsp;&nbsp;&nbsp;\n");
-                sb_ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;\n");
-                sb_ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">MS Excel</button>&nbsp;\n");
-                sb_ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>&nbsp;\n");
-                sb_ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>\n");
-                sb_ret.append("     </td>\n");
-                sb_ret.append(" </tr>\n");
-                sb_ret.append("</table>\n");
-                sb_ret.append("</fieldset>\n");
-                sb_ret.append("</form>\n");
+                ret.append("<fieldset>\n");
+                ret.append("<table border=\"0\" width=\"95%\">\n");
+                ret.append(" <tr>\n");
+                ret.append("     <td colspan=\"4\">&nbsp;&nbsp;&nbsp;\n");
+                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;\n");
+                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">MS Excel</button>&nbsp;\n");
+                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("graph")+"</button>&nbsp;\n");
+                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>\n");
+                ret.append("     </td>\n");
+                ret.append(" </tr>\n");
+                ret.append("</table>\n");
+                ret.append("</fieldset>\n");
+                ret.append("</form>\n");
 
-                sb_ret.append("<fieldset>\n");
-                sb_ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
-                sb_ret.append("<tr>\n");
-                sb_ret.append("<td colspan=\"4\">\n");
-                sb_ret.append("<div id=\"ctnergrid\" style=\"height:250px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">\n");
-                sb_ret.append("  <div id=\"gridMaster\"></div>\n");
-                sb_ret.append("</div>\n");
-                sb_ret.append("</td>\n");
-                sb_ret.append("</tr>\n");
-                sb_ret.append("</table>\n");
-                sb_ret.append("</fieldset>\n");
+                ret.append("<fieldset>\n");
+                ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
+                ret.append("<tr>\n");
+                ret.append("<td colspan=\"4\">\n");
+                ret.append("<div id=\"ctnergrid\" style=\"height:250px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">\n");
+                ret.append("  <div id=\"gridMaster\"></div>\n");
+                ret.append("</div>\n");
+                ret.append("</td>\n");
+                ret.append("</tr>\n");
+                ret.append("</table>\n");
+                ret.append("</fieldset>\n");
 
-                sb_ret.append("</div>\n");
+                ret.append("</div>\n");
             }else { // There are not sites and displays a message
-                sb_ret.append("\n<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
-                sb_ret.append("\n<table border=0 width=\"100%\">");
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                sb_ret.append("\n<tr>");
-                sb_ret.append("\n<td>&nbsp;</td>");
-                sb_ret.append("\n<td colspan=\"2\" align=\"center\" class=\"datos\">" + paramsRequest.getLocaleString("no_sites_found") + "</td>");
-                sb_ret.append("\n<td>&nbsp;</td>");
-                sb_ret.append("\n</tr>");
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                sb_ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
-                sb_ret.append("\n</table></form>");
+                ret.append("\n<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                ret.append("\n<table border=0 width=\"100%\">");
+                ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                ret.append("\n<tr>");
+                ret.append("\n<td>&nbsp;</td>");
+                ret.append("\n<td colspan=\"2\" align=\"center\" class=\"datos\">" + paramsRequest.getLocaleString("no_sites_found") + "</td>");
+                ret.append("\n<td>&nbsp;</td>");
+                ret.append("\n</tr>");
+                ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
+                ret.append("\n</table></form>");
             }
         }catch (Exception e) {
             log.error("Error on method DoView() resource " + strRscType +  " with id " +  base.getId(), e);
         }
-        response.getWriter().print(sb_ret.toString());
+        response.getWriter().print(ret.toString());
     }
 
     public void doDetail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
