@@ -35,7 +35,6 @@ public class CreateCommunity extends GenericResource
         {
             currentWebPage=site.getWebPage(request.getParameter("swbtp"));
         }
-        System.out.println("currentWebPage: "+currentWebPage.getId());
         String type = request.getParameter("selecttype");
 
         if (request.getParameter("selecttype") != null && request.getParameter("title") != null)
@@ -95,9 +94,9 @@ public class CreateCommunity extends GenericResource
                     e.printStackTrace();
                 }
             }
+            response.sendRedirect(currentWebPage.getUrl());
         }
-        response.setMode(response.Mode_VIEW);
-        response.sendRedirect(currentWebPage.getUrl());
+        response.setMode(response.Mode_VIEW);        
     }
 
     @Override
