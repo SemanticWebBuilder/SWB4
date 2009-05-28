@@ -142,32 +142,44 @@ public class CreateCommunity extends GenericResource
             {
                 if (request.getParameter("title") == null)
                 {
-                    out.println("<div>");
-                    out.println("<form name='frmselecttype' method='post' action='" + paramRequest.getActionUrl() + "'>");
-                    out.println("<fieldset><label for='title'>Indique el tema a crear:</label>");
-                    out.println("<input type='text' name='title' id='title'><br>");
-
-                    out.println("<label for='description'>Indique la descripción del tema:</label>");
-                    out.println("<textarea rows='7' cols='20' name='description' id='description'></textarea>");
-
                     String topic=request.getParameter("swbtp");
                     if(topic==null || topic.trim().equals(""))
                     {
                         topic="";
                     }
+                    out.println("<div>");
+                    out.println("<table width='50%'>");
+                    out.println("<form name='frmselecttype' method='post' action='" + paramRequest.getActionUrl() + "'><fieldset>");
                     out.println("<input type='hidden' name='swbtp' id='swbtp' value='"+ topic +"'>");
                     out.println("<input type='hidden' name='selecttype' value='" + type + "'><br>");
-                    //out.println("<label for='title'>Indique el el contenido por defecto:</label>");
-                    /*out.println("<select name='resbydefault'>");
-                    out.println("<option value='" + CommunityConfiguration.BLOG_RESOURCE_TYPE_ID + "'>Blog");
-                    out.println("<option value='" + CommunityConfiguration.FORO_RESOURCE_TYPE_ID + "'>Foro");
-                    out.println("<option value='" + CommunityConfiguration.WIKI_RESOURCE_TYPE_ID + "'>Wiki");
-                    out.println("<option value='n'>Ninguno");
-                    out.println("</select>");*/
+                    out.println("<tr>");
+                    out.println("<td>");
+                    out.println("<label for='title'>Indique el tema a crear:</label>");
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println("<input type='text' name='title' id='title'><br>");
+                    out.println("</td>");
+                    out.println("</tr>");
+
+                    out.println("<tr>");
+                    out.println("<td>");
+                    out.println("<label for='description'>Indique la descripción del tema:</label>");
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println("<textarea rows='7' cols='20' name='description' id='description'></textarea>");
+                    out.println("</td>");
+                    out.println("</tr>");
+
                     
+                    out.println("<tr>");
+                    out.println("<td colspan='2' align='center'>");
                     out.println("<input type='button' onClick='ValidaTitulo()' name='enviar' value='Crear'>");
+                    out.println("<td>");
+                    out.println("</tr>");
+                    
                     out.println("</fieldset>");
                     out.println("</form>");
+                    out.println("</table>");
                     out.println("</div>");
                     out.println("<script>");
                     out.println("function ValidaTitulo()");
