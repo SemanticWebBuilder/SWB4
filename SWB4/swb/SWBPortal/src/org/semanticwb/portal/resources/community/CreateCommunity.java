@@ -145,7 +145,7 @@ public class CreateCommunity extends GenericResource
                     out.println("<div>");
                     out.println("<form name='frmselecttype' method='post' action='" + paramRequest.getActionUrl() + "'>");
                     out.println("<fieldset><label for='title'>Indique el tema a crear:</label>");
-                    out.println("<input type='text' name='title' id='title'>");
+                    out.println("<input type='text' name='title' id='title'><br>");
 
                     out.println("<label for='description'>Indique la descripción del tema:</label>");
                     out.println("<textarea rows='7' cols='20' name='description' id='description'></textarea>");
