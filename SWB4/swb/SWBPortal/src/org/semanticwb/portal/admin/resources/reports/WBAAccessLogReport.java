@@ -1310,10 +1310,10 @@ public class WBAAccessLogReport extends GenericResource {
         String agregateId = request.getParameter("agregate")==null ? "2":request.getParameter("agregate");
         
         try {
+            GregorianCalendar first = new GregorianCalendar(year11, month11-1, day11, hour11, minute11);
+            GregorianCalendar last  = new GregorianCalendar(year12, month12-1, day12, hour12, minute12);
             Iterator<String> files = getFileNames(request);
-            if(files.hasNext()) {
-                GregorianCalendar first = new GregorianCalendar(year11, month11-1, day11, hour11, minute11);
-                GregorianCalendar last  = new GregorianCalendar(year12, month12-1, day12, hour12, minute12);
+            if(files.hasNext()) {                
                 String s_key=null;
                 Vector vec_rep = null;
                 while(files.hasNext()) {

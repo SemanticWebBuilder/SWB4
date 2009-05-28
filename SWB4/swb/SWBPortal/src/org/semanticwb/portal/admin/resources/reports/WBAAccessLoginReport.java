@@ -30,9 +30,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class WBAAccessSessionReport extends GenericResource {
+public class WBAAccessLoginReport extends GenericResource {
 
-    private static Logger log = SWBUtils.getLogger(WBAAccessSessionReport.class);
+    private static Logger log = SWBUtils.getLogger(WBAAccessLoginReport.class);
     public String strRscType;
     private HashMap hm_detail = null;
 
@@ -42,7 +42,7 @@ public class WBAAccessSessionReport extends GenericResource {
         try {
             strRscType = base.getResourceType().getResourceClassName();
         } catch (Exception e) {
-            strRscType = "WBAAccessSessionReport";
+            strRscType = "WBAAccessLoginReport";
         }
     }
 
@@ -903,7 +903,7 @@ public class WBAAccessSessionReport extends GenericResource {
         String t12 = request.getParameter("t12") == null ? "23:59" : request.getParameter("t12");
         last.set(Calendar.HOUR_OF_DAY, Integer.parseInt(t12.substring(0, 2), 10));
         last.set(Calendar.MINUTE, Integer.parseInt(t12.substring(3, 5), 10));
-        
+
         String ipadduser = request.getParameter("ipuser") == null ? "" : request.getParameter("ipuser");
         if (!ipadduser.equalsIgnoreCase("")) {
             b_ipadduser = true;
@@ -956,7 +956,7 @@ public class WBAAccessSessionReport extends GenericResource {
                                 continue;
                             }
                             datefile = (GregorianCalendar)tokens.get("date");
-                            //Evaluates if dates are correct                            
+                            //Evaluates if dates are correct
                             if( (datefile.after(first) || datefile.equals(first)) && ((datefile.before(last) || datefile.equals(last))) ) {
                                 dateinfile = sdf.format(datefile.getTime());
                             }else {
