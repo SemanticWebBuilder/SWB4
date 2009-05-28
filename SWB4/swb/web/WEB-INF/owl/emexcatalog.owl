@@ -15,47 +15,113 @@
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
   </owl:Ontology>
-  <owl:Class rdf:ID="school">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >school</rdfs:label>
+  <owl:Class rdf:ID="Cinemark">
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="EducationalInstitution"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:ID="College">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >College</rdfs:label>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#EducationalInstitution"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#EducationalInstitution">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Educational institution</rdfs:label>
-    <rdfs:subClassOf>
-      <swb:Class rdf:ID="Organisation">
+      <swb:Class rdf:ID="Cinema">
         <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Organization</swb:classCodeName>
-        <rdfs:label xml:lang="en">Organización</rdfs:label>
-        <rdfs:label xml:lang="en">Organisation</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        >Cinema</swb:classCodeName>
+        <rdfs:label xml:lang="es">Cine</rdfs:label>
+        <rdfs:label xml:lang="en">Cinema</rdfs:label>
+        <rdfs:subClassOf>
+          <swb:Class rdf:ID="Company">
+            <rdfs:label xml:lang="es">Compañía</rdfs:label>
+            <rdfs:label xml:lang="en">Company</rdfs:label>
+            <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Company</swb:classCodeName>
+            <rdfs:subClassOf>
+              <swb:Class rdf:ID="Organisation">
+                <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >Organization</swb:classCodeName>
+                <rdfs:label xml:lang="en">Organización</rdfs:label>
+                <rdfs:label xml:lang="en">Organisation</rdfs:label>
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </rdfs:subClassOf>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </rdfs:subClassOf>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Cinemark</rdfs:label>
+    <rdfs:label xml:lang="en">Cinemark</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="university">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >university</rdfs:label>
+  <owl:Class rdf:ID="Elementary">
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="EducationalInstitution">
+        <rdfs:label xml:lang="es">Escuela</rdfs:label>
+        <rdfs:label xml:lang="en">Educational institution</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Organisation"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Primaria</rdfs:label>
+    <rdfs:label xml:lang="es">Elementary school</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Secondary">
     <rdfs:subClassOf rdf:resource="#EducationalInstitution"/>
+    <rdfs:label xml:lang="es">Secondary school</rdfs:label>
+    <rdfs:label xml:lang="es">Secundaria</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="University">
+    <rdfs:subClassOf rdf:resource="#EducationalInstitution"/>
+    <rdfs:label xml:lang="en">university</rdfs:label>
+    <rdfs:label xml:lang="es">Universidad</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Prescholar">
+    <rdfs:subClassOf rdf:resource="#EducationalInstitution"/>
+    <rdfs:label xml:lang="es">Prescolar</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="locationState">
+    <rdfs:range rdf:resource="http://www.semanticwb.org/swbcatalogs#State"/>
+    <rdfs:label xml:lang="en">State</rdfs:label>
+    <rdfs:label xml:lang="es">Estado</rdfs:label>
+    <rdfs:domain rdf:resource="#Organisation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="locationCounty">
+    <rdfs:label xml:lang="es">Municipio</rdfs:label>
+    <rdfs:label xml:lang="en">County</rdfs:label>
+    <rdfs:domain rdf:resource="#Organisation"/>
+    <rdfs:range>
+      <rdf:Description rdf:about="http://www.semanticwb.org/swbcatalogs#County">
+        <rdfs:label xml:lang="es">Municipio</rdfs:label>
+        <rdfs:label xml:lang="en">County</rdfs:label>
+      </rdf:Description>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="locationCountry">
+    <rdfs:domain rdf:resource="#Organisation"/>
+    <rdfs:label xml:lang="es">País</rdfs:label>
+    <rdfs:label xml:lang="en">Country</rdfs:label>
+    <rdfs:range rdf:resource="http://www.semanticwb.org/swbcatalogs#Country"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="locationCity">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >city</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#Organisation"/>
+    <rdfs:label xml:lang="es">Ciudad</rdfs:label>
+    <rdfs:label xml:lang="en">City</rdfs:label>
+    <rdfs:range rdf:resource="http://www.semanticwb.org/swbcatalogs#City"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="location">
     <rdfs:range rdf:resource="http://www.semanticwb.org/swbcatalogs#LocationEntity"/>
     <rdfs:label xml:lang="es">Ubicación</rdfs:label>
     <rdfs:label xml:lang="en">Location</rdfs:label>
-    <rdfs:domain rdf:resource="#Organisation"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >location</swb:propertyCodeName>
   </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="wpUrl">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >wp url</rdfs:label>
+    <rdfs:domain rdf:resource="#Organisation"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="phoneNumber">
     <rdfs:label xml:lang="en">Phone number</rdfs:label>
     <rdfs:label xml:lang="es">Número telefónico</rdfs:label>
@@ -72,6 +138,12 @@
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >name</swb:propertyCodeName>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="dbpediaName">
+    <rdfs:label xml:lang="en">dbPedia Name</rdfs:label>
+    <rdfs:label xml:lang="es">Nombre dbPedia</rdfs:label>
+    <rdfs:domain rdf:resource="http://www.semanticwb.org/swbcatalogs#County"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="address">
     <rdfs:label xml:lang="en">Dirección</rdfs:label>
     <rdfs:label xml:lang="en">Address</rdfs:label>
@@ -80,101 +152,16 @@
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >address</swb:propertyCodeName>
   </owl:DatatypeProperty>
-  <swbc:County rdf:ID="Burgos">
-    <rdfs:label xml:lang="en">Burgos</rdfs:label>
-    <rdfs:label xml:lang="es">Burgos</rdfs:label>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >24.948787</swbc:latitud>
-    <swbc:state>
-      <swbc:State rdf:ID="Tamaulipas">
-        <swbc:stateCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >28</swbc:stateCode>
+  <emex:University rdf:ID="uvm3">
+    <rdfs:label xml:lang="en">Universidad del Valle de Mexico</rdfs:label>
+    <emex:locationCounty>
+      <swbc:County rdf:ID="Xochimilco">
         <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >-98.563332</swbc:longitud>
+        >-99.102997</swbc:longitud>
+        <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Xochimilco</emex:dbpediaName>
         <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >24.287222</swbc:latitud>
-        <swbc:country>
-          <swbc:Country rdf:ID="Mexico">
-            <swbc:name xml:lang="es">México</swbc:name>
-            <swbc:name xml:lang="en">Mexico</swbc:name>
-            <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >-99.366669</swbc:longitud>
-            <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >19.049999</swbc:latitud>
-            <swbc:countryCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >52</swbc:countryCode>
-            <rdfs:label xml:lang="es">México</rdfs:label>
-            <rdfs:label xml:lang="en">Mexico</rdfs:label>
-          </swbc:Country>
-        </swbc:country>
-        <rdfs:label xml:lang="en">Tamaulipas</rdfs:label>
-        <rdfs:label xml:lang="es">Tamaulipas</rdfs:label>
-      </swbc:State>
-    </swbc:state>
-    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >5</swbc:countyCode>
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-98.800478</swbc:longitud>
-  </swbc:County>
-  <swb:Class rdf:ID="Cinemark">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cinemark</rdfs:label>
-    <rdfs:subClassOf>
-      <swb:Class rdf:ID="Cinema">
-        <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Cinema</swb:classCodeName>
-        <rdfs:label xml:lang="es">Cine</rdfs:label>
-        <rdfs:label xml:lang="en">Cinema</rdfs:label>
-        <rdfs:subClassOf>
-          <swb:Class rdf:ID="Company">
-            <rdfs:label xml:lang="es">Compañía</rdfs:label>
-            <rdfs:label xml:lang="en">Company</rdfs:label>
-            <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Company</swb:classCodeName>
-            <rdfs:subClassOf rdf:resource="#Organisation"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Class>
-        </rdfs:subClassOf>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:subClassOf>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swbc:State rdf:ID="AguasCalientes">
-    <rdfs:label xml:lang="es">Aguascalientes</rdfs:label>
-    <rdfs:label xml:lang="en">Aguascalientes</rdfs:label>
-    <swbc:country rdf:resource="#Mexico"/>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >22.021667</swbc:latitud>
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-102.356392</swbc:longitud>
-    <swbc:stateCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >1</swbc:stateCode>
-  </swbc:State>
-  <swb:Class rdf:ID="Cinepolis">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cinepolis</rdfs:label>
-    <rdfs:subClassOf rdf:resource="#Cinema"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swbc:County rdf:ID="Cosio">
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-102.300003</swbc:longitud>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >22.366667</swbc:latitud>
-    <swbc:state rdf:resource="#AguasCalientes"/>
-    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >4</swbc:countyCode>
-    <rdfs:label xml:lang="es">Cosío</rdfs:label>
-    <rdfs:label xml:lang="en">Cosio</rdfs:label>
-  </swbc:County>
-  <emex:Lumiere rdf:ID="Lumiere_coapa">
-    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >5556066365</emex:phoneNumber>
-    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cinemas Lumiere Prado Coapa</emex:name>
-    <emex:location>
-      <swbc:County rdf:ID="Tlalpan">
+        >19.263000</swbc:latitud>
         <swbc:state>
           <swbc:State rdf:ID="Mexico_DF">
             <rdfs:label xml:lang="en">Mexico DF</rdfs:label>
@@ -183,56 +170,103 @@
             <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >19.409500</swbc:latitud>
             <rdfs:label xml:lang="es">México D.F.</rdfs:label>
-            <swbc:country rdf:resource="#Mexico"/>
+            <swbc:country>
+              <swbc:Country rdf:ID="Mexico">
+                <rdfs:label xml:lang="es">México</rdfs:label>
+                <rdfs:label xml:lang="en">Mexico</rdfs:label>
+                <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >-99.366669</swbc:longitud>
+                <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >19.049999</swbc:latitud>
+                <swbc:countryCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >52</swbc:countryCode>
+                <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >México</swbc:name>
+              </swbc:Country>
+            </swbc:country>
             <swbc:altitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >7349</swbc:altitud>
             <swbc:stateCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >9</swbc:stateCode>
+            <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >México D.F.</swbc:name>
           </swbc:State>
         </swbc:state>
-        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >-99.316666</swbc:longitud>
-        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >19.316668</swbc:latitud>
+        <rdfs:label xml:lang="en">Xochimilco</rdfs:label>
+        <rdfs:label xml:lang="es">Xochimilco</rdfs:label>
         <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >12</swbc:countyCode>
-        <rdfs:label xml:lang="en">Tlalpan</rdfs:label>
-        <rdfs:label xml:lang="es">Tlalpan</rdfs:label>
+        >13</swbc:countyCode>
+        <swbc:belongsTo rdf:resource="#Mexico_DF"/>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Xochimilco</swbc:name>
       </swbc:County>
-    </emex:location>
+    </emex:locationCounty>
+    <rdfs:label xml:lang="es">Universidad del Valle de México</rdfs:label>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Universidad del Valle de México</emex:name>
     <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Prol. Div. del Norte 4515, Col. Prado Coapa, CP 14370, Tlalpan, D.F.</emex:address>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Lumiere_coapa</rdfs:label>
-  </emex:Lumiere>
-  <swbc:County rdf:ID="Asientos">
-    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2</swbc:countyCode>
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-102.083336</swbc:longitud>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >22.233334</swbc:latitud>
-    <swbc:state rdf:resource="#AguasCalientes"/>
-    <rdfs:label xml:lang="en">Asientos</rdfs:label>
-    <rdfs:label xml:lang="es">Asientos</rdfs:label>
-  </swbc:County>
-  <swbc:County rdf:ID="Miguel_hidalgo">
-    <rdfs:label xml:lang="en">Miguel Hidalgo</rdfs:label>
-    <rdfs:label xml:lang="es">Miguel Hidalgo</rdfs:label>
-    <swbc:state rdf:resource="#Mexico_DF"/>
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-99.191523</swbc:longitud>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >19.406819</swbc:latitud>
-    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >16</swbc:countyCode>
-  </swbc:County>
-  <swbc:County rdf:ID="Cordoba">
-    <rdfs:label xml:lang="es">Córdoba</rdfs:label>
-    <rdfs:label xml:lang="en">Cordoba</rdfs:label>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >18.894167</swbc:latitud>
-    <swbc:state>
+    >AVENIDA MEXICO NUM 6285, SAN MARCOS, Xochimilco</emex:address>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >56760222</emex:phoneNumber>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+  </emex:University>
+  <emex:EducationalInstitution rdf:ID="Juventino_Rosas">
+    <emex:locationState>
+      <swbc:State rdf:ID="AguasCalientes">
+        <rdfs:label xml:lang="es">Aguascalientes</rdfs:label>
+        <rdfs:label xml:lang="en">Aguascalientes</rdfs:label>
+        <swbc:country rdf:resource="#Mexico"/>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >22.021667</swbc:latitud>
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-102.356392</swbc:longitud>
+        <swbc:stateCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >1</swbc:stateCode>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >AguasCalientes</swbc:name>
+      </swbc:State>
+    </emex:locationState>
+    <emex:locationCounty>
+      <swbc:County rdf:ID="Calvillo">
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-102.716667</swbc:longitud>
+        <swbc:belongsTo rdf:resource="#AguasCalientes"/>
+        <rdfs:label xml:lang="es">Calvillo</rdfs:label>
+        <rdfs:label xml:lang="en">Calvillo</rdfs:label>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Calvillo</swbc:name>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >21.850000</swbc:latitud>
+        <swbc:state rdf:resource="#AguasCalientes"/>
+        <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >3</swbc:countyCode>
+        <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Calvillo,_Aguascalientes</emex:dbpediaName>
+      </swbc:County>
+    </emex:locationCounty>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Juventino Rosas</emex:name>
+    <rdfs:label xml:lang="en">Juventino Rosas</rdfs:label>
+    <rdfs:label xml:lang="es">Juventino Rosas</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Cuauhtemoc">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Calvillo"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Priv. Emiliano Zapata NO. 108, el Cuervero, Calvillo</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cuauhtémoc</emex:name>
+    <rdfs:label xml:lang="en">Cuauhtemoc</rdfs:label>
+    <rdfs:label xml:lang="es">Cuauhtémoc</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Melchor_Ocampo">
+    <emex:locationState>
       <swbc:State rdf:ID="Veracruz">
         <swbc:stateCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >30</swbc:stateCode>
@@ -243,30 +277,697 @@
         <swbc:country rdf:resource="#Mexico"/>
         <rdfs:label xml:lang="es">Veracrúz</rdfs:label>
         <rdfs:label xml:lang="en">Veracruz</rdfs:label>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Veracruz</swbc:name>
       </swbc:State>
-    </swbc:state>
+    </emex:locationState>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >San Francisco S/n, Actopan</emex:address>
+    <emex:locationCounty>
+      <swbc:County rdf:ID="Actopan">
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-96.602118</swbc:longitud>
+        <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Actopan,_Veracruz</emex:dbpediaName>
+        <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >4</swbc:countyCode>
+        <swbc:state rdf:resource="#Veracruz"/>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >19.504663</swbc:latitud>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Actopan</swbc:name>
+        <swbc:belongsTo rdf:resource="#Veracruz"/>
+        <rdfs:label xml:lang="en">Actopan</rdfs:label>
+        <rdfs:label xml:lang="es">Actopan</rdfs:label>
+      </swbc:County>
+    </emex:locationCounty>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Melchor Ocampo</emex:name>
+    <rdfs:label xml:lang="en">Melchor Ocampo</rdfs:label>
+    <rdfs:label xml:lang="es">Melchor Ocampo</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Leon_felipe">
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdf:type rdf:resource="#Secondary"/>
+    <rdfs:label xml:lang="es">Leon Felipe</rdfs:label>
+    <rdfs:label xml:lang="en">Leon Felipe</rdfs:label>
+    <emex:locationCounty>
+      <swbc:County rdf:ID="Miguel_hidalgo">
+        <swbc:belongsTo rdf:resource="#Mexico_DF"/>
+        <rdfs:label xml:lang="en">Miguel Hidalgo</rdfs:label>
+        <rdfs:label xml:lang="es">Miguel Hidalgo</rdfs:label>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Miguel Hidalgo</swbc:name>
+        <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >16</swbc:countyCode>
+        <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Miguel_Hidalgo,_D.F.</emex:dbpediaName>
+        <swbc:state rdf:resource="#Mexico_DF"/>
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-99.191523</swbc:longitud>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >19.406819</swbc:latitud>
+      </swbc:County>
+    </emex:locationCounty>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Calz San Bartolo Naucalpan y R Uruguay, Argentina Poniente, Miguel Hidalgo</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Swcundaria Federal Leon Felipe</emex:name>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5553992193</emex:phoneNumber>
+  </emex:EducationalInstitution>
+  <emex:University rdf:ID="unitec1">
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5553966088</emex:phoneNumber>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Universidad Tecnológica de México</emex:name>
+    <rdfs:label xml:lang="es">Universidad Tecnológica de México</rdfs:label>
+    <emex:locationCounty rdf:resource="#Miguel_hidalgo"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdfs:label xml:lang="en">Mexican Technological University</rdfs:label>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Av. Marina Nacional Num. 162, Anahuac I, Miguel Hidalgo</emex:address>
+  </emex:University>
+  <swbc:County rdf:ID="Cosio">
+    <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cosío</swbc:name>
+    <rdfs:label xml:lang="en">Cosio</rdfs:label>
+    <swbc:state rdf:resource="#AguasCalientes"/>
+    <swbc:belongsTo rdf:resource="#AguasCalientes"/>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-102.300003</swbc:longitud>
     <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >44</swbc:countyCode>
+    >4</swbc:countyCode>
+    <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cosío,_Aguascalientes</emex:dbpediaName>
+    <rdfs:label xml:lang="es">Cosío</rdfs:label>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >22.366667</swbc:latitud>
+  </swbc:County>
+  <emex:Elementary rdf:ID="Lauro_aguirre">
+    <emex:locationState>
+      <swbc:State rdf:ID="Tamaulipas">
+        <swbc:stateCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >28</swbc:stateCode>
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-98.563332</swbc:longitud>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >24.287222</swbc:latitud>
+        <swbc:country rdf:resource="#Mexico"/>
+        <rdfs:label xml:lang="en">Tamaulipas</rdfs:label>
+        <rdfs:label xml:lang="es">Tamaulipas</rdfs:label>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Tamaulipas</swbc:name>
+      </swbc:State>
+    </emex:locationState>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <rdfs:label xml:lang="en">Lauro Aguirre</rdfs:label>
+    <rdfs:label xml:lang="es">Lauro Aguirre</rdfs:label>
+    <emex:locationCounty>
+      <swbc:County rdf:ID="Abasolo">
+        <swbc:belongsTo rdf:resource="#Tamaulipas"/>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >24.057907</swbc:latitud>
+        <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >1</swbc:countyCode>
+        <swbc:state rdf:resource="#Tamaulipas"/>
+        <rdfs:label xml:lang="en">Abasolo</rdfs:label>
+        <rdfs:label xml:lang="es">Abasolo</rdfs:label>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Abasolo</swbc:name>
+        <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Abasolo</emex:dbpediaName>
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-98.367012</swbc:longitud>
+      </swbc:County>
+    </emex:locationCounty>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hidalgo y Zaragoza Sn, Abasolo</emex:address>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >50074</emex:phoneNumber>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Lauro Aguirre</emex:name>
+  </emex:Elementary>
+  <emex:Cinema rdf:ID="Lumiere_coapa">
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinemas Lumiere Prado Coapa</emex:name>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556066365</emex:phoneNumber>
+    <rdf:type>
+      <swb:Class rdf:ID="Lumiere">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Lumiere</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Cinema"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdf:type>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Prol. Div. del Norte 4515, Col. Prado Coapa, CP 14370, Tlalpan, D.F.</emex:address>
+    <rdfs:label xml:lang="es">Lumiere Coapa</rdfs:label>
+    <rdfs:label xml:lang="en">Lumiere Coapa</rdfs:label>
+    <emex:location>
+      <swbc:County rdf:ID="Tlalpan">
+        <rdfs:label xml:lang="en">Tlalpan</rdfs:label>
+        <rdfs:label xml:lang="es">Tlalpan</rdfs:label>
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-99.316666</swbc:longitud>
+        <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Tlalpan</emex:dbpediaName>
+        <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >12</swbc:countyCode>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >19.316668</swbc:latitud>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Tlalpan</swbc:name>
+        <swbc:belongsTo rdf:resource="#Mexico_DF"/>
+        <swbc:state rdf:resource="#Mexico_DF"/>
+      </swbc:County>
+    </emex:location>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.cinemaslumiere.com/</emex:wpUrl>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+  </emex:Cinema>
+  <swbc:County rdf:ID="Asientos">
+    <swbc:belongsTo rdf:resource="#AguasCalientes"/>
+    <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Asientos</swbc:name>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-102.083336</swbc:longitud>
+    <rdfs:label xml:lang="es">Asientos</rdfs:label>
+    <swbc:state rdf:resource="#AguasCalientes"/>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >2</swbc:countyCode>
+    <rdfs:label xml:lang="en">Asientos</rdfs:label>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >22.233334</swbc:latitud>
+    <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Asientos,_Aguascalientes</emex:dbpediaName>
+  </swbc:County>
+  <swbc:County rdf:ID="Cordoba">
+    <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Córdoba,_Veracruz</emex:dbpediaName>
+    <rdfs:label xml:lang="es">Córdoba</rdfs:label>
+    <rdfs:label xml:lang="en">Cordoba</rdfs:label>
+    <swbc:state rdf:resource="#Veracruz"/>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >18.894167</swbc:latitud>
+    <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Córdoba</swbc:name>
     <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >-96.934723</swbc:longitud>
+    <swbc:belongsTo rdf:resource="#Veracruz"/>
+    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >44</swbc:countyCode>
   </swbc:County>
-  <swb:Class rdf:ID="Lumiere">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Lumiere</rdfs:label>
-    <rdfs:subClassOf rdf:resource="#Cinema"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
   <swbc:County rdf:ID="Altamira">
+    <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Altamira,_Tamaulipas</emex:dbpediaName>
     <swbc:state rdf:resource="#Tamaulipas"/>
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-97.936249</swbc:longitud>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >22.395594</swbc:latitud>
     <rdfs:label xml:lang="en">Altamira</rdfs:label>
     <rdfs:label xml:lang="es">Altamira</rdfs:label>
+    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >22.395594</swbc:latitud>
+    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >-97.936249</swbc:longitud>
+    <swbc:belongsTo rdf:resource="#Tamaulipas"/>
+    <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Altamira</swbc:name>
     <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >3</swbc:countyCode>
   </swbc:County>
+  <emex:Elementary rdf:ID="Elementary1">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdfs:label xml:lang="en">September 27</rdfs:label>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Calle 7 y Av. del Rosal, Col. Olivar del Conde 1a. Sección, C.P. 01400</emex:address>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationCounty>
+      <swbc:County rdf:ID="Alvaro_Obregon">
+        <rdfs:label xml:lang="es">Alvaro Obregón</rdfs:label>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Alvaro Obregón</swbc:name>
+        <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Álvaro_Obregón,_D.F.</emex:dbpediaName>
+        <swbc:state rdf:resource="#Mexico_DF"/>
+        <rdfs:label xml:lang="en">Alvaro Obregon</rdfs:label>
+        <swbc:belongsTo rdf:resource="#Mexico_DF"/>
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-99.199891</swbc:longitud>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >19.399988</swbc:latitud>
+        <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >10</swbc:countyCode>
+      </swbc:County>
+    </emex:locationCounty>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >27 de septiembre</emex:name>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <rdfs:label xml:lang="es">27 de Septiembre</rdfs:label>
+  </emex:Elementary>
+  <emex:EducationalInstitution rdf:ID="Salomon_Alvarez">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty>
+      <swbc:County rdf:ID="Burgos">
+        <rdfs:label xml:lang="en">Burgos</rdfs:label>
+        <rdfs:label xml:lang="es">Burgos</rdfs:label>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >24.948787</swbc:latitud>
+        <swbc:state rdf:resource="#Tamaulipas"/>
+        <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >5</swbc:countyCode>
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-98.800478</swbc:longitud>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Burgos</swbc:name>
+      </swbc:County>
+    </emex:locationCounty>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Salomón Álvarez García</emex:name>
+    <rdfs:label xml:lang="en">Salomon Alvarez Garcia</rdfs:label>
+    <rdfs:label xml:lang="es">Salomón Álvarez García</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="repIndia">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdfs:label xml:lang="en">Republica de la India</rdfs:label>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Constitucion no 20, Pueblo San Fco Tlalnepantla, Xochimilco</emex:address>
+    <rdfs:label xml:lang="es">República de la India</rdfs:label>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5558481364</emex:phoneNumber>
+    <rdf:type rdf:resource="#Elementary"/>
+    <emex:locationCounty rdf:resource="#Xochimilco"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >República de la India</emex:name>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+  </emex:EducationalInstitution>
+  <emex:Hospital rdf:ID="Angeles">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5552782300</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Miguel_hidalgo"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Dante 14, Piso 12, Col. Anzures</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hospitales Ángeles Miguel Hidalgo</emex:name>
+    <rdfs:label xml:lang="en">Hospitales Angeles Miguel Hidalgo</rdfs:label>
+    <rdfs:label xml:lang="es">Hospitales Ángeles Miguel Hidalgo</rdfs:label>
+  </emex:Hospital>
+  <emex:EducationalInstitution rdf:ID="Juan_rulfo">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty>
+      <swbc:County rdf:ID="Aguascalientes">
+        <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >1</swbc:countyCode>
+        <swbc:belongsTo rdf:resource="#AguasCalientes"/>
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-102.356392</swbc:longitud>
+        <swbc:state rdf:resource="#AguasCalientes"/>
+        <rdfs:label xml:lang="en">Aguascalientes</rdfs:label>
+        <rdfs:label xml:lang="es">Aguascalientes</rdfs:label>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >22.021667</swbc:latitud>
+        <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Aguascalientes</emex:dbpediaName>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Aguascalientes</swbc:name>
+      </swbc:County>
+    </emex:locationCounty>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >La Manzana NO. 110, Ojocaliente Iii, Aguascalientes</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Juan Rulfo</emex:name>
+    <rdfs:label xml:lang="en">Juan Rulfo</rdfs:label>
+    <rdfs:label xml:lang="es">Juan Rulfo</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:Cinema rdf:ID="Cinemex_altavista6">
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.cinemex.com.mx</emex:wpUrl>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinemex Altavista 6</emex:name>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >C. al Desierto de los Leones 45, Col. San Ángel, Del. Álvaro Obregón, México, D.F.</emex:address>
+    <rdf:type>
+      <swb:Class rdf:ID="Cinemex">
+        <rdfs:label xml:lang="en">Cinemex</rdfs:label>
+        <rdfs:label xml:lang="es">Cinemex</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Cinema"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdf:type>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <rdfs:label xml:lang="en">Cinemex Altavista 6</rdfs:label>
+    <rdfs:label xml:lang="es">Cinemex Altavista 6</rdfs:label>
+  </emex:Cinema>
+  <emex:EducationalInstitution rdf:ID="comunitario1">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Abasolo"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ej. Abasolito, Abasolo</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Centro Infantil Comunitario</emex:name>
+    <rdfs:label xml:lang="es">Centro Infantil Comunitario</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:Prescholar rdf:ID="Acaxochilt">
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Pdte. Kennedy y Eisenhower, Col. 1ra Ampliación Presidentes </emex:address>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556431616</emex:phoneNumber>
+    <rdfs:label xml:lang="en">Acaxochilt</rdfs:label>
+    <rdfs:label xml:lang="es">Acaxochilt</rdfs:label>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Acaxochilt</emex:name>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+  </emex:Prescholar>
+  <emex:EducationalInstitution rdf:ID="uvm2">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Universidad del Valle de México</emex:name>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://uvmnet.edu</emex:wpUrl>
+    <rdfs:label xml:lang="en">Universidad del Valle de Mexico</rdfs:label>
+    <rdfs:label xml:lang="es">Universidad del Valle de México</rdfs:label>
+    <rdf:type rdf:resource="#University"/>
+  </emex:EducationalInstitution>
+  <emex:Hospital rdf:ID="cancerologia">
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556280400</emex:phoneNumber>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >nstituto Nacional de Cancerología</emex:name>
+    <rdfs:label xml:lang="en">Cancerology National Institute</rdfs:label>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.incan.edu.mx/</emex:wpUrl>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Av. San Fernando no. 22, Col. Sección XVI</emex:address>
+    <rdfs:label xml:lang="es">Instituto Nacional de Cancerología</rdfs:label>
+  </emex:Hospital>
+  <emex:Cinema rdf:ID="Cinemark_obregon">
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5552801878</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:location rdf:resource="#Alvaro_Obregon"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinemark Alvaro Obregón</emex:name>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.cinemark.com.mx/</emex:wpUrl>
+    <rdfs:label xml:lang="es">Cinemark Obregón</rdfs:label>
+    <rdfs:label xml:lang="en">Cinemark Obregon</rdfs:label>
+    <rdf:type rdf:resource="#Cinemark"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >AVENIDA SAN JERONIMO 263 B, PUEBLO TIZAPAN, C.P. 01090, ALVARO OBREGON, D.F.</emex:address>
+  </emex:Cinema>
+  <emex:Hospital rdf:ID="medFam">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556413246 </emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Xochimilco"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Gladiolas # 158, Col. Barrio de San Pedro</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Clínica de Medicina Familiar Xochimilco</emex:name>
+    <rdfs:label xml:lang="en">Clinica de Medicina Familiar Xochimilco</rdfs:label>
+    <rdfs:label xml:lang="es">Clínica de Medicina Familiar Xochimilco</rdfs:label>
+  </emex:Hospital>
+  <emex:Secondary rdf:ID="GuillermoPrieto">
+    <emex:locationCounty rdf:resource="#Xochimilco"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5555481053</emex:phoneNumber>
+    <rdfs:label xml:lang="en">Guillermo Prieto Pradillo</rdfs:label>
+    <rdfs:label xml:lang="es">Guillermo Prieto Pradillo</rdfs:label>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Guillermo Prieto Pradillo</emex:name>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ladera Grande Carr a Sta Cecilia, Pueblo Santa Cecilia Tepetlapa, Xochimilco</emex:address>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+  </emex:Secondary>
+  <emex:EducationalInstitution rdf:ID="Maria_Elena_Chanes">
+    <rdfs:label xml:lang="en">Maria Elena Chanes</rdfs:label>
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Calvillo"/>
+    <rdfs:label xml:lang="es">María Elena Chanes</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >49561944</emex:phoneNumber>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >María Elena Chanes</emex:name>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >20 de Noviembre S/n, Calvillo</emex:address>
+  </emex:EducationalInstitution>
+  <emex:Cinemex rdf:ID="Cinemex_santafe">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Av. Vasco de Quiroga 3800, Col. Cuajimalpa, Del. Alvaro Obregón, México, D.F.</emex:address>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5552598259</emex:phoneNumber>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.cinemex.com.mx</emex:wpUrl>
+    <rdfs:label xml:lang="es">Cinemex Santa Fé</rdfs:label>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinemex Santa Fé</emex:name>
+    <rdf:type rdf:resource="#Cinema"/>
+    <rdfs:label xml:lang="en">Cinemex Santa Fe</rdfs:label>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+  </emex:Cinemex>
+  <emex:Cinepolis rdf:ID="Cinepolis_pericoapa">
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinépolis Pericoapa</emex:name>
+    <rdfs:label xml:lang="es">Cinépolis pericoapa</rdfs:label>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.cinepolis.com.mx</emex:wpUrl>
+    <emex:location rdf:resource="#Tlalpan"/>
+    <rdfs:label xml:lang="en">Cinepolis pericoapa</rdfs:label>
+    <rdf:type rdf:resource="#Cinema"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >52801878</emex:phoneNumber>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Avenida Canal de miramontes 3163, Municipio de Tlalpan, México D.F.</emex:address>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+  </emex:Cinepolis>
+  <emex:EducationalInstitution rdf:ID="Francisco_marquez">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Altamira"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Canelo #208 Col. Nuevo Lomas del Real, Altamira</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Francisco Márquez</emex:name>
+    <rdfs:label xml:lang="es">Francisco Márquez</rdfs:label>
+    <rdfs:label xml:lang="en">Francisco Marquez</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:Hospital rdf:ID="arigmed">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5555151241</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Calle Postes 9, Col. Jose Maria Pino Suarez </emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Arigmed</emex:name>
+    <rdfs:label xml:lang="en">Arigmed</rdfs:label>
+    <rdfs:label xml:lang="es">Arigmed</rdfs:label>
+  </emex:Hospital>
+  <emex:Hospital rdf:ID="pediatrico">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Prolongación, 16 de Septiembre, Esq. Camino a Nativitas, Barrio Xaltocan </emex:address>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556764993</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Xochimilco"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hospital Pediátrico Xochimilco</emex:name>
+    <rdfs:label xml:lang="en">Hospital Pediatrico Xochimilco</rdfs:label>
+    <rdfs:label xml:lang="es">Hospital Pediátrico Xochimilco</rdfs:label>
+  </emex:Hospital>
+  <emex:EducationalInstitution rdf:ID="Tecnica17">
+    <rdfs:label xml:lang="es">Secundaria Técnica 17</rdfs:label>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >0183550014</emex:phoneNumber>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdfs:label xml:lang="en">Technical Secondary Schoool No. 17</rdfs:label>
+    <emex:locationCounty rdf:resource="#Abasolo"/>
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <rdf:type rdf:resource="#Secondary"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Secundaria Técnica 17</emex:name>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Carretera Jimenez-Abasolo Km. 19. 5, Abasolo</emex:address>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Comunitario1">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty>
+      <swbc:County rdf:ID="Aldama">
+        <swbc:state rdf:resource="#Tamaulipas"/>
+        <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >22.917725</swbc:latitud>
+        <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Aldama</swbc:name>
+        <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >2</swbc:countyCode>
+        <emex:dbpediaName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Aldama,_Tamaulipas</emex:dbpediaName>
+        <swbc:belongsTo rdf:resource="#Tamaulipas"/>
+        <rdfs:label xml:lang="en">Aldama</rdfs:label>
+        <rdfs:label xml:lang="es">Aldama</rdfs:label>
+        <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >-98.077269</swbc:longitud>
+      </swbc:County>
+    </emex:locationCounty>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ej. Francisco Villa, Aldama</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Preescolar Comunitario Aldama</emex:name>
+    <rdfs:label xml:lang="en">Comunitary school</rdfs:label>
+    <rdfs:label xml:lang="es">Preescolar Comunitario</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:Hospital rdf:ID="Abasolo1">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >8353350154</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Abasolo"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >HIDALGO Y ZARAGOZA S/N , ZONA CENTRO, ABASOLO, TAMPS.</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hospital integral de Abasolo</emex:name>
+    <rdfs:label xml:lang="en">Abasolo Hospital</rdfs:label>
+    <rdfs:label xml:lang="es">Hospital integral de Abasolo</rdfs:label>
+  </emex:Hospital>
+  <emex:Hospital rdf:ID="cardiologia">
+    <rdfs:label xml:lang="en">Ignacio Chavez</rdfs:label>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5555732911</emex:phoneNumber>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.cardiologia.org.mx/</emex:wpUrl>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdfs:label xml:lang="es">Ignacio Chávez</rdfs:label>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Instituto Nacional de Cardiología "Inacio Chávez"</emex:name>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Juan Badiano no. 1, Col. Sección XVI</emex:address>
+  </emex:Hospital>
+  <emex:EducationalInstitution rdf:ID="Leona_vicario">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Asientos"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hidalgo No. 18, Asientos</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Leona Vicario</emex:name>
+    <rdfs:label xml:lang="en">Leona Vicario</rdfs:label>
+    <rdfs:label xml:lang="es">Leona Vicario</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Club_de_leones">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Aldama"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Juarez S/n /morelos y Matamoros, Aldama</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Club de Leones A.C.</emex:name>
+    <rdfs:label xml:lang="en">Lions Club</rdfs:label>
+    <rdfs:label xml:lang="es">Club de Leones A.C.</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:Elementary rdf:ID="Humboldt1">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:locationCounty rdf:resource="#Xochimilco"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >C Real Tepepan a Xochitepec 120, Villa Tepepan, Xochimilco</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Colegio Alemán Alexander Von Humboldt</emex:name>
+    <rdfs:label xml:lang="en">Alexander Von Humboldt German College</rdfs:label>
+    <rdfs:label xml:lang="es">Colegio Alemán Alexander Von Humboldt</rdfs:label>
+  </emex:Elementary>
+  <emex:EducationalInstitution rdf:ID="Ninos_heroes">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Calvillo"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Niños Héroes de Chapultepec</emex:name>
+    <rdfs:label xml:lang="en">Ninos Heroes de Chapultepec</rdfs:label>
+    <rdfs:label xml:lang="es">Niños Héroes de Chapultepec</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:Elementary rdf:ID="adolfo_ruiz">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Adolfo Ruíz Cortínez</emex:name>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Av. Benito Juárez 118, Col. Barrio Norte, C.P. 01410</emex:address>
+    <rdfs:label xml:lang="es">Adolfo Ruíz Cortinez</rdfs:label>
+    <rdfs:label xml:lang="en">Adolfo Ruiz Cortinez</rdfs:label>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+  </emex:Elementary>
+  <emex:Prescholar rdf:ID="Ave_Real">
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Calle Perdiz y Zacua, Col. Ave Real, C.P. 01560 </emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ave Real</emex:name>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556431986</emex:phoneNumber>
+    <rdfs:label xml:lang="es">Ave Real</rdfs:label>
+    <rdfs:label xml:lang="en">Ave Real</rdfs:label>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+  </emex:Prescholar>
+  <emex:EducationalInstitution rdf:ID="Ramon_g_bonfil">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Aldama"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Barra el Tordo, Aldama</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ramón G. Bonfil</emex:name>
+    <rdfs:label xml:lang="es">Ramón G. Bonfil</rdfs:label>
+    <rdfs:label xml:lang="en">Ramon G. Bonfil</rdfs:label>
+    <rdf:type rdf:resource="#Secondary"/>
+  </emex:EducationalInstitution>
   <swbc:County rdf:ID="Las_minas">
     <rdfs:label xml:lang="es">Las minas</rdfs:label>
     <rdfs:label xml:lang="en">Las minas</rdfs:label>
@@ -277,7 +978,563 @@
     >107</swbc:countyCode>
     <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >-97.147894</swbc:longitud>
+    <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Las minas</swbc:name>
   </swbc:County>
+  <emex:EducationalInstitution rdf:ID="Instituto_de_Ciencias">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >833640435</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Altamira"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Matamoros S/n Zona Centro, Altamira</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Instituto de Ciencias y Estudios Superiores</emex:name>
+    <rdfs:label xml:lang="es">Instituto de Ciencias y Estudios Superiores</rdfs:label>
+    <rdf:type rdf:resource="#University"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="AlfredoNovel">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556759032</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Xochimilco"/>
+    <rdfs:label xml:lang="en">Alfredo Novel</rdfs:label>
+    <rdfs:label xml:lang="es">Alfredo Novel</rdfs:label>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Azalea no 23-a, Barrio Xaltocan, Xochimilco</emex:address>
+    <rdf:type rdf:resource="#Secondary"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Alfredo Novel</emex:name>
+  </emex:EducationalInstitution>
+  <emex:Secondary rdf:ID="jovita_elguero">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Secundaria Diurna 21 "Jovita Elguero"</emex:name>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Canario y Av. General Felipe Ángeles, Col. Bellavista Tacubaya</emex:address>
+    <rdfs:label xml:lang="en">Jovita Elguero</rdfs:label>
+    <rdfs:label xml:lang="es">Jovita Elguero</rdfs:label>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+  </emex:Secondary>
+  <emex:Hospital rdf:ID="Centro_del_valle">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >4959561544</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Aguascalientes"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Rodolfo Landeros 439, Col. Centro</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Centro Médico del Valle</emex:name>
+    <rdfs:label xml:lang="en">Del Valle Medical Center</rdfs:label>
+    <rdfs:label xml:lang="es">Centro Médico del Valle</rdfs:label>
+  </emex:Hospital>
+  <emex:Cinema rdf:ID="Cinepolis_ags">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinépolis Aguascalientes</emex:name>
+    <rdfs:label xml:lang="en">Cinepolis Aguascalientes</rdfs:label>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.cinepolis.com.mx</emex:wpUrl>
+    <rdfs:label xml:lang="es">Cinépolis Aguascalientes</rdfs:label>
+    <emex:locationCounty rdf:resource="#Aguascalientes"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Av. Aguascalientes 1601, Col. La Fundición</emex:address>
+    <rdf:type>
+      <swb:Class rdf:ID="Cinepolis">
+        <rdfs:subClassOf rdf:resource="#Cinema"/>
+        <rdfs:label xml:lang="es">Cinépolis</rdfs:label>
+        <rdfs:label xml:lang="en">Cinepolis</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdf:type>
+  </emex:Cinema>
+  <emex:EducationalInstitution rdf:ID="Manuel_felix">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Altamira"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ayuntamiento #1900 Col. Gpe. Victoria, Altamira</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Manuel Félix Fernández</emex:name>
+    <rdfs:label xml:lang="en">Manuel Felix Fernandez</rdfs:label>
+    <rdfs:label xml:lang="es">Manuel Félix Fernández</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:University rdf:ID="pedregal1">
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Universidad del Pedregal</emex:name>
+    <rdfs:label xml:lang="en">Pedregal University</rdfs:label>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.upedregal.edu.mx</emex:wpUrl>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5585020101</emex:phoneNumber>
+    <rdfs:label xml:lang="es">Universidad del Pedregal</rdfs:label>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Transmisiones 51, Col. Ex-Hacienda de San Juan</emex:address>
+  </emex:University>
+  <emex:Secondary rdf:ID="Izcoatl">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >20 de Noviembre NO. 21, Calvillo</emex:address>
+    <rdfs:label xml:lang="es">Izcóatl</rdfs:label>
+    <rdfs:label xml:lang="en">Izcoatl</rdfs:label>
+    <emex:locationCounty rdf:resource="#Calvillo"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Izcóatl</emex:name>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >60155</emex:phoneNumber>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+  </emex:Secondary>
+  <emex:EducationalInstitution rdf:ID="Martires">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >8418444051</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Burgos"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Mártires de la Revolución</emex:name>
+    <rdfs:label xml:lang="en">Martires de la Revolucion</rdfs:label>
+    <rdfs:label xml:lang="es">Mártires de la Revolución</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Anahuac">
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Av. de las Torres 131, Col. Olivar de los Padres, C.P. 01780</emex:address>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdfs:label xml:lang="es">Universidad Anahuac</rdfs:label>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5555852014</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <rdfs:label xml:lang="en">Anahuac University</rdfs:label>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Universidad Anáhuac</emex:name>
+    <rdf:type rdf:resource="#University"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Congreso_de_anahuac">
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Aguascalientes"/>
+    <rdfs:label xml:lang="es">Congreso de Anáhuac</rdfs:label>
+    <rdfs:label xml:lang="en">Congreso de Anahuac</rdfs:label>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Medellin y Belice, Fracc. Sta. Elena, Aguascalientes</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Congreso de Anáhuac</emex:name>
+    <rdf:type rdf:resource="#Secondary"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >9785095</emex:phoneNumber>
+  </emex:EducationalInstitution>
+  <emex:Hospital rdf:ID="Hospital_hidalgo">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >4499153245</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Aguascalientes"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >20 de noviembre 603, Col. Gremial</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hospital Hidalgo</emex:name>
+    <rdfs:label xml:lang="en">Hidalgo Hospital</rdfs:label>
+    <rdfs:label xml:lang="es">Hospital Hidalgo</rdfs:label>
+  </emex:Hospital>
+  <emex:Hospital rdf:ID="Santa_teresa">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5552825180</emex:phoneNumber>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Acueducto Río Hondo 20, Col. Lomas de Chapultepec</emex:address>
+    <emex:locationCounty rdf:resource="#Miguel_hidalgo"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdfs:label xml:lang="en">Santa Teresa Hospital</rdfs:label>
+    <rdfs:label xml:lang="es">Hospital Santa Teresa</rdfs:label>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hospital Santa Teresa</emex:name>
+  </emex:Hospital>
+  <emex:Cinema rdf:ID="Cinemark_hidalgo">
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinemark Miguel Hidalgo</emex:name>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:locationCounty rdf:resource="#Miguel_hidalgo"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5552801878</emex:phoneNumber>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Calle Calderon de la Barca 89 a, Polanco V Seccion</emex:address>
+    <rdfs:label xml:lang="en">Cinemark Miguel Hidalgo</rdfs:label>
+    <rdfs:label xml:lang="es">Cinemark Miguel Hidalgo</rdfs:label>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdf:type rdf:resource="#Cinemark"/>
+  </emex:Cinema>
+  <emex:Elementary rdf:ID="Brighton">
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <rdfs:label xml:lang="es">Colegio Brighton</rdfs:label>
+    <rdfs:label xml:lang="en">Brighton School</rdfs:label>
+    <emex:locationCounty rdf:resource="#Miguel_hidalgo"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Colegio Brighton</emex:name>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ejercito Nacional no 1166, Polanco Reforma, Miguel Hidalgo</emex:address>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5553955842</emex:phoneNumber>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+  </emex:Elementary>
+  <emex:EducationalInstitution rdf:ID="Utna">
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Universidad Tecnológica del Norte de Aguascalientes</emex:name>
+    <rdfs:label xml:lang="es">Universidad Tecnológica del Norte de Aguascalientes</rdfs:label>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CARRETERA CALVILLO-JALPA, CRUCERO LOS TEPETATES </emex:address>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >4959564064</emex:phoneNumber>
+    <rdf:type rdf:resource="#University"/>
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationCounty rdf:resource="#Calvillo"/>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.utna.edu.mx/</emex:wpUrl>
+  </emex:EducationalInstitution>
+  <emex:Prescholar rdf:ID="Jesus_gomez">
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationCounty rdf:resource="#Aguascalientes"/>
+    <rdfs:label xml:lang="es">Jesús Gómez Portugal</rdfs:label>
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >9160659</emex:phoneNumber>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Jesús Gómez Portugal</emex:name>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cirio NO. 101, Fracc. Gomez Portugal, AguasCalientes</emex:address>
+    <rdfs:label xml:lang="en">Jesus Gomez Portugal</rdfs:label>
+  </emex:Prescholar>
+  <emex:EducationalInstitution rdf:ID="Joaquin_baranda">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Altamira"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Lazaro Cardenas s/n. Burgos</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Joaquín Baranda</emex:name>
+    <rdfs:label xml:lang="en">Joaquin Baranda</rdfs:label>
+    <rdfs:label xml:lang="es">Joaquín Baranda</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Expropiacion_petrolera">
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Expropiación Petrolera</emex:name>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >8332642410</emex:phoneNumber>
+    <rdfs:label xml:lang="es">Expropiación Petrolera</rdfs:label>
+    <emex:locationCounty rdf:resource="#Altamira"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <rdf:type rdf:resource="#Secondary"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Av. Altamira NO. 500, Altamira</emex:address>
+    <rdfs:label xml:lang="en">Expropiacion Petrolera</rdfs:label>
+  </emex:EducationalInstitution>
+  <emex:Secondary rdf:ID="diurna202">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Secundaria Diurna 202, "Temachitiani"</emex:name>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Av. Antigua Vía a la Venta s/n , Col. 1ª. Victoria, C.P. 01280 </emex:address>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Secundaria Diurna 202</rdfs:label>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+  </emex:Secondary>
+  <emex:EducationalInstitution rdf:ID="Jose_vicente_de_la_serna">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Aldama"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdfs:label xml:lang="en">Jose Vicente de la Serna</rdfs:label>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >José Vicente de la Serna</emex:name>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Carretera Al Tordo Km. 1, Aldama</emex:address>
+    <rdf:type rdf:resource="#Secondary"/>
+    <rdfs:label xml:lang="es">José Vicente de la Serna</rdfs:label>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >2741032</emex:phoneNumber>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Ninos_campesinos">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Abasolo"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Nuevo Dolores, Abasolo</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Niños Campesinos</emex:name>
+    <rdfs:label xml:lang="en">Niños Campesinos</rdfs:label>
+    <rdfs:label xml:lang="es">Niños Campesinos</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Maria_Montessori">
+    <emex:locationState rdf:resource="#Veracruz"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Jaime Nuno S/n Cerca de la Esc. P. Otates</emex:address>
+    <emex:locationCounty rdf:resource="#Actopan"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >María Montessori</emex:name>
+    <rdfs:label xml:lang="en">Maria Montessori</rdfs:label>
+    <rdfs:label xml:lang="es">María Montessori</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:Prescholar rdf:ID="Jangaskani">
+    <emex:locationCounty rdf:resource="#Xochimilco"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Muyuguarda S/n Manzana "a", Xochimilco</emex:address>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >55553707</emex:phoneNumber>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdfs:label xml:lang="en">Jangaskani</rdfs:label>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdfs:label xml:lang="es">Jangaskani</rdfs:label>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Jangaskani</emex:name>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+  </emex:Prescholar>
+  <emex:EducationalInstitution rdf:ID="Totolapan">
+    <emex:locationState rdf:resource="#Veracruz"/>
+    <emex:locationCounty rdf:resource="#Actopan"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Totolapan</emex:name>
+    <rdfs:label xml:lang="en">Totolapan</rdfs:label>
+    <rdfs:label xml:lang="es">Totolapan</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:Cinema rdf:ID="Lumiere_tlalpan">
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdf:type rdf:resource="#Lumiere"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Lumiere Cinemas Tlalpan</emex:name>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >56662731 </emex:phoneNumber>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CALZADA DE TLALPAN NUMERO 4085, COL. BOSQUES DE TETLAMEYA, MÉXICO, D.F.</emex:address>
+    <rdfs:label xml:lang="es">Lumiere Tlalpan</rdfs:label>
+    <rdfs:label xml:lang="en">Lumiere Tlalpan</rdfs:label>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.cinemaslumiere.com/</emex:wpUrl>
+  </emex:Cinema>
+  <emex:EducationalInstitution rdf:ID="Naciones_unidas">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Asientos"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Carlos Salinas de Gortari S/n, Col. Clavellinas</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Naciones Unidas</emex:name>
+    <rdfs:label xml:lang="en">Naciones Unidas</rdfs:label>
+    <rdfs:label xml:lang="es">Naciones Unidas</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="unila1">
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556634252</emex:phoneNumber>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ztaccihatl No. 178, Col. Florida, C.P. 01030</emex:address>
+    <rdfs:label xml:lang="es">Universidad Latinoamericana</rdfs:label>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Universidad Latinoamericana</emex:name>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdf:type rdf:resource="#University"/>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <rdfs:label xml:lang="en">Latinoamerican university</rdfs:label>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Tecnica8">
+    <rdfs:label xml:lang="en">Technical Secondary School 8</rdfs:label>
+    <emex:locationCounty rdf:resource="#Asientos"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Juarez NO. 3,cienega Grande, Cienega Grande</emex:address>
+    <rdf:type rdf:resource="#Secondary"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Secundaria Técnica 8</emex:name>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >20114</emex:phoneNumber>
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <rdfs:label xml:lang="es">Secundaria Técnica 8</rdfs:label>
+  </emex:EducationalInstitution>
+  <emex:University rdf:ID="uvm1">
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Universidad del Valle de México</emex:name>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >San Jerónimo 82, Col. San Angel, C.P. 01000</emex:address>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556160395</emex:phoneNumber>
+    <rdfs:label xml:lang="en">Universidad del Valle de Mexico</rdfs:label>
+    <rdfs:label xml:lang="es">Universidad del Valle de México</rdfs:label>
+  </emex:University>
+  <emex:EducationalInstitution rdf:ID="Centro_de_atencion_preescolar">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Calle Sauce S/n Est. Cuauhtemoc. Col. Jardin, Altamira</emex:address>
+    <emex:locationCounty rdf:resource="#Altamira"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Centro de Atención Preescolar</emex:name>
+    <rdfs:label xml:lang="es">Centro de Atencion Preescolar</rdfs:label>
+    <rdfs:label xml:lang="es">Centro de Atención Preescolar</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:Secondary rdf:ID="intlTlalpan">
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Carr. Fed. a Cuernavaca Km-24, San Andres Totoltepec, Tlalpan</emex:address>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Colegio Internacional Tlalpan</emex:name>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5558491884</emex:phoneNumber>
+    <rdfs:label xml:lang="en">Tlalpan International College</rdfs:label>
+    <rdfs:label xml:lang="es">Colegio Internacional Tlalpan</rdfs:label>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+  </emex:Secondary>
+  <emex:Hospital rdf:ID="Cruz_roja">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >4499162089</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Aguascalientes"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Licenciado Primo Verdad 224, Col. Aguascalientes</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cruz Roja Aguascalientes</emex:name>
+    <rdfs:label xml:lang="en">Aguascalientes Red Cross</rdfs:label>
+    <rdfs:label xml:lang="es">Cruz Roja Aguascalientes</rdfs:label>
+  </emex:Hospital>
+  <emex:Elementary rdf:ID="Alberto_Lenz">
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556161066</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Alberto Lenz</emex:name>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Altamirano 222, Col. Loreto Barrio, C.P. 01090</emex:address>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <rdfs:label xml:lang="en">Alberto Lenz</rdfs:label>
+    <rdfs:label xml:lang="es">Alberto Lenz</rdfs:label>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+  </emex:Elementary>
+  <emex:Prescholar rdf:ID="Jose_landeros">
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >José Landeros Gutiérrez</emex:name>
+    <rdfs:label xml:lang="es">José Landeros Gutiérrez</rdfs:label>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >9560032</emex:phoneNumber>
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Centenario NO. 503, Calvillo</emex:address>
+    <emex:locationCounty rdf:resource="#Calvillo"/>
+    <rdfs:label xml:lang="en">Jose Landeros Gutierrez</rdfs:label>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+  </emex:Prescholar>
+  <emex:University rdf:ID="unitecags">
+    <rdfs:label xml:lang="es">Universidad Tecnológica de Aguascalientes</rdfs:label>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Universidad Tecnológica de Aguascalientes</emex:name>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >4499105000</emex:phoneNumber>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.utags.edu.mx</emex:wpUrl>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Blvd. Juan Pablo II 1302, Fracc. Ex-hacienda La Cantera</emex:address>
+    <rdfs:label xml:lang="en">Aguascalientes Technological University</rdfs:label>
+    <emex:locationCounty rdf:resource="#Aguascalientes"/>
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+  </emex:University>
+  <emex:EducationalInstitution rdf:ID="Coatlicue">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Asientos"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >16 de Septiembre NO. 32, Col. Caldera</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Coatlicue</emex:name>
+    <rdfs:label xml:lang="en">Coatlicue</rdfs:label>
+    <rdfs:label xml:lang="es">Coatlicue</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Manuel_M_Ponce">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Asientos"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Carr. Entronque los Campos- Negritas Km. 1, Bajio de los Campos</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Manuel M. Ponce</emex:name>
+    <rdfs:label xml:lang="en">Manuel M. Ponce</rdfs:label>
+    <rdfs:label xml:lang="es">Manuel M. Ponce</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Comunitario2">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Altamira"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >N. C. P. Vicente Guerrero, Vicente Guerrero, Altamira</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Preescolar Comunitario</emex:name>
+    <rdfs:label xml:lang="es">Preescolar Comunitario</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Rigoberto_aguilar">
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdfs:label xml:lang="en">Dr. Rigoberto Aguilar Pico</rdfs:label>
+    <rdfs:label xml:lang="es">Dr. Rigoberto Aguilar Pico</rdfs:label>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Dr. Rigoberto Aguilar Pico</emex:name>
+    <emex:locationCounty rdf:resource="#Miguel_hidalgo"/>
+    <rdf:type rdf:resource="#Prescholar"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5553998955</emex:phoneNumber>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Lago Valparaiso no 11, Argentina Poniente</emex:address>
+  </emex:EducationalInstitution>
+  <emex:University rdf:ID="uaa">
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >4499147708</emex:phoneNumber>
+    <rdfs:label xml:lang="es">Universidad Autónoma de Aguascalientes</rdfs:label>
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Circunvalación Esquina I, Col. Aguascalientes Centro</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Universidad Autónoma de Aguascalientes</emex:name>
+    <rdfs:label xml:lang="en">Aguascalientes University</rdfs:label>
+    <emex:locationCounty rdf:resource="#Aguascalientes"/>
+  </emex:University>
   <swb:Class rdf:ID="Theatre">
     <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Theatre</swb:classCodeName>
@@ -286,40 +1543,369 @@
     <rdfs:subClassOf rdf:resource="#Company"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
-  <swbc:County rdf:ID="Abasolo">
-    <rdfs:label xml:lang="en">Abasolo</rdfs:label>
-    <rdfs:label xml:lang="es">Abasolo</rdfs:label>
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-98.367012</swbc:longitud>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >24.057907</swbc:latitud>
-    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >1</swbc:countyCode>
-    <swbc:state rdf:resource="#Tamaulipas"/>
-  </swbc:County>
-  <emex:Cinepolis rdf:ID="Cinepolis_ajusco">
+  <emex:Elementary rdf:ID="Axusco">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
     <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >55 30 89 46 52</emex:phoneNumber>
+    >5558461697</emex:phoneNumber>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Francisco Villa no 20, San Miguel Ajusco, Tlalpan</emex:address>
     <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cinépolis Ajusco</emex:name>
-    <emex:location rdf:resource="#Tlalpan"/>
+    >Axusco</emex:name>
+    <rdfs:label xml:lang="en">Axusco</rdfs:label>
+    <rdfs:label xml:lang="es">Axusco</rdfs:label>
+  </emex:Elementary>
+  <emex:Hospital rdf:ID="polisur">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >556811103</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Avenida Toluca 168, Olivar de los Padres, Código Postal: 01780	</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hospital Policlinica del Sur</emex:name>
+    <rdfs:label xml:lang="en">Hospital Policlinica del Sur</rdfs:label>
+    <rdfs:label xml:lang="es">Hospital Policlinica del Sur</rdfs:label>
+  </emex:Hospital>
+  <emex:EducationalInstitution rdf:ID="upn1">
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Carretera al Ajusco No. 24 Col. Héroes de Padierna Del. Tlalpan, C.P. 14200, México, D.F.</emex:address>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdfs:label xml:lang="en">Pedagogic National University</rdfs:label>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556309700</emex:phoneNumber>
+    <rdf:type rdf:resource="#University"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Universidad Pedagógica Nacional</emex:name>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.upn.mx</emex:wpUrl>
+    <rdfs:label xml:lang="es">Universidad Pedagógica Nacional</rdfs:label>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+  </emex:EducationalInstitution>
+  <emex:Cinepolis rdf:ID="Cinepolis_ajusco">
+    <rdfs:label xml:lang="es">Cinépolis Ajusco</rdfs:label>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.cinepolis.com.mx</emex:wpUrl>
     <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Carretera Picacho Ajusco 175 Col. Héroes de Padierna C.P. 14200 Delegación Tlalpan México D.F.</emex:address>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cinepolis Ajusco</rdfs:label>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >55 30 89 46 52</emex:phoneNumber>
+    <rdfs:label xml:lang="en">Cinepolis Ajusco</rdfs:label>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinépolis Ajusco</emex:name>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:location rdf:resource="#Tlalpan"/>
+    <rdf:type rdf:resource="#Cinema"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
   </emex:Cinepolis>
-  <swbc:County rdf:ID="Actopan">
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-96.602118</swbc:longitud>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >19.504663</swbc:latitud>
-    <swbc:state rdf:resource="#Veracruz"/>
-    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >4</swbc:countyCode>
-    <rdfs:label xml:lang="en">Actopan</rdfs:label>
-    <rdfs:label xml:lang="es">Actopan</rdfs:label>
-  </swbc:County>
+  <emex:EducationalInstitution rdf:ID="Tecnica7">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Calvillo"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >La Labor, s/n. Calvilllo</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Secundaria Técnica 7</emex:name>
+    <rdfs:label xml:lang="en">Technical Secondary School 7</rdfs:label>
+    <rdfs:label xml:lang="es">Secundaria Técnica 7</rdfs:label>
+    <rdf:type rdf:resource="#Secondary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Josefina_ramos">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Abasolo"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Lerdo de Tejada S/n, Abasolo</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Josefina Ramos del Río</emex:name>
+    <rdfs:label xml:lang="en">Josefina Ramos del Rio</rdfs:label>
+    <rdfs:label xml:lang="es">Josefina Ramos del Río</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Elizabeth_kenny">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5552507646</emex:phoneNumber>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Elizabeth Kenny</emex:name>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdf:type rdf:resource="#Prescholar"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Lago Iseo no 132, Anahuac I, Miguel Hidalgo</emex:address>
+    <rdfs:label xml:lang="en">Elizabeth Kenny</rdfs:label>
+    <rdfs:label xml:lang="es">Elizabeth Kenny</rdfs:label>
+    <emex:locationCounty rdf:resource="#Miguel_hidalgo"/>
+  </emex:EducationalInstitution>
+  <emex:Prescholar rdf:ID="IsaiasMorones">
+    <emex:locationCounty rdf:resource="#Xochimilco"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Isaías Morones</emex:name>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5555480384</emex:phoneNumber>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Vicente Guerrero S/n, Pueblo San Andres Ahuayucan, Xochimilco</emex:address>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdfs:label xml:lang="es">Isaías Morones</rdfs:label>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <rdfs:label xml:lang="en">Isaias Morones</rdfs:label>
+  </emex:Prescholar>
+  <emex:Cinema rdf:ID="Cinemex_hidalgo">
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.cinemex.com.mx</emex:wpUrl>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdfs:label xml:lang="en">Cinemex Miguel Hidalgo</rdfs:label>
+    <rdfs:label xml:lang="es">Cinemex Miguel Hidalgo</rdfs:label>
+    <rdf:type rdf:resource="#Cinemex"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinemex Miguel Hidalgo</emex:name>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5552015800</emex:phoneNumber>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Boulevard Manuel Avila Camacho 40 Piso 16-torre Esmeralda, Lomas de Chapultepec I Seccion</emex:address>
+    <emex:locationCounty rdf:resource="#Miguel_hidalgo"/>
+  </emex:Cinema>
+  <emex:EducationalInstitution rdf:ID="Antares">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Instituto Antares</emex:name>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Callejon de los Mendoza no 16, San Lorenzo Huipulco, Del. Tlalpan</emex:address>
+    <rdfs:label xml:lang="en">Antares Institute</rdfs:label>
+    <rdfs:label xml:lang="es">Instituto Antares</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:Hospital rdf:ID="Cruz_roja1">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >8332642434</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Altamira"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >HERMENEGILDO J ALDAN, COL. INFONAVIT ALTAMIRA</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cruz Roja Altamira</emex:name>
+    <rdfs:label xml:lang="en">Altamira Red Cross</rdfs:label>
+    <rdfs:label xml:lang="es">Cruz Roja Altamira</rdfs:label>
+  </emex:Hospital>
+  <emex:Hospital rdf:ID="Hospital_General_Calvillo">
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >4959561348</emex:phoneNumber>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Boulevard Rodolfo Landeros No. 440, Col. Bugambilias</emex:address>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.aguascalientes.gob.mx/isea/hcalvillo.asp</emex:wpUrl>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationCounty rdf:resource="#Calvillo"/>
+    <rdfs:label xml:lang="es">Hospital General Calvillo</rdfs:label>
+    <rdfs:label xml:lang="en">Calvillo Hospital</rdfs:label>
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hospital General Calvillo</emex:name>
+  </emex:Hospital>
+  <emex:EducationalInstitution rdf:ID="repArg">
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5555131205</emex:phoneNumber>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >República de Argentina</emex:name>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Morelos no 4, Del. Tlalpan</emex:address>
+    <rdfs:label xml:lang="es">República de Argentina</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+    <rdfs:label xml:lang="en">Republica de Argentina</rdfs:label>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Francisco_i_madero">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Aldama"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Francisco I. Madero, Aldama</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Francisco I. Madero</emex:name>
+    <rdfs:label xml:lang="en">Francisco I. Madero</rdfs:label>
+    <rdfs:label xml:lang="es">Francisco I. Madero</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Pedro_mendez">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Burgos"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >2 y 3 Ignacio Zaragoza, Candido Aguilar, Burgos</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Pedro J. Méndez</emex:name>
+    <rdfs:label xml:lang="en">Pedro J. Mendez</rdfs:label>
+    <rdfs:label xml:lang="es">Pedro J. Méndez</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:Hospital rdf:ID="Centro_de_salud">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >8331621304</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Altamira"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >C. V. GUERRERO ESQ. ITURBIDE S/N ZONA CENTRO, ALTAMIRA, TAMPS</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Centro de salud de Altamira</emex:name>
+    <rdfs:label xml:lang="es">Centro de salud de Altamira</rdfs:label>
+  </emex:Hospital>
+  <emex:EducationalInstitution rdf:ID="Benito_Juarez">
+    <rdfs:label xml:lang="es">Benito Juárez García</rdfs:label>
+    <rdfs:label xml:lang="en">Benito Juarez Garcia</rdfs:label>
+    <emex:locationCounty rdf:resource="#Altamira"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Benito Juárez García</emex:name>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Torres Quintero S/n Pte. Altamira</emex:address>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >2640149</emex:phoneNumber>
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdf:type rdf:resource="#Secondary"/>
+  </emex:EducationalInstitution>
+  <emex:Secondary rdf:ID="Amado_nervo">
+    <emex:locationCounty rdf:resource="#Aguascalientes"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >9752155</emex:phoneNumber>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Amado Nervo</emex:name>
+    <rdfs:label xml:lang="en">Amado Nervo</rdfs:label>
+    <rdfs:label xml:lang="es">Amado Nervo</rdfs:label>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Pascual Cornejo Brun NO. 102, Col. Progreso, Aguascalientes</emex:address>
+  </emex:Secondary>
+  <emex:EducationalInstitution rdf:ID="Comunitaria2">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Aldama"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hda. la Concepcion, Concepcion, Aldama</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Primaria Comunitaria</emex:name>
+    <rdfs:label xml:lang="en">Communitary Elementary School</rdfs:label>
+    <rdfs:label xml:lang="es">Primaria Comunitaria</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Rafael_tejeda">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Burgos"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Candido Aguilar s/n, Burgos</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Rafael Tejeda Puente</emex:name>
+    <rdfs:label xml:lang="en">Rafael Tejeda Puente</rdfs:label>
+    <rdfs:label xml:lang="es">Rafael Tejeda Puente</rdfs:label>
+    <rdf:type rdf:resource="#Secondary"/>
+  </emex:EducationalInstitution>
+  <emex:Hospital rdf:ID="manuel_gea">
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hospital General "Dr. Manuel Gea González"</emex:name>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.facmed.unam.mx/gea/</emex:wpUrl>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556653511</emex:phoneNumber>
+    <rdfs:label xml:lang="es">Manuel Gea González</rdfs:label>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Calzada de Tlalpan 4800, Col. Toriello Guerra</emex:address>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdfs:label xml:lang="en">Manuel Gea Gonzalez</rdfs:label>
+  </emex:Hospital>
+  <emex:EducationalInstitution rdf:ID="Tecnica16">
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Matamoros S/n, Asientos</emex:address>
+    <emex:locationCounty rdf:resource="#Asientos"/>
+    <rdfs:label xml:lang="es">Secundaria Tecnica 16</rdfs:label>
+    <rdf:type rdf:resource="#Secondary"/>
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <rdfs:label xml:lang="en">Technical Secondary School 16</rdfs:label>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >9673089</emex:phoneNumber>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Secundaria Tecnica 16</emex:name>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Rosario_castellanos">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Asientos"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Rosario Castellanos</emex:name>
+    <rdfs:label xml:lang="en">Rosario Castellanos</rdfs:label>
+    <rdfs:label xml:lang="es">Rosario Castellanos</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Ignacio_zaragoza">
+    <rdfs:label xml:lang="en">Ignacio Zaragoza</rdfs:label>
+    <rdfs:label xml:lang="es">Ignacio Zaragoza</rdfs:label>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Gral. Ignacio Zaragoza</emex:name>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5555271962</emex:phoneNumber>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Lago Mayor y 2do C de Lago Mayor, Anahuac I, Miguel Hidalgo</emex:address>
+    <emex:locationCounty rdf:resource="#Miguel_hidalgo"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Guadalupe_victoria">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Asientos"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Eva Samano de Lopez Mateos NO. 12, L. M. Asientos. Adolfo Lopez Mateos</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Guadalupe Victoria</emex:name>
+    <rdfs:label xml:lang="en">Guadalupe Victoria</rdfs:label>
+    <rdfs:label xml:lang="es">Guadalupe Victoria</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
+  <emex:Hospital rdf:ID="Aldama1">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >8362741754</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Aldama"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >HIDALGO NO. 203 PTE., ZONA CENTRO, ALDAMA, TAMPS.</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hospital Integral de Aldama</emex:name>
+    <rdfs:label xml:lang="en">Aldama Hospital</rdfs:label>
+    <rdfs:label xml:lang="es">Hospital Integral de Aldama</rdfs:label>
+  </emex:Hospital>
+  <emex:Secondary rdf:ID="Cumbres">
+    <emex:locationCounty rdf:resource="#Miguel_hidalgo"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5555209408</emex:phoneNumber>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Instituto Cumbres México</emex:name>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Rosedal no 50, Lomas de Chapultepec, Miguel Hidalgo</emex:address>
+    <rdfs:label xml:lang="es">Instituto Cumbres México</rdfs:label>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdfs:label xml:lang="en">Cumbres Institute</rdfs:label>
+  </emex:Secondary>
   <swbc:County rdf:ID="Atoyac">
+    <swbc:belongsTo rdf:resource="#Veracruz"/>
     <rdfs:label xml:lang="en">Atoyac</rdfs:label>
     <rdfs:label xml:lang="es">Atoyac</rdfs:label>
     <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -329,84 +1915,144 @@
     >21</swbc:countyCode>
     <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >-96.780195</swbc:longitud>
+    <swbc:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Atoyac</swbc:name>
   </swbc:County>
-  <swbc:County rdf:ID="Alvaro_Obregon">
-    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >10</swbc:countyCode>
-    <swbc:state rdf:resource="#Mexico_DF"/>
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-99.199891</swbc:longitud>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >19.399988</swbc:latitud>
-    <rdfs:label xml:lang="es">Alvaro Obregón</rdfs:label>
-    <rdfs:label xml:lang="en">Alvaro Obregon</rdfs:label>
-  </swbc:County>
-  <swbc:County rdf:ID="Aldama">
-    <swbc:state rdf:resource="#Tamaulipas"/>
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-98.077269</swbc:longitud>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >22.917725</swbc:latitud>
-    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2</swbc:countyCode>
-    <rdfs:label xml:lang="en">Aldama</rdfs:label>
-    <rdfs:label xml:lang="es">Aldama</rdfs:label>
-  </swbc:County>
-  <emex:Cinemark rdf:ID="Cinemark_obregon">
+  <swb:Class rdf:ID="Hospital">
+    <rdfs:label xml:lang="en">Hospital</rdfs:label>
+    <rdfs:label xml:lang="es">Hospital</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#Company"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <emex:Hospital rdf:ID="respiratorias">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.iner.gob.mx/</emex:wpUrl>
     <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >5552801878</emex:phoneNumber>
+    >5556664539</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Calz. Tlalpan no. 4502, Col. Sección XVI</emex:address>
+    <rdfs:label xml:lang="es">Instituto Nacional de Enfermedades Respiratorias</rdfs:label>
     <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cinemark Alvaro Obregón</emex:name>
-    <emex:location rdf:resource="#Alvaro_Obregon"/>
+    >Instituto Nacional de Enfermedades Respiratorias</emex:name>
+  </emex:Hospital>
+  <emex:EducationalInstitution rdf:ID="Conafe1">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Aguascalientes"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
     <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >AVENIDA SAN JERONIMO 263 B, PUEBLO TIZAPAN, C.P. 01090, ALVARO OBREGON, D.F.</emex:address>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cinemark_obregon</rdfs:label>
-  </emex:Cinemark>
-  <swbc:County rdf:ID="Xochimilco">
-    <rdfs:label xml:lang="en">Xochimilco</rdfs:label>
-    <rdfs:label xml:lang="es">Xochimilco</rdfs:label>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >19.263000</swbc:latitud>
-    <swbc:state rdf:resource="#Mexico_DF"/>
-    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >13</swbc:countyCode>
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-99.102997</swbc:longitud>
-  </swbc:County>
-  <emex:Cinepolis rdf:ID="Cinepolis_pericoapa">
+    >Conocido, los Cuervos (Los Ojos de Agua), Aguascalientes</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Jardín de Niños CONAFE</emex:name>
+    <rdfs:label xml:lang="en">CONAFE Kinder garden</rdfs:label>
+    <rdfs:label xml:lang="es">Jardín de Niños CONAFE</rdfs:label>
+    <rdf:type rdf:resource="#Prescholar"/>
+  </emex:EducationalInstitution>
+  <emex:Secondary rdf:ID="diurna39">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Secundaria Diurna 39</emex:name>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Tacubaya 19, Col. Merced Gómez Mixcoac, C.P. 01600 </emex:address>
+    <rdfs:label xml:lang="en">Secundaria diurna 39</rdfs:label>
+    <rdfs:label xml:lang="es">Secundaria diurna 39</rdfs:label>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+  </emex:Secondary>
+  <emex:Secondary rdf:ID="Irene_trevino">
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Irene Treviño Rodríguez</emex:name>
+    <rdfs:label xml:lang="es">Irene Treviño Rodríguez</rdfs:label>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Blvd. 2a. Generacion S/n/priv. 1 y Plazuela, Burgos</emex:address>
+    <rdfs:label xml:lang="en">Irene Trevino Rodriguez</rdfs:label>
     <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >52801878</emex:phoneNumber>
-    <emex:name xml:lang="en">Cinépolis pericoapa</emex:name>
-    <emex:name xml:lang="es">Cinépolis pericoapa</emex:name>
-    <emex:location rdf:resource="#Tlalpan"/>
+    >8418444113</emex:phoneNumber>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <emex:locationCounty rdf:resource="#Burgos"/>
+  </emex:Secondary>
+  <emex:Prescholar rdf:ID="Nezcaltiloyan">
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <rdfs:label xml:lang="en">Nezcaltiloyan</rdfs:label>
+    <rdfs:label xml:lang="es">Nezcaltiloyan</rdfs:label>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556302314</emex:phoneNumber>
+    <rdf:type rdf:resource="#EducationalInstitution"/>
+    <emex:locationCounty rdf:resource="#Tlalpan"/>
     <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Avenida Canal de miramontes 3163, Municipio de Tlalpan, México D.F.</emex:address>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cinepolis_pericoapa</rdfs:label>
-  </emex:Cinepolis>
-  <swbc:County rdf:ID="Aguascalientes">
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-102.356392</swbc:longitud>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >22.021667</swbc:latitud>
-    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >1</swbc:countyCode>
-    <swbc:state rdf:resource="#AguasCalientes"/>
-    <rdfs:label xml:lang="en">Aguascalientes</rdfs:label>
-    <rdfs:label xml:lang="es">Aguascalientes</rdfs:label>
-  </swbc:County>
-  <swbc:County rdf:ID="Calvillo">
-    <swbc:longitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >-102.716667</swbc:longitud>
-    <swbc:latitud rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >21.850000</swbc:latitud>
-    <swbc:state rdf:resource="#AguasCalientes"/>
-    <swbc:countyCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >3</swbc:countyCode>
-    <rdfs:label xml:lang="es">Calvillo</rdfs:label>
-    <rdfs:label xml:lang="en">Calvillo</rdfs:label>
-  </swbc:County>
+    >Prolongacion Bekal Venuncia, Col. Belvedere, Tlalpan</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Nezcaltiloyan</emex:name>
+  </emex:Prescholar>
+  <emex:Hospital rdf:ID="ISA">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >4959561398</emex:phoneNumber>
+    <emex:locationCounty rdf:resource="#Calvillo"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Rodolfo Landeros Gallegos 428, Col. Calvillo</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Instituto de Salud del Estado de Aguascalientes</emex:name>
+    <rdfs:label xml:lang="en">Aguascalientes Health Institute</rdfs:label>
+    <rdfs:label xml:lang="es">Instituto de Salud del Estado de Aguascalientes</rdfs:label>
+  </emex:Hospital>
+  <emex:Cinema rdf:ID="Cinemex_loreto">
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinemex Loreto</emex:name>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
+    <emex:locationCounty rdf:resource="#Alvaro_Obregon"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Av. Río Magdalena, Plaza Loreto, Del. Álvaro Obregón, México, D.F.</emex:address>
+    <rdfs:label xml:lang="en">Cinemex Loreto</rdfs:label>
+    <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >http://www.cinemex.com.mx</emex:wpUrl>
+    <rdfs:label xml:lang="es">Cinemex Loreto</rdfs:label>
+    <rdf:type rdf:resource="#Cinemex"/>
+  </emex:Cinema>
+  <emex:Cinema rdf:ID="Cinemark_rayon">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Aguascalientes"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Rayón Esq. Rincón s/n. Col. Centro, Aguascalientes</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cinemark Rayón</emex:name>
+    <rdfs:label xml:lang="en">Cinemark Rayon</rdfs:label>
+    <rdfs:label xml:lang="es">Cinemark Rayón</rdfs:label>
+    <rdf:type rdf:resource="#Cinemark"/>
+  </emex:Cinema>
+  <emex:EducationalInstitution rdf:ID="Ignacio_comonfort">
+    <emex:locationState rdf:resource="#Tamaulipas"/>
+    <emex:locationCounty rdf:resource="#Abasolo"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Pob. Nvo. Morelos, Col. Adolfo Lopez Mateos, Abasolo</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Ignacio Comonfort</emex:name>
+    <rdfs:label xml:lang="en">Ignacio Comonfort</rdfs:label>
+    <rdfs:label xml:lang="es">Ignacio Comonfort</rdfs:label>
+    <rdf:type rdf:resource="#Secondary"/>
+  </emex:EducationalInstitution>
+  <emex:EducationalInstitution rdf:ID="Alfonso_Reyes">
+    <emex:locationState rdf:resource="#AguasCalientes"/>
+    <emex:locationCounty rdf:resource="#Aguascalientes"/>
+    <emex:locationCountry rdf:resource="#Mexico"/>
+    <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Av. Barberena y Fraguas S/n, Ojocaliente Vi, AguasCalientes</emex:address>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Alfonso Reyes</emex:name>
+    <rdfs:label xml:lang="es">Alfonso Reyes</rdfs:label>
+    <rdfs:label xml:lang="en">Alfonso Reyes</rdfs:label>
+    <rdf:type rdf:resource="#Elementary"/>
+  </emex:EducationalInstitution>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
