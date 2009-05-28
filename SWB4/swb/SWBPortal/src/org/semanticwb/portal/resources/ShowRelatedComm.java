@@ -29,30 +29,24 @@ public class ShowRelatedComm extends GenericAdmResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
-        User user = paramsRequest.getUser();
         String contID = base.getAttribute("containerID","Comunidades");
         if(null==contID)return;
         WebSite ws = paramsRequest.getTopic().getWebSite();
         WebPage wpCont = ws.getWebPage(contID);
         WebPage wp = paramsRequest.getTopic();
         PrintWriter out = response.getWriter();
-        //out.println("<ul class=\"comunidades\">");
+        out.println("<ul class=\"comunidades\">");
         Iterator<WebPage> itwp = wpCont.listChilds();
-        //out.println("<li>Tiene childs: "+itwp.hasNext()+"</li>"); //debug
         while(itwp.hasNext())
         {
             WebPage wpo = itwp.next();
-            //out.println("<li>debug: "+wpo.getURI()+"</li>");
             if(wpo instanceof MicroSite)
             {
-
                 MicroSite wpr = (MicroSite)wpo;
-                //out.println("<li>debug OrganizationComm: "+wpr.getTitle()+"</li>");
                 WebPage wpAbout = wpr.getAbout();
                 if(wpAbout!=null&&wpAbout.equals(wp))
                 {
-                    //out.println("<li>debug OrganizationComm belong: "+wpr.getId()+"</li>");
-                    out.println("<li><a href=\""+wpr.getUrl()+"\">"+wpr.getDisplayName()+"</a></li>");
+                    out.println("<li><p><a href=\""+wpr.getUrl()+"\">"+wpr.getDisplayName()+"</a></p></li>");
                 }
             }
         }
