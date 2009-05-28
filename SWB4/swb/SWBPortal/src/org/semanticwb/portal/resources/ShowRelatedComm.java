@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -37,13 +38,17 @@ public class ShowRelatedComm extends GenericAdmResource {
         out.println("<div class=\"principal_seccion\">");
         out.println("<div class=\"seccion_contenido\">");
         out.println("<ul>");
-        Iterator<WebPage> itwp = wpCont.listChilds();
+        Iterator<GenericObject> itwp = wpCont.listRelatedObjects();
         while(itwp.hasNext())
         {
-            OrganizationComm wpr = (OrganizationComm)itwp.next();
-            if(wpr.getAbout().getId().equals(wp.getId()))
+            GenericObject go = itwp.next();
+            if(go instanceof OrganizationComm)
             {
-                out.println("<li><a href=\""+wpr.getUrl()+"\">"+wpr.getDisplayName()+"</a></li>");
+                OrganizationComm wpr = (OrganizationComm)go;
+                if(wpr.getAbout().getId().equals(wp.getId()))
+                {
+                    out.println("<li><a href=\""+wpr.getUrl()+"\">"+wpr.getDisplayName()+"</a></li>");
+                }
             }
         }
         out.println("</ul>");
