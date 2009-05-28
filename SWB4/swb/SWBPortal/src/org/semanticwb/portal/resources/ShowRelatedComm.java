@@ -14,6 +14,7 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.model.comm.MicroSite;
 import org.semanticwb.model.comm.OrganizationComm;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -36,18 +37,18 @@ public class ShowRelatedComm extends GenericAdmResource {
         WebPage wp = paramsRequest.getTopic();
         PrintWriter out = response.getWriter();
         out.println("<ul class=\"comunidades\">");
-        Iterator<WebPage> itwp = wpCont.listWebPages();
+        Iterator<WebPage> itwp = wpCont.listChilds();
         out.println("<li>Tiene childs: "+itwp.hasNext()+"</li>"); //debug
         while(itwp.hasNext())
         {
             WebPage wpo = itwp.next();
             out.println("<li>debug: "+wpo.getURI()+"</li>");
-            if(wpo instanceof OrganizationComm)
+            if(wpo instanceof MicroSite)
             {
 
-                OrganizationComm wpr = (OrganizationComm)wpo;
+                MicroSite wpr = (MicroSite)wpo;
                 out.println("<li>debug OrganizationComm: "+wpr.getTitle()+"</li>");
-                if(wpr.getAbout().getId().equals(wp.getId()))
+                if(wpr.getAbout().equals(wp))
                 {
                     out.println("<li>debug OrganizationComm belong: "+wpr.getId()+"</li>");
                     out.println("<li><a href=\""+wpr.getUrl()+"\">"+wpr.getDisplayName()+"</a></li>");
