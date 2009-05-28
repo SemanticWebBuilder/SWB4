@@ -157,13 +157,14 @@ public class CreateCommunity extends GenericResource
                     }
                     out.println("<input type='hidden' name='swbtp' id='swbtp' value='"+ topic +"'>");
                     out.println("<input type='hidden' name='selecttype' value='" + type + "'><br>");
-                    out.println("<label for='title'>Indique el el contenido por defecto:</label>");
+                    //out.println("<label for='title'>Indique el el contenido por defecto:</label>");
                     /*out.println("<select name='resbydefault'>");
                     out.println("<option value='" + CommunityConfiguration.BLOG_RESOURCE_TYPE_ID + "'>Blog");
                     out.println("<option value='" + CommunityConfiguration.FORO_RESOURCE_TYPE_ID + "'>Foro");
                     out.println("<option value='" + CommunityConfiguration.WIKI_RESOURCE_TYPE_ID + "'>Wiki");
                     out.println("<option value='n'>Ninguno");
                     out.println("</select>");*/
+                    
                     out.println("<input type='button' onClick='ValidaTitulo()' name='enviar' value='Crear'>");
                     out.println("</fieldset>");
                     out.println("</form>");
