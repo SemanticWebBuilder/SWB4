@@ -261,6 +261,11 @@ public class WBAAccessLoginReport extends GenericResource {
                 ret.append("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_detail") + "\"+params,\"detailWindow\", size);\n");
                 ret.append("}\n");
 
+                ret.append("function doGraph(size) {\n");
+                ret.append("   var params = getParams();\n");
+                ret.append("   window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("graph")+"\"+params,\"graphWindow\",size);\n");
+                ret.append("}\n");
+
                 ret.append("function doXml(accion, size) {\n");
                 ret.append("   var params = getParams();\n");
                 ret.append("   window.open(\"" + paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml") + "\"+params,\"graphWindow\",size);\n");
@@ -479,96 +484,91 @@ public class WBAAccessLoginReport extends GenericResource {
     }
 
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        StringBuffer sb_ret = new StringBuffer();
-        StringBuffer sb_app = new StringBuffer();
+        StringBuffer ret = new StringBuffer();
         Resource base = paramsRequest.getResourceBase();
-        DocumentBuilderFactory dbf = null;
-        DocumentBuilder db = null;
-        Document dom = null;
-        ArrayList ar_pag = null;
-        String s_title = null;
-        int i_len = 0;
-        boolean b_record = false;
+        Iterator<String[]> ar_pag = null;
 
         try {
-            sb_ret.append("\n<html>");
-            sb_ret.append("\n<head>");
-            sb_ret.append("\n<title>" + paramsRequest.getLocaleString("access_session_report") + "</title>");
-            sb_ret.append("\n</head>");
-            //<LINK href="/work/WBAdmin/templates/3/1/images/wb3.css" rel="stylesheet" type="text/css" >
-            sb_ret.append("\n<LINK href=\"" + SWBPlatform.getContextPath() + "work/WBAdmin/templates/3/1/images/wb3.css\" rel=\"stylesheet\" type=\"text/css\" >");
-            sb_ret.append("\n<script type=\"text/javascript\">");
-            sb_ret.append("\n   function DoPrint(){");
-            sb_ret.append("\n       window.print();");
-            sb_ret.append("\n   }");
-            sb_ret.append("\n   function DoClose(){");
-            sb_ret.append("\n       window.close();");
-            sb_ret.append("\n   }");
-            sb_ret.append("\n</script>");
-            sb_ret.append("\n<body>");
-            sb_ret.append("\n<table border=\"0\" width=\"550\">");
-            sb_ret.append("\n<tr>");
-            sb_ret.append("\n<td colpsan=\"3\" align=\"left\"><img src=\"" + SWBPlatform.getContextPath() + "wbadmin/images/WB.gif\" width=\"362\" height=\"31\">");
-            sb_ret.append("<input type=\"button\" class=\"boton\" onClick=\"DoPrint()\" value=\"" + paramsRequest.getLocaleString("print") + "\" name=\"btnPrint\">");
-            sb_ret.append("<input type=\"button\" class=\"boton\" onClick=\"DoClose()\" value=\"" + paramsRequest.getLocaleString("close") + "\" name=\"btnClose\">");
-            sb_ret.append("</td>");
-            sb_ret.append("\n</tr>");
-            sb_ret.append("\n<tr>");
-            sb_ret.append("\n<td colpsan=\"3\">&nbsp;</td>");
-            sb_ret.append("\n</tr>");
-            sb_ret.append("\n<tr>");
-            sb_ret.append("\n<td colpsan=\"3\">");
+            ret.append("<html>\n");
+            ret.append("<head>\n");
+            ret.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" />\n");
+            ret.append("<title>" + paramsRequest.getLocaleString("access_log_report") + "</title>\n");
 
-            // Start to print applet
-            //sb_app.append("\n<APPLET code=\"WBABar4Report.class\" archive=\""+ WBUtils.getInstance().getWebPath() + "wbadmin/lib/WBABar.jar\" width=\"550\" height=\"450\">");
-            sb_app.append("\n<APPLET code=\"applets.graph.WBGraph.class\" archive=\"" + SWBPlatform.getContextPath() + "wbadmin/lib/WBGraph.jar\" width=\"550\" height=\"450\">");
-            sb_app.append("\n<param name=\"GraphType\" value=\"Lines\">");
-            sb_app.append("\n<param name=\"ncdata\" value=\"1\">");
-            sb_app.append("\n<param name=\"percent\" value=\"false\">");
+            ret.append("<style type=\"text/css\">\n");
+            ret.append("@import \""+SWBPlatform.getContextPath()+"/swbadmin/js/dojo/dojo/resources/dojo.css\";\n");
+            ret.append("@import \""+SWBPlatform.getContextPath()+"/swbadmin/js/dojo/dijit/themes/soria/soria.css\";\n");
+            ret.append("@import \""+SWBPlatform.getContextPath()+"/swbadmin/css/swb.css\";\n");
+            ret.append("</style>\n");
 
-            /*ar_pag = getReportResults(request, paramsRequest);
-            i_len = ar_pag.size();
-            s_title = paramsRequest.getLocaleString("access_session_report");
-            sb_app.append("\n<param name=\"Title\" value=\"" + s_title + "\">");
-            sb_app.append("\n<param name=\"ndata\" value=\""+ i_len +"\">");
-            for(int j=0;j<i_len;j++){
-            //RecResHits recResHits=(RecResHits)ar_pag.get(j);
-            String[] arr_data = (String[])ar_pag.get(j);
-            //String s_date = recResHits.getdate().toString();
-            sb_app.append("\n<param name=\"label" + j + "\" value=\""+ arr_data[0] +"\">");
-            sb_app.append("\n<param name=\"data" + j + "\" value=\"" + arr_data[1] + "\">");
-            b_record = true;
-            }*/
+            ret.append("<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n");
+            ret.append("<script type=\"text/javascript\">\n");
+            ret.append("    function doPrint() {\n");
+            ret.append("        window.print();\n");
+            ret.append("    }\n");
+            ret.append("    function doClose() {\n");
+            ret.append("        window.close();\n");
+            ret.append("    }\n");
 
-            sb_app.append("\n<param name=\"color0\" value=\"66,138,212\">");
-            sb_app.append("\n<param name=\"color1\" value=\"237,237,235\">");
-            sb_app.append("\n<param name=\"color2\" value=\"229,243,253\">");
-            sb_app.append("\n<param name=\"barname0\" value=\"Hits\">");
-            sb_app.append("\n<param name=\"zoom\" value=\"true\">");
-            sb_app.append("\n</APPLET>");
-            // Finish to print applet
+            ret.append("</script>\n");
+            ret.append("</head>\n");
 
-            // Evaluates if there are records
-            if (b_record) {
-                // Prints applet
-                sb_ret.append(sb_app.toString());
-            } else {
-                // Prints message
-                sb_ret.append("\n<center><br><br><br><br><br><br><br><br><font color=\"black\">" + paramsRequest.getLocaleString("no_records_found") + "</font></center>");
+            ret.append("<body class=\"soria\">\n");
+            ret.append("<div class=\"swbform\">\n");
+            ret.append("<form>");
+            ret.append("<fieldset>\n");
+            ret.append("<table border=\"0\" width=\"560\" height=\"460\">\n");
+            ret.append("<tr>\n");
+            ret.append("<td colspan=\"3\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/images/swb-logo-hor.jpg\" width=\"180\" height=\"36\" /></td>\n");
+            ret.append("</tr>\n");
+            ret.append("<tr>\n");
+            ret.append("<td colspan=\"3\" align=\"right\">\n");
+            ret.append("<button dojoType=\"dijit.form.Button\" onClick=\"doPrint()\">"+paramsRequest.getLocaleString("print")+"</button>&nbsp;\n");
+            ret.append("<button dojoType=\"dijit.form.Button\" onClick=\"doClose()\">"+paramsRequest.getLocaleString("close")+"</button>&nbsp;\n");
+            ret.append("</td>\n");
+            ret.append("</tr>\n");
+            ret.append("<tr>\n");
+            ret.append("<td colpsan=\"3\">&nbsp;</td>\n");
+            ret.append("</tr>\n");
+            ret.append("<tr>\n");
+            ret.append("<td colpsan=\"3\">\n");
+
+            int ndata = 0;
+            ar_pag = getReportResults(request, paramsRequest);
+            if(ar_pag.hasNext()) {
+                ret.append("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/WBGraph.jar\" width=\"550\" height=\"450\">\n");
+                ret.append("<param name=\"GraphType\" value=\"Lines\">\n");
+                ret.append("<param name=\"ncdata\" value=\"1\">\n");
+                ret.append("<param name=\"percent\" value=\"false\">\n");
+                while(ar_pag.hasNext()) {
+                    String[] data = ar_pag.next();
+                    ret.append("<param name=\"label"+ndata+"\" value=\""+data[0]+"\">\n");
+                    ret.append("<param name=\"data"+ndata+"\"  value=\""+data[1]+"\">\n");
+                    ndata++;
+                }
+                String title = paramsRequest.getLocaleString("access_log_report");
+                ret.append("<param name=\"Title\" value=\"" + title + "\">\n");
+                ret.append("<param name=\"ndata\" value=\""+ ndata +"\">\n");
+                ret.append("<param name=\"color0\" value=\"66,138,212\">\n");
+                ret.append("<param name=\"barname0\" value=\"Hits\">\n");
+                ret.append("<param name=\"zoom\" value=\"true\">\n");
+                ret.append("</APPLET>\n");
+            }else {
+                ret.append(paramsRequest.getLocaleString("no_records_found"));
             }
 
-            sb_ret.append("\n</td>");
-            sb_ret.append("\n</tr>");
-            sb_ret.append("\n</table>");
-            sb_ret.append("\n</body>");
-            sb_ret.append("\n</html>");
-        //ar_pag = getReportResults(request, paramsRequest);
-        //i_len = ar_pag.size();
-
-        } catch (Exception e) {
+            ret.append("</td>\n");
+            ret.append("</tr>\n");
+            ret.append("</table>\n");
+            ret.append("</fieldset>\n");
+            ret.append("</form>");
+            ret.append("</div>\n");
+            ret.append("</body>\n");
+            ret.append("</html>\n");
+        }
+        catch (Exception e) {
             log.error("Error on method doGraph() resource " + strRscType + " with id " + base.getId(), e);
         }
-        response.getWriter().print(sb_ret.toString());
+        response.getWriter().print(ret.toString());
     }
 
     public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
@@ -807,7 +807,7 @@ public class WBAAccessLoginReport extends GenericResource {
         GregorianCalendar last = new GregorianCalendar(year12, month12 - 1, day12, hour12, minute12);
 
         if (repId != null) {
-            String realpath = path + accessLogPath + "_" + repId + "_sess.";
+            String realpath = path + accessLogPath + "_" + repId + "_logins.";
 
             if (period.equalsIgnoreCase("daily")) {
                 sdf = new SimpleDateFormat("yyyy-MM-dd");
