@@ -37,8 +37,8 @@ public class ShowRelatedComm extends GenericAdmResource {
         WebPage wp = paramsRequest.getTopic();
         PrintWriter out = response.getWriter();
         out.println("<ul class=\"comunidades\">");
-        Iterator<WebPage> itwp = wpCont.listChilds(user.getLanguage(),true,false,true,true);
-        out.println("<li>"+itwp.next()+"</li>"); //debug
+        Iterator<WebPage> itwp = wpCont.listChilds();
+        out.println("<li>Tiene childs: "+itwp.hasNext()+"</li>"); //debug
         while(itwp.hasNext())
         {
             GenericObject go = itwp.next();
