@@ -9,12 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import javax.servlet.http.HttpSession;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.fileupload.FileItem;
 import org.semanticwb.model.VersionInfo;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -28,7 +26,7 @@ import org.semanticwb.portal.util.WBFileUpload;
 
 
 /**
- *
+ * Presenta un editor de HTML para generar contenidos que se asocian a la página en que se genera este recurso.
  * @author jose.jimenez
  */
 public class HTMLContent extends GenericResource {
@@ -38,7 +36,7 @@ public class HTMLContent extends GenericResource {
 
     
     /**
-     * 
+     * Presenta el editor de HTML para generar el contenido a mostrar
      * @param request
      * @param response
      * @param paramRequest
@@ -50,13 +48,11 @@ public class HTMLContent extends GenericResource {
             SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
         
-        System.out.println("action:" + paramRequest.getAction());
         Resource resource = paramRequest.getResourceBase();
-        //String resourceWorkPath = "/work" + resource.getWorkPath() + "/";
         HttpSession session = request.getSession();
         VersionInfo versionInfo = new VersionInfo(resource.getSemanticObject());
         int versionNumber = versionInfo.getVersionNumber();
-        String fileName = "index.html";  //base.getActualVersion().getVersionFile();
+        String fileName = "index.html";
         String action = paramRequest.getAction();
         StringBuffer pathToRead = new StringBuffer(70);
         StringBuffer pathToWrite = new StringBuffer(70);
@@ -72,29 +68,18 @@ public class HTMLContent extends GenericResource {
             action = SWBParamRequest.Action_ADD;
         }
         
-        /*
-        VersionInfo version = new VersionInfo(resource.getSemanticObject());
-        version.setVersionFile(filename);
-        version.setVersionNumber(versionNumber);
-        resource.setActualVersion(version);
-        resource.setLastVersion(version);
-        */
         pathToRead.append(versionNumber + "/");
         pathToRead.append(fileName);
         pathToWrite.append("" + (++versionNumber));
         session.setAttribute("directory", pathToWrite.toString());
-        System.out.println("ruta para subir archivos:" + pathToWrite.toString());
-        System.out.println("tmpPath a buscar:" + SWBPlatform.getWorkPath() + tmpPath);
         
         if (action.equals(SWBParamRequest.Action_EDIT)) {
             try {
                 //Cuando se carga el archivo normalmente
                 if (tmpPath == null || "".equals(tmpPath)) {
-                    System.out.println("Carga normal.");
                     content = SWBUtils.IO.readInputStream(
                             SWBPlatform.getFileFromWorkPath(pathToRead.toString()));
                 } else { //cuando se carga el archivo temporal
-                    System.out.println("Carga desde tmpPath: " + SWBPlatform.getWorkPath() + tmpPath);
                     content = SWBUtils.IO.readInputStream(
                             SWBPlatform.getFileFromWorkPath(tmpPath + "index.html"));
                 }
@@ -115,6 +100,14 @@ public class HTMLContent extends GenericResource {
         }
     }
     
+    /**
+     * Presenta el contenido generado con el editor de HTML
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws org.semanticwb.portal.api.SWBResourceException
+     * @throws java.io.IOException
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest)
@@ -126,17 +119,21 @@ public class HTMLContent extends GenericResource {
         String fileName = versionInfo.getVersionFile();
         String resourceWorkPath = SWBPlatform.getWorkPath()
                 + resource.getWorkPath() + "/" + versionNumber + "/" + fileName;
-        System.out.println("resourceWorkPath:" + resourceWorkPath
-                + "\nversionNumber" + versionNumber
-                + "\nfileName" + fileName);
         response.getWriter().println(SWBUtils.IO.getFileFromPath(resourceWorkPath));
     }
 
+    /**
+     * Determina el metodo a ejecutar en base al modo que se envia en el objeto HttpServletRequest recibido
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws org.semanticwb.portal.api.SWBResourceException
+     * @throws java.io.IOException
+     */
     @Override
     public void processRequest(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
-        System.out.println("paramRequest.getMode():" + paramRequest.getMode());
         if (paramRequest.getMode().equals("saveContent")) {
             saveContent(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("uploadNewVersion")) {
@@ -149,7 +146,7 @@ public class HTMLContent extends GenericResource {
     }
 
     /**
-     * Almacena en un archivo con extensión html el contenido mostrado en el 
+     * Almacena en un archivo con extensión .html el contenido mostrado en el 
      * editor, creando una nueva versión de este recurso.
      * @param request
      * @param response
@@ -164,12 +161,19 @@ public class HTMLContent extends GenericResource {
         Resource resource = paramRequest.getResourceBase();
         String contentPath = (String) request.getSession().getAttribute("directory");
         String textToSave = request.getParameter("EditorDefault");
-        boolean deleteTmp = (request.getParameter("operation") != null) 
+        boolean deleteTmp = (request.getParameter("operation") != null
+                             && !"".equals(request.getParameter("operation")))
                             ? true : false;
         String filename = null;
         boolean textSaved = false;
         VersionInfo version = new VersionInfo(resource.getSemanticObject());
         int versionNumber = version.getVersionNumber();
+        int versionToDelete = versionNumber;
+        String directoryToRemove = SWBPlatform.getWorkPath() 
+                + resource.getWorkPath() + "/" 
+                + (versionToDelete > 1 ? versionToDelete : 1) + "/tmp";
+        String directoryToCreate = SWBPlatform.getWorkPath() 
+                + resource.getWorkPath() + "/" + (versionNumber + 1) + "/images";
         
         //Siempre se crea una nueva version al guardar
         versionNumber++;
@@ -188,23 +192,43 @@ public class HTMLContent extends GenericResource {
                         + contentPath + "/index.html");
                 filename = file.getName();
                 FileWriter writer = new FileWriter(file);
+                
+                //Si estaba en directorio temporal, modificar rutas de archivos asociados
+                if (deleteTmp) {
+                    textToSave = textToSave.replaceAll(
+                            SWBPlatform.getWebWorkPath()
+                            + resource.getWorkPath() + "/"
+                            + (version.getVersionNumber() > 1 ? version.getVersionNumber() : 1)
+                            + "/tmp/images", 
+                            SWBPlatform.getWebWorkPath()
+                            + resource.getWorkPath() + "/"
+                            + versionNumber + "/images");
+                }
+                
                 writer.write(textToSave);
                 writer.flush();
                 writer.close();
                 version.setVersionFile(filename);
                 version.setVersionNumber(versionNumber);
-                System.out.println("VersionNumber:" + version.getVersionNumber());
                 //TODO: Revisar si esto es correcto. Forzosamente se debe fijar
                 //la editada como la actual?
-                //resource.setActualVersion(version);
-                //resource.setLastVersion(version);
+                //resource.setActualVersion(versionNumber);
+                //resource.setLastVersion(versionNumber);
                 textSaved = true;
                 if (deleteTmp) {
+                    File imagesDirectory = new File(directoryToRemove + "/images");
                     //eliminar el directorio tmp de la version anterior
-                    SWBUtils.IO.removeDirectory(SWBPlatform.getWorkPath() 
-                            + resource.getWorkPath() + "/"
-                            + (versionNumber > 1 ? versionNumber - 1 : versionNumber)
-                            + "/tmp");
+                    if (imagesDirectory.exists()
+                            && SWBUtils.IO.createDirectory(directoryToCreate)) {
+                        
+                        //Copia los archivos del directorio tmp al de la nueva version
+                        for (String strFile : imagesDirectory.list()) {
+                            SWBUtils.IO.copy(imagesDirectory.getPath() + "/" + strFile,
+                                    directoryToCreate + "/" + strFile, false,
+                                    "", "");
+                        }
+                    }
+                    SWBUtils.IO.removeDirectory(directoryToRemove);
                 }
             } catch (Exception e) {
                 log.error("Al escribir el archivo", e);
@@ -212,17 +236,16 @@ public class HTMLContent extends GenericResource {
         }
         PrintWriter out = response.getWriter();
         if (textSaved) {
-            out.println("El contenido ha sido guardado exitosamente");
+            out.println("El contenido ha sido guardado exit&oacute;samente");
         } else {
             out.println("Se produjo un error al almacenar la información, intente de nuevo.");
-            //out.println("<br><a href=\"javascript:history.back();\">Regresar</a>");
         }
         out.close();
     }
     
     /**
-     * Carga un archivo al file system del servidor cuyo contenido sustituirá al
-     * contenido de este recurso, creando una nueva versión de este recurso.
+     * Carga un archivo al file system del servidor en un directorio temporal
+     * utilizando la interfaz del FCKEditor y el applet DragDrop.
      * @param request
      * @param response
      * @param paramRequest
@@ -238,11 +261,10 @@ public class HTMLContent extends GenericResource {
         Resource resource = paramRequest.getResourceBase();
         String fileContent = null;
         VersionInfo version = new VersionInfo(resource.getSemanticObject());
-        //request.getSession().setAttribute("directory", null);
         String portletWorkPath = SWBPlatform.getWorkPath()
                 + resource.getWorkPath() + "/" 
                 + (version.getVersionNumber() > 1
-                   ? version.getVersionNumber() - 1 : 1)
+                   ? version.getVersionNumber() : 1)
                 + "/tmp/";
         String clientFilePath = "";
         String filename = null;
@@ -269,6 +291,14 @@ public class HTMLContent extends GenericResource {
         }
         fUpload.saveFile("NewFile", portletWorkPath);
         String strAttaches = fUpload.FindAttaches("NewFile");
+        String[] filesAttached = strAttaches.split(";");
+        
+        //Almacena la ruta relativa (en la máquina cliente) de los archivos relacionados al html.
+        String localRelativePath = null;
+        if (filesAttached.length > 0 && filesAttached[0].indexOf("/") != -1) {
+            localRelativePath = filesAttached[0].substring(0,
+                    filesAttached[0].lastIndexOf("/"));
+        }
         file = new File(portletWorkPath + "images/");
         if (!file.exists()) {
             file.mkdir();
@@ -276,122 +306,73 @@ public class HTMLContent extends GenericResource {
         
         //Renombrar el nuevo archivo
         try {
-            file = new File(portletWorkPath + filename);
-            file.renameTo(new File(portletWorkPath + "index.html"));
-            //borra el archivo con el nombre original
-            file.delete();
+            //Se cambian las rutas a los archivos asociados.
+            if (strAttaches != null && strAttaches.length() > 0) {
+                SWBUtils.IO.copy(portletWorkPath + filename,
+                        portletWorkPath + "index.html", true,
+                        localRelativePath,
+                        SWBPlatform.getWebWorkPath() + resource.getWorkPath()
+                        + "/"
+                        + (version.getVersionNumber() > 1 ? version.getVersionNumber() : 1)
+                        + "/tmp/images");
+            } else {
+                SWBUtils.IO.copy(portletWorkPath + filename,
+                        portletWorkPath + "index.html", false, "", "");
+            }
+//            file = new File(portletWorkPath + filename);
+//            //borra el archivo con el nombre original
+//            file.delete();
         } catch (Exception e) {
             log.debug(e);
         }
         
-        //try {
-            // Se elimina de una de las dos rutas el directorio -work-, ya que las dos lo tienen.
-            /*
-            Iterator<FileItem> files = SWBUtils.IO.fileUpload(request,
-                    SWBPlatform.getWorkPath() + resource.getWorkPath() + "/"
-                    + version.getVersionNumber());
-            if (files.hasNext()) {
-                FileItem oneFile = files.next();
-                System.out.println("oneFile.getName(): " + oneFile.getName());
-                fileContent = oneFile.getString();
-                oneFile.delete();*/
-                request.setAttribute("clientFilePath", clientFilePath);
-                request.setAttribute("strAttaches", strAttaches);
-                request.setAttribute("fileContent", fileContent);
-                request.setAttribute("showApplet", "yes");
-            //}
-            // Se comenta para hacer una prueba de llamado directo al applet
-            //doAdmin(request, response, paramRequest);
-            PrintWriter out = response.getWriter();
-            StringBuffer bs = new StringBuffer(700);
+        PrintWriter out = response.getWriter();
+        StringBuffer bs = new StringBuffer(700);
 
-            bs.append("\n<html>");
-            bs.append("\n<head>");
-            bs.append("\n<script type=\"text/javascript\">");
-            bs.append("\n  //alert(this.location + ' - ' + parent.parent.location);");
-            //ejecutar submit de una nueva forma (en la JSP) con un hidden que indique se muestre 
-            //el doAdmin para recuperar los datos del directorio tmp.
-            bs.append("\nfunction createFunction() { ");
-            bs.append("\n  var vwrite= \"function findForms() {");
-            bs.append("\\n  var top = window.parent.frames;");
-            bs.append("\\n  for (var fr1 = 0; fr1 < top.length; fr1++) {");
-//            bs.append("\\n    alert(\\'Primer nivel: \\' + top[fr1].src + \\' - \\' + top[fr1].document.URL);");
-            bs.append("\\n    if (top[fr1].document.forms != undefined) {");
-            bs.append("\\n        var subtop = top[fr1].document.forms;");
-            bs.append("\\n        for (var fr2 = 0; fr2 < subtop.length; fr2++) {");
-//            bs.append("\\n            alert(subtop[fr2].name);");
-            bs.append("\\n            if (subtop[fr2].name == 'newFileForm' && subtop[fr2].id == 'newFileForm') {");
-            bs.append("\\n                subtop[fr2].submit();");
-            bs.append("\\n                break;");
-            bs.append("\\n            }");
-            //bs.append("            alert(\\'Segundo nivel: \\' + subtop[fr2].name + \\' - \\' + subtop[fr2].action);");
-            bs.append("\\n        }");
-//            bs.append("\\n    } else {");
-//            bs.append("\\n        alert(\\'Primer nivel: Sin forms dentro\\');");
-            bs.append("\\n    }");
-            bs.append("\\n  } ");
-            bs.append("\\n}\";");
-            
-            bs.append("\nvar head = window.parent.document.getElementsByTagName('head')[0];");
-            bs.append("\nif (head) {");
-            bs.append("\n  var vscript = window.parent.document.createElement('script');");
-            bs.append("\n  vscript.id = 'scriptToCreateFunction';");
-            bs.append("\n  vscript.type = 'text/javascript';");
-            bs.append("\n  vscript.innerHTML = vwrite;");
-            bs.append("\n  head.appendChild(vscript);");
-            bs.append("\n}");
-            
-            //bs.append("\nwindow.parent.document.write(vwrite);");
-            bs.append("\n  var button = window.parent.document.getElementById(\"PopupButtons\");");
-            bs.append("\n  button.value = \"Cerrar ventana\";");
-            bs.append("\n  //alert(window.parent.document.getElementById(\"btnCancel\").onclick);");
-            bs.append("\n  var cad = '<div align=\"right\">'");
-            //bs.append("\n          + '<input id=\"btnCancel\" class=\"Button\" type=\"button\" fcklang=\"DlgBtnCancel\" onclick=\"parent.document.getElementById(\\'newFileForm\\').submit();Cancel();\" value=\"Cerrar ventana\"/>'");
-            bs.append("\n          + '<input id=\"btnCancel\" class=\"Button\" type=\"button\" fcklang=\"DlgBtnCancel\" onclick=\"findForms();Cancel();\" value=\"Cerrar ventana\"/>'");
-            bs.append("\n          + '</div>'; ");
-            bs.append("\n  button.innerHTML = cad;");
-/*            bs.append("\n  var s = window.parent.parent.frames; ");
-            bs.append("\n  for (var x = 0; x < s.length; x++) { ");
-            bs.append("\n    alert(s[x].src);");
-            bs.append("\n    if (s[x].document.forms != undefined) ");
-            bs.append("\n       for (var y = 0; y < s.document.forms.length; s++) ");
-            bs.append("\n         alert('Forma: ' + s.document.forms[y].action)");
-            bs.append("\n    //alert(s.src);");
-            bs.append("\n  } ");
-            bs.append("\n  alert('Done!');");
-            bs.append("\n  ");*/
-            bs.append("\n}  ");
-            bs.append("\n</script>");
-            bs.append("\n</head>");
-            bs.append("\n");  // onload=\"createFunction();\"
-            bs.append("\n<body onload=\"createFunction();\">");
-            bs.append("\n  <APPLET WIDTH=\"100%\" HEIGHT=\"100%\" CODE=\"applets.dragdrop.DragDrop.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" archive=\"swbadmin/lib/DragDrop.jar, swbadmin/lib/WBCommons.jar\" border=\"0\">");
-            bs.append("\n  <PARAM NAME=\"webpath\" VALUE=\"" + SWBPlatform.getContextPath() + "/\">");
-            bs.append("\n  <PARAM NAME=\"foreground\" VALUE=\"000000\">");
-            bs.append("\n  <PARAM NAME=\"background\" VALUE=\"979FC3\">");
-            bs.append("\n  <PARAM NAME=\"foregroundSelection\" VALUE=\"ffffff\">");
-            bs.append("\n  <PARAM NAME=\"backgroundSelection\" VALUE=\"666699\">");
-            bs.append("\n  <PARAM NAME=\"path\" value=\"" + portletWorkPath + "images/\">");
-            bs.append("\n  <PARAM NAME=\"clientpath\" value=\"" + clientFilePath + "\">");
-            bs.append("\n  <PARAM NAME=\"files\" value=\"" + strAttaches + "\">");
-            bs.append("\n  </APPLET>");
-            bs.append("\n</body>");
-            bs.append("\n</html>");
-            bs.append("\n");
-//            bs.append("\n</div>");
-            out.println(bs.toString());
-            /*
-        } catch (IOException ioe) {
-            response.getWriter().println("Se produjo un error al leer el archivo."
-                    + "Por favor intente de nuevo, "
-                    + "<a href=\"history.go(-1);\" >Regresar</a>");
-            log.debug(ioe);
-        } catch (SWBResourceException swbre) {
-            response.getWriter().println("Se produjo un error al presentar el "
-                    + "contenido del archivo seleccionado. Por favor intente de "
-                    + "nuevo, <a href=\"history.go(-1);\" >Regresar</a>");
-            log.debug(swbre);
-        }*/
+        bs.append("\n<html>");
+        bs.append("\n<head>");
+        bs.append("\n<script type=\"text/javascript\">");
+        bs.append("\n  function searchForm() {");
+        bs.append("\n      for (var i = 0; i < top.frames.length; i++) {");
+        bs.append("\n          var forma = top.frames[i].document.getElementById('newFileForm'); ");
+        bs.append("\n          if (forma != undefined) {");
+        bs.append("\n              top.frames[i].closeAndReload(window.parent,\""
+                + localRelativePath + "\");");
+        bs.append("\n          }");
+        bs.append("\n      }");
+        bs.append("\n  }");
+        bs.append("\n");
+        bs.append("\n  var button = window.parent.document.getElementById(\"PopupButtons\");");
+        bs.append("\n  //button.value = \"Cerrar ventana\";");
+        bs.append("\n  var cad = '<div align=\"right\">'");
+        bs.append("\n          + '<input id=\"btnCancel\" class=\"Button\" type=\"button\" fcklang=\"DlgBtnCancel\" onclick=\"window.frames[\\'frmMain\\'].searchForm();\" value=\"Mostrar archivo cargado\"/>'");
+        bs.append("\n          + '</div>'; ");
+        bs.append("\n  button.innerHTML = cad;");
+        bs.append("\n  ");
+        bs.append("\n  var closeButton = window.parent.document.getElementById(\"closeButton\");");
+        bs.append("\n  closeButton.onclick = \"window.frames[\\'frmMain\\'].searchForm();\"");
+        bs.append("\n  ");
+        bs.append("\n</script>");
+        bs.append("\n</head>");
+        bs.append("\n");
+        bs.append("\n<body>");
+        bs.append("\n  <APPLET WIDTH=\"100%\" HEIGHT=\"100%\" CODE=\"applets.dragdrop.DragDrop.class\" codebase=\""
+                + SWBPlatform.getContextPath()
+                + "\" archive=\"swbadmin/lib/DragDrop.jar, swbadmin/lib/WBCommons.jar\" border=\"0\">");
+        bs.append("\n  <PARAM NAME=\"webpath\" VALUE=\""
+                + SWBPlatform.getContextPath() + "/\">");
+        bs.append("\n  <PARAM NAME=\"foreground\" VALUE=\"000000\">");
+        bs.append("\n  <PARAM NAME=\"background\" VALUE=\"979FC3\">");
+        bs.append("\n  <PARAM NAME=\"foregroundSelection\" VALUE=\"ffffff\">");
+        bs.append("\n  <PARAM NAME=\"backgroundSelection\" VALUE=\"666699\">");
+        bs.append("\n  <PARAM NAME=\"path\" value=\"" + portletWorkPath + "images/\">");
+        bs.append("\n  <PARAM NAME=\"clientpath\" value=\"" + clientFilePath + "\">");
+        bs.append("\n  <PARAM NAME=\"files\" value=\"" + strAttaches + "\">");
+        bs.append("\n  </APPLET>");
+        bs.append("\n</body>");
+        bs.append("\n</html>");
+        bs.append("\n");
+        out.println(bs.toString());
     }
     
     /**
@@ -514,37 +495,27 @@ public class HTMLContent extends GenericResource {
         output.append("\n	GetE( 'divUpload' ).style.display  = 'none' ;");
         output.append("\n	return true ;");
         output.append("\n}");
-/*        output.append("\nfunction changeButtons() { ");
-        output.append("\n   ");
-        output.append("\n  var button = window.parent.document.getElementById(\"btnCancel\");");
-        output.append("\n  button.onclick = \"Cancel();parent.document.getElementById('newFileForm').submit();\";"); 
-        output.append("\n  button.value = \"Cerrar ventana\";");
-        output.append("\n  alert(window.parent.document.getElementById(\"btnCancel\").onclick);");
-  
-        output.append("\n}   "); */
         output.append("\n        function fillHiddenPath() { ");
         output.append("\n          var localName = document.frmUpload.NewFile.value; ");
         output.append("\n          document.frmUpload.hiddenPath.value = localName.substring(0, localName.lastIndexOf(\"\\\\\"));");
-        output.append("\n          //alert('hiddenPath: ' + document.frmUpload.hiddenPath.value + '\\nNewFile: ' + document.frmUpload.NewFile.value); ");
         output.append("\n        } ");
+        output.append("\n    function isOk() {");
+        output.append("\n	if (Ok()) {");
+        output.append("\n	    document.frmUpload.submit();");
+        output.append("\n	}");
+        output.append("\n    }");
         output.append("\n	</script>");
         output.append("\n</head>");
         output.append("\n<body scroll=\"no\" style=\"overflow: hidden\">");
         output.append("\n    <div id=\"divUpload\" style=\"display: none\">");
-        output.append("\n        <form id=\"frmUpload\" name=\"frmUpload\" method=\"post\" enctype=\"multipart/form-data\" ");
-        output.append("\n            action=\"" + url.toString() + "\">");   // target=\"_parent\"
+        output.append("\n        <form id=\"frmUpload\" name=\"frmUpload\" method=\"post\" enctype=\"multipart/form-data\" onsubmit=\"Ok();\" ");
+        output.append("\n            action=\"" + url.toString() + "\">");
         output.append("\n            <span fcklang=\"DlgLnkUpload\">Upload</span><br />");
         output.append("\n            <input id=\"txtUploadFile\" style=\"width: 100%\" type=\"file\" size=\"40\" name=\"NewFile\" onchange=\"fillHiddenPath();\" /><br />");
         output.append("\n            <input id=\"hiddenPath\" type=\"hidden\" name=\"hiddenPath\" />");
         output.append("\n            <br />");
-        output.append("\n            <input id=\"btnUpload\" type=\"submit\" value=\"Send it to the Server\" fcklang=\"DlgLnkBtnUpload\" />");
-        output.append("\n            <!--script type=\"text/javascript\">");
-        output.append("\n                document.write( '<iframe name=\"UploadWindow\" style=\"display: none\" src=\"' + FCKTools.GetVoidUrl() + '\"></iframe>' ) ;");
-        output.append("\n            </script-->");
+        output.append("\n            <input id=\"btnUpload\" type=\"button\" value=\"Send it to the Server\" fcklang=\"DlgLnkBtnUpload\" onclick=\"isOk();\"/>");
         output.append("\n        </form>");
-        output.append("\n	<!--div id=\"divBrowseServer\" style=\"display: none\">");
-        output.append("\n            <input type=\"button\" value=\"Browse Server\" fckLang=\"DlgBtnBrowseServer\" onclick=\"BrowseServer();\" />");
-        output.append("\n	</div-->");
         output.append("\n    </div>");
         output.append("\n</body>");
         output.append("\n</html>");
