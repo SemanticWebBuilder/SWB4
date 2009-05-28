@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -37,16 +36,16 @@ public class ShowRelatedComm extends GenericAdmResource {
         WebPage wp = paramsRequest.getTopic();
         PrintWriter out = response.getWriter();
         out.println("<ul class=\"comunidades\">");
-        Iterator<WebPage> itwp = wpCont.listChilds();
+        Iterator<WebPage> itwp = wpCont.listWebPages();
         out.println("<li>Tiene childs: "+itwp.hasNext()+"</li>"); //debug
         while(itwp.hasNext())
         {
-            GenericObject go = itwp.next();
-            out.println("<li>debug:"+go.getId()+"</li>");
-            if(go instanceof OrganizationComm)
+            WebPage wpo = itwp.next();
+            out.println("<li>debug: "+wpo.getURI()+"</li>");
+            if(wpo instanceof OrganizationComm)
             {
 
-                OrganizationComm wpr = (OrganizationComm)go;
+                OrganizationComm wpr = (OrganizationComm)wpo;
                 out.println("<li>debug OrganizationComm: "+wpr.getTitle()+"</li>");
                 if(wpr.getAbout().getId().equals(wp.getId()))
                 {
