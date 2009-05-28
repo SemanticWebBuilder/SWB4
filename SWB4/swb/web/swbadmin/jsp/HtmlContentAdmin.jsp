@@ -98,9 +98,6 @@
     <br />
         <input type="hidden" name="operation" value="<%=action%>" />
         <input type="hidden" name="version" value="<%=version%>" />
-    <div align="left">
-        <input type="submit" value="Guardar contenido" />
-    </div>
     </form>
     <div align="right">
     <form name="mainFile" method="post" action="<%=urlNewVersion.toString()%>">
