@@ -70,7 +70,11 @@ public class CommunityConfiguration extends GenericResource
         pageTopic.addResource(resource);
         resource.setResourceType(resourcetype);
 
+        pageTopic.setActive(true);
 
+        TemplateRef tplref=site.createTemplateRef();
+        tplref.setTemplate(site.getTemplate("12"));
+        pageTopic.addTemplateRef(tplref);
         
 
         createGoogleGadget(site, title, pageTopic, resourceByDefault);
@@ -103,7 +107,7 @@ public class CommunityConfiguration extends GenericResource
         pageTopic.setActive(true);
 
         TemplateRef tplref=site.createTemplateRef();
-        tplref.setTemplate(site.getTemplate("1"));
+        tplref.setTemplate(site.getTemplate("12"));
         pageTopic.addTemplateRef(tplref);
 
         WebPage google = createGoogleGadget(site, title, pageTopic, resourceByDefault);
@@ -133,6 +137,13 @@ public class CommunityConfiguration extends GenericResource
 
         pageTopic.setParent(communityContainer);
         pageTopic.setTitle(title);
+        pageTopic.setActive(true);
+
+        TemplateRef tplref=site.createTemplateRef();
+        tplref.setTemplate(site.getTemplate("12"));
+        pageTopic.addTemplateRef(tplref);
+
+
         createGoogleGadget(site, title, pageTopic, resourceByDefault);
         
         createForo(site, title, pageTopic, resourceByDefault);
