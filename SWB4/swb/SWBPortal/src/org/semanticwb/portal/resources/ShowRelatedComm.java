@@ -27,12 +27,15 @@ public class ShowRelatedComm extends GenericAdmResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
-        String contID = base.getAttribute("");
+        String contID = base.getAttribute("containerID","Comunidades");
         if(null==contID)return;
         WebSite ws = paramsRequest.getTopic().getWebSite();
         WebPage wpCont = ws.getWebPage(contID);
         WebPage wp = paramsRequest.getTopic();
         PrintWriter out = response.getWriter();
+        out.println("<div class=\"principal\">");
+        out.println("<div class=\"principal_seccion\">");
+        out.println("<div class=\"seccion_contenido\">");
         out.println("<ul>");
         Iterator<WebPage> itwp = wpCont.listChilds();
         while(itwp.hasNext())
@@ -44,5 +47,8 @@ public class ShowRelatedComm extends GenericAdmResource {
             }
         }
         out.println("</ul>");
+        out.println("</div>");
+        out.println("</div>");
+        out.println("</div>");
     }
 }
