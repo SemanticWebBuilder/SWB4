@@ -29,10 +29,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.admin.resources.SWBAListRelatedObjects;
 
@@ -425,32 +424,59 @@ public class SemanticSearch extends GenericResource {
         sbf.append("<form id=\"" + createId("natural") + "\" " +
                    "action=\"" + aUrl + "\" method=\"post\" >\n" +
                       paramRequest.getLocaleString("prompt") + "<br>\n" +
-                   "  <input type=\"text\" class=\"busca-txt-top\" id=\"" + createId("naturalQuery") + "\" " +
-                      "name=\"" + createId("naturalQuery") + "\" value=\"" + query + "\" />" +
+                   "  <textarea id=\"" + createId("naturalQuery") + "\" " +
+                      "name=\"" + createId("naturalQuery") + "\" >" + query + "</textarea>" +
                    "  <input type=\"hidden\" id=\"" + createId("h_naturalQuery") + "\" " +
                    "  name=\"" + createId("h_naturalQuery") + "\" value=\"" + query2 + "\" />" +
-                   "  <input type=\"submit\" class=\"busca-btn-top\" />\n" +
-                   "  <div id=\"" + createId("busca-ayuda-ok") + "\" class=\"busca-ayuda-ok\" ></div>" +
+                   "  <input type=\"submit\" />Enviar</input>\n" +
+                   "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>" +
                    "</form>\n");
 
         if (errCount != null) {
             if (Integer.parseInt(errCount) == 0) {
+                /*ret.append("<fieldset>");
+                ret.append("<textarea rows=5 cols=70>");
+                ret.append(request.getParameter("sparqlQuery"));
+                ret.append("</textarea>");
+                ret.append("</fieldset>");*/
+
                 try {
+                    //Get info from dbpedia
+                    
+                    /*SemanticModel dbpModel = SWBPlatform.getSemanticMgr().getModel("DBPedia");
+                    String latLong = "PREFIX dbpedia: <http://dbpedia.org/resource/>\n" +
+                                     "PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>\n" +
+                                     "PREFIX swbc: <http://www.w3.org/2003/01/geo/wgs84_pos#>\n" +
+                                     "SELECT $lat $long\n" +
+                                     "  WHERE {\n" +
+                                     "    dbpedia:Mexico geo:lat ?lat.\n" +
+                                     "    dbpedia:Mexico geo:long ?long\n" +
+                                     "}\n";
+                    QueryExecution qexec = dbpModel.sparQLQuery(latLong);*/
+                    
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
                     Query squery = QueryFactory.create(sparqlQuery);
+                    System.out.println("------------------------------");
+                    System.out.println(sparqlQuery);
+                    System.out.println("------------------------------");
                     squery.serialize();
                     QueryExecution qexec = QueryExecutionFactory.create(squery, model);
                     long time = System.currentTimeMillis();
-                    sbf.append("<div id=\"rview\">" +
-                            "<h1>" + paramRequest.getLocaleString("sResults") + "</h1>");
+
                     try {
+                        sbf.append("<div>");
                         sbf.append("<table>");
                         ResultSet rs = qexec.execSelect();
                         sbf.append("<thead>");
                         sbf.append("<tr>");
 
                         if (rs.hasNext()) {
-                            sbf.append("<th>Title</th><th>Description</th>");
+                            Iterator<String> itcols = rs.getResultVars().iterator();
+                            while (itcols.hasNext()) {
+                                sbf.append("<th>");
+                                sbf.append(itcols.next());
+                                sbf.append("</th>");
+                            }
                             sbf.append("</tr>");
                             sbf.append("</thead>");
                             sbf.append("<tbody>");
@@ -467,51 +493,45 @@ public class SemanticSearch extends GenericResource {
                                 }
 
                                 Iterator<String> it = rs.getResultVars().iterator();
-                                boolean first = true;
                                 while (it.hasNext()) {
                                     String name = it.next();
                                     RDFNode x = rb.get(name);
                                     sbf.append("<td >");
-                                    SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-                                    SemanticObject so = ont.getSemanticObject(x.toString());
+                                    if (x!=null) {
+                                        if (x.isLiteral()) {
+                                            
+                                            sbf.append(x.asNode().getLiteral().getLexicalForm());
+                                        } else {
+                                            System.out.println(">obteniendo objeto semántico");
+                                    SemanticObject so = SemanticObject.createSemanticObject(x.toString());
 
                                     if (so != null) {
-                                        if (first) {
-                                            sbf.append(so.getDisplayName(lang));
-                                            sbf.append("</td><td>");
-                                            if (so.getProperty(Descriptiveable.swb_description) != null) {
-                                                sbf.append(so.getProperty(Descriptiveable.swb_description));
-                                            } else {
-                                                sbf.append("--");
-                                            }
-                                            sbf.append("</td>");
-                                            first = false;
+                                        System.out.println(">objeto semántico obtenido con éxito");
+                                        //SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
+                                        System.out.println(">Obteniendo clase semántica del objeto semántico");
+                                        SemanticClass tt = so.getSemanticClass();
+                                        if (tt != null) {
+                                            System.out.println(">>Clase semántica obtenida con éxito");
+                                            sbf.append(tt.getDisplayName(lang));
                                         } else {
-                                            SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
-                                            if (tt != null) {
-                                                sbf.append(tt.getDisplayName(lang));
-                                                sbf.append("</td><td>");
-                                            if (so.getProperty(Descriptiveable.swb_description) != null) {
-                                                sbf.append(so.getProperty(Descriptiveable.swb_description));
-                                            } else {
-                                                sbf.append("--");
-                                            }
-                                            sbf.append("</td>");
-                                            } else {
-                                                SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
-                                                sbf.append(stt.getDisplayName(lang));
-                                                sbf.append("</td><td>");
-                                                sbf.append("--");
-                                                sbf.append("</td>");
-                                            }
+                                            System.out.println(">>No se pudo obtener clase semántica");
+                                            System.out.println(">>Obteniendo propiedad semántica del objeto semántico");
+                                            SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
+                                            sbf.append(stt.getDisplayName(lang));
                                         }
                                     } else {
+                                        System.out.println(">el dato no tiene objeto semántico");
                                         if (x != null) {
+                                            System.out.println(">escribiendo valor");
                                             sbf.append(x);
                                         } else {
+                                            System.out.println(">el campo es nulo");
                                             sbf.append(" - ");
                                         }
                                     }
+                                        }
+                                    }
+                                    sbf.append("</td>");
                                 }
                                 sbf.append("</tr>");
                             }
@@ -522,7 +542,7 @@ public class SemanticSearch extends GenericResource {
                         }
                         sbf.append("</tbody>");
                         sbf.append("</table>");
-                        sbf.append("<p aling=\"center\">" + paramRequest.getLocaleString("exectime") + ": " + (System.currentTimeMillis() - time) + "ms." + "</p>");
+                        sbf.append("<p aling=\"center\">" + paramRequest.getLocaleString("exectime") + (System.currentTimeMillis() - time) + "ms." + "</p>");
                     } finally {
                         qexec.close();
                     }
