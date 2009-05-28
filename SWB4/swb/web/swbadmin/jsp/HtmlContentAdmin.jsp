@@ -19,24 +19,16 @@
     int version = (request.getParameter("version") != null && !"".equals(request.getParameter("version")))
                      ? Integer.parseInt(request.getParameter("version"))
                      : 0;
-    String jsPath = request.getContextPath() + "/resources/scripts/fckeditor/editor/";
-    //System.out.println("action:" + action);
+    VersionInfo versionInfo = new VersionInfo(base.getSemanticObject());
+    version = versionInfo.getVersionNumber();
     net.fckeditor.FCKeditor fckEditor = new net.fckeditor.FCKeditor(request, "EditorDefault");
     fckEditor.setHeight("450");
-    /*if (action.equals(url.Action_ADD)) {
-        
-    } else if (action.equals(url.Action_EDIT)) {  */
-        String content = (String) request.getAttribute("fileContent");
-        fckEditor.setValue(content);
-    //}
-    boolean showApplet = ((String) request.getAttribute("showApplet")) != null
-            && ((String) request.getAttribute("showApplet")).equalsIgnoreCase("yes")
-            ? true : false;
+    String content = (String) request.getAttribute("fileContent");
+    fckEditor.setValue(content);
     SWBResourceURL urlNewVersion = paramRequest.getRenderUrl();
     urlNewVersion.setCallMethod(SWBResourceURL.Call_CONTENT);
     urlNewVersion.setMode("selectFileInterface");
-    String portletWorkPath = base.getWorkPath() + "/" + (version > 1 ? version - 1 : 1) + "/tmp/";
-    //SWBPlatform.getWorkPath()
+    String portletWorkPath = base.getWorkPath() + "/" + (version > 1 ? version : 1) + "/tmp/";
 %>
 <%--
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
@@ -67,14 +59,10 @@
       function callUpload() {
         var f = document.frames ? document.frames["EditorDefault___Frame"] : document.getElementById("EditorDefault___Frame");
         var p = f.contentWindow || f.document;
-        var vscr = window.frames["EditorDefault___Frame"].document.getElementsByTagName("script");
-        /*/for (var i = 0; i < vscr.length; i++) {
-            alert(vscr.innerHTML);
-        }*/
-        
+        var emerg = p.FCKDialog || f.FCKDialog;
         //Esta liga abre el cuadro de dialogo para cargar archivos con los programas de FCKEditor
         //p.FCKDialog.OpenDialog('FCKDialog_UploadFile', 'UploadFile', '/swb/resources/scripts/fckeditor/editor/dialog/fck_HTMLfile.html', 450, 390, null, this.window, false);
-        p.FCKDialog.OpenDialog('FCKDialog_UploadFile', 'UploadFile', '<%=urlNewVersion.toString()%>', 450, 390, null, this.window, false);
+        emerg.OpenDialog('FCKDialog_UploadFile', 'UploadFile', '<%=urlNewVersion.toString()%>', 450, 390, null, this.window, false);
       }
       function sendFile() {
         if (document.mainFile.filePath.value == "") {
@@ -95,28 +83,11 @@
             }
         }
       }
-      function findForms() {
-      var top = window.parent.frames;
-      alert("Parent.location: " + window.parent.location);
-      for (var fr1 = 0; fr1 < top.length; fr1++) {
-          alert("Primer nivel: " + top[fr1].src + " - " + top[fr1].document.URL);
-          if (top[fr1].document.forms != undefined) {
-              var subtop = top[fr1].document.forms;
-              for (var fr2 = 0; fr2 < subtop.length; fr2++) {
-                  alert("Segundo nivel: " + subtop[fr2].name + " - " + subtop[fr2].action);
-              }
-          } else {
-              alert("Primer nivel: Sin forms dentro")
-          }
+      function closeAndReload(w, path) {
+          w.Cancel();
+          document.newFileForm.relativePath.value = path;
+          document.newFileForm.submit();
       }
-      }
-/*      alert(top + " - " + window.location);
-      var nforms = document.getElementsByTagName("div");
-      alert(document.URL);
-      //alert(document.parentNode.toString());
-      for (var t = 0; t < nforms.length; t++) {
-          alert(nforms[t].id);
-      } */
     </script>
     <div></div>
     <hr />
@@ -134,9 +105,6 @@
     <div align="right">
     <form name="mainFile" method="post" action="<%=urlNewVersion.toString()%>">
         <input type="button" value="Cargar archivo" onclick="javascript:callUpload();" />
-        <!--input type="file" name="filePath" value=""/-->
-        <!--input type="hidden" name="version" value="< %=version%>" />
-        <input type="button" value="Cargar archivo" onclick="javascript:sendFile();" /-->
     </form>
     </div>
 <%
@@ -145,4 +113,5 @@
 %>
     <form name="newFileForm" id="newFileForm" method="post" action="<%=url.toString()%>">
         <input type="hidden" name="tmpPath" value="<%=portletWorkPath%>" />
+        <input type="hidden" name="relativePath" value="" />
     </form>
