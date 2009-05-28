@@ -142,6 +142,7 @@ public class CommunityConfiguration extends GenericResource
 
         TemplateRef tplref=site.createTemplateRef();
         tplref.setTemplate(site.getTemplate("12"));
+        tplref.setActive(true);
         pageTopic.addTemplateRef(tplref);
 
 
