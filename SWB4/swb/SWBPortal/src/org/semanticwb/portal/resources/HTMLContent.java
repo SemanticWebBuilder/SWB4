@@ -255,6 +255,9 @@ public class HTMLContent extends GenericResource {
             HttpServletResponse response, SWBParamRequest paramRequest)
             throws IOException {
         
+        PrintWriter out = response.getWriter();
+        StringBuffer bs = new StringBuffer(700);
+        WBFileUpload fUpload = new WBFileUpload();
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setCallMethod(url.Call_DIRECT);
         url.setMode("admin");
@@ -266,7 +269,9 @@ public class HTMLContent extends GenericResource {
                 + (version.getVersionNumber() > 1
                    ? version.getVersionNumber() : 1)
                 + "/tmp/";
+        String extension = null;
         String clientFilePath = "";
+        String localRelativePath = null;
         String filename = null;
         File file = new File(portletWorkPath);
         if (!file.exists()) {
@@ -276,11 +281,11 @@ public class HTMLContent extends GenericResource {
         if (fileTmp.exists()) {
             fileTmp.delete();
         }
-        WBFileUpload fUpload = new WBFileUpload();
         fUpload.getFiles(request);
         filename = fUpload.getFileName("NewFile");
         filename = filename.replace('\\', '/');
         int i = filename.lastIndexOf("/");
+        String strAttaches = fUpload.FindAttaches("NewFile");
         if (i > -1) {
             clientFilePath = filename.substring(0, i + 1);
             filename = filename.substring(i + 1);
@@ -289,89 +294,93 @@ public class HTMLContent extends GenericResource {
         if (i != -1) {
             filename = filename.substring(i + 1);
         }
-        fUpload.saveFile("NewFile", portletWorkPath);
-        String strAttaches = fUpload.FindAttaches("NewFile");
-        String[] filesAttached = strAttaches.split(";");
-        
-        //Almacena la ruta relativa (en la máquina cliente) de los archivos relacionados al html.
-        String localRelativePath = null;
-        if (filesAttached.length > 0 && filesAttached[0].indexOf("/") != -1) {
-            localRelativePath = filesAttached[0].substring(0,
-                    filesAttached[0].lastIndexOf("/"));
-        }
-        file = new File(portletWorkPath + "images/");
-        if (!file.exists()) {
-            file.mkdir();
+        //Obtiene la extension del archivo cargado
+        if (filename.indexOf(".") != -1) {
+            extension = filename.substring(filename.lastIndexOf("."));
         }
         
-        //Renombrar el nuevo archivo
-        try {
-            //Se cambian las rutas a los archivos asociados.
-            if (strAttaches != null && strAttaches.length() > 0) {
-                SWBUtils.IO.copy(portletWorkPath + filename,
-                        portletWorkPath + "index.html", true,
-                        localRelativePath,
-                        SWBPlatform.getWebWorkPath() + resource.getWorkPath()
-                        + "/"
-                        + (version.getVersionNumber() > 1 ? version.getVersionNumber() : 1)
-                        + "/tmp/images");
-            } else {
-                SWBUtils.IO.copy(portletWorkPath + filename,
-                        portletWorkPath + "index.html", false, "", "");
+        if (extension != null && (extension.equalsIgnoreCase(".htm") || extension.equalsIgnoreCase(".html"))) {
+            fUpload.saveFile("NewFile", portletWorkPath);
+            String[] filesAttached = strAttaches.split(";");
+
+            //Almacena la ruta relativa (en la máquina cliente) de los archivos relacionados al html.
+            if (filesAttached.length > 0 && filesAttached[0].indexOf("/") != -1) {
+                localRelativePath = filesAttached[0].substring(0,
+                        filesAttached[0].lastIndexOf("/"));
             }
+            file = new File(portletWorkPath + "images/");
+            if (!file.exists()) {
+                file.mkdir();
+            }
+
+            //Renombrar el nuevo archivo
+            try {
+                //Se cambian las rutas a los archivos asociados.
+                if (strAttaches != null && strAttaches.length() > 0) {
+                    SWBUtils.IO.copy(portletWorkPath + filename,
+                            portletWorkPath + "index.html", true,
+                            localRelativePath,
+                            SWBPlatform.getWebWorkPath() + resource.getWorkPath() + "/" + (version.getVersionNumber() > 1 ? version.getVersionNumber() : 1) + "/tmp/images");
+                } else {
+                    SWBUtils.IO.copy(portletWorkPath + filename,
+                            portletWorkPath + "index.html", false, "", "");
+                }
 //            file = new File(portletWorkPath + filename);
 //            //borra el archivo con el nombre original
 //            file.delete();
-        } catch (Exception e) {
-            log.debug(e);
+            } catch (Exception e) {
+                log.debug(e);
+            }
+            bs.append("\n<html>");
+            bs.append("\n<head>");
+            bs.append("\n<script type=\"text/javascript\">");
+            bs.append("\n  function searchForm() {");
+            bs.append("\n      for (var i = 0; i < top.frames.length; i++) {");
+            bs.append("\n          var forma = top.frames[i].document.getElementById('newFileForm'); ");
+            bs.append("\n          if (forma != undefined) {");
+            bs.append("\n              top.frames[i].closeAndReload(window.parent,\"" + localRelativePath + "\");");
+            bs.append("\n          }");
+            bs.append("\n      }");
+            bs.append("\n  }");
+            bs.append("\n");
+            bs.append("\n  var button = window.parent.document.getElementById(\"PopupButtons\");");
+            bs.append("\n  //button.value = \"Cerrar ventana\";");
+            bs.append("\n  var cad = '<div align=\"right\">'");
+            bs.append("\n          + '<input id=\"btnCancel\" class=\"Button\" type=\"button\" fcklang=\"DlgBtnCancel\" onclick=\"window.frames[\\'frmMain\\'].searchForm();\" value=\"Mostrar archivo cargado\"/>'");
+            bs.append("\n          + '</div>'; ");
+            bs.append("\n  button.innerHTML = cad;");
+            bs.append("\n  ");
+            bs.append("\n  var closeButton = window.parent.document.getElementById(\"closeButton\");");
+            bs.append("\n  closeButton.onclick = \"window.frames[\\'frmMain\\'].searchForm();\"");
+            bs.append("\n  ");
+            bs.append("\n</script>");
+            bs.append("\n</head>");
+            bs.append("\n");
+            bs.append("\n<body>");
+            bs.append("\n  <APPLET WIDTH=\"100%\" HEIGHT=\"100%\" CODE=\"applets.dragdrop.DragDrop.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" archive=\"swbadmin/lib/DragDrop.jar, swbadmin/lib/WBCommons.jar\" border=\"0\">");
+            bs.append("\n  <PARAM NAME=\"webpath\" VALUE=\"" + SWBPlatform.getContextPath() + "/\">");
+            bs.append("\n  <PARAM NAME=\"foreground\" VALUE=\"000000\">");
+            bs.append("\n  <PARAM NAME=\"background\" VALUE=\"979FC3\">");
+            bs.append("\n  <PARAM NAME=\"foregroundSelection\" VALUE=\"ffffff\">");
+            bs.append("\n  <PARAM NAME=\"backgroundSelection\" VALUE=\"666699\">");
+            bs.append("\n  <PARAM NAME=\"path\" value=\"" + portletWorkPath + "images/\">");
+            bs.append("\n  <PARAM NAME=\"clientpath\" value=\"" + clientFilePath + "\">");
+            bs.append("\n  <PARAM NAME=\"files\" value=\"" + strAttaches + "\">");
+            bs.append("\n  </APPLET>");
+            bs.append("\n</body>");
+            bs.append("\n</html>");
+            bs.append("\n");
+        } else {
+            bs.append("\n<html>");
+            bs.append("\n<head>");
+            bs.append("\n</head>");
+            bs.append("\n");
+            bs.append("\n<body>");
+            bs.append("\n  <p>El archivo seleccionado debe tener extensi&oacute;n .htm o .html, por favor haga otra seleccion.");
+            bs.append("\n  <a href=\"javascript:history.go(-1);\">Regresar</a></p>");
+            bs.append("\n</body>");
+            bs.append("\n</html>");
         }
-        
-        PrintWriter out = response.getWriter();
-        StringBuffer bs = new StringBuffer(700);
-
-        bs.append("\n<html>");
-        bs.append("\n<head>");
-        bs.append("\n<script type=\"text/javascript\">");
-        bs.append("\n  function searchForm() {");
-        bs.append("\n      for (var i = 0; i < top.frames.length; i++) {");
-        bs.append("\n          var forma = top.frames[i].document.getElementById('newFileForm'); ");
-        bs.append("\n          if (forma != undefined) {");
-        bs.append("\n              top.frames[i].closeAndReload(window.parent,\""
-                + localRelativePath + "\");");
-        bs.append("\n          }");
-        bs.append("\n      }");
-        bs.append("\n  }");
-        bs.append("\n");
-        bs.append("\n  var button = window.parent.document.getElementById(\"PopupButtons\");");
-        bs.append("\n  //button.value = \"Cerrar ventana\";");
-        bs.append("\n  var cad = '<div align=\"right\">'");
-        bs.append("\n          + '<input id=\"btnCancel\" class=\"Button\" type=\"button\" fcklang=\"DlgBtnCancel\" onclick=\"window.frames[\\'frmMain\\'].searchForm();\" value=\"Mostrar archivo cargado\"/>'");
-        bs.append("\n          + '</div>'; ");
-        bs.append("\n  button.innerHTML = cad;");
-        bs.append("\n  ");
-        bs.append("\n  var closeButton = window.parent.document.getElementById(\"closeButton\");");
-        bs.append("\n  closeButton.onclick = \"window.frames[\\'frmMain\\'].searchForm();\"");
-        bs.append("\n  ");
-        bs.append("\n</script>");
-        bs.append("\n</head>");
-        bs.append("\n");
-        bs.append("\n<body>");
-        bs.append("\n  <APPLET WIDTH=\"100%\" HEIGHT=\"100%\" CODE=\"applets.dragdrop.DragDrop.class\" codebase=\""
-                + SWBPlatform.getContextPath()
-                + "\" archive=\"swbadmin/lib/DragDrop.jar, swbadmin/lib/WBCommons.jar\" border=\"0\">");
-        bs.append("\n  <PARAM NAME=\"webpath\" VALUE=\""
-                + SWBPlatform.getContextPath() + "/\">");
-        bs.append("\n  <PARAM NAME=\"foreground\" VALUE=\"000000\">");
-        bs.append("\n  <PARAM NAME=\"background\" VALUE=\"979FC3\">");
-        bs.append("\n  <PARAM NAME=\"foregroundSelection\" VALUE=\"ffffff\">");
-        bs.append("\n  <PARAM NAME=\"backgroundSelection\" VALUE=\"666699\">");
-        bs.append("\n  <PARAM NAME=\"path\" value=\"" + portletWorkPath + "images/\">");
-        bs.append("\n  <PARAM NAME=\"clientpath\" value=\"" + clientFilePath + "\">");
-        bs.append("\n  <PARAM NAME=\"files\" value=\"" + strAttaches + "\">");
-        bs.append("\n  </APPLET>");
-        bs.append("\n</body>");
-        bs.append("\n</html>");
-        bs.append("\n");
         out.println(bs.toString());
     }
     
@@ -501,7 +510,9 @@ public class HTMLContent extends GenericResource {
         output.append("\n        } ");
         output.append("\n    function isOk() {");
         output.append("\n	if (Ok()) {");
-        output.append("\n	    document.frmUpload.submit();");
+        output.append("\n	    var ext = document.frmUpload.NewFile.value.substring(document.frmUpload.NewFile.value.lastIndexOf('.'), document.frmUpload.NewFile.value.length);");
+        output.append("\n	    if (ext == '.htm' || ext == '.html') ");
+        output.append("\n	        document.frmUpload.submit();");
         output.append("\n	}");
         output.append("\n    }");
         output.append("\n	</script>");
