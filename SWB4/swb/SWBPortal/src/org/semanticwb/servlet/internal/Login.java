@@ -220,6 +220,7 @@ public class Login implements InternalServlet
                 if (it.hasNext())
                 {
                     user = (User) it.next();
+                    log.trace("user checked?:"+user.hashCode()+":"+user.isSigned());
                 }
                 sendLoginLog(request, user);
             // session.removeAttribute(VALSESS);

@@ -120,6 +120,7 @@ public class TripleStoreLoginModule implements LoginModule
 
     public boolean commit() throws LoginException
     {
+        boolean flag = false;
         if (!loginflag)
         {
             return false;
@@ -133,6 +134,7 @@ public class TripleStoreLoginModule implements LoginModule
         if (null != tmp)
         {
             tmp.getSemanticObject().setRDFResource(principal.getSemanticObject().getRDFResource());
+            flag = true;
         } else
         {
             subject.getPrincipals().add(principal);
@@ -141,6 +143,7 @@ public class TripleStoreLoginModule implements LoginModule
         try
         {
             principal.checkCredential(credential);
+            if (flag) tmp.checkCredential(credential);
         } catch (NoSuchAlgorithmException ex)
         {
             log.error("Can't set Signed status", ex);
