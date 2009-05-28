@@ -30,7 +30,7 @@ public class CommUtils extends GenericResource{
         GenericIterator <WebPage> gitChilds=paramRequest.getTopic().listChilds();
         while(gitChilds.hasNext()){
             WebPage child=gitChilds.next();
-            out.println("    <li><a href=\"\">"+child.getTitle()+"</a></li>");
+            out.println("    <li><a href=\""+child.getUrl()+"\">"+child.getTitle()+"</a></li>");
         }
         out.println("  </ul>");
     }
