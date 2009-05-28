@@ -17,6 +17,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
+import org.semanticwb.model.TemplateRef;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.catalogs.LocationEntity;
@@ -97,9 +98,14 @@ public class CommunityConfiguration extends GenericResource
         pageTopic.addResource(resource);
         resource.setResourceType(resourcetype);
 
-
         pageTopic.setParent(communityContainer);
         pageTopic.setTitle(title);
+        pageTopic.setActive(true);
+
+        TemplateRef tplref=site.createTemplateRef();
+        tplref.setTemplate(site.getTemplate("1"));
+        pageTopic.addTemplateRef(tplref);
+
         WebPage google = createGoogleGadget(site, title, pageTopic, resourceByDefault);
         
         createForo(site, title, pageTopic, resourceByDefault);
@@ -392,7 +398,7 @@ public class CommunityConfiguration extends GenericResource
             }
             if (!exists)
             {
-                out.println("<input name='type' value='" + resourceId + "' type='checkbox'><br>");
+                out.println(resourceId + "<input name='type' value='" + resourceId + "' type='checkbox'><br>");
             }
         }
         out.println("</fieldset></form>");
