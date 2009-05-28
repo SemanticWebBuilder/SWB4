@@ -161,7 +161,7 @@ public class CreateCommunity extends GenericResource
                     out.println("<label for='title'>Indique el tema a crear:</label>");
                     out.println("</td>");
                     out.println("<td>");
-                    out.println("<input type='text' size='40' maxlength='255' name='title' id='title'><br>");
+                    out.println("<input type='text' size='60' maxlength='255' name='title' id='title'><br>");
                     out.println("</td>");
                     out.println("</tr>");
 
