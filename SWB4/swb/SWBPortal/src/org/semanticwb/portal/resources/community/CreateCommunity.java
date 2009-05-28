@@ -147,6 +147,7 @@ public class CreateCommunity extends GenericResource
                     {
                         topic="";
                     }
+                    
                     out.println("<div>");
                     out.println("<table width='50%'>");
                     out.println("<form name='frmselecttype' method='post' action='" + paramRequest.getActionUrl() + "'><fieldset>");
