@@ -24,7 +24,7 @@ public class CreateCommunity extends GenericResource
 {
 
     public static final String WEBPAGE_TOPIC_LOCATION = "Tlalpan";
-    private static final String TEMAS_TOPIC_ID = "Temas";
+    public static final String TEMAS_TOPIC_ID = "Temas";
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
@@ -38,11 +38,11 @@ public class CreateCommunity extends GenericResource
         }
         String type = request.getParameter("selecttype");
 
-        if (request.getParameter("selecttype") != null && request.getParameter("title") != null)
+        if (request.getParameter("selecttype") != null && request.getParameter("title") != null && request.getParameter("description") != null)
         {          
             
             String title = request.getParameter("title");
-            System.out.println(request.getParameter("title"));
+            String description=request.getParameter("description");
             if (type.equals("t"))
             {
                 if (currentWebPage.getParent() != null && currentWebPage.getParent().getParent() != null && currentWebPage.getParent().getParent().getParent() != null && currentWebPage.getParent().getParent().getParent().getId().equals(TEMAS_TOPIC_ID))
@@ -53,7 +53,7 @@ public class CreateCommunity extends GenericResource
                         LocationEntity entity = LocationEntity.getLocationEntity(WEBPAGE_TOPIC_LOCATION, site);
                         WebPage topic = currentWebPage;
                         String resByDefault = request.getParameter("resbydefault");
-                        CommunityConfiguration.createCommunityTopic(site, title, entity, topic, resByDefault);
+                        CommunityConfiguration.createCommunityTopic(site, title, entity, topic, resByDefault,description);
                     }
                     catch (Exception e)
                     {
@@ -146,6 +146,10 @@ public class CreateCommunity extends GenericResource
                     out.println("<form name='frmselecttype' method='post' action='" + paramRequest.getActionUrl() + "'>");
                     out.println("<fieldset><label for='title'>Indique el tema a crear:</label>");
                     out.println("<input type='text' name='title' id='title'>");
+
+                    out.println("<label for='description'>Indique la descripción del tema:</label>");
+                    out.println("<textarea type='text' name='description' id='description'>");
+
                     String topic=request.getParameter("swbtp");
                     if(topic==null || topic.trim().equals(""))
                     {
@@ -170,6 +174,11 @@ public class CreateCommunity extends GenericResource
                     out.println("   if(frmselecttype.title.value=='')");
                     out.println("   {");
                     out.println("       alert('Debe indicar el título');");
+                    out.println("       return;");
+                    out.println("   }");
+                    out.println("   if(frmselecttype.description.value=='')");
+                    out.println("   {");
+                    out.println("       alert('Debe indicar la descripción');");
                     out.println("       return;");
                     out.println("   }");
                     out.println("   frmselecttype.submit();");

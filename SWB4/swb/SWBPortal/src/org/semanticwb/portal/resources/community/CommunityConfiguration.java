@@ -120,10 +120,11 @@ public class CommunityConfiguration extends GenericResource
         
     }
 
-    public static void createCommunityTopic(WebSite site, String title, LocationEntity locationentity, WebPage topic, String resourceByDefault)
+    public static void createCommunityTopic(WebSite site, String title, LocationEntity locationentity, WebPage topic, String resourceByDefault,String description)
     {
         WebPage communityContainer = site.getWebPage(COMMUNITY_CONTAINER_ID);
         TematicComm pageTopic = TematicComm.createTematicComm(UUID.randomUUID().toString(), site);
+        pageTopic.setDescription(description);
         pageTopic.setAbout(topic);
         pageTopic.setLocatedIn(locationentity);
 
