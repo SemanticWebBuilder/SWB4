@@ -97,6 +97,7 @@ public class CreateCommunity extends GenericResource
             }
         }
         response.setMode(response.Mode_VIEW);
+        response.sendRedirect(currentWebPage.getUrl());
     }
 
     @Override
@@ -126,7 +127,7 @@ public class CreateCommunity extends GenericResource
             else
             {
                 out.println("<option value='p'>Persona</option>");
-                out.println("<option value='o'>Organización</option>");
+                out.println("<option value='o'>Organizaci&oacute;n</option>");
             }
             out.println("</select>");
             out.println("<input type='submit' name='enviar' value='Crear'>");
