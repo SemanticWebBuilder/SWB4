@@ -148,7 +148,7 @@ public class CreateCommunity extends GenericResource
                     out.println("<input type='text' name='title' id='title'>");
 
                     out.println("<label for='description'>Indique la descripción del tema:</label>");
-                    out.println("<textarea type='text' name='description' id='description'>");
+                    out.println("<textarea rows='7' cols='20' name='description' id='description'></textarea>");
 
                     String topic=request.getParameter("swbtp");
                     if(topic==null || topic.trim().equals(""))
@@ -158,12 +158,12 @@ public class CreateCommunity extends GenericResource
                     out.println("<input type='hidden' name='swbtp' id='swbtp' value='"+ topic +"'>");
                     out.println("<input type='hidden' name='selecttype' value='" + type + "'><br>");
                     out.println("<label for='title'>Indique el el contenido por defecto:</label>");
-                    out.println("<select name='resbydefault'>");
+                    /*out.println("<select name='resbydefault'>");
                     out.println("<option value='" + CommunityConfiguration.BLOG_RESOURCE_TYPE_ID + "'>Blog");
                     out.println("<option value='" + CommunityConfiguration.FORO_RESOURCE_TYPE_ID + "'>Foro");
                     out.println("<option value='" + CommunityConfiguration.WIKI_RESOURCE_TYPE_ID + "'>Wiki");
                     out.println("<option value='n'>Ninguno");
-                    out.println("</select>");
+                    out.println("</select>");*/
                     out.println("<input type='button' onClick='ValidaTitulo()' name='enviar' value='Crear'>");
                     out.println("</fieldset>");
                     out.println("</form>");
