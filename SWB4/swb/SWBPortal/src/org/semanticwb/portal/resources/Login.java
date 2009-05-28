@@ -33,6 +33,7 @@ public class Login extends GenericAdmResource
         String jspfile = super.getResourceBase().getAttribute("jspfile");
         String url = SWBPlatform.getContextPath() + "/login/" + paramsRequest.getTopic().getWebSiteId() + "/" + paramsRequest.getTopic().getId();
         String query = request.getQueryString();
+        if (null==query)query ="";
         PrintWriter out = response.getWriter();
         if (null != jspfile)
             {
@@ -50,7 +51,7 @@ public class Login extends GenericAdmResource
                     log.error("Can't include a jsp file " + jspfile, ex);
                 }
             } else
-            {
+            { System.out.println("userS:  ***************   "+paramsRequest.getUser().isSigned());
         if (!paramsRequest.getUser().isSigned())
         {
             out.println("<form action=\""+url+"?"+query+"\" method=\"post\">");
