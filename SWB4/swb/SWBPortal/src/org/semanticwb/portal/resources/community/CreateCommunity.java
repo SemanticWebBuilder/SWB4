@@ -103,7 +103,10 @@ public class CreateCommunity extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        doAdmin(request, response, paramRequest);
+        if(request.getParameter("modeswbcreatecommunity")!=null && request.getParameter("modeswbcreatecommunity").equals("true"))
+        {
+            doAdmin(request, response, paramRequest);
+        }
     }
 
     @Override

@@ -29,7 +29,7 @@ public class CreateComunityLink extends GenericResource{
         if (currentWebPage.getParent() != null && currentWebPage.getParent().getParent() != null && currentWebPage.getParent().getParent().getParent() != null && currentWebPage.getParent().getParent().getParent().getId().equals(CreateCommunity.TEMAS_TOPIC_ID))
         {
             WebPage comunityContainer=WebPage.getWebPage(CommunityConfiguration.COMMUNITY_CONTAINER_ID, paramRequest.getTopic().getWebSite());
-            out.print("<a href=\""+comunityContainer.getUrl()+"?selecttype=t&swbtp="+ paramRequest.getTopic().getId() +"\" class=\"categoria\"><span class=\"listadocompleto\">Crear una comunidad</span></a>");
+            out.print("<a href=\""+comunityContainer.getUrl()+"?modeswbcreatecommunity=true&selecttype=t&swbtp="+ paramRequest.getTopic().getId() +"\" class=\"categoria\"><span class=\"listadocompleto\">Crear una comunidad</span></a>");
         }
     }
 }
