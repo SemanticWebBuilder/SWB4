@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.comm.OrganizationComm;
@@ -28,6 +29,7 @@ public class ShowRelatedComm extends GenericAdmResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
+        User user = paramsRequest.getUser();
         String contID = base.getAttribute("containerID","Comunidades");
         if(null==contID)return;
         WebSite ws = paramsRequest.getTopic().getWebSite();
@@ -35,10 +37,11 @@ public class ShowRelatedComm extends GenericAdmResource {
         WebPage wp = paramsRequest.getTopic();
         PrintWriter out = response.getWriter();
         out.println("<ul class=\"comunidades\">");
-        Iterator<GenericObject> itwp = wpCont.listRelatedObjects();
+        Iterator<WebPage> itwp = wpCont.listChilds(user.getLanguage(),true,false,true,true);
         while(itwp.hasNext())
         {
             GenericObject go = itwp.next();
+            System.out.println(go.getId()+"\n");
             if(go instanceof OrganizationComm)
             {
                 OrganizationComm wpr = (OrganizationComm)go;
