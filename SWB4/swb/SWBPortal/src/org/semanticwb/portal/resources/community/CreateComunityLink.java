@@ -25,8 +25,11 @@ public class CreateComunityLink extends GenericResource{
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out=response.getWriter();
-
-        WebPage comunityContainer=WebPage.getWebPage(CommunityConfiguration.COMMUNITY_CONTAINER_ID, paramRequest.getTopic().getWebSite());
-        out.print("<a href=\""+comunityContainer.getUrl()+"?selecttype=t&swbtp="+ paramRequest.getTopic().getId() +"\" class=\"categoria\"><span class=\"listadocompleto\">Crear una comunidad</span></a>");
+        WebPage currentWebPage=paramRequest.getTopic();
+        if (currentWebPage.getParent() != null && currentWebPage.getParent().getParent() != null && currentWebPage.getParent().getParent().getParent() != null && currentWebPage.getParent().getParent().getParent().getId().equals(CreateCommunity.TEMAS_TOPIC_ID))
+        {
+            WebPage comunityContainer=WebPage.getWebPage(CommunityConfiguration.COMMUNITY_CONTAINER_ID, paramRequest.getTopic().getWebSite());
+            out.print("<a href=\""+comunityContainer.getUrl()+"?selecttype=t&swbtp="+ paramRequest.getTopic().getId() +"\" class=\"categoria\"><span class=\"listadocompleto\">Crear una comunidad</span></a>");
+        }
     }
 }
