@@ -728,7 +728,7 @@ var onReadyRegister = function()
 					FCK.Events.FireEvent( 'OnSelectionChange' ) ;
 				}, 0 ) ;
 		}
-
+                
 		FCKDialog.OnDialogClose( window ) ;
 	} ;
 
@@ -757,9 +757,34 @@ var onReadyRegister = function()
 			}
 		}
 	} ;
+        
 })() ;
 // ]]>
 		</script>
+		<!--script type="text/javascript" id="scriptToCreateFunction">
+// <![CDATA[
+        var top = parent.frames;
+        function findForms() {
+          for (var fr1 = 0; fr1 < top.length; fr1++) {
+            if (top[fr1].document.forms != undefined) {
+              var subtop = top[fr1].document.forms;
+              for (var fr2 = 0; fr2 < subtop.length; fr2++) {
+                if (subtop[fr2].name == 'newFileForm' && subtop[fr2].id == 'newFileForm') {
+                  subtop[fr2].submit();
+                  //alert("Ya hizo el submit");
+                  break;
+                }
+              }
+            }
+          }
+        }
+        
+        function reloadEditor() {
+            Cancel();
+            findForms();
+        }
+// ]]>
+		</script-->
 	</head>
 	<body onload="Init();" class="PopupBody">
 		<div class="contents" id="contents">
