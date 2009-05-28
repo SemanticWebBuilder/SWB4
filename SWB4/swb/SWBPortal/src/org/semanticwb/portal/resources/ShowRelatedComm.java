@@ -38,15 +38,19 @@ public class ShowRelatedComm extends GenericAdmResource {
         PrintWriter out = response.getWriter();
         out.println("<ul class=\"comunidades\">");
         Iterator<WebPage> itwp = wpCont.listChilds(user.getLanguage(),true,false,true,true);
+        out.println("<li>"+itwp.next()+"</li>"); //debug
         while(itwp.hasNext())
         {
             GenericObject go = itwp.next();
-            System.out.println(go.getId()+"\n");
+            out.println("<li>debug:"+go.getId()+"</li>");
             if(go instanceof OrganizationComm)
             {
+
                 OrganizationComm wpr = (OrganizationComm)go;
+                out.println("<li>debug OrganizationComm: "+wpr.getTitle()+"</li>");
                 if(wpr.getAbout().getId().equals(wp.getId()))
                 {
+                    out.println("<li>debug OrganizationComm belong: "+wpr.getId()+"</li>");
                     out.println("<li><a href=\""+wpr.getUrl()+"\">"+wpr.getDisplayName()+"</a></li>");
                 }
             }
