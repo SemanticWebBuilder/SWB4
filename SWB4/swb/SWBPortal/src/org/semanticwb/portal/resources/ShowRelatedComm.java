@@ -34,10 +34,7 @@ public class ShowRelatedComm extends GenericAdmResource {
         WebPage wpCont = ws.getWebPage(contID);
         WebPage wp = paramsRequest.getTopic();
         PrintWriter out = response.getWriter();
-        out.println("<div class=\"principal\">");
-        out.println("<div class=\"principal_seccion\">");
-        out.println("<div class=\"seccion_contenido\">");
-        out.println("<ul>");
+        out.println("<ul class=\"comunidades\">");
         Iterator<GenericObject> itwp = wpCont.listRelatedObjects();
         while(itwp.hasNext())
         {
@@ -52,8 +49,5 @@ public class ShowRelatedComm extends GenericAdmResource {
             }
         }
         out.println("</ul>");
-        out.println("</div>");
-        out.println("</div>");
-        out.println("</div>");
     }
 }
