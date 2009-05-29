@@ -119,7 +119,7 @@ public class SemanticSearch extends GenericResource {
         rUrl.setMode("SUGGEST");
         rUrl.setCallMethod(rUrl.Call_DIRECT);
         //sbf.append("<script src=\"http://maps.google.com/maps?file=api&v=2&sensor=true&key=ABQIAAAAOJNnlv7XtimNAEXtmyrRcBTb-vLQlFZmc2N8bgWI8YDPp5FEVBSt-jSEUxX5Zuafs_gGbS--6HOwVw\" " +
-        //            " type=\"text/javascript\"></script>");
+          //          " type=\"text/javascript\"></script>");
         sbf.append("<script type=\"text/javascript\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>");
         sbf.append("<script type=\"text/javascript\">\n" +
                 "  dojo.require(\"dijit.form.Form\");\n" +
@@ -564,7 +564,7 @@ public class SemanticSearch extends GenericResource {
 	"	map.addOverlay(marker);	" +
       "}"+
    " }" +
-//                                " load();"+
+                                " load();"+
 "</script>");
 
                     }
