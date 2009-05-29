@@ -320,11 +320,11 @@ namespace WBOffice4
                 fileStream.Close();
                 crc32.Reset();
                 crc32.Update(buffer);
-                entry.Crc = crc32.Value;                
+                //entry.Crc = crc32.Value;                
                 zip.PutNextEntry(entry);                
                 zip.Write(buffer, 0, buffer.Length);
                 zip.CloseEntry();
-            }
+            }            
             foreach (DirectoryInfo dir in parent.GetDirectories())
             {                
                 addFiles(crc32,zip, dir,true);
@@ -343,7 +343,7 @@ namespace WBOffice4
             }
             ZipOutputStream zip = new ZipOutputStream(File.Create(zipFile.FullName));
             Crc32 crc32 = new Crc32();
-            zip.SetLevel(6);
+            zip.SetLevel(9);
             addFiles(crc32,zip, temporalFile,false);
             zip.Finish();
             zip.Close();
