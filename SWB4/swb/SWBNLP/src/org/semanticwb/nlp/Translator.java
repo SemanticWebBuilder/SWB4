@@ -313,7 +313,7 @@ public class Translator {
             while (sit.hasNext() && !found) {
                 sp = sit.next();
                 //System.out.println("  " + sp.getDisplayName(lex.getLanguage()));
-                if (sp.getDisplayName(lex.getLanguage()).equals(pName)) {
+                if (sp.getDisplayName(lex.getLanguage()).toUpperCase().equals(pName.toUpperCase())) {
                     res = res + sp.getPrefix() + ":" + sp.getName();
                     found = true;
                 }
