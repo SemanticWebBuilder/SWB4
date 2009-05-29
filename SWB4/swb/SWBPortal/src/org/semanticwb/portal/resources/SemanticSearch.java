@@ -544,11 +544,11 @@ public class SemanticSearch extends GenericResource {
                         sbf.append("<script type=\"text/javascript\">\n" +
                         "function load() {\n" +
                         "if (GBrowserIsCompatible()) {" +
-                        "var map = new GMap2(document.getElementById(" + createId("map") + "));" +
+                        "var map = new GMap2(document.getElementById('" + createId("map") + "'));" +
                         "map.addControl(new GMapTypeControl());" +
                         "map.addControl(new GLargeMapControl());" +
                         "map.addControl(new GOverviewMapControl());" +
-                        "map.setCenter(new GLatLng(" + lat_node.asNode().getLiteral().getLexicalForm() + ", "+ long_node.asNode().getLiteral().getLexicalForm() +"), 5);" +
+                        "map.setCenter(new GLatLng(" + lat_node.asNode().getLiteral().getLexicalForm() + ", "+ long_node.asNode().getLiteral().getLexicalForm() +"), 11);" +
 
 		"map.setMapType(G_HYBRID_TYPE);" +
 
@@ -559,11 +559,12 @@ public class SemanticSearch extends GenericResource {
 		"}" +
 
 		"var point = new GLatLng("+ lat_node.asNode().getLiteral().getLexicalForm() +","+ long_node.asNode().getLiteral().getLexicalForm() +");" +
-		"var address = '<b>MADAGASCAR</b><br/><i>Centro de Madagascar</i><br /><a href=\"http://www.centrodemadagascar.com\">Web del Centro de Madagascar</a>';"+
+		"var address = '<a href=\"http://www.centrodemadagascar.com\">Web del Centro de Madagascar</a>';" +
 		"var marker = addtag(point, address);" +
 	"	map.addOverlay(marker);	" +
       "}"+
-   " }"+
+   " }" +
+                                " load();"+
 "</script>");
 
                     }
