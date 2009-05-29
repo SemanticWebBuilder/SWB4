@@ -440,73 +440,172 @@ namespace WBOffice4.Steps
                 DirectoryInfo dir = (DirectoryInfo)this.treedir.SelectedNode.Tag;
                 lastpath = dir.FullName;
                 this.Wizard.Data[DIRECTORY_PATH] = lastpath;
-                String rep=this.Wizard.Data[Search.REPOSITORY_ID].ToString();
+                String rep = this.Wizard.Data[Search.REPOSITORY_ID].ToString();
                 VersionInfo version = (VersionInfo)this.Wizard.Data[SelectVersionToOpen.VERSION];
-                IOfficeApplication app=OfficeApplication.OfficeApplicationProxy;
+                IOfficeApplication app = OfficeApplication.OfficeApplicationProxy;
                 this.Wizard.SetProgressBarInit(5, 1, "Descargando contenido...");
-                String fileName=app.openContent(rep,version);
+                String fileName = app.openContent(rep, version);
                 this.Wizard.SetProgressBarInit(5, 2, "Validando contenido...");
                 FileInfo contentfile = new FileInfo(dir.FullName + "/" + fileName);
+                if (contentfile.Exists)
+                {
+                    DialogResult res = MessageBox.Show(this, "Existe un archivo con el nombre " + fileName + "\r\n¿Desea sobre escribir el archivo?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (res == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            contentfile.Delete();
+                        }
+                        catch (Exception ue)
+                        {
+                            MessageBox.Show(ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
                 String guid = Guid.NewGuid().ToString().Replace('-', '_');
                 FileInfo zipFile = new FileInfo(dir.FullName + "/" + guid + ".zip");
                 try
                 {
                     foreach (Part part in OfficeApplication.OfficeApplicationProxy.ResponseParts)
                     {
-                        FileStream fout = zipFile.Create();
+                        FileStream fout = zipFile.Open(FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
                         fout.Write(part.getContent(), 0, part.getContent().Length);
                         fout.Close();
                     }
-                    ZipFile zip = new ZipFile(zipFile.FullName);
-                    ZipEntry entry = zip.GetEntry(fileName);
-                    
-                    Stream fileIn = zip.GetInputStream(entry);
-                    if (contentfile.Exists)
+                    using (ZipInputStream s = new ZipInputStream(zipFile.OpenRead()))
                     {
-                        DialogResult res = MessageBox.Show(this, "Existe un archivo con el nombre " + fileName + "\r\n¿Desea sobre escribir el archivo?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                            if(res==DialogResult.Yes)
+                        
+                        ZipEntry entry;
+                        // extract the file or directory entry
+                        while ((entry = s.GetNextEntry()) != null)
+                        {
+                            if (entry.IsDirectory)
                             {
-                                contentfile.Delete();
+                                ExtractDirectory(s, entry.Name, entry.DateTime, zipFile.Directory);
                             }
                             else
                             {
-                                return;
+                                ExtractFile(s, entry.Name, entry.DateTime, entry.Size, zipFile.Directory);
                             }
+                            s.CloseEntry();
+                        }
+                        s.Close();
                     }
-                    byte[] buffer = new byte[2048];
-                    FileStream fileOut = contentfile.Open(FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
-                    int read = fileIn.Read(buffer, 0, buffer.Length);
-                    while (read != 0)
-                    {
-                        fileOut.Write(buffer, 0, read);
-                        read = fileIn.Read(buffer, 0, buffer.Length);
-                    }
-                    fileOut.Close();
-                    fileIn.Close();
-                    zip.Close();
                     this.Wizard.Close();
                     this.Wizard.SetProgressBarInit(5, 3, "Abriendo contenido...");
-                    OfficeDocument document = application.Open(contentfile);      
+                    OfficeDocument document = application.Open(contentfile);
                     this.Wizard.SetProgressBarInit(5, 4, "Guardando contenido...");
                     document.SaveContentProperties(version.contentId, rep);
-                    document.Save();                    
+                    document.Save();
                     this.Wizard.SetProgressBarEnd();
-                    MessageBox.Show(this,"¡Se ha abierto un contenido con el nombre "+ fileName +"!",this.Wizard.Text,MessageBoxButtons.OK,MessageBoxIcon.Information);                    
+                    MessageBox.Show(this, "¡Se ha abierto un contenido con el nombre " + fileName + "!", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);                    
                 }
-                catch
+                catch (Exception ue)
                 {
+                    MessageBox.Show(this, "El contenido tiene una falla\r\nDetalle: " + ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
                     zipFile.Delete();
                 }
-                
+
             }
             else
             {
                 MessageBox.Show(this, "¡Debe indicar un directorio!", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        protected void ExtractFile(Stream inputStream, string entryName, DateTime entryDate, long entrySize, DirectoryInfo ToDirectory)
+        {
+
+            FileInfo destFile = new FileInfo(Path.Combine(ToDirectory.FullName,
+            entryName));
+
+            // ensure destination directory exists
+            if (!destFile.Directory.Exists)
+            {
+                try
+                {
+                    destFile.Directory.Create();
+                    destFile.Directory.LastWriteTime = entryDate;
+                    destFile.Directory.Refresh();
+                }
+                catch (Exception ex)
+                {
+                    /*throw new BuildException(string.Format(CultureInfo.InvariantCulture,
+                        "Directory '{0}' could not be created.", destFile.DirectoryName),
+                        Location, ex);*/
+
+                    MessageBox.Show(ex.Message,this.Wizard.Text,MessageBoxButtons.OK,MessageBoxIcon.Error);
+                }
+            }
+
+            // determine if entry actually needs to be extracted
+            if (destFile.Exists && destFile.LastWriteTime >= entryDate)
+            {
+                return;
+            }
+
+            try
+            {
+                using (FileStream sw = new FileStream(destFile.FullName, FileMode.Create, FileAccess.Write))
+                {
+                    int size = 2048;
+                    byte[] data = new byte[2048];
+                    if (entrySize > 0L)
+                    {
+                        while (true)
+                        {
+                            size = inputStream.Read(data, 0, data.Length);
+                            if (size > 0)
+                            {
+                                sw.Write(data, 0, size);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    sw.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                /*throw new BuildException(string.Format(CultureInfo.InvariantCulture,
+                    "Unable to expand '{0}' to '{1}'.", entryName, ToDirectory.FullName),
+                    Location, ex);*/
+                MessageBox.Show(ex.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            destFile.LastWriteTime = entryDate;
+
+
+        }
+        protected void ExtractDirectory(Stream inputStream, string entryName, DateTime entryDate, DirectoryInfo ToDirectory)
+        {
+            DirectoryInfo destDir = new DirectoryInfo(Path.Combine(
+                ToDirectory.FullName, entryName));
+            if (!destDir.Exists)
+            {
+                try
+                {
+                    destDir.Create();
+                    destDir.LastWriteTime = entryDate;
+                    destDir.Refresh();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
 
 
 
