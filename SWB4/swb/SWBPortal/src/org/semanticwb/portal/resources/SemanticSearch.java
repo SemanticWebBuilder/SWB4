@@ -540,27 +540,32 @@ public class SemanticSearch extends GenericResource {
                                    "  </tbody>\n" +
                                    "</table><br><hr><br>");
 
-//                        sbf.append("<script type=\"text/javascript\" " +
-//                                "src=\"http://www.google.com/jsapi?key=ABQIAAAAOJNnlv7XtimNAEXtmyrRcBTb-vLQlFZmc2N8bgWI8YDPp5FEVBSt-jSEUxX5Zuafs_gGbS--6HOwVw\">\n</script>\n" +
-//                                "<script type=\"text/javascript\">\n" +
-//                                "google.load(\"maps\", \"2\",{\"other_params\":\"sensor=false\"});\n" +
-//                                "function initialize() {\n" +
-//                                "var map = new google.maps.Map2(document.getElementById(\"" + createId("map") + "\"));\n" +
-//                                "map.setCenter(new google.maps.LatLng("+
-//                                lat_node.asNode().getLiteral().getLexicalForm()+", " +
-//                                long_node.asNode().getLiteral().getLexicalForm() +"), 13);\n" +
-//                                "}\n" +
-//                                "google.setOnLoadCallback(initialize);\n" +
-//                                "</script>\n");
 
-                        /*sbf.append("<script type=\"text/javascript\">\n" +
-                        "var map = new GMap(dojo.byId(\"" + createId("map") + "\"));\n" +
-                        "map.setMapType(G_SATELLITE_TYPE);\n" +
-                        //"map.addControl(new GLargeMapControl());\n" +
-                        //"map.addControl(new GMapTypeControl());\n" +
-                        "map.centerAndZoom(new GPoint (" + lat_node.asNode().getLiteral().getLexicalForm() +
-                                ", " + long_node.asNode().getLiteral().getLexicalForm() + "), 13);\n" +
-                        "</script>\n");*/
+                        sbf.append("<script type=\"text/javascript\">\n" +
+                        "function load() {\n" +
+                        "if (GBrowserIsCompatible()) {" +
+                        "var map = new GMap2(document.getElementById(" + createId("map") + "));" +
+                        "map.addControl(new GMapTypeControl());" +
+                        "map.addControl(new GLargeMapControl());" +
+                        "map.addControl(new GOverviewMapControl());" +
+                        "map.setCenter(new GLatLng(" + lat_node.asNode().getLiteral().getLexicalForm() + ", "+ long_node.asNode().getLiteral().getLexicalForm() +"), 5);" +
+
+		"map.setMapType(G_HYBRID_TYPE);" +
+
+		"function addtag(point, address) {"+
+		"var marker = new GMarker(point);"+
+		"GEvent.addListener(marker, \"click\", function() { marker.openInfoWindowHtml(address); } );"+
+		"return marker;" +
+		"}" +
+
+		"var point = new GLatLng("+ lat_node.asNode().getLiteral().getLexicalForm() +","+ long_node.asNode().getLiteral().getLexicalForm() +");" +
+		"var address = '<b>MADAGASCAR</b><br/><i>Centro de Madagascar</i><br /><a href=\"http://www.centrodemadagascar.com\">Web del Centro de Madagascar</a>';"+
+		"var marker = addtag(point, address);" +
+	"	map.addOverlay(marker);	" +
+      "}"+
+   " }"+
+"</script>");
+
                     }
                     
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
