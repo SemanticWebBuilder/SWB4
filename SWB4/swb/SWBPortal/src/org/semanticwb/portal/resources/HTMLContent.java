@@ -350,8 +350,6 @@ public class HTMLContent extends GenericResource {
             bs.append("\n          + '</div>'; ");
             bs.append("\n  button.innerHTML = cad;");
             bs.append("\n  ");
-            bs.append("\n  var closeButton = window.parent.document.getElementById(\"closeButton\");");
-            bs.append("\n  closeButton.onclick = \"window.frames[\\'frmMain\\'].searchForm();\"");
             bs.append("\n  ");
             bs.append("\n</script>");
             bs.append("\n</head>");
