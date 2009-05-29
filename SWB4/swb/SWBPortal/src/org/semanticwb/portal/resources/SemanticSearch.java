@@ -457,9 +457,10 @@ public class SemanticSearch extends GenericResource {
                    "action=\"" + aUrl + "\" method=\"post\" >\n" +
                    "  <textarea id=\"" + createId("naturalQuery") + "\" rows=1 cols=70 " +
                       "name=\"" + createId("naturalQuery") + "\" >" + query + "</textarea>" +
+                   "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>" +
                    "  <input type=\"submit\" />\n" +
-                   "</form>\n" +
-                   "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>");
+                   "</form>\n");
+                   
 
         if (errCount != null) {
             if (Integer.parseInt(errCount) == 0) {
