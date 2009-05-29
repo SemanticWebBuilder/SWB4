@@ -301,7 +301,7 @@ namespace WBOffice4
         {
             foreach (FileInfo file in parent.GetFiles())
             {
-                FileStream fileStream = file.OpenRead();
+                FileStream fileStream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
                 byte[] buffer = new byte[fileStream.Length];
 
                 ZipEntry entry;

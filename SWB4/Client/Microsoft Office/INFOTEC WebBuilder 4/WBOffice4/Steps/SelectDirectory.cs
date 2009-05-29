@@ -445,7 +445,7 @@ namespace WBOffice4.Steps
                 IOfficeApplication app=OfficeApplication.OfficeApplicationProxy;
                 this.Wizard.SetProgressBarInit(5, 1, "Descargando contenido...");
                 String fileName=app.openContent(rep,version);
-                this.Wizard.SetProgressBarInit(5, 2, "Formatiendo contenido...");
+                this.Wizard.SetProgressBarInit(5, 2, "Validando contenido...");
                 FileInfo contentfile = new FileInfo(dir.FullName + "/" + fileName);
                 String guid = Guid.NewGuid().ToString().Replace('-', '_');
                 FileInfo zipFile = new FileInfo(dir.FullName + "/" + guid + ".zip");
