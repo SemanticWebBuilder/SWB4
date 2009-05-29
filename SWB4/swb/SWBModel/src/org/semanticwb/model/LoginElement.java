@@ -1,12 +1,15 @@
 package org.semanticwb.model;
 
 import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
 
 public class LoginElement extends org.semanticwb.model.base.LoginElementBase 
 {
+    static Logger log = SWBUtils.getLogger(LoginElement.class);
     public LoginElement(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -15,6 +18,7 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
+        log.debug("Type: "+type);
         if(type.equals("dojo"))
         {
             setAttribute("isValid", "return validateElement('"+prop.getName()+"','"+getValidateURL(obj, prop)+"',this.textbox.value);");
@@ -30,8 +34,20 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase
     {
         super.validate(request, obj, prop);
 
-    String login=request.getParameter("login");
-    String model=request.getParameter("model");
+    String login=request.getParameter("usrLogin");
+    log.debug("obj: "+obj.getDisplayName());
+    String model=null;
+    User cu = null;
+    if (obj.instanceOf(User.sclass)) {
+
+           cu= new User(obj);
+           model=cu.getUserRepository().getId();
+
+    } else if (obj.instanceOf(UserRepository.sclass)){
+        UserRepository ur = new UserRepository(obj);
+        model=ur.getId();
+    }
+    //String model=request.getParameter("model");
     //System.out.println("login:"+login+" model:"+model);
     if(login==null || login.length()==0 || login.indexOf(' ')>-1 || model==null)
     {
@@ -41,10 +57,13 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase
     {
         if(isValidId(login))
         {
+            if (cu!=null && cu.getLogin().equalsIgnoreCase(login)) return;
+
             User tmpobj = SWBContext.getUserRepository(model).getUserByLogin(login);
 
             if(tmpobj!=null)
             {
+
                 throw new FormValidateException(getLocaleString("errBusy","Login ya ocupado"));
                 //System.out.println("false");
             }else
