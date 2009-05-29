@@ -118,8 +118,8 @@ public class SemanticSearch extends GenericResource {
 
         rUrl.setMode("SUGGEST");
         rUrl.setCallMethod(rUrl.Call_DIRECT);
-        sbf.append("<script src=\"http://maps.google.com/maps?file=api&v=2&sensor=true&key=ABQIAAAAOJNnlv7XtimNAEXtmyrRcBTb-vLQlFZmc2N8bgWI8YDPp5FEVBSt-jSEUxX5Zuafs_gGbS--6HOwVw\" " +
-                    " type=\"text/javascript\"></script>");
+        //sbf.append("<script src=\"http://maps.google.com/maps?file=api&v=2&sensor=true&key=ABQIAAAAOJNnlv7XtimNAEXtmyrRcBTb-vLQlFZmc2N8bgWI8YDPp5FEVBSt-jSEUxX5Zuafs_gGbS--6HOwVw\" " +
+        //            " type=\"text/javascript\"></script>");
         sbf.append("<script type=\"text/javascript\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>");
         sbf.append("<script type=\"text/javascript\">\n" +
                 "  dojo.require(\"dijit.form.Form\");\n" +
@@ -135,7 +135,7 @@ public class SemanticSearch extends GenericResource {
                 "    });\n" +
                 "  });\n" +
                 "  var source =\"" + rUrl + "\";\n" +
-                "  var lang =\"" + paramRequest.getUser().getLanguage() + "\";\n" +
+                "  var lang =\"" + lang + "\";\n" +
                 "  var displayed;\n" +
                 "  var pdisplayed;\n" +
                 "</script>\n");
@@ -429,6 +429,10 @@ public class SemanticSearch extends GenericResource {
 
         HashMap<String, String> dbNames = new HashMap <String, String>();
         dbNames.put("Miguel Hidalgo","Miguel_Hidalgo,_D.F.");
+        dbNames.put("Tamaulipas","Tamaulipas");
+        dbNames.put("México, D.F.","México_city");
+        dbNames.put("Veracruz","Veracruz");
+        dbNames.put("Tamaulipas","Tamaulipas");
         dbNames.put("Alvaro Obregón","Álvaro_Obregón,_D.F.");
         dbNames.put("Xochimilco","Xochimilco");
         dbNames.put("Tlalpan","Tlalpan");
@@ -549,14 +553,14 @@ public class SemanticSearch extends GenericResource {
 //                                "google.setOnLoadCallback(initialize);\n" +
 //                                "</script>\n");
 
-                        sbf.append("<script type=\"text/javascript\">\n" +
+                        /*sbf.append("<script type=\"text/javascript\">\n" +
                         "var map = new GMap(dojo.byId(\"" + createId("map") + "\"));\n" +
                         "map.setMapType(G_SATELLITE_TYPE);\n" +
                         //"map.addControl(new GLargeMapControl());\n" +
                         //"map.addControl(new GMapTypeControl());\n" +
                         "map.centerAndZoom(new GPoint (" + lat_node.asNode().getLiteral().getLexicalForm() +
                                 ", " + long_node.asNode().getLiteral().getLexicalForm() + "), 13);\n" +
-                        "</script>\n");
+                        "</script>\n");*/
                     }
                     
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
