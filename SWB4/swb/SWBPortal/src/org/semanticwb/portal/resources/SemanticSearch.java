@@ -564,7 +564,7 @@ public class SemanticSearch extends GenericResource {
 	"	map.addOverlay(marker);	" +
       "}"+
    " }" +
-                                " load();"+
+//                                " load();"+
 "</script>");
 
                     }
