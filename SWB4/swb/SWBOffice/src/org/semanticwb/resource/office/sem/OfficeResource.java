@@ -103,7 +103,13 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                     if (!entry.isDirectory())
                     {
                         InputStream inEntry = zip.getInputStream(entry);
-                        SWBPlatform.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + entry.getName(), inEntry, "");
+                        String file=entry.getName();
+                        int pos=file.lastIndexOf("/");
+                        if(pos!=-1)
+                        {
+                            file=file.substring(pos+1);
+                        }
+                        SWBPlatform.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, inEntry, "");
                     }
                 }
                 zip.close();
