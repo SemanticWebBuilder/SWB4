@@ -672,7 +672,7 @@ public class SimpleNode implements Node
         }
         else
         {
-            throw new PathNotFoundException("The property " + relPath + WAS_NOT_FOUND);
+            throw new PathNotFoundException("The property " + relPath + WAS_NOT_FOUND+" for the NodeType("+getPrimaryNodeType().getName()+")");
         }
     }
 
