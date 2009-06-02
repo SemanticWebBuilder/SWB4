@@ -1,11 +1,12 @@
 package org.semanticwb.resources.filerepository.base;
 
 
-public class RepositoryFolderBase extends org.semanticwb.repository.Folder implements org.semanticwb.model.Descriptiveable,org.semanticwb.repository.Traceable
+public class RepositoryFolderBase extends org.semanticwb.repository.Folder implements org.semanticwb.resources.filerepository.Deleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.repository.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swbfilerep_userid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/filerepository#userid");
     public static final org.semanticwb.platform.SemanticProperty swbfilerep_hasUserGroupId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/filerepository#hasUserGroupId");
+    public static final org.semanticwb.platform.SemanticProperty swbfilerep_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/filerepository#deleted");
     public static final org.semanticwb.platform.SemanticProperty swbfilerep_hasUserId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/filerepository#hasUserId");
     public static final org.semanticwb.platform.SemanticProperty swbfilerep_hasRoleId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/filerepository#hasRoleId");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
@@ -109,6 +110,16 @@ public class RepositoryFolderBase extends org.semanticwb.repository.Folder imple
     public void removeUserGroupId(String usergroupid)
     {
         getSemanticObject().removeProperty(swbfilerep_hasUserGroupId,usergroupid);
+    }
+
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swbfilerep_deleted);
+    }
+
+    public void setDeleted(boolean deleted)
+    {
+        getSemanticObject().setBooleanProperty(swbfilerep_deleted, deleted);
     }
 
     public java.util.Iterator<String> listUserIds()
