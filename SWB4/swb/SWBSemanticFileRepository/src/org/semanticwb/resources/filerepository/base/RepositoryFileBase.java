@@ -1,12 +1,14 @@
 package org.semanticwb.resources.filerepository.base;
 
 
-public class RepositoryFileBase extends org.semanticwb.repository.File implements org.semanticwb.repository.Traceable
+public class RepositoryFileBase extends org.semanticwb.repository.File implements org.semanticwb.resources.filerepository.Deleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.repository.Traceable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swbfilerep_hasUserGroupId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/filerepository#hasUserGroupId");
     public static final org.semanticwb.platform.SemanticProperty swbfilerep_deleted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/filerepository#deleted");
     public static final org.semanticwb.platform.SemanticProperty swbfilerep_hasUserId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/filerepository#hasUserId");
     public static final org.semanticwb.platform.SemanticProperty swbfilerep_hasRoleId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/filerepository#hasRoleId");
+    public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swbfilerep_RepositoryFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/filerepository#RepositoryFile");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/filerepository#RepositoryFile");
 
@@ -45,6 +47,31 @@ public class RepositoryFileBase extends org.semanticwb.repository.File implement
     public static boolean hasRepositoryFile(String id, org.semanticwb.model.SWBModel model)
     {
         return (getRepositoryFile(id, model)!=null);
+    }
+
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+    public void setTitle(String title)
+    {
+        getSemanticObject().setProperty(swb_title, title);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
 
     public java.util.Iterator<String> listUserGroupIds()
@@ -136,5 +163,30 @@ public class RepositoryFileBase extends org.semanticwb.repository.File implement
     public void removeRoleId(String roleid)
     {
         getSemanticObject().removeProperty(swbfilerep_hasRoleId,roleid);
+    }
+
+    public String getDescription()
+    {
+        return getSemanticObject().getProperty(swb_description);
+    }
+
+    public void setDescription(String description)
+    {
+        getSemanticObject().setProperty(swb_description, description);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
     }
 }
