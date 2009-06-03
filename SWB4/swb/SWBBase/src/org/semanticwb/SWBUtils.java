@@ -141,7 +141,7 @@ public class SWBUtils {
         gc.set(Calendar.MONTH, Calendar.JANUARY);
         gc.set(Calendar.DATE, 1);
         int i;
-        for(i=0; i<12; i++) {
+        for(i=1; i<=12; i++) {
             if( formatter.format(gc.getTime()).equalsIgnoreCase(month) ) {
                 return i;
             }
