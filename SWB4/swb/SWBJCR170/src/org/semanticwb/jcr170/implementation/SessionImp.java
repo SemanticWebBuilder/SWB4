@@ -773,16 +773,42 @@ public class SessionImp implements Session
 
     public void move(String srcAbsPath, String destAbsPath) throws ItemExistsException, PathNotFoundException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
-        //TODO: revisar esto para los demas tipos de moviemntos, este moviento debería ser temporal, pero por tiempo se deja así
+        //TODO: revisar esto para los demas tipos de movimientos, este moviento debería ser temporal, pero por tiempo se deja así
         Item srcItem = this.getItem(srcAbsPath);
         Item destItem = this.getItem(destAbsPath);
+        if(srcItem==null)
+        {
+            throw new PathNotFoundException("The path "+srcAbsPath+" was not found");
+        }
+        if(destItem==null)
+        {
+            throw new PathNotFoundException("The path "+destAbsPath+" was not found");
+        }
         if (srcItem instanceof SimpleNode && destItem instanceof SimpleNode)
         {
             SimpleNode srcSimpleNode = (SimpleNode) srcItem;
             SimpleNode destSimpleNode = (SimpleNode) destItem;
-            if (srcSimpleNode.node != null && destSimpleNode.node != null)
+            if(destSimpleNode.getPrimaryNodeType().canAddChildNode(srcSimpleNode.getName(), srcSimpleNode.getPrimaryNodeType().getName()))
             {
-                srcSimpleNode.node.setParent(destSimpleNode.node);
+                if (srcSimpleNode.node != null && destSimpleNode.node != null)
+                {
+                    srcSimpleNode.node.setParent(destSimpleNode.node);
+                }
+                else
+                {
+                    throw new ConstraintViolationException("Can not be added a node of type "+ srcSimpleNode.getPrimaryNodeType().getName() +" to a node of type "+destSimpleNode.getPrimaryNodeType().getName());
+                }
+            }
+        }
+        else
+        {
+            if (!(srcItem instanceof SimpleNode))
+            {
+                throw new RepositoryException("The item "+srcItem+" is not a node");
+            }
+            else
+            {
+                throw new RepositoryException("The item "+destItem+" is not a node");
             }
         }
     }
