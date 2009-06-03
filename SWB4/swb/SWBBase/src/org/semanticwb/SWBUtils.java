@@ -48,6 +48,8 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.EmailAttachment;
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -125,6 +127,27 @@ public class SWBUtils {
             size++;
         }
         return size;
+    }
+
+    public static int monthToInt(String month, String language) {
+        Locale loc;
+        try {
+            loc = new Locale(language);
+        }catch(Exception e) {
+            loc = locale;
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM");
+        GregorianCalendar gc = new GregorianCalendar(loc);
+        gc.set(Calendar.MONTH, Calendar.JANUARY);
+        gc.set(Calendar.DATE, 1);
+        int i;
+        for(i=0; i<12; i++) {
+            if( formatter.format(gc.getTime()).equalsIgnoreCase(month) ) {
+                return i;
+            }
+            gc. add(Calendar.MONTH, 1);
+        }
+        return -1;
     }
 
     /*
