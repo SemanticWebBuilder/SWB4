@@ -792,12 +792,17 @@ public class SessionImp implements Session
             {
                 if (srcSimpleNode.node != null && destSimpleNode.node != null)
                 {
-                    srcSimpleNode.node.setParent(destSimpleNode.node);
+                    srcSimpleNode.node.setParent(destSimpleNode.node);                    
                 }
-                else
+                else // TODO: check is necesary to do something
                 {
-                    throw new ConstraintViolationException("Can not be added a node of type "+ srcSimpleNode.getPrimaryNodeType().getName() +" to a node of type "+destSimpleNode.getPrimaryNodeType().getName());
+
                 }
+                srcSimpleNode.parent=destSimpleNode;
+            }
+            else
+            {
+                throw new ConstraintViolationException("Can not be added a node of type "+ srcSimpleNode.getPrimaryNodeType().getName() +" to a node of type "+destSimpleNode.getPrimaryNodeType().getName());
             }
         }
         else
