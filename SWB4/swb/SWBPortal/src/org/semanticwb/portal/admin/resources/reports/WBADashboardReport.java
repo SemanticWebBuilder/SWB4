@@ -12,7 +12,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.portal.admin.resources.reports.beans.WBAFilterReportBean;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRGlobalAccessDataDetail;
 import org.semanticwb.portal.api.GenericResource;
@@ -24,6 +23,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.semanticwb.model.Device;
 import org.semanticwb.portal.admin.resources.reports.beans.WBAFilterReportBean;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRDeviceAccessDataDetail;
+import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRLoggedUserDataDetail;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRSessionDataDetail;
 import org.semanticwb.portal.api.SWBResourceURL;
 
@@ -166,6 +166,44 @@ public class WBADashboardReport extends GenericResource {
                     }
                 }
 
+                if(detail.equalsIgnoreCase("login")) {
+                    String barname = request.getParameter("wbr_barname");
+                    int month = SWBUtils.monthToInt(barname, language);
+                    WBAFilterReportBean filter = new WBAFilterReportBean();
+                    filter.setSite(websiteId);
+                    filter.setIdaux(REPORT_IDAUX_GLOBAL);
+                    filter.setType(REPORT_TYPE_GLOBAL);
+                    filter.setYearI(now.get(Calendar.YEAR));
+                    filter.setMonthI(month);
+                    filter.setDayI(now.getActualMinimum(Calendar.DAY_OF_MONTH));
+                    filter.setYearF(now.get(Calendar.YEAR));
+                    filter.setMonthF(month);
+                    filter.setDayF(now.getActualMaximum(Calendar.DAY_OF_MONTH));
+                    dataDetail = new JRGlobalAccessDataDetail(filter);
+                    ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
+                    if(ds!=null){
+                        logins = ds.getData().iterator();
+                    }else {
+                        logins = Collections.EMPTY_LIST.iterator();
+                    }
+                }else {
+                    WBAFilterReportBean filter = new WBAFilterReportBean();
+                    filter.setSite(SWBContext.getWebSite(websiteId).getUserRepository().getId());
+                    filter.setIdaux(REPORT_IDAUX_LOGINS);
+                    filter.setType(REPORT_TYPE_LOGINS);
+                    filter.setYearI(now.get(Calendar.YEAR));
+                    dataDetail = new JRLoggedUserDataDetail(filter);
+                    ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
+                    if(ds!=null){
+                        logins = ds.getData().iterator();
+                    }else {
+                        logins = Collections.EMPTY_LIST.iterator();
+                    }
+                }
+
+
+
+
                 if(detail.equalsIgnoreCase("device")) {
                     String barname = request.getParameter("wbr_barname");
                     int month = SWBUtils.monthToInt(barname, language);
@@ -210,36 +248,23 @@ public class WBADashboardReport extends GenericResource {
                         }
                     }
                 }else {
-                    System.out.println("device por mes");
-
-
-                    //long nd = SWBUtils.sizeOf(SWBContext.getWebSite(websiteId).listDevices());
-                    //System.out.println("nd="+nd);
-                    //Iterator<SWBRecHit>[] adevices = new Iterator[(int)nd];
-                    //Iterator<Device> devs = SWBContext.getWebSite(websiteId).listDevices();
-                    //for(int i=0; devs.hasNext(); i++) {
-                        //Device dev = devs.next();
                     Iterator<SWBRecHit> idevices;
-
-                        WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(websiteId);
-                        //filter.setIdaux(dev.getId());
-                        filter.setType(REPORT_TYPE_DEVICES);
-                        filter.setYearI(now.get(Calendar.YEAR));
-                        dataDetail = new JRDeviceAccessDataDetail(filter);
-                        ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
-                        if(ds!=null){
-                            idevices = ds.getData().iterator();
-                        }else {
-                            idevices = Collections.EMPTY_LIST.iterator();
-                        }
-                        //System.out.println("iii="+i);
-                    //}
+                    WBAFilterReportBean filter = new WBAFilterReportBean();
+                    filter.setSite(websiteId);
+                    //filter.setIdaux(dev.getId());
+                    filter.setType(REPORT_TYPE_DEVICES);
+                    filter.setYearI(now.get(Calendar.YEAR));
+                    dataDetail = new JRDeviceAccessDataDetail(filter);
+                    ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
+                    if(ds!=null){
+                        idevices = ds.getData().iterator();
+                    }else {
+                        idevices = Collections.EMPTY_LIST.iterator();
+                    }
 
                     devices = new HashMap();
                     while(idevices.hasNext()) {
                         SWBRecHit r = idevices.next();
-                        System.out.println("r="+r.toString()+"\n");
                         if(devices.containsKey(r.getMonth())) {
                             HashMap c = (HashMap)devices.get(r.getMonth());
                             c.put(r.getItem(), Long.toString(r.getHits()));
@@ -249,7 +274,6 @@ public class WBADashboardReport extends GenericResource {
                             c.put(r.getItem(), Long.toString(r.getHits()));
                         }
                     }
-                    System.out.println("\n\n");
                     Iterator<String> m = devices.keySet().iterator();
                     while(m.hasNext()) {
                         String key = m.next();
@@ -263,46 +287,8 @@ public class WBADashboardReport extends GenericResource {
                             }
                         }
                     }
-                    System.out.println("devices.size="+devices.size());
-
-                    
-                    /*//for(int i=0; i<12; i++) {
-                        for(int j=0; j<adevices.length; j++) {
-                            System.out.println("j="+j);
-                            Iterator<SWBRecHit> it = adevices[j];
-                            while(it.hasNext()) {
-                                SWBRecHit r = it.next();
-                                System.out.println("rec="+r.toString());
-                                if(devices.containsKey(r.getMonth())) {
-                                    String v = "|" + (String)devices.get(r.getMonth());
-                                    devices.put(r.getMonth(), v);
-                                }else {
-                                    devices.put(r.getMonth(), Long.toString(r.getHits()));
-                                }
-                                System.out.println("key="+r.getMonth());
-                                System.out.println("value="+devices.get(r.getMonth()));
-                            }
-                        }
-                    //}*/
                 }
-
-
-
-                    // login
-//                    filter.setSite(SWBContext.getWebSite(websiteId).getUserRepository().getId());
-//                    filter.setIdaux(REPORT_IDAUX_LOGINS);
-//                    filter.setType(REPORT_TYPE_LOGINS);
-//                    filter.setYearI(now.get(Calendar.YEAR));
-//                    dataDetail = new JRLoggedUserDataDetail(filter);
-//                    ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
-//                    if(ds!=null){
-//                        logins = ds.getData().iterator();
-//                    }else {
-//                        logins = Collections.EMPTY_LIST.iterator();
-//                    }
-
                 
-
                 out.println("<script type=\"text/javascript\">");
                 out.println(" function doApply() { ");
                 out.println("    window.document.frmrep.submit(); ");
@@ -402,6 +388,33 @@ public class WBADashboardReport extends GenericResource {
                 out.println("<tr>");
                 out.println("<td>");
                 out.println("<div class=\"applet\">");
+                // loggin user
+                out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/WBGraph.jar\" width=\"400\" height=\"400\">");
+                out.println("<param name=\"GraphType\" value=\"Bar\">");
+                out.println("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("login_report")+"\">");
+                if(!detail.equalsIgnoreCase("login")) {
+                    out.println("<param name=\"link\" value=\""+url+"?wb_detail=login&wb_site="+websiteId+"&wbr_barname="+"\">");
+                }
+                out.println("<param name=\"ncdata\" value=\"1\">");
+                out.println("<param name=\"percent\" value=\"false\">");
+                out.println("<param name=\"allpercent\" value=\"false\">");
+                out.println("<param name=\"zoom\" value=\"true\">");
+                x = 0;
+                while(logins.hasNext()) {
+                    SWBRecHit l = logins.next();
+                    out.println("<param name=\"label"+x+"\" value=\""+l.getMonth()+"\">");
+                    out.println("<param name=\"data"+x+"\"  value=\""+l.getHits()+"\">");
+                    x++;
+                }
+                out.println("<param name=\"ndata\" value=\""+x+"\">");
+                out.println("<param name=\"color0\" value=\"200,100,255\">");
+                out.println("<param name=\"barname0\" value=\"" + paramsRequest.getLocaleString("login") + "\">");
+                out.println("</APPLET>");
+                out.println("</div>");
+                out.println("</td>");
+
+                out.println("<td>");
+                out.println("<div class=\"applet\">");
                 // device
                 System.out.println("ya vamos por aca..........");
                 out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/WBGraph.jar\" width=\"400\" height=\"400\">");
@@ -443,11 +456,6 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<param name=\"barname"+i+"\" value=\""+d.getDisplayTitle(language)+"\">");
                 }
                 out.println("</APPLET>");
-                out.println("</div>");
-                out.println("</td>");
-
-                out.println("<td>");
-                out.println("<div class=\"applet\">");
                 out.println("</div>");
                 out.println("</td>");
                 out.println("</tr>");
