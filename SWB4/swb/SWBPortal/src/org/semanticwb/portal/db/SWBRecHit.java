@@ -2,7 +2,9 @@
 package org.semanticwb.portal.db;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /*import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;*/
@@ -19,15 +21,24 @@ public class SWBRecHit implements java.io.Serializable {
     private int year;
     private String month;
     private int day;
+
+    private Locale locale;
+    private GregorianCalendar gc;
     
     public SWBRecHit(){
     }
     
     //new SWBRecHit(date,rs.getString("topicmap"),rs.getString("idaux"),rs.getInt("type"),rs.getInt("hits"));
     public SWBRecHit(Timestamp date, String topicmap, String section, int type, long hits){
+        this(date, topicmap, section, type, hits, "es");
+    }
+
+    public SWBRecHit(Timestamp date, String topicmap, String section, int type, long hits, String language){
+        locale = new Locale(language);
+
         this.date = date;
         if(date!=null){
-            GregorianCalendar gc = new GregorianCalendar();
+            gc = new GregorianCalendar(locale);
             gc.setTimeInMillis(date.getTime());
             this.setYear(gc.get(GregorianCalendar.YEAR));
             this.setMonth(Integer.toString(gc.get(GregorianCalendar.MONTH)));
@@ -104,7 +115,12 @@ public class SWBRecHit implements java.io.Serializable {
     }
 
     public String getMonth() {
-        String mes;
+        SimpleDateFormat formatter  = new SimpleDateFormat("MMMM", locale);
+        return formatter.format(date);
+
+
+
+        /*String mes;
         int imes = Integer.parseInt(month);
         switch(imes){
             case 0: mes="Enero"; break;
@@ -121,7 +137,21 @@ public class SWBRecHit implements java.io.Serializable {
             case 11: mes="Diciembre"; break;
             default: mes="Desconocido";
         }      
-        return mes;
+        return mes;*/
+    }
+
+    public String getMonth(String pattern) {
+        SimpleDateFormat formatter  = new SimpleDateFormat(pattern, locale);
+        return formatter.format(date);
+    }
+
+    public int getMonthToInt() {
+        SimpleDateFormat formatter  = new SimpleDateFormat("M");
+        try {
+            return Integer.parseInt(formatter.format(date), 10);
+        }catch(NumberFormatException e) {
+            return -1;
+        }
     }
 
     private void setMonth(String month) {
