@@ -29,9 +29,9 @@ public class LoggedUserDataDetail extends SWBDataDetail{
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();
 
-        UserRepository ur=SWBContext.getUserRepository(rfilter);
+        UserRepository ur=SWBContext.getUserRepository(repository);
         labels.put(ur.getId(), ur.getDisplayTitle(userLanguage));
-
+        
         resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(repository, rfilter, type, year, labels);
         return resumeRecHits;
     }
@@ -40,7 +40,7 @@ public class LoggedUserDataDetail extends SWBDataDetail{
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();
 
-        UserRepository ur=SWBContext.getUserRepository(rfilter);
+        UserRepository ur=SWBContext.getUserRepository(repository);
         labels.put(ur.getId(), ur.getDisplayTitle(userLanguage));
 
         resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(repository, rfilter, type, year, month, day, labels);
@@ -51,7 +51,7 @@ public class LoggedUserDataDetail extends SWBDataDetail{
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();
 
-        UserRepository ur=SWBContext.getUserRepository(rfilter);
+        UserRepository ur=SWBContext.getUserRepository(repository);
         labels.put(ur.getId(), ur.getDisplayTitle(userLanguage));
 
         resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(repository, rfilter, type, yearI, monthI, dayI, yearF, monthF, dayF, labels);
