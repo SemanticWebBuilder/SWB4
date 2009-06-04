@@ -4,11 +4,13 @@
  */
 package org.semanticwb.nlp;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.lucene.index.CorruptIndexException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
@@ -27,7 +29,6 @@ public class tTranslator {
     private String nodeLabels = "SELECT|PRECON|PREDE|ASIGN|COMPL|COMPG|COMPLE|COMPGE|OFFSET|LIMIT|ORDER";
     private String eLog = "";   //Error log
     private int errCode = 0;    //Last error code
-    private String language = "es"; //Translator language
 
     /**
      * Creates a new instance of tTranslator with the given dictionary.
@@ -35,7 +36,6 @@ public class tTranslator {
      */
     public tTranslator (Lexicon dict) {
         lex = dict;
-        language = dict.getLanguage();
     }
 
     /**
@@ -45,7 +45,7 @@ public class tTranslator {
      * @param sent Rescticted-Natural Language sentence for the query.
      * @return SparQL query sentence.
      */
-    public String translateSentence(String sent) {
+    public String translateSentence(String sent) throws CorruptIndexException, IOException {
         String res = "";
         CommonTree sTree = null;
         input = new ANTLRStringStream(sent);
@@ -81,7 +81,7 @@ public class tTranslator {
      * @param hasPrede wheter or not the AST has a PREDE node.
      * @return String of a a SparQL query fragment.
      */
-    private String processSelectQuery(CommonTree root, boolean hasPrecon, boolean hasPrede) {
+    private String processSelectQuery(CommonTree root, boolean hasPrecon, boolean hasPrede) throws CorruptIndexException, IOException {
         String limitoff = "";
         String order = "";
         String res = "";
@@ -136,7 +136,7 @@ public class tTranslator {
      * @param root root node to start parsing (usually child of SELECT node).
      * @return String with a SParQL query fragment.
      */
-    private String startParsing(CommonTree root) {
+    private String startParsing(CommonTree root) throws CorruptIndexException, IOException {
         String res = "";
         List<CommonTree> child = root.getChildren();
 
@@ -157,7 +157,7 @@ public class tTranslator {
      * @param parentLabel name of the parent object of the node (for ataching properties).
      * @return a SparQL query fragment for the AST node.
      */
-    private String processNode(CommonTree root, String parent, String parentLabel) {
+    private String processNode(CommonTree root, String parent, String parentLabel) throws CorruptIndexException, IOException {
         String res = "";
         List<CommonTree> child = root.getChildren();
         String nname = root.getText();
@@ -266,7 +266,7 @@ public class tTranslator {
      * @return a SparQL query fragment, specifically a triple for an ASIGN node
      * or a triple and a FILTER clause for the node.
      */
-    private String processStatement(CommonTree root, String parent, String parentLabel) {
+    private String processStatement(CommonTree root, String parent, String parentLabel) throws CorruptIndexException, IOException {
         String res = "";
         String pName = assertPropertyType(root.getChild(0).getText(), parent);
         System.out.println("verificando " + root.getChild(0).getText() + " de " + parent + " con etiqueta " + parentLabel);
@@ -322,7 +322,7 @@ public class tTranslator {
      * @return the RDF type of propertyName if it's a propery of className,
      * empty String otherwise.
      */
-    private String assertPropertyType(String propertyName, String className) {
+    private String assertPropertyType(String propertyName, String className) throws CorruptIndexException, IOException {
         String res = "";
         String name = lex.getObjWordTag(className).getObjId();
         boolean found = false;
@@ -359,7 +359,7 @@ public class tTranslator {
      * @param className name of the SemanticClass with the specified property.
      * @return a SemanticClass which is the range class of the object property. Null otherwise.
      */
-    public SemanticClass assertPropertyRangeClass(String propertyName, String className) {
+    public SemanticClass assertPropertyRangeClass(String propertyName, String className) throws CorruptIndexException, IOException {
         String name = lex.getObjWordTag(className).getObjId();
         boolean found = false;
         SemanticProperty sp = null;
@@ -409,7 +409,7 @@ public class tTranslator {
      * @return prefix + name of the property, empty String if propertyName is
      *         not a SemanticProperty of className.
      */
-    public String assertPropertyRangeType(String propertyName, String className) {
+    public String assertPropertyRangeType(String propertyName, String className) throws CorruptIndexException, IOException {
         String res = "";
         String name = lex.getObjWordTag(className).getObjId();
         boolean found = false;
