@@ -46,7 +46,10 @@ import org.semanticwb.portal.admin.resources.SWBAListRelatedObjects;
 public class SemanticSearch extends GenericResource {
 
     private Logger log = SWBUtils.getLogger(SWBAListRelatedObjects.class);
-    private tTranslator tr;
+    private tTranslator tr = null;
+    private Lexicon lex = null;
+    private boolean langChanged = false;
+    private String lang = "x-x";
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -60,9 +63,9 @@ public class SemanticSearch extends GenericResource {
                 return;
             }
 
-            Lexicon dict = new Lexicon(request.getParameter("lang"));
-            tr = new tTranslator(dict);
-            String queryString = dict.getPrefixString() + "\n" + tr.translateSentence(query);
+            //Lexicon dict = new Lexicon(request.getParameter("lang"));
+            tr = new tTranslator(lex);
+            String queryString = lex.getPrefixString() + "\n" + tr.translateSentence(query);
 
             response.setRenderParameter("errCode", Integer.toString(tr.getErrCode()));
             response.setRenderParameter("sparqlQuery", queryString);
@@ -99,11 +102,20 @@ public class SemanticSearch extends GenericResource {
         String query = request.getParameter(createId("naturalQuery"));
         String errCount = request.getParameter("errCode");
         String sparqlQuery = request.getParameter("sparqlQuery");
-        String lang = "es";
+        String checked = request.getParameter(createId("showInfo"));
         User user = paramRequest.getUser();
 
+        //Get user language if any and create lexicon acordingly
         if (user != null) {
-            lang = paramRequest.getUser().getLanguage();
+            if (!lang.equals(paramRequest.getUser().getLanguage())) {
+                lang = paramRequest.getUser().getLanguage();
+                lex = new Lexicon(lang);
+            }
+        } else {
+            if (!lang.equals("es")) {
+                lang = "es";
+                lex = new Lexicon(lang);
+            }
         }
 
         response.setContentType("text/html");
@@ -114,6 +126,10 @@ public class SemanticSearch extends GenericResource {
             query = "";
         } else {
             query = query.trim();
+        }
+
+        if (checked == null) {
+            checked = "NO";
         }
 
         rUrl.setMode("SUGGEST");
@@ -456,8 +472,11 @@ public class SemanticSearch extends GenericResource {
         sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" " +
                    "action=\"" + aUrl + "\" method=\"post\" >\n" +
                    "  <textarea id=\"" + createId("naturalQuery") + "\" rows=1 cols=70 " +
-                      "name=\"" + createId("naturalQuery") + "\" >" + query + "</textarea>" +
-                   "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>" +
+                      "name=\"" + createId("naturalQuery") + "\" >" + query + "</textarea>\n" +
+                   "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>\n" +
+                   "  <input type=\"checkbox\" name=\"" + createId("showInfo") + "\" " +
+                      "value=\"YES\" " + (checked.equals("YES")?"CHECKED":"") + ">" +
+                      paramRequest.getLocaleString("msgShowInfo") + "<br>\n" +
                    "  <input type=\"submit\" />\n" +
                    "</form>\n");
                    
@@ -491,7 +510,9 @@ public class SemanticSearch extends GenericResource {
                 
                 try {
 
-                    sbf.append("<br><br><h2>Resultados de la búsqueda</h2>");
+                    System.out.println(">>>" + request.getParameter(createId("showInfo")));
+                    sbf.append("<br><br><h2>Resultados de la búsqueda</h2>\n");
+                    //if (request.getParameter(createId("showInfo")).equals("YES")) {
                     if (!dbName.equals("")) {
 
                         String dbPediaQuery =
@@ -542,7 +563,7 @@ public class SemanticSearch extends GenericResource {
                                    "</table><br><hr><br>");
 
 
-                        sbf.append("<script type=\"text/javascript\">\n" +
+                       /* sbf.append("<script type=\"text/javascript\">\n" +
                         "function load() {\n" +
                         "if (GBrowserIsCompatible()) {" +
                         "var map = new GMap2(document.getElementById('" + createId("map") + "'));" +
@@ -566,9 +587,10 @@ public class SemanticSearch extends GenericResource {
       "}"+
    " }" +
                                 " load();"+
-"</script>");
+"</script>");*/
 
                     }
+                
                     
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
                     Query squery = QueryFactory.create(sparqlQuery);
@@ -683,21 +705,21 @@ public class SemanticSearch extends GenericResource {
         SortedSet objOptions = new TreeSet();
         SortedSet proOptions = new TreeSet();
         String word = request.getParameter("word");
-        String lang = request.getParameter("lang");
+        String lan = request.getParameter("lang");
         boolean props = Boolean.parseBoolean(request.getParameter("props"));
         String tempcDn = "";
         boolean lPar = false;
         boolean rPar = false;
         int idCounter = 0;
-        Lexicon lex = new Lexicon(lang);
+        //Lexicon lex = new Lexicon(lan);
         StringBuffer sbf = new StringBuffer();
 
         response.setContentType("text/html");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
-        if (lang == null || lang.equals("")) {
-            lang = "es";
+        if (lan == null || lan.equals("")) {
+            lan = "es";
         }
         if (word.indexOf("(") != -1) {
             lPar = true;
@@ -717,7 +739,7 @@ public class SemanticSearch extends GenericResource {
 
             while (cit.hasNext()) {
                 SemanticClass tempc = cit.next();
-                tempcDn = tempc.getDisplayName(lang);
+                tempcDn = tempc.getDisplayName(lan);
 
                 if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                     objOptions.add(tempcDn);
@@ -726,7 +748,7 @@ public class SemanticSearch extends GenericResource {
                 Iterator<SemanticProperty> sit = tempc.listProperties();
                 while (sit.hasNext()) {
                     SemanticProperty tempp = sit.next();
-                    tempcDn = tempp.getDisplayName(lang);
+                    tempcDn = tempp.getDisplayName(lan);
 
                     if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                         proOptions.add(tempcDn);
@@ -793,7 +815,7 @@ public class SemanticSearch extends GenericResource {
                             "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
                             "onmousedown=\"setSelection(" + idCounter + ", 'con ');pdisplayed=false;dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML='';" +
                             "dojo.byId('" + createId("naturalQuery") + "').focus();displayed=false;\">" + (lPar ? "(" : "") +
-                            "<font color=\"red\">" + t.getDisplayName(lang) + "</font>" +
+                            "<font color=\"red\">" + t.getDisplayName(lan) + "</font>" +
                             (lPar ? ")" : "") + "</li>");
                     idCounter++;
                 }
@@ -811,7 +833,7 @@ public class SemanticSearch extends GenericResource {
                                 "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
                                 "onmousedown=\"setSelection(" + idCounter + ", 'con ');pdisplayed=false;dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML='';" +
                                 "dojo.byId('" + createId("naturalQuery") + "').focus();displayed=false;\">" + (lPar ? "(" : "") +
-                                "<font color=\"red\">" + t.getDisplayName(lang) + "</font>" +
+                                "<font color=\"red\">" + t.getDisplayName(lan) + "</font>" +
                                 (lPar ? ")" : "") + "</li>");
                         idCounter++;
                     }
