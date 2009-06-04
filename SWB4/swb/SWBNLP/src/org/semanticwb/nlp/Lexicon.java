@@ -4,9 +4,24 @@
  */
 package org.semanticwb.nlp;
 
+import java.io.IOException;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.Hits;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.FuzzyQuery;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.store.RAMDirectory;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
@@ -14,57 +29,132 @@ import org.semanticwb.platform.SemanticProperty;
 /**
  * @author hasdai
  * A lexicon is a list of tagged words. In this case, word labels are the
- * display names (in the given language) for Semantic Classes and Semantic
+ * display names (in a specific language) for Semantic Classes and Semantic
  * Properties. For the analysis purpose, Class names and Propery names are
- * stored in separated sets.
+ * stored in separated Directories.
  */
 public class Lexicon {
-    //TODO: Poner el léxico en un árbol
-
-    private ArrayList<SemanticProperty> pLexic;
-    private ArrayList<SemanticClass> oLexic;
+    private Analyzer luceneAnalyzer = new StandardAnalyzer();
+    private RAMDirectory objDir = null;
+    private RAMDirectory propDir = null;
     private String language = "es";
     private List prefixes = new ArrayList();
     private List namespaces = new ArrayList();
     private String prefixString = "";
+    boolean langChanged = false;
 
     /**
      * Creates a new Lexicon given the user's language. This method traverses the
      * SemanticVocabulary and retrieves the displayName of all Semantic Classes and
-     * Semantic Properties, then adds each of the names to the corresponding list.
+     * Semantic Properties, then adds each of the names to the corresponding Lucene Directory.
      * @param lang language for the new Lexicon.
      */
-    public Lexicon(String lang) {
-        pLexic = new ArrayList<SemanticProperty>();
-        oLexic = new ArrayList<SemanticClass>();
+    public Lexicon(String lang) throws CorruptIndexException, LockObtainFailedException, IOException {
         language = lang;
-        getVocabularyPrefixes();
 
-        //Create a new word dictionary instance
-        Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
+        //Create in-memory directories
+        objDir = new RAMDirectory();
+        propDir = new RAMDirectory();        
 
         //Traverse the ontology model to fill the dictionary
+        Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
         while (its.hasNext()) {
             SemanticClass sc = its.next();
             addWord(sc);
-            Iterator<SemanticProperty> ip = sc.listProperties();
 
+            //Add class prefix to the prefixes string
+            if (!prefixes.contains(sc.getPrefix())) {
+                prefixes.add(sc.getPrefix());
+            }
+
+            //Add namespace class to namespaces string
+            if (!namespaces.contains(sc.getOntClass().getNameSpace())) {
+                namespaces.add(sc.getOntClass().getNameSpace());
+            }
+
+            Iterator<SemanticProperty> ip = sc.listProperties();
             while (ip.hasNext()) {
                 SemanticProperty sp = ip.next();
                 addWord(sp);
+
+                //Add property prefix to prefixes string
+                if (!prefixes.contains(sp.getPrefix())) {
+                    prefixes.add(sp.getPrefix());
+                }
+
+                //Add property namespace to namespaces string
+                if (!namespaces.contains(sp.getRDFProperty().getNameSpace())) {
+                    namespaces.add(sp.getRDFProperty().getNameSpace());
+                }
             }
         }
+        
+        //Build prefix string for SparQL queries
+        prefixString = prefixString + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
+        for (int i = 0; i < prefixes.size(); i++) {
+            prefixString = prefixString + "PREFIX " + prefixes.get(i) + ": " + "<" + namespaces.get(i) + ">\n";
+        }
+
+        //Optimize directories
+        IndexWriter wr = new IndexWriter(objDir, luceneAnalyzer);
+        wr.optimize();
+        wr.close();
+        wr = new IndexWriter(propDir, luceneAnalyzer);
+        wr.optimize();
+        wr.close();
     }
 
-    public void addWord(SemanticClass o) {
-        if (!entryExist(o, true)) {
-            oLexic.add(o);
+    /**
+     * Adds a document with the information of a SemanticClass to the search index.
+     * @param o SemanticClass to extract information from.
+     * @throws org.apache.lucene.index.CorruptIndexException
+     * @throws java.io.IOException
+     */
+    public void addWord(SemanticClass o) throws CorruptIndexException, IOException {
+        if (search4Object(o.getDisplayName(language), objDir) == null) {
+            //Create in-memory index writer
+            IndexWriter objWriter = new IndexWriter(objDir, luceneAnalyzer);
+
+            //Create lucene document with SemanticClass info.
+            Document doc = createDocument("OBJ", o.getDisplayName(language), o.getPrefix(), o.getDisplayName(language).toLowerCase(), o.getName() , o.getClassId(), "");
+
+            //Write document to index
+            objWriter.addDocument(doc);
+            objWriter.close();
         }
     }
 
-    public void addWord(SemanticProperty p) {
-        if (!entryExist(p, false)) {
-            pLexic.add(p);
+    /**
+     * Adds a document with the information of a SemanticProperty to the search index.
+     * @param p SemanticProperty to extract information from.
+     * @throws org.apache.lucene.index.CorruptIndexException
+     * @throws java.io.IOException
+     */
+    public void addWord(SemanticProperty p) throws CorruptIndexException, IOException {
+        if (search4Object(p.getDisplayName(language), propDir) == null) {
+            //Create in-memory index writers
+            IndexWriter propWriter = new IndexWriter(propDir, luceneAnalyzer, true);
+
+            //If p is an ObjectProperty
+            if (p.isObjectProperty()) {
+                //Get name of property range class
+                StringBuffer bf = new StringBuffer();
+                bf.append(p.getRangeClass());
+
+                //Attempt to get range class
+                SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
+                if (rg != null) {
+                    //Create lucene document for the Semantic Property
+                    Document doc = createDocument("PRO", p.getDisplayName(language), p.getPrefix(), p.getName(), p.getName().toLowerCase(), p.getPropId(), rg.getClassId());
+                    propWriter.addDocument(doc);
+                }
+            } else {
+                //Create lucene document for the Semantic Property
+                Document doc = createDocument("PRO", p.getDisplayName(language), p.getPrefix(), p.getName(), p.getName().toLowerCase(), p.getPropId(), "");
+                propWriter.addDocument(doc);
+            }
+            propWriter.close();
         }
     }
 
@@ -76,42 +166,6 @@ public class Lexicon {
     }
 
     /**
-     * Gets the prefixes from the SemanticVocabulary of the lexicon, adding
-     * rdf and rdfs default prefixes.
-     */
-    private void getVocabularyPrefixes() {
-        Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
-        while (its.hasNext()) {
-            SemanticClass sc = its.next();
-
-            if (!prefixes.contains(sc.getPrefix())) {
-                prefixes.add(sc.getPrefix());
-            }
-            if (!namespaces.contains(sc.getOntClass().getNameSpace())) {
-                namespaces.add(sc.getOntClass().getNameSpace());
-            }
-
-            Iterator<org.semanticwb.platform.SemanticProperty> ip = sc.listProperties();
-            while (ip.hasNext()) {
-                SemanticProperty prop = ip.next();
-
-                if (!prefixes.contains(prop.getPrefix())) {
-                    prefixes.add(prop.getPrefix());
-                }
-                if (!namespaces.contains(prop.getRDFProperty().getNameSpace())) {
-                    namespaces.add(prop.getRDFProperty().getNameSpace());
-                }
-            }
-        }
-
-        prefixString = prefixString + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
-        for (int i = 0; i < prefixes.size(); i++) {
-            prefixString = prefixString + "PREFIX " + prefixes.get(i) + ": " + "<" + namespaces.get(i) + ">\n";
-        }
-    }
-
-    /**
      * Gets the prefixes string of the Lexicon.
      */
     public String getPrefixString() {
@@ -120,151 +174,145 @@ public class Lexicon {
 
     /**
      * Gets the tag for the specified word label. It searches in both, classes and
-     * properties list in order to find a tag.
+     * properties directory in order to find a tag.
      * @param w label of word to get tag for.
      * @return WordTag object with the tag and type for the word label.
      */
-    public WordTag getWordTag(String label) {
-        boolean found = false;
-        int index = 0;
+    public WordTag getWordTag(String label) throws CorruptIndexException, IOException {
+        Document doc = search4Object(label, propDir);
 
-        for (int i = 0; i < pLexic.size() && !found; i++) {
-            if (pLexic.get(i).getDisplayName(language).toUpperCase().compareTo(label.toUpperCase()) == 0) {
-                found = true;
-                index = i;
-            }
+        if (doc != null) {
+            return new WordTag(doc.get("tag"), doc.get("prefix") + ":" + doc.get("name"), doc.get("name"), doc.get("id"), doc.get("rangeName"));
         }
-
-        if (found) {
-            SemanticProperty sp = pLexic.get(index);
-            String rgs = "";
-
-            if (sp.isObjectProperty()) {
-                StringBuffer bf = new StringBuffer();
-                bf.append(sp.getRangeClass());
-
-                SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
-                if (rg != null) {
-                    rgs = rg.getClassId();
-                }
-            }
-            return new WordTag("PRO",
-                    pLexic.get(index).getPrefix() + ":" + pLexic.get(index).getName(),
-                    pLexic.get(index).getName(),
-                    pLexic.get(index).getPropId(),
-                    rgs);
-        }
-
-        for (int i = 0; i < oLexic.size(); i++) {
-            if (oLexic.get(i).getDisplayName(language).toUpperCase().compareTo(label.toUpperCase()) == 0) {
-                return new WordTag("OBJ",
-                        oLexic.get(i).getPrefix() + ":" + oLexic.get(i).getName(),
-                        oLexic.get(i).getName(),
-                        oLexic.get(i).getClassId(), "");
-            }
+        
+        doc = search4Object(label, objDir);
+        if (doc != null) {
+            return new WordTag(doc.get("tag"), doc.get("prefix") + ":" + doc.get("name"), doc.get("name"), doc.get("id"), doc.get("rangeName"));
         }
         return new WordTag("VAR", "", "", "", "");
     }
 
     /**
      * Gets the tag for the specified label (name of a property). It searches
-     * only in the properties list.
+     * only in the properties directory.
      * @param label name of the property to get tag for.
      * @return WordTag object with the tag and type for the given property name.
      */
-    public WordTag getPropWordTag(String label) {
-        boolean found = false;
-        int index = 0;
+    public WordTag getPropWordTag(String label) throws CorruptIndexException, IOException {
+        Document doc = search4Object(label, propDir);
 
-        for (int i = 0; i < pLexic.size() && !found; i++) {
-            if (pLexic.get(i).getDisplayName(language).toUpperCase().compareTo(label.toUpperCase()) == 0) {
-                found = true;
-                index = i;
-            }
-        }
-
-        if (found) {
-            SemanticProperty sp = pLexic.get(index);
-            String rgs = "";
-
-            if (sp.isObjectProperty()) {
-                StringBuffer bf = new StringBuffer();
-                bf.append(sp.getRangeClass());
-
-                SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
-                if (rg != null) {
-                    rgs = rg.getClassId();
-                }
-            }
-            return new WordTag("PRO",
-                    pLexic.get(index).getPrefix() + ":" + pLexic.get(index).getName(),
-                    pLexic.get(index).getName(),
-                    pLexic.get(index).getPropId(),
-                    rgs);
+        if (doc != null) {
+            return new WordTag(doc.get("tag"), doc.get("prefix") + ":" + doc.get("name"), doc.get("name"), doc.get("id"), doc.get("rangeName"));
         }
         return new WordTag("VAR", "", "", "", "");
     }
 
     /**
      * Gets the tag for the specified label (name of a class). It searches
-     * only in the classes list.
+     * only in the classes directory.
      * @param label name of the class to get tag for.
      * @return WordTag object with the tag and type for the given class name.
      */
-    public WordTag getObjWordTag(String label) {
-        for (int i = 0; i < oLexic.size(); i++) {
-            if (oLexic.get(i).getDisplayName(language).toUpperCase().compareTo(label.toUpperCase()) == 0) {
-                return new WordTag("OBJ",
-                        oLexic.get(i).getPrefix() + ":" + oLexic.get(i).getName(),
-                        oLexic.get(i).getName(),
-                        oLexic.get(i).getClassId(), "");
-            }
+    public WordTag getObjWordTag(String label) throws CorruptIndexException, java.io.IOException {
+
+        Document doc = search4Object(label, objDir);
+
+        if (doc != null) {
+            return new WordTag(doc.get("tag"), doc.get("prefix") + ":" + doc.get("name"), doc.get("name"), doc.get("id"), doc.get("rangeName"));
         }
         return new WordTag("VAR", "", "", "", "");
     }
 
     /**
-     * Verifies if a word already exists in the Lexicon.
-     * @param entry word to search for.
-     * @return true if word is in the Lexicon, false otherwise.
+     * Creates a lucene document for indexing lexicon entries.
+     * @param objTag The tag for the indexed SemanticObject (class or property)
+     * @param objDisplayName Display name of the SemanticObject
+     * @param objName RDF Name of the SemanticObject (for prefix extraction)
+     * @param objId ID of the SemanticObject.
+     * @param rangeObjName The name of the related SemanticClass (range Class)
+     * if the current element is an ObjectProperty.
+     * @param isObjectProp Wheter the document should include the range class.
+     * @return 
      */
-    public boolean entryExist(Object entry, boolean isClass) {
-        //TODO: Arreglar para hacer la búsqueda en un árbol
-        boolean found = false;
+    private Document createDocument (String objTag, String objDisplayName, String objPrefix, String objDisplayNameLower, String objName, String objId, String rangeObjName) {
+        Document doc = new Document();
+        doc.add(new Field("tag", objTag, Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("prefix", objPrefix, Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("displayName", objDisplayName, Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("displayNameLower", objDisplayNameLower, Field.Store.YES, Field.Index.UN_TOKENIZED));
+        doc.add(new Field("name", objName, Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("id", objId, Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("rangeName", rangeObjName, Field.Store.YES, Field.Index.NO));
 
-        if (isClass) {
-            SemanticClass s = (SemanticClass) entry;
-            for (int i = 0; i < oLexic.size() && !found; i++) {
-                if (oLexic.get(i).getClassId().compareTo(s.getClassId()) == 0) {
-                    found = true;
-                }
-            }
+        return doc;
+    }
+
+    /**
+     * Search for a SemanticObject's displayName in the indexed vocabulary.
+     * @param keyWord lowercase name of the requested SemanticObject.
+     * @param dir RAMDirectory for searching.
+     * @return Lucene document for the found term.
+     * @throws org.apache.lucene.index.CorruptIndexException
+     * @throws java.io.IOException
+     */
+    public Document search4Object (String keyWord, RAMDirectory dir) throws CorruptIndexException, IOException {        
+        if (dir.list().length == 0) return null;
+
+        //Create a new index searcher
+        IndexSearcher searcher = new IndexSearcher(dir);
+        
+        //Create a term for a term query (search for keyWord in displayNameLower field)
+        Term t = new Term("displayNameLower", keyWord.toLowerCase());
+
+        //Build term query
+        Query query = new TermQuery(t);
+
+        //Get search results
+        Hits hits = searcher.search(query);
+
+        if (hits.length() == 0) { searcher.close(); return null; }
+
+        //Return first search result document
+        Document doc = hits.doc(0);
+        searcher.close();
+        return doc;
+    }
+
+    /**
+     * Gets a list of displayNames similar to the provided label.
+     * @param label Word to get suggestions to.
+     * @param forClasses Wheter to search for SemanticClass or SemanticProperty names.
+     * @return List of names similar to label.
+     * @throws org.apache.lucene.index.CorruptIndexException
+     * @throws java.io.IOException
+     */
+    public ArrayList<String> suggestDisplayName (String label, boolean forClasses) throws CorruptIndexException, IOException {
+        //Create a new index searcher
+        IndexSearcher searcher = null;
+
+        if (forClasses) {
+            searcher = new IndexSearcher(objDir);
         } else {
-            SemanticProperty s = (SemanticProperty) entry;
-            for (int i = 0; i < pLexic.size() && !found; i++) {
-                if (pLexic.get(i).getPropId().compareTo(s.getPropId()) == 0) {
-                    found = true;
-                }
-            }
+            searcher = new IndexSearcher(propDir);
         }
-        return found;
-    }
 
-    /**
-     * Gets an iterator to the list of words for the classes in the
-     * SemanticVocabulary.
-     * @return Iterator to Class words.
-     */
-    public Iterator<SemanticClass> listObjEntries() {
-        return oLexic.iterator();
-    }
+        //Create term for a fuzzy query (search for similar keyword in displayNameLower field)
+        Term t = new Term("displayNameLower", label);
 
-    /**
-     * Gets an iterator to the list of words for the properties in the
-     * SemanticVocabulary.
-     * @return Iterator to Property words.
-     */
-    public Iterator<SemanticProperty> listPropEntries() {
-        return pLexic.iterator();
+        //Build fuzzy query with minimumSimilarity = 0.5f
+        Query query = new FuzzyQuery(t);
+
+        //Get search results
+        Hits hits = searcher.search(query);
+
+        if (hits.length() == 0) { searcher.close(); return null; }
+
+        //Put search results into the return list
+        ArrayList<String> res = new ArrayList<String>();
+        for (int i = 0; i < hits.length(); i++) {
+            Document doc = hits.doc(i);
+            res.add(doc.get("displayName"));
+        }
+        return res;
     }
 }
