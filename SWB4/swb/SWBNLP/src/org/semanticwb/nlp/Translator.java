@@ -4,11 +4,13 @@
  */
 package org.semanticwb.nlp;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
+import org.apache.lucene.index.CorruptIndexException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
@@ -44,7 +46,7 @@ public class Translator {
      * @param sent Rescticted-Natural Language sentence for the query.
      * @return SparQL query sentence.
      */
-    public String translateSentence(String sent) {
+    public String translateSentence(String sent) throws CorruptIndexException, IOException {
         CommonTree sTree = null;
         errCode = 0;
         input = new ANTLRStringStream(sent);
@@ -84,7 +86,7 @@ public class Translator {
         return errCode;
     }
 
-    private String getSparqlQuery(CommonTree root, boolean isCompound) {
+    private String getSparqlQuery(CommonTree root, boolean isCompound) throws CorruptIndexException, IOException {
         String res = "";
 
         if (root.getText().equals("SELECT")) {
@@ -93,7 +95,7 @@ public class Translator {
         return res;
     }
 
-    private String ProcessSelect(CommonTree root, boolean isCompound) {
+    private String ProcessSelect(CommonTree root, boolean isCompound) throws CorruptIndexException, IOException {
         String limitoff = "";
         String order = "";
         String res = "";
@@ -124,7 +126,7 @@ public class Translator {
         return res + "}" + order + limitoff;
     }
 
-    private String ProcessNode(CommonTree root, boolean isCompound) {
+    private String ProcessNode(CommonTree root, boolean isCompound) throws CorruptIndexException, IOException {
         String res = "";
 
         Iterator<CommonTree> cit;
@@ -229,7 +231,7 @@ public class Translator {
         }
     }
 
-    private String ProcessPrede(CommonTree root, String parent) {
+    private String ProcessPrede(CommonTree root, String parent) throws IOException {
         String res = "";
         String props = "";
         List<CommonTree> ch = root.getChildren();
@@ -248,7 +250,7 @@ public class Translator {
         return res;
     }
 
-    private String ProcessPrecon(CommonTree root, String parent) {
+    private String ProcessPrecon(CommonTree root, String parent) throws IOException {
         String res = "";
         List<CommonTree> ch = root.getChildren();
         Iterator<CommonTree> cit = ch.iterator();
@@ -298,7 +300,7 @@ public class Translator {
         return res;
     }
 
-    private String assertProperty(String parent, String pName) {
+    private String assertProperty(String parent, String pName) throws CorruptIndexException, IOException {
         String res = "";
         String name = lex.getObjWordTag(parent).getType().replace(":", "_");
         //System.out.println("--" + name + ", " + pName);
@@ -314,6 +316,7 @@ public class Translator {
                 sp = sit.next();
                 //System.out.println("  " + sp.getDisplayName(lex.getLanguage()));
                 if (sp.getDisplayName(lex.getLanguage()).toUpperCase().equals(pName.toUpperCase())) {
+                    System.out.println("Comparando " + lex.getLanguage().toUpperCase() + " con " + pName.toUpperCase());
                     res = res + sp.getPrefix() + ":" + sp.getName();
                     found = true;
                 }
