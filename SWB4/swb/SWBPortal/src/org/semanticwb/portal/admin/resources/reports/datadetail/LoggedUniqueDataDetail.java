@@ -26,14 +26,14 @@ public class LoggedUniqueDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
-    protected List doDataList(String site, String rfilter, int type, int year, String userLanguage) throws IncompleteFilterException {
+    protected List doDataList(String repository, String rfilter, int type, int year, String userLanguage) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();
 
-        UserRepository ur=SWBContext.getUserRepository(rfilter);
+        UserRepository ur=SWBContext.getUserRepository(repository);
         labels.put(ur.getId(), ur.getDisplayTitle(userLanguage));
 
-        resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, year, labels);
+        resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(repository, rfilter, type, year, labels);
         return resumeRecHits;
     }
     
@@ -41,7 +41,7 @@ public class LoggedUniqueDataDetail extends SWBDataDetail{
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();
 
-        UserRepository ur=SWBContext.getUserRepository(rfilter);
+        UserRepository ur=SWBContext.getUserRepository(repository);
         labels.put(ur.getId(), ur.getDisplayTitle(userLanguage));
 
         resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(repository, rfilter, type, year, month, day, labels);
@@ -52,7 +52,7 @@ public class LoggedUniqueDataDetail extends SWBDataDetail{
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();
 
-        UserRepository ur=SWBContext.getUserRepository(rfilter);
+        UserRepository ur=SWBContext.getUserRepository(repository);
         labels.put(ur.getId(), ur.getDisplayTitle(userLanguage));
 
         resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(repository, rfilter, type, yearI, monthI, dayI, yearF, monthF, dayF, labels);
