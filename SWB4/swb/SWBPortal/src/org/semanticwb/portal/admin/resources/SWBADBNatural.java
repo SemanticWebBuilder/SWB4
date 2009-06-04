@@ -9,8 +9,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.nlp.Lexicon;
-import org.semanticwb.nlp.tTranslator;
+import org.semanticwb.nlp.translation.SWBSparqlTranslator;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -32,6 +31,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
+import org.semantiwb.nlp.Lexicon;
 
 /**
  *
@@ -40,7 +40,7 @@ import org.semanticwb.platform.SemanticProperty;
 public class SWBADBNatural extends GenericResource {
     private Logger log = SWBUtils.getLogger(SWBAListRelatedObjects.class);
 
-    private tTranslator tr;
+    private SWBSparqlTranslator tr;
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -477,7 +477,7 @@ public class SWBADBNatural extends GenericResource {
         }
 
         Lexicon dict = new Lexicon(request.getParameter("lang"));
-        tr = new tTranslator(dict);
+        tr = new SWBSparqlTranslator(dict);
         String queryString = dict.getPrefixString() + "\n" + tr.translateSentence(query);
 
         response.setRenderParameter("errCode", Integer.toString(tr.getErrCode()));
