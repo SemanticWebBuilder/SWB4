@@ -6,8 +6,10 @@
 package org.semanticwb.nlp.analysis;
 
 /**
- *
- * @author hasdai
+ * An antlr natural language SparQl query parser.
+ * Un analizador de consultas SparQl en lenguaje natural generado por antlr.
+ * 
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 // $ANTLR 3.1.2 /home/hasdai/Documentos/ComplexParser.g 2009-04-02 12:24:13
 
