@@ -464,7 +464,7 @@ public class SemanticSearch extends GenericResource {
         dbNames.put("Atoyac","");
         dbNames.put("Córdoba","Córdoba,_Veracruz");
         dbNames.put("Las minas","");
-        
+
         //Add language parameter to the action url string
         aUrl.setAction("SEARCH");
         aUrl.setParameter("lang", lang);
@@ -479,7 +479,7 @@ public class SemanticSearch extends GenericResource {
                       paramRequest.getLocaleString("msgShowInfo") + "<br>\n" +
                    "  <input type=\"submit\" />\n" +
                    "</form>\n");
-                   
+
 
         if (errCount != null) {
             if (Integer.parseInt(errCount) == 0) {
@@ -507,7 +507,7 @@ public class SemanticSearch extends GenericResource {
                     if (dbNames.containsKey(mname.replace("\"", ""))) {
                         dbName = dbNames.get(mname.replace("\"",""));
                     }
-                
+
                 try {
 
                     System.out.println(">>>" + request.getParameter(createId("showInfo")));
@@ -590,14 +590,14 @@ public class SemanticSearch extends GenericResource {
 "</script>");*/
 
                     }
-                
-                    
+
+
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
                     Query squery = QueryFactory.create(sparqlQuery);
 //                    System.out.println("------------------------------");
 //                    System.out.println(sparqlQuery);
 //                    System.out.println("------------------------------");
-                    
+
                     squery.serialize();
                     QueryExecution qexec = QueryExecutionFactory.create(squery, model);
                     long time = System.currentTimeMillis();
@@ -638,7 +638,7 @@ public class SemanticSearch extends GenericResource {
                                     sbf.append("<td >");
                                     if (x!=null) {
                                         if (x.isLiteral()) {
-                                            
+
                                             sbf.append(x.asNode().getLiteral().getLexicalForm());
                                         } else {
                                             //System.out.println(">obteniendo objeto semántico");
