@@ -28,10 +28,11 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.nlp.Lexicon;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
-import org.semantiwb.nlp.Lexicon;
+
 
 /**
  *
