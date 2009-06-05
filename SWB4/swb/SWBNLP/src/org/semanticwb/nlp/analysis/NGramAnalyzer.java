@@ -7,15 +7,16 @@ package org.semanticwb.nlp.analysis;
 
 import java.io.Reader;
 import org.apache.lucene.analysis.Analyzer;
-//import org.apache.lucene.analysis.ngram.NGramTokenizer;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.ngram.NGramTokenizer;
 
 /**
- * n-gram analyzer based on Lucene's NGramTokenizer. Extracted from
+ * N-gram analyzer class based on Lucene's NGramTokenizer. Extracted from
  * http://sujitpal.blogspot.com/2007/12/spelling-checker-with-lucene.html
- * @author imacg5
+ *
+ * @author Sujit Pal
  */
-public class NGramAnalyzer extends Analyzer{
+public class NGramAnalyzer extends Analyzer {
     private int minGram;
     private int maxGram;
 
@@ -25,7 +26,6 @@ public class NGramAnalyzer extends Analyzer{
     }
 
     public TokenStream tokenStream(String fieldName, Reader reader) {
-  //      return new NGramTokenizer(reader, minGram, maxGram);
-        return null;
+        return new NGramTokenizer(reader, minGram, maxGram);
     }
 }
