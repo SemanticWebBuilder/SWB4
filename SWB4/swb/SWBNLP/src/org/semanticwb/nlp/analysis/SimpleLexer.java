@@ -7,7 +7,7 @@ package org.semanticwb.nlp.analysis;
 
 /**
  *
- * @author hasdai
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 // $ANTLR 3.1.2 /home/hasdai/Documentos/sLexer.g 2009-04-01 09:39:38
 
