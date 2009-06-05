@@ -30,8 +30,17 @@ import org.semanticwb.platform.SemanticProperty;
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class Word {
+    /** Lexical form of the word.
+     * Forma léxica de la palabra.
+     */
     private String label=""; //DisplayName
+    /**Tag for the word as a {@link WordTag} object.
+     * Etiqueta de la palabra como un objeto {@link WordTag}.
+     */
     private WordTag wTag;   //POS-TAG
+    /**Word language.
+     * Idioma de la palabra.
+     */
     private String lang = "es";
 
     /**
