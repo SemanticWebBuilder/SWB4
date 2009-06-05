@@ -16,7 +16,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 /**
  *
- * @author imacg5
+ * @author haxdai
  */
 public class SWBSpellChecker {
     private SpellChecker checker;
