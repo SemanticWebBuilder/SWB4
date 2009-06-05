@@ -27,7 +27,7 @@ import org.semanticwb.platform.SemanticProperty;
  * are stored in a lexicon (dictionary) with an associated tag which marks its
  * function (or functions) in a sentence (verb, noun, determiner).
  *
- * @author hasdai
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class Word {
     private String label=""; //DisplayName
