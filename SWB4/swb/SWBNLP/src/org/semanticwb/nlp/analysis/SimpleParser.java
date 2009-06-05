@@ -7,7 +7,7 @@ package org.semanticwb.nlp.analysis;
 
 /**
  *
- * @author hasdai
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 // $ANTLR 3.1.2 /home/hasdai/Documentos/SimpleParser.g 2009-03-24 17:29:36
 
