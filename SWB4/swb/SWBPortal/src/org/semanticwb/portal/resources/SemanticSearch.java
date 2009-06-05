@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.nlp.Lexicon;
-import org.semanticwb.nlp.tTranslator;
+import org.semanticwb.nlp.translation.SWBSparqlTranslator;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -46,7 +46,7 @@ import org.semanticwb.portal.admin.resources.SWBAListRelatedObjects;
 public class SemanticSearch extends GenericResource {
 
     private Logger log = SWBUtils.getLogger(SWBAListRelatedObjects.class);
-    private tTranslator tr = null;
+    private SWBSparqlTranslator tr = null;
     private Lexicon lex = null;
     private boolean langChanged = false;
     private String lang = "x-x";
@@ -64,7 +64,7 @@ public class SemanticSearch extends GenericResource {
             }
 
             //Lexicon dict = new Lexicon(request.getParameter("lang"));
-            tr = new tTranslator(lex);
+            tr = new SWBSparqlTranslator(lex);
             String queryString = lex.getPrefixString() + "\n" + tr.translateSentence(query);
 
             response.setRenderParameter("errCode", Integer.toString(tr.getErrCode()));
