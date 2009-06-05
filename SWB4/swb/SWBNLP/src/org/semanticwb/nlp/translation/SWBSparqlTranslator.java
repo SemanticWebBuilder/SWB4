@@ -21,8 +21,16 @@ import org.semanticwb.platform.SemanticProperty;
 
 
 /**
+ * A natural language to SparQl query translator. Uses the Abstract Sintax Tree
+ * (AST) of a sentence obtained with the antlr generated parser ({@link ComplexParser})
+ * in order to build a structured SparQl query.
  *
- * @author hasdai
+ * Un traductor de consultas en lenguaje natural a consultas SparQl. Usa el árbol
+ * de sintaxis abstracta (AST) de una oración obtenido con el analizador generado
+ * por antlr ({@link ComplexParser}) para construir una consulta SparQl
+ * estructurada.
+ *
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class SWBSparqlTranslator {
 
@@ -36,19 +44,27 @@ public class SWBSparqlTranslator {
     private int errCode = 0;    //Last error code
 
     /**
-     * Creates a new instance of SWBSparqlTranslator with the given dictionary.
-     * @param dict Dictionary for the new translator.
+     * Creates a new instance of SWBSparqlTranslator with the given Lexicon.
+     * Crea un SWBSparqlTranslator con el diccionario especificado.
+     * @param dict Lexicon for the new translator. Diccionario para el traductor.
      */
     public SWBSparqlTranslator (Lexicon dict) {
         lex = dict;
     }
 
     /**
-     * Transforms a Natural Language query to a SparQL query. Using an ANTLR
-     * parser, this method builds an AST (Abstract Sintax Tree) and traverses it
-     * to generate the SparQL query.
+     * Transforms a Natural Language query to a SparQL query. Using an antlr 
+     * (http://www.antlr.org) parser, this method builds an AST
+     * (Abstract Sintax Tree) and traverses it to generate the SparQL query.
+     *
+     * Transforma una consulta en lenguaje natural a una consulta en SparQl.
+     * Usando un analizador generado por antlr (http://www.antlr.org), el método
+     * construye un AST (Árbol de sintáxis abstracta) y lo recorre para generar
+     * la consulta SparQl.
+     * 
      * @param sent Rescticted-Natural Language sentence for the query.
-     * @return SparQL query sentence.
+     * Oración en lenguaje natural restringido para la consulta.
+     * @return SparQL query sentence. Sentencia de la consulta SparQl.
      */
     public String translateSentence(String sent) throws CorruptIndexException, IOException {
         String res = "";
@@ -81,10 +97,13 @@ public class SWBSparqlTranslator {
 
     /**
      * Transforms a SELECT node in the AST to a SparQL query fragment.
-     * @param root SELECT node to transform.
+     * Transforma un nodo SELECT en el AST en un fragmento de la consulta SparQl.
+     * @param root SELECT node to transform. Nodo SELECT a transformar.
      * @param hasPrecon wheter or not the AST has a PRECON node.
+     * Indica si el AST contiene una preposición CON.
      * @param hasPrede wheter or not the AST has a PREDE node.
-     * @return String of a a SparQL query fragment.
+     * Indica si el AST contiene una preposición DE.
+     * @return String of a SparQL query fragment. Fragmento de consulta SparQl.
      */
     private String processSelectQuery(CommonTree root, boolean hasPrecon, boolean hasPrede) throws CorruptIndexException, IOException {
         String limitoff = "";
@@ -138,8 +157,11 @@ public class SWBSparqlTranslator {
 
     /**
      * Starts deep parsing of the AST.
+     * Inicia el análisis a profundidad del AST.
      * @param root root node to start parsing (usually child of SELECT node).
+     * Nodo raíz (usualmente hijo del nodo SELECT) para el análisis.
      * @return String with a SParQL query fragment.
+     * Cadena con un fragmento de consulta SparQl.
      */
     private String startParsing(CommonTree root) throws CorruptIndexException, IOException {
         String res = "";
@@ -157,6 +179,7 @@ public class SWBSparqlTranslator {
 
     /**
      * Transforms an AST node into a SparQL query fragment.
+     * Transforma un AST en un fragmento de la consulta SparQl.
      * @param root AST node to transform.
      * @param parent name of the parent object of the node (for searching properties).
      * @param parentLabel name of the parent object of the node (for ataching properties).
