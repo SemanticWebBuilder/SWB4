@@ -24,6 +24,7 @@ import org.semanticwb.model.Device;
 import org.semanticwb.model.Language;
 import org.semanticwb.portal.admin.resources.reports.beans.WBAFilterReportBean;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRDeviceAccessDataDetail;
+import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRLanguageAccessDataDetail;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRLoggedUserDataDetail;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRSessionDataDetail;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -186,7 +187,7 @@ public class WBADashboardReport extends GenericResource {
                     //filter.setIdaux(REPORT_IDAUX_GLOBAL);
                     filter.setType(REPORT_TYPE_LANGUAGE);
                     filter.setYearI(now.get(Calendar.YEAR));
-                    dataDetail = new JRGlobalAccessDataDetail(filter);
+                    dataDetail = new JRLanguageAccessDataDetail(filter);
                     ds = (JRBeanCollectionDataSource)dataDetail.orderJRReport();
                     if(ds!=null){
                         ilanguages = ds.getData().iterator();
@@ -271,7 +272,7 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<param name=\"ncdata\" value=\"1\">");
                     out.println("<param name=\"percent\" value=\"false\">");
                     out.println("<param name=\"allpercent\" value=\"false\">");
-                    out.println("<param name=\"zoom\" value=\"true\">");
+                    out.println("<param name=\"zoom\" value=\"false\">");
                     int x = 0;
                     while(globals.hasNext()) {
                         SWBRecHit g = globals.next();
@@ -280,7 +281,7 @@ public class WBADashboardReport extends GenericResource {
                         x++;
                     }
                     out.println("<param name=\"ndata\" value=\""+x+"\">");
-                    out.println("<param name=\"color0\" value=\"100,100,255\">");
+                    out.println("<param name=\"color0\" value=\"243,247,129\">");
                     out.println("<param name=\"barname0\" value=\"" + paramsRequest.getLocaleString("global") + "\">");
                     out.println("</APPLET>");
                     out.println("</div>");
@@ -295,7 +296,7 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<param name=\"ncdata\" value=\"1\">");
                     out.println("<param name=\"percent\" value=\"false\">");
                     out.println("<param name=\"allpercent\" value=\"false\">");
-                    out.println("<param name=\"zoom\" value=\"true\">");
+                    out.println("<param name=\"zoom\" value=\"false\">");
                     x = 0;
                     while(sessions.hasNext()) {
                         SWBRecHit s = sessions.next();
@@ -304,7 +305,7 @@ public class WBADashboardReport extends GenericResource {
                         x++;
                     }
                     out.println("<param name=\"ndata\" value=\""+x+"\">");
-                    out.println("<param name=\"color0\" value=\"150,150,255\">");
+                    out.println("<param name=\"color0\" value=\"190,129,247\">");
                     out.println("<param name=\"barname0\" value=\"" + paramsRequest.getLocaleString("session") + "\">");
                     out.println("</APPLET>");
                     out.println("</div>");
@@ -321,7 +322,7 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<param name=\"ncdata\" value=\"1\">");
                     out.println("<param name=\"percent\" value=\"false\">");
                     out.println("<param name=\"allpercent\" value=\"false\">");
-                    out.println("<param name=\"zoom\" value=\"true\">");
+                    out.println("<param name=\"zoom\" value=\"false\">");
                     x = 0;
                     while(logins.hasNext()) {
                         SWBRecHit l = logins.next();
@@ -330,7 +331,7 @@ public class WBADashboardReport extends GenericResource {
                         x++;
                     }
                     out.println("<param name=\"ndata\" value=\""+x+"\">");
-                    out.println("<param name=\"color0\" value=\"200,100,255\">");
+                    out.println("<param name=\"color0\" value=\"190,247,129\">");
                     out.println("<param name=\"barname0\" value=\"" + paramsRequest.getLocaleString("login") + "\">");
                     out.println("</APPLET>");
                     out.println("</div>");
@@ -346,7 +347,7 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<param name=\"ncdata\" value=\""+nc+"\">");
                     out.println("<param name=\"percent\" value=\"false\">");
                     out.println("<param name=\"allpercent\" value=\"false\">");
-                    out.println("<param name=\"zoom\" value=\"true\">");
+                    out.println("<param name=\"zoom\" value=\"false\">");
 
                     x=0;
                     Iterator<String> m = devices.keySet().iterator();
@@ -366,10 +367,26 @@ public class WBADashboardReport extends GenericResource {
                     Iterator<Device> id = SWBContext.getWebSite(websiteId).listDevices();
                     for(int i=0; id.hasNext(); i++) {
                         Device d = id.next();
-                        //out.println("<param name=\"color"+i+"\" value=\""+i+",100,255\">");
-                        out.println("<param name=\"color"+i+"\" value=\""+i+","+i+",255\">");
+                        //out.println("<param name=\"color"+i+"\" value=\""+i+","+i+",255\">");
                         out.println("<param name=\"barname"+i+"\" value=\""+d.getDisplayTitle(language)+"\">");
                     }
+                    out.println("<param name=\"color0\" value=\"247,129,129\">");
+                    out.println("<param name=\"color1\" value=\"247,190,129\">");
+                    out.println("<param name=\"color2\" value=\"243,247,129\">");
+                    out.println("<param name=\"color3\" value=\"190,247,129\">");
+                    out.println("<param name=\"color4\" value=\"129,247,129\">");
+                    out.println("<param name=\"color5\" value=\"129,247,190\">");
+                    out.println("<param name=\"color6\" value=\"129,247,243\">");
+                    out.println("<param name=\"color7\" value=\"129,190,247\">");
+                    out.println("<param name=\"color8\" value=\"129,129,247\">");
+                    out.println("<param name=\"color9\" value=\"190,129,247\">");
+                    out.println("<param name=\"color10\" value=\"247,129,243\">");
+                    out.println("<param name=\"color11\" value=\"247,129,190\">");
+                    out.println("<param name=\"color12\" value=\"153,0,255\">");
+                    out.println("<param name=\"color13\" value=\"255,0,255\">");
+                    out.println("<param name=\"color14\" value=\"255,102,0\">");
+                    out.println("<param name=\"color15\" value=\"153,102,0\">");
+                    out.println("<param name=\"color16\" value=\"0,102,0\">");
                     out.println("</APPLET>");
                     out.println("</div>");
                     out.println("</td>");
@@ -386,7 +403,7 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<param name=\"ncdata\" value=\""+nc+"\">");
                     out.println("<param name=\"percent\" value=\"false\">");
                     out.println("<param name=\"allpercent\" value=\"false\">");
-                    out.println("<param name=\"zoom\" value=\"true\">");
+                    out.println("<param name=\"zoom\" value=\"false\">");
 
                     x=0;
                     m = languages.keySet().iterator();
@@ -406,10 +423,22 @@ public class WBADashboardReport extends GenericResource {
                     Iterator<Language> il = SWBContext.getWebSite(websiteId).listLanguages();
                     for(int i=0; il.hasNext(); i++) {
                         Language l = il.next();
-                        //out.println("<param name=\"color"+i+"\" value=\""+i+",100,255\">");
-                        out.println("<param name=\"color"+i+"\" value=\""+i+","+i+",255\">");
+                        //char j = (char)((int)Math.random()*255);
+                        //out.println("<param name=\"color"+i+"\" value=\""+j+","+j+",255\">");
                         out.println("<param name=\"barname"+i+"\" value=\""+l.getDisplayTitle(language)+"\">");
                     }
+                    out.println("<param name=\"color0\" value=\"247,129,129\">");
+                    out.println("<param name=\"color1\" value=\"247,190,129\">");
+                    out.println("<param name=\"color2\" value=\"243,247,129\">");
+                    out.println("<param name=\"color3\" value=\"190,247,129\">");
+                    out.println("<param name=\"color4\" value=\"129,247,129\">");
+                    out.println("<param name=\"color5\" value=\"129,247,190\">");
+                    out.println("<param name=\"color6\" value=\"129,247,243\">");
+                    out.println("<param name=\"color7\" value=\"129,190,247\">");
+                    out.println("<param name=\"color8\" value=\"129,129,247\">");
+                    out.println("<param name=\"color9\" value=\"190,129,247\">");
+                    out.println("<param name=\"color10\" value=\"247,129,243\">");
+                    out.println("<param name=\"color11\" value=\"247,129,190\">");
                     out.println("</APPLET>");
                     out.println("</div>");
                     out.println("</td>");
