@@ -161,14 +161,14 @@ public class TematicIndexXSLConfig extends GenericAdmResource
             if(usrlanguage!=null){
                 father.setAttribute("hasfatherdescription","1");
                 Element fatherdescription = dom.createElement("fatherdescription");
-                fatherdescription.appendChild(dom.createTextNode(wp.getDescription(usrlanguage)));
+                fatherdescription.appendChild(dom.createTextNode(wp.getDisplayDescription(usrlanguage)));
                 father.appendChild(fatherdescription);
             }else{
                 Iterator <org.semanticwb.model.Language> itLang=wp.getWebSite().listLanguages();
                 while(itLang.hasNext())
                 {
                     org.semanticwb.model.Language lang=itLang.next();
-                    String descr =wp.getDescription(lang.getId());
+                    String descr =wp.getDisplayDescription(lang.getId());
                     father.setAttribute("hasfatherdescription","0");
                     Element fatherlanguage = dom.createElement("fatherlanguage");
                     fatherlanguage.appendChild(dom.createTextNode(lang.getId()));
@@ -202,14 +202,14 @@ public class TematicIndexXSLConfig extends GenericAdmResource
                     {
                         father.setAttribute("hassondescription","1");
                         Element fatherdescription = dom.createElement("sondescription");
-                        fatherdescription.appendChild(dom.createTextNode(hijo.getDescription(usrlanguage)));
+                        fatherdescription.appendChild(dom.createTextNode(hijo.getDisplayDescription(usrlanguage)));
                         father.appendChild(fatherdescription);
                     }else{
                         Iterator <org.semanticwb.model.Language> itLang=wp.getWebSite().listLanguages();
                         while(itLang.hasNext())
                         {
                             org.semanticwb.model.Language lang=itLang.next();
-                            String descr =wp.getDescription(lang.getId());
+                            String descr =wp.getDisplayDescription(lang.getId());
                             son.setAttribute("hassondescription","0");
                             Element sonlanguage = dom.createElement("sonlanguage");
                             sonlanguage.appendChild(dom.createTextNode(lang.getId()));
@@ -241,14 +241,14 @@ public class TematicIndexXSLConfig extends GenericAdmResource
                             {
                                 grandson.setAttribute("hasgrandsondescription","1");
                                 Element grandsondescription = dom.createElement("grandsondescription");
-                                grandsondescription.appendChild(dom.createTextNode(hijo.getDescription(usrlanguage)));
+                                grandsondescription.appendChild(dom.createTextNode(hijo.getDescription()));
                                 grandson.appendChild(grandsondescription);
                             }else{
                                 Iterator <org.semanticwb.model.Language> itLang=wp.getWebSite().listLanguages();
                                 while(itLang.hasNext())
                                 {
                                     org.semanticwb.model.Language lang=itLang.next();
-                                    String descr =wp.getDescription(lang.getId());
+                                    String descr =wp.getDisplayDescription(lang.getId());
                                     grandson.setAttribute("hasgrandsondescription","0");
                                     Element grandsonlanguage = dom.createElement("grandsonlanguage");
                                     grandsonlanguage.appendChild(dom.createTextNode(lang.getId()));
