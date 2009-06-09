@@ -29,7 +29,6 @@ public class CreateCommunity extends GenericResource
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-        System.out.println("Hiciste checkOut serch");
         WebPage currentWebPage = response.getTopic();
         WebSite site=currentWebPage.getWebSite();
         if(request.getParameter("swbtp")!=null && site.getWebPage(request.getParameter("swbtp"))!=null)
