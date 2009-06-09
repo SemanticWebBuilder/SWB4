@@ -293,7 +293,7 @@ public class WBMenuNivel extends GenericAdmResource
                 PrintWriter out = response.getWriter();
                 //response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
                 out.print(SWBUtils.XML.transformDom(tpl, dom));
-                out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
+                //out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
             }
         }
         catch(Exception e)
