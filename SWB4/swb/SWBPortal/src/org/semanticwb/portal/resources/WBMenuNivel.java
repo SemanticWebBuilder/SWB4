@@ -167,7 +167,7 @@ public class WBMenuNivel extends GenericAdmResource
             while(itehermanos.hasNext())
             {
                 WebPage tphermano=itehermanos.next();
-               //if(user.haveAccess(tphermano))
+               if(user.haveAccess(tphermano))
                 {
                     Element ehermano = dom.createElement("brother");
                     ehermano.setAttribute("id", tphermano.getId());
@@ -190,7 +190,7 @@ public class WBMenuNivel extends GenericAdmResource
                     while (hijos.hasNext())
                     {
                         WebPage hijo = hijos.next();
-                        //TODO VER 4:if(user.haveAccess(hijo))
+                        if(user.haveAccess(hijo))
                         {
                             Element ehijo = dom.createElement("child");
                             ehijo.setAttribute("id", hijo.getId());
@@ -230,7 +230,7 @@ public class WBMenuNivel extends GenericAdmResource
             while (hijos.hasNext())
             {
                 WebPage hijo = hijos.next();
-                //TODO VER 4:if(user.haveAccess(hijo))
+                if(user.haveAccess(hijo))
                 {
                     Element ehijo = dom.createElement("child");
                     ehijo.setAttribute("id", hijo.getId());
