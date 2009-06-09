@@ -551,10 +551,10 @@ public class SemanticSearch extends GenericResource {
                             RDFNode long_node = dbrb.get("long");
                             //RDFNode home_node = dbrb.get("page");
 
-                            System.out.println("Información obtenida");
+                            /*System.out.println("Información obtenida");
                             System.out.println("-->" + desc_node.asNode().getLiteral().getLexicalForm());
                             System.out.println("-->" + lat_node.asNode().getLiteral().getLexicalForm());
-                            System.out.println("-->" + long_node.asNode().getLiteral().getLexicalForm());
+                            System.out.println("-->" + long_node.asNode().getLiteral().getLexicalForm());*/
                             //System.out.println("-->" + home_node.asNode().getLiteral().getLexicalForm());
 
                     /*sbf.append("<script type=\"text/javascript\" " +
