@@ -142,6 +142,7 @@ public class TematicIndexXSLConfig extends GenericAdmResource
         try
         {
             String usrlanguage=paramRequest.getUser().getLanguage();
+            if(usrlanguage==null) usrlanguage="es";
             int ison = 0;
             int igrandson = 0;
 
