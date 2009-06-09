@@ -9,8 +9,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -18,18 +19,24 @@ import org.semanticwb.portal.api.SWBResourceException;
  *
  * @author victor.lorenzana
  */
-public class CreateComunityLink extends GenericResource{
+public class CreateComunityLink extends GenericAdmResource{
 
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        Resource base=paramRequest.getResourceBase();
         PrintWriter out=response.getWriter();
         WebPage currentWebPage=paramRequest.getTopic();
         if (currentWebPage.getParent() != null && currentWebPage.getParent().getParent() != null && currentWebPage.getParent().getParent().getParent() != null && currentWebPage.getParent().getParent().getParent().getId().equals(CreateCommunity.TEMAS_TOPIC_ID))
         {
+            String params="?modeswbcreatecommunity=true" +
+            "&swbtp="+ paramRequest.getTopic().getId();
+            if(base.getAttribute("selecttype")!=null) {
+                params+="&selecttype=" + base.getAttribute("selecttype");
+            }
             WebPage comunityContainer=WebPage.getWebPage(CommunityConfiguration.COMMUNITY_CONTAINER_ID, paramRequest.getTopic().getWebSite());
-            out.print("<a href=\""+comunityContainer.getUrl()+"?modeswbcreatecommunity=true&selecttype=t&swbtp="+ paramRequest.getTopic().getId() +"\" class=\"categoria\"><span class=\"listadocompleto\">Crear una comunidad</span></a>");
+            out.print("<a href=\""+comunityContainer.getUrl() + params +"\" class=\"categoria\"><span class=\"listadocompleto\">Crear una comunidad</span></a>");
         }
     }
 }
