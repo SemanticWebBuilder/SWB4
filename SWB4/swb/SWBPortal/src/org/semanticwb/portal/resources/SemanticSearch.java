@@ -24,6 +24,7 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -56,11 +57,16 @@ public class SemanticSearch extends GenericResource {
         String action = response.getAction();
         String query = request.getParameter(createId("naturalQuery"));
 
-
         if (action.equals("SEARCH")) {
             if (query == null || query.equals("")) {
                 response.setMode(SWBResourceURL.Mode_VIEW);
                 return;
+            }
+
+            if (request.getParameter(createId("showInfo")) != null) {
+                response.setRenderParameter(createId("showInfo"), request.getParameter(createId("showInfo")));
+            } else {
+                response.setRenderParameter(createId("showInfo"), "noshow");
             }
 
             //Lexicon dict = new Lexicon(request.getParameter("lang"));
@@ -71,6 +77,8 @@ public class SemanticSearch extends GenericResource {
             response.setRenderParameter("sparqlQuery", queryString);
             response.setRenderParameter(createId("naturalQuery"), query);
             response.setMode(SWBResourceURL.Mode_VIEW);
+            //response.setMode("SHOWRES");
+            
         } else {
             super.processAction(request, response);
         }
@@ -81,6 +89,8 @@ public class SemanticSearch extends GenericResource {
         String mode = paramRequest.getMode();
         if (mode.equals("SUGGEST")) {
             doSuggest(request, response, paramRequest);
+        } else if (mode.equals("SHOWRES")) {
+            doShowResults(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -105,7 +115,7 @@ public class SemanticSearch extends GenericResource {
         String checked = request.getParameter(createId("showInfo"));
         User user = paramRequest.getUser();
 
-        //Get user language if any and create lexicon acordingly
+        //Get user language if any and create lexicon and translator acordingly
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
@@ -122,6 +132,7 @@ public class SemanticSearch extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
+        
         if (query == null) {
             query = "";
         } else {
@@ -135,7 +146,7 @@ public class SemanticSearch extends GenericResource {
         rUrl.setMode("SUGGEST");
         rUrl.setCallMethod(rUrl.Call_DIRECT);
         //sbf.append("<script src=\"http://maps.google.com/maps?file=api&v=2&sensor=true&key=ABQIAAAAOJNnlv7XtimNAEXtmyrRcBTb-vLQlFZmc2N8bgWI8YDPp5FEVBSt-jSEUxX5Zuafs_gGbS--6HOwVw\" " +
-          //          " type=\"text/javascript\"></script>");
+        //          " type=\"text/javascript\"></script>");
         sbf.append("<script type=\"text/javascript\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>");
         sbf.append("<script type=\"text/javascript\">\n" +
                 "  dojo.require(\"dijit.form.Form\");\n" +
@@ -402,168 +413,173 @@ public class SemanticSearch extends GenericResource {
                 "  }\n\n");
 
         sbf.append("  function submitParams(url) {\n" +
-                   "    var loc = url+'&" + createId("naturalQuery") + "=' + encodeUrlAccents(dijit.byId('" + createId("naturalQuery") + "').value);" +
-                   "    var h_wnd = window.open(loc,'" + paramRequest.getLocaleString("sResults") + "','width=800,height=600,menubar=yes');\n" +
-                   "    dojo.byId('" + createId("natural") + "').target=h_wnd;" +
-                   "    dojo.byId('" + createId("natural") + "').submit();" +
-                   "  }\n\n" +
-                   "  function getHtml(url, tagid) {\n" +
-                   "    dojo.xhrGet({\n" +
-                   "    url: url,\n" +
-                   "    load: function(response)\n" +
-                   "    {\n" +
-                   "      var tag=dojo.byId(tagid);\n" +
-                   "      if(tag) {\n" +
-                   "        var pan=dijit.byId(tagid);\n" +
-                   "        if(pan && pan.attr) {\n" +
-                   "          pan.attr('content',response);\n" +
-                   "        } else {\n" +
-                   "          tag.innerHTML = response;\n" +
-                   "        }\n" +
-                   "      } else {\n" +
-                   "        alert(\"No existe ningún elemento con id \" + tagid);\n" +
-                   "      }\n" +
-                   "      return response;\n" +
-                   "    },\n" +
-                   "    error: function(response) {\n" +
-                   "      if(dojo.byId(tagid)) {\n" +
-                   "        dojo.byId(tagid).innerHTML = \"<p>Ocurrió un error con respuesta:<br />\" + response + \"</p>\";\n" +
-                   "      } else {\n" +
-                   "        alert(\"No existe ningún elemento con id \" + tagid);\n" +
-                   "      }\n" +
-                   "      return response;\n" +
-                   "    },\n" +
-                   "    handleAs: \"text\"\n" +
-                   "  });\n" +
-                   "}");
+                "    var loc = url+'&" + createId("naturalQuery") + "=' + encodeUrlAccents(dijit.byId('" + createId("naturalQuery") + "').value);" +
+                "    var h_wnd = window.open(loc,'" + paramRequest.getLocaleString("sResults") + "','width=800,height=600,menubar=yes');\n" +
+                "    dojo.byId('" + createId("natural") + "').target=h_wnd;" +
+                "    dojo.byId('" + createId("natural") + "').submit();" +
+                "  }\n\n" +
+                "  function getHtml(url, tagid) {\n" +
+                "    dojo.xhrGet({\n" +
+                "    url: url,\n" +
+                "    load: function(response)\n" +
+                "    {\n" +
+                "      var tag=dojo.byId(tagid);\n" +
+                "      if(tag) {\n" +
+                "        var pan=dijit.byId(tagid);\n" +
+                "        if(pan && pan.attr) {\n" +
+                "          pan.attr('content',response);\n" +
+                "        } else {\n" +
+                "          tag.innerHTML = response;\n" +
+                "        }\n" +
+                "      } else {\n" +
+                "        alert(\"No existe ningún elemento con id \" + tagid);\n" +
+                "      }\n" +
+                "      return response;\n" +
+                "    },\n" +
+                "    error: function(response) {\n" +
+                "      if(dojo.byId(tagid)) {\n" +
+                "        dojo.byId(tagid).innerHTML = \"<p>Ocurrió un error con respuesta:<br />\" + response + \"</p>\";\n" +
+                "      } else {\n" +
+                "        alert(\"No existe ningún elemento con id \" + tagid);\n" +
+                "      }\n" +
+                "      return response;\n" +
+                "    },\n" +
+                "    handleAs: \"text\"\n" +
+                "  });\n" +
+                "}");
         sbf.append("  function encodeUrlAccents (str) {\n" +
-                   "    var res = str.replace(\"ó\", \"%F3\");\n" +
-                   "    return res;" +
-                   "  }\n" +
-                   "</script>\n\n");
+                "    var res = str.replace(\"ó\", \"%F3\");\n" +
+                "    return res;" +
+                "  }\n" +
+                "</script>\n\n");
 
 
-        HashMap<String, String> dbNames = new HashMap <String, String>();
-        dbNames.put("Miguel Hidalgo","Miguel_Hidalgo,_D.F.");
-        dbNames.put("Tamaulipas","Tamaulipas");
-        dbNames.put("México, D.F.","México_city");
-        dbNames.put("Veracruz","Veracruz");
-        dbNames.put("Tamaulipas","Tamaulipas");
-        dbNames.put("Alvaro Obregón","Álvaro_Obregón,_D.F.");
-        dbNames.put("Xochimilco","Xochimilco");
-        dbNames.put("Tlalpan","Tlalpan");
-        dbNames.put("Altamira","Altamira,_Tamaulipas");
-        dbNames.put("Aldama","Aldama,_Tamaulipas");
-        dbNames.put("Abasolo","");
-        dbNames.put("Burgos","");
-        dbNames.put("Aguascalientes","Aguascalientes,_Aguascalientes");
-        dbNames.put("Asientos","Asientos,_Aguascalientes");
-        dbNames.put("Calvillo","Calvillo,_Aguascalientes");
-        dbNames.put("Cosío","Cosío,_Aguascalientes");
-        dbNames.put("Actopan","Actopan,_Veracruz");
-        dbNames.put("Atoyac","");
-        dbNames.put("Córdoba","Córdoba,_Veracruz");
-        dbNames.put("Las minas","");
+        HashMap<String, String> dbNames = new HashMap<String, String>();
+        dbNames.put("Miguel Hidalgo", "Miguel_Hidalgo,_D.F.");
+        dbNames.put("Tamaulipas", "Tamaulipas");
+        dbNames.put("México, D.F.", "México_city");
+        dbNames.put("Veracruz", "Veracruz");
+        dbNames.put("Tamaulipas", "Tamaulipas");
+        dbNames.put("Alvaro Obregón", "Álvaro_Obregón,_D.F.");
+        dbNames.put("Xochimilco", "Xochimilco");
+        dbNames.put("Tlalpan", "Tlalpan");
+        dbNames.put("Altamira", "Altamira,_Tamaulipas");
+        dbNames.put("Aldama", "Aldama,_Tamaulipas");
+        dbNames.put("Abasolo", "");
+        dbNames.put("Burgos", "");
+        dbNames.put("Aguascalientes", "Aguascalientes,_Aguascalientes");
+        dbNames.put("Asientos", "Asientos,_Aguascalientes");
+        dbNames.put("Calvillo", "Calvillo,_Aguascalientes");
+        dbNames.put("Cosío", "Cosío,_Aguascalientes");
+        dbNames.put("Actopan", "Actopan,_Veracruz");
+        dbNames.put("Atoyac", "");
+        dbNames.put("Córdoba", "Córdoba,_Veracruz");
+        dbNames.put("Las minas", "");
 
         //Add language parameter to the action url string
         aUrl.setAction("SEARCH");
         aUrl.setParameter("lang", lang);
 
         sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" " +
-                   "action=\"" + aUrl + "\" method=\"post\" >\n" +
-                   "  <textarea id=\"" + createId("naturalQuery") + "\" rows=1 cols=70 " +
-                      "name=\"" + createId("naturalQuery") + "\" >" + query + "</textarea>\n" +
-                   "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>\n" +
-                   "  <input type=\"checkbox\" name=\"" + createId("showInfo") + "\" " +
-                      "value=\"YES\" " + (checked.equals("YES")?"CHECKED":"") + ">" +
-                      paramRequest.getLocaleString("msgShowInfo") + "<br>\n" +
-                   "  <input type=\"submit\" />\n" +
-                   "</form>\n");
-
+                "action=\"" + aUrl + "\" >\n" +
+                "  <textarea id=\"" + createId("naturalQuery") + "\" rows=1 cols=70 " +
+                "name=\"" + createId("naturalQuery") + "\" >" + query + "</textarea>\n" +
+                "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>\n" +
+                "  <input type=\"checkbox\" name=\"" + createId("showInfo") + "\" " +
+                "value=\"show\">" +
+                paramRequest.getLocaleString("msgShowInfo") + "<br>\n" +
+                "  <input type=\"submit\" value=\"Buscar\">\n" +
+                "</form>\n");
 
         if (errCount != null) {
             if (Integer.parseInt(errCount) == 0) {
                 String patternStr = "\"[a-zA-Z]+\"";
                 String mname = "";
-                String dbName ="";
+                String dbName = "";
 
                 // Compile and use regular expression
-                    Pattern pattern = Pattern.compile(patternStr);
-                    Matcher matcher = pattern.matcher(sparqlQuery);
-                    boolean matchFound = matcher.find();
+                Pattern pattern = Pattern.compile(patternStr);
+                Matcher matcher = pattern.matcher(sparqlQuery);
+                boolean matchFound = matcher.find();
 
-                    if (matchFound) {
-                        // Get all groups for this match
-                        for (int i=0; i<=matcher.groupCount(); i++) {
-                            // Get the group's indices
-                            int groupStart = matcher.start(i);
-                            int groupEnd = matcher.end(i);
+                if (matchFound) {
+                    // Get all groups for this match
+                    for (int i = 0; i <= matcher.groupCount(); i++) {
+                        // Get the group's indices
+                        int groupStart = matcher.start(i);
+                        int groupEnd = matcher.end(i);
 
-                            // groupStr is equivalent to
-                            mname = sparqlQuery.subSequence(groupStart, groupEnd).toString();
-                        }
+                        // groupStr is equivalent to
+                        mname = sparqlQuery.subSequence(groupStart, groupEnd).toString();
                     }
+                }
 
-                    if (dbNames.containsKey(mname.replace("\"", ""))) {
-                        dbName = dbNames.get(mname.replace("\"",""));
-                    }
+                if (dbNames.containsKey(mname.replace("\"", ""))) {
+                    dbName = dbNames.get(mname.replace("\"", ""));
+                }
 
                 try {
 
-                    System.out.println(">>>" + request.getParameter(createId("showInfo")));
                     sbf.append("<br><br><h2>Resultados de la búsqueda</h2>\n");
-                    //if (request.getParameter(createId("showInfo")).equals("YES")) {
-                    if (!dbName.equals("")) {
+                    if (checked != null && checked.equals("show")) {
 
-                        String dbPediaQuery =
-                                          "PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>\n" +
-                                          "PREFIX dbprop: <http://dbpedia.org/property/>\n" +
-                                          "SELECT ?desc ?lat ?long\n" +
-                                          "WHERE {\n" +
-                                          "<http://dbpedia.org/resource/" + dbName + "> dbprop:abstract ?desc.\n" +
-                                          "FILTER (lang(?desc) = \"" + lang + "\").\n" +
-                                          "<http://dbpedia.org/resource/" + dbName + "> geo:lat ?lat.\n" +
-                                          "<http://dbpedia.org/resource/" + dbName + "> geo:long ?long\n" +
-                                          "}\n";
-                    //System.out.println("<<<<<" + dbPediaQuery);
-                    //Query dbpedia
-                    SemanticModel dbpModel = SWBPlatform.getSemanticMgr().getModel("DBPedia");
-                    QueryExecution dbQexec = dbpModel.sparQLQuery(dbPediaQuery);
+                        //sbf.append("<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=ABQIAAAAolpeBAG69pwV4I7Q2UbUGBSMG_cj-afGZZq-6fyhqNzQozVt8BSYRf8EN-EXKomSjxvWtyaBEL5wJw\" type=\"text/javascript\"></script>");
+                        System.out.println("Obteniendo información de la dbpedia");
+                        if (!dbName.equals("")) {
+                            String dbPediaQuery =
+                                    "PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>\n" +
+                                    "PREFIX dbprop: <http://dbpedia.org/property/>\n" +
+                                    "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n"+
+                                    "SELECT ?desc ?lat ?long ?page\n" +
+                                    "WHERE {\n" +
+                                    "<http://dbpedia.org/resource/" + dbName + "> dbprop:abstract ?desc.\n" +
+                                    "FILTER (lang(?desc) = \"" + lang + "\").\n" +
+                                    "<http://dbpedia.org/resource/" + dbName + "> geo:lat ?lat.\n" +
+                                    "<http://dbpedia.org/resource/" + dbName + "> geo:long ?long.\n" +
+                                    "<http://dbpedia.org/resource/" + dbName + "> foaf:page ?page\n" +
+                                    "}\n";
+                            System.out.println("<<<<<" + dbPediaQuery);
+                            //Query dbpedia
+                            SemanticModel dbpModel = SWBPlatform.getSemanticMgr().getModel("DBPedia");
+                            QueryExecution dbQexec = dbpModel.sparQLQuery(dbPediaQuery);
 
-                    //Get dbPedia INFO
-                    ResultSet dbrs = dbQexec.execSelect();
-                    QuerySolution dbrb = dbrs.nextSolution();
-                    RDFNode desc_node = dbrb.get("desc");
-                    RDFNode lat_node = dbrb.get("lat");
-                    RDFNode long_node = dbrb.get("long");
+                            //Get dbPedia INFO
+                            ResultSet dbrs = dbQexec.execSelect();
+                            QuerySolution dbrb = dbrs.nextSolution();
+                            RDFNode desc_node = dbrb.get("desc");
+                            RDFNode lat_node = dbrb.get("lat");
+                            RDFNode long_node = dbrb.get("long");
+                            //RDFNode home_node = dbrb.get("page");
 
-                    //System.out.println("-->" + desc_node.asNode().getLiteral().getLexicalForm());
-                    //System.out.println("-->" + lat_node.asNode().getLiteral().getLexicalForm());
-                    //System.out.println("-->" + long_node.asNode().getLiteral().getLexicalForm());
+                            System.out.println("Información obtenida");
+                            System.out.println("-->" + desc_node.asNode().getLiteral().getLexicalForm());
+                            System.out.println("-->" + lat_node.asNode().getLiteral().getLexicalForm());
+                            System.out.println("-->" + long_node.asNode().getLiteral().getLexicalForm());
+                            //System.out.println("-->" + home_node.asNode().getLiteral().getLexicalForm());
 
-//                    sbf.append("<script type=\"text/javascript\" " +
-//                            "src=\"http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAOJNnlv7XtimNAEXtmyrRcBTb-vLQlFZmc2N8bgWI8YDPp5FEVBSt-jSEUxX5Zuafs_gGbS--6HOwVw&sensor=true\"></script>");
+                    /*sbf.append("<script type=\"text/javascript\" " +
+                            "src=\"http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAOJNnlv7XtimNAEXtmyrRcBTb-vLQlFZmc2N8bgWI8YDPp5FEVBSt-jSEUxX5Zuafs_gGbS--6HOwVw&sensor=true\"></script>");*/
 
-                        sbf.append("<table cellpadding=10 cellspacing=10>\n" +
-                                   "  <thead>\n" +
-                                   "    <tr>\n" +
-                                   "      <th>" + paramRequest.getLocaleString("infoAbout") + dbName + "</th>\n" +
-                                   "      <th>" + paramRequest.getLocaleString("mapAbout") + dbName + "</th>\n" +
-                                   "    </tr>\n" +
-                                   "  </thead>\n" +
-                                   "  <tbody>\n" +
-                                   "    <tr>\n" +
-                                   "      <td>" + desc_node.asNode().getLiteral().getLexicalForm() + "</td>\n" +
-                                   "      <td>\n" +
-                                   "        <div id=\"" + createId("map") + "\" style=\"width: 400px; " +
-                                             "height: 300px\"></div>\n" +
-                                   "      </td>\n" +
-                                   "    </tr>\n" +
-                                   "  </tbody>\n" +
-                                   "</table><br><hr><br>");
+                            sbf.append("<table cellpadding=10 cellspacing=10>\n" +
+                                    "  <thead>\n" +
+                                    "    <tr>\n" +
+                                    "      <th>" + paramRequest.getLocaleString("infoAbout") + " " + //" <a href=\"" +
+                                            /*home_node.asNode().getLiteral().getLexicalForm() + "\">" + */dbName + "</th>\n" +
+                                    "      <th>" + paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></th>\n" +
+                                    "    </tr>\n" +
+                                    "  </thead>\n" +
+                                    "  <tbody>\n" +
+                                    "    <tr>\n" +
+                                    "      <td>" + desc_node.asNode().getLiteral().getLexicalForm() + "</td>\n" +
+                                    "      <td>\n" +
+                                    "        <div id=\"" + createId("map") + "\" style=\"width: 400px; " +
+                                    "height: 300px\"></div>\n" +
+                                    "      </td>\n" +
+                                    "    </tr>\n" +
+                                    "  </tbody>\n" +
+                                    "</table><br><hr><br>");
 
-
-                       /* sbf.append("<script type=\"text/javascript\">\n" +
+                         sbf.append("<script type=\"text/javascript\">\n" +
                         "function load() {\n" +
                         "if (GBrowserIsCompatible()) {" +
                         "var map = new GMap2(document.getElementById('" + createId("map") + "'));" +
@@ -572,23 +588,24 @@ public class SemanticSearch extends GenericResource {
                         "map.addControl(new GOverviewMapControl());" +
                         "map.setCenter(new GLatLng(" + lat_node.asNode().getLiteral().getLexicalForm() + ", "+ long_node.asNode().getLiteral().getLexicalForm() +"), 11);" +
 
-		"map.setMapType(G_HYBRID_TYPE);" +
+                        "map.setMapType(G_HYBRID_TYPE);" +
 
-		"function addtag(point, address) {"+
-		"var marker = new GMarker(point);"+
-		"GEvent.addListener(marker, \"click\", function() { marker.openInfoWindowHtml(address); } );"+
-		"return marker;" +
-		"}" +
+                        "function addtag(point, address) {"+
+                        "var marker = new GMarker(point);"+
+                        "GEvent.addListener(marker, \"click\", function() { marker.openInfoWindowHtml(address); } );"+
+                        "return marker;" +
+                        "}" +
 
-		"var point = new GLatLng("+ lat_node.asNode().getLiteral().getLexicalForm() +","+ long_node.asNode().getLiteral().getLexicalForm() +");" +
-		"var address = '<a href=\"http://www.centrodemadagascar.com\">Web del Centro de Madagascar</a>';" +
-		"var marker = addtag(point, address);" +
-	"	map.addOverlay(marker);	" +
-      "}"+
-   " }" +
-                                " load();"+
-"</script>");*/
+                        "var point = new GLatLng("+ lat_node.asNode().getLiteral().getLexicalForm() +","+ long_node.asNode().getLiteral().getLexicalForm() +");" +
+                        "var address = '<a href=\"http://www.centrodemadagascar.com\">Web del Centro de Madagascar</a>';" +
+                        "var marker = addtag(point, address);" +
+                        "	map.addOverlay(marker);	" +
+                        "}"+
+                        " }" +
+                        " load();"+
+                        "</script>");
 
+                        }
                     }
 
 
@@ -636,38 +653,38 @@ public class SemanticSearch extends GenericResource {
                                     String name = it.next();
                                     RDFNode x = rb.get(name);
                                     sbf.append("<td >");
-                                    if (x!=null) {
+                                    if (x != null) {
                                         if (x.isLiteral()) {
 
                                             sbf.append(x.asNode().getLiteral().getLexicalForm());
                                         } else {
                                             //System.out.println(">obteniendo objeto semántico");
-                                    SemanticObject so = SemanticObject.createSemanticObject(x.toString());
+                                            SemanticObject so = SemanticObject.createSemanticObject(x.toString());
 
-                                    if (so != null) {
-                                        //System.out.println(">objeto semántico obtenido con éxito");
-                                        //SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
-                                        //System.out.println(">Obteniendo clase semántica del objeto semántico");
-                                        SemanticClass tt = so.getSemanticClass();
-                                        if (tt != null) {
-                                            //System.out.println(">>Clase semántica obtenida con éxito");
-                                            sbf.append(tt.getDisplayName(lang));
-                                        } else {
-                                            //System.out.println(">>No se pudo obtener clase semántica");
-                                            //System.out.println(">>Obteniendo propiedad semántica del objeto semántico");
-                                            SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
-                                            sbf.append(stt.getDisplayName(lang));
-                                        }
-                                    } else {
-                                        //System.out.println(">el dato no tiene objeto semántico");
-                                        if (x != null) {
-                                            //System.out.println(">escribiendo valor");
-                                            sbf.append(x);
-                                        } else {
-                                            //System.out.println(">el campo es nulo");
-                                            sbf.append(" - ");
-                                        }
-                                    }
+                                            if (so != null) {
+                                                //System.out.println(">objeto semántico obtenido con éxito");
+                                                //SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
+                                                //System.out.println(">Obteniendo clase semántica del objeto semántico");
+                                                SemanticClass tt = so.getSemanticClass();
+                                                if (tt != null) {
+                                                    //System.out.println(">>Clase semántica obtenida con éxito");
+                                                    sbf.append(tt.getDisplayName(lang));
+                                                } else {
+                                                    //System.out.println(">>No se pudo obtener clase semántica");
+                                                    //System.out.println(">>Obteniendo propiedad semántica del objeto semántico");
+                                                    SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
+                                                    sbf.append(stt.getDisplayName(lang));
+                                                }
+                                            } else {
+                                                //System.out.println(">el dato no tiene objeto semántico");
+                                                if (x != null) {
+                                                    //System.out.println(">escribiendo valor");
+                                                    sbf.append(x);
+                                                } else {
+                                                    //System.out.println(">el campo es nulo");
+                                                    sbf.append(" - ");
+                                                }
+                                            }
                                         }
                                     }
                                     sbf.append("</td>");
@@ -675,7 +692,7 @@ public class SemanticSearch extends GenericResource {
                                 sbf.append("</tr>");
                             }
                         } else {
-                            sbf.append("<font color='red'>"+ paramRequest.getLocaleString("nofound") +"</font>");
+                            sbf.append("<font color='red'>" + paramRequest.getLocaleString("nofound") + "</font>");
                             sbf.append("</tr>");
                             sbf.append("</thead>");
                         }
@@ -687,7 +704,7 @@ public class SemanticSearch extends GenericResource {
                     }
                 } catch (Exception e) {
                     if (tr.getErrCode() != 0) {
-                        sbf.append("<script language=\"javascript\" type=\"text/javascript\">alert('"+ paramRequest.getLocaleString("failmsg") +"');</script>");
+                        sbf.append("<script language=\"javascript\" type=\"text/javascript\">alert('" + paramRequest.getLocaleString("failmsg") + "');</script>");
                     }
                 }
             } else {
@@ -843,6 +860,272 @@ public class SemanticSearch extends GenericResource {
             sbf.append("</ul>");
         }
         out.println(sbf.toString());
+    }
+
+    public void doShowResults(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        StringBuffer sbf = new StringBuffer();
+        String query = request.getParameter(createId("naturalQuery"));
+        String errCount = request.getParameter("errCode");
+        String sparqlQuery = request.getParameter("sparqlQuery");
+        String checked = request.getParameter(createId("showInfo"));
+
+        HashMap<String, String> dbNames = new HashMap<String, String>();
+        dbNames.put("Miguel Hidalgo", "Miguel_Hidalgo,_D.F.");
+        dbNames.put("Tamaulipas", "Tamaulipas");
+        dbNames.put("México, D.F.", "México_city");
+        dbNames.put("Veracruz", "Veracruz");
+        dbNames.put("Tamaulipas", "Tamaulipas");
+        dbNames.put("Alvaro Obregón", "Álvaro_Obregón,_D.F.");
+        dbNames.put("Xochimilco", "Xochimilco");
+        dbNames.put("Tlalpan", "Tlalpan");
+        dbNames.put("Altamira", "Altamira,_Tamaulipas");
+        dbNames.put("Aldama", "Aldama,_Tamaulipas");
+        dbNames.put("Abasolo", "");
+        dbNames.put("Burgos", "");
+        dbNames.put("Aguascalientes", "Aguascalientes,_Aguascalientes");
+        dbNames.put("Asientos", "Asientos,_Aguascalientes");
+        dbNames.put("Calvillo", "Calvillo,_Aguascalientes");
+        dbNames.put("Cosío", "Cosío,_Aguascalientes");
+        dbNames.put("Actopan", "Actopan,_Veracruz");
+        dbNames.put("Atoyac", "");
+        dbNames.put("Córdoba", "Córdoba,_Veracruz");
+        dbNames.put("Las minas", "");
+
+        if (query == null) {
+            query = "";
+        } else {
+            query = query.trim();
+        }
+
+        if (checked == null) {
+            checked = "NO";
+        }
+
+        if (errCount != null) {
+            if (Integer.parseInt(errCount) == 0) {
+                String patternStr = "\"[a-zA-Z]+\"";
+                String mname = "";
+                String dbName = "";
+
+                // Compile and use regular expression
+                Pattern pattern = Pattern.compile(patternStr);
+                Matcher matcher = pattern.matcher(sparqlQuery);
+                boolean matchFound = matcher.find();
+
+                if (matchFound) {
+                    // Get all groups for this match
+                    for (int i = 0; i <= matcher.groupCount(); i++) {
+                        // Get the group's indices
+                        int groupStart = matcher.start(i);
+                        int groupEnd = matcher.end(i);
+
+                        // groupStr is equivalent to
+                        mname = sparqlQuery.subSequence(groupStart, groupEnd).toString();
+                    }
+                }
+
+                if (dbNames.containsKey(mname.replace("\"", ""))) {
+                    dbName = dbNames.get(mname.replace("\"", ""));
+                }
+
+                try {
+
+                    sbf.append("<br><br><h2>Resultados de la búsqueda</h2>\n");
+                    if (checked != null && checked.equals("show")) {
+
+                        //sbf.append("<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=ABQIAAAAolpeBAG69pwV4I7Q2UbUGBSMG_cj-afGZZq-6fyhqNzQozVt8BSYRf8EN-EXKomSjxvWtyaBEL5wJw\" type=\"text/javascript\"></script>");
+                        System.out.println("Obteniendo información de la dbpedia");
+                        if (!dbName.equals("")) {
+                            String dbPediaQuery =
+                                    "PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>\n" +
+                                    "PREFIX dbprop: <http://dbpedia.org/property/>\n" +
+                                    "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n"+
+                                    "SELECT ?desc ?lat ?long ?home\n" +
+                                    "WHERE {\n" +
+                                    "<http://dbpedia.org/resource/" + dbName + "> dbprop:abstract ?desc.\n" +
+                                    "FILTER (lang(?desc) = \"" + lang + "\").\n" +
+                                    "<http://dbpedia.org/resource/" + dbName + "> geo:lat ?lat.\n" +
+                                    "<http://dbpedia.org/resource/" + dbName + "> geo:long ?long\n" +
+                                    "<http://dbpedia.org/resource/" + dbName + "> foaf:page ?home\n" +
+                                    "}\n";
+                            //System.out.println("<<<<<" + dbPediaQuery);
+                            //Query dbpedia
+                            SemanticModel dbpModel = SWBPlatform.getSemanticMgr().getModel("DBPedia");
+                            QueryExecution dbQexec = dbpModel.sparQLQuery(dbPediaQuery);
+
+                            //Get dbPedia INFO
+                            ResultSet dbrs = dbQexec.execSelect();
+                            QuerySolution dbrb = dbrs.nextSolution();
+                            RDFNode desc_node = dbrb.get("desc");
+                            RDFNode lat_node = dbrb.get("lat");
+                            RDFNode long_node = dbrb.get("long");
+                            RDFNode home_node = dbrb.get("home");
+
+                            System.out.println("Información obtenida");
+                            System.out.println("-->" + desc_node.asNode().getLiteral().getLexicalForm());
+                            System.out.println("-->" + lat_node.asNode().getLiteral().getLexicalForm());
+                            System.out.println("-->" + long_node.asNode().getLiteral().getLexicalForm());
+                            System.out.println("-->" + home_node.asNode().getLiteral().getLexicalForm());
+
+                    /*sbf.append("<script type=\"text/javascript\" " +
+                            "src=\"http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAOJNnlv7XtimNAEXtmyrRcBTb-vLQlFZmc2N8bgWI8YDPp5FEVBSt-jSEUxX5Zuafs_gGbS--6HOwVw&sensor=true\"></script>");*/
+
+                            sbf.append("<table cellpadding=10 cellspacing=10>\n" +
+                                    "  <thead>\n" +
+                                    "    <tr>\n" +
+                                    "      <th>" + paramRequest.getLocaleString("infoAbout") + " <a href=\"" +
+                                            home_node.asNode().getLiteral().getLexicalForm() + "\">" + dbName + "</th>\n" +
+                                    "      <th>" + paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></th>\n" +
+                                    "    </tr>\n" +
+                                    "  </thead>\n" +
+                                    "  <tbody>\n" +
+                                    "    <tr>\n" +
+                                    "      <td>" + desc_node.asNode().getLiteral().getLexicalForm() + "</td>\n" +
+                                    "      <td>\n" +
+                                    "        <div id=\"" + createId("map") + "\" style=\"width: 400px; " +
+                                    "height: 300px\"></div>\n" +
+                                    "      </td>\n" +
+                                    "    </tr>\n" +
+                                    "  </tbody>\n" +
+                                    "</table><br><hr><br>");
+
+                         sbf.append("<script type=\"text/javascript\">\n" +
+                        "function load() {\n" +
+                        "if (GBrowserIsCompatible()) {" +
+                        "var map = new GMap2(document.getElementById('" + createId("map") + "'));" +
+                        "map.addControl(new GMapTypeControl());" +
+                        "map.addControl(new GLargeMapControl());" +
+                        "map.addControl(new GOverviewMapControl());" +
+                        "map.setCenter(new GLatLng(" + lat_node.asNode().getLiteral().getLexicalForm() + ", "+ long_node.asNode().getLiteral().getLexicalForm() +"), 11);" +
+
+                        "map.setMapType(G_HYBRID_TYPE);" +
+
+                        "function addtag(point, address) {"+
+                        "var marker = new GMarker(point);"+
+                        "GEvent.addListener(marker, \"click\", function() { marker.openInfoWindowHtml(address); } );"+
+                        "return marker;" +
+                        "}" +
+
+                        "var point = new GLatLng("+ lat_node.asNode().getLiteral().getLexicalForm() +","+ long_node.asNode().getLiteral().getLexicalForm() +");" +
+                        "var address = '<a href=\"http://www.centrodemadagascar.com\">Web del Centro de Madagascar</a>';" +
+                        "var marker = addtag(point, address);" +
+                        "	map.addOverlay(marker);	" +
+                        "}"+
+                        " }" +
+                        " load();"+
+                        "</script>");
+
+                        }
+                    }
+
+
+                    Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+                    Query squery = QueryFactory.create(sparqlQuery);
+//                    System.out.println("------------------------------");
+//                    System.out.println(sparqlQuery);
+//                    System.out.println("------------------------------");
+
+                    squery.serialize();
+                    QueryExecution qexec = QueryExecutionFactory.create(squery, model);
+                    long time = System.currentTimeMillis();
+
+                    try {
+                        sbf.append("<div>");
+                        sbf.append("<table cellspacing=7>");
+                        ResultSet rs = qexec.execSelect();
+                        sbf.append("<thead>");
+                        sbf.append("<tr>");
+
+                        if (rs.hasNext()) {
+                            Iterator<String> itcols = rs.getResultVars().iterator();
+                            while (itcols.hasNext()) {
+                                sbf.append("<th>");
+                                sbf.append(itcols.next());
+                                sbf.append("</th>");
+                            }
+                            sbf.append("</tr>");
+                            sbf.append("</thead>");
+                            sbf.append("<tbody>");
+
+                            boolean odd = true;
+                            while (rs.hasNext()) {
+                                odd = !odd;
+                                QuerySolution rb = rs.nextSolution();
+
+                                if (odd) {
+                                    sbf.append("<tr bgcolor=\"#EFEDEC\">");
+                                } else {
+                                    sbf.append("<tr>");
+                                }
+
+                                Iterator<String> it = rs.getResultVars().iterator();
+                                while (it.hasNext()) {
+                                    String name = it.next();
+                                    RDFNode x = rb.get(name);
+                                    sbf.append("<td >");
+                                    if (x != null) {
+                                        if (x.isLiteral()) {
+
+                                            sbf.append(x.asNode().getLiteral().getLexicalForm());
+                                        } else {
+                                            //System.out.println(">obteniendo objeto semántico");
+                                            SemanticObject so = SemanticObject.createSemanticObject(x.toString());
+
+                                            if (so != null) {
+                                                //System.out.println(">objeto semántico obtenido con éxito");
+                                                //SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
+                                                //System.out.println(">Obteniendo clase semántica del objeto semántico");
+                                                SemanticClass tt = so.getSemanticClass();
+                                                if (tt != null) {
+                                                    //System.out.println(">>Clase semántica obtenida con éxito");
+                                                    sbf.append(tt.getDisplayName(lang));
+                                                } else {
+                                                    //System.out.println(">>No se pudo obtener clase semántica");
+                                                    //System.out.println(">>Obteniendo propiedad semántica del objeto semántico");
+                                                    SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
+                                                    sbf.append(stt.getDisplayName(lang));
+                                                }
+                                            } else {
+                                                //System.out.println(">el dato no tiene objeto semántico");
+                                                if (x != null) {
+                                                    //System.out.println(">escribiendo valor");
+                                                    sbf.append(x);
+                                                } else {
+                                                    //System.out.println(">el campo es nulo");
+                                                    sbf.append(" - ");
+                                                }
+                                            }
+                                        }
+                                    }
+                                    sbf.append("</td>");
+                                }
+                                sbf.append("</tr>");
+                            }
+                        } else {
+                            sbf.append("<font color='red'>" + paramRequest.getLocaleString("nofound") + "</font>");
+                            sbf.append("</tr>");
+                            sbf.append("</thead>");
+                        }
+                        sbf.append("</tbody>");
+                        sbf.append("</table>");
+                        sbf.append("<p aling=\"center\">" + paramRequest.getLocaleString("exectime") + ": " + (System.currentTimeMillis() - time) + "ms." + "</p>");
+                    } finally {
+                        qexec.close();
+                    }
+                } catch (Exception e) {
+                    if (tr.getErrCode() != 0) {
+                        sbf.append("<script language=\"javascript\" type=\"text/javascript\">alert('" + paramRequest.getLocaleString("failmsg") + "');</script>");
+                    }
+                }
+            } else {
+                sbf.append("<script language=\"javascript\" type=\"text/javascript\">");
+                sbf.append("alert(\"" + tr.getErrors().replace("\n", "\\n") + "\");");
+                sbf.append("</script>");
+            }
+        }
+        sbf.append("</div>");
+        out.print(sbf.toString());
     }
 
     private String createId(String suffix) {
