@@ -475,7 +475,7 @@ public class SemanticSearch extends GenericResource {
                    "</script>\n");
 
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
-            String url = "/swb/swb/Tlalpan/Resultado_Busqueda";
+            String url = paramRequest.getResourceBase().getAttribute("destUrl", "#");
 
             sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" " +
                 "action=\"" + url + "\" method=\"post\">\n" +
@@ -1105,7 +1105,7 @@ public class SemanticSearch extends GenericResource {
                                     "  </tbody>\n" +
                                     "</table><br>\n" +
                                     "<p><a href=\"#\" onClick=\"window.open('" + mapUrl + "','" +
-                                    paramRequest.getLocaleString("mapAbout") + " " + dbName + "','menubar=0, width=500, height=400');return false;\">" + paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
+                                    paramRequest.getLocaleString("mapAbout") + " " + dbName + "','menubar=0, width=800, height=600');return false;\">" + paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
                                     "<hr><br>" +
                                     query + ":<br>");
                         }
