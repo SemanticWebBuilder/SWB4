@@ -31,27 +31,6 @@ public class SWBContextBase
     {
        return org.semanticwb.model.WebSite.createWebSite(name, namespace);
     }
-    public static final SemanticClass swbc_Catalogs=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/swbcatalogs#Catalogs");
-
-    public static org.semanticwb.model.catalogs.Catalogs getCatalogs(String name)
-    {
-        return org.semanticwb.model.catalogs.Catalogs.getCatalogs(name);
-    }
-
-    public static java.util.Iterator<org.semanticwb.model.catalogs.Catalogs> listCatalogss()
-    {
-        return (java.util.Iterator<org.semanticwb.model.catalogs.Catalogs>)swbc_Catalogs.listGenericInstances();
-    }
-
-    public static void removeCatalogs(String name)
-    {
-        org.semanticwb.model.catalogs.Catalogs.removeCatalogs(name);
-    }
-
-    public static org.semanticwb.model.catalogs.Catalogs createCatalogs(String name, String namespace)
-    {
-       return org.semanticwb.model.catalogs.Catalogs.createCatalogs(name, namespace);
-    }
     public static final SemanticClass swb_UserRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserRepository");
 
     public static org.semanticwb.model.UserRepository getUserRepository(String name)
