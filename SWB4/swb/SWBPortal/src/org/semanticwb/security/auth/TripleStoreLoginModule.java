@@ -37,7 +37,6 @@ public class TripleStoreLoginModule implements LoginModule
     protected User principal = null;
     protected Object credential = null;
     protected String website = null;
-    {System.out.println("TripleStoreLoginModule Created");}
 
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options)
     {

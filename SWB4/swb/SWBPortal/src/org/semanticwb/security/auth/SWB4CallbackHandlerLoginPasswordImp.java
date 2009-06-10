@@ -12,7 +12,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.servlet.internal.DistributorParams;
 
 /**
  * CallbackHandler for login password credentials
@@ -25,14 +24,12 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
     private HttpServletRequest request;
     private HttpServletResponse response;
     private String authType;
-    //private DistributorParams dparams;
     private String website;
 
     public SWB4CallbackHandlerLoginPasswordImp() {
         log.trace("Simple CallbackHandler");
         this.request = null;
         this.response = null;
-       // this.dparams = null;
         this.authType = (String) SWBPlatform.getServletContext().getAttribute("authType");
         this.website = null;
     }
@@ -42,9 +39,7 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
         this.request = request;
         this.response = response;
         this.authType = authType;
-        log.trace("got authType:"+ this.authType);
         this.website = website;
-        log.trace("got WebSite:"+ this.website);
     }
 
     /**
@@ -56,7 +51,6 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
      */
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
         log.trace("Tipo de Autenticacion: " + authType);
-        log.trace("has request: "+(null!=request));
         if ("BASIC".equalsIgnoreCase(authType)) {
             getBasicCredentials(callbacks);
         }
@@ -90,7 +84,6 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
             } else if (callbacks[i] instanceof TextInputCallback) {
                 TextInputCallback textInputCallback = (TextInputCallback) callbacks[i];
                 if (null != website) {
-                    log.trace("SEtting website: "+website);
                     textInputCallback.setText(website);
                 } else {
                     textInputCallback.setText(SWBContext.getGlobalWebSite().getId());
@@ -100,11 +93,9 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
     }
 
     private void getFormCredentials(Callback[] callbacks) {
-        log.trace("Get From request....");
         String login = request.getParameter("wb_username");
         String password = request.getParameter("wb_password");
         for (int i = 0; i < callbacks.length; i++) {
-            log.trace("callback:"+callbacks[i].toString());
             if (callbacks[i] instanceof NameCallback) {
                 NameCallback nameCallback = (NameCallback) callbacks[i];
                 nameCallback.setName(login);
@@ -114,7 +105,6 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
                 passwordCallback.setPassword(password == null ? null : password.toCharArray());
             } else if (callbacks[i] instanceof TextInputCallback) {
                 TextInputCallback textInputCallback = (TextInputCallback) callbacks[i];
-                log.trace("Setting website: "+website);
                 textInputCallback.setText(website);
             }
         }
