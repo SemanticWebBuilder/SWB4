@@ -150,7 +150,7 @@
                 while(itwp.hasNext())
                 {
                     WebPage wp = itwp.next();
-                    if(wp.getId().equals("y")) wp.setDeleted(true);
+                    //if(wp.getId().equals("y")) wp.setDeleted(true);
                     if(wp.isDeleted())  //wp.isDeleted()
                     {
                         addSemanticObject(arr, wp.getSemanticObject(),false,true);
