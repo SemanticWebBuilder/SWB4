@@ -211,7 +211,7 @@ public class WBSiteMap extends GenericAdmResource
         Resource base=getResourceBase();
         
         if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {
-            System.out.println("liga mapa");
+            System.out.println("******************************liga mapa");
 
             String surl="";
 
@@ -249,7 +249,7 @@ public class WBSiteMap extends GenericAdmResource
                 out.println("</a>");
             }
         }else {
-            System.out.println("render mapa");
+            System.out.println("******************************render mapa");
             // Mapa de sitio
             try {
                 SWBResourceURL url=paramRequest.getRenderUrl();
