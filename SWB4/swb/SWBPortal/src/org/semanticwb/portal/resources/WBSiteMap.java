@@ -81,8 +81,7 @@ public class WBSiteMap extends GenericAdmResource
      * @throws IOException
      */    
     @Override
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if(paramRequest.getMode().equalsIgnoreCase("Json")) {
             doChilds(request, response, paramRequest);
         }else if(paramRequest.getMode().equalsIgnoreCase("bind")) {
@@ -109,7 +108,7 @@ public class WBSiteMap extends GenericAdmResource
             String name = names.nextElement();
             params.put(name, request.getParameter(name));
         }
-        SelectTree tree = new SelectTree(paramRequest.getTopic().getWebSite().getTitle(), url.toString(), false, base.getAttribute("title"));
+        SelectTree tree = new SelectTree(paramRequest.getTopic().getWebSite().getTitle(), url.toString(), false, base.getAttribute("title"), paramRequest.getUser().getLanguage());
         String x = tree.renderXHTML(params);
         out.println(x);
         out.flush();
@@ -133,14 +132,14 @@ public class WBSiteMap extends GenericAdmResource
             json.append("id:'"+home.getId()+"',");
             json.append("purl:'"+home.getUrl()+"',");
             json.append("type:'home'");
-            if(home.listVisibleChilds(lang).hasNext()) {
+            if(home.listChilds(lang, true, false, false, false).hasNext()) {
                 json.append(",children:[");
                 json.append(addReferences(home, lang));
                 json.append("]");
             }
             json.append("}");
 
-            if(home.listVisibleChilds(lang).hasNext()) {
+            if(home.listChilds(lang, true, false, false, false).hasNext()) {
                 json.append(",");
                 json.append(addChilds(home, lang));
             }
@@ -157,7 +156,7 @@ public class WBSiteMap extends GenericAdmResource
     private String addReferences(WebPage node, String lang) {
         StringBuilder json = new StringBuilder();
 
-        Iterator<WebPage> itwps = node.listVisibleChilds(lang);
+        Iterator<WebPage> itwps = node.listChilds(lang, true, false, false, false);
         while(itwps.hasNext()) {
             WebPage wp = itwps.next();
             json.append("{_reference:'"+wp.getDisplayName(lang)+"'}");
@@ -171,14 +170,14 @@ public class WBSiteMap extends GenericAdmResource
     private String addChilds(WebPage node, String lang) {
         StringBuilder json = new StringBuilder();
 
-        Iterator<WebPage> itwps = node.listVisibleChilds(lang);
+        Iterator<WebPage> itwps = node.listChilds(lang, true, false, false, false);
         while(itwps.hasNext()) {
             WebPage wp = itwps.next();
             json.append("{");
             json.append("name:'"+wp.getDisplayName(lang)+"',");
             json.append("id:'"+wp.getId()+"',");
             json.append("purl:'"+wp.getUrl()+"'");
-            if(wp.listVisibleChilds(lang).hasNext()) {
+            if(wp.listChilds(lang, true, false, false, false).hasNext()) {
                 json.append(",type:'chanel'");
                 json.append(",children:[");
                 json.append(addReferences(wp, lang));
@@ -186,7 +185,7 @@ public class WBSiteMap extends GenericAdmResource
             }
             json.append("}");
 
-            if(wp.listVisibleChilds(lang).hasNext()) {
+            if(wp.listChilds(lang, true, false, false, false).hasNext()) {
                 json.append(",");
                 json.append(addChilds(wp, lang));
             }
@@ -211,7 +210,9 @@ public class WBSiteMap extends GenericAdmResource
         PrintWriter out = response.getWriter();
         Resource base=getResourceBase();
         
-        if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {        
+        if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {
+            System.out.println("liga mapa");
+
             String surl="";
 
             if (!"".equals(base.getAttribute("url", "").trim())) {
@@ -248,6 +249,7 @@ public class WBSiteMap extends GenericAdmResource
                 out.println("</a>");
             }
         }else {
+            System.out.println("render mapa");
             // Mapa de sitio
             try {
                 SWBResourceURL url=paramRequest.getRenderUrl();
@@ -259,7 +261,7 @@ public class WBSiteMap extends GenericAdmResource
                 }catch(NumberFormatException e) {
                     level = 0;
                 }
-                SelectTree tree = new SelectTree(paramRequest.getTopic().getWebSite().getTitle(), url.toString(), false, level, base.getAttribute("title"));
+                SelectTree tree = new SelectTree(paramRequest.getTopic().getWebSite().getTitle(), url.toString(), false, level, base.getAttribute("title"), paramRequest.getUser().getLanguage());
                 HashMap params = new HashMap();
                 Enumeration<String> names = request.getParameterNames();
                 while(names.hasMoreElements()) {
@@ -276,6 +278,13 @@ public class WBSiteMap extends GenericAdmResource
         out.flush();
     }
 
+
+
+
+
+
+
+    
     private class SelectTree {
         private final String pathImages = SWBPlatform.getContextPath() + "/swbadmin/icons";
         private String website;
@@ -283,15 +292,17 @@ public class WBSiteMap extends GenericAdmResource
         private boolean openOnClick;
         private int level;
         private String title;
+        private String language;
 
-        public SelectTree(String website, String url, boolean openOnClick, String title) {
+        public SelectTree(String website, String url, boolean openOnClick, String title, String language) {
             this.website = website;
             this.url = url;
             this.openOnClick = openOnClick;
             this.title = title;
+            this.language = language;
         }
 
-        public SelectTree(String website, String url, boolean openOnClick, int level, String title) {
+        public SelectTree(String website, String url, boolean openOnClick, int level, String title, String language) {
             this.website = website;
             this.url = url;
             this.openOnClick = openOnClick;
@@ -299,9 +310,18 @@ public class WBSiteMap extends GenericAdmResource
                 this.level = level;
             }
             this.title = title;
+            this.language = language;
         }
 
         public String renderXHTMLFirstTime(HashMap request) throws SWBResourceException, IOException {
+
+            System.out.println("website="+website);
+            System.out.println("url="+url);
+            System.out.println("openOnClick="+openOnClick);
+            System.out.println("level="+level);
+            System.out.println("title="+title);
+
+
             StringBuilder html = new StringBuilder();
             StringBuilder params = new StringBuilder("&site="+website);
             String whoOpen = "";
@@ -325,17 +345,25 @@ public class WBSiteMap extends GenericAdmResource
                     }
                 }
 
-                if(level>0 && tpsite==null) tpsite=SWBContext.getWebSite(website).getHomePage();
+                if(level>0 && tpsite==null) {
+                    tpsite=SWBContext.getWebSite(website).getHomePage();
+                }
 
                 WebSite tmit = SWBContext.getWebSite(website);
+                System.out.println("tmit.getId()="+tmit.getId());
                 WebPage tmhome=tmit.getHomePage();
+                System.out.println("tmhome.getId()="+tmhome.getId());
 
                 boolean opened = Boolean.parseBoolean(request.get(tmhome.getId())==null?"false":((String)request.get(tmhome.getId())).equals("1")?"true":"false");
-                if(level>0)opened=true;
+                if(level>0) {
+                    opened=true;
+                }
+
+                System.out.println("opened="+opened);
 
                 html.append("<div class=\"swb-mapa\" id=\"tree_"+website+"\">");
                 if(title!=null) {
-                    html.append("<h1>mapa de sitio</h1>");
+                    html.append("<h1>"+title+"</h1>");
                 }
                 html.append("<ul>");
                 html.append("<li>");
@@ -373,7 +401,7 @@ public class WBSiteMap extends GenericAdmResource
 
                 //if(tpsite!=null && this.level>0 && opened) {
                 if(opened) {
-                    html.append(addChild(request, tmit, tmhome, tpid, params, 1));
+                    html.append(addChild(request, tmit, tmhome, tpid, params, 1, language));
                 }
                 html.append("</li>");
                 html.append("</ul>");
@@ -383,6 +411,8 @@ public class WBSiteMap extends GenericAdmResource
             }
             catch(Exception e) {
                 log.error("Error on method WebSiteSectionTree.render()", e);
+                System.out.println(e);
+                html.append("\n\nError:"+e);
             }
             return html.toString();
         }
@@ -456,7 +486,7 @@ public class WBSiteMap extends GenericAdmResource
                 }
 
                 if(tpsite!=null && opened) {                
-                    html.append(addChild(request, tmit, tmhome, tpid, params));
+                    html.append(addChild(request, tmit, tmhome, tpid, params, language));
                 }
                 html.append("</li>");
                 html.append("</ul>");
@@ -470,19 +500,19 @@ public class WBSiteMap extends GenericAdmResource
             return html.toString();
         }
 
-        private String addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, int level) {
+        private String addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, int level, String language) {
             boolean opened;
 
             StringBuilder html = new StringBuilder("<ul>");
-            Iterator<WebPage> childs=pageroot.listChilds();
+            Iterator<WebPage> childs=pageroot.listChilds(language, true, false, false, false);
             while(childs.hasNext()) {
                 WebPage webpage = childs.next();
-                if(webpage.getId()!=null) {
+                if(webpage.getId()!=null && webpage instanceof WebPage ) {
 
                     opened = Boolean.parseBoolean(request.get(webpage.getId())==null?"false":((String)request.get(webpage.getId())).equals("1")?"true":"false");
                     if(this.level>level)opened=true;else opened=false;
 
-                    if(webpage.listChilds().hasNext()) {
+                    if(webpage.listChilds(language, true, false, false, false).hasNext()) {
                         html.append("<li>");
                         if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
                             if(opened) {
@@ -516,7 +546,7 @@ public class WBSiteMap extends GenericAdmResource
                         }
 
                         if(opened) {
-                            html.append(addChild(request, tmit, webpage, tpid, params, level+1));
+                            html.append(addChild(request, tmit, webpage, tpid, params, level+1, language));
                         }
 
                         html.append("</li>");
@@ -541,18 +571,18 @@ public class WBSiteMap extends GenericAdmResource
             return html.toString();
         }
 
-        private String addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params) {
+        private String addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, String language) {
             boolean opened;
 
             StringBuilder html = new StringBuilder("<ul>");
-            Iterator<WebPage> childs=pageroot.listChilds();
+            Iterator<WebPage> childs=pageroot.listChilds(language, true, false, false, false);
             while(childs.hasNext()) {
                 WebPage webpage = childs.next();
                 if(webpage.getId()!=null) {
 
                     opened = Boolean.parseBoolean(request.get(webpage.getId())==null?"false":((String)request.get(webpage.getId())).equals("1")?"true":"false");
 
-                    if(webpage.listChilds().hasNext()) {
+                    if(webpage.listChilds(language, true, false, false, false).hasNext()) {
                         html.append("<li>");
                         if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
                             if(opened) {
@@ -585,7 +615,7 @@ public class WBSiteMap extends GenericAdmResource
                         }
 
                         if(opened) {
-                            html.append(addChild(request, tmit, webpage, tpid, params));
+                            html.append(addChild(request, tmit, webpage, tpid, params, language));
                         }
 
                         html.append("</li>");
