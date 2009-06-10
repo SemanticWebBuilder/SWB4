@@ -161,10 +161,12 @@ public class WBADashboardReport extends GenericResource {
                         if(devices.containsKey(r.getMonth())) {
                             HashMap c = (HashMap)devices.get(r.getMonth());
                             c.put(r.getItem(), Long.toString(r.getHits()));
+                            System.out.println("key="+r.getItem()+" value="+r.getHits());
                         }else {
                             HashMap c = new HashMap();
                             devices.put(r.getMonth(), c);
                             c.put(r.getItem(), Long.toString(r.getHits()));
+                            System.out.println("key="+r.getItem()+" value="+r.getHits());
                         }
                     }
                     Iterator<String> dbm = devices.keySet().iterator();
@@ -363,9 +365,9 @@ public class WBADashboardReport extends GenericResource {
                         x++;
                     }
                     out.println("<param name=\"ndata\" value=\""+x+"\">");
-
+                    out.println("<param name=\"barname0\" value=\"desconocido\">");
                     Iterator<Device> id = SWBContext.getWebSite(websiteId).listDevices();
-                    for(int i=0; id.hasNext(); i++) {
+                    for(int i=1; id.hasNext(); i++) {
                         Device d = id.next();
                         //out.println("<param name=\"color"+i+"\" value=\""+i+","+i+",255\">");
                         out.println("<param name=\"barname"+i+"\" value=\""+d.getDisplayTitle(language)+"\">");
