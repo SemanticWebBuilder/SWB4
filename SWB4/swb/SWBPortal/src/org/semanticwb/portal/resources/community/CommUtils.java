@@ -36,7 +36,7 @@ public class CommUtils extends GenericResource{
         while(gitChilds.hasNext()){
             WebPage child=gitChilds.next();
             url.setParameter("topic2Remove", child.getId());
-            out.println("<li><a href=\""+url.toString()+"\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/TRASH.png\" border=\"0\" align=\"absmiddle\" alt=\"Eliminar Utileria\" /></a>&nbsp;&nbsp;<a href=\""+child.getUrl()+"\">"+child.getTitle()+"</a></li>");
+            out.println("<li><a onclick=\"return confirm('Esta seguro de eliminar esta utilería?');\" href=\""+url.toString()+"\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/TRASH.png\" border=\"0\" align=\"absmiddle\" alt=\"Eliminar Utileria\" /></a>&nbsp;&nbsp;<a href=\""+child.getUrl()+"\">"+child.getTitle()+"</a></li>");
         }
         out.println("  </ul>");
     }
