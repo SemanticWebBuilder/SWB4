@@ -469,14 +469,17 @@ public class CommunityConfiguration extends GenericResource
         out.println("<table>");
         out.println("<tr><td><b>Seleccione las utilerias que desea agregar:</b></td></tr>");
         WebPage page = paramRequest.getTopic();
-        HashSet<Resource> resourcesAlreadyExists = getResources(page);
+        HashSet<String> resourcesAlreadyExists = getResources(page);
         for (String resourceId : resources)
         {
+            System.out.println("doAdmin/resourceId:"+resourceId);
             boolean exists = false;
-            for (Resource resource : resourcesAlreadyExists)
+            for (String resource : resourcesAlreadyExists)
             {
-                if (resource.getResourceType().getId().equals(resourceId))
+                System.out.println("doAdmin/resource:"+resource);
+                if (resource.startsWith(resourceId))
                 {
+                    System.out.println("doAdmin/resource-1:"+resource);
                     exists = true;
                     break;
                 }
@@ -502,15 +505,17 @@ public class CommunityConfiguration extends GenericResource
         doAdmin(request, response, paramRequest);
     }
 
-    public HashSet<Resource> getResources(WebPage page)
+    public HashSet<String> getResources(WebPage page)
     {
-        HashSet<Resource> resourcesPage = new HashSet<Resource>();
+        HashSet<String> resourcesPage = new HashSet<String>();
         Iterator<WebPage> childs = page.listChilds();
         while (childs.hasNext())
         {
             WebPage child = childs.next();
-            resourcesPage.addAll(getResources(child));
+            //resourcesPage.addAll(getResources(child));
+            resourcesPage.add(child.getId());
         }
         return resourcesPage;
     }
+
 }
