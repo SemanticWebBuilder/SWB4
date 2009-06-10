@@ -4,13 +4,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.*;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
-import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
-import org.semanticwb.portal.lib.WBResponse;
+
 
 public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWBRankWebPageBase
 {

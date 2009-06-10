@@ -30,13 +30,13 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
 
     public void valueBound(HttpSessionBindingEvent arg0) 
     {
-        System.out.println("SWBSessionObject.valueBound:"+arg0+" "+subject);
+        //System.out.println("SWBSessionObject.valueBound:"+arg0+" "+subject);
         
     }
 
     public void valueUnbound(HttpSessionBindingEvent arg0) 
     {
-        System.out.println("SWBSessionObject.valueUnbound:"+arg0+" "+subject);
+        //System.out.println("SWBSessionObject.valueUnbound:"+arg0+" "+subject);
         SWBPortal.getUserMgr().unboundSessionObject(arg0.getSession().getId());
     }
     

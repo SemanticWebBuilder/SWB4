@@ -116,7 +116,7 @@ public class HTMLContent extends GenericResource {
         Resource resource = paramRequest.getResourceBase();
         VersionInfo versionInfo = new VersionInfo(resource.getSemanticObject());
         int versionNumber = versionInfo.getVersionNumber();
-        String fileName = versionInfo.getVersionFile();
+        String fileName = "index.html";//versionInfo.getVersionFile();
         String resourceWorkPath = SWBPlatform.getWorkPath()
                 + resource.getWorkPath() + "/" + versionNumber + "/" + fileName;
         response.getWriter().println(SWBUtils.IO.getFileFromPath(resourceWorkPath));

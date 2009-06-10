@@ -100,6 +100,14 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setResourceMode(2);
                     ptype.setTitle("Banner");
                 }
+                //Crea recursos de defecto
+                if (site.getResourceType("HTMLContent") == null) {
+                    ResourceType ptype = site.createResourceType("HTMLContent");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.HTMLContent");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.HTMLContent");
+                    ptype.setResourceMode(1);
+                    ptype.setTitle("HTMLContent");
+                }
 
                 if (site.getResourceType("Promo") == null) {
                     ResourceType ptype = site.createResourceType("Promo");
@@ -133,12 +141,12 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("StaticText");
                 }
 
-                if (site.getResourceType("WBSiteMap") == null) {
-                    ResourceType ptype = site.createResourceType("WBSiteMap");
+                if (site.getResourceType("SiteMap") == null) {
+                    ResourceType ptype = site.createResourceType("SiteMap");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.WBSiteMap");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.WBSiteMap");
                     ptype.setResourceMode(3);
-                    ptype.setTitle("WBSiteMap");
+                    ptype.setTitle("SiteMap");
                 }
 
                 if (site.getResourceType("Recommend") == null) {
@@ -177,21 +185,21 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("Poll");
                 }
 
-                if (site.getResourceType("WBMenuMap") == null) {
+                if (site.getResourceType("MenuMap") == null) {
 
-                    ResourceType ptype = site.createResourceType("WBMenuMap");
+                    ResourceType ptype = site.createResourceType("MenuMap");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.WBMenuMap");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.WBMenuMap");
                     ptype.setResourceMode(2);
-                    ptype.setTitle("WBMenuMap");
+                    ptype.setTitle("MenuMap");
                 }
 
-                if (site.getResourceType("WBMenuNivel") == null) {
-                    ResourceType ptype = site.createResourceType("WBMenuNivel");
+                if (site.getResourceType("MenuNivel") == null) {
+                    ResourceType ptype = site.createResourceType("MenuNivel");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.WBMenuNivel");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.WBMenuNivel");
                     ptype.setResourceMode(2);
-                    ptype.setTitle("WBMenuNivel");
+                    ptype.setTitle("MenuNivel");
                 }
 
                 if (site.getResourceType("JSPResource") == null) {
@@ -244,29 +252,47 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("RemoteWebApp");
                 }
 
-                if (site.getResourceType("WBUrlContent") == null) {
-                    ResourceType ptype = site.createResourceType("WBUrlContent");
+                if (site.getResourceType("UrlContent") == null) {
+                    ResourceType ptype = site.createResourceType("UrlContent");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.WBUrlContent");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.WBUrlContent");
                     ptype.setResourceMode(3);
-                    ptype.setTitle("WBUrlContent");
+                    ptype.setTitle("UrlContent");
                 }
 
                 if (site.getResourceType("Search") == null) {
                     ResourceType ptype = site.createResourceType("Search");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.Search");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.Search");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.WBSearch");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.WBSearch");
                     ptype.setResourceMode(3);
                     ptype.setTitle("Search");
                 }
 
-                if (site.getResourceType("Search") == null) {
-                    ResourceType ptype = site.createResourceType("Search");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.Search");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.Search");
+                if (site.getResourceType("GoogleGadget") == null) {
+                    ResourceType ptype = site.createResourceType("GoogleGadget");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.googlegadgets.GoogleGadget");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.googlegadgets.GoogleGadget");
                     ptype.setResourceMode(3);
-                    ptype.setTitle("Search");
+                    ptype.setTitle("GoogleGadget");
                 }
+
+                if (site.getResourceType("SparQLQueryResource") == null) {
+                    ResourceType ptype = site.createResourceType("SparQLQueryResource");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.SparqlQueryResource");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.SparqlQueryResource");
+                    ptype.setResourceMode(3);
+                    ptype.setTitle("SparQLQueryResource");
+                }
+
+                if (site.getResourceType("Wiki") == null) {
+                    ResourceType ptype = site.createResourceType("Wiki");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.wiki.Wiki");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.wiki.Wiki");
+                    ptype.setResourceMode(3);
+                    ptype.setTitle("Wiki");
+                }
+
+
                 //Crea dispositivos de defecto
                 if (!site.hasDevice("1")) {
                     Device dev = site.createDevice();

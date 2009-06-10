@@ -10,9 +10,7 @@ package org.semanticwb.portal.indexer;
 import java.sql.Timestamp;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Properties;
-import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.semanticwb.Logger;
@@ -20,7 +18,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 
 /**
@@ -31,7 +28,7 @@ public class SWBIndexMgr implements SWBAppObject
 {
     private static Logger log=SWBUtils.getLogger(SWBIndexMgr.class);
 
-    private HashMap indexers=new HashMap();
+    private HashMap<String, SWBIndexer> indexers=new HashMap();
     private Properties prop;   
     private String defaultIndexer="swb";
     
@@ -50,7 +47,7 @@ public class SWBIndexMgr implements SWBAppObject
         {
             log.info("WBIndexMgr can not be Initialized (isClient)...");
         }
-        init();
+        //init();
     }
     
     public void destroy()
@@ -93,17 +90,18 @@ public class SWBIndexMgr implements SWBAppObject
         }
        
         defaultIndexer=prop.getProperty("defaultIndexer","swb");
-        
-        int delays=Integer.parseInt(prop.getProperty("delay","30"));
-        TimerTask t=new TimerTask()
-        {
-            public void run()
-            {
-                _run();
-            }
-        };
-        timer = new Timer();
-        timer.schedule(t, delays*1000, delays*1000);   
+
+        //Timer
+//        int delays=Integer.parseInt(prop.getProperty("delay","30"));
+//        TimerTask t=new TimerTask()
+//        {
+//            public void run()
+//            {
+//                _run();
+//            }
+//        };
+//        timer = new Timer();
+//        timer.schedule(t, delays*1000, delays*1000);
      
     }
     
@@ -111,6 +109,7 @@ public class SWBIndexMgr implements SWBAppObject
 
     public void _run()
     {
+        //System.out.println("indexMgr run()");
         //if (indexer == null || indexer.indexer == null || !indexer.indexer.isAlive())
         {
             //System.out.println("IndexMgr->Indexando cambios... "+lastupdate);
@@ -264,11 +263,18 @@ public class SWBIndexMgr implements SWBAppObject
     
     public SWBIndexer getTopicMapIndexer(String tmid)
     {
+        //System.out.println("getTopicMapIndexer:"+tmid);
         WebSite tm=SWBContext.getWebSite(tmid);
         if(tm==null)return null;
+        //System.out.println("isIndeable:"+tm.isIndexable());
         //TODO:Agregar indexador al modelo
         //return (SWBIndexer)indexers.get(tm.getIndexer());
-        return (SWBIndexer)indexers.get("swb");
+        if(tm.isIndexable())return getDefaultIndexer();
+        return null;
     }        
-    
+
+    public SWBIndexer getDefaultIndexer()
+    {
+        return (SWBIndexer)indexers.get(defaultIndexer);
+    }
 }
