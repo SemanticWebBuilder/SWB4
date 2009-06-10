@@ -436,6 +436,20 @@ public class CommunityConfiguration extends GenericResource
             {
                 if (!existsWebPage(resourceTypeId, page))
                 {
+                    WebPage pageRec=null;
+                    if(resourceTypeId.equals(FORO_RESOURCE_TYPE_ID)){
+                        pageRec = createForo(site, type.getId() + page.getTitle(), page, resourceTypeId);
+                    }else if(resourceTypeId.equals(BLOG_RESOURCE_TYPE_ID)){
+                        pageRec = createBlog(site, type.getId() + page.getTitle(), page, resourceTypeId);
+                    }else if(resourceTypeId.equals(WIKI_RESOURCE_TYPE_ID)){
+                        pageRec = createWiki(site, type.getId() + page.getTitle(), page, resourceTypeId);
+                    }else if(resourceTypeId.equals(GOOGLE_RESOURCE_TYPE_ID)){
+                        pageRec = createGoogleGadget(site, type.getId() + page.getTitle(), page, resourceTypeId);
+                    }
+                    TemplateRef tplrefRec=site.createTemplateRef();
+                    tplrefRec.setTemplate(site.getTemplate("13"));
+                    tplrefRec.setActive(true);
+                    pageRec.addTemplateRef(tplrefRec);
                 }
             }
         }
@@ -447,6 +461,7 @@ public class CommunityConfiguration extends GenericResource
     {
         PrintWriter out = response.getWriter();
 
+        out.println("<table>");
         out.println("<p>Seleccione las utilerias que desea agregar:</p><form action='" + paramRequest.getActionUrl() + "' method='post'><fieldset>");
         WebPage page = paramRequest.getTopic();
         HashSet<Resource> resourcesAlreadyExists = getResources(page);
@@ -463,10 +478,16 @@ public class CommunityConfiguration extends GenericResource
             }
             if (!exists)
             {
-                out.println(resourceId + "<input name='type' value='" + resourceId + "' type='checkbox'><br>");
+                out.println("<tr>");
+                out.println("<td>"+resourceId+"</td>");
+                out.println("<td><input name='type' value='" + resourceId + "' type='checkbox'></td>");
+                out.println("</tr>");
             }
         }
-        out.println("</fieldset></form>");
+        out.println("<tr>");
+                out.println("<td><button type='submit'>Enviar</button></td>");
+        out.println("</tr></fieldset></form>");
+        out.println("<table>");
         out.close();
     }
 
