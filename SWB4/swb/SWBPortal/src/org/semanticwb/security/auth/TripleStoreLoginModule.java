@@ -37,6 +37,7 @@ public class TripleStoreLoginModule implements LoginModule
     protected User principal = null;
     protected Object credential = null;
     protected String website = null;
+    {System.out.println("TripleStoreLoginModule Created");}
 
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options)
     {
@@ -61,7 +62,7 @@ public class TripleStoreLoginModule implements LoginModule
         callbacks[2] = new TextInputCallback("Site");
         try
         {
-
+            log.trace("callback:"+callbackHandler);
             callbackHandler.handle(callbacks);
             login = ((NameCallback) callbacks[0]).getName();
             credential = ((PasswordCallback) callbacks[1]).getPassword();
@@ -76,6 +77,7 @@ public class TripleStoreLoginModule implements LoginModule
             log.error("UnsupportedCallbackException Error Login a user", ex);
             throw new LoginException("UnsupportedCallbackException Error: " + ex.getMessage());
         }
+        log.trace("WebSite id: "+website);
         WebSite ws = SWBContext.getWebSite(website);
         UserRepository ur = ws.getUserRepository();
         principal = ur.getUserByLogin(login);

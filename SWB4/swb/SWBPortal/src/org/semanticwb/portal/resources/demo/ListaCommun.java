@@ -100,7 +100,12 @@ public class ListaCommun extends GenericResource {
         GenericIterator<WebPage>git = contenedor.listChilds();
         while (git.hasNext()){
             MicroSite act = (MicroSite)git.next();
-            if (null==act.getAbout()) continue;
+            //System.out.println("====== "+act.getDisplayName());
+            if (null==act.getAbout()) 
+            {
+                //System.out.println("******************** "+ act.getDisplayName() +" trae about null");
+                continue;
+            }
             String name = act.getAbout().getDisplayName();
             String url = act.getAbout().getRealUrl();
             LocationEntity location = act.getLocatedIn();
@@ -126,8 +131,7 @@ public class ListaCommun extends GenericResource {
         ret += "<li><p><a href=\""+este.getUrl()+"\">"+este.getId()+" ("+este.getCount()+")</a></p></li>\n";
         }
         ret += "</ul>";
-        System.out.println(
-                set.toString());
+        //System.out.println(set.toString());
         return ret;
     }
 
@@ -180,7 +184,7 @@ public class ListaCommun extends GenericResource {
         {
             Contenedor other = (Contenedor)o;
             if (other.getCount()>getCount()) return 1;
-            if (other.getCount()==getCount()) return 0;
+            if (other.getCount()==getCount()) return other.getId().compareTo(getId());
             return -1;
         }
 
