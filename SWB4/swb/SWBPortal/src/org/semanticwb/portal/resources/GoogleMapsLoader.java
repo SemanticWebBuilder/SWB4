@@ -50,30 +50,30 @@ public class GoogleMapsLoader extends GenericResource {
                 "</table>");
         
         sbf.append("<script type=\"text/javascript\">\n" +
-                        "function load() {\n" +
-                        "if (GBrowserIsCompatible()) {" +
-                        "var map = new GMap2(document.getElementById('" + getResourceBase().getId() + "/map'));" +
-                        "map.addControl(new GMapTypeControl());" +
-                        "map.addControl(new GLargeMapControl());" +
-                        "map.addControl(new GOverviewMapControl());" +
-                        "map.setCenter(new GLatLng(" + latitude + ", "+ longitude +"), 11);" +
+                   "  function load() {\n" +
+                   "    if (GBrowserIsCompatible()) {\n" +
+                   "      var map = new GMap2(document.getElementById('" + getResourceBase().getId() + "/map'));\n" +
+                   "      map.addControl(new GMapTypeControl());\n" +
+                   "      map.addControl(new GLargeMapControl());\n" +
+                        //"map.addControl(new GOverviewMapControl());\n" +
+                   "      map.setCenter(new GLatLng(" + latitude + ", "+ longitude +"), 11);\n" +
+                   "      map.setMapType(G_HYBRID_TYPE);\n" +
 
-                        "map.setMapType(G_HYBRID_TYPE);" +
+//                        "function addtag(point, address) {"+
+//                        "var marker = new GMarker(point);"+
+//                        "GEvent.addListener(marker, \"click\", function() { marker.openInfoWindowHtml(address); } );"+
+//                        "return marker;" +
+//                        "}" +
 
-                        "function addtag(point, address) {"+
-                        "var marker = new GMarker(point);"+
-                        "GEvent.addListener(marker, \"click\", function() { marker.openInfoWindowHtml(address); } );"+
-                        "return marker;" +
-                        "}" +
-
-                        "var point = new GLatLng("+ latitude +","+ longitude +");" +
-                        "var address = '<a href=\"http://www.centrodemadagascar.com\">Web del Centro de Madagascar</a>';" +
-                        "var marker = addtag(point, address);" +
-                        "	map.addOverlay(marker);	" +
-                        "}"+
-                        " }" +
-                        " load();"+
-                        "</script>");
+                   "      var point = map.getCenter();" +//new GPoint("+ latitude +","+ longitude +");" +
+                        //"var address = '<a href=\"http://www.centrodemadagascar.com\">Web del Centro de Madagascar</a>';" +
+                        //"var marker = addtag(point, address);" +
+                   "      var marker = new GMarker(point);\n" +
+                   "	  map.addOverlay(marker);\n" +
+                   "    }\n"+
+                   "  }\n" +
+                   "  load();\n"+
+                   "</script>\n\n");
         out.println(sbf.toString());
     }
 }
