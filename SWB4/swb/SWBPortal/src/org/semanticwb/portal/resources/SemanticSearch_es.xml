@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmSemSearch" action="true" method="POST">
+        <input type="TEXT" name="destUrl" label="Página de resultados:"/>
+        <input type="SUBMIT" name="btnSave" value="GUARDAR"/>
+        <input type="RESET" name="btnReset" value="CANCELAR"/>
+    </form>
+</admresource>
