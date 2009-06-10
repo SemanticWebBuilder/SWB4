@@ -475,7 +475,7 @@ public class SemanticSearch extends GenericResource {
                    "</script>\n");
 
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
-            String url = "/swb/swb/site1/resultados";
+            String url = "/swb/swb/Tlalpan/Resultado_Busqueda";
 
             sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" " +
                 "action=\"" + url + "\" method=\"post\">\n" +
@@ -641,7 +641,6 @@ public class SemanticSearch extends GenericResource {
         PrintWriter out = response.getWriter();
         StringBuffer sbf = new StringBuffer();
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
-        SWBResourceURL aUrl = paramRequest.getActionUrl();
         String query = request.getParameter(createId("naturalQuery"));
         String checked = request.getParameter(createId("showInfo"));
         User user = paramRequest.getUser();
@@ -1012,8 +1011,8 @@ public class SemanticSearch extends GenericResource {
         dbNames.put("Las minas", "");
 
         //Add language parameter to the action url string
-        aUrl.setAction("SEARCH");
-        aUrl.setParameter("lang", lang2);
+//        aUrl.setAction("SEARCH");
+  //      aUrl.setParameter("lang", lang2);
 
         sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" " +
                 "action=\"#\" >\n" +
@@ -1091,7 +1090,7 @@ public class SemanticSearch extends GenericResource {
                             System.out.println("-->" + long_node.asNode().getLiteral().getLexicalForm());*/
                             //System.out.println("-->" + home_node.asNode().getLiteral().getLexicalForm());
 
-                            String mapUrl = "/swb/swb/site1/googleMap?lat=" + lat_node.asNode().getLiteral().getLexicalForm() + "&long="+ long_node.asNode().getLiteral().getLexicalForm();
+                            String mapUrl = "/swb/swb/Tlalpan/googleMap?lat=" + lat_node.asNode().getLiteral().getLexicalForm() + "&long="+ long_node.asNode().getLiteral().getLexicalForm();
                             sbf.append("<table cellpadding=10 cellspacing=10>\n" +
                                     "  <thead>\n" +
                                     "    <tr>\n" +
@@ -1106,7 +1105,7 @@ public class SemanticSearch extends GenericResource {
                                     "  </tbody>\n" +
                                     "</table><br>\n" +
                                     "<p><a href=\"#\" onClick=\"window.open('" + mapUrl + "','" +
-                                    paramRequest.getLocaleString("mapAbout") + " " + dbName + "','menubar=0, width=400, height=300');return false;\">" + paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
+                                    paramRequest.getLocaleString("mapAbout") + " " + dbName + "','menubar=0, width=500, height=400');return false;\">" + paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
                                     "<hr><br>" +
                                     query + ":<br>");
                         }
