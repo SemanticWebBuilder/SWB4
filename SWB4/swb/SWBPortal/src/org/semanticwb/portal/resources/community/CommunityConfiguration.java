@@ -427,35 +427,30 @@ public class CommunityConfiguration extends GenericResource
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         try{
-        System.out.println("Entra a processAction-J9Jun");
         String[] values = request.getParameterValues("type");
         WebPage page = response.getTopic();
         WebSite site = page.getWebSite();
         for (String resourceTypeId : values)
         {
-            System.out.println("Entra a processAction-J9Jun-1");
             ResourceType type = site.getResourceType(resourceTypeId);
             if (type != null)
             {
-                System.out.println("Entra a processAction-J9Jun-2:"+type.getId()+",page:"+page.getId());
                 if (!existsWebPage(resourceTypeId, page))
                 {
-                    System.out.println("Entra a processAction-J9Jun-3:"+resourceTypeId);
                     WebPage pageRec=null;
                     if(resourceTypeId.equals(FORO_RESOURCE_TYPE_ID)){
-                        pageRec = createForo(site, type.getId() + page.getTitle(), page, "foro");
+                        pageRec = createForo(site, page.getTitle(), page, "foro");
                     }else if(resourceTypeId.equals(BLOG_RESOURCE_TYPE_ID)){
-                        pageRec = createBlog(site, type.getId() + page.getTitle(), page, "blog");
+                        pageRec = createBlog(site, page.getTitle(), page, "blog");
                     }else if(resourceTypeId.equals(WIKI_RESOURCE_TYPE_ID)){
-                        pageRec = createWiki(site, type.getId() + page.getTitle(), page, "wiki");
+                        pageRec = createWiki(site, page.getTitle(), page, "wiki");
                     }else if(resourceTypeId.equals(GOOGLE_RESOURCE_TYPE_ID)){
-                        pageRec = createGoogleGadget(site, type.getId() + page.getTitle(), page, "gadget");
+                        pageRec = createGoogleGadget(site, page.getTitle(), page, "gadget");
                     }
                     TemplateRef tplrefRec=site.createTemplateRef();
                     tplrefRec.setTemplate(site.getTemplate("13"));
                     tplrefRec.setActive(true);
                     pageRec.addTemplateRef(tplrefRec);
-                    System.out.println("Entra a processAction-J9Jun-4");
                 }
             }
         }
@@ -472,7 +467,7 @@ public class CommunityConfiguration extends GenericResource
 
         out.println("<form action='" + paramRequest.getActionUrl() + "' method='post'>");
         out.println("<table>");
-        out.println("<tr><td>Seleccione las utilerias que desea agregar:</td></tr>");
+        out.println("<tr><td><b>Seleccione las utilerias que desea agregar:</b></td></tr>");
         WebPage page = paramRequest.getTopic();
         HashSet<Resource> resourcesAlreadyExists = getResources(page);
         for (String resourceId : resources)
