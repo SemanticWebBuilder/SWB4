@@ -499,8 +499,7 @@ public class CommunityConfiguration extends GenericResource
         out.println("</tr>");
         out.println("</table>");
         out.println("</form>");
-        out.close();
-    }
+  }
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
