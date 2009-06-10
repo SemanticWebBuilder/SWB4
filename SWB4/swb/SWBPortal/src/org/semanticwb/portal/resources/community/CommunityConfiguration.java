@@ -443,13 +443,13 @@ public class CommunityConfiguration extends GenericResource
                     System.out.println("Entra a processAction-J9Jun-3:"+resourceTypeId);
                     WebPage pageRec=null;
                     if(resourceTypeId.equals(FORO_RESOURCE_TYPE_ID)){
-                        pageRec = createForo(site, type.getId() + page.getTitle(), page, resourceTypeId);
+                        pageRec = createForo(site, type.getId() + page.getTitle(), page, "foro");
                     }else if(resourceTypeId.equals(BLOG_RESOURCE_TYPE_ID)){
-                        pageRec = createBlog(site, type.getId() + page.getTitle(), page, resourceTypeId);
+                        pageRec = createBlog(site, type.getId() + page.getTitle(), page, "blog");
                     }else if(resourceTypeId.equals(WIKI_RESOURCE_TYPE_ID)){
-                        pageRec = createWiki(site, type.getId() + page.getTitle(), page, resourceTypeId);
+                        pageRec = createWiki(site, type.getId() + page.getTitle(), page, "wiki");
                     }else if(resourceTypeId.equals(GOOGLE_RESOURCE_TYPE_ID)){
-                        pageRec = createGoogleGadget(site, type.getId() + page.getTitle(), page, resourceTypeId);
+                        pageRec = createGoogleGadget(site, type.getId() + page.getTitle(), page, "gadget");
                     }
                     TemplateRef tplrefRec=site.createTemplateRef();
                     tplrefRec.setTemplate(site.getTemplate("13"));
@@ -470,8 +470,9 @@ public class CommunityConfiguration extends GenericResource
     {
         PrintWriter out = response.getWriter();
 
+        out.println("<form action='" + paramRequest.getActionUrl() + "' method='post'>");
         out.println("<table>");
-        out.println("<p>Seleccione las utilerias que desea agregar:</p><form action='" + paramRequest.getActionUrl() + "' method='post'><fieldset>");
+        out.println("<tr><td>Seleccione las utilerias que desea agregar:</td></tr>");
         WebPage page = paramRequest.getTopic();
         HashSet<Resource> resourcesAlreadyExists = getResources(page);
         for (String resourceId : resources)
@@ -494,9 +495,10 @@ public class CommunityConfiguration extends GenericResource
             }
         }
         out.println("<tr>");
-                out.println("<td><button type='submit'>Enviar</button></td>");
-        out.println("</tr></fieldset></form>");
-        out.println("<table>");
+        out.println("<td><button type='submit'>Enviar</button></td>");
+        out.println("</tr>");
+        out.println("</table>");
+        out.println("</form>");
         out.close();
     }
 
