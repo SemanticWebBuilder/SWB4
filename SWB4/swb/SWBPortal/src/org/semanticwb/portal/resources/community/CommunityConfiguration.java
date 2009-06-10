@@ -426,16 +426,21 @@ public class CommunityConfiguration extends GenericResource
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
+        try{
+        System.out.println("Entra a processAction-J9Jun");
         String[] values = request.getParameterValues("type");
         WebPage page = response.getTopic();
         WebSite site = page.getWebSite();
         for (String resourceTypeId : values)
         {
+            System.out.println("Entra a processAction-J9Jun-1");
             ResourceType type = site.getResourceType(resourceTypeId);
             if (type != null)
             {
+                System.out.println("Entra a processAction-J9Jun-2:"+type.getId()+",page:"+page.getId());
                 if (!existsWebPage(resourceTypeId, page))
                 {
+                    System.out.println("Entra a processAction-J9Jun-3:"+resourceTypeId);
                     WebPage pageRec=null;
                     if(resourceTypeId.equals(FORO_RESOURCE_TYPE_ID)){
                         pageRec = createForo(site, type.getId() + page.getTitle(), page, resourceTypeId);
@@ -450,8 +455,12 @@ public class CommunityConfiguration extends GenericResource
                     tplrefRec.setTemplate(site.getTemplate("13"));
                     tplrefRec.setActive(true);
                     pageRec.addTemplateRef(tplrefRec);
+                    System.out.println("Entra a processAction-J9Jun-4");
                 }
             }
+        }
+        }catch(Exception e){
+            e.printStackTrace();
         }
         response.setAction(response.Mode_VIEW);
     }
