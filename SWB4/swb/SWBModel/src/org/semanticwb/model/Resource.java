@@ -2,6 +2,7 @@ package org.semanticwb.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
@@ -30,6 +31,8 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
     private long timer;                     //valores de sincronizacion de views, hits
     private static long time;               //tiempo en milisegundos por cada actualizacion
     private boolean viewed = false;
+
+    private Random rand=new Random();
 
     static
     {
@@ -74,13 +77,29 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
     public void refreshRandPriority()
     {
         //TODO:
-//        if (this.getCamp() == 1)
-//            randpriority = SWBPriorityCalculator.getInstance().calcPriority(0);
-//        else if (this.getCamp() == 2)
-//            randpriority = WBUtils.getInstance().calcPriority(6);
-//        else
-//            randpriority = WBUtils.getInstance().calcPriority(recResource.getPriority());
+        //if (this.getCamp() == 1)
+        //    randpriority = SWBPriorityCalculator.getInstance().calcPriority(0);
+        //else if (this.getCamp() == 2)
+        //    randpriority = WBUtils.getInstance().calcPriority(6);
+        //else
+            randpriority = calcPriority(getPriority());
     }
+
+    private int calcPriority(int p)
+    {
+        if (p == 0)
+            return 0;
+        else if (p == 1)
+            return 1;
+        else if (p == 5)
+            return 50;
+        else if (p > 5)
+            return 60;
+        else {
+            return rand.nextInt(10 * p) + 2;
+        }
+    }
+
 
     public void setRandPriority(int randpriority)
     {
