@@ -62,6 +62,8 @@ public abstract class SWBIndexer
         this.name = name;
         list=Collections.synchronizedList(new LinkedList());
         int delays=Integer.parseInt(props.getProperty("delay","30"));
+        //System.out.println("delays:"+delays);
+        
         TimerTask t=new TimerTask(){
             public void run()
             {
@@ -69,16 +71,19 @@ public abstract class SWBIndexer
             }
         };
         timer = new Timer();
-        timer.schedule(t, delays*1000, delays*1000);        
+        timer.schedule(t, delays*1000, delays*1000);
+        
         init();
     }
 
     protected void _run()
     {
+        //System.out.println("SWBIndexer _run()");
         log.debug("indexer:"+name+" is running...");
         while(list.size()>0)
         {
             SWBIndexObj obj=(SWBIndexObj)list.remove(0);
+            //System.out.println("SWBIndexObj:"+obj);
             try
             {
                 if(obj.is4Remove())
@@ -94,6 +99,7 @@ public abstract class SWBIndexer
                 log.error(t);
             }
         }
+        //System.out.println("SWBIndexer _run2()");
     }
     
     public abstract void init();    
@@ -163,7 +169,7 @@ public abstract class SWBIndexer
         if(topic.isVisible() && topic.isIndexable())
         {
             SWBIndexObj obj=new SWBIndexObj();
-            obj.setType(obj.TYPE_TOPIC);
+            obj.setType(SWBIndexObj.TYPE_TOPIC);
             obj.setUrl(topic.getUrl());
             obj.setId(topic.getWebSiteId()+" "+topic.getId());
             obj.setCategory(getCategory(topic));
@@ -197,7 +203,7 @@ public abstract class SWBIndexer
     public void removeTopic(String topicmapid, String topicid, boolean contents)
     {
         SWBIndexObj obj=new SWBIndexObj();
-        obj.setType(obj.TYPE_TOPIC);
+        obj.setType(SWBIndexObj.TYPE_TOPIC);
         obj.setId(topicmapid+" "+topicid);
         if(contents)
         {
@@ -217,7 +223,7 @@ public abstract class SWBIndexer
         if(res!=null && res.getResourceBase().isActive() && !res.getResourceBase().isDeleted())
         {
             SWBIndexObj obj=new SWBIndexObj();
-            obj.setType(obj.TYPE_CONTENT);
+            obj.setType(SWBIndexObj.TYPE_CONTENT);
             obj.setId(topic.getWebSiteId()+" "+resb.getId());
             obj.setCategory(getCategory(topic));
             obj.setUrl(topic.getUrl());
@@ -233,7 +239,7 @@ public abstract class SWBIndexer
     public void removeContent(String resid, String topicmapid)
     {
         SWBIndexObj obj=new SWBIndexObj();
-        obj.setType(obj.TYPE_CONTENT);
+        obj.setType(SWBIndexObj.TYPE_CONTENT);
         obj.setId(topicmapid+" "+resid);
         obj.setTopicMapID(topicmapid);
         obj.set4Remove(true);
@@ -248,7 +254,7 @@ public abstract class SWBIndexer
     public void indexFile(File file, String url, WebPage topic, String resid) throws IOException
     {
         SWBIndexObj obj=new SWBIndexObj();
-        obj.setType(obj.TYPE_FILE);
+        obj.setType(SWBIndexObj.TYPE_FILE);
         obj.setUrl(url);
         obj.setId(file.getCanonicalPath());
         if(topic!=null)
@@ -270,7 +276,7 @@ public abstract class SWBIndexer
         try
         {
             SWBIndexObj obj=new SWBIndexObj();
-            obj.setType(obj.TYPE_FILE);
+            obj.setType(SWBIndexObj.TYPE_FILE);
             obj.setId(file.getCanonicalPath());
             obj.set4Remove(true);
             list.add(obj);
@@ -312,7 +318,7 @@ public abstract class SWBIndexer
         StringBuffer names = new StringBuffer();
         if (page!=null)
         {
-            Iterator<SemanticLiteral> it=page.getSemanticObject().listLiteralProperties(page.swb_title);
+            Iterator<SemanticLiteral> it=page.getSemanticObject().listLiteralProperties(WebPage.swb_title);
             while(it.hasNext())
             {
                 SemanticLiteral lit=it.next();
@@ -343,7 +349,7 @@ public abstract class SWBIndexer
         StringBuffer descb = new StringBuffer();
         if (page!=null)
         {
-            Iterator<SemanticLiteral> it=page.getSemanticObject().listLiteralProperties(page.swb_description);
+            Iterator<SemanticLiteral> it=page.getSemanticObject().listLiteralProperties(WebPage.swb_description);
             while(it.hasNext())
             {
                 SemanticLiteral lit=it.next();
@@ -402,12 +408,12 @@ public abstract class SWBIndexer
         
         if(tpacc)
         {
-            if(obj.getType().equals(obj.TYPE_TOPIC))
+            if(obj.getType().equals(SWBIndexObj.TYPE_TOPIC))
             {
                 //se agregar sumamary
-                obj.setSummary(topic.getDescription(user.getLanguage()));
+                obj.setSummary(topic.getDisplayDescription(user.getLanguage()));
                 return true;
-            }else if(obj.getType().equals(obj.TYPE_CONTENT))
+            }else if(obj.getType().equals(SWBIndexObj.TYPE_CONTENT))
             {
                 try
                 {
@@ -430,7 +436,7 @@ public abstract class SWBIndexer
                     log.error(e);
                 }
                 return false;
-            }else if(obj.getType().equals(obj.TYPE_FILE))
+            }else if(obj.getType().equals(SWBIndexObj.TYPE_FILE))
             {
                 try
                 {

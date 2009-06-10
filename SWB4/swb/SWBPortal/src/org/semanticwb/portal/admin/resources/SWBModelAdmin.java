@@ -85,15 +85,14 @@ public class SWBModelAdmin extends GenericResource {
             out.println("<fieldset>");
             out.println("<legend>" + paramRequest.getLocaleLogString("existTpls") + "</legend>");
             out.println("<form action=\"" + urlAction.toString() + "\" method=\"post\" enctype='multipart/form-data'>");
-            out.println("<table width=\"75%\">");
+            out.println("<table width=\"100%\">");
             out.println("<tr align=\"left\">");
-            out.println("<br>");
-            out.println("<td><b>" + paramRequest.getLocaleLogString("tpl") + "</b></td>");
-            out.println("<td><b>" + paramRequest.getLocaleLogString("size") + "</b></td>");
-            out.println("<td><b>"+paramRequest.getLocaleLogString("install") +"</b></td>");
-            out.println("<td><b>"+paramRequest.getLocaleLogString("download") + "</b></td>");
-            out.println("<td><b>"+paramRequest.getLocaleLogString("delete") + "</b></td>");
-            out.println("<td><b>" + paramRequest.getLocaleLogString("up2comunity") + "</b></td>");
+            out.println("<th><b>" + paramRequest.getLocaleLogString("tpl") + "</b></th>");
+            out.println("<th><b>" + paramRequest.getLocaleLogString("size") + "</b></th>");
+            out.println("<th><b>"+paramRequest.getLocaleLogString("install") +"</b></th>");
+            out.println("<th><b>"+paramRequest.getLocaleLogString("download") + "</b></th>");
+            out.println("<th><b>"+paramRequest.getLocaleLogString("delete") + "</b></th>");
+            out.println("<th><b>" + paramRequest.getLocaleLogString("up2comunity") + "</b></th>");
             out.println("</tr>");
             for (int i = 0; i < files.length; i++) {
                 File filex = files[i];

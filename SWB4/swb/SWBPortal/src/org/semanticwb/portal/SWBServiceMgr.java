@@ -11,11 +11,10 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Dns;
-import org.semanticwb.model.Language;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceSubType;
 import org.semanticwb.model.ResourceType;
-import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.Traceable;
@@ -27,6 +26,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.portal.indexer.SWBIndexer;
 
 /**
  *
@@ -35,6 +35,9 @@ import org.semanticwb.platform.SemanticProperty;
 public class SWBServiceMgr implements SemanticObserver {
 
     private static Logger log = SWBUtils.getLogger(SWBServiceMgr.class);
+
+    private int lastobj;              //ultimo objeto modificado
+    private long lastthread;          //ultimo thread utilizado
 
     public void notify(SemanticObject obj, Object prop, String action)
     {
@@ -136,10 +139,18 @@ public class SWBServiceMgr implements SemanticObserver {
                     {
                         Dns.refresh();
                     }
+                    if(obj.instanceOf(WebPage.sclass))
+                    {
+                        SWBPortal.getIndexMgr().getDefaultIndexer().removeTopic(obj.getModel().getName(), obj.getId());
+                    }
+                    if(obj.instanceOf(WebSite.sclass))
+                    {
+                        SWBPortal.getIndexMgr().getDefaultIndexer().removeWebSite(obj.getId());
+                    }
                 }
             } else if (prop instanceof SemanticProperty)
             {
-                updateTraceable(obj,usr);
+                updateObject(obj,usr);
                 //System.out.println("obj:"+obj+" "+Resource.sclass+"="+Resource.sclass+" prop:"+prop+"="+Resource.swb_resourceSubType);
                 if(obj.instanceOf(Resource.sclass) && prop.equals(Resource.swb_resourceSubType))
                 {
@@ -161,6 +172,45 @@ public class SWBServiceMgr implements SemanticObserver {
             }else
             {
                 //TODO: SemanticClass
+            }
+        }
+    }
+    public void updateObject(SemanticObject obj, User usr)
+    {
+        //TODO:Una rapida aproximacion para no estar actualizando al modificar cada propiedad
+        //if(obj.hashCode()!=lastobj || Thread.currentThread().getId()!=lastthread)
+        {
+            System.out.println("updateObject:"+obj+" user:"+usr);
+            lastobj=obj.hashCode();
+            lastthread=Thread.currentThread().getId();
+            updateTraceable(obj,usr);
+
+            if(obj.instanceOf(WebPage.sclass))
+            {
+                SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();
+                indexer.removeTopic(obj.getModel().getName(),obj.getId());
+                indexer.indexWebPage((WebPage)obj.createGenericInstance());
+            }
+            if(obj.instanceOf(Resource.sclass))
+            {
+                //System.out.println("Resource modificado");
+                Resource res=(Resource)obj.createGenericInstance();
+                if(res.getResourceType().getResourceMode()==ResourceType.MODE_CONTENT)
+                {
+                    //System.out.println("Resource tipo contenido");
+                    SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();
+                    indexer.removeContent(obj.getId(),obj.getModel().getName());
+                    Iterator<Resourceable> it=res.listResourceables();
+                    while(it.hasNext())
+                    {
+                        Resourceable ob=it.next();
+                        if(ob instanceof WebPage)
+                        {
+                            //System.out.println("Contenido en la pagina ob");
+                            indexer.indexContent(res,(WebPage)ob);
+                        }
+                    }
+                }
             }
         }
     }

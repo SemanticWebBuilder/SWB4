@@ -37,6 +37,7 @@ import org.semanticwb.portal.SWBUserMgr;
 import org.semanticwb.portal.access.SWBAccessIncrement;
 import org.semanticwb.portal.access.SWBAccessLog;
 import org.semanticwb.portal.db.SWBDBAdmLog;
+import org.semanticwb.portal.indexer.SWBIndexMgr;
 import org.semanticwb.util.JarFile;
 import org.semanticwb.util.db.GenericDB;
 
@@ -56,6 +57,7 @@ public class SWBPortal {
     private static SWBMessageCenter msgcenter=null;
     private static SWBAccessLog acclog=null;
     private static SWBAccessIncrement accInc=null;
+    private static SWBIndexMgr indmgr=null;
     private static HashMap<String, SessionUser> m_sessions;
 
     static public synchronized SWBPortal createInstance() {
@@ -228,6 +230,9 @@ public class SWBPortal {
         accInc=new SWBAccessIncrement();
         accInc.init();
 
+        indmgr=new SWBIndexMgr();
+        indmgr.init();
+
         //Inicializa el RuleMgr
         Rule.getRuleMgr();
 
@@ -341,6 +346,11 @@ public class SWBPortal {
     public static SWBAccessIncrement getAccessIncrement()
     {
         return accInc;
+    }
+
+    public static SWBIndexMgr getIndexMgr()
+    {
+        return indmgr;
     }
 
     public static JarFile getAdminFile(String path) {

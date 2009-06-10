@@ -11,12 +11,12 @@ import java.io.OutputStream;
  *
  * @author jorge.jimenez
  */
-public class WBServletOutputStreamImp extends javax.servlet.ServletOutputStream 
+public class SWBServletOutputStreamImp extends javax.servlet.ServletOutputStream
 {
     OutputStream out=null;
     
     /** Creates a new instance of WBServletOutputStreamImp */
-    public WBServletOutputStreamImp(OutputStream out)
+    public SWBServletOutputStreamImp(OutputStream out)
     {
         this.out=out;
     }
