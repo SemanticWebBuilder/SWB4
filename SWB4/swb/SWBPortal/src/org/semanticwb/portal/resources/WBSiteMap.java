@@ -220,6 +220,8 @@ public class WBSiteMap extends GenericAdmResource
             }else {
                 surl=paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString();
             }
+            System.out.println("base.getAttribute(\"url\")="+base.getAttribute("url"));
+            System.out.println("surl="+surl);
 
             if (!"".equals(base.getAttribute("img", "").trim())) {
                 out.println("<a href=\"" + surl +"\">");

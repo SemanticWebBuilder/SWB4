@@ -28,7 +28,7 @@
         <input type="TEXT" name="title" label="Título:" size="50"/>
 
             <input type="TEXT" name="level" label="Nivel de despliegue" size="2" />
-            <input type="TEXT" name="url" label="Url de la sección que despliega el mapa:" size="50"/>
+            <input type="TEXT" name="url" label="Url de la sección que despliega el mapa de sitio:" size="50"/>
             
         </fieldset>
         <fieldset>
