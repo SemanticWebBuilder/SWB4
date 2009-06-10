@@ -51,7 +51,7 @@ public class Login extends GenericAdmResource
                     log.error("Can't include a jsp file " + jspfile, ex);
                 }
             } else
-            { System.out.println("userS:  ***************   "+paramsRequest.getUser().isSigned());
+            { //System.out.println("userS:  ***************   "+paramsRequest.getUser().isSigned());
         if (!paramsRequest.getUser().isSigned())
         {
             out.println("<fieldset><form action=\""+url+query+"\" method=\"post\">");
