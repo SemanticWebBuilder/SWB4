@@ -108,7 +108,7 @@ public class WBSiteMap extends GenericAdmResource
             String name = names.nextElement();
             params.put(name, request.getParameter(name));
         }
-        SelectTree tree = new SelectTree(paramRequest.getTopic().getWebSite().getTitle(), url.toString(), false, base.getAttribute("title"), paramRequest.getUser().getLanguage());
+        SelectTree tree = new SelectTree(paramRequest.getTopic().getWebSite().getId(), url.toString(), false, base.getAttribute("title"), paramRequest.getUser().getLanguage());
         String x = tree.renderXHTML(params);
         out.println(x);
         out.flush();
@@ -261,7 +261,7 @@ public class WBSiteMap extends GenericAdmResource
                 }catch(NumberFormatException e) {
                     level = 0;
                 }
-                SelectTree tree = new SelectTree(paramRequest.getTopic().getWebSite().getTitle(), url.toString(), false, level, base.getAttribute("title"), paramRequest.getUser().getLanguage());
+                SelectTree tree = new SelectTree(paramRequest.getTopic().getWebSite().getId(), url.toString(), false, level, base.getAttribute("title"), paramRequest.getUser().getLanguage());
                 HashMap params = new HashMap();
                 Enumeration<String> names = request.getParameterNames();
                 while(names.hasMoreElements()) {
