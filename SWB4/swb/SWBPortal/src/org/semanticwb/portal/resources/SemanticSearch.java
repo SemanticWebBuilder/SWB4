@@ -1016,7 +1016,7 @@ public class SemanticSearch extends GenericResource {
         aUrl.setParameter("lang", lang2);
 
         sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" " +
-                "action=\"" + aUrl + "\" >\n" +
+                "action=\"#\" >\n" +
                 "  <textarea id=\"" + createId("naturalQuery") + "\" rows=1 cols=70" +
                 "name=\"" + createId("naturalQuery") + "\" class=\"txt-busca\" >" + query + "</textarea>\n" +
                 "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>\n" +
@@ -1090,9 +1090,6 @@ public class SemanticSearch extends GenericResource {
                             System.out.println("-->" + lat_node.asNode().getLiteral().getLexicalForm());
                             System.out.println("-->" + long_node.asNode().getLiteral().getLexicalForm());*/
                             //System.out.println("-->" + home_node.asNode().getLiteral().getLexicalForm());
-
-                    /*sbf.append("<script type=\"text/javascript\" " +
-                            "src=\"http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAOJNnlv7XtimNAEXtmyrRcBTb-vLQlFZmc2N8bgWI8YDPp5FEVBSt-jSEUxX5Zuafs_gGbS--6HOwVw&sensor=true\"></script>");*/
 
                             String mapUrl = "/swb/swb/site1/googleMap?lat=" + lat_node.asNode().getLiteral().getLexicalForm() + "&long="+ long_node.asNode().getLiteral().getLexicalForm();
                             sbf.append("<table cellpadding=10 cellspacing=10>\n" +
