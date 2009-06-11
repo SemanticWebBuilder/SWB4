@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -17,7 +17,7 @@ import org.semanticwb.portal.api.SWBResourceException;
  * Recurso administrador de google maps para WebBuilder.
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
-public class GoogleMapsLoader extends GenericResource {
+public class GoogleMapsLoader extends GenericAdmResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
