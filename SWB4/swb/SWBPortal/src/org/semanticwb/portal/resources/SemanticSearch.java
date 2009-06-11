@@ -624,12 +624,16 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang2.equals(paramRequest.getUser().getLanguage())) {
                 lang2 = paramRequest.getUser().getLanguage();
+                long time = System.currentTimeMillis();
                 lex = new Lexicon(lang2);
+                System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time));
             }
         } else {
             if (!lang2.equals("es")) {
                 lang2 = "es";
+                long time = System.currentTimeMillis();
                 lex = new Lexicon(lang2);
+                System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time));
             }
         }
 
@@ -639,9 +643,6 @@ public class SemanticSearch extends GenericAdmResource {
         } else {
             query = query.trim();
         }
-
-        System.out.println(">>>>Gathered data: ");
-        System.out.println(">>>>query: "+query+", lang: "+lang2+", ");
 
         rUrl.setMode("SUGGEST");
         rUrl.setCallMethod(rUrl.Call_DIRECT);             
@@ -677,7 +678,9 @@ public class SemanticSearch extends GenericAdmResource {
                 "</form>\n");
 
         tr = new SWBSparqlTranslator(lex);
+        long time = System.currentTimeMillis();
         String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query);
+        System.out.println("+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time));
         System.out.println(sparqlQuery);
         String errCount = Integer.toString(tr.getErrCode());
 
@@ -712,6 +715,7 @@ public class SemanticSearch extends GenericAdmResource {
 
                     sbf.append("<br><br><h2>Resultados de la búsqueda</h2>\n");
                         System.out.println("Obteniendo información de la dbpedia");
+                        time = System.currentTimeMillis();
                         if (!dbName.equals("")) {
                             String dbPediaQuery =
                                     "PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>\n" +
@@ -723,15 +727,16 @@ public class SemanticSearch extends GenericAdmResource {
                                     "FILTER (lang(?desc) = \"" + lang2 + "\").\n" +
                                     "<http://dbpedia.org/resource/" + dbName + "> geo:lat ?lat.\n" +
                                     "<http://dbpedia.org/resource/" + dbName + "> geo:long ?long.\n" +
-                                    "<http://dbpedia.org/resource/" + dbName + "> foaf:page ?page\n" +
+                                    "<http://dbpedia.org/resource/" + dbName + "> foaf:page ?page.\n" +
                                     "}\n";
                             //System.out.println("<<<<<" + dbPediaQuery);
                             //Query dbpedia
                             SemanticModel dbpModel = SWBPlatform.getSemanticMgr().getModel("DBPedia");
-                            QueryExecution dbQexec = dbpModel.sparQLQuery(dbPediaQuery);
+                            QueryExecution dbQexec = dbpModel.sparQLQuery(dbPediaQuery);                            
 
                             //Get dbPedia INFO
                             ResultSet dbrs = dbQexec.execSelect();
+                            System.out.println("+++Tiempo de consulta dbPedia: " + String.valueOf(System.currentTimeMillis() - time));
                             QuerySolution dbrb = dbrs.nextSolution();
                             RDFNode desc_node = dbrb.get("desc");
                             RDFNode lat_node = dbrb.get("lat");
@@ -741,8 +746,8 @@ public class SemanticSearch extends GenericAdmResource {
                             /*System.out.println("Información obtenida");
                             System.out.println("-->" + desc_node.asNode().getLiteral().getLexicalForm());
                             System.out.println("-->" + lat_node.asNode().getLiteral().getLexicalForm());
-                            System.out.println("-->" + long_node.asNode().getLiteral().getLexicalForm());
-                            //System.out.println("-->" + home_node.asNode().getLiteral().getLexicalForm());*/
+                            System.out.println("-->" + long_node.asNode().getLiteral().getLexicalForm());*/
+                            //System.out.println("-->" + home_node.asNode().getLiteral().getLexicalForm());
 
                             String mapUrl = getResourceBase().getAttribute("mapUrl") + "?lat=" + lat_node.asNode().getLiteral().getLexicalForm() + "&long="+ long_node.asNode().getLiteral().getLexicalForm();
                             sbf.append("<table cellpadding=10 cellspacing=10>\n" +
@@ -772,7 +777,7 @@ public class SemanticSearch extends GenericAdmResource {
 
                     squery.serialize();
                     QueryExecution qexec = QueryExecutionFactory.create(squery, model);
-                    long time = System.currentTimeMillis();
+                    time = System.currentTimeMillis();
 
                     try {
                         sbf.append("<div>");
