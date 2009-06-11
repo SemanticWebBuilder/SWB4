@@ -605,7 +605,7 @@ public class BlogResource extends GenericResource
     {
 
         User user = paramRequest.getUser();
-        UserRepository userrep = user.getUserRepository();
+        UserRepository userrep = paramRequest.getTopic().getWebSite().getUserRepository();
 
         PrintWriter out = response.getWriter();
         if ( this.getResourceBase().getAttribute("blogid") == null || this.getResourceBase().getAttribute("blogid").equals("") )
@@ -712,7 +712,7 @@ public class BlogResource extends GenericResource
     public void doAsignUser(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         User user = paramRequest.getUser();
-        UserRepository userrep = user.getUserRepository();
+        UserRepository userrep = paramRequest.getTopic().getWebSite().getUserRepository();
 
         PrintWriter out = response.getWriter();
         if ( this.getResourceBase().getAttribute("blogid") == null || this.getResourceBase().getAttribute("blogid").equals("") )
