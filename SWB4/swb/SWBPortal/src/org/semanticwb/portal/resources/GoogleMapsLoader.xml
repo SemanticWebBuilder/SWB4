@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmSemSearch" action="true" method="POST" enctype="multipart/form-data">
+        <fieldset>
+            <input type="TEXT" name="mapKey" label="Clave del API de Google:"/>
+            <input type="TEXT" name="mapWidth" label="Ancho de mapa:"/>
+            <input type="TEXT" name="mapHeight" label="Alto de mapa:"/>
+        </fieldset>
+        <fieldset>
+            <input type="SUBMIT" name="btnSave" value="Guardar"/>
+            <input type="RESET" name="btnReset" value="Cancelar"/>
+        </fieldset>
+    </form>
+</admresource>
