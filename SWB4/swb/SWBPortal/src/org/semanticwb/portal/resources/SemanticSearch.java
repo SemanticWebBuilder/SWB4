@@ -741,20 +741,23 @@ public class SemanticSearch extends GenericAdmResource {
                             RDFNode desc_node = dbrb.get("desc");
                             RDFNode lat_node = dbrb.get("lat");
                             RDFNode long_node = dbrb.get("long");
-                            //RDFNode home_node = dbrb.get("page");
+                            RDFNode home_node = dbrb.get("page");
 
-                            /*System.out.println("Información obtenida");
-                            System.out.println("-->" + desc_node.asNode().getLiteral().getLexicalForm());
+                            //System.out.println("Información obtenida");
+                            /*System.out.println("-->" + desc_node.asNode().getLiteral().getLexicalForm());
                             System.out.println("-->" + lat_node.asNode().getLiteral().getLexicalForm());
                             System.out.println("-->" + long_node.asNode().getLiteral().getLexicalForm());*/
-                            //System.out.println("-->" + home_node.asNode().getLiteral().getLexicalForm());
+                            //System.out.println("-->" + home_node.toString());
 
-                            String mapUrl = getResourceBase().getAttribute("mapUrl") + "?lat=" + lat_node.asNode().getLiteral().getLexicalForm() + "&long="+ long_node.asNode().getLiteral().getLexicalForm();
+                            String mapUrl = getResourceBase().getAttribute("mapUrl") +
+                                    "?lat=" + lat_node.asNode().getLiteral().getLexicalForm() +
+                                    "&long="+ long_node.asNode().getLiteral().getLexicalForm() +
+                                    "&wikiUrl=" + home_node.toString();
                             sbf.append("<table cellpadding=10 cellspacing=10>\n" +
                                     "  <thead>\n" +
                                     "    <tr>\n" +
-                                    "      <th>" + paramRequest.getLocaleString("infoAbout") + " " + //" <a href=\"" +
-                                            /*home_node.asNode().getLiteral().getLexicalForm() + "\">" + */dbName + "</th>\n" +
+                                    "      <th>" + paramRequest.getLocaleString("infoAbout") + " " +  "<a href=\"" +
+                                            home_node.toString() + "\">" + dbName + "</a></th>\n" +
                                     "    </tr>\n" +
                                     "  </thead>\n" +
                                     "  <tbody>\n" +
