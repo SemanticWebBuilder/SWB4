@@ -55,23 +55,13 @@ public class GoogleMapsLoader extends GenericAdmResource {
                    "  function load() {\n" +
                    "    if (GBrowserIsCompatible()) {\n" +
                    "      var map = new GMap2(document.getElementById('" + getResourceBase().getId() + "/map'));\n" +
-                   "      map.addControl(new GMapTypeControl());\n" +
+                   "      map.setCenter(new GLatLng(" + latitude + ", "+ longitude +"), 11);\n" +                   
                    "      map.addControl(new GLargeMapControl());\n" +
-                        //"map.addControl(new GOverviewMapControl());\n" +
-                   "      map.setCenter(new GLatLng(" + latitude + ", "+ longitude +"), 11);\n" +
-                   "      map.setMapType(G_HYBRID_TYPE);\n" +
-
-//                        "function addtag(point, address) {"+
-//                        "var marker = new GMarker(point);"+
-//                        "GEvent.addListener(marker, \"click\", function() { marker.openInfoWindowHtml(address); } );"+
-//                        "return marker;" +
-//                        "}" +
-
-                   "      var point = map.getCenter();" +//new GPoint("+ latitude +","+ longitude +");" +
-                        //"var address = '<a href=\"http://www.centrodemadagascar.com\">Web del Centro de Madagascar</a>';" +
-                        //"var marker = addtag(point, address);" +
-                   "      var marker = new GMarker(point);\n" +
-                   "	  map.addOverlay(marker);\n" +
+                   "      map.addControl(new GScaleControl());\n" +
+                   "      map.addControl(new GMapTypeControl());\n" +
+                   "      var punto = new GLatLng("+ latitude + "," + longitude + ");\n" +
+                   "      var marcador = new GMarker(punto);\n" +
+                   "      map.addOverlay(marcador);\n" +
                    "    }\n"+
                    "  }\n" +
                    "  load();\n"+
