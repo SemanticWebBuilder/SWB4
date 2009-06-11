@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.nlp.Lexicon;
 import org.semanticwb.nlp.translation.SWBSparqlTranslator;
-import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -32,19 +31,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.admin.resources.SWBAListRelatedObjects;
+import org.semanticwb.portal.api.GenericAdmResource;
 
 /**
  *
  * @author hasdai
  */
-public class SemanticSearch extends GenericResource {
+public class SemanticSearch extends GenericAdmResource {
 
     private Logger log = SWBUtils.getLogger(SWBAListRelatedObjects.class);
     private SWBSparqlTranslator tr = null;
@@ -475,7 +474,7 @@ public class SemanticSearch extends GenericResource {
                    "</script>\n");
 
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
-            String url = paramRequest.getResourceBase().getAttribute("destUrl", "#");
+            String url = getResourceBase().getAttribute("destUrl");
 
             sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" " +
                 "action=\"" + url + "\" method=\"post\">\n" +
@@ -1090,7 +1089,7 @@ public class SemanticSearch extends GenericResource {
                             System.out.println("-->" + long_node.asNode().getLiteral().getLexicalForm());*/
                             //System.out.println("-->" + home_node.asNode().getLiteral().getLexicalForm());
 
-                            String mapUrl = "/swb/swb/Tlalpan/googleMap?lat=" + lat_node.asNode().getLiteral().getLexicalForm() + "&long="+ long_node.asNode().getLiteral().getLexicalForm();
+                            String mapUrl = getResourceBase().getAttribute("mapUrl") + "?lat=" + lat_node.asNode().getLiteral().getLexicalForm() + "&long="+ long_node.asNode().getLiteral().getLexicalForm();
                             sbf.append("<table cellpadding=10 cellspacing=10>\n" +
                                     "  <thead>\n" +
                                     "    <tr>\n" +
