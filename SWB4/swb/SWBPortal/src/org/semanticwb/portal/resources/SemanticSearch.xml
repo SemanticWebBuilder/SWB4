@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <form name="frmAdmSemSearch" action="true" method="POST">
-        <admdbconnmgr defconn="true"/>
-        <input type="TEXT" name="destUrl" label="Página de resultados:"/>
-        <input type="SUBMIT" name="btnSave" value="GUARDAR"/>
-        <input type="RESET" name="btnReset" value="CANCELAR"/>
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmSemSearch" action="true" method="POST" enctype="multipart/form-data">
+        <fieldset>
+            <input type="TEXT" name="destUrl" label="Página de resultados:"/>
+            <input type="TEXT" name="mapUrl" label="Página de mapa:"/>
+        </fieldset>
+        <fieldset>
+            <input type="SUBMIT" name="btnSave" value="Guardar"/>
+            <input type="RESET" name="btnReset" value="Cancelar"/>
+        </fieldset>
     </form>
 </admresource>
