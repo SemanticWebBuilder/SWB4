@@ -1104,7 +1104,7 @@ public class SemanticSearch extends GenericAdmResource {
                                     "  </tbody>\n" +
                                     "</table><br>\n" +
                                     "<p><a href=\"#\" onClick=\"window.open('" + mapUrl + "','" +
-                                    paramRequest.getLocaleString("mapAbout") + " " + dbName + "','menubar=0, width=800, height=600');return false;\">" + paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
+                                    paramRequest.getLocaleString("mapAbout") + " " + dbName + "','menubar=0, width=420, height=420');return false;\">" + paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
                                     "<hr><br>" +
                                     query + ":<br>");
                         }
