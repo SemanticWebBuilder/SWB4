@@ -38,6 +38,11 @@ public class GoogleMapsLoader extends GenericAdmResource {
             longitude = "-99.131076";
         }
 
+        String wikiUrl = request.getParameter("wikiUrl");
+        if (wikiUrl == null || wikiUrl.equals("")) {
+            wikiUrl = "#";
+        }
+
         sbf.append("<script src=\"http://maps.google.com/maps?file=api&v=2&sensor=false&key=" + getResourceBase().getAttribute("mapKey") + "\"" +
                   " type=\"text/javascript\"></script>");
 
@@ -62,6 +67,7 @@ public class GoogleMapsLoader extends GenericAdmResource {
                    "      var punto = new GLatLng("+ latitude + "," + longitude + ");\n" +
                    "      var marcador = new GMarker(punto);\n" +
                    "      map.addOverlay(marcador);\n" +
+                   "      marcador.openInfoWindowHtml('<p>" + paramRequest.getLocaleString("msgWP") +"</p><p><a href=\"" + wikiUrl + "\">" + wikiUrl + "</a>');\n" +
                    "    }\n"+
                    "  }\n" +
                    "  load();\n"+
