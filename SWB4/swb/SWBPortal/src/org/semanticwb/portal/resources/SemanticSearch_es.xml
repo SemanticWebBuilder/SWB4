@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <form name="frmAdmSemSearch" action="true" method="POST">
         <admdbconnmgr defconn="true"/>
-        <input type="TEXT" name="destUrl" label="PÃ¡gina de resultados:"/>
+        <input type="TEXT" name="destUrl" label="Página de resultados:"/>
         <input type="SUBMIT" name="btnSave" value="GUARDAR"/>
         <input type="RESET" name="btnReset" value="CANCELAR"/>
     </form>
