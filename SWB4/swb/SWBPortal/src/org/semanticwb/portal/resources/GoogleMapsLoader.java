@@ -38,13 +38,15 @@ public class GoogleMapsLoader extends GenericResource {
             longitude = "-99.131076";
         }
 
-        sbf.append("<script src=\"http://maps.google.com/maps?file=api&v=2&sensor=false&key=ABQIAAAAOJNnlv7XtimNAEXtmyrRcBSvBiWx47Sg3GqjNr4y4ou_VmvayxTQVYbEJHhu9GaB8tmww2NjFuv0vA\"" +
+        sbf.append("<script src=\"http://maps.google.com/maps?file=api&v=2&sensor=false&key=" + getResourceBase().getAttribute("mapKey") + "\"" +
                   " type=\"text/javascript\"></script>");
 
         sbf.append("<table>\n" +
                    "  <tr>\n" +
-                   "    <td width=300>\n" +
-                   "      <div id=\"" + getResourceBase().getId() + "/map\" style=\"width:400px; height:300px;\"></div>\n" +
+                   "    <td width=" + getResourceBase().getAttribute("mapWidth","300") + ">\n" +
+                   "      <div id=\"" + getResourceBase().getId() + "/map\" style=\"width:" + 
+                   getResourceBase().getAttribute("mapWidth","300") + "px; height:" +
+                   getResourceBase().getAttribute("mapHeight","400")+ "px;\"></div>\n" +
                    "    </td>\n" +
                    "  </tr>" +
                 "</table>");
