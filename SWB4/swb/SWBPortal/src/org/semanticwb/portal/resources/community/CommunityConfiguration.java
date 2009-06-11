@@ -226,6 +226,7 @@ public class CommunityConfiguration extends GenericResource
                 foro = WebPage.createWebPage(FORO_RESOURCE_TYPE_ID + UUID.randomUUID().toString(), site);
                 foro.setParent(parent);
                 foro.setActive(true);
+                foro.setHidden(true);
                 foro.setCreated(new java.util.Date(System.currentTimeMillis()));
                 foro.setTitle("Foro de " + title);
             }
@@ -262,6 +263,7 @@ public class CommunityConfiguration extends GenericResource
                 wiki = WebPage.createWebPage(WIKI_RESOURCE_TYPE_ID + UUID.randomUUID().toString(), site);
                 wiki.setTitle("Wiki de " + title);
                 wiki.setParent(parent);
+                wiki.setHidden(true);
                 wiki.setCreated(new java.util.Date(System.currentTimeMillis()));
                 wiki.setActive(true);
             }
@@ -297,6 +299,7 @@ public class CommunityConfiguration extends GenericResource
                 blog = WebPage.createWebPage(BLOG_RESOURCE_TYPE_ID + UUID.randomUUID().toString(), site);
                 blog.setParent(parent);
                 blog.setTitle("Blog de " + title);
+                blog.setHidden(true);
                 blog.setCreated(new java.util.Date(System.currentTimeMillis()));
                 blog.setActive(true);
             }
@@ -343,6 +346,7 @@ public class CommunityConfiguration extends GenericResource
                 googlegadget = WebPage.createWebPage(GOOGLE_RESOURCE_TYPE_ID + UUID.randomUUID().toString(), site);
                 googlegadget.setParent(parent);
                 googlegadget.setTitle("Gadget de " + title);
+                googlegadget.setHidden(true);
                 googlegadget.setCreated(new java.util.Date(System.currentTimeMillis()));
                 googlegadget.setActive(true);
             }
@@ -464,39 +468,39 @@ public class CommunityConfiguration extends GenericResource
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
-
-        out.println("<form action='" + paramRequest.getActionUrl() + "' method='post'>");
-        out.println("<table>");
-        out.println("<tr><td><b>Seleccione las utilerias que desea agregar:</b></td></tr>");
+        StringBuffer strbf=new StringBuffer();
+        boolean flag=false;
+        strbf.append("<form action='" + paramRequest.getActionUrl() + "' method='post'>");
+        strbf.append("<table>");
+        strbf.append("<tr><td><b>Seleccione las utilerias que desea agregar:</b></td></tr>");
         WebPage page = paramRequest.getTopic();
         HashSet<String> resourcesAlreadyExists = getResources(page);
         for (String resourceId : resources)
         {
-            System.out.println("doAdmin/resourceId:"+resourceId);
             boolean exists = false;
             for (String resource : resourcesAlreadyExists)
             {
-                System.out.println("doAdmin/resource:"+resource);
                 if (resource.startsWith(resourceId))
                 {
-                    System.out.println("doAdmin/resource-1:"+resource);
                     exists = true;
                     break;
                 }
             }
             if (!exists)
             {
-                out.println("<tr>");
-                out.println("<td>"+resourceId+"</td>");
-                out.println("<td><input name='type' value='" + resourceId + "' type='checkbox'></td>");
-                out.println("</tr>");
+                strbf.append("<tr>");
+                strbf.append("<td>"+resourceId+"</td>");
+                strbf.append("<td><input name='type' value='" + resourceId + "' type='checkbox'></td>");
+                strbf.append("</tr>");
+                flag=true;
             }
         }
-        out.println("<tr>");
-        out.println("<td><button type='submit'>Enviar</button></td>");
-        out.println("</tr>");
-        out.println("</table>");
-        out.println("</form>");
+        strbf.append("<tr>");
+        strbf.append("<td><button type='submit'>Enviar</button></td>");
+        strbf.append("</tr>");
+        strbf.append("</table>");
+        strbf.append("</form>");
+        if(flag) out.println(strbf.toString());
   }
 
     @Override
