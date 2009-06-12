@@ -240,18 +240,39 @@ public class CreateCommunity extends GenericResource
             }
             else if (type.equals("o"))
                 {
-                    System.out.println("entra a conf/doAdmin-3");
+                    System.out.println("entra a conf/doAdmin-3-JOrge");
                     if (request.getParameter("title") == null)
                     {
-                        System.out.println("entra a conf/doAdmin-4");
+                        System.out.println("entra a conf/doAdmin-4-JOrge");
                         out.println("<div>");
-                        out.println("<form name='frmselecttype' method='post' action='"+ paramRequest.getActionUrl() +"'>");
-                        out.println("<fieldset><label for='title'>Indique el nombre organización:</label>");
-                        out.println("<input type='text' name='title' id='title'>");
+                        out.println("<form name='frmselecttype' method='post' action='"+ paramRequest.getActionUrl() +"'><fieldset>");
                         out.println("<input type='hidden' name='selecttype' value='" + type + "'>");
+
+                        out.println("<tr>");
+                        out.println("<td>");
+                        out.println("<label for='title'>Indique el nombre organización:</label>");
+                        out.println("</td>");
+                        out.println("<td>");
+                        out.println("<input type='text' size='60' maxlength='255' name='title' id='title'><br>");
+                        out.println("</td>");
+                        out.println("</tr>");
+
+                        out.println("<tr>");
+                        out.println("<td>");
+                        out.println("<label for='description'>Indique la descripción del tema:</label>");
+                        out.println("</td>");
+                        out.println("<td>");
+                        out.println("<textarea rows='7' cols='40' name='description' id='description'></textarea>");
+                        out.println("</td>");
+                        out.println("</tr>");
+                        
+                        out.println("<tr>");
+                        out.println("<td colspan='2' align='center'>");
                         out.println("<input type='button' onClick='ValidaTitulo()' name='enviar' value='Crear'>");
-                        out.println("</fieldset>");
-                        out.println("</form>");
+                        out.println("<td>");
+                        out.println("</tr>");
+                        
+                        out.println("</fieldset></form>");
                         out.println("</div>");
                         out.println("<script>");
                         out.println("function ValidaTitulo()");
