@@ -28,16 +28,25 @@ public class GoogleMapsLoader extends GenericAdmResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
+        //Assert location info
+        String info = request.getParameter("info");
+        if (info == null || info.equals("")) {
+            info = "";
+        }
+
+        //Assert location latitude
         String latitude = request.getParameter("lat");
         if (latitude == null || latitude.equals("")) {
             latitude = "19.432216";
         }
 
+        //Assert location longitude
         String longitude = request.getParameter("long");
         if (longitude == null || longitude.equals("")) {
             longitude = "-99.131076";
         }
 
+        //Assert location homepage
         String wikiUrl = request.getParameter("wikiUrl");
         if (wikiUrl == null || wikiUrl.equals("")) {
             wikiUrl = "#";
@@ -67,7 +76,8 @@ public class GoogleMapsLoader extends GenericAdmResource {
                    "      var punto = new GLatLng("+ latitude + "," + longitude + ");\n" +
                    "      var marcador = new GMarker(punto);\n" +
                    "      map.addOverlay(marcador);\n" +
-                   "      marcador.openInfoWindowHtml('<p>" + paramRequest.getLocaleString("msgWP") +"</p><p><a href=\"" + wikiUrl + "\">" + wikiUrl + "</a>');\n" +
+                   "      marcador.openInfoWindowHtml('<p>" + info + "</p><hr>" +
+                          paramRequest.getLocaleString("msgWP") +" <a href=\"" + wikiUrl + "\">" + wikiUrl + "</a>');\n" +
                    "    }\n"+
                    "  }\n" +
                    "  load();\n"+
