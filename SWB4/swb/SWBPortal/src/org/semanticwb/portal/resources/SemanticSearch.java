@@ -452,7 +452,7 @@ public class SemanticSearch extends GenericAdmResource {
                 "  });\n" +
                 "}\n" +
                 "function openMap(loc, title, args) {\n" +
-                "  window.open(loc, title, args);" +
+                "  window.open(loc, '', args);" +
                 "}\n" +
                 "</script>");
 
@@ -770,9 +770,9 @@ public class SemanticSearch extends GenericAdmResource {
                                     "    </tr>\n" +
                                     "  </tbody>\n" +
                                     "</table><br>\n" +
-                                    "<p><a href=\"#\" onClick=\"openMap('" + mapUrl + "','" +
-                                    paramRequest.getLocaleString("mapAbout") + " " + dbName +
-                                    "','menubar=0, width=420, height=420');\">" +
+                                    "<p><a href=\"#\" onClick=\"openMap('" + mapUrl.replace(" ", "%20") + "','" +
+                                    paramRequest.getLocaleString("mapAbout").replace(" ", "%20") + "%20" + dbName.replace(" ", "%20") +
+                                    "','menubar=0,width=420,height=420');\">" +
                                     paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
                                     "<hr><br>" + paramRequest.getLocaleString("msgSearch") + ": " + query + ".<br>");
                                     /*"<p><a href=\"#\" onClick=\"window.open('" + mapUrl + "','" +
@@ -844,14 +844,14 @@ public class SemanticSearch extends GenericAdmResource {
                                                 SemanticClass tt = so.getSemanticClass();
                                                 if (tt != null) {
                                                     if (so.instanceOf(org)) {
-                                                        String mapUrl = getResourceBase().getAttribute("mapUrl") +
+                                                        String mapUrl = getResourceBase().getAttribute("mapUrl").replace(" ", "%20") +
                                                         "?lat=" + so.getProperty(so_lat) +
                                                         "&long="+ so.getProperty(so_long) +
-                                                        "&wikiUrl=" + (so.getProperty(so_home) == null?"#":so.getProperty(so_home)) +
-                                                        "&info=" + so.getProperty(so_name).replace("\"", "");
-                                                        sbf.append("<a href=\"#\" onclick=\"window.open('" + mapUrl + "','" +
-                                                        paramRequest.getLocaleString("mapAbout") + " " + tt.getDisplayName(lang2) +
-                                                        "','menubar=0, width=420, height=420');\">" + so.getProperty(so_name).replace("\"", "") + "</a>");
+                                                        "&wikiUrl=" + (so.getProperty(so_home) == null?"#":so.getProperty(so_home).replace(" ","%20")) +
+                                                        "&info=" + so.getProperty(so_name).replace("\"", "").replace(" ", "%20");
+                                                        sbf.append("<a href=\"#\" onclick=\"openMap('" + mapUrl + "','" +
+                                                        paramRequest.getLocaleString("mapAbout").replace(" ", "%20") + "%20" + tt.getDisplayName(lang2).replace(" ","%20") +
+                                                        "','menubar=0,width=420,height=420');\">" + so.getProperty(so_name).replace("\"", "") + "</a>");
                                                     } else {
                                                         sbf.append(tt.getDisplayName(lang2));
                                                     }
