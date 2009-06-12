@@ -1,7 +1,7 @@
 package org.semanticwb.resources.filerepository.base;
 
 
-public class RepositoryFileBase extends org.semanticwb.repository.File implements org.semanticwb.model.Descriptiveable,org.semanticwb.repository.Traceable,org.semanticwb.resources.filerepository.Deleteable
+public class RepositoryFileBase extends org.semanticwb.repository.File implements org.semanticwb.model.Descriptiveable,org.semanticwb.resources.filerepository.Deleteable,org.semanticwb.repository.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swbfilerep_hasUserGroupId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/filerepository#hasUserGroupId");
