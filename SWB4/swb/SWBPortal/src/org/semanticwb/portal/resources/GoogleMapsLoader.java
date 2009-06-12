@@ -24,7 +24,7 @@ public class GoogleMapsLoader extends GenericAdmResource {
         PrintWriter out = response.getWriter();
         StringBuffer sbf = new StringBuffer();
 
-        response.setContentType("text/html");
+        response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
