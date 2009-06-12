@@ -137,7 +137,7 @@ public class SWBSparqlTranslator {
                     }
                     res = res + varList + "\nWHERE \n{\n";
                     String etype = lex.getObjWordTag(t.getText()).getType();
-                    if(!etype.isEmpty()) {
+                    if(!etype.equals("")) {
                         res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + etype
                             + ".\n";
                         res += startParsing(t);
@@ -212,11 +212,11 @@ public class SWBSparqlTranslator {
         } else {
             if (child != null) {
                 String rangeType = assertPropertyRangeType(nname, parent);
-                if (!rangeType.isEmpty()) {
+                if (!rangeType.equals("")) {
                     SemanticClass scl = assertPropertyRangeClass(nname, parent);
                     res = res + "?" + nname.replace(" ","_").replaceAll("[\\(|\\)]", "") + " rdf:type " + rangeType + ".\n";
                     String pName = assertPropertyType(nname, parent);
-                    if (!pName.isEmpty()) {
+                    if (!pName.equals("")) {
                         res = res + "?" + parent.replace(" ","_").replaceAll("[\\(|\\)]", "") + " " + pName + " ?" +
                                 nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                     }
@@ -229,8 +229,8 @@ public class SWBSparqlTranslator {
                 }
             } else {
                 String pName = assertPropertyType(nname, parent);
-                if (!pName.isEmpty()) {
-                    if (!parentLabel.isEmpty()) {
+                if (!pName.equals("")) {
+                    if (!parentLabel.equals("")) {
                         res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
                             " " + pName + " ?" + nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                     } else {
@@ -284,12 +284,12 @@ public class SWBSparqlTranslator {
         String pName = assertPropertyType(root.getChild(0).getText(), parent);
         System.out.println("verificando " + root.getChild(0).getText() + " de " + parent + " con etiqueta " + parentLabel);
         if (root.getText().equals("ASIGN")) {
-            if (!pName.isEmpty()) {
+            if (!pName.equals("")) {
                 res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
                         " " + pName + " " + root.getChild(1).getText() + ".\n";
             }
         } else if (root.getText().equals("COMPL")) {
-                if (!pName.isEmpty()) {
+                if (!pName.equals("")) {
                     res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
                             " " + pName + " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
                             ".\n";
@@ -297,21 +297,21 @@ public class SWBSparqlTranslator {
                             " < " + root.getChild(1).getText() + ").\n";
                 }
             } else if (root.getText().equals("COMPG")) {
-                if (!pName.isEmpty()) {
+                if (!pName.equals("")) {
                     res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName +
                             " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                     res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
                             " > " + root.getChild(1).getText() + ").\n";
                 }
             } else if (root.getText().equals("COMPLE")) {
-                if (!pName.isEmpty()) {
+                if (!pName.equals("")) {
                     res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName +
                             " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                     res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
                             " <= " + root.getChild(1).getText() + ").\n";
                 }
             } else if (root.getText().equals("COMPGE")) {
-                if (!pName.isEmpty()) {
+                if (!pName.equals("")) {
                     res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName +
                             " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
                             ".\n";
@@ -319,7 +319,7 @@ public class SWBSparqlTranslator {
                             " >= " + root.getChild(1).getText() + ").\n";
                 }
             } else {
-                if (!pName.isEmpty()) {
+                if (!pName.equals("")) {
                     res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName + " ?" +
                             root.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                 }
