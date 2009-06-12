@@ -125,7 +125,7 @@ public class SemanticSearch extends GenericAdmResource {
         String checked = request.getParameter(createId("showInfo"));
         User user = paramRequest.getUser();
 
-        response.setContentType("text/html");
+        response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         
@@ -841,17 +841,16 @@ public class SemanticSearch extends GenericAdmResource {
                                                         "?lat=" + so.getProperty(so_lat) +
                                                         "&long="+ so.getProperty(so_long) +
                                                         "&wikiUrl=" + (so.getProperty(so_home) == null?"#":so.getProperty(so_home)) +
-                                                        "&info=" + so.getProperty(so_name).replace("\"", "") + "<br>" + so.getProperty(so_address).replace("\"","");
+                                                        "&info=" + so.getProperty(so_name).replace("\"", "");
                                                         sbf.append("<a href=\"#\" onclick=\"window.open('" + mapUrl + "','" +
                                                         paramRequest.getLocaleString("mapAbout") + " " + tt.getDisplayName(lang2) +
-                                                        "','menubar=0, width=420, height=420');\">" + tt.getDisplayName(lang2) + "</a>");
+                                                        "','menubar=0, width=420, height=420');\">" + so.getProperty(so_name).replace("\"", "") + "</a>");
                                                     } else {
                                                         sbf.append(tt.getDisplayName(lang2));
                                                     }
                                                 } else {
                                                     SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
                                                     sbf.append(stt.getDisplayName(lang2));
-                                                    System.out.println("Es una propiedad");
                                                 }
                                             } else {
                                                 //System.out.println(">el dato no tiene objeto semántico");
