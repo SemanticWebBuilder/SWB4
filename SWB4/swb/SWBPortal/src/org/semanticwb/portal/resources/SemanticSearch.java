@@ -619,6 +619,12 @@ public class SemanticSearch extends GenericAdmResource {
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
         String query = request.getParameter(createId("naturalQuery"));
         User user = paramRequest.getUser();
+        SemanticProperty so_lat = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#latitude");
+        SemanticProperty so_long = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#longitude");
+        SemanticProperty so_home = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#wpUrl");
+        SemanticProperty so_name = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#name");
+        SemanticProperty so_address = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#address");
+        SemanticObject so2;
 
         //Get user language if any and create lexicon and translator acordingly
         if (user != null) {
@@ -743,16 +749,11 @@ public class SemanticSearch extends GenericAdmResource {
                             RDFNode long_node = dbrb.get("long");
                             RDFNode home_node = dbrb.get("page");
 
-                            //System.out.println("Información obtenida");
-                            /*System.out.println("-->" + desc_node.asNode().getLiteral().getLexicalForm());
-                            System.out.println("-->" + lat_node.asNode().getLiteral().getLexicalForm());
-                            System.out.println("-->" + long_node.asNode().getLiteral().getLexicalForm());*/
-                            //System.out.println("-->" + home_node.toString());
-
                             String mapUrl = getResourceBase().getAttribute("mapUrl") +
                                     "?lat=" + lat_node.asNode().getLiteral().getLexicalForm() +
                                     "&long="+ long_node.asNode().getLiteral().getLexicalForm() +
-                                    "&wikiUrl=" + home_node.toString();
+                                    "&wikiUrl=" + home_node.toString() +
+                                    "&info=" + dbName.replace("\"", "\\\"");
                             sbf.append("<table cellpadding=10 cellspacing=10>\n" +
                                     "  <thead>\n" +
                                     "    <tr>\n" +
@@ -813,34 +814,48 @@ public class SemanticSearch extends GenericAdmResource {
 
                                 Iterator<String> it = rs.getResultVars().iterator();
                                 while (it.hasNext()) {
-                                    String name = it.next();
+                                    String name = it.next();                                    
+
                                     RDFNode x = rb.get(name);
                                     sbf.append("<td >");
                                     if (x != null) {
+                                        SemanticClass org = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/emexcatalog.owl#Organisation");
                                         if (x.isLiteral()) {
-
-                                            sbf.append(x.asNode().getLiteral().getLexicalForm());
+                                            /*if (name.equals(so_name.getDisplayName(lang2))) {
+                                                so2 = getOrganizationByName(x.asNode().getLiteral().getLexicalForm());
+                                                System.out.println(">>>Name " + so2.getProperty(so_name));
+                                                //System.out.println(">>> name: " + x.asNode().getLiteral().getLexicalForm());
+                                                sbf.append(x.asNode().getLiteral().getLexicalForm());
+                                            } else {*/
+                                                sbf.append(x.asNode().getLiteral().getLexicalForm());
+                                            //}
                                         } else {
                                             //System.out.println(">obteniendo objeto semántico");
-                                            SemanticObject so = SemanticObject.createSemanticObject(x.toString());
+                                            SemanticObject so = SemanticObject.createSemanticObject(x.toString());                                            
 
                                             if (so != null) {
-                                                //System.out.println(">objeto semántico obtenido con éxito");
-                                                //SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
-                                                //System.out.println(">Obteniendo clase semántica del objeto semántico");
                                                 SemanticClass tt = so.getSemanticClass();
                                                 if (tt != null) {
-                                                    //System.out.println(">>Clase semántica obtenida con éxito");
-                                                    sbf.append(tt.getDisplayName(lang2));
+                                                    if (so.instanceOf(org)) {
+                                                        String mapUrl = getResourceBase().getAttribute("mapUrl") +
+                                                        "?lat=" + so.getProperty(so_lat) +
+                                                        "&long="+ so.getProperty(so_long) +
+                                                        "&wikiUrl=" + (so.getProperty(so_home) == null?"#":so.getProperty(so_home)) +
+                                                        "&info=" + so.getProperty(so_name).replace("\"", "") + "<br>" + so.getProperty(so_address).replace("\"","");
+                                                        sbf.append("<a href=\"#\" onclick=\"window.open('" + mapUrl + "','" +
+                                                        paramRequest.getLocaleString("mapAbout") + " " + tt.getDisplayName(lang2) +
+                                                        "','menubar=0, width=420, height=420');\">" + tt.getDisplayName(lang2) + "</a>");
+                                                    } else {
+                                                        sbf.append(tt.getDisplayName(lang2));
+                                                    }
                                                 } else {
-                                                    //System.out.println(">>No se pudo obtener clase semántica");
-                                                    //System.out.println(">>Obteniendo propiedad semántica del objeto semántico");
                                                     SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
                                                     sbf.append(stt.getDisplayName(lang2));
+                                                    System.out.println("Es una propiedad");
                                                 }
                                             } else {
                                                 //System.out.println(">el dato no tiene objeto semántico");
-                                                if (x != null) {
+                                                if (x != null) {                                                    
                                                     //System.out.println(">escribiendo valor");
                                                     sbf.append(x);
                                                 } else {
@@ -884,10 +899,41 @@ public class SemanticSearch extends GenericAdmResource {
         return getResourceBase().getId() + "/" + suffix;
     }
 
-    private String decodeUrlAccents(String str) {
-        String res = "";
+    private SemanticObject getOrganizationByName(String name) {
+        String sparqlQuery = "PREFIX emex: <http://www.semanticwebbuilder.org/emexcatalog.owl#>\n" +
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "SELECT DISTINCT ?org\n" +
+                "WHERE {\n" +
+                "  ?org rdf:type emex:Organisation.\n" +
+                "  ?org emex:name  \"" + name + "\".\n" +
+                "}\n";
+        System.out.println(sparqlQuery);
+        Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+        Query squery = QueryFactory.create(sparqlQuery);
+        squery.serialize();
+        QueryExecution qexec = QueryExecutionFactory.create(squery, model);
 
-        res = str.replace("%F3", "ó");
-        return res;
+        try {
+            ResultSet rs = qexec.execSelect();
+            if (rs.hasNext()) {
+                while (rs.hasNext()) {
+                    QuerySolution rb = rs.nextSolution();
+                    Iterator<String> it = rs.getResultVars().iterator();
+                    while (it.hasNext()) {
+                        String fname = it.next();
+                        RDFNode x = rb.get(fname);
+
+                        if (x != null && !x.isLiteral()) {
+                            return SemanticObject.createSemanticObject(x.toString());
+                        } else {
+                            return null;
+                        }
+                    }
+                }
+            }
+            return null;
+        } finally {
+            qexec.close();
+        }
     }
 }
