@@ -362,7 +362,7 @@ public class SWBSparqlTranslator {
             sit = sc.listProperties();
             while (sit.hasNext() && !found) {
                 sp = sit.next();
-                if (sp.getDisplayName(lex.getLanguage()).equals(propertyName)) {
+                if (sp.getDisplayName(lex.getLanguage()).toLowerCase().equals(propertyName.toLowerCase())) {
                     res = res + sp.getPrefix() + ":" + sp.getName();
                     found = true;
                 }
@@ -398,7 +398,7 @@ public class SWBSparqlTranslator {
             sit = sc.listProperties();
             while (sit.hasNext() && !found) {
                 sp = sit.next();
-                if (sp.getDisplayName(lex.getLanguage()).equals(propertyName)) {
+                if (sp.getDisplayName(lex.getLanguage()).toLowerCase().equals(propertyName.toLowerCase())) {
                     found = true;
                     if (sp.isObjectProperty()) {
                         StringBuffer bf = new StringBuffer();
@@ -449,7 +449,7 @@ public class SWBSparqlTranslator {
             sit = sc.listProperties();
             while (sit.hasNext() && !found) {
                 sp = sit.next();
-                if (sp.getDisplayName(lex.getLanguage()).equals(propertyName)) {
+                if (sp.getDisplayName(lex.getLanguage()).toLowerCase().equals(propertyName.toLowerCase())) {
                     found = true;
                     if (sp.isObjectProperty()) {
                         StringBuffer bf = new StringBuffer();
