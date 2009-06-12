@@ -102,8 +102,10 @@ public class CreateCommunity extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        System.out.println("entra a conf/doView");
         if(request.getParameter("modeswbcreatecommunity")!=null && request.getParameter("modeswbcreatecommunity").equals("true"))
         {
+            System.out.println("entra a conf/doView-1");
             doAdmin(request, response, paramRequest);
         }
     }
@@ -111,7 +113,7 @@ public class CreateCommunity extends GenericResource
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-
+        System.out.println("entra a conf/doAdmin-1");
         WebPage currentWebPage = paramRequest.getTopic();
         PrintWriter out = response.getWriter();
         response.setHeader("Cache-Control", "no-cache");
@@ -139,6 +141,7 @@ public class CreateCommunity extends GenericResource
         }
         else
         {
+            System.out.println("entra a conf/doAdmin-2");
             String type = request.getParameter("selecttype");
             if (type.equals("t"))
             {
@@ -236,8 +239,10 @@ public class CreateCommunity extends GenericResource
                 }
                 if (type.equals("o"))
                 {
+                    System.out.println("entra a conf/doAdmin-3");
                     if (request.getParameter("title") == null)
                     {
+                        System.out.println("entra a conf/doAdmin-4");
                         out.println("<div>");
                         out.println("<form name='frmselecttype' method='post' action='"+ paramRequest.getActionUrl() +"'>");
                         out.println("<fieldset><label for='title'>Indique el nombre organización:</label>");
