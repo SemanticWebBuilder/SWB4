@@ -253,7 +253,7 @@ public class SWBARule extends GenericResource {
 //                ret.append("\n</TR>");
 //                ret.append("\n</TABLE></fieldset>");
 
-                if (accion.equals("edit") | accion.equals("details")) {
+                if (accion.equals("edit") || accion.equals("details")) {
                     String xml = null;
                     xml = rRule.getXml();
                     if (null == xml) {
