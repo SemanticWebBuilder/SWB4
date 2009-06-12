@@ -206,7 +206,7 @@ public class CreateCommunity extends GenericResource
                 }
 
             }
-            if (type.equals("p"))
+            else if (type.equals("p"))
             {
                 if (request.getParameter("title") == null)
                 {
@@ -237,7 +237,8 @@ public class CreateCommunity extends GenericResource
                     out.println("}");
                     out.println("</script>");
                 }
-                if (type.equals("o"))
+            }
+            else if (type.equals("o"))
                 {
                     System.out.println("entra a conf/doAdmin-3");
                     if (request.getParameter("title") == null)
@@ -265,7 +266,6 @@ public class CreateCommunity extends GenericResource
                         out.println("</script>");
                     }
                 }
-            }
         }
     }
 }
