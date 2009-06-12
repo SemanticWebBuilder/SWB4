@@ -36,19 +36,19 @@ public class GoogleMapsLoader extends GenericAdmResource {
 
         //Assert location latitude
         String latitude = request.getParameter("lat");
-        if (latitude == null || latitude.equals("")) {
+        if (latitude == null || latitude.equals("") || latitude.equals("null")) {
             latitude = "19.432216";
         }
 
         //Assert location longitude
         String longitude = request.getParameter("long");
-        if (longitude == null || longitude.equals("")) {
+        if (longitude == null || longitude.equals("") || longitude.equals("null")) {
             longitude = "-99.131076";
         }
 
         //Assert location homepage
         String wikiUrl = request.getParameter("wikiUrl");
-        if (wikiUrl == null || wikiUrl.equals("")) {
+        if (wikiUrl == null || wikiUrl.equals("") || wikiUrl.equals("null")) {
             wikiUrl = "#";
         }
 
@@ -75,10 +75,21 @@ public class GoogleMapsLoader extends GenericAdmResource {
                    "      map.addControl(new GMapTypeControl());\n" +
                    "      var punto = new GLatLng("+ latitude + "," + longitude + ");\n" +
                    "      var marcador = new GMarker(punto);\n" +
-                   "      map.addOverlay(marcador);\n" +
-                   "      marcador.openInfoWindowHtml('<p>" + info + "</p><hr>" +
-                          paramRequest.getLocaleString("msgWP") +" <a href=\"" + wikiUrl + "\">" + wikiUrl + "</a>');\n" +
-                   "    }\n"+
+                   "      map.addOverlay(marcador);\n");
+                   if (!info.equals("")) {
+                       if (!wikiUrl.equals("#")) {
+                            sbf.append("      marcador.openInfoWindowHtml('<p>" + info + "</p><hr>" +
+                            paramRequest.getLocaleString("msgWP") +" <a href=\"" + wikiUrl + "\">" + wikiUrl + "</a>');\n");
+                       } else {
+                           sbf.append("      marcador.openInfoWindowHtml('<p>" + info + "</p>');\n");
+                       }                       
+                   } else {
+                        if (!wikiUrl.equals("#")) {
+                            sbf.append("      marcador.openInfoWindowHtml('"+
+                            paramRequest.getLocaleString("msgWP") +" <a href=\"" + wikiUrl + "\">" + wikiUrl + "</a>');\n");
+                        }
+                   }
+                   sbf.append("    }\n"+
                    "  }\n" +
                    "  load();\n"+
                    "</script>\n\n");
