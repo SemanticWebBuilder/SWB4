@@ -122,7 +122,7 @@ public class CommunityConfiguration extends GenericResource
         pageTopic.setActive(true);
 
         TemplateRef tplref=site.createTemplateRef();
-        tplref.setTemplate(site.getTemplate("12"));
+        tplref.setTemplate(site.getTemplate("5"));
         pageTopic.addTemplateRef(tplref);
 
         WebPage google = createGoogleGadget(site, title, pageTopic, resourceByDefault);
@@ -130,19 +130,19 @@ public class CommunityConfiguration extends GenericResource
         tplrefGoogle.setTemplate(site.getTemplate("13"));
         tplrefGoogle.setActive(true);
         google.addTemplateRef(tplrefGoogle);
-        
+
         WebPage foro = createForo(site, title, pageTopic, resourceByDefault);
         TemplateRef tplrefForo=site.createTemplateRef();
         tplrefForo.setTemplate(site.getTemplate("13"));
         tplrefForo.setActive(true);
         foro.addTemplateRef(tplrefForo);
-        
+
         WebPage blog = createBlog(site, title, pageTopic, resourceByDefault);
         TemplateRef tplrefBlog=site.createTemplateRef();
         tplrefBlog.setTemplate(site.getTemplate("13"));
         tplrefBlog.setActive(true);
         blog.addTemplateRef(tplrefBlog);
-        
+
         WebPage wiki = createWiki(site, title, pageTopic, resourceByDefault);
         TemplateRef tplrefWiki=site.createTemplateRef();
         tplrefWiki.setTemplate(site.getTemplate("13"));
@@ -176,12 +176,6 @@ public class CommunityConfiguration extends GenericResource
         tplref.setActive(true);
         pageTopic.addTemplateRef(tplref);
 
-       /*
-        createGoogleGadget(site, title, pageTopic, resourceByDefault);
-        createForo(site, title, pageTopic, resourceByDefault);
-        createBlog(site, title, pageTopic, resourceByDefault);
-        createWiki(site, title, pageTopic, resourceByDefault);
-        * */
         WebPage google = createGoogleGadget(site, title, pageTopic, resourceByDefault);
         TemplateRef tplrefGoogle=site.createTemplateRef();
         tplrefGoogle.setTemplate(site.getTemplate("13"));
