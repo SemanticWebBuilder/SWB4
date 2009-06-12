@@ -450,7 +450,10 @@ public class SemanticSearch extends GenericAdmResource {
                 "    },\n" +
                 "    handleAs: \"text\"\n" +
                 "  });\n" +
-                "}" +
+                "}\n" +
+                "function openMap(loc, title, args) {\n" +
+                "  window.open(loc, title, args);" +
+                "}\n" +
                 "</script>");
 
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
@@ -458,8 +461,8 @@ public class SemanticSearch extends GenericAdmResource {
 
             sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" " +
                 "action=\"" + url + "\" method=\"post\">\n" +
-                "  <textarea id=\"" + createId("naturalQuery") + "\" " +
-                "name=\"" + createId("naturalQuery") + "\" class=\"txt-busca\" >" + query + "</textarea>\n" +
+                "  <input type=\"text\" id=\"" + createId("naturalQuery") + "\" " +
+                "name=\"" + createId("naturalQuery") + "\" class=\"txt-busca\" value=\"" + query + "\" />\n" +
                 "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>\n" +
                 "  <input type=\"submit\" value=\"Buscar\" class=\"btn-busca\">\n" +
                 "</form>\n");
@@ -677,7 +680,7 @@ public class SemanticSearch extends GenericAdmResource {
 
         sbf.append("<form id=\"" + createId("natural") + "\" " +
                 "action=\"" + getResourceBase().getAttribute("destUrl") + "\" >\n" +
-                "  <textarea id=\"" + createId("naturalQuery") + "\" rows=1 cols=70 " +
+                "  <textarea id=\"" + createId("naturalQuery") + "\" rows=5 cols=70 " +
                 "name=\"" + createId("naturalQuery") + "\" class=\"txt-busca\">" + query + "</textarea>\n" +
                 "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>\n" +
                 "  <input type=\"submit\" value=\"Buscar\" class=\"btn-busca\">\n" +
@@ -767,11 +770,16 @@ public class SemanticSearch extends GenericAdmResource {
                                     "    </tr>\n" +
                                     "  </tbody>\n" +
                                     "</table><br>\n" +
-                                    "<p><a href=\"#\" onClick=\"window.open('" + mapUrl + "','" +
+                                    "<p><a href=\"#\" onClick=\"openMap('" + mapUrl + "','" +
+                                    paramRequest.getLocaleString("mapAbout") + " " + dbName +
+                                    "','menubar=0, width=420, height=420');\">" +
+                                    paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
+                                    "<hr><br>" + paramRequest.getLocaleString("msgSearch") + ": " + query + ".<br>");
+                                    /*"<p><a href=\"#\" onClick=\"window.open('" + mapUrl + "','" +
                                     paramRequest.getLocaleString("mapAbout") + " " + dbName + 
                                     "','menubar=0, width=420, height=420');return false;\">" +
                                     paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
-                                    "<hr><br>" + paramRequest.getLocaleString("msgSearch") + ": " + query + ".<br>");
+                                    "<hr><br>" + paramRequest.getLocaleString("msgSearch") + ": " + query + ".<br>");*/
                         }
 
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
