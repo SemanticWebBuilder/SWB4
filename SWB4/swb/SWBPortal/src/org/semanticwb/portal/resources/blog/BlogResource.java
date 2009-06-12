@@ -1423,6 +1423,94 @@ public class BlogResource extends GenericResource
         }
     }
 
+    public void asignRole(String name, int level, int blogid) throws SWBResourceException, IOException
+    {
+        Connection con = SWBUtils.DB.getDefaultConnection();
+        try
+        {
+                if ( name.startsWith("role_") )
+                {
+                    name = name.substring(5);
+                    if ( level > 0 )
+                    {
+                        try
+                        {
+                            PreparedStatement pt = con.prepareStatement("select count(*) as cuenta from wbblogpermissions where blogid=? and userid=? and isrol=?");
+                            pt.setInt(1, blogid);
+                            pt.setString(2, name);
+                            pt.setInt(3, 1);
+                            boolean exists = false;
+                            ResultSet rs = pt.executeQuery();
+                            if ( rs.next() )
+                            {
+                                if ( rs.getInt("cuenta") > 0 )
+                                {
+                                    exists = true;
+                                }
+                            }
+                            rs.close();
+                            pt.close();
+                            if ( !exists )
+                            {
+                                pt = con.prepareStatement("insert into wbblogpermissions(blogid,userid,level,isrol) values(?,?,?,?)");
+                                pt.setInt(1, blogid);
+                                pt.setString(2, name);
+                                pt.setInt(3, level);
+                                pt.setInt(4, 1);
+                                pt.executeUpdate();
+                                pt.close();
+                            }
+                            else
+                            {
+                                pt = con.prepareStatement("update wbblogpermissions set level=? where blogid=? and userid=? and isrol=?");
+                                pt.setInt(1, level);
+                                pt.setInt(2, blogid);
+                                pt.setString(3, name);
+                                pt.setInt(4, 1);
+                                pt.executeUpdate();
+                                pt.close();
+                            }
+                        }
+                        catch ( SQLException sqle )
+                        {
+                            log.error(sqle);
+                        }
+                    }
+                    else // 0 no tiene permisos
+                    {
+                        try
+                        {
+                            PreparedStatement pt = con.prepareStatement("delete from wbblogpermissions where blogid=?  and userid=? and isrol=1");
+                            pt.setInt(1, blogid);
+                            pt.setString(2, name);
+                            pt.executeUpdate();
+                            pt.close();
+                        }
+                        catch ( SQLException sqle )
+                        {
+                            log.error(sqle);
+                        }
+                    }
+                }
+
+        }
+        finally
+        {
+            if ( con != null )
+            {
+                try
+                {
+                    con.close();
+                }
+                catch ( SQLException sqle )
+                {
+                    log.error(sqle);
+                }
+            }
+        }
+    }
+
+
     public void asignUser(HttpServletRequest request, SWBActionResponse response, int blogid) throws SWBResourceException, IOException
     {
         Connection con = SWBUtils.DB.getDefaultConnection();
