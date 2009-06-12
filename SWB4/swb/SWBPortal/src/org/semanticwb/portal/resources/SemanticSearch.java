@@ -719,7 +719,7 @@ public class SemanticSearch extends GenericAdmResource {
 
                 try {
 
-                    sbf.append("<br><br><h2>Resultados de la búsqueda</h2>\n");
+                    //sbf.append("<br><br><h2>Resultados de la búsqueda</h2>\n");
                         System.out.println("Obteniendo información de la dbpedia");
                         time = System.currentTimeMillis();
                         if (!dbName.equals("")) {
@@ -768,9 +768,10 @@ public class SemanticSearch extends GenericAdmResource {
                                     "  </tbody>\n" +
                                     "</table><br>\n" +
                                     "<p><a href=\"#\" onClick=\"window.open('" + mapUrl + "','" +
-                                    paramRequest.getLocaleString("mapAbout") + " " + dbName + "','menubar=0, width=420, height=420');return false;\">" + paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
-                                    "<hr><br>" +
-                                    query + ":<br>");
+                                    paramRequest.getLocaleString("mapAbout") + " " + dbName + 
+                                    "','menubar=0, width=420, height=420');return false;\">" +
+                                    paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
+                                    "<hr><br>" + paramRequest.getLocaleString("msgSearch") + ": " + query + ".<br>");
                         }
 
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
@@ -784,22 +785,20 @@ public class SemanticSearch extends GenericAdmResource {
                     time = System.currentTimeMillis();
 
                     try {
-                        sbf.append("<div>");
-                        sbf.append("<table cellspacing=7>");
+                        sbf.append("<div>\n" +
+                                   "  <table cellspacing=7>\n");
                         ResultSet rs = qexec.execSelect();
-                        sbf.append("<thead>");
-                        sbf.append("<tr>");
+                        sbf.append("  <thead>\n" +
+                                   "    <tr>\n");
 
                         if (rs.hasNext()) {
                             Iterator<String> itcols = rs.getResultVars().iterator();
                             while (itcols.hasNext()) {
-                                sbf.append("<th>");
-                                sbf.append(itcols.next());
-                                sbf.append("</th>");
+                                sbf.append("      <th>" + itcols.next() + "</th>\n");
                             }
-                            sbf.append("</tr>");
-                            sbf.append("</thead>");
-                            sbf.append("<tbody>");
+                            sbf.append("    </tr>\n");
+                            sbf.append("  </thead>\n");
+                            sbf.append("  <tbody>\n");
 
                             boolean odd = true;
                             while (rs.hasNext()) {
@@ -807,9 +806,9 @@ public class SemanticSearch extends GenericAdmResource {
                                 QuerySolution rb = rs.nextSolution();
 
                                 if (odd) {
-                                    sbf.append("<tr bgcolor=\"#EFEDEC\">");
+                                    sbf.append("    <tr bgcolor=\"#EFEDEC\">\n");
                                 } else {
-                                    sbf.append("<tr>");
+                                    sbf.append("    <tr>\n");
                                 }
 
                                 Iterator<String> it = rs.getResultVars().iterator();
@@ -817,7 +816,7 @@ public class SemanticSearch extends GenericAdmResource {
                                     String name = it.next();                                    
 
                                     RDFNode x = rb.get(name);
-                                    sbf.append("<td >");
+                                    sbf.append("      <td>");
                                     if (x != null) {
                                         SemanticClass org = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/emexcatalog.owl#Organisation");
                                         if (x.isLiteral()) {
@@ -864,18 +863,19 @@ public class SemanticSearch extends GenericAdmResource {
                                             }
                                         }
                                     }
-                                    sbf.append("</td>");
+                                    sbf.append("</td>\n");
                                 }
-                                sbf.append("</tr>");
+                                sbf.append("    </tr>\n");
                             }
                         } else {
-                            sbf.append("<font color='red'>" + paramRequest.getLocaleString("nofound") + "</font>");
-                            sbf.append("</tr>");
-                            sbf.append("</thead>");
+                            sbf.append("      <th><font color='red'>" + paramRequest.getLocaleString("nofound") + "</font></th>");
+                            sbf.append("    </tr>\n");
+                            sbf.append("  </thead>\n");
+                            sbf.append("  <tbody>\n");
                         }
-                        sbf.append("</tbody>");
-                        sbf.append("</table>");
-                        sbf.append("<p aling=\"center\">" + paramRequest.getLocaleString("exectime") + ": " + (System.currentTimeMillis() - time) + "ms." + "</p>");
+                        sbf.append("  </tbody>\n");
+                        sbf.append("</table>\n");
+                        sbf.append("<p aling=\"center\">\n" + paramRequest.getLocaleString("exectime") + ": " + (System.currentTimeMillis() - time) + "ms." + "</p>\n");
                     } finally {
                         qexec.close();
                     }
@@ -890,7 +890,7 @@ public class SemanticSearch extends GenericAdmResource {
                 sbf.append("</script>");
             }
         }
-        sbf.append("</div>");
+        sbf.append("</div>\n");
         out.print(sbf.toString());
     }
 
