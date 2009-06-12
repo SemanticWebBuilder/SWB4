@@ -320,6 +320,7 @@ public class CommunityConfiguration extends GenericResource
                 blogResource.createBlog("Blog de " + title, true);
                 resource.setActive(true);
                 try{
+                    System.out.println("resource.getId():"+resource.getId());
                     blogResource.asignRole("role_*", 3, Integer.parseInt(resource.getId()));
                 }catch(Exception f){
                     f.printStackTrace();
