@@ -143,16 +143,15 @@ public class CreateCommunity extends GenericResource
         {
             System.out.println("entra a conf/doAdmin-2");
             String type = request.getParameter("selecttype");
+            String topic=request.getParameter("swbtp");
+            if(topic==null || topic.trim().equals(""))
+            {
+                topic="";
+            }
             if (type.equals("t"))
             {
                 if (request.getParameter("title") == null)
                 {
-                    String topic=request.getParameter("swbtp");
-                    if(topic==null || topic.trim().equals(""))
-                    {
-                        topic="";
-                    }
-                    
                     out.println("<div>");
                     out.println("<table width='50%'>");
                     out.println("<form name='frmselecttype' method='post' action='" + paramRequest.getActionUrl() + "'><fieldset>");
@@ -240,26 +239,26 @@ public class CreateCommunity extends GenericResource
             }
             else if (type.equals("o"))
                 {
-                    System.out.println("entra a conf/doAdmin-3-JOrge");
+                    System.out.println("entra a conf/doAdmin-3-JOrge:"+topic);
                     if (request.getParameter("title") == null)
                     {
                         System.out.println("entra a conf/doAdmin-4-JOrge");
-                        out.println("<div>");
-                        out.println("<form name='frmselecttype' method='post' action='"+ paramRequest.getActionUrl() +"'><fieldset>");
+                        out.println("<form name='frmselecttype' method='post' action='"+ paramRequest.getActionUrl() +"'>");
                         out.println("<input type='hidden' name='selecttype' value='" + type + "'>");
+                        out.println("<input type='hidden' name='swbtp' id='swbtp' value='"+ topic +"'>");
 
                         out.println("<tr>");
                         out.println("<td>");
-                        out.println("<label for='title'>Indique el nombre organización:</label>");
+                        out.println(" Indique el nombre organización:");
                         out.println("</td>");
                         out.println("<td>");
-                        out.println("<input type='text' size='60' maxlength='255' name='title' id='title'><br>");
+                        out.println("<input type='text' size='60' maxlength='255' name='title' id='title'>");
                         out.println("</td>");
                         out.println("</tr>");
 
                         out.println("<tr>");
                         out.println("<td>");
-                        out.println("<label for='description'>Indique la descripción del tema:</label>");
+                        out.println("Indique la descripción del tema:");
                         out.println("</td>");
                         out.println("<td>");
                         out.println("<textarea rows='7' cols='40' name='description' id='description'></textarea>");
@@ -272,8 +271,7 @@ public class CreateCommunity extends GenericResource
                         out.println("<td>");
                         out.println("</tr>");
                         
-                        out.println("</fieldset></form>");
-                        out.println("</div>");
+                        out.println("</form>");
                         out.println("<script>");
                         out.println("function ValidaTitulo()");
                         out.println("{");
