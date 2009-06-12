@@ -25,6 +25,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -462,10 +463,10 @@ public class SemanticSearch extends GenericAdmResource {
             sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" " +
                 "action=\"" + url + "\" method=\"post\">\n" +
                 "  <input type=\"text\" id=\"" + createId("naturalQuery") + "\" " +
-                "name=\"" + createId("naturalQuery") + "\" class=\"txt-busca\" value=\"" + query + "\" />\n" +
-                "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>\n" +
+                "name=\"" + createId("naturalQuery") + "\" class=\"txt-busca\" value=\"" + query + "\" />\n" +                
                 "  <input type=\"submit\" value=\"Buscar\" class=\"btn-busca\">\n" +
-                "</form>\n");
+                "</form>\n" +
+                "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>\n");
         } else {
             doShowResults(request, response, paramRequest);
         }
@@ -774,13 +775,9 @@ public class SemanticSearch extends GenericAdmResource {
                                     paramRequest.getLocaleString("mapAbout").replace(" ", "%20") + "%20" + dbName.replace(" ", "%20") +
                                     "','menubar=0,width=420,height=420');\">" +
                                     paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
-                                    "<hr><br>" + paramRequest.getLocaleString("msgSearch") + ": " + query + ".<br>");
-                                    /*"<p><a href=\"#\" onClick=\"window.open('" + mapUrl + "','" +
-                                    paramRequest.getLocaleString("mapAbout") + " " + dbName + 
-                                    "','menubar=0, width=420, height=420');return false;\">" +
-                                    paramRequest.getLocaleString("mapAbout") + " " + dbName + "</a></p>" +
-                                    "<hr><br>" + paramRequest.getLocaleString("msgSearch") + ": " + query + ".<br>");*/
+                                    "<hr><br>");
                         }
+                        sbf.append("<br>" + paramRequest.getLocaleString("msgSearch") + ": " + query + ".<br>");
 
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
                     Query squery = QueryFactory.create(sparqlQuery);
@@ -800,9 +797,10 @@ public class SemanticSearch extends GenericAdmResource {
                                    "    <tr>\n");
 
                         if (rs.hasNext()) {
-                            Iterator<String> itcols = rs.getResultVars().iterator();
-                            while (itcols.hasNext()) {
-                                sbf.append("      <th>" + itcols.next() + "</th>\n");
+                            for (String icol : (List<String>) rs.getResultVars()) {
+                            //Iterator<String> itcols = rs.getResultVars().iterator();
+                            //while (itcols.hasNext()) {
+                                sbf.append("      <th>" + icol + "</th>\n");
                             }
                             sbf.append("    </tr>\n");
                             sbf.append("  </thead>\n");
@@ -925,9 +923,7 @@ public class SemanticSearch extends GenericAdmResource {
             if (rs.hasNext()) {
                 while (rs.hasNext()) {
                     QuerySolution rb = rs.nextSolution();
-                    Iterator<String> it = rs.getResultVars().iterator();
-                    while (it.hasNext()) {
-                        String fname = it.next();
+                    for (String fname : (List<String>) rs.getResultVars()) {
                         RDFNode x = rb.get(fname);
 
                         if (x != null && !x.isLiteral()) {
