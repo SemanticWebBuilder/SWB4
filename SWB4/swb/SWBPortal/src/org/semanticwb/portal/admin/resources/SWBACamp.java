@@ -52,7 +52,7 @@ public class SWBACamp extends GenericResource {
         String strTm = request.getParameter("tm");
         
         if(user==null) user = new User(paramRequest.getTopic().getWebSite().getUserRepository().getSemanticObject());
-        if((request.getParameter("act")!=null&&(request.getParameter("act").equals("add")||request.getParameter("act").equals("edit")))|(request.getParameter("act")==null&&request.getParameter("id")!=null)){
+        if((request.getParameter("act")!=null&&(request.getParameter("act").equals("add")||request.getParameter("act").equals("edit")))||(request.getParameter("act")==null&&request.getParameter("id")!=null)){
             doEdit(request,response,paramRequest);
         }
         if(request.getParameter("act")!=null&&request.getParameter("act").equals("remove")){
