@@ -135,7 +135,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="longitude">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Organisation"/>
     <rdfs:label xml:lang="en">Longitude</rdfs:label>
     <rdfs:label xml:lang="es">Longitud</rdfs:label>
@@ -164,8 +163,8 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="address">
-    <rdfs:label xml:lang="es">Dirección</rdfs:label>
     <rdfs:label xml:lang="en">Address</rdfs:label>
+    <rdfs:label xml:lang="es">Dirección</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Organisation"/>
   </owl:DatatypeProperty>
@@ -426,9 +425,9 @@
         >Tamaulipas</swbc:name>
       </swbc:State>
     </emex:locationState>
-    <emex:locationCountry rdf:resource="#Mexico"/>
     <emex:longitude rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >-98.407288</emex:longitude>
+    <emex:locationCountry rdf:resource="#Mexico"/>
     <emex:latitude rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >24.048596</emex:latitude>
     <rdf:type rdf:resource="#EducationalInstitution"/>
@@ -477,9 +476,9 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdf:type>
-    <rdfs:label xml:lang="es">Lumiere Coapa</rdfs:label>
     <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Prol. Div. del Norte 4515, Col. Prado Coapa, CP 14370, Tlalpan, D.F.</emex:address>
+    <rdfs:label xml:lang="es">Lumiere Coapa</rdfs:label>
     <rdfs:label xml:lang="en">Lumiere Coapa</rdfs:label>
     <emex:location>
       <swbc:County rdf:ID="Tlalpan">
@@ -762,10 +761,10 @@
   <emex:Hospital rdf:ID="cancerologia">
     <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Instituto Nacional de Cancerología</emex:name>
-    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >5556280400</emex:phoneNumber>
     <emex:latitude rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >19.290805</emex:latitude>
+    <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5556280400</emex:phoneNumber>
     <rdfs:label xml:lang="en">Cancerology National Institute</rdfs:label>
     <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >http://www.incan.edu.mx/</emex:wpUrl>
@@ -806,11 +805,11 @@
     <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Gladiolas # 158, Col. Barrio de San Pedro</emex:address>
     <emex:locationState rdf:resource="#Mexico_DF"/>
-    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Clínica de Medicina Familiar Xochimilco</emex:name>
-    <rdfs:label xml:lang="es">Clínica de Medicina Familiar Xochimilco</rdfs:label>
     <emex:longitude rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >-99.157383</emex:longitude>
+    <rdfs:label xml:lang="es">Clínica de Medicina Familiar Xochimilco</rdfs:label>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Clínica de Medicina Familiar Xochimilco</emex:name>
     <emex:locationCountry rdf:resource="#Mexico"/>
     <rdfs:label xml:lang="en">Clinica de Medicina Familiar Xochimilco</rdfs:label>
     <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1479,10 +1478,10 @@
     <rdfs:label xml:lang="en">Joaquin Baranda</rdfs:label>
     <emex:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Lazaro Cardenas s/n. Burgos</emex:address>
-    <emex:latitude rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >22.387793</emex:latitude>
     <emex:longitude rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >-97.959595</emex:longitude>
+    <emex:latitude rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >22.387793</emex:latitude>
     <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Joaquín Baranda</emex:name>
     <emex:locationCountry rdf:resource="#Mexico"/>
@@ -2118,9 +2117,9 @@
   <emex:EducationalInstitution rdf:ID="repArg">
     <emex:phoneNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >5555131205</emex:phoneNumber>
-    <emex:locationState rdf:resource="#Mexico_DF"/>
     <emex:longitude rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >-99.170805</emex:longitude>
+    <emex:locationState rdf:resource="#Mexico_DF"/>
     <emex:locationCounty rdf:resource="#Tlalpan"/>
     <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >República de Argentina</emex:name>
@@ -2250,10 +2249,10 @@
     >Candido Aguilar s/n, Burgos</emex:address>
   </emex:EducationalInstitution>
   <emex:Hospital rdf:ID="manuel_gea">
-    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Hospital General "Dr. Manuel Gea González"</emex:name>
     <emex:latitude rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >19.293275</emex:latitude>
+    <emex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hospital General "Dr. Manuel Gea González"</emex:name>
     <emex:locationCountry rdf:resource="#Mexico"/>
     <emex:wpUrl rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >http://www.facmed.unam.mx/gea/</emex:wpUrl>
