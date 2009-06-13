@@ -28,7 +28,7 @@ public class BusinessComm extends GenericResource
         PrintWriter out=response.getWriter();
         User usr=paramRequest.getUser();
         if (usr != null && usr.isSigned()) {
-            String bcomm=(String)usr.getExtendedAttribute("BusinessComm");
+            String bcomm=usr.getProperty("BusinessComm");
             if(bcomm==null || bcomm.trim().length()==0){ //El usuario esta registrado pero no tiene comunidad, puede crearla (presentar boton)
                 WebPage comunityContainer=WebPage.getWebPage(CommunityConfiguration.COMMUNITY_CONTAINER_ID, paramRequest.getTopic().getWebSite());
                 String params="?modeswbcreatecommunity=true" +
@@ -39,7 +39,7 @@ public class BusinessComm extends GenericResource
             }else{ //El usuario tiene comunidad de negocios, hay que presentarsela (presentar boton para que se vaya a su comunidad)
                 WebPage page=paramRequest.getTopic().getWebSite().getWebPage(bcomm);
                 if(page!=null){
-                  out.println("<input name=\"acces\" type=\"button\" value=\"Accesa a tu comunidad Ahora\" onclick=\"window.location='"+page.getUrl()+"';\">");
+                  out.println("<input name=\"acces\" type=\"button\" value=\"Accede a tu comunidad Ahora\" onclick=\"window.location='"+page.getUrl()+"';\">");
                 }
             }
        }else { //Enviar a registrar
