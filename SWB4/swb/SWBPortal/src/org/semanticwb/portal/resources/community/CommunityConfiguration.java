@@ -102,13 +102,18 @@ public class CommunityConfiguration extends GenericResource
         wiki.addTemplateRef(tplrefWiki);
     }
 
-    public static void createComunnityOrganization(WebSite site, String title, LocationEntity locationentity, WebPage topic, String resourceByDefault)
+    public static void createComunnityOrganization(WebSite site, String title, LocationEntity locationentity, WebPage topic, String resourceByDefault, SWBActionResponse response)
     {
 
         WebPage communityContainer = site.getWebPage(COMMUNITY_CONTAINER_ID);
         OrganizationComm pageTopic = OrganizationComm.createOrganizationComm(UUID.randomUUID().toString(), site);
         pageTopic.setAbout(topic);
         pageTopic.setLocatedIn(locationentity);
+        try{
+            response.getUser().setProperty("BusinessComm", pageTopic.getId());
+          }catch(Exception e){
+            log.error(e);
+        }
 
         ResourceType resourcetype = site.getResourceType(CONFIGURATION_RESOURCE_TYPE_ID);
         Resource resource = site.createResource("conf_" + UUID.randomUUID().toString());
@@ -123,8 +128,10 @@ public class CommunityConfiguration extends GenericResource
 
         TemplateRef tplref=site.createTemplateRef();
         tplref.setTemplate(site.getTemplate("5"));
+        tplref.setActive(true);
         pageTopic.addTemplateRef(tplref);
 
+        /*
         WebPage google = createGoogleGadget(site, title, pageTopic, resourceByDefault);
         TemplateRef tplrefGoogle=site.createTemplateRef();
         tplrefGoogle.setTemplate(site.getTemplate("13"));
@@ -148,6 +155,7 @@ public class CommunityConfiguration extends GenericResource
         tplrefWiki.setTemplate(site.getTemplate("13"));
         tplrefWiki.setActive(true);
         wiki.addTemplateRef(tplrefWiki);
+         * */
         
     }
 
