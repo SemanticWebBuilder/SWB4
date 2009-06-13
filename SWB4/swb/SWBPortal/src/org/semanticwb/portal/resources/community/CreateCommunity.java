@@ -48,7 +48,6 @@ public class CreateCommunity extends GenericResource
                 {
                     try
                     {
-                        System.out.println("Creando comunidad...");
                         LocationEntity entity = LocationEntity.getLocationEntity(WEBPAGE_TOPIC_LOCATION, site);
                         WebPage topic = currentWebPage;
                         String resByDefault = request.getParameter("resbydefault");
@@ -85,9 +84,9 @@ public class CreateCommunity extends GenericResource
                 try
                 {                    
                     LocationEntity entity = LocationEntity.getLocationEntity("Tlalpan", site);
-                    WebPage topic = null;
+                    WebPage topic = currentWebPage;
                     String resByDefault = request.getParameter("resbydefault");
-                    CommunityConfiguration.createComunnityOrganization(site, title, entity, topic, resByDefault);
+                    CommunityConfiguration.createComunnityOrganization(site, title, entity, topic, resByDefault, response);
                 }
                 catch (Exception e)
                 {
@@ -102,10 +101,8 @@ public class CreateCommunity extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        System.out.println("entra a conf/doView");
         if(request.getParameter("modeswbcreatecommunity")!=null && request.getParameter("modeswbcreatecommunity").equals("true"))
         {
-            System.out.println("entra a conf/doView-1");
             doAdmin(request, response, paramRequest);
         }
     }
@@ -113,7 +110,6 @@ public class CreateCommunity extends GenericResource
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        System.out.println("entra a conf/doAdmin-1");
         WebPage currentWebPage = paramRequest.getTopic();
         PrintWriter out = response.getWriter();
         response.setHeader("Cache-Control", "no-cache");
@@ -141,7 +137,6 @@ public class CreateCommunity extends GenericResource
         }
         else
         {
-            System.out.println("entra a conf/doAdmin-2");
             String type = request.getParameter("selecttype");
             String topic=request.getParameter("swbtp");
             if(topic==null || topic.trim().equals(""))
@@ -239,10 +234,10 @@ public class CreateCommunity extends GenericResource
             }
             else if (type.equals("o"))
                 {
-                    System.out.println("entra a conf/doAdmin-3-JOrge:"+topic);
                     if (request.getParameter("title") == null)
                     {
-                        System.out.println("entra a conf/doAdmin-4-JOrge");
+                        out.println("<div>");
+                        out.println("<table width='50%'>");
                         out.println("<form name='frmselecttype' method='post' action='"+ paramRequest.getActionUrl() +"'>");
                         out.println("<input type='hidden' name='selecttype' value='" + type + "'>");
                         out.println("<input type='hidden' name='swbtp' id='swbtp' value='"+ topic +"'>");
@@ -272,6 +267,8 @@ public class CreateCommunity extends GenericResource
                         out.println("</tr>");
                         
                         out.println("</form>");
+                        out.println("</table>");
+                        out.println("</div>");
                         out.println("<script>");
                         out.println("function ValidaTitulo()");
                         out.println("{");
