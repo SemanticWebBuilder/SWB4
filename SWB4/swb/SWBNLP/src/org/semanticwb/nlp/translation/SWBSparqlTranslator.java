@@ -53,7 +53,7 @@ public class SWBSparqlTranslator {
     }
 
     /**
-     * Transforms a Natural Language query to a SparQL query. Using an antlr 
+     * Transforms a Natural Language query to a SparQL query. Using an antlr
      * (http://www.antlr.org) parser, this method builds an AST
      * (Abstract Sintax Tree) and traverses it to generate the SparQL query.
      *
@@ -61,7 +61,7 @@ public class SWBSparqlTranslator {
      * Usando un analizador generado por antlr (http://www.antlr.org), el método
      * construye un AST (Árbol de sintáxis abstracta) y lo recorre para generar
      * la consulta SparQl.
-     * 
+     *
      * @param sent Rescticted-Natural Language sentence for the query.
      * Oración en lenguaje natural restringido para la consulta.
      * @return SparQL query sentence. Sentencia de la consulta SparQl.
@@ -114,13 +114,17 @@ public class SWBSparqlTranslator {
         List<CommonTree> child = root.getChildren();
         if (child != null) {
             res = "SELECT DISTINCT ";
-            for (CommonTree t : child) {
+            Iterator<CommonTree> cit = child.iterator();
+            while (cit.hasNext()) {
+                CommonTree t = cit.next();
+
                 if (t.getText().equals("LIMIT")) {
                     limitoff = limitoff + " LIMIT " + t.getChild(0).getText() + "\n";
                 } else if (t.getText().equals("ORDER")) {
                     order += " ORDER BY ";
-                    for (CommonTree o : (List<CommonTree>) t.getChildren()) {
-                        order = order + "?" + o.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ";
+                    Iterator<CommonTree> oit = t.getChildren().iterator();
+                    while (oit.hasNext()) {
+                        order = order + "?" + oit.next().getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ";
                     }
                     order = order.trim() + "\n";
                 } else if (t.getText().equals("OFFSET")) {
@@ -164,7 +168,9 @@ public class SWBSparqlTranslator {
         List<CommonTree> child = root.getChildren();
 
         if (child != null) {
-            for (CommonTree t : child) {
+            Iterator<CommonTree> cit = child.iterator();
+            while (cit.hasNext()) {
+                CommonTree t = cit.next();
                 res += processNode(t, root.getText(), root.getText());
             }
         }
@@ -188,7 +194,10 @@ public class SWBSparqlTranslator {
         if (nname.equals("PRECON")) {
             //Procesar los hijos con el padre del actual
             if (child != null) {
-                for (CommonTree t : child) {
+                Iterator<CommonTree> cit = child.iterator();
+                while (cit.hasNext()) {
+                    CommonTree t = cit.next();
+
                     res += processNode(t, parent, parentLabel);
                 }
             }
@@ -198,7 +207,9 @@ public class SWBSparqlTranslator {
         } else if (nname.equals("PREDE")) {
             if (!root.getChild(0).getText().equals("MODTO")) {
                 if (child != null) {
-                    for (CommonTree t : child) {
+                    Iterator<CommonTree> cit = child.iterator();
+                    while (cit.hasNext()) {
+                        CommonTree t = cit.next();
                         String cname = t.getText();
 
                         res = res + "?" + parent.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " +
@@ -222,7 +233,9 @@ public class SWBSparqlTranslator {
                     }
                     if (scl != null) {
                         String cName = scl.getDisplayName(lex.getLanguage());
-                        for (CommonTree t : child) {
+                        Iterator<CommonTree> cit = child.iterator();
+                        while (cit.hasNext()) {
+                            CommonTree t = cit.next();
                             res += processNode(t, cName, nname);
                         }
                     }
@@ -262,7 +275,9 @@ public class SWBSparqlTranslator {
 
         List<CommonTree> child = root.getChildren();
         if (child != null) {
-            for (CommonTree t : child) {
+            Iterator<CommonTree> cit = child.iterator();
+            while (cit.hasNext()) {
+                CommonTree t = cit.next();
                 res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ";
             }
         }
@@ -480,8 +495,9 @@ public class SWBSparqlTranslator {
         //Process all children of current node
         List<CommonTree> child = tree.getChildren();
         if (child != null) {
-            for (CommonTree ele : child) {
-                fixNames(ele);
+            Iterator<CommonTree> cit = tree.getChildren().iterator();
+            while (cit.hasNext()) {
+                fixNames(cit.next());
             }
         }
     }
@@ -499,8 +515,10 @@ public class SWBSparqlTranslator {
             chil = root.getChildren();
         }
         if (chil != null) {
-            for (CommonTree cit : chil) {
-                traverseAST(cit, indent + "  ");
+            Iterator<CommonTree> cit = chil.iterator();
+            while (cit.hasNext()) {
+                CommonTree t = cit.next();
+                traverseAST(t, indent + "  ");
             }
         }
     }
