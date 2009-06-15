@@ -761,8 +761,8 @@ public class SemanticSearch extends GenericAdmResource {
                             sbf.append("<table cellpadding=10 cellspacing=10>\n" +
                                     "  <thead>\n" +
                                     "    <tr>\n" +
-                                    "      <th>" + paramRequest.getLocaleString("infoAbout") + " " +  "<a href=\"" +
-                                            home_node.toString() + "\">" + dbName + "</a></th>\n" +
+                                    "      <th>" + paramRequest.getLocaleString("infoAbout") + " " +  "<a href=\"#\" " +
+                                           "onclick=\"openMap('" + home_node.toString() + "','','');\">" + dbName + "</a></th>\n" +
                                     "    </tr>\n" +
                                     "  </thead>\n" +
                                     "  <tbody>\n" +
