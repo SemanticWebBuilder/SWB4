@@ -102,11 +102,12 @@ public class CommunityConfiguration extends GenericResource
         wiki.addTemplateRef(tplrefWiki);
     }
 
-    public static void createComunnityOrganization(WebSite site, String title, LocationEntity locationentity, WebPage topic, String resourceByDefault, SWBActionResponse response)
+    public static void createComunnityOrganization(WebSite site, String title, LocationEntity locationentity, WebPage topic, String resourceByDefault, SWBActionResponse response, String description)
     {
 
         WebPage communityContainer = site.getWebPage(COMMUNITY_CONTAINER_ID);
         OrganizationComm pageTopic = OrganizationComm.createOrganizationComm(UUID.randomUUID().toString(), site);
+        pageTopic.setDescription(description);
         pageTopic.setAbout(topic);
         pageTopic.setLocatedIn(locationentity);
         try{
