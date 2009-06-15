@@ -86,7 +86,7 @@ public class CreateCommunity extends GenericResource
                     LocationEntity entity = LocationEntity.getLocationEntity("Tlalpan", site);
                     WebPage topic = currentWebPage;
                     String resByDefault = request.getParameter("resbydefault");
-                    CommunityConfiguration.createComunnityOrganization(site, title, entity, topic, resByDefault, response);
+                    CommunityConfiguration.createComunnityOrganization(site, title, entity, topic, resByDefault, response, description);
                 }
                 catch (Exception e)
                 {
