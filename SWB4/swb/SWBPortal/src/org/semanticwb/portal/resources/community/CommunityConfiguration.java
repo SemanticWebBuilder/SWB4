@@ -137,6 +137,7 @@ public class CommunityConfiguration extends GenericResource
         tplrefGoogle.setTemplate(site.getTemplate("13"));
         tplrefGoogle.setActive(true);
         google.addTemplateRef(tplrefGoogle);
+         **/
 
         WebPage foro = createForo(site, title, pageTopic, resourceByDefault);
         TemplateRef tplrefForo=site.createTemplateRef();
@@ -144,18 +145,20 @@ public class CommunityConfiguration extends GenericResource
         tplrefForo.setActive(true);
         foro.addTemplateRef(tplrefForo);
 
+        /*
         WebPage blog = createBlog(site, title, pageTopic, resourceByDefault);
         TemplateRef tplrefBlog=site.createTemplateRef();
         tplrefBlog.setTemplate(site.getTemplate("13"));
         tplrefBlog.setActive(true);
         blog.addTemplateRef(tplrefBlog);
+         * */
 
         WebPage wiki = createWiki(site, title, pageTopic, resourceByDefault);
         TemplateRef tplrefWiki=site.createTemplateRef();
         tplrefWiki.setTemplate(site.getTemplate("13"));
         tplrefWiki.setActive(true);
         wiki.addTemplateRef(tplrefWiki);
-         * */
+        
         
     }
 
