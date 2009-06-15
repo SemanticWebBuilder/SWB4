@@ -17,7 +17,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 
 /**
  *
- * @author Ana
+ * @author Jorge Jiménez
  */
 public class BusinessComm extends GenericResource
 {
