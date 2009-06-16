@@ -1,11 +1,11 @@
 WEB-INF
 WEB-INF/classes
 work
-wbadmin
+swbadmin
 applets
 WEB-INF/lib
 WEB-INF/topicmaps
-wbutil
+swbutil
 WEB-INF/classes/db.properties
 WEB-INF/classes/license.properties
 WEB-INF/classes/topicmaps.properties

@@ -12,7 +12,7 @@
     String sref=request.getParameter("sref");
     String sprop=request.getParameter("sprop");
     //System.out.println("SemObjectEditor suri:"+suri+" scls:"+scls+" sref:"+sref+" sprop:"+sprop);
-    
+    //System.out.println("debug:1");
     if(suri==null && scls==null)
     {
         String code=SWBUtils.IO.readInputStream(request.getInputStream());
@@ -31,16 +31,20 @@
     String smode=request.getParameter("smode");
 try
 {
+    //System.out.println("debug:2");
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
-    if(suri== null) //es una creacion
+    if(suri==null) //es una creacion
     {
+        //System.out.println("debug:3");
         SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(scls);
         SemanticObject ref=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(sref);
         SWBFormMgr frm=new SWBFormMgr(cls,ref,null);
+        frm.setLang(lang);
         frm.addHiddenParameter("sprop", sprop);
         frm.setSubmitByAjax(true);
         frm.setType(SWBFormMgr.TYPE_DOJO);
 
+        //System.out.println("debug:4");
         SemanticObject obj=frm.processForm(request);
         if(obj!=null)
         {
@@ -79,6 +83,8 @@ try
         }
     }else
     {
+        //System.out.println("debug:5");
+
         SemanticObject obj=ont.getSemanticObject(suri);
         SemanticClass cls=obj.getSemanticClass();
 
@@ -97,6 +103,7 @@ try
         }
         //System.out.println(view);
 
+        //System.out.println("debug:6");
         SWBFormMgr frm=new SWBFormMgr(obj, view,mode);
         frm.setLang(lang);
         frm.setSubmitByAjax(true);

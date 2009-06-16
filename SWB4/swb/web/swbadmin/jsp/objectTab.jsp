@@ -19,7 +19,7 @@
     String icon=SWBContext.UTILS.getIconClass(obj);
     out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+id+"','"+obj.getDisplayName(lang)+"','"+icon+"');\" _loadingMessage=\""+loading+"\" />");
 
-    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" nested=\"true\" _selectedChild=\"btab1\" onButtonClick=\"alert('click');\" onLoad=\"alert('Hola');\">");
+    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" nested=\"true\" _selectedChild=\"btab1\" onButtonClick=\"alert('click');\" onLoad_=\"alert('Hola');\">");
 
     Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(ObjectBehavior.listObjectBehaviors(adm));
     //Iterator<ObjectBehavior> obit=SWBComparator.sortSermanticObjects(new GenericIterator(ObjectBehavior.swbxf_ObjectBehavior, obj.getModel().listInstancesOfClass(ObjectBehavior.swbxf_ObjectBehavior)));
@@ -83,10 +83,10 @@
             //out.println("    </script>");
             //request.getRequestDispatcher((url+"?"+params).substring(4)).include(request, response);
             out.println("</div>");
-            out.println("    <script type=\"dojo/connect\">");
+            //out.println("    <script type=\"dojo/connect\">");
             //out.println("       dojo.connect(this.controlButton, \"onClick\", onClickTab);");
-            out.println("       alert(\"hola\");");
-            out.println("    </script>");
+            //out.println("       alert(\"hola\");");
+            //out.println("    </script>");
         }
     }
 
