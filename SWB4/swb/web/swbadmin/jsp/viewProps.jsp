@@ -1,8 +1,18 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*"%>
+<%!
+   private int nocache=0;
+
+    public String getLocaleString(String key, String lang)
+    {
+        return SWBUtils.TEXT.getLocaleString("locale_swb_admin", key, new java.util.Locale(lang));
+    }
+%>
 <%
+    User user=SWBPortal.getSessionUser();
     String lang="es";
+    if(user!=null)lang=user.getLanguage();
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     String id=request.getParameter("id");
@@ -12,24 +22,26 @@
     SemanticClass cls=obj.getSemanticClass();
     String title=obj.getDisplayName(lang);
     String url=null;
-    if(gen instanceof WebPage)url=((WebPage)gen).getUrl();
+    if(gen instanceof WebPage)url=((WebPage)gen).getUrl()+"?_nocache="+(nocache++);
+    if(gen instanceof WebSite)url=SWBPortal.getDistributorPath()+"/"+gen.getId();
+
     String description=obj.getProperty(Descriptiveable.swb_description);
     String active=obj.getProperty(Activeable.swb_active);
     String sortname=obj.getProperty(WebPage.swb_webPageSortName);
 %>
 <table>
     <!--<caption>Propiedades</caption>-->
-    <tr><th>Propiedad</th><th>Valor</th></tr>
+    <tr><th><%=getLocaleString("property",lang)%></th><th><%=getLocaleString("value",lang)%></th></tr>
 <%
     if(url!=null)
     {
 %>
-        <tr><td>Id</td><td><a href="<%=url%>" onclick="dojo.byId('swbPreviewFrame').src='<%=url%>';dijit.byId('tabs').selectChild(dijit.byId('swbPreviewTab'));return false;"><%=obj.getId()%></a></td></tr>
+        <tr><td><%=getLocaleString("identificator",lang)%></td><td><a href="<%=url%>" onclick="dojo.byId('swbPreviewFrame').src='<%=url%>';dijit.byId('tabs').selectChild(dijit.byId('swbPreviewTab'));return false;"><%=obj.getId()%></a></td></tr>
 <%
     }else
     {
 %>
-        <tr><td>Id</td><td><%=obj.getId()%></td></tr>
+        <tr><td><%=getLocaleString("identificator",lang)%></td><td><%=obj.getId()%></td></tr>
 <%
     }
 %>

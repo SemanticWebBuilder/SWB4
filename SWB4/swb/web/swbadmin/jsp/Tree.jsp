@@ -11,6 +11,11 @@
         return lang;
     }
 
+    public String getLocaleString(String key, String lang)
+    {
+        return SWBUtils.TEXT.getLocaleString("locale_swb_admin", key, new Locale(lang));
+    }
+
     public JSONObject getAction(String name, String value, String target) throws JSONException
     {
         JSONObject obj=new JSONObject();
@@ -51,6 +56,11 @@
         return obj;
     }
 
+    public JSONObject getDummyNode() throws JSONException
+    {
+        return getNode("_NOID_" + (nullnode++), "DUMMY", "DUMMY", "DUMMY");
+    }
+
     public JSONObject getReloadAction() throws JSONException
     {
         return getAction("reload",null,null);
@@ -65,51 +75,56 @@
     {
         return getMenuItem("_",null, null);
     }
+
+    public JSONObject getMenuReload(String lang) throws JSONException
+    {
+        return getMenuItem(getLocaleString("reload",lang), "dijitEditorIcon dijitEditorIconCut", getReloadAction());
+    }
     
-    public void addWebSites(JSONArray arr)  throws JSONException
+    public void addWebSites(JSONArray arr, String lang)  throws JSONException
     {
         //System.out.println("addWebSites");
-        Iterator<WebSite> it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),getUserLanguage());
+        Iterator<WebSite> it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),lang);
         while(it.hasNext())
         {
             WebSite site=it.next();
             //System.out.println("site:"+site);
             //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
             //site=SWBContext.getWebSite(site.getURI());
-            addSemanticObject(arr, site.getSemanticObject(),false,true);
+            addSemanticObject(arr, site.getSemanticObject(),false,true,lang);
             //addWebSite(arr, site);
         }                 
     }
 
-    public void addUserReps(JSONArray arr)  throws JSONException
+    public void addUserReps(JSONArray arr, String lang)  throws JSONException
     {
         //System.out.println("addWebSites");
-        Iterator<UserRepository> it=SWBComparator.sortSermanticObjects(SWBContext.listUserRepositorys(),getUserLanguage());
+        Iterator<UserRepository> it=SWBComparator.sortSermanticObjects(SWBContext.listUserRepositorys(),lang);
         while(it.hasNext())
         {
             UserRepository rep=it.next();
             //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
             //rep=SWBContext.getUserRepository(rep.getURI());
-            addSemanticObject(arr, rep.getSemanticObject(),false,true);
+            addSemanticObject(arr, rep.getSemanticObject(),false,true,lang);
             //addWebSite(arr, site);
         }
     }
 
-    public void addDocRepositories(JSONArray arr)  throws JSONException
+    public void addDocRepositories(JSONArray arr, String lang)  throws JSONException
     {
         //System.out.println("addWebSites");
-        Iterator<org.semanticwb.repository.Workspace> it=SWBComparator.sortSermanticObjects(SWBContext.listWorkspaces(),getUserLanguage());
+        Iterator<org.semanticwb.repository.Workspace> it=SWBComparator.sortSermanticObjects(SWBContext.listWorkspaces(),lang);
         while(it.hasNext())
         {
             org.semanticwb.repository.Workspace rep=it.next();
             //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
             //rep=SWBContext.getUserRepository(rep.getURI());
-            addSemanticObject(arr, rep.getSemanticObject(),false,true);
+            addSemanticObject(arr, rep.getSemanticObject(),false,true,lang);
             //addWebSite(arr, site);
         }
     }
 
-    public void addFavorites(JSONArray arr)  throws JSONException
+    public void addFavorites(JSONArray arr, String lang)  throws JSONException
     {
         User user=SWBPortal.getSessionUser();
         //System.out.println("user uri:"+user.getURI());
@@ -123,15 +138,15 @@
                 while(it.hasNext())
                 {
                     SemanticObject obj=it.next();
-                    addSemanticObject(arr, obj,false,true);
+                    addSemanticObject(arr, obj,false,true,lang);
                 }
             }
         }
     }
 
-    public void addWebSitesTrash(JSONArray arr)  throws JSONException
+    public void addWebSitesTrash(JSONArray arr, String lang)  throws JSONException
     {
-        Iterator<WebSite> it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),getUserLanguage());
+        Iterator<WebSite> it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),lang);
         while(it.hasNext())
         {
             WebSite site=it.next();
@@ -143,7 +158,7 @@
                     Resource por = itp.next();
                     if(por.isDeleted())
                     {
-                        addSemanticObject(arr, por.getSemanticObject(),false,true);
+                        addSemanticObject(arr, por.getSemanticObject(),false,true,lang);
                     }
                 }
                 Iterator<WebPage> itwp = site.listWebPages();
@@ -153,24 +168,24 @@
                     //if(wp.getId().equals("y")) wp.setDeleted(true);
                     if(wp.isDeleted())  //wp.isDeleted()
                     {
-                        addSemanticObject(arr, wp.getSemanticObject(),false,true);
+                        addSemanticObject(arr, wp.getSemanticObject(),false,true,lang);
                     }
                 }
             }
         }
 
-        it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),getUserLanguage());
+        it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),lang);
         while(it.hasNext())
         {
             WebSite site=it.next();
             if(site.isDeleted())
             {
-                addSemanticObject(arr, site.getSemanticObject(),false,true);
+                addSemanticObject(arr, site.getSemanticObject(),false,true,lang);
             }
         }
     }
 
-    public boolean hasHerarquicalNodes(SemanticObject obj) throws JSONException
+    public boolean hasHerarquicalNodes(SemanticObject obj, String lang) throws JSONException
     {
         boolean ret=false;
         Iterator<SemanticObject> it=obj.getSemanticClass().listHerarquicalNodes();
@@ -182,26 +197,26 @@
     }
 
 
-    public void addHerarquicalNodes(JSONArray arr, SemanticObject obj) throws JSONException
+    public void addHerarquicalNodes(JSONArray arr, SemanticObject obj, String lang) throws JSONException
     {
         Iterator<SemanticObject> it=SWBComparator.sortSortableObject(obj.getSemanticClass().listHerarquicalNodes());
         while(it.hasNext())
         {
             HerarquicalNode node=new HerarquicalNode(it.next());
-            addHerarquicalNode(arr,node,obj,false);
+            addHerarquicalNode(arr,node,obj,false,lang);
         }
     }
 
-    public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds) throws JSONException
+    public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, String lang) throws JSONException
     {
         SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
         String pf=node.getPropertyFilter();
-        JSONObject jobj=getNode("HN|"+obj.getURI()+"|"+node.getURI(), node.getDisplayTitle(getUserLanguage()), "HerarquicalNode", node.getIconClass());
+        JSONObject jobj=getNode("HN|"+obj.getURI()+"|"+node.getURI(), node.getDisplayTitle(lang), "HerarquicalNode", node.getIconClass());
         arr.put(jobj);
 
         JSONArray childs=new JSONArray();
         jobj.putOpt("children", childs);
-        Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),getUserLanguage()),pf);
+        Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang),pf);
 
         //System.out.println("obj:"+obj.getId());
         //drop acceptance
@@ -211,20 +226,29 @@
         //Menus
         JSONArray menus=new JSONArray();
         jobj.putOpt("menus", menus);
-        String url=SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI();
+        String url=SWBPlatform.getContextPath();
+        //TODO:Separar en controller
+        if(cls.equals(Language.sclass))
+        {
+            url+="/swbadmin/jsp/addLang.jsp";
+        }else
+        {
+            url+="/swbadmin/jsp/SemObjectEditor.jsp";
+        }
+        url+="?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI();
         if(pf!=null)url+="&"+pf;
-        menus.put(getMenuItem("Agregar "+cls.getDisplayName(getUserLanguage()), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", url,"Agregar "+cls.getDisplayName(getUserLanguage()))));
+        menus.put(getMenuItem(getLocaleString("add",lang)+" "+cls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", url,getLocaleString("add",lang)+" "+cls.getDisplayName(lang))));
         dropacc.put(cls.getClassId());
         //Iterator<SemanticClass> it2=cls.listSubClasses();
         //while(it2.hasNext())
         //{
         //    SemanticClass scls=it2.next();
-        //    menus.put(getMenuItem("Agregar "+scls.getDisplayName(getUserLanguage()), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
+        //    menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
         //    dropacc.put(scls.getClassID());
         //}
 
         menus.put(getMenuSeparator());
-        menus.put(getMenuItem("Recargar", "dijitEditorIcon dijitEditorIconCut", getReloadAction()));
+        menus.put(getMenuReload(lang));
 
         SemanticProperty herarprop=null;   //Herarquical property;
         Iterator<SemanticProperty> hprops=cls.listInverseHerarquicalProperties();
@@ -241,11 +265,11 @@
                 {
                     if(so.getObjectProperty(herarprop)==null)
                     {
-                        addSemanticObject(childs, so,false);
+                        addSemanticObject(childs, so,false,lang);
                     }
                 }else
                 {
-                    addSemanticObject(childs, so,false);
+                    addSemanticObject(childs, so,false,lang);
                 }
             }
         }else
@@ -261,7 +285,7 @@
     }
 
     //TODO:Separar en una clase treeController
-    public void addResourceType(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy) throws JSONException
+    public void addResourceType(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, String lang) throws JSONException
     {
         boolean hasChilds=false;
         SemanticClass cls=obj.getSemanticClass();
@@ -278,7 +302,7 @@
         }
 
         String icon=SWBContext.UTILS.getIconClass(obj);
-        JSONObject jobj=getNode(obj.getURI(), obj.getDisplayName(getUserLanguage()), type, icon);
+        JSONObject jobj=getNode(obj.getURI(), obj.getDisplayName(lang), type, icon);
         arr.put(jobj);
 
         //dragSupport
@@ -298,14 +322,14 @@
         JSONArray menus=new JSONArray();
         jobj.putOpt("menus", menus);
 
-        if(restype.getResourceMode()==2)
+        if(restype.getResourceMode()!=1)
         {
             Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
             while(pit.hasNext())
             {
                 SemanticProperty prop=pit.next();
                 SemanticClass rcls=prop.getRangeClass();
-                menus.put(getMenuItem("Agregar "+rcls.getDisplayName(getUserLanguage()), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+rcls.getDisplayName(getUserLanguage()))));
+                menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
                 dropacc.put(rcls.getClassId());
             }
             menus.put(getMenuSeparator());
@@ -316,17 +340,17 @@
         {
             if(!active)
             {
-                menus.put(getMenuItem("Activar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+                menus.put(getMenuItem(getLocaleString("active",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
             }else
             {
-                menus.put(getMenuItem("Desactivar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+                menus.put(getMenuItem(getLocaleString("unactive",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
             }
         }
 
-        menus.put(getMenuItem("Editar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
+        menus.put(getMenuItem(getLocaleString("edit",lang), "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
         if(!obj.instanceOf(Undeleteable.swb_Undeleteable) ||  (obj.instanceOf(Undeleteable.swb_Undeleteable) && obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false))
         {
-            menus.put(getMenuItem("Eliminar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
+            menus.put(getMenuItem(getLocaleString("delete",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
         }
         menus.put(getMenuSeparator());
 
@@ -334,12 +358,12 @@
         boolean isfavo=user.hasFavorite(obj);
         if(!isfavo)
         {
-            menus.put(getMenuItem("Agregar a Favoritos", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+            menus.put(getMenuItem(getLocaleString("addFavorites",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
         }else
         {
-            menus.put(getMenuItem("Eliminar de Favoritos", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+            menus.put(getMenuItem(getLocaleString("deleteFavorites",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
         }
-        menus.put(getMenuItem("Recargar", "dijitEditorIcon dijitEditorIconCut", getReloadAction()));
+        menus.put(getMenuReload(lang));
 
         //eventos
         JSONArray events=new JSONArray();
@@ -351,52 +375,60 @@
         JSONArray childs=new JSONArray();
         jobj.putOpt("children", childs);
 
-        hasChilds=hasHerarquicalNodes(obj);
-        if(addChilds || !hasChilds)
+        if(restype.getResourceMode()!=restype.MODE_CONTENT)
         {
-            addHerarquicalNodes(childs, obj);
-
-            Iterator<SemanticObject> it=obj.listHerarquicalChilds();
-            if(addChilds)
+            hasChilds=hasHerarquicalNodes(obj,lang);
+            if(addChilds || !hasChilds)
             {
-                Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(it,getUserLanguage());
-                while(it2.hasNext())
+                addHerarquicalNodes(childs, obj,lang);
+
+                Iterator<SemanticObject> it=obj.listHerarquicalChilds();
+                if(addChilds)
                 {
-                    SemanticObject ch=it2.next();
-                    boolean add=true;
-                    if(ch.instanceOf(Resource.sclass))
+                    Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(it,lang);
+                    while(it2.hasNext())
                     {
-                        Resource res=(Resource)ch.createGenericInstance();
-                        if(res.getResourceSubType()!=null)add=false;
+                        SemanticObject ch=it2.next();
+                        boolean add=true;
+                        if(ch.instanceOf(Resource.sclass))
+                        {
+                            Resource res=(Resource)ch.createGenericInstance();
+                            if(res.getResourceSubType()!=null)add=false;
+                            //if(add && restype.getResourceMode()==restype.MODE_SYSTEM)
+                            //{
+                            //    System.out.println("res.getResourceable():"+res.getResourceable());
+                            //    if(res.getResourceable()!=null)add=false;
+                            //}
+                        }
+                        if(add)addSemanticObject(childs, ch,false,lang);
                     }
-                    if(add)addSemanticObject(childs, ch,false);
-                }
-            }else
-            {
-                if(it.hasNext())
+                }else
                 {
-                    hasChilds=true;
+                    if(it.hasNext())
+                    {
+                        hasChilds=true;
+                    }
                 }
             }
-        }
-        if(hasChilds && !addChilds)
-        {
-            if (addDummy) {
-                childs.put(getNode("_NOID_" + (nullnode++), "DUMMY", "DUMMY", "DUMMY"));
-            } else {
-                jobj.put("hasChilds", "true");
+            if(hasChilds && !addChilds)
+            {
+                if (addDummy) {
+                    childs.put(getDummyNode());
+                } else {
+                    jobj.put("hasChilds", "true");
+                }
+                events.put(getEvent("onOpen", getReloadAction()));
             }
-            events.put(getEvent("onOpen", getReloadAction()));
         }
     }
 
 
-    public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds) throws JSONException
+    public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, String lang) throws JSONException
     {
-        addSemanticObject(arr, obj, addChilds, false);
+        addSemanticObject(arr, obj, addChilds, false,lang);
     }
 
-    public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy) throws JSONException
+    public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, String lang) throws JSONException
     {
         boolean hasChilds=false;
         SemanticClass cls=obj.getSemanticClass();
@@ -407,7 +439,7 @@
         //System.out.println("type:"+type);
         if(cls.equals(ResourceType.sclass))
         {
-            addResourceType(arr,obj,addChilds,addDummy);
+            addResourceType(arr,obj,addChilds,addDummy,lang);
             return;
         }
         //Active
@@ -419,7 +451,7 @@
         }
 
         String icon=SWBContext.UTILS.getIconClass(obj);
-        JSONObject jobj=getNode(obj.getURI(), obj.getDisplayName(getUserLanguage()), type, icon);
+        JSONObject jobj=getNode(obj.getURI(), obj.getDisplayName(lang), type, icon);
         arr.put(jobj);
 
         //dragSupport
@@ -448,14 +480,14 @@
             {
                 SemanticProperty prop=pit.next();
                 SemanticClass rcls=prop.getRangeClass();
-                menus.put(getMenuItem("Agregar "+rcls.getDisplayName(getUserLanguage()), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+rcls.getDisplayName(getUserLanguage()))));
+                menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
                 dropacc.put(rcls.getClassId());
                 //add subclasess
                 Iterator<SemanticClass> it=rcls.listSubClasses();
                 while(it.hasNext())
                 {
                     SemanticClass scls=it.next();
-                    menus.put(getMenuItem("Agregar "+scls.getDisplayName(getUserLanguage()), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),"Agregar "+scls.getDisplayName(getUserLanguage()))));
+                    menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
                     dropacc.put(scls.getClassId());
                 }
             }
@@ -469,18 +501,18 @@
         {
             if(!active)
             {
-                menus.put(getMenuItem("Activar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+                menus.put(getMenuItem(getLocaleString("active",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
             }else
             {
-                menus.put(getMenuItem("Desactivar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+                menus.put(getMenuItem(getLocaleString("unactive",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
             }
         }
 
         //menu remove
-        menus.put(getMenuItem("Editar", "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
+        menus.put(getMenuItem(getLocaleString("edit",lang), "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
         if(!obj.instanceOf(Undeleteable.swb_Undeleteable) ||  (obj.instanceOf(Undeleteable.swb_Undeleteable) && obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false))
         {
-            menus.put(getMenuItem("Eliminar", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
+            menus.put(getMenuItem(getLocaleString("delete",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
         }
         menus.put(getMenuSeparator());
 
@@ -489,13 +521,13 @@
         boolean isfavo=user.hasFavorite(obj);
         if(!isfavo)
         {
-            menus.put(getMenuItem("Agregar a Favoritos", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+            menus.put(getMenuItem(getLocaleString("addFavorites",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
         }else
         {
-            menus.put(getMenuItem("Eliminar de Favoritos", "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+            menus.put(getMenuItem(getLocaleString("deleteFavorites",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
         }
         //menu recargar
-        menus.put(getMenuItem("Recargar", "dijitEditorIcon dijitEditorIconCut", getReloadAction()));
+        menus.put(getMenuReload(lang));
 
         //eventos
         JSONArray events=new JSONArray();
@@ -507,19 +539,19 @@
         JSONArray childs=new JSONArray();
         jobj.putOpt("children", childs);
 
-        hasChilds=hasHerarquicalNodes(obj);
+        hasChilds=hasHerarquicalNodes(obj,lang);
         if(addChilds || !hasChilds)
         {
-            addHerarquicalNodes(childs, obj);
+            addHerarquicalNodes(childs, obj,lang);
 
             Iterator<SemanticObject> it=obj.listHerarquicalChilds();
             if(addChilds)
             {
-                Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(it,getUserLanguage());
+                Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(it,lang);
                 while(it2.hasNext())
                 {
                     SemanticObject ch=it2.next();
-                    addSemanticObject(childs, ch,false);
+                    addSemanticObject(childs, ch,false,lang);
                 }
             }else
             {
@@ -532,7 +564,7 @@
         if(hasChilds && !addChilds)
         {
             if (addDummy) {
-                childs.put(getNode("_NOID_" + (nullnode++), "DUMMY", "DUMMY", "DUMMY"));
+                childs.put(getDummyNode());
             } else {
                 jobj.put("hasChilds", "true");
             }
@@ -620,6 +652,7 @@
 
     
 %><%
+    String lang=getUserLanguage();
 
     SemanticOntology sont=(SemanticOntology)session.getAttribute("ontology");
     if(sont==null)
@@ -667,11 +700,11 @@
         obj.put("label","title");
         JSONArray items=new JSONArray();
         obj.putOpt("items", items);
-        if(id.equals("mtree"))addWebSites(items);
-        if(id.equals("muser"))addUserReps(items);
-        if(id.equals("mfavo"))addFavorites(items);
-        if(id.equals("mtra")) addWebSitesTrash(items);
-        if(id.equals("mdoc")) addDocRepositories(items);
+        if(id.equals("mtree"))addWebSites(items,lang);
+        if(id.equals("muser"))addUserReps(items,lang);
+        if(id.equals("mfavo"))addFavorites(items,lang);
+        if(id.equals("mtra")) addWebSitesTrash(items,lang);
+        if(id.equals("mdoc")) addDocRepositories(items,lang);
         if(id.equals("mclass")) addClasses(items,sont);
         if(id.equals("mprop")) addProperties(items,sont);
         out.print(obj.toString());
@@ -696,14 +729,14 @@
                 SemanticObject nobj=ont.getSemanticObject(nuri);
                 //System.out.println("obj:"+obj+" node:"+nobj);
                 HerarquicalNode node=new HerarquicalNode(nobj);
-                addHerarquicalNode(items,node,obj,addChilds);
+                addHerarquicalNode(items,node,obj,addChilds,lang);
             }
         }else
         {
             SemanticObject sobj=ont.getSemanticObject(suri);
             if(sobj!=null)
             {
-                addSemanticObject(items, sobj,addChilds);
+                addSemanticObject(items, sobj,addChilds,lang);
                 Iterator<SemanticObject> it=sobj.listHerarquicalParents();
                 if(it.hasNext())
                 {

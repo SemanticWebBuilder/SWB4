@@ -1,17 +1,36 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="org.semanticwb.*"%>
-<%-- 
+<%--
     Document   : treeWidget
     Created on : 30/12/2008, 05:09:54 PM
     Author     : Jei
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="org.semanticwb.*"%>
+<%@page import="org.semanticwb.portal.api.*"%>
 <%
-    String id=request.getParameter("id");
-    String showRoot=request.getParameter("showRoot");
-    String rootLabel=request.getParameter("rootLabel");
+    String id;
+    String showRoot;
+    String rootLabel;
+    String url;
+
+    SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
+    if(paramRequest!=null)
+    {
+        id=paramRequest.getArgument("id", "tree");
+        showRoot=paramRequest.getArgument("showRoot", "false");
+        rootLabel=paramRequest.getArgument("rootLabel");
+        SWBResourceURL surl=paramRequest.getRenderUrl().setMode("json").setCallMethod(paramRequest.Call_DIRECT);
+        surl.setParameter("id", id);
+        url=surl.toString();
+    }else
+    {
+        id=request.getParameter("id");
+        showRoot=request.getParameter("showRoot");
+        rootLabel=request.getParameter("rootLabel");
+        if(id==null)id="tree";
+        if(showRoot==null)showRoot="false";
+        url="/swb/swbadmin/jsp/Tree.jsp?id="+id;
+    }
     //System.out.println("id:"+id);
-    if(id==null)id="tree";
-    if(showRoot==null)showRoot="false";
     if(rootLabel!=null)rootLabel="rootLabel=\""+rootLabel+"\"";
     else rootLabel="";
     String store=id+"Store";
@@ -21,7 +40,7 @@
 <!-- menu -->
 <ul dojoType="dijit.Menu" id="<%=menu%>" style="display: none;" onOpen="hideApplet(true);" onClose="hideApplet(false);"></ul>
 <!-- data for tree and combobox -->
-<div dojoType="dojo.data.ItemFileWriteStore" jsId="<%=store%>" url="/swb/swbadmin/jsp/Tree.jsp?id=<%=id%>"></div>
+<div dojoType="dojo.data.ItemFileWriteStore" jsId="<%=store%>" url="<%=url%>"></div>
 <div dojoType="dijit.tree.ForestStoreModel" jsId="<%=model%>"
   store="<%=store%>" rootId="root" <%=rootLabel%> childrenAttrs="children"></div>
 <!-- tree widget -->
@@ -52,8 +71,9 @@
             executeTreeNodeEvent(<%=store%>,nodeWidget.item,"onDblClick");
         }
     </script>
+<!--
     <script type="dojo/method" event="onEnterKey" args="event">
-        alert("onEnterKey"+event);
+        //alert("onEnterKey"+event);
         var domElement = event.target;
         var nodeWidget = dijit.getEnclosingWidget(domElement);
         act_treeNode=nodeWidget;
@@ -61,6 +81,7 @@
             executeTreeNodeEvent(<%=store%>,nodeWidget.item,"onDblClick");
         }
     </script>
+-->
     <script type="dojo/method" event="onDndDrop" args="source,nodes,copy">
         //alert(source+" "+nodes+" "+copy+" "+this.containerState);
 		// summary:
@@ -180,7 +201,7 @@
     </script>
 
     <script type="dojo/method" event="onDndStart" args="_1a,_1b,_1c">
-        alert("Hola");
+        //alert("Hola");
         /*
         if(this.isSource){
             this._changeState("Source",this==_1a?(_1c?"Copied":"Moved"):"");

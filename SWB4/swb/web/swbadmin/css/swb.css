@@ -51,6 +51,8 @@ html, body, #main{
 .swbIconWebSiteU,
 .swbIconUserRespositorys,
 .swbIconUserRepository,
+.swbIconHomePage,
+.swbIconHomePageU,
 .swbIconWebPage,
 .swbIconWebPageU,
 .swbIconWebPageE,
@@ -105,6 +107,8 @@ html, body, #main{
 .swbIconWebSites    { background-position: -280px -0px; }
 .swbIconWebSite     { background-position: -280px -18px; }
 .swbIconWebSiteU    { background-position: -280px -36px; }
+.swbIconHomePage    { background-position: -400px -18px; }
+.swbIconHomePageU    { background-position: -400px -36px; }
 .swbIconWebPage     { background-position: -420px -18px; }
 .swbIconWebPageU    { background-position: -420px -36px; }
 .swbIconWebPageF    { background-position: -0px -72px; }
