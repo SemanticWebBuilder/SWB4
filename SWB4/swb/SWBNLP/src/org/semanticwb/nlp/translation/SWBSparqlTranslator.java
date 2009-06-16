@@ -85,7 +85,7 @@ public class SWBSparqlTranslator {
                 return res;
             } else {
                 errCode = 2;
-                eLog += "no se pudo obtener AST.\n";
+                eLog += "La consulta no está bien escrita.\n";
                 return "";
             }
         } catch (org.antlr.runtime.RecognitionException ex) {
@@ -114,17 +114,13 @@ public class SWBSparqlTranslator {
         List<CommonTree> child = root.getChildren();
         if (child != null) {
             res = "SELECT DISTINCT ";
-            Iterator<CommonTree> cit = child.iterator();
-            while (cit.hasNext()) {
-                CommonTree t = cit.next();
-
+            for (CommonTree t : child) {
                 if (t.getText().equals("LIMIT")) {
                     limitoff = limitoff + " LIMIT " + t.getChild(0).getText() + "\n";
                 } else if (t.getText().equals("ORDER")) {
                     order += " ORDER BY ";
-                    Iterator<CommonTree> oit = t.getChildren().iterator();
-                    while (oit.hasNext()) {
-                        order = order + "?" + oit.next().getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ";
+                    for (CommonTree oit : (List<CommonTree>) t.getChildren()) {
+                        order = order + "?" + oit.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ";
                     }
                     order = order.trim() + "\n";
                 } else if (t.getText().equals("OFFSET")) {
@@ -132,18 +128,17 @@ public class SWBSparqlTranslator {
                 } else {
                     if (hasPrede) {
                         if (hasPrecon) {
-                            varList += getVarList((CommonTree)t.getChild(1), t.getText());
+                            varList += getVarList((CommonTree) t.getChild(1), t.getText());
                         } else {
-                            varList += getVarList((CommonTree)t.getChild(0), t.getText());
+                            varList += getVarList((CommonTree) t.getChild(0), t.getText());
                         }
                     } else {
                         varList = varList + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "");
                     }
                     res = res + varList + "\nWHERE \n{\n";
                     String etype = lex.getObjWordTag(t.getText()).getType();
-                    if(!etype.equals("")) {
-                        res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + etype
-                            + ".\n";
+                    if (!etype.equals("")) {
+                        res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + etype + ".\n";
                         res += startParsing(t);
                     } else {
                         errCode = 2;
@@ -168,9 +163,7 @@ public class SWBSparqlTranslator {
         List<CommonTree> child = root.getChildren();
 
         if (child != null) {
-            Iterator<CommonTree> cit = child.iterator();
-            while (cit.hasNext()) {
-                CommonTree t = cit.next();
+            for (CommonTree t : child) {
                 res += processNode(t, root.getText(), root.getText());
             }
         }
@@ -194,10 +187,7 @@ public class SWBSparqlTranslator {
         if (nname.equals("PRECON")) {
             //Procesar los hijos con el padre del actual
             if (child != null) {
-                Iterator<CommonTree> cit = child.iterator();
-                while (cit.hasNext()) {
-                    CommonTree t = cit.next();
-
+                for (CommonTree t : child) {
                     res += processNode(t, parent, parentLabel);
                 }
             }
@@ -207,9 +197,7 @@ public class SWBSparqlTranslator {
         } else if (nname.equals("PREDE")) {
             if (!root.getChild(0).getText().equals("MODTO")) {
                 if (child != null) {
-                    Iterator<CommonTree> cit = child.iterator();
-                    while (cit.hasNext()) {
-                        CommonTree t = cit.next();
+                    for (CommonTree t : child) {
                         String cname = t.getText();
 
                         res = res + "?" + parent.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " +
@@ -233,9 +221,7 @@ public class SWBSparqlTranslator {
                     }
                     if (scl != null) {
                         String cName = scl.getDisplayName(lex.getLanguage());
-                        Iterator<CommonTree> cit = child.iterator();
-                        while (cit.hasNext()) {
-                            CommonTree t = cit.next();
+                        for (CommonTree t : child) {
                             res += processNode(t, cName, nname);
                         }
                     }
@@ -275,9 +261,7 @@ public class SWBSparqlTranslator {
 
         List<CommonTree> child = root.getChildren();
         if (child != null) {
-            Iterator<CommonTree> cit = child.iterator();
-            while (cit.hasNext()) {
-                CommonTree t = cit.next();
+            for (CommonTree t : child) {
                 res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ";
             }
         }
@@ -297,7 +281,7 @@ public class SWBSparqlTranslator {
     private String processStatement(CommonTree root, String parent, String parentLabel) throws CorruptIndexException, IOException {
         String res = "";
         String pName = assertPropertyType(root.getChild(0).getText(), parent);
-        System.out.println("verificando " + root.getChild(0).getText() + " de " + parent + " con etiqueta " + parentLabel);
+        //System.out.println("verificando " + root.getChild(0).getText() + " de " + parent + " con etiqueta " + parentLabel);
         if (root.getText().equals("ASIGN")) {
             if (!pName.equals("")) {
                 res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
@@ -495,9 +479,8 @@ public class SWBSparqlTranslator {
         //Process all children of current node
         List<CommonTree> child = tree.getChildren();
         if (child != null) {
-            Iterator<CommonTree> cit = tree.getChildren().iterator();
-            while (cit.hasNext()) {
-                fixNames(cit.next());
+            for (CommonTree t : child) {
+                fixNames(t);
             }
         }
     }
@@ -515,9 +498,7 @@ public class SWBSparqlTranslator {
             chil = root.getChildren();
         }
         if (chil != null) {
-            Iterator<CommonTree> cit = chil.iterator();
-            while (cit.hasNext()) {
-                CommonTree t = cit.next();
+            for (CommonTree t : chil) {
                 traverseAST(t, indent + "  ");
             }
         }
