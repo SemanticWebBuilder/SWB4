@@ -280,13 +280,13 @@ public class SWBATemplateEdit extends GenericResource {
             SemanticObject obj = SemanticObject.createSemanticObject(id);
             if (obj != null) {
                 //User user=SWBPortal.getSessionUser();
-                out.println("<div class=\"applet\">");
+                out.println("<div class=\"applet\" style=\"position: relative; min-height: 100%\">");
                 SWBAEditor.getTemplateApplet(new java.io.PrintWriter(out), obj.getModel().getName(), obj.getId(), Integer.parseInt(vnum), user);
                 SWBResourceURL urlb = paramRequest.getRenderUrl();
                 urlb.setMode(SWBResourceURL.Mode_VIEW);
                 urlb.setParameter("act", "");
                 urlb.setParameter("suri", id);
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlb + "',this.domNode); return false;\">Cancelar</button>");
+                //out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlb + "',this.domNode); return false;\">Cancelar</button>");
                 out.println("</div>");
             }
         }

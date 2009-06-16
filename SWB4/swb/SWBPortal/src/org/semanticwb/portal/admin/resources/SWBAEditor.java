@@ -909,14 +909,14 @@ public class SWBAEditor extends GenericResource
             WBResourceURL url=paramsRequest.getRenderUrl();
             url.setMode("upload");
             url.setCallMethod(url.Call_DIRECT);
-            out.println("<PARAM NAME =\"upload\" VALUE=\""+url+"\">");
+            out.println("<param name=\"upload\" value=\""+url+"\">");
             url.setMode("download");
-            out.println("<PARAM NAME =\"download\" VALUE=\""+url+"\">");
+            out.println("<param name=\"download\" value=\""+url+"\">");
             url.setMode("gateway");
-            out.println("<PARAM NAME =\"gateway\" VALUE=\""+url+"\">");
-            out.println("<PARAM NAME =\"startview\" VALUE=\"text\">");
-            out.println("<PARAM NAME =\"tm\" VALUE=\""+stm+"\">");
-            out.println("<PARAM NAME =\"id\" VALUE=\""+sid+"\">");
+            out.println("<param name=\"gateway\" value=\""+url+"\">");
+            out.println("<param name=\"startview\" value=\"text\">");
+            out.println("<param name=\"tm\" value=\""+stm+"\">");
+            out.println("<param name=\"id\" value=\""+sid+"\">");
             if(sid!=null)//temaplate)
             {
                 int id=Integer.parseInt(sid);
@@ -929,9 +929,9 @@ public class SWBAEditor extends GenericResource
                     ver=new com.infotec.wb.services.TemplateSrv().newVersion(stm, tpl.getId(), ver,user.getId());
                 }
                 
-                out.println("<PARAM NAME =\"document\" VALUE=\""+tpl.getWebPath()+"/"+ver+"/"+tpl.getFileName(ver)+"\">");
-                out.println("<PARAM NAME =\"filename\" VALUE=\""+tpl.getFileName(ver)+"\">");
-                out.println("<PARAM NAME =\"ver\" VALUE=\""+ver+"\">");
+                out.println("<param name=\"document\" value=\""+tpl.getWebPath()+"/"+ver+"/"+tpl.getFileName(ver)+"\">");
+                out.println("<param name=\"filename\" value=\""+tpl.getFileName(ver)+"\">");
+                out.println("<param name=\"ver\" value=\""+ver+"\">");
             }
             out.println("</APPLET>");
         }else
@@ -962,23 +962,23 @@ public class SWBAEditor extends GenericResource
      */    
     public static void getTemplateApplet(PrintWriter out, String topicmapid, String templateid, int version, User user)
     {
-        out.println("<APPLET id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\""+SWBPlatform.getContextPath()+"\" ARCHIVE=\"swbadmin/lib/htmleditor.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
+        out.println("<applet id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\""+SWBPlatform.getContextPath()+"\" archive=\"swbadmin/lib/htmleditor.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
         String url=SWBPortal.getDistributorPath()+"/SWBAdmin/WBAd_utl_HTMLEditor/_rid/1/_mto/3/_mod/";
 
-        out.println("<PARAM NAME =\"upload\" VALUE=\""+url+"upload"+"\">");
-        out.println("<PARAM NAME =\"download\" VALUE=\""+url+"download"+"\">");
-        out.println("<PARAM NAME =\"gateway\" VALUE=\""+url+"gateway"+"\">");
-        out.println("<PARAM NAME =\"startview\" VALUE=\"text\">");
-        out.println("<PARAM NAME =\"tm\" VALUE=\""+topicmapid+"\">");
-        out.println("<PARAM NAME =\"id\" VALUE=\""+templateid+"\">");
+        out.println("<param name=\"upload\" value=\""+url+"upload"+"\">");
+        out.println("<param name=\"download\" value=\""+url+"download"+"\">");
+        out.println("<param name=\"gateway\" value=\""+url+"gateway"+"\">");
+        out.println("<param name=\"startview\" value=\"text\">");
+        out.println("<param name=\"tm\" value=\""+topicmapid+"\">");
+        out.println("<param name=\"id\" value=\""+templateid+"\">");
 
         Template tpl=SWBContext.getWebSite(topicmapid).getTemplate(templateid);
-        out.println("<PARAM NAME =\"document\" VALUE=\""+SWBPlatform.getWebWorkPath()+tpl.getWorkPath()+"/"+version+"/"+URLEncoder.encode(tpl.getFileName(version))+"\">");
-        out.println("<PARAM NAME =\"filename\" VALUE=\""+tpl.getFileName(version)+"\">");
-        out.println("<PARAM NAME =\"ver\" VALUE=\""+version+"\">");
-        out.println("<PARAM NAME =\"locale\" VALUE=\""+user.getLanguage()+"\">");
-        out.println("<PARAM NAME =\"type\" VALUE=\"Template\">");
-        out.println("</APPLET>");        
+        out.println("<param name=\"document\" value=\""+SWBPlatform.getWebWorkPath()+tpl.getWorkPath()+"/"+version+"/"+URLEncoder.encode(tpl.getFileName(version))+"\">");
+        out.println("<param name=\"filename\" value=\""+tpl.getFileName(version)+"\">");
+        out.println("<param name=\"ver\" value=\""+version+"\">");
+        out.println("<param name=\"locale\" value=\""+user.getLanguage()+"\">");
+        out.println("<param name=\"type\" value=\"Template\">");
+        out.println("</applet>");
     }
     
     /**
@@ -995,20 +995,20 @@ public class SWBAEditor extends GenericResource
         out.println("<APPLET id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\""+WBUtils.getInstance().getWebPath()+"\" ARCHIVE=\"swbadmin/lib/htmleditor.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
         String url=WBUtils.getInstance().getDistPath()+"/SWBAdmin/WBAd_utl_HTMLEditor/_rid/1/_mto/3/_mod/";
 
-        out.println("<PARAM NAME =\"upload\" VALUE=\""+url+"upload"+"\">");
-        out.println("<PARAM NAME =\"download\" VALUE=\""+url+"download"+"\">");
-        out.println("<PARAM NAME =\"gateway\" VALUE=\""+url+"gateway"+"\">");
-        out.println("<PARAM NAME =\"startview\" VALUE=\"html\">");
-        out.println("<PARAM NAME =\"tm\" VALUE=\""+base.getTopicMapId()+"\">");
-        out.println("<PARAM NAME =\"id\" VALUE=\""+base.getId()+"\">");
-        out.println("<PARAM NAME =\"tp\" VALUE=\""+topic.getId()+"\">");
+        out.println("<param name=\"upload\" value=\""+url+"upload"+"\">");
+        out.println("<param name=\"download\" value=\""+url+"download"+"\">");
+        out.println("<param name=\"gateway\" value=\""+url+"gateway"+"\">");
+        out.println("<param name=\"startview\" value=\"html\">");
+        out.println("<param name=\"tm\" value=\""+base.getTopicMapId()+"\">");
+        out.println("<param name=\"id\" value=\""+base.getId()+"\">");
+        out.println("<param name=\"tp\" value=\""+topic.getId()+"\">");
 
         //todo: terminar esta parte
-        out.println("<PARAM NAME =\"document\" VALUE=\""+SWB WBUtils.getInstance().getWebWorkPath()+base.getResourceWorkPath()+"/"+version+"/"+com.infotec.appfw.util.URLEncoder.encode(filename)+"\">");
-        out.println("<PARAM NAME =\"filename\" VALUE=\""+filename+"\">");
-        out.println("<PARAM NAME =\"ver\" VALUE=\""+version+"\">");
-        out.println("<PARAM NAME =\"locale\" VALUE=\""+user.getLanguage()+"\">");
-        out.println("<PARAM NAME =\"type\" VALUE=\"LocalContent\">");
+        out.println("<param name=\"document\" value=\""+SWB WBUtils.getInstance().getWebWorkPath()+base.getResourceWorkPath()+"/"+version+"/"+com.infotec.appfw.util.URLEncoder.encode(filename)+"\">");
+        out.println("<param name=\"filename\" value=\""+filename+"\">");
+        out.println("<param name=\"ver\" value=\""+version+"\">");
+        out.println("<param name=\"locale\" value=\""+user.getLanguage()+"\">");
+        out.println("<param name=\"type\" value=\"LocalContent\">");
         out.println("</APPLET>");        
     }    
     */

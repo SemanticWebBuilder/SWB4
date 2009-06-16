@@ -150,7 +150,6 @@ public class SWBServiceMgr implements SemanticObserver {
                 }
             } else if (prop instanceof SemanticProperty)
             {
-                updateObject(obj,usr);
                 //System.out.println("obj:"+obj+" "+Resource.sclass+"="+Resource.sclass+" prop:"+prop+"="+Resource.swb_resourceSubType);
                 if(obj.instanceOf(Resource.sclass) && prop.equals(Resource.swb_resourceSubType))
                 {
@@ -169,6 +168,7 @@ public class SWBServiceMgr implements SemanticObserver {
                 {
                     Dns.refresh();
                 }
+                updateObject(obj,usr);
             }else
             {
                 //TODO: SemanticClass
@@ -177,42 +177,45 @@ public class SWBServiceMgr implements SemanticObserver {
     }
     public void updateObject(SemanticObject obj, User usr)
     {
-        //TODO:Una rapida aproximacion para no estar actualizando al modificar cada propiedad
-        //if(obj.hashCode()!=lastobj || Thread.currentThread().getId()!=lastthread)
+        try
         {
-            System.out.println("updateObject:"+obj+" user:"+usr);
-            lastobj=obj.hashCode();
-            lastthread=Thread.currentThread().getId();
-            updateTraceable(obj,usr);
+            //TODO:Una rapida aproximacion para no estar actualizando al modificar cada propiedad
+            //if(obj.hashCode()!=lastobj || Thread.currentThread().getId()!=lastthread)
+            {
+                System.out.println("updateObject:"+obj+" user:"+usr);
+                lastobj=obj.hashCode();
+                lastthread=Thread.currentThread().getId();
+                updateTraceable(obj,usr);
 
-            if(obj.instanceOf(WebPage.sclass))
-            {
-                SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();
-                indexer.removeTopic(obj.getModel().getName(),obj.getId());
-                indexer.indexWebPage((WebPage)obj.createGenericInstance());
-            }
-            if(obj.instanceOf(Resource.sclass))
-            {
-                //System.out.println("Resource modificado");
-                Resource res=(Resource)obj.createGenericInstance();
-                if(res.getResourceType().getResourceMode()==ResourceType.MODE_CONTENT)
+                if(obj.instanceOf(WebPage.sclass))
                 {
-                    //System.out.println("Resource tipo contenido");
                     SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();
-                    indexer.removeContent(obj.getId(),obj.getModel().getName());
-                    Iterator<Resourceable> it=res.listResourceables();
-                    while(it.hasNext())
+                    indexer.removeTopic(obj.getModel().getName(),obj.getId());
+                    indexer.indexWebPage((WebPage)obj.createGenericInstance());
+                }
+                if(obj.instanceOf(Resource.sclass))
+                {
+                    //System.out.println("Resource modificado");
+                    Resource res=(Resource)obj.createGenericInstance();
+                    if(res.getResourceType().getResourceMode()==ResourceType.MODE_CONTENT)
                     {
-                        Resourceable ob=it.next();
-                        if(ob instanceof WebPage)
+                        //System.out.println("Resource tipo contenido");
+                        SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();
+                        indexer.removeContent(obj.getId(),obj.getModel().getName());
+                        Iterator<Resourceable> it=res.listResourceables();
+                        while(it.hasNext())
                         {
-                            //System.out.println("Contenido en la pagina ob");
-                            indexer.indexContent(res,(WebPage)ob);
+                            Resourceable ob=it.next();
+                            if(ob instanceof WebPage)
+                            {
+                                //System.out.println("Contenido en la pagina ob");
+                                indexer.indexContent(res,(WebPage)ob);
+                            }
                         }
                     }
                 }
             }
-        }
+        }catch(Exception e){log.error(e);}
     }
 
     public void updateTraceable(SemanticObject obj, User usr)
