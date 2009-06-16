@@ -230,7 +230,10 @@ public class SemanticObject
     private Object getPropertyValueCache(SemanticProperty prop, String lang)
     {
         Object ret=null;
-        if(hasPropertyCache)ret=m_cacheprops.get(prop.getURI()+"|"+lang);
+        if(hasPropertyCache)
+        {
+            ret=m_cacheprops.get(prop.getURI()+"|"+lang);
+        }
         return ret;
     }
 
@@ -935,6 +938,17 @@ public class SemanticObject
         return it;
     }
 
+    /**
+     * Regresa lista de objetos activos y no borrados relacionados por la propiedad
+     * @param prop
+     * @return
+     */
+    public Iterator<SemanticObject> listValidObjectProperties(SemanticProperty prop)
+    {
+        Iterator it=filterValidObjects(listObjectProperties(prop));
+        return it;
+    }
+
     public boolean hasObjectProperty(SemanticProperty prop, SemanticObject obj)
     {
 
@@ -1010,6 +1024,12 @@ public class SemanticObject
     public SemanticObject getObjectProperty(SemanticProperty prop, SemanticObject defValue)
     {
         SemanticObject ret = defValue;
+        if(prop.getCardinality()!=1)
+        {
+            Iterator<SemanticObject> it=listObjectProperties(prop);
+            if(it!=null && it.hasNext())ret=it.next();
+            return ret;
+        }
         if (m_virtual)
         {
             ArrayList<SemanticObject> arr = ((ArrayList) m_virtprops.get(prop.getURI()));
