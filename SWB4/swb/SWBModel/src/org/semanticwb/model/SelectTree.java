@@ -22,6 +22,8 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
         if(page.getURI().equals(selected))ret+="selected";
         ret+=">"+separator+page.getDisplayName(lang)+"</option>";
 
+        if(separator.length()==0)separator=">";
+
         Iterator<WebPage> it=page.listVisibleChilds(lang);
         while(it.hasNext())
         {
@@ -131,7 +133,7 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
                     if(site!=null)
                     {
                         WebPage home=site.getHomePage();
-                        ret.append(addPage(home, uri, lang, ">"));
+                        ret.append(addPage(home, uri, lang, ""));
                     }
                 }
                 ret.append("</select>");
