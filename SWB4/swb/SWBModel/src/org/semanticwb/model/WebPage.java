@@ -268,7 +268,20 @@ public class WebPage extends WebPageBase
     public boolean isParentof(WebPage page)
     {
         return page.isChildof(this);
-    }    
+    }
+
+    /**
+     * Indica si lapagina tienen alguna regla, rol o grupo de usuarios asignado o heredado
+     * @return
+     */
+    public boolean isFiltered()
+    {
+        boolean ret=false;
+        ret=listInheritRoleRefs().hasNext();
+        if(!ret)ret=listInheritUserGroupRefs().hasNext();
+        if(!ret)ret=listInheritRuleRefs().hasNext();
+        return ret;
+    }
     
     /** Regresa el nombre por defecto.
      * @return String

@@ -103,10 +103,9 @@ public class SWBContext extends SWBContextBase
                     }
                     //System.out.println("getIconClass:2");
                 }
-/*
                 if(cls.hasProperty(RoleRefable.swb_hasRoleRef.getName()))
                 {
-                    if(obj.hasObjectProperty(RoleRefable.swb_hasRoleRef))
+                    if(obj.listValidObjectProperties(RoleRefable.swb_hasRoleRef).hasNext())
                     {
                         ret+="F";
                         return ret;
@@ -115,7 +114,7 @@ public class SWBContext extends SWBContextBase
                 }
                 if(cls.hasProperty(UserGroupRefable.swb_hasUserGroupRef.getName()))
                 {
-                    if(obj.hasObjectProperty(UserGroupRefable.swb_hasUserGroupRef))
+                    if(obj.listValidObjectProperties(UserGroupRefable.swb_hasUserGroupRef).hasNext())
                     {
                         ret+="F";
                         return ret;
@@ -124,13 +123,13 @@ public class SWBContext extends SWBContextBase
                 }
                 if(cls.hasProperty(RuleRefable.swb_hasRuleRef.getName()))
                 {
-                    if(obj.hasObjectProperty(RuleRefable.swb_hasRuleRef))
+                    if(obj.listValidObjectProperties(RuleRefable.swb_hasRuleRef).hasNext())
                     {
                         ret+="F";
                         return ret;
                     }
                 }
-*/
+
             }
             return ret;
         }
