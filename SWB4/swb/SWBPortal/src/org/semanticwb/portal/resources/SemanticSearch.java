@@ -42,14 +42,13 @@ import org.semanticwb.portal.api.GenericAdmResource;
 
 /**
  *
- * @author hasdai
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class SemanticSearch extends GenericAdmResource {
 
     private Logger log = SWBUtils.getLogger(SWBAListRelatedObjects.class);
     private SWBSparqlTranslator tr = null;
     private Lexicon lex = null;
-    private boolean langChanged = false;
     private String lang2 = "x-x";
     private String lang = "x-x";
 
@@ -124,7 +123,7 @@ public class SemanticSearch extends GenericAdmResource {
         SWBResourceURL rUrl = paramRequest.getRenderUrl();        
         String query = request.getParameter(createId("naturalQuery"));
         String checked = request.getParameter(createId("showInfo"));
-        User user = paramRequest.getUser();
+        User user = paramRequest.getUser();        
 
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
@@ -645,7 +644,7 @@ public class SemanticSearch extends GenericAdmResource {
                 lex = new Lexicon(lang2);
                 System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time));
             }
-        }
+        }        
 
         //Assert query string
         if (query == null) {
@@ -689,7 +688,7 @@ public class SemanticSearch extends GenericAdmResource {
 
         tr = new SWBSparqlTranslator(lex);
         long time = System.currentTimeMillis();
-        String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query);
+        String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query);        
         System.out.println("+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time));
         System.out.println(sparqlQuery);
         String errCount = Integer.toString(tr.getErrCode());
