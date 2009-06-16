@@ -6,6 +6,7 @@
 package org.semanticwb.nlp;
 
 import java.io.IOException;
+import java.io.StringReader;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -16,8 +17,12 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Hits;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.lucene.analysis.Token;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.TermQuery;
@@ -43,7 +48,19 @@ public class Lexicon {
     private List prefixes = new ArrayList();
     private List namespaces = new ArrayList();
     private String prefixString = "";
-    boolean langChanged = false;
+    private Analyzer SnballAnalyzer = null;
+    private HashMap<String, String> langCodes;
+    private String [] stopWords = {"a", "ante", "bajo", "cabe", "con",
+                                        "contra", "de", "desde", "durante",
+                                        "en", "entre", "hacia", "hasta", 
+                                        "mediante", "para", "por", "según",
+                                        "sin", "sobre", "tras", "el", "la",
+                                        "los", "las", "ellos", "ellas", "un",
+                                        "uno", "unos", "una", "unas", "y", "o",
+                                        "pero", "si", "no", "como", "que", "su",
+                                        "sus", "esto", "eso", "esta", "esa",
+                                        "esos", "esas", "del"
+                                  };    
 
     /**
      * Creates a new Lexicon given the user's language. This method traverses the
@@ -56,7 +73,18 @@ public class Lexicon {
 
         //Create in-memory directories
         objDir = new RAMDirectory();
-        propDir = new RAMDirectory();
+        propDir = new RAMDirectory();        
+
+        //Initialize lang codes map
+        langCodes = new HashMap<String, String>();
+        langCodes.put("es", "Spanish");
+        langCodes.put("en", "English");
+        langCodes.put("de", "Dutch");
+        langCodes.put("pt", "Portuguese");
+        langCodes.put("ru", "Russian");
+
+        //Create SnowballAnalizer to get word root
+        SnballAnalyzer = new SnowballAnalyzer(langCodes.get(language), stopWords);
 
         //Traverse the ontology model to fill the dictionary
         Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
@@ -108,18 +136,31 @@ public class Lexicon {
     }
 
     /**
+     * Sets the words that are not going to be considered in snowball analysis.
+     * @param sw List of words to ignore (stop words).
+     */
+    public void setStopWords(String []sw) {
+        stopWords = sw;
+        
+        //Create SnowballAnalizer to get word root
+        SnballAnalyzer = new SnowballAnalyzer(langCodes.get(language), stopWords);
+    }
+
+    /**
      * Adds a document with the information of a SemanticClass to the search index.
      * @param o SemanticClass to extract information from.
      * @throws org.apache.lucene.index.CorruptIndexException
      * @throws java.io.IOException
      */
     public void addWord(SemanticClass o) throws CorruptIndexException, IOException {
-        if (search4Object(o.getDisplayName(language), objDir) == null) {
+        if (search4Object(o.getDisplayName(language), "displayNameLower", objDir) == null) {
             //Create in-memory index writer
             IndexWriter objWriter = new IndexWriter(objDir, luceneAnalyzer);
 
             //Create lucene document with SemanticClass info.
-            Document doc = createDocument("OBJ", o.getDisplayName(language), o.getPrefix(), o.getDisplayName(language).toLowerCase(), o.getName() , o.getClassId(), "");
+            Document doc = createDocument("OBJ", o.getDisplayName(language),
+                    o.getPrefix(), o.getDisplayName(language).toLowerCase(),
+                    getSnowballLexForm(o.getDisplayName(language)) ,o.getName() , o.getClassId(), "");
 
             //Write document to index
             objWriter.addDocument(doc);
@@ -134,7 +175,7 @@ public class Lexicon {
      * @throws java.io.IOException
      */
     public void addWord(SemanticProperty p) throws CorruptIndexException, IOException {
-        if (search4Object(p.getDisplayName(language), propDir) == null) {
+        if (search4Object(p.getDisplayName(language), "displayNameLower", propDir) == null) {
             //Create in-memory index writers
             IndexWriter propWriter = new IndexWriter(propDir, luceneAnalyzer, true);
 
@@ -148,12 +189,14 @@ public class Lexicon {
                 SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
                 if (rg != null) {
                     //Create lucene document for the Semantic Property
-                    Document doc = createDocument("PRO", p.getDisplayName(language), p.getPrefix(), p.getName(), p.getName().toLowerCase(), p.getPropId(), rg.getClassId());
+                    Document doc = createDocument("PRO", p.getDisplayName(language), p.getPrefix(), 
+                            p.getName(), getSnowballLexForm(p.getDisplayName(language)) ,p.getName().toLowerCase(), p.getPropId(), rg.getClassId());
                     propWriter.addDocument(doc);
                 }
             } else {
                 //Create lucene document for the Semantic Property
-                Document doc = createDocument("PRO", p.getDisplayName(language), p.getPrefix(), p.getName(), p.getName().toLowerCase(), p.getPropId(), "");
+                Document doc = createDocument("PRO", p.getDisplayName(language), p.getPrefix(), 
+                        p.getName(), getSnowballLexForm(p.getDisplayName(language)) ,p.getName().toLowerCase(), p.getPropId(), "");
                 propWriter.addDocument(doc);
             }
             propWriter.close();
@@ -181,13 +224,13 @@ public class Lexicon {
      * @return WordTag object with the tag and type for the word label.
      */
     public WordTag getWordTag(String label) throws CorruptIndexException, IOException {
-        Document doc = search4Object(label, propDir);
+        Document doc = search4Object(label, "displayNameLower", propDir);
 
         if (doc != null) {
             return new WordTag(doc.get("tag"), doc.get("prefix") + ":" + doc.get("name"), doc.get("name"), doc.get("id"), doc.get("rangeName"));
         }
 
-        doc = search4Object(label, objDir);
+        doc = search4Object(label, "displayNameLower", objDir);
         if (doc != null) {
             return new WordTag(doc.get("tag"), doc.get("prefix") + ":" + doc.get("name"), doc.get("name"), doc.get("id"), doc.get("rangeName"));
         }
@@ -201,7 +244,7 @@ public class Lexicon {
      * @return WordTag object with the tag and type for the given property name.
      */
     public WordTag getPropWordTag(String label) throws CorruptIndexException, IOException {
-        Document doc = search4Object(label, propDir);
+        Document doc = search4Object(label, "displayNameLower", propDir);
 
         if (doc != null) {
             return new WordTag(doc.get("tag"), doc.get("prefix") + ":" + doc.get("name"), doc.get("name"), doc.get("id"), doc.get("rangeName"));
@@ -217,7 +260,7 @@ public class Lexicon {
      */
     public WordTag getObjWordTag(String label) throws CorruptIndexException, java.io.IOException {
 
-        Document doc = search4Object(label, objDir);
+        Document doc = search4Object(label, "displayNameLower", objDir);
 
         if (doc != null) {
             return new WordTag(doc.get("tag"), doc.get("prefix") + ":" + doc.get("name"), doc.get("name"), doc.get("id"), doc.get("rangeName"));
@@ -236,15 +279,16 @@ public class Lexicon {
      * @param isObjectProp Wheter the document should include the range class.
      * @return
      */
-    private Document createDocument (String objTag, String objDisplayName, String objPrefix, String objDisplayNameLower, String objName, String objId, String rangeObjName) {
+    private Document createDocument (String objTag, String objDisplayName, String objPrefix, String objDisplayNameLower, String snowball, String objName, String objId, String rangeObjName) {
         Document doc = new Document();
         doc.add(new Field("tag", objTag, Field.Store.YES, Field.Index.NO));
         doc.add(new Field("prefix", objPrefix, Field.Store.YES, Field.Index.NO));
         doc.add(new Field("displayName", objDisplayName, Field.Store.YES, Field.Index.NO));
         doc.add(new Field("displayNameLower", objDisplayNameLower, Field.Store.YES, Field.Index.UN_TOKENIZED));
+        doc.add(new Field("snowballName", snowball, Field.Store.YES, Field.Index.UN_TOKENIZED));
         doc.add(new Field("name", objName, Field.Store.YES, Field.Index.NO));
         doc.add(new Field("id", objId, Field.Store.YES, Field.Index.NO));
-        doc.add(new Field("rangeName", rangeObjName, Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("rangeName", rangeObjName, Field.Store.YES, Field.Index.NO));        
 
         return doc;
     }
@@ -257,14 +301,14 @@ public class Lexicon {
      * @throws org.apache.lucene.index.CorruptIndexException
      * @throws java.io.IOException
      */
-    public Document search4Object (String keyWord, RAMDirectory dir) throws CorruptIndexException, IOException {
+    public Document search4Object (String keyWord, String fieldName, RAMDirectory dir) throws CorruptIndexException, IOException {
         if (dir.list().length == 0) return null;
 
         //Create a new index searcher
         IndexSearcher searcher = new IndexSearcher(dir);
 
         //Create a term for a term query (search for keyWord in displayNameLower field)
-        Term t = new Term("displayNameLower", keyWord.toLowerCase());
+        Term t = new Term(fieldName, keyWord.toLowerCase());
 
         //Build term query
         Query query = new TermQuery(t);
@@ -326,5 +370,18 @@ public class Lexicon {
 
     public RAMDirectory getPropDirectory() {
         return propDir;
+    }
+
+    public String getSnowballLexForm(String word) throws IOException {
+        TokenStream ts = SnballAnalyzer.tokenStream("sna", new StringReader(word));
+        String res = "";
+
+        Token tk;
+        while ((tk = ts.next()) != null) {            
+            res = res + tk.termText();
+        }
+        ts.close();
+        System.out.println(res);
+        return res;
     }
 }
