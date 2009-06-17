@@ -1128,6 +1128,7 @@ public class SemanticObject
         Object ret = null;
         if (!m_virtual)
         {
+            Object vals[]=null;
             GenericObject obj = this.createGenericInstance();
             Class cls = obj.getClass();
             Method method=extSetMethods.get(cls.getName()+"-"+prop.getURI());
@@ -1139,17 +1140,40 @@ public class SemanticObject
                     name = prop.getName();
                 }
                 name = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+                //System.out.println("name:"+name);
                 try
                 {
-                    Class types[]=new Class[values.length];
-                    for(int x=0;x<values.length;x++)
+                    Class types[]=null;
+                    if(prop.isLocaleable())
                     {
-                        types[x]=values[x].getClass();
-                        Class pri=wrapperToPrimitive.get(types[x]);
-                        if(pri!=null)
-                        {
-                            types[x]=pri;
-                        }
+                        types=new Class[values.length];
+                        vals=values;
+                    }else
+                    {
+                        types=new Class[1];
+                        vals=new Object[1];
+                        vals[0]=values[0];
+                    }
+
+                    Object o=values[0];
+                    if(o!=null)types[0]=o.getClass();
+                    else
+                    {
+                        if(prop.isString())types[0]=String.class;
+                        else if(prop.isDate())types[0]=Date.class;
+                        else if(prop.isObjectProperty())types[0]=prop.getDomainClass().getObjectClass();
+                    }
+                    Class pri=wrapperToPrimitive.get(types[0]);
+                    if(pri!=null)
+                    {
+                        types[0]=pri;
+                    }
+
+                    if(prop.isLocaleable() && values.length>1)
+                    {
+                        o=values[1];
+                        if(o==null)types[1]=String.class;
+                        else types[1]=o.getClass();
                     }
                     //System.out.println("getMethod:"+name+" "+types);
                     method = cls.getMethod(name,types);
@@ -1162,7 +1186,7 @@ public class SemanticObject
             }
             try
             {
-                ret = method.invoke(obj,values);
+                ret = method.invoke(obj,vals);
             }
             catch (Exception e)
             {
