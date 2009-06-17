@@ -42,6 +42,7 @@ public class SWBSparqlTranslator {
     private String nodeLabels = "SELECT|PRECON|PREDE|ASIGN|COMPL|COMPG|COMPLE|COMPGE|OFFSET|LIMIT|ORDER";
     private String eLog = "";   //Error log
     private int errCode = 0;    //Last error code
+    private boolean snowballAnalyze = false;
 
     /**
      * Creates a new instance of SWBSparqlTranslator with the given Lexicon.
@@ -50,6 +51,18 @@ public class SWBSparqlTranslator {
      */
     public SWBSparqlTranslator (Lexicon dict) {
         lex = dict;
+    }
+
+    /**
+     * Creates a new instance of SWBSparqlTranslator with the given Lexicon.
+     * Crea un SWBSparqlTranslator con el diccionario especificado.
+     * @param dict Lexicon for the new translator. Diccionario para el traductor.
+     * @param snowball Wheter to use snowball analysis in the process of index
+     * and search for words.
+     */
+    public SWBSparqlTranslator (Lexicon dict, boolean snowball) {
+        lex = dict;
+        snowballAnalyze = snowball;
     }
 
     /**
@@ -136,7 +149,7 @@ public class SWBSparqlTranslator {
                         varList = varList + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "");
                     }
                     res = res + varList + "\nWHERE \n{\n";
-                    String etype = lex.getObjWordTag(t.getText(), false).getType();
+                    String etype = lex.getObjWordTag(t.getText(), snowballAnalyze).getType();
                     if (!etype.equals("")) {
                         res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + etype + ".\n";
                         res += startParsing(t);
@@ -336,7 +349,7 @@ public class SWBSparqlTranslator {
      */
     private String assertPropertyType(String propertyName, String className) throws CorruptIndexException, IOException {
         String res = "";
-        String name = lex.getObjWordTag(className, false).getObjId();
+        String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
         boolean found = false;
         SemanticProperty sp = null;
         Iterator<SemanticProperty> sit;
@@ -372,7 +385,7 @@ public class SWBSparqlTranslator {
      * @return a SemanticClass which is the range class of the object property. Null otherwise.
      */
     public SemanticClass assertPropertyRangeClass(String propertyName, String className) throws CorruptIndexException, IOException {
-        String name = lex.getObjWordTag(className, false).getObjId();
+        String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
         boolean found = false;
         SemanticProperty sp = null;
         Iterator<SemanticProperty> sit;
@@ -423,7 +436,7 @@ public class SWBSparqlTranslator {
      */
     public String assertPropertyRangeType(String propertyName, String className) throws CorruptIndexException, IOException {
         String res = "";
-        String name = lex.getObjWordTag(className, false).getObjId();
+        String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
         boolean found = false;
         SemanticProperty sp = null;
         Iterator<SemanticProperty> sit;
@@ -441,7 +454,7 @@ public class SWBSparqlTranslator {
 
                         SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
                         if (rg != null) {
-                            res = res + lex.getObjWordTag(rg.getDisplayName(lex.getLanguage()), false).getType();
+                            res = res + lex.getObjWordTag(rg.getDisplayName(lex.getLanguage()), snowballAnalyze).getType();
                         }
                     }
                     else {
