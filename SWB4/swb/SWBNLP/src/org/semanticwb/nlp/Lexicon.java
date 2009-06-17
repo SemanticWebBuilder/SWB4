@@ -92,7 +92,7 @@ public class Lexicon {
         Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
         while (its.hasNext()) {
             SemanticClass sc = its.next();
-            addWord(sc, true);
+            addWord(sc);
 
             //Add class prefix to the prefixes string
             if (!prefixes.contains(sc.getPrefix())) {
@@ -107,7 +107,7 @@ public class Lexicon {
             Iterator<SemanticProperty> ip = sc.listProperties();
             while (ip.hasNext()) {
                 SemanticProperty sp = ip.next();
-                addWord(sp, true);
+                addWord(sp);
 
                 //Add property prefix to prefixes string
                 if (!prefixes.contains(sp.getPrefix())) {
@@ -154,15 +154,9 @@ public class Lexicon {
      * @throws org.apache.lucene.index.CorruptIndexException
      * @throws java.io.IOException
      */
-    public void addWord(SemanticClass o, boolean snowball) throws CorruptIndexException, IOException {
+    public void addWord(SemanticClass o) throws CorruptIndexException, IOException {
         String oName = o.getDisplayName(language);
-        Document doc = null;
-
-        if (snowball) {
-            doc = search4Object(getSnowballLexForm(oName), "snowballName", objDir);
-        } else {
-            doc = search4Object(oName, "displayNameLower", objDir);
-        }
+        Document doc = search4Object(oName, "displayNameLower", objDir);
         
         if (doc == null) {            
             //Create in-memory index writer
@@ -184,15 +178,9 @@ public class Lexicon {
      * @throws org.apache.lucene.index.CorruptIndexException
      * @throws java.io.IOException
      */
-    public void addWord(SemanticProperty p, boolean snowball) throws CorruptIndexException, IOException {
+    public void addWord(SemanticProperty p) throws CorruptIndexException, IOException {
         String pName = p.getDisplayName(language);
-        Document doc = null;
-
-        if (snowball) {           
-            search4Object(getSnowballLexForm(pName), "snowballName", propDir);
-        } else {
-            search4Object(pName, "displayNameLower", propDir);
-        }
+        Document doc = search4Object(pName, "displayNameLower", propDir);
         
         if (doc == null) {
             //Create in-memory index writers
