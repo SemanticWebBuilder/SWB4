@@ -142,16 +142,16 @@ public class Translator {
                 res += getVars((CommonTree) root.getChild(0));
             }
 
-            res = res + " \nWHERE\n{\n?" + root.getText() + " rdf:type " + lex.getObjWordTag(root.getText()).getType() + ".\n";
+            res = res + " \nWHERE\n{\n?" + root.getText() + " rdf:type " + lex.getObjWordTag(root.getText(), false).getType() + ".\n";
             if (isCompound) {
                 res += ProcessPrede((CommonTree) root.getChild(0), root.getText());
             } else {
                 res += ProcessPrecon((CommonTree) root.getChild(0), root.getText());
             }
         } else {
-            String tag = lex.getObjWordTag(root.getText()).getTag();
+            String tag = lex.getObjWordTag(root.getText(), false).getTag();
             if (!tag.equals("VAR")) {
-                res = res + " *\nWHERE\n{\n?" + root.getText() + " rdf:type " + lex.getObjWordTag(root.getText()).getType() + ".\n";
+                res = res + " *\nWHERE\n{\n?" + root.getText() + " rdf:type " + lex.getObjWordTag(root.getText(), false).getType() + ".\n";
                 res = res + "?" + root.getText() + " ?property ?value\n";
             } else {
                 eLog = "No existe alguna clase con nombre " + root.getText() + "\n";
@@ -306,7 +306,7 @@ public class Translator {
 
     private String assertProperty(String parent, String pName) throws CorruptIndexException, IOException {
         String res = "";
-        String name = lex.getObjWordTag(parent).getType().replace(":", "_");
+        String name = lex.getObjWordTag(parent, false).getType().replace(":", "_");
         //System.out.println("--" + name + ", " + pName);
         boolean found = false;
         SemanticProperty sp = null;
