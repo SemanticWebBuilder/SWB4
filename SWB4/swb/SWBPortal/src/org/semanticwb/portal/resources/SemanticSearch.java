@@ -686,13 +686,15 @@ public class SemanticSearch extends GenericAdmResource {
                 "  <input type=\"submit\" value=\"Buscar\" class=\"btn-busca\">\n" +
                 "</form>\n");
 
-        tr = new SWBSparqlTranslator(lex);
+        tr = new SWBSparqlTranslator(lex, true);
         long time = System.currentTimeMillis();
         String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query);
+        System.out.println(">>>>>RemoveAccents: " + lex.removeAccents(query));
+        System.out.println(">>>>>SnowBallForm : " + lex.getSnowballLexForm(query));
         System.out.println("+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time));
-        System.out.println(sparqlQuery);
+        //System.out.println(sparqlQuery);
         String errCount = Integer.toString(tr.getErrCode());
-
+        
         if (errCount != null) {
             if (Integer.parseInt(errCount) == 0) {
                 String patternStr = "\"[a-zA-Z]+\"";
@@ -721,8 +723,6 @@ public class SemanticSearch extends GenericAdmResource {
                 }
 
                 try {
-
-                    //sbf.append("<br><br><h2>Resultados de la búsqueda</h2>\n");
                         System.out.println("Obteniendo información de la dbpedia");
                         time = System.currentTimeMillis();
                         if (!dbName.equals("")) {
@@ -789,6 +789,7 @@ public class SemanticSearch extends GenericAdmResource {
                     time = System.currentTimeMillis();
 
                     try {
+                        int hitsCount = 0;
                         sbf.append("<div>\n" +
                                    "  <table cellspacing=7>\n");
                         ResultSet rs = qexec.execSelect();
@@ -797,8 +798,6 @@ public class SemanticSearch extends GenericAdmResource {
 
                         if (rs.hasNext()) {
                             for (String icol : (List<String>) rs.getResultVars()) {
-                            //Iterator<String> itcols = rs.getResultVars().iterator();
-                            //while (itcols.hasNext()) {
                                 sbf.append("      <th>" + icol + "</th>\n");
                             }
                             sbf.append("    </tr>\n");
@@ -816,9 +815,11 @@ public class SemanticSearch extends GenericAdmResource {
                                     sbf.append("    <tr>\n");
                                 }
 
-                                Iterator<String> it = rs.getResultVars().iterator();
-                                while (it.hasNext()) {
-                                    String name = it.next();
+                                //Iterator<String> it = rs.getResultVars().iterator();
+                                for (String name : (List<String>) rs.getResultVars()) {
+                                    hitsCount++;
+                                //while (it.hasNext()) {
+                                  //  String name = it.next();
 
                                     RDFNode x = rb.get(name);
                                     sbf.append("      <td>");
@@ -880,7 +881,7 @@ public class SemanticSearch extends GenericAdmResource {
                         }
                         sbf.append("  </tbody>\n");
                         sbf.append("</table>\n");
-                        sbf.append("<p aling=\"center\">\n" + paramRequest.getLocaleString("exectime") + ": " + (System.currentTimeMillis() - time) + "ms." + "</p>\n");
+                        sbf.append("<p aling=\"center\">\n" + hitsCount + " coincidencias en " + paramRequest.getLocaleString("exectime") + ": " + (System.currentTimeMillis() - time) + "ms." + "</p>\n");
                     } finally {
                         qexec.close();
                     }
