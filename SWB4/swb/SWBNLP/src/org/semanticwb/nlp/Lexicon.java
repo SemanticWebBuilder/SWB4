@@ -31,7 +31,9 @@ import org.apache.lucene.store.RAMDirectory;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
-
+//NOTE: For JDK6 use following import instead
+//import java.text.Normalizer
+import sun.text.Normalizer;
 
 /**
  * @author hasdai
@@ -90,7 +92,7 @@ public class Lexicon {
         Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
         while (its.hasNext()) {
             SemanticClass sc = its.next();
-            addWord(sc);
+            addWord(sc, true);
 
             //Add class prefix to the prefixes string
             if (!prefixes.contains(sc.getPrefix())) {
@@ -105,7 +107,7 @@ public class Lexicon {
             Iterator<SemanticProperty> ip = sc.listProperties();
             while (ip.hasNext()) {
                 SemanticProperty sp = ip.next();
-                addWord(sp);
+                addWord(sp, true);
 
                 //Add property prefix to prefixes string
                 if (!prefixes.contains(sp.getPrefix())) {
@@ -152,15 +154,23 @@ public class Lexicon {
      * @throws org.apache.lucene.index.CorruptIndexException
      * @throws java.io.IOException
      */
-    public void addWord(SemanticClass o) throws CorruptIndexException, IOException {
-        if (search4Object(o.getDisplayName(language), "displayNameLower", objDir) == null) {
+    public void addWord(SemanticClass o, boolean snowball) throws CorruptIndexException, IOException {
+        String oName = o.getDisplayName(language);
+        Document doc = null;
+
+        if (snowball) {
+            doc = search4Object(getSnowballLexForm(oName), "snowballName", objDir);
+        } else {
+            doc = search4Object(oName, "displayNameLower", objDir);
+        }
+        
+        if (doc == null) {            
             //Create in-memory index writer
             IndexWriter objWriter = new IndexWriter(objDir, luceneAnalyzer);
 
             //Create lucene document with SemanticClass info.
-            Document doc = createDocument("OBJ", o.getDisplayName(language),
-                    o.getPrefix(), o.getDisplayName(language).toLowerCase(),
-                    getSnowballLexForm(o.getDisplayName(language)) ,o.getName() , o.getClassId(), "");
+            doc = createDocument("OBJ", oName, o.getPrefix(), oName.toLowerCase(),
+                    getSnowballLexForm(oName), o.getName(), o.getClassId(), "");
 
             //Write document to index
             objWriter.addDocument(doc);
@@ -174,8 +184,17 @@ public class Lexicon {
      * @throws org.apache.lucene.index.CorruptIndexException
      * @throws java.io.IOException
      */
-    public void addWord(SemanticProperty p) throws CorruptIndexException, IOException {
-        if (search4Object(p.getDisplayName(language), "displayNameLower", propDir) == null) {
+    public void addWord(SemanticProperty p, boolean snowball) throws CorruptIndexException, IOException {
+        String pName = p.getDisplayName(language);
+        Document doc = null;
+
+        if (snowball) {           
+            search4Object(getSnowballLexForm(pName), "snowballName", propDir);
+        } else {
+            search4Object(pName, "displayNameLower", propDir);
+        }
+        
+        if (doc == null) {
             //Create in-memory index writers
             IndexWriter propWriter = new IndexWriter(propDir, luceneAnalyzer, true);
 
@@ -189,14 +208,14 @@ public class Lexicon {
                 SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
                 if (rg != null) {
                     //Create lucene document for the Semantic Property
-                    Document doc = createDocument("PRO", p.getDisplayName(language), p.getPrefix(),
-                            p.getName(), getSnowballLexForm(p.getDisplayName(language)) ,p.getName().toLowerCase(), p.getPropId(), rg.getClassId());
+                    doc = createDocument("PRO", pName, p.getPrefix(),
+                            p.getName(), getSnowballLexForm(pName) ,p.getName().toLowerCase(), p.getPropId(), rg.getClassId());
                     propWriter.addDocument(doc);
                 }
             } else {
                 //Create lucene document for the Semantic Property
-                Document doc = createDocument("PRO", p.getDisplayName(language), p.getPrefix(),
-                        p.getName(), getSnowballLexForm(p.getDisplayName(language)) ,p.getName().toLowerCase(), p.getPropId(), "");
+                doc = createDocument("PRO", pName, p.getPrefix(),
+                        p.getName(), getSnowballLexForm(pName) ,p.getName().toLowerCase(), p.getPropId(), "");
                 propWriter.addDocument(doc);
             }
             propWriter.close();
@@ -223,11 +242,11 @@ public class Lexicon {
      * @param w label of word to get tag for.
      * @return WordTag object with the tag and type for the word label.
      */
-    public WordTag getWordTag(String label, boolean snowballSearch) throws CorruptIndexException, IOException {
+    public WordTag getWordTag(String label, boolean snowball) throws CorruptIndexException, IOException {
         Document doc = null;
 
-        if (snowballSearch) {
-            doc = search4Object(label, "snowballName", propDir);
+        if (snowball) {
+            doc = search4Object(getSnowballLexForm(label), "snowballName", propDir);
         } else {
             doc = search4Object(label, "displayNameLower", propDir);
         }
@@ -237,8 +256,8 @@ public class Lexicon {
         }
 
         doc = null;
-        if (snowballSearch) {
-            doc = search4Object(label, "snowballName", objDir);
+        if (snowball) {
+            doc = search4Object(getSnowballLexForm(label), "snowballName", objDir);
         } else {
             doc = search4Object(label, "displayNameLower", objDir);
         }
@@ -255,11 +274,11 @@ public class Lexicon {
      * @param label name of the property to get tag for.
      * @return WordTag object with the tag and type for the given property name.
      */
-    public WordTag getPropWordTag(String label, boolean snowballSearch) throws CorruptIndexException, IOException {
+    public WordTag getPropWordTag(String label, boolean snowball) throws CorruptIndexException, IOException {
         Document doc = null;
 
-        if (snowballSearch) {
-            doc = search4Object(label, "snowballName", propDir);
+        if (snowball) {
+            doc = search4Object(getSnowballLexForm(label), "snowballName", propDir);
         } else {
             doc = search4Object(label, "displayNameLower", propDir);
         }
@@ -276,11 +295,11 @@ public class Lexicon {
      * @param label name of the class to get tag for.
      * @return WordTag object with the tag and type for the given class name.
      */
-    public WordTag getObjWordTag(String label, boolean snowballSearch) throws CorruptIndexException, java.io.IOException {
+    public WordTag getObjWordTag(String label, boolean snowball) throws CorruptIndexException, java.io.IOException {
         Document doc = null;
 
-        if (snowballSearch) {
-            doc = search4Object(label, "snowballName", objDir);
+        if (snowball) {
+            doc = search4Object(getSnowballLexForm(label), "snowballName", objDir);
         } else {
             doc = search4Object(label, "displayNameLower", objDir);
         }
@@ -295,9 +314,9 @@ public class Lexicon {
      * Creates a lucene document for indexing lexicon entries.
      * @param objTag The tag for the indexed SemanticObject (class or property)
      * @param objDisplayName Display name of the SemanticObject
-     * @param objName RDF Name of the SemanticObject (for prefix extraction)
+     * @param objName RDF Name of the SemanticObject (for prefix extraction).
      * @param objId ID of the SemanticObject.
-     * @param rangeObjName The name of the related SemanticClass (range Class)
+     * @param rangeObjName The name of the related SemanticClass (range Class).
      * if the current element is an ObjectProperty.
      * @param isObjectProp Wheter the document should include the range class.
      * @return
@@ -318,7 +337,8 @@ public class Lexicon {
 
     /**
      * Search for a SemanticObject's displayName in the indexed vocabulary.
-     * @param keyWord lowercase name of the requested SemanticObject.
+     * @param keyWord Lowercase name of the requested SemanticObject.
+     * @param fieldName Name of the field to search in.
      * @param dir RAMDirectory for searching.
      * @return Lucene document for the found term.
      * @throws org.apache.lucene.index.CorruptIndexException
@@ -395,16 +415,36 @@ public class Lexicon {
         return propDir;
     }
 
-    public String getSnowballLexForm(String word) throws IOException {
-        TokenStream ts = SnballAnalyzer.tokenStream("sna", new StringReader(word));
+    /**
+     * Gets the snowball-ed form of an input text. Applies the snowball algorithm
+     * to each word in the text to get its root or stem.
+     * @param input Text to stem.
+     * @return
+     * @throws java.io.IOException
+     */
+    public String getSnowballLexForm(String input) throws IOException {
+        TokenStream ts = SnballAnalyzer.tokenStream("sna", new StringReader(input));
         String res = "";
 
         Token tk;
         while ((tk = ts.next()) != null) {
-            res = res + tk.termText();
+            res = res + tk.termText() + " ";
         }
         ts.close();
         //System.out.println(res);
-        return res;
+        return res.trim();
+    }
+
+    /**
+     * Removes all accented characters from a string. Uses sun.text.Normalizer
+     * class. Nothe that in jdk6 Normalizer class has moved to java.text package.
+     * @param input String to normalize.
+     * @return String without accented characters.
+     */
+    public String removeAccents(String input) {
+        //NOTE: For JDK6 use following line instead
+        //java.text.Normalizer.normalize(input, java.text.Normalizer.Form.NFD);
+        String res = Normalizer.normalize(input, Normalizer.DECOMP, 0);
+        return res.replaceAll("[^\\p{ASCII}]", "");
     }
 }
