@@ -582,7 +582,7 @@ public class SWBADBNatural extends GenericResource {
                 sbf.append("</ul>");
             }
         } else {
-            String tag = lex.getObjWordTag(word).getObjId();
+            String tag = lex.getObjWordTag(word, false).getObjId();
 
             sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                     "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
@@ -605,7 +605,7 @@ public class SWBADBNatural extends GenericResource {
                     idCounter++;
                 }
             } else {
-                tag = lex.getPropWordTag(word).getRangeClassId();
+                tag = lex.getPropWordTag(word, false).getRangeClassId();
                 if (!tag.equals("")) {
                     SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
                     idCounter = 0;
