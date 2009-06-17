@@ -52,7 +52,7 @@ public class Lexicon {
     private HashMap<String, String> langCodes;
     private String [] stopWords = {"a", "ante", "bajo", "cabe", "con",
                                         "contra", "de", "desde", "durante",
-                                        "en", "entre", "hacia", "hasta", 
+                                        "en", "entre", "hacia", "hasta",
                                         "mediante", "para", "por", "según",
                                         "sin", "sobre", "tras", "el", "la",
                                         "los", "las", "ellos", "ellas", "un",
@@ -60,7 +60,7 @@ public class Lexicon {
                                         "pero", "si", "no", "como", "que", "su",
                                         "sus", "esto", "eso", "esta", "esa",
                                         "esos", "esas", "del"
-                                  };    
+                                  };
 
     /**
      * Creates a new Lexicon given the user's language. This method traverses the
@@ -73,7 +73,7 @@ public class Lexicon {
 
         //Create in-memory directories
         objDir = new RAMDirectory();
-        propDir = new RAMDirectory();        
+        propDir = new RAMDirectory();
 
         //Initialize lang codes map
         langCodes = new HashMap<String, String>();
@@ -141,7 +141,7 @@ public class Lexicon {
      */
     public void setStopWords(String []sw) {
         stopWords = sw;
-        
+
         //Create SnowballAnalizer to get word root
         SnballAnalyzer = new SnowballAnalyzer(langCodes.get(language), stopWords);
     }
@@ -189,13 +189,13 @@ public class Lexicon {
                 SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
                 if (rg != null) {
                     //Create lucene document for the Semantic Property
-                    Document doc = createDocument("PRO", p.getDisplayName(language), p.getPrefix(), 
+                    Document doc = createDocument("PRO", p.getDisplayName(language), p.getPrefix(),
                             p.getName(), getSnowballLexForm(p.getDisplayName(language)) ,p.getName().toLowerCase(), p.getPropId(), rg.getClassId());
                     propWriter.addDocument(doc);
                 }
             } else {
                 //Create lucene document for the Semantic Property
-                Document doc = createDocument("PRO", p.getDisplayName(language), p.getPrefix(), 
+                Document doc = createDocument("PRO", p.getDisplayName(language), p.getPrefix(),
                         p.getName(), getSnowballLexForm(p.getDisplayName(language)) ,p.getName().toLowerCase(), p.getPropId(), "");
                 propWriter.addDocument(doc);
             }
@@ -223,14 +223,26 @@ public class Lexicon {
      * @param w label of word to get tag for.
      * @return WordTag object with the tag and type for the word label.
      */
-    public WordTag getWordTag(String label) throws CorruptIndexException, IOException {
-        Document doc = search4Object(label, "displayNameLower", propDir);
+    public WordTag getWordTag(String label, boolean snowballSearch) throws CorruptIndexException, IOException {
+        Document doc = null;
+
+        if (snowballSearch) {
+            doc = search4Object(label, "snowballName", propDir);
+        } else {
+            doc = search4Object(label, "displayNameLower", propDir);
+        }
 
         if (doc != null) {
             return new WordTag(doc.get("tag"), doc.get("prefix") + ":" + doc.get("name"), doc.get("name"), doc.get("id"), doc.get("rangeName"));
         }
 
-        doc = search4Object(label, "displayNameLower", objDir);
+        doc = null;
+        if (snowballSearch) {
+            doc = search4Object(label, "snowballName", objDir);
+        } else {
+            doc = search4Object(label, "displayNameLower", objDir);
+        }
+
         if (doc != null) {
             return new WordTag(doc.get("tag"), doc.get("prefix") + ":" + doc.get("name"), doc.get("name"), doc.get("id"), doc.get("rangeName"));
         }
@@ -243,8 +255,14 @@ public class Lexicon {
      * @param label name of the property to get tag for.
      * @return WordTag object with the tag and type for the given property name.
      */
-    public WordTag getPropWordTag(String label) throws CorruptIndexException, IOException {
-        Document doc = search4Object(label, "displayNameLower", propDir);
+    public WordTag getPropWordTag(String label, boolean snowballSearch) throws CorruptIndexException, IOException {
+        Document doc = null;
+
+        if (snowballSearch) {
+            doc = search4Object(label, "snowballName", propDir);
+        } else {
+            doc = search4Object(label, "displayNameLower", propDir);
+        }
 
         if (doc != null) {
             return new WordTag(doc.get("tag"), doc.get("prefix") + ":" + doc.get("name"), doc.get("name"), doc.get("id"), doc.get("rangeName"));
@@ -258,9 +276,14 @@ public class Lexicon {
      * @param label name of the class to get tag for.
      * @return WordTag object with the tag and type for the given class name.
      */
-    public WordTag getObjWordTag(String label) throws CorruptIndexException, java.io.IOException {
+    public WordTag getObjWordTag(String label, boolean snowballSearch) throws CorruptIndexException, java.io.IOException {
+        Document doc = null;
 
-        Document doc = search4Object(label, "displayNameLower", objDir);
+        if (snowballSearch) {
+            doc = search4Object(label, "snowballName", objDir);
+        } else {
+            doc = search4Object(label, "displayNameLower", objDir);
+        }
 
         if (doc != null) {
             return new WordTag(doc.get("tag"), doc.get("prefix") + ":" + doc.get("name"), doc.get("name"), doc.get("id"), doc.get("rangeName"));
@@ -288,7 +311,7 @@ public class Lexicon {
         doc.add(new Field("snowballName", snowball, Field.Store.YES, Field.Index.UN_TOKENIZED));
         doc.add(new Field("name", objName, Field.Store.YES, Field.Index.NO));
         doc.add(new Field("id", objId, Field.Store.YES, Field.Index.NO));
-        doc.add(new Field("rangeName", rangeObjName, Field.Store.YES, Field.Index.NO));        
+        doc.add(new Field("rangeName", rangeObjName, Field.Store.YES, Field.Index.NO));
 
         return doc;
     }
@@ -377,11 +400,11 @@ public class Lexicon {
         String res = "";
 
         Token tk;
-        while ((tk = ts.next()) != null) {            
+        while ((tk = ts.next()) != null) {
             res = res + tk.termText();
         }
         ts.close();
-        System.out.println(res);
+        //System.out.println(res);
         return res;
     }
 }
