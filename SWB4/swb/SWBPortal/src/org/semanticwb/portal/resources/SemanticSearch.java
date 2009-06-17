@@ -91,7 +91,7 @@ public class SemanticSearch extends GenericAdmResource {
             response.setRenderParameter("sparqlQuery", queryString);
             response.setRenderParameter(createId("naturalQuery"), query);
             response.setMode("SHOWRES");
-            
+
         } else {
             super.processAction(request, response);
         }
@@ -120,21 +120,21 @@ public class SemanticSearch extends GenericAdmResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         StringBuffer sbf = new StringBuffer();
-        SWBResourceURL rUrl = paramRequest.getRenderUrl();        
+        SWBResourceURL rUrl = paramRequest.getRenderUrl();
         String query = request.getParameter(createId("naturalQuery"));
         String checked = request.getParameter(createId("showInfo"));
-        User user = paramRequest.getUser();        
+        User user = paramRequest.getUser();
 
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        
+
         //Get user language if any
         if (user != null) {
                 lang = user.getLanguage();
         } else {
                 lang = "es";
-        }        
+        }
 
         //Assert query string
         if (query == null) {
@@ -462,7 +462,7 @@ public class SemanticSearch extends GenericAdmResource {
             sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" " +
                 "action=\"" + url + "\" method=\"post\">\n" +
                 "  <input type=\"text\" id=\"" + createId("naturalQuery") + "\" " +
-                "name=\"" + createId("naturalQuery") + "\" class=\"txt-busca\" value=\"" + query + "\" />\n" +                
+                "name=\"" + createId("naturalQuery") + "\" class=\"txt-busca\" value=\"" + query + "\" />\n" +
                 "  <input type=\"submit\" value=\"Buscar\" class=\"btn-busca\">\n" +
                 "</form>\n" +
                 "  <div id=\"" + createId("busca-ayuda-ok") + "\"></div>\n");
@@ -569,7 +569,7 @@ public class SemanticSearch extends GenericAdmResource {
                 sbf.append("</ul>");
             }
         } else {
-            String tag = lex.getObjWordTag(word).getObjId();
+            String tag = lex.getObjWordTag(word, false).getObjId();
 
             sbf.append("<ul id=\"" + createId("resultlist") + "\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                     "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
@@ -592,7 +592,7 @@ public class SemanticSearch extends GenericAdmResource {
                     idCounter++;
                 }
             } else {
-                tag = lex.getPropWordTag(word).getRangeClassId();
+                tag = lex.getPropWordTag(word, false).getRangeClassId();
                 if (!tag.equals("")) {
                     SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
                     idCounter = 0;
@@ -644,7 +644,7 @@ public class SemanticSearch extends GenericAdmResource {
                 lex = new Lexicon(lang2);
                 System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time));
             }
-        }        
+        }
 
         //Assert query string
         if (query == null) {
@@ -654,7 +654,7 @@ public class SemanticSearch extends GenericAdmResource {
         }
 
         rUrl.setMode("SUGGEST");
-        rUrl.setCallMethod(rUrl.Call_DIRECT);             
+        rUrl.setCallMethod(rUrl.Call_DIRECT);
 
         HashMap<String, String> dbNames = new HashMap<String, String>();
         dbNames.put("Miguel Hidalgo", "Miguel_Hidalgo,_D.F.");
@@ -688,7 +688,7 @@ public class SemanticSearch extends GenericAdmResource {
 
         tr = new SWBSparqlTranslator(lex);
         long time = System.currentTimeMillis();
-        String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query);        
+        String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query);
         System.out.println("+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time));
         System.out.println(sparqlQuery);
         String errCount = Integer.toString(tr.getErrCode());
@@ -741,7 +741,7 @@ public class SemanticSearch extends GenericAdmResource {
                             //System.out.println("<<<<<" + dbPediaQuery);
                             //Query dbpedia
                             SemanticModel dbpModel = SWBPlatform.getSemanticMgr().getModel("DBPedia");
-                            QueryExecution dbQexec = dbpModel.sparQLQuery(dbPediaQuery);                            
+                            QueryExecution dbQexec = dbpModel.sparQLQuery(dbPediaQuery);
 
                             //Get dbPedia INFO
                             ResultSet dbrs = dbQexec.execSelect();
@@ -818,7 +818,7 @@ public class SemanticSearch extends GenericAdmResource {
 
                                 Iterator<String> it = rs.getResultVars().iterator();
                                 while (it.hasNext()) {
-                                    String name = it.next();                                    
+                                    String name = it.next();
 
                                     RDFNode x = rb.get(name);
                                     sbf.append("      <td>");
@@ -835,7 +835,7 @@ public class SemanticSearch extends GenericAdmResource {
                                             //}
                                         } else {
                                             //System.out.println(">obteniendo objeto semántico");
-                                            SemanticObject so = SemanticObject.createSemanticObject(x.toString());                                            
+                                            SemanticObject so = SemanticObject.createSemanticObject(x.toString());
 
                                             if (so != null) {
                                                 SemanticClass tt = so.getSemanticClass();
@@ -858,7 +858,7 @@ public class SemanticSearch extends GenericAdmResource {
                                                 }
                                             } else {
                                                 //System.out.println(">el dato no tiene objeto semántico");
-                                                if (x != null) {                                                    
+                                                if (x != null) {
                                                     //System.out.println(">escribiendo valor");
                                                     sbf.append(x);
                                                 } else {
