@@ -128,7 +128,8 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement
     public java.sql.Connection getConnection() throws java.sql.SQLException
     {
         checkStatement();
-        return st.getConnection();
+        return conn;
+        //return st.getConnection();
     }
 
     public int getFetchDirection() throws java.sql.SQLException
@@ -315,6 +316,16 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement
 
     public int executeUpdate() throws SQLException {
         if(debug)System.out.println("executeUpdate():"+query);
+        if(debug)
+        {
+            //time=System.currentTimeMillis();
+            System.out.println("----------------------------------------------");
+            System.out.println("--> execute():"+query);
+            System.out.println("--> args:"+args);
+            args="";
+            if(query.contains("Delete"))
+                new Exception().printStackTrace();
+        }
         checkStatement();
         return st.executeUpdate();
     }
@@ -374,6 +385,11 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement
     }
 
     public void setString(int parameterIndex, String x) throws SQLException {
+//        if(x.equals("Uv::http://www.semanticwebbuilder.org/swb4/ontology#ResourceType:"))
+//        {
+//            new Exception().printStackTrace();
+//            //Thread.dumpStack();
+//        }
         if(debug)args+=" "+parameterIndex+" "+x;
         checkStatement();
         st.setString(parameterIndex, x);
