@@ -25,22 +25,25 @@ public class PoolPreparedStatement implements java.sql.PreparedStatement
     private String query=null;
     private String args="";
     private boolean debug=false;
+    private Connection con;
 
     /** Creates a new instance of PoolStatement
      * @param st 
      */
-    public PoolPreparedStatement(PreparedStatement st)
+    public PoolPreparedStatement(PreparedStatement st, Connection con)
     {
         this.st = st;
+        this.con = con;
     }
 
     /** Creates a new instance of PoolStatement
      * @param st
      */
-    public PoolPreparedStatement(PreparedStatement st, String query)
+    public PoolPreparedStatement(PreparedStatement st, String query, Connection con)
     {
         this.st = st;
         this.query=query;
+        this.con=con;
     }
 
     public void addBatch(String str) throws java.sql.SQLException
@@ -95,7 +98,8 @@ public class PoolPreparedStatement implements java.sql.PreparedStatement
 
     public java.sql.Connection getConnection() throws java.sql.SQLException
     {
-        return st.getConnection();
+        //return st.getConnection();
+        return con;
     }
 
     public int getFetchDirection() throws java.sql.SQLException
@@ -365,7 +369,7 @@ public class PoolPreparedStatement implements java.sql.PreparedStatement
             System.out.println("--> execute():"+query);
             System.out.println("--> args:"+args);
             args="";
-            new Exception().printStackTrace();
+            //new Exception().printStackTrace();
         }
         ret=st.execute();
         if(debug)System.out.println("------------------"+(System.currentTimeMillis() - time)+"-----------------------");
