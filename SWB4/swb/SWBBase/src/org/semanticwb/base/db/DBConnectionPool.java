@@ -71,16 +71,30 @@ public class DBConnectionPool
      */
     public void freeConnection(Connection con)
     {
+        boolean add=true;
         // Put the connection at the end of the Vector
         try
         {
-            if(!con.isClosed())
+            if(idle_time>0 && (System.currentTimeMillis()-((PoolConnection)con).getIdleTime())>idle_time)
             {
-                freeConnections.addElement(con);
+                ((PoolConnection)con).destroyConnection();
+                add=false;
             }
-        }catch(Exception e){log.error("Error freeConnection()",e);}
+            if(((PoolConnection)con).getNativeConnection().isClosed())
+            {
+                ((PoolConnection)con).destroyConnection();
+                add=false;
+            }
+            if(add)
+            {
+                synchronized(freeConnections)
+                {
+                    freeConnections.addElement(con);
+                }
+            }
+        }catch(Exception e){log.warn("To return connection to pool",e);}
     }
-    
+
     /**
      * Obtiene una conexión del pool. Si ninguna conexión esté disponible, una nueva conexión es
      * creada al menos que el número máximo de conexiones haya sido alcanzado. Si una conexión
@@ -103,27 +117,48 @@ public class DBConnectionPool
         {
             try
             {
-                con.init();
-                if (con.isClosed())
+                if(idle_time>0 && (System.currentTimeMillis()-con.getIdleTime())>idle_time)
                 {
-                    log.warn("Removed bad connection (isClosed)from " + name + ", " + con.getDescription());
-                    con.destroyConnection();
-                    con=null;
-                    return getConnection();
-                }else if(idle_time>0 && (System.currentTimeMillis()-con.getIdleTime())>idle_time)
-                {
-                    log.warn("Removed bad connection (idle_time) from " + name + ", " + con.getDescription());
+                    log.warn("Removed bad connection "+con.getId()+" (idle_time) from " + name + ", " + con.getDescription());
+                    //con.printTrackTrace(System.out);
                     con.destroyConnection();
                     con=null;
                     return getConnection();
                 }
+                if (con.getNativeConnection().isClosed())
+                {
+                    log.warn("Removed bad connection "+con.getId()+" (isClosed) from " + name + ", " + con.getDescription());
+                    //con.printTrackTrace(System.out);
+                    con.destroyConnection();
+                    con=null;
+                    return getConnection();
+                }
+/*              
+                try
+                {
+                    con.getMetaData();
+//                        Statement st=con.createStatement();
+//                        ResultSet rs=st.executeQuery("desc swb_admlog");
+//                        rs.close();
+//                        st.close();
+                }catch(Exception e)
+                {
+                    log.warn("Removed bad connection "+con.getId()+" (desc) from " + name + ", " + con.getDescription());
+                    //con.printTrackTrace(System.out);
+                    con.destroyConnection();
+                    con=null;
+                    return getConnection();
+                }
+*/
             } catch (SQLException e)
             {
-                log.error("Removed bad connection from " + name + ", " + con.getDescription(),e);
+                log.error("Removed bad connection "+con.getId()+" from " + name + ", " + con.getDescription(),e);
+                //con.printTrackTrace(System.out);
                 con.destroyConnection();
                 con=null;
                 return getConnection();
             }
+            con.init();
         } else if (maxConn == 0 || checkedOut < maxConn)
         {
             con = (PoolConnection) newConnection();
@@ -133,18 +168,18 @@ public class DBConnectionPool
         {
             manager.getTimeLock().addConnection(con);
         }
-        //System.out.println("getConnection():"+con);
+        log.trace("getConnection():"+con.getId()+" "+con.getPool().getName()+" "+freeConnections.size());
         return con;
     }
 
     /**
-     * Obtiene una conexi�n del pool. Si ninguna conexi�n est� disponible, una nueva conexi�n es
-     * creada al menos que el n�mero m�ximo de conexiones haya sido alcanzado. Si una conexi�n
-     * libre ha sido cerrada por la base de datos, se elimina del pool y este m�tdo es llamado
+     * Obtiene una conexión del pool. Si ninguna conexión está disponible, una nueva conexión es
+     * creada al menos que el número máximo de conexiones haya sido alcanzado. Si una conexión
+     * libre ha sido cerrada por la base de datos, se elimina del pool y este métdo es llamado
      * otra vez recursivamente.
      * <P>
-     * Si ninguna conexi�n est� disponible y el n�mero m�ximo ha sido alcanzado, este m�todo espera
-     * por una conexi�n liberada el tiempo especificado.
+     * Si ninguna conexión está disponible y el número máximo ha sido alcanzado, este método espera
+     * por una conexión liberada el tiempo especificado.
      *
      * @param timeout El valor del timeout en milisegundos.
      * @return 
@@ -178,8 +213,8 @@ public class DBConnectionPool
                 con = (PoolConnection) freeConnections.remove(0);
                 try
                 {
-                    con.init();
                     con.destroyConnection();
+                    //con.init();
                     log.debug("Closed connection for pool " + name + ", " + con.getDescription());
                 } catch (Exception e)
                 {
@@ -193,7 +228,7 @@ public class DBConnectionPool
 
 
     /**
-     * Crea una nueva conexi�n usando un identificador de usuario y passsword si son especificados.
+     * Crea una nueva conexión usando un identificador de usuario y passsword si son especificados.
      * @return 
      */
     public Connection newNoPoolConnection()
