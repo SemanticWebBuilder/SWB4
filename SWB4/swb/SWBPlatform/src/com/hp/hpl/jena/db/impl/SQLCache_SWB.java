@@ -1,0 +1,234 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.hp.hpl.jena.db.impl;
+
+import com.hp.hpl.jena.db.IDBConnection;
+import com.hp.hpl.jena.db.RDFRDBException;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Properties;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
+
+/**
+ *
+ * @author javier.solis
+ */
+public class SQLCache_SWB extends SQLCache
+{
+    private static Logger log=SWBUtils.getLogger(SQLCache_SWB.class);
+
+    private ArrayList arr=new ArrayList();
+
+    /**
+     * Constructor. Creates a new cache sql statements for interfacing to
+     * a specific database.
+     * @param sqlFile the name of the file of sql statements to load, this is
+     * loaded from the classpath.
+     * @param defaultOps Properties table which provides the default
+     * sql statements, any definitions of a given operation in the loaded file
+     * will override the default.
+     * @param connection the jdbc connection to the database itself
+     * @param idType the sql string to use for id types (substitutes for $id in files)
+     */
+    public SQLCache_SWB(String sqlFile, Properties defaultOps, IDBConnection connection, String idType) throws IOException {
+        super(sqlFile, defaultOps, connection, idType);
+        setCachePreparedStatements(false);
+    }
+
+	/**
+	 * Prepare a SQL statement for the given statement string.
+	 *
+	 * <p>Only works for single statements, not compound statements.
+	 * @param stmt the sql statement to prepare.
+	 * @return a prepared SQL statement appropriate for the JDBC connection
+	 * used when this SQLCache was constructed or null if there is no such
+	 * connection.
+	 */
+	private synchronized PreparedStatement doPrepareSQLStatement(String sql) throws SQLException {
+		if (m_connection == null) return null;
+		//return getConnection().prepareStatement(sql);
+        //System.out.println("create statement:"+arr.size());
+        //Connection con=SWBUtils.DB.getNoPoolConnection("swb");
+        Connection con=SWBUtils.DB.getDefaultConnection();
+        arr.add(con);
+        //return new PoolPreparedStatement(con.prepareStatement(sql),con);
+        return con.prepareStatement(sql);
+	}
+
+	/**
+	 * Return a prepared SQL statement for the given statement string.
+	 * The statement should either be closed after use.
+	 *
+	 * <p>Only works for single statements, not compound statements.
+	 * @param stmt the sql statement to prepare.
+	 * @return a prepared SQL statement appropriate for the JDBC connection
+	 * used when this SQLCache was constructed or null if there is no such
+	 * connection.
+	 */
+    @Override
+	public synchronized PreparedStatement prepareSQLStatement(String sql) throws SQLException {
+		if (m_connection == null) return null;
+		return doPrepareSQLStatement(sql);
+	}
+
+    @Override
+	public synchronized PreparedStatement getPreparedSQLStatement(String opname, String [] attr) throws SQLException {
+		/* TODO extended calling format or statement format to support different
+		 * result sets and conconcurrency modes.
+		 */
+
+		PreparedStatement ps=null;
+		if (m_connection == null || opname == null) return null;
+//		int attrCnt = (attr == null) ? 0 : attr.length;
+//		String aop = opname;
+//		if ( attrCnt > 0 ) aop = concatOpName(aop, attr[0]);
+//		if ( attrCnt > 1 ) aop = concatOpName(aop, attr[1]);
+//		if ( attrCnt > 2 ) aop = concatOpName(aop, attr[2]);
+//		if ( attrCnt > 3 ) throw new JenaException("Too many arguments");
+//
+//		List psl = (List) m_preparedStatements.get(aop);
+//		// OVERRIDE: added proper PreparedStatement removal.
+//		if (psl!=null && !psl.isEmpty()) {
+//			ps = (PreparedStatement) psl.remove(0);
+//			try{
+//    			ps.clearParameters();
+//    		}catch(SQLException e) {
+//    			ps.close();
+//    		}
+//		}
+		if (ps == null) {
+			String sql = getSQLStatement(opname, attr);
+			if (sql == null) {
+				throw new SQLException("No SQL defined for operation: " + opname);
+			}
+//			if (psl == null && CACHE_PREPARED_STATEMENTS) {
+//				psl = new LinkedList();
+//				m_preparedStatements.put(aop, psl);
+//			}
+			ps = doPrepareSQLStatement(sql);
+		}
+//		if ( CACHE_PREPARED_STATEMENTS ) m_cachedStmtInUse.put(ps,psl);
+		return ps;
+	}
+
+	/**
+	 * Run a group of sql statements - normally used for db formating and clean up.
+	 * All statements are executed even if one raises an error then the error is
+	 * reported at the end.
+	 *
+	 * Attribute version -- substitute the ${a} attribute macro
+	 * for the current attribute
+	 */
+    @Override
+	public void runSQLGroup(String opname, String [] attr) throws SQLException {
+		String op = null;
+		SQLException eignore = null;
+
+        Connection con=SWBUtils.DB.getDefaultConnection();
+        java.sql.Statement sql = con.createStatement();
+		//java.sql.Statement sql = getConnection().createStatement();
+		Iterator ops = getSQLStatementGroup(opname).iterator();
+
+		try {
+    		int attrCnt = attr == null ? 0 : attr.length;
+    		if ( attrCnt > 6 )
+    			throw new RDFRDBException("Too many parameters");
+    		while (ops.hasNext()) {
+    			op = (String) ops.next();
+    			if ( attrCnt > 0 ) op = substitute(op,"${a}",attr[0]);
+    			if ( attrCnt > 1 ) op = substitute(op,"${b}",attr[1]);
+    			if ( attrCnt > 2 ) op = substitute(op,"${c}",attr[2]);
+    			if ( attrCnt > 3 ) op = substitute(op,"${d}",attr[3]);
+    			if ( attrCnt > 4 ) op = substitute(op,"${e}",attr[4]);
+    			if ( attrCnt > 5 ) op = substitute(op,"${f}",attr[5]);
+    			try {
+    			    //System.out.println("SQL : "+op) ;
+    				sql.execute(op);
+    			} catch (SQLException e) {
+    				// This is debugging legacy, exception is still reported at the end
+    				//System.out.println("SQL failure: " + op + ": " + e); System.out.flush() ;
+    				throw e ;
+    			}
+    		}
+		} finally
+		{
+		    try {
+                sql.close();
+                con.close();
+            } catch (SQLException e2) {}
+		}
+	}
+
+    /**
+     * Return a prepared statement to the statement pool for reuse by
+     * another caller. Any close problems logged rather than raising exception
+     * so that iterator close() operations can be silent so that they can meet
+     * the ClosableIterator signature.
+     */
+    @Override
+    public synchronized void returnPreparedSQLStatement(PreparedStatement ps) {
+//        if (!CACHE_PREPARED_STATEMENTS) {
+            try {
+                ps.close();
+                Connection con=ps.getConnection();
+                arr.remove(con);
+                con.close();
+                //System.out.println("close statement:"+arr.size());
+            } catch (SQLException e) {
+                log.warn("Problem discarded prepared statement", e);
+            }
+            return;
+//        }
+//        List psl = (List) m_cachedStmtInUse.get(ps);
+//        if (psl != null) {
+//        	if (psl.size() >= MAX_PS_CACHE) {
+//           		try {
+//               		ps.close();
+//            	} catch (SQLException e) {
+//                	logger.warn("Problem discarded prepared statement", e);
+//            	}
+//        	} else {
+//            	psl.add(ps);
+//        	}
+//        	m_cachedStmtInUse.remove(ps);
+//        } else {
+//        	throw new JenaException("Attempt to return unused prepared statement");
+//        }
+    }
+
+
+        /**
+     * Execute the given statement, return null if the statement appears to be
+     * just an update or return an iterator for the result set if the statement appears
+     * to be a query
+     */
+    @Override
+    protected ResultSetIterator executeSQL(PreparedStatement ps, String opname, ResultSetIterator iterator) throws SQLException {
+        try
+        {
+            if (ps.execute()) {
+                java.sql.ResultSet rs = ps.getResultSet();
+                iterator.reset(rs, ps, this, opname);
+                return iterator;
+            } else {
+                returnPreparedSQLStatement(ps);
+                return null;
+            }
+        }catch(RuntimeException e)
+        {
+            returnPreparedSQLStatement(ps);
+            throw e;
+        }
+    }
+
+
+
+}
