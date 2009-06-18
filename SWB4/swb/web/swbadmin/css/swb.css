@@ -41,11 +41,17 @@ html, body, #main{
 .swbIconResourceType,
 .swbIconResource,
 .swbIconResourceU,
+.swbIconResourceE,
+.swbIconResourceW,
+.swbIconResourceF,
 .swbIconResourceSubType,
 .swbIconTemplateGroup,
 .swbIconTemplates,
 .swbIconTemplate,
 .swbIconTemplateU,
+.swbIconTemplateE,
+.swbIconTemplateW,
+.swbIconTemplateF,
 .swbIconWebSites,
 .swbIconWebSite,
 .swbIconWebSiteU,
@@ -100,10 +106,16 @@ html, body, #main{
 .swbIconResources    { background-position: -340px -0px; }
 .swbIconResource     { background-position: -340px -18px; }
 .swbIconResourceU    { background-position: -340px -36px; }
+.swbIconResourceF   { background-position: -120px -72px; }
+.swbIconResourceW   { background-position: -140px -72px; }
+.swbIconResourceE   { background-position: -160px -72px; }
 .swbIconResourceType { background-position: -340px -0px; }
 .swbIconTemplates   { background-position: -140px -0px; }
 .swbIconTemplate    { background-position: -140px -18px; }
 .swbIconTemplateU   { background-position: -140px -36px; }
+.swbIconTemplateF   { background-position: -180px -72px; }
+.swbIconTemplateW   { background-position: -200px -72px; }
+.swbIconTemplateE   { background-position: -220px -72px; }
 .swbIconWebSites    { background-position: -280px -0px; }
 .swbIconWebSite     { background-position: -280px -18px; }
 .swbIconWebSiteU    { background-position: -280px -36px; }
