@@ -24,6 +24,7 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResource;
@@ -72,11 +73,16 @@ public class SWBResourceMgr
 
     public void loadResourceModels()
     {
-        Iterator<ResourceType> it=ResourceType.listResourceTypes();
+        Iterator<WebSite> it=SWBContext.listWebSites();
         while(it.hasNext())
         {
-            ResourceType type=it.next();
-            loadResourceTypeModel(type);
+            WebSite site=it.next();
+            Iterator<ResourceType> it2=site.listResourceTypes();
+            while(it2.hasNext())
+            {
+                ResourceType type=it2.next();
+                loadResourceTypeModel(type);
+            }
         }
         SWBPlatform.getSemanticMgr().getSchema().rebind();
     }
