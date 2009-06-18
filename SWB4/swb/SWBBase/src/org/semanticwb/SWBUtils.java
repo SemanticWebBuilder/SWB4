@@ -2228,7 +2228,14 @@ public class SWBUtils {
     /**
      * 
      */
-    public static class DB {
+    public static class DB 
+    {
+        public static final String DBTYPE_HSQL="HSQL";
+        public static final String DBTYPE_MySQL="MySQL";
+        public static final String DBTYPE_MsSQL="MsSQL";
+        public static final String DBTYPE_Oracle="Oracle";
+        public static final String DBTYPE_PostgreSQL="PostgreSQL";
+        public static final String DBTYPE_Derby="Derby";
 
         private static DBConnectionManager manager = null;
         private static String defaultPoolName = "swb";
@@ -2358,13 +2365,12 @@ public class SWBUtils {
          */
         public static String getDatabaseType(String poolName) {
             String ret = getDatabaseName(poolName);
-            if(ret.toLowerCase().indexOf("hsql")>-1)ret="HSQL";
-            else if(ret.toLowerCase().indexOf("hsqldb")>-1)ret="HSQLDB";
-            else if(ret.toLowerCase().indexOf("mysql")>-1)ret="MySQL";
-            else if(ret.toLowerCase().indexOf("mssql")>-1)ret="MsSQL";
-            else if(ret.toLowerCase().indexOf("oracle")>-1)ret="Oracle";
-            else if(ret.toLowerCase().indexOf("postgresql")>-1)ret="PostgreSQL";
-            else if(ret.toLowerCase().indexOf("dervy")>-1)ret="Dervy";
+            if(ret.toLowerCase().indexOf("hsql")>-1)ret=DBTYPE_HSQL;
+            else if(ret.toLowerCase().indexOf("mysql")>-1)ret=DBTYPE_MySQL;
+            else if(ret.toLowerCase().indexOf("mssql")>-1)ret=DBTYPE_MsSQL;
+            else if(ret.toLowerCase().indexOf("oracle")>-1)ret=DBTYPE_Oracle;
+            else if(ret.toLowerCase().indexOf("postgresql")>-1)ret=DBTYPE_PostgreSQL;
+            else if(ret.toLowerCase().indexOf("derby")>-1)ret=DBTYPE_Derby;
             return ret;
         }
 
