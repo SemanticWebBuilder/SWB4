@@ -135,7 +135,7 @@ public class DBConnectionManager
     }
 
     /**
-     * Regresa una conexi�n que no pertenece al pool.
+     * Regresa una conexión que no pertenece al pool.
      *
      * @param   name        El nombre del pool definido en el archivo de propiedades.
      * @return  Connection  La conexi�n o nulo.
