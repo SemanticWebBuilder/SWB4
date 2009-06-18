@@ -7,6 +7,7 @@
 
 package org.semanticwb.base.db;
 
+import java.io.PrintStream;
 import java.sql.*;
 import java.util.*;
 import org.semanticwb.Logger;
@@ -36,6 +37,8 @@ public class PoolConnection implements java.sql.Connection
     private long id = 0;
     private long idle_time=0;
     private boolean destroy=false;
+    private boolean isdestroyed = false;
+    private StackTraceElement stack[]=null;
 
     /**
      * 
@@ -44,6 +47,7 @@ public class PoolConnection implements java.sql.Connection
      */
     public PoolConnection(Connection con, DBConnectionPool pool)
     {
+        idle_time=System.currentTimeMillis();
         this.con = con;
         this.pool = pool;
         pool.checkedOut++;
@@ -56,7 +60,6 @@ public class PoolConnection implements java.sql.Connection
      */
     public void init()
     {
-        idle_time=System.currentTimeMillis();
         isclosed = false;
         description = "";
         id = 0;
@@ -70,6 +73,7 @@ public class PoolConnection implements java.sql.Connection
     public long getId()
     {
         return id;
+
     }
 
     /** Setter for property id.
@@ -78,7 +82,21 @@ public class PoolConnection implements java.sql.Connection
      */
     public void setId(long id)
     {
+        stack=Thread.currentThread().getStackTrace();
         this.id = id;
+    }
+
+    public StackTraceElement[] getStackTraceElements()
+    {
+        return stack;
+    }
+
+    public void printTrackTrace(PrintStream out)
+    {
+        for(int x=0;x<stack.length;x++)
+        {
+            out.println(stack[x]);
+        }
     }
 
     /**
@@ -170,6 +188,7 @@ public class PoolConnection implements java.sql.Connection
         {
             if(destroy)
             {
+                log.trace("Connection.close(destroy):"+getId());
                 try
                 {
                     destroyConnection();
@@ -205,7 +224,7 @@ public class PoolConnection implements java.sql.Connection
      */
     public void setAutoCommit(boolean param) throws SQLException
     {
-        destroy=true;
+        if(param==false)destroy=true;
         con.setAutoCommit(param);
     }
 
@@ -232,7 +251,7 @@ public class PoolConnection implements java.sql.Connection
 
     public int getTransactionIsolation() throws SQLException
     {
-        destroy=true;
+        //destroy=true;
         return con.getTransactionIsolation();
     }
 
@@ -280,12 +299,13 @@ public class PoolConnection implements java.sql.Connection
 
     public boolean isClosed() throws SQLException
     {
-        return con.isClosed();
+        //Thread.dumpStack();
+        return isclosed || con.isClosed();
     }
 
     public Statement createStatement() throws SQLException
     {
-        Statement st = new PoolStatement(con.createStatement());
+        Statement st = new PoolStatement(con.createStatement(),this);
         vec.addElement(st);
         //System.out.println("New Statement was Created...");
         return st;
@@ -293,14 +313,14 @@ public class PoolConnection implements java.sql.Connection
 
     public Statement createStatement(int param, int param1) throws SQLException
     {
-        Statement st = new PoolStatement(con.createStatement(param, param1));
+        Statement st = new PoolStatement(con.createStatement(param, param1),this);
         vec.addElement(st);
         return st;
     }
 
     public PreparedStatement prepareStatement(String str) throws SQLException
     {
-        PreparedStatement st = new PoolPreparedStatement(con.prepareStatement(str),str);
+        PreparedStatement st = new PoolPreparedStatement(con.prepareStatement(str),str,this);
         return st;
     }
 
@@ -316,7 +336,7 @@ public class PoolConnection implements java.sql.Connection
 
     public void commit() throws SQLException
     {
-        destroy=true;
+        //destroy=true;
         con.commit();
     }
 
@@ -327,7 +347,7 @@ public class PoolConnection implements java.sql.Connection
 
     public void rollback() throws SQLException
     {
-        destroy=true;
+        //destroy=true;
         con.rollback();
     }
     
@@ -336,30 +356,40 @@ public class PoolConnection implements java.sql.Connection
      */
     protected void destroyConnection()
     {
-        if (isclosed == false)
+        if (isdestroyed == false)
         {
+            isdestroyed=true;
             isclosed=true;
             pool.checkedOut--;
             pool.getConnectionManager().getTimeLock().removeConnection(this);
             try
             {
+                //System.out.println("******************close****************");
+                //printTrackTrace(System.out);
                 con.close();
             }catch(Exception e)
             {
                 log.error("Connection "+description+" finalize:"+e);
             }
-            log.trace("destroyConnection:("+getId()+","+pool.getName()+"):"+pool.checkedOut);
+            log.debug("destroyConnection:("+getId()+","+pool.getName()+"):"+pool.checkedOut);
         }
     }    
 
+    @Override
     protected void finalize() throws Throwable
     {
         // We are no longer referenced by anyone (including the
         // connection pool). Time to close down.
-        if(isclosed==false)
-        {
-            destroyConnection();
-            log.warn("finalize()..., connection was not closed, "+description);
+        try {
+            if(isdestroyed==false)
+            {
+                log.warn("finalize("+getId()+")..., connection was not closed, "+description);
+                destroyConnection();
+            }
+            //Thread.dumpStack();
+            //printTrackTrace(System.out);
+        } finally {
+            super.finalize();
         }
     }
 //************************************ jdk 1.4 *****************************************************************
