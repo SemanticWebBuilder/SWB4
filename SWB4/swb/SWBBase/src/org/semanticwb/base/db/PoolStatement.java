@@ -18,12 +18,15 @@ public class PoolStatement implements java.sql.Statement
     Statement st;
     boolean closed = false;
 
+    Connection con;
+
     /** Creates a new instance of PoolStatement
      * @param st 
      */
-    public PoolStatement(Statement st)
+    public PoolStatement(Statement st, Connection con)
     {
         this.st = st;
+        this.con=con;
     }
 
     public void addBatch(String str) throws java.sql.SQLException
@@ -74,7 +77,8 @@ public class PoolStatement implements java.sql.Statement
 
     public java.sql.Connection getConnection() throws java.sql.SQLException
     {
-        return st.getConnection();
+        return con;
+        //return st.getConnection();
     }
 
     public int getFetchDirection() throws java.sql.SQLException
