@@ -8,7 +8,12 @@ package org.semanticwb.platform;
 import com.hp.hpl.jena.db.DBConnection;
 import com.hp.hpl.jena.db.IDBConnection;
 import com.hp.hpl.jena.db.ModelRDB;
+import com.hp.hpl.jena.db.impl.Driver_Derby_SWB;
+import com.hp.hpl.jena.db.impl.Driver_HSQL_SWB;
+import com.hp.hpl.jena.db.impl.Driver_MsSQL_SWB;
 import com.hp.hpl.jena.db.impl.Driver_MySQL_SWB;
+import com.hp.hpl.jena.db.impl.Driver_Oracle_SWB;
+import com.hp.hpl.jena.db.impl.Driver_PostgreSQL_SWB;
 import com.hp.hpl.jena.db.impl.IRDBDriver;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
@@ -23,6 +28,7 @@ import com.hp.hpl.jena.rdf.model.NsIterator;
 import com.hp.hpl.jena.sdb.sql.SDBConnection;
 import com.hp.hpl.jena.sdb.store.DatabaseType;
 import com.hp.hpl.jena.sdb.store.LayoutType;
+//import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.File;
 import java.io.FileInputStream;
@@ -90,9 +96,9 @@ public class SemanticMgr implements SWBInstanceObject
         m_observers=new ArrayList();
 
         DBConnectionPool pool=SWBUtils.DB.getDefaultPool();
-        String M_DB_URL         = pool.getURL();
-        String M_DB_USER        = pool.getUser();
-        String M_DB_PASSWD      = pool.getPassword();
+//        String M_DB_URL         = pool.getURL();
+//        String M_DB_USER        = pool.getUser();
+//        String M_DB_PASSWD      = pool.getPassword();
         String M_DB             = SWBUtils.DB.getDatabaseType(pool.getName());
 
         if(SWB_PERSIST.equalsIgnoreCase("sdb"))
@@ -109,23 +115,31 @@ public class SemanticMgr implements SWBInstanceObject
                 log.event("Formating Database Tables...");
                 store.getTableFormatter().create();
             }            
+        }else if(SWB_PERSIST.equalsIgnoreCase("tdb"))
+        {
+            //Nothing to do
         }else
         {
 
-//        // create a database connection
-//        conn = new DBConnection(M_DB_URL, M_DB_USER, M_DB_PASSWD, M_DB);
+            // create a database connection
+            //conn = new DBConnection(M_DB_URL, M_DB_USER, M_DB_PASSWD, M_DB);
 
             // Create database connection
             conn = new DBConnection(SWBUtils.DB.getDefaultPool().newAutoConnection(), M_DB);
 
-            if(M_DB.equals("MySQL"))
-            {
-                IRDBDriver driver=new Driver_MySQL_SWB();
-                driver.setConnection(conn);
-                conn.setDriver(driver);
-            }
+            IRDBDriver driver=null;
+            if(M_DB.equals(SWBUtils.DB.DBTYPE_MySQL)){driver=new Driver_MySQL_SWB();}
+            else if(M_DB.equals(SWBUtils.DB.DBTYPE_Derby)){driver=new Driver_Derby_SWB();}
+            else if(M_DB.equals(SWBUtils.DB.DBTYPE_HSQL)){driver=new Driver_HSQL_SWB();}
+            else if(M_DB.equals(SWBUtils.DB.DBTYPE_MsSQL)){driver=new Driver_MsSQL_SWB();}
+            else if(M_DB.equals(SWBUtils.DB.DBTYPE_Oracle)){driver=new Driver_Oracle_SWB();}
+            else if(M_DB.equals(SWBUtils.DB.DBTYPE_PostgreSQL)){driver=new Driver_PostgreSQL_SWB();}
+            
+            driver.setConnection(conn);
+            conn.setDriver(driver);
             conn.getDriver().setTableNamePrefix("swb_");
             conn.getDriver().setDoDuplicateCheck(false);
+
             maker = ModelFactory.createModelRDBMaker(conn);
         }
 
@@ -272,9 +286,14 @@ public class SemanticMgr implements SWBInstanceObject
         if(SWB_PERSIST.equals("sdb"))
         {
             ret=SDBFactory.connectNamedModel(store, name);
+        }else if(SWB_PERSIST.equals("tdb"))
+        {
+            //ret=TDBFactory.createModel(SWBPlatform.getWorkPath()+"/models/"+name+"/data");
         }else
         {
             ret=maker.openModel(name);
+            ((ModelRDB)(ret)).setDoFastpath(false);
+            ((ModelRDB)(ret)).setQueryOnlyAsserted(true);
         }
         return ret;
     }
@@ -536,6 +555,9 @@ public class SemanticMgr implements SWBInstanceObject
         if(SWB_PERSIST.equals("sdb"))
         {
             model.getRDFModel().removeAll();
+        }else if(SWB_PERSIST.equals("tdb"))
+        {
+            //TDBFactory.createModel(SWBPlatform.getWorkPath()+"/models/"+name+"/data");
         }else
         {
             maker.removeModel(name);
