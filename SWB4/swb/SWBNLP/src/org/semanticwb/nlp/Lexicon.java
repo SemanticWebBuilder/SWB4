@@ -41,6 +41,12 @@ import sun.text.Normalizer;
  * display names (in a specific language) for Semantic Classes and Semantic
  * Properties. For the analysis purpose, Class names and Propery names are
  * stored in separated Directories.
+ *
+ * Un Lexicon (diccionario) es una lista de palabras etiquetadas. En este caso,
+ * la formas lexicas de las palabras son los displayNames (para un idioma
+ * especifico) de las clases y propiedades semanticas. Para propositos del
+ * analisis, los nombres de las clases y de las propiedades se almacenan en
+ * directorios separados.
  */
 public class Lexicon {
     private Analyzer luceneAnalyzer = new StandardAnalyzer();
@@ -67,8 +73,15 @@ public class Lexicon {
     /**
      * Creates a new Lexicon given the user's language. This method traverses the
      * SemanticVocabulary and retrieves the displayName of all Semantic Classes and
-     * Semantic Properties, then adds each of the names to the corresponding Lucene Directory.
-     * @param lang language for the new Lexicon.
+     * Semantic Properties, then adds each of the names to the corresponding Lucene
+     * Directory.
+     *
+     * Crea un nuevo diccionario para el lenguaje de usuario proporcionado. Este
+     * metodo recorre el vocabulario semantico y recupera los displayNames de
+     * las clases y propiedades semanticas, despues agrega los nombres al directorio
+     * de Lucene correspondiente.
+     *
+     * @param lang language for the new Lexicon. Idioma del nuevo diccionario.
      */
     public Lexicon(String lang) throws CorruptIndexException, LockObtainFailedException, IOException {
         language = lang;
@@ -139,7 +152,10 @@ public class Lexicon {
 
     /**
      * Sets the words that are not going to be considered in snowball analysis.
-     * @param sw List of words to ignore (stop words).
+     *
+     * Establece el conjunto de palabras que el analizador snowball ignorara.
+     * @param sw List of words to ignore (stop words). Lista de palabras a
+     * ignorar (stop words).
      */
     public void setStopWords(String []sw) {
         stopWords = sw;
@@ -149,8 +165,15 @@ public class Lexicon {
     }
 
     /**
-     * Adds a document with the information of a SemanticClass to the search index.
-     * @param o SemanticClass to extract information from.
+     * Adds an entry to the lexicon. Creates a Lucene document with the
+     * information retrieved from a SemanticClass. The lexical form of the word
+     * entry is the displayName of the associated SemanticClass.
+     *
+     * Agrega una entrada al diccionario. Crea un documento de Lucene con la
+     * informacion de una clase semantica. La forma lexica de la palabra
+     * agregada es el displayName de la clase semantica asociada.
+     * @param o SemanticClass to extract information from. Clase semantica para
+     * la cual se creara una entrada.
      * @throws org.apache.lucene.index.CorruptIndexException
      * @throws java.io.IOException
      */
@@ -173,8 +196,15 @@ public class Lexicon {
     }
 
     /**
-     * Adds a document with the information of a SemanticProperty to the search index.
-     * @param p SemanticProperty to extract information from.
+     * Adds an entry to the lexicon. Creates a Lucene document with the
+     * information retrieved from a SemanticProperty. The lexical form of the
+     * word entry is the displayName of the associated SemanticProperty.
+     *
+     * Agrega una entrada al diccionario. Crea un documento de Lucene con la
+     * informacion de una propiedad semantica. La forma lexica de la palabra
+     * agregada es el displayName de la propiedad semantica asociada.
+     * @param p SemanticProperty to extract information from. Propiedad semantica
+     * para la cual se creara una entrada.
      * @throws org.apache.lucene.index.CorruptIndexException
      * @throws java.io.IOException
      */
@@ -212,22 +242,29 @@ public class Lexicon {
 
     /**
      * Gets the language of the Lexicon.
+     * Obtiene el idioma del diccionario.
      */
     public String getLanguage() {
         return language;
     }
 
     /**
-     * Gets the prefixes string of the Lexicon.
+     * Gets the prefixes string of the Lexicon (for a SparQl query).
+     * Obtiene la lista de prefijos del diccionario (para una consulta SparQl).
      */
     public String getPrefixString() {
         return prefixString;
     }
 
     /**
-     * Gets the tag for the specified word label. It searches in both, classes and
-     * properties directory in order to find a tag.
-     * @param w label of word to get tag for.
+     * Gets the tag for the specified lexical form. It searches in both, classes
+     * and properties directory in order to find a tag.
+     *
+     * Obtiene una etiqueta compuesta para la forma lexica especificada. Busca
+     * tanto en el directorio de clases como en el de propiedades para encontrar
+     * la etiqueta.
+     * @param label lexical form of word to get tag for. Forma lexica a etiquetar.
+     * @param snowball Wheter to use snowball analyzer (better search flexibility).
      * @return WordTag object with the tag and type for the word label.
      */
     public WordTag getWordTag(String label, boolean snowball) throws CorruptIndexException, IOException {
@@ -257,9 +294,13 @@ public class Lexicon {
     }
 
     /**
-     * Gets the tag for the specified label (name of a property). It searches
-     * only in the properties directory.
+     * Gets the tag for the specified lexical form (name of a property). It
+     * searches only in the properties directory.
+     *
+     * Obtiene una etiqueta compuesta para la forma lexica especificada (nombre de
+     * una propiedad semantica). Busca solo en el directorio de propiedades.
      * @param label name of the property to get tag for.
+     * @param snowball Wheter to use snowball analyzer (better search flexibility).
      * @return WordTag object with the tag and type for the given property name.
      */
     public WordTag getPropWordTag(String label, boolean snowball) throws CorruptIndexException, IOException {
@@ -278,9 +319,13 @@ public class Lexicon {
     }
 
     /**
-     * Gets the tag for the specified label (name of a class). It searches
+     * Gets the tag for the specified lexical form (name of a class). It searches
      * only in the classes directory.
+     *
+     * Obtiene una etiqueta compuesta para la forma lexica especificada (nombre
+     * de una clase semantica). Busca solo en el directorio de clases.
      * @param label name of the class to get tag for.
+     * @param snowball Wheter to use snowball analyzer (better search flexibility).
      * @return WordTag object with the tag and type for the given class name.
      */
     public WordTag getObjWordTag(String label, boolean snowball) throws CorruptIndexException, java.io.IOException {
@@ -299,14 +344,18 @@ public class Lexicon {
     }
 
     /**
-     * Creates a lucene document for indexing lexicon entries.
-     * @param objTag The tag for the indexed SemanticObject (class or property)
-     * @param objDisplayName Display name of the SemanticObject
-     * @param objName RDF Name of the SemanticObject (for prefix extraction).
-     * @param objId ID of the SemanticObject.
-     * @param rangeObjName The name of the related SemanticClass (range Class).
-     * if the current element is an ObjectProperty.
-     * @param isObjectProp Wheter the document should include the range class.
+     * Creates a new Lucene Document to index a lexicon entry into a directory.
+     *
+     * Crea un nuevo documento de Lucene para indexar en un directorio del
+     * diccionario.
+     * @param objTag
+     * @param objDisplayName
+     * @param objPrefix
+     * @param objDisplayNameLower
+     * @param snowball
+     * @param objName
+     * @param objId
+     * @param rangeObjName
      * @return
      */
     private Document createDocument (String objTag, String objDisplayName, String objPrefix, String objDisplayNameLower, String snowball, String objName, String objId, String rangeObjName) {
