@@ -10,6 +10,7 @@ import com.hp.hpl.jena.db.RDFRDBException;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -43,7 +44,13 @@ public class Driver_Oracle_SWB extends Driver_Oracle
 		}
 
         try {
-			m_sql = new SQLCache_SWB(SQL_FILE, null, dbcon, ID_SQL_TYPE);
+            if(SWBPlatform.getEnv("swb/ts_statementsCache","false").equals("false"))
+            {
+                m_sql = new SQLCache_SWB(SQL_FILE, null, dbcon, ID_SQL_TYPE);
+            }else
+            {
+                m_sql = new SQLCache(SQL_FILE, null, dbcon, ID_SQL_TYPE);
+            }
 		} catch (Exception e) {
             e.printStackTrace( System.err );
 			log.error("Unable to set connection for Driver:", e);

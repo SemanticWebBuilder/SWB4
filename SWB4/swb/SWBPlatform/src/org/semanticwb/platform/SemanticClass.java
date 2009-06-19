@@ -47,8 +47,8 @@ public class SemanticClass
     private SemanticProperty displayNameProperty;
     List<SemanticProperty> herarquicalProps;
     List<SemanticProperty> inverseHerarquicalProps;
-    private String m_classID=null;
-    private boolean m_isClassIDCheck=false;
+    private String m_classGroupId=null;
+    private boolean m_isClassGroupIdCheck=false;
 
 //    private Boolean isdragSupport=null;
 
@@ -100,11 +100,18 @@ public class SemanticClass
         //System.out.println("Name:"+getName()+" "+getClassName()+" "+m_class.getNameSpace()+" "+getPrefix());
     }
 
+    /**
+     * regresa nombre local de la clase
+     * @return
+     */
     public String getName()
     {
         return m_class.getLocalName();
     }
 
+    /**
+     * Regresa Prefijo de la clase en base al NS de la ontologia
+     */
     public String getPrefix()
     {
         return m_class.getOntModel().getNsURIPrefix(m_class.getNameSpace());
@@ -119,6 +126,10 @@ public class SemanticClass
         return getCodePackage()+"."+getClassCodeName();
     }
 
+    /**
+     * Regresa paquete de la clase generica java definido den la ontologia
+     * @return
+     */
     public String getCodePackage()
     {
         if(m_classCodePackage==null)
@@ -200,24 +211,45 @@ public class SemanticClass
 //        return isdragSupport;
 //    }
 
-
     public String getClassId()
     {
-        if(!m_isClassIDCheck)
-        {
-            SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_CLASSID);
-            SemanticLiteral lit=getRequiredProperty(prop);
-            if(lit!=null)m_classID=lit.getString();
-            m_isClassIDCheck=true;
-            if(m_classID==null)
-            {
-                m_classID=getPrefix()+"_"+getName();
-            }
-
-        }
-        return m_classID;
+        return getPrefix()+":"+getName();
     }
 
+    /** Usado para generar el identificador (uri) de las instancias de la clase,
+     * asi como de sus subclases, tambien se usa para identificar al objeto en el URL (webpage:home)
+     * @return
+     */
+    public String getClassGroupId()
+    {
+        if(!m_isClassGroupIdCheck)
+        {
+            SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_CLASSGROUPID);
+
+            SemanticClass cls=this;
+            while(cls!=null)
+            {
+                SemanticLiteral lit=cls.getRequiredProperty(prop);
+                if(lit!=null)m_classGroupId=lit.getString();
+
+                if(m_classGroupId!=null)break;
+                Iterator<SemanticClass> it=cls.listSuperClasses(true);
+                cls=null;
+                while(it.hasNext())
+                {
+                    SemanticClass aux=it.next();
+                    if(aux.isSWBClass())cls=aux;
+                }
+            }
+
+            m_isClassGroupIdCheck=true;
+            if(m_classGroupId==null)
+            {
+                m_classGroupId=getPrefix()+"_"+getName();
+            }
+        }
+        return m_classGroupId;
+    }
 
     public SemanticLiteral getRequiredProperty(SemanticProperty prop)
     {

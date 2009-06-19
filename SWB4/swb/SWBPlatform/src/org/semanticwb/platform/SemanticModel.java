@@ -37,6 +37,7 @@ public class SemanticModel
     private String m_name;
     private String m_nameSpace;
     private SemanticObject m_modelObject;
+    private boolean m_trace=true;
 
     public SemanticModel(String name, Model model)
     {
@@ -44,10 +45,28 @@ public class SemanticModel
         this.m_name=name;
         init();
     }
-    
+
     private void init()
     {
         
+    }
+
+    /**
+     * Define si el modelo loggeara los cambios hechos por el usuario
+     * @return
+     */
+    public boolean isTraceable()
+    {
+        return m_trace;
+    }
+
+    /**
+     * Activa o desactiva el logger de cambios en el modelo
+     * @param trace
+     */
+    public void setTraceable(boolean trace)
+    {
+        m_trace=trace;
     }
 
     public Iterator<SemanticObject> listSubjects(SemanticProperty prop,String value)
@@ -204,8 +223,8 @@ public class SemanticModel
         String ret=getNameSpace();
         if(cls!=null && !cls.isSWBModel())
         {
-            cls=cls.getRootClass(); //busca la clase raiz
-            ret+=cls.getClassId()+":"+id;
+            //cls=cls.getRootClass(); //busca la clase raiz
+            ret+=cls.getClassGroupId()+":"+id;
         }else
         {
             ret+=id;
@@ -378,7 +397,7 @@ public class SemanticModel
     public synchronized long getCounter(SemanticClass cls)
     {
         //System.out.println("cls:"+cls+" "+cls.getRootClass());
-        return getCounter(cls.getRootClass().getClassId());
+        return getCounter(cls.getClassGroupId());
     }
 
     /**
