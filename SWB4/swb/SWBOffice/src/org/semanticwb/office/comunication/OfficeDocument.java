@@ -77,14 +77,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     private static final String LASTMODIFIED = PROP_LASTMODIFIED.getPrefix() + ":" + PROP_LASTMODIFIED.getName();
     public static final String JCR_CONTENT = "jcr:content";
     private static final String JCR_FROZEN_NODE = "jcr:frozenNode";
-    private static final String WORD_RESOURCE_TYPE = "word_resource";
-    private static final String WORD_RESOURCE_DESCRIPTION = "Recurso Word";
+    private static final String WORD_RESOURCE_TYPE = "WordContent";
+    private static final String WORD_RESOURCE_DESCRIPTION = "WordContent";
     private static final String WORD_RESOURCE_TITLE = WORD_RESOURCE_DESCRIPTION;
-    private static final String PPT_RESOURCE_TYPE = "ppt_resource";
-    private static final String PPT_RESOURCE_DESCRIPTION = "Recurso Power Point";
+    private static final String PPT_RESOURCE_TYPE = "PPTContent";
+    private static final String PPT_RESOURCE_DESCRIPTION = "PPTContent";
     private static final String PPT_RESOURCE_TITLE = PPT_RESOURCE_DESCRIPTION;
-    private static final String EXCEL_RESOURCE_TYPE = "excel_resource";
-    private static final String EXCEL_RESOURCE_DESCRIPTION = "Recurso Excel";
+    private static final String EXCEL_RESOURCE_TYPE = "ExcelContent";
+    private static final String EXCEL_RESOURCE_DESCRIPTION = "ExcelContent";
     private static final String EXCEL_RESOURCE_TITLE = EXCEL_RESOURCE_DESCRIPTION;
     private static final String CONTENT_NOT_FOUND = "El contenido no se encontró en el repositorio.";
     private static Logger log = SWBUtils.getLogger(OfficeDocument.class);
@@ -831,7 +831,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             resourceType = site.createResourceType(EXCEL_RESOURCE_TYPE);
             resourceType.setCreated(new Date(System.currentTimeMillis()));
             resourceType.setDescription(EXCEL_RESOURCE_DESCRIPTION);
-            resourceType.setResourceBundle(ExcelResource.class.getSimpleName());
+            resourceType.setResourceBundle(ExcelResource.class.getCanonicalName());
             resourceType.setTitle(EXCEL_RESOURCE_TITLE);
             resourceType.setResourceMode(1);
             resourceType.setResourceClassName(ExcelResource.class.getCanonicalName());
@@ -844,7 +844,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             resourceType = site.createResourceType(PPT_RESOURCE_TYPE);
             resourceType.setCreated(new Date(System.currentTimeMillis()));
             resourceType.setDescription(PPT_RESOURCE_DESCRIPTION);
-            resourceType.setResourceBundle(PPTResource.class.getSimpleName());
+            resourceType.setResourceBundle(PPTResource.class.getCanonicalName());
             resourceType.setTitle(PPT_RESOURCE_TITLE);
             resourceType.setResourceMode(1);
             resourceType.setResourceClassName(PPTResource.class.getCanonicalName());
@@ -858,7 +858,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             resourceType.setCreated(new Date(System.currentTimeMillis()));
             resourceType.setDescription(WORD_RESOURCE_DESCRIPTION);
             resourceType.setTitle(WORD_RESOURCE_TITLE);
-            resourceType.setResourceBundle(WordResource.class.getSimpleName());
+            resourceType.setResourceBundle(WordResource.class.getCanonicalName());
             resourceType.setResourceMode(1);
             resourceType.setResourceClassName(WordResource.class.getCanonicalName());
             resourceType.setUpdated(new Date(System.currentTimeMillis()));
