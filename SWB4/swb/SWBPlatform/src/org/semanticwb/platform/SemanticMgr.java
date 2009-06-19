@@ -216,8 +216,14 @@ public class SemanticMgr implements SWBInstanceObject
 
         loadDBModels();
 
-        loadRemoteModel("DBPedia", "http://dbpedia.org/sparql", "http://dbpedia.org/resource/",false);
-        loadRemoteModel("Books", "http://www.sparql.org/books", "http://example.org/book/",false);
+        if(SWBPlatform.getEnv("swb/addModel_DBPedia","false").equals("true"))
+        {
+            loadRemoteModel("DBPedia", "http://dbpedia.org/sparql", "http://dbpedia.org/resource/",false);
+        }
+//        if(SWBPlatform.getEnv("swb/addOnt_DBPedia","false").equals("true"))
+//        {
+//            loadRemoteModel("Books", "http://www.sparql.org/books", "http://example.org/book/",false);
+//        }
 
         m_ontology.rebind();
     }
