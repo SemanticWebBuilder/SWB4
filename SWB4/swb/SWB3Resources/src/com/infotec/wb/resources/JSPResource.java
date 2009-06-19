@@ -37,7 +37,7 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBActionResponse;
-import org.semanticwb.portal.lib.WBResponse;
+import org.semanticwb.portal.lib.SWBResponse;
 
 /** Este recurso permite ejecutar un archivo jsp, dando la ruta del archivo a
  * ejecutar dentro del sitio, pudiendose presentar como contenido o como un
@@ -90,9 +90,9 @@ public class JSPResource extends GenericAdmResource
             request.setAttribute("actionResponse", actionResponse);
             RequestDispatcher dispatcher = request.getRequestDispatcher(path);
             if (getResourceBase().getAttribute("forward") != null) {
-                dispatcher.forward(request, new WBResponse());
+                dispatcher.forward(request, new SWBResponse());
             } else {
-                dispatcher.include(request, new WBResponse());
+                dispatcher.include(request, new SWBResponse());
             }
         } catch (Exception e) {
             log.error(actionResponse.getLocaleLogString("Process_Error") + "..." + path, e);
