@@ -24,6 +24,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticModel;
@@ -33,6 +34,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.repository.Workspace;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -123,13 +125,7 @@ public class SWBModelAdmin extends GenericResource {
             out.println("<tr><td colspan=\"2\">" + paramRequest.getLocaleLogString("upload") + "<input type=\"file\" name=\"zipmodel\" value=\"" + paramRequest.getLocaleLogString("new") + "\"/></td></tr>");
             out.println("<tr><td colspan=\"2\"><button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\">"+paramRequest.getLocaleLogString("up")+"</button><br/><br/></td></tr>");
             out.println("</table>");
-            out.println("</form>");
-            out.println("</fieldset>");
-            out.println("</div>");
-            out.println("<div class=\"swbform\" id=\"vsites\" dojoType=\"dijit.TitlePane\" title=\"Sitios a guardar\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
-            out.println("<fieldset>");
-            out.println("<legend>" + paramRequest.getLocaleLogString("selectSite") + "</legend>");
-            out.println("<div class=\"swbform\">");
+
             out.println("<table width=\"75%\">");
             urlAction.setAction("savesite");
             Iterator<WebSite> itws = SWBContext.listWebSites();
@@ -141,9 +137,94 @@ public class SWBModelAdmin extends GenericResource {
                 out.println("</td></tr>");
             }
             out.println("</table>");
+
+            out.println("</form>");
+            out.println("</fieldset>");
+            out.println("</div>");
+
+            //Repositorio de usuarios
+            out.println("<div class=\"swbform\" id=\"vUsrRep\" dojoType=\"dijit.TitlePane\" title=\""+paramRequest.getLocaleLogString("usrRep")+"\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
+            out.println("<fieldset>");
+            out.println("<legend>" + paramRequest.getLocaleLogString("selectUsrRep") + "</legend>");
+            out.println("<div class=\"swbform\">");
+            out.println("<table width=\"75%\">");
+            urlAction.setAction("saveUsrRep");
+            Iterator<UserRepository> itUsrRep = SWBContext.listUserRepositorys();
+            while (itUsrRep.hasNext()) {
+                UserRepository ws = itUsrRep.next();
+                out.println("<tr><td>");
+                urlAction.setParameter("usrRepid", ws.getId());
+                out.println("<a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\">" + ws.getTitle() + "</a>");
+                out.println("</td></tr>");
+            }
+            out.println("</table>");
             out.println("</div>");
             out.println("</fieldset>");
             out.println("</div>");
+
+            //Repositorio de documentos
+            out.println("<div class=\"swbform\" id=\"vUsrDoc\" dojoType=\"dijit.TitlePane\" title=\""+paramRequest.getLocaleLogString("docRep")+"\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
+            out.println("<fieldset>");
+            out.println("<legend>" + paramRequest.getLocaleLogString("existTpls") + "</legend>");
+            out.println("<form action=\"" + urlAction.toString() + "\" method=\"post\" enctype='multipart/form-data'>");
+            out.println("<table width=\"100%\">");
+            out.println("<tr align=\"left\">");
+            out.println("<th><b>" + paramRequest.getLocaleLogString("tpl") + "</b></th>");
+            out.println("<th><b>" + paramRequest.getLocaleLogString("size") + "</b></th>");
+            out.println("<th><b>"+paramRequest.getLocaleLogString("install") +"</b></th>");
+            out.println("<th><b>"+paramRequest.getLocaleLogString("download") + "</b></th>");
+            out.println("<th><b>"+paramRequest.getLocaleLogString("delete") + "</b></th>");
+            out.println("<th><b>" + paramRequest.getLocaleLogString("up2comunity") + "</b></th>");
+            out.println("</tr>");
+            for (int i = 0; i < files.length; i++) {
+                File filex = files[i];
+                String fileName = filex.getName();
+                if (filex.isFile() && fileName.endsWith("_rep.rdf")) {
+                    int pos = fileName.lastIndexOf(".");
+                    if (pos > -1) {
+                        fileName = fileName.substring(0, pos);
+                    }
+                    out.println("<tr align=\"left\"><td>");
+                    url.setParameter("zipName", filex.getAbsolutePath());
+                    url.setMode("viewmodel");
+                    out.println("<a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\">" + fileName + "</a>");
+                    out.println("</td><td>");
+                    out.println(filex.length() + " bytes");
+                    out.println("</td>");
+                    url.setMode("installmodel");
+                    url.setAction("form");
+                    out.println("<td align=\"center\"><a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconinst.png\" alt=\""+paramRequest.getLocaleLogString("install") + "\"/></a></td>");
+                    out.println("<td align=\"center\"><a href=\"" + WEBPATH + filex.getName() + "\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/icondesin.png\" alt=\""+paramRequest.getLocaleLogString("download") + "\"/></a></td>");
+                    urlAction.setParameter("zipName", filex.getAbsolutePath());
+                    urlAction.setAction("delete");
+                    out.println("<td align=\"center\"><a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconelim.png\" alt=\""+paramRequest.getLocaleLogString("delete") + "\"/></a></td>");
+                    out.println("<td align=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconsubcom.png\" alt=\""+paramRequest.getLocaleLogString("up2comunity") + "\"/></td>");
+                    out.println("</tr>");
+                }
+            }
+            out.println("<tr><td colspan=\"2\">" + paramRequest.getLocaleLogString("upload") + "<input type=\"file\" name=\"zipmodel\" value=\"" + paramRequest.getLocaleLogString("new") + "\"/></td></tr>");
+            out.println("<tr><td colspan=\"2\"><button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\">"+paramRequest.getLocaleLogString("up")+"</button><br/><br/></td></tr>");
+            out.println("</table>");
+            out.println("</fieldset>");
+
+            out.println("<fieldset>");
+            out.println("<legend>" + paramRequest.getLocaleLogString("selectDocRep") + "</legend>");
+            out.println("<div class=\"swbform\">");
+            out.println("<table width=\"75%\">");
+            urlAction.setAction("saveDocRep");
+            Iterator<Workspace> itDocRep = SWBContext.listWorkspaces();
+            while (itDocRep.hasNext()) {
+                Workspace ws = itDocRep.next();
+                out.println("<tr><td>");
+                urlAction.setParameter("docRepid", ws.getId());
+                out.println("<a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\">" + ws.getTitle() + "</a>");
+                out.println("</td></tr>");
+            }
+            out.println("</table>");
+            out.println("</div>");
+            out.println("</fieldset>");
+            out.println("</div>");
+
             out.println(strbf.toString());
         } catch (Exception e) {
             log.debug(e);
@@ -413,7 +494,37 @@ public class SWBModelAdmin extends GenericResource {
                 e.printStackTrace();
                 log.debug(e);
             }
-        } else if (response.getAction().equals("install")) {
+        }else if(response.getAction().equals("saveUsrRep")){
+                String uri = request.getParameter("usrRepid");
+                UserRepository usrRep = SWBContext.getUserRepository(uri);
+                String path = SWBPlatform.getWorkPath() + "/";
+                String zipdirectory = path + "sitetemplates/";
+            //-------------Generación de archivo rdf del repositorio especificado----------------
+                try {
+                    File file = new File(zipdirectory + usrRep.getId() + ".rdf");
+                    FileOutputStream out = new FileOutputStream(file);
+                    usrRep.getSemanticObject().getModel().write(out);
+                    out.flush();
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }else if(response.getAction().equals("saveDocRep")){
+                String uri = request.getParameter("docRepid");
+                Workspace workspace = SWBContext.getWorkspace(uri);
+                String path = SWBPlatform.getWorkPath() + "/";
+                String zipdirectory = path + "sitetemplates/";
+            //-------------Generación de archivo rdf del repositorio especificado----------------
+                try {
+                    File file = new File(zipdirectory + workspace.getId() + ".rdf");
+                    FileOutputStream out = new FileOutputStream(file);
+                    workspace.getSemanticObject().getModel().write(out);
+                    out.flush();
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }else if (response.getAction().equals("install")) {
             String siteInfo = SWBUtils.IO.readFileFromZip(request.getParameter("zipName"), "siteInfo.xml");
             String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
             Document dom = SWBUtils.XML.xmlToDom(siteInfo);
