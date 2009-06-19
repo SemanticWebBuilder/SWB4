@@ -93,7 +93,12 @@ html, body, #main{
 .swbIconMenuItem,
 .swbIconMenuItemU,
 .swbIconClass,
-.swbIconClassU
+.swbIconClassU,
+.swbIconReload,
+.swbIconTrash,
+.swbIconAdd,
+.swbIconEdit,
+.swbIconDelete
 {
 	background-repeat: no-repeat; 
 	width:20px;
@@ -148,8 +153,12 @@ html, body, #main{
 .swbIconPFlow       { background-position: -120px -18px; }
 .swbIconPFlowU      { background-position: -120px -36px; }
 .swbIconClass       { background-position: -380px -18px; }
-.swbIconClassU       { background-position: -380px -36px; }
-
+.swbIconClassU      { background-position: -380px -36px; }
+.swbIconTrash       { background-position: -440px -18px; }
+.swbIconReload      { background-position: -520px -18px; }
+.swbIconDelete      { background-position: -103px -200px; }
+.swbIconAdd         { background-position: -242px -200px; }
+.swbIconEdit        { background-position: -3px -145px; }
 
 /*  48x48 */
 
