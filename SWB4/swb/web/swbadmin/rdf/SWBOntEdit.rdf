@@ -207,7 +207,7 @@
     <j.1:homePage rdf:resource="http://www.semanticwb.org/SWBOntEdit#WebPage:home"/>
     <j.1:modifiedBy rdf:resource="http://www.semanticwb.org/uradm#swb_User:1"/>
     <j.1:title>OWLEditor</j.1:title>
-    <j.1:updated>2009-04-17T19:38:54.828</j.1:updated>
+    <j.1:updated>2009-06-18T19:57:22.781</j.1:updated>
     <j.1:userRepository rdf:resource="http://www.semanticwb.org/uradm#uradm"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
   </rdf:Description>

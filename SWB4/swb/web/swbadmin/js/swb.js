@@ -505,10 +505,14 @@
               addNewTab(id, action.value, item.title);
           }else if(action.name=="showDialog")
           {
-                showDialog(action.value, action.target);
+              showDialog(action.value, action.target);
           }else if(action.name=="showStatusURL")
           {
-                showStatusURL(action.value);
+              showStatusURL(action.value);
+          }else if(action.name=="showStatusURLConfirm")
+          {
+              if(confirm(action.target))
+                  showStatusURL(action.value);
           }else if(action.name=="getHtml")
           {
               //alert(action.value+" "+action.target);

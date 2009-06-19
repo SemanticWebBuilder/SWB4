@@ -4,9 +4,23 @@
     Author     : Jei
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="org.semanticwb.*"%>
-<%@page import="org.semanticwb.portal.api.*"%>
+<%@page import="java.util.*, org.semanticwb.*, org.semanticwb.*, org.semanticwb.portal.api.*, org.semanticwb.model.*"%>
+<%!
+    public String getUserLanguage()
+    {
+        String lang="es";
+        User user=SWBPortal.getSessionUser();
+        if(user!=null)lang=user.getLanguage();
+        return lang;
+    }
+
+    public String getLocaleString(String key, String lang)
+    {
+        return SWBUtils.TEXT.getLocaleString("locale_swb_admin", key, new Locale(lang));
+    }
+%>
 <%
+    String lang=getUserLanguage();
     String id;
     String showRoot;
     String rootLabel;
@@ -44,7 +58,7 @@
 <div dojoType="dijit.tree.ForestStoreModel" jsId="<%=model%>"
   store="<%=store%>" rootId="root" <%=rootLabel%> childrenAttrs="children"></div>
 <!-- tree widget -->
-<div dojoType="dijit.Tree" id="<%=id%>" model="<%=model%>" dndController="dijit._tree.dndSource" betweenThreshold="8" persist="false" showRoot="<%=showRoot%>">
+<div dojoType="dijit.Tree" id="<%=id%>" model="<%=model%>" dndController="dijit._tree.dndSource" betweenThreshold_="8" persist="false" showRoot="<%=showRoot%>">
     <script type="dojo/method" event="onClick" args="item, node">
         if(item)
         {
@@ -127,7 +141,7 @@
                         //alert(childItem.id+" "+newParentItem.id+" "+oldParentItem.id);
                         if(childItem && oldParentItem && newParentItem && oldParentItem!=newParentItem && childItem!=newParentItem)
                         {
-                            var ac=confirm("Aceptar el movimiento?");
+                            var ac=confirm("<%=getLocaleString("aceptmove",lang)%>");
                             if(ac)
                             {
                                 var f=showStatusURL('<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/drop.jsp?suri='+encodeURIComponent(childItem.id)+'&newp='+encodeURIComponent(newParentItem.id)+'&oldp='+encodeURIComponent(oldParentItem.id),true);
@@ -150,6 +164,8 @@
 			if(expand)this.tree._expandNode(targetWidget);
 		}
 		this.onDndCancel();
+        this.isDragging=false;
+        this.mouseDown=false;
         this.containerState="";
     </script>
 
@@ -194,12 +210,19 @@
         }, this);
         //var m=dojo.dnd.manager();
         //m.canDrop(false);
-        //alert(act_treeNode.item.id);
-        //self.status="checkAcceptance-->act_treeNode:"+act_treeNode+" drag:"+act_treeNode.item.dragSupport;
-        if(act_treeNode.item.dragSupport=="true")return true;
+        if(act_treeNode!=null)
+        {
+            //self.status="checkAcceptance-->act_treeNode:"+act_treeNode.item.id+" drag:"+act_treeNode.item.dragSupport;
+            //alert(act_treeNode.item.id);
+            if(act_treeNode.item.dragSupport=="true")return true;
+        }else
+        {
+            self.status="checkAcceptance-->act_treeNode:"+act_treeNode;
+            act_treeNode=null;
+        }
         return false;
     </script>
-
+/*
     <script type="dojo/method" event="onDndStart" args="_1a,_1b,_1c">
         //alert("Hola");
         /*
@@ -214,7 +237,7 @@
         this.isDragging=true;
         */
     </script>
-
+*/
 
     <script type="dojo/method" event="getIconClass" args="item, opened">
         if(item)
@@ -237,7 +260,24 @@
         }
     </script>
 -->
+<!--
+<script type="dojo/method" event="creator" args="item, hint">
+    var type = [];
+    var node = dojo.doc.createElement("span");
+    node.innerHTML = "hola";
+    node.id = dojo.dnd.getUniqueId();
+    return {node: node, data: item, type: type};
+</script>
+-->
     <script type="dojo/connect">
+
+        dojo.dnd.Avatar.prototype._generateText = function()
+        {
+            return (this.manager.copy ? "<%=getLocaleString("referencing",lang)%>" : "<%=getLocaleString("moving",lang)%>") +
+            " "+this.manager.nodes.length + " " +
+            (this.manager.nodes.length != 1 ? "<%=getLocaleString("nodes",lang)%>" : "<%=getLocaleString("node",lang)%>");
+        };
+
         var menuEmpty = dijit.byId("<%=menu%>");
 
         menuEmpty.bindDomNode(this.domNode);
