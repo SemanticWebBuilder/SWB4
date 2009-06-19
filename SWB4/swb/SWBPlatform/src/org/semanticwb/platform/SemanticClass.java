@@ -54,6 +54,7 @@ public class SemanticClass
 
     private boolean dispObject=false;
     private SemanticObject displayObject=null;
+    private String m_className=null;
 
 
     public SemanticClass(OntClass oclass)
@@ -123,7 +124,31 @@ public class SemanticClass
      */
     public String getClassName()
     {
-        return getCodePackage()+"."+getClassCodeName();
+        if(m_className==null)
+        {
+            SemanticClass cls=this;
+            while(cls!=null)
+            {
+                if(cls.isSWB())
+                {
+                    m_className=getCodePackage()+"."+getClassCodeName();
+                    break;
+                }else
+                {
+                    Iterator<SemanticClass> it=cls.listSuperClasses(true);
+                    cls=null;
+                    SemanticClass acls=null;
+                    while(it.hasNext())
+                    {
+                        SemanticClass aux=it.next();
+                        if(aux.isSWBClass())cls=aux;
+                        if(!aux.isSWB())acls=aux;
+                    }
+                    if(cls==null)cls=acls;
+                }
+            }
+        }
+        return m_className;
     }
 
     /**
