@@ -14,25 +14,25 @@ public class SWBClass extends org.semanticwb.model.base.SWBClassBase
         boolean ret=true;
         if(this instanceof Activeable)
         {
-            if(!((Activeable)this).isActive())return false;
+            if(!((Activeable)this).isActive())ret=false;
         }
-        if(this instanceof Viewable)
+        if(ret && this instanceof Viewable)
         {
             long val=((Viewable)this).getViews();
             long max=((Viewable)this).getMaxViews();
             //System.out.println("views:"+max+" "+val);
-            if((max>0) && (val>=max))return false;
+            if((max>0) && (val>=max))ret=false;
         }
-        if(this instanceof Hitable)
+        if(ret && this instanceof Hitable)
         {
             long val=((Hitable)this).getHits();
             long max=((Hitable)this).getMaxHits();
             //System.out.println("hits:"+max+" "+val);
-            if((max>0) && (val>=max))return false;
+            if((max>0) && (val>=max))ret=false;
         }
         if(ret && this instanceof Trashable)
         {
-            if(((Trashable)this).isDeleted())return false;
+            if(((Trashable)this).isDeleted())ret=false;
         }
         //TODO: calendarizacion
         return ret;
