@@ -44,7 +44,7 @@ public class SWBServiceMgr implements SemanticObserver {
         User usr = SWBPortal.getSessionUser();
         log.trace("obj:" + obj + " prop:" + prop + " action:" + action + " " + usr);
         //System.out.println("obj:" + obj + " prop:" + prop + " action:" + action + " " + usr);
-        SWBPortal.getDBAdmLog().saveAdmLog(usr, obj, prop, action);
+        if(obj.getModel().isTraceable())SWBPortal.getDBAdmLog().saveAdmLog(usr, obj, prop, action);
 
         SemanticClass cls = obj.getSemanticClass();
         if(cls.isSWB())
@@ -168,7 +168,7 @@ public class SWBServiceMgr implements SemanticObserver {
                 {
                     Dns.refresh();
                 }
-                updateObject(obj,usr);
+                if(obj.getModel().isTraceable())updateObject(obj,usr);
             }else
             {
                 //TODO: SemanticClass

@@ -48,6 +48,7 @@ public class SWBImportWebSite extends GenericResource {
                 String usrRep = request.getParameter("wsrepository");
 
                 WebSite site = SWBContext.createWebSite(id, "http://www." + id + ".swb#");
+                site.getSemanticObject().getModel().setTraceable(false);
                 //site.setCreated(new java.util.Date(System.currentTimeMillis()));
                 site.setTitle(title);
                 //Crea repositorio de usuarios para el nuevo sitio
@@ -55,6 +56,7 @@ public class SWBImportWebSite extends GenericResource {
                 if (usrRep != null) {
                     if (usrRep.equals("0")) { //Utilizara un repositorio exclusivo
                         newUsrRep = SWBContext.createUserRepository(id + "_usr", "http://user." + id + ".swb#");
+                        newUsrRep.getSemanticObject().getModel().setTraceable(false);
                         newUsrRep.setTitle("Repositorio de usuarios(" + id + ")", "es");
                         newUsrRep.setTitle("Users Repository(" + id + ")", "en");
                         newUsrRep.setUndeleteable(true);
@@ -73,14 +75,17 @@ public class SWBImportWebSite extends GenericResource {
                         site.setUserRepository(exitUsrRep);
                     }
                 }
+                newUsrRep.getSemanticObject().getModel().setTraceable(true);
 
                 //creación de repositorio de documentoss
                 Workspace workspace = SWBContext.createWorkspace(id + "_rep", "http://repository." + id + ".swb#");
+                workspace.getSemanticObject().getModel().setTraceable(false);
                 workspace.setTitle("Repositorio de documentos(" + title + ")", "es");
                 workspace.setTitle("Documents Repository(" + title + ")", "en");
                 //TODO: undeleted repository
                 //workspace.setUn
                 site.addSubModel(workspace);
+                workspace.getSemanticObject().getModel().setTraceable(true);
 
                 WebPage home = site.createWebPage("home");
                 site.setHomePage(home);
@@ -93,6 +98,30 @@ public class SWBImportWebSite extends GenericResource {
                 grp.setTitle("Default");
 
                 //Crea recursos de defecto
+                if (site.getResourceType("ExcelContent") == null) {
+                    ResourceType ptype = site.createResourceType("ExcelContent");
+                    ptype.setResourceClassName("org.semanticwb.resource.office.sem.ExcelResource");
+                    ptype.setResourceBundle("org.semanticwb.resource.office.sem.ExcelResource");
+                    ptype.setResourceMode(1);
+                    ptype.setTitle("ExcelContent");
+                }
+
+                if (site.getResourceType("WordContent") == null) {
+                    ResourceType ptype = site.createResourceType("WordContent");
+                    ptype.setResourceClassName("org.semanticwb.resource.office.sem.WordResource");
+                    ptype.setResourceBundle("org.semanticwb.resource.office.sem.WordResource");
+                    ptype.setResourceMode(1);
+                    ptype.setTitle("WordContent");
+                }
+
+                if (site.getResourceType("PPTContent") == null) {
+                    ResourceType ptype = site.createResourceType("PPTContent");
+                    ptype.setResourceClassName("org.semanticwb.resource.office.sem.PPTResource");
+                    ptype.setResourceBundle("org.semanticwb.resource.office.sem.PPTResource");
+                    ptype.setResourceMode(1);
+                    ptype.setTitle("PPTContent");
+                }
+
                 if (site.getResourceType("Banner") == null) {
                     ResourceType ptype = site.createResourceType("Banner");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.Banner");
@@ -100,7 +129,7 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setResourceMode(2);
                     ptype.setTitle("Banner");
                 }
-                //Crea recursos de defecto
+
                 if (site.getResourceType("HTMLContent") == null) {
                     ResourceType ptype = site.createResourceType("HTMLContent");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.HTMLContent");
@@ -367,6 +396,8 @@ public class SWBImportWebSite extends GenericResource {
                 out.println("addItemByURI(mtreeStore, null, '" + site.getURI() + "');");
                 out.println("showStatus('Sitio Creado');");
                 out.println("</script>");
+
+                site.getSemanticObject().getModel().setTraceable(false);
             } else { //Forma de entrada(Datos iniciales)
                 url.setAction("step2");
                 getStep1(out, url, paramRequest);
