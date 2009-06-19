@@ -13,7 +13,16 @@
 
     public String getLocaleString(String key, String lang)
     {
-        return SWBUtils.TEXT.getLocaleString("locale_swb_admin", key, new Locale(lang));
+        String ret="";
+        if(lang==null)
+        {
+            ret=SWBUtils.TEXT.getLocaleString("locale_swb_admin", key);
+        }else
+        {
+            ret=SWBUtils.TEXT.getLocaleString("locale_swb_admin", key, new Locale(lang));
+        }
+        //System.out.println(key+" "+lang+" "+ret);
+        return ret;
     }
 
     public JSONObject getAction(String name, String value, String target) throws JSONException
@@ -78,7 +87,7 @@
 
     public JSONObject getMenuReload(String lang) throws JSONException
     {
-        return getMenuItem(getLocaleString("reload",lang), "dijitEditorIcon dijitEditorIconCut", getReloadAction());
+        return getMenuItem(getLocaleString("reload",lang), getLocaleString("icon_reload",null), getReloadAction());
     }
     
     public void addWebSites(JSONArray arr, String lang)  throws JSONException
@@ -237,13 +246,13 @@
         }
         url+="?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI();
         if(pf!=null)url+="&"+pf;
-        menus.put(getMenuItem(getLocaleString("add",lang)+" "+cls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", url,getLocaleString("add",lang)+" "+cls.getDisplayName(lang))));
+        menus.put(getMenuItem(getLocaleString("add",lang)+" "+cls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", url,getLocaleString("add",lang)+" "+cls.getDisplayName(lang))));
         dropacc.put(cls.getClassId());
         //Iterator<SemanticClass> it2=cls.listSubClasses();
         //while(it2.hasNext())
         //{
         //    SemanticClass scls=it2.next();
-        //    menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
+        //    menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
         //    dropacc.put(scls.getClassID());
         //}
 
@@ -329,7 +338,7 @@
             {
                 SemanticProperty prop=pit.next();
                 SemanticClass rcls=prop.getRangeClass();
-                menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
+                menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
                 dropacc.put(rcls.getClassId());
             }
             menus.put(getMenuSeparator());
@@ -340,17 +349,17 @@
         {
             if(!active)
             {
-                menus.put(getMenuItem(getLocaleString("active",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+                menus.put(getMenuItem(getLocaleString("active",lang), getLocaleString("icon_active",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
             }else
             {
-                menus.put(getMenuItem(getLocaleString("unactive",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+                menus.put(getMenuItem(getLocaleString("unactive",lang), getLocaleString("icon_unactive",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
             }
         }
 
-        menus.put(getMenuItem(getLocaleString("edit",lang), "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
+        menus.put(getMenuItem(getLocaleString("edit",lang), getLocaleString("icon_edit",null), getNewTabAction()));
         if(!obj.instanceOf(Undeleteable.swb_Undeleteable) ||  (obj.instanceOf(Undeleteable.swb_Undeleteable) && obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false))
         {
-            menus.put(getMenuItem(getLocaleString("delete",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
+            menus.put(getMenuItem(getLocaleString("delete",lang), getLocaleString("icon_delete",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),getLocaleString("delete",lang)+" "+cls.getDisplayName(lang))));
         }
         menus.put(getMenuSeparator());
 
@@ -358,10 +367,10 @@
         boolean isfavo=user.hasFavorite(obj);
         if(!isfavo)
         {
-            menus.put(getMenuItem(getLocaleString("addFavorites",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+            menus.put(getMenuItem(getLocaleString("addFavorites",lang), getLocaleString("icon_addFavorites",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
         }else
         {
-            menus.put(getMenuItem(getLocaleString("deleteFavorites",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+            menus.put(getMenuItem(getLocaleString("deleteFavorites",lang), getLocaleString("icon_deleteFavorites",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
         }
         menus.put(getMenuReload(lang));
 
@@ -480,14 +489,14 @@
             {
                 SemanticProperty prop=pit.next();
                 SemanticClass rcls=prop.getRangeClass();
-                menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
+                menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
                 dropacc.put(rcls.getClassId());
                 //add subclasess
                 Iterator<SemanticClass> it=rcls.listSubClasses();
                 while(it.hasNext())
                 {
                     SemanticClass scls=it.next();
-                    menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), "dijitEditorIcon dijitEditorIconCut",getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
+                    menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
                     dropacc.put(scls.getClassId());
                 }
             }
@@ -501,18 +510,18 @@
         {
             if(!active)
             {
-                menus.put(getMenuItem(getLocaleString("active",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+                menus.put(getMenuItem(getLocaleString("active",lang), getLocaleString("icon_active",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
             }else
             {
-                menus.put(getMenuItem(getLocaleString("unactive",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+                menus.put(getMenuItem(getLocaleString("unactive",lang), getLocaleString("icon_unactive",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
             }
         }
 
         //menu remove
-        menus.put(getMenuItem(getLocaleString("edit",lang), "dijitEditorIcon dijitEditorIconCut", getNewTabAction()));
+        menus.put(getMenuItem(getLocaleString("edit",lang), getLocaleString("icon_edit",null), getNewTabAction()));
         if(!obj.instanceOf(Undeleteable.swb_Undeleteable) ||  (obj.instanceOf(Undeleteable.swb_Undeleteable) && obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false))
         {
-            menus.put(getMenuItem(getLocaleString("delete",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),null)));
+            menus.put(getMenuItem(getLocaleString("delete",lang), getLocaleString("icon_delete",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),getLocaleString("delete",lang)+" "+cls.getDisplayName(lang))));
         }
         menus.put(getMenuSeparator());
 
@@ -521,10 +530,10 @@
         boolean isfavo=user.hasFavorite(obj);
         if(!isfavo)
         {
-            menus.put(getMenuItem(getLocaleString("addFavorites",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+            menus.put(getMenuItem(getLocaleString("addFavorites",lang), getLocaleString("icon_addFavorites",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
         }else
         {
-            menus.put(getMenuItem(getLocaleString("deleteFavorites",lang), "dijitEditorIcon dijitEditorIconCut", getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+            menus.put(getMenuItem(getLocaleString("deleteFavorites",lang), getLocaleString("icon_deleteFavorites",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
         }
         //menu recargar
         menus.put(getMenuReload(lang));
