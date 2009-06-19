@@ -10,7 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.Device;
+import org.semanticwb.model.Language;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.TemplateRef;
 import org.semanticwb.model.User;
@@ -72,9 +73,28 @@ public class SWBTemplateMgr
         while (tpls.hasNext())
         {
             TemplateRef ref=tpls.next();
+            //valida tipo de herencia
+            if(topic.hasTemplateRef(ref))
+            {
+                if(ref.getInherit()==TemplateRef.INHERIT_CHILDS)continue;
+            }else
+            {
+                if(ref.getInherit()==TemplateRef.INHERIT_ACTUAL)continue;
+            }
             try
             {
                 Template tpl=getTemplateImp(ref.getTemplate());
+                //validar lenguage de la plantilla
+                Language ltpl=tpl.getLanguage();
+                if(ltpl!=null && !ltpl.getId().equals(user.getLanguage()))continue;
+                //validar dispositivo de la plantilla
+                Device dtpl=tpl.getDevice();
+                if(dtpl!=null)
+                {
+                    Device ud=user.getDevice();
+                    if(ud==null || !(dtpl.equals(ud) || dtpl.hasChild(ud)))continue;
+                }
+
                 boolean passrules = user.haveAccess(tpl);
                 //if (passrules == true && !intereval.eval(today, tpl)) passrules = false;
                 //System.out.println("ref:"+ ref+" rule:"+passrules+" "+tpl.getURI());
