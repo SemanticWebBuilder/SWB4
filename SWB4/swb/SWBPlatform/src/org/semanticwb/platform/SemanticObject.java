@@ -2082,7 +2082,7 @@ public class SemanticObject
 
     public String getWorkPath()
     {
-        return "/models/"+getModel().getName()+"/"+getSemanticClass().getClassId()+"/"+getId();
+        return "/models/"+getModel().getName()+"/"+getSemanticClass().getClassGroupId()+"/"+getId();
     }
 
 }
