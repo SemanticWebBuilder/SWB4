@@ -2,7 +2,7 @@
 <%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*"%>
 <%!
-   private int nocache=0;
+   //private int nocache=0;
 
     public String getLocaleString(String key, String lang)
     {
@@ -22,7 +22,7 @@
     SemanticClass cls=obj.getSemanticClass();
     String title=obj.getDisplayName(lang);
     String url=null;
-    if(gen instanceof WebPage)url=((WebPage)gen).getUrl()+"?_nocache="+(nocache++);
+    if(gen instanceof WebPage)url=((WebPage)gen).getUrl();
     if(gen instanceof WebSite)url=SWBPortal.getDistributorPath()+"/"+gen.getId();
 
     String description=obj.getProperty(Descriptiveable.swb_description);
@@ -36,7 +36,7 @@
     if(url!=null)
     {
 %>
-        <tr><td><%=getLocaleString("identificator",lang)%></td><td><a href="<%=url%>" onclick="dojo.byId('swbPreviewFrame').src='<%=url%>';dijit.byId('tabs').selectChild(dijit.byId('swbPreviewTab'));return false;"><%=obj.getId()%></a></td></tr>
+        <tr><td><%=getLocaleString("identificator",lang)%></td><td><a href="<%=url%>" onclick="selectPreviewTab('<%=url%>');return false;"><%=obj.getId()%></a></td></tr>
 <%
     }else
     {

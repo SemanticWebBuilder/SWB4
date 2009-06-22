@@ -501,6 +501,12 @@
                 }
             }
         }
+
+        if(obj.instanceOf(WebPage.sclass))
+        {
+            WebPage page=(WebPage)obj.createGenericInstance();
+            menus.put(getMenuItem(getLocaleString("preview",lang), getLocaleString("icon_preview",null), getAction("showPreviewURL",page.getUrl(),null)));
+        }
         
         if(menus.length()>0)
             menus.put(getMenuSeparator());
@@ -517,8 +523,9 @@
             }
         }
 
-        //menu remove
         menus.put(getMenuItem(getLocaleString("edit",lang), getLocaleString("icon_edit",null), getNewTabAction()));
+        menus.put(getMenuItem(getLocaleString("clone",lang), getLocaleString("icon_clone",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/clone.jsp?suri="+obj.getEncodedURI(),getLocaleString("clone",lang)+" "+cls.getDisplayName(lang))));
+        //menu remove
         if(!obj.instanceOf(Undeleteable.swb_Undeleteable) ||  (obj.instanceOf(Undeleteable.swb_Undeleteable) && obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false))
         {
             menus.put(getMenuItem(getLocaleString("delete",lang), getLocaleString("icon_delete",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),getLocaleString("delete",lang)+" "+cls.getDisplayName(lang))));
