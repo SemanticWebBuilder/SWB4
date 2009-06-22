@@ -730,9 +730,19 @@ public class SemanticClass
         return displayNameProperty;
     }
 
+    public boolean hasHerarquicalProperties()
+    {
+        return !herarquicalProps.isEmpty();
+    }
+
     public Iterator<SemanticProperty> listHerarquicalProperties()
     {
         return herarquicalProps.iterator();
+    }
+
+    public boolean hasInverseHerarquicalProperties()
+    {
+        return !inverseHerarquicalProps.isEmpty();
     }
 
     public Iterator<SemanticProperty> listInverseHerarquicalProperties()

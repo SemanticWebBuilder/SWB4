@@ -4,6 +4,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.rdf.model.impl.StatementImpl;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.Date;
@@ -2055,6 +2056,22 @@ public class SemanticObject
         return list.iterator();
     }
 
+    public boolean hasHerarquicalParents()
+    {
+        boolean ret=false;
+        Iterator<SemanticProperty> it=getSemanticClass().listInverseHerarquicalProperties();
+        while(it.hasNext())
+        {
+            SemanticProperty prop=it.next();
+            if(hasObjectProperty(prop))
+            {
+                ret=true;
+                break;
+            }
+        }
+        return ret;
+    }
+
     public Iterator<SemanticObject> listHerarquicalParents()
     {
         ArrayList<SemanticObject> list=new ArrayList();
@@ -2070,6 +2087,47 @@ public class SemanticObject
             }
         }
         return list.iterator();
+    }
+
+    @Override
+    public SemanticObject clone()
+    {
+        String id=null;
+        if(m_cls.isAutogenId())
+        {
+            id=""+m_model.getCounter(m_cls);
+        }else
+        {
+            int x=1;
+            do
+            {
+                x++;
+                id=getId()+x;
+            }while(createSemanticObject(id)!=null);
+        }
+        String uri=m_model.getObjectUri(id, m_cls);
+        Resource res=getModel().getRDFModel().createResource(uri);
+        //res.addProperty(m_model.getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE), m_cls.getOntClass());
+
+        Iterator<Statement> it=m_res.listProperties();
+        while(it.hasNext())
+        {
+            Statement st=it.next();
+            Property prop=st.getPredicate();
+            SemanticProperty sprop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(prop.getURI());
+            if(sprop==null || !sprop.isRemoveDependency())
+            {
+                Statement nst=new StatementImpl(res, prop, st.getObject());
+                m_model.getRDFModel().add(nst);
+            }else
+            {
+                System.out.println("Remove dependency prop:"+prop);
+            }
+        }
+
+        SemanticObject ret=SemanticObject.createSemanticObject(res);
+        SWBPlatform.getSemanticMgr().notifyChange(ret, null, "Clone");
+        return ret;
     }
     
     public SemanticObject getHerarquicalParent()
