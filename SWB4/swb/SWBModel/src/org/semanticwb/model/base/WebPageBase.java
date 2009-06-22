@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class WebPageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Undeleteable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Rankable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Calendarable,org.semanticwb.model.Viewable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Filterable,org.semanticwb.model.Hiddenable
+public class WebPageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Indexable,org.semanticwb.model.RoleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Referensable,org.semanticwb.model.Calendarable,org.semanticwb.model.Traceable,org.semanticwb.model.Resourceable,org.semanticwb.model.Viewable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Hiddenable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
@@ -350,7 +350,8 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public boolean hasChild(org.semanticwb.model.WebPage webpage)
     {
-        if(webpage==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasWebPageChild,webpage.getSemanticObject());
+        if(webpage==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasWebPageChild,webpage.getSemanticObject());
     }
 
     public org.semanticwb.model.WebPage getChild()

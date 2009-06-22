@@ -32,7 +32,7 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
     private static long time;               //tiempo en milisegundos por cada actualizacion
     private boolean viewed = false;
 
-    private Random rand=new Random();
+    private static Random rand=new Random();
 
     static
     {
@@ -96,7 +96,7 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
         else if (p > 5)
             return 60;
         else {
-            return rand.nextInt(10 * p) + 2;
+            return rand.nextInt(10 * p) + 1;
         }
     }
 
