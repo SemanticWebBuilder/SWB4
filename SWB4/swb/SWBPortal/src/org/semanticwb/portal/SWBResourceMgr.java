@@ -17,6 +17,8 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Device;
+import org.semanticwb.model.Language;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceSubType;
 import org.semanticwb.model.ResourceType;
@@ -186,7 +188,7 @@ public class SWBResourceMgr
             {
                 Resource base = res.getResourceBase();
                 //System.out.println("base:"+base);
-                if(user.haveAccess(base))
+                //if(user.haveAccess(base))
                 {
                     if(checkResource(base, user, 0, today, topic))
                     {
@@ -408,6 +410,18 @@ public class SWBResourceMgr
                 //&& (base.getCamp() == 0 || DBCatalogs.getInstance().getCamp(base.getTopicMapId(),base.getCamp()).getActive() == 1)
         )
         {
+            //validar lenguage del recurso
+            Language l=base.getLanguage();
+            if(l!=null && !l.getId().equals(user.getLanguage()))return false;
+
+            //validar dispositivo del recurso
+            Device d=base.getDevice();
+            if(d!=null)
+            {
+                Device ud=user.getDevice();
+                if(ud==null || !(d.equals(ud) || d.hasChild(ud)))return false;
+            }
+
             //Filter
             if(!base.evalFilterMap(topic)) return false;
 
