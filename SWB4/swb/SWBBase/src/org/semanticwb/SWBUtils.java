@@ -1004,6 +1004,27 @@ public class SWBUtils {
             return ret.toString();
         }
 
+        public static long getFileSize(String path)
+        {
+            return getFileSize(new File(path));
+        }
+
+        public static long getFileSize(File file)
+        {
+            long ret=0;
+            if(file.isFile())ret=file.length();
+            else if(file.isDirectory())
+            {
+                File files[]=file.listFiles();
+                for(int x=0;x<files.length;x++)
+                {
+                    File ch=files[x];
+                    ret+=getFileSize(ch);
+                }
+            }
+            return ret;
+        }
+
         /**
          * Crea un directorio con el nombre de ruta especificada
          * Creates a directory with specified path name
