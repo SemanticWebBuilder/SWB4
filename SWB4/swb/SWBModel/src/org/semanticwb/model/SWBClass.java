@@ -1,5 +1,7 @@
 package org.semanticwb.model;
 
+import java.util.Iterator;
+
 
 public class SWBClass extends org.semanticwb.model.base.SWBClassBase 
 {
@@ -23,6 +25,10 @@ public class SWBClass extends org.semanticwb.model.base.SWBClassBase
             //System.out.println("views:"+max+" "+val);
             if((max>0) && (val>=max))ret=false;
         }
+        if(ret && this instanceof Trashable)
+        {
+            if(((Trashable)this).isDeleted())ret=false;
+        }
         if(ret && this instanceof Hitable)
         {
             long val=((Hitable)this).getHits();
@@ -30,11 +36,19 @@ public class SWBClass extends org.semanticwb.model.base.SWBClassBase
             //System.out.println("hits:"+max+" "+val);
             if((max>0) && (val>=max))ret=false;
         }
-        if(ret && this instanceof Trashable)
+        if(ret && this instanceof Calendarable)
         {
-            if(((Trashable)this).isDeleted())ret=false;
+            Iterator<Calendar> it=((Calendarable)this).listCalendars();
+            while(it.hasNext())
+            {
+                Calendar cal=it.next();
+                if(cal.isActive() && !cal.isOnSchedule())
+                {
+                    ret=false;
+                    break;
+                }
+            }
         }
-        //TODO: calendarizacion
         return ret;
     }
 

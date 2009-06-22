@@ -1,17 +1,14 @@
 package org.semanticwb.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
-import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 
 public class WebPage extends WebPageBase 
@@ -19,6 +16,7 @@ public class WebPage extends WebPageBase
     private static Logger log=SWBUtils.getLogger(WebPage.class);
 
     private String siteid=null;
+    private String realurl=null;
 
     private long views=-1;
     private long timer;                     //valores de sincronizacion de views, hits
@@ -58,47 +56,52 @@ public class WebPage extends WebPageBase
      */
     public String getRealUrl()
     {
-        //String id=getSId();
-        String id=getId();
-        return SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor","swb") + "/" + getWebSiteId() + "/" + id;
+        if(realurl==null)
+        {
+            realurl=SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor","swb") + "/" + getWebSiteId() + "/" + getId();
+        }
+        return realurl;
     }    
     
-    /**  Regresa el Url del topico
-     *  Ejemplo: /wb2/jei/home
+    /**  
+     * Regresa el Url de la pagina
+     * Ejemplo: /swb/jei/home
      * @return String
      */
     public String getUrl()
     {
-//        if(this.getSubjectIdentity()!=null)
-//        {
-//            String url=this.getSubjectIdentity().getResourceRef();
-//            if(url!=null)
-//            {
-//                if(url.startsWith(WBVirtualHostMgr.PREF_FURL))
+        String url=getWebPageURL();
+        if(url!=null)
+        {
+            if(getWebPageURLType()==2)  //Friendly
+            {
+                url=SWBPlatform.getContextPath()+url;
+            }else if(getWebPageURLType()==1) //Redirect
+            {
+                if(url.startsWith("//"))
+                {
+                    url=url.substring(1);
+                }else
+                {
+                    url=SWBPlatform.getContextPath()+url;
+                }
+//                Iterator it=paths.keySet().iterator();
+//                while(it.hasNext())
 //                {
-//                    url=url.substring(WBVirtualHostMgr.PREF_FURL.length());
-//                    if(url.startsWith("/"))url=url.substring(1);
-//                    url=WBUtils.getInstance().getWebPath()+url;
-//                }else
-//                {
-//                    Iterator it=paths.keySet().iterator();
-//                    while(it.hasNext())
+//                    String key=(String)it.next();
+//                    int i=url.indexOf(key);
+//                    if(i>=0)
 //                    {
-//                        String key=(String)it.next();
-//                        int i=url.indexOf(key);
-//                        if(i>=0)
-//                        {
-//                            url=url.substring(0,i)+paths.get(key)+url.substring(i+key.length());
-//                        }
+//                        url=url.substring(0,i)+paths.get(key)+url.substring(i+key.length());
 //                    }
 //                }
-//                return url;
-//            }
-//        }
+            }
+            return url;
+        }
         return getRealUrl();
     }
     
-    /** Regresa un representacion en html de la ruta de navegacion el topico.
+    /** Regresa una representacion en html de la ruta de navegacion de la pagina.
      * @return String en formato html
      */
     public String getPath()
@@ -207,8 +210,9 @@ public class WebPage extends WebPageBase
         return isValid() && !isHidden();
     }
     
-    /**  Regresa el Url del topico
-     *  Ejemplo: /wb2/jei/home
+    /**
+     * Regresa el Url de la pagina
+     * Ejemplo: /swb/jei/home
      * @return String
      */
     public String getUrl(WebPage virtualtopic)
@@ -271,7 +275,7 @@ public class WebPage extends WebPageBase
     }
 
     /**
-     * Indica si lapagina tienen alguna regla, rol o grupo de usuarios asignado o heredado
+     * Indica si la pagina tienen alguna regla, rol o grupo de usuarios asignado o heredado
      * @return
      */
     public boolean isFiltered()
@@ -350,13 +354,36 @@ public class WebPage extends WebPageBase
         return ret.iterator();
     }
     */
-     
-    public Iterator<WebPage> listVisibleChilds(String sortLang)
+
+    public boolean isOnSchedule()
     {
-        return listChilds(sortLang, true, false, false, true);
+        boolean ret=true;
+        Iterator<Calendar> it=((Calendarable)this).listCalendars();
+        while(it.hasNext())
+        {
+            Calendar cal=it.next();
+            if(cal.isActive() && !cal.isOnSchedule())
+            {
+                ret=false;
+                break;
+            }
+        }
+        return ret;
     }
     
-    public Iterator<WebPage> listChilds(String sortLang, Boolean active, Boolean deleted, Boolean hidden, Boolean inSchedule)
+    public Iterator<WebPage> listVisibleChilds(String sortLang)
+    {
+        TreeSet set= new TreeSet(new SWBComparator(sortLang));
+        Iterator<WebPage> it = listChilds();
+        while (it.hasNext())
+        {
+            WebPage tp=it.next();
+            if(tp.isVisible())set.add(tp);
+        }
+        return set.iterator();
+    }
+    
+    public Iterator<WebPage> listChilds(String sortLang, Boolean active, Boolean deleted, Boolean hidden, Boolean onSchedule)
     {
         TreeSet set= new TreeSet(new SWBComparator(sortLang));
         //set.addAll(getChild());
@@ -367,22 +394,29 @@ public class WebPage extends WebPageBase
             if (active!=null && tp.isActive() != active) continue;
             if (deleted!=null && tp.isDeleted() != deleted) continue;
             if (hidden!=null && tp.isHidden() != hidden) continue;
-            //TODO:Schedule
-            //if (inSchedule!=null && tp.isInSchedule() == onSchedule) continue;
+            if (onSchedule!=null && tp.isOnSchedule() == onSchedule) continue;
             set.add(tp);
         }
         return set.iterator();        
     }
     
-    public void addHit(HttpServletRequest request, User user)
-    {
-        //TODO:
-    }
+//    public void addHit(HttpServletRequest request, User user)
+//    {
+//        //TODO:
+//    }
     
     @Override
     public long getDiskUsage()
     {
-        return 1000;
+        long ret=0;
+        Iterator<Resource> it=listResources();
+        while(it.hasNext())
+        {
+            Resource res=it.next();
+            String work=SWBPlatform.getWorkPath()+res.getWorkPath();
+            ret+=SWBUtils.IO.getFileSize(work);
+        }
+        return ret/1000;
     }
 
     @Override

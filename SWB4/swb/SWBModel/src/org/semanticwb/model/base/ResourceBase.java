@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLConfable,org.semanticwb.model.Campable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable,org.semanticwb.model.Sortable,org.semanticwb.model.Hitable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Calendarable,org.semanticwb.model.Viewable,org.semanticwb.model.Localeable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable
+public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Indexable,org.semanticwb.model.Campable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Sortable,org.semanticwb.model.Referensable,org.semanticwb.model.Calendarable,org.semanticwb.model.Traceable,org.semanticwb.model.Localeable,org.semanticwb.model.Viewable,org.semanticwb.model.Trashable,org.semanticwb.model.Priorityable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.XMLable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Deviceable,org.semanticwb.model.Hitable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
@@ -41,6 +41,8 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
     public static final org.semanticwb.platform.SemanticProperty swb_priority=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#priority");
     public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleRef");
+    public static final org.semanticwb.platform.SemanticClass swb_Device=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Device");
+    public static final org.semanticwb.platform.SemanticProperty swb_device=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#device");
     public static final org.semanticwb.platform.SemanticProperty swb_views=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#views");
     public static final org.semanticwb.platform.SemanticClass swb_Resourceable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resourceable");
     public static final org.semanticwb.platform.SemanticProperty swb_hasResourceable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasResourceable");
@@ -551,6 +553,27 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
          if(obj!=null)
          {
              ret=(org.semanticwb.model.RoleRef)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public void setDevice(org.semanticwb.model.Device device)
+    {
+        getSemanticObject().setObjectProperty(swb_device, device.getSemanticObject());
+    }
+
+    public void removeDevice()
+    {
+        getSemanticObject().removeProperty(swb_device);
+    }
+
+    public org.semanticwb.model.Device getDevice()
+    {
+         org.semanticwb.model.Device ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_device);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Device)obj.createGenericInstance();
          }
          return ret;
     }

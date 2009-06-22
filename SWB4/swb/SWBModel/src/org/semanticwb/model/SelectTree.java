@@ -15,7 +15,7 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
     {
         super(base);
     }
-
+/*
     private String addPage(WebPage page, String selected, String lang, String separator)
     {
         String ret="<option value=\""+page.getURI()+"\" ";
@@ -32,6 +32,24 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
         }
         return ret;
     }
+*/
+    private String addObject(SemanticObject obj, String selected, String lang, String separator)
+    {
+        String ret="<option value=\""+obj.getURI()+"\" ";
+        if(obj.getURI().equals(selected))ret+="selected";
+        ret+=">"+separator+obj.getDisplayName(lang)+"</option>";
+
+        if(separator.length()==0)separator=">";
+
+        Iterator<SemanticObject> it=obj.listHerarquicalChilds();
+        while(it.hasNext())
+        {
+            SemanticObject child=it.next();
+            ret+=addObject(child,selected,lang,"--"+separator);
+        }
+        return ret;
+    }
+    
 
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
@@ -120,20 +138,33 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
                     {
                         if(!obj.isVirtual())it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
                     }
+                    boolean hp=false;
+                    if(cls!=null)hp=cls.hasHerarquicalProperties();
+                    //System.out.println("cls:"+cls+" hp:"+hp+" "+cls.hasHerarquicalProperties()+" "+cls.hasInverseHerarquicalProperties());
                     while(it.hasNext())
                     {
                         SemanticObject sob=it.next();
-                        ret.append("<option value=\""+sob.getURI()+"\" ");
-                        if(sob.getURI().equals(uri))ret.append("selected");
-                        ret.append(">"+sob.getDisplayName(lang)+"</option>");
+                        if(hp)
+                        {
+                            if(!sob.hasHerarquicalParents())
+                            {
+                                ret.append(addObject(sob, uri, lang, ""));
+                            }
+                        }else
+                        {
+                            ret.append("<option value=\""+sob.getURI()+"\" ");
+                            if(sob.getURI().equals(uri))ret.append("selected");
+                            ret.append(">"+sob.getDisplayName(lang)+"</option>");
+                        }
                     }
-                }else
+                }
+                else
                 {
                     WebSite site=SWBContext.getWebSite(obj.getModel().getName());
                     if(site!=null)
                     {
                         WebPage home=site.getHomePage();
-                        ret.append(addPage(home, uri, lang, ""));
+                        ret.append(addObject(home.getSemanticObject(), uri, lang, ""));
                     }
                 }
                 ret.append("</select>");
