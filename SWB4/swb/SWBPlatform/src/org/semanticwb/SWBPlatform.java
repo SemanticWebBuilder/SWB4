@@ -349,16 +349,20 @@ public class SWBPlatform
         }           
     }
     
-    /** Getter for property workPath.
-     * @return Value of property workPath.
+    /**
+     * Regresa ruta del directorio de trabajo
+     * Ejemplo: /opt/swb/work
+     * @return String con la ruta del directorio de trabajo
      */
     public static String getWorkPath()
     {
         return workPath;
     }
     
-    /** Getter for property workPath.
-     * @return Value of property workPath.
+    /**
+     * Regresa ruta web del directorio work
+     * Ejemplo: /[context]/work
+     * @return String con la ruta web del directorio work
      */
     public static String getWebWorkPath()
     {
