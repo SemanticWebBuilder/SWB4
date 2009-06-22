@@ -316,6 +316,12 @@
           return ret;
       }
 
+      function showPreviewURL(url)
+      {
+          dojo.byId('swbPreviewFrame').src=url;
+          dijit.byId('tabs').selectChild(dijit.byId('swbPreviewTab'));
+      }
+
       function decodeExtendedCharacters(str)
       {
           var ret="";
@@ -513,6 +519,9 @@
           {
               if(confirm(action.target))
                   showStatusURL(action.value);
+          }else if(action.name=="showPreviewURL")
+          {
+              showPreviewURL(action.value);
           }else if(action.name=="getHtml")
           {
               //alert(action.value+" "+action.target);
