@@ -54,8 +54,8 @@ public class CreateUsrRepository extends GenericResource {
                 //Envia estatus a pantalla
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
-                 out.println("addItemByURI(mtreeStore, null, '" + newUsrRep.getURI() + "');");
-                out.println("showStatus('Repositorio de Usuarios Creado jorge');");
+                out.println("addItemByURI(mtreeStore, null, '" + newUsrRep.getURI() + "');");
+                out.println("showStatus('"+paramRequest.getLocaleLogString("repUsrCreated")+"');");
                 out.println("</script>");
              } else { //Forma de entrada(Datos iniciales)
                 url.setAction("step2");
