@@ -98,7 +98,10 @@ html, body, #main{
 .swbIconTrash,
 .swbIconAdd,
 .swbIconEdit,
-.swbIconDelete
+.swbIconDelete,
+.swbIconCalendars,
+.swbIconCalendar,
+.swbIconCalendarU
 {
 	background-repeat: no-repeat; 
 	width:20px;
@@ -159,6 +162,9 @@ html, body, #main{
 .swbIconDelete      { background-position: -103px -200px; }
 .swbIconAdd         { background-position: -242px -200px; }
 .swbIconEdit        { background-position: -3px -145px; }
+.swbIconCalendars   { background-position: -220px -0px; }
+.swbIconCalendar    { background-position: -220px -18px; }
+.swbIconCalendarU   { background-position: -220px -36px; }
 
 /*  48x48 */
 
