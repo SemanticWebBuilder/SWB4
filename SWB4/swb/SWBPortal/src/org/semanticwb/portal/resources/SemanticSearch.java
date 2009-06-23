@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
+import org.semanticwb.nlp.spell.SWBSpellChecker;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -635,15 +636,21 @@ public class SemanticSearch extends GenericAdmResource {
                 lang2 = paramRequest.getUser().getLanguage();
                 long time = System.currentTimeMillis();
                 lex = new Lexicon(lang2);
-                System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time));
+                System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
             }
         } else {
             if (!lang2.equals("es")) {
                 lang2 = "es";
                 long time = System.currentTimeMillis();
                 lex = new Lexicon(lang2);
-                System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time));
+                System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
             }
+        }
+
+        SWBSpellChecker speller = new SWBSpellChecker(lex.getObjDirectory(), "displayName");
+        
+        for (String f : speller.getSuggestions("pogina")) {
+            System.out.println("...." + f);
         }
 
         //Assert query string
@@ -689,9 +696,9 @@ public class SemanticSearch extends GenericAdmResource {
         tr = new SWBSparqlTranslator(lex, true);
         long time = System.currentTimeMillis();
         String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query);
-        System.out.println(">>>>>RemoveAccents: " + lex.removeAccents(query));
-        System.out.println(">>>>>SnowBallForm : " + lex.getSnowballLexForm(query));
-        System.out.println("+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time));
+       // System.out.println(">>>>>RemoveAccents: " + lex.removeAccents(query));
+       // System.out.println(">>>>>SnowBallForm : " + lex.getSnowballLexForm(query));
+        System.out.println("+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
         //System.out.println(sparqlQuery);
         String errCount = Integer.toString(tr.getErrCode());
         
@@ -745,7 +752,7 @@ public class SemanticSearch extends GenericAdmResource {
 
                             //Get dbPedia INFO
                             ResultSet dbrs = dbQexec.execSelect();
-                            System.out.println("+++Tiempo de consulta dbPedia: " + String.valueOf(System.currentTimeMillis() - time));
+                            System.out.println("+++Tiempo de consulta dbPedia: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
                             QuerySolution dbrb = dbrs.nextSolution();
                             RDFNode desc_node = dbrb.get("desc");
                             RDFNode lat_node = dbrb.get("lat");
@@ -779,13 +786,14 @@ public class SemanticSearch extends GenericAdmResource {
                         sbf.append("<br>" + paramRequest.getLocaleString("msgSearch") + ": " + query + ".<br>");
 
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
-                    Query squery = QueryFactory.create(sparqlQuery);
+                    SemanticModel mo = new SemanticModel("test", model);
+                    //Query squery = QueryFactory.create(sparqlQuery);
 //                    System.out.println("------------------------------");
 //                    System.out.println(sparqlQuery);
 //                    System.out.println("------------------------------");
 
-                    squery.serialize();
-                    QueryExecution qexec = QueryExecutionFactory.create(squery, model);
+                    //squery.serialize();
+                    QueryExecution qexec = mo.sparQLQuery(sparqlQuery);
                     time = System.currentTimeMillis();
 
                     try {
@@ -795,7 +803,7 @@ public class SemanticSearch extends GenericAdmResource {
                         ResultSet rs = qexec.execSelect();
                         sbf.append("  <thead>\n" +
                                    "    <tr>\n");
-
+                        System.out.println("+++Tiempo de consulta modelo local: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
                         if (rs.hasNext()) {
                             for (String icol : (List<String>) rs.getResultVars()) {
                                 sbf.append("      <th>" + icol + "</th>\n");
@@ -803,6 +811,7 @@ public class SemanticSearch extends GenericAdmResource {
                             sbf.append("    </tr>\n");
                             sbf.append("  </thead>\n");
                             sbf.append("  <tbody>\n");
+
 
                             boolean odd = true;
                             while (rs.hasNext()) {
