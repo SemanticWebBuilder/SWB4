@@ -92,7 +92,7 @@ public class MapFE extends WBContainerFE
     }
     
     private void setMapFEName(Object obj){
-       if(obj instanceof ParamAppletFE){
+       if(obj instanceof AreaMapFE){
            AreaMapFE objareafe=(AreaMapFE)obj;
            objareafe.setMapFEObj(this);
          }
