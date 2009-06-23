@@ -65,7 +65,7 @@ public class TestDBPedia2 {
         model.write(System.out);
     }
 
-    //@Test
+    @Test
     public void QueryDBPediaConstruct() {
        	String queryString =
             "PREFIX dbpedia:      <http://dbpedia.org/resource/> " +
@@ -79,7 +79,7 @@ public class TestDBPedia2 {
         model.write(System.out);
     }
 
-    @Test
+    //@Test
     public void QueryDBPediaDescribe() {
        	String queryString =
             "PREFIX dbpedia:      <http://dbpedia.org/resource/> " +

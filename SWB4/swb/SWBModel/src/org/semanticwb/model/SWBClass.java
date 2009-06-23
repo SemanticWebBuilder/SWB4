@@ -18,16 +18,16 @@ public class SWBClass extends org.semanticwb.model.base.SWBClassBase
         {
             if(!((Activeable)this).isActive())ret=false;
         }
+        if(ret && this instanceof Trashable)
+        {
+            if(((Trashable)this).isDeleted())ret=false;
+        }
         if(ret && this instanceof Viewable)
         {
             long val=((Viewable)this).getViews();
             long max=((Viewable)this).getMaxViews();
             //System.out.println("views:"+max+" "+val);
             if((max>0) && (val>=max))ret=false;
-        }
-        if(ret && this instanceof Trashable)
-        {
-            if(((Trashable)this).isDeleted())ret=false;
         }
         if(ret && this instanceof Hitable)
         {
@@ -36,6 +36,35 @@ public class SWBClass extends org.semanticwb.model.base.SWBClassBase
             //System.out.println("hits:"+max+" "+val);
             if((max>0) && (val>=max))ret=false;
         }
+        if(ret && this instanceof Expirable)
+        {
+            java.util.Date date=((Expirable)this).getExpiration();
+            if(date!=null)
+            {
+                if(System.currentTimeMillis()>date.getTime())ret=false;
+            }
+        }
+        if(ret && this instanceof CalendarRefable)
+        {
+            Iterator<CalendarRef> it=((CalendarRefable)this).listCalendarRefs();
+            while(it.hasNext())
+            {
+                CalendarRef calref=it.next();
+                if(calref.isActive())
+                {
+                    Calendar cal=calref.getCalendar();
+                    if(cal!=null && cal.isActive())
+                    {
+                        if(!cal.isOnSchedule())
+                        {
+                            ret=false;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+/*
         if(ret && this instanceof Calendarable)
         {
             Iterator<Calendar> it=((Calendarable)this).listCalendars();
@@ -49,6 +78,7 @@ public class SWBClass extends org.semanticwb.model.base.SWBClassBase
                 }
             }
         }
+ */
         return ret;
     }
 

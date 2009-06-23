@@ -2,6 +2,7 @@ package org.semanticwb.model;
 
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import java.util.Date;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -99,6 +100,15 @@ public class SWBContext extends SWBContextBase
                     if(!obj.getBooleanProperty(Activeable.swb_active))
                     {
                         ret+="U";
+                        return ret;
+                    }
+                    //System.out.println("getIconClass:2");
+                }
+                if(cls.hasProperty(SWBClass.swb_valid.getName()))
+                {
+                    if(!obj.getBooleanProperty(SWBClass.swb_valid))
+                    {
+                        ret+="W";
                         return ret;
                     }
                     //System.out.println("getIconClass:2");

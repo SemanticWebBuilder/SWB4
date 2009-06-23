@@ -5,6 +5,8 @@
 
 package org.semanticwb.model.base;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -63,7 +65,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
                 {
                     if(value.length()>0 && !value.equals(old))
                     {
-//                        System.out.println("old:"+old+" value:"+value);
+                        //System.out.println("old:"+old+" value:"+value);
 //                        for(int x=0;x<value.length();x++)
 //                        {
 //                            System.out.print((int)value.charAt(x)+" ");
@@ -72,6 +74,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
                         if(prop.isDouble())obj.setDoubleProperty(prop, Double.parseDouble(value));
                         if(prop.isInt() || prop.isShort() || prop.isByte())obj.setIntProperty(prop, Integer.parseInt(value));
                         if(prop.isLong())obj.setLongProperty(prop, Long.parseLong(value));
+                        if(prop.isDate())obj.setDateProperty(prop, new java.util.Date(value));
                         if(prop.isString())obj.setProperty(prop, value);
                     }else if(value.length()==0 && old!=null)
                     {
