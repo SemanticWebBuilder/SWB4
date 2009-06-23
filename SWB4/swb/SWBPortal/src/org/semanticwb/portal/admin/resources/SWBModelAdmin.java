@@ -129,7 +129,7 @@ public class SWBModelAdmin extends GenericResource {
             out.println("</fieldset>");
             out.println("</div>");
 
-            out.println("<div class=\"swbform\" id=\"vsites\" dojoType=\"dijit.TitlePane\" title=\""+paramRequest.getLocaleLogString("docRep")+"\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
+            out.println("<div class=\"swbform\" id=\"vsites\" dojoType=\"dijit.TitlePane\" title=\""+paramRequest.getLocaleLogString("sites2Save")+"\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
             out.println("<fieldset>");
             out.println("<legend>" + paramRequest.getLocaleLogString("existTpls") + "</legend>");
             out.println("<div class=\"swbform\">");
@@ -333,9 +333,9 @@ public class SWBModelAdmin extends GenericResource {
 
                 //-------------Generación de archivo rdf del sitio especificado----------------
                 try {
-                    File file = new File(zipdirectory + site.getId() + ".rdf");
+                    File file = new File(zipdirectory + site.getId() + ".nt");
                     FileOutputStream out = new FileOutputStream(file);
-                    site.getSemanticObject().getModel().write(out,"N3");
+                    site.getSemanticObject().getModel().write(out,"N-TRIPLE");
                     out.flush();
                     out.close();
                 } catch (Exception e) {
@@ -356,9 +356,9 @@ public class SWBModelAdmin extends GenericResource {
                     Iterator<SemanticObject> sitSubModels = site.getSemanticObject().listObjectProperties(site.swb_hasSubModel);
                     while (sitSubModels.hasNext()) {
                         SemanticObject sObj = sitSubModels.next();
-                        File fileSubModel = new File(zipdirectory + "/" + sObj.getId() + ".rdf");
+                        File fileSubModel = new File(zipdirectory + "/" + sObj.getId() + ".nt");
                         FileOutputStream rdfout = new FileOutputStream(fileSubModel);
-                        sObj.getModel().write(rdfout);
+                        sObj.getModel().write(rdfout,"N-TRIPLE");
                         rdfout.flush();
                         rdfout.close();
                         //Agregar c/archivo .rdf de submodelos a arreglo de archivos
@@ -387,7 +387,7 @@ public class SWBModelAdmin extends GenericResource {
 
 
                 //--------------Agregar archivo rdf y xml generados a arraylist---------------------
-                aFiles.add(new File(zipdirectory + site.getId() + ".rdf"));
+                aFiles.add(new File(zipdirectory + site.getId() + ".nt"));
                 aFiles.add(new File(zipdirectory + "siteInfo.xml"));
                 //--------------Barrer archivos de arrayList para pasar a arreglo de Files y eliminar---
                 File[] files2add = new File[aFiles.size()];
@@ -406,7 +406,7 @@ public class SWBModelAdmin extends GenericResource {
                     filetmp.delete();
                 }
 
-                new File(zipdirectory + site.getId() + ".rdf").delete();
+                new File(zipdirectory + site.getId() + ".nt").delete();
                 new File(zipdirectory + "siteInfo.xml").delete();
 
 
@@ -419,36 +419,6 @@ public class SWBModelAdmin extends GenericResource {
                 e.printStackTrace();
                 log.debug(e);
             }
-        }else if(response.getAction().equals("saveUsrRep")){
-                String uri = request.getParameter("usrRepid");
-                UserRepository usrRep = SWBContext.getUserRepository(uri);
-                String path = SWBPlatform.getWorkPath() + "/";
-                String zipdirectory = path + "sitetemplates/";
-            //-------------Generación de archivo rdf del repositorio especificado----------------
-                try {
-                    File file = new File(zipdirectory + usrRep.getId() + ".rdf");
-                    FileOutputStream out = new FileOutputStream(file);
-                    usrRep.getSemanticObject().getModel().write(out);
-                    out.flush();
-                    out.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-        }else if(response.getAction().equals("saveDocRep")){
-                String uri = request.getParameter("docRepid");
-                Workspace workspace = SWBContext.getWorkspace(uri);
-                String path = SWBPlatform.getWorkPath() + "/";
-                String zipdirectory = path + "sitetemplates/";
-            //-------------Generación de archivo rdf del repositorio especificado----------------
-                try {
-                    File file = new File(zipdirectory + workspace.getId() + ".rdf");
-                    FileOutputStream out = new FileOutputStream(file);
-                    workspace.getSemanticObject().getModel().write(out);
-                    out.flush();
-                    out.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
         }else if (response.getAction().equals("install")) {
             String siteInfo = SWBUtils.IO.readFileFromZip(request.getParameter("zipName"), "siteInfo.xml");
             String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
@@ -516,25 +486,30 @@ public class SWBModelAdmin extends GenericResource {
                 }
                 //Parseo de nombre de NameSpace anteriores por nuevos
                 String newNs = "http://www." + newId + ".swb#";
-                File fileModel = new File(MODELS + newId + "/" + oldIDModel + ".rdf");
+                File fileModel = new File(MODELS + newId + "/" + oldIDModel + ".nt");
                 FileInputStream frdfio = new FileInputStream(fileModel);
                 String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
                 fileModel.delete();
 
                 rdfcontent = rdfcontent.replaceAll(oldNamespace, newNs); //Reempplazar namespace anterior x nuevo
+                rdfcontent = rdfcontent.replaceAll(newNs+oldIDModel, newNs+newId); //Reempplazar namespace y id anterior x nuevos
+
+                File filetmp = new File(ZIPDIRECTORY + "tmp.xml");
+                FileOutputStream out = new FileOutputStream(filetmp);
+               out.write(rdfcontent.getBytes());
 
                 //Reemplaza ids de repositorios de usuarios y documentos x nuevos
-                rdfcontent = rdfcontent.replaceAll(oldIDModel + "_usr", newId + "_usr");
-                rdfcontent = rdfcontent.replaceAll("http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
-                rdfcontent = rdfcontent.replaceAll(oldIDModel + "_rep", newId + "_rep");
-                rdfcontent = rdfcontent.replaceAll("http://rep." + oldIDModel + ".swb#", "http://rep." + newId + ".swb#");
+                //rdfcontent = rdfcontent.replaceAll(oldIDModel + "_usr", newId + "_usr");
+                //rdfcontent = rdfcontent.replaceAll("http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
+                //rdfcontent = rdfcontent.replaceAll(oldIDModel + "_rep", newId + "_rep");
+                //rdfcontent = rdfcontent.replaceAll("http://rep." + oldIDModel + ".swb#", "http://rep." + newId + ".swb#");
 
                 //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
-                rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
+                //rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
 
                 //Mediante inputStream creado generar sitio
                 InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
-                SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newId, newNs, io);
+                SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newId, newNs, io, "N-TRIPLE");
                 WebSite website = SWBContext.getWebSite(model.getName());
                 website.setTitle(newTitle);
                 website.setDescription(oldDescription);
@@ -560,7 +535,7 @@ public class SWBModelAdmin extends GenericResource {
                         }
                     }
                     //Buscar rdf del submodelo
-                    fileModel = new File(MODELS + newId + "/" + xmodelID + ".rdf");
+                    fileModel = new File(MODELS + newId + "/" + xmodelID + ".nt");
                     if (fileModel != null && fileModel.exists()) {
                         frdfio = new FileInputStream(fileModel);
                         String rdfmodel = SWBUtils.IO.readInputStream(frdfio);
@@ -570,7 +545,7 @@ public class SWBModelAdmin extends GenericResource {
                                 xmodelID = xmodelID.substring(0, pos);
                                 rdfmodel = rdfmodel.replaceAll(xmodelID, newId);
                                 io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io);
+                                SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
                             }
                         }if (key.endsWith("_rep")) { //Para los submodelos de dosumentos
                             //TODO
