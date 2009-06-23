@@ -647,11 +647,11 @@ public class SemanticSearch extends GenericAdmResource {
             }
         }
 
-        SWBSpellChecker speller = new SWBSpellChecker(lex.getObjDirectory(), "displayName");
+       // SWBSpellChecker speller = new SWBSpellChecker(lex.getObjDirectory(), "displayName");
         
-        for (String f : speller.getSuggestions("pogina")) {
+        /*for (String f : speller.getSuggestions("pogina")) {
             System.out.println("...." + f);
-        }
+        }*/
 
         //Assert query string
         if (query == null) {
@@ -696,9 +696,7 @@ public class SemanticSearch extends GenericAdmResource {
         tr = new SWBSparqlTranslator(lex, true);
         long time = System.currentTimeMillis();
         String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query);
-       // System.out.println(">>>>>RemoveAccents: " + lex.removeAccents(query));
-       // System.out.println(">>>>>SnowBallForm : " + lex.getSnowballLexForm(query));
-        System.out.println("+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
+        System.out.println("\n+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
         //System.out.println(sparqlQuery);
         String errCount = Integer.toString(tr.getErrCode());
         
@@ -730,7 +728,7 @@ public class SemanticSearch extends GenericAdmResource {
                 }
 
                 try {
-                        System.out.println("Obteniendo información de la dbpedia");
+                       // System.out.println("Obteniendo información de la dbpedia");
                         time = System.currentTimeMillis();
                         if (!dbName.equals("")) {
                             String dbPediaQuery =
@@ -752,7 +750,7 @@ public class SemanticSearch extends GenericAdmResource {
 
                             //Get dbPedia INFO
                             ResultSet dbrs = dbQexec.execSelect();
-                            System.out.println("+++Tiempo de consulta dbPedia: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
+                            
                             QuerySolution dbrb = dbrs.nextSolution();
                             RDFNode desc_node = dbrb.get("desc");
                             RDFNode lat_node = dbrb.get("lat");
@@ -784,8 +782,8 @@ public class SemanticSearch extends GenericAdmResource {
                                     "<hr><br>");
                         }
                         sbf.append("<br>" + paramRequest.getLocaleString("msgSearch") + ": " + query + ".<br>");
-
-                    Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+                    System.out.println("+++Tiempo de consulta dbPedia: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
+                    Model model = SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel();
                     SemanticModel mo = new SemanticModel("test", model);
                     //Query squery = QueryFactory.create(sparqlQuery);
 //                    System.out.println("------------------------------");
@@ -794,16 +792,15 @@ public class SemanticSearch extends GenericAdmResource {
 
                     //squery.serialize();
                     QueryExecution qexec = mo.sparQLQuery(sparqlQuery);
-                    time = System.currentTimeMillis();
 
                     try {
+                        time = System.currentTimeMillis();
                         int hitsCount = 0;
                         sbf.append("<div>\n" +
                                    "  <table cellspacing=7>\n");
                         ResultSet rs = qexec.execSelect();
                         sbf.append("  <thead>\n" +
-                                   "    <tr>\n");
-                        System.out.println("+++Tiempo de consulta modelo local: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
+                                   "    <tr>\n");                        
                         if (rs.hasNext()) {
                             for (String icol : (List<String>) rs.getResultVars()) {
                                 sbf.append("      <th>" + icol + "</th>\n");
@@ -817,13 +814,11 @@ public class SemanticSearch extends GenericAdmResource {
                             while (rs.hasNext()) {
                                 odd = !odd;
                                 QuerySolution rb = rs.nextSolution();
-
                                 if (odd) {
                                     sbf.append("    <tr bgcolor=\"#EFEDEC\">\n");
                                 } else {
                                     sbf.append("    <tr>\n");
                                 }
-
                                 //Iterator<String> it = rs.getResultVars().iterator();
                                 for (String name : (List<String>) rs.getResultVars()) {
                                     hitsCount++;
@@ -891,6 +886,7 @@ public class SemanticSearch extends GenericAdmResource {
                         sbf.append("  </tbody>\n");
                         sbf.append("</table>\n");
                         sbf.append("<p aling=\"center\">\n" + hitsCount + " coincidencias en " + paramRequest.getLocaleString("exectime") + ": " + (System.currentTimeMillis() - time) + "ms." + "</p>\n");
+                        System.out.println("+++Tiempo de consulta modelo local: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
                     } finally {
                         qexec.close();
                     }
@@ -898,7 +894,7 @@ public class SemanticSearch extends GenericAdmResource {
                     if (tr.getErrCode() != 0) {
                         sbf.append("<script language=\"javascript\" type=\"text/javascript\">alert('" + paramRequest.getLocaleString("failmsg") + "');</script>");
                     }
-                }
+                }                
             } else {
                 sbf.append("<script language=\"javascript\" type=\"text/javascript\">");
                 sbf.append("alert(\"" + tr.getErrors().replace("\n", "\\n") + "\");");
