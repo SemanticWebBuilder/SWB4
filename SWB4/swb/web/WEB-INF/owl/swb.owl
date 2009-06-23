@@ -234,6 +234,9 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Activeable"/>
     </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Expirable"/>
+    </rdfs:subClassOf>
     <rdfs:label xml:lang="en">User</rdfs:label>
     <rdfs:subClassOf rdf:resource="#UserGroupable"/>
     <rdfs:label xml:lang="es">Usuario</rdfs:label>
@@ -241,6 +244,9 @@
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdf:type rdf:resource="#Class"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="CalendarRefable"/>
+    </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#PropertyGroup">
     <rdfs:subClassOf rdf:resource="#Sortable"/>
@@ -271,7 +277,7 @@
     <rdfs:subClassOf rdf:resource="#Undeleteable"/>
     <rdfs:subClassOf rdf:resource="#Trashable"/>
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="CalendarRefable"/>
+      <owl:Class rdf:about="#CalendarRefable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#PFlowRefable"/>
     <rdfs:subClassOf>
@@ -323,7 +329,7 @@
       </swb:Interface>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="Expirable"/>
+      <owl:Class rdf:about="#Expirable"/>
     </rdfs:subClassOf>
     <rdfs:label xml:lang="en">Web Page</rdfs:label>
     <rdfs:label xml:lang="es">Página Web</rdfs:label>
