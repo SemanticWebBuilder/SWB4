@@ -15,10 +15,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -375,9 +372,7 @@ public class SWBADBNatural extends GenericResource {
                 try {
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
                     SemanticModel mod = new SemanticModel("local", model);
-                    //Query squery = QueryFactory.create(sparqlQuery);
-                    //squery.serialize();
-                    QueryExecution qexec = mod.sparQLQuery(sparqlQuery);//QueryExecutionFactory.create(squery, model);
+                    QueryExecution qexec = mod.sparQLQuery(sparqlQuery);
                     long time = System.currentTimeMillis();
 
                     try {
