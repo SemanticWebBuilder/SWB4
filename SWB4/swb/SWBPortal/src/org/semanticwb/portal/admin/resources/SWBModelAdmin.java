@@ -494,10 +494,6 @@ public class SWBModelAdmin extends GenericResource {
                 rdfcontent = rdfcontent.replaceAll(oldNamespace, newNs); //Reempplazar namespace anterior x nuevo
                 rdfcontent = rdfcontent.replaceAll(newNs+oldIDModel, newNs+newId); //Reempplazar namespace y id anterior x nuevos
 
-                File filetmp = new File(ZIPDIRECTORY + "tmp.xml");
-                FileOutputStream out = new FileOutputStream(filetmp);
-               out.write(rdfcontent.getBytes());
-
                 //Reemplaza ids de repositorios de usuarios y documentos x nuevos
                 //rdfcontent = rdfcontent.replaceAll(oldIDModel + "_usr", newId + "_usr");
                 //rdfcontent = rdfcontent.replaceAll("http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
