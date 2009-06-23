@@ -32,7 +32,6 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -208,40 +207,6 @@ public class SWBUsrRep extends GenericResource {
         } catch (Exception e) {
             log.debug(e);
         }
-    }
-
-    private String parseRdfContent(String rdfcontent, String oldName, String newName, String oldID, String newID, String newNS) {
-        Document dom = null;
-        try {
-            dom = SWBUtils.XML.xmlToDom(rdfcontent);
-            NodeList nodeList = dom.getElementsByTagName("rdf:Description");
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node nodeDescr = nodeList.item(i);
-                NamedNodeMap nodeMap = nodeDescr.getAttributes();
-                for (int j = 0; j < nodeMap.getLength(); j++) {
-                    String nvalue = nodeMap.item(j).getNodeValue();
-                    if (nvalue != null && nvalue.equalsIgnoreCase(newNS + oldID)) {
-                        nodeMap.item(j).setNodeValue(newNS + newID); //ver como tengo que poner el newName, si debe ser con minusculas
-                        NodeList nlist = nodeDescr.getChildNodes();
-                        for (int k = 0; k < nlist.getLength(); k++) {
-                            if (nlist.item(k).getNodeName().endsWith("title")) {
-                                nlist.item(k).getFirstChild().setNodeValue(newName);
-                            }
-                        }
-                    }
-                }
-                NodeList nlist = nodeDescr.getChildNodes();
-                for (int k = 0; k < nlist.getLength(); k++) {
-                    Node node = nlist.item(k);
-                    if (node.getPrefix() != null && node.getPrefix().equals(oldID)) {
-                        node.setPrefix(newID);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return SWBUtils.TEXT.replaceFirstIgnoreCase(SWBUtils.XML.domToXml(dom), "xmlns:" + oldID, "xmlns:" + newID);
     }
 
     /**
