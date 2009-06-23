@@ -335,7 +335,7 @@ public class SWBModelAdmin extends GenericResource {
                 try {
                     File file = new File(zipdirectory + site.getId() + ".rdf");
                     FileOutputStream out = new FileOutputStream(file);
-                    site.getSemanticObject().getModel().write(out);
+                    site.getSemanticObject().getModel().write(out,"N3");
                     out.flush();
                     out.close();
                 } catch (Exception e) {
