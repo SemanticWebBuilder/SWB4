@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +24,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.WebSite;
+import org.semanticwb.model.UserRepository;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -95,7 +96,7 @@ public class SWBDocRep extends GenericResource {
             for (int i = 0; i < files.length; i++) {
                 File filex = files[i];
                 String fileName = filex.getName();
-                if (filex.isFile() && fileName.endsWith("_rep.rdf")) {
+                if (filex.isFile() && fileName.endsWith("_rep.zip")) {
                     int pos = fileName.lastIndexOf(".");
                     if (pos > -1) {
                         fileName = fileName.substring(0, pos);
@@ -305,20 +306,92 @@ public class SWBDocRep extends GenericResource {
             File fichero = new File(request.getParameter("zipName"));
             fichero.delete();
         }else if(response.getAction().equals("saveDocRep")){
-                String uri = request.getParameter("docRepid");
-                Workspace workspace = SWBContext.getWorkspace(uri);
-                String path = SWBPlatform.getWorkPath() + "/";
-                String zipdirectory = path + "sitetemplates/";
-            //-------------Generación de archivo rdf del repositorio especificado----------------
                 try {
-                    File file = new File(zipdirectory + workspace.getId() + ".rdf");
+                String uri = request.getParameter("docRepid");
+                Workspace site = SWBContext.getWorkspace(uri);
+                String path = SWBPlatform.getWorkPath() + "/";
+                String modelspath = path + "models/";
+                String zipdirectory = path + "sitetemplates/";
+                String zipFile = zipdirectory + site.getId() + ".zip";
+                //---------Generación de archivo zip de carpeta work de sitio especificado-------------
+                java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(new FileOutputStream(zipFile));
+                //java.io.File directory = new File(modelspath + site.getId() + "/");
+                //java.io.File base = new File(modelspath);
+                //org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
+                //Graba archivo cualquiera
+                zos.setComment("Model File SemanticWebBuilderOS");
+                try {
+                    ZipEntry entry = new ZipEntry("readme.txt");
+                    zos.putNextEntry(entry);
+                    zos.write("Model File SemanticWebBuilderOS".getBytes());
+                    zos.closeEntry();
+                } catch (Exception e) {
+                }
+
+                //-------------Generación de archivo rdf del sitio especificado----------------
+                try {
+                    File file = new File(zipdirectory + site.getId() + ".nt");
                     FileOutputStream out = new FileOutputStream(file);
-                    workspace.getSemanticObject().getModel().write(out);
+                    site.getSemanticObject().getModel().write(out,"N-TRIPLE");
                     out.flush();
                     out.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                //----------Generación de archivo siteInfo.xml del sitio especificado-----------
+                ArrayList aFiles = new ArrayList();
+                File file = new File(zipdirectory + "siteInfo.xml");
+                FileOutputStream out = new FileOutputStream(file);
+                StringBuffer strbr = new StringBuffer();
+                try {
+                    strbr.append("<model>\n");
+                    strbr.append("<id>" + site.getId() + "</id>\n");
+                    strbr.append("<namespace>" + site.getSemanticObject().getModel().getNameSpace() + "</namespace>\n");
+                    strbr.append("<title>" + site.getTitle() + "</title>\n");
+                    strbr.append("<description>" + site.getDescription() + "</description>\n");
+                    strbr.append("</model>");
+                    out.write(strbr.toString().getBytes("utf-8"));
+                    out.flush();
+                    out.close();
+                } catch (Exception e) {
+                    log.debug(e);
+                }
+                zos.close();
+
+
+                //--------------Agregar archivo rdf y xml generados a arraylist---------------------
+                aFiles.add(new File(zipdirectory + site.getId() + ".nt"));
+                aFiles.add(new File(zipdirectory + "siteInfo.xml"));
+                //--------------Barrer archivos de arrayList para pasar a arreglo de Files y eliminar---
+                File[] files2add = new File[aFiles.size()];
+                int cont = 0;
+                Iterator<File> itFiles = aFiles.iterator();
+                while (itFiles.hasNext()) {
+                    File filetmp = itFiles.next();
+                    files2add[cont] = filetmp;
+                    cont++;
+                }
+                //Agregar archivos rfd de modelo y submodelos y archivo siteInfo.xml a zip existente
+                org.semanticwb.SWBUtils.IO.addFilesToExistingZip(new File(zipFile), files2add);
+                itFiles = aFiles.iterator();
+                while (itFiles.hasNext()) {
+                    File filetmp = itFiles.next();
+                    filetmp.delete();
+                }
+
+                new File(zipdirectory + site.getId() + ".nt").delete();
+                new File(zipdirectory + "siteInfo.xml").delete();
+
+
+                //Envia mensage de estatus en admin de wb
+                response.setMode(response.Mode_VIEW);
+                response.setRenderParameter("msgKey", "siteExported");
+                response.setRenderParameter("wsUri", uri);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.debug(e);
+            }
         }else if (response.getAction().equals("install")) {
             String siteInfo = SWBUtils.IO.readFileFromZip(request.getParameter("zipName"), "siteInfo.xml");
             String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
@@ -386,26 +459,27 @@ public class SWBDocRep extends GenericResource {
                 }
                 //Parseo de nombre de NameSpace anteriores por nuevos
                 String newNs = "http://www." + newId + ".swb#";
-                File fileModel = new File(MODELS + newId + "/" + oldIDModel + ".rdf");
+                File fileModel = new File(MODELS + newId + "/" + oldIDModel + ".nt");
                 FileInputStream frdfio = new FileInputStream(fileModel);
                 String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
                 fileModel.delete();
 
                 rdfcontent = rdfcontent.replaceAll(oldNamespace, newNs); //Reempplazar namespace anterior x nuevo
+                rdfcontent = rdfcontent.replaceAll(newNs+oldIDModel, newNs+newId); //Reempplazar namespace y id anterior x nuevos
 
                 //Reemplaza ids de repositorios de usuarios y documentos x nuevos
-                rdfcontent = rdfcontent.replaceAll(oldIDModel + "_usr", newId + "_usr");
-                rdfcontent = rdfcontent.replaceAll("http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
-                rdfcontent = rdfcontent.replaceAll(oldIDModel + "_rep", newId + "_rep");
-                rdfcontent = rdfcontent.replaceAll("http://rep." + oldIDModel + ".swb#", "http://rep." + newId + ".swb#");
+//                rdfcontent = rdfcontent.replaceAll(oldIDModel + "_usr", newId + "_usr");
+//                rdfcontent = rdfcontent.replaceAll("http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
+//                rdfcontent = rdfcontent.replaceAll(oldIDModel + "_rep", newId + "_rep");
+//                rdfcontent = rdfcontent.replaceAll("http://rep." + oldIDModel + ".swb#", "http://rep." + newId + ".swb#");
 
                 //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
-                rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
+                //rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
 
-                //Mediante inputStream creado generar sitio
+                //Mediante inputStream creado generar repositorio de usuarios
                 InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
-                SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newId, newNs, io);
-                WebSite website = SWBContext.getWebSite(model.getName());
+                SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newId, newNs, io, "N-TRIPLE");
+                Workspace website = SWBContext.getWorkspace(model.getName());
                 website.setTitle(newTitle);
                 website.setDescription(oldDescription);
                 String xmodelID = null, xmodelNS = null, xmodelTitle = null, xmodelDescr = null;
@@ -430,7 +504,7 @@ public class SWBDocRep extends GenericResource {
                         }
                     }
                     //Buscar rdf del submodelo
-                    fileModel = new File(MODELS + newId + "/" + xmodelID + ".rdf");
+                    fileModel = new File(MODELS + newId + "/" + xmodelID + ".nt");
                     if (fileModel != null && fileModel.exists()) {
                         frdfio = new FileInputStream(fileModel);
                         String rdfmodel = SWBUtils.IO.readInputStream(frdfio);
