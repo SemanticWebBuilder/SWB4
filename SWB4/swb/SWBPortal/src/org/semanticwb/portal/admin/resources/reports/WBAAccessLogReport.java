@@ -135,7 +135,7 @@ public class WBAAccessLogReport extends GenericResource {
     }
 
     public void doRenderLanguageSelect(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html;charset=iso-8859-1");
+        response.setContentType("text/html; charset=utf-8");
 
         PrintWriter out = response.getWriter();
 
@@ -155,7 +155,7 @@ public class WBAAccessLogReport extends GenericResource {
     }
 
     public void doRenderUserTypeSelect(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html;charset=iso-8859-1");
+        response.setContentType("text/html; charset=utf-8");
 
         PrintWriter out = response.getWriter();
 
@@ -196,7 +196,7 @@ public class WBAAccessLogReport extends GenericResource {
         out.flush();
         out.close();*/
 
-        response.setContentType("text/json;charset=iso-8859-1");
+        response.setContentType("text/json; charset=iso-8859-1");
         JSONObject jobj = new JSONObject();
         JSONArray jarr = new JSONArray();
         try {
