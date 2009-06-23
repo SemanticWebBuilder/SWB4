@@ -30,6 +30,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.nlp.Lexicon;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -373,9 +374,10 @@ public class SWBADBNatural extends GenericResource {
 
                 try {
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
-                    Query squery = QueryFactory.create(sparqlQuery);
-                    squery.serialize();
-                    QueryExecution qexec = QueryExecutionFactory.create(squery, model);
+                    SemanticModel mod = new SemanticModel("local", model);
+                    //Query squery = QueryFactory.create(sparqlQuery);
+                    //squery.serialize();
+                    QueryExecution qexec = mod.sparQLQuery(sparqlQuery);//QueryExecutionFactory.create(squery, model);
                     long time = System.currentTimeMillis();
 
                     try {
