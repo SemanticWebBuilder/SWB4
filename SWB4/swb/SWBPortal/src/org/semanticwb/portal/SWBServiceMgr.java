@@ -100,7 +100,7 @@ public class SWBServiceMgr implements SemanticObserver {
                                         "   <TOPIC METHOD=\"getDisplayName\" LANGUAGE=\"{user@getLanguage}\"/>\n" +
                                         "</title>\n" +
 
-                                        "\n\n<!--\n" +
+                                        "\n<!--\n" +
                                         "Nota: No olvides incluir estos scripts en tus plantillas hechas por fuera\n" +
                                         "***************************************************************************\n" +
                                         "***************************************************************************\n" +
