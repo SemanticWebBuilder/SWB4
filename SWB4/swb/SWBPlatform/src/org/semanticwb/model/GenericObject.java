@@ -5,6 +5,7 @@
 
 package org.semanticwb.model;
 
+import java.util.HashMap;
 import org.semanticwb.platform.SemanticObject;
 
 /**
@@ -13,10 +14,22 @@ import org.semanticwb.platform.SemanticObject;
  */
 public interface GenericObject 
 {
+    /**
+     * Regresa uri del objeto
+     * @return
+     */
     public String getURI();
-    
+
+    /**
+     * Regresa Identificador del objeto
+     * @return
+     */
     public String getId();
-    
+
+    /**
+     * Segresa el objeto semantico que contiene la informacion delobjeto
+     * @return
+     */
     public SemanticObject getSemanticObject();    
     
     /**
@@ -26,7 +39,12 @@ public interface GenericObject
      * @return SemanticObject para cascada
      */
     public GenericObject setProperty(String prop, String value);
-    
+
+    /**
+     * Elimina una propiedad del objeto
+     * @param prop
+     * @return
+     */
     public GenericObject removeProperty(String prop);
 
     /**
@@ -42,4 +60,5 @@ public interface GenericObject
      * Se invoca cuando la instancia del objeto es eliminado de cache
      */
     public void dispose();
+
 }
