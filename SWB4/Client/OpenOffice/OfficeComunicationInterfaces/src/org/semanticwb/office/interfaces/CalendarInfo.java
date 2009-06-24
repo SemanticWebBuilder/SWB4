@@ -44,6 +44,10 @@ public class CalendarInfo {
     @Override
     public String toString()
     {
+        if(title==null)
+        {
+            return "";
+        }
         return title.toString();
     }
 
