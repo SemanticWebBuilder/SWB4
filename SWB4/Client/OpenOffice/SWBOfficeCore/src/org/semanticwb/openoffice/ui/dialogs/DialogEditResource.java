@@ -174,11 +174,18 @@ public class DialogEditResource extends javax.swing.JDialog
             }
             for (CalendarInfo info : added)
             {
-                Object[] data =
+                if (OfficeApplication.getOfficeApplicationProxy().existCalendar(pageInformation.page.site, info))
                 {
-                    info, info.active
-                };
-                model.addRow(data);
+                    Object[] data =
+                    {
+                        info, info.active
+                    };
+                    model.addRow(data);
+                }
+                else
+                {
+                    added.remove(info);
+                }
             }
         }
         catch (Exception e)
@@ -650,14 +657,14 @@ private void jButtonAddCalendarActionPerformed(java.awt.event.ActionEvent evt)//
             {
                 CalendarInfo calendar = (CalendarInfo) model.get(index);
                 boolean exists = false;
-                DefaultTableModel tableModel=(DefaultTableModel)this.jTableScheduler.getModel();
+                DefaultTableModel tableModel = (DefaultTableModel) this.jTableScheduler.getModel();
                 int count = tableModel.getRowCount();
                 for (int i = 0; i < count; i++)
                 {
-                    CalendarInfo calactual=(CalendarInfo)tableModel.getValueAt(0, i);
-                    if(calactual.id.equals(calendar.id))
+                    CalendarInfo calactual = (CalendarInfo) tableModel.getValueAt(0, i);
+                    if (calactual.id.equals(calendar.id))
                     {
-                        exists=true;
+                        exists = true;
                         break;
                     }
                 }
