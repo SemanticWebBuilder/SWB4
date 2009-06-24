@@ -46,7 +46,7 @@ public class CalendarInfo {
     {
         if(title==null)
         {
-            return "";
+            return "Sin nombre";
         }
         return title.toString();
     }
