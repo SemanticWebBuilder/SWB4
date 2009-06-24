@@ -15,6 +15,7 @@ import java.awt.Frame;
 import java.io.Reader;
 import java.io.StringReader;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
@@ -278,24 +279,32 @@ public class DialogCalendarList extends javax.swing.JDialog
         if (this.jListCalendars.getSelectedIndex() != -1)
         {
             DefaultListModel model = (DefaultListModel) this.jListCalendars.getModel();
-            CalendarInfo cal = (CalendarInfo) model.get(this.jListCalendars.getSelectedIndex());            
+            CalendarInfo cal = (CalendarInfo) model.get(this.jListCalendars.getSelectedIndex());
             try
             {
                 this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                OfficeApplication.getOfficeDocumentProxy().deleteCalendarFromCatalog(this.resourceInfo.page.site, cal);
-                model.removeElement(cal);
-                if(this.jListCalendars.getSelectedIndex()==-1 || model.isEmpty())
+                boolean canDelete = OfficeApplication.getOfficeApplicationProxy().canDeleteCalendar(this.resourceInfo.page.site, cal);
+                if (canDelete)
                 {
-                    this.jButtonDeleteCalendar.setEnabled(false);
-                    this.jButtonEditCalendar.setEnabled(false);
+                    OfficeApplication.getOfficeDocumentProxy().deleteCalendarFromCatalog(this.resourceInfo.page.site, cal);
+                    model.removeElement(cal);
+                    if (this.jListCalendars.getSelectedIndex() == -1 || model.isEmpty())
+                    {
+                        this.jButtonDeleteCalendar.setEnabled(false);
+                        this.jButtonEditCalendar.setEnabled(false);
+                    }
+                    else
+                    {
+                        this.jButtonDeleteCalendar.setEnabled(true);
+                        this.jButtonEditCalendar.setEnabled(true);
+                    }
                 }
                 else
                 {
-                    this.jButtonDeleteCalendar.setEnabled(true);
-                    this.jButtonEditCalendar.setEnabled(true);
+                    JOptionPane.showMessageDialog(this, "¡El calendario no se puede borrar, esta siendo utilizado por otro contenido u otro elemento del portal!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.WARNING_MESSAGE);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
