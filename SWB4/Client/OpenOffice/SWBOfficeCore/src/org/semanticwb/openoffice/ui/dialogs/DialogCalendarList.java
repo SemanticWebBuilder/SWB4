@@ -265,20 +265,20 @@ public class DialogCalendarList extends javax.swing.JDialog
                     Document document = builder.build(reader);
                     dialogCalendar.setDocument(document, cal.title);
                     dialogCalendar.setVisible(true);
-                    if(!dialogCalendar.isCanceled)
+                    if (!dialogCalendar.isCanceled)
                     {
                         Document xmlCalendar = dialogCalendar.getDocument();
                         XMLOutputter out = new XMLOutputter();
                         String xml = out.outputString(xmlCalendar);
                         String title = dialogCalendar.jTextFieldTitle.getText();
-                        cal.title=title;
-                        cal.xml=xml;
+                        cal.title = title;
+                        cal.xml = xml;
                         try
                         {
                             this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                             OfficeApplication.getOfficeDocumentProxy().updateCalendar(resourceInfo.page.site, cal);
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             e.printStackTrace();
                         }
@@ -302,38 +302,42 @@ public class DialogCalendarList extends javax.swing.JDialog
         {
             DefaultListModel model = (DefaultListModel) this.jListCalendars.getModel();
             CalendarInfo cal = (CalendarInfo) model.get(this.jListCalendars.getSelectedIndex());
-            try
+            int res = JOptionPane.showConfirmDialog(this, "¿Deseas eliminar la calendarización?", this.getTitle(), JOptionPane.YES_NO_OPTION);
+            if (res == JOptionPane.YES_OPTION)
             {
-                this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                boolean canDelete = OfficeApplication.getOfficeApplicationProxy().canDeleteCalendar(this.resourceInfo.page.site, cal);
-                if (canDelete)
+                try
                 {
-                    OfficeApplication.getOfficeDocumentProxy().deleteCalendarFromCatalog(this.resourceInfo.page.site, cal);
-                    //model.removeElement(cal);
-                    fillCalendarList();
-                    if (this.jListCalendars.getSelectedIndex() == -1 || model.isEmpty())
+                    this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                    boolean canDelete = OfficeApplication.getOfficeApplicationProxy().canDeleteCalendar(this.resourceInfo.page.site, cal);
+                    if (canDelete)
                     {
-                        this.jButtonDeleteCalendar.setEnabled(false);
-                        this.jButtonEditCalendar.setEnabled(false);
+                        OfficeApplication.getOfficeDocumentProxy().deleteCalendarFromCatalog(this.resourceInfo.page.site, cal);
+                        //model.removeElement(cal);
+                        fillCalendarList();
+                        if (this.jListCalendars.getSelectedIndex() == -1 || model.isEmpty())
+                        {
+                            this.jButtonDeleteCalendar.setEnabled(false);
+                            this.jButtonEditCalendar.setEnabled(false);
+                        }
+                        else
+                        {
+                            this.jButtonDeleteCalendar.setEnabled(true);
+                            this.jButtonEditCalendar.setEnabled(true);
+                        }
                     }
                     else
                     {
-                        this.jButtonDeleteCalendar.setEnabled(true);
-                        this.jButtonEditCalendar.setEnabled(true);
+                        JOptionPane.showMessageDialog(this, "¡El calendario no se puede borrar, esta siendo utilizado por otro contenido u otro elemento del portal!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.WARNING_MESSAGE);
                     }
                 }
-                else
+                catch (Exception e)
                 {
-                    JOptionPane.showMessageDialog(this, "¡El calendario no se puede borrar, esta siendo utilizado por otro contenido u otro elemento del portal!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.WARNING_MESSAGE);
+                    e.printStackTrace();
                 }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            finally
-            {
-                this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                finally
+                {
+                    this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                }
             }
         }
     }//GEN-LAST:event_jButtonDeleteCalendarActionPerformed
