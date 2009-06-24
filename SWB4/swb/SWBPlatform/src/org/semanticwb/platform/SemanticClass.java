@@ -385,7 +385,7 @@ public class SemanticClass
             }
             catch(NoSuchMethodException nsme)
             {
-                new IllegalArgumentException(nsme);
+               throw new IllegalArgumentException(nsme); //MAPS74 faltaba el throw
             }
         }
         return m_constructor;
