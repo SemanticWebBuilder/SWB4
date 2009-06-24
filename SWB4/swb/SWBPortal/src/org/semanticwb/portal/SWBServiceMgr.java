@@ -99,14 +99,26 @@ public class SWBServiceMgr implements SemanticObserver {
                                         "<title>\n" +
                                         "   <TOPIC METHOD=\"getDisplayName\" LANGUAGE=\"{user@getLanguage}\"/>\n" +
                                         "</title>\n" +
+
+                                        "\n\n<!--\n" +
+                                        "Nota: No olvides incluir estos scripts en tus plantillas hechas por fuera\n" +
+                                        "***************************************************************************\n" +
+                                        "***************************************************************************\n" +
+                                        "-->\n" +
                                         "<style type=\"text/css\">\n" +
                                         //"    @import \"<webpath/>/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css\";\n" +
                                         //"    @import \"<webpath/>/swbadmin/js/dojo/dijit/themes/tundra/tundra.css\";\n" +
                                         "    @import \""+ctx+"/swbadmin/js/dojo/dijit/themes/soria/soria.css\";\n" +
                                         "    @import \""+ctx+"/swbadmin/css/swb_portal.css\";\n" +
-                                        "</style>\n" +
+                                        "</style>\n" +                                        
                                         "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n" +
+                                        "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb_.js\"></script>\n" +
                                         "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb.js\"></script>\n" +
+                                        "<!--\n" +
+                                        "***************************************************************************\n" +
+                                        "***************************************************************************\n" +
+                                        "-->\n\n" +
+
                                    "</head>\n " +
                                    "<body>\n   " +
                                    "<p style=\"margin-top: 0\">\n" +
