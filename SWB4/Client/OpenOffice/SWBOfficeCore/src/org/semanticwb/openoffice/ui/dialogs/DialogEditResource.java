@@ -166,11 +166,14 @@ public class DialogEditResource extends javax.swing.JDialog
             this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
             for (CalendarInfo info : OfficeApplication.getOfficeDocumentProxy().getCalendarsOfResource(pageInformation))
             {
-                Object[] data =
+                if (OfficeApplication.getOfficeApplicationProxy().existCalendar(pageInformation.page.site, info))
                 {
-                    info, info.active
-                };
-                model.addRow(data);
+                    Object[] data =
+                    {
+                        info, info.active
+                    };
+                    model.addRow(data);
+                }
             }
             for (CalendarInfo info : added)
             {
