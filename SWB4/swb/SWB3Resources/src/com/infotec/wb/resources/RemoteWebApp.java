@@ -40,7 +40,7 @@ import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.TemplateImp;
-import org.semanticwb.portal.lib.WBResponse;
+import org.semanticwb.portal.lib.SWBResponse;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.lib.SWBBridgeResponse;
 import org.semanticwb.portal.lib.SWBRequest;
@@ -358,7 +358,7 @@ public class RemoteWebApp extends GenericAdmResource
                                     //System.out.println("rid:"+rid);
                                     //System.out.println("distparams.getAccResourceID():"+distparams.getAccResourceID());
 
-                                    WBResponse res2=new WBResponse(response);
+                                    SWBResponse res2=new SWBResponse(response);
                                     javax.servlet.http.HttpServletRequest req=request;
                                     if(distparams!=null && !distparams.getAccResourceID().equals("0") && !rid.equals(distparams.getAccResourceID()))
                                     {
