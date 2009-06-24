@@ -901,7 +901,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     public boolean existCalendar(SiteInfo siteInfo, CalendarInfo CalendarInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(siteInfo.id);
-        org.semanticwb.model.Calendar cal = site.createCalendar();
+        org.semanticwb.model.Calendar cal = site.getCalendar(CalendarInfo.id);
         if(cal==null)
         {
             return false;
