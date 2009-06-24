@@ -90,8 +90,6 @@ public class SWBASchedule extends GenericResource {
         log.debug("Action: " + action);
         out.println("<div class=\"swbform\">");
         out.println("<form  action=\"" + url + "\"  id=\"" + id + "/calendar\" name=\"" + id + "/calendar\" method=\"post\" onsubmit=\"submitForm('" + id + "/calendar'); return false;\">"); //id=\"calendar\" name=\"calendar\" dojoType=\"dijit.form.Form\"
-        out.println("<fieldset>");
-
         // Recurso de calendarización
 
         String createdate = "";
@@ -166,10 +164,13 @@ public class SWBASchedule extends GenericResource {
                 active = SWBUtils.XML.getAttribute(doc, "active");
                 createdate = SWBUtils.XML.getAttribute(doc, "createdate");
                 usercreate = SWBUtils.XML.getAttribute(doc, "usercreate");
-                inidate = cambiaFormato(SWBUtils.XML.getAttribute(doc, "inidate"), 2);
+                inidate = SWBUtils.XML.getAttribute(doc, "inidate");
+                if(null!=inidate)
+                    inidate = cambiaFormato(inidate, 2);
+
                 enddate = SWBUtils.XML.getAttribute(doc, "enddate");
                 if (null != enddate) {
-                    enddate = cambiaFormato(SWBUtils.XML.getAttribute(doc, "enddate"), 2);
+                    enddate = cambiaFormato(enddate, 2);
                     sendselect = "endselect";
                 }
                 starthour = SWBUtils.XML.getAttribute(doc, "starthour");
@@ -376,7 +377,9 @@ public class SWBASchedule extends GenericResource {
         }
 
         out.println("<fieldset>");
-        out.println(" <legend> Definici&oacute;n Periodicidad </legend>");
+        out.println("Definici&oacute;n Periodicidad");
+        out.println("</fieldset>");
+        out.println("<fieldset>");
         out.println("  <table cellSpacing=0 cellPadding=1 width=\"98%\" border=0>");
         out.println("  <tbody>");
         out.println("  <tr>");
@@ -946,7 +949,10 @@ public class SWBASchedule extends GenericResource {
                 doc.appendChild(interval);
                 String fechaIni = request.getParameter(id + "/inidate");
 
-                addElem(doc, interval, "inidate", cambiaFormato(fechaIni, 1));
+                if(fechaIni!=null&&fechaIni.trim().length()>0)
+                {
+                    addElem(doc, interval, "inidate", cambiaFormato(fechaIni, 1));
+                }
                 addElem(doc, interval, "active", strActive);
                 addElem(doc, interval, "createdate", strCreateDate);
                 addElem(doc, interval, "usercreate", strUserCreate);
@@ -1126,14 +1132,6 @@ public class SWBASchedule extends GenericResource {
         parent.appendChild(elem);
     }
 
-//    public String getDateFormat(long dateTime, String lang) {
-//        if (null == lang) {
-//            lang = "es";
-//        }
-//        Locale local = new Locale(lang);
-//        DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, local);
-//        return df.format(new Date(dateTime));
-//    }
     public String getDisplaySemObj(SemanticObject obj, String lang) {
         String ret = obj.getRDFName();
         try {
