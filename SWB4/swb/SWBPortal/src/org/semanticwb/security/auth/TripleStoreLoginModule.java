@@ -48,8 +48,8 @@ public class TripleStoreLoginModule implements LoginModule
     }
 
     public boolean login() throws LoginException
-    {
-        if (callbackHandler == null || !(callbackHandler instanceof SWB4CallbackHandler))
+    {   
+        if (callbackHandler == null)
         {
             throw new LoginException("No callbackHandler or not adecuate callbackHandler supplied");
         }
