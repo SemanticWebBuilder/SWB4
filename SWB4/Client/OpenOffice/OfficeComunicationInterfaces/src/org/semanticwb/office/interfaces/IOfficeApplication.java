@@ -95,4 +95,7 @@ public interface IOfficeApplication
 
     @XmlRpcMethod(methodName = "OfficeApplication.canDeleteCalendar")
     public boolean canDeleteCalendar(SiteInfo siteInfo,CalendarInfo CalendarInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.existCalendar")
+    public boolean existCalendar(SiteInfo siteInfo,CalendarInfo CalendarInfo) throws Exception;
 }
