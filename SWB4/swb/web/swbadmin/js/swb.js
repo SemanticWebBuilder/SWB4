@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-      var context="/swb";
+      var context="";
       var trees= new Array();
 
       var CONST_TAB="/tab";   //Constante sufijo para identificar al tab
