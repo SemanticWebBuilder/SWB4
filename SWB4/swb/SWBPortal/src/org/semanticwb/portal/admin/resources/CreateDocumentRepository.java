@@ -46,7 +46,7 @@ public class CreateDocumentRepository extends GenericResource {
                 //Envia estatus a pantalla
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
-                out.println("addItemByURI(mtreeStore, null, '" + workspace.getURI() + "');");
+                out.println("addItemByURI(mdocStore, null, '" + workspace.getURI() + "');");
                 out.println("showStatus('"+paramRequest.getLocaleLogString("repDocCreated")+"');");
                 out.println("</script>");
              } else { //Forma de entrada(Datos iniciales)

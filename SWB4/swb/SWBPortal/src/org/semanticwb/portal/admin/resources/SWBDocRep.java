@@ -65,7 +65,7 @@ public class SWBDocRep extends GenericResource {
             if (request.getParameter("msgKey") != null) {
                 out.println("<script type=\"text/javascript\">");
                 if(request.getParameter("msgKey").equals("siteCreated")){
-                    out.println("parent.addItemByURI(parent.mtreeStore, null, '" + request.getParameter("wsUri") + "');");
+                    out.println("parent.addItemByURI(parent.mdocStore, null, '" + request.getParameter("wsUri") + "');");
                 }
                 out.println("parent.showStatus('" + paramRequest.getLocaleLogString(request.getParameter("msgKey")) + "');");
                 out.println("</script>");
@@ -117,11 +117,13 @@ public class SWBDocRep extends GenericResource {
                     out.println("</tr>");
                 }
             }
-            out.println("<tr><td colspan=\"2\">" + paramRequest.getLocaleLogString("upload") + "<input type=\"file\" name=\"zipmodel\" value=\"" + paramRequest.getLocaleLogString("new") + "\"/></td></tr>");
-            out.println("<tr><td colspan=\"2\"><button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\">"+paramRequest.getLocaleLogString("up")+"</button><br/><br/></td></tr>");
             out.println("</table>");
-            out.println("</form>");
             out.println("</fieldset>");
+            out.println("<fieldset><span align=\"center\">");
+            out.println("" + paramRequest.getLocaleLogString("upload") + "<input type=\"file\" name=\"zipmodel\" value=\"" + paramRequest.getLocaleLogString("new") + "\"/><br/>");
+            out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\">"+paramRequest.getLocaleLogString("up")+"</button>");
+            out.println("</fieldset>");
+            out.println("</form>");
             out.println("</div>");
 
             out.println("<div class=\"swbform\" id=\"vsites\" dojoType=\"dijit.TitlePane\" title=\""+paramRequest.getLocaleLogString("docRep")+"\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
@@ -192,14 +194,14 @@ public class SWBDocRep extends GenericResource {
                     out.println("<input id=\"swb_create_id\" type=\"text\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
                     out.println("</td>");
                     out.append("</tr>");
-                    out.println("<td><button dojoType='dijit.form.Button' type=\"submit\" onClick=\"if(!dijit.byId('frmImport1').isValid()) return false;\">" + paramRequest.getLocaleLogString("send") + "</button>");
-                    out.println("<button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\">"+paramRequest.getLocaleLogString("return")+"</button>");
-                    out.println("</td></tr>");
                     out.println("</table>");
                     out.println("</fieldset>");
+                    out.println("<fieldset><span align=\"center\">");
+                    out.println("<button dojoType='dijit.form.Button' type=\"submit\" onClick=\"if(!dijit.byId('frmImport1').isValid()) return false;\">" + paramRequest.getLocaleLogString("send") + "</button>");
+                    out.println("<button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\">"+paramRequest.getLocaleLogString("return")+"</button>");
+                    out.println("</span></fieldset>");
                     out.println("<input type=\"hidden\" name=\"zipName\" value=\"" + request.getParameter("zipName") + "\"");
                     out.println("</form>");
-                    out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
                 } catch (Exception e) {
                     log.debug(e);
                 }
