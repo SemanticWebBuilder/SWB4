@@ -1044,13 +1044,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         while (calendars.hasNext())
         {
             org.semanticwb.model.Calendar cal = calendars.next();
-            CalendarInfo info = new CalendarInfo();
-            info.id = cal.getId();
-            info.xml = cal.getXml();
-            info.active = cal.isActive();
-            info.title = cal.getTitle();
-            getCalendarInfo.add(info);
-
+            if (cal.getXml() != null)
+            {
+                CalendarInfo info = new CalendarInfo();
+                info.id = cal.getId();
+                info.xml = cal.getXml();
+                info.active = cal.isActive();
+                info.title = cal.getTitle();
+                getCalendarInfo.add(info);
+            }
         }
         return getCalendarInfo.toArray(new CalendarInfo[getCalendarInfo.size()]);
     }
@@ -1790,10 +1792,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         WebSite site = SWBContext.getWebSite(siteInfo.id);
         org.semanticwb.model.Calendar cal = site.getCalendar(calendarIndo.id);
-        if (cal != null)
-        {
-            cal.remove();
-        }
+        site.removeCalendar(calendarIndo.id);
     }
 }
 
