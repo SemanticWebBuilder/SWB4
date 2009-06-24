@@ -1,28 +1,4 @@
 /*
- * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboraci?n e integraci?n para Internet,
- * la cual, es una creaci?n original del Fondo de Informaci?n y Documentaci?n para la Industria INFOTEC, misma que se encuentra
- * debidamente registrada ante el Registro P?blico del Derecho de Autor de los Estados Unidos Mexicanos con el
- * No. 03-2002-052312015400-14, para la versi?n 1; No. 03-2003-012112473900 para la versi?n 2, y No. 03-2006-012012004000-01
- * para la versi?n 3, respectivamente.
- *
- * INFOTEC pone a su disposici?n la herramienta INFOTEC WebBuilder a trav?s de su licenciamiento abierto al p?blico (?open source?),
- * en virtud del cual, usted podr? usarlo en las mismas condiciones con que INFOTEC lo ha dise?ado y puesto a su disposici?n;
- * aprender de ?l; distribuirlo a terceros; acceder a su c?digo fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los t?rminos y condiciones de la LICENCIA ABIERTA AL P?BLICO que otorga INFOTEC para la utilizaci?n
- * de INFOTEC WebBuilder 3.2.
- *
- * INFOTEC no otorga garant?a sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni impl?cita ni expl?cita,
- * siendo usted completamente responsable de la utilizaci?n que le d? y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposici?n la siguiente
- * direcci?n electr?nica:
- *
- *                                          http://www.webbuilder.org.mx
- */
-
-
-/*
  * Poll.java
  *
  * Created on 20 de junio de 2002, 16:38
@@ -62,8 +38,7 @@ import org.semanticwb.portal.util.FileUpload;
  * @modified by :Carlos Ramos (CIRI)
  */
 
-public class Poll extends GenericResource 
-{
+public class Poll extends GenericResource {
     private static Logger log = SWBUtils.getLogger(Poll.class);
     private static String poll = "poll_";
     
@@ -81,8 +56,7 @@ public class Poll extends GenericResource
      * @param base
      */    
     @Override
-    public void setResourceBase(Resource base)
-    {
+    public void setResourceBase(Resource base) {
         try 
         {
             super.setResourceBase(base);
@@ -103,8 +77,7 @@ public class Poll extends GenericResource
      * @throws IOException
      */    
     @Override
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if(paramRequest.getMode().equals("showResults")) {
             doShowPollResults(request,response,paramRequest);
         }else {
@@ -121,9 +94,8 @@ public class Poll extends GenericResource
      * @throws IOException
      */    
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
-    {
-        response.setContentType("text/html; charset=iso-8859-1");
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=utf-8");
         response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
         response.setHeader("Pragma","no-cache"); //HTTP 1.0
         response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
@@ -166,11 +138,11 @@ public class Poll extends GenericResource
                     out.println("</p>");
 
                     SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
-                    url.setResourceBase(base);
+                    //url.setResourceBase(base);
                     url.setMode("showResults");
-                    url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
+                    //url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
                     url.setParameter("NombreCookie","VotosEncuesta"+ base.getId());
-                    url.setTopic(paramRequest.getTopic());
+                    //url.setTopic(paramRequest.getTopic());
                     url.setCallMethod(paramRequest.Call_DIRECT);
 
                     boolean display = Boolean.valueOf(base.getAttribute("display","true")).booleanValue();
@@ -190,10 +162,10 @@ public class Poll extends GenericResource
                         out.println("</form>");
                     }else {
                         out.println("<p>");
-                        out.println("<a href=\"javascript:;\" onmousedown=\"getHtml('"+url.toString(true)+"','"+poll+base.getId()+"'); expande();\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
-                        out.println("<div id=\""+poll+base.getId()+"\" ");
-                        out.println("style=\"height:"+base.getAttribute("height", "260").trim()+"px; ");
-                        out.println("\">");
+                        out.println("<a href=\"javascript:;\" onmousedown=\"getHtml('"+url+"','"+poll+base.getId()+"'); expande();\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
+                        out.println("<div id=\""+poll+base.getId()+"\"> ");
+                        //out.println("style=\"height:"+base.getAttribute("height", "260").trim()+"px; ");
+                        //out.println("\">");
                         out.println("</div>");
                         out.println("</p>");
                         if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
@@ -221,6 +193,8 @@ public class Poll extends GenericResource
                     win += ",left="+ base.getAttribute("left", "220").trim();
 
                     out.println("<script type=\"text/javascript\">");
+
+                    out.println("dojo.require(\"dojo.fx\");");
 
                     out.println("dojo.addOnLoad(collapse());");
 
@@ -289,7 +263,8 @@ public class Poll extends GenericResource
                     out.println("} ");*/
 
                     out.println("function expande() {");
-                    out.println("  var anim1 = dojox.fx.wipeTo( {node:\""+poll+base.getId()+"\", duration:500, height:"+base.getAttribute("height", "260")+" });");
+                    //out.println("  var anim1 = dojo.fx.wipeTo( {node:\""+poll+base.getId()+"\", duration:500, height:"+base.getAttribute("height", "260")+" });");
+                    out.println("  var anim1 = dojo.fx.wipeIn( {node:\""+poll+base.getId()+"\", duration:500 });");
                     out.println("  var anim2 = dojo.fadeIn({node:\""+poll+base.getId()+"\", duration:650});");
                     out.println("  dojo.fx.combine([anim1,anim2]).play();");
                     out.println("}");
@@ -320,8 +295,7 @@ public class Poll extends GenericResource
      * @throws AFException
      * @throws IOException
      */    
-    public void doShowPollResults(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void doShowPollResults(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer("");
         Resource base=getResourceBase();
         try {
@@ -331,13 +305,13 @@ public class Poll extends GenericResource
                 dom = SWBUtils.XML.xmlToDom(data);
             }
             //if(request.getParameter("radiobutton")!=null && request.getParameter("radiobutton").length()>9)
-            if(request.getParameter("radiobutton")!=null)
-            {
+            System.out.println("radiobutton="+request.getParameter("radiobutton"));
+            if(request.getParameter("radiobutton")!=null) {
                 boolean flag=false;
                 int validateMode=Integer.parseInt(base.getAttribute("vmode", "0"));
                 if(validateMode==0){
                     flag=validateIPAddress(request);
-                }else{
+                }else {
                     flag=validateCookie(request);
                     //Pone cookie
                     MngCookie = new SWBCookieMgr();
@@ -345,8 +319,7 @@ public class Poll extends GenericResource
                     MngCookie.AddCookie("VotosEncuesta"+ base.getId(), "SI",  true, true, request, response);
                 }
                 
-                if ("false".equals(base.getAttribute("oncevote", "true").trim()) || !flag) // Es un usuario que paso la prueba de las IPs
-                {
+                if ("false".equals(base.getAttribute("oncevote", "true").trim()) || !flag) { // Es un usuario que paso la prueba de las IPs
                     int valor = 0;
                     try { 
                         valor=Integer.parseInt(request.getParameter("radiobutton").substring(9)); 
@@ -355,11 +328,9 @@ public class Poll extends GenericResource
                         log.error("Respuesta de encuesta en cero. ", e); 
                     }
                     
-                    if(valor > 0)
-                    {
+                    if(valor > 0) {
                         String varia = "enc_votos";
-                        if (data == null)
-                        {
+                        if (data == null) {
                             try {
                                 dom = SWBUtils.XML.getNewDocument();
                                 Element root = dom.createElement("resource");
@@ -371,15 +342,11 @@ public class Poll extends GenericResource
                             }catch (Exception e) {
                                 log.error(paramRequest.getLocaleString("error_Encuesta_doView_setData") +" "+ restype +" " + paramRequest.getLocaleString("error_Encuesta_doView_id") +" "+ base.getId() +" - "+ base.getTitle(), e); 
                             }
-                        } 
-                        else
-                        {
-                            try
-                            {
+                        }else {
+                            try {
                                 NodeList nlist = dom.getElementsByTagName(varia + valor);
                                 boolean exist = false;
-                                for (int i = 0; i < nlist.getLength(); i++)
-                                {
+                                for (int i = 0; i < nlist.getLength(); i++) {
                                     exist = true;
                                     int votosOption = -1;
                                     votosOption = Integer.parseInt(nlist.item(i).getChildNodes().item(0).getNodeValue());
@@ -389,8 +356,7 @@ public class Poll extends GenericResource
                                         nlist.item(i).getChildNodes().item(0).setNodeValue(String.valueOf(votosOption));
                                     }
                                 }
-                                if (!exist)
-                                {
+                                if (!exist) {
                                     Node nres = dom.getFirstChild();
                                     Element option = dom.createElement(varia + valor);
                                     option.appendChild(dom.createTextNode("1"));
@@ -408,7 +374,7 @@ public class Poll extends GenericResource
         }catch(Exception e) { 
             log.error(e); 
         }
-        response.setContentType("text/html; charset=iso-8859-1");
+        response.setContentType("text/html; charset=utf-8");
         response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
         response.setHeader("Pragma","no-cache"); //HTTP 1.0
         response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
@@ -420,7 +386,7 @@ public class Poll extends GenericResource
      * Metodo que valida si se encuentra la cookie de la encuensta registrada en la maquina del usuario
      * @param request
      */
-    private boolean validateCookie(javax.servlet.http.HttpServletRequest request){
+    private boolean validateCookie(javax.servlet.http.HttpServletRequest request) {
         for(int i=0;i<request.getCookies().length;i++){
             javax.servlet.http.Cookie cookie=request.getCookies() [i];
             if(request.getParameter("NombreCookie").equals(cookie.getName()) && cookie.getValue().equals("SI")) {
@@ -435,8 +401,7 @@ public class Poll extends GenericResource
      * Metodo que valida si la ip del usuario final ya voto
      * @param request
      */
-    private boolean validateIPAddress(javax.servlet.http.HttpServletRequest request)
-    {
+    private boolean validateIPAddress(javax.servlet.http.HttpServletRequest request) {
         boolean flag = false;
         int minutes;
         try { 
@@ -503,10 +468,10 @@ public class Poll extends GenericResource
      * @throws AFException
      * @throws IOException
      */    
-    private String getPollResults(HttpServletRequest request, SWBParamRequest paramRequest, Document data) throws SWBResourceException, IOException
-    {
+    private String getPollResults(HttpServletRequest request, SWBParamRequest paramRequest, Document data) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer("");
         Resource base=getResourceBase();
+        System.out.println("display="+base.getAttribute("display","true"));
         boolean display = Boolean.valueOf(base.getAttribute("display","true")).booleanValue();
         try
         {            
@@ -674,8 +639,7 @@ public class Poll extends GenericResource
         return ret.toString();
     }
    
-    private String getLinks(NodeList links, String comment)
-    {
+    private String getLinks(NodeList links, String comment) {
         StringBuffer ret = new StringBuffer("");
         if (links==null) return ret.toString();
         String _comment=comment;
@@ -706,8 +670,7 @@ public class Poll extends GenericResource
      * @throws IOException
      */    
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
-    {
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         Resource base=getResourceBase();
         String msg=paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_undefinedOperation");
@@ -916,8 +879,7 @@ public class Poll extends GenericResource
      * @param fup
      * @param att
      */  
-    protected void setAttribute(Resource base, FileUpload fup, String att)
-    {
+    protected void setAttribute(Resource base, FileUpload fup, String att) {
         try
         {
             if(null != fup.getValue(att) && !"".equals(fup.getValue(att).trim())) {
@@ -936,8 +898,7 @@ public class Poll extends GenericResource
      * @param att
      * @param value
      */  
-    protected void setAttribute(Resource base, FileUpload fup, String att, String value)
-    {
+    protected void setAttribute(Resource base, FileUpload fup, String att, String value) {
         try
         {
             if(null != fup.getValue(att) && value.equals(fup.getValue(att).trim())) {
@@ -950,16 +911,12 @@ public class Poll extends GenericResource
         catch(Exception e) {  log.error("Error while setting resource attribute: "+att + ", "+base.getId() +"-"+ base.getTitle(), e); }
     }    
     
-    /*
+    /**
      * @param dom
      * @param nodeType
      * @param name
-     */     
-    /**
-     * Metodo que remueve nodos en un dom-document
-     */    
-    private void removeAllNodes(Document dom, short nodeType, String name)
-    {
+     */        
+    private void removeAllNodes(Document dom, short nodeType, String name) {
         NodeList list = dom.getElementsByTagName(name);
         for (int i = 0; i < list.getLength(); i++)
         {
@@ -979,8 +936,7 @@ public class Poll extends GenericResource
      * @param request
      * @param paramsRequest
      */      
-    private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest)
-    {
+    private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest) {
         StringBuffer ret=new StringBuffer();
         Resource base=getResourceBase();
         try
@@ -1380,11 +1336,9 @@ public class Poll extends GenericResource
      * @param request
      * @param paramsRequest
      */     
-    private String getScript(HttpServletRequest request, SWBParamRequest paramsRequest)
-    {
+    private String getScript(HttpServletRequest request, SWBParamRequest paramsRequest) {
         StringBuffer ret = new StringBuffer();
-        try
-        {
+        try {
             ret.append("<script type=\"text/javascript\">");
             ret.append("\nvar swOk=0, optionObj;");
             ret.append("\nfunction jsValida(pForm)");
