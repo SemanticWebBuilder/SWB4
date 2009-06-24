@@ -20,6 +20,9 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.setTitle")
     public void setTitle(String repositoryName, String contentID, String title) throws Exception;
 
+    @XmlRpcMethod(methodName = "OfficeDocument.deleteCalendarFromCatalog")
+    public void deleteCalendarFromCatalog(SiteInfo siteInfo, CalendarInfo cal) throws Exception;
+
     @XmlRpcMethod(methodName = "OfficeDocument.setDescription")
     public void setDescription(String repositoryName, String contentID, String description) throws Exception;
 
@@ -98,20 +101,33 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.getNumberOfVersions")
     public int getNumberOfVersions(String repositoryName, String contentId) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.getCalendars")
-    public CalendarInfo[] getCalendars(ResourceInfo resourceInfo) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.getCatalogCalendars")
+    public CalendarInfo[] getCatalogCalendars(SiteInfo siteInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.getCalendarsOfResource")
+    public CalendarInfo[] getCalendarsOfResource(ResourceInfo info) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.updateCalendar")
-    public void updateCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo) throws Exception;
+    public void updateCalendar(SiteInfo siteInfo,CalendarInfo calendarInfo) throws Exception;
 
-    @XmlRpcMethod(methodName = "OfficeDocument.insertCalendar")
-    public CalendarInfo insertCalendar(ResourceInfo resourceInfo, String title, String xml) throws Exception;
+    @XmlRpcMethod(methodName = "OfficeDocument.insertCalendartoResource")
+    public void insertCalendartoResource(ResourceInfo resourceInfo,CalendarInfo calendar) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.deleteCalendar")
     public void deleteCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.activeCalendar")
     public void activeCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo, boolean active) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.setEndDate")
+    public void setEndDate(ResourceInfo resourceInfo, Date date) throws Exception;
+
+
+    @XmlRpcMethod(methodName = "OfficeDocument.getEndDate")
+    public Date getEndDate(ResourceInfo resourceInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.deleteEndDate")
+    public void deleteEndDate(ResourceInfo resourceInfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.updatePorlet")
     public void updatePorlet(ResourceInfo resourceInfo) throws Exception;

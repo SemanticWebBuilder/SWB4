@@ -78,6 +78,8 @@ public interface IOfficeApplication
     @XmlRpcMethod(methodName = "OfficeApplication.getAllContents")
     public FlowContentInformation[] getAllContents(WebSiteInfo site) throws Exception;
 
+    @XmlRpcMethod(methodName = "OfficeApplication.createCalendar")
+    public CalendarInfo createCalendar(SiteInfo info,String title,String xml) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.getContentsForAuthorize")
     public FlowContentInformation[] getContentsForAuthorize(WebSiteInfo site) throws Exception;
