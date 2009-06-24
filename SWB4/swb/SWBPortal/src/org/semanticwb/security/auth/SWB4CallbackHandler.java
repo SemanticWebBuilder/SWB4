@@ -1,6 +1,5 @@
 package org.semanticwb.security.auth;
 
-import java.io.Serializable;
 import javax.security.auth.callback.CallbackHandler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +13,7 @@ import org.semanticwb.servlet.internal.DistributorParams;
  * Abstract CallBackHandler for Semantic WebBuilder, it enforces the specific needs for authentication process
  * @author Sergio Martínez  sergio.martinez@acm.org
  */
-public abstract class SWB4CallbackHandler implements CallbackHandler, Serializable {
+public abstract class SWB4CallbackHandler implements CallbackHandler {
 
     private static Logger log = SWBUtils.getLogger(SWB4CallbackHandler.class);
     private HttpServletRequest request;
