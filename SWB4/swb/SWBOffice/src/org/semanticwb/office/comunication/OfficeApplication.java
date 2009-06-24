@@ -897,4 +897,18 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             return true;
         }
     }
+
+    public boolean existCalendar(SiteInfo siteInfo, CalendarInfo CalendarInfo) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(siteInfo.id);
+        org.semanticwb.model.Calendar cal = site.createCalendar();
+        if(cal==null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 }
