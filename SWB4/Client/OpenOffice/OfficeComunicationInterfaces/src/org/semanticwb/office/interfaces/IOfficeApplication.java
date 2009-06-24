@@ -92,4 +92,7 @@ public interface IOfficeApplication
 
     @XmlRpcMethod(methodName = "OfficeApplication.reject")
     public void reject(ResourceInfo resourceInfo, String message) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.canDeleteCalendar")
+    public boolean canDeleteCalendar(SiteInfo siteInfo,CalendarInfo CalendarInfo) throws Exception;
 }
