@@ -886,7 +886,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     public boolean canDeleteCalendar(SiteInfo siteInfo, CalendarInfo CalendarInfo) throws Exception
     {        
         WebSite site = SWBContext.getWebSite(siteInfo.id);
-        org.semanticwb.model.Calendar cal = site.createCalendar();
+        org.semanticwb.model.Calendar cal = site.getCalendar(CalendarInfo.id);
         GenericIterator<CalendarRef> refs=cal.listCalendarRefInvs();
         if(refs.hasNext())
         {
