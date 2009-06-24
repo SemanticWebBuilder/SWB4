@@ -27,6 +27,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
@@ -266,7 +267,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                         {
                             OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
-                            if (officeResource.getRepositoryName()!=null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow().equals("*"))
+                            if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow().equals("*"))
                             {
                                 InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
                                 officeResource.loadContent(in);
@@ -356,7 +357,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 Iterator<WebSite> sites = SWBContext.listWebSites();
                 while (sites.hasNext())
                 {
-                    WebSite site=sites.next();
+                    WebSite site = sites.next();
                     Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(prop_content, contentId);
                     while (it.hasNext())
                     {
@@ -364,7 +365,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                         {
                             OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
-                            if (officeResource.getRepositoryName()!=null && officeResource.getRepositoryName().equals(repositoryName))
+                            if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName))
                             {
                                 InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
                                 officeResource.loadContent(in);
@@ -575,7 +576,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     Iterator<WebSite> sites = SWBContext.listWebSites();
                     while (sites.hasNext())
                     {
-                        WebSite site=sites.next();
+                        WebSite site = sites.next();
                         if (info.published)
                         {
                             break;
@@ -587,7 +588,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                             if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                             {
                                 OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
-                                if (officeResource.getRepositoryName()!=null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow() != null)
+                                if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow() != null)
                                 {
                                     if (officeResource.getVersionToShow().equals("*"))
                                     {
@@ -807,9 +808,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                 {
                     OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
-                    if (officeResource.getRepositoryName()!=null && officeResource.getRepositoryName().equals(repositoryName))
+                    if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName))
                     {
-                        Resource base=site.getResource(obj.getId());
+                        Resource base = site.getResource(obj.getId());
                         officeResource.setResourceBase(base);
                         ResourceInfo info = getResourceInfo(officeResource);
                         if (info != null)
@@ -1015,12 +1016,31 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         resource.getSemanticObject().setProperty(prop, value);
     }
 
-    public CalendarInfo[] getCalendars(ResourceInfo resourceInfo) throws Exception
+    public CalendarInfo[] getCalendarsOfResource(ResourceInfo resourceInfo) throws Exception
     {
-        ArrayList<CalendarInfo> getCalendarInfo = new ArrayList<CalendarInfo>();
+        HashSet<CalendarInfo> getCalendarInfo = new HashSet<CalendarInfo>();
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
-        Resource resource = site.getResource(resourceInfo.id);                
-        Iterator<org.semanticwb.model.Calendar> calendars = resource.listCalendars();
+        Resource resource = site.getResource(resourceInfo.id);
+        GenericIterator<CalendarRef> calendars = resource.listCalendarRefs();
+        while (calendars.hasNext())
+        {
+            org.semanticwb.model.CalendarRef ref = calendars.next();
+            org.semanticwb.model.Calendar cal = ref.getCalendar();
+            CalendarInfo info = new CalendarInfo();
+            info.id = cal.getId();
+            info.xml = cal.getXml();
+            info.active = ref.isActive();
+            info.title = cal.getTitle();
+            getCalendarInfo.add(info);
+        }
+        return getCalendarInfo.toArray(new CalendarInfo[getCalendarInfo.size()]);
+    }
+
+    public CalendarInfo[] getCatalogCalendars(SiteInfo siteInfo) throws Exception
+    {
+        HashSet<CalendarInfo> getCalendarInfo = new HashSet<CalendarInfo>();
+        WebSite site = SWBContext.getWebSite(siteInfo.id);
+        Iterator<org.semanticwb.model.Calendar> calendars = site.listCalendars();
         while (calendars.hasNext())
         {
             org.semanticwb.model.Calendar cal = calendars.next();
@@ -1030,6 +1050,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             info.active = cal.isActive();
             info.title = cal.getTitle();
             getCalendarInfo.add(info);
+
         }
         return getCalendarInfo.toArray(new CalendarInfo[getCalendarInfo.size()]);
     }
@@ -1496,45 +1517,67 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         OfficeResource.clean(dir);
     }
 
-    public void updateCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo) throws Exception
+    public void updateCalendar(SiteInfo siteInfo, CalendarInfo calendarInfo) throws Exception
     {
-        WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
+        WebSite site = SWBContext.getWebSite(siteInfo.id);
         org.semanticwb.model.Calendar cal = site.getCalendar(calendarInfo.id);
         cal.setXml(calendarInfo.xml);
         cal.setUpdated(new Date(System.currentTimeMillis()));
     }
 
-    public CalendarInfo insertCalendar(ResourceInfo resourceInfo, String title, String xml) throws Exception
+    public void insertCalendartoResource(ResourceInfo resourceInfo, CalendarInfo calendar) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
-        org.semanticwb.model.Calendar cal = site.createCalendar();
-        cal.setXml(xml);
-        cal.setTitle(title);
-        cal.setCreated(new Date(System.currentTimeMillis()));
-        cal.setUpdated(new Date(System.currentTimeMillis()));
-        CalendarInfo info = new CalendarInfo();
-        Resource resource=site.getResource(resourceInfo.id);
-        resource.addCalendar(cal);
-        info.title = title;
-        info.id = cal.getId();
-        info.active = cal.isActive();
-        info.xml = cal.getXml();
-        return info;
+        org.semanticwb.model.Calendar cal = site.getCalendar(calendar.id);
+        Resource resource = site.getResource(resourceInfo.id);
+        boolean exists = false;
+        GenericIterator<CalendarRef> refs = resource.listCalendarRefs();
+        while (refs.hasNext())
+        {
+            CalendarRef ref = refs.next();
+            if (ref.getCalendar().getId().equals(calendar.id))
+            {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists)
+        {
+            CalendarRef ref = CalendarRef.createCalendarRef(site);
+            ref.setCalendar(cal);
+            ref.setActive(true);
+            resource.addCalendarRef(ref);
+        }
     }
 
     public void deleteCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
-        org.semanticwb.model.Calendar cal = site.getCalendar(calendarInfo.id);
-        site.getResource(resourceInfo.id).removeCalendar(cal);
-        cal.remove();
+        Resource resource = site.getResource(resourceInfo.id);
+        GenericIterator<CalendarRef> refs = resource.listCalendarRefs();
+        while (refs.hasNext())
+        {
+            CalendarRef ref = refs.next();
+            if (ref.getCalendar().getId().equals(calendarInfo.id))
+            {
+                ref.remove();
+            }
+        }
     }
 
     public void activeCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo, boolean active) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
-        org.semanticwb.model.Calendar cal = site.getCalendar(calendarInfo.id);
-        cal.setActive(active);
+        Resource resource = site.getResource(resourceInfo.id);
+        GenericIterator<CalendarRef> refs = resource.listCalendarRefs();
+        while (refs.hasNext())
+        {
+            CalendarRef ref = refs.next();
+            if (ref.getCalendar().getId().equals(calendarInfo.id))
+            {
+                ref.setActive(active);
+            }
+        }
     }
 
     public void updatePorlet(ResourceInfo resourceInfo) throws Exception
@@ -1691,9 +1734,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         Resource resource = site.getResource(info.id);
-        if(resource.getPflowInstance()!=null)
+        if (resource.getPflowInstance() != null)
         {
-            if(resource.getPflowInstance().getStatus()==3 || resource.getPflowInstance().getStatus()==-1)
+            if (resource.getPflowInstance().getStatus() == 3 || resource.getPflowInstance().getStatus() == -1)
             {
                 resource.getPflowInstance().remove();
             }
@@ -1720,6 +1763,37 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         Resource resource = site.getResource(info.id);
         return SWBPortal.getPFlowManager().isAuthorized(resource);
+    }
+
+    public void setEndDate(ResourceInfo info, Date date) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(info.page.site.id);
+        Resource resource = site.getResource(info.id);
+        resource.setExpiration(date);
+    }
+
+    public void deleteEndDate(ResourceInfo info) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(info.page.site.id);
+        Resource resource = site.getResource(info.id);
+        resource.setExpiration(null);
+    }
+
+    public Date getEndDate(ResourceInfo info) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(info.page.site.id);
+        Resource resource = site.getResource(info.id);
+        return resource.getExpiration();
+    }
+
+    public void deleteCalendarFromCatalog(SiteInfo siteInfo, CalendarInfo calendarIndo) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(siteInfo.id);
+        org.semanticwb.model.Calendar cal = site.getCalendar(calendarIndo.id);
+        if (cal != null)
+        {
+            cal.remove();
+        }
     }
 }
 

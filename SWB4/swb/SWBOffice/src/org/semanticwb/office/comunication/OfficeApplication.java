@@ -32,6 +32,7 @@ import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.ContentType;
@@ -716,21 +717,21 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     flowContentInformation.resourceInfo = new ResourceInfo();
                     flowContentInformation.resourceInfo.active = res.isActive();
                     flowContentInformation.resourceInfo.description = res.getDescription();
-                    flowContentInformation.resourceInfo.page=new PageInfo();
-                    Iterator<Resourceable> resourceables=res.listResourceables();
-                    while(resourceables.hasNext())
+                    flowContentInformation.resourceInfo.page = new PageInfo();
+                    Iterator<Resourceable> resourceables = res.listResourceables();
+                    while (resourceables.hasNext())
                     {
-                        Resourceable resourceable=resourceables.next();
-                        if(resourceable instanceof WebPage)
+                        Resourceable resourceable = resourceables.next();
+                        if (resourceable instanceof WebPage)
                         {
-                            WebPage webpage=(WebPage)resourceable;
-                            flowContentInformation.resourceInfo.page.id=webpage.getId();
-                            flowContentInformation.resourceInfo.page.description=webpage.getDescription();
-                            flowContentInformation.resourceInfo.page.title=webpage.getTitle();
-                            flowContentInformation.resourceInfo.page.site=new SiteInfo();
-                            flowContentInformation.resourceInfo.page.site.id=site.getId();
-                            flowContentInformation.resourceInfo.page.site.title=site.getTitle();
-                            flowContentInformation.resourceInfo.page.site.description=site.getDescription();
+                            WebPage webpage = (WebPage) resourceable;
+                            flowContentInformation.resourceInfo.page.id = webpage.getId();
+                            flowContentInformation.resourceInfo.page.description = webpage.getDescription();
+                            flowContentInformation.resourceInfo.page.title = webpage.getTitle();
+                            flowContentInformation.resourceInfo.page.site = new SiteInfo();
+                            flowContentInformation.resourceInfo.page.site.id = site.getId();
+                            flowContentInformation.resourceInfo.page.site.title = site.getTitle();
+                            flowContentInformation.resourceInfo.page.site.description = site.getDescription();
                         }
                     }
                     flowContentInformation.resourceInfo.id = res.getId();
@@ -760,7 +761,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public FlowContentInformation[] getAllContents(WebSiteInfo info) throws Exception
     {
-        WebSite site=SWBContext.getWebSite(info.id);
+        WebSite site = SWBContext.getWebSite(info.id);
         HashSet<FlowContentInformation> contents = new HashSet<FlowContentInformation>();
         for (Resource res : SWBPortal.getPFlowManager().getContentsAtFlowAll(site))
         {
@@ -779,21 +780,21 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     flowContentInformation.resourceInfo = new ResourceInfo();
                     flowContentInformation.resourceInfo.active = res.isActive();
                     flowContentInformation.resourceInfo.description = res.getDescription();
-                    flowContentInformation.resourceInfo.page=new PageInfo();
-                    Iterator<Resourceable> resourceables=res.listResourceables();
-                    while(resourceables.hasNext())
+                    flowContentInformation.resourceInfo.page = new PageInfo();
+                    Iterator<Resourceable> resourceables = res.listResourceables();
+                    while (resourceables.hasNext())
                     {
-                        Resourceable resourceable=resourceables.next();
-                        if(resourceable instanceof WebPage)
+                        Resourceable resourceable = resourceables.next();
+                        if (resourceable instanceof WebPage)
                         {
-                            WebPage webpage=(WebPage)resourceable;
-                            flowContentInformation.resourceInfo.page.id=webpage.getId();
-                            flowContentInformation.resourceInfo.page.description=webpage.getDescription();
-                            flowContentInformation.resourceInfo.page.title=webpage.getTitle();
-                            flowContentInformation.resourceInfo.page.site=new SiteInfo();
-                            flowContentInformation.resourceInfo.page.site.id=site.getId();
-                            flowContentInformation.resourceInfo.page.site.title=site.getTitle();
-                            flowContentInformation.resourceInfo.page.site.description=site.getDescription();
+                            WebPage webpage = (WebPage) resourceable;
+                            flowContentInformation.resourceInfo.page.id = webpage.getId();
+                            flowContentInformation.resourceInfo.page.description = webpage.getDescription();
+                            flowContentInformation.resourceInfo.page.title = webpage.getTitle();
+                            flowContentInformation.resourceInfo.page.site = new SiteInfo();
+                            flowContentInformation.resourceInfo.page.site.id = site.getId();
+                            flowContentInformation.resourceInfo.page.site.title = site.getTitle();
+                            flowContentInformation.resourceInfo.page.site.description = site.getDescription();
                         }
                     }
                     flowContentInformation.resourceInfo.id = res.getId();
@@ -809,7 +810,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     public FlowContentInformation[] getContentsForAuthorize(WebSiteInfo info) throws Exception
     {
-        WebSite site=SWBContext.getWebSite(info.id);
+        WebSite site = SWBContext.getWebSite(info.id);
         org.semanticwb.model.User wbuser = SWBContext.getAdminRepository().getUserByLogin(user);
         HashSet<FlowContentInformation> contents = new HashSet<FlowContentInformation>();
         for (Resource res : SWBPortal.getPFlowManager().getContentsAtFlow(wbuser, site))
@@ -829,21 +830,21 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     flowContentInformation.resourceInfo = new ResourceInfo();
                     flowContentInformation.resourceInfo.active = res.isActive();
                     flowContentInformation.resourceInfo.description = res.getDescription();
-                    flowContentInformation.resourceInfo.page=new PageInfo();
-                    Iterator<Resourceable> resourceables=res.listResourceables();
-                    while(resourceables.hasNext())
+                    flowContentInformation.resourceInfo.page = new PageInfo();
+                    Iterator<Resourceable> resourceables = res.listResourceables();
+                    while (resourceables.hasNext())
                     {
-                        Resourceable resourceable=resourceables.next();
-                        if(resourceable instanceof WebPage)
+                        Resourceable resourceable = resourceables.next();
+                        if (resourceable instanceof WebPage)
                         {
-                            WebPage webpage=(WebPage)resourceable;
-                            flowContentInformation.resourceInfo.page.id=webpage.getId();
-                            flowContentInformation.resourceInfo.page.description=webpage.getDescription();
-                            flowContentInformation.resourceInfo.page.title=webpage.getTitle();
-                            flowContentInformation.resourceInfo.page.site=new SiteInfo();
-                            flowContentInformation.resourceInfo.page.site.id=site.getId();
-                            flowContentInformation.resourceInfo.page.site.title=site.getTitle();
-                            flowContentInformation.resourceInfo.page.site.description=site.getDescription();
+                            WebPage webpage = (WebPage) resourceable;
+                            flowContentInformation.resourceInfo.page.id = webpage.getId();
+                            flowContentInformation.resourceInfo.page.description = webpage.getDescription();
+                            flowContentInformation.resourceInfo.page.title = webpage.getTitle();
+                            flowContentInformation.resourceInfo.page.site = new SiteInfo();
+                            flowContentInformation.resourceInfo.page.site.id = site.getId();
+                            flowContentInformation.resourceInfo.page.site.title = site.getTitle();
+                            flowContentInformation.resourceInfo.page.site.description = site.getDescription();
                         }
                     }
                     flowContentInformation.resourceInfo.id = res.getId();
@@ -862,5 +863,22 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         Resource resource = SWBContext.getWebSite(resourceInfo.page.site.id).getResource(resourceInfo.id);
         org.semanticwb.model.User wbuser = SWBContext.getAdminRepository().getUserByLogin(user);
         return SWBPortal.getPFlowManager().isReviewer(resource, wbuser);
+    }
+
+    public CalendarInfo createCalendar(SiteInfo siteInfo, String title, String xml) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(siteInfo.id);
+        org.semanticwb.model.Calendar cal = site.createCalendar();
+        cal.setActive(true);
+        cal.setXml(xml);
+        cal.setCreated(new Date(System.currentTimeMillis()));
+        cal.setUpdated(new Date(System.currentTimeMillis()));
+        cal.setTitle(title);
+        CalendarInfo info = new CalendarInfo();
+        info.id = cal.getId();
+        info.title = cal.getTitle();
+        info.active = cal.isActive();
+        info.xml = cal.getXml();
+        return info;
     }
 }
