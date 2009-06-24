@@ -647,8 +647,9 @@ public class SemanticSearch extends GenericAdmResource {
             }
         }
 
-       // SWBSpellChecker speller = new SWBSpellChecker(lex.getObjDirectory(), "displayName");
-        
+       //SWBSpellChecker speller = new SWBSpellChecker();
+        //speller.testSuggest(lex.getObjDirectory(), query);
+
         /*for (String f : speller.getSuggestions("pogina")) {
             System.out.println("...." + f);
         }*/
@@ -699,7 +700,7 @@ public class SemanticSearch extends GenericAdmResource {
         System.out.println("\n+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
         //System.out.println(sparqlQuery);
         String errCount = Integer.toString(tr.getErrCode());
-        
+
         if (errCount != null) {
             if (Integer.parseInt(errCount) == 0) {
                 String patternStr = "\"[a-zA-Z]+\"";
@@ -750,7 +751,7 @@ public class SemanticSearch extends GenericAdmResource {
 
                             //Get dbPedia INFO
                             ResultSet dbrs = dbQexec.execSelect();
-                            
+
                             QuerySolution dbrb = dbrs.nextSolution();
                             RDFNode desc_node = dbrb.get("desc");
                             RDFNode lat_node = dbrb.get("lat");
@@ -800,7 +801,7 @@ public class SemanticSearch extends GenericAdmResource {
                                    "  <table cellspacing=7>\n");
                         ResultSet rs = qexec.execSelect();
                         sbf.append("  <thead>\n" +
-                                   "    <tr>\n");                        
+                                   "    <tr>\n");
                         if (rs.hasNext()) {
                             for (String icol : (List<String>) rs.getResultVars()) {
                                 sbf.append("      <th>" + icol + "</th>\n");
@@ -894,7 +895,7 @@ public class SemanticSearch extends GenericAdmResource {
                     if (tr.getErrCode() != 0) {
                         sbf.append("<script language=\"javascript\" type=\"text/javascript\">alert('" + paramRequest.getLocaleString("failmsg") + "');</script>");
                     }
-                }                
+                }
             } else {
                 sbf.append("<script language=\"javascript\" type=\"text/javascript\">");
                 sbf.append("alert(\"" + tr.getErrors().replace("\n", "\\n") + "\");");
