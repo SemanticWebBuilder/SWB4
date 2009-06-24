@@ -2089,8 +2089,12 @@ public class SemanticObject
         return list.iterator();
     }
 
-    @Override
-    public SemanticObject clone()
+    /**
+     * Clona un objeto y sus dependencias, el objeto hash sirve para
+     * almacenar las dependencias clonadas
+     * @return
+     */
+    public SemanticObject cloneObject(HashMap hash)
     {
         String id=null;
         if(m_cls.isAutogenId())
