@@ -265,6 +265,28 @@ public class DialogCalendarList extends javax.swing.JDialog
                     Document document = builder.build(reader);
                     dialogCalendar.setDocument(document, cal.title);
                     dialogCalendar.setVisible(true);
+                    if(!dialogCalendar.isCanceled)
+                    {
+                        Document xmlCalendar = dialogCalendar.getDocument();
+                        XMLOutputter out = new XMLOutputter();
+                        String xml = out.outputString(xmlCalendar);
+                        String title = dialogCalendar.jTextFieldTitle.getText();
+                        cal.title=title;
+                        cal.xml=xml;
+                        try
+                        {
+                            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                            OfficeApplication.getOfficeDocumentProxy().updateCalendar(resourceInfo.page.site, cal);
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                        finally
+                        {
+                            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
