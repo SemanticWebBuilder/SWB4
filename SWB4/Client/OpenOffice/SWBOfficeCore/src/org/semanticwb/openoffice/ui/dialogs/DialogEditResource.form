@@ -271,6 +271,7 @@
                 <Property name="text" type="java.lang.String" value="Activar Vigencia"/>
               </Properties>
               <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCheckBoxEndDateActiveItemStateChanged"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxEndDateActiveActionPerformed"/>
               </Events>
             </Component>

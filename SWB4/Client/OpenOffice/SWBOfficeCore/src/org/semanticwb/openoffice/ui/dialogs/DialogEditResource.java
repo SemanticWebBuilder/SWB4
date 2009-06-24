@@ -322,6 +322,11 @@ public class DialogEditResource extends javax.swing.JDialog
         jSpinnerEndDate.setEnabled(false);
 
         jCheckBoxEndDateActive.setText("Activar Vigencia");
+        jCheckBoxEndDateActive.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCheckBoxEndDateActiveItemStateChanged(evt);
+            }
+        });
         jCheckBoxEndDateActive.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxEndDateActiveActionPerformed(evt);
@@ -763,6 +768,11 @@ private void jButtonSendToAuthorizeActionPerformed(java.awt.event.ActionEvent ev
 
 private void jCheckBoxEndDateActiveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jCheckBoxEndDateActiveActionPerformed
 {//GEN-HEADEREND:event_jCheckBoxEndDateActiveActionPerformed
+    
+}//GEN-LAST:event_jCheckBoxEndDateActiveActionPerformed
+
+private void jCheckBoxEndDateActiveItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_jCheckBoxEndDateActiveItemStateChanged
+{//GEN-HEADEREND:event_jCheckBoxEndDateActiveItemStateChanged
     if (this.jCheckBoxActive.isSelected())
     {
         this.jSpinnerEndDate.setEnabled(true);
@@ -771,7 +781,7 @@ private void jCheckBoxEndDateActiveActionPerformed(java.awt.event.ActionEvent ev
     {
         this.jSpinnerEndDate.setEnabled(false);
     }
-}//GEN-LAST:event_jCheckBoxEndDateActiveActionPerformed
+}//GEN-LAST:event_jCheckBoxEndDateActiveItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
