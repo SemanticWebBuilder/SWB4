@@ -309,7 +309,8 @@ public class DialogCalendarList extends javax.swing.JDialog
                 if (canDelete)
                 {
                     OfficeApplication.getOfficeDocumentProxy().deleteCalendarFromCatalog(this.resourceInfo.page.site, cal);
-                    model.removeElement(cal);
+                    //model.removeElement(cal);
+                    fillCalendarList();
                     if (this.jListCalendars.getSelectedIndex() == -1 || model.isEmpty())
                     {
                         this.jButtonDeleteCalendar.setEnabled(false);
