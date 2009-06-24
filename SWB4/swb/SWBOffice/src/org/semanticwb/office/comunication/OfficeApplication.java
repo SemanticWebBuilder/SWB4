@@ -25,6 +25,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
@@ -880,5 +881,20 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         info.active = cal.isActive();
         info.xml = cal.getXml();
         return info;
+    }
+
+    public boolean canDeleteCalendar(SiteInfo siteInfo, CalendarInfo CalendarInfo) throws Exception
+    {        
+        WebSite site = SWBContext.getWebSite(siteInfo.id);
+        org.semanticwb.model.Calendar cal = site.createCalendar();
+        GenericIterator<CalendarRef> refs=cal.listCalendarRefInvs();
+        if(refs.hasNext())
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }
