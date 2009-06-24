@@ -167,7 +167,7 @@ public class DistributorParams
 
         adicparams=new HashMap();
         ArrayList adicaux=new ArrayList();
-        adicparams.put(new Long(0), adicaux);
+        adicparams.put(Long.valueOf(0), adicaux);
         
         internalQuery=new HashMap();
         ArrayList intqaux=null;
@@ -490,7 +490,7 @@ public class DistributorParams
      */
     public ArrayList getExtURIParams()
     {
-        return (ArrayList)adicparams.get(new Long(0));
+        return (ArrayList)adicparams.get(Long.valueOf(0));
     }
     
     /**
