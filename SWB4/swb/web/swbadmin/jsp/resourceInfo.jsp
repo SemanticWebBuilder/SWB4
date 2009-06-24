@@ -107,7 +107,7 @@
             if(isbase)
             {
                 out.println("<tr><td width=\"200px\" align=\"right\"></td><td>");
-                out.print("<input type='text' dojoType='dijit.form.TextBox' style=\"width:400px;font-size:12;\" value='' onChange=\"submitUrl('/swb/swbadmin/jsp/resourceUpdProp.jsp?");
+                out.print("<input type='text' dojoType='dijit.form.TextBox' style=\"width:400px;font-size:12;\" value='' onChange=\"submitUrl('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceUpdProp.jsp?");
                 out.print("suri="+URLEncoder.encode(res.getURI()));
                 out.print("&prop="+URLEncoder.encode(prop.getURI()));
                 out.print("&val='+this.value+'");

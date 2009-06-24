@@ -73,7 +73,7 @@ try
             }
         }else
         {
-            frm.setAction("/swb/swbadmin/jsp/SemObjectEditor.jsp");
+            frm.setAction(SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp");
             //frm.addButton("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
             frm.addButton(SWBFormButton.newSaveButton());
             //frm.addButton("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>");
@@ -127,7 +127,7 @@ try
             out.println("showStatus('"+obj.getSemanticClass().getDisplayName(lang)+" actualizado');");
             out.println("</script>");
         }
-        frm.setAction("/swb/swbadmin/jsp/SemObjectEditor.jsp");
+        frm.setAction(SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp");
 
         //frm.addButton("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
         frm.addButton(SWBFormButton.newSaveButton());

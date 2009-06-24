@@ -42,7 +42,7 @@
         rootLabel=request.getParameter("rootLabel");
         if(id==null)id="tree";
         if(showRoot==null)showRoot="false";
-        url="/swb/swbadmin/jsp/Tree.jsp?id="+id;
+        url=SWBPlatform.getContextPath()+"/swbadmin/jsp/Tree.jsp?id="+id;
     }
     //System.out.println("id:"+id);
     if(rootLabel!=null)rootLabel="rootLabel=\""+rootLabel+"\"";

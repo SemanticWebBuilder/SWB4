@@ -17,7 +17,7 @@
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.model.SWBModel"%>
 
-<link href="/swb/swbadmin/css/forum.css" rel="stylesheet" type="text/css" />
+<link href="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/css/forum.css" rel="stylesheet" type="text/css" />
 
 
 <table>

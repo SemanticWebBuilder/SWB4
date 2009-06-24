@@ -13,7 +13,7 @@
     if(obj==null)return;
     SemanticClass cls=obj.getSemanticClass();
 
-    String loading="<BR/><center><img src='/swb/swbadmin/images/loading.gif'/><center>";
+    String loading="<BR/><center><img src='"+SWBPlatform.getContextPath()+"/swbadmin/images/loading.gif'/><center>";
 
     //Div dummy para detectar evento de carga y modificar titulo
     String icon=SWBContext.UTILS.getIconClass(obj);

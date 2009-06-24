@@ -12,8 +12,8 @@
 <head>
 <title>Semantic WebBuilder</title>
 <meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
-<style type="text/css" media="screen">@import "/swb/swbadmin/js/iui/iui.css";</style>
-<script type="application/x-javascript" src="/swb/swbadmin/js/iui/iui.js"></script>
+<style type="text/css" media="screen">@import "<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/js/iui/iui.css";</style>
+<script type="application/x-javascript" src="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/js/iui/iui.js"></script>
 <script type="application/x-javascript">
     function send(element)
     {

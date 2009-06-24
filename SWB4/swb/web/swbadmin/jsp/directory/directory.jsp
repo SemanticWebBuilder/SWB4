@@ -79,7 +79,7 @@ if (sobj != null) {
     SWBResourceURL url=paramRequest.getRenderUrl();
     url.setParameter("objUri", sobj.getURI());
 %>
-<link href="/swb/swbadmin/css/directory.css" rel="stylesheet" type="text/css" />
+<link href="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/css/directory.css" rel="stylesheet" type="text/css" />
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
     <tr>
         <td align="left" valign="top"  height="25" class="block-title">

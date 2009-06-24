@@ -36,7 +36,7 @@
 %>
 <table>
     <tr>
-        <td><a href="/swb/swb/wiki/Eventos">Agenda Municipal</a></td>
+        <td><a href="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swb/wiki/Eventos">Agenda Municipal</a></td>
     </tr>
     <%
     int cont = 0;
@@ -124,7 +124,7 @@
 <%
     } else if (action.equals("addEvent")) {
 %>
-<form id="http://www.semanticwebbuilder.org/portal/resources/Events#Event/form" class="swbform" action="/swb/swb/wiki/Eventos/_aid/19/_act/add/_mod/add"  onsubmit="submitForm('http://www.semanticwebbuilder.org/portal/resources/Events#Event/form');return false;" method="post">
+<form id="http://www.semanticwebbuilder.org/portal/resources/Events#Event/form" class="swbform" action="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swb/wiki/Eventos/_aid/19/_act/add/_mod/add"  onsubmit="submitForm('http://www.semanticwebbuilder.org/portal/resources/Events#Event/form');return false;" method="post">
     <input type="hidden" name="scls" value="http://www.semanticwebbuilder.org/portal/resources/Events#Event"/>
     <input type="hidden" name="smode" value="create"/>
     <input type="hidden" name="sref" value="http://www.wiki.swb#Resource:19"/>
@@ -162,7 +162,7 @@
 <%
 } else {
 %>
-<link href="/swb/swbadmin/css/events.css" rel="stylesheet" type="text/css" />
+<link href="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/css/events.css" rel="stylesheet" type="text/css" />
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
     <tr>
         <td align="left" valign="top"  height="25" class="block-title">

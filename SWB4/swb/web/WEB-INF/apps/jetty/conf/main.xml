@@ -44,14 +44,15 @@
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
   <Call name="addWebApplication">
-    <Arg>/swb/</Arg>
+    <Arg>/</Arg>
     <Arg><SystemProperty name="webapp" default="."/></Arg>
     <Set name="defaultsDescriptor"><SystemProperty name="home" default="."/>/jetty/conf/webdefault.xml</Set>
   </Call>
+<!--
   <Call name="addWebApplication">
     <Arg>/</Arg>
     <Arg><SystemProperty name="webapp" default="."/>WEB-INF/apps/jetty/root</Arg>
     <Set name="defaultsDescriptor"><SystemProperty name="home" default="."/>/jetty/conf/webdefault.xml</Set>
   </Call>
-
+-->
 </Configure>
