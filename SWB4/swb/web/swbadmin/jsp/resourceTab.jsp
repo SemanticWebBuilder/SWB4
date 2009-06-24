@@ -32,13 +32,13 @@
 
     out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style=\"width=100%;height=100%;\" id=\""+id+"/tab2\" nested=\"true\">");
 
-    out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\"Información\" refreshOnShow=\"true\" href=\"/swb/swbadmin/jsp/resourceInfo.jsp?suri="+eid+"\" >");
+    out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\"Información\" refreshOnShow=\"true\" href=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceInfo.jsp?suri="+eid+"\" >");
     out.println("</div>");
     if(isClass)
     {
-        out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\"Instancias\" refreshOnShow=\"true\" href=\"/swb/swbadmin/jsp/classInstance.jsp?suri="+eid+"\" >");
+        out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\"Instancias\" refreshOnShow=\"true\" href=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/classInstance.jsp?suri="+eid+"\" >");
         out.println("</div>");
-        out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\"Dominio\" refreshOnShow=\"true\" href=\"/swb/swbadmin/jsp/classDomain.jsp?suri="+eid+"\" >");
+        out.println("<div dojoType=\"dijit.layout.ContentPane\" title=\"Dominio\" refreshOnShow=\"true\" href=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/classDomain.jsp?suri="+eid+"\" >");
         out.println("</div>");
     }
     out.println("</div><!-- end Bottom TabContainer -->");

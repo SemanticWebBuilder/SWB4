@@ -26,7 +26,7 @@
     //System.out.println("cls:"+cls);
     //System.out.println("ref:"+ref);
 %>
-<form id="<%=scls%>/form" dojoType="dijit.form.Form" class="swbform" action="/swb/swbadmin/jsp/SemObjectEditor.jsp"  onsubmit="submitForm('<%=scls%>/form');return false;" method="post">
+<form id="<%=scls%>/form" dojoType="dijit.form.Form" class="swbform" action="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/jsp/SemObjectEditor.jsp"  onsubmit="submitForm('<%=scls%>/form');return false;" method="post">
     <input type="hidden" name="scls" value="<%=scls%>"/>
     <input type="hidden" name="smode" value="create"/>
     <input type="hidden" name="sref" value="<%=sref%>"/>

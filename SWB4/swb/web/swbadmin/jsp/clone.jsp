@@ -29,7 +29,7 @@ package swbadmin.jsp;
     if(obj!=null)
     {
         String type=obj.getSemanticClass().getDisplayName(lang);
-        GenericObject obj2=obj.cloneObject(new HashMap());
+        SemanticObject obj2=obj.cloneObject();
         out.println(type+" fue clonado...");
         SemanticObject pobj=obj.getHerarquicalParent();
         if(pobj!=null)
