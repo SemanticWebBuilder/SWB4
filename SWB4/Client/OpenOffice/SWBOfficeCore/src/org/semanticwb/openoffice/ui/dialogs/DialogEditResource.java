@@ -7,16 +7,16 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Cursor;
 import java.awt.Frame;
-import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
 import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
@@ -32,6 +32,8 @@ import org.semanticwb.openoffice.ui.icons.ImageLoader;
 public class DialogEditResource extends javax.swing.JDialog
 {
 
+    private static final String DATE_FORMAT = "dd/MM/yyyy";
+    private static final SimpleDateFormat DATE_SIMPLEFORMAT = new SimpleDateFormat(DATE_FORMAT);
     private PanelPropertyEditor panelPropertyEditor1 = new PanelPropertyEditor();
     private String repositoryName,  contentID;
     private ResourceInfo pageInformation;
@@ -43,6 +45,7 @@ public class DialogEditResource extends javax.swing.JDialog
     {
         super((Frame) null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.jSpinnerEndDate.setEditor(new JSpinner.DateEditor(jSpinnerEndDate, DATE_FORMAT));
         this.jPanelInformation.add(panelPropertyEditor1);
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
@@ -57,6 +60,27 @@ public class DialogEditResource extends javax.swing.JDialog
         loadProperties();
         loadCalendars();
         setLocationRelativeTo(null);
+
+
+        try
+        {
+            Date date = OfficeApplication.getOfficeDocumentProxy().getEndDate(pageInformation);
+            if (date == null)
+            {
+                this.jCheckBoxActive.setSelected(false);
+                this.jSpinnerEndDate.setEnabled(false);
+            }
+            else
+            {
+                this.jCheckBoxActive.setSelected(true);
+                this.jSpinnerEndDate.setEnabled(true);
+                this.jSpinnerEndDate.setValue(date);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         jButtonSendToAuthorize.setVisible(false);
         try
@@ -78,11 +102,10 @@ public class DialogEditResource extends javax.swing.JDialog
             public void valueChanged(ListSelectionEvent e)
             {
                 jButtonDeleteScheduler.setEnabled(false);
-                jButtonEditEcheduler.setEnabled(false);
                 if (e.getFirstIndex() != -1)
                 {
                     jButtonDeleteScheduler.setEnabled(true);
-                    jButtonEditEcheduler.setEnabled(true);
+
                 }
             }
         });
@@ -140,7 +163,8 @@ public class DialogEditResource extends javax.swing.JDialog
         }
         try
         {
-            for (CalendarInfo info : OfficeApplication.getOfficeDocumentProxy().getCalendars(pageInformation))
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            for (CalendarInfo info : OfficeApplication.getOfficeDocumentProxy().getCalendarsOfResource(pageInformation))
             {
                 Object[] data =
                 {
@@ -160,6 +184,10 @@ public class DialogEditResource extends javax.swing.JDialog
         catch (Exception e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
     }
@@ -212,6 +240,9 @@ public class DialogEditResource extends javax.swing.JDialog
         jLabelPage = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jComboBoxVersion = new javax.swing.JComboBox();
+        jLabel5 = new javax.swing.JLabel();
+        jSpinnerEndDate = new javax.swing.JSpinner();
+        jCheckBoxEndDateActive = new javax.swing.JCheckBox();
         jPanelInformation = new javax.swing.JPanel();
         jPanelSchedule = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -219,8 +250,6 @@ public class DialogEditResource extends javax.swing.JDialog
         jToolBar1 = new javax.swing.JToolBar();
         jButtonAddCalendar = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
-        jButtonEditEcheduler = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JToolBar.Separator();
         jButtonDeleteScheduler = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -277,6 +306,18 @@ public class DialogEditResource extends javax.swing.JDialog
 
         jLabel8.setText("Versión a publicar:");
 
+        jLabel5.setText("Vigencia:");
+
+        jSpinnerEndDate.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.DAY_OF_WEEK));
+        jSpinnerEndDate.setEnabled(false);
+
+        jCheckBoxEndDateActive.setText("Activar Vigencia");
+        jCheckBoxEndDateActive.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxEndDateActiveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -288,25 +329,31 @@ public class DialogEditResource extends javax.swing.JDialog
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextFieldTitle, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)))
                     .addComponent(jLabel8)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel6)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jCheckBoxActive, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabelSite, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabelPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel2Layout.createSequentialGroup()
                                     .addGap(1, 1, 1)
-                                    .addComponent(jComboBoxVersion, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jLabelPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                            .addComponent(jCheckBoxEndDateActive)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jSpinnerEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jComboBoxVersion, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -336,7 +383,12 @@ public class DialogEditResource extends javax.swing.JDialog
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jComboBoxVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jSpinnerEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBoxEndDateActive))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Información", jPanel2);
@@ -392,20 +444,6 @@ public class DialogEditResource extends javax.swing.JDialog
         });
         jToolBar1.add(jButtonAddCalendar);
         jToolBar1.add(jSeparator1);
-
-        jButtonEditEcheduler.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/edit.png"))); // NOI18N
-        jButtonEditEcheduler.setToolTipText("Editar la calendarización seleccionada");
-        jButtonEditEcheduler.setEnabled(false);
-        jButtonEditEcheduler.setFocusable(false);
-        jButtonEditEcheduler.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButtonEditEcheduler.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButtonEditEcheduler.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEditEchedulerActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jButtonEditEcheduler);
-        jToolBar1.add(jSeparator2);
 
         jButtonDeleteScheduler.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
         jButtonDeleteScheduler.setToolTipText("Eliminar la calendarización seleccionada");
@@ -465,6 +503,15 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         {
             this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
             OfficeApplication.getOfficeDocumentProxy().updatePorlet(pageInformation);
+            if (this.jCheckBoxEndDateActive.isSelected())
+            {
+                Date date = (Date) this.jSpinnerEndDate.getValue();
+                OfficeApplication.getOfficeDocumentProxy().setEndDate(pageInformation, date);
+            }
+            else
+            {
+                OfficeApplication.getOfficeDocumentProxy().deleteEndDate(pageInformation);
+            }
             if (this.jCheckBoxActive.isSelected())
             {
                 if (this.pageInformation.active)
@@ -558,20 +605,9 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
             {
                 CalendarInfo cal = (CalendarInfo) model.getValueAt(i, 0);
                 boolean active = (Boolean) model.getValueAt(i, 1);
-                if (cal.id == null)
-                {
-                    // insert
-                    CalendarInfo calinfo = OfficeApplication.getOfficeDocumentProxy().insertCalendar(pageInformation, cal.title, cal.xml);
-                    added.remove(cal);
-                    OfficeApplication.getOfficeDocumentProxy().activeCalendar(pageInformation, calinfo, active);
-                    cal.id = calinfo.id;
-                }
-                else
-                {
-                    // update
-                    OfficeApplication.getOfficeDocumentProxy().updateCalendar(pageInformation, cal);
-                    OfficeApplication.getOfficeDocumentProxy().activeCalendar(pageInformation, cal, active);
-                }
+                OfficeApplication.getOfficeDocumentProxy().insertCalendartoResource(pageInformation, cal);
+                added.remove(cal);
+                OfficeApplication.getOfficeDocumentProxy().activeCalendar(pageInformation, cal, active);
             }
 
 
@@ -586,11 +622,11 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 }
                 OfficeApplication.getOfficeDocumentProxy().setResourceProperties(pageInformation, prop, value);
             }
-            JOptionPane.showMessageDialog(this, "¡Se ha guardado la información correctamente!",this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "¡Se ha guardado la información correctamente!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
         }
         catch (Exception e)
         {
-            JOptionPane.showMessageDialog(this, "¡Existe un error la guardar la información!\r\nDetalle: "+e.getLocalizedMessage(),this.getTitle(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "¡Existe un error la guardar la información!\r\nDetalle: " + e.getLocalizedMessage(), this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         finally
@@ -603,53 +639,44 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 
 private void jButtonAddCalendarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAddCalendarActionPerformed
 {//GEN-HEADEREND:event_jButtonAddCalendarActionPerformed
-    DialogCalendar dialogCalendar = new DialogCalendar();
-    dialogCalendar.setVisible(true);
-    if (!dialogCalendar.isCanceled)
+    DialogCalendarList list = new DialogCalendarList(pageInformation);
+    list.setVisible(true);
+    if (!list.isCanceled())
     {
-        Document xmlCalendar = dialogCalendar.getDocument();
-        XMLOutputter out = new XMLOutputter();
-        CalendarInfo cal = new CalendarInfo();
-        cal.xml = out.outputString(xmlCalendar);
-        cal.title = dialogCalendar.jTextFieldTitle.getText();
-        DefaultTableModel model = (DefaultTableModel) jTableScheduler.getModel();
-        Object[] data =
+        DefaultListModel model = (DefaultListModel) list.jListCalendars.getModel();
+        if (list.jListCalendars.getSelectedIndices() != null)
         {
-            cal, cal.active
-        };
-        added.add(cal);
-        model.addRow(data);
-    }
-}//GEN-LAST:event_jButtonAddCalendarActionPerformed
-
-private void jButtonEditEchedulerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonEditEchedulerActionPerformed
-{//GEN-HEADEREND:event_jButtonEditEchedulerActionPerformed
-    if (jTableScheduler.getSelectedRow() != -1)
-    {
-        CalendarInfo cal = (CalendarInfo) jTableScheduler.getModel().getValueAt(jTableScheduler.getSelectedRow(), 0);
-        DialogCalendar dialogCalendar = new DialogCalendar();
-        SAXBuilder SAXBuilder = new SAXBuilder();
-        ByteArrayInputStream in = new ByteArrayInputStream(cal.xml.getBytes());
-        try
-        {
-            Document document = SAXBuilder.build(in);
-            dialogCalendar.setDocument(document, cal.title);
-            dialogCalendar.setVisible(true);
-            if (!dialogCalendar.isCanceled)
+            for (int index : list.jListCalendars.getSelectedIndices())
             {
-                cal.title = dialogCalendar.jTextFieldTitle.getText();
-                XMLOutputter out = new XMLOutputter();
-                document = dialogCalendar.getDocument();
-                cal.xml = out.outputString(document);
-                //loadCalendars();
+                CalendarInfo calendar = (CalendarInfo) model.get(index);
+                boolean exists = false;
+                DefaultTableModel tableModel=(DefaultTableModel)this.jTableScheduler.getModel();
+                int count = tableModel.getRowCount();
+                for (int i = 0; i < count; i++)
+                {
+                    CalendarInfo calactual=(CalendarInfo)tableModel.getValueAt(0, i);
+                    if(calactual.id.equals(calendar.id))
+                    {
+                        exists=true;
+                        break;
+                    }
+                }
+                if (!exists)
+                {
+                    try
+                    {
+                        added.add(calendar);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
     }
-}//GEN-LAST:event_jButtonEditEchedulerActionPerformed
+    loadCalendars();
+}//GEN-LAST:event_jButtonAddCalendarActionPerformed
 
 private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonDeleteSchedulerActionPerformed
 {//GEN-HEADEREND:event_jButtonDeleteSchedulerActionPerformed
@@ -659,35 +686,28 @@ private void jButtonDeleteSchedulerActionPerformed(java.awt.event.ActionEvent ev
         if (res == JOptionPane.YES_OPTION)
         {
             CalendarInfo cal = (CalendarInfo) jTableScheduler.getModel().getValueAt(jTableScheduler.getSelectedRow(), 0);
-            if (cal.id == null)
+            DefaultTableModel model = (DefaultTableModel) jTableScheduler.getModel();
+            model.removeRow(jTableScheduler.getSelectedRow());
+
+            if (model.getRowCount() == 0 || jTableScheduler.getSelectedRow() == -1)
             {
-                DefaultTableModel model = (DefaultTableModel) jTableScheduler.getModel();
-                model.removeRow(jTableScheduler.getSelectedRow());
-                added.remove(cal);
-                if (model.getRowCount() == 0 || jTableScheduler.getSelectedRow() == -1)
-                {
-                    this.jButtonDeleteScheduler.setEnabled(false);
-                    this.jButtonEditEcheduler.setEnabled(false);
-                }
+                this.jButtonDeleteScheduler.setEnabled(false);
             }
-            else
+            try
             {
-                try
-                {
-                    OfficeApplication.getOfficeDocumentProxy().deleteCalendar(pageInformation, cal);
-                    loadCalendars();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
+                added.remove(cal);
+                OfficeApplication.getOfficeDocumentProxy().deleteCalendar(pageInformation, cal);
+                loadCalendars();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
             }
         }
     }
     if (this.jTableScheduler.getSelectedRow() == -1)
     {
         this.jButtonDeleteScheduler.setEnabled(false);
-        this.jButtonEditEcheduler.setEnabled(false);
     }
 }//GEN-LAST:event_jButtonDeleteSchedulerActionPerformed
 
@@ -731,20 +751,33 @@ private void jButtonSendToAuthorizeActionPerformed(java.awt.event.ActionEvent ev
     }
 }//GEN-LAST:event_jButtonSendToAuthorizeActionPerformed
 
+private void jCheckBoxEndDateActiveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jCheckBoxEndDateActiveActionPerformed
+{//GEN-HEADEREND:event_jCheckBoxEndDateActiveActionPerformed
+    if (this.jCheckBoxActive.isSelected())
+    {
+        this.jSpinnerEndDate.setEnabled(true);
+    }
+    else
+    {
+        this.jSpinnerEndDate.setEnabled(false);
+    }
+}//GEN-LAST:event_jCheckBoxEndDateActiveActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonAddCalendar;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonDeleteScheduler;
-    private javax.swing.JButton jButtonEditEcheduler;
     private javax.swing.JButton jButtonOK;
     private javax.swing.JButton jButtonSendToAuthorize;
     private javax.swing.JCheckBox jCheckBoxActive;
+    private javax.swing.JCheckBox jCheckBoxEndDateActive;
     private javax.swing.JComboBox jComboBoxVersion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelPage;
@@ -757,7 +790,7 @@ private void jButtonSendToAuthorizeActionPerformed(java.awt.event.ActionEvent ev
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JSpinner jSpinnerEndDate;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTableScheduler;
     private javax.swing.JTextArea jTextAreaDescription;
