@@ -190,11 +190,11 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library>
-                    <file>${reference.RepositoryManager.jar}</file>
+                    <file>${reference.SWBOffice.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library>
-                    <file>${reference.SWBOffice.jar}</file>
+                    <file>${reference.SWBRepositoryManager.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library>
@@ -202,19 +202,19 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library>
-                    <file>${reference.XMLRPCCommon.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library>
-                    <file>${reference.XMRPCServer.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library>
-                    <file>${reference.OfficeComunicationInterfaces.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library>
                     <file>${file.reference.jaxen-core.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.SWBXMLRPCCommon.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.SWBXMRPCServer.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.SWBOfficeComunicationInterfaces.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library>
@@ -356,22 +356,6 @@
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
-                <foreign-project>OfficeComunicationInterfaces</foreign-project>
-                <artifact-type>jar</artifact-type>
-                <script>build.xml</script>
-                <target>jar</target>
-                <clean-target>clean</clean-target>
-                <id>jar</id>
-            </reference>
-            <reference>
-                <foreign-project>RepositoryManager</foreign-project>
-                <artifact-type>jar</artifact-type>
-                <script>build.xml</script>
-                <target>jar</target>
-                <clean-target>clean</clean-target>
-                <id>jar</id>
-            </reference>
-            <reference>
                 <foreign-project>SWB3Resources</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
@@ -420,6 +404,14 @@
                 <id>jar</id>
             </reference>
             <reference>
+                <foreign-project>SWBOfficeComunicationInterfaces</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>SWBPlatform</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
@@ -436,6 +428,14 @@
                 <id>jar</id>
             </reference>
             <reference>
+                <foreign-project>SWBRepositoryManager</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>SWBSearch</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
@@ -444,7 +444,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>XMLRPCCommon</foreign-project>
+                <foreign-project>SWBXMLRPCCommon</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -452,7 +452,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>XMRPCServer</foreign-project>
+                <foreign-project>SWBXMRPCServer</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
