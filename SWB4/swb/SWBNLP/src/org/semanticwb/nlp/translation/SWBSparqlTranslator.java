@@ -554,18 +554,10 @@ public class SWBSparqlTranslator {
                     suggestions = propSpeller.suggestSimilar(tkText);
                     if (suggestions == null || suggestions.length == 0) {
                         res = res + (compound ? "[" + tkText + "]" : tkText) + " ";
-                    } else if (suggestions.length > 0) {
-                        System.out.println("Obtenidas ");
-                        for (int i = 0; i < suggestions.length; i++) {
-                            System.out.println(suggestions[i]);
-                        }
+                    } else if (suggestions.length > 0) {                        
                         res = res + (compound ? "[" + suggestions[0] + "]" : suggestions[0]) + " ";
                     }
                 } else if (suggestions.length > 0) {
-                    System.out.println("Obtenidas ");
-                    for (int i = 0; i < suggestions.length; i++) {
-                            System.out.println(suggestions[i]);
-                        }
                     res = res + (compound ? "[" + suggestions[0] + "]" : suggestions[0]) + " ";
                 }
             } else {
