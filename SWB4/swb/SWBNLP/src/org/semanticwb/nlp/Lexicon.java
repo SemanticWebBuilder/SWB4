@@ -33,12 +33,8 @@ import org.apache.lucene.search.TermQuery;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
-//NOTE: For JDK6 use following import instead
-//import java.text.Normalizer
-//import sun.text.Normalizer;
 
 /**
- * @author hasdai
  * A lexicon is a list of tagged words. In this case, word labels are the
  * display names (in a specific language) for Semantic Classes and Semantic
  * Properties. For the analysis purpose, Class names and Propery names are
@@ -49,18 +45,24 @@ import org.semanticwb.platform.SemanticProperty;
  * especifico) de las clases y propiedades semanticas. Para propositos del
  * analisis, los nombres de las clases y de las propiedades se almacenan en
  * directorios separados.
+ *
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class Lexicon {
-    String propDirPath;
-    String objDirPath;
-    Searcher searcher = null;
-    IndexWriter writer = null;
-    private Analyzer luceneAnalyzer = new StandardAnalyzer();
     private String language = "es";
+    private String propDirPath;
+    private String objDirPath;
+    
+    private Searcher searcher = null;
+    private IndexWriter writer = null;
+
+    private Analyzer SnballAnalyzer = null;
+    private Analyzer luceneAnalyzer = null;
+
     private List prefixes = new ArrayList();
     private List namespaces = new ArrayList();
     private String prefixString = "";
-    private Analyzer SnballAnalyzer = null;
+    
     private HashMap<String, String> langCodes;
     private String [] stopWords = {"a", "ante", "bajo", "cabe", "con",
                                         "contra", "de", "desde", "durante",
@@ -96,24 +98,28 @@ public class Lexicon {
      *
      * @param lang language for the new Lexicon. Idioma del nuevo diccionario.
      */
-    public Lexicon(String lang) {
-        System.out.println("MSG - Lexicon created");
+    public Lexicon(String lang) {        
         language = lang;      
 
         //Set directory path
         objDirPath = SWBPlatform.getWorkPath() + "/index/objDir_" + language;
         propDirPath = SWBPlatform.getWorkPath() + "/index/propDir_" + language;
 
+        //Create analyzer for index creation and optimization
+        luceneAnalyzer = new StandardAnalyzer();
+
         //Create object directory
         File file = new File(objDirPath);
         if (!file.exists()) {
             createIndex(objDirPath, luceneAnalyzer);
+            System.out.println("MSG - Object Lexicon created");
         }
 
         //Create property directory
         file = new File(propDirPath);
         if (!file.exists()) {
             createIndex(propDirPath, luceneAnalyzer);
+            System.out.println("MSG - Property Lexicon created");
         }
 
         //Initialize lang codes map
@@ -171,14 +177,20 @@ public class Lexicon {
         optimizeIndex();
     }
 
+    /**
+     * Optimizes the Objects and Properties indexes.
+     *
+     * Optimiza los directorios de objetos y propiedades.
+     */
     public void optimizeIndex() {
         try {
-            IndexWriter wr = new IndexWriter(objDirPath, luceneAnalyzer);
-            wr.optimize();
-            wr.close();
-            wr = new IndexWriter(propDirPath, luceneAnalyzer);
-            wr.optimize();
-            wr.close();
+            writer = new IndexWriter(objDirPath, luceneAnalyzer);
+            writer.optimize();
+            writer.close();
+            writer = new IndexWriter(propDirPath, luceneAnalyzer);
+            writer.optimize();
+            writer.close();
+            writer = null;
         } catch (Exception ex) {
             Logger.getLogger(Lexicon.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -218,15 +230,16 @@ public class Lexicon {
         if (doc == null) {
             try {
                 //Create in-memory index writer
-                IndexWriter objWriter = new IndexWriter(objDirPath, luceneAnalyzer, false);
+                writer = new IndexWriter(objDirPath, luceneAnalyzer, false);
 
                 //Create lucene document with SemanticClass info.
                 doc = createDocument("OBJ", oName, o.getPrefix(), oName.toLowerCase(),
                         getSnowballLexForm(oName), o.getName(), o.getClassId(), "");
 
                 //Write document to index
-                objWriter.addDocument(doc);
-                objWriter.close();
+                writer.addDocument(doc);
+                writer.close();
+                writer = null;
             } catch (Exception ex) {
                 Logger.getLogger(Lexicon.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -253,7 +266,7 @@ public class Lexicon {
         if (doc == null) {
             try {
             //Create in-memory index writers
-            IndexWriter propWriter = new IndexWriter(propDirPath, luceneAnalyzer, false);
+            writer = new IndexWriter(propDirPath, luceneAnalyzer, false);
 
             //If p is an ObjectProperty
             if (p.isObjectProperty()) {
@@ -267,15 +280,16 @@ public class Lexicon {
                     //Create lucene document for the Semantic Property
                     doc = createDocument("PRO", pName, p.getPrefix(),
                             p.getName(), getSnowballLexForm(pName) ,p.getName().toLowerCase(), p.getPropId(), rg.getClassId());
-                    propWriter.addDocument(doc);
+                    writer.addDocument(doc);
                 }
             } else {
                 //Create lucene document for the Semantic Property
                 doc = createDocument("PRO", pName, p.getPrefix(),
                         p.getName(), getSnowballLexForm(pName) ,p.getName().toLowerCase(), p.getPropId(), "");
-                propWriter.addDocument(doc);
+                writer.addDocument(doc);
             }
-            propWriter.close();
+            writer.close();
+            writer = null;
             } catch (Exception ex) {
                 Logger.getLogger(Lexicon.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -535,19 +549,6 @@ public class Lexicon {
         }
         return res.trim();
     }
-
-    /**
-     * Removes all accented characters from a string. Uses sun.text.Normalizer
-     * class. Nothe that in jdk6 Normalizer class has moved to java.text package.
-     * @param input String to normalize.
-     * @return String without accented characters.
-     */
-    /*public String removeAccents(String input) {
-        //NOTE: For JDK6 use following line instead
-        //java.text.Normalizer.normalize(input, java.text.Normalizer.Form.NFD);
-        String res = Normalizer.normalize(input, Normalizer.DECOMP, 0);
-        return res.replaceAll("[^\\p{ASCII}]", "");
-    }*/
 
     public void createIndex(String path, Analyzer analyzer) {
         try {
