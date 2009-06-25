@@ -116,7 +116,7 @@ public class Poll extends GenericResource {
                     out.println("<form name=\"frmEncuesta\" id=\"frmEncuesta_"+base.getId()+"\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\" style=\"color:"+base.getAttribute("textcolor")+";\" >");
                     if (!"".equals(base.getAttribute("imgencuesta", "").trim())) {
                         out.println("<p>");
-                        out.println("<img src=\""+webWorkPath+"/"+base.getAttribute("imgencuesta")+"\" border=\"0\" />");
+                        out.println("<img src=\""+webWorkPath+"/"+base.getAttribute("imgencuesta")+"\" border=\"0\" alt=\""+base.getAttribute("question")+"\" />");
                         out.println("</p>");
                     }else {
                         out.println("<p>"+base.getAttribute("question")+"</p>");
@@ -381,7 +381,6 @@ public class Poll extends GenericResource {
         }
         return false;
     }
-    
     
     /**
      * Metodo que valida si la ip del usuario final ya voto
@@ -931,24 +930,30 @@ public class Poll extends GenericResource {
             
             ret.append("<div class=\"swbform\"> ");
             ret.append("<form name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> ");
+            
             ret.append("<fieldset> ");
-            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
-            ret.append("<tr> ");
+            ret.append("<legend>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_section1")+"</legend>");
+            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"0\" cellspacing=\"7\"> ");
+            ret.append("<tr><td width=\"30%\"></td><td width=\"70%\"></td>");
+            /*ret.append("<tr> ");
             ret.append("<td colspan=\"2\"> ");
             ret.append(paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_section1"));
             ret.append("</td> ");
-            ret.append("</tr> ");
+            ret.append("</tr> ");*/
+
             ret.append("<tr>");
-            ret.append("<td>* " + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_question") + "</td>");
+            ret.append("<td align=\"right\">* " + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_question") + "</td>");
             ret.append("<td>");
             ret.append("<input type=\"text\" size=\"50\" name=\"question\" ");
             if(!"".equals(base.getAttribute("question", "").trim())) {
                 ret.append(" value=\"" + base.getAttribute("question").trim().replaceAll("\"", "&#34;") + "\"");
             }
-            ret.append("/></td> ");
+            ret.append("/>");
+            ret.append("</td> ");
             ret.append("</tr>");
+
             ret.append("<tr>");
-            ret.append("<td>* " + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_option") + "</td>");
+            ret.append("<td align=\"right\">* " + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_option") + "</td>");
             ret.append("<td>");
             ret.append("<input type=\"text\" size=\"50\" name=\"txtOption\"/><input type=\"hidden\" name=\"option\" ");
             if (!"".equals(base.getAttribute("option", "").trim())) {
@@ -959,20 +964,18 @@ public class Poll extends GenericResource {
             ret.append("<input type=\"button\" name=\"btnEdit\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnEdit") + "\" onClick=\"updateOption(this.form.selOption, this.form.txtOption)\"/>");
             ret.append("</td> ");
             ret.append("</tr> ");
+            
             ret.append("<tr> ");
             ret.append("<td>&nbsp;</td> ");
             ret.append("<td>");
             ret.append("<select name=\"selOption\" size=\"5\" multiple=\"multiple\" onChange=\"editOption(this.form.selOption, this.form.txtOption)\">");
             String value="";
-            //Document dom=base.getDom();
+            
             Document dom=SWBUtils.XML.xmlToDom(base.getXml());
-            if(dom!=null)
-            {
+            if(dom != null) {
                 NodeList node = dom.getElementsByTagName("option");
-                if (node.getLength() > 0)
-                {
-                    for (int i = 0; i < node.getLength(); i++)
-                    {
+                if (node.getLength() > 0) {
+                    for (int i = 0; i < node.getLength(); i++) {
                         value = node.item(i).getChildNodes().item(0).getNodeValue().trim();
                         if(!"".equals(value.trim())) {
                             ret.append("<option value=\"" + value.trim().replaceAll("\"", "&#34;") + "\">" + value.trim() + "</option>");
@@ -984,8 +987,9 @@ public class Poll extends GenericResource {
             ret.append("<input type=\"button\" name=\"btnDel\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnDelete") + "\" onClick=\"deleteOption(this.form.selOption, this.form.txtOption)\" />");
             ret.append("</td>");
             ret.append("</tr>");
+
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_link") + "</td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_link") + "</td>");
             ret.append("<td>");
             ret.append("<input type=\"text\" size=\"50\" name=\"txtLink\"/><input type=\"hidden\" name=\"link\" ");
             if(!"".equals(base.getAttribute("link", "").trim())) {
@@ -996,6 +1000,7 @@ public class Poll extends GenericResource {
             ret.append("<input type=\"button\" name=\"btnEdit\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnEdit") + "\" onClick=\"updateOption(this.form.selLink, this.form.txtLink)\" />");
             ret.append("</td> ");
             ret.append("</tr> ");
+            
             ret.append("<tr> ");
             ret.append("<td>&nbsp;</td> ");
             ret.append("<td>");
@@ -1018,30 +1023,31 @@ public class Poll extends GenericResource {
             ret.append("<input type=\"button\" name=\"btnDel\" value=\"" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_btnDelete") + "\" onClick=\"deleteOption(this.form.selLink, this.form.txtLink)\" />");
             ret.append("</td>");
             ret.append("</tr>");
+
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_displayLinks") + "</td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_displayLinks") + "</td>");
             ret.append("<td>");
             value=base.getAttribute("wherelinks", "1").trim();
-            ret.append("<input type=\"radio\" name=\"wherelinks\" value=\"1\" ");
+            ret.append("<label><input type=\"radio\" name=\"wherelinks\" value=\"1\" ");
             if("1".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onPoll")+"<br />");
-            ret.append("<input type=\"radio\" name=\"wherelinks\" value=\"2\" ");
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onPoll")+"</label><br />");
+            ret.append("<label><input type=\"radio\" name=\"wherelinks\" value=\"2\" ");
             if("2".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onPollResults")+"<br />");
-            ret.append("<input type=radio name=\"wherelinks\" value=\"3\" ");
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onPollResults")+"</label><br />");
+            ret.append("<label><input type=radio name=\"wherelinks\" value=\"3\" ");
             if("3".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onBoth")+"<br /></td>");
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_onBoth")+"<label><br />");
             ret.append("</td>");
             ret.append("</tr>");
             
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_textcolor") + "</td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_textcolor") + "</td>");
             ret.append("<td>");
             ret.append("<table>");
             ret.append("<tr>");
@@ -1055,7 +1061,7 @@ public class Poll extends GenericResource {
             ret.append("</tr>");
             
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_otherTextcolor") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_hexadecimal") + "):</font></td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_otherTextcolor") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_hexadecimal") + "):</font></td>");
             ret.append("<td>");
             ret.append("<div id=\"cptextcolor_"+base.getId()+"\"></div>");
             
@@ -1068,17 +1074,19 @@ public class Poll extends GenericResource {
 
             ret.append("</td>");
             ret.append("</tr>");
+            
             ret.append("<tr>");
-            ret.append("<td>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgTitle") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg):</font></td>");
+            ret.append("<td align=\"right\">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgTitle") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg, png):</font></td>");
             ret.append("<td>");
-            ret.append("<input type=\"file\" size=\"40\" name=\"imgencuesta\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
+            ret.append("<input type=\"file\" size=\"40\" name=\"imgencuesta\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif|png');\"/>");
             if(!"".equals(base.getAttribute("imgencuesta", "").trim())) {
                 ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("imgencuesta").trim(), "imgencuesta") +"<input type=\"checkbox\" name=\"noimgencuesta\" value=\"1\"/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cutImage") + " <i>" + base.getAttribute("imgencuesta").trim() + "</i></p>");
             }
             ret.append("</td>");
             ret.append("</tr>");
+
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgVote") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg):</font></td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgVote") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg, png):</font></td>");
             ret.append("<td>");
             ret.append("<input type=\"file\" size=\"40\" name=\"button\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
             if(!"".equals(base.getAttribute("button", "").trim())) {
@@ -1086,113 +1094,133 @@ public class Poll extends GenericResource {
             }
             ret.append("</td>");
             ret.append("</tr>");
+            
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_voteOnce") + "</td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_voteOnce") + "</td>");
             ret.append("<td>");
             value=base.getAttribute("oncevote", "true").trim();
-            ret.append("<input type=\"radio\" name=\"oncevote\" value=\"true\" ");
+            ret.append("<label><input type=\"radio\" name=\"oncevote\" value=\"true\" ");
             if("true".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_yes") +" ");
-            ret.append("<input type=\"radio\" name=\"oncevote\" value=\"false\" ");
+            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_yes")+"</label>");
+            ret.append("&nbsp;&nbsp;");
+            ret.append("<label><input type=\"radio\" name=\"oncevote\" value=\"false\" ");
             if("false".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no") +"</td>");
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no")+"</label>");
+            ret.append("</td>");
             ret.append("</tr>");
             
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_vmode") + "</td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_vmode") + "</td>");
             ret.append("<td>");
             value=base.getAttribute("vmode", "0").trim();
-            ret.append("<input type=\"radio\" name=\"vmode\" value=\"0\" ");
+            ret.append("<label><input type=\"radio\" name=\"vmode\" value=\"0\" ");
             if("0".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_ipMode") +" ");
-            ret.append("<input type=\"radio\" name=\"vmode\" value=\"1\" ");
+            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_ipMode")+"</label>");
+            ret.append("&nbsp;&nbsp;");
+            ret.append("<label><input type=\"radio\" name=\"vmode\" value=\"1\" ");
             if("1".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append(">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cookieMode") +"</td>");
+            ret.append(">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cookieMode") +"</label>");
+            ret.append("</td>");
             ret.append("</tr>");
             
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_time") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_minutes") + "):</font></td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_time") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_minutes") + ")</font>:</td>");
             ret.append("<td>");
             ret.append("<input type=\"text\" size=\"6\" maxlength=\"5\" name=\"time\" dir=\"rtl\" ");
-            ret.append(" value=\"" + base.getAttribute("time", "20").trim() + "\"");
-            ret.append("/></td>");
+            ret.append(" value=\""+base.getAttribute("time", "20").trim()+"\" />");
+            ret.append("</td>");
             ret.append("</tr>");
-            ret.append("<tr> ");
+            ret.append("</table>");
+            ret.append("</fieldset>");
+
+            ret.append("<br /> ");
+            
+            ret.append("<fieldset> ");
+            ret.append("<legend>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_section2")+"</legend>");
+            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"0\" cellspacing=\"7\"> ");
+            ret.append("<tr><td width=\"30%\"></td><td width=\"70%\"></td>");
+            /*ret.append("<tr> ");
             ret.append("<td colspan=2>");
             ret.append(paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_section2"));
             ret.append("</td> ");
-            ret.append("</tr> ");
+            ret.append("</tr> ");*/
             
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_display_results") + "</td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_display_results") + "</td>");
             ret.append("<td>");
             value=base.getAttribute("display", "true").trim();
-            ret.append("<input type=\"radio\" name=\"display\" value=\"true\" ");
+            ret.append("<label><input type=\"radio\" name=\"display\" value=\"true\" ");
             if ("true".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_window") + " ");
-            ret.append("<input type=\"radio\" name=\"display\" value=\"false\" ");
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_window")+"</label>");
+            ret.append("&nbsp;&nbsp;");
+            ret.append("<label><input type=\"radio\" name=\"display\" value=\"false\" ");
             if ("false".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_collapseDiv") + "</td>");
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_collapseDiv")+"</label>");
+            ret.append("</td>");
             ret.append("</tr>");
             
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_spaceLine") + "</td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_spaceLine") + "</td>");
             ret.append("<td>");
             ret.append("<input type=\"text\" size=\"2\" maxlength=\"2\" name=\"branches\" ");
             ret.append(" value=\"" + base.getAttribute("branches", "1").trim() + "\"");
             ret.append("/></td>");
             ret.append("</tr>");
+            
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_percentage") + "</td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_percentage") + "</td>");
             ret.append("<td>");
             value=base.getAttribute("porcent", "true").trim();
-            ret.append("<input type=\"radio\" name=\"porcent\" value=\"true\" ");
+            ret.append("<label><input type=\"radio\" name=\"porcent\" value=\"true\" ");
             if("true".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_yes") + " ");
-            ret.append("<input type=\"radio\" name=\"porcent\" value=\"false\" ");
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_yes")+"</label>");
+            ret.append("&nbsp;&nbsp;");
+            ret.append("<label><input type=\"radio\" name=\"porcent\" value=\"false\" ");
             if("false".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no") + "</td>");
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no")+"</label>");
+            ret.append("</td>");
             ret.append("</tr>");
+
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_total") + "</td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_total") + "</td>");
             ret.append("<td>");
             value=base.getAttribute("totvote", "true").trim();
-            ret.append("<input type=\"radio\" name=\"totvote\" value=\"true\" ");
+            ret.append("<label><input type=\"radio\" name=\"totvote\" value=\"true\" ");
             if("true".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_yes") + " ");
-            ret.append("<input type=\"radio\" name=\"totvote\" value=\"false\" ");
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_yes")+"</label>");
+            ret.append("&nbsp;&nbsp;");
+            ret.append("<label><input type=\"radio\" name=\"totvote\" value=\"false\" ");
             if("false".equals(value)) {
                 ret.append(" checked=\"checked\"");
             }
-            ret.append("/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no") + "</td>");
+            ret.append("/>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_no")+"</label>");
+            ret.append("</td>");
             ret.append("</tr>");
             
             ret.append("<tr> ");
-            ret.append("<td>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_textcolor")+"</td> ");
+            ret.append("<td align=\"right\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_textcolor")+"</td> ");
             ret.append("<td>");
             ret.append("<table>");
             ret.append("<tr>");
-            ret.append("<td>");
-            ret.append("<input type=\"text\" size=\"7\" maxlength=\"7\" id=\"textcolorres_"+base.getId()+"\" name=\"textcolorres\" value=\""+base.getAttribute("textcolorres", "#000000")+"\">");
-            ret.append("</td>");
+            ret.append("<td><input type=\"text\" size=\"7\" maxlength=\"7\" id=\"textcolorres_"+base.getId()+"\" name=\"textcolorres\" value=\""+base.getAttribute("textcolorres", "#000000")+"\"></td>");
             ret.append("<td bgcolor=\"" + base.getAttribute("textcolorres", "#000000") + "\" width=\"20\">&nbsp;</td>");
             ret.append("</tr>");
             ret.append("</table>");
@@ -1200,7 +1228,7 @@ public class Poll extends GenericResource {
             ret.append("</tr>");
                          
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_otherTextcolor") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_hexadecimal") + "):</font></td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_otherTextcolor") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_hexadecimal") + "):</font></td>");
             ret.append("<td>");
             ret.append("<div id=\"cptextcolorres_"+base.getId()+"\"></div>");
 
@@ -1215,7 +1243,7 @@ public class Poll extends GenericResource {
             ret.append("</tr>");
             
             ret.append("<tr>");
-            ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgBackground") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg):</font></td>");
+            ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgBackground") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg, png):</font></td>");
             ret.append("<td>");
             ret.append("<input type=\"file\" size=\"40\" name=\"backimgres\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
             if(!"".equals(base.getAttribute("backimgres", "").trim())) {
@@ -1223,52 +1251,78 @@ public class Poll extends GenericResource {
             }
             ret.append("</td>");
             ret.append("</tr>");
+
             ret.append("<tr>");
-            ret.append("<td>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_msgResults")+" :</td>");
+            ret.append("<td align=\"right\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_msgResults")+":</td>");
             ret.append("<td>");
             ret.append("<input type=\"text\" name=\"msg_viewresults\"");
             if(!"".equals(base.getAttribute("msg_viewresults", "").trim())) {
                 ret.append( "value=\""+base.getAttribute("msg_viewresults").trim()+"\"");
             }
-            ret.append("/></td>");
+            ret.append("/>");
+            ret.append("</td>");
             ret.append("</tr>");
+
             ret.append("<tr>");
-            ret.append("<td>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_numVotes")+":</td>");
+            ret.append("<td align=\"right\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_numVotes")+":</td>");
             ret.append("<td>");
             ret.append("<input type=\"text\" name=\"msg_vote\"");
             if(!"".equals(base.getAttribute("msg_vote", "").trim())) {
                 ret.append(" value=\""+base.getAttribute("msg_vote").trim()+"\"");
             }
-            ret.append("/></td>");
+            ret.append("/>");
+            ret.append("</td>");
             ret.append("</tr>");
+
             ret.append("<tr>");
-            ret.append("<td>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_windowClose")+":</td>");
+            ret.append("<td align=\"right\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_windowClose")+":</td>");
             ret.append("<td>");
             ret.append("<input type=\"text\" name=\"msg_closewin\"");
             if(!"".equals(base.getAttribute("msg_closewin", "").trim())) {
                 ret.append(" value=\""+base.getAttribute("msg_closewin").trim()+ "\"");
             }
-            ret.append("/></td>");
+            ret.append("/>");
+            ret.append("</td>");
             ret.append("</tr>");
+
             ret.append("<tr>");
-            ret.append("<td>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_totalVotes")+":</td>");
+            ret.append("<td align=\"right\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_totalVotes")+":</td>");
             ret.append("<td>");
             ret.append("<input type=\"text\" name=\"msg_totvotes\"");
             if(!"".equals(base.getAttribute("msg_totvotes", "").trim())) {
                 ret.append(" value=\""+base.getAttribute("msg_totvotes").trim()+"\"");
             }
-            ret.append("/></td>");
+            ret.append("/>");
+            ret.append("</td>");
             ret.append("</tr>");
+            
             ret.append("<tr>");
-            ret.append("<td>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_vote")+":</td>");
+            ret.append("<td align=\"right\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_message")+" "+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_vote")+":</td>");
             ret.append("<td>");
             ret.append("<input type=\"text\" name=\"msg_tovote\"");
             if(!"".equals(base.getAttribute("msg_tovote", "").trim())) {
                 ret.append(" value=\""+base.getAttribute("msg_tovote").trim()+"\"");
             }
-            ret.append("/></td>");
+            ret.append("/>");
+            ret.append("</td>");
             ret.append("</tr>");
-            ret.append(admResUtils.loadWindowConfiguration(base, paramRequest));
+
+            /*ret.append("<tr><td colspan=\"2\"><hr noshade=\"noshade\" color=\"#66CCFF\" /></td></tr>");
+            ret.append("<tr>");
+            ret.append("<td colspan=\"2\">");
+            ret.append(paramRequest.getLocaleString("usrmsg_SettingsNewWindow"));
+            ret.append("</td>");
+            ret.append("</tr>");*/
+            ret.append("</table>");
+            ret.append("</fieldset>");
+
+            ret.append("<br /> ");
+
+            ret.append("<fieldset> ");
+            ret.append("<legend>"+paramRequest.getLocaleString("usrmsg_SettingsNewWindow")+"</legend>");
+            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"0\" cellspacing=\"7\"> ");
+            ret.append("<tr><td width=\"30%\"></td><td width=\"70%\"></td>");
+            ret.append(admResUtils.loadWindowConfiguration(base, paramRequest));            
             ret.append("</table> ");
             ret.append("</fieldset>");
             
