@@ -67,12 +67,12 @@ public class DialogEditResource extends javax.swing.JDialog
             Date date = OfficeApplication.getOfficeDocumentProxy().getEndDate(pageInformation);
             if (date == null)
             {
-                this.jCheckBoxActive.setSelected(false);
+                this.jCheckBoxEndDateActive.setSelected(false);
                 this.jSpinnerEndDate.setEnabled(false);
             }
             else
             {
-                this.jCheckBoxActive.setSelected(true);
+                this.jCheckBoxEndDateActive.setSelected(true);
                 this.jSpinnerEndDate.setEnabled(true);
                 this.jSpinnerEndDate.setValue(date);
             }
@@ -773,7 +773,7 @@ private void jCheckBoxEndDateActiveActionPerformed(java.awt.event.ActionEvent ev
 
 private void jCheckBoxEndDateActiveItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_jCheckBoxEndDateActiveItemStateChanged
 {//GEN-HEADEREND:event_jCheckBoxEndDateActiveItemStateChanged
-    if (this.jCheckBoxActive.isSelected())
+    if (jCheckBoxEndDateActive.isSelected())
     {
         this.jSpinnerEndDate.setEnabled(true);
     }
