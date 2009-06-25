@@ -268,7 +268,7 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<td>");
                     out.println("<div class=\"applet\">");
                     // global
-                    out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/WBGraph.jar\" width=\"400\" height=\"400\">");
+                    out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"400\" height=\"400\">");
                     out.println("<param name=\"GraphType\" value=\"Bar\">");
                     out.println("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("global_report")+"\">");
                     out.println("<param name=\"ncdata\" value=\"1\">");
@@ -292,7 +292,7 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<td>");
                     out.println("<div class=\"applet\">");
                     // sesiones
-                    out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/WBGraph.jar\" width=\"400\" height=\"400\">");
+                    out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"400\" height=\"400\">");
                     out.println("<param name=\"GraphType\" value=\"Bar\">");
                     out.println("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("session_report")+"\">");
                     out.println("<param name=\"ncdata\" value=\"1\">");
@@ -318,7 +318,7 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<td>");
                     out.println("<div class=\"applet\">");
                     // loggin user
-                    out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/WBGraph.jar\" width=\"400\" height=\"400\">");
+                    out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"400\" height=\"400\">");
                     out.println("<param name=\"GraphType\" value=\"Bar\">");
                     out.println("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("login_report")+"\">");
                     out.println("<param name=\"ncdata\" value=\"1\">");
@@ -342,7 +342,7 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<td>");
                     out.println("<div class=\"applet\">");
                     // device
-                    out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/WBGraph.jar\" width=\"400\" height=\"400\">");
+                    out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"400\" height=\"400\">");
                     out.println("<param name=\"GraphType\" value=\"Bar\">");
                     out.println("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("device_report")+"\">");
                     long nc = SWBUtils.sizeOf(SWBContext.getWebSite(websiteId).listDevices());
@@ -398,7 +398,7 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<td>");
                     out.println("<div class=\"applet\">");
                     // language
-                    out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/WBGraph.jar\" width=\"400\" height=\"400\">");
+                    out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"400\" height=\"400\">");
                     out.println("<param name=\"GraphType\" value=\"Bar\">");
                     out.println("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("language_report")+"\">");
                     nc = SWBUtils.sizeOf(SWBContext.getWebSite(websiteId).listLanguages());

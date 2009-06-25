@@ -650,7 +650,7 @@ public class WBAdmResourceUtils {
                             strb = new StringBuffer();
                             strb.append("\n");
                             //strb.append("<OBJECT WIDTH=100% HEIGHT=100% classid=\"clsid:8AD9C840-044E-11D1-B3E9-00805F499D93\" codebase=\"http://java.sun.com/products/plugin/autodl/jinstall-1_4_0-win.cab#Version=1,4,0,0\" border=0><NOEMBED><XMP>\n");
-                            strb.append("<APPLET  WIDTH=100% HEIGHT=100% CODE=\"applets.dragdrop.DragDrop.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" archive=\"swbadmin/lib/DragDrop.jar, swbadmin/lib/WBCommons.jar\" border=0>");
+                            strb.append("<APPLET  WIDTH=100% HEIGHT=100% CODE=\"applets.dragdrop.DragDrop.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" archive=\"swbadmin/lib/SWBAplDragDrop.jar, swbadmin/lib/SWBAplCommons.jar\" border=0>");
                             //strb.append("<APPLET  WIDTH=100% HEIGHT=100% CODE=\"DragDrop.class\" archive=\""+ webPath + "admin/DragDrop.jar\" border=0></XMP>");
                             //strb.append("<PARAM NAME=CODE VALUE=\"DragDrop.class\">\n");
                             //strb.append("<PARAM NAME=ARCHIVE VALUE=\""+ webPath + "admin/DragDrop.jar\">\n");
@@ -743,7 +743,7 @@ public class WBAdmResourceUtils {
                         {
                             sbfRet.append("\n");
                             //sbfRet.append("<OBJECT WIDTH=100% HEIGHT=100% classid=\"clsid:8AD9C840-044E-11D1-B3E9-00805F499D93\" codebase=\"http://java.sun.com/products/plugin/autodl/jinstall-1_4_0-win.cab#Version=1,4,0,0\" border=0><NOEMBED><XMP>\n");
-                            sbfRet.append("<APPLET  WIDTH=100% HEIGHT=100% CODE=\"applets.dragdrop.DragDrop.class\" codebase=\""+SWBPlatform.getContextPath()+"\" archive=\"wbadmin/lib/DragDrop.jar, wbadmin/lib/WBCommons.jar\" border=0>");
+                            sbfRet.append("<APPLET  WIDTH=100% HEIGHT=100% CODE=\"applets.dragdrop.DragDrop.class\" codebase=\""+SWBPlatform.getContextPath()+"\" archive=\"swbadmin/lib/SWBAplDragDrop.jar, swbadmin/lib/SWBAplCommons.jar\" border=0>");
                             //sbfRet.append("<PARAM NAME =\"JSESS\" VALUE=\"" + idsession + "\">\n");
                             sbfRet.append("<PARAM NAME=\"webpath\" VALUE=\""+SWBPlatform.getContextPath()+"\">\n");
                             sbfRet.append("<PARAM NAME=\"foreground\" VALUE=\"000000\">\n");
@@ -964,7 +964,7 @@ public class WBAdmResourceUtils {
         } else {
             sbfRet.append("240");
         }
-        sbfRet.append("\" code=\"applets.selcolor.SelColor.class\" codebase=\"" + webPath + "\" archive=\"wbadmin/lib/SelColor.jar\" border=\"0\">");
+        sbfRet.append("\" code=\"applets.selcolor.SelColor.class\" codebase=\"" + webPath + "\" archive=\"swbadmin/lib/SWBAplSelColor.jar\" border=\"0\">");
         sbfRet.append("\n<param name=\"name\" value=\"");
         if (param.get("id") != null) {
             sbfRet.append((String) param.get("id"));
@@ -972,7 +972,7 @@ public class WBAdmResourceUtils {
             sbfRet.append("selColor");
         }
         sbfRet.append("\">");
-        sbfRet.append("\n<param name=\"cache_archive\" value=\"" + webPath + "wbadmin/lib/SelColor.jar\">");
+        sbfRet.append("\n<param name=\"cache_archive\" value=\"" + webPath + "swbadmin/lib/SWBAplSelColor.jar\">");
         sbfRet.append("\n<param name=\"_cache_version\" value=\"1.0.0.1\">");
         sbfRet.append("\n<param name=\"_cache_archive_ex\" value=\"applet.jar;preload, util.jar;preload,tools.jar;preload\">");
         sbfRet.append("\n<param name=\"type\" value=\"application/x-java-applet;version=1.4\">");

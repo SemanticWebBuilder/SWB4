@@ -740,7 +740,7 @@ public class SWBAWorkflow extends GenericResource
 //                //out.println("codebase=\"http://java.sun.com/products/plugin/autodl/jinstall-1_4_2-windows-i586.cab#Version=1,4,2,0\"> ");
 //                out.println("<PARAM name=\"java_code\" value=\"applets.workflowadmin.EditWorkflow.class\">");
 //                out.println("<PARAM name=\"java_codebase\" value=\"" + SWBPlatform.getContextPath() + "\">");
-//                out.println("<PARAM name=\"java_archive\" value=\"swbadmin/lib/WorkFlowAdmin.jar, swbadmin/lib/WBCommons.jar\">");
+//                out.println("<PARAM name=\"java_archive\" value=\"swbadmin/lib/SWBAplWorkFlowAdmin.jar, swbadmin/lib/SWBAplCommons.jar\">");
 //
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setMode("gateway");
@@ -754,7 +754,7 @@ public class SWBAWorkflow extends GenericResource
 
 //                System.out.println("Con APPLET");
 
-                out.println("<APPLET id=\"apptree\" name=\"editrole\" code=\"applets.workflowadmin.EditWorkflow.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" ARCHIVE=\"swbadmin/lib/WorkFlowAdmin.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"350\">");
+                out.println("<APPLET id=\"apptree\" name=\"editrole\" code=\"applets.workflowadmin.EditWorkflow.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" ARCHIVE=\"swbadmin/lib/SWBAplWorkFlowAdmin.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"350\">");
                 out.println("<PARAM NAME =\"idworkflow\" VALUE=\"" + id + "\">");
                 out.println("<PARAM NAME =\"cgipath\" VALUE=\"" + url + "\">");
                 out.println("<PARAM NAME =\"locale\" VALUE=\"" + user.getLanguage() + "\">");

@@ -49,7 +49,7 @@ public class SWBAListActiveUsers extends GenericResource {
 //            if(act==null)
 //            {
 //                out.println("<tr><td colspan='2'>");
-//                out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"swbadmin/lib/WBGraph.jar\" width=\"100%\" height=\"200\">");
+//                out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"swbadmin/lib/SWBAplGraph.jar\" width=\"100%\" height=\"200\">");
 //                SWBResourceURL url=paramRequest.getRenderUrl();
 //                url.setCallMethod(SWBResourceURL.Call_DIRECT);
 //                url.setMode("getData");
