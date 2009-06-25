@@ -7,8 +7,14 @@ package org.semanticwb.portal.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
+//import java.util.Date;
+//import java.util.*;
 import java.util.Date;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.*;
@@ -265,11 +271,14 @@ public class SWBASOPropRefEditor extends GenericResource {
 
             boolean isInherit = true;
 
-            log.debug("obj sem class"+obj.getSemanticClass().getName());
+            log.debug("obj sem class: " + obj.getSemanticClass().getName());
 
             Iterator<SemanticObject> itso = null;
-            if (obj.getSemanticClass().equals(User.swb_User)) {
+
+            if (obj.getSemanticClass().equals(User.swb_User) && !prop.getRangeClass().equals(User.swb_CalendarRef)) {
                 itso = obj.listObjectProperties(spref);
+            } else if (obj.getSemanticClass().equals(User.swb_User) && prop.getRangeClass().equals(User.swb_CalendarRef)) {
+                itso = obj.listObjectProperties(spro);
             } else {
                 itso = obj.listObjectProperties(prop);
             }
@@ -279,8 +288,9 @@ public class SWBASOPropRefEditor extends GenericResource {
                 SemanticClass clsobj = sobj.getSemanticClass();
                 //log.debug("Clase: " + clsobj.getName()+" -- "+sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title));
                 String stitle = getDisplaySemObj(sobj, user.getLanguage());
-                if(clsobj.getName().trim().equals("UserGroupRef"))
-                    title=sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title);
+                if (clsobj.getName().trim().equals("UserGroupRef")) {
+                    title = sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title);
+                }
 
                 SemanticProperty semprop = ont.getSemanticProperty(idpref);
                 SemanticProperty sem_p = ont.getSemanticProperty(idpref);
@@ -320,7 +330,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     urlchoose.setParameter("rspropref", idpref);
                 }
                 urlchoose.setParameter("act", "edit");
-                
+
                 //out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + stitle + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
                 out.println("<a href=\"#\"  onclick=\"addNewTab('" + semobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + semobj.getDisplayName(user.getLanguage()) + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
                 out.println("</td>");
@@ -543,7 +553,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     while (itso.hasNext()) {
                         SemanticObject sobj = itso.next();
                         SemanticClass clsobj = sobj.getSemanticClass();
-                        log.debug("Clase:" + clsobj.getName()+", SO: "+sobj.getDisplayName(user.getLanguage()));
+                        log.debug("Clase:" + clsobj.getName() + ", SO: " + sobj.getDisplayName(user.getLanguage()));
                         String stitle = getDisplaySemObj(sobj, user.getLanguage());
 
                         out.println("<tr>");
@@ -722,22 +732,28 @@ public class SWBASOPropRefEditor extends GenericResource {
 
             SemanticClass clsprop = propref.getRangeClass();
             title = clsprop.getName();
-            log.debug(title);
+            log.debug("Titulo de la clase ref: " + title);
 
             HashMap hmSO = new HashMap();
             Iterator<SemanticObject> ite_so = obj.listObjectProperties(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp));
             while (ite_so.hasNext()) {
                 SemanticObject so = ite_so.next();
                 if (null != so) {
-                    SemanticObject soref = so.getObjectProperty(propref);
-                    if (null != soref) {
-                        hmSO.put(soref.getURI(), soref);
+                    log.debug("--prop--so--" + so.getURI());
+                    if (so.createGenericInstance() instanceof UserGroup) {
+                        hmSO.put(so.getURI(), so);
+                    } else {
+                        SemanticObject soref = so.getObjectProperty(propref);
+                        if (null != soref) {
+                            log.debug("--propref--so--" + soref.getURI());
+                            hmSO.put(soref.getURI(), soref);
+                        }
                     }
                 }
             }
 
             SemanticObject obusrRep = null;
-            if (clsprop.equals(Role.swb_Role)||clsprop.equals(User.swb_UserGroup)) { //||clsprop.equals(UserGroup.swb_UserGroupable)
+            if (clsprop.equals(Role.swb_Role) || clsprop.equals(User.swb_UserGroup)) { //||clsprop.equals(UserGroup.swb_UserGroupable)
                 GenericObject go = obj.getModel().getModelObject().createGenericInstance();
                 if (go instanceof WebSite) {
                     obusrRep = ((WebSite) go).getUserRepository().getSemanticObject();
@@ -762,16 +778,16 @@ public class SWBASOPropRefEditor extends GenericResource {
 
             //:hasUserGroupRef&spropref=swb:userGroup
 
-            log.debug("choose:"+clsprop.getName()+", "+idp );
+            log.debug("choose:" + clsprop.getName() + ", " + idp);
 
             SWBResourceURL urladd = paramRequest.getActionUrl();
-            if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role))||idp.endsWith("hasUserGroup")&& clsprop.equals(UserGroup.swb_UserGroup)) {
+            if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup)) {
                 urladd.setAction("choose");
             } else {
                 urladd.setAction("new");
             }
             out.println("<div class=\"swbform\">");
-            out.println("<form id=\"" + id + "/chooseSO\" name=\"" + id + "/chooseSO\" action=\"" + urladd + "\" method=\"post\"  onsubmit=\"if(validateChk('sobj','"+paramRequest.getLocaleString("alertMSG")+"')) submitForm('" + id + "/chooseSO'); return false;\">");
+            out.println("<form id=\"" + id + "/chooseSO\" name=\"" + id + "/chooseSO\" action=\"" + urladd + "\" method=\"post\"  onsubmit=\"if(validateChk('sobj','" + paramRequest.getLocaleString("alertMSG") + "')) submitForm('" + id + "/chooseSO'); return false;\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">"); //obj.getURI()
             out.println("<input type=\"hidden\" name=\"sprop\" value=\"" + idp + "\">");
             out.println("<input type=\"hidden\" name=\"spropref\" value=\"" + idpref + "\">");
@@ -786,7 +802,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("<th>");
             out.println(paramRequest.getLocaleString("th_select"));
             out.println("</th>");
-            if(clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule)||clsprop.equals(UserGroup.swb_UserGroup)) {
+            if (clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule) || clsprop.equals(UserGroup.swb_UserGroup)) {
                 out.println("<th>");
                 out.println(paramRequest.getLocaleString("th_check"));
                 out.println("</th>");
@@ -794,7 +810,34 @@ public class SWBASOPropRefEditor extends GenericResource {
             out.println("</tr>");
             out.println("</theader>");
             log.debug("Clase: " + clsprop.getName());
-            Iterator<SemanticObject> itso = obj.getModel().listInstancesOfClass(clsprop);
+            Iterator<SemanticObject> itso = null;
+
+            HashMap<String, SemanticObject> hmtmp = new HashMap();
+            if (prop.equals(User.swb_hasCalendarRef) && obj.getSemanticClass().equals(User.swb_User)) {
+                GenericObject go = obj.getModel().getModelObject().createGenericInstance();
+                log.debug("UserREP(" + (go instanceof UserRepository ? "true" : "false") + ")");
+                if (go instanceof UserRepository) {
+                    UserRepository urep = (UserRepository) go;
+                    log.debug("UREP URI: " + urep.getURI());
+                    Iterator<WebSite> itws = SWBContext.listWebSites();
+                    log.debug("........." + itws.hasNext());
+                    while (itws.hasNext()) {
+                        WebSite wsso = itws.next();
+                        log.debug("buscando calendarios en:" + wsso.getTitle());
+                        if (wsso.getUserRepository().equals(urep) && wsso.isActive() && !wsso.isDeleted()) {
+                            Iterator<Calendar> itc = wsso.listCalendars();
+                            while (itc.hasNext()) {
+                                Calendar calso = itc.next();
+                                log.debug("Calendario:" + calso.getTitle());
+                                hmtmp.put(calso.getURI(), calso.getSemanticObject());
+                            }
+                        }
+                    }
+                    itso = hmtmp.values().iterator();
+                }
+            } else {
+                itso = obj.getModel().listInstancesOfClass(clsprop);
+            }
 
             int numrols = 0;
             while (itso.hasNext()) {
@@ -807,7 +850,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     out.println("<tr>");
                     out.println("<td>" + stitle + "</td> ");
                     SWBResourceURL urlchoose = paramRequest.getActionUrl();
-                    if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role))||idp.endsWith("hasUserGroup")&& clsprop.equals(UserGroup.swb_UserGroup)) {
+                    if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup)) {
                         urlchoose.setAction("choose");
                         urlchoose.setParameter("suri", id);
                     } else {
@@ -845,7 +888,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 urlBack.setParameter("spropref", idpref);
             }
             urlBack.setParameter("act", "");
-            if ((clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule) ||clsprop.equals(UserGroup.swb_UserGroup)) && numrols > 0) {
+            if ((clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule) || clsprop.equals(UserGroup.swb_UserGroup)) && numrols > 0) {
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\"  >" + paramRequest.getLocaleString("Add_Selected") + "</button>"); //submitUrl('" + url + "',this); onclick=\"return false;\"  onclick=\"document.getElementById('" + id + "/chooseSO').submit();\" _onclick=\"if(validateChk('sobj')){document.getElementById('" + id + "/chooseSO').submit(); return false;} else {return false;}\"
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"selectAll('sobj',true);\">" + paramRequest.getLocaleString("Select_All") + "</button>"); //submitUrl('" + url + "',this);
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"selectAll('sobj',false);\">" + paramRequest.getLocaleString("Unselect_All") + "</button>"); //submitUrl('" + url + "',this);
@@ -963,6 +1006,10 @@ public class SWBASOPropRefEditor extends GenericResource {
             log.debug(soc.getSemanticClass().getName());
             String name = "";
             SemanticProperty sp = ont.getSemanticProperty(spropref);
+            SemanticProperty spref = ont.getSemanticProperty(sprop);
+            if (soc.getSemanticClass().equals(User.swb_User) && spref.getRangeClass().equals(User.swb_CalendarRef)) {
+                sp = spref;
+            }
             name = sp.getName();
             if (soc.getSemanticClass().equals(User.swb_User)) {
 
@@ -985,7 +1032,7 @@ public class SWBASOPropRefEditor extends GenericResource {
             }
             log.debug("remove-closetab:" + sval);
             response.setRenderParameter("closetab", sval);
-            response.setRenderParameter("statmsg", response.getLocaleString("statmsg3")+" " + name + ".");
+            response.setRenderParameter("statmsg", response.getLocaleString("statmsg3") + " " + name + ".");
             response.setMode(response.Mode_EDIT);
 
         } else if ("choose".equals(action)) //suri, prop
@@ -1023,7 +1070,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 } else if (sobj != null) {
                     for (int i = 0; i < valores.length; i++) {
                         sobj = valores[i];
-                        log.debug("valor: "+sobj);
+                        log.debug("valor: " + sobj);
                         SemanticObject aux = ont.getSemanticObject(sobj);
                         if (sobj != null) {
                             obj.setObjectProperty(prop, aux); //actualizando el objectProperty a una instancia existente
@@ -1033,15 +1080,16 @@ public class SWBASOPropRefEditor extends GenericResource {
                     }
                 }
             } else {   // empieza propiedad con has
-                if (sobj != null&&obj!=null) {
+                if (sobj != null && obj != null) {
                     for (int i = 0; i < valores.length; i++) {
                         sobj = valores[i];
-                        log.debug("Agregando un " + propref.getName() + " a " + obj.getURI()+" ---SOBJ--- "+sobj);
-                        if(sobj!=null)
-                        {
+                        log.debug("Agregando un " + propref.getName() + " a " + obj.getURI() + " ---SOBJ--- " + sobj);
+                        if (sobj != null) {
                             SemanticObject aux = ont.getSemanticObject(sobj.trim()); //agregando al objectProperty nueva instancia
-                            log.debug(aux.getURI()+"---"+propref.getRangeClass().getName());
-                            if(aux!=null) obj.addObjectProperty(propref, aux);
+                            log.debug(aux.getURI() + "---" + propref.getRangeClass().getName());
+                            if (aux != null) {
+                                obj.addObjectProperty(propref, aux);
+                            }
                         }
                     }
                 }
@@ -1095,7 +1143,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     }
                 }
                 so = obj;
-                response.setRenderParameter("statmsg", response.getLocaleString("statmsg2") );
+                response.setRenderParameter("statmsg", response.getLocaleString("statmsg2"));
             } catch (Exception e) {
                 log.error(e);
                 response.setRenderParameter("statmsg", response.getLocaleString("statERRORmsg1"));
@@ -1121,7 +1169,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 response.setRenderParameter("statmsg", (value.equals("true") ? response.getLocaleString("statmsg4") : response.getLocaleString("statmsg5")));
             } catch (Exception e) {
                 log.error(e);
-                response.setRenderParameter("statmsg",(value.equals("true") ? response.getLocaleString("statERRORmsg2") : response.getLocaleString("statERRORmsg3")) );
+                response.setRenderParameter("statmsg", (value.equals("true") ? response.getLocaleString("statERRORmsg2") : response.getLocaleString("statERRORmsg3")));
             }
             response.setRenderParameter("spropref", spropref);
             response.setRenderParameter("sprop", sprop);
