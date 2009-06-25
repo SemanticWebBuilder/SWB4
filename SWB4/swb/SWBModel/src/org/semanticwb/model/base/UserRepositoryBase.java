@@ -6,15 +6,13 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
-    public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepLoginContext=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepLoginContext");
+    public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepAuthMethod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepAuthMethod");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepSecurityQuestionList=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepSecurityQuestionList");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepCallBackHandlerClassName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepCallBackHandlerClassName");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
-    public static final org.semanticwb.platform.SemanticClass swb_WebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
-    public static final org.semanticwb.platform.SemanticProperty swb_hasUserRepWebSitesInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserRepWebSitesInv");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticProperty swb_undeleteable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#undeleteable");
     public static final org.semanticwb.platform.SemanticClass swb_UserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroup");
@@ -108,6 +106,16 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
          return ret;
     }
 
+    public String getLoginContext()
+    {
+        return getSemanticObject().getProperty(swb_userRepLoginContext);
+    }
+
+    public void setLoginContext(String userRepLoginContext)
+    {
+        getSemanticObject().setProperty(swb_userRepLoginContext, userRepLoginContext);
+    }
+
     public String getTitle()
     {
         return getSemanticObject().getProperty(swb_title);
@@ -131,16 +139,6 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-    public String getLoginContext()
-    {
-        return getSemanticObject().getProperty(swb_userRepLoginContext);
-    }
-
-    public void setLoginContext(String userRepLoginContext)
-    {
-        getSemanticObject().setProperty(swb_userRepLoginContext, userRepLoginContext);
     }
 
     public String getAuthMethod()
@@ -215,27 +213,6 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite> listWebSites()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite>(getSemanticObject().listObjectProperties(swb_hasUserRepWebSitesInv));
-    }
-
-    public boolean hasWebSite(org.semanticwb.model.WebSite website)
-    {
-        if(website==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasUserRepWebSitesInv,website.getSemanticObject());
-    }
-
-    public org.semanticwb.model.WebSite getWebSite()
-    {
-         org.semanticwb.model.WebSite ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUserRepWebSitesInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.WebSite)obj.createGenericInstance();
          }
          return ret;
     }
