@@ -8,6 +8,7 @@ package org.semanticwb.nlp.translation;
 import org.semanticwb.nlp.analysis.SimpleLexer;
 import org.semanticwb.nlp.analysis.ComplexParser;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.antlr.runtime.ANTLRStringStream;
@@ -16,6 +17,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.apache.lucene.index.CorruptIndexException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.nlp.Lexicon;
+import org.semanticwb.nlp.spell.SWBSpellChecker;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -43,6 +45,8 @@ public class SWBSparqlTranslator {
     private String eLog = "";   //Error log
     private int errCode = 0;    //Last error code
     private boolean snowballAnalyze = false;
+    private SWBSpellChecker objSpeller = null;
+    private SWBSpellChecker propSpeller = null;
 
     /**
      * Creates a new instance of SWBSparqlTranslator with the given Lexicon.
@@ -62,6 +66,13 @@ public class SWBSparqlTranslator {
      */
     public SWBSparqlTranslator (Lexicon dict, boolean snowball) {
         lex = dict;
+        snowballAnalyze = snowball;
+    }
+
+    public SWBSparqlTranslator (Lexicon dict, SWBSpellChecker objChecker, SWBSpellChecker propChecker, boolean snowball) {
+        lex = dict;
+        objSpeller = objChecker;
+        propSpeller = propChecker;
         snowballAnalyze = snowball;
     }
 
@@ -515,6 +526,54 @@ public class SWBSparqlTranslator {
                 traverseAST(t, indent + "  ");
             }
         }
+    }
+
+    public String didYouMean (String sent) {
+        if (objSpeller == null) return null;
+
+        String []stopWords = {"de", "of", "con", "with", "=", "<", ">", "<=", ">=", ","};
+        List<String> sw = Arrays.asList(stopWords);
+        String res = "";
+        ANTLRStringStream sinput = new ANTLRStringStream(sent);
+        SimpleLexer stokenizer = new SimpleLexer(sinput);
+        CommonTokenStream stokens = new CommonTokenStream(stokenizer);
+
+        org.antlr.runtime.Token tk;
+        while ((tk = stokens.LT(1)) != org.antlr.runtime.Token.EOF_TOKEN) {
+            String tkText = tk.getText().trim();
+            if (!sw.contains(tkText) && (!tkText.startsWith("\"") && !tkText.endsWith("\""))) {
+                boolean compound = false;
+
+                if (tkText.startsWith("[") && tkText.endsWith("]")) {
+                    tkText.replace("[", "").replace("]", "");                    
+                    compound = true;
+                }
+
+                String[] suggestions = objSpeller.suggestSimilar(tkText);
+                if (suggestions == null || suggestions.length == 0) {
+                    suggestions = propSpeller.suggestSimilar(tkText);
+                    if (suggestions == null || suggestions.length == 0) {
+                        res = res + (compound ? "[" + tkText + "]" : tkText) + " ";
+                    } else if (suggestions.length > 0) {
+                        System.out.println("Obtenidas ");
+                        for (int i = 0; i < suggestions.length; i++) {
+                            System.out.println(suggestions[i]);
+                        }
+                        res = res + (compound ? "[" + suggestions[0] + "]" : suggestions[0]) + " ";
+                    }
+                } else if (suggestions.length > 0) {
+                    System.out.println("Obtenidas ");
+                    for (int i = 0; i < suggestions.length; i++) {
+                            System.out.println(suggestions[i]);
+                        }
+                    res = res + (compound ? "[" + suggestions[0] + "]" : suggestions[0]) + " ";
+                }
+            } else {
+                res = res + tkText + " ";
+            }
+            stokens.consume();
+        }
+        return res;
     }
 
     /**
