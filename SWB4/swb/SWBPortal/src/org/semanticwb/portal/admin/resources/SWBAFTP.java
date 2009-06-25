@@ -607,7 +607,7 @@ public class SWBAFTP extends GenericResource{
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
             out.println("<div class=\"applet\">");
-            out.println("<APPLET id=\"ftp\" name=\"ftp\" code=\"applets.ftp.ftp.class\" codebase=\""+SWBPlatform.getContextPath()+"\" ARCHIVE=\"swbadmin/lib/ftp.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
+            out.println("<APPLET id=\"ftp\" name=\"ftp\" code=\"applets.ftp.ftp.class\" codebase=\""+SWBPlatform.getContextPath()+"\" ARCHIVE=\"swbadmin/lib/SWBAplFtp.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
             SWBResourceURL url=paramRequest.getRenderUrl();
             url.setMode("gateway");
             url.setCallMethod(url.Call_DIRECT);            

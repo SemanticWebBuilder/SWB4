@@ -533,7 +533,7 @@ public class WBAAccessSessionReport extends GenericResource {
             int ndata = 0;
             ar_pag = getReportResults(request, paramsRequest);
             if(ar_pag.hasNext()) {
-                ret.append("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/WBGraph.jar\" width=\"550\" height=\"450\">\n");
+                ret.append("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"550\" height=\"450\">\n");
                 ret.append("<param name=\"GraphType\" value=\"Lines\">\n");
                 ret.append("<param name=\"ncdata\" value=\"1\">\n");
                 ret.append("<param name=\"percent\" value=\"false\">\n");

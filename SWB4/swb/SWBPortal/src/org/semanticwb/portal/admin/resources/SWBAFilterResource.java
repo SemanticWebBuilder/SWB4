@@ -488,7 +488,7 @@ public class SWBAFilterResource extends SWBATree {
                     pfil.setXml("<resource><filter/></resource>");
                 }
                 out.println("<div class=\"applet\">");
-                out.println("<APPLET id=\"editfilter\" name=\"editfilter\" code=\"applets.filterSection.FilterSection.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" ARCHIVE=\"swbadmin/lib/filterSection.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
+                out.println("<APPLET id=\"editfilter\" name=\"editfilter\" code=\"applets.filterSection.FilterSection.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" ARCHIVE=\"swbadmin/lib/SWBAplFilterSection.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setMode("gateway");
                 url.setCallMethod(url.Call_DIRECT);

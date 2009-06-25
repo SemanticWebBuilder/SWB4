@@ -104,7 +104,7 @@ public class SWBAMMemory extends GenericResource {
             out.println("<div class=\"applet\">");
             out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""
                     + SWBPlatform.getContextPath()
-                    + "/swbadmin/lib/WBGraph.jar\" width=\"100%\" height=\"200\">");
+                    + "/swbadmin/lib/SWBAplGraph.jar\" width=\"100%\" height=\"200\">");
             SWBResourceURL url = paramsRequest.getRenderUrl();
             url.setCallMethod(url.Call_DIRECT);
             url.setMode("getData");
