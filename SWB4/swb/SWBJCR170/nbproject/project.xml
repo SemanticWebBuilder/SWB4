@@ -14,22 +14,6 @@
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
-                <foreign-project>OfficeComunicationInterfaces</foreign-project>
-                <artifact-type>jar</artifact-type>
-                <script>build.xml</script>
-                <target>jar</target>
-                <clean-target>clean</clean-target>
-                <id>jar</id>
-            </reference>
-            <reference>
-                <foreign-project>RepositoryManager</foreign-project>
-                <artifact-type>jar</artifact-type>
-                <script>build.xml</script>
-                <target>jar</target>
-                <clean-target>clean</clean-target>
-                <id>jar</id>
-            </reference>
-            <reference>
                 <foreign-project>SWBBase</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
@@ -46,6 +30,14 @@
                 <id>jar</id>
             </reference>
             <reference>
+                <foreign-project>SWBOfficeComunicationInterfaces</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>SWBPlatform</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
@@ -55,6 +47,14 @@
             </reference>
             <reference>
                 <foreign-project>SWBPortal</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>SWBRepositoryManager</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
