@@ -113,99 +113,91 @@ public class Poll extends GenericResource {
                 NodeList node = dom.getElementsByTagName("option");            
                 if (!"".equals(base.getAttribute("question", "").trim()) && node.getLength() > 1) {                    
                     out.println("<div class=\"swb-encuesta\">");
-                    out.println("<form name=\"frmEncuesta\" id=\"frmEncuesta_"+base.getId()+"\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\">");
-                    if (!"".equals(base.getAttribute("imgencuesta", "").trim()))
-                    {
+                    out.println("<form name=\"frmEncuesta\" id=\"frmEncuesta_"+base.getId()+"\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\" style=\"color:"+base.getAttribute("textcolor")+";\" >");
+                    if (!"".equals(base.getAttribute("imgencuesta", "").trim())) {
                         out.println("<p>");
-                        out.println("<img src=\"");
-                        out.println(webWorkPath +"/"+ base.getAttribute("imgencuesta").trim());
-                        out.println("\" border=\"0\"/>");
+                        out.println("<img src=\""+webWorkPath+"/"+base.getAttribute("imgencuesta")+"\" border=\"0\" />");
                         out.println("</p>");
-                    }                    
-                    out.println(base.getAttribute("question").trim());
-                    out.println("<br/>");
-                    for (int i = 0; i < node.getLength(); i++)
-                    {
-                        out.println("<label><input type=\"radio\" name=\"radiobutton\" value=\"enc_votos" + (i + 1) + "\" />");
-                        out.println(node.item(i).getChildNodes().item(0).getNodeValue().trim() +"</label><br />");
+                    }else {
+                        out.println("<p>"+base.getAttribute("question")+"</p>");
                     }
-                    out.println("<p>");
-                    if (!"".equals(base.getAttribute("button", "").trim())) {
+
+                    for (int i = 0; i < node.getLength(); i++) {
+                        out.println("<label><input type=\"radio\" name=\"radiobutton\" value=\"enc_votos"+(i + 1)+"\" />");
+                        out.print(node.item(i).getChildNodes().item(0).getNodeValue()+"</label><br />");
+                    }
+
+                    out.println("<br />");
+                    ////out.println("<p>");
+                    if(!"".equals(base.getAttribute("button", ""))) {
                         out.println("<input type=\"image\" name=\"votar\" src=\"" + webWorkPath +"/"+ base.getAttribute("button").trim() +"\" onClick=\"buscaCookie(this.form); return false;\"/>");
                     }else {
                         out.println("<input type=\"button\" name=\"votar\" value=\"" + base.getAttribute("msg_tovote",paramRequest.getLocaleString("msg_tovote")) +"\" onClick=\"buscaCookie(this.form);\"/>");
                     }
-                    out.println("</p>");
+                    ////out.println("</p>");
 
                     SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
-                    //url.setResourceBase(base);
                     url.setMode("showResults");
-                    //url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
                     url.setParameter("NombreCookie","VotosEncuesta"+ base.getId());
-                    //url.setTopic(paramRequest.getTopic());
                     url.setCallMethod(paramRequest.Call_DIRECT);
 
                     boolean display = Boolean.valueOf(base.getAttribute("display","true")).booleanValue();
-                    if(display){
+                    if(display) {
                         out.println("<p>");
-                        out.println("<a href=\"javascript:abreresultados(\'" + url.toString(true) + "\')\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
+                        out.println("<a href=\"javascript:abreResultados(\'" + url.toString(true) + "\')\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
                         out.println("</p>");
                         
                         if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
-                            out.println("<p>");
+                            ////out.println("<p>");
                             out.println(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
-                            out.println("</p>");
-                        }                        
-                        out.println("<p>");
+                            ////out.println("</p>");
+                        }
+                        
                         out.println("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/>");
-                        out.println("</p>");
                         out.println("</form>");
                     }else {
                         out.println("<p>");
                         out.println("<a href=\"javascript:;\" onmousedown=\"getHtml('"+url+"','"+poll+base.getId()+"'); expande();\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
                         out.println("<div id=\""+poll+base.getId()+"\"> ");
-                        //out.println("style=\"height:"+base.getAttribute("height", "260").trim()+"px; ");
-                        //out.println("\">");
                         out.println("</div>");
                         out.println("</p>");
+                        
                         if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
-                            out.println("<p>");
+                            ////out.println("<p>");
                             out.println(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
-                            out.println("</p>");
-                        }                        
-                        out.println("<p>");
+                            ////out.println("</p>");
+                        }
+
                         out.println("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/>");
-                        out.println("</p>");
                         out.println("</form>");
                         out.println("</div>");
                     }
 
-                    String win = "menubar="+ base.getAttribute("menubar", "no").trim();
-                    win += ",toolbar="+ base.getAttribute("toolbar", "no").trim();
-                    win += ",status="+ base.getAttribute("status", "no").trim();
-                    win += ",location="+ base.getAttribute("location", "no").trim();
-                    win += ",directories="+ base.getAttribute("directories", "no").trim();
-                    win += ",scrollbars="+ base.getAttribute("scrollbars", "no").trim();
-                    win += ",resizable="+ base.getAttribute("resizable", "no").trim();
-                    win += ",width="+ base.getAttribute("width", "360").trim();
-                    win += ",height="+ base.getAttribute("height", "260").trim();
-                    win += ",top="+ base.getAttribute("top", "125").trim();
-                    win += ",left="+ base.getAttribute("left", "220").trim();
+                    StringBuilder win = new StringBuilder();
+                    win.append("menubar="+ base.getAttribute("menubar", "no"));
+                    win.append(",toolbar="+ base.getAttribute("toolbar", "no"));
+                    win.append(",status="+ base.getAttribute("status", "no"));
+                    win.append(",location="+ base.getAttribute("location", "no"));
+                    win.append(",directories="+ base.getAttribute("directories", "no"));
+                    win.append(",scrollbars="+ base.getAttribute("scrollbars", "no"));
+                    win.append(",resizable="+ base.getAttribute("resizable", "no"));
+                    win.append(",width="+ base.getAttribute("width", "360"));
+                    win.append(",height="+ base.getAttribute("height", "260"));
+                    win.append(",top="+ base.getAttribute("top", "125"));
+                    win.append(",left="+ base.getAttribute("left", "220"));
 
                     out.println("<script type=\"text/javascript\">");
-
                     out.println("dojo.require(\"dojo.fx\");");
-
                     out.println("dojo.addOnLoad(collapse());");
 
                     out.println("\nfunction buscaCookie(forma) {");
                     out.println("    var numcom = getCookie(forma.NombreCookie.value); ");
-                    out.println("    if (numcom == \"SI\") { ");
+                    out.println("    if(numcom == \"SI\") { ");
                     if("true".equals(base.getAttribute("oncevote", "true").trim()) && !"0".equals(base.getAttribute("vmode", "0").trim())) {
                         out.println("    alert('"+ paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgVote") +"'); ");
                     }
                     out.println("     } ");
-                    out.println("    Grabaencuesta(forma); ");
+                    out.println("    grabaEncuesta(forma); ");
                     out.println("} ");
                     out.println("function setCookie(name) {");
                     out.println("    document.cookie = name; ");
@@ -236,34 +228,32 @@ public class Poll extends GenericResource {
                     out.println("        endstr = document.cookie.length; ");
                     out.println("    return unescape(document.cookie.substring(offset, endstr)); ");
                     out.println("} ");
-                    out.println("function Grabaencuesta(forma) {");
-                    out.println("    var radiobutton; ");
-                    out.println("    for(var i=0; i< forma.length; i++) ");
-                    out.println("    { ");
-                    out.println("        if(forma.elements[i].type == \"radio\") ");
-                    out.println("            if(forma.elements[i].checked) ");
-                    out.println("                radiobutton=forma.elements[i].value; ");
+                    out.println("function grabaEncuesta(forma) {");
+                    out.println("    var optValue; ");
+                    out.println("    for(var i=0; i< forma.length; i++) {");
+                    out.println("        if(forma.elements[i].type == \"radio\") { ");
+                    out.println("            if(forma.elements[i].checked) { ");
+                    out.println("                optValue = forma.elements[i].value; ");
+                    out.println("                break;");
+                    out.println("            } ");
+                    out.println("        } ");
                     out.println("    } ");
-                    out.println("    if(radiobutton!=null) { ");
+                    out.println("    if(optValue != null) { ");
                     if(display) {
-                        out.println("  window.open(\'"+ url.toString() +"&radiobutton=\' + radiobutton,\'_newenc\',\'"+ win + "\'); ");
+                        out.println("  window.open(\'"+ url.toString() +"&radiobutton=\'+optValue,\'_newenc\',\'"+win+"\'); ");
                     }else {
-                        out.println("  getHtml('"+url.toString()+"&radiobutton='+radiobutton,'"+poll+base.getId()+"'); expande();");
+                        out.println("  getHtml('"+url.toString()+"&radiobutton='+optValue,'"+poll+base.getId()+"'); expande();");
                     }
+                    out.println("    }else { ");
+                    out.println("       alert('"+ paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgAnswer") +"'); ");
                     out.println("    } ");
-                    out.println("    else { alert('"+ paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgAnswer") +"'); } ");
                     out.println("} ");
 
-                    out.println("function abreresultados(ruta) {");
+                    out.println("function abreResultados(ruta) {");
                     out.println("    window.open(ruta,\'_newenc\',\'"+ win +"\'); ");
                     out.println("} ");
-
-                    /*out.println("function getHtml(url, tagid) { ");
-                    out.println("    $('#'+tagid).load(url);");
-                    out.println("} ");*/
-
+                    
                     out.println("function expande() {");
-                    //out.println("  var anim1 = dojo.fx.wipeTo( {node:\""+poll+base.getId()+"\", duration:500, height:"+base.getAttribute("height", "260")+" });");
                     out.println("  var anim1 = dojo.fx.wipeIn( {node:\""+poll+base.getId()+"\", duration:500 });");
                     out.println("  var anim2 = dojo.fadeIn({node:\""+poll+base.getId()+"\", duration:650});");
                     out.println("  dojo.fx.combine([anim1,anim2]).play();");
@@ -274,10 +264,7 @@ public class Poll extends GenericResource {
                     out.println("  var anim2 = dojo.fadeOut({node:\""+poll+base.getId()+"\", duration:650});");
                     out.println("  dojo.fx.combine([anim1, anim2]).play();");
                     out.println("}");
-
-
-
-
+                    
                     out.println("</script>");
                 }
             }
@@ -304,8 +291,7 @@ public class Poll extends GenericResource {
             if(data != null) {
                 dom = SWBUtils.XML.xmlToDom(data);
             }
-            //if(request.getParameter("radiobutton")!=null && request.getParameter("radiobutton").length()>9)
-            System.out.println("radiobutton="+request.getParameter("radiobutton"));
+            
             if(request.getParameter("radiobutton")!=null) {
                 boolean flag=false;
                 int validateMode=Integer.parseInt(base.getAttribute("vmode", "0"));
@@ -471,10 +457,8 @@ public class Poll extends GenericResource {
     private String getPollResults(HttpServletRequest request, SWBParamRequest paramRequest, Document data) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer("");
         Resource base=getResourceBase();
-        System.out.println("display="+base.getAttribute("display","true"));
         boolean display = Boolean.valueOf(base.getAttribute("display","true")).booleanValue();
-        try
-        {            
+        try {
             Document dom=SWBUtils.XML.xmlToDom(base.getXml());
             if(dom==null) {
                 return ret.toString();
@@ -486,21 +470,21 @@ public class Poll extends GenericResource {
                 ret.append("</head> ");
                 ret.append("<body leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\"");
                 if (!"".equals(base.getAttribute("textcolorres", "").trim())) {
-                    ret.append(" text=\"" + base.getAttribute("textcolorres").trim() + "\"");
+                    ret.append(" text=\""+base.getAttribute("textcolorres")+"\"");
                 }
                 if (!"".equals(base.getAttribute("backimgres", "").trim())) {
-                    ret.append(" background=\"" + webWorkPath +"/"+ base.getAttribute("backimgres").trim() + "\"");
+                    ret.append(" background=\""+webWorkPath +"/"+ base.getAttribute("backimgres")+"\"");
                 }
                 ret.append("> ");
                 /*
                  * Se calcula el n?mero de saltos que se proporcion? en la admon. del recurso
                  * y se procede a generar la cadena de <BR> respectivos.
                  */
-                int count =1;
+                int count =0;
                 try { 
-                    Integer.parseInt(base.getAttribute("branches", "1")); 
+                    Integer.parseInt(base.getAttribute("branches", "0"));
                 }catch(Exception e) {
-                    count=1; 
+                    count=0;
                 }
                 for (int i = 0; i < count; i++) {
                     ret.append("<br />");
@@ -565,10 +549,10 @@ public class Poll extends GenericResource {
                     
                     boolean porcent = Boolean.valueOf(base.getAttribute("porcent","true")).booleanValue();
                     boolean totvote = Boolean.valueOf(base.getAttribute("totvote","true")).booleanValue();
-                    for (int i = 0; i < node.getLength(); i++)
-                    {
+                    for (int i = 0; i < node.getLength(); i++) {
                         int num = i + 1;
-                        ret.append("<tr valign=\"top\"><td align=\"right\"> ");
+                        ret.append("<tr valign=\"top\">");
+                        ret.append("<td align=\"right\"> ");
                         ret.append(node.item(i).getChildNodes().item(0).getNodeValue());
                         ret.append(":</td><td width=\"150\"> ");
                         String varia = "enc_votos";
@@ -585,8 +569,7 @@ public class Poll extends GenericResource {
                             intPorcentaje = (int) intPorcentaje;
                             intPorcentaje = intPorcentaje / 10;
 
-                            if (Integer.parseInt(nume) == num)
-                            {
+                            if (Integer.parseInt(nume) == num) {
                                 largo = intPorcentaje;
                                 falta = 100 - (int) largo;
                                 ret.append("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/linealleno.gif\" width=\"" + largo + "\" height=\"5\"/> ");
@@ -609,21 +592,23 @@ public class Poll extends GenericResource {
                     intAjuste = 0;
                     ret.append("  </table> ");
                     ret.append("</td></tr> ");
-                    if (totvote) ret.append("<tr><td align=\"right\">"+ base.getAttribute("msg_totvotes",paramRequest.getLocaleString("msg_totvotes")) + ": " + intTotalVotos + "</td></tr> ");
+                    if (totvote) {
+                        ret.append("<tr><td align=\"right\">"+ base.getAttribute("msg_totvotes",paramRequest.getLocaleString("msg_totvotes")) + ": " + intTotalVotos + "</td></tr> ");
+                    }
                 }else {
                     ret.append("<tr><td>" + paramRequest.getLocaleString("usrmsg_Encuesta_getResultEnc_noVotes") +"</td></tr> ");
                 }
+
                 ret.append("<tr><td align=\"center\"> ");
-                if("2".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim()))
-                {
+                if("2".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
                     ret.append("<br />"+getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
                 }
                 ret.append("</td></tr> ");
                                 
                 if(display){
-                    ret.append("<tr><td align=\"center\"><br /><a href=\"javascript:window.close();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> ");
+                    ret.append("<tr><td align=\"center\"><a href=\"javascript:window.close();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> ");
                 }else {
-                    ret.append("<tr><td align=\"center\"><br /><a href=\"javascript:;\" onmousedown=\"collapse();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> ");
+                    ret.append("<tr><td align=\"center\"><a href=\"javascript:;\" onmousedown=\"collapse();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></td></tr> ");
                 }
                 ret.append("</table>");
                 
@@ -785,7 +770,7 @@ public class Poll extends GenericResource {
                         } 
                     }
                     
-                    value = null != fup.getValue("branches") && !"".equals(fup.getValue("branches").trim()) ? fup.getValue("branches").trim() : "1";
+                    value = null!=fup.getValue("branches") && !"".equals(fup.getValue("branches")) ? fup.getValue("branches").trim() : "0";
                     base.setAttribute("branches", value);
                     value = null != fup.getValue("time") && !"".equals(fup.getValue("time").trim()) ? fup.getValue("time").trim() : "20";
                     base.setAttribute("time", value);
@@ -957,7 +942,7 @@ public class Poll extends GenericResource {
             ret.append("<td>* " + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_question") + "</td>");
             ret.append("<td>");
             ret.append("<input type=\"text\" size=\"50\" name=\"question\" ");
-            if (!"".equals(base.getAttribute("question", "").trim())) {
+            if(!"".equals(base.getAttribute("question", "").trim())) {
                 ret.append(" value=\"" + base.getAttribute("question").trim().replaceAll("\"", "&#34;") + "\"");
             }
             ret.append("/></td> ");
@@ -1073,33 +1058,14 @@ public class Poll extends GenericResource {
             ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_otherTextcolor") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_hexadecimal") + "):</font></td>");
             ret.append("<td>");
             ret.append("<div id=\"cptextcolor_"+base.getId()+"\"></div>");
-            /*ret.append("<script src='/swb/swbadmin/js/jquery/colorpicker.js' type='text/javascript'></script>");*/
+            
             ret.append("<script type=\"text/javascript\">");
             ret.append("   dojo.require(\"dijit.ColorPalette\");");
             ret.append("   dojo.addOnLoad(function(){");
             ret.append("       var myPalette = new dijit.ColorPalette( {palette:\"7x10\", onChange: function(val){ dojo.byId(\"textcolor_"+base.getId()+"\").value=val;}}, \"cptextcolor_"+base.getId()+"\" );");
-            ret.append("   });");
-
-            /*ret.append("var colors=new Array('#ffffff', '#fff5ee', '#fff8dc', '#fffacd', '#ffffe0', '#98fb98', '#afeeee', '#e0ffff', '#e6e6fa', '#dda0dd', ");
-            ret.append("                   '#d3d3d3', '#ffc0cb', '#ffe4c4', '#ffe4b5', '#f0e68c', '#90ee90', '#20b2aa', '#87cefa', '#6495ed', '#ee82ee', ");
-            ret.append("                   '#c0c0c0', '#f08080', '#f4a460', '#ffa500', '#eee8aa', '#7fff00', '#48d1cc', '#87ceeb', '#7b68ee', '#da70d6', ");
-            ret.append("                   '#808080', '#ff0000', '#ff4500', '#ff8c00', '#ffff00', '#32cd32', '#8fbc8f', '#4169e1', '#6a5acd', '#ba55d3', ");
-            ret.append("                   '#696969', '#dc143c', '#d2691e', '#ff7f50', '#ffd700', '#228b22', '#2e8b57', '#0000ff', '#8a2be2', '#9932cc', ");
-            ret.append("                   '#2f4f4f', '#b22222', '#8b4513', '#a0522d', '#808000', '#008000', '#008b8b', '#0000cd', '#483d8b', '#8b008b', ");
-            ret.append("                   '#000000', '#8b0000', '#800000', '#a52a2a', '#556b2f', '#006400', '#006400', '#000080', '#4b0082', '#800080'); ");
-            ret.append("$(document).ready(function(){ ");
-            ret.append("    $('#cptextcolor').colorPicker( ");
-            ret.append("    { ");
-            ret.append("        color:colors, ");
-            ret.append("        defaultColor:colors.indexOf('"+base.getAttribute("textcolor", "#000000").toLowerCase()+"'), // index of the default color ");
-            ret.append("        columns:10,     // number of columns ");
-            ret.append("        click:function(c){ ");
-            ret.append("            $('#textcolor').val(c); ");
-            ret.append("        } ");
-            ret.append("    }); ");
-            ret.append("}); ");*/
-            
+            ret.append("   });");            
             ret.append("</script> ");
+
             ret.append("</td>");
             ret.append("</tr>");
             ret.append("<tr>");
@@ -1225,7 +1191,7 @@ public class Poll extends GenericResource {
             ret.append("<table>");
             ret.append("<tr>");
             ret.append("<td>");
-            ret.append("<input type=\"text\" size=\"7\" maxlength=\"7\" id=\"textcolorres\" name=\"textcolorres\" value=\""+base.getAttribute("textcolorres", "#000000").trim()+"\">");
+            ret.append("<input type=\"text\" size=\"7\" maxlength=\"7\" id=\"textcolorres_"+base.getId()+"\" name=\"textcolorres\" value=\""+base.getAttribute("textcolorres", "#000000")+"\">");
             ret.append("</td>");
             ret.append("<td bgcolor=\"" + base.getAttribute("textcolorres", "#000000") + "\" width=\"20\">&nbsp;</td>");
             ret.append("</tr>");
@@ -1236,21 +1202,15 @@ public class Poll extends GenericResource {
             ret.append("<tr>");
             ret.append("<td>"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_otherTextcolor") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_hexadecimal") + "):</font></td>");
             ret.append("<td>");
-            ret.append("<div id=\"cptextcolorres\"></div>");
-            ret.append("<script src='/swb/swbadmin/js/jquery/colorpicker.js' type='text/javascript'></script>");
+            ret.append("<div id=\"cptextcolorres_"+base.getId()+"\"></div>");
+
             ret.append("<script type=\"text/javascript\">");
-            ret.append("$(document).ready(function(){ ");
-            ret.append("    $('#cptextcolorres').colorPicker( ");
-            ret.append("    { ");
-            ret.append("        color:colors, ");
-            ret.append("        defaultColor:colors.indexOf('"+base.getAttribute("textcolorres", "#000000").toLowerCase()+"'), // index of the default color ");
-            ret.append("        columns:10,     // number of columns ");
-            ret.append("        click:function(c){ ");
-            ret.append("            $('#textcolorres').val(c); ");
-            ret.append("        } ");
-            ret.append("    }); ");
-            ret.append("}); ");
+            ret.append("   dojo.require(\"dijit.ColorPalette\");");
+            ret.append("   dojo.addOnLoad(function(){");
+            ret.append("       var myPalette = new dijit.ColorPalette( {palette:\"7x10\", onChange: function(val){ dojo.byId(\"textcolorres_"+base.getId()+"\").value=val;}}, \"cptextcolorres_"+base.getId()+"\" );");
+            ret.append("   });");
             ret.append("</script> ");
+            
             ret.append("</td>");
             ret.append("</tr>");
             
@@ -1340,8 +1300,8 @@ public class Poll extends GenericResource {
         StringBuffer ret = new StringBuffer();
         try {
             ret.append("<script type=\"text/javascript\">");
-            ret.append("\nvar swOk=0, optionObj;");
-            ret.append("\nfunction jsValida(pForm)");
+            ret.append("var swOk=0, optionObj;");
+            ret.append("function jsValida(pForm)");
             ret.append("{");
             ret.append("   if(pForm.question.value==null || pForm.question.value=='' || pForm.question.value==' ')");
             ret.append("   {");
