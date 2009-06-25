@@ -130,11 +130,21 @@ public class SemanticSearch extends GenericAdmResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
-        //Get user language if any
+        //Get user language if any and create lexicon and translator acordingly
         if (user != null) {
-                lang = user.getLanguage();
+            if (!lang2.equals(paramRequest.getUser().getLanguage())) {
+                lang2 = paramRequest.getUser().getLanguage();
+                long time = System.currentTimeMillis();
+                lex = new Lexicon(lang2);
+                System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
+            }
         } else {
-                lang = "es";
+            if (!lang2.equals("es")) {
+                lang2 = "es";
+                long time = System.currentTimeMillis();
+                lex = new Lexicon(lang2);
+                System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
+            }
         }
 
         //Assert query string
@@ -167,7 +177,7 @@ public class SemanticSearch extends GenericAdmResource {
                 "    });\n" +
                 "  });\n" +
                 "  var source =\"" + rUrl + "\";\n" +
-                "  var lang =\"" + lang + "\";\n" +
+                "  var lang =\"" + lang2 + "\";\n" +
                 "  var displayed;\n" +
                 "  var pdisplayed;\n" +
                 "</script>\n");
@@ -487,7 +497,7 @@ public class SemanticSearch extends GenericAdmResource {
         //Lexicon lex = new Lexicon(lan);
         StringBuffer sbf = new StringBuffer();
 
-        response.setContentType("text/html");
+        response.setContentType("text/html; charset=utf8");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
@@ -503,11 +513,13 @@ public class SemanticSearch extends GenericAdmResource {
             word = word.replace(")", "");
         }
 
+        System.out.println("....Sugiriendo " + lan);
         word = word.replace("[", "");
         word = word.replace("]", "");
         word = word.trim();
 
         if (!props) {
+            System.out.println("...Buscando sugerencias para " + word);
             Iterator<SemanticClass> cit = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
 
             while (cit.hasNext()) {
@@ -516,6 +528,7 @@ public class SemanticSearch extends GenericAdmResource {
 
                 if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                     objOptions.add(tempcDn);
+                    System.out.println("  ...Agregando " + tempcDn  + " a las sugerencias de clases");
                 }
 
                 Iterator<SemanticProperty> sit = tempc.listProperties();
@@ -525,6 +538,7 @@ public class SemanticSearch extends GenericAdmResource {
 
                     if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                         proOptions.add(tempcDn);
+                        System.out.println("  ...Agregando " + tempcDn  + " a las sugerencias de propiedades");
                     }
                 }
             }
@@ -536,7 +550,7 @@ public class SemanticSearch extends GenericAdmResource {
 
                 sbf.append("<ul id=\"" + createId("resultlist") + "\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                         "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
-                        "200px;width:300px;border:1px solid #a0a0ff;\">");
+                        "200px;width:300px;border:1px solid #a0a0ff;\">\n");
                 while (rit.hasNext()) {
                     String tempi = (String) rit.next();
                     index = tempi.toLowerCase().indexOf(word.toLowerCase());
@@ -548,7 +562,7 @@ public class SemanticSearch extends GenericAdmResource {
                             "onmousedown=\"setSelection(" + idCounter + ", '');dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML='';" +
                             "dojo.byId('" + createId("naturalQuery") + "').focus();displayed=false;pdisplayed=false\">" + (lPar ? "(" : "") +
                             "<font color=\"red\">" + tempi + "</font>" +
-                            (lPar ? ")" : "") + "</li>");
+                            (lPar ? ")" : "") + "</li>\n");
                     idCounter++;
                 }
 
@@ -564,17 +578,19 @@ public class SemanticSearch extends GenericAdmResource {
                             "onmousedown=\"setSelection(" + idCounter + ", '');dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML='';" +
                             "dojo.byId('" + createId("naturalQuery") + "').focus();displayed=false;pdisplayed=false;\">" + (lPar ? "(" : "") +
                             "<font color=\"blue\">" + tempi + "</font>" +
-                            (lPar ? ")" : "") + "</li>");
+                            (lPar ? ")" : "") + "</li>\n");
                     idCounter++;
                 }
-                sbf.append("</ul>");
+                sbf.append("</ul>\n");
             }
         } else {
-            String tag = lex.getObjWordTag(word, false).getObjId();
+            System.out.println("...Buscando propiedades para " + word);
+            String tag = lex.getObjWordTag(word.toLowerCase(), false).getObjId();
+            System.out.println("...Tag encontrado" + tag);
 
             sbf.append("<ul id=\"" + createId("resultlist") + "\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                     "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
-                    "200px;width:300px;border:1px solid #a0a0ff;\">");
+                    "200px;width:300px;border:1px solid #a0a0ff;\">\n");
 
             if (!tag.equals("")) {
                 SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
@@ -589,7 +605,7 @@ public class SemanticSearch extends GenericAdmResource {
                             "onmousedown=\"setSelection(" + idCounter + ", 'con ');pdisplayed=false;dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML='';" +
                             "dojo.byId('" + createId("naturalQuery") + "').focus();displayed=false;\">" + (lPar ? "(" : "") +
                             "<font color=\"red\">" + t.getDisplayName(lan) + "</font>" +
-                            (lPar ? ")" : "") + "</li>");
+                            (lPar ? ")" : "") + "</li>\n");
                     idCounter++;
                 }
             } else {
@@ -607,13 +623,14 @@ public class SemanticSearch extends GenericAdmResource {
                                 "onmousedown=\"setSelection(" + idCounter + ", 'con ');pdisplayed=false;dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML='';" +
                                 "dojo.byId('" + createId("naturalQuery") + "').focus();displayed=false;\">" + (lPar ? "(" : "") +
                                 "<font color=\"red\">" + t.getDisplayName(lan) + "</font>" +
-                                (lPar ? ")" : "") + "</li>");
+                                (lPar ? ")" : "") + "</li>\n");
                         idCounter++;
                     }
                 }
             }
-            sbf.append("</ul>");
+            sbf.append("</ul>\n");
         }
+        System.out.println(sbf.toString());
         out.println(sbf.toString());
     }
 
@@ -647,9 +664,16 @@ public class SemanticSearch extends GenericAdmResource {
             }
         }
 
-       //SWBSpellChecker speller = new SWBSpellChecker();
+       SWBSpellChecker speller = new SWBSpellChecker(lex.getObjDirectory(), "displayName");
         //speller.testSuggest(lex.getObjDirectory(), query);
 
+       String []suggestions = speller.getSuggestions("filtro de recarso");
+       if (suggestions != null) {
+       System.out.println("-------Suggestions------");
+        for (int i = 0; i < suggestions.length; i++) {
+            System.out.println(suggestions[i]);
+        }
+       }
         /*for (String f : speller.getSuggestions("pogina")) {
             System.out.println("...." + f);
         }*/
