@@ -513,13 +513,11 @@ public class SemanticSearch extends GenericAdmResource {
             word = word.replace(")", "");
         }
 
-        System.out.println("....Sugiriendo " + lan);
         word = word.replace("[", "");
         word = word.replace("]", "");
         word = word.trim();
 
         if (!props) {
-            System.out.println("...Buscando sugerencias para " + word);
             Iterator<SemanticClass> cit = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
 
             while (cit.hasNext()) {
@@ -528,7 +526,6 @@ public class SemanticSearch extends GenericAdmResource {
 
                 if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                     objOptions.add(tempcDn);
-                    System.out.println("  ...Agregando " + tempcDn  + " a las sugerencias de clases");
                 }
 
                 Iterator<SemanticProperty> sit = tempc.listProperties();
@@ -538,7 +535,6 @@ public class SemanticSearch extends GenericAdmResource {
 
                     if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                         proOptions.add(tempcDn);
-                        System.out.println("  ...Agregando " + tempcDn  + " a las sugerencias de propiedades");
                     }
                 }
             }
@@ -584,9 +580,7 @@ public class SemanticSearch extends GenericAdmResource {
                 sbf.append("</ul>\n");
             }
         } else {
-            System.out.println("...Buscando propiedades para " + word);
             String tag = lex.getObjWordTag(word.toLowerCase(), false).getObjId();
-            System.out.println("...Tag encontrado" + tag);
 
             sbf.append("<ul id=\"" + createId("resultlist") + "\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                     "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
@@ -630,7 +624,6 @@ public class SemanticSearch extends GenericAdmResource {
             }
             sbf.append("</ul>\n");
         }
-        System.out.println(sbf.toString());
         out.println(sbf.toString());
     }
 
