@@ -754,7 +754,7 @@ public class SWBAWorkflow extends GenericResource
 
 //                System.out.println("Con APPLET");
 
-                out.println("<APPLET id=\"apptree\" name=\"editrole\" code=\"applets.workflowadmin.EditWorkflow.class\" codebase=\"" + SWBPlatform.getContextPath() + "\" ARCHIVE=\"swbadmin/lib/SWBAplWorkFlowAdmin.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"350\">");
+                out.println("<APPLET id=\"apptree\" name=\"editrole\" code=\"applets.workflowadmin.EditWorkflow.class\" codebase=\"" + SWBPlatform.getContextPath() + "/\" ARCHIVE=\"swbadmin/lib/SWBAplWorkFlowAdmin.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"350\">");
                 out.println("<PARAM NAME =\"idworkflow\" VALUE=\"" + id + "\">");
                 out.println("<PARAM NAME =\"cgipath\" VALUE=\"" + url + "\">");
                 out.println("<PARAM NAME =\"locale\" VALUE=\"" + user.getLanguage() + "\">");

@@ -280,7 +280,7 @@ public class SWBATemplateEdit extends GenericResource {
             SemanticObject obj = SemanticObject.createSemanticObject(id);
             if (obj != null) {
                 //User user=SWBPortal.getSessionUser();
-                out.println("<div class=\"applet\" style=\"position: relative; min-height: 100%\">");
+                out.println("<div class=\"applet\">");
                 SWBAEditor.getTemplateApplet(new java.io.PrintWriter(out), obj.getModel().getName(), obj.getId(), Integer.parseInt(vnum), user);
                 SWBResourceURL urlb = paramRequest.getRenderUrl();
                 urlb.setMode(SWBResourceURL.Mode_VIEW);

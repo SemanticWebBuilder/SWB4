@@ -64,7 +64,7 @@ public class CountDownResource extends GenericAdmResource
         String backgrownd=getResourceBase().getAttribute("backgrownd","FFFFFF");
         Date d=new Date(date);
         
-        out.println("<APPLET code=\"applets/clocks/CountDown.class\" codebase=\""+SWBPlatform.getContextPath()+"\" ARCHIVE=\"swbadmin/lib/SWBAplClock.jar, swbadmin/lib/SWBAplCommons.jar\" width="+width+" height="+height+">");
+        out.println("<APPLET code=\"applets/clocks/CountDown.class\" codebase=\""+SWBPlatform.getContextPath()+"/\" ARCHIVE=\"swbadmin/lib/SWBAplClock.jar, swbadmin/lib/SWBAplCommons.jar\" width="+width+" height="+height+">");
         out.println("<param name=\"actualTime\" value=\""+(new Date()).getTime()+"\">");
         out.println("<param name=\"endTime\" value=\""+d.getTime()+"\">");
         out.println("<param name=\"backgrownd\" value=\""+backgrownd+"\">");
