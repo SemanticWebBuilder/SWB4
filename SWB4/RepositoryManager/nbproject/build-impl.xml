@@ -19,7 +19,7 @@ is divided into following sections:
   - cleanup
 
         -->
-<project xmlns:j2seproject1="http://www.netbeans.org/ns/j2se-project/1" xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3" xmlns:jaxrpc="http://www.netbeans.org/ns/j2se-project/jax-rpc" basedir=".." default="default" name="RepositoryManager-impl">
+<project xmlns:j2seproject1="http://www.netbeans.org/ns/j2se-project/1" xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3" xmlns:jaxrpc="http://www.netbeans.org/ns/j2se-project/jax-rpc" basedir=".." default="default" name="SWBRepositoryManager-impl">
     <target depends="test,jar,javadoc" description="Build and test whole project." name="default"/>
     <!-- 
                 ======================
@@ -317,9 +317,9 @@ is divided into following sections:
                 ===================
             -->
     <target depends="init" name="deps-jar" unless="no.deps">
-        <ant antfile="${project.OfficeComunicationInterfaces}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBOfficeComunicationInterfaces}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init,-check-automatic-build,-clean-after-automatic-build" name="-verify-automatic-build"/>
@@ -635,9 +635,9 @@ is divided into following sections:
                 ===============
             -->
     <target depends="init" name="deps-clean" unless="no.deps">
-        <ant antfile="${project.OfficeComunicationInterfaces}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBOfficeComunicationInterfaces}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="-do-clean">

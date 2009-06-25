@@ -317,15 +317,15 @@ is divided into following sections:
                 ===================
             -->
     <target depends="init" name="deps-jar" unless="no.deps">
-        <ant antfile="${project.OfficeComunicationInterfaces}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.RepositoryManager}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBJCR170}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBOfficeComunicationInterfaces}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBPortal}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.XMLRPCCommon}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.XMRPCServer}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBRepositoryManager}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBXMRPCServer}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init,-check-automatic-build,-clean-after-automatic-build" name="-verify-automatic-build"/>
     <target depends="init" name="-check-automatic-build">
@@ -640,15 +640,15 @@ is divided into following sections:
                 ===============
             -->
     <target depends="init" name="deps-clean" unless="no.deps">
-        <ant antfile="${project.OfficeComunicationInterfaces}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.RepositoryManager}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBJCR170}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBOfficeComunicationInterfaces}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBPortal}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.XMLRPCCommon}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.XMRPCServer}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBRepositoryManager}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBXMRPCServer}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>

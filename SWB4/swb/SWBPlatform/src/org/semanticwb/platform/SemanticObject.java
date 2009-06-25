@@ -2094,8 +2094,9 @@ public class SemanticObject
      * almacenar las dependencias clonadas
      * @return
      */
-    public SemanticObject cloneObject(HashMap hash)
+    public SemanticObject cloneObject()
     {
+        //Get URI
         String id=null;
         if(m_cls.isAutogenId())
         {
@@ -2111,8 +2112,21 @@ public class SemanticObject
         }
         String uri=m_model.getObjectUri(id, m_cls);
         Resource res=getModel().getRDFModel().createResource(uri);
-        //res.addProperty(m_model.getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE), m_cls.getOntClass());
 
+        //Get Herarquical properties
+        ArrayList<SemanticProperty> hp=new ArrayList();
+        Iterator<SemanticProperty> ithp=getSemanticClass().listHerarquicalProperties();
+        while(ithp.hasNext())
+        {
+            hp.add(ithp.next());
+        }
+        ithp=getSemanticClass().listInverseHerarquicalProperties();
+        while(ithp.hasNext())
+        {
+            hp.add(ithp.next());
+        }
+
+        //res.addProperty(m_model.getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE), m_cls.getOntClass());
         Iterator<Statement> it=m_res.listProperties();
         while(it.hasNext())
         {
