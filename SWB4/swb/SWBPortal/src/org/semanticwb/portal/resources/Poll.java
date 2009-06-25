@@ -115,19 +115,19 @@ public class Poll extends GenericResource {
                     out.println("<div class=\"swb-encuesta\">");
                     out.println("<form name=\"frmEncuesta\" id=\"frmEncuesta_"+base.getId()+"\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\" style=\"color:"+base.getAttribute("textcolor")+";\" >");
                     if (!"".equals(base.getAttribute("imgencuesta", "").trim())) {
-                        out.println("<p>");
                         out.println("<img src=\""+webWorkPath+"/"+base.getAttribute("imgencuesta")+"\" border=\"0\" alt=\""+base.getAttribute("question")+"\" />");
-                        out.println("</p>");
-                    }else {
-                        out.println("<p>"+base.getAttribute("question")+"</p>");
                     }
+                    
+                    out.println("<br />"+base.getAttribute("question"));
 
+                    out.println("<p>");
                     for (int i = 0; i < node.getLength(); i++) {
                         out.println("<label><input type=\"radio\" name=\"radiobutton\" value=\"enc_votos"+(i + 1)+"\" />");
                         out.print(node.item(i).getChildNodes().item(0).getNodeValue()+"</label><br />");
                     }
+                    out.println("</p>");
 
-                    out.println("<br />");
+                    //out.println("<br />");
                     ////out.println("<p>");
                     if(!"".equals(base.getAttribute("button", ""))) {
                         out.println("<input type=\"image\" name=\"votar\" src=\"" + webWorkPath +"/"+ base.getAttribute("button").trim() +"\" onClick=\"buscaCookie(this.form); return false;\"/>");
