@@ -956,7 +956,7 @@ public class SWBAFilters extends SWBATree {
             url.setCallMethod(url.Call_DIRECT);
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
-            out.println("<APPLET id=\"editfilter\" name=\"editfilter\" code=\"applets.filters.EditFilter.class\" codebase=\""+SWBPlatform.getContextPath()+"\" ARCHIVE=\"swbadmin/lib/SWBAplEditFilters.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
+            out.println("<APPLET id=\"editfilter\" name=\"editfilter\" code=\"applets.filters.EditFilter.class\" codebase=\""+SWBPlatform.getContextPath()+"/\" ARCHIVE=\"swbadmin/lib/SWBAplEditFilters.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
             out.println("<PARAM NAME =\"cgipath\" VALUE=\""+url+"\">");            
             out.println("<PARAM NAME =\"locale\" VALUE=\""+user.getLanguage()+"\">");            
             out.println("<PARAM NAME =\"tm\" VALUE=\""+map.getId()+"\">");            
@@ -983,7 +983,7 @@ public class SWBAFilters extends SWBATree {
         {
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
-            out.println("<APPLET id=\"editfilter\" name=\"editfilter\" code=\"applets.filters.EditFilter.class\" codebase=\""+SWBPlatform.getContextPath()+"\" ARCHIVE=\"swbadmin/lib/SWBAplEditFilters.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
+            out.println("<APPLET id=\"editfilter\" name=\"editfilter\" code=\"applets.filters.EditFilter.class\" codebase=\""+SWBPlatform.getContextPath()+"/\" ARCHIVE=\"swbadmin/lib/SWBAplEditFilters.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
             SWBResourceURL url=paramRequest.getRenderUrl();
             url.setMode("gateway");
             url.setCallMethod(url.Call_DIRECT);
