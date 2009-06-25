@@ -5,15 +5,16 @@
 
 package org.semanticwb.nlp.spell;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.spell.LuceneDictionary;
+import org.apache.lucene.search.spell.PlainTextDictionary;
 import org.apache.lucene.search.spell.SpellChecker;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 /**
  *
  * @author haxdai
@@ -21,28 +22,17 @@ import org.apache.lucene.store.RAMDirectory;
 public class SWBSpellChecker {
     private SpellChecker checker;
     private LuceneDictionary spellDict;
-    private RAMDirectory spellDir;
+    private Directory spellDir;
     private int numSug = 5;
 
-    public SWBSpellChecker(String directoryPath) {
-        //TODO: load words from file at directoryPath and stem them to a RAMDirectory
+    private static Logger log=SWBUtils.getLogger(SWBSpellChecker.class);    
+
+    public SWBSpellChecker(String directoryPath, String fieldName) {
+        indexSpellDir(directoryPath, fieldName);
     }
 
-    public SWBSpellChecker(Directory dir, String fieldName) throws IOException {
-       indexSpellDir(dir, fieldName);
-    }
-
-    public SWBSpellChecker(Directory originalDir, Directory spellDirectory, String fieldName) {
-        spellDir = null;
-        try {
-            //Create RAMDirectory from the specified directory
-            spellDir = new RAMDirectory(spellDirectory);
-
-            //Create spellcheck index directory and dictionary
-            indexSpellDir(originalDir, fieldName);
-        } catch (IOException ex) {
-            Logger.getLogger(SWBSpellChecker.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public SWBSpellChecker(File txtDictFile) {
+        indexSpellTextFile(txtDictFile);
     }
 
     public int getNumSug() {
@@ -53,11 +43,6 @@ public class SWBSpellChecker {
         this.numSug = numSug;
     }
 
-    public void writeSpellDirectory(String destPath) {
-        //TODO: Write spell directory to a file at destPath
-    }
-
-
     /**
      * Creates and indexes a new Directory for spell checking.
      * Call this method when you want to
@@ -65,33 +50,31 @@ public class SWBSpellChecker {
      * @param fieldName Name of the field which new spell dictionary and index
      * directory will have.
      */
-    public void indexSpellDir(Directory dir, String fieldName) throws java.io.IOException {
-        IndexReader reader = null;
-
-        if (IndexReader.isLocked(dir)) return;
-
+    public void indexSpellDir(String dirPath, String fieldName) {
         try {
-            //Open original directory
-            reader = IndexReader.open(dir);
             spellDir = new RAMDirectory();
-
-            //Create a lucene dictionary with terms taken from fieldName field of
-            //the orignal index directory
-            spellDict = new LuceneDictionary(reader, fieldName);
-
-            //Create the spellChecker using spellDir as index directory for spell checking
             checker = new SpellChecker(spellDir);
-
-            //Index the spellDictionary
+            spellDict = new LuceneDictionary(IndexReader.open(dirPath), fieldName);
             checker.indexDictionary(spellDict);
-        } catch (CorruptIndexException ex) {
-            Logger.getLogger(SWBSpellChecker.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(SWBSpellChecker.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (reader != null) {
-                reader.close();
-            }
+
+            /*System.out.println("-----Words in lexicon----");
+            Iterator wit = spellDict.getWordsIterator();
+            while (wit.hasNext()) {
+                String word = (String)wit.next();
+                System.out.println(word);
+            }*/
+        } catch (Exception ex) {
+           log.error(ex);
+        }
+    }
+
+    private void indexSpellTextFile(File txtDictFile) {
+        try {
+        spellDir = new RAMDirectory();
+        checker = new SpellChecker(spellDir);
+        checker.indexDictionary(new PlainTextDictionary(txtDictFile));
+        } catch (Exception ex) {
+            log.error(ex);
         }
     }
 
@@ -101,7 +84,22 @@ public class SWBSpellChecker {
      * @return Set of words similar to 'word'.
      * @throws java.io.IOException
      */
-    public String [] getSuggestions (String word) throws IOException {
-        return checker.suggestSimilar(word, numSug);
-    }
+    public String[] getSuggestions(String word) {
+        try {
+            if (checker.exist(word)) {
+                return null;
+            }
+            String res[] = checker.suggestSimilar(word, numSug);
+            return res;
+        /*for (int i = 0; i < res.length; i++) {
+        String string = res[i];
+        System.out.println(string);*/
+        } catch (Exception ex) {
+            log.error(ex);
+        }
+        return null;
+
+    }    
+    //DESCOMPONER LA CADENA EN PALABRAS, BUSCAR SUGERENCIAS PARA LAS PALABRAS SEPARADAS
+    //RECONSTRUIR CADENA CON PALABRAS SUGERIDAS
 }
