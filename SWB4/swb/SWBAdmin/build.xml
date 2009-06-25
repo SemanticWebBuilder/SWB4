@@ -81,25 +81,25 @@
         <copy file="../applets/TMWBView/dist/TMWBView.jar" todir="${build.classes.dir}//swbadmin/lib"/>
     -->
         <target name="-post-compile">
-        <copy file="../applets/DragDrop/dist/DragDrop.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/EditFilters/dist/EditFilters.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/filterSection/dist/filterSection.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/ftp/dist/ftp.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/GenericTree/dist/GenericTree.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/htmleditor/dist/htmleditor.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/Modeler/dist/Modeler.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/Rules/dist/Rules.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/WBABar/dist/WBABar.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/WBCommons/dist/WBCommons.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/WBGraph/dist/WBGraph.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <copy file="../applets/WorkFlowAdmin/dist/WorkFlowAdmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/DragDrop.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/htmleditor.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/ftp.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/GenericTree.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/Modeler.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/Rules.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/filterSection.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/WorkFlowAdmin.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <copy file="../applets/DragDrop/dist/SWBAplDragDrop.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/EditFilters/dist/SWBAplEditFilters.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/filterSection/dist/SWBAplFilterSection.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/ftp/dist/SWBAplFtp.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/GenericTree/dist/SWBAplGenericTree.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/htmleditor/dist/SWBAplHtmlEditor.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/Modeler/dist/SWBAplModeler.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/Rules/dist/SWBAplRules.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/WBABar/dist/SWBAplBar.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/WBCommons/dist/SWBAplCommons.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/WBGraph/dist/SWBAplGraph.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/WorkFlowAdmin/dist/SWBAplWorkFlowAdmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplDragDrop.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplHtmlEditor.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplFtp.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplGenericTree.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplModeler.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplRules.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplFilterSection.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplWorkFlowAdmin.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         </target>
 </project>
