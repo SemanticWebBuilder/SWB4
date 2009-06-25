@@ -1017,103 +1017,123 @@ public class WBAdmResourceUtils {
         StringBuffer ret = new StringBuffer("");
         try {
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgMenubar") + "</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgMenubar") + "</td> \n");
+            ret.append("<td> \n");
             ret.append("<input type=\"checkbox\" name=\"menubar\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("menubar", ""))) {
                 ret.append(" checked");
             }
-            ret.append("></td> \n");
+            ret.append("/> \n");
+            ret.append("</td> \n");
             ret.append("</tr> \n");
+
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgToolbar") + "</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgToolbar") + "</td> \n");
+            ret.append("<td> \n");
             ret.append("<input type=\"checkbox\" name=\"toolbar\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("toolbar", ""))) {
                 ret.append(" checked");
             }
-            ret.append("></td> \n");
+            ret.append(" /> \n");
+            ret.append("</td> \n");
             ret.append("</tr> \n");
+
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgStatusbar") + "</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgStatusbar") + "</td> \n");
+            ret.append("<td> \n");
             ret.append("<input type=\"checkbox\" name=\"status\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("status", ""))) {
                 ret.append(" checked");
             }
-            ret.append("></td> \n");
+            ret.append(" /> \n");
+            ret.append("</td> \n");
             ret.append("</tr> \n");
+
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgLocation") + "</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgLocation") + "</td> \n");
+            ret.append("<td> \n");
             ret.append("<input type=\"checkbox\" name=\"location\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("location", ""))) {
                 ret.append(" checked");
             }
-            ret.append("></td> \n");
+            ret.append(" /> \n");
+            ret.append("</td> \n");
             ret.append("</tr> \n");
+
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgDirectories") + "</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgDirectories") + "</td> \n");
+            ret.append("<td \n>");
             ret.append("<input type=\"checkbox\" name=\"directories\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("directories", ""))) {
                 ret.append(" checked");
             }
-            ret.append("></td> \n");
+            ret.append(" /> \n");
+            ret.append("</td> \n");
             ret.append("</tr> \n");
+
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgScrollbars") + "</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgScrollbars") + "</td> \n");
+            ret.append("<td> \n");
             ret.append("<input type=\"checkbox\" name=\"scrollbars\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("scrollbars", ""))) {
                 ret.append(" checked");
             }
-            ret.append("></td> \n");
+            ret.append(" /> \n");
+            ret.append(" </td> \n");
             ret.append("</tr> \n");
+
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgResizable") + "</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgResizable") + "</td> \n");
+            ret.append("<td>");
             ret.append("<input type=\"checkbox\" name=\"resizable\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("resizable", ""))) {
                 ret.append(" checked");
             }
             ret.append("></td> \n");
             ret.append("</tr> \n");
+
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgWidth") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgWidth") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
+            ret.append("<td> \n");
             ret.append("<input type=text size=4 maxlength=4 name=width ");
             if (!"".equals(base.getAttribute("width", "").trim())) {
                 ret.append(" value=\"" + base.getAttribute("width").trim() + "\"");
             }
-            ret.append("></td> \n");
+            ret.append(" /> \n");
+            ret.append("</td> \n");
             ret.append("</tr> \n");
+
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgHeight") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgHeight") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
+            ret.append("<td> \n");
             ret.append("<input type=text size=4 maxlength=4 name=height ");
             if (!"".equals(base.getAttribute("height", "").trim())) {
                 ret.append(" value=\"" + base.getAttribute("height").trim() + "\"");
             }
-            ret.append("></td> \n");
+            ret.append(" /> \n");
+            ret.append("</td> \n");
             ret.append("</tr> \n");
+
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgTop") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgTop") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
+            ret.append("<td> \n");
             ret.append("<input type=text size=4 maxlength=4 name=top ");
             if (!"".equals(base.getAttribute("top", "").trim())) {
                 ret.append(" value=\"" + base.getAttribute("top").trim() + "\"");
             }
-            ret.append("></td> \n");
+            ret.append(" /> \n");
+            ret.append("</td> \n");
             ret.append("</tr> \n");
+
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgLeft") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
-            ret.append("<td class=\"valores\">");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgLeft") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
+            ret.append("<td> \n");
             ret.append("<input type=text size=4 maxlength=4 name=left ");
             if (!"".equals(base.getAttribute("left", "").trim())) {
                 ret.append(" value=\"" + base.getAttribute("left").trim() + "\"");
             }
-            ret.append("></td> \n");
+            ret.append(" /> \n");
+            ret.append("</td> \n");
             ret.append("</tr> \n");
         } catch (Exception e) {
             log.error("Error while generating form to load window configuration in resource " + base.getId() + ".", e);
