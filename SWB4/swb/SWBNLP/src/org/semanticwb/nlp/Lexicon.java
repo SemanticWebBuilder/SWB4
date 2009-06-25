@@ -218,7 +218,7 @@ public class Lexicon {
         if (doc == null) {
             try {
                 //Create in-memory index writer
-                IndexWriter objWriter = new IndexWriter(objDirPath, luceneAnalyzer);
+                IndexWriter objWriter = new IndexWriter(objDirPath, luceneAnalyzer, false);
 
                 //Create lucene document with SemanticClass info.
                 doc = createDocument("OBJ", oName, o.getPrefix(), oName.toLowerCase(),
@@ -253,7 +253,7 @@ public class Lexicon {
         if (doc == null) {
             try {
             //Create in-memory index writers
-            IndexWriter propWriter = new IndexWriter(propDirPath, luceneAnalyzer, true);
+            IndexWriter propWriter = new IndexWriter(propDirPath, luceneAnalyzer, false);
 
             //If p is an ObjectProperty
             if (p.isObjectProperty()) {
