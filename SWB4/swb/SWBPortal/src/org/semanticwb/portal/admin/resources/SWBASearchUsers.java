@@ -207,7 +207,7 @@ public class SWBASearchUsers extends GenericResource
             jobj.put("numRows", lista.length);
 
             jobj.put("items", jarr);
-        } catch (JSONException jse)
+        } catch (JSONException njse)
         {
         }
         int start = 0;

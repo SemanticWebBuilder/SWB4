@@ -1,622 +1,247 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.semanticwb.portal.admin.resources;
 
-import java.io.*;
-import java.sql.Timestamp;
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.model.*;
-import org.semanticwb.portal.api.*;
-
+import org.semanticwb.SWBUtils;
+import org.semanticwb.model.IPFilter;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.WebSite;
+import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 /**
  *
- * @author juan.fernandez
+ * @author serch
  */
-public class SWBAIPFilter extends GenericResource {
+public class SWBAIPFilter extends GenericResource
+{
 
-    
-    private final int I_PAGE_SIZE = 10;
-    private final int I_INIT_PAGE = 1;
-    private int iPage=0;
-    private int iTotPage=0;
-    private int iIniPage=0;
-    private int iFinPage=0;
-    private String strUrl= null; 
-    private String[] iArray = null;
-    private String[] strArray = null;
+    private Logger log = SWBUtils.getLogger(SWBAIPFilter.class);
+    private int pagezise = 10;
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-     
-        PrintWriter out=response.getWriter();
-        String iResId=request.getParameter("id")!=null?request.getParameter("id"):"0";
-        int iWBPage=1;
-        String idtm=paramRequest.getTopic().getWebSiteId();
-        String strOrder="order";
-        String strWBAction="view";
-        String strConfirm=request.getParameter("confirm");          
-
-        try { iWBPage=Integer.parseInt(request.getParameter("WBPage")); }
-        catch(NumberFormatException e) { iWBPage=1; }
-        if (request.getParameter("sort")!=null && !request.getParameter("sort").trim().equals("")) strOrder=request.getParameter("sort");
-        if(request.getParameter("act")!=null && !request.getParameter("act").trim().equals(""))
-            strWBAction=request.getParameter("act");
-        if(request.getParameter("idtm")!=null && !request.getParameter("idtm").trim().equals("")) idtm=request.getParameter("idtm");
-        int iArraySize = getArraySize(idtm);
-        strUrl =SWBPlatform.getContextPath() + SWBPlatform.getEnv("wb/distributor") + "/" + paramRequest.getTopic().getWebSiteId() + "/";        
-
-        if (strWBAction.equals("view") && iResId.equals("0")) 
-        {
-            iArray = new String[iArraySize];
-            strArray = new String[iArraySize];
-            if (strOrder.equals("order")) iArray=getIntSortArray(idtm,iArray,iWBPage);
-            else  strArray=getStrSortArray(idtm,strArray,strOrder,iWBPage);
-            out.println(getIniForm(strOrder, idtm, paramRequest));
-            if (strConfirm!=null && (strConfirm.equals("removed") || strConfirm.equals("updated") || strConfirm.equals("added"))) 
-            {
-                out.println("<script>");
-                out.println("alert('"+ request.getParameter("message")+"');");
-                out.println("location='"+strUrl+paramRequest.getTopic().getId()+"';");
-                out.println("</script>");
-            }            
-        }
-        else if (strWBAction.equals("add") || strWBAction.equals("edit")) 
-        {
-            out.println(getForm(iResId, idtm, paramRequest));
-        }
-        else if (strWBAction.equals("remove") && !iResId.equals("0")) 
-        {
-            SWBResourceURL urlResAct=paramRequest.getActionUrl();
-            out.println("<form name=\"frmIPFilter\" method=\"post\"> \n");
-            out.println("<input type=hidden name=act2 value=\"remove\"> \n");
-            out.println("<input type=hidden name=idtm value=\""+idtm+"\"> \n");
-            out.println("<input type=hidden name=id value=\""+iResId+"\"> \n");
-            out.println("<script language=\"JavaScript\" type=\"text/JavaScript\"> \n");
-            out.println("      document.frmIPFilter.action='"+urlResAct+"'; \n");
-            out.println("      document.frmIPFilter.submit(); \n");
-            out.println("</script> \n");
-            out.println("</form> \n");
-
-            out.println(getForm(iResId, idtm, paramRequest));
-        }
-    }
-    
-    private String getObjId(String strRec) 
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String id="0";
-        String[] strFields=strRec.split(":");
-        try { id=strFields[1]; }
-        catch(Exception e) { id="0"; }
-        return id;
-    }
-
-    private String [] getStrSortArray(String idtm, String [] strArray, String strOrder, int iWBPage) 
-    {
-        int cont=0;
-        String sort="";
-        WebSite ws = SWBContext.getWebSite(idtm);
-        Iterator<IPFilter> en = ws.listIPFilters();        
-        while (en.hasNext()) 
+        response.setContentType("text/html;charset=ISO-8859-1");
+        String val = request.getParameter("suri");
+        WebSite ws = SWBContext.getWebSite(val);
+        boolean empty = (ws == null ? true : false);
+        IPFilter[] lista = null;
+        if (!empty)
         {
-            IPFilter rec = en.next();
-            if(rec!=null)
+            Iterator<IPFilter> itip = ws.listIPFilters();
+            ArrayList<IPFilter> l1 = new ArrayList<IPFilter>();
+            while (itip.hasNext())
             {
-                if(idtm!=null && !idtm.trim().equals(""))
-                {
-                    if(rec.getWebSite().getId().equals(idtm))
-                    {
-                        sort=rec.getId();
-                        
-                        //TODO: falta saber si el IPFilter tiene descripcion, IP y action
-                        if (strOrder.equals("ip")) sort=rec.getIpNumber(); 
-                        else if (strOrder.equals("description"))  sort = rec.getDescription();
-//                        else if (strOrder.equals("action")) sort=String.valueOf(rec.getAction());
-                        else if (strOrder.equals("lastupdate")) sort=String.valueOf(rec.getUpdated());
-                        sort+=":"+rec.getId();
-                        strArray[cont]=sort;
-                        cont++;
-                    }
-                }
-                else
-                {
-                    sort=String.valueOf(rec.getId());
-                    //TODO: falta saber si IPFilter va tener Description y action
-                    if (strOrder.equals("ip")) sort=rec.getIpNumber();
-                    else if (strOrder.equals("description"))  sort=rec.getDescription();
-//                    else if (strOrder.equals("action")) sort=String.valueOf(rec.getAction());
-                    else if (strOrder.equals("lastupdate")) sort=String.valueOf(rec.getUpdated());
-                    sort+=":"+rec.getId();
-                    strArray[cont]=sort;
-                    cont++;
+                l1.add(itip.next());
+            }
+            lista = l1.toArray(new IPFilter[0]);
+        }
+
+        int start = 0;
+        int pag = pagezise;
+        try
+        {
+            start = Integer.parseInt(request.getParameter("start"));
+            pag = Integer.parseInt(request.getParameter("count"));
+        } catch (Exception ne)
+        {
+        }
+        int cant = 0;
+        if (!empty && null != lista)
+        {
+            cant = lista.length;
+        }
+        JSONObject jobj = new JSONObject();
+        JSONArray jarr = new JSONArray();
+        try
+        {
+            JSONObject tjson = new JSONObject();
+            jobj.put("numRows", cant); //lista.length);
+
+            jobj.put("items", jarr);
+        } catch (JSONException njse)
+        {
+        }
+    //    JSONObject obj = new JSONObject();
+        try
+        {
+            if (!empty && cant > 0)
+            {
+                int end = start + pag;
+                while (start < end && start < lista.length) {
+                    JSONObject obj = new JSONObject();
+                obj.put("@uri", "javascript:parent.addNewTab('" + lista[start] + "',null,'" + lista[start].getEncodedURI() + "')");
+                obj.put("ipAddr", lista[start].getIpNumber());
+                obj.put("desc", lista[start].getTitle());
+                obj.put("rest", lista[start].getAction());
+                obj.put("acct", lista[start].getUpdated());
+                jarr.put(obj);
+                start++;
                 }
             }
-        }
-        Arrays.sort(strArray,String.CASE_INSENSITIVE_ORDER);
-        getPageRange(strArray.length,iWBPage);
-        return strArray;
-    }
-
-    private String[] getIntSortArray(String idtm, String[] iArray, int iWBPage) 
-    {
-        int cont=0;
-        Iterator<IPFilter> en = SWBContext.getWebSite(idtm).listIPFilters();
-        while (en.hasNext()) 
+        } catch (JSONException njsone)
         {
-            IPFilter rec = en.next();
-            if(rec!=null)
-            {
-                if(idtm!=null && !idtm.trim().equals(""))
-                {
-                    if(rec.getWebSite().getId().equals(idtm))
-                    {
-                        iArray[cont] = rec.getId();
-                        cont++;
-                    }
-                }
-                else
-                {
-                    iArray[cont]=rec.getId();
-                    cont++;
-                }
-            }
         }
-        Arrays.sort(iArray);
-        getPageRange(iArray.length,iWBPage);
-        return iArray;
-    }
-
-    private int getArraySize(String idtm) 
-    {
-        int cont=0;
-        Iterator<IPFilter> en = SWBContext.getWebSite(idtm).listIPFilters();
-        while (en.hasNext()) 
-        {
-            IPFilter rec = en.next();
-            cont++;
-        }
-        return cont;
-    }
-
-    private String getStrObjTable(IPFilter rec, int row) 
-    {
-        if(rec==null) return "";
-        StringBuffer sbRet=new StringBuffer();
-        String bgcolor="#FFFFFF";
-        if(row%2==0) bgcolor="#EFEDEC";
-        sbRet.append("<tr class=\"valores\" bgcolor=\""+bgcolor+"\"> \n");
-        sbRet.append("<td> \n");
-        sbRet.append("<input type=\"radio\" name=\"id\" value=\""+rec.getIpNumber()+"\" title=\""+rec.getIpNumber()+"\"> \n");
-        sbRet.append("</td> \n");
-        sbRet.append("<td> \n");
-        sbRet.append(rec.getId());
-        sbRet.append("</td> \n");        
-        sbRet.append("<td> \n");
-        sbRet.append(rec.getIpNumber());
-        sbRet.append("</td> \n");
-        sbRet.append("<td> \n");
-        sbRet.append(rec.getDescription());
-        sbRet.append("</td> \n");
-        sbRet.append("<td> \n");
-        //TODO: getAction()
-        //sbRet.append(rec.getAction());
-        sbRet.append("Acción???");
-        sbRet.append("</td> \n");
-        sbRet.append("<td> \n");
-        sbRet.append(rec.getUpdated());
-        sbRet.append("</td> \n");
-        sbRet.append("</tr> \n");
-        return sbRet.toString();
-    }
-
-    private void getPageRange (int iSize, int iPageNum) 
-    {
-        iPage = I_INIT_PAGE;
-        if (iPageNum > 1) iPage = iPageNum;
-        if(iSize > I_PAGE_SIZE)
-        {
-            iTotPage = iSize / I_PAGE_SIZE;
-            int i_ret = iSize % I_PAGE_SIZE;
-            if(i_ret > 0) iTotPage = iTotPage + 1;
-        }
-        else iTotPage=1;
-     
-        iIniPage =  (I_PAGE_SIZE*iPage) - I_PAGE_SIZE ;
-        iFinPage = I_PAGE_SIZE*iPage;
-        if(iSize < I_PAGE_SIZE*iPage) iFinPage = iSize;
-    }
-
-    private String getJavaScript (SWBParamRequest paramsRequest) 
-    {
-        StringBuffer sbRet=new StringBuffer();
-        try 
-        {
-            sbRet.append("<script language=\"JavaScript\" type=\"text/JavaScript\"> \n");
-            sbRet.append("  if (document.frmIPFilter.idtm.length==undefined || document.frmIPFilter.idtm.length==1) { \n");
-            sbRet.append("     document.frmIPFilter.Open.disabled=true;\n");
-            sbRet.append("     document.frmIPFilter.Add.disabled=true;\n");
-            sbRet.append("     document.frmIPFilter.Remove.disabled=true;\n");
-            sbRet.append("     alert('"+paramsRequest.getLocaleString("msgNotAccess")+"')\n");
-            sbRet.append("  } \n");
-            sbRet.append("  var strResName=''; \n");
-            sbRet.append("  var strResId=''; \n");
-            sbRet.append("  function sort(col,page) { \n");
-            sbRet.append("      document.frmIPFilter.sort.value = col; \n");
-            sbRet.append("      document.frmIPFilter.WBPage.value = page; \n");
-            sbRet.append("      document.frmIPFilter.submit(); \n");
-            sbRet.append("  } \n");
-            sbRet.append("  function doPaging(page,col) { \n");
-            sbRet.append("      document.frmIPFilter.WBPage.value = page; \n");
-            sbRet.append("      document.frmIPFilter.sort.value = col; \n");
-            sbRet.append("      document.frmIPFilter.submit(); \n");
-            sbRet.append("  } \n");
-            sbRet.append("function send(action) { \n");
-            //SWBResourceURL urlResAct=paramsRequest.getActionUrl();
-            sbRet.append("    var agree=false; \n");
-            sbRet.append("\n    if(document.frmIPFilter.idtm.selectedIndex==0 || document.frmIPFilter.idtm.options[document.frmIPFilter.idtm.selectedIndex].value=='') { ");
-            sbRet.append("\n        alert('"+paramsRequest.getLocaleString("msgSiteRequired")+"')");
-            sbRet.append("\n        document.frmIPFilter.idtm.focus();");
-            sbRet.append("\n        return false;");
-            sbRet.append("\n    }");            
-            sbRet.append("    if (action=='view'){ \n");
-            sbRet.append("      document.frmIPFilter.act.value = action; \n");
-            sbRet.append("      agree=true; \n");
-            sbRet.append("    } \n"); 
-            sbRet.append("    if (action=='remove') \n");
-            sbRet.append("    { \n");
-            sbRet.append("      var selected=radioselected(); \n");
-            sbRet.append("      if (selected) agree=confirm('"+paramsRequest.getLocaleString("msgConfirmRemove")+" '+strResName+'?'); \n");
-            sbRet.append("      else alert ('"+paramsRequest.getLocaleString("msgIPFilterRequired")+"');\n");
-            sbRet.append("      document.frmIPFilter.act.value = action; \n");
-            sbRet.append("      document.frmIPFilter.ResId.value = strResId; \n");
-            sbRet.append("    } \n");
-            sbRet.append("    if (action=='add'){ \n");
-            sbRet.append("      document.frmIPFilter.act.value = action; \n");
-            sbRet.append("      agree=true; \n");
-            sbRet.append("    } \n");        
-            sbRet.append("    if (action=='edit'){ \n");
-            sbRet.append("      var selected=radioselected(); \n");
-            sbRet.append("      var agree=false; \n");
-            sbRet.append("      if (!selected) alert ('"+paramsRequest.getLocaleString("msgIPFilterRequired")+"');\n");
-            sbRet.append("      else agree=true; \n");
-            sbRet.append("      document.frmIPFilter.act.value = action; \n");
-            sbRet.append("      document.frmIPFilter.ResId.value = strResId; \n");
-            sbRet.append("    } \n");
-            sbRet.append("    if (action=='save'){ \n");
-            sbRet.append("      var agree=validateForm(); \n");
-            //sbRet.append("      document.frmIPFilter.action='"+urlResAct+"'; \n");
-            //sbRet.append("      document.frmIPFilter.act.value='"+paramsRequest.getAction()+"'; \n");
-            sbRet.append("    } \n");
-            sbRet.append("    if (agree) document.frmIPFilter.submit();\n");
-            sbRet.append("} \n");
-            sbRet.append("function radioselected() { \n");
-            sbRet.append("    if (document.frmIPFilter.id.value!=\"\") { \n");
-            sbRet.append("       if (document.frmIPFilter.id.length!=undefined) { \n");
-            sbRet.append("          for(i=0;i<document.frmIPFilter.id.length;i++) { \n");
-            sbRet.append("             if(document.frmIPFilter.id[i].checked==true) { \n");
-            sbRet.append("                 strResId=document.frmIPFilter.id[i].value;  \n");
-            sbRet.append("                 strResName=document.frmIPFilter.id[i].title;  \n");
-            sbRet.append("                 return true;  \n");
-            sbRet.append("             } \n");
-            sbRet.append("          } \n");
-            sbRet.append("       } \n");
-            sbRet.append("       else if(document.frmIPFilter.id.checked) { \n");
-            sbRet.append("          strResId=document.frmIPFilter.id.value;  \n");
-            sbRet.append("          strResName=document.frmIPFilter.id.title;  \n");
-            sbRet.append("          return true;  \n");        
-            sbRet.append("       } \n");
-            sbRet.append("    } \n");        
-            sbRet.append("} \n");
-            sbRet.append("function radioselect() { \n");
-            sbRet.append("    if (document.frmIPFilter.res.value!=\"\")  \n");
-            sbRet.append("      alert (document.frmIPFilter.res.value);  \n");
-            sbRet.append("} \n");
-            sbRet.append("\n function validateForm() {");
-            sbRet.append("\n    var frm=document.frmIPFilter;");
-            /*
-            sbRet.append("\n    for (var i=0; i < frm.elements.length; i++ ) { ");
-            sbRet.append("\n        if(frm.elements[i]!=undefined) {");
-            // Valida los objetos de la forma tipo text
-            sbRet.append("\n            if(frm.elements[i].type==\"text\") {");
-            sbRet.append("\n               if (frm.elements[i].value=='') {");
-            sbRet.append("\n                  alert ('"+paramsRequest.getLocaleString("msgIPRequired")+"');");
-            sbRet.append("\n                  frm.elements[i].focus();");
-            sbRet.append("\n                  return false;");
-            sbRet.append("\n               }");
-            sbRet.append("\n            }");
-            sbRet.append("\n        }");
-            sbRet.append("\n    }");
-            */
-            sbRet.append("\n    if (frm.ip1.value=='') {");
-            sbRet.append("\n        alert ('"+paramsRequest.getLocaleString("msgIPRequired")+"');");
-            sbRet.append("\n        frm.ip1.focus();");
-            sbRet.append("\n        return false;");
-            sbRet.append("\n    }");
-            sbRet.append("\n    if(!isRange(frm.ip1,1) || !isRange(frm.ip2,0) || !isRange(frm.ip3,0) || !isRange(frm.ip4,0)) return false;");
-            sbRet.append("\n    else {");
-            sbRet.append("\n        frm.ip.value=frm.ip1.value;");
-            sbRet.append("\n        if (frm.ip2.value!='') frm.ip.value+='.'+frm.ip2.value;");
-            sbRet.append("\n        if (frm.ip3.value!='') {");
-            sbRet.append("\n            if (frm.ip2.value=='') frm.ip.value+='.0';");
-            sbRet.append("\n            frm.ip.value+='.'+frm.ip3.value;");
-            sbRet.append("\n        }");
-            sbRet.append("\n        if (frm.ip4.value!='') {");
-            sbRet.append("\n            if (frm.ip2.value=='') frm.ip.value+='.0';");
-            sbRet.append("\n            if (frm.ip3.value=='') frm.ip.value+='.0';");
-            sbRet.append("\n            frm.ip.value+='.'+frm.ip4.value;");
-            sbRet.append("\n        }");
-            sbRet.append("\n    }");
-            sbRet.append("\n    if(frm.idtm.selectedIndex==0 ||  frm.idtm.options[frm.idtm.selectedIndex].value=='') { ");
-            sbRet.append("\n        alert('"+paramsRequest.getLocaleString("msgSiteRequired")+"')");
-            sbRet.append("\n        frm.idtm.focus();");
-            sbRet.append("\n        return false;");
-            sbRet.append("\n    }");
-            sbRet.append("\n    return true;");
-            sbRet.append("\n }");
-            sbRet.append("\n function isRange(ip, initial) { ");
-            sbRet.append("\n    if(ip.value.length > 0)");
-            sbRet.append("\n        if(parseInt(ip.value) < initial || parseInt(ip.value) > 255) {");
-            sbRet.append("\n            alert ('"+paramsRequest.getLocaleString("msgSubnetMask")+"');");
-            sbRet.append("\n            ip.focus();");
-            sbRet.append("\n            return false;");
-            sbRet.append("\n        }");
-            sbRet.append("\n    return true;");
-            sbRet.append("\n }");
-            sbRet.append("</script> \n");
-        } catch(Exception e){}            
-        return sbRet.toString();
-    }
-
-    private String getIniForm(String strOrder, String idtm, SWBParamRequest paramsRequest) throws SWBResourceException
-    {
-        StringBuffer sbRet=new StringBuffer();
-        //User user= paramsRequest.getUser();
-        sbRet.append("<div class=\"box\">");
-        sbRet.append("<form name=\"frmIPFilter\" method=\"post\" action=\"\"> \n");
-        sbRet.append("<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">");
-        sbRet.append("<tr> \n");
-        sbRet.append("<td class=\"valores\">"+paramsRequest.getLocaleString("msgSite")+"</td>");
-        sbRet.append("<td colspan=\"5\" align=\"left\" class=\"valores\">");
-        sbRet.append("<select name=\"idtm\" onChange='javascript:send(\"view\")'>");
-        sbRet.append("<option value=\"\">"+paramsRequest.getLocaleString("msgSiteOption")+"</option>\n");
-        Iterator<WebSite> it=SWBContext.listWebSites();
-        boolean bOk=false;
-        String js="";
-        while(it.hasNext())
-        {
-            WebSite tm=(WebSite)it.next();
-            //TODO: AdmFilterMgr.getInstance().haveAccess2TopicMap
-            //if(2 == AdmFilterMgr.getInstance().haveAccess2TopicMap(user, tm.getId()))
-            {
-                js+="<option value=\""+tm.getId()+"\"";
-                if(tm.getId().equals(idtm)) { js+=" selected"; bOk=true; }
-                js+=">"+tm.getTitle()+"</option>\n";
-            }
-        }
-        if(!bOk && js.indexOf(">"+paramsRequest.getTopic().getWebSiteId()+"</option>")>-1)  
-            js=js.replaceFirst(">"+paramsRequest.getTopic().getWebSiteId()+"</option>", "selected>"+paramsRequest.getTopic().getWebSiteId()+"</option>");
-        sbRet.append(js);
-        sbRet.append("</select></td> \n");
-        sbRet.append("</tr> \n");        
-        sbRet.append("<tr align=\"center\"> \n");
-        sbRet.append("<td colspan=\"6\" class=\"datos\">"+paramsRequest.getLocaleString("msgPage")+" "+ iPage +" "+paramsRequest.getLocaleString("msgOf")+" " + iTotPage+"&nbsp;&nbsp;&nbsp;&nbsp;");
-        if(iPage > 1) sbRet.append("<a href=\"javascript:doPaging(" + (iPage - 1) + ",'"+strOrder+"');\" class=\"link\">&lt;&lt;</a>&nbsp;");
-        if(iPage > 0 && (iPage + 1 <= iTotPage)) 
-            sbRet.append("<a href=\"javascript:doPaging(" + (iPage + 1) +",'"+strOrder+"');\" class=\"link\">&gt;&gt;</a>");
-        sbRet.append("</td> \n");
-        sbRet.append("</tr> \n");
-        sbRet.append("<tr class=\"tabla\"> \n");
-        sbRet.append("<td>&nbsp;</td> \n");
-        sbRet.append("<td><a href=\"javascript:sort('order',"+iPage+")\" class=\"link\">"+paramsRequest.getLocaleString("msgID")+"</a></td> \n");
-        sbRet.append("<td><a href=\"javascript:sort('ip',"+iPage+")\" class=\"link\">"+paramsRequest.getLocaleString("msgIP")+"</a></td> \n");
-        sbRet.append("<td><a href=\"javascript:sort('description',"+iPage+")\" class=\"link\">"+paramsRequest.getLocaleString("msgDescription")+"</a></td> \n");
-        sbRet.append("<td><a href=\"javascript:sort('action',"+iPage+")\" class=\"link\">"+paramsRequest.getLocaleString("msgRestriction")+"</a></td> \n");
-        sbRet.append("<td><a href=\"javascript:sort('lastupdate',"+iPage+")\">"+paramsRequest.getLocaleString("msgLastUpdate")+"</a></td> \n");
-        //sbRet.append("<td>"+paramsRequest.getLocaleString("msgLastUpdate")+"</td> \n");
-        sbRet.append("</tr> \n");
-        if (strOrder.equals("order")) 
-        {
-            for (int i=iIniPage; i < iFinPage; i++) 
-            {
-                IPFilter rec = SWBContext.getWebSite(idtm).getIPFilter(iArray[i]);
-                sbRet.append(getStrObjTable(rec, i));
-            }
-        }
-        else
-        {
-            for (int i=iIniPage; i < iFinPage; i++) 
-            {
-                IPFilter rec = SWBContext.getWebSite(idtm).getIPFilter(getObjId(strArray[i])); //DBCatalogs.getInstance().getIpFilter(idtm, getObjId(strArray[i]));
-                sbRet.append(getStrObjTable(rec, i));
-            }
-        }
-        sbRet.append("<tr> \n");
-        sbRet.append("<td colspan=\"6\" align=right> \n");
-        sbRet.append("<hr size=1 noshade> \n");
-        sbRet.append("\n <input type=button  class=\"boton\" name=Open onClick='javascript:send(\"edit\")' value="+paramsRequest.getLocaleString("btnEdit")+">");        
-        //sbRet.append("&nbsp;&nbsp;&nbsp;");
-        sbRet.append("\n <input type=button  class=\"boton\" name=Add onClick='javascript:send(\"add\");' value="+paramsRequest.getLocaleString("btnAdd")+">");
-        //sbRet.append("&nbsp;&nbsp;&nbsp;");
-        sbRet.append("\n <input type=button  class=\"boton\" name=Remove onClick='javascript:send(\"remove\");' value="+paramsRequest.getLocaleString("btnRemove")+">");
-        sbRet.append("</td> \n");
-        sbRet.append("</tr> \n");
-        sbRet.append("</table> \n");
-        sbRet.append("<input type=hidden name=sort> \n");
-        sbRet.append("<input type=hidden name=act> \n");
-        sbRet.append("<input type=hidden name=ResId> \n");
-        sbRet.append("<input type=hidden name=WBPage> \n");
-        sbRet.append("</form> \n");
-        sbRet.append("</div>");
-        sbRet.append(getJavaScript(paramsRequest));        
-        return sbRet.toString();
-    }
-
-    private String getForm(String id, String idtm, SWBParamRequest paramsRequest) throws SWBResourceException
-    {
-        StringBuffer sbRet=new StringBuffer();
-        IPFilter rec=null;
-        if(!id.equals("0")) rec=SWBContext.getWebSite(idtm).getIPFilter(id);
-        SWBResourceURL urlResAct=paramsRequest.getActionUrl();
-        String[] ip=null;
-        //if(rec!=null && (rec.getIp()!=null && rec.getIp().matches("(((0)|([1-9]([0-9]){0,1})|(1([0-9]){2})|(2[0-4][0-9])|(25[0-5]))\\.){3}((0)|([1-9]([0-9]){0,1})|(1([0-9]){2})|(2[0-4][0-9])|(25[0-5]))$"))) 
-        if(rec!=null && rec.getIpNumber()!=null) 
-        {
-            ip=rec.getIpNumber().split("\\.");
-            //if(ip.length < 1) ip=new String[]{rec.getIp()};
-        }
-        sbRet.append(getJavaScript(paramsRequest));
-        sbRet.append("<div class=box>");
-        sbRet.append("<form name=\"frmIPFilter\" method=\"post\" action=\""+urlResAct+"\"> \n");
-        sbRet.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\">");
-        sbRet.append("<tr> \n");
-        sbRet.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgIP")+":</td> \n");
-        sbRet.append("<td class=\"valores\"><input name=\"ip1\" type=\"text\" size=3 maxlength=3 dir=rtl value=\""+(ip!=null && ip.length > 0 ? ip[0] : "")+ "\">.\n");
-        sbRet.append("<input name=\"ip2\" type=\"text\" size=3 maxlength=3 dir=rtl value=\""+(ip!=null && ip.length > 1 ? ip[1] : "")+ "\">.\n");
-        sbRet.append("<input name=\"ip3\" type=\"text\" size=3 maxlength=3 dir=rtl value=\""+(ip!=null && ip.length > 2 ? ip[2] : "")+ "\">.\n");
-        sbRet.append("<input name=\"ip4\" type=\"text\" size=3 maxlength=3 dir=rtl value=\""+(ip!=null && ip.length > 3 ? ip[3] : "")+ "\">\n");
-        sbRet.append("<input name=\"ip\" type=\"hidden\"");
-        if(rec!=null && rec.getIpNumber()!=null) sbRet.append(" value=\""+rec.getIpNumber()+"\"");
-        sbRet.append("></td> \n");
-        sbRet.append("</tr> \n");
-
-        sbRet.append("<tr> \n");
-        sbRet.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgSite")+"</td> \n");
-        sbRet.append("<td class=\"valores\"><select name=idtm>");
-        sbRet.append("<option value=\"\">"+paramsRequest.getLocaleString("msgSiteOption")+"</option>\n");
-        Iterator<WebSite> it=SWBContext.listWebSites();
-        boolean bOk=false;
-        String js="";
-        while(it.hasNext())
-        {
-            WebSite tm=(WebSite)it.next();
-            js+="<option value=\""+tm.getId()+"\"";
-            if(rec!=null && rec.getWebSite().getId().equals(tm.getId())) { js+=" selected"; bOk=true; }
-            js+=">"+tm.getId()+"</option>\n";
-        }
-        if(!bOk && js.indexOf(">"+idtm+"</option>")>-1)  
-            js=js.replaceFirst(">"+idtm+"</option>", "selected>"+idtm+"</option>");
-        sbRet.append(js);
-        sbRet.append("</select></td> \n");
-        sbRet.append("</tr> \n");
-        sbRet.append("<tr> \n");
-        sbRet.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgDescription")+":</td> \n");
-        sbRet.append("<td class=\"valores\"><textarea name=\"description\" cols=\"38\" rows=\"8\" wrap=\"VIRTUAL\">");
-        if(rec!=null && rec.getDescription()!=null) sbRet.append(rec.getDescription());
-        sbRet.append("</textarea></td> \n");
-        sbRet.append("</tr> \n");
-        sbRet.append("<tr> \n");
-        sbRet.append("<td>&nbsp;</td> \n");
-        sbRet.append("<td class=\"valores\"><input name=\"action\" type=\"radio\" value=0");
-        //TODO: getAction() IPFilter ???
-        //if(rec==null || (rec!=null && rec.getAction() == 0)) sbRet.append(" checked");
-        sbRet.append("> "+paramsRequest.getLocaleString("msgNotCount")+"</td> \n");
-        sbRet.append("</tr> \n");
-        sbRet.append("<tr> \n");
-        sbRet.append("<td>&nbsp;</td> \n");
-        sbRet.append("<td class=\"valores\"><input name=\"action\" type=\"radio\" value=1");
-        //TODO: getAction() IPFilter ???
-        //if(rec!=null && rec.getAction() == 1) sbRet.append(" checked");
-        sbRet.append("> "+paramsRequest.getLocaleString("msgNotAllow")+"</td> \n");
-        sbRet.append("</tr> \n");
-        sbRet.append("<tr><td colspan=\"6\"><HR size=\"1\" noshade></td></tr> \n");
-        sbRet.append("<tr> \n");
-        sbRet.append("<td colspan=\"6\" align=\"right\"> \n");
-        sbRet.append("<input type=button class=\"boton\" name=Save onClick='javascript:send(\"save\");' value=");
-        if(rec!=null && !rec.getId().equals("0")) sbRet.append(paramsRequest.getLocaleString("btnUpdate"));
-        else sbRet.append(paramsRequest.getLocaleString("btnSave"));
-        sbRet.append("> \n");
-        //sbRet.append("&nbsp;&nbsp;&nbsp; \n");
-        sbRet.append("<input type=reset class=\"boton\" name=Reset value="+paramsRequest.getLocaleString("btnReset")+"> \n");
-        //sbRet.append("&nbsp;&nbsp;&nbsp; \n");
-        sbRet.append("<input type=button class=\"boton\" name=Back onClick=location='"+strUrl+paramsRequest.getTopic().getId()+"'; value="+paramsRequest.getLocaleString("msgBack")+"> ");
-        sbRet.append("</td> \n");
-        sbRet.append("</tr> \n");
-        sbRet.append("</table> \n");
-        sbRet.append("<input type=hidden name=sort> \n");
-        sbRet.append("<input type=hidden name=act>");
-        sbRet.append("<input type=hidden name=act2 value=\"");
-        if(rec!=null && !rec.getId().equals("0")) sbRet.append("edit");
-        else sbRet.append("add");
-        sbRet.append("\"> \n");
-        sbRet.append("<input type=hidden name=id value=\""+id+"\"> \n");
-        sbRet.append("</form> \n");
-        sbRet.append("</div> \n");
-        return sbRet.toString();
+        response.getOutputStream().println(jobj.toString());
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-    
-        HashMap params=new HashMap();
-
-        User user = response.getUser();
-        String id=request.getParameter("id")!=null?request.getParameter("id"):"0";
-        String strWBAction=request.getParameter("act2");
-        String msg=null;
-        String idtm=request.getParameter("idtm");
-        WebSite ws = SWBContext.getWebSite(idtm);
-
-        if (strWBAction!=null && strWBAction.equals("remove")) 
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        StringBuffer ret = new StringBuffer("");
+        SWBResourceURL url = paramRequest.getRenderUrl();
+        url.setMode(SWBResourceURL.Mode_EDIT);
+        url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        ret.append("<script type=\"text/javascript\">\n" +
+                "           dojo.require(\"dojo.parser\");\n" +
+                "                   dojo.require(\"dijit.layout.ContentPane\");\n" +
+                "                   dojo.require(\"dijit.form.FilteringSelect\");\n" +
+                "                   dojo.require(\"dijit.form.CheckBox\");\n" +
+                "                   dojo.require(\"dojox.grid.DataGrid\");\n" +
+                "                   dojo.require(\"dojox.data.QueryReadStore\");\n" +
+                "                var Global_suri =''; \n" +
+                "                var model =''; \n" +
+                "        </script>\n");
+        ret.append("<form id=\"" + IPFilter.swb_IPFilter.getClassName() + "/create\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
+        ret.append("onSubmit=\"return false;\" method=\"POST\">");
+        ret.append("\t<fieldset>\n\t<label for=\"Sitios\">Sitio</label>");
+        Iterator<WebSite> itur = SWBContext.listWebSites();
+        ret.append("\n\t\t\t\t<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"userRepository\" id=\"Sitios\"  >");
+        ret.append("\n\t\t\t\t\t<option value=\"\"></option>"); //todo Add Language
+        while (itur.hasNext())
         {
-            try{
-                ws.removeIPFilter(id);
-                msg=response.getLocaleString("msgOkRemove")+" "+id+".";
-            }
-            catch(Exception e)
-            {
-               msg=response.getLocaleString("msgErrRemove")+" "+id+"."; 
-            }
-            params.put("confirm","removed");
+            WebSite ur = itur.next();
+            ret.append("\n\t\t\t\t\t<option value=\"" + ur.getId() + "\">" + ur.getTitle() + "</option>"); //todo Add Language
         }
-        else 
+        ret.append("\n\n<script type=\"dojo/method\" event=\"onChange\" args=\"suri\">\n");
+        ret.append("  Global_suri = suri;\n");
+        ret.append("   model = new dojox.data.QueryReadStore({\n" +
+                "				url:\"" + url + "?suri=\"+Global_suri,\n" +
+                "		requestMethod:\"post\"});\n" +
+                "       grid1.setStore(model);\n" );
+        ret.append("</script> \n");
+        ret.append("\n\t\t\t\t</select>");
+        ret.append("\n\t\t\t</fieldset>\n</form>");
+
+        ret.append("<script type=\"text/javascript\">\n" +
+                "       // data grid layout: a grid view is a group of columns\n" +
+                "       var page= 0;\n" +
+                "       var start= 0;\n" +
+                "       var batchSize=" + pagezise + ";                        \n" +
+                "               // Data Grid layout\n" +
+                "               // A grid view is a group of columns\n" +
+                "       var view1 = [\n" +
+                "                    {name: 'Dirección IP',width:'30%', field: \"ipAddr\"},\n" +
+                "                    {name: 'Descripción',width:'30%', field: \"desc\"},\n" +
+                "                    {name: 'Restricción',width:'20%',field: \"rest\"},\n " +
+                "                    {name: 'Ultima actualización',width:'20%',field: \"acct\"},\n " +
+                "            ]\n ;" +
+                "       var layout = [ view1 ];\n" +
+                //  "       model = new dojox.grid.data.Objects([{key: \"login\"}, {key: \"name\"},{key: \"papellid\"},{key: \"sapellid\"},{key: \"email\"}], null);\n" +
+
+                "       \n" +
+                "       dojo.addOnLoad(function(){\n" +
+                "   	model = new dojox.data.QueryReadStore({\n" +
+                "				url:\"" + url + "?suri=\"+Global_suri,\n" +
+                "		requestMethod:\"post\"\n" +
+                "	});\n\n" +
+                "       grid1.setStore(model);\n" +
+                "       grid1.setStructure(layout);\n" +
+                "       });\n" +
+                "       function openOther(evt){\n" +
+                "           var row=evt.rowIndex;\n" +
+                "           var curItem = grid1.getItem(row);\n" +
+                "           var rowID=model.getValue(curItem,\"@uri\");\n" +
+                "           eval(rowID);\n" +
+                "           return false;\n" +
+                "       }\n" +
+                "           \n" +
+                "        </script>\n");
+
+        ret.append("<div id=\"grid1\" jsid=\"grid1\" dojoType=\"dojox.grid.DataGrid\" model=\"model\" structure=\"layout\" onRowDblClick=\"openOther\" autoWidth_=\"true\" rowsPerPage=\"10\" >\n</div>");
+        url.setMode(SWBResourceURL.Mode_HELP);
+        ret.append("<fieldset><button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"parent.showDialog('"+url+"');\">Agregar</button></fieldset>");
+
+        response.getWriter().write(ret.toString());
+    }
+
+    @Override
+    public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+                StringBuffer ret = new StringBuffer(1000);
+                 SWBResourceURL url = paramRequest.getActionUrl();
+//                 ret.append("<script type=\"text/javascript\">\n"+
+//        "           dojo.require(\"dojo.parser\");\n"+
+//        "                   dojo.require(\"dijit.layout.ContentPane\");\n"+
+//        "                   dojo.require(\"dijit.form.FilteringSelect\");\n"+
+//        "                   dojo.require(\"dijit.form.CheckBox\");\n"+
+//        "        </script>\n");
+      //http://www.semanticwebbuilder.org/swb4/ontology#User
+        ret.append("<form id=\""+IPFilter.swb_IPFilter.getClassName()+"/create\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
+        ret.append("action=\""+url+"\" ");
+        ret.append("onSubmit=\"submitForm('"+IPFilter.swb_IPFilter.getClassName()+"/create');return false;\" method=\"POST\">");
+        ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Sitios</label>");
+        ret.append("\n\t\t\t</td>\n\t\t\t<td>");
+        Iterator<WebSite> itur = SWBContext.listWebSites();
+        ret.append("\n\t\t\t\t<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"webSite\" id=\"webSite\" >");
+        while (itur.hasNext())
         {
-            int action=0;
-            String ip=request.getParameter("ip");
-            String description=request.getParameter("description");
-            Timestamp lastupdate = new Timestamp(System.currentTimeMillis());        
-            try { action=Integer.parseInt(request.getParameter("action")); }
-            catch(NumberFormatException e) { action=0; }  
-            
-            if (strWBAction!=null && strWBAction.equals("add"))  
-            {
-                IPFilter rec=ws.createIPFilter();
-                //TODO: IPFilter Description, Action, IP, user, created, updated
-                    rec.setDescription(description);
-                    rec.setIpNumber(ip);
-//                    rec.setAction(action);
-                    rec.setCreator(user);
-                //IPFilter rec=srv.createIPFilter(idtm,ip,description,action,lastupdate,response.getUser().getId());
-                if(rec!=null && !rec.getId().equals("0")) msg=response.getLocaleString("msgOkAdd")+" "+rec.getId()+".";
-                else msg=response.getLocaleString("msgErrAdd")+" "+id+".";
-                params.put("confirm","added");
-            }
-            else if (strWBAction!=null && strWBAction.equals("edit")) 
-            {
-                IPFilter rec=ws.getIPFilter(id);
-                try{
-                //if(srv.updateIPFilter(idtm,id,ip,description,action,lastupdate,response.getUser().getId())) 
-                    //TODO: IPFilter Description, Action, IP, user, created, updated
-                    rec.setDescription(description);
-                    rec.setIpNumber(ip);
-//                    rec.setAction(action);
-                    rec.setModifiedBy(user);
-                    msg=response.getLocaleString("msgOkUpdate")+" "+id+".";
-                }
-                catch(Exception e)
-                {
-                    msg=response.getLocaleString("msgErrUpdate")+" "+id+".";
-                }
-                params.put("confirm","updated");
-            }
+            WebSite ur = itur.next();
+            ret.append("\n\t\t\t\t\t<option value=\"" + ur.getId() + "\">" + ur.getTitle() + "</option>"); //todo Add Language
         }
-        params.put("message", msg);
-        params.put("idtm", idtm);
-        response.setRenderParameters(params);
+        ret.append("\n\t\t\t\t</select>\n\t\t\t</td>\n\t\t</tr>");
+        ret.append("\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Título <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
+        ret.append("<input type=\"text\" name=\"titulo\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" " +
+                "promptMessage=\"Asigna un nombre a este filtro.\" invalidMessage=\"Título del filtro es requerido.\" trim=\"true\" />");
+        ret.append("\n\t\t\t</td>\n\t\t</tr>");
+        ret.append("\n\t<tr>\n\t\t<td align=\"center\" colspan=\"2\">");
+        ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>\n");
+        ret.append("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>\n");
+        ret.append("\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t</fieldset>\n</form>");
+                 response.getWriter().write(ret.toString());
+    }
+
+    @Override
+    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        StringBuffer ret = new StringBuffer();
+        
+        ret.append("<script type=\"text/javascript\">\n\ndojo.require(\"dojo.parser\");\ndijit.byId('swbDialog').hide();\nshowStatus('Filtro creado');\n");
+        ret.append("addNewTab('"+request.getParameter("suri")+"','/"+SWBPlatform.getContextPath()+"swbadmin/jsp/objectTab.jsp','"+request.getParameter("label")+"');\n");
+        ret.append("</script>");
+        response.getWriter().write(ret.toString());
+    }
+
+
+
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
+    {
+        String website = request.getParameter("webSite");
+        String titulo = request.getParameter("titulo");
+        if (null==website||website.length()==0||null==titulo||titulo.length()==0) {
+            response.setMode(SWBResourceURL.Mode_HELP);
+            return;
+        }
+        WebSite ws = SWBContext.getWebSite(website);
+        response.setMode(SWBResourceURL.Mode_XML);
+        IPFilter ipFilter = ws.createIPFilter();
+
+        ipFilter.setTitle(titulo);
+        response.setRenderParameter("suri", ipFilter.getURI());
+        response.setRenderParameter("label", ipFilter.getTitle());
     }
 }

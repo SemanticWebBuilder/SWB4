@@ -5,6 +5,7 @@ import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
@@ -95,7 +96,7 @@ public class SWBACreateUser extends GenericResource {
     {
         StringBuffer ret = new StringBuffer();
         ret.append("<script type=\"text/javascript\">\ndijit.byId('swbDialog').hide();\nshowStatus('Usuario creado');\n");
-        ret.append("addNewTab('"+request.getParameter("suri")+"','/swb/swbadmin/jsp/objectTab.jsp','"+request.getParameter("login")+"');\n");
+        ret.append("addNewTab('"+request.getParameter("suri")+"','/"+SWBPlatform.getContextPath()+"swbadmin/jsp/objectTab.jsp','"+request.getParameter("login")+"');\n");
         ret.append("</script>");
         response.getWriter().write(ret.toString());
 
