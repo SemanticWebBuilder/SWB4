@@ -1824,7 +1824,13 @@ public class SemanticObject
             externalInvokerSet(prop,value);
         }else
         {
-            setLiteralProperty(prop, new SemanticLiteral(new Timestamp(value.getTime())));
+            if(value!=null)
+            {
+                setLiteralProperty(prop, new SemanticLiteral(new Timestamp(value.getTime())));
+            }else
+            {
+                removeProperty(prop);
+            }
         }
         return this;
     }
@@ -1947,7 +1953,13 @@ public class SemanticObject
             externalInvokerSet(prop,value);
         }else
         {
-            setLiteralProperty(prop, new SemanticLiteral(value));
+            if(value!=null)
+            {
+                setLiteralProperty(prop, new SemanticLiteral(value));
+            }else
+            {
+                removeProperty(prop);
+            }
         }
         return this;
     }
