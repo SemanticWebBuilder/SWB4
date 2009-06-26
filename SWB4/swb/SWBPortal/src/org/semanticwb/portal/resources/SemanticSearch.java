@@ -660,7 +660,7 @@ public class SemanticSearch extends GenericAdmResource {
        SWBSpellChecker speller = new SWBSpellChecker(lex.getObjDirectory(), "displayName");
         //speller.testSuggest(lex.getObjDirectory(), query);
 
-       String []suggestions = speller.getSuggestions("filtro de recarso");
+       String []suggestions = speller.suggestSimilar("filtro de recarso");
        if (suggestions != null) {
        System.out.println("-------Suggestions------");
         for (int i = 0; i < suggestions.length; i++) {
