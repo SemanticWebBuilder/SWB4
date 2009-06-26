@@ -429,7 +429,7 @@ public class DistributorParams
         while (it.hasNext())
         {
             IPFilter ip =  it.next();
-            if (ipuser.indexOf(ip.getIpNumber()) > -1)
+            if (null!= ip.getIpNumber() && ipuser.indexOf(ip.getIpNumber()) > -1)
             {
                 return ip.getAction();
             }
