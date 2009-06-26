@@ -15,6 +15,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.model.Dns;
+import org.semanticwb.model.IPFilter;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
@@ -420,6 +421,19 @@ public class DistributorParams
 //                return ip.getAction();
 //            }
 //        }
+
+        //MAPS74
+        String ipuser = request.getRemoteAddr().toString();
+        Iterator<IPFilter> it = webpage.getWebSite().listIPFilters();
+                //DBCatalogs.getInstance().getIpFilters(webpage.getMap().getId()).values().iterator();
+        while (it.hasNext())
+        {
+            IPFilter ip =  it.next();
+            if (ipuser.indexOf(ip.getIpNumber()) > -1)
+            {
+                return ip.getAction();
+            }
+        }
         return -1;
     }
     
