@@ -174,8 +174,12 @@
                         <!-- top tabs (marked as "center" to take up the main part of the BorderContainer) -->
                 <div dojoType="dijit.layout.TabContainer" region="center" id="tabs" jsId="tabs">
                     <!-- sixth upper tab -->
+<!--
+                    <div dojoType="dijit.layout.ContentPane" title="Inicio" style="display:none; padding:10px; " closable="true" href="{webpath}/swb/SWBAdmin/Work_Admin">
+                    </div>
+-->
                     <div id="swbPreviewTab" dojoType="dijit.layout.ContentPane" title="Preview" style="display:none; padding:10px; " closable="false" href_="{webpath}/swb">
-                        <iframe id="swbPreviewFrame" dojoType_="dijit.layout.ContentPane" src="{webpath}/swb/SWBAdmin/Work_Admin" width="100%" height="100%" frameborder="0"></iframe>
+                        <iframe id="swbPreviewFrame" dojoType="dijit.layout.ContentPane" src="{webpath}/swb/SWBAdmin/Work_Admin" width="100%" height="100%" frameborder="0"></iframe>
                     </div>
                 </div><!-- end of region="center" TabContainer -->
             </div> <!-- end of "mainSplit" BorderContainer -->

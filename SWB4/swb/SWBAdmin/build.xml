@@ -93,8 +93,8 @@
         <copy file="../applets/WBCommons/dist/SWBAplCommons.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/WBGraph/dist/SWBAplGraph.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/WorkFlowAdmin/dist/SWBAplWorkFlowAdmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplDragDrop.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplHtmlEditor.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplDragDrop.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplFtp.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplGenericTree.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplModeler.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
