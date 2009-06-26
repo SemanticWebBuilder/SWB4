@@ -51,7 +51,7 @@ public class SWBUserMgr
      * @param request <PRE>Recibe <I>requets</I> para buscar cookie de Usuario y de languaje</PRE>
      * @return <PRE>Regresa un objeto <I>WBUser</I></PRE>
      */
-    public Subject getSubject(HttpServletRequest request)
+    public Subject getSubject(HttpServletRequest request, String website)
     {
         HttpSession ses = request.getSession(true);
         
@@ -66,7 +66,7 @@ public class SWBUserMgr
                 sessions.put(ses.getId(), ses);
             }
         }
-        return  sessobj.getSubject();
+        return  sessobj.getSubject(website);
     }
 
     public void unboundSessionObject(String sessID)
@@ -80,7 +80,7 @@ public class SWBUserMgr
         User ret=null;
         UserRepository rep=site.getUserRepository();
         if(rep==null)rep=SWBContext.getDefaultRepository();
-        Subject sub=getSubject(request);
+        Subject sub=getSubject(request, site.getId());
         Iterator it=sub.getPrincipals().iterator();
         while(it.hasNext())
         {

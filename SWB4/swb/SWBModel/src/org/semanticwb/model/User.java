@@ -15,7 +15,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
 
-public class User extends UserBase implements Principal, java.io.Serializable
+public class User extends UserBase implements Principal
 {
 
     static Logger log = SWBUtils.getLogger(User.class);
@@ -221,7 +221,7 @@ public class User extends UserBase implements Principal, java.io.Serializable
         {
             if (SemanticVocabulary.XMLS_BOOLEAN.equals(prop.getRange().toString()))
             {
-                obj = new Boolean(getSemanticObject().getBooleanProperty(prop));
+                obj = Boolean.valueOf(getSemanticObject().getBooleanProperty(prop));
             }
             if (SemanticVocabulary.XMLS_STRING.equals(prop.getRange().toString()))
             {
@@ -229,11 +229,11 @@ public class User extends UserBase implements Principal, java.io.Serializable
             }
             if (SemanticVocabulary.XMLS_INT.equals(prop.getRange().toString()))
             {
-                obj = new Integer(getSemanticObject().getIntProperty(prop));
+                obj = Integer.valueOf(getSemanticObject().getIntProperty(prop));
             }
             if (SemanticVocabulary.XMLS_LONG.equals(prop.getRange().toString()))
             {
-                obj = new Long(getSemanticObject().getLongProperty(prop));
+                obj = Long.valueOf(getSemanticObject().getLongProperty(prop));
             }
             if (SemanticVocabulary.XMLS_DATETIME.equals(prop.getRange().toString()))
             {

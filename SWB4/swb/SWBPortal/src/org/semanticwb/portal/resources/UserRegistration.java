@@ -319,7 +319,7 @@ public class UserRegistration extends GenericAdmResource
     {
         Enumeration enums = request.getParameterNames();
         User user = response.getUser();
-        Subject subject = SWBPortal.getUserMgr().getSubject(request);
+        Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getTopic().getWebSiteId());
         UserRepository userRep = response.getTopic().getWebSite().getUserRepository();
         String usrLogin = request.getParameter("usrLogin");
 
