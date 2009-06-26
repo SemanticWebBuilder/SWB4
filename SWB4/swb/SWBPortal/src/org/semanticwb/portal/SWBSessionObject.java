@@ -1,13 +1,16 @@
 package org.semanticwb.portal;
 
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 
@@ -18,6 +21,7 @@ import org.semanticwb.model.User;
  */
 public class SWBSessionObject implements HttpSessionBindingListener, Serializable
 {
+    static private Logger log = SWBUtils.getLogger(SWBSessionObject.class);
 
     private transient HashMap<String, Subject> mapa;
 
@@ -78,6 +82,13 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
             Principal p = SWBContext.getUserRepository(key).getUser(id);
             act.getPrincipals().add(p);
             act.getPrivateCredentials().add(cred);
+            try
+            {
+                ((User) p).checkCredential(cred);
+            } catch (NoSuchAlgorithmException ex)
+            {
+                log.error("Can't check credential, this shoudn't pass", ex);
+            }
             mapa.put(key, act);
         }
     }
