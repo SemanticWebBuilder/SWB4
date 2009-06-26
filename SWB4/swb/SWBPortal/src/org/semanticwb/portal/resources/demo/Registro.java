@@ -131,7 +131,7 @@ public class Registro extends GenericResource{
                 log.error("There are no crypto algorithms!!!! ");
             }
             String url = response.getTopic().getRealUrl();
-            Subject subject = SWBPortal.getUserMgr().getSubject(request);
+            Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getTopic().getWebSiteId());
             Set<Principal> principals  = subject.getPrincipals();
             principals.clear();
             principals.add(u);

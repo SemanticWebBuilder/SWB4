@@ -191,7 +191,9 @@ public class ListaCommun extends GenericResource {
         @Override
         public boolean equals(Object obj)
         {
-            return name.equals(obj);
+            if (obj instanceof Contenedor)
+            return name.equals(((Contenedor)obj).getId());
+            else return false;
         }
 
         @Override

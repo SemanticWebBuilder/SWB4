@@ -79,7 +79,7 @@ public class Login implements InternalServlet
         String authMethod = ur.getAuthMethod();
         String context = ur.getLoginContext();
         String CBHClassName = ur.getCallBackHandlerClassName();
-        Subject subject = SWBPortal.getUserMgr().getSubject(request);
+        Subject subject = SWBPortal.getUserMgr().getSubject(request, dparams.getWebPage().getWebSiteId());
         String uri = request.getRequestURI();
         String path = SWBPlatform.getContextPath();
         User user = null;
