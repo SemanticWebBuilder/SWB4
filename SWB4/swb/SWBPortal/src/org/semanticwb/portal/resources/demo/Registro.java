@@ -33,7 +33,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 public class Registro extends GenericResource{
 
-    static Logger log = SWBUtils.getLogger(Registro.class);
+    static private Logger log = SWBUtils.getLogger(Registro.class);
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
