@@ -75,7 +75,7 @@ public class SWBImportWebSite extends GenericResource {
                         site.setUserRepository(exitUsrRep);
                     }
                 }
-                newUsrRep.getSemanticObject().getModel().setTraceable(true);
+                if(newUsrRep!=null)newUsrRep.getSemanticObject().getModel().setTraceable(true);
 
                 //creación de repositorio de documentoss
                 Workspace workspace = SWBContext.createWorkspace(id + "_rep", "http://repository." + id + ".swb#");
