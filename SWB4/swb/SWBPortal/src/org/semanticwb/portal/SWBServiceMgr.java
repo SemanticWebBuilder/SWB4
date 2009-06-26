@@ -26,6 +26,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.indexer.SWBIndexer;
 
 /**
@@ -176,9 +177,23 @@ public class SWBServiceMgr implements SemanticObserver {
                         }
                     }
                 }
+                if(obj.instanceOf(Resource.sclass))
+                {
+                    SWBResource res=SWBPortal.getResourceMgr().getResource(obj.getURI());
+                    try
+                    {
+                        if(res!=null)res.setResourceBase(res.getResourceBase());
+                    }catch(Exception e){log.error(e);}
+                }
                 if(obj.instanceOf(Dns.sclass)&& prop.equals(Dns.swb_dns))
                 {
                     Dns.refresh();
+                }
+                if(obj.instanceOf(Template.sclass)&& prop.equals(Template.swb_active))
+                {
+                    Template aux=(Template)obj.createGenericInstance();
+                    Template tpl=SWBPortal.getTemplateMgr().getTemplateImp(aux);
+                    if(tpl!=null)tpl.reload();
                 }
                 if(obj.getModel().isTraceable())updateObject(obj,usr);
             }else
