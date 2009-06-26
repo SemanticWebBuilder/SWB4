@@ -660,9 +660,6 @@
     </owl:inverseOf>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="userRepository">
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasUserRepWebSitesInv"/>
-    </owl:inverseOf>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_userRepository">
         <swbxf:formElement>
@@ -1168,10 +1165,6 @@
     <swb:inheritProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:inheritProperty>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#hasUserRepWebSitesInv">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >hasWebSite</swb:propertyCodeName>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="device">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_device">
@@ -1487,6 +1480,16 @@
     >hasObject</swb:propertyCodeName>
     <rdfs:range rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="formView">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
+    <rdfs:domain>
+      <swb:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef">
+        <rdfs:subClassOf rdf:resource="#Reference"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <owl:inverseOf rdf:resource="#hasFormViewRefInv"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="resourceType">
     <rdfs:domain rdf:resource="#Resource"/>
     <rdfs:range rdf:resource="#ResourceType"/>
@@ -1501,16 +1504,6 @@
         >160</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="formView">
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
-    <rdfs:domain>
-      <swb:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef">
-        <rdfs:subClassOf rdf:resource="#Reference"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
-    <owl:inverseOf rdf:resource="#hasFormViewRefInv"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hasEditProperty">
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
