@@ -117,7 +117,13 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
     {
        if(m_dom==null)
        {
-           m_dom=getSemanticObject().getDomProperty(swb_xml);
+           if(swb_xml!=null)
+           {
+               m_dom=getSemanticObject().getDomProperty(swb_xml);
+           }else
+           {
+               m_dom=SWBUtils.XML.getNewDocument();
+           }
        }
        return m_dom;
     }
