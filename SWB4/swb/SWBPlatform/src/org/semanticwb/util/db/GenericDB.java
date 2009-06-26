@@ -4,7 +4,6 @@
  */
 package org.semanticwb.util.db;
 
-import java.io.FileInputStream;
 import org.semanticwb.SWBUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,7 +13,6 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import org.hibernate.dialect.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -84,8 +82,7 @@ public class GenericDB {
     private HashMap hmSQLType=null;
     private HashMap hmSyntax=null;
 
-    public void GenericDB() {
-
+    public GenericDB() {
         if (null == hmDialect) {
             loadDialects();
         }
