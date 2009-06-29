@@ -96,7 +96,7 @@
     		<xsl:value-of select="@legend" />
     		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/legend<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     	</xsl:if>
-    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TABLE<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TABLE cellpadding="0" cellspacing="7"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     	<xsl:apply-templates />
     	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TABLE<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     	<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
