@@ -32,14 +32,13 @@ public class UserRepository extends UserRepositoryBase
     public static final String SWBUR_ClassPost = "#clsExtendedAttibutes";
     public static final String SWBUR_ClassUserTypeHold = "userType";
     public static final String SWBUR_ClassUserTypePost = "/clsUserType";
-    private static ArrayList<String> userTypes = null;
+    private static ArrayList<String> userTypes = new ArrayList<String>();
     private static final String NL = System.getProperty("line.separator");
 
     public UserRepository(SemanticObject base)
     {
         super(base);
         //System.out.println("***********UserRepository***************");
-        userTypes = new ArrayList<String>();
         StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
         while (ptopIt.hasNext())
         {
@@ -429,12 +428,12 @@ public class UserRepository extends UserRepositoryBase
             {
                 String lang = values[1].split("\\|")[0];
                 String[] labels = values[1].split("\\|")[1].split(":");
-                String cad = "";
+                StringBuilder cad = new StringBuilder(250);
                 for (int j = 0; j < vals.length; j++)
                 {
-                    cad = cad + vals[j] + ":" + labels[j] + (j + 1 == vals.length ? "" : "|");
+                    cad.append(vals[j]).append(":").append(labels[j]).append((j + 1 == vals.length ? "" : "|"));
                 }
-                dobj.setSelectValues(cad, lang); //value:label|value:label{@lang}
+                dobj.setSelectValues(cad.toString(), lang); //value:label|value:label{@lang}
             }
         }
         return sp;

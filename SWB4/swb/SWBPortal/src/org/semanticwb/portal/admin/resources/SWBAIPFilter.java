@@ -68,7 +68,7 @@ public class SWBAIPFilter extends GenericResource
         JSONArray jarr = new JSONArray();
         try
         {
-            JSONObject tjson = new JSONObject();
+            //JSONObject tjson = new JSONObject();
             jobj.put("numRows", cant); //lista.length);
 
             jobj.put("items", jarr);
