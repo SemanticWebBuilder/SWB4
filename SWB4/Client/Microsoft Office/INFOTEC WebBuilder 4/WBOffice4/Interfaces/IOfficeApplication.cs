@@ -71,6 +71,8 @@ namespace WBOffice4.Interfaces
         [XmlRpcMethod("OfficeApplication.getAllContents")]
         FlowContentInformation[] getAllContents(WebSiteInfo site);
 
+        [XmlRpcMethod("OfficeApplication.createCalendar")]
+        CalendarInfo createCalendar(SiteInfo info, String title, String xml);
 
         [XmlRpcMethod("OfficeApplication.getContentsForAuthorize")]
         FlowContentInformation[] getContentsForAuthorize(WebSiteInfo site);
@@ -83,5 +85,15 @@ namespace WBOffice4.Interfaces
 
         [XmlRpcMethod("OfficeApplication.reject")]
         void reject(ResourceInfo resourceInfo, String message);
+
+        [XmlRpcMethod("OfficeApplication.canDeleteCalendar")]
+        bool canDeleteCalendar(SiteInfo siteInfo, CalendarInfo CalendarInfo);
+
+        [XmlRpcMethod("OfficeApplication.existCalendar")]
+        bool existCalendar(SiteInfo siteInfo, CalendarInfo CalendarInfo);
+
+
+
+
     }
 }
