@@ -358,11 +358,12 @@ public class WebPage extends WebPageBase
     public boolean isOnSchedule()
     {
         boolean ret=true;
-        Iterator<Calendar> it=((Calendarable)this).listCalendars();
+        Iterator<CalendarRef> it=((CalendarRefable)this).listCalendarRefs();
         while(it.hasNext())
         {
-            Calendar cal=it.next();
-            if(cal.isActive() && !cal.isOnSchedule())
+            CalendarRef calref=it.next();
+            Calendar cal=calref.getCalendar();
+            if(cal!=null && cal.isActive() && calref.isActive() && !cal.isOnSchedule())
             {
                 ret=false;
                 break;
