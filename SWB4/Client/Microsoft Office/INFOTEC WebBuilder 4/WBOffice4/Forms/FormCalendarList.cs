@@ -126,21 +126,20 @@ namespace WBOffice4.Forms
 
         private void toolStripButtonEdit_Click(object sender, EventArgs e)
         {
-            if (this.listBoxCalendars.SelectedItem!=null)
-        {
-            CalendarInfo cal = (CalendarInfo)this.listBoxCalendars.SelectedItem;
-            if (cal.xml != null)
+            if (this.listBoxCalendars.SelectedItem != null)
             {
-                FrmPeriodicidad dialogCalendar = new FrmPeriodicidad(cal.active);
-                
-                    XmlDocument document=new XmlDocument();
+                CalendarInfo cal = (CalendarInfo)this.listBoxCalendars.SelectedItem;
+                if (cal.xml != null)
+                {
+                    FrmPeriodicidad dialogCalendar = new FrmPeriodicidad(cal.active);
+                    dialogCalendar.textBoxTitle.Text = cal.title;
+                    XmlDocument document = new XmlDocument();
                     document.LoadXml(cal.xml);
-                    dialogCalendar.Document=document;
-                    DialogResult res=dialogCalendar.ShowDialog(this);
-                    if (res==DialogResult.OK)
+                    dialogCalendar.Document = document;
+                    DialogResult res = dialogCalendar.ShowDialog(this);
+                    if (res == DialogResult.OK)
                     {
                         XmlDocument xmlCalendar = dialogCalendar.Document;
-
                         String xml = xmlCalendar.OuterXml;
                         String title = dialogCalendar.textBoxTitle.Text;
                         cal.title = title;
@@ -159,9 +158,9 @@ namespace WBOffice4.Forms
                             this.Cursor = Cursors.Default;
                         }
                     }
-               
+
+                }
             }
-        }
         }
     }
 }
