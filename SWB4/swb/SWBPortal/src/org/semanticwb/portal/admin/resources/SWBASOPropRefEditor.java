@@ -78,7 +78,12 @@ public class SWBASOPropRefEditor extends GenericResource {
         if (s_soid != null && s_soid.trim().length() > 0) {
             SemanticObject so = ont.getSemanticObject(s_soid);
             out.println(" reloadTab('" + so.getURI() + "');");
-            out.println(" setTabTitle('" + so.getURI() + "','" + so.getDisplayName(user.getLanguage()) + "','" + SWBContext.UTILS.getIconClass(so) + "')");
+
+             out.println("updateTreeNodeByURI('"+so.getURI()+"');");
+
+            String icon=SWBContext.UTILS.getIconClass(so);
+            out.println("setTabTitle('"+so.getURI()+"','"+so.getDisplayName(user.getLanguage())+"','"+icon+"');");
+            
         }
         if (request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
             log.debug("showStatus");
@@ -866,7 +871,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                     out.println("<td>");
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlchoose + "',this); return false;\">" + stitle + "</a>");
                     out.println("</td> ");
-                    if (clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule) || clsprop.equals(UserGroup.swb_UserGroup)) {
+                    if (clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule) || clsprop.equals(UserGroup.swb_UserGroup) || clsprop.equals(Calendar.swb_Calendar)) {
                         out.println("<td>");
                         out.println("<input type=\"checkbox\" value=\"" + sobj.getURI() + "\" name=\"sobj\">");
                         out.println("</td>");
@@ -888,7 +893,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 urlBack.setParameter("spropref", idpref);
             }
             urlBack.setParameter("act", "");
-            if ((clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule) || clsprop.equals(UserGroup.swb_UserGroup)) && numrols > 0) {
+            if ((clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule) || clsprop.equals(UserGroup.swb_UserGroup)|| clsprop.equals(Calendar.swb_Calendar)) && numrols > 0) {
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\"  >" + paramRequest.getLocaleString("Add_Selected") + "</button>"); //submitUrl('" + url + "',this); onclick=\"return false;\"  onclick=\"document.getElementById('" + id + "/chooseSO').submit();\" _onclick=\"if(validateChk('sobj')){document.getElementById('" + id + "/chooseSO').submit(); return false;} else {return false;}\"
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"selectAll('sobj',true);\">" + paramRequest.getLocaleString("Select_All") + "</button>"); //submitUrl('" + url + "',this);
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"selectAll('sobj',false);\">" + paramRequest.getLocaleString("Unselect_All") + "</button>"); //submitUrl('" + url + "',this);
