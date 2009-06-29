@@ -224,7 +224,7 @@ public class SWBServiceMgr implements SemanticObserver {
                 {
                     //System.out.println("Resource modificado");
                     Resource res=(Resource)obj.createGenericInstance();
-                    if(res.getResourceType().getResourceMode()==ResourceType.MODE_CONTENT)
+                    if(res.getResourceType()!=null && res.getResourceType().getResourceMode()==ResourceType.MODE_CONTENT)
                     {
                         //System.out.println("Resource tipo contenido");
                         SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();

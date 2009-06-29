@@ -143,7 +143,10 @@ public class SWBResourceMgr
             if(res==null)
             {
                 res=createSWBResource(resource);
-                resources.put(uri, res);
+                if(res!=null)
+                {
+                    resources.put(uri, res);
+                }
             }
         }
         return res;
@@ -523,30 +526,34 @@ public class SWBResourceMgr
         try
         {
             log.debug("Loading Resource:" + resource.getURI());
-            String clsname = resource.getResourceType().getResourceClassName();
-            Class cls = createSWBResourceClass(clsname);
-//            obj = (WBResource) convertOldWBResource(cls.newInstance(),base);
-            obj=(SWBResource)cls.newInstance();
-            if (obj != null)
+            ResourceType type=resource.getResourceType();
+            if(type!=null)
             {
-                obj.setResourceBase(resource);
-                if(obj.getResourceBase()==null)throw new SWBException(clsname+": if you override method setResourceBase, you have to invoke super.setResourceBase(base);");
-                obj.init();
+                String clsname = type.getResourceClassName();
+                Class cls = createSWBResourceClass(clsname);
+    //            obj = (WBResource) convertOldWBResource(cls.newInstance(),base);
+                obj=(SWBResource)cls.newInstance();
+                if (obj != null)
+                {
+                    obj.setResourceBase(resource);
+                    if(obj.getResourceBase()==null)throw new SWBException(clsname+": if you override method setResourceBase, you have to invoke super.setResourceBase(base);");
+                    obj.init();
 
-                //HashMap basemap=(HashMap)resourcesbase.get(resource.getTopicMapId());
-                //resources.put(resource.getURI(), obj);
-                //if(base.isWb2Resource())oldresources.put(new Long(base.getId()), obj);
+                    //HashMap basemap=(HashMap)resourcesbase.get(resource.getTopicMapId());
+                    //resources.put(resource.getURI(), obj);
+                    //if(base.isWb2Resource())oldresources.put(new Long(base.getId()), obj);
 
-//                String typekey=""+resource.getType();
-//                if(!resource.getTypeMap().equals(resource.getTopicMapId()))typekey+="|"+resource.getTypeMap();
-//                HashMap tp = (HashMap) basemap.get(typekey);
-//                if (tp == null)
-//                {
-//                    tp = new HashMap();
-//                    basemap.put(typekey, tp);
-//                }
-//                tp.put(new Long(base.getId()), base);
-//                System.out.println("base.getId():"+base.getId()+" tmid:"+base.getTopicMapId()+" typekey:"+typekey);
+    //                String typekey=""+resource.getType();
+    //                if(!resource.getTypeMap().equals(resource.getTopicMapId()))typekey+="|"+resource.getTypeMap();
+    //                HashMap tp = (HashMap) basemap.get(typekey);
+    //                if (tp == null)
+    //                {
+    //                    tp = new HashMap();
+    //                    basemap.put(typekey, tp);
+    //                }
+    //                tp.put(new Long(base.getId()), base);
+    //                System.out.println("base.getId():"+base.getId()+" tmid:"+base.getTopicMapId()+" typekey:"+typekey);
+                }
             }
         } catch (Throwable e)
         {
