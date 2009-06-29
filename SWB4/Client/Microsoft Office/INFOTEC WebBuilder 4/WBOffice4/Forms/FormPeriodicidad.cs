@@ -100,20 +100,20 @@ namespace WBOffice4.Forms
         private NumericUpDown yyear;
         private NumericUpDown mmonth2;
         private CheckBox checkBoxActive;
-		ListView list;
+		//ListView list;
 		/// <summary>
 		/// Constructor de forma para configurar periodicidad
 		/// </summary>
 		/// <param name="item">Peridiocidad a cambiar</param>
 		/// <param name="user">Usuario</param>
 		/// <param name="list">Lista de periodicidades</param>
-		public FrmPeriodicidad(ListView list,bool active)
+		public FrmPeriodicidad(bool active)
 		{
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-            this.list=list;
+            //this.list=list;
             buttonAvanzado_Click(null, null);
             this.checkBoxActive.Checked = active;
 		}

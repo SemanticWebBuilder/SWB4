@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Windows.Forms;
+using System.Diagnostics;
 using WBOffice4.Forms;
 using WBOffice4.Interfaces;
 using WBOffice4.Utils;
@@ -22,6 +23,7 @@ namespace WBOffice4.Forms
         public FormEditPorlet(ResourceInfo pageInformation, String repositoryName, String contentID)
         {
             InitializeComponent();
+            this.dateTimePickerEndDate.Value = DateTime.Now;
             this.pageInformation = pageInformation;
             this.repositoryName = repositoryName;
             this.contentID = contentID;
@@ -29,7 +31,7 @@ namespace WBOffice4.Forms
             this.textBoxDescription.Text = pageInformation.description;
             this.checkBoxActive.Checked = pageInformation.active;
             this.labelSite.Text = pageInformation.page.site.title;
-            this.labelPage.Text = pageInformation.page.title;            
+            this.labelPage.Text = pageInformation.page.title;
             loadCalendars();
             VersionInfo info = new VersionInfo();
             info.nameOfVersion = "*";
@@ -51,6 +53,26 @@ namespace WBOffice4.Forms
             }
             comboBoxVersiones.SelectedItem = selected;
             loadProperties();
+
+            try
+            {
+                DateTime date = OfficeApplication.OfficeDocumentProxy.getEndDate(pageInformation);
+                if (date == null)
+                {
+                    this.checkBoxEndDate.Checked=false;
+                    this.dateTimePickerEndDate.Enabled=false;
+                }
+                else
+                {
+                    this.checkBoxEndDate.Checked = true;
+                    this.dateTimePickerEndDate.Enabled = true;
+                    this.dateTimePickerEndDate.Value=date;
+                }
+            }
+            catch (Exception ue)
+            {
+                Debug.WriteLine(ue.StackTrace);
+            }
         }
         private void loadProperties()
         {
@@ -70,14 +92,14 @@ namespace WBOffice4.Forms
         {
             this.listViewCalendar.Items.Clear();
 
-            foreach (CalendarInfo info in OfficeApplication.OfficeDocumentProxy.getCalendars(pageInformation))
+            foreach (CalendarInfo info in OfficeApplication.OfficeDocumentProxy.getCalendarsOfResource(pageInformation))
             {
-                CalendarItem item = new CalendarItem(info);                
+                CalendarItem item = new CalendarItem(info);
                 listViewCalendar.Items.Add(item);
             }
             foreach (CalendarInfo info in added)
             {
-                CalendarItem item = new CalendarItem(info); 
+                CalendarItem item = new CalendarItem(info);
                 listViewCalendar.Items.Add(item);
             }
 
@@ -94,41 +116,63 @@ namespace WBOffice4.Forms
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
-            FrmPeriodicidad frmPeriodicidad = new FrmPeriodicidad(listViewCalendar,false);
-            frmPeriodicidad.ShowDialog(this);
-            if (frmPeriodicidad.DialogResult == DialogResult.OK)
+            FormCalendarList list = new FormCalendarList(pageInformation);
+            DialogResult res = list.ShowDialog(this);
+            if (res == DialogResult.OK)
             {
-                XmlDocument xmlCalendar = frmPeriodicidad.Document;
-                CalendarInfo cal = new CalendarInfo();
-                cal.active = frmPeriodicidad.isActive();
-                cal.xml = xmlCalendar.OuterXml;
-                cal.title = frmPeriodicidad.textBoxTitle.Text;
-                CalendarItem item = new CalendarItem(cal);                
-                listViewCalendar.Items.Add(item);
+                if (list.listBoxCalendars.SelectedItem != null)
+                {
+
+                    CalendarInfo calendar = (CalendarInfo)list.listBoxCalendars.SelectedItem;
+                    bool exists = false;
+                    int count = this.listViewCalendar.Items.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        CalendarItem calactual = (CalendarItem)this.listViewCalendar.Items[i];
+                        if (calactual.CalendarInfo.id.Equals(calendar.id))
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if (!exists)
+                    {
+                        try
+                        {
+                            added.Add(calendar);
+                        }
+                        catch (Exception ue)
+                        {
+                            Debug.WriteLine(ue.StackTrace);
+                        }
+                    }
+
+                }
             }
+            loadCalendars();
         }
 
-        private void toolStripButtonEdit_Click(object sender, EventArgs e)
+        /*private void toolStripButtonEdit_Click(object sender, EventArgs e)
         {
             if (this.listViewCalendar.SelectedItems.Count > 0)
             {
                 CalendarItem calendarItem = (CalendarItem)this.listViewCalendar.SelectedItems[0];
                 CalendarInfo cal = calendarItem.CalendarInfo;
-                FrmPeriodicidad frmPeriodicidad = new FrmPeriodicidad(listViewCalendar,cal.active);
+                FrmPeriodicidad frmPeriodicidad = new FrmPeriodicidad(cal.active);
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(cal.xml);
                 frmPeriodicidad.textBoxTitle.Text = cal.title;
                 frmPeriodicidad.Document = doc;
-                DialogResult res=frmPeriodicidad.ShowDialog(this);
+                DialogResult res = frmPeriodicidad.ShowDialog(this);
                 if (res == DialogResult.OK)
                 {
                     cal.xml = frmPeriodicidad.Document.OuterXml;
                     calendarItem.Title = frmPeriodicidad.textBoxTitle.Text;
-                    calendarItem.Active=frmPeriodicidad.isActive();
+                    calendarItem.Active = frmPeriodicidad.isActive();
                 }
 
             }
-        }
+        }*/
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
@@ -223,21 +267,9 @@ namespace WBOffice4.Forms
                     CalendarItem calendarItem = (CalendarItem)calendar;
                     CalendarInfo cal = (CalendarInfo)calendarItem.CalendarInfo;
                     bool active = cal.active;
-                    if (cal.id == null)
-                    {
-                        // insert
-                        CalendarInfo calinfo = OfficeApplication.OfficeDocumentProxy.insertCalendar(pageInformation, cal.title, cal.xml);
-                        added.Remove(cal);
-                        OfficeApplication.OfficeDocumentProxy.activeCalendar(pageInformation, calinfo, active);
-                        cal.id = calinfo.id;
-                    }
-                    else
-                    {
-                        // update
-                        OfficeApplication.OfficeDocumentProxy.updateCalendar(pageInformation, cal);
-                        OfficeApplication.OfficeDocumentProxy.activeCalendar(pageInformation, cal, active);
-                    }
-
+                    OfficeApplication.OfficeDocumentProxy.insertCalendartoResource(pageInformation, cal);
+                    added.Remove(cal);
+                    OfficeApplication.OfficeDocumentProxy.activeCalendar(pageInformation, cal, active);
                 }
 
                 PropertyInfo[] properties = null;
@@ -286,34 +318,48 @@ namespace WBOffice4.Forms
 
         private void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
-            if (this.listViewCalendar.SelectedItems.Count > 0)
+            if (this.listViewCalendar.SelectedItems.Count>0)
             {
-                CalendarInfo cal = ((CalendarItem)this.listViewCalendar.SelectedItems[0]).CalendarInfo;
-                if (cal.id == null) // Es nuevo
+                DialogResult res = MessageBox.Show(this, "¿Desea eliminar la calendarización?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (res == DialogResult.Yes)
                 {
-                    added.Remove(cal);
-                    loadCalendars();
-                }
-                else 
-                {
-                    OfficeApplication.OfficeDocumentProxy.deleteCalendar(this.pageInformation, cal);
-                    loadCalendars();
+                    CalendarInfo cal = ((CalendarItem)this.listViewCalendar.SelectedItems[0]).CalendarInfo;
+                    this.listViewCalendar.Items.Remove((CalendarItem)this.listViewCalendar.SelectedItems[0]);
 
+
+                    if (this.listViewCalendar.Items.Count== 0 || listViewCalendar.SelectedItems.Count == 0)
+                    {
+                        this.toolStripButtonDelete.Enabled=false;
+                    }
+                    try
+                    {
+                        added.Remove(cal);
+                        OfficeApplication.OfficeDocumentProxy.deleteCalendar(pageInformation, cal);
+                        loadCalendars();
+                    }
+                    catch (Exception ue)
+                    {
+                        Debug.WriteLine(ue.StackTrace);
+                    }
                 }
+            }
+            if (this.listViewCalendar.SelectedItems.Count == 0)
+            {
+                this.toolStripButtonDelete.Enabled=false;
             }
         }
 
         private void listViewCalendar_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.toolStripButtonDelete.Enabled = false;
-            this.toolStripButtonEdit.Enabled = false;
+            //this.toolStripButtonEdit.Enabled = false;
             if (this.listViewCalendar.SelectedItems.Count > 0)
             {
                 this.toolStripButtonDelete.Enabled = true;
-                this.toolStripButtonEdit.Enabled = true;
+                //this.toolStripButtonEdit.Enabled = true;
             }
         }
 
-        
+
     }
 }

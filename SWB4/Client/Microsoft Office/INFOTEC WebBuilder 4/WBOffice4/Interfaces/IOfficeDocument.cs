@@ -13,6 +13,9 @@ namespace WBOffice4.Interfaces
         [XmlRpcMethod("OfficeDocument.setTitle")]
         void setTitle(String repositoryName, String contentID, String title);
 
+        [XmlRpcMethod("OfficeDocument.deleteCalendarFromCatalog")]
+        void deleteCalendarFromCatalog(SiteInfo siteInfo, CalendarInfo cal);
+
         [XmlRpcMethod("OfficeDocument.setDescription")]
         void setDescription(String repositoryName, String contentID, String description);
 
@@ -91,20 +94,33 @@ namespace WBOffice4.Interfaces
         [XmlRpcMethod("OfficeDocument.getNumberOfVersions")]
         int getNumberOfVersions(String repositoryName, String contentId);
 
-        [XmlRpcMethod("OfficeDocument.getCalendars")]
-        CalendarInfo[] getCalendars(ResourceInfo resourceInfo);
+        [XmlRpcMethod("OfficeDocument.getCatalogCalendars")]
+        CalendarInfo[] getCatalogCalendars(SiteInfo siteInfo);
+
+        [XmlRpcMethod("OfficeDocument.getCalendarsOfResource")]
+        CalendarInfo[] getCalendarsOfResource(ResourceInfo info);
 
         [XmlRpcMethod("OfficeDocument.updateCalendar")]
-        void updateCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo);
+        void updateCalendar(SiteInfo siteInfo, CalendarInfo calendarInfo);
 
-        [XmlRpcMethod("OfficeDocument.insertCalendar")]
-        CalendarInfo insertCalendar(ResourceInfo resourceInfo, String title, String xml);
+        [XmlRpcMethod("OfficeDocument.insertCalendartoResource")]
+        void insertCalendartoResource(ResourceInfo resourceInfo, CalendarInfo calendar);
 
         [XmlRpcMethod("OfficeDocument.deleteCalendar")]
         void deleteCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo);
 
         [XmlRpcMethod("OfficeDocument.activeCalendar")]
         void activeCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo, bool active);
+
+        [XmlRpcMethod("OfficeDocument.setEndDate")]
+        void setEndDate(ResourceInfo resourceInfo, DateTime date);
+
+
+        [XmlRpcMethod("OfficeDocument.getEndDate")]
+        DateTime getEndDate(ResourceInfo resourceInfo);
+
+        [XmlRpcMethod("OfficeDocument.deleteEndDate")]
+        void deleteEndDate(ResourceInfo resourceInfo);
 
         [XmlRpcMethod("OfficeDocument.updatePorlet")]
         void updatePorlet(ResourceInfo resourceInfo);
@@ -147,6 +163,5 @@ namespace WBOffice4.Interfaces
 
         [XmlRpcMethod("OfficeDocument.isAuthorized")]
         bool isAuthorized(ResourceInfo info);
-        
     }
 }

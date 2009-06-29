@@ -265,6 +265,9 @@
     <EmbeddedResource Include="Forms\FormAuthorize.resx">
       <DependentUpon>FormAuthorize.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCalendarList.resx">
+      <DependentUpon>FormCalendarList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormChangePassword.resx">
       <DependentUpon>FormChangePassword.cs</DependentUpon>
     </EmbeddedResource>
@@ -407,6 +410,12 @@
     </Compile>
     <Compile Include="Forms\FormAuthorize.Designer.cs">
       <DependentUpon>FormAuthorize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormCalendarList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormCalendarList.Designer.cs">
+      <DependentUpon>FormCalendarList.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormDocumentsToAuthorize.cs">
       <SubType>Form</SubType>

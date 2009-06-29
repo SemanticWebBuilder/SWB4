@@ -54,11 +54,12 @@
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.toolStripCalendar = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.label7 = new System.Windows.Forms.Label();
+            this.checkBoxEndDate = new System.Windows.Forms.CheckBox();
+            this.dateTimePickerEndDate = new System.Windows.Forms.DateTimePicker();
             this.panel1.SuspendLayout();
             this.tabControlProperties.SuspendLayout();
             this.tabPageInformation.SuspendLayout();
@@ -71,7 +72,7 @@
             this.panel1.Controls.Add(this.buttonOK);
             this.panel1.Controls.Add(this.buttonCancel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 244);
+            this.panel1.Location = new System.Drawing.Point(0, 280);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(419, 42);
             this.panel1.TabIndex = 1;
@@ -106,11 +107,14 @@
             this.tabControlProperties.Location = new System.Drawing.Point(0, 0);
             this.tabControlProperties.Name = "tabControlProperties";
             this.tabControlProperties.SelectedIndex = 0;
-            this.tabControlProperties.Size = new System.Drawing.Size(419, 244);
+            this.tabControlProperties.Size = new System.Drawing.Size(419, 280);
             this.tabControlProperties.TabIndex = 2;
             // 
             // tabPageInformation
             // 
+            this.tabPageInformation.Controls.Add(this.dateTimePickerEndDate);
+            this.tabPageInformation.Controls.Add(this.checkBoxEndDate);
+            this.tabPageInformation.Controls.Add(this.label7);
             this.tabPageInformation.Controls.Add(this.comboBoxVersiones);
             this.tabPageInformation.Controls.Add(this.label6);
             this.tabPageInformation.Controls.Add(this.checkBoxActive);
@@ -126,7 +130,7 @@
             this.tabPageInformation.Location = new System.Drawing.Point(4, 22);
             this.tabPageInformation.Name = "tabPageInformation";
             this.tabPageInformation.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageInformation.Size = new System.Drawing.Size(411, 218);
+            this.tabPageInformation.Size = new System.Drawing.Size(411, 254);
             this.tabPageInformation.TabIndex = 0;
             this.tabPageInformation.Text = "Información";
             this.tabPageInformation.UseVisualStyleBackColor = true;
@@ -287,8 +291,6 @@
             this.toolStripCalendar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripCalendar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonAdd,
-            this.toolStripSeparator1,
-            this.toolStripButtonEdit,
             this.toolStripSeparator2,
             this.toolStripButtonDelete});
             this.toolStripCalendar.Location = new System.Drawing.Point(0, 0);
@@ -307,22 +309,6 @@
             this.toolStripButtonAdd.ToolTipText = "Agregar una calendarizacin para la publicación actual";
             this.toolStripButtonAdd.Click += new System.EventHandler(this.toolStripButtonAdd_Click);
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripButtonEdit
-            // 
-            this.toolStripButtonEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonEdit.Enabled = false;
-            this.toolStripButtonEdit.Image = global::WBOffice4.Properties.Resources.edit;
-            this.toolStripButtonEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonEdit.Name = "toolStripButtonEdit";
-            this.toolStripButtonEdit.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonEdit.ToolTipText = "Editar la calendarización seleccionada";
-            this.toolStripButtonEdit.Click += new System.EventHandler(this.toolStripButtonEdit_Click);
-            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -339,13 +325,41 @@
             this.toolStripButtonDelete.ToolTipText = "Eliminar la calendarización seleccionada";
             this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(10, 218);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(51, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "Vigencia:";
+            // 
+            // checkBoxEndDate
+            // 
+            this.checkBoxEndDate.AutoSize = true;
+            this.checkBoxEndDate.Location = new System.Drawing.Point(131, 218);
+            this.checkBoxEndDate.Name = "checkBoxEndDate";
+            this.checkBoxEndDate.Size = new System.Drawing.Size(100, 17);
+            this.checkBoxEndDate.TabIndex = 13;
+            this.checkBoxEndDate.Text = "ActivarVigencia";
+            this.checkBoxEndDate.UseVisualStyleBackColor = true;
+            // 
+            // dateTimePickerEndDate
+            // 
+            this.dateTimePickerEndDate.CustomFormat = "dd/MM/yyyy";
+            this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerEndDate.Location = new System.Drawing.Point(281, 218);
+            this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
+            this.dateTimePickerEndDate.Size = new System.Drawing.Size(122, 20);
+            this.dateTimePickerEndDate.TabIndex = 14;
+            // 
             // FormEditPorlet
             // 
             this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(419, 286);
+            this.ClientSize = new System.Drawing.Size(419, 322);
             this.Controls.Add(this.tabControlProperties);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -393,10 +407,11 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ToolStrip toolStripCalendar;
         private System.Windows.Forms.ToolStripButton toolStripButtonAdd;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonEdit;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton toolStripButtonDelete;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.DateTimePicker dateTimePickerEndDate;
+        private System.Windows.Forms.CheckBox checkBoxEndDate;
+        private System.Windows.Forms.Label label7;
     }
 }
