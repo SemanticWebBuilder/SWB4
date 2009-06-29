@@ -44,7 +44,7 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
 
     public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
-        String ret="";
+        StringBuilder ret=new StringBuilder(250);
         String name=prop.getName();
         String label=prop.getDisplayName(lang);
         SemanticObject sobj=prop.getDisplayProperty();
@@ -101,34 +101,34 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
             }
             if(mode.equals("edit") || mode.equals("create") )
             {
-                ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">";
+                ret.append("<select name=\"").append(name).append("\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"").append(imsg).append("\">");
                 //onChange="dojo.byId('oc1').value=arguments[0]"
-                ret+="<option value=\"\"></option>";
+                ret.append("<option value=\"\"></option>");
                 SemanticClass cls=prop.getRangeClass();
                 Iterator<SemanticObject> it=null;
 
                     if(!obj.isVirtual())it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
 
-                while(it.hasNext())
+                while(it!=null && it.hasNext())
                 {
                     SemanticObject sob=it.next();
-                    ret+="<option value=\""+sob.getURI()+"\" ";
-                    if(sob.getURI().equals(uri))ret+="selected";
-                    ret+=">"+sob.getDisplayName(lang)+"</option>";
+                    ret.append("<option value=\"").append(sob.getURI()).append("\" ");
+                    if(sob.getURI().equals(uri))ret.append("selected");
+                    ret.append(">").append(sob.getDisplayName(lang)).append("</option>");
                 }
-                ret+="</select>";
+                ret.append("</select>");
             }else if(mode.equals("view"))
             {
-                ret="<span _id=\""+name+"\" name=\""+name+"\">"+value+"</span>";
+                ret.append("<span _id=\"").append(name).append("\" name=\"").append(name).append("\">").append(value).append("</span>");
             }
         }else
         {
             if(selectValues!=null)
             {
                 String value=obj.getProperty(prop);
-                ret="<select name=\""+name+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">";
+                ret.append("<select name=\"").append(name).append("\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\"").append(imsg).append("\">");
                 StringTokenizer st=new StringTokenizer(selectValues,"|");
-                ret+="<option value=\"\"></option>";
+                ret.append("<option value=\"\"></option>");
                 while(st.hasMoreTokens())
                 {
                     String tok=st.nextToken();
@@ -140,17 +140,17 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
                         id=tok.substring(0,ind);
                         val=tok.substring(ind+1);
                     }
-                    ret+="<option value=\""+id+"\" ";
-                    if(id.equals(value))ret+="selected";
-                    ret+=">"+val+"</option>";
+                    ret.append("<option value=\"").append(id).append("\" ");
+                    if(id.equals(value))ret.append("selected");
+                    ret.append(">").append(val).append("</option>");
                 }
-                ret+="</select>";
+                ret.append("</select>");
             }
         }
 
         
 
-        return ret;
+        return ret.toString();
     }
 
 }

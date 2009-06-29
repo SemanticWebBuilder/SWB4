@@ -32,13 +32,13 @@ public class Login extends GenericAdmResource
     {
         String jspfile = super.getResourceBase().getAttribute("jspfile");
         String url = SWBPlatform.getContextPath() + "/login/" + paramsRequest.getTopic().getWebSiteId() + "/" + paramsRequest.getTopic().getId();
-        String query = request.getQueryString();
-        if (null==query)query =""; else query = "?"+query;
+        //String query = request.getQueryString();
+        //if (null==query)query =""; else query = "?"+query;
         PrintWriter out = response.getWriter();
         if (null != jspfile)
             {
                 request.setAttribute("url", url);
-                request.setAttribute("query", query);
+                //request.setAttribute("query", query);
                 request.setAttribute("paramRequest", paramsRequest);
                 // System.out.println(currUser.getUsrFullName());
                 RequestDispatcher dispatcher = request.getRequestDispatcher(jspfile);
@@ -54,7 +54,7 @@ public class Login extends GenericAdmResource
             { //System.out.println("userS:  ***************   "+paramsRequest.getUser().isSigned());
         if (!paramsRequest.getUser().isSigned())
         {
-            out.println("<fieldset><form action=\""+url+query+"\" method=\"post\">");
+            out.println("<fieldset><form action=\""+url+"\" method=\"post\">");
             out.println("<label>Usuario:</label><input type=\"text\" id=\"wb_username\" name=\"wb_username\" /><br />");
             out.println("<label>Contrase&ntilde;a:</label><input type=\"password\" id=\"wb_password\" name=\"wb_password\" /><br />");
             out.println("<input type=\"submit\" value=\"Enviar\" /></form></fieldset>");
