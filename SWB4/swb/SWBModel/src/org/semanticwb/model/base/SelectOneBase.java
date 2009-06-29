@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
 public class SelectOneBase extends org.semanticwb.model.base.FormElementBase 
 {
     public static final org.semanticwb.platform.SemanticProperty swbxf_so_globalScope=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_globalScope");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_so_blankSuport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_blankSuport");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_so_nullSuport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_nullSuport");
     public static final org.semanticwb.platform.SemanticClass swbxf_SelectOne=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne");
 
@@ -57,12 +57,12 @@ public class SelectOneBase extends org.semanticwb.model.base.FormElementBase
 
     public boolean isBlankSuport()
     {
-        return getSemanticObject().getBooleanProperty(swbxf_so_blankSuport);
+        return getSemanticObject().getBooleanProperty(swbxf_so_nullSuport);
     }
 
-    public void setBlankSuport(boolean so_blankSuport)
+    public void setBlankSuport(boolean so_nullSuport)
     {
-        getSemanticObject().setBooleanProperty(swbxf_so_blankSuport, so_blankSuport);
+        getSemanticObject().setBooleanProperty(swbxf_so_nullSuport, so_nullSuport);
     }
 
     public void remove()
