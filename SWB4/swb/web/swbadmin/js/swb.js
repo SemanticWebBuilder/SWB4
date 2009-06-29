@@ -1299,3 +1299,59 @@ function hideApplet(flag)
        window.open(url,"RepWindow",sizze);
    }
 
+// Funciones para el administrador de indices de búsqueda
+
+   function enviar(frmid,accion)
+    {
+        //alert('fid:'+frmid+', action: '+accion);
+        var frm=dijit.byId(frmid);
+        frm.attr('action', accion);
+
+        //alert('forma action:'+frm.attr('action'));
+        submitForm(frmid);
+        return false;
+    }
+
+    function selectCombo(obj,id)
+    {
+       obj.selectedIndex=id;
+    }
+
+    function sleep(milliseconds) {
+      var start = new Date().getTime();
+      for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+          break;
+        }
+      }
+    }
+
+
+     function indexcheck(url, tagid)
+     {
+          var indx =  dijit.byId(tagid);
+          var indsize= indexrefresh(url,tagid);
+          while(eval(indsize)>0)
+          {
+            sleep(5000);
+            indsize=indexrefresh(url,tagid);
+          }
+      }
+
+     function indexrefresh(url,tagid)
+      {
+          dojo.xhrPost({
+              url: url,
+              load: function(response)
+              {
+                  dijit.byId(tagid).attr("value",response);
+                  return response;
+              },
+              error: function(response)
+              {
+                  dijit.byId(tagid).attr("value","0");
+                  return response;
+              },
+              handleAs: "text"
+          });
+      }
