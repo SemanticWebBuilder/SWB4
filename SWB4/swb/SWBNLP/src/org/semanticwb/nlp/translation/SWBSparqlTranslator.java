@@ -1,26 +1,20 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.semanticwb.nlp.translation;
 
+import java.io.InputStream;
 import org.semanticwb.nlp.analysis.SimpleLexer;
 import org.semanticwb.nlp.analysis.ComplexParser;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
-import org.apache.lucene.index.CorruptIndexException;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.nlp.Lexicon;
+import org.semanticwb.nlp.SWBLexicon;
 import org.semanticwb.nlp.spell.SWBSpellChecker;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
-
 
 /**
  * A natural language to SparQl query translator. Uses the Abstract Sintax Tree
@@ -38,7 +32,7 @@ public class SWBSparqlTranslator {
 
     private ComplexParser parser;     //ANTLR parser
     private SimpleLexer tokenizer;   //ANTLR tokenizer
-    private Lexicon lex;        //Dictionary
+    private SWBLexicon lex;        //Dictionary
     private CommonTokenStream tokens;   //TokenStream for parsing
     private ANTLRStringStream input;    //StringStream to parse
     private String nodeLabels = "SELECT|PRECON|PREDE|ASIGN|COMPL|COMPG|COMPLE|COMPGE|OFFSET|LIMIT|ORDER";
@@ -47,33 +41,67 @@ public class SWBSparqlTranslator {
     private boolean snowballAnalyze = false;
     private SWBSpellChecker objSpeller = null;
     private SWBSpellChecker propSpeller = null;
+    Properties prop = null;
 
     /**
-     * Creates a new instance of SWBSparqlTranslator with the given Lexicon.
+     * Creates a new instance of SWBSparqlTranslator with the given SWBLexicon.
      * Crea un SWBSparqlTranslator con el diccionario especificado.
-     * @param dict Lexicon for the new translator. Diccionario para el traductor.
+     * @param dict SWBLexicon for the new translator. Diccionario para el traductor.
      */
-    public SWBSparqlTranslator (Lexicon dict) {
+    public SWBSparqlTranslator(SWBLexicon dict) {
         lex = dict;
+        snowballAnalyze = false;
+        //InputStream in = getClass().getResourceAsStream("/org/semanticwb")
     }
 
     /**
-     * Creates a new instance of SWBSparqlTranslator with the given Lexicon.
+     * Creates a new instance of SWBSparqlTranslator with the given SWBLexicon.
      * Crea un SWBSparqlTranslator con el diccionario especificado.
-     * @param dict Lexicon for the new translator. Diccionario para el traductor.
-     * @param snowball Wheter to use snowball analysis in the process of index
-     * and search for words.
+     * @param dict SWBLexicon for the new translator. Diccionario para el traductor.
+     * @param snowball Wheter to use snowball word analysis.
      */
-    public SWBSparqlTranslator (Lexicon dict, boolean snowball) {
+    public SWBSparqlTranslator(SWBLexicon dict, boolean snowball) {
         lex = dict;
         snowballAnalyze = snowball;
     }
 
-    public SWBSparqlTranslator (Lexicon dict, SWBSpellChecker objChecker, SWBSpellChecker propChecker, boolean snowball) {
-        lex = dict;
-        objSpeller = objChecker;
-        propSpeller = propChecker;
-        snowballAnalyze = snowball;
+    /**
+     * Gets the range class (as a SemanticClass) of an object property.
+     * @param propertyName name of the property to assert.
+     * @param className name of the SemanticClass with the specified property.
+     * @return a SemanticClass which is the range class of the object property. Null otherwise.
+     */
+    public SemanticClass assertPropertyRangeClass(String propertyName, String className) {
+        String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
+        boolean found = false;
+
+        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(name);
+        if (sc != null) {
+            Iterator <SemanticProperty> sit = sc.listProperties();
+            while (sit.hasNext() && !found) {
+                SemanticProperty sp = sit.next();
+
+                if (sp.getDisplayName(lex.getLanguage()).toLowerCase().equals(propertyName.toLowerCase())) {
+                    found = true;
+                    if (sp.isObjectProperty()) {
+                        SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
+                        if (rg != null) {
+                            return rg;
+                        }
+                    } else {
+                        errCode = 3;
+                        eLog += "La propiedad " + sp.getDisplayName(lex.getLanguage()) + "no es de tipo Objeto.\n";
+                    }
+                }
+            }
+
+            if (!found) {
+                eLog += "La clase " + sc.getDisplayName(lex.getLanguage()) + " no tiene una propiedad llamada ";
+                eLog += propertyName + "\n";
+                errCode = 3;
+            }
+        }
+        return null;
     }
 
     /**
@@ -90,7 +118,7 @@ public class SWBSparqlTranslator {
      * Oración en lenguaje natural restringido para la consulta.
      * @return SparQL query sentence. Sentencia de la consulta SparQl.
      */
-    public String translateSentence(String sent) throws CorruptIndexException, IOException {
+    public String translateSentence(String sent) {
         String res = "";
         CommonTree sTree = null;
         input = new ANTLRStringStream(sent);
@@ -129,7 +157,7 @@ public class SWBSparqlTranslator {
      * Indica si el AST contiene una preposición DE.
      * @return String of a SparQL query fragment. Fragmento de consulta SparQl.
      */
-    private String processSelectQuery(CommonTree root, boolean hasPrecon, boolean hasPrede) throws CorruptIndexException, IOException {
+    private String processSelectQuery(CommonTree root, boolean hasPrecon, boolean hasPrede) {
         String limitoff = "";
         String order = "";
         String res = "";
@@ -182,7 +210,7 @@ public class SWBSparqlTranslator {
      * @return String with a SParQL query fragment.
      * Cadena con un fragmento de consulta SparQl.
      */
-    private String startParsing(CommonTree root) throws CorruptIndexException, IOException {
+    private String startParsing(CommonTree root) {
         String res = "";
         List<CommonTree> child = root.getChildren();
 
@@ -202,7 +230,7 @@ public class SWBSparqlTranslator {
      * @param parentLabel name of the parent object of the node (for ataching properties).
      * @return a SparQL query fragment for the AST node.
      */
-    private String processNode(CommonTree root, String parent, String parentLabel) throws CorruptIndexException, IOException {
+    private String processNode(CommonTree root, String parent, String parentLabel) {
         String res = "";
         List<CommonTree> child = root.getChildren();
         String nname = root.getText();
@@ -216,8 +244,8 @@ public class SWBSparqlTranslator {
                 }
             }
         } else if (nname.equals("ASIGN") || nname.equals("COMPG") || nname.equals("COMPL") ||
-                    nname.equals("COMPLE") || nname.equals("COMPGE")) {
-                    res = res + processStatement(root, parent, parentLabel);
+                nname.equals("COMPLE") || nname.equals("COMPGE")) {
+            res = res + processStatement(root, parent, parentLabel);
         } else if (nname.equals("PREDE")) {
             if (!root.getChild(0).getText().equals("MODTO")) {
                 if (child != null) {
@@ -237,10 +265,10 @@ public class SWBSparqlTranslator {
                 String rangeType = assertPropertyRangeType(nname, parent);
                 if (!rangeType.equals("")) {
                     SemanticClass scl = assertPropertyRangeClass(nname, parent);
-                    res = res + "?" + nname.replace(" ","_").replaceAll("[\\(|\\)]", "") + " rdf:type " + rangeType + ".\n";
+                    res = res + "?" + nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + rangeType + ".\n";
                     String pName = assertPropertyType(nname, parent);
                     if (!pName.equals("")) {
-                        res = res + "?" + parent.replace(" ","_").replaceAll("[\\(|\\)]", "") + " " + pName + " ?" +
+                        res = res + "?" + parent.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName + " ?" +
                                 nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                     }
                     if (scl != null) {
@@ -255,10 +283,10 @@ public class SWBSparqlTranslator {
                 if (!pName.equals("")) {
                     if (!parentLabel.equals("")) {
                         res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
-                            " " + pName + " ?" + nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
+                                " " + pName + " ?" + nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                     } else {
                         res = res + "?" + parent.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
-                            " " + pName + " ?" + nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
+                                " " + pName + " ?" + nname.replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
                     }
                 }
             }
@@ -302,7 +330,7 @@ public class SWBSparqlTranslator {
      * @return a SparQL query fragment, specifically a triple for an ASIGN node
      * or a triple and a FILTER clause for the node.
      */
-    private String processStatement(CommonTree root, String parent, String parentLabel) throws CorruptIndexException, IOException {
+    private String processStatement(CommonTree root, String parent, String parentLabel) {
         String res = "";
         String pName = assertPropertyType(root.getChild(0).getText(), parent);
         //System.out.println("verificando " + root.getChild(0).getText() + " de " + parent + " con etiqueta " + parentLabel);
@@ -312,41 +340,41 @@ public class SWBSparqlTranslator {
                         " " + pName + " " + root.getChild(1).getText() + ".\n";
             }
         } else if (root.getText().equals("COMPL")) {
-                if (!pName.equals("")) {
-                    res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
-                            " " + pName + " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
-                            ".\n";
-                    res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
-                            " < " + root.getChild(1).getText() + ").\n";
-                }
-            } else if (root.getText().equals("COMPG")) {
-                if (!pName.equals("")) {
-                    res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName +
-                            " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
-                    res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
-                            " > " + root.getChild(1).getText() + ").\n";
-                }
-            } else if (root.getText().equals("COMPLE")) {
-                if (!pName.equals("")) {
-                    res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName +
-                            " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
-                    res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
-                            " <= " + root.getChild(1).getText() + ").\n";
-                }
-            } else if (root.getText().equals("COMPGE")) {
-                if (!pName.equals("")) {
-                    res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName +
-                            " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
-                            ".\n";
-                    res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
-                            " >= " + root.getChild(1).getText() + ").\n";
-                }
-            } else {
-                if (!pName.equals("")) {
-                    res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName + " ?" +
-                            root.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
-                }
+            if (!pName.equals("")) {
+                res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        " " + pName + " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        ".\n";
+                res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        " < " + root.getChild(1).getText() + ").\n";
             }
+        } else if (root.getText().equals("COMPG")) {
+            if (!pName.equals("")) {
+                res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName +
+                        " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
+                res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        " > " + root.getChild(1).getText() + ").\n";
+            }
+        } else if (root.getText().equals("COMPLE")) {
+            if (!pName.equals("")) {
+                res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName +
+                        " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
+                res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        " <= " + root.getChild(1).getText() + ").\n";
+            }
+        } else if (root.getText().equals("COMPGE")) {
+            if (!pName.equals("")) {
+                res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName +
+                        " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        ".\n";
+                res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        " >= " + root.getChild(1).getText() + ").\n";
+            }
+        } else {
+            if (!pName.equals("")) {
+                res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " " + pName + " ?" +
+                        root.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + ".\n";
+            }
+        }
         return res;
     }
 
@@ -358,7 +386,7 @@ public class SWBSparqlTranslator {
      * @return the RDF type of propertyName if it's a propery of className,
      * empty String otherwise.
      */
-    private String assertPropertyType(String propertyName, String className) throws CorruptIndexException, IOException {
+    private String assertPropertyType(String propertyName, String className) {
         String res = "";
         String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
         boolean found = false;
@@ -390,62 +418,13 @@ public class SWBSparqlTranslator {
     }
 
     /**
-     * Gets the range class (as a SemanticClass) of an object property.
-     * @param propertyName name of the property to assert.
-     * @param className name of the SemanticClass with the specified property.
-     * @return a SemanticClass which is the range class of the object property. Null otherwise.
-     */
-    public SemanticClass assertPropertyRangeClass(String propertyName, String className) throws CorruptIndexException, IOException {
-        String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
-        boolean found = false;
-        SemanticProperty sp = null;
-        Iterator<SemanticProperty> sit;
-
-        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(name);
-        if (sc != null) {
-            sit = sc.listProperties();
-            while (sit.hasNext() && !found) {
-                sp = sit.next();
-                if (sp.getDisplayName(lex.getLanguage()).toLowerCase().equals(propertyName.toLowerCase())) {
-                    found = true;
-                    if (sp.isObjectProperty()) {
-                        StringBuffer bf = new StringBuffer();
-                        bf.append(sp.getRangeClass());
-
-                        SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
-                        if (rg != null) {
-                            return rg;
-                        }
-                    }
-                    else {
-                        errCode = 3;
-                        eLog += "La propiedad " + sp.getDisplayName(lex.getLanguage()) + "no es de tipo Objeto.\n";
-                    }
-                }
-            }
-
-            if (!found) {
-                eLog += "La clase " + sc.getDisplayName(lex.getLanguage()) + " no tiene una propiedad llamada ";
-                if (sit.hasNext()) {
-                    sp = sit.next();
-                    eLog += sp.getDisplayName(lex.getLanguage()) + "\n";
-                } else {
-                    eLog += propertyName + "\n";
-                }
-                errCode = 3;
-            }
-        }
-    return null;
-    }
-
-    /**
      * Gets the type (prefix + name) of the range class for an object property.
      * @param propertyName name of the property to assert.
      * @param className name of the SemanticClass with the specified property.
      * @return prefix + name of the property, empty String if propertyName is
      *         not a SemanticProperty of className.
      */
-    public String assertPropertyRangeType(String propertyName, String className) throws CorruptIndexException, IOException {
+    public String assertPropertyRangeType(String propertyName, String className) {
         String res = "";
         String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
         boolean found = false;
@@ -467,8 +446,7 @@ public class SWBSparqlTranslator {
                         if (rg != null) {
                             res = res + lex.getObjWordTag(rg.getDisplayName(lex.getLanguage()), snowballAnalyze).getType();
                         }
-                    }
-                    else {
+                    } else {
                         errCode = 3;
                         eLog += "La propiedad " + sp.getDisplayName(lex.getLanguage()) + "no es de tipo Objeto.\n";
                     }
@@ -486,8 +464,8 @@ public class SWBSparqlTranslator {
                 errCode = 3;
             }
         }
-    return res ;
-}
+        return res;
+    }
 
     /**
      * Fixes node names in the AST. Removes brackets in NAME nodes.
@@ -528,10 +506,12 @@ public class SWBSparqlTranslator {
         }
     }
 
-    public String didYouMean (String sent) {
-        if (objSpeller == null) return null;
+    public String didYouMean(String sent) {
+        if (objSpeller == null) {
+            return null;
+        }
 
-        String []stopWords = {"de", "of", "con", "with", "=", "<", ">", "<=", ">=", ","};
+        String[] stopWords = {"de", "of", "con", "with", "=", "<", ">", "<=", ">=", ","};
         List<String> sw = Arrays.asList(stopWords);
         String res = "";
         ANTLRStringStream sinput = new ANTLRStringStream(sent);
@@ -545,7 +525,7 @@ public class SWBSparqlTranslator {
                 boolean compound = false;
 
                 if (tkText.startsWith("[") && tkText.endsWith("]")) {
-                    tkText.replace("[", "").replace("]", "");                    
+                    tkText.replace("[", "").replace("]", "");
                     compound = true;
                 }
 
@@ -554,7 +534,7 @@ public class SWBSparqlTranslator {
                     suggestions = propSpeller.suggestSimilar(tkText);
                     if (suggestions == null || suggestions.length == 0) {
                         res = res + (compound ? "[" + tkText + "]" : tkText) + " ";
-                    } else if (suggestions.length > 0) {                        
+                    } else if (suggestions.length > 0) {
                         res = res + (compound ? "[" + suggestions[0] + "]" : suggestions[0]) + " ";
                     }
                 } else if (suggestions.length > 0) {
@@ -571,14 +551,14 @@ public class SWBSparqlTranslator {
     /**
      * Gets the code of the last error occured.
      */
-    public int getErrCode () {
+    public int getErrCode() {
         return errCode;
     }
 
     /**
      * Gets the error log for a parsing task.
      */
-    public String getErrors () {
+    public String getErrors() {
         return eLog;
     }
 }
