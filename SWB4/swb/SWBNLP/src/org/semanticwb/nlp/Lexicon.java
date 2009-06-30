@@ -167,7 +167,7 @@ public class Lexicon {
         if (wt == null) {
             if (outr != null) {
                 try {
-                    outr.write("[" + o.getDisplayName(language) + "]\n");
+                    outr.write(o.getDisplayName(language) +"\n");
                 } catch (IOException ex) {
                     Logger.getLogger(Lexicon.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -295,7 +295,7 @@ public class Lexicon {
             return wt;
         }
 
-        return null;//return new WordTag("", "VAR", "", "", "", "");
+        return new WordTag("VAR", "", "", "", "", "");
     }
 
     /**
@@ -323,7 +323,7 @@ public class Lexicon {
             return wt;
         }
         
-        return null;//return new WordTag("", "VAR", "", "", "", "");
+        return new WordTag("VAR", "", "", "", "", "");
     }
 
     /**
