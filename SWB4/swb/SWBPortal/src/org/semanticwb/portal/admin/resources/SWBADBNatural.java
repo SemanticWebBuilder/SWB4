@@ -25,7 +25,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.nlp.Lexicon;
+import org.semanticwb.model.User;
+import org.semanticwb.nlp.SWBLexicon;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -38,6 +39,8 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class SWBADBNatural extends GenericResource {
     private Logger log = SWBUtils.getLogger(SWBAListRelatedObjects.class);
+    private String lang = "x-x";
+    private SWBLexicon lex = null;
 
     private SWBSparqlTranslator tr;
 
@@ -60,26 +63,43 @@ public class SWBADBNatural extends GenericResource {
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
-        StringBuffer ret = new StringBuffer();
-        SWBResourceURL url = paramRequest.getRenderUrl();
+        StringBuffer sbf = new StringBuffer();
+        SWBResourceURL rUrl = paramRequest.getRenderUrl();
         String query = request.getParameter("naturalQuery");
         String errCount = request.getParameter("errCode");
         String sparqlQuery = request.getParameter("sparqlQuery");
-        String lang = paramRequest.getUser().getLanguage();
+        User user = null;
 
+        response.setContentType("text/html; charset=utf-8");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
+        //Get user language if any and create lexicon and translator acordingly
+        if (user != null) {
+            if (!lang.equals(paramRequest.getUser().getLanguage())) {
+                lang = paramRequest.getUser().getLanguage();
+                lex = new SWBLexicon(lang);
+            }
+        } else {
+            if (!lang.equals("es")) {
+                lang = "es";
+                lex = new SWBLexicon(lang);
+            }
+        }
+
+        //Assert query string
         if (query == null) {
             query = "";
         } else {
             query = query.trim();
         }
         
-        url.setMode("SUGGEST");
-        ret.append("<script type=\"text/javascript\">\n" +
+        rUrl.setMode("SUGGEST");
+        sbf.append("<script type=\"text/javascript\">\n" +
                 "dojo.require(\"dijit.form.Form\");\n" +
                 "dojo.require(\"dijit.form.Button\");\n" +
                 "</script>\n");
-        ret.append("<script type=\"text/javascript\">\n" +
+        sbf.append("<script type=\"text/javascript\">\n" +
                 "dojo.addOnLoad(function () {\n" +
                 "dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyDown');\n" +
                 "dojo.connect(dojo.byId('naturalQuery'), 'onkeyup', 'queryOnKeyUp');\n" +
@@ -87,7 +107,7 @@ public class SWBADBNatural extends GenericResource {
                 "clearSuggestions();\n" +
                 "});\n" +
                 "});\n" +
-                "var source =\"" + url.toString() + "\";\n" +
+                "var source =\"" + rUrl.toString() + "\";\n" +
                 "var lang =\"" + paramRequest.getUser().getLanguage() + "\";\n" +
                 "var displayed;\n" +
                 "var pdisplayed;\n" +
@@ -95,7 +115,7 @@ public class SWBADBNatural extends GenericResource {
         /**
          * Clears the suggestions list and gives focus to the textarea.
          */
-        ret.append("<script type=\"text/javascript\">" +
+        sbf.append("<script type=\"text/javascript\">" +
                 "function clearSuggestions() {\n" +
                     "if (dojo.byId('results')) {\n" +
                         "dojo.byId('results').innerHTML = \"\";\n" +
@@ -105,7 +125,7 @@ public class SWBADBNatural extends GenericResource {
                     "dojo.byId('naturalQuery').focus();\n" +
                 "}\n");
 
-        ret.append("function queryOnKeyDown (evt) {\n" +
+        sbf.append("function queryOnKeyDown (evt) {\n" +
                         "var wd = getCurrentWord('naturalQuery');\n" +
                         "if (evt.target.value == '' || wd.word.length < 3) {\n" +
                             "clearSuggestions();\n" +
@@ -123,7 +143,7 @@ public class SWBADBNatural extends GenericResource {
                         "}\n" +
                     "}\n");
 
-        ret.append("function queryOnKeyUp (evt) {\n" +
+        sbf.append("function queryOnKeyUp (evt) {\n" +
                         "var wd = getCurrentWord('naturalQuery');\n" +
                         "if (evt.target.value == '' || wd.word.length < 3) {\n" +
                             "clearSuggestions();\n" +
@@ -174,7 +194,7 @@ public class SWBADBNatural extends GenericResource {
                     * Gets the word at current cursor position in a textarea.
                     * @param elm textarea to extract word from.
                     */
-        ret.append("function getCurrentWord(elm) {" +
+        sbf.append("function getCurrentWord(elm) {" +
                         "var cPos = getCaretPos(elm);" +
                         "var txt = dojo.byId(elm).value;" +
                         "var prevBlank = -1;" +
@@ -234,7 +254,7 @@ public class SWBADBNatural extends GenericResource {
          * Gets cursor current position in a textarea.
          * @param elm textarea to calculate caret position from.
          */
-        ret.append("function getCaretPos(elm) {" +
+        sbf.append("function getCaretPos(elm) {" +
                         "var pos;" +
                         "if (dojo.doc.selection) {" +
                             "var Sel = document.selection.createRange();" +
@@ -254,7 +274,7 @@ public class SWBADBNatural extends GenericResource {
          * @param clear wheter or not to clear previous list
          * @param props wheter or not to get properties of the current word as SemanticClass
          */
-        ret.append("function getSuggestions(word, src, clear, props) {" +
+        sbf.append("function getSuggestions(word, src, clear, props) {" +
                         "if (clear) {" +
                             "clearSuggestions();" +
                         "}" +
@@ -274,7 +294,7 @@ public class SWBADBNatural extends GenericResource {
          * @param id identifier of the list item to highlight
          * @param high toggles highlight color.
         */
-        ret.append("function highLightSelection(id, high) {" +
+        sbf.append("function highLightSelection(id, high) {" +
                         "var ele = dojo.byId('id' + id);" +
                         "console.log('buscando id' + id);"+
                         "if (high) {" +
@@ -288,7 +308,7 @@ public class SWBADBNatural extends GenericResource {
                         "}" +
                     "}");
 
-        ret.append("function getPreviousName (word) {" +
+        sbf.append("function getPreviousName (word) {" +
                         "var pName = \"\";" +
                         "var prevBrk = -1;" +
                         "var firstBrk = -1;" +
@@ -328,7 +348,7 @@ public class SWBADBNatural extends GenericResource {
          * @param selected index of current selected item
          * @param prep
          */
-        ret.append("function setSelection(selected, prep) {" +
+        sbf.append("function setSelection(selected, prep) {" +
                         "var word = getCurrentWord('naturalQuery');" +
                         "var newText = dojo.byId('id' + selected).innerHTML.replace(/<(.|\\n)+?>/g, \"\");" +
                         "newText = prep + \"[\" + newText + \"]\";" +
@@ -336,38 +356,38 @@ public class SWBADBNatural extends GenericResource {
                         "dojo.byId('naturalQuery').value = valText.substring(0, word.startP) +" +
                             "newText + valText.substring(word.endP, valText.length);" +
                     "}");
-        ret.append("</script>");
+        sbf.append("</script>");
 
-        url = paramRequest.getActionUrl();
-        url.setParameter("lang", lang);
-        ret.append("<form id=\"" + getResourceBase().getId() + "/natural\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
-        ret.append("action=\"" + url.toString() + "\" method=\"post\" ");
-        ret.append("onsubmit=\"submitForm('" + getResourceBase().getId() + "/natural'); return false;\">");
-        ret.append("<fieldset>Natural Language Query Examples");
-        ret.append("<PRE>");
-        ret.append("1. [User] con [Activo]=true, [Primer Apellido]\n");
-        ret.append("2. [Activo], [Contraseña] de [User] con [Usuario]=\"admin\"\n");
-        ret.append("3. [Creación], [Correo Electrónico] de [User] con [Usuario] = \"admin\"\n");
-        ret.append("4. todo de [User] con [Creación] < \"2009-04-02T13:36:21.409\"\n");
-        ret.append("5. todo de [Página Web] con [Usuario Creador] con [Usuario] = \"admin\"\n");
-        ret.append(paramRequest.getLocaleString("prompt"));
-        ret.append("</PRE>");
-        ret.append("Natural Language Query:<BR>");
-        ret.append("<textarea id=\"naturalQuery\" name=\"naturalQuery\" rows=5 cols=70>");
-        ret.append(query);
-        ret.append("</textarea><div id=\"results\"></div>");
-        ret.append("</fieldset>");
-        ret.append("<fieldset>");
-        ret.append("<button dojoType='dijit.form.Button' type=\"submit\">"+paramRequest.getLocaleString("send")+"</button>\n");
-        ret.append("</fieldset>");
+        rUrl = paramRequest.getActionUrl();
+        rUrl.setParameter("lang", lang);
+        sbf.append("<form id=\"" + getResourceBase().getId() + "/natural\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
+        sbf.append("action=\"" + rUrl.toString() + "\" ");
+        sbf.append("onsubmit=\"submitForm('" + getResourceBase().getId() + "/natural'); return false;\">");
+        sbf.append("<fieldset>Natural Language Query Examples");
+        sbf.append("<PRE>");
+        sbf.append("1. [User] con [Activo]=true, [Primer Apellido]\n");
+        sbf.append("2. [Activo], [Contraseña] de [User] con [Usuario]=\"admin\"\n");
+        sbf.append("3. [Creación], [Correo Electrónico] de [User] con [Usuario] = \"admin\"\n");
+        sbf.append("4. todo de [User] con [Creación] < \"2009-04-02T13:36:21.409\"\n");
+        sbf.append("5. todo de [Página Web] con [Usuario Creador] con [Usuario] = \"admin\"\n");
+        sbf.append(paramRequest.getLocaleString("prompt"));
+        sbf.append("</PRE>");
+        sbf.append("Natural Language Query:<BR>");
+        sbf.append("<textarea id=\"naturalQuery\" name=\"naturalQuery\" rows=5 cols=70>");
+        sbf.append(query);
+        sbf.append("</textarea><div id=\"results\"></div>");
+        sbf.append("</fieldset>");
+        sbf.append("<fieldset>");
+        sbf.append("<button dojoType='dijit.form.Button' type=\"submit\">"+paramRequest.getLocaleString("send")+"</button>\n");
+        sbf.append("</fieldset>");
 
         if (errCount != null) {
             if (Integer.parseInt(errCount) == 0) {
-                /*ret.append("<fieldset>");
-                ret.append("<textarea rows=5 cols=70>");
-                ret.append(request.getParameter("sparqlQuery"));
-                ret.append("</textarea>");
-                ret.append("</fieldset>");*/
+                sbf.append("<fieldset>");
+                sbf.append("<textarea rows=5 cols=70>");
+                sbf.append(request.getParameter("sparqlQuery"));
+                sbf.append("</textarea>");
+                sbf.append("</fieldset>");
 
                 try {
                     Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
@@ -376,22 +396,22 @@ public class SWBADBNatural extends GenericResource {
                     long time = System.currentTimeMillis();
 
                     try {
-                        ret.append("<fieldset>");
-                        ret.append("<table>");
+                        sbf.append("<fieldset>");
+                        sbf.append("<table>");
                         ResultSet rs = qexec.execSelect();
-                        ret.append("<thead>");
-                        ret.append("<tr>");
+                        sbf.append("<thead>");
+                        sbf.append("<tr>");
 
                         if (rs.hasNext()) {
                             Iterator<String> itcols = rs.getResultVars().iterator();
                             while (itcols.hasNext()) {
-                                ret.append("<th>");
-                                ret.append(itcols.next());
-                                ret.append("</th>");
+                                sbf.append("<th>");
+                                sbf.append(itcols.next());
+                                sbf.append("</th>");
                             }
-                            ret.append("</tr>");
-                            ret.append("</thead>");
-                            ret.append("<tbody>");
+                            sbf.append("</tr>");
+                            sbf.append("</thead>");
+                            sbf.append("<tbody>");
 
                             boolean odd = true;
                             while (rs.hasNext()) {
@@ -399,9 +419,9 @@ public class SWBADBNatural extends GenericResource {
                                 QuerySolution rb = rs.nextSolution();
 
                                 if (odd) {
-                                    ret.append("<tr bgcolor=\"#EFEDEC\">");
+                                    sbf.append("<tr bgcolor=\"#EFEDEC\">");
                                 } else {
-                                    ret.append("<tr>");
+                                    sbf.append("<tr>");
                                 }
 
                                 Iterator<String> it = rs.getResultVars().iterator();
@@ -409,60 +429,60 @@ public class SWBADBNatural extends GenericResource {
                                 while (it.hasNext()) {
                                     String name = it.next();
                                     RDFNode x = rb.get(name);
-                                    ret.append("<td >");
+                                    sbf.append("<td >");
                                     SemanticObject so = SemanticObject.createSemanticObject(x.toString());
 
                                     if (so != null) {
                                         if (first) {
-                                            ret.append("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI() + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '" + so.getDisplayName(lang) + "');\">" + so.getDisplayName(lang) + "</a>");
+                                            sbf.append("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI() + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '" + so.getDisplayName(lang) + "');\">" + so.getDisplayName(lang) + "</a>");
                                             first = false;
                                         } else {
                                             SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
                                             if (tt != null) {
-                                                ret.append(tt.getDisplayName(lang));
+                                                sbf.append(tt.getDisplayName(lang));
                                             } else {
                                                 SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
-                                                ret.append(stt.getDisplayName(lang));
+                                                sbf.append(stt.getDisplayName(lang));
                                             }
                                         }
                                     } else {
                                         if (x != null) {
-                                            ret.append(x);
+                                            sbf.append(x);
                                         } else {
-                                            ret.append(" - ");
+                                            sbf.append(" - ");
                                         }
                                     }
-                                    ret.append("</td>");
+                                    sbf.append("</td>");
                                 }
-                                ret.append("</tr>");
+                                sbf.append("</tr>");
                             }
                         } else {
-                            ret.append("<font color='red'>"+ paramRequest.getLocaleString("nofound") +"</font>");
-                            ret.append("</tr>");
-                            ret.append("</thead>");
+                            sbf.append("<font color='red'>"+ paramRequest.getLocaleString("nofound") +"</font>");
+                            sbf.append("</tr>");
+                            sbf.append("</thead>");
                         }
-                        ret.append("</tbody>");
-                        ret.append("</table>");
-                        ret.append("</fieldset>");
-                        ret.append("<fieldset>");
-                        ret.append("<p aling=\"center\">" + paramRequest.getLocaleString("exectime") + (System.currentTimeMillis() - time) + "ms." + "</p>");
-                        ret.append("</fieldset>");
+                        sbf.append("</tbody>");
+                        sbf.append("</table>");
+                        sbf.append("</fieldset>");
+                        sbf.append("<fieldset>");
+                        sbf.append("<p aling=\"center\">" + paramRequest.getLocaleString("exectime") + (System.currentTimeMillis() - time) + "ms." + "</p>");
+                        sbf.append("</fieldset>");
                     } finally {
                         qexec.close();
                     }
                 } catch (Exception e) {
                     if (tr.getErrCode() != 0) {
-                        ret.append("<script language=\"javascript\" type=\"text/javascript\">alert('"+ paramRequest.getLocaleString("failmsg") +"');</script>");
+                        sbf.append("<script language=\"javascript\" type=\"text/javascript\">alert('"+ paramRequest.getLocaleString("failmsg") +"');</script>");
                     }
                 }
             } else {
-                ret.append("<script language=\"javascript\" type=\"text/javascript\">");
-                ret.append("alert(\"" + tr.getErrors().replace("\n", "\\n") + "\");");
-                ret.append("</script>");
+                sbf.append("<script language=\"javascript\" type=\"text/javascript\">");
+                sbf.append("alert(\"" + tr.getErrors().replace("\n", "\\n") + "\");");
+                sbf.append("</script>");
             }
         }
-        ret.append("</form>");
-        response.getWriter().print(ret.toString());
+        sbf.append("</form>");
+        response.getWriter().print(sbf.toString());
     }
 
     @Override
@@ -474,9 +494,9 @@ public class SWBADBNatural extends GenericResource {
             return;
         }
 
-        Lexicon dict = new Lexicon(request.getParameter("lang"));
-        tr = new SWBSparqlTranslator(dict);
-        String queryString = dict.getPrefixString() + "\n" + tr.translateSentence(query);
+        //SWBLexicon dict = new SWBLexicon(request.getParameter("lang"));
+        tr = new SWBSparqlTranslator(lex);
+        String queryString = lex.getPrefixString() + "\n" + tr.translateSentence(query);
 
         response.setRenderParameter("errCode", Integer.toString(tr.getErrCode()));
         response.setRenderParameter("sparqlQuery", queryString);
@@ -486,22 +506,23 @@ public class SWBADBNatural extends GenericResource {
 
     public void doSuggest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
+        StringBuffer sbf = new StringBuffer();
         SortedSet objOptions = new TreeSet();
         SortedSet proOptions = new TreeSet();
         String word = request.getParameter("word");
-        String lang = request.getParameter("lang");
+        String language = request.getParameter("lang");
         boolean props = Boolean.parseBoolean(request.getParameter("props"));
         String tempcDn = "";
         boolean lPar = false;
         boolean rPar = false;
         int idCounter = 0;
-        Lexicon lex = new Lexicon(lang);
-        StringBuffer sbf = new StringBuffer();
 
-        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setContentType("text/html; charset=utf-8");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
 
-        if (lang == null || lang.equals("")) {
-            lang = "es";
+        if (language == null || language.equals("")) {
+            language = "es";
         }
         if (word.indexOf("(") != -1) {
             lPar = true;
@@ -521,7 +542,7 @@ public class SWBADBNatural extends GenericResource {
 
             while (cit.hasNext()) {
                 SemanticClass tempc = cit.next();
-                tempcDn = tempc.getDisplayName(lang);
+                tempcDn = tempc.getDisplayName(language);
 
                 if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                     objOptions.add(tempcDn);
@@ -530,7 +551,7 @@ public class SWBADBNatural extends GenericResource {
                 Iterator<SemanticProperty> sit = tempc.listProperties();
                 while (sit.hasNext()) {
                     SemanticProperty tempp = sit.next();
-                    tempcDn = tempp.getDisplayName(lang);
+                    tempcDn = tempp.getDisplayName(language);
 
                     if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                         proOptions.add(tempcDn);
@@ -597,7 +618,7 @@ public class SWBADBNatural extends GenericResource {
                             "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
                             "onmousedown=\"setSelection(" + idCounter + ", 'con ');pdisplayed=false;dojo.byId('results').innerHTML='';" +
                             "dojo.byId('naturalQuery').focus();displayed=false;\">" + (lPar ? "(" : "") +
-                            "<font color=\"red\">" + t.getDisplayName(lang) + "</font>" +
+                            "<font color=\"red\">" + t.getDisplayName(language) + "</font>" +
                             (lPar ? ")" : "") + "</li>");
                     idCounter++;
                 }
@@ -615,12 +636,11 @@ public class SWBADBNatural extends GenericResource {
                                 "onmouseout=\"highLightSelection(" + idCounter + ",false);\" " +
                                 "onmousedown=\"setSelection(" + idCounter + ", 'con ');pdisplayed=false;dojo.byId('results').innerHTML='';" +
                                 "dojo.byId('naturalQuery').focus();displayed=false;\">" + (lPar ? "(" : "") +
-                                "<font color=\"red\">" + t.getDisplayName(lang) + "</font>" +
+                                "<font color=\"red\">" + t.getDisplayName(language) + "</font>" +
                                 (lPar ? ")" : "") + "</li>");
                         idCounter++;
                     }
                 }
-
             }
             sbf.append("</ul>");
         }
