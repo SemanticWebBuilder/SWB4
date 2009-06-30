@@ -81,7 +81,7 @@
 
     }
 %>
-<span id="swblogout"><%=user.getFullName()%> | <a href="<%=SWBPlatform.getContextPath()%>/login?wb_logout=true">logout</a></span>
+<span id="swblogout"><a href="?suri=<%=user.getEncodedURI()%>" onclick="addNewTab('<%=user.getURI()%>', null, '<%=user.getSemanticObject().getDisplayName(lang)%>');return false;"><%=user.getFullName()%></a> | <a href="<%=SWBPlatform.getContextPath()%>/login?wb_logout=true">logout</a></span>
 <!--    
 
     <div id="getMail" dojoType="dijit.form.ComboButton" optionsTitle="Mail Source Options">
