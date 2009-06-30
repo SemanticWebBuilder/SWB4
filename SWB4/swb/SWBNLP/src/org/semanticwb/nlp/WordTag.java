@@ -35,7 +35,7 @@ public class WordTag {
      * POS tag for the word.
      * Etiqueta de la palabra a nivel sintáctico.
      */
-    private String lbl; //Etiqueta de la palabra a nivel sint‚àö¬∞ctico : OBJ, PREC, PRED, etc.
+    private String lbl; //Etiqueta de la palabra a nivel sintáctico : OBJ, PREC, PRED, etc.
     /**
      * Class type of the object in the ontology associated to the word.
      * Tipo de dato en la ontología para el objeto asociado a la palabra.
@@ -52,6 +52,7 @@ public class WordTag {
      */
     private String oId;    //Id de la clase que representa la palabra
     private String rangeName;
+    private String snowballForm;
 
     /**
      * Creates a new instance of a {@link WordTag} with the given label, TagType,
@@ -68,9 +69,10 @@ public class WordTag {
      * Identificador del objeto en la ontología asociado a la palabra.
      * @param rang
      */
-    public WordTag(String label, String typ, String cName, String cId, String rang)
+    public WordTag(String label, String snowball, String typ, String cName, String cId, String rang)
     {
         lbl = label;
+        snowballForm = snowball;
         TagType = typ;
         name = cName;
         rangeName = rang;
@@ -137,7 +139,7 @@ public class WordTag {
      */
     public void setTagLabel(String t)
     {
-        lbl = t;
+        this.lbl = t;
     }
 
     /**
@@ -146,15 +148,22 @@ public class WordTag {
      */
     public void setType(String tt)
     {
-        TagType = tt;
+        this.TagType = tt;
     }
 
+    public String getSnowballForm() {
+        return snowballForm;
+    }
+
+    public void setSnowballForm(String snowballForm) {
+        this.snowballForm = snowballForm;
+    }
     
     public String getWClassName() {
         return name;
     }
 
     public void setClassName(String newName) {
-        name = newName;
+        this.name = newName;
     }
 }
