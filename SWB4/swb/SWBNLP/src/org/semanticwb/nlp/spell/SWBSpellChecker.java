@@ -6,8 +6,6 @@
 package org.semanticwb.nlp.spell;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.spell.LuceneDictionary;
 import org.apache.lucene.search.spell.PlainTextDictionary;
@@ -18,22 +16,22 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
 /**
- * Wrapper for lucene @link{SpellChecker} class.
+ * Wrapper for Lucene @link{SpellChecker} class.
  * Envoltorio para la clase @link{SpellChecker} de Lucene.
  * 
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class SWBSpellChecker {
     /**Lucene SpellChecker object*/
-    private SpellChecker checker;
+    private SpellChecker checker = null;
     /**Lucene Dictionary to store words for spelling suggestions*/
-    private LuceneDictionary spellDict;
+    private LuceneDictionary spellDict = null;
     /**Directory to store spell indexes*/
-    private Directory spellDir;
+    private Directory spellDir = null;
     /**Number of max suggestions to retrieve*/
     private int numSug = 5;
 
-    private static Logger log=SWBUtils.getLogger(SWBSpellChecker.class);
+    private static Logger log = SWBUtils.getLogger(SWBSpellChecker.class);
 
     /**
      * Creates a new instance of a SWBSpellChecker. Creates a new SpellChecker
@@ -46,16 +44,12 @@ public class SWBSpellChecker {
         indexSpellDir(directoryPath, fieldName);
     }
 
-    public SWBSpellChecker(File txtDictFile) {
-        indexSpellTextFile(txtDictFile);
-    }
+    public SWBSpellChecker(String txtDictFilePath) {
+        File f = new File(txtDictFilePath);
 
-    public int getNumSug() {
-        return numSug;
-    }
-
-    public void setNumSug(int numSug) {
-        this.numSug = numSug;
+        if (f.exists()) {
+            indexSpellTextFile(f);
+        }
     }
 
     /**
@@ -76,21 +70,8 @@ public class SWBSpellChecker {
         }
     }
 
-    public ArrayList<String> getWords() {
-        if (spellDict == null) return null;
-        
-        ArrayList<String> res = new ArrayList<String>();
-
-        Iterator wit = spellDict.getWordsIterator();
-        while (wit.hasNext()) {
-            String word = (String)wit.next();
-            res.add(word);
-        }
-        return res;
-    }
-
     private void indexSpellTextFile(File txtDictFile) {
-        try {
+         try {
             spellDir = new RAMDirectory();
             checker = new SpellChecker(spellDir);
             checker.indexDictionary(new PlainTextDictionary(txtDictFile));
@@ -99,6 +80,14 @@ public class SWBSpellChecker {
         }
     }
 
+    public int getNumSug() {
+        return numSug;
+    }
+
+    public void setNumSug(int numSug) {
+        this.numSug = numSug;
+    }    
+
     /**
      * Gets a set of words similar to the given input.
      * @param word Wort to have spell check done on.
@@ -106,14 +95,16 @@ public class SWBSpellChecker {
      * @throws java.io.IOException
      */
     public String[] suggestSimilar(String word) {
-        try {
-            if (checker.exist(word)) {
-                return null;
+        if (checker != null) {
+            try {
+                if (checker.exist(word)) {
+                    return null;
+                }
+                String res[] = checker.suggestSimilar(word, numSug);
+                return res;
+            } catch (Exception ex) {
+                log.error(ex);
             }
-            String res[] = checker.suggestSimilar(word, numSug);
-            return res;
-        } catch (Exception ex) {
-            log.error(ex);
         }
         return null;
     }
