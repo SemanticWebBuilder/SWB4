@@ -5,6 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <style>
+        @import "/swbadmin/js/dojo/dojo/resources/dojo.css";
+        @import "/swbadmin/js/dojo/dijit/themes/soria/soria.css";
+        @import "/swbadmin/css/swb.css";
 
 body {
 	font-family:helvetica,tahoma,verdana,sans-serif;
@@ -75,7 +78,7 @@ pre {
 /* default loading indicator for ajax calls */
 .loading-indicator {
 	font-size:8pt;
-	background-image:url('/swb/swbadmin/js/extjs/resources/images/default/grid/loading.gif');
+	background-image:url('/swbadmin/js/extjs/resources/images/default/grid/loading.gif');
 	background-repeat: no-repeat;
 	background-position: left;
 	padding-left:20px;
@@ -90,13 +93,13 @@ pre {
     background-image:url( ../desktop/images/tabs.gif ) !important;
 }
     </style>
-    <link rel="stylesheet" type="text/css" href="/swb/swbadmin/js/extjs/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="/swbadmin/js/extjs/resources/css/ext-all.css" />
     <!-- GC -->
  	<!-- LIBS -->
- 	<script type="text/javascript" src="/swb/swbadmin/js/extjs/adapter/ext/ext-base.js"></script>
+ 	<script type="text/javascript" src="/swbadmin/js/extjs/adapter/ext/ext-base.js"></script>
  	<!-- ENDLIBS -->
 
-    <script type="text/javascript" src="/swb/swbadmin/js/extjs/ext-all.js"></script>
+    <script type="text/javascript" src="/swbadmin/js/extjs/ext-all.js"></script>
 <!--
     <link rel="stylesheet" type="text/css" href="tabs-example.css" />
     <script type="text/javascript" src="TabCloseMenu.js"></script>
@@ -172,7 +175,7 @@ Ext.onReady(function(){
             title: 'New Tab ' + (++index),
             iconCls: 'tabs',
             //html: 'Tab Body ' + (index) + '<br/><br/>' + Ext.example.bogusMarkup,
-            autoLoad: '/swb/swb',
+            autoLoad: '/swbadmin/jsp/SemObjectEditor.jsp?suri=http%3A%2F%2Fwww.semanticwb.org%2FSWBAdmin%23WebPage%3Ahome',
             closable:true
         }).show();
     }
@@ -185,7 +188,7 @@ Ext.onReady(function(){
 });
 
 
-Ext.BLANK_IMAGE_URL = '/swb/swbadmin/js/extjs/resources/images/default/s.gif';
+Ext.BLANK_IMAGE_URL = '/swbadmin/js/extjs/resources/images/default/s.gif';
 
 Ext.example = function(){
     var msgCt;
@@ -288,8 +291,14 @@ Cookies.getCookieVal = function(offset){
    return unescape(document.cookie.substring(offset, endstr));
 };
   </script>
+
+        <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
+        <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb.js" ></script>
+        <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb_admin.js" ></script>
+        <script type="text/javascript" charset="utf-8" src="/swbadmin/js/schedule.js" ></script>
+
 </head>
-<body>
+<body class="soria" >
 <!--
     <script type="text/javascript" src="../shared/examples.js"></script>
 -->

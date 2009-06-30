@@ -113,11 +113,6 @@ public class WBXMLParser {
             }
             
         }
-        
-        
-        
-        
-        
         return auxnode;
     }
     
