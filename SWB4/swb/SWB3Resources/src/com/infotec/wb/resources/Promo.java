@@ -22,7 +22,7 @@
  */
 
 
-package org.semanticwb.portal.resources;
+package com.infotec.wb.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
