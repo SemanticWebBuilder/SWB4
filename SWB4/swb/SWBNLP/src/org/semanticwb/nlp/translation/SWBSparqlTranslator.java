@@ -37,8 +37,7 @@ public class SWBSparqlTranslator {
     private String eLog = "";   //Error log
     private int errCode = 0;    //Last error code
     private boolean snowballAnalyze = false;
-    private SWBSpellChecker objSpeller = null;
-    private SWBSpellChecker propSpeller = null;
+    private SWBSpellChecker speller = null;
 
     /**
      * Creates a new instance of SWBSparqlTranslator with the given SWBLexicon.
@@ -48,21 +47,24 @@ public class SWBSparqlTranslator {
     public SWBSparqlTranslator(SWBLexicon dict) {
         lex = dict;
         snowballAnalyze = false;
+        speller = new SWBSpellChecker(dict.getSpellDictPath());
     }
 
     /**
      * Creates a new instance of SWBSparqlTranslator with the given SWBLexicon.
      * Crea un SWBSparqlTranslator con el diccionario especificado.
      * @param dict SWBLexicon for the new translator. Diccionario para el traductor.
-     * @param snowball Wheter to use snowball word analysis.
+     * @param snowball Wheter to use snowball algorithm for word analysis.
      */
     public SWBSparqlTranslator(SWBLexicon dict, boolean snowball) {
         lex = dict;
         snowballAnalyze = snowball;
+        speller = new SWBSpellChecker(dict.getSpellDictPath());
     }
 
     /**
      * Gets the range class (as a SemanticClass) of an object property.
+     * Obtiene el rango (como clase semántica) de una propiedad de tipo objeto.
      * @param propertyName name of the property to assert.
      * @param className name of the SemanticClass with the specified property.
      * @return a SemanticClass which is the range class of the object property. Null otherwise.
@@ -73,7 +75,7 @@ public class SWBSparqlTranslator {
 
         SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(name);
         if (sc != null) {
-            Iterator <SemanticProperty> sit = sc.listProperties();
+            Iterator<SemanticProperty> sit = sc.listProperties();
             while (sit.hasNext() && !found) {
                 SemanticProperty sp = sit.next();
 
@@ -101,121 +103,207 @@ public class SWBSparqlTranslator {
     }
 
     /**
-     * Transforms a Natural Language query to a SparQL query. Using an antlr
-     * (http://www.antlr.org) parser, this method builds an AST
-     * (Abstract Sintax Tree) and traverses it to generate the SparQL query.
-     *
-     * Transforma una consulta en lenguaje natural a una consulta en SparQl.
-     * Usando un analizador generado por antlr (http://www.antlr.org), el método
-     * construye un AST (Árbol de sintáxis abstracta) y lo recorre para generar
-     * la consulta SparQl.
-     *
-     * @param sent Rescticted-Natural Language sentence for the query.
-     * Oración en lenguaje natural restringido para la consulta.
-     * @return SparQL query sentence. Sentencia de la consulta SparQl.
+     * Gets the type (prefix + name) of the range class for an object property.
+     * Obtiene el tipo (prefijo + nombre) de la clase rango para una propiedad
+     * de tipo objeto.
+     * @param propertyName name of the property to assert.
+     * @param className name of the SemanticClass with the specified property.
+     * @return prefix + name of the property, empty String if propertyName is
+     *         not a SemanticProperty of className.
      */
-    public String translateSentence(String sent) {
+    public String assertPropertyRangeType(String propertyName, String className) {
         String res = "";
-        CommonTree sTree = null;
-        input = new ANTLRStringStream(sent);
-        tokenizer = new SimpleLexer(input);
-        tokens = new CommonTokenStream(tokenizer);
-        parser = new ComplexParser(tokens);
+        String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
+        boolean found = false;
+        SemanticProperty sp = null;
+        Iterator<SemanticProperty> sit;
 
-        try {
-            ComplexParser.squery_return qres = (ComplexParser.squery_return) parser.squery();
-            if (parser.getErrorCount() == 0) {
-                sTree = (CommonTree) qres.getTree();
-                fixNames(sTree);
-                //traverseAST(sTree, "");
-                res += processSelectQuery(sTree, parser.hasPrecon(), parser.hasPrede());
-                //System.out.println(res);
-                return res;
-            } else {
-                errCode = 2;
-                eLog += "La consulta no está bien escrita.\n";
-                return "";
-            }
-        } catch (org.antlr.runtime.RecognitionException ex) {
-            errCode = 2;
-            eLog += "No se ha podido traducir la consulta.\n";
-            return "";
-        }
-    }
+        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(name);
+        if (sc != null) {
+            sit = sc.listProperties();
+            while (sit.hasNext() && !found) {
+                sp = sit.next();
+                if (sp.getDisplayName(lex.getLanguage()).toLowerCase().equals(propertyName.toLowerCase())) {
+                    found = true;
+                    if (sp.isObjectProperty()) {
+                        StringBuffer bf = new StringBuffer();
+                        bf.append(sp.getRangeClass());
 
-    /**
-     * Transforms a SELECT node in the AST to a SparQL query fragment.
-     * Transforma un nodo SELECT en el AST en un fragmento de la consulta SparQl.
-     * @param root SELECT node to transform. Nodo SELECT a transformar.
-     * @param hasPrecon wheter or not the AST has a PRECON node.
-     * Indica si el AST contiene una preposición CON.
-     * @param hasPrede wheter or not the AST has a PREDE node.
-     * Indica si el AST contiene una preposición DE.
-     * @return String of a SparQL query fragment. Fragmento de consulta SparQl.
-     */
-    private String processSelectQuery(CommonTree root, boolean hasPrecon, boolean hasPrede) {
-        String limitoff = "";
-        String order = "";
-        String res = "";
-        String varList = "";
-
-        List<CommonTree> child = root.getChildren();
-        if (child != null) {
-            res = "SELECT DISTINCT ";
-            for (CommonTree t : child) {
-                if (t.getText().equals("LIMIT")) {
-                    limitoff = limitoff + " LIMIT " + t.getChild(0).getText() + "\n";
-                } else if (t.getText().equals("ORDER")) {
-                    order += " ORDER BY ";
-                    for (CommonTree oit : (List<CommonTree>) t.getChildren()) {
-                        order = order + "?" + oit.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ";
-                    }
-                    order = order.trim() + "\n";
-                } else if (t.getText().equals("OFFSET")) {
-                    limitoff = limitoff + " OFFSET " + t.getChild(0).getText() + "\n";
-                } else {
-                    if (hasPrede) {
-                        if (hasPrecon) {
-                            varList += getVarList((CommonTree) t.getChild(1), t.getText());
-                        } else {
-                            varList += getVarList((CommonTree) t.getChild(0), t.getText());
+                        SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
+                        if (rg != null) {
+                            res = res + lex.getObjWordTag(rg.getDisplayName(lex.getLanguage()), snowballAnalyze).getType();
                         }
                     } else {
-                        varList = varList + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "");
-                    }
-                    res = res + varList + "\nWHERE \n{\n";
-                    String etype = lex.getObjWordTag(t.getText(), snowballAnalyze).getType();
-                    if (!etype.equals("")) {
-                        res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + etype + ".\n";
-                        res += startParsing(t);
-                    } else {
-                        errCode = 2;
-                        eLog = eLog + t.getText() + " no es una clase.";
+                        errCode = 3;
+                        eLog += "La propiedad " + sp.getDisplayName(lex.getLanguage()) + "no es de tipo Objeto.\n";
                     }
                 }
             }
-        }
-        return res + "}" + order + limitoff;
-    }
 
-    /**
-     * Starts deep parsing of the AST.
-     * Inicia el análisis a profundidad del AST.
-     * @param root root node to start parsing (usually child of SELECT node).
-     * Nodo raíz (usualmente hijo del nodo SELECT) para el análisis.
-     * @return String with a SParQL query fragment.
-     * Cadena con un fragmento de consulta SparQl.
-     */
-    private String startParsing(CommonTree root) {
-        String res = "";
-        List<CommonTree> child = root.getChildren();
-
-        if (child != null) {
-            for (CommonTree t : child) {
-                res += processNode(t, root.getText(), root.getText());
+            if (!found) {
+                eLog += "La clase " + sc.getDisplayName(lex.getLanguage()) + " no tiene una propiedad llamada ";
+                if (sit.hasNext()) {
+                    sp = sit.next();
+                    eLog += sp.getDisplayName(lex.getLanguage()) + "\n";
+                } else {
+                    eLog += propertyName + "\n";
+                }
+                errCode = 3;
             }
         }
         return res;
+    }
+
+    /**
+     * Validates if propertyName is a property of className in the
+     * SemanticVocabulary.
+     * Valida si propertyName es una propiedad de className dentro del
+     * vocabulario semántico.
+     * @param propertyName name of the property to get type for.
+     * @param className name of the class which contains the propertyName.
+     * @return the RDF type of propertyName if it's a propery of className,
+     * empty String otherwise.
+     */
+    private String assertPropertyType(String propertyName, String className) {
+        String res = "";
+        String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
+        boolean found = false;
+        SemanticProperty sp = null;
+        Iterator<SemanticProperty> sit;
+        //System.out.println(">verificando " + propertyName + " de " + className);
+        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(name);
+        if (sc != null) {
+            sit = sc.listProperties();
+            while (sit.hasNext() && !found) {
+                sp = sit.next();
+                if (sp.getDisplayName(lex.getLanguage()).toLowerCase().equals(propertyName.toLowerCase())) {
+                    res = res + sp.getPrefix() + ":" + sp.getName();
+                    found = true;
+                }
+            }
+            if (!found) {
+                eLog += "La clase " + sc.getDisplayName(lex.getLanguage()) + " no tiene una propiedad llamada ";
+                if (sit.hasNext()) {
+                    sp = sit.next();
+                    eLog += sp.getDisplayName(lex.getLanguage()) + "\n";
+                } else {
+                    eLog += propertyName + "\n";
+                }
+                errCode = 3;
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Gets a suggested query string correcting spelling errors.
+     * @param sent Original mispelled query.
+     * @return Query String without spelling errors or the same string if there
+     * is not suggestion.
+     */
+    public String didYouMean(String sent) {
+        String res = "";
+        String[] stopWords = {"de", "of", "con", "with", "=", "<", ">",
+            "<=", ">=", ","};
+
+        List<String> sw = Arrays.asList(stopWords);
+
+        ANTLRStringStream sinput = new ANTLRStringStream(sent);
+        SimpleLexer stokenizer = new SimpleLexer(sinput);
+        CommonTokenStream stokens = new CommonTokenStream(stokenizer);
+
+        if (speller == null) {
+            return null;
+        }
+
+        org.antlr.runtime.Token tk;
+        while ((tk = stokens.LT(1)) != org.antlr.runtime.Token.EOF_TOKEN) {
+            String tkText = tk.getText().trim();
+            if (!sw.contains(tkText) && (!tkText.startsWith("\"") && !tkText.endsWith("\""))) {
+                boolean compound = false;
+
+                if (tkText.startsWith("[") && tkText.endsWith("]")) {
+                    tkText.replace("[", "").replace("]", "");
+                    compound = true;
+                }
+
+                String[] suggestions = speller.suggestSimilar(tkText);
+                if (suggestions == null || suggestions.length == 0) {
+                    suggestions = speller.suggestSimilar(tkText);
+                    if (suggestions == null || suggestions.length == 0) {
+                        res = res + (compound ? "[" + tkText + "]" : tkText) + " ";
+                    } else if (suggestions.length > 0) {
+                        res = res + (compound ? "[" + suggestions[0] + "]" : suggestions[0]) + " ";
+                    }
+                } else if (suggestions.length > 0) {
+                    res = res + (compound ? "[" + suggestions[0] + "]" : suggestions[0]) + " ";
+                }
+            } else {
+                res = res + tkText + " ";
+            }
+            stokens.consume();
+        }
+        return res;
+    }
+
+    /**
+     * Fixes node names in the AST. Removes brackets in NAME nodes.
+     * @param tree AST to fix.
+     */
+    private void fixNames(CommonTree tree) {
+        //If the node is the root of a NAME
+        if (nodeLabels.indexOf(tree.getText()) == -1) {
+            //Set the current node's text to be the child text
+            tree.token.setText(tree.getText().replaceAll("[\\[|\\]]", ""));
+        }
+
+        //Process all children of current node
+        List<CommonTree> child = tree.getChildren();
+        if (child != null) {
+            for (CommonTree t : child) {
+                fixNames(t);
+            }
+        }
+    }
+
+    /**
+     * Gets the code of the last error occured.
+     */
+    public int getErrCode() {
+        return errCode;
+    }
+
+    /**
+     * Gets the error log generated in a parsing process.
+     */
+    public String getErrors() {
+        return eLog;
+    }
+
+    /**
+     * Transforms a PREDE node into a SparQL query fragment. If PREDE's first
+     * child is a MODTO node, an '*' is added to the varList of the SELECT clause
+     * for the query. Otherwise, varList consists of the names of all child
+     * nodes of PREDE.
+     * @param root the PREDE node.
+     * @param parent name of the parent object of PREDE node.
+     * @return a SparQL query fragment, specifically a varList for the SelecQuery
+     * production of the SparQL query language grammar.
+     */
+    private String getVarList(CommonTree root, String parent) {
+        String res = "";
+
+        if (root.getChild(0).getText().equals("MODTO")) {
+            return "?" + parent.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ?prop ?val";
+        }
+
+        List<CommonTree> child = root.getChildren();
+        if (child != null) {
+            for (CommonTree t : child) {
+                res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ";
+            }
+        }
+        return res.trim();
     }
 
     /**
@@ -291,29 +379,58 @@ public class SWBSparqlTranslator {
     }
 
     /**
-     * Transforms a PREDE node into a SparQL query fragment. If PREDE's first
-     * child is a MODTO node, an '*' is added to the varList of the SELECT clause
-     * for the query. Otherwise, varList consists of the names of all child
-     * nodes of PREDE.
-     * @param root the PREDE node.
-     * @param parent name of the parent object of PREDE node.
-     * @return a SparQL query fragment, specifically a varList for the SelecQuery
-     * production of the SparQL query language grammar.
+     * Transforms a SELECT node in the AST to a SparQL query fragment.
+     * Transforma un nodo SELECT en el AST en un fragmento de la consulta SparQl.
+     * @param root SELECT node to transform. Nodo SELECT a transformar.
+     * @param hasPrecon wheter or not the AST has a PRECON node.
+     * Indica si el AST contiene una preposición CON.
+     * @param hasPrede wheter or not the AST has a PREDE node.
+     * Indica si el AST contiene una preposición DE.
+     * @return String of a SparQL query fragment. Fragmento de consulta SparQl.
      */
-    private String getVarList(CommonTree root, String parent) {
+    private String processSelectQuery(CommonTree root, boolean hasPrecon, boolean hasPrede) {
+        String limitoff = "";
+        String order = "";
         String res = "";
-
-        if (root.getChild(0).getText().equals("MODTO")) {
-            return "?" + parent.replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ?prop ?val";
-        }
+        String varList = "";
 
         List<CommonTree> child = root.getChildren();
         if (child != null) {
+            res = "SELECT DISTINCT ";
             for (CommonTree t : child) {
-                res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ";
+                if (t.getText().equals("LIMIT")) {
+                    limitoff = limitoff + " LIMIT " + t.getChild(0).getText() + "\n";
+                } else if (t.getText().equals("ORDER")) {
+                    order += " ORDER BY ";
+                    for (CommonTree oit : (List<CommonTree>) t.getChildren()) {
+                        order = order + "?" + oit.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " ";
+                    }
+                    order = order.trim() + "\n";
+                } else if (t.getText().equals("OFFSET")) {
+                    limitoff = limitoff + " OFFSET " + t.getChild(0).getText() + "\n";
+                } else {
+                    if (hasPrede) {
+                        if (hasPrecon) {
+                            varList += getVarList((CommonTree) t.getChild(1), t.getText());
+                        } else {
+                            varList += getVarList((CommonTree) t.getChild(0), t.getText());
+                        }
+                    } else {
+                        varList = varList + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "");
+                    }
+                    res = res + varList + "\nWHERE \n{\n";
+                    String etype = lex.getObjWordTag(t.getText(), snowballAnalyze).getType();
+                    if (!etype.equals("")) {
+                        res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + etype + ".\n";
+                        res += startParsing(t);
+                    } else {
+                        errCode = 2;
+                        eLog = eLog + t.getText() + " no es una clase.";
+                    }
+                }
             }
         }
-        return res.trim();
+        return res + "}" + order + limitoff;
     }
 
     /**
@@ -375,111 +492,65 @@ public class SWBSparqlTranslator {
     }
 
     /**
-     * Validates if propertyName is a property of className in the
-     * SemanticVocabulary.
-     * @param propertyName name of the property to get type for.
-     * @param className name of the class which contains the propertyName.
-     * @return the RDF type of propertyName if it's a propery of className,
-     * empty String otherwise.
+     * Starts deep parsing of the AST.
+     * Inicia el análisis a profundidad del AST.
+     * @param root root node to start parsing (usually child of SELECT node).
+     * Nodo raíz (usualmente hijo del nodo SELECT) para el análisis.
+     * @return String with a SParQL query fragment.
+     * Cadena con un fragmento de consulta SparQl.
      */
-    private String assertPropertyType(String propertyName, String className) {
+    private String startParsing(CommonTree root) {
         String res = "";
-        String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
-        boolean found = false;
-        SemanticProperty sp = null;
-        Iterator<SemanticProperty> sit;
-        //System.out.println(">verificando " + propertyName + " de " + className);
-        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(name);
-        if (sc != null) {
-            sit = sc.listProperties();
-            while (sit.hasNext() && !found) {
-                sp = sit.next();
-                if (sp.getDisplayName(lex.getLanguage()).toLowerCase().equals(propertyName.toLowerCase())) {
-                    res = res + sp.getPrefix() + ":" + sp.getName();
-                    found = true;
-                }
-            }
-            if (!found) {
-                eLog += "La clase " + sc.getDisplayName(lex.getLanguage()) + " no tiene una propiedad llamada ";
-                if (sit.hasNext()) {
-                    sp = sit.next();
-                    eLog += sp.getDisplayName(lex.getLanguage()) + "\n";
-                } else {
-                    eLog += propertyName + "\n";
-                }
-                errCode = 3;
-            }
-        }
-        return res;
-    }
+        List<CommonTree> child = root.getChildren();
 
-    /**
-     * Gets the type (prefix + name) of the range class for an object property.
-     * @param propertyName name of the property to assert.
-     * @param className name of the SemanticClass with the specified property.
-     * @return prefix + name of the property, empty String if propertyName is
-     *         not a SemanticProperty of className.
-     */
-    public String assertPropertyRangeType(String propertyName, String className) {
-        String res = "";
-        String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
-        boolean found = false;
-        SemanticProperty sp = null;
-        Iterator<SemanticProperty> sit;
-
-        SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(name);
-        if (sc != null) {
-            sit = sc.listProperties();
-            while (sit.hasNext() && !found) {
-                sp = sit.next();
-                if (sp.getDisplayName(lex.getLanguage()).toLowerCase().equals(propertyName.toLowerCase())) {
-                    found = true;
-                    if (sp.isObjectProperty()) {
-                        StringBuffer bf = new StringBuffer();
-                        bf.append(sp.getRangeClass());
-
-                        SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
-                        if (rg != null) {
-                            res = res + lex.getObjWordTag(rg.getDisplayName(lex.getLanguage()), snowballAnalyze).getType();
-                        }
-                    } else {
-                        errCode = 3;
-                        eLog += "La propiedad " + sp.getDisplayName(lex.getLanguage()) + "no es de tipo Objeto.\n";
-                    }
-                }
-            }
-
-            if (!found) {
-                eLog += "La clase " + sc.getDisplayName(lex.getLanguage()) + " no tiene una propiedad llamada ";
-                if (sit.hasNext()) {
-                    sp = sit.next();
-                    eLog += sp.getDisplayName(lex.getLanguage()) + "\n";
-                } else {
-                    eLog += propertyName + "\n";
-                }
-                errCode = 3;
-            }
-        }
-        return res;
-    }
-
-    /**
-     * Fixes node names in the AST. Removes brackets in NAME nodes.
-     * @param tree AST to fix.
-     */
-    private void fixNames(CommonTree tree) {
-        //If the node is the root of a NAME
-        if (nodeLabels.indexOf(tree.getText()) == -1) {
-            //Set the current node's text to be the child text
-            tree.token.setText(tree.getText().replaceAll("[\\[|\\]]", ""));
-        }
-
-        //Process all children of current node
-        List<CommonTree> child = tree.getChildren();
         if (child != null) {
             for (CommonTree t : child) {
-                fixNames(t);
+                res += processNode(t, root.getText(), root.getText());
             }
+        }
+        return res;
+    }
+
+    /**
+     * Transforms a Natural Language query to a SparQL query. Using an antlr
+     * (http://www.antlr.org) parser, this method builds an AST
+     * (Abstract Sintax Tree) and traverses it to generate the SparQL query.
+     *
+     * Transforma una consulta en lenguaje natural a una consulta en SparQl.
+     * Usando un analizador generado por antlr (http://www.antlr.org), el método
+     * construye un AST (Árbol de sintáxis abstracta) y lo recorre para generar
+     * la consulta SparQl.
+     *
+     * @param sent Rescticted-Natural Language sentence for the query.
+     * Oración en lenguaje natural restringido para la consulta.
+     * @return SparQL query sentence. Sentencia de la consulta SparQl.
+     */
+    public String translateSentence(String sent) {
+        String res = "";
+        CommonTree sTree = null;
+        input = new ANTLRStringStream(sent);
+        tokenizer = new SimpleLexer(input);
+        tokens = new CommonTokenStream(tokenizer);
+        parser = new ComplexParser(tokens);
+
+        try {
+            ComplexParser.squery_return qres = (ComplexParser.squery_return) parser.squery();
+            if (parser.getErrorCount() == 0) {
+                sTree = (CommonTree) qres.getTree();
+                fixNames(sTree);
+                //traverseAST(sTree, "");
+                res += processSelectQuery(sTree, parser.hasPrecon(), parser.hasPrede());
+                //System.out.println(res);
+                return res;
+            } else {
+                errCode = 2;
+                eLog += "La consulta no está bien escrita.\n";
+                return "";
+            }
+        } catch (org.antlr.runtime.RecognitionException ex) {
+            errCode = 2;
+            eLog += "No se ha podido traducir la consulta.\n";
+            return "";
         }
     }
 
@@ -500,61 +571,5 @@ public class SWBSparqlTranslator {
                 traverseAST(t, indent + "  ");
             }
         }
-    }
-
-    public String didYouMean(String sent) {
-        if (objSpeller == null) {
-            return null;
-        }
-
-        String[] stopWords = {"de", "of", "con", "with", "=", "<", ">", "<=", ">=", ","};
-        List<String> sw = Arrays.asList(stopWords);
-        String res = "";
-        ANTLRStringStream sinput = new ANTLRStringStream(sent);
-        SimpleLexer stokenizer = new SimpleLexer(sinput);
-        CommonTokenStream stokens = new CommonTokenStream(stokenizer);
-
-        org.antlr.runtime.Token tk;
-        while ((tk = stokens.LT(1)) != org.antlr.runtime.Token.EOF_TOKEN) {
-            String tkText = tk.getText().trim();
-            if (!sw.contains(tkText) && (!tkText.startsWith("\"") && !tkText.endsWith("\""))) {
-                boolean compound = false;
-
-                if (tkText.startsWith("[") && tkText.endsWith("]")) {
-                    tkText.replace("[", "").replace("]", "");
-                    compound = true;
-                }
-
-                String[] suggestions = objSpeller.suggestSimilar(tkText);
-                if (suggestions == null || suggestions.length == 0) {
-                    suggestions = propSpeller.suggestSimilar(tkText);
-                    if (suggestions == null || suggestions.length == 0) {
-                        res = res + (compound ? "[" + tkText + "]" : tkText) + " ";
-                    } else if (suggestions.length > 0) {
-                        res = res + (compound ? "[" + suggestions[0] + "]" : suggestions[0]) + " ";
-                    }
-                } else if (suggestions.length > 0) {
-                    res = res + (compound ? "[" + suggestions[0] + "]" : suggestions[0]) + " ";
-                }
-            } else {
-                res = res + tkText + " ";
-            }
-            stokens.consume();
-        }
-        return res;
-    }
-
-    /**
-     * Gets the code of the last error occured.
-     */
-    public int getErrCode() {
-        return errCode;
-    }
-
-    /**
-     * Gets the error log for a parsing task.
-     */
-    public String getErrors() {
-        return eLog;
     }
 }
