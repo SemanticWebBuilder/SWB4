@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.semanticwb.nlp.spell;
 
 import java.io.File;
@@ -34,16 +29,30 @@ public class SWBSpellChecker {
     private static Logger log = SWBUtils.getLogger(SWBSpellChecker.class);
 
     /**
-     * Creates a new instance of a SWBSpellChecker. Creates a new SpellChecker
-     * using a Lucene Dictionary built from the "fieldName" field of the Directory
-     * in "directoryPath".
-     * @param directoryPath path of the Directory to extract Dictionary words from.
-     * @param fieldName
+     * Creates a new instance of a SWBSpellChecker. Builds a Lucene SpellChecker
+     * using a Directory containing the displayName of Semantic classes and properties.
+     *
+     * Crea una nueva instancia de SWBSpellChecker. Construye un corrector
+     * ortográfico de Lucene a partir de un Directorio de Lucene que contiene los
+     * displayNames de las clases y propiedades semánticas.
+     *
+     * @param directoryPath path of the Lucene Directory to extract words from.
+     * @param fieldName name of the field to take words from.
      */
     public SWBSpellChecker(String directoryPath, String fieldName) {
         indexSpellDir(directoryPath, fieldName);
     }
 
+    /**
+     * Creates a new instance of a SWBSpellChecker. Builds a Lucene SpellChecker
+     * using a text file containing the displayName of Semantic classes and properties.
+     *
+     * Crea una nueva instancia de SWBSpellChecker. Construye un corrector
+     * ortográfico de Lucene a partir de un archivo de texto que contiene los
+     * displayNames de las clases y propiedades semánticas.
+     *
+     * @param txtDictFilePath path of the text file to extract words from.
+     */
     public SWBSpellChecker(String txtDictFilePath) {
         File f = new File(txtDictFilePath);
 
@@ -53,9 +62,9 @@ public class SWBSpellChecker {
     }
 
     /**
-     * Creates and indexes a new Directory for spell checking.
-     * Call this method when you want to
-     * @param dir Name of the original index directory.
+     * Creates and indexes a new Directory for spell checking. This method uses
+     * an existing Lucene Directory to create the spelling dictionary.
+     * @param dirPath Path of the original index directory.
      * @param fieldName Name of the field which new spell dictionary and index
      * directory will have.
      */
@@ -70,6 +79,11 @@ public class SWBSpellChecker {
         }
     }
 
+    /**
+     * Creates and indexes a new Directory for spell checking. This method uses
+     * an existing text file to create the spelling dictionary.
+     * @param txtDictFile Path of the text file containing the spelling dictionary.
+     */
     private void indexSpellTextFile(File txtDictFile) {
          try {
             spellDir = new RAMDirectory();
@@ -80,10 +94,16 @@ public class SWBSpellChecker {
         }
     }
 
+    /**
+     * Gets the current number of suggestions to obtain from the SpellChecker.
+     */
     public int getNumSug() {
         return numSug;
     }
 
+    /**
+     * Sets the number of suggestions to obtain from the SpellChecker.
+     */
     public void setNumSug(int numSug) {
         this.numSug = numSug;
     }    
@@ -91,8 +111,7 @@ public class SWBSpellChecker {
     /**
      * Gets a set of words similar to the given input.
      * @param word Wort to have spell check done on.
-     * @return Set of words similar to 'word'.
-     * @throws java.io.IOException
+     * @return Set of words similar to the input string'.
      */
     public String[] suggestSimilar(String word) {
         if (checker != null) {
