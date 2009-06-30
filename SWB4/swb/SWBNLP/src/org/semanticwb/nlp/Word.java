@@ -58,7 +58,7 @@ public class Word {
     public Word(String lbl, String lan) {
         lang = lan;
         label = lbl;
-        wTag = new WordTag("", "", "", "", "");
+        wTag = new WordTag("","", "", "", "", "");
     }
 
     /**
@@ -79,7 +79,7 @@ public class Word {
     public Word(SemanticClass cl, String lan) {
         lang = lan;
         label = cl.getDisplayName(lang);
-        wTag = new WordTag("OBJ", cl.getPrefix() + ":" + cl.getName(), cl.getName(), cl.getClassId(), "");
+        //wTag = new WordTag("OBJ", cl.getPrefix() + ":" + cl.getName(), cl.getName(), cl.getClassId(), "");
     }
 
     /**
@@ -110,10 +110,10 @@ public class Word {
             //Attempt to get range class
             SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
             if (rg != null) {
-                wTag = new WordTag("PRO", p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), rg.getClassId());
+               // wTag = new WordTag("PRO", p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), rg.getClassId());
             }
         } else {
-            wTag = new WordTag("PRO", p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), "");
+           // wTag = new WordTag("PRO", p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), "");
         }
     }
     
