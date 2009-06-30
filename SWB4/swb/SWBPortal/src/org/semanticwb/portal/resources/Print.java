@@ -1,22 +1,22 @@
 /*
- * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboración e integración para Internet,
- * la cual, es una creación original del Fondo de Información y Documentación para la Industria INFOTEC, misma que se encuentra
- * debidamente registrada ante el Registro Público del Derecho de Autor de los Estados Unidos Mexicanos con el
- * No. 03-2002-052312015400-14, para la versión 1; No. 03-2003-012112473900 para la versión 2, y No. 03-2006-012012004000-01
- * para la versión 3, respectivamente.
+ * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboraci�n e integraci�n para Internet,
+ * la cual, es una creaci�n original del Fondo de Informaci�n y Documentaci�n para la Industria INFOTEC, misma que se encuentra
+ * debidamente registrada ante el Registro P�blico del Derecho de Autor de los Estados Unidos Mexicanos con el
+ * No. 03-2002-052312015400-14, para la versi�n 1; No. 03-2003-012112473900 para la versi�n 2, y No. 03-2006-012012004000-01
+ * para la versi�n 3, respectivamente.
  *
- * INFOTEC pone a su disposición la herramienta INFOTEC WebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * INFOTEC pone a su disposici�n la herramienta INFOTEC WebBuilder a trav�s de su licenciamiento abierto al p�blico (�open source�),
+ * en virtud del cual, usted podr� usarlo en las mismas condiciones con que INFOTEC lo ha dise�ado y puesto a su disposici�n;
+ * aprender de �l; distribuirlo a terceros; acceder a su c�digo fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los t�rminos y condiciones de la LICENCIA ABIERTA AL P�BLICO que otorga INFOTEC para la utilizaci�n
  * de INFOTEC WebBuilder 3.2.
  *
- * INFOTEC no otorga garantía sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * INFOTEC no otorga garant�a sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni impl�cita ni expl�cita,
+ * siendo usted completamente responsable de la utilizaci�n que le d� y asumiendo la totalidad de los riesgos que puedan derivar
  * de la misma.
  *
- * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
+ * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposici�n la siguiente
+ * direcci�n electr�nica:
  *
  *                                          http://www.webbuilder.org.mx
  */
@@ -31,9 +31,12 @@
 package org.semanticwb.portal.resources;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -50,12 +53,13 @@ import org.semanticwb.portal.api.SWBResourceURLImp;
 import org.semanticwb.portal.util.FileUpload;
 
 /** Objeto que se encarga de desplegar y administrar una interfaz parar imprimir topicos bajo ciertos
- * criterios(configuración de recurso).
+ * criterios(configuraci�n de recurso).
  *
  * Object that is in charge to unfold and to administer an interface to print topics under certain
  * criteria (resource configuration).
  *
- * @author : Vanessa Arredondo Núñez
+ * @author : Vanessa Arredondo N��ez
+ * @Modified: Jorge Jiménez
  * @version 1.0
  */
 public class Print extends GenericResource
@@ -119,88 +123,52 @@ public class Print extends GenericResource
      * @throws AFException
      * @throws IOException
      */
-    public void doView(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest reqParams) throws SWBResourceException, IOException
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        try{
         String action = null != request.getParameter("imp_act") && !"".equals(request.getParameter("imp_act").trim()) ? request.getParameter("imp_act").trim() : "imp_step1";
         setWindowConf();
-        if("imp_step2".equals(action))  printByPage(request, response, reqParams); // Imprimir por página o documento completo
-        else if("imp_step3".equals(action))  printContent(request, response, reqParams); // Nueva ventana con el contenido a imprimir
+        if("imp_step2".equals(action))  {
+            printByPage(request, response, paramRequest); // Imprimir por p�gina o documento completo
+        }
+        else if("imp_step3".equals(action))  {
+            printContent(request, response, paramRequest); // Nueva ventana con el contenido a imprimir
+        }
         else
         {
-            // Objeto(imagen/botón) para invocar la nueva ventana
+            // Objeto(imagen/bot�n) para invocar la nueva ventana
             StringBuffer ret = new StringBuffer("");
             Resource base=getResourceBase();
 
-            String surlfin = null;
-            //boolean rwa = false;
-            /*
-            try{
-                String surl = request.getRequestURL().toString();
-                int pos = surl.indexOf("/_rid/");
-                if (pos > -1) {
-                    int pos1 = surl.indexOf("/", pos + 6);
-                    String recid = surl.substring(pos + 6, pos1);
+            SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
+            url.setResourceBase(base);
+            url.setMode(url.Mode_VIEW);
+            url.setWindowState(url.WinState_MAXIMIZED);
+            url.setTopic(paramRequest.getTopic());
+            url.setCallMethod(paramRequest.Call_DIRECT);
+            if(request.getParameter("page")!=null && !request.getParameter("page").trim().equals(""))
+            {
+                url.setParameter("imp_act","imp_step2");
+                url.setParameter("page", request.getParameter("page"));
+            }
+            else
+            {
+                url.setParameter("imp_act","imp_step3");
+                //url.setParameter("page", "0");
+            }
+            getParams(request, url);
 
-                    int postm=surl.indexOf("/_idtm/",pos1);
-                    String stm=reqParams.getTopic().getMap().getId();
-                    if(postm>-1){
-                        int itm=surl.indexOf("/", postm + 7);
-                        stm=surl.substring(postm + 7,itm);
-                    }
-
-                    String recsTypeName = ResourceMgr.getInstance().getResource(stm, Long.parseLong(recid)).getResourceBase().getResourceType().getObjclass();
-                    if (recsTypeName.equals("com.infotec.wb.resources.RemoteWebApp"))
-                    {
-                        ServletInputStream stream=request.getInputStream();
-                        request.getSession().setAttribute("paramsStream", stream);
-                        String qs=request.getQueryString();
-                        if(request instanceof WBHttpServletRequestWrapper)qs=((WBHttpServletRequestWrapper)request).getRealQueryString();
-                        if(qs==null)
-                        {
-                            //qs="";
-                            qs="?url2print="+request.getRequestURI();
-                        }
-                        else
-                        {
-                            qs="?"+qs+"&url2print="+request.getRequestURI();
-                        }
-                        surlfin = surl.substring(0, pos) + "/_tpl/" +base.getAttribute("template").trim() + surl.substring(pos) + qs;
-                        //rwa = true;
-                    }
-
-                }
-            }catch(Exception e){
-
-            }**/
-            //if (!rwa) {
-                SWBResourceURLImp url = new SWBResourceURLImp(request, base, reqParams.getTopic(), SWBResourceURL.UrlType_RENDER);
-                url.setResourceBase(base);
-                url.setMode(url.Mode_VIEW);
-                url.setWindowState(url.WinState_MAXIMIZED);
-                url.setTopic(reqParams.getTopic());
-                url.setCallMethod(reqParams.Call_DIRECT);
-                if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
-                    url.setParameter("imp_act", "imp_step2");
-                    url.setParameter("page", request.getParameter("page"));
-                } else {
-                    url.setParameter("imp_act", "imp_step3");
-                    url.setParameter("page", "0"); //Imprime documento completo
-                }
-                getParams(request, url);
-                url.setParameter("url2print", request.getRequestURI());
-                surlfin = url.toString();
-            //}
-
-            String onclick = "javascript:window.open('" + surlfin + "','_newimp','" + getWindowConf() + "'); return false;";
+            //response.sendRedirect(url.toString());
+            String onclick="javascript:window.open('" + url.toString() +"','_newimp','" + getWindowConf() + "'); return false;";
 
             synchronized (ret)
             {
                 if (!"".equals(base.getAttribute("img", "").trim()))
                 {
-                    ret.append("\n<a href=\""+surlfin+"\" onClick=\""+ onclick +"\"><img src=\"");
+                    ret.append("\n<a href=\""+onclick+"\"><img onClick=\""+ onclick +"\" src=\"");
                     ret.append(webWorkPath +"/"+ base.getAttribute("img").trim() +"\"");
-                    if (!"".equals(base.getAttribute("alt","").trim())) ret.append(" alt=\"" + base.getAttribute("alt").trim().replaceAll("\"", "&#34;") + "\"");
+                    if (!"".equals(base.getAttribute("alt","").trim())) {
+                        ret.append(" alt=\"" + base.getAttribute("alt").trim().replaceAll("\"", "&#34;") + "\"");
+                    }
                     ret.append(" border=0></a>");
                 }
                 else if (!"".equals(base.getAttribute("btntexto", "").trim()))
@@ -208,23 +176,30 @@ public class Print extends GenericResource
                     ret.append("\n<form name=\"frmImprimir\" action=\"\">");
                     ret.append("\n<input type=button name=btnImprimir onClick=\""+ onclick +"\" value=");
                     ret.append("\"" + base.getAttribute("btntexto").trim().replaceAll("\"", "&#34;") + "\"");
-                    if (!"".equals(base.getAttribute("blnstyle", "").trim())) ret.append(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
+                    if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
+                        ret.append(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
+                    }
                     ret.append("\n></form>");
                 }
                 else
                 {
-                    ret.append("\n<a href=\""+surlfin+"\" onClick=\""+ onclick +"\"");
-                    if (!"".equals(base.getAttribute("blnstyle", "").trim())) ret.append(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
+                    ret.append("\n<a href=\""+onclick+"\" onClick=\""+ onclick +"\"");
+                    if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
+                        ret.append(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
+                    }
                     ret.append(">");
-                    if (!"".equals(base.getAttribute("lnktexto", "").trim())) ret.append(base.getAttribute("lnktexto").trim());
-                    else reqParams.getLocaleString("msgPrint");
+                    if (!"".equals(base.getAttribute("lnktexto", "").trim())) {
+                        ret.append(base.getAttribute("lnktexto").trim());
+                    }
+                    else {
+                        ret.append(paramRequest.getLocaleString("msgPrint"));
+                    }
                     ret.append("</a>");
                 }
             }
-            response.getWriter().print(ret.toString());
-        }
-        }catch(Exception e){
-            log.debug(e);
+
+            PrintWriter out = response.getWriter();
+            out.println(ret.toString());
         }
     }
 
@@ -235,19 +210,20 @@ public class Print extends GenericResource
      * @throws AFException
      * @throws IOException
      */
-    public void printByPage(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest reqParams) throws SWBResourceException, IOException
+    public void printByPage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer("");
-        SWBResourceURLImp url=new SWBResourceURLImp(request, getResourceBase(), reqParams.getTopic(),SWBResourceURL.UrlType_RENDER);
+        SWBResourceURLImp url=new SWBResourceURLImp(request, getResourceBase(), paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
         url.setResourceBase(getResourceBase());
         url.setMode(url.Mode_VIEW);
         url.setWindowState(url.WinState_MAXIMIZED);
-        url.setTopic(reqParams.getTopic());
-        url.setCallMethod(reqParams.Call_DIRECT);
+        url.setTopic(paramRequest.getTopic());
+        url.setCallMethod(paramRequest.Call_DIRECT);
 
         getParams(request, url);
 
         url.setParameter("imp_act","imp_step3");
+
 
         ret.append("\n<script language=\"JavaScript\">");
         ret.append("\nfunction wbPrint(frm)");
@@ -267,14 +243,16 @@ public class Print extends GenericResource
         ret.append("\n<table width=\"100%\" height=\"100%\" border=\"1\"><tr><td align=\"center\" valign=\"center\">");
         ret.append("\n<table border=\"0\" cellspacing=\"5\" cellpadding=\"5\">");
         ret.append("\n<tr><td>");
-        ret.append("\n<input type=radio  name=page value=\"0\" checked> " + reqParams.getLocaleString("msgAllDocument"));
+        ret.append("\n<input type=radio  name=page value=\"0\" checked> " + paramRequest.getLocaleString("msgAllDocument"));
         ret.append("\n</td></tr><tr><td>");
         ret.append("\n<input type=radio  name=page value=\"");
-        if(request.getParameter("page")!=null && !request.getParameter("page").trim().equals("")) ret.append(request.getParameter("page"));
+        if(request.getParameter("page")!=null && !request.getParameter("page").trim().equals("")) {
+            ret.append(request.getParameter("page"));
+        }
         else ret.append("1");
-        ret.append("\"> "+ reqParams.getLocaleString("msgCurrentPage"));
+        ret.append("\"> "+ paramRequest.getLocaleString("msgCurrentPage"));
         ret.append("\n</td></tr><tr><td align=center>");
-        ret.append("\n<input type=button name=btnPrint onClick=\"wbPrint(this.form)\" value=\""+ reqParams.getLocaleString("btnPrint") +"\">");
+        ret.append("\n<input type=button name=btnPrint onClick=\"wbPrint(this.form)\" value=\""+ paramRequest.getLocaleString("btnPrint") +"\">");
         ret.append("\n</td></tr>");
         ret.append("\n</table>");
         ret.append("\n</td></tr></table>");
@@ -282,7 +260,7 @@ public class Print extends GenericResource
         response.getWriter().print(ret.toString());
 
 //        response.setContentType("text/html");
-//        Resource base=getResourceBase();
+//         base=getResourceBase();
 //        if (!"".equals(base.getAttribute("template", "").trim()))
 //        {
 //            try
@@ -301,37 +279,27 @@ public class Print extends GenericResource
      * @throws AFException
      * @throws IOException
      */
-    public void printContent(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest reqParams) throws SWBResourceException, IOException
+    public void printContent(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        PrintWriter out=response.getWriter();
         response.setContentType("text/html");
         Resource base=getResourceBase();
         if (!"".equals(base.getAttribute("template", "").trim()))
         {
             try
             {
-                Template tpl =reqParams.getTopic().getWebSite().getTemplate(base.getAttribute("template").trim());
-
-                if(request.getParameter("page")!=null) request.setAttribute("page",request.getParameter("page"));
+                Template tpl =paramRequest.getTopic().getWebSite().getTemplate(base.getAttribute("template").trim());
+                if(request.getParameter("page")!=null) {
+                    request.setAttribute("page",request.getParameter("page"));
+                }
                 if(tpl!=null) {
-                    if(request.getSession().getAttribute("remoteContent")!=null){
-                        String content2print=(String)request.getSession().getAttribute("remoteContent");
-                        String url2print=(String)request.getSession().getAttribute("remoteURI");
-                        String sUrl2print=request.getParameter("url2print");
-                        if(url2print!=null && sUrl2print!=null && url2print.equals(sUrl2print)){
-                            ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, response.getWriter(), reqParams.getUser(), reqParams.getTopic(), false, content2print);
-                        }else{
-                            ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, reqParams.getUser(), reqParams.getTopic());
-                        }
-                    }
-                    else{
-                        ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, reqParams.getUser(), reqParams.getTopic());
-                    }
+                       //out.println("<script language=\"JavaScript\">");
+                       //out.println("window.self.print();");
+                       //out.println("</script>");
+                    ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, paramRequest.getUser(), paramRequest.getTopic());
                 }
             }
-            catch(Exception e) {
-                e.printStackTrace();
-                log.debug("Error while getting topic to print: "+base.getId() +"-"+ base.getTitle(), e);
-            }
+            catch(Exception e) { log.error("Error while getting topic to print: "+base.getId() +"-"+ base.getTitle(), e); }
         }
     }
 
@@ -366,14 +334,14 @@ public class Print extends GenericResource
      * @throws AFException
      * @throws IOException
      */
-    public void doAdmin(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Resource base=getResourceBase();
         StringBuffer ret = new StringBuffer("");
-        String msg=paramsRequest.getLocaleString("msgUndefinedOperation");
-        String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramsRequest.getAction();
+        String msg=paramRequest.getLocaleString("msgUndefinedOperation");
+        String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
 
-        if(action.equals("add") || action.equals("edit"))  ret.append(getForm(request, paramsRequest));
+        if(action.equals("add") || action.equals("edit"))  ret.append(getForm(request, paramRequest));
         else if(action.equals("update"))
         {
             FileUpload fup = new FileUpload();
@@ -398,16 +366,22 @@ public class Print extends GenericResource
                             String file = admResUtils.getFileName(base, value);
                             if (file != null && !file.trim().equals(""))
                             {
-                                if (!admResUtils.isFileType(file, "bmp|jpg|jpeg|gif"))
-                                    msg=paramsRequest.getLocaleString("msgErrFileType") +" <i>bmp, jpg, jpeg, gif</i>: " + file;
+                                if (!admResUtils.isFileType(file, "bmp|jpg|jpeg|gif")){
+                                    msg=paramRequest.getLocaleString("msgErrFileType") +" <i>bmp, jpg, jpeg, gif</i>: " + file;
+                                }
                                 else
                                 {
-                                    if (admResUtils.uploadFile(base, fup, "img"))
+                                    if (admResUtils.uploadFile(base, fup, "img")){
                                         base.setAttribute("img", file);
-                                    else msg=paramsRequest.getLocaleString("msgErrUploadFile") +" <i>" + value + "</i>.";
+                                    }
+                                    else {
+                                        msg=paramRequest.getLocaleString("msgErrUploadFile") +" <i>" + value + "</i>.";
+                                    }
                                 }
                             }
-                            else msg=paramsRequest.getLocaleString("msgErrUploadFile") +" <i>" + value + "</i>.";
+                            else {
+                                msg=paramRequest.getLocaleString("msgErrUploadFile") +" <i>" + value + "</i>.";
+                            }
                         }
                     }
 
@@ -428,16 +402,16 @@ public class Print extends GenericResource
                     setAttribute(base, fup, "left");
 
                     base.updateAttributesToDB();
-                    msg=paramsRequest.getLocaleString("msgOkUpdateResource") +" "+ base.getId();
+                    msg=paramRequest.getLocaleString("msgOkUpdateResource") +" "+ base.getId();
                     ret.append(
                         "<script language=\"JavaScript\">\n"+
                         "   alert('"+msg+"');\n"+
-                        "   location='"+paramsRequest.getRenderUrl().setAction("edit").toString()+"';\n"+
+                        "   location='"+paramRequest.getRenderUrl().setAction("edit").toString()+"';\n"+
                         "</script>\n");
                 }
-                else msg=paramsRequest.getLocaleString("msgTemplateRequired");
+                else msg=paramRequest.getLocaleString("msgTemplateRequired");
             }
-            catch(Exception e) { log.debug(e); msg=paramsRequest.getLocaleString("msgErrUpdateResource") +" "+ base.getId(); }
+            catch(Exception e) { log.error(e); msg=paramRequest.getLocaleString("msgErrUpdateResource") +" "+ base.getId(); }
         }
         else if(action.equals("remove"))
         {
@@ -459,10 +433,12 @@ public class Print extends GenericResource
     {
         try
         {
-            if(null != fup.getValue(att) && !"".equals(fup.getValue(att).trim())) base.setAttribute(att, fup.getValue(att).trim());
+            if(null != fup.getValue(att) && !"".equals(fup.getValue(att).trim())) {
+                base.setAttribute(att, fup.getValue(att).trim());
+            }
             else base.removeAttribute(att);
         }
-        catch(Exception e) {  log.debug("Error while setting resource attribute: "+att + ", "+base.getId() +"-"+ base.getTitle(), e); }
+        catch(Exception e) {  log.error("Error while setting resource attribute: "+att + ", "+base.getId() +"-"+ base.getTitle(), e); }
     }
 
     /**
@@ -475,10 +451,14 @@ public class Print extends GenericResource
     {
         try
         {
-            if(null != fup.getValue(att) && value.equals(fup.getValue(att).trim())) base.setAttribute(att, fup.getValue(att).trim());
-            else base.removeAttribute(att);
+            if(null != fup.getValue(att) && value.equals(fup.getValue(att).trim())) {
+                base.setAttribute(att, fup.getValue(att).trim());
+            }
+            else {
+                base.removeAttribute(att);
+            }
         }
-        catch(Exception e) {  log.debug("Error while setting resource attribute: "+att + ", "+base.getId() +"-"+ base.getTitle(), e); }
+        catch(Exception e) {  log.error("Error while setting resource attribute: "+att + ", "+base.getId() +"-"+ base.getTitle(), e); }
     }
 
     /**
@@ -510,9 +490,11 @@ public class Print extends GenericResource
             Iterator <Template> itTpl=paramsRequest.getTopic().getWebSite().listTemplates();
             while (itTpl.hasNext())
             {
-                Template tpl = (Template) itTpl.next();
+                Template tpl = itTpl.next();
                 ret.append("\n<option value=\"" + tpl.getId() + "\"");
-                if (String.valueOf(tpl.getId()).equals(base.getAttribute("template", "").trim())) ret.append(" selected");
+                if (String.valueOf(tpl.getId()).equals(base.getAttribute("template", "").trim())) {
+                    ret.append(" selected");
+                }
                 ret.append(">" + tpl.getTitle() + "</option>");
             }
             ret.append("\n</select>");
@@ -522,35 +504,45 @@ public class Print extends GenericResource
             ret.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgImage")+" (bmp, gif, jpg, jpeg):</td> \n");
             ret.append("<td class=\"valores\">");
             ret.append("<input type=\"file\" name=\"img\" size=\"40\" onClick=\"this.form.btntexto.value=''; this.form.lnktexto.value=''\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
-            if (!"".equals(base.getAttribute("img", "").trim())) ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("img").trim(), "img") +"<input type=checkbox name=noimg value=1>" + paramsRequest.getLocaleString("msgCutImage") + " <i>" + base.getAttribute("img").trim() + "</i></p>");
+            if (!"".equals(base.getAttribute("img", "").trim())) {
+                ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("img").trim(), "img") +"<input type=checkbox name=noimg value=1>" + paramsRequest.getLocaleString("msgCutImage") + " <i>" + base.getAttribute("img").trim() + "</i></p>");
+            }
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgAlt")+"</td> \n");
             ret.append("<td class=\"valores\">");
             ret.append("<input type=text size=50 name=alt ");
-            if (!"".equals(base.getAttribute("alt", "").trim()))  ret.append(" value=\"" + base.getAttribute("alt").trim().replaceAll("\"", "&#34;") + "\"");
+            if (!"".equals(base.getAttribute("alt", "").trim()))  {
+                ret.append(" value=\"" + base.getAttribute("alt").trim().replaceAll("\"", "&#34;") + "\"");
+            }
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgButton")+"</td> \n");
             ret.append("<td class=\"valores\">");
             ret.append("<input type=text size=50 name=btntexto ");
-            if (!"".equals(base.getAttribute("btntexto", "").trim()))  ret.append(" value=\"" + base.getAttribute("btntexto").trim().replaceAll("\"", "&#34;") + "\"");
+            if (!"".equals(base.getAttribute("btntexto", "").trim()))  {
+                ret.append(" value=\"" + base.getAttribute("btntexto").trim().replaceAll("\"", "&#34;") + "\"");
+            }
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgLink")+"</td> \n");
             ret.append("<td class=\"valores\">");
             ret.append("<input type=text size=50 name=lnktexto ");
-            if (!"".equals(base.getAttribute("lnktexto", "").trim()))  ret.append(" value=\"" + base.getAttribute("lnktexto").trim().replaceAll("\"", "&#34;") + "\"");
+            if (!"".equals(base.getAttribute("lnktexto", "").trim()))  {
+                ret.append(" value=\"" + base.getAttribute("lnktexto").trim().replaceAll("\"", "&#34;") + "\"");
+            }
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgStyle")+"</td> \n");
             ret.append("<td class=\"valores\">");
             ret.append("<input type=text size=50 name=blnstyle ");
-            if (!"".equals(base.getAttribute("blnstyle", "").trim()))  ret.append(" value=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
+            if (!"".equals(base.getAttribute("blnstyle", "").trim()))  {
+                ret.append(" value=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
+            }
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
@@ -577,7 +569,7 @@ public class Print extends GenericResource
             ret.append("</form> \n");
             ret.append(getScript(request, paramsRequest));
         }
-        catch(Exception e) {  log.debug(e); }
+        catch(Exception e) {  log.error(e); }
         return ret.toString();
     }
 
@@ -611,7 +603,7 @@ public class Print extends GenericResource
             ret.append(admResUtils.loadIsNumber());
             ret.append("\n</script>");
         }
-        catch(Exception e) {  log.debug(e); }
+        catch(Exception e) {  log.error(e); }
         return ret.toString();
     }
  }
