@@ -1,12 +1,10 @@
 package org.semanticwb.nlp.translation;
 
-import java.io.InputStream;
 import org.semanticwb.nlp.analysis.SimpleLexer;
 import org.semanticwb.nlp.analysis.ComplexParser;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
@@ -41,7 +39,6 @@ public class SWBSparqlTranslator {
     private boolean snowballAnalyze = false;
     private SWBSpellChecker objSpeller = null;
     private SWBSpellChecker propSpeller = null;
-    Properties prop = null;
 
     /**
      * Creates a new instance of SWBSparqlTranslator with the given SWBLexicon.
@@ -51,7 +48,6 @@ public class SWBSparqlTranslator {
     public SWBSparqlTranslator(SWBLexicon dict) {
         lex = dict;
         snowballAnalyze = false;
-        //InputStream in = getClass().getResourceAsStream("/org/semanticwb")
     }
 
     /**
