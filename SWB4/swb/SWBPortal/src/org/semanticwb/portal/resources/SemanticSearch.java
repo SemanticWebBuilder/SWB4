@@ -9,9 +9,8 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.nlp.Lexicon;
+import org.semanticwb.nlp.SWBLexicon;
 import org.semanticwb.nlp.translation.SWBSparqlTranslator;
-import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -49,54 +48,8 @@ public class SemanticSearch extends GenericAdmResource {
 
     private Logger log = SWBUtils.getLogger(SWBAListRelatedObjects.class);
     private SWBSparqlTranslator tr = null;
-    private Lexicon lex = null;
-    private String lang2 = "x-x";
+    private SWBLexicon lex = null;
     private String lang = "x-x";
-
-    @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        String action = response.getAction();
-        String query = request.getParameter(createId("naturalQuery"));
-        User user = response.getUser();
-
-        if (action.equals("SEARCH")) {
-            if (query == null || query.equals("")) {
-                response.setMode(SWBResourceURL.Mode_VIEW);
-                return;
-            }
-
-            //Get user language if any and create lexicon and translator acordingly
-            if (user != null) {
-                if (!lang.equals(user.getLanguage())) {
-                    lang = user.getLanguage();
-                    lex = new Lexicon(lang);
-                }
-            } else {
-                if (!lang.equals("es")) {
-                    lang = "es";
-                    lex = new Lexicon(lang);
-                }
-            }
-
-            if (request.getParameter(createId("showInfo")) != null) {
-                response.setRenderParameter(createId("showInfo"), request.getParameter(createId("showInfo")));
-            } else {
-                response.setRenderParameter(createId("showInfo"), "noshow");
-            }
-
-            //Lexicon dict = new Lexicon(request.getParameter("lang"));
-            tr = new SWBSparqlTranslator(lex);
-            String queryString = lex.getPrefixString() + "\n" + tr.translateSentence(query);
-
-            response.setRenderParameter("errCode", Integer.toString(tr.getErrCode()));
-            response.setRenderParameter("sparqlQuery", queryString);
-            response.setRenderParameter(createId("naturalQuery"), query);
-            response.setMode("SHOWRES");
-
-        } else {
-            super.processAction(request, response);
-        }
-    }
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -123,7 +76,6 @@ public class SemanticSearch extends GenericAdmResource {
         StringBuffer sbf = new StringBuffer();
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
         String query = request.getParameter(createId("naturalQuery"));
-        String checked = request.getParameter(createId("showInfo"));
         User user = paramRequest.getUser();
 
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -132,32 +84,29 @@ public class SemanticSearch extends GenericAdmResource {
 
         //Get user language if any and create lexicon and translator acordingly
         if (user != null) {
-            if (!lang2.equals(paramRequest.getUser().getLanguage())) {
-                lang2 = paramRequest.getUser().getLanguage();
+            if (!lang.equals(paramRequest.getUser().getLanguage())) {
+                lang = paramRequest.getUser().getLanguage();
                 long time = System.currentTimeMillis();
-                lex = new Lexicon(lang2);
+                lex = new SWBLexicon(lang);
                 System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
             }
         } else {
-            if (!lang2.equals("es")) {
-                lang2 = "es";
+            if (!lang.equals("es")) {
+                lang = "es";
                 long time = System.currentTimeMillis();
-                lex = new Lexicon(lang2);
+                lex = new SWBLexicon(lang);
                 System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
             }
         }
+
+        SWBSpellChecker speller = new SWBSpellChecker(lex.getSpellDictPath());
 
         //Assert query string
         if (query == null) {
             query = "";
         } else {
             query = query.trim();
-        }
-
-        //Assert checkbox value
-        if (checked == null) {
-            checked = "noshow";
-        }
+        }        
 
         rUrl.setMode("SUGGEST");
         rUrl.setCallMethod(rUrl.Call_DIRECT);
@@ -177,11 +126,11 @@ public class SemanticSearch extends GenericAdmResource {
                 "    });\n" +
                 "  });\n" +
                 "  var source =\"" + rUrl + "\";\n" +
-                "  var lang =\"" + lang2 + "\";\n" +
+                "  var lang =\"" + lang + "\";\n" +
                 "  var displayed;\n" +
                 "  var pdisplayed;\n" +
                 "</script>\n");
-        sbf.append("<script type=\"text/javascript\" charset=\"utf-8\" src=\"/swb/swbadmin/js/swb_admin.js\" ></script>");
+        sbf.append("<script type=\"text/javascript\" charset=\"utf-8\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb_admin.js\" ></script>");
 
         /**
          * Clears the suggestions list and gives focus to the textarea.
@@ -470,7 +419,7 @@ public class SemanticSearch extends GenericAdmResource {
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
             String url = getResourceBase().getAttribute("destUrl");
 
-            sbf.append("<form id=\"" + createId("natural") + "\" dojoType=\"dijit.form.Form\" " +
+            sbf.append("<form id=\"" + createId("natural") + "\" " +
                 "action=\"" + url + "\" method=\"post\">\n" +
                 "  <input type=\"text\" id=\"" + createId("naturalQuery") + "\" " +
                 "name=\"" + createId("naturalQuery") + "\" class=\"txt-busca\" value=\"" + query + "\" />\n" +
@@ -481,7 +430,7 @@ public class SemanticSearch extends GenericAdmResource {
             doShowResults(request, response, paramRequest);
         }
         out.print(sbf.toString());
-    }
+    }    
 
     public void doSuggest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -494,7 +443,7 @@ public class SemanticSearch extends GenericAdmResource {
         boolean lPar = false;
         boolean rPar = false;
         int idCounter = 0;
-        //Lexicon lex = new Lexicon(lan);
+        //SWBLexicon lex = new SWBLexicon(lan);
         StringBuffer sbf = new StringBuffer();
 
         response.setContentType("text/html; charset=utf8");
@@ -642,34 +591,20 @@ public class SemanticSearch extends GenericAdmResource {
 
         //Get user language if any and create lexicon and translator acordingly
         if (user != null) {
-            if (!lang2.equals(paramRequest.getUser().getLanguage())) {
-                lang2 = paramRequest.getUser().getLanguage();
+            if (!lang.equals(paramRequest.getUser().getLanguage())) {
+                lang = paramRequest.getUser().getLanguage();
                 long time = System.currentTimeMillis();
-                lex = new Lexicon(lang2);
+                lex = new SWBLexicon(lang);
                 System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
             }
         } else {
-            if (!lang2.equals("es")) {
-                lang2 = "es";
+            if (!lang.equals("es")) {
+                lang = "es";
                 long time = System.currentTimeMillis();
-                lex = new Lexicon(lang2);
+                lex = new SWBLexicon(lang);
                 System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
             }
         }
-
-       SWBSpellChecker speller = new SWBSpellChecker(lex.getObjDirectory(), "displayName");
-        //speller.testSuggest(lex.getObjDirectory(), query);
-
-       String []suggestions = speller.suggestSimilar("filtro de recarso");
-       if (suggestions != null) {
-       System.out.println("-------Suggestions------");
-        for (int i = 0; i < suggestions.length; i++) {
-            System.out.println(suggestions[i]);
-        }
-       }
-        /*for (String f : speller.getSuggestions("pogina")) {
-            System.out.println("...." + f);
-        }*/
 
         //Assert query string
         if (query == null) {
@@ -715,7 +650,7 @@ public class SemanticSearch extends GenericAdmResource {
         long time = System.currentTimeMillis();
         String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query);
         System.out.println("\n+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
-        //System.out.println(sparqlQuery);
+        System.out.println(sparqlQuery);
         String errCount = Integer.toString(tr.getErrCode());
 
         if (errCount != null) {
@@ -756,12 +691,12 @@ public class SemanticSearch extends GenericAdmResource {
                                     "SELECT ?desc ?lat ?long ?page\n" +
                                     "WHERE {\n" +
                                     "<http://dbpedia.org/resource/" + dbName + "> dbprop:abstract ?desc.\n" +
-                                    "FILTER (lang(?desc) = \"" + lang2 + "\").\n" +
+                                    "FILTER (lang(?desc) = \"" + lang + "\").\n" +
                                     "<http://dbpedia.org/resource/" + dbName + "> geo:lat ?lat.\n" +
                                     "<http://dbpedia.org/resource/" + dbName + "> geo:long ?long.\n" +
                                     "<http://dbpedia.org/resource/" + dbName + "> foaf:page ?page.\n" +
                                     "}\n";
-                            //System.out.println("<<<<<" + dbPediaQuery);
+                            System.out.println("<<<<<" + dbPediaQuery);
                             //Query dbpedia
                             SemanticModel dbpModel = SWBPlatform.getSemanticMgr().getModel("DBPedia");
                             QueryExecution dbQexec = dbpModel.sparQLQuery(dbPediaQuery);
@@ -804,9 +739,9 @@ public class SemanticSearch extends GenericAdmResource {
                     Model model = SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel();
                     SemanticModel mo = new SemanticModel("test", model);
                     //Query squery = QueryFactory.create(sparqlQuery);
-//                    System.out.println("------------------------------");
-//                    System.out.println(sparqlQuery);
-//                    System.out.println("------------------------------");
+                   // System.out.println("------------------------------");
+                  // System.out.println(sparqlQuery);
+                  // System.out.println("------------------------------");
 
                     //squery.serialize();
                     QueryExecution qexec = mo.sparQLQuery(sparqlQuery);
@@ -870,14 +805,14 @@ public class SemanticSearch extends GenericAdmResource {
                                                         "&wikiUrl=" + (so.getProperty(so_home) == null?"#":so.getProperty(so_home).replace(" ","%20")) +
                                                         "&info=" + so.getProperty(so_name).replace("\"", "").replace(" ", "%20");
                                                         sbf.append("<a href=\"#\" onclick=\"openMap('" + mapUrl + "','" +
-                                                        paramRequest.getLocaleString("mapAbout").replace(" ", "%20") + "%20" + tt.getDisplayName(lang2).replace(" ","%20") +
+                                                        paramRequest.getLocaleString("mapAbout").replace(" ", "%20") + "%20" + tt.getDisplayName(lang).replace(" ","%20") +
                                                         "','menubar=0,width=420,height=420');\">" + so.getProperty(so_name).replace("\"", "") + "</a>");
                                                     } else {
-                                                        sbf.append(tt.getDisplayName(lang2));
+                                                        sbf.append(tt.getDisplayName(lang));
                                                     }
                                                 } else {
                                                     SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
-                                                    sbf.append(stt.getDisplayName(lang2));
+                                                    sbf.append(stt.getDisplayName(lang));
                                                 }
                                             } else {
                                                 //System.out.println(">el dato no tiene objeto semántico");
