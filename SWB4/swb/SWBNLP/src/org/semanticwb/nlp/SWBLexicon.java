@@ -12,11 +12,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -36,6 +37,7 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class SWBLexicon {
 
+    private Logger log = SWBUtils.getLogger(SWBLexicon.class);
     private File outputFile = null;
     private Writer outr = null;
     private String language = "es";
@@ -72,18 +74,14 @@ public class SWBLexicon {
      */
     public SWBLexicon(String lang) {
         language = lang;
-        spellDictPath = SWBPlatform.getWorkPath() + "/index/spell_" + language + ".txt";
+        spellDictPath = SWBPlatform.getWorkPath() + "/index/spell_" + 
+                language + ".txt";
 
-        outputFile = new File(spellDictPath);
-        try {
-            outr = new BufferedWriter(new FileWriter(outputFile));
-        } catch (IOException ex) {
-            Logger.getLogger(SWBLexicon.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //Create word hashes
         objHash = new HashMap<String, WordTag>();
         propHash = new HashMap<String, WordTag>();
 
-        //Initialize lang codes map
+        //Initialize lang codes map (for snowball algorithm)
         langCodes = new HashMap<String, String>();
         langCodes.put("es", "Spanish");
         langCodes.put("en", "English");
@@ -91,67 +89,75 @@ public class SWBLexicon {
         langCodes.put("pt", "Portuguese");
         langCodes.put("ru", "Russian");
 
-        //Traverse the ontology model to fill the dictionary
-        Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
-        while (its.hasNext()) {
-            SemanticClass sc = its.next();
-            addWord(sc);
+        outputFile = new File(spellDictPath);
+        try {
+            outr = new BufferedWriter(new FileWriter(outputFile));
 
-            //Add class prefix to the prefixes string
-            if (!prefixes.contains(sc.getPrefix())) {
-                prefixes.add(sc.getPrefix());
-            }
+            //Traverse the ontology model to fill the dictionary
+            Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
+            while (its.hasNext()) {
+                SemanticClass sc = its.next();
+                addWord(sc);
 
-            //Add namespace class to namespaces string
-            if (!namespaces.contains(sc.getOntClass().getNameSpace())) {
-                namespaces.add(sc.getOntClass().getNameSpace());
-            }
-
-            Iterator<SemanticProperty> ip = sc.listProperties();
-            while (ip.hasNext()) {
-                SemanticProperty sp = ip.next();
-                addWord(sp);
-
-                //Add property prefix to prefixes string
-                if (!prefixes.contains(sp.getPrefix())) {
-                    prefixes.add(sp.getPrefix());
+                //Add class prefix to the prefixes string (for SparQl queries)
+                if (!prefixes.contains(sc.getPrefix())) {
+                    prefixes.add(sc.getPrefix());
                 }
 
-                //Add property namespace to namespaces string
-                if (!namespaces.contains(sp.getRDFProperty().getNameSpace())) {
-                    namespaces.add(sp.getRDFProperty().getNameSpace());
+                //Add namespace class to namespaces string (for SparQl queries)
+                if (!namespaces.contains(sc.getOntClass().getNameSpace())) {
+                    namespaces.add(sc.getOntClass().getNameSpace());
+                }
+
+                Iterator<SemanticProperty> ip = sc.listProperties();
+                while (ip.hasNext()) {
+                    SemanticProperty sp = ip.next();
+                    addWord(sp);
+
+                    //Add property prefix to prefixes string (for SparQl queries)
+                    if (!prefixes.contains(sp.getPrefix())) {
+                        prefixes.add(sp.getPrefix());
+                    }
+
+                    //Add property namespace to namespaces string (for SparQl queries)
+                    if (!namespaces.contains(sp.getRDFProperty().getNameSpace())) {
+                        namespaces.add(sp.getRDFProperty().getNameSpace());
+                    }
                 }
             }
+
+            //Build prefixes string for SparQL queries
+            prefixString = prefixString + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
+            
+            for (int i = 0; i < prefixes.size(); i++) {
+                prefixString = prefixString + "PREFIX " + prefixes.get(i) +
+                        ": " + "<" + namespaces.get(i) + ">\n";
+            }
+        } catch (IOException ex) {
+            log.error(ex);
         }
 
-        //Build prefixes string for SparQL queries
-        prefixString = prefixString + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
-        for (int i = 0; i < prefixes.size(); i++) {
-            prefixString = prefixString + "PREFIX " + prefixes.get(i) + ": " + "<" + namespaces.get(i) + ">\n";
-        }
-
+        //Close writer
         if (outr != null) {
             try {
                 outr.close();
             } catch (IOException ex) {
-                Logger.getLogger(SWBLexicon.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
         }
     }
 
     /**
-     * Adds an entry to the lexicon. Creates a Lucene document with the
-     * information retrieved from a SemanticClass. The lexical form of the word
+     * Adds an entry to the lexicon. Creates a WordTag with the information
+     * retrieved from a SemanticClass. The lexical form of the word
      * entry is the displayName of the associated SemanticClass.
      *
-     * Agrega una entrada al diccionario. Crea un documento de Lucene con la
-     * informacion de una clase semantica. La forma lexica de la palabra
-     * agregada es el displayName de la clase semantica asociada.
+     * Agrega una entrada al diccionario. Crea un WordTag con la informacion de
+     * una clase semantica. La forma lexica de la palabra agregada es el
+     * displayName de la clase semantica asociada.
      * @param o SemanticClass to extract information from. Clase semantica para
      * la cual se creara una entrada.
-     * @throws org.apache.lucene.index.CorruptIndexException
-     * @throws java.io.IOException
      */
     public void addWord(SemanticClass o) {
         String oName = o.getDisplayName(language);
@@ -162,25 +168,23 @@ public class SWBLexicon {
                 try {
                     outr.write(o.getDisplayName(language) + "\n");
                 } catch (IOException ex) {
-                    Logger.getLogger(SWBLexicon.class.getName()).log(Level.SEVERE, null, ex);
+                    log.error(ex);
                 }
             }
-            objHash.put(oName.toLowerCase(), new WordTag("OBJ", getSnowballLexForm(oName), o.getPrefix() + ":" + o.getName(), o.getClassName(), o.getClassId(), ""));
+            objHash.put(oName.toLowerCase(), new WordTag("OBJ", getSnowballForm(oName), o.getPrefix() + ":" + o.getName(), o.getClassName(), o.getClassId(), ""));
         }
     }
 
     /**
-     * Adds an entry to the lexicon. Creates a Lucene document with the
-     * information retrieved from a SemanticProperty. The lexical form of the
-     * word entry is the displayName of the associated SemanticProperty.
+     * Adds an entry to the lexicon. Creates a WordTag with the information
+     * retrieved from a SemanticProperty. The lexical form of the word entry is
+     * the displayName of the associated SemanticProperty.
      *
-     * Agrega una entrada al diccionario. Crea un documento de Lucene con la
-     * informacion de una propiedad semantica. La forma lexica de la palabra
-     * agregada es el displayName de la propiedad semantica asociada.
+     * Agrega una entrada al diccionario. Crea un WordTag con la informacion de
+     * una propiedad semantica. La forma lexica de la palabra agregada es el
+     * displayName de la propiedad semantica asociada.
      * @param p SemanticProperty to extract information from. Propiedad semantica
      * para la cual se creara una entrada.
-     * @throws org.apache.lucene.index.CorruptIndexException
-     * @throws java.io.IOException
      */
     public void addWord(SemanticProperty p) {
         String pName = p.getDisplayName(language);
@@ -191,7 +195,7 @@ public class SWBLexicon {
                 try {
                     outr.write(p.getDisplayName(language) + "\n");
                 } catch (IOException ex) {
-                    Logger.getLogger(SWBLexicon.class.getName()).log(Level.SEVERE, null, ex);
+                    log.error(ex);
                 }
             }
 
@@ -199,9 +203,9 @@ public class SWBLexicon {
             if (p.isObjectProperty()) {
                 //Attempt to get range class object
                 SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(p.getRangeClass().getURI());
-                propHash.put(pName.toLowerCase(), new WordTag("PRO", getSnowballLexForm(pName), p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), rg.getClassId()));
+                propHash.put(pName.toLowerCase(), new WordTag("PRO", getSnowballForm(pName), p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), rg.getClassId()));
             } else {
-                propHash.put(pName.toLowerCase(), new WordTag("PRO", getSnowballLexForm(pName), p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), ""));
+                propHash.put(pName.toLowerCase(), new WordTag("PRO", getSnowballForm(pName), p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), ""));
             }
         }
     }
@@ -216,19 +220,20 @@ public class SWBLexicon {
 
     /**
      * Gets the tag for the specified lexical form (name of a class). It searches
-     * only in the classes directory.
+     * only in the classes set.
      *
      * Obtiene una etiqueta compuesta para la forma lexica especificada (nombre
-     * de una clase semantica). Busca solo en el directorio de clases.
+     * de una clase semantica). Busca solo en el conjunto de clases.
      * @param label name of the class to get tag for.
      * @param snowball Wheter to use snowball analyzer (better search flexibility).
      * @return WordTag object with the tag and type for the given class name.
      */
     public WordTag getObjWordTag(String label, boolean snowball) {
         WordTag wt = null;
+        
         if (snowball) {
             wt = objHash.get(label.toLowerCase());
-            if (wt != null && !getSnowballLexForm(label).equals(wt.getSnowballForm())) {
+            if (wt != null && !getSnowballForm(label).equals(wt.getSnowballForm())) {
                 wt = null;
             }
         } else {
@@ -238,7 +243,6 @@ public class SWBLexicon {
         if (wt != null) {
             return wt;
         }
-
         return new WordTag("VAR", "", "", "", "", "");
     }
 
@@ -252,10 +256,10 @@ public class SWBLexicon {
 
     /**
      * Gets the tag for the specified lexical form (name of a property). It
-     * searches only in the properties directory.
+     * searches only in the properties set.
      *
      * Obtiene una etiqueta compuesta para la forma lexica especificada (nombre de
-     * una propiedad semantica). Busca solo en el directorio de propiedades.
+     * una propiedad semantica). Busca solo en el conjunto de propiedades.
      * @param label name of the property to get tag for.
      * @param snowball Wheter to use snowball analyzer (better search flexibility).
      * @return WordTag object with the tag and type for the given property name.
@@ -264,7 +268,7 @@ public class SWBLexicon {
         WordTag wt = null;
         if (snowball) {
             wt = propHash.get(label.toLowerCase());
-            if (wt != null && !getSnowballLexForm(label).equals(wt.getSnowballForm())) {
+            if (wt != null && !getSnowballForm(label).equals(wt.getSnowballForm())) {
                 wt = null;
             }
         } else {
@@ -281,16 +285,21 @@ public class SWBLexicon {
     /**
      * Gets the snowball-ed form of an input text. Applies the snowball algorithm
      * to each word in the text to get its root or stem.
+     *
+     * Obtiene el lexema o raiz de una palabra mediante el algoritmo de snowball.
      * @param input Text to stem.
-     * @return
-     * @throws java.io.IOException
+     * @return Root of the input.
      */
-    public String getSnowballLexForm(String input) {
+    public String getSnowballForm(String input) {
+        String res = "";
+        
         //Create snowball analyzer
         Analyzer SnballAnalyzer = new SnowballAnalyzer(langCodes.get(language), stopWords);
-        TokenStream ts = SnballAnalyzer.tokenStream("sna", new StringReader(input));
-        String res = "";
 
+        //Create token stream for prhase composition
+        TokenStream ts = SnballAnalyzer.tokenStream("sna", new StringReader(input));
+
+        //Build the result string with the analyzed tokens
         try {
             Token tk;
             while ((tk = ts.next()) != null) {
@@ -298,33 +307,36 @@ public class SWBLexicon {
             }
             ts.close();
         } catch (Exception ex) {
-            Logger.getLogger(SWBLexicon.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         return res.trim();
     }
 
+    /**
+     * Gets the path to the text file containing the list of displayNames for
+     * spell checking.
+     */
     public String getSpellDictPath() {
         return spellDictPath;
     }
 
     /**
      * Gets the tag for the specified lexical form. It searches in both, classes
-     * and properties directory in order to find a tag.
+     * and properties sets in order to find a tag.
      *
      * Obtiene una etiqueta compuesta para la forma lexica especificada. Busca
-     * tanto en el directorio de clases como en el de propiedades para encontrar
+     * tanto en el conjunto de clases como en el de propiedades para encontrar
      * la etiqueta.
-     * @param label lexical form of word to get tag for. Forma lexica a etiquetar.
+     * @param label lexical form of the word to tag. Forma lexica a etiquetar.
      * @param snowball Wheter to use snowball analyzer (better search flexibility).
      * @return WordTag object with the tag and type for the word label.
      */
     public WordTag getWordTag(String label, boolean snowball) {
         WordTag wt = null;
-        //Document doc = null;
 
         if (snowball) {
             wt = objHash.get(label.toLowerCase());
-            if (wt != null && !getSnowballLexForm(label).equals(wt.getSnowballForm())) {
+            if (wt != null && !getSnowballForm(label).equals(wt.getSnowballForm())) {
                 wt = null;
             }
         } else {
@@ -338,7 +350,7 @@ public class SWBLexicon {
         wt = null;
         if (snowball) {
             wt = propHash.get(label.toLowerCase());
-            if (wt != null && !getSnowballLexForm(label).equals(wt.getSnowballForm())) {
+            if (wt != null && !getSnowballForm(label).equals(wt.getSnowballForm())) {
                 wt = null;
             }
         } else {
@@ -348,7 +360,6 @@ public class SWBLexicon {
         if (wt != null) {
             return wt;
         }
-
-        return null;//return new WordTag("", "VAR", "", "", "", "");
+        return null;
     }
 }
