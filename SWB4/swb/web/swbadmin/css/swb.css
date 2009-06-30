@@ -82,6 +82,8 @@ html, body, #main{
 .swbIconRoleU,
 .swbIconDnss,
 .swbIconDns,
+.swbIconUser,
+.swbIconUserU,
 .swbIconUserGroups,
 .swbIconUserGroup,
 .swbIconObjectBehaviors,
@@ -140,6 +142,8 @@ html, body, #main{
 .swbIconLanguage    { background-position: -20px -18px; }
 .swbIconRoles       { background-position: -40px -0px; }
 .swbIconRole        { background-position: -40px -18px; }
+.swbIconUser        { background-position: -0px -18px; }
+.swbIconUserU       { background-position: -0px -36px; }
 .swbIconUserGroups  { background-position: -320px -0px; }
 .swbIconUserGroup   { background-position: -320px -18px; }
 .swbIconWorkspace   { background-position: -360px -18px; }
