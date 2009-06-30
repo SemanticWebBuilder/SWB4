@@ -15,7 +15,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.apache.lucene.index.CorruptIndexException;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.nlp.Lexicon;
+import org.semanticwb.nlp.SWBLexicon;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -26,7 +26,7 @@ import org.semanticwb.platform.SemanticProperty;
 public class Translator {
 
     //Word Dictionary
-    private Lexicon lex;
+    private SWBLexicon lex;
     //Labels used for AST main nodes
     private String nodeLabels = "SELECT|ASK|PRECON|PREDE|ASIGN|COMPL|COMPG|COMPLE|COMPGE|NAME|COMPNAME|OFFSET|LIMIT";
     private SimpleParser parser;
@@ -41,7 +41,7 @@ public class Translator {
      * the given dictionary.
      * @param lx Dictionary for the Translator to use.
      */
-    public Translator(Lexicon lx) {
+    public Translator(SWBLexicon lx) {
         lex = lx;
     }
 
