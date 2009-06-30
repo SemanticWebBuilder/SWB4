@@ -6,13 +6,16 @@ package org.semanticwb.portal.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -26,6 +29,7 @@ import org.semanticwb.portal.db.SWBRecAdmLog;
 public class SiteLog extends GenericResource {
 
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+    private Logger log = SWBUtils.getLogger(SWBRecAdmLog.class);
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -36,20 +40,30 @@ public class SiteLog extends GenericResource {
         out.println(paramRequest.getLocaleString("RecentChanges"));
         out.println("</caption>");
         out.println("<tbody>");
-        int cont=0;
-        Iterator<SWBRecAdmLog> iter = SWBPortal.getDBAdmLog().getBitaObjURI(paramRequest.getTopic().getWebSite().getURI(), paramRequest.getTopic().getWebSite().getURI());
-        while (iter.hasNext()) {
-            SWBRecAdmLog obj = iter.next();
-            String userId = obj.getUser();
-            if(userId.equals(user.getId()))
-            {
-                out.println("<tr>");
-                out.println("  <td class=\"mov-recurso\"><a href=\"#\">" + obj.getAction() + "</td>");
-                out.println("  <td class=\"mov-recurso\"><a href=\"#\">" + ont.getSemanticProperty(obj.getPropId()).getDisplayName(user.getLanguage()) + "</td>");
-                out.println("  <td class=\"mov-recurso\"><a href=\"#\">" + SWBUtils.TEXT.iso8601DateFormat(obj.getDate()) + "</td>");
-                out.println("</tr>");
-                cont++;
-                if(cont>=10) break;
+        int cont = 0;
+        String sql = "select * from swb_admlog where log_user='" + user.getURI() + "' order by log_date";
+        Connection con = SWBUtils.DB.getDefaultConnection("SiteLog:doView");
+        if (con != null) {
+            try {
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                while (rs.next()) {
+                    String fecha=""+rs.getTimestamp("log_date");
+                    if(fecha.lastIndexOf(" ")>0) fecha=fecha.substring(0,fecha.lastIndexOf(" "));
+                    out.println("<tr>");
+                    out.println("  <td class=\"mov-recurso\">" + rs.getString("log_action") + "</td>");
+                    System.out.println("log_objuri:"+rs.getString("log_objuri"));
+                    out.println("  <td class=\"mov-recurso\">" + SemanticObject.createSemanticObject(rs.getString("log_objuri")).getDisplayName() + "</td>");
+                    out.println("  <td class=\"mov-recurso\">" + ont.getSemanticProperty(rs.getString("log_propid")).getDisplayName(user.getLanguage()) + "</td>");
+                    out.println("  <td class=\"mov-fecha\">" + fecha + "</td>");
+                    out.println("</tr>");
+                    cont++;
+                    if (cont >= 10) {
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                log.error(e);
             }
         }
         out.println("</tbody>");
