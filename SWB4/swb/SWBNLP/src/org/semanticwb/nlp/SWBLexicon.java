@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.io.Writer;
 import org.apache.lucene.analysis.Analyzer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -160,17 +161,17 @@ public class SWBLexicon {
      */
     public void addWord(SemanticClass o) {
         String oName = o.getDisplayName(language);
-        WordTag wt = objHash.get(oName.toLowerCase());
+        WordTag wt = objHash.get(getSnowballForm(oName));
 
         if (wt == null) {
             if (outr != null) {
                 try {
-                    outr.write(o.getDisplayName(language) + "\n");
+                    outr.write(oName + "\n");
                 } catch (IOException ex) {
                     log.error(ex);
                 }
             }
-            objHash.put(oName.toLowerCase(), new WordTag("OBJ", getSnowballForm(oName), o.getPrefix() + ":" + o.getName(), o.getClassName(), o.getClassId(), ""));
+            objHash.put(getSnowballForm(oName), new WordTag("OBJ", oName, o.getPrefix() + ":" + o.getName(), o.getClassName(), o.getClassId(), ""));
         }
     }
 
@@ -187,12 +188,12 @@ public class SWBLexicon {
      */
     public void addWord(SemanticProperty p) {
         String pName = p.getDisplayName(language);
-        WordTag wt = propHash.get(pName.toLowerCase());
+        WordTag wt = propHash.get(getSnowballForm(pName));
 
         if (wt == null) {
             if (outr != null) {
                 try {
-                    outr.write(p.getDisplayName(language) + "\n");
+                    outr.write(pName + "\n");
                 } catch (IOException ex) {
                     log.error(ex);
                 }
@@ -202,9 +203,9 @@ public class SWBLexicon {
             if (p.isObjectProperty()) {
                 //Attempt to get range class object
                 SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(p.getRangeClass().getURI());
-                propHash.put(pName.toLowerCase(), new WordTag("PRO", getSnowballForm(pName), p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), rg.getClassId()));
+                propHash.put(getSnowballForm(pName), new WordTag("PRO", pName, p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), rg.getClassId()));
             } else {
-                propHash.put(pName.toLowerCase(), new WordTag("PRO", getSnowballForm(pName), p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), ""));
+                propHash.put(getSnowballForm(pName), new WordTag("PRO", pName, p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), ""));
             }
         }
     }
@@ -224,21 +225,12 @@ public class SWBLexicon {
      * Obtiene una etiqueta compuesta para la forma lexica especificada (nombre
      * de una clase semantica). Busca solo en el conjunto de clases.
      * @param label name of the class to get tag for.
-     * @param snowball Wheter to use snowball analyzer (better search flexibility).
      * @return WordTag object with the tag and type for the given class name.
      */
-    public WordTag getObjWordTag(String label, boolean snowball) {
+    public WordTag getObjWordTag(String label) {
         WordTag wt = null;
-        
-        if (snowball) {
-            wt = objHash.get(label.toLowerCase());
-            if (wt != null && !getSnowballForm(label).equals(wt.getSnowballForm())) {
-                wt = null;
-            }
-        } else {
-            wt = objHash.get(label.toLowerCase());
-        }
 
+        wt = objHash.get(getSnowballForm(label));
         if (wt != null) {
             return wt;
         }
@@ -260,24 +252,15 @@ public class SWBLexicon {
      * Obtiene una etiqueta compuesta para la forma lexica especificada (nombre de
      * una propiedad semantica). Busca solo en el conjunto de propiedades.
      * @param label name of the property to get tag for.
-     * @param snowball Wheter to use snowball analyzer (better search flexibility).
      * @return WordTag object with the tag and type for the given property name.
      */
-    public WordTag getPropWordTag(String label, boolean snowball) {
+    public WordTag getPropWordTag(String label) {
         WordTag wt = null;
-        if (snowball) {
-            wt = propHash.get(label.toLowerCase());
-            if (wt != null && !getSnowballForm(label).equals(wt.getSnowballForm())) {
-                wt = null;
-            }
-        } else {
-            wt = propHash.get(label.toLowerCase());
-        }
+        wt = propHash.get(getSnowballForm(label));
 
         if (wt != null) {
             return wt;
         }
-
         return new WordTag("VAR", "", "", "", "", "");
     }
 
@@ -327,38 +310,50 @@ public class SWBLexicon {
      * tanto en el conjunto de clases como en el de propiedades para encontrar
      * la etiqueta.
      * @param label lexical form of the word to tag. Forma lexica a etiquetar.
-     * @param snowball Wheter to use snowball analyzer (better search flexibility).
      * @return WordTag object with the tag and type for the word label.
      */
-    public WordTag getWordTag(String label, boolean snowball) {
+    public WordTag getWordTag(String label) {
         WordTag wt = null;
 
-        if (snowball) {
-            wt = objHash.get(label.toLowerCase());
-            if (wt != null && !getSnowballForm(label).equals(wt.getSnowballForm())) {
-                wt = null;
-            }
-        } else {
-            wt = objHash.get(label);
-        }
-
+        wt = objHash.get(getSnowballForm(label));
         if (wt != null) {
             return wt;
         }
 
-        wt = null;
-        if (snowball) {
-            wt = propHash.get(label.toLowerCase());
-            if (wt != null && !getSnowballForm(label).equals(wt.getSnowballForm())) {
-                wt = null;
-            }
-        } else {
-            wt = propHash.get(label);
-        }
-
+        wt = propHash.get(getSnowballForm(label));
         if (wt != null) {
             return wt;
         }
-        return null;
+        return new WordTag("VAR", "", "", "", "", "");
+    }
+
+    /**
+     * Returns an iterator to the list of lexemes for the SemanticClases in the
+     * Lexicon.
+     */
+    public Iterator listClassNames() {
+        List res = new ArrayList();
+
+        Iterator it = objHash.values().iterator();
+        while (it.hasNext()) {
+            WordTag wt = (WordTag) it.next();
+            res.add(wt.getDisplayName());
+        }
+        return res.iterator();
+    }
+
+    /**
+     * Returns an iterator to the list of lexemes for the SemanticProperties in
+     * the Lexicon.
+     */
+    public Iterator listPropertyNames() {
+        List res = new ArrayList();
+
+        Iterator it = propHash.values().iterator();
+        while (it.hasNext()) {
+            WordTag wt = (WordTag) it.next();
+            res.add(wt.getDisplayName());
+        }
+        return res.iterator();
     }
 }
