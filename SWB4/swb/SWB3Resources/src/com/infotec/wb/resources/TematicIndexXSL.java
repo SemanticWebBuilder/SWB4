@@ -150,7 +150,7 @@ public class TematicIndexXSL extends GenericAdmResource
             while(hijos.hasNext())
             {
                 WebPage hijo=hijos.next();
-                //if (paramsRequest.getUser().haveAccess(hijo, false)) 
+                if (paramRequest.getUser().haveAccess(hijo))
                 {
                     ison++;
                     Element son = dom.createElement("son");
@@ -189,7 +189,7 @@ public class TematicIndexXSL extends GenericAdmResource
                     while(nietos.hasNext())
                     {
                         WebPage nieto= nietos.next();
-                        //if (paramRequest.getUser().haveAccess(nieto, false)) 
+                        if (paramRequest.getUser().haveAccess(nieto)) 
                         {
                             igrandson++;
                             Element grandson = dom.createElement("grandson");
@@ -270,11 +270,9 @@ public class TematicIndexXSL extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        System.out.println("Entra a TematicIndex/doView");
         try
         {
             Document dom =getDom(request, response, paramRequest);
-            //System.out.println(AFUtils.getInstance().DomtoXml(dom));
             if(dom != null) {
                 response.getWriter().println(SWBUtils.XML.transformDom(tpl, dom));
             }
