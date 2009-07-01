@@ -2415,7 +2415,7 @@ public class SWBUtils {
 
     public static class CryptoWrapper {
 
-        public static String passwordDigest(String toEncode) throws NoSuchAlgorithmException {
+        public static String passwordDigest(String toEncode) throws NoSuchAlgorithmException, UnsupportedEncodingException {
             if (toEncode.startsWith("{SHA-512}") ||
                     toEncode.startsWith("{SHA}") ||
                     toEncode.startsWith("{SSHA}") ||
@@ -2426,17 +2426,17 @@ public class SWBUtils {
             }
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
             //return "{SHA-512}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
-            return "{SHA-512}" + SFBase64.encodeString(new String(messageDigest.digest(toEncode.getBytes())), false);
+            return "{SHA-512}" + SFBase64.encodeBytes(messageDigest.digest(toEncode.getBytes("ISO8859-1")), false);
         }
 
-        public static String comparablePassword(String toEncode) throws NoSuchAlgorithmException {
+        public static String comparablePassword(String toEncode) throws NoSuchAlgorithmException, UnsupportedEncodingException {
             return comparablePassword(toEncode, "SHA-512");
         }
 
-        public static String comparablePassword(String toEncode, String digestAlgorithm) throws NoSuchAlgorithmException {
+        public static String comparablePassword(String toEncode, String digestAlgorithm) throws NoSuchAlgorithmException, UnsupportedEncodingException {
             MessageDigest messageDigest = MessageDigest.getInstance(digestAlgorithm);
             //return "{SHA-512}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
-            return "{SHA-512}" + SFBase64.encodeString(new String(messageDigest.digest(toEncode.getBytes())), false);
+            return "{SHA-512}" + SFBase64.encodeBytes(messageDigest.digest(toEncode.getBytes("ISO8859-1")), false);
         }
 
         public static byte[] PBEAES128Cipher(String passPhrese, byte[] data) throws GeneralSecurityException {
