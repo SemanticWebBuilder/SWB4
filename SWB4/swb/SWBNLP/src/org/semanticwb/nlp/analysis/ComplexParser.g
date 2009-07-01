@@ -7,7 +7,7 @@ options {
 }
 
 tokens {
-	LIMIT; SELECT; ASIGN; COMPL; COMPG; COMPLE; COMPGE;
+	LIMIT; SELECT; ASIGN; COMPL; COMPG; COMPLE; COMPGE; COMPAS;
 	PRECON; PREDE; OFFSET; ORDER; COMPNAME; MODTO; NAME;
 }
 
@@ -123,6 +123,8 @@ sent
 	|name SIGLE val -> ^(COMPLE name val)
 	|VAR SIGGE val -> ^(COMPGE VAR val)
 	|name SIGGE val -> ^(COMPGE name val)
+        |VAR MODC val -> ^(COMPAS name val)
+        |name MODC val -> ^(COMPAS name val)
 ;
 
 /*A value can be a literal (double quoted strings), a boolean or a num*/
