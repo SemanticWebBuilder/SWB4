@@ -56,6 +56,7 @@
       function FCKeditor_OnComplete(editorInstance) {
         window.status = editorInstance.Description;
       }
+      var urlFileSelection = "<%=urlNewVersion.toString()%>";
       function callUpload() {
         var f = document.frames ? document.frames["EditorDefault___Frame"] : document.getElementById("EditorDefault___Frame");
         var p = f.contentWindow || f.document;
@@ -105,7 +106,7 @@
     </form>
     </div>
 <%
-    url.setMode("admin");
+    url.setMode(paramRequest.Mode_EDIT);
     url.setAction(SWBResourceURL.Action_EDIT);
 %>
     <form name="newFileForm" id="newFileForm" method="post" action="<%=url.toString()%>">
