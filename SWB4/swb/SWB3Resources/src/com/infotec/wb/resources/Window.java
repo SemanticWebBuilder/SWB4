@@ -275,7 +275,6 @@ public class Window extends GenericAdmResource {
                               SWBActionResponse response) 
                               throws SWBResourceException, java.io.IOException {
         Resource base = getResourceBase();
-        //TODO Espera de adicion de un metodo equivalente a addHit
         base.addHit(request, response.getUser(), response.getTopic());
         String url = base.getAttribute("url", "").trim();
         if (!url.equals("")) response.sendRedirect(url);
