@@ -249,13 +249,11 @@ public class Poll extends GenericResource
                     ret.append("} \n");
                     ret.append("</script> \n");
                 }
-                ret.append("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
             } 
             catch (Exception e) { log.error(paramRequest.getLocaleString("error_Encuesta_doView_resource") +" "+ restype +" "+ paramRequest.getLocaleString("error_Encuesta_doView_method"), e); }
         }
         PrintWriter out=response.getWriter();
         out.print(ret.toString());
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
     }
     
     /**
@@ -888,7 +886,7 @@ public class Poll extends GenericResource
             SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN);
             url.setAction("update");
             ret.append("<form name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> \n");            
-            ret.append("<div class=box>");
+            //ret.append("<div class=box>");
             ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\">");
             ret.append("<tr> \n");
             ret.append("<td colspan=2>");
@@ -989,26 +987,27 @@ public class Poll extends GenericResource
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_textcolor") + "</td>");
             ret.append("\n<td class=\"valores\">");
-            /*
+          
             HashMap param=new HashMap();
             param.put("id", "selColor");
             param.put("session", request.getSession().getId());
             param.put("linkcolor",  base.getAttribute("textcolor", "#000000").trim().substring(1));
             param.put("linkactual", base.getAttribute("textcolor", "#000000").trim().substring(1));
             ret.append(admResUtils.loadColorApplet(param));
-             * * */
-            ret.append("<script type=\"text/javascript\">");
-            ret.append("   dojo.require(\"dijit.ColorPalette\");");
-            ret.append("   dojo.addOnLoad(function(){ ");
-            ret.append("   var myPalette = new dijit.ColorPalette({ ");
-            ret.append("   palette: \"7x10\", ");
-            ret.append("   onChange: function(val){ document.frmResource.textcolor.value=val;}  ");
-            ret.append("   }, \"placeHolder\" ); ");
-            ret.append("   }); ");
-            ret.append("</script>");
-            ret.append("<span id=\"placeHolder\"></span>");
-            ret.append("</td> \n");
-            ret.append("\n</tr>");
+           
+
+//            ret.append("<script type=\"text/javascript\">");
+//            ret.append("   dojo.require(\"dijit.ColorPalette\");");
+//            ret.append("   dojo.addOnLoad(function(){ ");
+//            ret.append("   var myPalette = new dijit.ColorPalette({ ");
+//            ret.append("   palette: \"7x10\", ");
+//            ret.append("   onChange: function(val){ document.frmResource.textcolor.value=val;}  ");
+//            ret.append("   }, \"placeHolder\" ); ");
+//            ret.append("   }); ");
+//            ret.append("</script>");
+//            ret.append("<span id=\"placeHolder\"></span>");
+//            ret.append("</td> \n");
+//            ret.append("\n</tr>");
             
              
             ret.append("\n<tr>");
@@ -1110,25 +1109,25 @@ public class Poll extends GenericResource
             ret.append("<tr> \n");
             ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_textcolor")+"</td> \n");
             ret.append("<td class=\"valores\">");
-            /*
+           
             param.put("id", "selColorBack");
             param.put("linkcolor",  base.getAttribute("textcolores", "#000000").trim().substring(1));
             param.put("linkactual", base.getAttribute("textcolores", "#000000").trim().substring(1));
             ret.append(admResUtils.loadColorApplet(param));
-             *  * */
+           
             
-            ret.append("<script type=\"text/javascript\">");
-            ret.append("   dojo.require(\"dijit.ColorPalette\");");
-            ret.append("   dojo.addOnLoad(function(){ ");
-            ret.append("   var myPalette = new dijit.ColorPalette({ ");
-            ret.append("   palette: \"7x10\", ");
-            ret.append("   onChange: function(val){ document.frmResource.textcolores.value=val;}  ");
-            ret.append("   }, \"placeHolder1\" ); ");
-            ret.append("   }); ");
-            ret.append("</script>");
-            ret.append("<span id=\"placeHolder1\"></span>");
-            ret.append("</td> \n");
-            ret.append("\n</tr>");
+//            ret.append("<script type=\"text/javascript\">");
+//            ret.append("   dojo.require(\"dijit.ColorPalette\");");
+//            ret.append("   dojo.addOnLoad(function(){ ");
+//            ret.append("   var myPalette = new dijit.ColorPalette({ ");
+//            ret.append("   palette: \"7x10\", ");
+//            ret.append("   onChange: function(val){ document.frmResource.textcolores.value=val;}  ");
+//            ret.append("   }, \"placeHolder1\" ); ");
+//            ret.append("   }); ");
+//            ret.append("</script>");
+//            ret.append("<span id=\"placeHolder1\"></span>");
+//            ret.append("</td> \n");
+//            ret.append("\n</tr>");
                          
             ret.append("\n<tr>");
             ret.append("\n<td class=\"datos\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_otherTextcolor") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_hexadecimal") + "):</font></td>");
@@ -1202,7 +1201,7 @@ public class Poll extends GenericResource
             ret.append("</font></td> \n");
             ret.append("</tr> \n");
             ret.append("</table> \n");
-            ret.append("</div> \n");
+            //ret.append("</div> \n");
             ret.append("</form> \n");
             ret.append(getScript(request, paramRequest));
         }
