@@ -128,6 +128,7 @@ public class RSSResource extends GenericAdmResource
      * @throws AFException
      * @throws IOException
      */    
+    @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, java.io.IOException
     {
         try
@@ -156,7 +157,6 @@ public class RSSResource extends GenericAdmResource
         try
         {
             Document dom =getDom(request, response, paramReq);
-            //System.out.println(AFUtils.getInstance().DomtoXml(dom));
             if(dom != null) {
                 out.print(SWBUtils.XML.transformDom(tpl, dom));
             }            
@@ -164,6 +164,5 @@ public class RSSResource extends GenericAdmResource
         catch (Exception e) { 
             log.error("Error while processing RSS for: "+getResourceBase().getAttribute("url"), e);
         }
-        out.println("<br><a href=\"" + paramReq.getRenderUrl().setMode(paramReq.Mode_ADMIN) + "\">admin rss resource</a>");
     }
 }
