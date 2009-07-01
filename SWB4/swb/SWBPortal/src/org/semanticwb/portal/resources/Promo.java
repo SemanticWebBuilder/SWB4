@@ -44,17 +44,331 @@ public class Promo extends GenericAdmResource {
         }
     }    
     
-    /**
-     * Genera el html final del recurso
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws SWBResourceException
-     * @throws IOException
-     */    
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
-    {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=utf-8");
+        Resource base=getResourceBase();
+        String out;
+
+        String cssClass = base.getAttribute("cssClass");
+        if(cssClass == null) {
+            out = renderWithStyle();
+        }else {
+            out = render();
+        }
+        
+        PrintWriter pw = response.getWriter();
+        pw.println(out);
+        pw.flush();
+    }
+
+    private String renderWithStyle() {
+        StringBuilder out = new StringBuilder();
+        Resource base=getResourceBase();
+
+        int width;
+        try {
+            width = Integer.parseInt(base.getAttribute("width","0"));
+        }catch(NumberFormatException nfe) {
+            width = 0;
+        }
+        int height;
+        try {
+            height = Integer.parseInt(base.getAttribute("height","0"));
+        }catch(NumberFormatException nfe) {
+            height = 0;
+        }
+
+        String textcolor = base.getAttribute("textcolor");
+
+        String title = base.getAttribute("title");
+        String titleStyle = base.getAttribute("titleStyle","");
+
+        String subtitle = base.getAttribute("subtitle");
+        String subtitleStyle = base.getAttribute("subtitleStyle","");
+
+        String imgfile = base.getAttribute("imgfile");
+        String caption = base.getAttribute("caption");
+        String captionStyle = base.getAttribute("captionStyle","");
+        int imgWidth;
+        try {
+            imgWidth = Integer.parseInt(base.getAttribute("imgWidth"));
+        }catch(NumberFormatException nfe) {
+            imgWidth = 150;
+        }
+        int imgHeight;
+        try {
+            imgHeight = Integer.parseInt(base.getAttribute("imgHeight"));
+        }catch(NumberFormatException nfe) {
+            imgHeight = 180;
+        }
+
+        String text = base.getAttribute("text");
+        String textStyle = base.getAttribute("textStyle","");
+
+        String more = base.getAttribute("more");
+        String moreStyle = base.getAttribute("moreStyle","");
+        String url = base.getAttribute("url");
+
+        int imgPos;
+        try {
+            imgPos = Integer.parseInt(base.getAttribute("imgPos","1"));
+        }catch(NumberFormatException nfe) {
+            imgPos = 1;
+        }
+
+        try {
+            //marco
+            out.append("<div style=\"");
+            if(textcolor != null) {
+                out.append("color:"+textcolor+";");
+            }
+            if(width>0)  {
+                out.append("width:"+width+"px;");
+            }
+            if(height>0) {
+                out.append("height:"+height+"px;");
+            }
+            out.append("\">");
+
+            //title
+            if(title != null) {
+                out.append("<h1 style=\""+titleStyle+"\"><span> \n");
+                out.append(title);
+                out.append("</span></h1> \n");
+            }
+
+            //image
+            String margin = "";
+            StringBuilder img = new StringBuilder("");
+            if(imgfile != null) {
+                if(imgPos == 3) {
+                    img.append("<div style=\"text-align:center; float:right; margin:10px\"> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    if(caption != null) {
+                        img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
+                    }
+                    img.append("</div> \n");
+                    margin = "margin-right:"+(imgWidth+20)+"px;";
+                    out.append(img);
+                }else if(imgPos == 4) {
+                    img.append("<div style=\"text-align:center; float:left; margin:10px\"> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    if(caption != null) {
+                        img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
+                    }
+                    img.append("</div> \n");
+                    margin = "margin-left:"+(imgWidth+20)+"px;";
+                    out.append(img);
+                }else if(imgPos == 2) {
+                    img.append("<div style=\"text-align:center; float:right; margin:10px;\"> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    if(caption != null) {
+                        img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
+                    }
+                    img.append("</div> \n");
+                    out.append(img);
+                }else if(imgPos == 1) {
+                    img.append("<div style=\"text-align:center; float:left; margin:10px;\"> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    if(caption != null) {
+                        img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
+                    }
+                    img.append("</div> \n");
+                    out.append(img);
+                }else if(imgPos == 5) {
+                    img.append("<div style=\"text-align:center\"> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    if(caption != null) {
+                        img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
+                    }
+                    img.append("</div> \n");
+                    out.append(img);
+                }else {
+                    imgPos = 6;
+                    img.append("<div style=\"text-align:center\"> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    if(caption != null) {
+                        img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
+                    }
+                    img.append("</div> \n");
+                }
+            }
+
+            //subtitle
+            if(subtitle != null) {
+                out.append("<h2 style=\""+subtitleStyle+"\"><span>"+subtitle+"</span></h2> \n");
+            }
+
+            if( base.getAttribute("more")==null ) {
+                //texto
+                out.append("<p style=\"text-align:justify;"+margin+"\"> \n");
+                if(url != null) {
+                    out.append("<a href=\""+url+"\" style=\""+textStyle);
+                    if("0".equalsIgnoreCase(base.getAttribute("uline", "0"))) {
+                        out.append(" ;text-decoration:none;");
+                    }
+                    if ("1".equalsIgnoreCase(base.getAttribute("target", "0").trim())) {
+                        out.append(" target=\"_blank\"");
+                    }
+                    out.append("\"> \n");
+                    out.append(text);
+                    out.append("\n</a> \n");
+                }else {
+                    out.append("<span style=\""+textStyle+"\"> \n");
+                    out.append(text);
+                    out.append("</span> \n");
+                }
+                out.append("</p> \n");
+            }else {
+                out.append("<p style=\"text-align:justify;"+margin+"\"> \n");
+                out.append("<span style=\""+textStyle+"\"> \n");
+                out.append(text);
+                out.append("</span> \n");
+                out.append("</p> \n");
+                //más...
+                if( url!=null) {
+                    out.append("<ul style=\"list-style:none; margin:7px; padding:0px\"><li> \n");
+                    out.append("<a href=\""+url+"\" style=\""+moreStyle);
+                    if("0".equalsIgnoreCase(base.getAttribute("uline", "0"))) {
+                        out.append(" ;text-decoration:none;\"");
+                    }
+                    if ("1".equalsIgnoreCase(base.getAttribute("target", "0").trim())) {
+                        out.append(" target=\"_blank\"");
+                    }
+                    out.append("> \n");
+                    out.append(more);
+                    out.append("\n</a> \n");
+                    out.append("</li></ul> \n");
+                }
+            }
+
+            if( imgfile!=null && imgPos==6 ) {
+                out.append(img);
+            }
+
+            //marco
+            out.append("</div>");
+        }catch (Exception e) {
+            log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
+        }
+        return out.toString();
+    }
+
+    private String render() {
+        StringBuilder out = new StringBuilder();
+        Resource base=getResourceBase();
+        
+        String cssClass = base.getAttribute("cssClass","");
+        String title = base.getAttribute("title");
+        String subtitle = base.getAttribute("subtitle");
+        String imgfile = base.getAttribute("imgfile");
+        String caption = base.getAttribute("caption");
+        int imgWidth;
+        try {
+            imgWidth = Integer.parseInt(base.getAttribute("imgWidth"));
+        }catch(NumberFormatException nfe) {
+            imgWidth = 150;
+        }
+        int imgHeight;
+        try {
+            imgHeight = Integer.parseInt(base.getAttribute("imgHeight"));
+        }catch(NumberFormatException nfe) {
+            imgHeight = 180;
+        }
+
+        String text = base.getAttribute("text");
+        String more = base.getAttribute("more");
+        String url = base.getAttribute("url");
+
+        int imgPos;
+        try {
+            imgPos = Integer.parseInt(base.getAttribute("imgPos","1"));
+        }catch(NumberFormatException nfe) {
+            imgPos = 1;
+        }
+
+        try {
+            //marco
+            out.append("<div class=\""+cssClass+"\"> \n");
+
+            //title
+            if(title != null) {
+                out.append("<h1><span> \n");
+                out.append(title);
+                out.append("</span></h1> \n");
+            }
+
+            //image
+            StringBuilder img = new StringBuilder("");
+            if(imgfile != null) {
+                if(imgPos != 6) {
+                    img.append("<div> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    if(caption != null) {
+                        img.append("<h6><span>"+caption+"</span></h6> \n");
+                    }
+                    img.append("</div> \n");
+                    out.append(img);
+                }else {
+                    imgPos = 6;
+                    img.append("<div> \n");
+                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" width=\""+imgWidth+"\" height=\""+imgHeight+"\" /></span> \n");
+                    if(caption != null) {
+                        img.append("<h6><span>"+caption+"</span></h6> \n");
+                    }
+                    img.append("</div> \n");
+                }
+            }
+
+            //subtitle
+            if(subtitle != null) {
+                out.append("<h2><span>"+subtitle+"</span></h2> \n");
+            }
+
+            if( base.getAttribute("more")==null ) {
+                //texto
+                out.append("<p> \n");
+                if(url != null) {
+                    out.append("<a href=\""+url+"\">\n");
+                    out.append(text);
+                    out.append("\n</a> \n");
+                }else {
+                    out.append("<span> \n");
+                    out.append(text);
+                    out.append("</span> \n");
+                }
+                out.append("</p> \n");
+            }else {
+                out.append("<p> \n");
+                out.append("<span> \n");
+                out.append(text);
+                out.append("</span> \n");
+                out.append("</p> \n");
+                //más...
+                if( url!=null) {
+                    out.append("<ul style=\"list-style:none; margin:7px; padding:0px\"><li> \n");
+                    out.append("<a href=\""+url+"\">\n");
+                    out.append(more);
+                    out.append("\n</a> \n");
+                    out.append("</li></ul> \n");
+                }
+            }
+
+            if( imgfile!=null && imgPos==6 ) {
+                out.append(img);
+            }
+
+            //marco
+            out.append("</div>");
+        }catch (Exception e) {
+            log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
+        }
+        return out.toString();
+    }
+ 
+    /*@Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=utf-8");
         PrintWriter out = response.getWriter();
         Resource base=getResourceBase();
@@ -108,7 +422,7 @@ public class Promo extends GenericAdmResource {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }        
         out.flush();
-    }
+    }*/
     
     /**
      * Obtiene las ligas de redireccionamiento del promocional
@@ -314,8 +628,7 @@ public class Promo extends GenericAdmResource {
      * @throws IOException
      */    
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException 
-    {
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
         //base. addHit(request, response.getUser(), response.getTopic());
         String url = base.getAttribute("url", "").trim();
