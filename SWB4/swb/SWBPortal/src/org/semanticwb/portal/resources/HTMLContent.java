@@ -13,7 +13,12 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.User;
 import org.semanticwb.model.VersionInfo;
+import org.semanticwb.model.Versionable;
+import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -26,15 +31,20 @@ import org.semanticwb.portal.util.WBFileUpload;
 
 
 /**
- * Presenta un editor de HTML para generar contenidos que se asocian a la página en que se genera este recurso.
+ * Presenta un editor de HTML para generar contenido que se asocia a la página
+ * en que se genera este recurso.
  * @author jose.jimenez
  */
 public class HTMLContent extends GenericResource {
 
-    
+
+    /** Objeto utilizado para generacion de mensajes en el log */
     private static Logger log = SWBUtils.getLogger(HTMLContent.class);
 
-    
+    /**Ruta relativa para carpeta de archivos asociados a cada version */
+    private static final String FOLDER = "images";
+
+
     /**
      * Presenta el editor de HTML para generar el contenido a mostrar
      * @param request
@@ -48,6 +58,22 @@ public class HTMLContent extends GenericResource {
             SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
         
+        doEdit(request, response, paramRequest);
+    }
+
+    /**
+     * Presenta el editor de HTML para generar el contenido a mostrar
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws org.semanticwb.portal.api.SWBResourceException
+     * @throws java.io.IOException
+     */
+    @Override
+    public void doEdit(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException {
+
         Resource resource = paramRequest.getResourceBase();
         HttpSession session = request.getSession();
         VersionInfo versionInfo = new VersionInfo(resource.getSemanticObject());
@@ -59,26 +85,30 @@ public class HTMLContent extends GenericResource {
         String content = "";
         //Para mostrar el contenido de una versión temporal
         String tmpPath = request.getParameter("tmpPath");
-        
+
         pathToRead.append(resource.getWorkPath() + "/");
         pathToWrite.append("/work" + resource.getWorkPath() + "/");
-        
+
         if (action.equalsIgnoreCase(SWBParamRequest.Action_EDIT)
                 && versionNumber == 0 && tmpPath == null) {
             action = SWBParamRequest.Action_ADD;
         }
-        
+
         pathToRead.append(versionNumber + "/");
         pathToRead.append(fileName);
         pathToWrite.append("" + (++versionNumber));
         session.setAttribute("directory", pathToWrite.toString());
-        
+
         if (action.equals(SWBParamRequest.Action_EDIT)) {
             try {
                 //Cuando se carga el archivo normalmente
                 if (tmpPath == null || "".equals(tmpPath)) {
                     content = SWBUtils.IO.readInputStream(
                             SWBPlatform.getFileFromWorkPath(pathToRead.toString()));
+                    //Se sustituye el tag insertado por el metodo saveContent por la ruta logica del archivo
+                    content = SWBUtils.TEXT.replaceAll(content, "<workpath/>",
+                            SWBPlatform.getWebWorkPath() + resource.getWorkPath()
+                            + "/" + versionNumber + "/");
                 } else { //cuando se carga el archivo temporal
                     content = SWBUtils.IO.readInputStream(
                             SWBPlatform.getFileFromWorkPath(tmpPath + "index.html"));
@@ -98,8 +128,221 @@ public class HTMLContent extends GenericResource {
             e.printStackTrace();
             log.debug(e);
         }
+        System.out.println("Web Work Path - SWBPlatform.getWebWorkPath():" + SWBPlatform.getWebWorkPath());
+        System.out.println("Context Path - SWBPlatform.getContextPath():" + SWBPlatform.getContextPath());
+        System.out.println("Work Path - SWBPlatform.getWorkPath():" + SWBPlatform.getWorkPath());
+        System.out.println("Resource Work Path - resource.getWorkPath():" + resource.getWorkPath());
     }
     
+    /**
+     * Muestra un listado de las versiones existentes para el contenido correspondiente.
+     * Cada version puede editarse, fijarse como la actual, mostrarse y eliminarse,
+     * tambi&eacute;n se despliega una opci&oacute;n para agregar una nueva versi&oacute;n.
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws org.semanticwb.portal.api.SWBResourceException
+     * @throws java.io.IOException
+     */
+    public void doListVersions(HttpServletRequest request,
+            HttpServletResponse response,
+            SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException {
+
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        Resource base = getResourceBase();
+        User user = paramRequest.getUser();
+        PrintWriter out = response.getWriter();
+        String id = request.getParameter("suri");
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+
+        if (request.getParameter("dialog") != null
+                && request.getParameter("dialog").equals("close")) {
+            out.println("<script type=\"javascript\">");
+            out.println(" hideDialog(); ");
+            out.println(" reloadTab('" + id + "'); ");
+            out.println("</script>");
+            return;
+        }
+
+        if (null == id) {
+            out.println("<fieldset>");
+            out.println("URI faltante");
+            out.println("</fieldset>");
+        } else {
+            String action = request.getParameter("act");
+            GenericObject obj = ont.getGenericObject(id);
+
+            //Template tmpl = (Template) obj;
+
+            log.debug("doView(), suri: " + id);
+            VersionInfo via = null;
+            VersionInfo vio = null;
+
+            if (obj instanceof Versionable) {
+                vio = (VersionInfo) findFirstVersion(obj);
+                via = ((Versionable) obj).getActualVersion();
+
+                if (action == null || action.equals("")) {
+
+                    log.debug("act:''");
+                    out.println("<div class=\"swbform\">");
+                    out.println("<fieldset>");
+                    out.println("<table width=\"98%\" >");
+                    out.println("<thead>");
+                    out.println("<tr>");
+                    out.println("<th>");
+                    out.println(paramRequest.getLocaleString("msgVersion"));
+                    out.println("</th>");
+                    out.println("<th>");
+                    out.println(paramRequest.getLocaleString("msgAction"));
+                    out.println("</th>");
+                    out.println("<th>");
+                    out.println(paramRequest.getLocaleString("msgComment"));
+                    out.println("</th>");
+                    out.println("</tr>");
+                    out.println("</thead>");
+                    out.println("<tbody>");
+                    if (null != vio) {
+
+                        while (vio != null) {
+                            out.println("<tr>");
+                            out.println("<td align=\"center\">");
+                            out.println(vio.getVersionNumber());
+                            out.println("</td>");
+                            out.println("<td>");
+
+                            SWBResourceURL urle = paramRequest.getRenderUrl();
+                            urle.setParameter("suri", id);
+                            urle.setParameter("sobj", vio.getURI());
+                            urle.setParameter("vnum", Integer.toString(vio.getVersionNumber()));
+                            urle.setParameter("act", "edit_temp");
+                            urle.setMode(SWBResourceURL.Mode_EDIT);
+                            out.println("<a href=\"#\" onclick=\"submitUrl('" 
+                                    + urle + "',this); return false;\"><img src=\""
+                                    + SWBPlatform.getContextPath()
+                                    + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"editar version\"></a>");
+
+                            SWBResourceURL urlnv = paramRequest.getRenderUrl();
+                            urlnv.setParameter("suri", id);
+                            urlnv.setParameter("sobj", vio.getURI());
+                            urlnv.setParameter("vnum", Integer.toString(vio.getVersionNumber()));
+                            urlnv.setParameter("act", "newversion");
+                            urlnv.setMode(SWBResourceURL.Mode_EDIT);
+                            out.println("<a href=\"#\" onclick=\"showDialog('"
+                                    + urlnv + "','Nueva versión de Plantilla');\"><img src=\""
+                                    + SWBPlatform.getContextPath()
+                                    + "/swbadmin/icons/nueva_version.gif\" border=\"0\" alt=\""
+                                    + paramRequest.getLocaleString("msgNewVersion")
+                                    + "\"></a>");
+
+                            if (!vio.equals(via)) {
+                                SWBResourceURL urlsa = paramRequest.getActionUrl();
+                                urlsa.setParameter("suri", id);
+                                urlsa.setParameter("sval", vio.getURI());
+                                urlsa.setAction("setactual");
+                                out.println("<a href=\"#\" onclick=\"submitUrl('"
+                                        + urlsa + "',this); return false;\"><img src=\""
+                                        + SWBPlatform.getContextPath()
+                                        + "/swbadmin/icons/cambio_version.gif\" border=\"0\" alt=\""
+                                        + paramRequest.getLocaleString("logTplSetActual")
+                                        + "\"></a>");
+                            } else {
+                                out.println("<img src=\""
+                                        + SWBPlatform.getContextPath()
+                                        + "/swbadmin/icons/activa.gif\" border=\"0\" alt=\""
+                                        + paramRequest.getLocaleString("msgActualVersion")
+                                        + "\">");
+                            }
+
+                            out.println("<a href=\"#\" onclick=\"window.open('"
+                                    + SWBPlatform.getWebWorkPath()
+                                    + base.getWorkPath() + "/"
+                                    + vio.getVersionNumber() + "/"
+                                    + vio.getVersionFile()
+                                    + "','Preview','scrollbars, resizable, width=550, height=550');\"><img src=\""
+                                    + SWBPlatform.getContextPath()
+                                    + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\""
+                                    + paramRequest.getLocaleString("msgPreview")
+                                    + "\"></a>"); //submitUrl('" + urlec + "',this); return false;
+
+                            SWBResourceURL urlr = paramRequest.getActionUrl();
+                            urlr.setParameter("suri", id);
+                            urlr.setParameter("sval", vio.getURI());
+                            urlr.setAction("remove");
+                            out.println("<a href=\"#\" onclick=\"if(confirm('"
+                                    + paramRequest.getLocaleString("q_removeVersion")
+                                    + "')){submitUrl('" + urlr
+                                    + "',this);} return false;\"><img src=\""
+                                    + SWBPlatform.getContextPath()
+                                    + "/swbadmin/images/delete.gif\" border=\"0\" alt=\""
+                                    + paramRequest.getLocaleString("msgRemoveVersion")
+                                    + "\"></a>");
+                            if (vio.equals(via)) {
+                                out.println("( " + paramRequest.getLocaleString("msgActualVersion") + " ) ");
+                            }
+                            out.println("</td>");
+                            out.println("<td>");
+
+                            String comment = (vio.getVersionComment() != null &&
+                                    vio.getVersionComment().trim().length() > 0 &&
+                                    !vio.getVersionComment().equals("null"))
+                                    ? vio.getVersionComment() : "";
+                            out.println(comment + "</td>");
+                            out.println("</tr>");
+                            vio = vio.getNextVersion();
+                        }
+                    }
+                    out.println("</tbody>");
+                    out.println("</table>");
+                    out.println("</fieldset>");
+                    out.println("<fieldset>");
+                    SWBResourceURL urlNew = paramRequest.getRenderUrl();
+                    urlNew.setParameter("suri", id);
+                    urlNew.setParameter("act", "newversion");
+                    urlNew.setMode(SWBResourceURL.Mode_EDIT);
+                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"showDialog('"
+                            + urlNew + "','Agregar plantilla de defecto');\">"
+                            + paramRequest.getLocaleString("btn_addnew")
+                            + "</button>");
+                    SWBResourceURL urlVR = paramRequest.getActionUrl();
+                    urlVR.setParameter("suri", id);
+                    urlVR.setAction("resetversion");
+                    urlVR.setMode(SWBResourceURL.Mode_VIEW);
+                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"if(confirm('"
+                            + paramRequest.getLocaleString("q_resetVersion")
+                            + "')){submitUrl('" + urlVR.toString()
+                            + "',this.domNode);} return false;\">"
+                            + paramRequest.getLocaleString("btn_versionreset")
+                            + "</button>");
+                    out.println("</fieldset>");
+                    out.println("</div>");
+                }
+            }
+        }
+    }
+
+    /**
+     * Encuentra la primer version del objeto recibido.
+     * @param obj
+     * @return el objeto VersionInfo que contiene la informaci&oacute;n de la
+     * primer versi&oacute;n del objeto recibido.
+     */
+    private VersionInfo findFirstVersion(GenericObject obj) {
+        VersionInfo ver = null;
+        if (obj != null) {
+            ver = ((Versionable) obj).getActualVersion();
+        }
+        if (null != ver) {
+            while (ver.getPreviousVersion() != null) { //
+                ver = ver.getPreviousVersion();
+            }
+        }
+        return ver;
+    }
+
     /**
      * Presenta el contenido generado con el editor de HTML
      * @param request
@@ -119,11 +362,17 @@ public class HTMLContent extends GenericResource {
         String fileName = "index.html";//versionInfo.getVersionFile();
         String resourceWorkPath = SWBPlatform.getWorkPath()
                 + resource.getWorkPath() + "/" + versionNumber + "/" + fileName;
-        response.getWriter().println(SWBUtils.IO.getFileFromPath(resourceWorkPath));
+        String fileContent = SWBUtils.IO.getFileFromPath(resourceWorkPath);
+        response.getWriter().println(SWBUtils.TEXT.replaceAll(fileContent,
+                                     "<workpath/>",
+                                     SWBPlatform.getWorkPath()
+                                     + resource.getWorkPath() + "/"
+                                     + versionNumber + "/"));
     }
 
     /**
-     * Determina el metodo a ejecutar en base al modo que se envia en el objeto HttpServletRequest recibido
+     * Determina el metodo a ejecutar en base al modo que se envia en el objeto
+     * HttpServletRequest recibido
      * @param request
      * @param response
      * @param paramRequest
@@ -146,8 +395,8 @@ public class HTMLContent extends GenericResource {
     }
 
     /**
-     * Almacena en un archivo con extensión .html el contenido mostrado en el 
-     * editor, creando una nueva versión de este recurso.
+     * Almacena en un archivo con extensi&oacute;n .html el contenido mostrado 
+     * en el editor, creando una nueva versi&oacute;n de este contenido.
      * @param request
      * @param response
      * @param paramRequest
@@ -173,7 +422,11 @@ public class HTMLContent extends GenericResource {
                 + resource.getWorkPath() + "/" 
                 + (versionToDelete > 1 ? versionToDelete : 1) + "/tmp";
         String directoryToCreate = SWBPlatform.getWorkPath() 
-                + resource.getWorkPath() + "/" + (versionNumber + 1) + "/images";
+                + resource.getWorkPath() + "/" + (versionNumber + 1) + "/"
+                + HTMLContent.FOLDER;
+        String attachedFiles = null;
+        String workingDirectory = SWBPlatform.getWebWorkPath()
+                                  + resource.getWorkPath();
         
         //Siempre se crea una nueva version al guardar
         versionNumber++;
@@ -187,23 +440,73 @@ public class HTMLContent extends GenericResource {
                 if (!filePath.exists()) {
                     filePath.mkdirs();
                 }
+                filePath = new File(directoryToCreate);
+                if (!filePath.exists()) {
+                    filePath.mkdirs();
+                }
                 File file = new File(SWBPlatform.getWorkPath().substring(0,
                         SWBPlatform.getWorkPath().lastIndexOf("/") + 1)
                         + contentPath + "/index.html");
                 filename = file.getName();
                 FileWriter writer = new FileWriter(file);
-                
-                //Si estaba en directorio temporal, modificar rutas de archivos asociados
-                if (deleteTmp) {
-                    textToSave = textToSave.replaceAll(
-                            SWBPlatform.getWebWorkPath()
-                            + resource.getWorkPath() + "/"
-                            + (version.getVersionNumber() > 1 ? version.getVersionNumber() : 1)
-                            + "/tmp/images", 
-                            SWBPlatform.getWebWorkPath()
-                            + resource.getWorkPath() + "/"
-                            + versionNumber + "/images");
+
+                //Se encuentran archivos asociados al contenido para conservarlos en la nueva version
+                attachedFiles = SWBPortal.UTIL.FindAttaches(textToSave);
+                String [] associated = attachedFiles.split(";");
+                System.out.println("textToSave:\n" + textToSave);
+                System.out.println("\nattachedFiles: " + attachedFiles);
+//                for (String s : associated) {
+//                    if (s.indexOf("http://") != -1) {
+//                        String fileName = s.substring(s.lastIndexOf("/") + 1);
+//                        //Cada archivo se copia al directorio de la nueva version
+//                        SWBUtils.IO.copy(s, directoryToCreate + "/" + fileName,
+//                                         false, "", "");
+//                        //Se sustituye la ruta anterior por el dir de la version actual
+//                        textToSave = SWBUtils.TEXT.replaceAll(textToSave, s,
+//                                "<workpath/>" + HTMLContent.FOLDER + fileName);
+//                        System.out.println("Sustituye: " + s + "\n      por: "
+//                                + "<workpath/>" + HTMLContent.FOLDER + fileName);
+//                    }
+//                }
+                //Se buscan archivos asociados al contenido para conservarlos en la nueva version
+                int index = 0;
+                while (index != -1) {
+                    if (index != 0) {
+                        int quoteIndex = textToSave.indexOf("\"", index);
+                        if (quoteIndex != -1) {
+                            //ruta logica de un archivo asociado
+                            String attachedFilePath = textToSave.substring(index,
+                                                      quoteIndex);
+                            //Ruta fisica del archivo a copiar
+                            String s = SWBPlatform.getWorkPath()
+                                    + attachedFilePath.substring(
+                                            attachedFilePath.indexOf("work") + 4);
+                            String fileName = s.substring(s.lastIndexOf("/") + 1);
+                            SWBUtils.IO.copy(s, directoryToCreate + "/" + fileName,
+                                             false, "", "");
+                            //Se sustituye la ruta logica por el tag
+                            textToSave = SWBUtils.TEXT.replaceAll(textToSave,
+                                    attachedFilePath,
+                                    "<workpath/>" + HTMLContent.FOLDER + "/" + fileName);
+                        }
+
+                    }
+                    index = textToSave.indexOf(workingDirectory);
                 }
+
+
+//   Comentado porque se cambia por el codigo de arriba
+                //Si estaba en directorio temporal, modificar rutas de archivos asociados
+//                if (deleteTmp) {
+//                    textToSave = textToSave.replaceAll(
+//                            SWBPlatform.getWebWorkPath()
+//                            + resource.getWorkPath() + "/"
+//                            + (version.getVersionNumber() > 1 ? version.getVersionNumber() : 1)
+//                            + "/tmp/images",
+//                            SWBPlatform.getWebWorkPath()
+//                            + resource.getWorkPath() + "/"
+//                            + versionNumber + "/images");
+//                }
                 
                 writer.write(textToSave);
                 writer.flush();
@@ -216,7 +519,8 @@ public class HTMLContent extends GenericResource {
                 //resource.setLastVersion(versionNumber);
                 textSaved = true;
                 if (deleteTmp) {
-                    File imagesDirectory = new File(directoryToRemove + "/images");
+                    File imagesDirectory = new File(directoryToRemove + "/"
+                            + HTMLContent.FOLDER);
                     //eliminar el directorio tmp de la version anterior
                     if (imagesDirectory.exists()
                             && SWBUtils.IO.createDirectory(directoryToCreate)) {
@@ -231,6 +535,7 @@ public class HTMLContent extends GenericResource {
                     SWBUtils.IO.removeDirectory(directoryToRemove);
                 }
             } catch (Exception e) {
+                textSaved = false;
                 log.error("Al escribir el archivo", e);
             }
         }
@@ -260,7 +565,7 @@ public class HTMLContent extends GenericResource {
         WBFileUpload fUpload = new WBFileUpload();
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setCallMethod(url.Call_DIRECT);
-        url.setMode("admin");
+        url.setMode("edit");
         Resource resource = paramRequest.getResourceBase();
         String fileContent = null;
         VersionInfo version = new VersionInfo(resource.getSemanticObject());
@@ -299,7 +604,8 @@ public class HTMLContent extends GenericResource {
             extension = filename.substring(filename.lastIndexOf("."));
         }
         
-        if (extension != null && (extension.equalsIgnoreCase(".htm") || extension.equalsIgnoreCase(".html"))) {
+        if (extension != null && (extension.equalsIgnoreCase(".htm")
+                || extension.equalsIgnoreCase(".html"))) {
             fUpload.saveFile("NewFile", portletWorkPath);
             String[] filesAttached = strAttaches.split(";");
 
@@ -308,7 +614,7 @@ public class HTMLContent extends GenericResource {
                 localRelativePath = filesAttached[0].substring(0,
                         filesAttached[0].lastIndexOf("/"));
             }
-            file = new File(portletWorkPath + "images/");
+            file = new File(portletWorkPath + HTMLContent.FOLDER);
             if (!file.exists()) {
                 file.mkdir();
             }
@@ -320,7 +626,10 @@ public class HTMLContent extends GenericResource {
                     SWBUtils.IO.copy(portletWorkPath + filename,
                             portletWorkPath + "index.html", true,
                             localRelativePath,
-                            SWBPlatform.getWebWorkPath() + resource.getWorkPath() + "/" + (version.getVersionNumber() > 1 ? version.getVersionNumber() : 1) + "/tmp/images");
+                            SWBPlatform.getWebWorkPath() + resource.getWorkPath()
+                                + "/"
+                                + (version.getVersionNumber() > 1 ? version.getVersionNumber() : 1)
+                                + "/tmp/" + HTMLContent.FOLDER);
                 } else {
                     SWBUtils.IO.copy(portletWorkPath + filename,
                             portletWorkPath + "index.html", false, "", "");
@@ -346,7 +655,8 @@ public class HTMLContent extends GenericResource {
             bs.append("\n  var button = window.parent.document.getElementById(\"PopupButtons\");");
             bs.append("\n  //button.value = \"Cerrar ventana\";");
             bs.append("\n  var cad = '<div align=\"right\">'");
-            bs.append("\n          + '<input id=\"btnCancel\" class=\"Button\" type=\"button\" fcklang=\"DlgBtnCancel\" onclick=\"window.frames[\\'frmMain\\'].searchForm();\" value=\"Mostrar archivo cargado\"/>'");
+            bs.append("\n          + '<input id=\"btnCancel\" class=\"Button\" type=\"button\" fcklang=\"DlgBtnCancel\"");
+            bs.append(" onclick=\"window.frames[\\'frmMain\\'].searchForm();\" value=\"Mostrar archivo cargado\"/>'");
             bs.append("\n          + '</div>'; ");
             bs.append("\n  button.innerHTML = cad;");
             bs.append("\n  ");
@@ -355,13 +665,15 @@ public class HTMLContent extends GenericResource {
             bs.append("\n</head>");
             bs.append("\n");
             bs.append("\n<body>");
-            bs.append("\n  <APPLET WIDTH=\"100%\" HEIGHT=\"100%\" CODE=\"applets.dragdrop.DragDrop.class\" codebase=\"" + SWBPlatform.getContextPath() + "/\" archive=\"swbadmin/lib/SWBAplDragDrop.jar, swbadmin/lib/SWBAplCommons.jar\" border=\"0\">");
+            bs.append("\n  <APPLET WIDTH=\"100%\" HEIGHT=\"100%\" CODE=\"applets.dragdrop.DragDrop.class\" codebase=\""
+                    + SWBPlatform.getContextPath()
+                    + "/\" archive=\"swbadmin/lib/SWBAplDragDrop.jar, swbadmin/lib/SWBAplCommons.jar\" border=\"0\">");
             bs.append("\n  <PARAM NAME=\"webpath\" VALUE=\"" + SWBPlatform.getContextPath() + "/\">");
             bs.append("\n  <PARAM NAME=\"foreground\" VALUE=\"000000\">");
             bs.append("\n  <PARAM NAME=\"background\" VALUE=\"979FC3\">");
             bs.append("\n  <PARAM NAME=\"foregroundSelection\" VALUE=\"ffffff\">");
             bs.append("\n  <PARAM NAME=\"backgroundSelection\" VALUE=\"666699\">");
-            bs.append("\n  <PARAM NAME=\"path\" value=\"" + portletWorkPath + "images/\">");
+            bs.append("\n  <PARAM NAME=\"path\" value=\"" + portletWorkPath + HTMLContent.FOLDER + "/" + "\">");
             bs.append("\n  <PARAM NAME=\"clientpath\" value=\"" + clientFilePath + "\">");
             bs.append("\n  <PARAM NAME=\"files\" value=\"" + strAttaches + "\">");
             bs.append("\n  </APPLET>");
