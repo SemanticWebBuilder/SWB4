@@ -101,14 +101,17 @@ public class TripleStoreLoginModule implements LoginModule
         {
             try
             {    //TODO quitar siguiente trace
-                log.trace("passwords (u/c/t): " + principal.getPassword() +
-                        " " + SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)) +
-                        " - " + (new String((char[]) credential)));
+                log.trace("passwords (u/c/t): \n" + principal.getPassword() +
+                        "\n" + SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)) +
+                        "\n" + (new String((char[]) credential))+
+                        "\n"+ principal.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential))));
                 if (!principal.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential))))
                 {
                     throw new LoginException("Password Mistmatch:");
                 }
-            } catch (NoSuchAlgorithmException ex)
+            } catch (Exception ex)
+                    //NoSuchAlgorithmException & UnsupportedEncodingException,
+                    //Wrapped up, it doesn't matter which one, we just can't do anything else
             {
                 log.error("User: Can't set a crypted Password", ex);
                 throw new LoginException("Digest Failed");
