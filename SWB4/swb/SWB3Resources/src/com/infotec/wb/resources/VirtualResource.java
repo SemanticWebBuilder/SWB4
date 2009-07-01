@@ -76,7 +76,7 @@ public class VirtualResource extends GenericAdmResource
             //base=res.getResourceBase();
             // TODO agregar validación base.haveAccess(paramsRequest.getUser()) al siguiente if
             // TODO agregar validación SWBIntervalEvaluation.eval(new java.util.Date(),base) al siguiente if
-            if(base.isActive() && !base.isDeleted() ) {
+            if(base.isActive() && !base.isDeleted()) {
                 ((SWBParamRequestImp)paramRequest).setResourceBase(base);
                 ((SWBParamRequestImp)paramRequest).setVirtualResource(base);                
                 res.render(request, response, paramRequest);                
