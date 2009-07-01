@@ -148,7 +148,9 @@ public class TripleStoreLoginModule implements LoginModule
         {
             principal.checkCredential(credential);
             if (flag) tmp.checkCredential(credential);
-        } catch (NoSuchAlgorithmException ex)
+        } catch (Exception ex)
+                //NoSuchAlgorithmException & UnsupportedEncodingException,
+                //Wrapped up, it doesn't matter which one, we just can't do anything else
         {
             log.error("Can't set Signed status", ex);
         }

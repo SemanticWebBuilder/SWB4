@@ -1,6 +1,7 @@
 package org.semanticwb.model;
 
 import com.hp.hpl.jena.rdf.model.Statement;
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.Date;
@@ -44,7 +45,9 @@ public class User extends UserBase implements Principal
             //System.out.println("tmpPasswd:"+tmpPasswd);
             super.setPassword(tmpPasswd);
             setPasswordChanged(new Date());
-        } catch (NoSuchAlgorithmException ex)
+        } catch (Exception ex)
+                //NoSuchAlgorithmException & UnsupportedEncodingException,
+                //Wrapped up, it doesn't matter which one, we just can't do anything else
         {
             log.error("User: Can't set a crypted Password", ex);
         }
@@ -80,7 +83,7 @@ public class User extends UserBase implements Principal
         return !(getSemanticObject().isVirtual());
     }
 
-    public void checkCredential(Object credential) throws NoSuchAlgorithmException
+    public void checkCredential(Object credential) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         this.login = getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)));
     }
