@@ -66,6 +66,7 @@ public class StaticText extends GenericAdmResource
      * @throws IOException
      * @exception com.infotec.appfw.exception.AFException Si se origina cualquier error en el recurso al traer el html.
      */
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
         base.getAttribute("text");
@@ -73,7 +74,6 @@ public class StaticText extends GenericAdmResource
 
         PrintWriter out = response.getWriter();
         out.println(staticText);
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin static text</a>");
     }
 
     public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest)
