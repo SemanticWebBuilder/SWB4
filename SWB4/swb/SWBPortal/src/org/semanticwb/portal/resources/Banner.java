@@ -41,6 +41,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBResourceException;
 
 
@@ -147,4 +148,17 @@ public class Banner extends GenericAdmResource
         PrintWriter out = response.getWriter();
         out.println(ret.toString());        
     }
+
+    /**
+     * Metodo para hacer operaciones
+     */
+    @Override
+    public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
+    {
+        Resource base=getResourceBase();
+        base.addHit(request, response.getUser(), response.getTopic());
+        String url = base.getAttribute("url", "").trim();
+        if (!url.equals("")) response.sendRedirect(url);
+    }
+
 }
