@@ -123,7 +123,7 @@ sent
 	|name SIGLE val -> ^(COMPLE name val)
 	|VAR SIGGE val -> ^(COMPGE VAR val)
 	|name SIGGE val -> ^(COMPGE name val)
-        |VAR MODC val -> ^(COMPAS name val)
+        |VAR MODC val -> ^(COMPAS VAR val)
         |name MODC val -> ^(COMPAS name val)
 ;
 
