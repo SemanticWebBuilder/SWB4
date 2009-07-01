@@ -346,9 +346,15 @@
       }
 
       //alert("hola:"+decodeExtendedCharacters("á&#27721;é"));
+      //Depricado, usar addNewTab
+      function selectTab(id, url, title, tabName)
+      {
+          addNewTab(id,url,title,tabName);
+      }
 
-        function selectTab(id,url,title,tabName)
-        {
+      function addNewTab(id, url, title, tabName)
+      {
+          //alert("addNewTab:"+title);
           //if(title)title=encodeExtendedCharacters(title);
           var objid=id+CONST_TAB;
           var newTab = dijit.byId(objid);
@@ -381,8 +387,7 @@
                   onDownloadEnd: function()
                   {
                       var ret=true;
-                      //ret=confirm("Do you really want to Close this?");
-                      if(ret)
+                      if(tabName)
                       {
                           var d=dijit.byId(objid+"2");
                           if(d)
@@ -406,68 +411,69 @@
               newTab.closable=true;
               tabs.addChild(newTab);
               tabs.selectChild(newTab);
-          }else
-          {
-              tabs.selectChild(newTab);
-              objid=id+CONST_TAB+"2";
-              var tab = dijit.byId(objid);
-              if(tab)
-              {
-                  var arr=tab.getChildren();
-                  //alert(arr.length);
-                  for (var n = 0; n < arr.length; n++)
-                  {
-                      if(arr[n].id==(id+"/"+tabName))
-                      {
-                           tab.selectChild(arr[n]);
-                           break;
-                      }
-                  }
-              }
-          }
-        }
-
-      function addNewTab(id, url, title)
-      {
-          //alert("addNewTab:"+title);
-          //if(title)title=encodeExtendedCharacters(title);
-          var objid=id+CONST_TAB;
-          var newTab = dijit.byId(objid);
-          if(!url)url=context+"/swbadmin/jsp/objectTab.jsp";
-          if(newTab==null)
-          {
-              newTab = new dojox.layout.ContentPane(
-              {
-                  id: objid,
-                  closeable:'true',
-                  //loadingMessage: LOADING_MSG,
-                  onClose: function()
+              //closeAll
+              var menu=tabs.tablist.pane2menu[newTab];
+              var closeall=new dijit.MenuItem({
+                  label:"Cerrar todos",
+                  //iconClass:"swbIconDelete",
+                  onClick:function()
                   {
                       var ret=true;
-                      //ret=confirm("Do you really want to Close this?");
-                      if(ret)
+                      var arr=tabs.getChildren();
+                      for (var n = 0; n < arr.length; n++)
                       {
-                          var d=dijit.byId(objid+"2");
-                          if(d)
+                          var tab=arr[n];
+                          if(tab.closable==true)
                           {
-                              var arr=d.getChildren();
-                              for (var n = 0; n < arr.length; n++)
-                              {
-                                  arr[n].attr('content',null);
-                              }
+                              tabs.closeChild(tab);
                           }
                       }
                       return ret;
-                  },
-                  title: title,
-                  href: url+"?suri="+encodeURIComponent(id)
+                  }
               });
-              newTab.closable=true;
-              tabs.addChild(newTab);
-              tabs.selectChild(newTab);
+              //closeAthers
+              menu.addChild(closeall);
+              var closeothers=new dijit.MenuItem({
+                  label:"Cerrar los demas",
+                  //iconClass:"swbIconDelete",
+                  onClick:function()
+                  {
+                      var ret=true;
+                      var arr=tabs.getChildren();
+                      for (var n = 0; n < arr.length; n++)
+                      {
+                          var tab=arr[n];
+                          if(tab.closable==true && tab!=newTab)
+                          {
+                              tabs.closeChild(tab);
+                          }
+                      }
+                      tabs.selectChild(newTab);
+                      return ret;
+                  }
+              });
+              menu.addChild(closeothers);
           }else
           {
               tabs.selectChild(newTab);
+              if(tabName)
+              {
+                  objid=id+CONST_TAB+"2";
+                  var tab = dijit.byId(objid);
+                  if(tab)
+                  {
+                      var arr=tab.getChildren();
+                      //alert(arr.length);
+                      for (var n = 0; n < arr.length; n++)
+                      {
+                          if(arr[n].id==(id+"/"+tabName))
+                          {
+                               tab.selectChild(arr[n]);
+                               break;
+                          }
+                      }
+                  }
+              }
           }
       }
 
@@ -1092,11 +1098,17 @@
           _oldTabButton=button;
       }
 
-        function printObjProp(obj)
+        function printObjProp(obj, content)
         {
             var ret="";
             for (property in obj) {
-                ret+=property+"="+obj[property]+", ";
+                if(content && content==true)
+                {
+                    ret+=property+"="+obj[property]+", ";
+                }else
+                {
+                    ret+=property+", ";
+                }
             }
             //console.log(ret);
             alert(ret);
