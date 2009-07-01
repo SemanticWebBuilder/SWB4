@@ -110,7 +110,8 @@ public class WBMenu extends GenericAdmResource
         {   
             boolean onlychilds=new Boolean(paramRequest.getArgument("onlychilds","false")).booleanValue();
             WebSite tm = paramRequest.getTopic().getWebSite();
-            String lang=paramRequest.getUser().getLanguage();
+            User user=paramRequest.getUser();
+            String lang=user.getLanguage();
             WebPage tpid = null;
             if (paramRequest.getArguments().get("topic") != null) 
             {
@@ -129,13 +130,11 @@ public class WBMenu extends GenericAdmResource
             dom.appendChild(el);
             Element topicCurrent = dom.createElement("currenttopic");
             topicCurrent.setAttribute("id", tpid.getUrl());
-            //topicCurrent.setAttribute("name", tpid.getTitle(lang)); //TODO: AUMENTAR EL LANGUAJE, AHORA NO SE MUESTRA
             topicCurrent.setAttribute("name", tpid.getTitle(lang));
             topicCurrent.setAttribute("path", tpid.getUrl());
             el.appendChild(topicCurrent);
             WebPage padre=padre = tpid.getParent();
-            //if(!onlychilds && padre!=null && padre.isVisible() && user.haveAccess(padre)) //TODO VER 4
-            if(!onlychilds && padre!=null && padre.isVisible())
+            if(!onlychilds && padre!=null && padre.isVisible() && user.haveAccess(padre))
             {
                 Element epadre = dom.createElement("parent");
                 epadre.setAttribute("id", padre.getId());
@@ -150,7 +149,7 @@ public class WBMenu extends GenericAdmResource
                 while(itehermanos.hasNext())
                 {
                     WebPage tphermano=itehermanos.next();
-                    //if(user.haveAccess(tphermano))    //TODO
+                    if(user.haveAccess(tphermano)) 
                     {
                         Element ehermano = dom.createElement("brother");
                         ehermano.setAttribute("id", tphermano.getId());
@@ -165,7 +164,7 @@ public class WBMenu extends GenericAdmResource
                             while (hijos.hasNext()) 
                             {
                                 WebPage hijo =  hijos.next();
-                                //if(user.haveAccess(hijo))
+                                if(user.haveAccess(hijo))
                                 {
                                     Element ehijo = dom.createElement("child");
                                     ehijo.setAttribute("id", hijo.getId());
@@ -197,7 +196,7 @@ public class WBMenu extends GenericAdmResource
                 while (hijos.hasNext()) 
                 {
                     WebPage hijo = hijos.next();
-                    //if(user.haveAccess(hijo)) TODO: VER 4
+                    if(user.haveAccess(hijo))
                     {
                         Element ehijo = dom.createElement("child");
                         ehijo.setAttribute("id", hijo.getId());
