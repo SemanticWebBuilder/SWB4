@@ -75,18 +75,7 @@ public class StaticText extends GenericAdmResource {
         url.setMode(url.Mode_EDIT);
         
         PrintWriter out = response.getWriter();
-        
-//        out.println("<script type=\"text/javascript\">");
-//
-//        out.println("  function editableTextOnChange(id, arg) {");
-//        out.println("    postHtml('"+url.toString()+"'+'?val='+arg, id);");
-//        out.println("  }");
-//
-//        out.println("</script>");
-
-//        out.println("<div id=\"stext_"+base.getId()+"\" dojoType=\"dijit.InlineEditBox\" onChange=\"editableTextOnChange(this.id,arguments[0])\" autoSave=\"true\">");
         out.println(staticText);
-//        out.println("</div>");
         out.flush();
     }
 
@@ -138,17 +127,15 @@ public class StaticText extends GenericAdmResource {
         out.flush();
     }
 
-    @Override
+    /*@Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base = response.getResourceBase();
-        System.out.println("text="+request.getParameter("val"));
-        //base.setAttribute("text", request.getParameter("value_"+base.getId()));
         base.setAttribute("text", request.getParameter("val"));
         try{
             base.updateAttributesToDB();
         }catch(Exception e){
             
         }
-    }
+    }*/
     
 }
