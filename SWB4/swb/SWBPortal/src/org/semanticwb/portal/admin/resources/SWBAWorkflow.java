@@ -134,7 +134,7 @@ public class SWBAWorkflow extends GenericResource
     public void getCatalogRoles(Element res, String tm)
     {        
         Vector<Role> roles = new Vector<Role>();     
-        WebSite map = SWBContext.getAdminWebSite();
+        WebSite map = SWBContext.getWebSite(tm);
 
         Iterator<Role> it = map.getUserRepository().listRoles();
         while (it.hasNext())
@@ -142,7 +142,7 @@ public class SWBAWorkflow extends GenericResource
             Role role = it.next();
             roles.add(role);
         }
-        Collections.sort(roles, new OrdenaRole());
+        //Collections.sort(roles, new OrdenaRole());
         Iterator itRoles = roles.iterator();
         while (itRoles.hasNext())
         {
@@ -754,12 +754,14 @@ public class SWBAWorkflow extends GenericResource
 
 //                System.out.println("Con APPLET");
 
+                out.println("<div class=\"applet\">");
                 out.println("<APPLET id=\"apptree\" name=\"editrole\" code=\"applets.workflowadmin.EditWorkflow.class\" codebase=\"" + SWBPlatform.getContextPath() + "/\" ARCHIVE=\"swbadmin/lib/SWBAplWorkFlowAdmin.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"350\">");
                 out.println("<PARAM NAME =\"idworkflow\" VALUE=\"" + id + "\">");
                 out.println("<PARAM NAME =\"cgipath\" VALUE=\"" + url + "\">");
                 out.println("<PARAM NAME =\"locale\" VALUE=\"" + user.getLanguage() + "\">");
                 out.println("<PARAM NAME =\"tm\" VALUE=\"" + tm + "\">");
                 out.println("</APPLET>");
+                out.println("</div>");
             }
         }
         catch (Exception e)
