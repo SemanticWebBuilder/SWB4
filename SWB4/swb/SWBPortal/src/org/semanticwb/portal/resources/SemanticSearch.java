@@ -103,53 +103,54 @@ public class SemanticSearch extends GenericAdmResource {
         rUrl.setMode("SUGGEST");
         rUrl.setCallMethod(rUrl.Call_DIRECT);
 
-        sbf.append("<script type=\"text/javascript\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>");
-        sbf.append("<script type=\"text/javascript\">\n" +
-                "  dojo.require(\"dijit.form.Form\");\n" +
-                "  dojo.require(\"dijit.form.Button\");\n" +
-                "  dojo.require(\"dijit.form.TextBox\");\n" +
-                "</script>\n");
-        sbf.append("<script type=\"text/javascript\">\n" +
-                "  dojo.addOnLoad(function () {\n" +
-                "    dojo.connect(dojo.byId('" + createId("naturalQuery") + "'), 'onkeydown', 'queryOnKeyDown');\n" +
-                "    dojo.connect(dojo.byId('" + createId("naturalQuery") + "'), 'onkeyup', 'queryOnKeyUp');\n" +
-                "    dojo.connect(dojo.byId('" + createId("naturalQuery") + "'), 'onblur', function () {\n" +
-                "      clearSuggestions();\n" +
-                "    });\n" +
-                "  });\n" +
-                "  var source =\"" + rUrl + "\";\n" +
-                "  var lang =\"" + lang + "\";\n" +
-                "  var displayed;\n" +
-                "  var pdisplayed;\n" +
-                "</script>\n");
-        sbf.append("<script type=\"text/javascript\" charset=\"utf-8\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb_admin.js\" ></script>");
+        sbf.append("      <script type=\"text/javascript\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n" +
+                   "      <script type=\"text/javascript\">\n" +
+                   "        dojo.require(\"dijit.form.Form\");\n" +
+                   "        dojo.require(\"dijit.form.Button\");\n" +
+                   "        dojo.require(\"dijit.form.TextBox\");\n" +
+                   "      </script>\n" +
+                   "      <script type=\"text/javascript\">\n" +
+                   "        dojo.addOnLoad(function () {\n" +
+                   "          dojo.connect(dojo.byId('" + createId("naturalQuery") + "'), 'onkeydown', 'queryOnKeyDown');\n" +
+                   "          dojo.connect(dojo.byId('" + createId("naturalQuery") + "'), 'onkeyup', 'queryOnKeyUp');\n" +
+                   "          dojo.connect(dojo.byId('" + createId("naturalQuery") + "'), 'onblur', function () {\n" +
+                   "            clearSuggestions();\n" +
+                   "          });\n" +
+                   "        });\n" +
+                   "        var source =\"" + rUrl + "\";\n" +
+                   "        var lang =\"" + lang + "\";\n" +
+                   "        var displayed;\n" +
+                   "        var pdisplayed;\n" +
+                   "      </script>\n" +
+                   "      <script type=\"text/javascript\" charset=\"utf-8\" src=\"" +
+                            SWBPlatform.getContextPath() + "/swbadmin/js/swb_admin.js\" ></script>\n\n");
 
         /**
          * Clears the suggestions list and gives focus to the textarea.
          */
-        sbf.append("<script type=\"text/javascript\">\n" +
-                "  function clearSuggestions() {\n" +
-                "    if (dojo.byId('" + createId("busca-ayuda-ok") + "')) {\n" +
-                "      dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML = \"\";\n" +
-                "    }\n" +
-                "    displayed = false;\n" +
-                "    curSelected = 0;\n" +
-                "    dojo.byId('" + createId("naturalQuery") + "').focus();\n" +
-                "  }\n\n" +
-                "  function queryOnKeyDown (evt) {\n" +
-                "    var wd = getCurrentWord('" + createId("naturalQuery") + "');\n" +
-                "      if (evt.target.value == '' || wd.word.length < 3) {\n" +
-                "        clearSuggestions();\n" +
-                "        return;\n" +
-                "      }\n" +
+        sbf.append("      <script type=\"text/javascript\">\n" +
+                   "        function clearSuggestions() {\n" +
+                   "          if (dojo.byId('" + createId("busca-ayuda-ok") + "')) {\n" +
+                   "            dojo.byId('" + createId("busca-ayuda-ok") + "').innerHTML = \"\";\n" +
+                   "          }\n" +
+                   "          displayed = false;\n" +
+                   "          curSelected = 0;\n" +
+                   "          dojo.byId('" + createId("naturalQuery") + "').focus();\n" +
+                   "        }\n\n" +
+                   "        function queryOnKeyDown (evt) {\n" +
+                   "          var wd = getCurrentWord('" + createId("naturalQuery") + "');\n" +
+                   "          if (evt.target.value == '' || wd.word.length < 3) {\n" +
+                   "            clearSuggestions();\n" +
+                   "            return;\n" +
+                   "          }\n" +
                 //CTRL+SHIFT+SPACE
-                "      if (evt.ctrlKey && evt.shiftKey && evt.keyCode == dojo.keys.SPACE) {\n" +
-                "        getSuggestions(wd, source, true, false);\n" +
-                "        dojo.stopEvent(evt);\n" +
-                "      } else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.ENTER) {\n" +
-                "        setSelection(curSelected, (wd.word == \"" + paramRequest.getLocaleString("with").toLowerCase() + "\")?\"" + paramRequest.getLocaleString("with").toLowerCase() + " \":\"\");\n" +
-                "        clearSuggestions();\n" +
-                "        pdisplayed = false;\n" +
+                   "          if (evt.ctrlKey && evt.shiftKey && evt.keyCode == dojo.keys.SPACE) {\n" +
+                   "            getSuggestions(wd, source, true, false);\n" +
+                   "            dojo.stopEvent(evt);\n" +
+                   "          } else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.ENTER) {\n" +
+                   "            setSelection(curSelected, (wd.word == \"" + paramRequest.getLocaleString("with").toLowerCase() + "\")?\"" + paramRequest.getLocaleString("with").toLowerCase() + " \":\"\");\n" +
+                   "            clearSuggestions();\n" +
+                   "            pdisplayed = false;\n" +
                 "        dojo.stopEvent(evt);\n" +
                 "      }\n" +
                 "  }\n\n" +
