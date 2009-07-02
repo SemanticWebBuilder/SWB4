@@ -52,7 +52,7 @@ public class WordTag {
      */
     private String oId;    //Id de la clase que representa la palabra
     private String rangeName;
-    private String snowballForm;
+    private String displayName;
 
     /**
      * Creates a new instance of a {@link WordTag} with the given label, TagType,
@@ -69,10 +69,10 @@ public class WordTag {
      * Identificador del objeto en la ontología asociado a la palabra.
      * @param rang
      */
-    public WordTag(String label, String snowball, String typ, String cName, String cId, String rang)
+    public WordTag(String label, String display, String typ, String cName, String cId, String rang)
     {
         lbl = label;
-        snowballForm = snowball;
+        displayName = display;
         TagType = typ;
         name = cName;
         rangeName = rang;
@@ -151,19 +151,27 @@ public class WordTag {
         this.TagType = tt;
     }
 
-    public String getSnowballForm() {
-        return snowballForm;
+    /**
+     * Gets the displayName of the current {@link WordTag}.
+     * Obtiene el displayName del {@link WordTag}.
+     */
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setSnowballForm(String snowballForm) {
-        this.snowballForm = snowballForm;
+    /**
+     * Sets the displayName of the current {@link WordTag}.
+     * Establece el displayName en el {@link WordTag}.
+     */
+    public void setDisplayName(String display) {
+        this.displayName = display;
     }
     
     public String getWClassName() {
         return name;
     }
 
-    public void setClassName(String newName) {
+    public void setWClassName(String newName) {
         this.name = newName;
     }
 }
