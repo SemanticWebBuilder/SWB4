@@ -115,7 +115,7 @@ public abstract class OfficeApplication
             }
             catch (HttpException e)
             {
-                if (e.getCode() == 403)
+                if (e.getCode() == 403 || e.getCode()==404)
                 {
                     JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Error de acceso", JOptionPane.OK_OPTION |
                             JOptionPane.ERROR_MESSAGE);
