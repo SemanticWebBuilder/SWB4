@@ -32,6 +32,11 @@
             this.textBoxID = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
+            // Description
+            // 
+            this.Description.Text = "Indique el identificador de la página web a crear, esta formará parte de la direc" +
+                "ción web de la misma";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -55,6 +60,9 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxID);
             this.Name = "SelectWebPageID";
+            this.StepDescription = "Indique el identificador de la página web a crear, esta formará parte de la direc" +
+                "ción web de la misma";
+            this.StepTitle = "Identificador de página";
             this.ShowStep += new TSWizards.ShowStepEventHandler(this.SelectWebPageID_ShowStep);
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(this.SelectWebPageID_ValidateStep);
             this.Controls.SetChildIndex(this.textBoxID, 0);
