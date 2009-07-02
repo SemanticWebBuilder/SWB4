@@ -31,12 +31,17 @@ namespace WBOffice4.Steps
             WebPageInfo parent=(WebPageInfo)this.Wizard.Data[SelectSiteCreatePage.WEB_PAGE];
             try
             {
+                this.Cursor = Cursors.WaitCursor;
                 openOfficeApplication.createPage(parent, this.textBoxID.Text, title, description);
                 MessageBox.Show(this, "¡Se ha creado la página web correctamente!", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ue)
             {
-                MessageBox.Show(this, "¡Existe un error al crear la página web!\r\nDetalle: "+ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "¡Existe un error al crear la página web!\r\nDetalle: " + ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
             }
 
         }
