@@ -187,23 +187,24 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
     /** Lee un atributo del DOM del Recurso
      * Si el atributo no esta declarado regresa null.
      */
-    public Iterator<String> getAttributeNames()
-    {
-        ArrayList vec=new ArrayList();
-        try
-        {
+    public Iterator<String> getAttributeNames() {
+        ArrayList attributeNames=new ArrayList();
+        try {
             Document dom=getDom();
             Node root=dom.getFirstChild();
-            NodeList data=root.getChildNodes();
-            for(int x=0;x<data.getLength();x++)
-            {
-                vec.add(data.item(x).getNodeName());
+            if( root==null ) {
+                return attributeNames.iterator();
             }
-        } catch (Exception e)
-        {
+
+            NodeList data=root.getChildNodes();
+            for(int x=0;x<data.getLength();x++) {
+                System.out.println("node="+data.item(x).getNodeName());
+                attributeNames.add(data.item(x).getNodeName());
+            }
+        }catch (Exception e) {
             log.error(" ->Resource " + getId(), e);
         }
-        return vec.iterator();
+        return attributeNames.iterator();
     }
 
 
