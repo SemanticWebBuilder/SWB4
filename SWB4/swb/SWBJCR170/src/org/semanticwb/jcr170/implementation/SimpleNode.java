@@ -42,6 +42,7 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
+import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
@@ -1451,30 +1452,25 @@ public class SimpleNode implements Node
         throw new UnsupportedRepositoryOperationException("The node is new or is not versionable");
     }
 
-    public void restore(String versionName, boolean arg1) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
+    public void restore(String versionName, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
     {
         throw new UnsupportedRepositoryOperationException(NOT_SUPPORTED_YET);
     }
 
-    public void restore(Version version, boolean arg1) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, RepositoryException
+    public void restore(Version version, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, RepositoryException
     {
-        restore(version, null, arg1);
+        restore(version, null, removeExisting);
     }
 
-    public void restore(Version version, String relPath, boolean arg2) throws PathNotFoundException, ItemExistsException, VersionException, ConstraintViolationException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
-    {
-        if (isVersionable())
-        {
-        }
+    public void restore(Version version, String relPath, boolean removeExisting) throws PathNotFoundException, ItemExistsException, VersionException, ConstraintViolationException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
+    {       
         throw new UnsupportedRepositoryOperationException(NOT_SUPPORTED_YET);
     }
 
-    public void restoreByLabel(String label, boolean arg1) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
-    {
-        if (isVersionable())
-        {
-        }
-        throw new UnsupportedRepositoryOperationException(NOT_SUPPORTED_YET);
+    public void restoreByLabel(String label, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
+    {        
+        Version version=getVersionHistory().getVersionByLabel(label);
+        restore(version, removeExisting);
     }
 
     public VersionHistory getVersionHistory() throws UnsupportedRepositoryOperationException, RepositoryException
