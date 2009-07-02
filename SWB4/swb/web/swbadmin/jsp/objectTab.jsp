@@ -1,4 +1,4 @@
-<%@page contentType="text/html"%><%@page pageEncoding="UTF-8"%><%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
+<%@page contentType="text/html"%><%@page pageEncoding="UTF-8"%><%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*,org.semanticwb.portal.api.*"%>
 <%
     User user=SWBPortal.getSessionUser();
     String lang="es";
@@ -40,13 +40,6 @@
         String url=ob.getUrl();
         //System.out.println("ob:"+ob.getTitle(lang)+" "+ob.getDisplayObject()+" "+ob.getInterface()+" "+ob.getURL());
 
-        String params="suri="+URLEncoder.encode(obj.getURI());
-
-        String bp=ob.getBehaviorParams();
-        if(bp!=null)
-        {
-            params+="&"+SWBUtils.TEXT.replaceAll(bp, "swb:", URLEncoder.encode(SemanticVocabulary.URI));
-        }
 //        Iterator<ResourceParameter> prmit=ob.listParams();
 //        while(prmit.hasNext())
 //        {
@@ -55,6 +48,9 @@
 //        }
         //System.out.println("params:"+params);
         //Genericos
+        
+        SemanticObject robj=null;
+
         boolean addDiv=false;
         //if(dpobj==null)
         {
@@ -69,15 +65,39 @@
                     if(obj.instanceOf(scls))
                     {
                         addDiv=true;
+                    }else if(obj.instanceOf(Resource.sclass))
+                    {
+                        Resource res=(Resource)obj.getGenericInstance();
+                        SWBResource swbres=SWBPortal.getResourceMgr().getResource(res);
+                        if(swbres!=null && swbres instanceof GenericSemResource)
+                        {
+                            robj=((GenericSemResource)swbres).getSemanticObject();
+                            if(robj.instanceOf(scls))
+                            {
+                                addDiv=true;
+                            }
+                        }
                     }
+
                 }
             }
         }
         if(addDiv)
         {
+            SemanticObject aux=obj;
+            if(robj!=null)aux=robj;
+
+            String params="suri="+URLEncoder.encode(aux.getURI());
+
+            String bp=ob.getBehaviorParams();
+            if(bp!=null)
+            {
+                params+="&"+SWBUtils.TEXT.replaceAll(bp, "swb:", URLEncoder.encode(SemanticVocabulary.URI));
+            }
+
             //out.println("<div dojoType=\"dojox.layout.ContentPane\" title=\""+title+"\" _style=\"display:true;padding:10px;\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" executeScripts=\"true\">");
             //System.out.println("url:"+url+"?"+params);
-            out.println("<div id=\""+obj.getURI()+"/"+ob.getId()+"\" dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" _loadingMessage=\""+loading+"\" onLoad=\"onLoadTab(this);\">");
+            out.println("<div id=\""+aux.getURI()+"/"+ob.getId()+"\" dojoType=\"dijit.layout.ContentPane\" title=\""+title+"\" refreshOnShow=\""+refresh+"\" href=\""+url+"?"+params+"\" _loadingMessage=\""+loading+"\" onLoad=\"onLoadTab(this);\">");
             //out.println("    <script type=\"dojo/connect\">");
             //out.println("       dojo.connect(this.controlButton, \"onClick\", onClickTab);");
             //out.println("    </script>");
