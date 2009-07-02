@@ -206,7 +206,7 @@
   <rdf:Description rdf:about="http://www.semanticwb.org.mx/swb4/content#dp_numberofpages">
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
     <rdfs:label xml:lang="en">Number of pages to diaplay</rdfs:label>
-    <rdfs:label xml:lang="es">Número de páginas a despluegar</rdfs:label>
+    <rdfs:label xml:lang="es">Número de páginas a desplegar</rdfs:label>
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</swb:index>
     <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swbxf:propHidden>
     <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swbxf:propDisabled>
