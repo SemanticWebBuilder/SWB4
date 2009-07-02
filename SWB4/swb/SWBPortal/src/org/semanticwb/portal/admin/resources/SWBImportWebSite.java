@@ -132,8 +132,8 @@ public class SWBImportWebSite extends GenericResource {
 
                 if (site.getResourceType("HTMLContent") == null) {
                     ResourceType ptype = site.createResourceType("HTMLContent");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.HTMLContent");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.HTMLContent");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.HTMLContent");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.HTMLContent");
                     ptype.setResourceMode(1);
                     ptype.setTitle("HTMLContent");
                 }
