@@ -10,7 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -39,7 +38,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 public class SWBATemplateEdit extends GenericResource {
 
-    private Logger log = SWBUtils.getLogger(SWBAVersionInfo.class);
+    private Logger log = SWBUtils.getLogger(SWBATemplateEdit.class);
     String webpath = SWBPlatform.getContextPath();
     Resource base;
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
