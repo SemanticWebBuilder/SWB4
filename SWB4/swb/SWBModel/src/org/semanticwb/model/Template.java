@@ -18,7 +18,46 @@ public class Template extends TemplateBase
 
     private String actPath;
     
-    private HashMap header=null;    
+    private HashMap header=null;
+
+
+    public static String DEFAUL_HTML="<template method=\"setHeaders\" Content-Type=\"text/html\"  response=\"{response}\" />\n" +
+                           "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n" +
+                           "<html>\n" +
+                           "<head>\n" +
+                            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" +
+                            "<title>\n" +
+                            "   <TOPIC METHOD=\"getDisplayName\" LANGUAGE=\"{user@getLanguage}\"/>\n" +
+                            "</title>\n" +
+
+                            "\n<!--\n" +
+                            "Nota: No olvides incluir estos scripts en tus plantillas hechas por fuera\n" +
+                            "***************************************************************************\n" +
+                            "***************************************************************************\n" +
+                            "-->\n" +
+                            "<link rel='stylesheet' type='text/css' media='all' href='{webpath}/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css' />"+
+                            "<link rel='stylesheet' type='text/css' media='all' href='{webpath}/swbadmin/js/dojo/dijit/themes/tundra/tundra.css' />"+
+                            //"<style type=\"text/css\">\n" +
+                            //"    @import \"<webpath/>/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css\";\n" +
+                            //"    @import \"<webpath/>/swbadmin/js/dojo/dijit/themes/tundra/tundra.css\";\n" +
+                            //"    @import \""+ctx+"/swbadmin/js/dojo/dijit/themes/soria/soria.css\";\n" +
+                            //"    @import \""+ctx+"/swbadmin/css/swb_portal.css\";\n" +
+                            //"</style>\n" +
+                            "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n" +
+                            "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb_.js\"></script>\n" +
+                            "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb.js\"></script>\n" +
+                            "<!--\n" +
+                            "***************************************************************************\n" +
+                            "***************************************************************************\n" +
+                            "-->\n\n" +
+                            "</head>\n " +
+                            "<body>\n   " +
+                            "<p style=\"margin-top: 0\">\n" +
+                            "   <Content></Content>\n" +
+                            "</p>\n " +
+                            "</body>\n" +
+                            "</html>";
+
     
     public Template(SemanticObject base)
     {
