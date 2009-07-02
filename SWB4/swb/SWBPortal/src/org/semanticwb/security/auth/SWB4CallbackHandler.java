@@ -19,7 +19,7 @@ public abstract class SWB4CallbackHandler implements CallbackHandler {
     private HttpServletRequest request;
     private HttpServletResponse response;
     private String authType;
-    private DistributorParams dparams;
+    private String website;
 
     /**
      * Constructor por defecto, inicializa el modo de autenticación por defecto
@@ -28,7 +28,7 @@ public abstract class SWB4CallbackHandler implements CallbackHandler {
     public SWB4CallbackHandler() {
         this.request = null;
         this.response = null;
-        this.dparams = null;
+        this.website = null;
         this.authType = (String) SWBPlatform.getServletContext().getAttribute("authType");
     }
 
@@ -40,11 +40,11 @@ public abstract class SWB4CallbackHandler implements CallbackHandler {
      * @param authType modo de autenticacion (BASIC - FORM)
      * @param dparams Contexto de operación
      */
-    public SWB4CallbackHandler(HttpServletRequest request, HttpServletResponse response, String authType, DistributorParams dparams) {
+    public SWB4CallbackHandler(HttpServletRequest request, HttpServletResponse response, String authType, String website) {
         this.request = request;
         this.response = response;
         this.authType = authType;
-        this.dparams = dparams;
+        this.website = website;
     }
 
     /**
@@ -64,8 +64,9 @@ public abstract class SWB4CallbackHandler implements CallbackHandler {
     public void setRequest(HttpServletRequest request) {
         log.trace("Setting Request");
         this.request = request;
-        if (null == dparams) {
-            dparams = new DistributorParams(request, request.getRequestURI());
+        if (null == website) {
+            DistributorParams dparams = new DistributorParams(request, request.getRequestURI());
+            website = dparams.getWebPage().getWebSiteId();
         }
     }
 

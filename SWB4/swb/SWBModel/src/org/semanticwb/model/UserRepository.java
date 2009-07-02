@@ -34,10 +34,13 @@ public class UserRepository extends UserRepositoryBase
     public static final String SWBUR_ClassUserTypePost = "/clsUserType";
     private static ArrayList<String> userTypes = new ArrayList<String>();
     private static final String NL = System.getProperty("line.separator");
+    private final boolean EXTERNAL;
+   // private final UserRepositoryBridge
 
     public UserRepository(SemanticObject base)
     {
         super(base);
+        if (null==super.getUserRepExternalConfigFile()) EXTERNAL = false; else EXTERNAL = true;
         //System.out.println("***********UserRepository***************");
         StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
         while (ptopIt.hasNext())
@@ -198,9 +201,14 @@ public class UserRepository extends UserRepositoryBase
         return ret;
     }
 
+    private void syncUser(String login){
+
+    }
+
     public User getUserByLogin(String login)
     {
         User ret = null;
+        if (EXTERNAL) syncUser(login);
         if (null != login)
         {
             Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
@@ -598,4 +606,5 @@ public class UserRepository extends UserRepositoryBase
     {
         return userTypes.contains(name);
     }
+
 }

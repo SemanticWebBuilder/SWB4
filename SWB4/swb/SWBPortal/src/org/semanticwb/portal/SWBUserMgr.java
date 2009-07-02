@@ -5,11 +5,17 @@
 
 package org.semanticwb.portal;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import javax.security.auth.Subject;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
@@ -17,12 +23,12 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Device;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBVocabulary;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SWBInstanceObject;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.servlet.internal.Login;
+
 
 /**
  *
@@ -186,6 +192,36 @@ public class SWBUserMgr
             }
         }
         return ret;
+    }
+
+    public void login(HttpServletRequest request, HttpServletResponse response, WebSite website) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, LoginException
+    {
+        UserRepository ur = website.getUserRepository();
+        Constructor[] constructor = Class.forName(ur.getCallBackHandlerClassName()).getConstructors();
+        int method = 0;
+        for (int i = 0; i < constructor.length; i++)
+        {
+            if (constructor[i].getParameterTypes().length == 4)
+            {
+                method = i;
+            }
+        }
+        CallbackHandler callback = (CallbackHandler) constructor[method].newInstance(request, response, ur.getAuthMethod(), website.getId());
+        LoginContext lc;
+        Subject subject = SWBPortal.getUserMgr().getSubject(request, website.getId());
+                log.trace("Sending calback:"+callback);
+               // request.getSession(true).invalidate();
+                lc = new LoginContext(ur.getLoginContext(), subject, callback);
+                lc.login();
+                User user = null;
+                Iterator it = subject.getPrincipals().iterator();
+                if (it.hasNext())
+                {
+                    user = (User) it.next();
+                    log.trace("user checked?:"+user.hashCode()+":"+user.isSigned());
+                }
+                Login.sendLoginLog(request, user);
+
     }
 
 }
