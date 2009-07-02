@@ -36,7 +36,6 @@ public class SWBSparqlTranslator {
     private String nodeLabels = "SELECT|PRECON|PREDE|ASIGN|COMPL|COMPG|COMPLE|COMPGE|OFFSET|LIMIT|ORDER";
     private String eLog = "";   //Error log
     private int errCode = 0;    //Last error code
-    private boolean snowballAnalyze = false;
     private SWBSpellChecker speller = null;
 
     /**
@@ -46,19 +45,6 @@ public class SWBSparqlTranslator {
      */
     public SWBSparqlTranslator(SWBLexicon dict) {
         lex = dict;
-        snowballAnalyze = false;
-        speller = new SWBSpellChecker(dict.getSpellDictPath());
-    }
-
-    /**
-     * Creates a new instance of SWBSparqlTranslator with the given SWBLexicon.
-     * Crea un SWBSparqlTranslator con el diccionario especificado.
-     * @param dict SWBLexicon for the new translator. Diccionario para el traductor.
-     * @param snowball Wheter to use snowball algorithm for word analysis.
-     */
-    public SWBSparqlTranslator(SWBLexicon dict, boolean snowball) {
-        lex = dict;
-        snowballAnalyze = snowball;
         speller = new SWBSpellChecker(dict.getSpellDictPath());
     }
 
@@ -70,7 +56,7 @@ public class SWBSparqlTranslator {
      * @return a SemanticClass which is the range class of the object property. Null otherwise.
      */
     public SemanticClass assertPropertyRangeClass(String propertyName, String className) {
-        String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
+        String name = lex.getObjWordTag(className).getObjId();
         boolean found = false;
 
         SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(name);
@@ -113,7 +99,7 @@ public class SWBSparqlTranslator {
      */
     public String assertPropertyRangeType(String propertyName, String className) {
         String res = "";
-        String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
+        String name = lex.getObjWordTag(className).getObjId();
         boolean found = false;
         SemanticProperty sp = null;
         Iterator<SemanticProperty> sit;
@@ -131,7 +117,7 @@ public class SWBSparqlTranslator {
 
                         SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(bf.toString());
                         if (rg != null) {
-                            res = res + lex.getObjWordTag(rg.getDisplayName(lex.getLanguage()), snowballAnalyze).getType();
+                            res = res + lex.getObjWordTag(rg.getDisplayName(lex.getLanguage())).getType();
                         }
                     } else {
                         errCode = 3;
@@ -166,7 +152,7 @@ public class SWBSparqlTranslator {
      */
     private String assertPropertyType(String propertyName, String className) {
         String res = "";
-        String name = lex.getObjWordTag(className, snowballAnalyze).getObjId();
+        String name = lex.getObjWordTag(className).getObjId();
         boolean found = false;
         SemanticProperty sp = null;
         Iterator<SemanticProperty> sit;
@@ -204,7 +190,7 @@ public class SWBSparqlTranslator {
     public String didYouMean(String sent) {
         String res = "";
         String[] stopWords = {"de", "of", "con", "with", "=", "<", ">",
-            "<=", ">=", ","};
+            "<=", ">=", ",", "like", "como", "true", "false"};
 
         List<String> sw = Arrays.asList(stopWords);
 
@@ -243,7 +229,7 @@ public class SWBSparqlTranslator {
             }
             stokens.consume();
         }
-        return res;
+        return res.trim();
     }
 
     /**
@@ -419,7 +405,7 @@ public class SWBSparqlTranslator {
                         varList = varList + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "");
                     }
                     res = res + varList + "\nWHERE \n{\n";
-                    String etype = lex.getObjWordTag(t.getText(), snowballAnalyze).getType();
+                    String etype = lex.getObjWordTag(t.getText()).getType();
                     if (!etype.equals("")) {
                         res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + etype + ".\n";
                         res += startParsing(t);
