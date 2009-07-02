@@ -10,11 +10,15 @@
     }
 %>
 <%
-    User user=SWBPortal.getSessionUser();
-    String lang="es";
-    if(user!=null)lang=user.getLanguage();
-    response.setHeader("Cache-Control", "no-cache"); 
-    response.setHeader("Pragma", "no-cache"); 
+    response.setHeader("Cache-Control", "no-cache");
+    response.setHeader("Pragma", "no-cache");
+    User user=SWBPortal.getSessionUser(SWBContext.USERREPOSITORY_ADMIN);
+    if(user==null || !user.isSigned())
+    {
+        out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"showDialog('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/login.jsp','Login');\" />");
+        return;
+    }
+    String lang=user.getLanguage();
     String id=request.getParameter("id");
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     SemanticObject obj=ont.getSemanticObject(id);
@@ -36,7 +40,7 @@
     if(url!=null)
     {
 %>
-        <tr><td><%=getLocaleString("identificator",lang)%></td><td><a href="<%=url%>" onclick="selectPreviewTab('<%=url%>');return false;"><%=obj.getId()%></a></td></tr>
+        <tr><td><%=getLocaleString("identificator",lang)%></td><td><a href="<%=url%>" onclick="showPreviewURL('<%=url%>');return false;"><%=obj.getId()%></a></td></tr>
 <%
     }else
     {
