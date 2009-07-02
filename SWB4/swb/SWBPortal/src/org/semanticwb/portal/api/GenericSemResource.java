@@ -5,10 +5,7 @@
 
 package org.semanticwb.portal.api;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +31,6 @@ public class GenericSemResource extends GenericResource implements org.semanticw
 {
     private static Logger log=SWBUtils.getLogger(GenericSemResource.class);
 
-    private static SemanticModel model=null;
     private SemanticObject m_obj=null;
 
     public GenericSemResource(SemanticObject obj)
@@ -77,7 +73,7 @@ public class GenericSemResource extends GenericResource implements org.semanticw
         SWBFormMgr mgr=new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
         mgr.setSubmitByAjax(true);
         mgr.addButton(SWBFormButton.newSaveButton());
-        mgr.setType(mgr.TYPE_DOJO);
+        mgr.setType(SWBFormMgr.TYPE_DOJO);
         if("update".equals(paramRequest.getAction()))
         {
             try
@@ -117,11 +113,11 @@ public class GenericSemResource extends GenericResource implements org.semanticw
                 m_obj=res.getResourceData();
                 if(m_obj==null)
                 {
-                    org.semanticwb.platform.SemanticModel model=getResourceBase().getSemanticObject().getModel();
+                    SemanticModel model=getResourceBase().getSemanticObject().getModel();
                     SemanticClass cls=getSemanticClass();
                     if(cls!=null)
                     {
-                        m_obj=model.createSemanticObject(model.getObjectUri(getResourceBase().getId(), cls), cls);
+                        m_obj=model.createSemanticObjectById(getResourceBase().getId(), cls);
                         getResourceBase().setResourceData(m_obj);
                     }else
                     {

@@ -28,6 +28,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticModel;
+import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.api.SWBResourceCachedMgr;
@@ -67,6 +68,13 @@ public class SWBResourceMgr
         } catch (Exception e)
         {
             log.error("Error getting swb/resourceCached variable...",e);
+        }
+        try
+        {
+            resReloader = Boolean.parseBoolean(SWBPlatform.getEnv("swb/resReloader","false"));
+        } catch (Exception e)
+        {
+            log.error("Error getting swb/resReloader variable...",e);
         }
         cache = new SWBResourceCachedMgr(time);
         tracer = new SWBResourceTraceMgr();
@@ -502,8 +510,7 @@ public class SWBResourceMgr
             {
                 resourceLoaders.remove(clsname);
                 //recarga bundle (XML) del recurso (si existe).
-                //TODO:Revisar recarga
-                //GenericAdmResource.reload(clsname);
+                GenericAdmResource.reload(clsname);
             } else
             {
                 cl = (ClassLoader) resourceLoaders.get(clsname);
@@ -568,7 +575,7 @@ public class SWBResourceMgr
      * @return Value of property resReloader.
      *
      */
-    public boolean isResurceReloader()
+    public boolean isResourceReloader()
     {
         return resReloader;
     }
