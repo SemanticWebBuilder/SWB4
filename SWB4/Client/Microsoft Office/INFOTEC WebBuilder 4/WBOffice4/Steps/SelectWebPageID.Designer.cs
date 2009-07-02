@@ -44,10 +44,11 @@
             // textBoxID
             // 
             this.textBoxID.Location = new System.Drawing.Point(165, 54);
+            this.textBoxID.MaxLength = 50;
             this.textBoxID.Name = "textBoxID";
             this.textBoxID.Size = new System.Drawing.Size(267, 20);
             this.textBoxID.TabIndex = 2;
-            this.textBoxID.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxID_KeyDown);
+            this.textBoxID.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxID_KeyPress);
             // 
             // SelectWebPageID
             // 
