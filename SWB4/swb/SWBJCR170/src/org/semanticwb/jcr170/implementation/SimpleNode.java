@@ -42,7 +42,6 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
-import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
@@ -54,6 +53,7 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.ChildNodeDefinition;
+import org.semanticwb.repository.FrozenNode;
 import org.semanticwb.repository.HierarchyNode;
 import org.semanticwb.repository.LockUserComparator;
 import org.semanticwb.repository.Lockable;
@@ -67,7 +67,7 @@ import org.semanticwb.repository.Versionable;
  */
 public class SimpleNode implements Node
 {
-
+    private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
     private static Logger log = SWBUtils.getLogger(SimpleNode.class);
     private String id;
     private boolean modified = false;
@@ -1454,17 +1454,44 @@ public class SimpleNode implements Node
 
     public void restore(String versionName, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
     {
-        throw new UnsupportedRepositoryOperationException(NOT_SUPPORTED_YET);
+        Version version=getVersionHistory().getVersion(versionName);
+        restore(version, null, removeExisting);
     }
 
     public void restore(Version version, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, RepositoryException
     {
-        restore(version, null, removeExisting);
+        restore(version, ".", removeExisting);
     }
 
     public void restore(Version version, String relPath, boolean removeExisting) throws PathNotFoundException, ItemExistsException, VersionException, ConstraintViolationException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
-    {       
-        throw new UnsupportedRepositoryOperationException(NOT_SUPPORTED_YET);
+    {
+        SimpleNode nodeTorestore=null;
+        if(relPath.equals("."))
+        {
+            nodeTorestore=this;
+        }
+        else
+        {
+
+        }
+        if(nodeTorestore==null)
+        {
+            throw new PathNotFoundException("The node with path "+ relPath +" was not found");
+        }
+        else
+        {
+            Node nodeFrozen=version.getNode(JCR_FROZENNODE_NAME);
+            PropertyIterator it= nodeFrozen.getProperties();
+            while(it.hasNext())
+            {
+                Property prop=it.nextProperty();
+                this.setProperty(prop.getName(), prop.getValues());
+            }
+            if(removeExisting)
+            {
+                version.remove();
+            }
+        }
     }
 
     public void restoreByLabel(String label, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
