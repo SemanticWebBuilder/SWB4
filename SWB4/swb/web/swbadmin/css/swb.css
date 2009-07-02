@@ -384,6 +384,14 @@ _form.swbform fieldset li {
 	background-image: url(../js/dojo/dijit/themes/tundra/images/treeExpand_loading.gif);
 }
 
+.swbError {
+	color: #FF5050;
+	text-decoration: none;
+	font-family: Verdana;
+	font-size: 12px;
+	font-weight: bold;
+}
+
 
 
 /************* Version 3 ****************/
