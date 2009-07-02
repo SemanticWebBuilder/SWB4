@@ -249,16 +249,19 @@ namespace WBOffice4
                 catch (HttpException e)
                 {
                     if (e.Code == HttpStatusCode.NotFound)
-                    {
-                        RtlAwareMessageBox.Show(null, "El sitio al que desea conectarse, indica que no tiene habilitada la función de publicación de contenidos", "Iniciar sessión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    {                        
+                        RtlAwareMessageBox.Show(null, "No se puede conectar a la dirección web, o la dirección es incorrecta o no se tiene habilitada la publicación de contenidos", "Iniciar sessión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        tryLogOn = false;
                     }
                     else if (e.Code == HttpStatusCode.Forbidden)
                     {
                         RtlAwareMessageBox.Show(null, "Su clave o contraseña es incorrecta", "Iniciar sessión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        tryLogOn = false;
                     }
                     else
                     {
                         RtlAwareMessageBox.Show(null, e.Message, "Iniciar sessión", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                        tryLogOn = false;
                     }
                     OfficeApplication.LogOff();
                 }
@@ -267,16 +270,19 @@ namespace WBOffice4
                     if (e.Status == WebExceptionStatus.ConnectFailure)
                     {
                         RtlAwareMessageBox.Show(null, "El sitio web con el que intenta trabajar, se encuentra apagado o no se puede acceder al mismo.", "Iniciar sessión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        tryLogOn = false;
                     }
                     else
                     {
                         RtlAwareMessageBox.Show(null, e.Message, "Iniciar sessión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        tryLogOn = false;
                     }
                     OfficeApplication.LogOff();
                 }
                 catch (Exception e)
                 {
                     RtlAwareMessageBox.Show(null, e.Message, "Iniciar sessión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    tryLogOn = false;
                     OfficeApplication.LogOff();
                 }                
             }
