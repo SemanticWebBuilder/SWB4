@@ -119,44 +119,33 @@ namespace WBOffice4.Steps
                 String title = (String)Wizard.Data[TitleAndDecriptionCratePage.TITLE];
                 this.textBoxID.Text = getId(title);
             }
-        }
+        }        
 
-       
-
-        private void textBoxID_KeyDown(object sender, KeyEventArgs e)
+        private void textBoxID_KeyPress(object sender, KeyPressEventArgs e)
         {
-            Keys ichar = e.KeyCode;
-            if (ichar == Keys.Back)
+            int ichar = e.KeyChar;
+            if (ichar == 8)
             {
                 return;
             }
+            if (ichar >= 65 && ichar <= 90) // A-Z
+            {
+                return;
+            }
+            if (ichar >= 48 && ichar <= 57) // 0 - 9
+            {
+                return;
+            }
+            if (ichar >= 97 && ichar <= 122) // a - z
+            {
+                return;
+            }
+            if (e.KeyChar == '_')
+            {
+                return;
+            }
+            e.Handled = true; 
 
-            if (textBoxID.Text.Length > 50)
-            {
-                e.Handled = true;
-            }
-
-            if (e.KeyValue >= 'A' && e.KeyValue <= 'Z') // A-Z
-            {
-                return;
-            }
-            else if (e.KeyValue >= '0' && e.KeyValue <= '9') // 0 - 9
-            {
-                return;
-            }
-            else if (e.KeyValue >= 'a' && e.KeyValue <= 'z') // a - z
-            {
-                return;
-            }
-            else if (e.KeyValue == '_')
-            {
-                return;
-            }
-            else
-            {
-                e.Handled = true;
-
-            }
         }
 
     }
