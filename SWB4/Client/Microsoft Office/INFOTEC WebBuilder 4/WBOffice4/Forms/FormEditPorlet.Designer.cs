@@ -35,6 +35,9 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.tabControlProperties = new System.Windows.Forms.TabControl();
             this.tabPageInformation = new System.Windows.Forms.TabPage();
+            this.dateTimePickerEndDate = new System.Windows.Forms.DateTimePicker();
+            this.checkBoxEndDate = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.comboBoxVersiones = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.checkBoxActive = new System.Windows.Forms.CheckBox();
@@ -57,9 +60,6 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.label7 = new System.Windows.Forms.Label();
-            this.checkBoxEndDate = new System.Windows.Forms.CheckBox();
-            this.dateTimePickerEndDate = new System.Windows.Forms.DateTimePicker();
             this.panel1.SuspendLayout();
             this.tabControlProperties.SuspendLayout();
             this.tabPageInformation.SuspendLayout();
@@ -134,6 +134,34 @@
             this.tabPageInformation.TabIndex = 0;
             this.tabPageInformation.Text = "Información";
             this.tabPageInformation.UseVisualStyleBackColor = true;
+            // 
+            // dateTimePickerEndDate
+            // 
+            this.dateTimePickerEndDate.CustomFormat = "dd/MM/yyyy";
+            this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerEndDate.Location = new System.Drawing.Point(281, 218);
+            this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
+            this.dateTimePickerEndDate.Size = new System.Drawing.Size(122, 20);
+            this.dateTimePickerEndDate.TabIndex = 14;
+            // 
+            // checkBoxEndDate
+            // 
+            this.checkBoxEndDate.AutoSize = true;
+            this.checkBoxEndDate.Location = new System.Drawing.Point(131, 218);
+            this.checkBoxEndDate.Name = "checkBoxEndDate";
+            this.checkBoxEndDate.Size = new System.Drawing.Size(103, 17);
+            this.checkBoxEndDate.TabIndex = 13;
+            this.checkBoxEndDate.Text = "Activar Vigencia";
+            this.checkBoxEndDate.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(10, 218);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(51, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "Vigencia:";
             // 
             // comboBoxVersiones
             // 
@@ -245,7 +273,7 @@
             this.tabPageProperties.Location = new System.Drawing.Point(4, 22);
             this.tabPageProperties.Name = "tabPageProperties";
             this.tabPageProperties.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageProperties.Size = new System.Drawing.Size(411, 218);
+            this.tabPageProperties.Size = new System.Drawing.Size(411, 254);
             this.tabPageProperties.TabIndex = 1;
             this.tabPageProperties.Text = "Propiedades de publicación";
             this.tabPageProperties.UseVisualStyleBackColor = true;
@@ -256,7 +284,7 @@
             this.tabPageCalendar.Controls.Add(this.toolStripCalendar);
             this.tabPageCalendar.Location = new System.Drawing.Point(4, 22);
             this.tabPageCalendar.Name = "tabPageCalendar";
-            this.tabPageCalendar.Size = new System.Drawing.Size(411, 218);
+            this.tabPageCalendar.Size = new System.Drawing.Size(411, 254);
             this.tabPageCalendar.TabIndex = 2;
             this.tabPageCalendar.Text = "Calendarización";
             this.tabPageCalendar.UseVisualStyleBackColor = true;
@@ -270,7 +298,7 @@
             this.listViewCalendar.FullRowSelect = true;
             this.listViewCalendar.Location = new System.Drawing.Point(0, 25);
             this.listViewCalendar.Name = "listViewCalendar";
-            this.listViewCalendar.Size = new System.Drawing.Size(411, 193);
+            this.listViewCalendar.Size = new System.Drawing.Size(411, 229);
             this.listViewCalendar.TabIndex = 1;
             this.listViewCalendar.UseCompatibleStateImageBehavior = false;
             this.listViewCalendar.View = System.Windows.Forms.View.Details;
@@ -324,34 +352,6 @@
             this.toolStripButtonDelete.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonDelete.ToolTipText = "Eliminar la calendarización seleccionada";
             this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(10, 218);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(51, 13);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "Vigencia:";
-            // 
-            // checkBoxEndDate
-            // 
-            this.checkBoxEndDate.AutoSize = true;
-            this.checkBoxEndDate.Location = new System.Drawing.Point(131, 218);
-            this.checkBoxEndDate.Name = "checkBoxEndDate";
-            this.checkBoxEndDate.Size = new System.Drawing.Size(100, 17);
-            this.checkBoxEndDate.TabIndex = 13;
-            this.checkBoxEndDate.Text = "ActivarVigencia";
-            this.checkBoxEndDate.UseVisualStyleBackColor = true;
-            // 
-            // dateTimePickerEndDate
-            // 
-            this.dateTimePickerEndDate.CustomFormat = "dd/MM/yyyy";
-            this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerEndDate.Location = new System.Drawing.Point(281, 218);
-            this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
-            this.dateTimePickerEndDate.Size = new System.Drawing.Size(122, 20);
-            this.dateTimePickerEndDate.TabIndex = 14;
             // 
             // FormEditPorlet
             // 
