@@ -234,7 +234,7 @@
 	        	<xsl:if test="string-length( @maxlength ) &gt; 0"> maxlength=&quot;<xsl:value-of select="@maxlength" />&quot;</xsl:if>
 			<xsl:if test="@autocomplete = 'on' or @autocomplete = 'off'"> autocomplete=&quot;<xsl:value-of select="@autocomplete" />&quot;</xsl:if>
 		</xsl:if>
-	        <xsl:if test="@checked = 'true' and (@type = 'radio' or @type = 'checkbox')"> checked</xsl:if>
+	        <xsl:if test="@checked = 'true' and (@type = 'radio' or @type = 'checkbox')"> checked="checked" </xsl:if>
 	        <xsl:if test="@type = 'file'">
 	        	<xsl:if test="string-length( @size      ) &gt; 0"> size=&quot;<xsl:value-of select="@size" />&quot;</xsl:if>
 	        	<xsl:if test="string-length( @maxlength ) &gt; 0"> maxlength=&quot;<xsl:value-of select="@maxlength" />&quot;</xsl:if>
