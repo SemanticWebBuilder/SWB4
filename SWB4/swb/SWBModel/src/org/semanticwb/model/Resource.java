@@ -192,17 +192,12 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
         try {
             Document dom=getDom();
             Node root=dom.getFirstChild();
-            if( root==null ) {
-                return attributeNames.iterator();
-            }
 
             NodeList data=root.getChildNodes();
             for(int x=0;x<data.getLength();x++) {
-                System.out.println("node="+data.item(x).getNodeName());
                 attributeNames.add(data.item(x).getNodeName());
             }
         }catch (Exception e) {
-            log.error(" ->Resource " + getId(), e);
         }
         return attributeNames.iterator();
     }
