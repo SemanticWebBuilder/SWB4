@@ -49,7 +49,7 @@ public class Login implements InternalServlet
         this.handleError = handleError;
     }
 
-    public void sendLoginLog(HttpServletRequest request, User usr) {
+    public static void sendLoginLog(HttpServletRequest request, User usr) {
         //User session log
         {
             StringBuffer logbuf = new StringBuffer();

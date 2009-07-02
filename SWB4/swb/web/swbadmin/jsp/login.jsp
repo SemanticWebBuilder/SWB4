@@ -16,12 +16,17 @@
     String password=request.getParameter("wb_password");
     if(username!=null)
     {
-        //TODO: Serch  Login
-        
+        try {
+        SWBPortal.getUserMgr().login(request, response, SWBContext.getAdminWebSite());
+
         out.println("<script type=\"text/javascript\">");
         out.println("hideDialog();");
         out.println("</script>");
         return;
+        } catch (Exception notLoged){
+        //TODO: Jei Error code
+            return;
+        }
     }
 %>
     <form id="login/form" dojoType="dijit.form.Form" class="swbform" action="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/jsp/login.jsp"  onsubmit="submitForm('login/form');return false;" method="post">
