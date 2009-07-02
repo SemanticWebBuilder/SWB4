@@ -86,27 +86,19 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
-                long time = System.currentTimeMillis();
                 lex = new SWBLexicon(lang);
-                System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
             }
         } else {
             if (!lang.equals("es")) {
                 lang = "es";
-                long time = System.currentTimeMillis();
                 lex = new SWBLexicon(lang);
-                System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
             }
         }
 
         SWBSpellChecker speller = new SWBSpellChecker(lex.getSpellDictPath());
 
         //Assert query string
-        if (query == null) {
-            query = "";
-        } else {
-            query = query.trim();
-        }        
+        query = (query == null?"":query.trim());
 
         rUrl.setMode("SUGGEST");
         rUrl.setCallMethod(rUrl.Call_DIRECT);
@@ -446,7 +438,7 @@ public class SemanticSearch extends GenericAdmResource {
         //SWBLexicon lex = new SWBLexicon(lan);
         StringBuffer sbf = new StringBuffer();
 
-        response.setContentType("text/html; charset=utf8");
+        response.setContentType("text/html; charset=utf-8");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
@@ -529,7 +521,7 @@ public class SemanticSearch extends GenericAdmResource {
                 sbf.append("</ul>\n");
             }
         } else {
-            String tag = lex.getObjWordTag(word.toLowerCase(), false).getObjId();
+            String tag = lex.getObjWordTag(word.toLowerCase()).getObjId();
 
             sbf.append("<ul id=\"" + createId("resultlist") + "\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                     "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
@@ -552,7 +544,7 @@ public class SemanticSearch extends GenericAdmResource {
                     idCounter++;
                 }
             } else {
-                tag = lex.getPropWordTag(word, false).getRangeClassId();
+                tag = lex.getPropWordTag(word).getRangeClassId();
                 if (!tag.equals("")) {
                     SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
                     idCounter = 0;
@@ -593,25 +585,17 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
-                long time = System.currentTimeMillis();
                 lex = new SWBLexicon(lang);
-                System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
             }
         } else {
             if (!lang.equals("es")) {
                 lang = "es";
-                long time = System.currentTimeMillis();
                 lex = new SWBLexicon(lang);
-                System.out.println("+++Tiempo de indexado: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
             }
         }
 
         //Assert query string
-        if (query == null) {
-            query = "";
-        } else {
-            query = query.trim();
-        }
+        query = (query == null?"":query.trim());
 
         rUrl.setMode("SUGGEST");
         rUrl.setCallMethod(rUrl.Call_DIRECT);
@@ -646,7 +630,7 @@ public class SemanticSearch extends GenericAdmResource {
                 "  <input type=\"submit\" value=\"Buscar\" class=\"btn-busca\">\n" +
                 "</form>\n");
 
-        tr = new SWBSparqlTranslator(lex, true);
+        tr = new SWBSparqlTranslator(lex);
         long time = System.currentTimeMillis();
         String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query);
         System.out.println("\n+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
