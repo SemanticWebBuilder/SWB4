@@ -39,6 +39,10 @@ public class SiteLog extends GenericResource {
         out.println("<caption>");
         out.println(paramRequest.getLocaleString("RecentChanges"));
         out.println("</caption>");
+        out.println("<th align=\"left\">"+paramRequest.getLocaleString("action")+"</th>");
+        out.println("<th align=\"left\">"+paramRequest.getLocaleString("object")+"</th>");
+        out.println("<th align=\"left\">"+paramRequest.getLocaleString("property")+"</th>");
+        out.println("<th align=\"left\">"+paramRequest.getLocaleString("date")+"</th>");
         out.println("<tbody>");
         int cont = 0;
         String sql = "select * from swb_admlog where log_user='" + user.getURI() + "' order by log_date";
@@ -48,18 +52,22 @@ public class SiteLog extends GenericResource {
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery(sql);
                 while (rs.next()) {
-                    String fecha=""+rs.getTimestamp("log_date");
-                    if(fecha.lastIndexOf(" ")>0) fecha=fecha.substring(0,fecha.lastIndexOf(" "));
-                    out.println("<tr>");
-                    out.println("  <td class=\"mov-recurso\">" + rs.getString("log_action") + "</td>");
-                    System.out.println("log_objuri:"+rs.getString("log_objuri"));
-                    out.println("  <td class=\"mov-recurso\">" + SemanticObject.createSemanticObject(rs.getString("log_objuri")).getDisplayName() + "</td>");
-                    out.println("  <td class=\"mov-recurso\">" + ont.getSemanticProperty(rs.getString("log_propid")).getDisplayName(user.getLanguage()) + "</td>");
-                    out.println("  <td class=\"mov-fecha\">" + fecha + "</td>");
-                    out.println("</tr>");
-                    cont++;
-                    if (cont >= 10) {
-                        break;
+                    SemanticObject swbobj=SemanticObject.createSemanticObject(rs.getString("log_objuri"));
+                    System.out.println("swbobj:"+swbobj);
+                    if(swbobj!=null){
+                        String fecha=""+rs.getTimestamp("log_date");
+                        if(fecha.lastIndexOf(" ")>0) fecha=fecha.substring(0,fecha.lastIndexOf(" "));
+                        out.println("<tr>");
+                        out.println("  <td class=\"mov-recurso\">" + rs.getString("log_action") + "</td>");
+                        System.out.println("log_objuri:"+rs.getString("log_objuri"));
+                        out.println("  <td class=\"mov-recurso\">" + swbobj.getDisplayName() + "</td>");
+                        out.println("  <td class=\"mov-recurso\">" + ont.getSemanticProperty(rs.getString("log_propid")).getDisplayName(user.getLanguage()) + "</td>");
+                        out.println("  <td class=\"mov-fecha\">" + fecha + "</td>");
+                        out.println("</tr>");
+                        cont++;
+                        if (cont >= 10) {
+                            break;
+                        }
                     }
                 }
             } catch (Exception e) {
