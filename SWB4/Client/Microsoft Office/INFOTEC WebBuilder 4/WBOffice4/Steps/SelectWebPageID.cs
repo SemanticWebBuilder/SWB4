@@ -29,7 +29,15 @@ namespace WBOffice4.Steps
             String title = this.Wizard.Data[TitleAndDescription.TITLE].ToString();
             String description = this.Wizard.Data[TitleAndDescription.DESCRIPTION].ToString();
             WebPageInfo parent=(WebPageInfo)this.Wizard.Data[SelectSiteCreatePage.WEB_PAGE];
-            openOfficeApplication.createPage(parent, this.textBoxID.Text, title, description);
+            try
+            {
+                openOfficeApplication.createPage(parent, this.textBoxID.Text, title, description);
+                MessageBox.Show(this, "¡Se ha creado la página web correctamente!", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ue)
+            {
+                MessageBox.Show(this, "¡Existe un error al crear la página web!\r\nDetalle: "+ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
 
