@@ -111,7 +111,7 @@ public class SWBSpellChecker {
     /**
      * Gets a set of words similar to the given input.
      * @param word Wort to have spell check done on.
-     * @return Set of words similar to the input string'.
+     * @return Set of words similar to the input string.
      */
     public String[] suggestSimilar(String word) {
         if (checker != null) {
