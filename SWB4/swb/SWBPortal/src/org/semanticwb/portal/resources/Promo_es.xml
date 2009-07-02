@@ -88,7 +88,7 @@
             <statictext name="b">
             <![CDATA[
             <button id="btnSave" dojoType="dijit.form.Button">Guardar</button>
-            <button id="btnReset" dojoType="dijit.form.Button">Reestablecer</button>
+            <button id="btnReset" dojoType="dijit.form.Button">Restablecer</button>
             ]]>
             </statictext>
         </fieldset>

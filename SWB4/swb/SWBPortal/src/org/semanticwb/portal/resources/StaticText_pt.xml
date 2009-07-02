@@ -1,30 +1,49 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<!--
- * StaticText.xml.xml
- *
- * Created on 28 de diciembre de 2004, 12:26 PM
- *
- * @author  Administrador
- -->
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmAdmin" action="true" method="POST" enctype="multipart/form-data">
-		<admdbconnmgr defconn="true"/>     
-                <fieldset>
-<!--                         
-		<input type="FILE" name="html" label="* Archivo de contenido local:" size="40" showfile="false"/>
-		<statictext name="labelPag">* Desea páginar contenido:</statictext>
-		<input type="RADIO" name="pcont" label="Si" value="1"/>
-		<input type="RADIO" name="pcont" label="No" value="0"/>
---> 
-                <textarea name="text" label="* Text:" rows="5" cols="38" jsrequired="true"/>
-                </fieldset>
-                <fieldset>
-		<input type="SUBMIT" name="btnSave"  moreattr="class=&#34;boton&#34;" value="Salvar"/>
-		<input type="RESET"  name="btnReset" moreattr="class=&#34;boton&#34;" value="Cancelar"/>
-                <statictext name="labelPag">
-                	<![CDATA[* Dados obrigatórios]]>
-		</statictext>
-                </fieldset>
+		<admdbconnmgr defconn="true"/>
+            <fieldset legend="Datos">
+                <textarea name="text" label="* Texto:" rows="5" cols="38" jsrequired="true"/>
+            </fieldset>
+            <fieldset>
+                <statictext name="b">
+                <![CDATA[
+                <button id="btnSave" dojoType="dijit.form.Button">Guardar</button>
+                <button id="btnReset" dojoType="dijit.form.Button">Restablecer</button>
+                ]]>
+                </statictext>
+            </fieldset>
         </form>
+        <statictext name="txtNote">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				* Datos requeridos.
+			</font>
+		]]>
+        </statictext>
+
+        <script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.form.Button");
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnSave"), "onClick",
+                function() {
+                    if(jsValida(dojo.byId("frmAdmin"))) {
+                        dojo.byId("frmAdmin").submit();
+                    }
+                }
+            );
+        });
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnReset"), "onClick",
+                function() {
+                    dojo.byId("frmAdmin").reset();
+                }
+            );
+        });
+        ]]>
+        </script>
 </admresource>
