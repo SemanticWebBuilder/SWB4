@@ -85,4 +85,21 @@ public class CodeGeneratorBase
         }
     }
 
+    @Test
+    public void generateCodeSwbres()
+    {
+        try
+        {
+            String path=getClass().getResource("/").getPath().replaceAll("%20", " ");
+            File dir = new File(path+"../../../SWBPortal/src");
+            CodeGenerator codeGeneration = new CodeGenerator();
+            codeGeneration.generateCode("swbres",false,dir);
+            System.out.println("Generación de clases completa");
+        }
+        catch ( CodeGeneratorException cge )
+        {
+            fail(cge.getMessage());
+        }
+    }
+
 }
