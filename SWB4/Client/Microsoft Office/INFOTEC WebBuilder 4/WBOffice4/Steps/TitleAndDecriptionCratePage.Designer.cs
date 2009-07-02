@@ -34,6 +34,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
+            // Description
+            // 
+            this.Description.Text = "Indique el título y descripción de la página";
+            // 
             // textBoxTitle
             // 
             this.textBoxTitle.Location = new System.Drawing.Point(157, 18);
@@ -76,6 +80,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "TitleAndDecriptionCratePage";
+            this.StepDescription = "Indique el título y descripción de la página";
+            this.StepTitle = "Título y descripción";
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(this.TitleAndDecriptionCratePage_ValidateStep);
             this.Controls.SetChildIndex(this.Description, 0);
             this.Controls.SetChildIndex(this.label1, 0);
