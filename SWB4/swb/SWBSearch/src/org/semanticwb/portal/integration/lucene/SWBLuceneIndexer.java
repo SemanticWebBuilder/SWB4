@@ -33,6 +33,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -281,7 +282,11 @@ public class SWBLuceneIndexer extends SWBIndexer
                 if(obj.getLang()!=null) {
                     user.setLanguage(obj.getLang());
                 }else {
-                    user.setLanguage(topic.getWebSite().getLanguage().getId());
+                    Language lng=topic.getWebSite().getLanguage();
+                    if(lng!=null)
+                    {
+                        user.setLanguage(lng.getId());
+                    }else user.setLanguage("es");
                 }
                 SWBParamRequestImp resParams = new SWBParamRequestImp(request,res.getResourceBase(),topic,user);
                 resParams.setCallMethod(SWBParamRequestImp.Call_CONTENT);
