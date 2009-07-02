@@ -46,7 +46,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ZipLibrary\net-20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.TeamSystem.Data.UnitTesting, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -178,12 +181,6 @@
     </Compile>
     <Compile Include="Steps\SelectSite.Designer.cs">
       <DependentUpon>SelectSite.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Steps\SelectTitles.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Steps\SelectTitles.Designer.cs">
-      <DependentUpon>SelectTitles.cs</DependentUpon>
     </Compile>
     <Compile Include="URIConfigurationList.cs" />
     <Compile Include="Utils\FileUtil.cs" />
@@ -325,6 +322,12 @@
     <EmbeddedResource Include="Steps\SelectVersionToPublish.resx">
       <DependentUpon>SelectVersionToPublish.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Steps\SelectWebPageID.resx">
+      <DependentUpon>SelectWebPageID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\TitleAndDecriptionCratePage.resx">
+      <DependentUpon>TitleAndDecriptionCratePage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Steps\TitleAndDescription.resx">
       <DependentUpon>TitleAndDescription.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -348,10 +351,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Steps\SelectSite.resx">
       <DependentUpon>SelectSite.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Steps\SelectTitles.resx">
-      <DependentUpon>SelectTitles.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Steps\Search.resx">
@@ -452,7 +451,9 @@
     <Compile Include="Steps\ContentProperties.Designer.cs">
       <DependentUpon>ContentProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Steps\DatabaseSetup.cs" />
     <Compile Include="Steps\DummyNode.cs" />
+    <Compile Include="Steps\LanguageListItem.cs" />
     <Compile Include="Steps\RepositoryNode.cs" />
     <Compile Include="Steps\SelectSiteCreatePage.cs">
       <SubType>UserControl</SubType>
@@ -462,6 +463,18 @@
     </Compile>
     <Compile Include="Steps\SelectSitePublish.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectWebPageID.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectWebPageID.Designer.cs">
+      <DependentUpon>SelectWebPageID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steps\TitleAndDecriptionCratePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\TitleAndDecriptionCratePage.Designer.cs">
+      <DependentUpon>TitleAndDecriptionCratePage.cs</DependentUpon>
     </Compile>
     <Compile Include="Steps\ViewProperties.cs">
       <SubType>UserControl</SubType>
@@ -502,6 +515,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icon_rechazar.png" />
+    <None Include="Steps\app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

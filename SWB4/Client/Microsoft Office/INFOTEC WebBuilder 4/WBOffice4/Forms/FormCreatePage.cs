@@ -18,7 +18,8 @@ namespace WBOffice4.Forms
         private void FormCreatePage_LoadSteps(object sender, EventArgs e)
         {
             this.AddStep(new SelectSiteCreatePage());
-            this.AddStep(new SelectTitles());
+            this.AddStep(new TitleAndDecriptionCratePage());
+            this.AddStep(new SelectWebPageID());
         }
     }
 }

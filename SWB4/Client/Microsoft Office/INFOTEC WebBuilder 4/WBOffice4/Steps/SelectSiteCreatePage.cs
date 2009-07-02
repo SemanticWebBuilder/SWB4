@@ -25,7 +25,12 @@ namespace WBOffice4.Steps
             {
                 MessageBox.Show(this, "¡Debe indicar una página web", "Seleccionar página web", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 e.Cancel = true;
-            }           
+            }
+            else
+            {
+                WebPageInfo parent = (WebPageInfo)this.treeView1.SelectedNode.Tag;
+                this.Wizard.Data[SelectSiteCreatePage.WEB_PAGE] = parent;
+            }
         }
     }
 }
