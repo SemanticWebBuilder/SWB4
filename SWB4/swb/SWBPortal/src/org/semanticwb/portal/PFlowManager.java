@@ -955,8 +955,8 @@ public class PFlowManager
                                     Iterator<User> itusers = husers.iterator();
                                     while (itusers.hasNext())
                                     {
-                                        User user = (User) itusers.next();
-                                        if (to.indexOf(user.getEmail()) == -1)
+                                        User user = itusers.next();
+                                        if (user != null && user.getEmail() != null && to.indexOf(user.getEmail()) == -1)
                                         {
                                             to += user.getEmail() + ";";
                                         }
