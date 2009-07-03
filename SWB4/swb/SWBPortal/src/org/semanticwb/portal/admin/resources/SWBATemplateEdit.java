@@ -351,29 +351,8 @@ public class SWBATemplateEdit extends GenericResource {
                         //System.out.println("Copied OK");
                     }
                 } else {
-                    StringBuffer defaultTPL = new StringBuffer();
-                    defaultTPL.append("<template method=\"setHeaders\" Content-Type=\"text/html\"  response=\"{response}\" />");
-                    defaultTPL.append("\n<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
-                    defaultTPL.append("\n<html>");
-                    defaultTPL.append("\n<head>");
-                    defaultTPL.append("\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">");
-                    defaultTPL.append("\n<title>");
-                    defaultTPL.append("\n   <TOPIC METHOD=\"getDisplayName\" LANGUAGE=\"{user@getLanguage}\"/>");
-                    defaultTPL.append("\n</title>");
-                    defaultTPL.append("\n<style type=\"text/css\">");
-                    defaultTPL.append("\n    @import \"/swb/swbadmin/js/dojo/dijit/themes/soria/soria.css\";");
-                    defaultTPL.append("\n    @import \"/swb/swbadmin/css/swb_portal.css\";");
-                    defaultTPL.append("\n</style>");
-                    defaultTPL.append("\n<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>");
-                    defaultTPL.append("\n<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb.js\"></script>");
-                    defaultTPL.append("\n</head>");
-                    defaultTPL.append("\n <body>");
-                    defaultTPL.append("\n   <p style=\"margin-top: 0\">");
-                    defaultTPL.append("\n   <Content></Content>");
-                    defaultTPL.append("\n</p>");
-                    defaultTPL.append("\n </body>");
-                    defaultTPL.append("\n</html>");
-
+                    String defaultTPL = tmpl.DEFAUL_HTML;
+                    
                     String rutaFS_target_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + vnum + "/";
                     File f = new File(rutaFS_target_path);
                     if (!f.exists()) {
@@ -383,7 +362,7 @@ public class SWBATemplateEdit extends GenericResource {
                     File ftmpl = new File(SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + vnum + "/template.html");
                     Writer output = new BufferedWriter(new FileWriter(ftmpl));
                     try {
-                        output.write(defaultTPL.toString());
+                        output.write(defaultTPL);
                     } finally {
                         output.close();
                     }
