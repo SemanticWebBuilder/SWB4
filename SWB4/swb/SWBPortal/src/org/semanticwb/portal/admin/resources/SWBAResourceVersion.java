@@ -4,7 +4,6 @@
  */
 
 //package org.semanticwb.portal.admin.resources;
-
 /**
  *
  * @author juan.fernandez
@@ -18,8 +17,12 @@
  */
 package org.semanticwb.portal.admin.resources;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -68,7 +71,7 @@ public class SWBAResourceVersion extends GenericResource {
             out.println(" hideDialog(); ");
             out.println(" reloadTab('" + id + "'); ");
             out.println("</script>");
-            return;
+            //return;
         }
 
 
@@ -91,7 +94,7 @@ public class SWBAResourceVersion extends GenericResource {
             log.debug("doView(), suri: " + id);
             VersionInfo via = null;
             VersionInfo vio = null;
-
+            boolean versionExists = false;
             if (obj instanceof Versionable) {
                 vio = (VersionInfo) findFirstVersion(obj);
                 via = ((Versionable) obj).getActualVersion();
@@ -117,6 +120,7 @@ public class SWBAResourceVersion extends GenericResource {
                     out.println("</thead>");
                     out.println("<tbody>");
                     if (null != vio) {
+                        versionExists = true;
                         while (vio != null) {
 
                             out.println("<tr>");
@@ -139,27 +143,27 @@ public class SWBAResourceVersion extends GenericResource {
                             urlnv.setParameter("vnum", Integer.toString(vio.getVersionNumber()));
                             urlnv.setParameter("act", "newversion");
                             urlnv.setMode(SWBResourceURL.Mode_EDIT);
-                            out.println("<a href=\"#\" onclick=\"showDialog('" + urlnv + "','Nueva versión de Recurso');\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/nueva_version.gif\" border=\"0\" alt=\""+paramRequest.getLocaleString("msgNewVersion")+"\"></a>");
+                            out.println("<a href=\"#\" onclick=\"showDialog('" + urlnv + "','Nueva versión de Recurso');\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/nueva_version.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgNewVersion") + "\"></a>");
 
                             if (!vio.equals(via)) {
                                 SWBResourceURL urlsa = paramRequest.getActionUrl();
                                 urlsa.setParameter("suri", id);
                                 urlsa.setParameter("sval", vio.getURI());
                                 urlsa.setAction("setactual");
-                                out.println("<a href=\"#\" onclick=\"submitUrl('" + urlsa + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/cambio_version.gif\" border=\"0\" alt=\""+paramRequest.getLocaleString("logTplSetActual")+"\"></a>");
+                                out.println("<a href=\"#\" onclick=\"submitUrl('" + urlsa + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/cambio_version.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("logTplSetActual") + "\"></a>");
                             } else {
-                                out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/activa.gif\" border=\"0\" alt=\""+paramRequest.getLocaleString("msgActualVersion")+"\">");
+                                out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/activa.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgActualVersion") + "\">");
                             }
 
-                            out.println("<a href=\"#\" onclick=\"window.open('" + SWBPlatform.getWebWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vio.getVersionNumber() + "/"+vio.getVersionFile()  + "','Preview','scrollbars, resizable, width=550, height=550');\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\""+paramRequest.getLocaleString("msgPreview")+"\"></a>"); //submitUrl('" + urlec + "',this); return false;
+                            out.println("<a href=\"#\" onclick=\"window.open('" + SWBPlatform.getWebWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vio.getVersionNumber() + "/" + vio.getVersionFile() + "','Preview','scrollbars, resizable, width=550, height=550');\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgPreview") + "\"></a>"); //submitUrl('" + urlec + "',this); return false;
 
                             SWBResourceURL urlr = paramRequest.getActionUrl();
                             urlr.setParameter("suri", id);
                             urlr.setParameter("sval", vio.getURI());
                             urlr.setAction("remove");
-                            out.println("<a href=\"#\" onclick=\"if(confirm('"+paramRequest.getLocaleString("q_removeVersion")+"')){submitUrl('" + urlr + "',this);} return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\""+paramRequest.getLocaleString("msgRemoveVersion")+"\"></a>");
+                            out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("q_removeVersion") + "')){submitUrl('" + urlr + "',this);} return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgRemoveVersion") + "\"></a>");
                             if (vio.equals(via)) {
-                                out.println("( "+paramRequest.getLocaleString("msgActualVersion")+" ) ");
+                                out.println("( " + paramRequest.getLocaleString("msgActualVersion") + " ) ");
                             }
                             out.println("</td>");
                             out.println("<td>");
@@ -174,16 +178,20 @@ public class SWBAResourceVersion extends GenericResource {
                     out.println("</table>");
                     out.println("</fieldset>");
                     out.println("<fieldset>");
-                    SWBResourceURL urlNew = paramRequest.getRenderUrl();
-                    urlNew.setParameter("suri", id);
-                    urlNew.setParameter("act", "newversion");
-                    urlNew.setMode(SWBResourceURL.Mode_EDIT);
-                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"showDialog('" + urlNew + "','Agregar nu');\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
-                    SWBResourceURL urlVR = paramRequest.getActionUrl();
-                    urlVR.setParameter("suri", id);
-                    urlVR.setAction("resetversion");
-                    urlVR.setMode(SWBResourceURL.Mode_VIEW);
-                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"if(confirm('"+paramRequest.getLocaleString("q_resetVersion")+"')){submitUrl('" + urlVR.toString() + "',this.domNode);} return false;\">" + paramRequest.getLocaleString("btn_versionreset") + "</button>");
+
+                    if (!versionExists) {
+                        SWBResourceURL urlNew = paramRequest.getRenderUrl();
+                        urlNew.setParameter("suri", id);
+                        urlNew.setParameter("act", "newversion");
+                        urlNew.setMode(SWBResourceURL.Mode_EDIT);
+                        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"showDialog('" + urlNew + "','Agregar nueva versión');\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
+                    } else {
+                        SWBResourceURL urlVR = paramRequest.getActionUrl();
+                        urlVR.setParameter("suri", id);
+                        urlVR.setAction("resetversion");
+                        urlVR.setMode(SWBResourceURL.Mode_VIEW);
+                        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"if(confirm('" + paramRequest.getLocaleString("q_resetVersion") + "')){submitUrl('" + urlVR.toString() + "',this.domNode);} return false;\">" + paramRequest.getLocaleString("btn_versionreset") + "</button>");
+                    }
                     out.println("</fieldset>");
                     out.println("</div>");
                 }
@@ -294,14 +302,14 @@ public class SWBAResourceVersion extends GenericResource {
             if (swres != null) {
                 //User user=SWBPortal.getSessionUser();
                 out.println("<div class=\"swbform\">");
-                SWBResourceURLImp urlb = (SWBResourceURLImp)paramRequest.getRenderUrl();
+                SWBResourceURLImp urlb = (SWBResourceURLImp) paramRequest.getRenderUrl();
                 urlb.setResourceBase(swres.getResourceBase());
                 urlb.setMode(SWBResourceURLImp.Mode_EDIT);
                 urlb.setCallMethod(SWBResourceURLImp.Call_DIRECT);
                 urlb.setParameter("act", "");
                 urlb.setParameter("suri", id);
                 urlb.setParameter("numversion", vnum);
-                out.println("<iframe id=\""+getResourceBase().getId()+"swbResVersionFrame\" dojoType=\"dijit.layout.ContentPane\" src=\""+urlb+"\" width=\"100%\" height=\"100%\" frameborder=\"0\"></iframe>");
+                out.println("<iframe id=\"" + getResourceBase().getId() + "swbResVersionFrame\" dojoType=\"dijit.layout.ContentPane\" src=\"" + urlb + "\" width=\"100%\" height=\"100%\" frameborder=\"0\"></iframe>");
                 out.println("</div>");
             }
         }
@@ -366,45 +374,35 @@ public class SWBAResourceVersion extends GenericResource {
                     if (SWBUtils.IO.copyStructure(rutaFS_source_path, rutaFS_target_path, true, rutaWeb_source_path, rutaWeb_target_path)) {
                         //System.out.println("Copied OK");
                     }
+                } else {
+
+                    SWBResource swres = (SWBResource) go;
+                    VersionInfo vi = swres.getResourceBase().getWebSite().createVersionInfo();
+                    vi.setVersionFile("index.html");
+                    vi.setVersionNumber(1);
+                    vi.setVersionComment(VersionComment);
+//                    vi.setNextVersion(null);
+//                    vi.setPreviousVersion(null);
+
+                    Versionable vswres = (Versionable) go;
+                    vswres.setActualVersion(vi);
+                    vswres.setLastVersion(vi);
+
+
+                    String rutaFS_target_path = SWBPlatform.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/";
+                    File f = new File(rutaFS_target_path);
+                    if (!f.exists()) {
+                        f.mkdirs();
+                    }
+
+                    File ftmpl = new File(SWBPlatform.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/index.html");
+                    Writer output = new BufferedWriter(new FileWriter(ftmpl));
+                    try {
+                        output.write(" ");
+                    } finally {
+                        output.close();
+                    }
                 }
-//                else {
-//                    StringBuffer defaultTPL = new StringBuffer();
-//                    defaultTPL.append("<template method=\"setHeaders\" Content-Type=\"text/html\"  response=\"{response}\" />");
-//                    defaultTPL.append("\n<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
-//                    defaultTPL.append("\n<html>");
-//                    defaultTPL.append("\n<head>");
-//                    defaultTPL.append("\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">");
-//                    defaultTPL.append("\n<title>");
-//                    defaultTPL.append("\n   <TOPIC METHOD=\"getDisplayName\" LANGUAGE=\"{user@getLanguage}\"/>");
-//                    defaultTPL.append("\n</title>");
-//                    defaultTPL.append("\n<style type=\"text/css\">");
-//                    defaultTPL.append("\n    @import \"/swb/swbadmin/js/dojo/dijit/themes/soria/soria.css\";");
-//                    defaultTPL.append("\n    @import \"/swb/swbadmin/css/swb_portal.css\";");
-//                    defaultTPL.append("\n</style>");
-//                    defaultTPL.append("\n<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>");
-//                    defaultTPL.append("\n<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb.js\"></script>");
-//                    defaultTPL.append("\n</head>");
-//                    defaultTPL.append("\n <body>");
-//                    defaultTPL.append("\n   <p style=\"margin-top: 0\">");
-//                    defaultTPL.append("\n   <Content></Content>");
-//                    defaultTPL.append("\n</p>");
-//                    defaultTPL.append("\n </body>");
-//                    defaultTPL.append("\n</html>");
-//
-//                    String rutaFS_target_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + vnum + "/";
-//                    File f = new File(rutaFS_target_path);
-//                    if (!f.exists()) {
-//                        f.mkdirs();
-//                    }
-//
-//                    File ftmpl = new File(SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + vnum + "/template.html");
-//                    Writer output = new BufferedWriter(new FileWriter(ftmpl));
-//                    try {
-//                        output.write(defaultTPL.toString());
-//                    } finally {
-//                        output.close();
-//                    }
-//                }
 
                 //SWBPortal.getResourceMgr().reloadTemplate(tmpl);
                 response.setRenderParameter("dialog", "close");
@@ -422,7 +420,7 @@ public class SWBAResourceVersion extends GenericResource {
             sobase.setObjectProperty(Versionable.swb_actualVersion, soactual);
 
             // Para recargar el recurso
-            SWBResource swres = (SWBResource)sobase.getGenericInstance();
+            SWBResource swres = (SWBResource) sobase.getGenericInstance();
             swres.setResourceBase(swres.getResourceBase());
 
             response.setRenderParameter(act, "");
@@ -500,7 +498,7 @@ public class SWBAResourceVersion extends GenericResource {
                     vio.removeNextVersion();
                     vio.removePreviousVersion();
                     vio.remove();
-                    //sobase.getSemanticObject().remove();
+                //sobase.getSemanticObject().remove();
                 }
             }
 
@@ -509,9 +507,10 @@ public class SWBAResourceVersion extends GenericResource {
         } else if ("resetversion".equals(act)) {
             //System.out.println("Reset - Version");
             Versionable versiones = null;
-            if(go instanceof Versionable)
+            if (go instanceof Versionable) {
                 versiones = (Versionable) go;
-            
+            }
+
             SWBResource tmpl = (SWBResource) go;
 
 
@@ -575,8 +574,8 @@ public class SWBAResourceVersion extends GenericResource {
                 //SWBResource swres = (SWBResource)sobase.getGenericInstance();
                 tmpl.setResourceBase(tmpl.getResourceBase());
 
-                //SWBPortal.getTemplateMgr().reloadTemplate(tmpl);
-                //System.out.println("filename:"+va.getVersionFile());
+            //SWBPortal.getTemplateMgr().reloadTemplate(tmpl);
+            //System.out.println("filename:"+va.getVersionFile());
             }
         }
         response.setRenderParameter("suri", id);
