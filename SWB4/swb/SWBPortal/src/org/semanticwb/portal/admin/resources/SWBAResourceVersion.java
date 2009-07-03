@@ -305,7 +305,7 @@ public class SWBAResourceVersion extends GenericResource {
                 SWBResourceURLImp urlb = (SWBResourceURLImp) paramRequest.getRenderUrl();
                 urlb.setResourceBase(swres.getResourceBase());
                 urlb.setMode(SWBResourceURLImp.Mode_EDIT);
-                urlb.setCallMethod(SWBResourceURLImp.Call_DIRECT);
+                //urlb.setCallMethod(SWBResourceURLImp.Call_DIRECT);
                 urlb.setParameter("act", "");
                 urlb.setParameter("suri", id);
                 urlb.setParameter("numversion", vnum);
