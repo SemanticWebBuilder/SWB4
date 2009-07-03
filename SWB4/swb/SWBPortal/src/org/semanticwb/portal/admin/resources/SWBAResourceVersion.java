@@ -71,9 +71,8 @@ public class SWBAResourceVersion extends GenericResource {
             out.println(" hideDialog(); ");
             out.println(" reloadTab('" + id + "'); ");
             out.println("</script>");
-            //return;
+            return;
         }
-
 
         if (null == id) {
             out.println("<fieldset>");
@@ -267,10 +266,7 @@ public class SWBAResourceVersion extends GenericResource {
             out.println("</table>");
             out.println("</filedset>");
             out.println("<filedset>");
-            //out.println("<hr noshade>");
             out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >Guardar</button>"); //_onclick=\"submitForm('"+id+"/"+idvi+"/"+base.getId()+"/FVIComment');return false;\"
-            //out.println("<button dojoType=\"dijit.form.Button\">Favoritos</button>");
-            //out.println("<button dojoType=\"dijit.form.Button\">Eliminar</button>");
             SWBResourceURL urlb = paramRequest.getRenderUrl();
             urlb.setMode(SWBResourceURL.Mode_VIEW);
             urlb.setParameter("act", "");
@@ -295,23 +291,18 @@ public class SWBAResourceVersion extends GenericResource {
             out.println(fm.renderForm(request));
         } else if (action.equals("edit_temp")) {
             //System.out.println("VNUM: " + vnum);
-            SemanticObject obj = SemanticObject.createSemanticObject(id);
+            //SemanticObject obj = SemanticObject.createSemanticObject(id);
             GenericObject gobj = ont.getGenericObject(id);
 
             swres = (SWBResource) gobj;
             if (swres != null) {
-                //User user=SWBPortal.getSessionUser();
-                //out.println("<div class=\"swbform\">");
                 SWBResourceURLImp urlb = (SWBResourceURLImp) paramRequest.getRenderUrl();
                 urlb.setResourceBase(swres.getResourceBase());
                 urlb.setMode(SWBResourceURLImp.Mode_EDIT);
-                //urlb.setCallMethod(SWBResourceURLImp.Call_DIRECT);
-                urlb.setParameter("act", "");
+                urlb.setCallMethod(SWBResourceURLImp.Call_DIRECT);
                 urlb.setParameter("suri", id);
                 urlb.setParameter("numversion", vnum);
-                //out.println("<div id=\"swbPreviewTab\" dojoType=\"dijit.layout.ContentPane\" title=\"Preview\" style=\"display:none; padding:10px; \" closable=\"false\" >");
                 out.println("<iframe id=\"" + getResourceBase().getId() + "swbResVersionFrame\" dojoType=\"dijit.layout.ContentPane\" src=\"" + urlb + "\" width=\"100%\" height=\"100%\" frameborder=\"0\"></iframe>");
-                //out.println("</div>");
             }
         }
     }
@@ -382,8 +373,6 @@ public class SWBAResourceVersion extends GenericResource {
                     vi.setVersionFile("index.html");
                     vi.setVersionNumber(1);
                     vi.setVersionComment(VersionComment);
-//                    vi.setNextVersion(null);
-//                    vi.setPreviousVersion(null);
 
                     Versionable vswres = (Versionable) go;
                     vswres.setActualVersion(vi);
@@ -410,11 +399,13 @@ public class SWBAResourceVersion extends GenericResource {
                 response.setRenderParameter("act", "");
                 response.setMode(response.Mode_VIEW);
             }
-        } else if ("update".equals(act)) {
-            id = request.getParameter("psuri");
-            response.setRenderParameter(act, "");
-            response.setMode(response.Mode_VIEW);
-        } else if ("setactual".equals(act)) {
+        }
+//        else if ("update".equals(act)) {
+//            id = request.getParameter("psuri");
+//            response.setRenderParameter(act, "");
+//            response.setMode(response.Mode_VIEW);
+//        }
+        else if ("setactual".equals(act)) {
             String idval = request.getParameter("sval");
             SemanticObject sobase = ont.getSemanticObject(id);
             SemanticObject soactual = ont.getSemanticObject(idval);
