@@ -301,7 +301,7 @@ public class SWBAResourceVersion extends GenericResource {
             swres = (SWBResource) gobj;
             if (swres != null) {
                 //User user=SWBPortal.getSessionUser();
-                out.println("<div class=\"swbform\">");
+                //out.println("<div class=\"swbform\">");
                 SWBResourceURLImp urlb = (SWBResourceURLImp) paramRequest.getRenderUrl();
                 urlb.setResourceBase(swres.getResourceBase());
                 urlb.setMode(SWBResourceURLImp.Mode_EDIT);
@@ -309,8 +309,9 @@ public class SWBAResourceVersion extends GenericResource {
                 urlb.setParameter("act", "");
                 urlb.setParameter("suri", id);
                 urlb.setParameter("numversion", vnum);
+                //out.println("<div id=\"swbPreviewTab\" dojoType=\"dijit.layout.ContentPane\" title=\"Preview\" style=\"display:none; padding:10px; \" closable=\"false\" >");
                 out.println("<iframe id=\"" + getResourceBase().getId() + "swbResVersionFrame\" dojoType=\"dijit.layout.ContentPane\" src=\"" + urlb + "\" width=\"100%\" height=\"100%\" frameborder=\"0\"></iframe>");
-                out.println("</div>");
+                //out.println("</div>");
             }
         }
     }
