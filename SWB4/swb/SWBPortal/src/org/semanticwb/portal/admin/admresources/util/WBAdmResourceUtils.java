@@ -1322,6 +1322,24 @@ public class WBAdmResourceUtils {
         return sbfRet.toString();
     }
     
+    public String loadIsNumber(int radix) {
+        if(radix!=8 && radix!=10 && radix!=16) {
+            radix = 10;
+        }
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\n function isInt(textBoxIn) {");
+        sbfRet.append("\n    var pCaracter = textBoxIn.value;");
+
+        sbfRet.append("\n    if( isNaN(pCaracter) ) {");
+        sbfRet.append("\n       alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadIsNumber_msg") + ".');");
+        sbfRet.append("\n       textBoxIn.focus();");
+        sbfRet.append("\n       return false;");
+        sbfRet.append("\n    }");
+        sbfRet.append("\n    return true;");
+        sbfRet.append("\n }");
+        return sbfRet.toString();
+    }
+    
     
     /**
      * Crea una función JavaScript específica.
