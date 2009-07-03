@@ -53,11 +53,11 @@ public class SWBPortal {
     private static SWBResourceMgr resmgr = null;
     private static SWBTemplateMgr templatemgr = null;
     private static SWBServiceMgr servicemgr = null;
-    private static SWBDBAdmLog admlog=null;
-    private static SWBMessageCenter msgcenter=null;
-    private static SWBAccessLog acclog=null;
-    private static SWBAccessIncrement accInc=null;
-    private static SWBIndexMgr indmgr=null;
+    private static SWBDBAdmLog admlog = null;
+    private static SWBMessageCenter msgcenter = null;
+    private static SWBAccessLog acclog = null;
+    private static SWBAccessIncrement accInc = null;
+    private static SWBIndexMgr indmgr = null;
     private static HashMap<String, SessionUser> m_sessions;
 
     static public synchronized SWBPortal createInstance() {
@@ -74,18 +74,15 @@ public class SWBPortal {
     }
     //Initialize context
 
-    private void init() 
-    {
+    private void init() {
         WebSite site = SWBContext.getAdminWebSite();
-        if (site == null)
-        {
+        if (site == null) {
             log.event("Creating Admin WebSite...");
             SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ADMIN, "http://www.semanticwb.org/SWBAdmin#");
         }
 
         site = SWBContext.getOntEditor();
-        if (site == null)
-        {
+        if (site == null) {
             log.event("Creating Ontology Editor WebSite...");
             SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ONTEDITOR, "http://www.semanticwb.org/SWBOntEdit#");
         }
@@ -116,13 +113,13 @@ public class SWBPortal {
             user.setLanguage("es");
             user.setActive(true);
 
-            UserGroup grp1=urep.createUserGroup("admin");
-            grp1.setTitle("Administrator","en");
-            grp1.setTitle("Administrador","es");
+            UserGroup grp1 = urep.createUserGroup("admin");
+            grp1.setTitle("Administrator", "en");
+            grp1.setTitle("Administrador", "es");
             grp1.setUndeleteable(true);
-            UserGroup grp2=urep.createUserGroup("su");
-            grp2.setTitle("Super User","en");
-            grp2.setTitle("Super Usuario","es");
+            UserGroup grp2 = urep.createUserGroup("su");
+            grp2.setTitle("Super User", "en");
+            grp2.setTitle("Super Usuario", "es");
             grp2.setUndeleteable(true);
             grp2.setParent(grp1);
             user.addUserGroup(grp1);
@@ -144,11 +141,11 @@ public class SWBPortal {
             lang = site.createLanguage("en");
             lang.setTitle("Ingles", "es");
             lang.setTitle("English", "en");
-            //Create HomePage
+        //Create HomePage
 //            WebPage home = site.createWebPage("home");
 //            site.setHomePage(home);
 //            home.setActive(true);
-            //Create DNS
+        //Create DNS
 //            Dns dns = site.createDns("localhost");
 //            dns.setTitle("localhost");
 //            dns.setDescription("DNS por default", "es");
@@ -224,13 +221,13 @@ public class SWBPortal {
         msgcenter = new SWBMessageCenter();
         msgcenter.init();
 
-        acclog= new SWBAccessLog();
+        acclog = new SWBAccessLog();
         acclog.init();
 
-        accInc=new SWBAccessIncrement();
+        accInc = new SWBAccessIncrement();
         accInc.init();
 
-        indmgr=new SWBIndexMgr();
+        indmgr = new SWBIndexMgr();
         indmgr.init();
 
         //Inicializa el RuleMgr
@@ -299,7 +296,6 @@ public class SWBPortal {
 //            dns.setWebPage(home);
 //        }
 //    }
-
     public static String getDistributorPath() {
         return SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor", "swb");
     }
@@ -324,32 +320,27 @@ public class SWBPortal {
         return servicemgr;
     }
 
-    public static SWBDBAdmLog getDBAdmLog()
-    {
+    public static SWBDBAdmLog getDBAdmLog() {
         return admlog;
     }
 
-    public static SWBMessageCenter getMessageCenter()
-    {
+    public static SWBMessageCenter getMessageCenter() {
         return msgcenter;
     }
 
-    public static SWBAccessLog getAccessLog()
-    {
+    public static SWBAccessLog getAccessLog() {
         return acclog;
     }
-    public static PFlowManager getPFlowManager()
-    {
+
+    public static PFlowManager getPFlowManager() {
         return pflowMgr;
     }
 
-    public static SWBAccessIncrement getAccessIncrement()
-    {
+    public static SWBAccessIncrement getAccessIncrement() {
         return accInc;
     }
 
-    public static SWBIndexMgr getIndexMgr()
-    {
+    public static SWBIndexMgr getIndexMgr() {
         return indmgr;
     }
 
@@ -399,7 +390,7 @@ public class SWBPortal {
         if (user != null) {
             SessionUser sess = m_sessions.get(Thread.currentThread().getName());
             if (sess == null) {
-                m_sessions.put(Thread.currentThread().getName(), new SessionUser(user,user.getUserRepository().getId()));
+                m_sessions.put(Thread.currentThread().getName(), new SessionUser(user, user.getUserRepository().getId()));
             } else {
                 sess.setUser(user, user.getUserRepository().getId());
             }
@@ -538,6 +529,88 @@ public class SWBPortal {
                         }
                     } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
                         ret.append(tok.getRawString());
+                    }
+                }
+            } catch (NumberFormatException f) {
+                log.error(f);
+            } catch (Exception e) {
+                log.error(e);
+            }
+            return ret.toString();
+        }
+
+        /**
+         * @param datos
+         * @param ruta
+         */
+        public static String getContentByPage(String datos, int page) {
+            HtmlTag tag = new HtmlTag();
+            StringBuffer ret = new StringBuffer();
+            StringBuffer rettmp = new StringBuffer();
+            boolean flag = false;
+            boolean flag1 = false;
+            boolean flag2 = false;
+            try {
+                HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new java.io.ByteArrayInputStream(datos.getBytes()));
+                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+                    int ttype = tok.getTokenType();
+                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
+                        tok.parseTag(tok.getStringValue(), tag);
+                        if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
+                            continue;
+                        }
+                        if (tag.getTagString().toLowerCase().equals("div")) {
+                            flag1 = true;
+                            if (!tag.isEndTag()) {
+                                rettmp = new StringBuffer();
+                                rettmp.append("<");
+                                rettmp.append(tag.getTagString());
+                                rettmp.append(" ");
+                                Enumeration en = tag.getParamNames();
+                                String name = "";
+                                String value = "";
+                                String actionval = "";
+                                while (en.hasMoreElements()) {
+                                    name = (String) en.nextElement();
+                                    value = tag.getParam(name);
+                                    rettmp.append(name);
+                                    rettmp.append("=\"");
+                                    if (name.toLowerCase().equals("class")) {
+                                        if (value.toLowerCase().equals("section" + page)) {
+                                            flag = true;
+                                            ret.append(rettmp.toString());
+                                            ret.append(value);
+                                            ret.append("\" ");
+                                            ret.append(">");
+                                        }
+                                    } else if (flag) {
+                                        flag2 = true;
+                                        ret.append(rettmp.toString());
+                                        ret.append(value);
+                                        ret.append("\" ");
+                                        ret.append(">");
+                                    }
+                                }
+                            } else {
+                                if (flag && !flag2) {
+                                    ret.append(tok.getRawString());
+                                    ret.append("</body>");
+                                    ret.append("</html>");
+                                    break;
+                                } else if (flag && flag2) {
+                                    ret.append(tok.getRawString());
+                                    flag2 = false;
+                                }
+                            }
+                        } else {
+                            if (!flag1 || flag) {
+                                ret.append(tok.getRawString());
+                            }
+                        }
+                    } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
+                        if (!flag1 || flag) {
+                            ret.append(tok.getRawString());
+                        }
                     }
                 }
             } catch (NumberFormatException f) {
@@ -906,7 +979,6 @@ public class SWBPortal {
             }
             return value;
         }
-
         private final String ALPHABETH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
         private String getRandString(int size) {
@@ -919,8 +991,11 @@ public class SWBPortal {
 
         public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, int size, String cad) throws ServletException, IOException {
             String cadena = null;
-            if (null==cad) cadena = getRandString(size);
-            else cadena = cad;
+            if (null == cad) {
+                cadena = getRandString(size);
+            } else {
+                cadena = cad;
+            }
             request.getSession(true).setAttribute("swb_valCad", cadena);
             BufferedImage buffer = new BufferedImage(150, 40, BufferedImage.TYPE_INT_RGB);
             Graphics2D g = buffer.createGraphics();
@@ -928,7 +1003,7 @@ public class SWBPortal {
             g.setBackground(new Color(255, 255, 255));
             g.clearRect(0, 0, 150, 40);
             g.setColor(new Color(0, 0, 0));
-            Font f = new Font("Serif",Font.BOLD,25);
+            Font f = new Font("Serif", Font.BOLD, 25);
             //g.setFont(g.getFont().deriveFont(Font.ROMAN_BASELINE, 25.0f));
             g.setFont(f);
             g.drawString(cadena, 15, 30);
@@ -941,16 +1016,16 @@ public class SWBPortal {
             }
 
             /*try {
-                org.semanticwb.base.util.GIFEncoder encoder = new org.semanticwb.base.util.GIFEncoder(buffer);
-                response.setContentType("image/gif");
-                encoder.Write(response.getOutputStream());
+            org.semanticwb.base.util.GIFEncoder encoder = new org.semanticwb.base.util.GIFEncoder(buffer);
+            response.setContentType("image/gif");
+            encoder.Write(response.getOutputStream());
             } catch (AWTException e) {
-                log.error(e);
+            log.error(e);
             }*/
-                
+
             try {
                 response.setContentType("image/png");
-                javax.imageio.ImageIO.write(buffer, "png", response.getOutputStream());                
+                javax.imageio.ImageIO.write(buffer, "png", response.getOutputStream());
             } catch (IOException e) {
                 log.error(e);
             }
@@ -958,12 +1033,12 @@ public class SWBPortal {
 
         public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, String attributeName, int size, String cad) throws ServletException, IOException {
             String cadena = null;
-            if(null==cad) {
+            if (null == cad) {
                 cadena = getRandString(size);
-            }else {
+            } else {
                 cadena = cad;
             }
-            if(null==attributeName) {
+            if (null == attributeName) {
                 attributeName = "swb_valCad";
             }
             request.getSession(true).setAttribute(attributeName, cadena);
@@ -973,7 +1048,7 @@ public class SWBPortal {
             g.setBackground(new Color(255, 255, 255));
             g.clearRect(0, 0, 150, 40);
             g.setColor(new Color(0, 0, 0));
-            Font f = new Font("Serif",Font.BOLD,25);
+            Font f = new Font("Serif", Font.BOLD, 25);
             g.setFont(f);
             g.drawString(cadena, 15, 30);
 
