@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" import="net.fckeditor.*" %>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
@@ -9,18 +9,30 @@
 <%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.model.VersionInfo"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
+<%@page import="org.semanticwb.model.GenericObject"%>
+<%@page import="org.semanticwb.platform.SemanticOntology"%>
+<%@page import="org.semanticwb.portal.api.SWBResource"%>
+<%@page import="org.semanticwb.portal.api.SWBResourceURLImp"%>
+
 <%--@ taglib uri="http://java.fckeditor.net" prefix="FCK" --%>
 <%
-    Resource base = paramRequest.getResourceBase();
-    SWBResourceURL url = paramRequest.getRenderUrl();
-    url.setCallMethod(SWBResourceURL.Call_CONTENT);
+    SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+            GenericObject obj = ont.getGenericObject(request.getParameter("suri"));
+
+            SWBResource swres = (SWBResource) obj;
+
+    Resource base = swres.getResourceBase();
+    SWBResourceURLImp url = (SWBResourceURLImp) paramRequest.getRenderUrl();
+    url.setResourceBase(base);
+    url.setCallMethod(SWBResourceURLImp.Call_DIRECT);
+//    url.setCallMethod(SWBResourceURL.Call_CONTENT);
     url.setMode("saveContent");
     String action = (request.getParameter("tmpPath") != null) ? "tmp" : "";  //request.getParameter("tmpPath")
-    int version = (request.getParameter("version") != null && !"".equals(request.getParameter("version")))
-                     ? Integer.parseInt(request.getParameter("version"))
+    int version = (request.getParameter("numversion") != null && !"".equals(request.getParameter("numversion")))
+                     ? Integer.parseInt(request.getParameter("numversion"))
                      : 0;
-    VersionInfo versionInfo = new VersionInfo(base.getSemanticObject());
-    version = versionInfo.getVersionNumber();
+    //VersionInfo versionInfo = new VersionInfo(base.getSemanticObject());
+    //version = versionInfo.getVersionNumber();
     net.fckeditor.FCKeditor fckEditor = new net.fckeditor.FCKeditor(request, "EditorDefault");
     fckEditor.setHeight("450");
     String content = (String) request.getAttribute("fileContent");
@@ -29,7 +41,8 @@
     urlNewVersion.setCallMethod(SWBResourceURL.Call_CONTENT);
     urlNewVersion.setMode("selectFileInterface");
     String portletWorkPath = base.getWorkPath() + "/" + (version > 1 ? version : 1) + "/tmp/";
-%>
+System.out.println("version:" + version);
+    %>
 <%--
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2008 Frederico Caldeira Knabben
@@ -57,6 +70,7 @@
         window.status = editorInstance.Description;
       }
       var urlFileSelection = "<%=urlNewVersion.toString()%>";
+      var actualContext = "<%=SWBPlatform.getContextPath()%>";
       function callUpload() {
         var f = document.frames ? document.frames["EditorDefault___Frame"] : document.getElementById("EditorDefault___Frame");
         var p = f.contentWindow || f.document;
