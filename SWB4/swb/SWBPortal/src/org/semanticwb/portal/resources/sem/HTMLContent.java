@@ -3,6 +3,7 @@ package org.semanticwb.portal.resources.sem;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.http.*;
 import org.semanticwb.portal.api.*;
 import java.io.File;
@@ -27,6 +28,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.resources.sem.base.HTMLContentBase;
 import org.semanticwb.portal.util.WBFileUpload;
 
 public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLContentBase 
@@ -49,13 +51,17 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void doView(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException {
         
         Resource resource = paramRequest.getResourceBase();
-        VersionInfo versionInfo = new VersionInfo(resource.getSemanticObject());
-        int versionNumber = versionInfo.getVersionNumber();
-        String fileName = "index.html";//versionInfo.getVersionFile();
+        HTMLContent hc = new HTMLContent();
+        hc.setResourceBase(resource);
+        Versionable versionInfo = null;
+        VersionInfo vi = hc.getActualVersion();
+        int versionNumber = vi.getVersionNumber();
+        String fileName = vi.getVersionFile();
         String resourceWorkPath = SWBPlatform.getWorkPath()
                 + resource.getWorkPath() + "/" + versionNumber + "/" + fileName;
         String fileContent = SWBUtils.IO.getFileFromPath(resourceWorkPath);
@@ -64,7 +70,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                                      SWBPlatform.getWorkPath()
                                      + resource.getWorkPath() + "/"
                                      + versionNumber + "/"));
-        
     }
 
     /**
@@ -82,17 +87,25 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
         System.out.println("En HTMLContent.doEdit():"+request.getParameter("numversion"));
 
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        GenericObject obj = ont.getGenericObject(request.getParameter("suri"));
         Resource resource = paramRequest.getResourceBase();
         HttpSession session = request.getSession();
         //VersionInfo versionInfo = new VersionInfo(resource.getSemanticObject());
         int versionNumber = Integer.parseInt(request.getParameter("numversion"));    //versionInfo.getVersionNumber();
-        String fileName = "index.html";
+        String fileName = null;
         String action = paramRequest.getAction();
         StringBuffer pathToRead = new StringBuffer(70);
         StringBuffer pathToWrite = new StringBuffer(70);
         String content = "";
         //Para mostrar el contenido de una versión temporal
         String tmpPath = request.getParameter("tmpPath");
+        VersionInfo vio = null;
+
+        if (obj instanceof Versionable) {
+            vio = (VersionInfo) findVersion(obj, versionNumber);
+            fileName = vio.getVersionFile();
+        }
 
         pathToRead.append(resource.getWorkPath() + "/");
         pathToWrite.append("/work" + resource.getWorkPath() + "/");
@@ -113,7 +126,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 if (tmpPath == null || "".equals(tmpPath)) {
                     content = SWBUtils.IO.readInputStream(
                             SWBPlatform.getFileFromWorkPath(pathToRead.toString()));
-                    //Se sustituye el tag insertado por el metodo saveContent por la ruta logica del archivo
+                    //Se sustituye el tag insertado por el metodo saveContent en lugar de la ruta logica del archivo
                     content = SWBUtils.TEXT.replaceAll(content, "<workpath/>",
                             SWBPlatform.getWebWorkPath() + resource.getWorkPath()
                             + "/" + (versionNumber) + "/");
@@ -122,16 +135,17 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                             SWBPlatform.getFileFromWorkPath(tmpPath + "index.html"));
                 }
             } catch (Exception e) {
+                content = "Error al leer el archivo";
                 e.printStackTrace();
             }
         }
-        request.setAttribute("fileContent", content);
 
         try {
+            request.setAttribute("fileContent", content);
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("numversion", versionNumber);
             RequestDispatcher rd = request.getRequestDispatcher(
-                    "/swbadmin/jsp/HtmlContentAdmin.jsp");
+                    "/swbadmin/jsp/HtmlContentSemAdmin.jsp");
             rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -201,6 +215,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         String attachedFiles = null;
         String workingDirectory = SWBPlatform.getWebWorkPath()
                                   + resource.getWorkPath();
+        String message = null;
 
         //Siempre se crea una nueva version al guardar
         //versionNumber++;
@@ -318,13 +333,17 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 log.error("Al escribir el archivo", e);
             }
         }
-        PrintWriter out = response.getWriter();
+        //PrintWriter out = response.getWriter();
         if (textSaved) {
-            out.println("El contenido ha sido guardado exit&oacute;samente");
+            message = "El contenido ha sido guardado exit&oacute;samente";
         } else {
-            out.println("Se produjo un error al almacenar la información, intente de nuevo.");
+            message = "Se produjo un error al almacenar la información, intente de nuevo.";
         }
-        out.close();
+        //out.close();
+        request.setAttribute("message", message);
+        request.setAttribute("numversion", versionNumber);
+        this.doEdit(request, response, paramRequest);
+
     }
 
     /**
@@ -347,25 +366,32 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         url.setMode("edit");
         Resource resource = paramRequest.getResourceBase();
         String fileContent = null;
-        VersionInfo version = new VersionInfo(resource.getSemanticObject());
-        String portletWorkPath = SWBPlatform.getWorkPath()
-                + resource.getWorkPath() + "/"
-                + (version.getVersionNumber() > 1
-                   ? version.getVersionNumber() : 1)
-                + "/tmp/";
+        int numversion = 0;
+        //VersionInfo version = new VersionInfo(resource.getSemanticObject());
+        String portletWorkPath = null;
         String extension = null;
         String clientFilePath = "";
         String localRelativePath = null;
         String filename = null;
+
+        ArrayList values = fUpload.getValue("numvalue");
+        if (values != null && !values.isEmpty()) {
+            numversion = Integer.parseInt((String) values.get(0));
+        }
+        System.out.println("Para guardar archivo en: " + portletWorkPath);
         File file = new File(portletWorkPath);
         if (!file.exists()) {
             file.mkdirs();
         }
+        System.out.println("Ya lo creó");
         File fileTmp = new File(portletWorkPath + "index.html");
         if (fileTmp.exists()) {
             fileTmp.delete();
         }
         fUpload.getFiles(request);
+        portletWorkPath = SWBPlatform.getWorkPath()
+                + resource.getWorkPath() + "/" + numversion + "/tmp/";
+
         filename = fUpload.getFileName("NewFile");
         filename = filename.replace('\\', '/');
         int i = filename.lastIndexOf("/");
@@ -398,6 +424,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 file.mkdir();
             }
 
+            System.out.println("Cuando cierra ventana, recarga con la ruta: " + localRelativePath);
+
             //Renombrar el nuevo archivo
             try {
                 //Se cambian las rutas a los archivos asociados.
@@ -406,9 +434,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                             portletWorkPath + "index.html", true,
                             localRelativePath,
                             SWBPlatform.getWebWorkPath() + resource.getWorkPath()
-                                + "/"
-                                + (version.getVersionNumber() > 1 ? version.getVersionNumber() : 1)
-                                + "/tmp/" + HTMLContent.FOLDER);
+                                + "/" + numversion + "/tmp/" + HTMLContent.FOLDER);
                 } else {
                     SWBUtils.IO.copy(portletWorkPath + filename,
                             portletWorkPath + "index.html", false, "", "");
@@ -488,6 +514,15 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setCallMethod(url.Call_DIRECT);
         url.setMode("uploadNewVersion");
+        String actualcontext = (!"".equals(SWBPlatform.getContextPath())
+                               ? "/" + SWBPlatform.getContextPath()
+                               : "");
+        int numversion = 0;
+        try {
+            numversion = Integer.parseInt(request.getParameter("numversion"));
+        } catch (NumberFormatException nfe) {
+            log.debug("Se recibio parametro no numerico", nfe);
+        }
 
         output.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
         output.append("\n<html xmlns=\"http://www.w3.org/1999/xhtml\">");
@@ -495,7 +530,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         output.append("\n	<title>Upload Main File</title>");
         output.append("\n	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
         output.append("\n	<meta name=\"robots\" content=\"noindex, nofollow\" />");
-        output.append("\n	<script src=\"/swb/swbadmin/js/fckeditor/editor/dialog/common/fck_dialog_common.js\" type=\"text/javascript\"></script>");
+        output.append("\n	<script src=\"" + actualcontext
+                + "/swbadmin/js/fckeditor/editor/dialog/common/fck_dialog_common.js\" type=\"text/javascript\"></script>");
         output.append("\n	<script type=\"text/javascript\">");
         output.append("\n	  var dialog = window.parent ;");
         output.append("\n	  var oEditor = dialog.InnerDialogLoaded() ;");
@@ -613,6 +649,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         output.append("\n            <span fcklang=\"DlgLnkUpload\">Upload</span><br />");
         output.append("\n            <input id=\"txtUploadFile\" style=\"width: 100%\" type=\"file\" size=\"40\" name=\"NewFile\" onchange=\"fillHiddenPath();\" /><br />");
         output.append("\n            <input id=\"hiddenPath\" type=\"hidden\" name=\"hiddenPath\" />");
+        output.append("\n            <input id=\"hiddennumversion\" type=\"hidden\" name=\"numversion\" value=\"" + numversion + "\" />");
         output.append("\n            <br />");
         output.append("\n            <input id=\"btnUpload\" type=\"button\" value=\"Send it to the Server\" fcklang=\"DlgLnkBtnUpload\" onclick=\"isOk();\"/>");
         output.append("\n        </form>");
@@ -623,6 +660,28 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
         response.getWriter().println(output.toString());
 
+    }
+
+    /**
+     * Encuentra el objeto VersionInfo correspondiente al numero de version recibido.
+     * @param versionNumber indica el número de version que se desea obtener
+     * @return el objeto VersionInfo que contiene la informaci&oacute;n de la
+     * versi&oacute;n del objeto recibido.
+     */
+    private VersionInfo findVersion(GenericObject obj, int versionNumber) {
+
+        VersionInfo ver = null;
+        if (obj != null) {
+            ver = ((Versionable) obj).getLastVersion();
+        }
+        if (null != ver) {
+            while (ver.getVersionNumber() != versionNumber) { //
+                if (ver.getPreviousVersion() != null) {
+                    ver = ver.getPreviousVersion();
+                }
+            }
+        }
+        return ver;
     }
 
 }
