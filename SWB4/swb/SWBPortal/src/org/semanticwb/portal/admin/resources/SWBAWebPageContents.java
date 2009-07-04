@@ -786,16 +786,16 @@ public class SWBAWebPageContents extends GenericResource {
 
     public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String id = request.getParameter("sval");
-        PrintWriter out = response.getWriter();
-        out.println("<fieldset >");
-        out.println("<legend>Previsualizar</legend>");
+//        PrintWriter out = response.getWriter();
+//        out.println("<fieldset >");
+//        out.println("<legend>Previsualizar</legend>");
         try {
             SWBResource res = SWBPortal.getResourceMgr().getResource(id);
             res.render(request, response, paramRequest);
         } catch (Exception e) {
             log.error("Error while getting content string ,id:" + id, e);
         }
-        out.println("</fieldset>");
+//        out.println("</fieldset>");
     }
 
     public void doPFlowMessage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
