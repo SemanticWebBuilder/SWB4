@@ -677,7 +677,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
      */
     private VersionInfo findVersion(int versionNumber)
     {
-
         VersionInfo ver = getLastVersion();
         if (null != ver) {
             while (ver.getVersionNumber() != versionNumber) { //
