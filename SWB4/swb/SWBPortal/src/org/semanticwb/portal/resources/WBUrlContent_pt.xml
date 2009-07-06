@@ -1,23 +1,72 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<xslfile>admresource.xslt</xslfile>
-	<form name="frmWBUrlContent" action="true" method="POST">
+	<form name="frmUrlContent" action="true" method="POST">
 		<admdbconnmgr defconn="true"/>
-                <fieldset>
-		<input type="TEXT" name="url" label="Endereço web dol conteúdo remoto:" size="50" jsrequired="true"/>
-		<input type="TEXT" name="tagbcawb" label="Etiqueta da buscar:" value="bca" size="20" maxlength="20"/>
-                <input type="TEXT" name="charset" label="codificação" size="20" maxlength="20"/>
-		<statictext name="showInfoLink">
-			<![CDATA[
-				Deseja que seja  mostrado o link da informação de origem?
-			]]>	
-		</statictext>
-		<input type="RADIO" name="InfoSource" label="Não" value="0" checked="true"/>
-		<input type="RADIO" name="InfoSource" label="Sim" value="1"/>
-                </fieldset>
-                <fieldset>
-		<input type="SUBMIT" name="btnSave"  value="Salvar" class="boton"/>
-		<input type="RESET"  name="btnReset" value="Cancelar" class="boton"/>
-                </fieldset>
+        <fieldset legend="Dados">
+            <input type="TEXT" name="url" label="Url dol conteúdo remoto:" size="50" jsrequired="true"/>
+            <input type="TEXT" name="tagbcawb" label="Etiqueta da buscar:" value="bca" size="20" maxlength="20"/>
+            <input type="TEXT" name="charset" label="Codificação" size="20" maxlength="20"/>
+        </fieldset>
+        <fieldset legend="Forma e estilo">
+            <statictext name="showInfoLink">
+                <![CDATA[
+                    Deseja que seja  mostrado o link da informação de origem?
+                ]]>
+            </statictext>
+            <input type="RADIO" name="InfoSource" label="Não" value="0" checked="true"/>
+            <input type="RADIO" name="InfoSource" label="Se" value="1"/>
+        </fieldset>
+        <fieldset>
+            <statictext name="b">
+            <![CDATA[
+            <button id="btnSave" type="submit" dojoType="dijit.form.Button">Salvar</button>
+            <button id="btnReset" type="reset" dojoType="dijit.form.Button">Redefinir</button>
+            ]]>
+            </statictext>
+        </fieldset>
 	</form>
+    <statictext name="txtNote">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				* Datos requeridos.
+			</font>
+		]]>
+	</statictext>
+
+    <script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.form.Button");
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnSave"), "onClick",
+                function() {
+                    if(jsValida(dojo.byId("frmUrlContent"))) {
+                        dojo.byId("frmUrlContent").submit();
+                    }
+                }
+            );
+        });
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnReset"), "onClick",
+                function() {
+                    dojo.byId("frmUrlContent").reset();
+                }
+            );
+        });*
+        ]]>
+    </script>
+    <script type="text/javascript">
+        <![CDATA[
+        function jsValida(frm) {
+            if(frm.url.value==null || frm.url.value=='' || frm.url.value==' ') {
+                alert('Indique la dirección web del contenido.');
+                frm.url.focus();
+                return false;
+            }
+            return true;
+        }
+        ]]>
+	</script>
 </admresource>
