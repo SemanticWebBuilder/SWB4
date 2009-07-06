@@ -673,12 +673,6 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
         return org.semanticwb.model.Device.createDevice(id,this);
     }
 
-    public org.semanticwb.model.Device createDevice()
-    {
-        long id=getSemanticObject().getModel().getCounter(swb_Device);
-        return org.semanticwb.model.Device.createDevice(String.valueOf(id),this);
-    } 
-
     public void removeDevice(String id)
     {
         org.semanticwb.model.Device.removeDevice(id, this);

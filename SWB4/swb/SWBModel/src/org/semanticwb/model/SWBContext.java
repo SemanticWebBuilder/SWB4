@@ -1,15 +1,13 @@
 package org.semanticwb.model;
 
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.SWBContextBase;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticVocabulary;
 
 public class SWBContext extends SWBContextBase
@@ -21,6 +19,8 @@ public class SWBContext extends SWBContextBase
     public static String WEBSITE_GLOBAL="SWBGlobal";
     public static String USERREPOSITORY_DEFAULT="urswb";
     public static String USERREPOSITORY_ADMIN="uradm";
+
+    private static ArrayList<String> filtered=new ArrayList();
     
     private static SWBContext instance=null;
     static public synchronized SWBContext createInstance()
@@ -35,6 +35,9 @@ public class SWBContext extends SWBContextBase
     private SWBContext()
     {
         log.event("Initializing SemanticWebBuilder Context...");
+        filtered.add(WEBSITE_ADMIN);
+        filtered.add(WEBSITE_ONTEDITOR);
+        //filtered.add(WEBSITE_GLOBAL);
     }
     
     public static WebSite getAdminWebSite()
@@ -75,6 +78,28 @@ public class SWBContext extends SWBContextBase
             System.out.println("id:"+id+" obj:"+obj);
         }
         return view;
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites()
+    {
+        if(SWBPlatform.getEnv("swb/adminShow","false").equals("false"))
+        {
+            ArrayList<org.semanticwb.model.WebSite> arr=new ArrayList();
+            Iterator<org.semanticwb.model.WebSite> it=swb_WebSite.listGenericInstances();
+            while(it.hasNext())
+            {
+                WebSite ws=it.next();
+                if(!filtered.contains(ws.getId()))
+                {
+                    arr.add(ws);
+                }
+            }
+            return arr.iterator();
+        }else
+        {
+            return (java.util.Iterator<org.semanticwb.model.WebSite>)swb_WebSite.listGenericInstances();
+            //return SWBContextBase.listWebSites();
+        }
     }
 
     /**

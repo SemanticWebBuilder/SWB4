@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.BitSet;
 import java.security.AccessController;
+import org.semanticwb.SWBUtils;
 import sun.security.action.GetPropertyAction;
 
 /**
@@ -124,9 +125,16 @@ public class URLEncoder
         dontNeedEncoding.set('.');
         dontNeedEncoding.set('*');
 
-        dfltEncName = (String) AccessController.doPrivileged(
+        try
+        {
+            dfltEncName = (String) AccessController.doPrivileged(
                 new GetPropertyAction("file.encoding")
-        );
+            );
+        }catch(Exception e)
+        {
+            dfltEncName=SWBUtils.TEXT.getDafaultEncoding();
+        }
+        //System.out.println("dfltEncName:"+dfltEncName);
     }
 
     /**
