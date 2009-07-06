@@ -2,38 +2,82 @@
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
     <script type="text/javascript" language="JavaScript">
-        <![CDATA[          
+        <![CDATA[
             function jsValida(frm) {
-                var level = parseInt(frm.level.value, 10);
-                if(isNaN(level)) {
-                    alert('Este campo debe ser numérico.');
+                if( isNaN(parseInt(frm.level.value, 10)) ) {
+                    alert('El nivel de despliegue debe ser numérico.');
+                    frm.level.focus();
                     return false;
                 }
-                if(level < 1) {
+                if( frm.width.value.length>0 && isNaN(parseInt(frm.width.value, 10)) ) {
+                    alert('El ancho debe ser numérico.');
+                    frm.width.focus();
+                    return false;
+                }
+                if( frm.height.value.length>0 && isNaN(parseInt(frm.height.value, 10)) ) {
+                    alert('El alto debe ser numérico.');
+                    frm.height.focus();
+                    return false;
+                }
+                if(frm.level.value < 1) {
                     alert("El nivel de despliegue debe ser mayor que cero.");
+                    frm.level.focus();
                     return false;
                 }
                 return true;
             }
         ]]>
     </script>
-    <form name="frmWBSiteMap" action="true" method="POST" enctype="multipart/form-data">
+    <form name="frmSiteMap" action="true" method="POST" enctype="multipart/form-data">
         <admdbconnmgr defconn="true"/>
-        <fieldset>
-        <input type="FILE" name="img" label="Imagem para o esquema do site (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Deletar a imagem para o esquema do site" moreattr="onclick=&#34;jsClear(this.form);&#34;" size="40"/>
-        <input type="TEXT" name="alt" label="Texto alternativo para a imagem:" size="50"/>
-        <input type="TEXT" name="btntexto" label="Texto do botão no caso de não definição da imagen:" size="50"/>
-        <input type="TEXT" name="lnktexto" label="Texto do link no caso de não definição da imagen nem do botão:" size="50"/>
-        <input type="TEXT" name="blnstyle" label="Estilo do botón ou do link segundo ao caso:" size="50"/>
-        <input type="TEXT" name="title" label="Título:" size="50"/>
-
-            <input type="TEXT" name="level" label="Nivel de despliegue" size="2" />
-            <input type="TEXT" name="url" label="Url de la sección que despliega el mapa de sitio:" size="50"/>
-
+        <fieldset legend="Datos">
+            <input type="FILE" name="img" label="Imagem para o botão (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen para mapa de sitio" moreattr="onclick=&#34;jsClear(this.form);&#34;" size="40"/>
+            <input type="TEXT" name="alt" label="Suplente texto para imagem:" size="50"/>
+            <input type="TEXT" name="btntexto" label="Texto do botão se não definir imagem:" size="50"/>
+            <input type="TEXT" name="lnktexto" label="Texto do campeonato se ele não define de imagem ou botão:" size="50"/>
+            <input type="TEXT" name="title" label="Título:" size="50"/>
+            <input type="TEXT" name="level" label="Visor nível" size="2" jsvaltype="js_numbers" />
+            <input type="TEXT" name="url" label="Secção exibe o mapa do site:" size="50"/>
         </fieldset>
+
+        <fieldset legend="Forma y estilo">
+            <input type="TEXT" name="width" label="Anchura:" size="50" />
+            <input type="TEXT" name="height" label="Altura:" size="50" />
+            <input type="TEXT" name="blnstyle" label="Estilo botão ou o campeonato como o caso pode ser:" size="50" />
+        </fieldset>
+
         <fieldset>
-        <input type="SUBMIT" name="btnSave"  value="Salvar" onclick="if(jsValida(this.form)) return true; else return false;"/>
-        <input type="RESET"  name="btnReset" value="Cancelar"/>
+            <statictext name="b">
+            <![CDATA[
+            <button id="btnSave" type=\"submit\" name=\"btnSave\" dojoType="dijit.form.Button">Guardar</button>
+            <button id="btnReset" type=\"reset\" name=\"btnReset\" dojoType="dijit.form.Button">Reestablecer</button>
+            ]]>
+            </statictext>
         </fieldset>
     </form>
+
+
+    <script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.form.Button");
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnSave"), "onClick",
+                function() {
+                    if(jsValida(dojo.byId("frmPromo"))) {
+                        dojo.byId("frmPromo").submit();
+                    }
+                }
+            );
+        });
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnReset"), "onClick",
+                function() {
+                    dojo.byId("frmPromo").reset();
+                }
+            );
+        });
+        ]]>
+    </script>
 </admresource>
