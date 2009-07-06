@@ -1,0 +1,612 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:eng="http://www.owl-ontologies.com/oqp_engine.owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.owl-ontologies.com/oqp_engine.owl">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="ArtefactDefinitionGN">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Artefacts"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Artefacts">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ArtefactDefinition">
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="Engine">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="InstanceActivity">
+    <rdfs:subClassOf rdf:resource="#Engine"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="artefactEjecuteValidation">
+    <rdfs:domain rdf:resource="#ArtefactDefinition"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="ValidationDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasActivityGeneratesArtefact">
+    <rdfs:domain>
+      <swb:Class rdf:ID="ActivityDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#ArtefactDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessGuideAdjustment">
+    <rdfs:range>
+      <swb:Class rdf:ID="GuideAdjustmentDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain>
+      <swb:Class rdf:ID="ProcessDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasActivityRequireArtefact">
+    <rdfs:range rdf:resource="#ArtefactDefinition"/>
+    <rdfs:domain rdf:resource="#ActivityDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="MeasuringIndicator">
+    <rdfs:domain>
+      <swb:Class rdf:ID="MeasuringDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:range>
+      <swb:Class rdf:ID="IndicatorDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="IndicatorMeasuring"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessTraining">
+    <rdfs:range>
+      <swb:Class rdf:ID="TrainingDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessActivity">
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+    <rdfs:range rdf:resource="#ActivityDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessVerification">
+    <rdfs:range>
+      <swb:Class rdf:ID="VerificationDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessCategorie">
+    <rdfs:range>
+      <swb:Class rdf:ID="CategoryProcessDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <swb:Interface rdf:ID="ListaDefinition">
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Interface>
+        </rdfs:subClassOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="artefactPreviousArtefact">
+    <rdfs:domain rdf:resource="#ArtefactDefinition"/>
+    <rdfs:range rdf:resource="#ArtefactDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="artefactEjecuteVerification">
+    <rdfs:range rdf:resource="#VerificationDefinition"/>
+    <rdfs:domain rdf:resource="#ArtefactDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessQuantitativeTarget">
+    <rdfs:range>
+      <swb:Class rdf:ID="QuantitativeTargetDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessProcess">
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+    <rdfs:range rdf:resource="#ProcessDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessObjetive">
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="ObjetiveDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessInfrastructureResource">
+    <rdfs:range>
+      <swb:Class rdf:ID="InfrastructureResourceDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTaskPreviousTask">
+    <rdfs:domain>
+      <swb:Class rdf:ID="TaskDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#TaskDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessIndicator">
+    <rdfs:range rdf:resource="#IndicatorDefinition"/>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasActivityTask">
+    <rdfs:domain rdf:resource="#ActivityDefinition"/>
+    <rdfs:range rdf:resource="#TaskDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasInstaceActivityActivity">
+    <rdfs:range rdf:resource="#ActivityDefinition"/>
+    <rdfs:domain rdf:resource="#InstanceActivity"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessExceptionalSituation">
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="ExceptionalSituationDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessMeasuring">
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+    <rdfs:range rdf:resource="#MeasuringDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="ProcessInstanceActivity">
+    <rdfs:domain>
+      <swb:Class rdf:ID="Process">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#ActivityDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessLessonLearned">
+    <rdfs:range>
+      <swb:Class rdf:ID="LessonLearnedDefinition">
+        <rdfs:subClassOf rdf:resource="#Engine"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="artefactNextArtefact">
+    <rdfs:range rdf:resource="#ArtefactDefinition"/>
+    <rdfs:domain rdf:resource="#ArtefactDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTaskRole">
+    <rdfs:domain rdf:resource="#TaskDefinition"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Role"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasActivityInfrastructureResource">
+    <rdfs:domain rdf:resource="#ActivityDefinition"/>
+    <rdfs:range rdf:resource="#InfrastructureResourceDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTaskNextTask">
+    <rdfs:domain rdf:resource="#TaskDefinition"/>
+    <rdfs:range rdf:resource="#TaskDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessValidation">
+    <rdfs:range rdf:resource="#ValidationDefinition"/>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasObjetiveIndicator">
+    <rdfs:domain rdf:resource="#ObjetiveDefinition"/>
+    <rdfs:range rdf:resource="#IndicatorDefinition"/>
+  </owl:ObjectProperty>
+  <rdf:Property rdf:ID="hasTaskDefinitionProperty">
+    <rdfs:domain rdf:resource="#TaskDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Property>
+  <owl:DatatypeProperty rdf:ID="MeasuringDate">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:domain rdf:resource="#MeasuringDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="ExceptionalSituationDescription">
+    <rdfs:domain rdf:resource="#ExceptionalSituationDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="activityName">
+    <rdfs:domain rdf:resource="#ActivityDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="artefactInternatProduct">
+    <rdfs:domain rdf:resource="#ArtefactDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="Measuring">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#MeasuringDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="recurso">
+    <rdfs:domain rdf:resource="#InfrastructureResourceDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="activityNumber">
+    <rdfs:domain rdf:resource="#ActivityDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="artefactVerification">
+    <rdfs:domain rdf:resource="#ArtefactDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="artefactLevel">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#ArtefactDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="taskStartDate">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:domain rdf:resource="#TaskDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="taskStatus">
+    <rdfs:domain rdf:resource="#TaskDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="gn_ProcessExceptionalSituation">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="activityDescription">
+    <rdfs:domain rdf:resource="#ActivityDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="artefactkHIncorporated">
+    <rdfs:domain rdf:resource="#ArtefactDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="activityLevel">
+    <rdfs:domain rdf:resource="#ActivityDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="GuideAdjustmentName">
+    <rdfs:domain rdf:resource="#GuideAdjustmentDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="GuideAdjustmentDescription">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#GuideAdjustmentDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="ProcessProposition">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_ProcessProposition">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <rdfs:label xml:lang="en">Purpouse</rdfs:label>
+        <rdfs:label xml:lang="es">Proposito</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="toleTraining">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="ProcessDescription">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+    <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_description"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="ProcessNomenclature">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="statusActivity">
+    <rdfs:domain rdf:resource="#InstanceActivity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="artefactFile">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ArtefactDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="artefactName">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ArtefactDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="listNomenclature">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ListaDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="ProcessMeasurin">
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="artefactVersion">
+    <rdfs:domain rdf:resource="#ArtefactDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="activityStatus">
+    <rdfs:domain rdf:resource="#ActivityDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="listDescription">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ListaDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="artefactValidation">
+    <rdfs:domain rdf:resource="#ArtefactDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="gn_ProcessLessonLearned">
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="gn_ProcessTraining">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="taskLevel">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#TaskDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="taskEndDate">
+    <rdfs:domain rdf:resource="#TaskDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="taskTimeLimit">
+    <rdfs:domain rdf:resource="#TaskDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="Description">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="taskRecommendedTime">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#TaskDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="LessonLearnedDescription">
+    <rdfs:domain rdf:resource="#LessonLearnedDefinition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="ProcessName">
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_ProcessName">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <rdfs:label xml:lang="en">Process Name</rdfs:label>
+        <rdfs:label xml:lang="es">Nombre del Proceso</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ProcessDefinition"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="taskHowUse">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#TaskDefinition"/>
+  </owl:DatatypeProperty>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#WebSite">
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Process">
+        <swbxf:heClass rdf:resource="#ProcessDefinition"/>
+        <swb:title xml:lang="en">Process</swb:title>
+        <swb:title xml:lang="es">Procesos</swb:title>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCalendars</swb:iconClass>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+  </rdf:Description>
+  <swb:Role rdf:ID="Responsable_de_Pruebas"/>
+  <swb:Role rdf:ID="Responsable_de_BienesServicios_e_Infraestructura"/>
+  <eng:CategoryProcessDefinition rdf:ID="Gerencia">
+    <eng:listDescription rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Categoría de procesos que aborda las prácticas de gestión de procesos, proyectos y recursos en función de los lineamientos establecidos en la Categoría de Alta Dirección. Proporciona los elementos para el funcionamiento de los procesos de la Categoría de Operación, recibe y evalúa la información generada por éstos y comunica los resultados a la Categoría de Alta Dirección</eng:listDescription>
+    <eng:listNomenclature rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >GER</eng:listNomenclature>
+  </eng:CategoryProcessDefinition>
+  <swb:Class rdf:ID="ArtefactDefinitionAPE">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Artefacts"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Role rdf:ID="Grupo_de_Gestion"/>
+  <swb:Role rdf:ID="Responsable_de_Recursos_Humanos_y_Ambiente_de_Trabajo"/>
+  <swb:Role rdf:ID="Responsable_de_Conocimiento_de_la_Organizacion"/>
+  <swbxf:DisplayProperty rdf:ID="dp_AreaDefinition"/>
+  <swb:Role rdf:ID="Responsable_de_Gestion_de_Recursos"/>
+  <swb:Class rdf:ID="ArtefactDefinitionBSI">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Artefacts"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="ArtefactDefinitionGP">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Artefacts"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="ArtefactDefinitionRHAT">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Artefacts"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Role rdf:ID="Diseñador_de_Interfaz_de_Usuario"/>
+  <eng:CategoryProcessDefinition rdf:ID="AltaDireccion">
+    <eng:listDescription rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Categoría de procesos que aborda las prácticas de Alta Dirección relacionadas con la gestión del negocio. Proporciona los lineamientos a los procesos de la Categoría de Gerencia y se retroalimenta con la información generada por ellos.</eng:listDescription>
+    <eng:listNomenclature rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >DIR</eng:listNomenclature>
+  </eng:CategoryProcessDefinition>
+  <swb:Role rdf:ID="Equipo_de_Trabajo"/>
+  <swb:Role rdf:ID="Responsable_de_Gestion_de_Negocio"/>
+  <swb:Role rdf:ID="Responsable_de_Manuales"/>
+  <swbxf:DisplayProperty rdf:ID="dp_TextDescription"/>
+  <swb:Role rdf:ID="Responsable_de_Gestion_de_Proyectos"/>
+  <swb:Role rdf:ID="Programador"/>
+  <swbxf:DisplayProperty rdf:ID="dp_FileDefinition">
+    <rdfs:label>Examina</rdfs:label>
+  </swbxf:DisplayProperty>
+  <swb:Class rdf:ID="Complement">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Role rdf:ID="Responsable_de_Desarrollo_y_Mantenimiento_de_Software"/>
+  <swb:Role rdf:ID="Grupo_Directivo"/>
+  <swb:Role rdf:ID="Analista"/>
+  <swb:Class rdf:ID="ArtefactDefinitionDMS">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Artefacts"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.oqp.engine</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >eng</swb:prefix>
+  </swb:CodePackage>
+  <swbxf:DisplayProperty rdf:ID="dp_Description">
+    <rdfs:label xml:lang="es">Descripción</rdfs:label>
+    <rdfs:label xml:lang="en">Description</rdfs:label>
+  </swbxf:DisplayProperty>
+  <swb:Role rdf:ID="Responsable_de_Gestion_de_Procesos"/>
+  <eng:CategoryProcessDefinition rdf:ID="Operacion">
+    <eng:listDescription rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Categoría de procesos que aborda las prácticas de los proyectos de desarrollo y mantenimiento de software. Esta categoría realiza las actividades de acuerdo a los elementos proporcionados por la Categoría de Gerencia y entrega a ésta la información y productos generados.</eng:listDescription>
+    <eng:listNomenclature rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >OPE</eng:listNomenclature>
+  </eng:CategoryProcessDefinition>
+  <swbxf:DisplayProperty rdf:ID="dp_ValidDefinition"/>
+  <swb:Role rdf:ID="Responsable_de_Subcontrato"/>
+  <swb:Role rdf:ID="Cliente"/>
+  <swb:Class rdf:ID="ComplementArtefact">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Artefacts"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="ArtefactDefinitionGR">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Artefacts"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="ArtefactDefinitionCO">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Artefacts"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Role rdf:ID="Evaluador"/>
+  <swb:Role rdf:ID="Diseñador"/>
+  <swbxf:DisplayProperty rdf:ID="dp_DateDefinition"/>
+  <swb:Class rdf:ID="ListDefinition">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#ComplementArtefact"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Role rdf:ID="Responsable_de_Capacitacion"/>
+  <swb:Role rdf:ID="Revisor"/>
+  <swb:Role rdf:ID="Responsable_de_Proceso"/>
+  <swb:Role rdf:ID="Responsable_de_Administracion_del_Proyecto_Especifico"/>
+  <swb:Class rdf:ID="ArtefactDefinitionGPY">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Artefacts"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Role rdf:ID="Usuario"/>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
