@@ -2,6 +2,11 @@
 <%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.model.*,java.util.*,java.io.*"%>
 <%!
+    public String getLocaleString(String key, String lang)
+    {
+        return SWBUtils.TEXT.getLocaleString("locale_swb_admin", key, new Locale(lang));
+    }
+
    void addChild(WebPage page, JspWriter out, String lang) throws IOException
    {
         Iterator<WebPage> it=page.listVisibleChilds(lang);
@@ -39,10 +44,11 @@
    }
 %>
 <%
+    String lang="es";
+    User user=SWBPortal.getSessionUser();
+    if(user!=null)lang=user.getLanguage();
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache");
-    User user=SWBPortal.getSessionUser();
-    String lang=user.getLanguage();
 %>
 
 <div id="semwblogo" class="dijitReset dijitInline swbLogo"></div>
@@ -61,6 +67,8 @@
     while(it.hasNext())
     {
         WebPage child=it.next();
+        //System.out.println(child);
+        //System.out.println(child.getTitle()+" "+child.getTitle("es")+" "+child.getTitle("en"));
 %>
     <div id="<%=child.getId()%>" dojoType="dijit.form.DropDownButton" iconClass_="swbIconWebPage">
         <script type="dojo/method" event="onClick">
@@ -81,7 +89,7 @@
 
     }
 %>
-<span id="swblogout"><a href="?suri=<%=user.getEncodedURI()%>" onclick="addNewTab('<%=user.getURI()%>', null, '<%=user.getSemanticObject().getDisplayName(lang)%>');return false;"><%=user.getFullName()%></a> | <a href="<%=SWBPlatform.getContextPath()%>/login?wb_logout=true">logout</a></span>
+<span id="swblogout"><a href="?suri=<%=user.getEncodedURI()%>" onclick="addNewTab('<%=user.getURI()%>', null, '<%=user.getSemanticObject().getDisplayName(lang)%>');return false;"><%=user.getFullName()%></a> | <a href="<%=SWBPlatform.getContextPath()%>/login?wb_logout=true"><%=getLocaleString("logout",lang)%></a></span>
 <!--    
 
     <div id="getMail" dojoType="dijit.form.ComboButton" optionsTitle="Mail Source Options">

@@ -40,14 +40,14 @@ function MM_swapImage() { //v3.0
 <div id="general">
   <div id="fecha"><RESOURCE TYPE="StaticText" STYPE="date"/></div>
   <div id="bienvenido">
-    <h3><RESOURCE TYPE="StaticText" STYPE="Bienvenida">bienvenido</RESOURCE></h3>
+    <h3><if:user language="es">Bienvenido</if:user><if:user language="en">Welcome</if:user></h3>
   </div>
   <div id="nombre">
     <h3><USER method="getFullName"/></h3>
   </div>
   <div id="sabias">
-    <h3><RESOURCE TYPE="StaticText" STYPE="tick">Sabias que...</RESOURCE></h3>
-    <p><RESOURCE TYPE="SWBNews">Los efectos de animación y transición de PowerPoint no se mostraran al publicarlo como contenido, ya que son funcionalidades especificas de PowerPoint, y no tienen su equivalente en HTML.</RESOURCE></p>
+    <h3><if:user language="es">Sabias que...</if:user><if:user language="en">Did you know that...</if:user></h3>
+    <p><RESOURCE TYPE="News">Los efectos de animación y transición de PowerPoint no se mostraran al publicarlo como contenido, ya que son funcionalidades especificas de PowerPoint, y no tienen su equivalente en HTML.</RESOURCE></p>
   </div>
 
 
