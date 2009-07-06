@@ -87,8 +87,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
         System.out.println("En HTMLContent.doEdit():"+request.getParameter("numversion"));
 
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        GenericObject obj = ont.getGenericObject(request.getParameter("suri"));
+        //SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        //GenericObject obj = ont.getGenericObject(request.getParameter("suri"));
         Resource resource = paramRequest.getResourceBase();
         HttpSession session = request.getSession();
         //VersionInfo versionInfo = new VersionInfo(resource.getSemanticObject());
@@ -102,10 +102,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         String tmpPath = request.getParameter("tmpPath");
         VersionInfo vio = null;
 
-        if (obj instanceof Versionable) {
-            vio = (VersionInfo) findVersion(obj, versionNumber);
-            fileName = vio.getVersionFile();
-        }
+        vio = (VersionInfo) findVersion(versionNumber);
+        fileName = vio.getVersionFile();
 
         pathToRead.append(resource.getWorkPath() + "/");
         pathToWrite.append("/work" + resource.getWorkPath() + "/");
@@ -677,12 +675,10 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
      * @return el objeto VersionInfo que contiene la informaci&oacute;n de la
      * versi&oacute;n del objeto recibido.
      */
-    private VersionInfo findVersion(GenericObject obj, int versionNumber) {
+    private VersionInfo findVersion(int versionNumber)
+    {
 
-        VersionInfo ver = null;
-        if (obj != null) {
-            ver = ((Versionable) obj).getLastVersion();
-        }
+        VersionInfo ver = getLastVersion();
         if (null != ver) {
             while (ver.getVersionNumber() != versionNumber) { //
                 if (ver.getPreviousVersion() != null) {
