@@ -3,18 +3,6 @@
  * and open the template in the editor.
  */
 
-//package org.semanticwb.portal.admin.resources;
-/**
- *
- * @author juan.fernandez
- */
-//public class SWBAResourceVersion {
-//
-//}
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.semanticwb.portal.admin.resources;
 
 import java.io.BufferedWriter;
