@@ -122,7 +122,7 @@ public class SWBAResourceVersion extends GenericResource {
                             urle.setParameter("vnum", Integer.toString(vio.getVersionNumber()));
                             urle.setParameter("act", "edit_temp");
                             urle.setMode(SWBResourceURL.Mode_EDIT);
-                            out.println("<a href=\"#\" onclick=\"submitUrl('" + urle + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"editar version\"></a>");
+                            out.println("<a href=\""+urle+"\" onclick=\"submitUrl('" + urle + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"editar version\"></a>");
 
                             SWBResourceURL urlnv = paramRequest.getRenderUrl();
                             urlnv.setParameter("suri", id);
@@ -295,7 +295,7 @@ public class SWBAResourceVersion extends GenericResource {
                 urlb.setResourceBase(swres.getResourceBase());
                 urlb.setMode(SWBResourceURLImp.Mode_EDIT);
                 urlb.setCallMethod(SWBResourceURLImp.Call_DIRECT);
-                urlb.setParameter("suri", id);
+                //urlb.setParameter("suri", id);
                 urlb.setParameter("numversion", vnum);
                 out.println("<iframe id=\"" + getResourceBase().getId() + "swbResVersionFrame\" dojoType=\"dijit.layout.ContentPane\" src=\"" + urlb + "\" width=\"100%\" height=\"100%\" frameborder=\"0\"></iframe>");
             }
