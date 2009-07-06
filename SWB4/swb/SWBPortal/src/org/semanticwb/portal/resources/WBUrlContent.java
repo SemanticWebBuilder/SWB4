@@ -1,26 +1,3 @@
-/*
- * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboraci�n e integraci�n para Internet,
- * la cual, es una creaci�n original del Fondo de Informaci�n y Documentaci�n para la Industria INFOTEC, misma que se encuentra
- * debidamente registrada ante el Registro P�blico del Derecho de Autor de los Estados Unidos Mexicanos con el
- * No. 03-2002-052312015400-14, para la versi�n 1; No. 03-2003-012112473900 para la versi�n 2, y No. 03-2006-012012004000-01
- * para la versi�n 3, respectivamente.
- *
- * INFOTEC pone a su disposici�n la herramienta INFOTEC WebBuilder a trav�s de su licenciamiento abierto al p�blico (�open source�),
- * en virtud del cual, usted podr� usarlo en las mismas condiciones con que INFOTEC lo ha dise�ado y puesto a su disposici�n;
- * aprender de �l; distribuirlo a terceros; acceder a su c�digo fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los t�rminos y condiciones de la LICENCIA ABIERTA AL P�BLICO que otorga INFOTEC para la utilizaci�n
- * de INFOTEC WebBuilder 3.2.
- *
- * INFOTEC no otorga garant�a sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni impl�cita ni expl�cita,
- * siendo usted completamente responsable de la utilizaci�n que le d� y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposici�n la siguiente
- * direcci�n electr�nica:
- *
- *                                          http://www.webbuilder.org.mx
- */
-
 
 package org.semanticwb.portal.resources;
 
@@ -45,15 +22,6 @@ import org.semanticwb.portal.admin.admresources.util.XmlBundle;
 
 import com.arthurdo.parser.*;
 
-/** Esta clase se encarga de desplegar y administrar un WBUrlContent bajo ciertos
- * criterios del recurso (configuraci�n).
- *
- * This class displays and administrate an URL Content on WebBuilder  under
- * criteria like resource configuration.
- * @author : Jorge Alberto Jim�nez Sandoval(JAJS)
- * @since : October 28th 2004, 15:10
- */
-
 public class WBUrlContent extends GenericAdmResource {
     private static Logger log = SWBUtils.getLogger(WBUrlContent.class);
     
@@ -65,49 +33,37 @@ public class WBUrlContent extends GenericAdmResource {
     String file = "";
     String paramfromUrl = "";    
     String nameClass="WBUrlContent";
-       
-    /**
-     * Inicializa el recurso
-     */    
+   
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
-        //if (recproperties == null) {
-            FileInputStream fptr = null;
-            recproperties = new Properties();
-            try {
-                    int pos=-1;
-                    pos=this.getClass().getName().lastIndexOf(".");
-                    if(pos>-1){
-                        nameClass=this.getClass().getName().substring(pos+1);
+        FileInputStream fptr = null;
+        recproperties = new Properties();
+        try {
+                int pos=-1;
+                pos=this.getClass().getName().lastIndexOf(".");
+                if(pos>-1){
+                    nameClass=this.getClass().getName().substring(pos+1);
+                }
+                try {
+                    fptr =  new FileInputStream(SWBPlatform.getWorkPath()+"/sites/"+base.getWebSiteId()+"/config/resources/"+nameClass+".properties");
+                }catch(Exception e) {
+                }
+                if(fptr==null) { //busca en raiz de work/config
+                    try {
+                        fptr = new FileInputStream(SWBPlatform.getWorkPath()+"/work/config/resources/"+nameClass+".properties");
+                    }catch(Exception e) {
                     }
-                    try{
-                        fptr =  new FileInputStream(SWBPlatform.getWorkPath()+"/sites/"+base.getWebSiteId()+"/config/resources/"+nameClass+".properties");
-                    }catch(Exception e){}
-                    if(fptr==null){ //busca en raiz de work/config
-                        try{
-                            fptr =  new FileInputStream(SWBPlatform.getWorkPath()+"/work/config/resources/"+nameClass+".properties");
-                        }catch(Exception e){}
-                    }
-                    if (fptr != null) {
-                        recproperties.load(fptr);
-                        msg1 = recproperties.getProperty("FuneteOriginal");
-                        msg2 = recproperties.getProperty("InfoOriginal");
-                    } 
-            }catch(Exception e){
-                log.error("Error while loading resource properties file: "+base.getId() +"-"+ base.getTitle(), e);
-            }
-        //}
-    }
+                }
+                if (fptr != null) {
+                    recproperties.load(fptr);
+                    msg1 = recproperties.getProperty("FuneteOriginal");
+                    msg2 = recproperties.getProperty("InfoOriginal");
+                }
+        }catch(Exception e){
+            log.error("Error while loading resource properties file: "+base.getId() +"-"+ base.getTitle(), e);
+        }
+    }    
     
-    
-    /**
-     * Genera el resultado final del recurso en formato html
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
-     */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
@@ -119,31 +75,31 @@ public class WBUrlContent extends GenericAdmResource {
         try{
             //TODO. cambiar SWBUtils.XML.xmlToDom(base.getXml()) por el método base.getDom()
             Document dom = SWBUtils.XML.xmlToDom(base.getXml());
-            if (dom == null) {
+            if(dom == null) {
                 throw new SWBResourceException("Dom nulo");
             }
             ret.append("<!-- <content id=\"" + base.getId() + "\"/> -->");
             String param = "";
             StringBuffer othersparam = new StringBuffer();
             try {
-                if (request.getParameter("urlwb") == null) {
+                if(request.getParameter("urlwb") == null) {
                     NodeList url = dom.getElementsByTagName("url");
-                    if (url.getLength() > 0) {
+                    if(url.getLength() > 0) {
                         String surl = url.item(0).getChildNodes().item(0).getNodeValue();
                         ret.append(CorrigeRuta(surl, paramRequest.getTopic(), param, othersparam, request,paramRequest));
                     }
-                } else {
+                }else {
                     Enumeration en = request.getParameterNames();
                     boolean flag = true;
-                    while (en.hasMoreElements()) {
+                    while(en.hasMoreElements()) {
                         String paramN = en.nextElement().toString();
-                        if (!paramN.equals("urlwb") && !paramN.equals("param") && !paramN.equals("wbresid")) {
+                        if(!paramN.equals("urlwb") && !paramN.equals("param") && !paramN.equals("wbresid")) {
                             String[] paramval = request.getParameterValues(paramN);
-                            for (int i = 0; i < paramval.length; i++) {
-                                if (flag) {
+                            for(int i = 0; i < paramval.length; i++) {
+                                if(flag) {
                                     othersparam.append("?" + paramN + "=" + paramval[i]);
                                     flag = false;
-                                } else {
+                                }else {
                                     othersparam.append("&" + paramN + "=" + paramval[i]);
                                 }
                             }
@@ -152,32 +108,31 @@ public class WBUrlContent extends GenericAdmResource {
                     
                     String urlwb = "";
                     String wbresid = "";
-                    if (request.getParameter("urlwb") != null)
+                    if(request.getParameter("urlwb")!=null) {
                         urlwb = DeCodificaCadena(request.getParameter("urlwb"), paramRequest.getTopic());
-                    else {
+                    }else {
                         response.getWriter().print(ret.toString());
                     }
-                    if (request.getParameter("param") != null)
+                    if(request.getParameter("param")!=null) {
                         param = DeCodificaCadena(request.getParameter("param"), paramRequest.getTopic());
-                    if (request.getParameter("wbresid") != null) {
-                        wbresid = request.getParameter("wbresid");
-                    } else
-                        wbresid = base.getId();
-                    if (!urlwb.equals("") && wbresid.equals(base.getId())) {
-                        ret.append(CorrigeRuta(urlwb, paramRequest.getTopic(), param, othersparam, request,paramRequest));
                     }
-                    
+                    if(request.getParameter("wbresid")!=null) {
+                        wbresid = request.getParameter("wbresid");
+                    }else {
+                        wbresid = base.getId();
+                    }
+                    if(!urlwb.equals("") && wbresid.equals(base.getId())) {
+                        ret.append(CorrigeRuta(urlwb, paramRequest.getTopic(), param, othersparam, request,paramRequest));
+                    }                    
                 }
-            } catch (Exception f) {
+            }catch (Exception f) {
                 ret.append("page is not in well formed..");
                 ret.append("<nocache/>");
                 log.error("Error in UrlContent resource while decoding page: "+paramRequest.getTopic().getId(), f);
             }
-        }
-        catch (Exception e) { 
+        }catch (Exception e) { 
             log.error("Error in resource WBUrlContent while bringing HTML ", e);
-        }
-        
+        }        
         PrintWriter out = response.getWriter();
         out.println(ret.toString());
     }
@@ -219,12 +174,12 @@ public class WBUrlContent extends GenericAdmResource {
         StringBuffer ret = new StringBuffer();
         NodeList tagbcawb = dom.getElementsByTagName("tagbcawb");
         String stagbcawb = "bca";
-        if (tagbcawb.getLength() > 0)
-            if (!tagbcawb.item(0).getChildNodes().item(0).getNodeValue().equals(""))
+        if(tagbcawb.getLength() > 0)
+            if(!tagbcawb.item(0).getChildNodes().item(0).getNodeValue().equals(""))
                 stagbcawb = tagbcawb.item(0).getChildNodes().item(0).getNodeValue();
         NodeList NInfoSource = dom.getElementsByTagName("InfoSource");
         int iInfoSource = -1;
-        if (NInfoSource.getLength() > 0)
+        if(NInfoSource.getLength() > 0)
             iInfoSource = Integer.parseInt(NInfoSource.item(0).getChildNodes().item(0).getNodeValue().trim());
         
         String baserut = (String) SWBPlatform.getContextPath();
@@ -754,6 +709,5 @@ public class WBUrlContent extends GenericAdmResource {
             }
         }
         return params;
-    }
-    
+    }    
 }
