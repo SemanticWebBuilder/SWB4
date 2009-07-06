@@ -99,7 +99,7 @@ FCKConfig.TemplateReplaceCheckbox = true ;
 FCKConfig.ToolbarLocation = 'In' ;
 
 FCKConfig.ToolbarSets["Default"] = [
-	['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],
+	['Source','DocProps','-','Save','NewPage','UploadFile','Preview','-','Templates'],
 	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','ImageButton','HiddenField'],
@@ -275,8 +275,11 @@ FCKConfig.JustifyClasses = [] ;
 // Custom implementations should just ignore it.
 var _FileBrowserLanguage	= 'php' ;	// asp | aspx | cfm | lasso | perl | php | py
 var _QuickUploadLanguage	= 'php' ;	// asp | aspx | cfm | lasso | perl | php | py
-var context = "";
-var domainAndContext = document.location.protocol+'//'+document.location.host+context;
+var contextInAdmin = parent.actualContext;
+if (contextInAdmin != "")
+    contextInAdmin = contextInAdmin + "/";
+//alert("contextInAdmin:"+contextInAdmin);
+var domainAndContext = document.location.protocol+'//'+document.location.host+'/'+contextInAdmin;
 // Don't care about the following two lines. It just calculates the correct connector
 // extension to use for the default File Browser (Perl uses "cgi").
 var _FileBrowserExtension = _FileBrowserLanguage == 'perl' ? 'cgi' : _FileBrowserLanguage ;
