@@ -81,7 +81,7 @@
     </head>
     <body class="soria">
         <!-- basic preloader: -->
-        <div id="loader"><div id="loaderInner">Loading Semantic WebBuilder... </div></div>
+        <div id="loader"><div id="loaderInner"><if:user language="es">Cargando SemanticWebBuilder...</if:user><if:user language="en">Loading SemanticWebBuilder...</if:user></div></div>
 
 <!--
         <div dojoType="dojo.data.ItemFileWriteStore" jsId="sitesStore" url="{webpath}/swbadmin/jsp/Sites.jsp"></div>
@@ -112,30 +112,30 @@
                            region="top"
                            />
 -->
-                    <div dojoType="dijit.layout.AccordionContainer"  id="leftAccordion" region="center" splitter="true">
+                    <div dojoType="dijit.layout.AccordionContainer" id="leftAccordion" region="center" splitter="true">
 
-                        <div dojoType="dijit.layout.AccordionPane" title="Sitios" selected="true">
+                        <template method="writeGT"/>div dojoType="dijit.layout.AccordionPane" title="<if:user language="es">Sitios</if:user><if:user language="en">Sites</if:user>" selected="true">
                             <include src="/swbadmin/jsp/treeWidget.jsp?id=mtree"/>
                         </div>
 
-                        <div dojoType="dijit.layout.AccordionPane" title="Repositorios de Documentos">
+                        <template method="writeGT"/>div dojoType="dijit.layout.AccordionPane" title="<if:user language="es">Repositorios de Documentos</if:user><if:user language="en">Document Repository</if:user>">
                             <include src="/swbadmin/jsp/treeWidget.jsp?id=mdoc"/>
                         </div>
 
-                        <div dojoType="dijit.layout.AccordionPane" title="Repositorios de Usuarios">
+                        <template method="writeGT"/>div dojoType="dijit.layout.AccordionPane" title="<if:user language="es">Repositorios de Usuarios</if:user><if:user language="en">User Repository</if:user>">
                             <include src="/swbadmin/jsp/treeWidget.jsp?id=muser"/>
                         </div>
 <!--
-                        <div dojoType="dijit.layout.AccordionPane" title="Papelera">
+                        <template method="writeGT"/>div dojoType="dijit.layout.AccordionPane" title="<if:user language="es">Papelera</if:user><if:user language="en">Trash</if:user>">
                             <include src="/swbadmin/jsp/treeWidget.jsp?id=mtra"/>
                         </div>
 -->
-                        <div dojoType="dijit.layout.AccordionPane" title="Favoritos">
+                        <template method="writeGT"/>div dojoType="dijit.layout.AccordionPane" title="<if:user language="es">Favoritos</if:user><if:user language="en">Favorites</if:user>">
                             <include src="/swbadmin/jsp/treeWidget.jsp?id=mfavo&showRoot=true&rootLabel=Server"/>
                         </div>
                     </div><!-- end AccordionContainer -->
 
-                    <div id="vprop" dojoType="dijit.TitlePane" title="Propiedades" class="admViewProperties" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
+                    <template method="writeGT"/>div id="vprop" dojoType="dijit.TitlePane" title="<if:user language="es">Propiedades</if:user><if:user language="en">Properties</if:user>" class="admViewProperties" open="false" duration="150" minSize_="20" splitter_="true" region="bottom">
                         View Properties ...
                         <script type="dojo/method" event="postCreate" args="">
                             if(!this.open){
@@ -178,7 +178,7 @@
                     <div dojoType="dijit.layout.ContentPane" title="Inicio" style="display:none; padding:10px; " closable="true" href="{webpath}/swb/SWBAdmin/Work_Admin">
                     </div>
 -->
-                    <div id="swbPreviewTab" dojoType="dijit.layout.ContentPane" title="Preview" style="display:none; padding:10px; " closable="false" href_="{webpath}/swb">
+                    <template method="writeGT"/>div id="swbPreviewTab" dojoType="dijit.layout.ContentPane" title="<if:user language="es">Vista Previa</if:user><if:user language="en">Preview</if:user>" style="display:none; padding:10px; " closable="false" href_="{webpath}/swb">
                         <iframe id="swbPreviewFrame" dojoType="dijit.layout.ContentPane" src="{webpath}/swb/SWBAdmin/Work_Admin" width="100%" height="100%" frameborder="0"></iframe>
                     </div>
                 </div><!-- end of region="center" TabContainer -->
@@ -191,6 +191,5 @@
             </div>
         </div>
         <div id="status" dojoType="dojox.layout.ContentPane" executeScripts="true">status...</div>
-
     </body>
 </html>
