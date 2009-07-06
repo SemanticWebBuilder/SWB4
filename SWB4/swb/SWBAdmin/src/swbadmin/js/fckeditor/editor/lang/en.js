@@ -32,6 +32,7 @@ ToolbarExpand		: "Expand Toolbar",
 // Toolbar Items and Context Menu
 Save				: "Save",
 NewPage				: "New Page",
+UploadFile			: "Upload File",
 Preview				: "Preview",
 Cut					: "Cut",
 Copy				: "Copy",
@@ -525,6 +526,9 @@ DlgAboutBrowserInfoTab	: "Browser Info",
 DlgAboutLicenseTab	: "License",
 DlgAboutVersion		: "version",
 DlgAboutInfo		: "For further information go to",
+
+// Upload file Dialog
+DlgUploadFileTitle	: "Upload file",
 
 // Div Dialog
 DlgDivGeneralTab	: "General",
