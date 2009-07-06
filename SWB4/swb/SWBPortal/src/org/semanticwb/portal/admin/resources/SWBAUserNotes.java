@@ -19,7 +19,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
  *
  * @author Jorge Jiménez
  */
-public class UserNotes extends GenericAdmResource 
+public class SWBAUserNotes extends GenericAdmResource
 {
 
     @Override

@@ -28,6 +28,7 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.SWBParamRequestImp;
 import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.api.SWBResourceModes;
+import org.semanticwb.portal.util.SWBIFMethod;
 import org.semanticwb.portal.util.SWBMethod;
 import org.semanticwb.servlet.SWBHttpServletRequestWrapper;
 import org.semanticwb.servlet.SWBHttpServletResponseWrapper;
@@ -59,6 +60,7 @@ public class TemplateImp extends Template
         objects.put("response", HttpServletResponse.class);
         objects.put("webpath", SWBPlatform.getContextPath());
         objects.put("distpath", SWBPortal.getDistributorPath());
+        objects.put("if:user", SWBIFMethod.class);
         
         webPath = SWBPlatform.getWebWorkPath()+super.getWorkPath();
         actPath = webPath+ "/" + getActualVersion().getVersionNumber() + "/";
@@ -171,8 +173,8 @@ public class TemplateImp extends Template
                 tok = new HtmlStreamTokenizer(SWBPlatform.getFileFromWorkPath(filename));
             else
                 tok = new HtmlStreamTokenizer(SWBPlatform.getFileFromWorkPath(actRelWorkPath + "/" + filename));
-            HtmlTag tag = new HtmlTag();
             StringBuffer auxpart = new StringBuffer();
+            HtmlTag opentag=null;                       //tag inicial
             boolean textpart = false;
             boolean objectpart = false;
             boolean resourcepart = false;
@@ -184,7 +186,13 @@ public class TemplateImp extends Template
                 int ttype = tok.getTokenType();
                 if (ttype == HtmlStreamTokenizer.TT_TAG)
                 {
+                    HtmlTag tag = new HtmlTag();
                     tok.parseTag(tok.getStringValue(), tag);
+                    if(!tag.isEndTag())
+                    {
+                        //System.out.println("tok:"+tok.getStringValue()+" "+tag);
+                        opentag=tag;
+                    }
                     if (tag.getTagString().toLowerCase().equals("resource"))
                     {
                         if (textpart)
@@ -251,6 +259,18 @@ public class TemplateImp extends Template
                         {
                             if (!textpart) textpart = true;
                             auxpart.append(obj.toString());
+                        }else if(obj==SWBIFMethod.class)
+                        {
+                            if (!tag.isEndTag())
+                            {
+                                if (!textpart) textpart = true;
+                                parts.add(auxpart.toString());
+                                auxpart = new StringBuffer();
+                            }else
+                            {
+                                parts.add(new SWBIFMethod(opentag, auxpart.toString()));
+                                auxpart = new StringBuffer();
+                            }
                         }else
                         {
                             if (textpart)
@@ -1116,6 +1136,9 @@ public class TemplateImp extends Template
                         }
                     } else
                         out.print(wbm.invoke(topic, user, request,response));
+                }else if (obj instanceof SWBIFMethod)
+                {
+                    out.print(((SWBIFMethod)obj).eval(user, topic, this));
                 }
                 log.debug("<!-- TemplateTag:"+ (System.currentTimeMillis()-tini) +"ms -->");                
             }

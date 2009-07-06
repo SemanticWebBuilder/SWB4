@@ -410,7 +410,7 @@ public class Login implements InternalServlet
                         SWBPortal.UTIL.parseHTML(login, SWBPlatform.getWebWorkPath() + "/config/images/");
             }
 
-            login = login.replaceFirst("<WBVERSION>", SWBPlatform.getVersion());
+            login = login.replaceFirst("<SWBVERSION>", SWBPlatform.getVersion());
         } catch (Exception e)
         {
             log.error("Error to load login page...", e);
