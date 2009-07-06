@@ -210,48 +210,44 @@ public class WBSiteMap extends GenericAdmResource
         PrintWriter out = response.getWriter();
         Resource base=getResourceBase();
         
-        if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {
-            System.out.println("******************************liga mapa");
-
+        if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT) {
             String surl="";
 
-            if (!"".equals(base.getAttribute("url", "").trim())) {
+            if(!"".equals(base.getAttribute("url", "").trim())) {
                 surl=base.getAttribute("url").trim();
             }else {
                 surl=paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString();
             }
-            System.out.println("base.getAttribute(\"url\")="+base.getAttribute("url"));
-            System.out.println("surl="+surl);
-
-            if (!"".equals(base.getAttribute("img", "").trim())) {
+            
+            if( base.getAttribute("img")!=null ) {
                 out.println("<a href=\"" + surl +"\">");
                 out.println("<img src=\""+ webWorkPath +"/"+ base.getAttribute("img").trim() +"\"");
-                if (!"".equals(base.getAttribute("alt", "").trim())) {
+                if(!"".equals(base.getAttribute("alt", "").trim())) {
                     out.println(" alt=\"" + base.getAttribute("alt").trim() + "\"");
                 }
                 out.println(" border=0></a>");
-            }else if (!"".equals(base.getAttribute("btntexto", "").trim())) {
+            }else if( base.getAttribute("btntexto")!=null ) {
                 out.println("<form name=frmWBSiteMap method=POST action=\"" + surl + "\">");
                 out.println("<input type=submit name=btnWBSiteMap value=");
                 out.println("\"" + base.getAttribute("btntexto").trim().replaceAll("\"","&#34;") + "\"");
-                if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
+                if( base.getAttribute("blnstyle")!=null ) {
                     out.println(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"","&#34;") + "\"");
                 }
                 out.println("></form>");
             }else {
-                out.println("<a href=\"" + surl +"\"");
-                if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
+                out.println("<a href=\""+surl+"\"");
+                if( base.getAttribute("blnstyle")!=null ) {
                     out.println(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"","&#34;") + "\"");
                 }
                 out.println(">");
-                if (!"".equals(base.getAttribute("lnktexto", "").trim())) {
+                if( base.getAttribute("lnktexto")!=null ) {
                     out.println(base.getAttribute("lnktexto").trim());
+                }else {
+                    out.println(paramRequest.getLocaleString("msgSiteMap"));
                 }
-                else out.println(paramRequest.getLocaleString("msgSiteMap"));
                 out.println("</a>");
             }
         }else {
-            System.out.println("******************************render mapa");
             // Mapa de sitio
             try {
                 SWBResourceURL url=paramRequest.getRenderUrl();
@@ -270,10 +266,18 @@ public class WBSiteMap extends GenericAdmResource
                     String name = names.nextElement();
                     params.put(name, request.getParameter(name));
                 }
-                String x = tree.renderXHTMLFirstTime(params);
-                out.print(x);
-            }
-            catch(Exception e) {
+
+                System.out.println("base.getAttribute(width)="+base.getAttribute("width"));
+                System.out.println("base.getAttribute(height)="+base.getAttribute("height"));
+                if( base.getAttribute("width")!=null ) {
+                    tree.setWidth(base.getAttribute("width"));
+                }
+                if( base.getAttribute("height")!=null ) {
+                    tree.setHeight(base.getAttribute("height"));
+                }
+                
+                out.println(tree.renderXHTMLFirstTime(params));
+            }catch(Exception e) {
                 log.error(e);
             }
         }
@@ -295,6 +299,8 @@ public class WBSiteMap extends GenericAdmResource
         private int level;
         private String title;
         private String language;
+
+        private String width, height;
 
         public SelectTree(String website, String url, boolean openOnClick, String title, String language) {
             this.website = website;
@@ -361,9 +367,19 @@ public class WBSiteMap extends GenericAdmResource
                     opened=true;
                 }
 
-                System.out.println("opened="+opened);
+                System.out.println("\n\n**********width="+width);
+                System.out.println("**********height="+height);
 
-                html.append("<div class=\"swb-mapa\" id=\"tree_"+website+"\">");
+                html.append("<div class=\"swb-mapa\" id=\"tree_"+website+"\" style=\"");
+                if(width!=null) {
+                    System.out.println("width...");
+                    html.append("width:"+width+";");
+                }
+                if(height!=null) {
+                    System.out.println("height...");
+                    html.append("height:"+height+";");
+                }
+                html.append("\" >");
                 if(title!=null) {
                     html.append("<h1>"+title+"</h1>");
                 }
@@ -449,7 +465,19 @@ public class WBSiteMap extends GenericAdmResource
                 boolean opened = Boolean.parseBoolean(request.get(tmhome.getId())==null?"false":((String)request.get(tmhome.getId())).equals("1")?"true":"false");
                 if(level>0)opened=true;
 
-                html.append("<div class=\"swb-mapa\" id=\"tree_"+website+"\">");
+                System.out.println("\n\n**********width="+width);
+                System.out.println("**********height="+height);
+
+                html.append("<div class=\"swb-mapa\" id=\"tree_"+website+"\" style=\"");
+                if(width!=null) {
+                    System.out.println("width...");
+                    html.append("width:"+width+";");
+                }
+                if(height!=null) {
+                    System.out.println("height...");
+                    html.append("height:"+height+";");
+                }
+                html.append("\" >");
                 if(title!=null) {
                     html.append("<h1>mapa de sitio</h1>");
                 }
@@ -640,6 +668,34 @@ public class WBSiteMap extends GenericAdmResource
             html.append("</ul>");
 
             return html.toString();
+        }
+
+        /**
+         * @return the width
+         */
+        public String getWidth() {
+            return width;
+        }
+
+        /**
+         * @param width the width to set
+         */
+        public void setWidth(String width) {
+            this.width = width;
+        }
+
+        /**
+         * @return the height
+         */
+        public String getHeight() {
+            return height;
+        }
+
+        /**
+         * @param height the height to set
+         */
+        public void setHeight(String height) {
+            this.height = height;
         }
     }
 }
