@@ -154,7 +154,14 @@ public class SWBAResourceVersion extends GenericResource {
                                 out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/activa.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgActualVersion") + "\">");
                             }
 
-                            out.println("<a href=\"#\" onclick=\"window.open('" + SWBPlatform.getWebWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vio.getVersionNumber() + "/" + vio.getVersionFile() + "','Preview','scrollbars, resizable, width=550, height=550');\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgPreview") + "\"></a>"); //submitUrl('" + urlec + "',this); return false;
+                            // Llamado al doView del recurso.
+                            SWBResourceURLImp urlV = (SWBResourceURLImp) paramRequest.getRenderUrl();
+                            urlV.setResourceBase(swres.getResourceBase());
+                            urlV.setParameter("numversion", Integer.toString(vio.getVersionNumber()));
+                            urlV.setMode(SWBResourceURLImp.Mode_VIEW);
+                            urlV.setCallMethod(SWBResourceURLImp.Call_DIRECT);
+                            //out.println("<a href=\"#\" onclick=\"window.open('" + SWBPlatform.getWebWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vio.getVersionNumber() + "/" + vio.getVersionFile() + "','Preview','scrollbars, resizable, width=550, height=550');\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgPreview") + "\"></a>"); //submitUrl('" + urlec + "',this); return false;
+                            out.println("<a href=\"#\" onclick=\"window.open('" + urlV + "','Preview','scrollbars, resizable, width=550, height=550');\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgPreview") + "\"></a>"); //submitUrl('" + urlec + "',this); return false;
 
                             SWBResourceURL urlr = paramRequest.getActionUrl();
                             urlr.setParameter("suri", id);
