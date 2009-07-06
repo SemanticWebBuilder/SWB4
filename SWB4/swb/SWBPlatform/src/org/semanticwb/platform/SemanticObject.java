@@ -592,7 +592,27 @@ public class SemanticObject
 
     public SemanticLiteral getLiteralProperty(SemanticProperty prop)
     {
-        return getLiteralProperty(prop, null);
+        SemanticLiteral ret = null;
+        if (m_virtual)
+        {
+            ret=(SemanticLiteral)getPropertyValueCache(prop, null);
+        }else
+        {
+            Object aux=getPropertyValueCache(prop, null);
+            if(aux==NULL)return null;
+            ret=(SemanticLiteral)aux;
+            if(ret==null)
+            {
+                Statement stm = null;
+                stm = m_res.getProperty(prop.getRDFProperty());
+                if (stm != null)
+                {
+                    ret = new SemanticLiteral(stm);
+                }
+                setPropertyValueCache(prop, null, ret);
+            }
+        }
+        return ret;
     }
 
     public SemanticLiteral getLiteralProperty(SemanticProperty prop, String lang)
@@ -609,13 +629,7 @@ public class SemanticObject
             if(ret==null)
             {
                 Statement stm = null;
-                if(lang!=null)
-                {
-                    stm=getLocaleStatement(prop,lang);
-                }else
-                {
-                    stm = m_res.getProperty(prop.getRDFProperty());
-                }
+                stm=getLocaleStatement(prop,lang);
                 if (stm != null)
                 {
                     ret = new SemanticLiteral(stm);
@@ -1065,13 +1079,17 @@ public class SemanticObject
 
     private Statement getLocaleStatement(SemanticProperty prop, String lang)
     {
+        //System.out.println(m_res+" "+prop+" "+lang);
         StmtIterator stit = m_res.listProperties(prop.getRDFProperty());
+        //System.out.println("->"+m_res.getProperty(prop.getRDFProperty()));
         Statement st = null;
         while (stit.hasNext())
         {
             Statement staux = stit.nextStatement();
             String lg = staux.getLanguage();
-            if (lg != null && lg.equals(lang))
+            if(lg.length()==0)lg=null;
+            //System.out.println("-->"+lang+" "+lg+" "+staux);
+            if ((lang==null && lg==null) || (lg != null && lg.equals(lang)))
             {
                 st = staux;
                 break;
@@ -1399,7 +1417,7 @@ public class SemanticObject
             }
         }else
         {
-            SemanticLiteral lit=getLiteralProperty(prop);
+            SemanticLiteral lit=getLiteralProperty(prop,null);
             if(lit!=null)
             {
                 ret=lit.getString();

@@ -416,7 +416,7 @@ public class TestAdminWebSite {
 
     }
 
-    @Test
+    //@Test
     public void writeAdmin()
     {
         WebSite site=SWBContext.getAdminWebSite();
