@@ -111,17 +111,19 @@
     <br />
         <input type="hidden" name="operation" value="<%=action%>" />
         <input type="hidden" name="numversion" value="<%=version%>" />
+        <input type="hidden" name="suri" value="<%=request.getParameter("suri")%>" />
     </form>
-    <div align="right">
+    <!--div align="right">
     <form name="mainFile" method="post" action="<%=urlNewVersion.toString()%>">
         <input type="button" value="Cargar archivo" onclick="javascript:callUpload();" />
     </form>
-    </div>
+    </div-->
 <%
     url.setMode(paramRequest.Mode_EDIT);
     url.setAction(SWBResourceURL.Action_EDIT);
 %>
     <form name="newFileForm" id="newFileForm" method="post" action="<%=url.toString()%>">
+        <input type="hidden" name="suri" value="<%=request.getParameter("suri")%>" />
         <input type="hidden" name="tmpPath" value="<%=portletWorkPath%>" />
         <input type="hidden" name="relativePath" value="" />
         <input type="hidden" name="numversion" value="<%=version%>" />
