@@ -220,6 +220,7 @@ public class TemplateEditor extends javax.swing.JApplet
         {
             URL url=new URL(this.getCodeBase(),document);
             String txt=readInputStream(htmlEditor.getStreamAndSetURL(url));
+            System.out.println(txt);
             textEditor.setText(txt.replaceAll(workpath,""));
             
             try
@@ -2033,11 +2034,17 @@ Action:caret-previous-word
             {
                 ret.append(new String(bfile, 0, x));
             }
-            in.close();
         } catch (Exception e)
         {
-            System.out.println(e);
+            e.printStackTrace();
+        }finally
+        {
+            try
+            {
+                in.close();            
+            }catch(Exception e2){e2.printStackTrace();}
         }
+
         return ret.toString();
     }
     

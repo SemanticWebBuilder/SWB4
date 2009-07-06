@@ -392,13 +392,13 @@ public class WBTextEditorPane extends JTextPane implements CaretListener, KeyLis
     }
 
     public void mouseEntered(MouseEvent e) {
-        System.out.println("mouseEntered:"+e.getModifiersEx()+" "+e.BUTTON1);
+        //System.out.println("mouseEntered:"+e.getModifiersEx()+" "+e.BUTTON1);
         try
         {
             if(e.getModifiersEx()>0)
             {
-                System.out.println("cur:"+JSObject.getWindow(applet).eval("dojo.dnd.manager().source.tree"));
-                System.out.println("cur:"+JSObject.getWindow(applet).eval("dijit.getEnclosingWidget(dojo.dnd.manager().nodes[0]).item.id"));
+                //System.out.println("cur:"+JSObject.getWindow(applet).eval("dojo.dnd.manager().source.tree"));
+                //System.out.println("cur:"+JSObject.getWindow(applet).eval("dijit.getEnclosingWidget(dojo.dnd.manager().nodes[0]).item.id"));
                 JSObject.getWindow(applet).eval("dojo.dnd.manager().source.onDndCancel()");
                 JSObject.getWindow(applet).eval("dojo.dnd.manager().source.containerState=''");
 
