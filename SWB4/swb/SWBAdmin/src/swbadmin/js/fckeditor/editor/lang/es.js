@@ -32,6 +32,7 @@ ToolbarExpand		: "Expandir Barra",
 // Toolbar Items and Context Menu
 Save				: "Guardar",
 NewPage				: "Nueva Página",
+UploadFile			: "Cargar Archivo",
 Preview				: "Vista Previa",
 Cut					: "Cortar",
 Copy				: "Copiar",
@@ -330,7 +331,7 @@ DlgCellHorAlignLeft	: "Izquierda",
 DlgCellHorAlignCenter	: "Centrado",
 DlgCellHorAlignRight: "Derecha",
 DlgCellVerAlign		: "Alineación Vertical",
-DlgCellVerAlignNotSet	: "<Not establecido>",
+DlgCellVerAlignNotSet	: "<No establecido>",
 DlgCellVerAlignTop	: "Tope",
 DlgCellVerAlignMiddle	: "Medio",
 DlgCellVerAlignBottom	: "ie",
@@ -525,6 +526,9 @@ DlgAboutBrowserInfoTab	: "Información de Navegador",
 DlgAboutLicenseTab	: "Licencia",
 DlgAboutVersion		: "versión",
 DlgAboutInfo		: "Para mayor información por favor dirigirse a",
+
+// Upload file Dialog
+DlgUploadFileTitle	: "Carga de archivo",
 
 // Div Dialog
 DlgDivGeneralTab	: "General",
