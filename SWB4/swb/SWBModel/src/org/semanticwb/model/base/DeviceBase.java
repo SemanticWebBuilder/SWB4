@@ -33,12 +33,6 @@ public class DeviceBase extends org.semanticwb.model.SWBClass implements org.sem
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Device>(it, true);
     }
 
-    public static org.semanticwb.model.Device createDevice(org.semanticwb.model.SWBModel model)
-    {
-        long id=model.getSemanticObject().getModel().getCounter(sclass);
-        return org.semanticwb.model.Device.createDevice(String.valueOf(id), model);
-    }
-
     public static org.semanticwb.model.Device getDevice(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.model.Device)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
