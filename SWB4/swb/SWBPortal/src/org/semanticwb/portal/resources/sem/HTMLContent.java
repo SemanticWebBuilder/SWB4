@@ -61,13 +61,19 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         Versionable versionInfo = null;
         VersionInfo vi = hc.getActualVersion();
         int versionNumber = vi.getVersionNumber();
+        if (request.getParameter("numversion") != null &&
+                !"".equals(request.getParameter("numversion"))) {
+            versionNumber = Integer.parseInt(request.getParameter("numversion"));
+            vi = findVersion(versionNumber);
+        }
+
         String fileName = vi.getVersionFile();
         String resourceWorkPath = SWBPlatform.getWorkPath()
                 + resource.getWorkPath() + "/" + versionNumber + "/" + fileName;
         String fileContent = SWBUtils.IO.getFileFromPath(resourceWorkPath);
         response.getWriter().println(SWBUtils.TEXT.replaceAll(fileContent,
                                      "<workpath/>",
-                                     SWBPlatform.getWorkPath()
+                                     SWBPlatform.getWebWorkPath()
                                      + resource.getWorkPath() + "/"
                                      + versionNumber + "/"));
     }
@@ -85,8 +91,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
 
-        System.out.println("En HTMLContent.doEdit():"+request.getParameter("numversion"));
-
         //SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         //GenericObject obj = ont.getGenericObject(request.getParameter("suri"));
         Resource resource = paramRequest.getResourceBase();
@@ -102,7 +106,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         String tmpPath = request.getParameter("tmpPath");
         VersionInfo vio = null;
 
-        vio = (VersionInfo) findVersion(versionNumber);
+        vio = findVersion(versionNumber);
         fileName = vio.getVersionFile();
 
         pathToRead.append(resource.getWorkPath() + "/");
@@ -149,10 +153,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             e.printStackTrace();
             log.debug(e);
         }
-//        System.out.println("Web Work Path - SWBPlatform.getWebWorkPath():" + SWBPlatform.getWebWorkPath());
-//        System.out.println("Context Path - SWBPlatform.getContextPath():" + SWBPlatform.getContextPath());
-//        System.out.println("Work Path - SWBPlatform.getWorkPath():" + SWBPlatform.getWorkPath());
-//        System.out.println("Resource Work Path - resource.getWorkPath():" + resource.getWorkPath());
     }
 
     /**
@@ -240,21 +240,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 //Se encuentran archivos asociados al contenido para conservarlos en la nueva version
                 //attachedFiles = SWBPortal.UTIL.FindAttaches(textToSave);
                 //String [] associated = attachedFiles.split(";");
-                System.out.println("textToSave:\n" + textToSave);
-                System.out.println("\nworkingDirectory: " + workingDirectory);
-//                for (String s : associated) {
-//                    if (s.indexOf("http://") != -1) {
-//                        String fileName = s.substring(s.lastIndexOf("/") + 1);
-//                        //Cada archivo se copia al directorio de la nueva version
-//                        SWBUtils.IO.copy(s, directoryToCreate + "/" + fileName,
-//                                         false, "", "");
-//                        //Se sustituye la ruta anterior por el dir de la version actual
-//                        textToSave = SWBUtils.TEXT.replaceAll(textToSave, s,
-//                                "<workpath/>" + HTMLContent.FOLDER + fileName);
-//                        System.out.println("Sustituye: " + s + "\n      por: "
-//                                + "<workpath/>" + HTMLContent.FOLDER + fileName);
-//                    }
-//                }
                 //Se buscan archivos asociados al contenido para conservarlos en la nueva version
                 int index = 0;
                 while (index != -1) {
@@ -269,8 +254,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                                     + attachedFilePath.substring(
                                             attachedFilePath.indexOf("work") + 4);
                             String fileName = s.substring(s.lastIndexOf("/") + 1);
-//                            System.out.println("\nSustituye: \nlogica:   " + s
-//                                    + "\nfisica:   " + directoryToCreate + "/" + fileName);
                             //Solo copia archivos de versiones anteriores
                             if (s.indexOf(resource.getWorkPath() + "/" + versionNumber) == -1) {
                                 SWBUtils.IO.copy(s, directoryToCreate + "/" + fileName,
@@ -324,7 +307,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                                     "", "");
                         }
                     }
-                    //SWBUtils.IO.removeDirectory(directoryToRemove);
+                    SWBUtils.IO.removeDirectory(directoryToRemove);
                 }
             } catch (Exception e) {
                 textSaved = false;
@@ -375,24 +358,21 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
         ArrayList values = fUpload.getValue("numversion");
         int g = 0;
-        System.out.println("Valores recibidos: " + values.size());
-        while (g < values.size()) {
-            System.out.println("  " + g + ": " + (String) values.get(g));
-            g++;
-        }
+//        System.out.println("Valores recibidos: " + values.size());
+//        while (g < values.size()) {
+//            System.out.println("  " + g + ": " + (String) values.get(g));
+//            g++;
+//        }
         if (values != null && !values.isEmpty()) {
-            numversion = Integer.parseInt((String) values.get(0));
+            numversion = Integer.parseInt(((String) values.get(0)).trim());
         }
         portletWorkPath = SWBPlatform.getWorkPath()
                 + resource.getWorkPath() + "/" + numversion + "/tmp/";
 
-        System.out.println("Para guardar archivo en: " + portletWorkPath);
+//        System.out.println("Para guardar archivo en: " + portletWorkPath);
         File file = new File(portletWorkPath);
         if (!file.exists()) {
             file.mkdirs();
-            System.out.println("Ya lo creó");
-        } else {
-            System.out.println("Ya estaba creado");
         }
         File fileTmp = new File(portletWorkPath + "index.html");
         if (fileTmp.exists()) {
@@ -430,8 +410,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             if (!file.exists()) {
                 file.mkdir();
             }
-
-            System.out.println("Cuando cierra ventana, recarga con la ruta: " + localRelativePath);
 
             //Renombrar el nuevo archivo
             try {
@@ -641,11 +619,14 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         output.append("\n          document.frmUpload.hiddenPath.value = localName.substring(0, localName.lastIndexOf(\"\\\\\"));");
         output.append("\n        } ");
         output.append("\n    function isOk() {");
-        output.append("\n	if (Ok()) {");
-        output.append("\n	    var ext = document.frmUpload.NewFile.value.substring(document.frmUpload.NewFile.value.lastIndexOf('.'), document.frmUpload.NewFile.value.length);");
-        output.append("\n	    if (ext == '.htm' || ext == '.html') ");
-        output.append("\n	        document.frmUpload.submit();");
-        output.append("\n	}");
+        output.append("\n	     if  (Ok()) {");
+        output.append("\n	         var ext = document.frmUpload.NewFile.value.substring(document.frmUpload.NewFile.value.lastIndexOf('.'), document.frmUpload.NewFile.value.length);");
+        output.append("\n	         if (ext == '.htm' || ext == '.html') {");
+        output.append("\n	             document.frmUpload.submit();");
+        output.append("\n	         } else { ");
+        output.append("\n	             alert('¡Solo puede seleccionar archivos con extensión .htm o .html!');");
+        output.append("\n	         }");
+        output.append("\n	     }");
         output.append("\n    }");
         output.append("\n	</script>");
         output.append("\n</head>");
