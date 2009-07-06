@@ -604,6 +604,8 @@ body {
 .icomap span {
 	color: #999;
 	line-height: 8px;
+    line-height: 8px;
+    display: block;
 }
 .icomap span:hover {
     background-color: #99ccff;
