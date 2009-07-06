@@ -665,13 +665,13 @@ public class SWBAEditor extends GenericResource
             String webWork=null;
             FileOutputStream fout=null;
 
-//            System.out.println("TM:"+tm);
-//            System.out.println("ID:"+id);
-//            System.out.println("TP:"+tp);
-//            System.out.println("VER:"+ver);
-//            System.out.println("TYPE:"+type);
-//            System.out.println("PATHFILEWB:"+name);
-//            System.out.println("DOCUMENT:"+doc);
+            System.out.println("TM:"+tm);
+            System.out.println("ID:"+id);
+            System.out.println("TP:"+tp);
+            System.out.println("VER:"+ver);
+            System.out.println("TYPE:"+type);
+            System.out.println("PATHFILEWB:"+name);
+            System.out.println("DOCUMENT:"+doc);
             
             if(type.equalsIgnoreCase("Template"))
             {
@@ -680,19 +680,19 @@ public class SWBAEditor extends GenericResource
 
                 if(request.getHeader("ATTACHWB")!=null)work+="images/";
                 
-                //System.out.println("work:"+work+" name:"+name);
+                System.out.println("work:"+work+" name:"+name);
 
                 if(!("FINDATTACHES".equals(doc)))
                 {
                     File fpath=new File(work);
                     fpath.mkdirs();
                     File file=new File(work+name);
-//                    System.out.println("file:"+file);
+                    System.out.println("file:"+file);
                     fout=new FileOutputStream(file);
                 }
                 
                 String ret=writeFile(in, fout);
-                //System.out.println("ret:"+ret);
+                System.out.println("ret:"+ret);
                 if(doc!=null)
                 {
                     if(doc.equals("RELOAD"))

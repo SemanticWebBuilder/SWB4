@@ -104,7 +104,10 @@ public class SWBUserMgr
             //language=DBUser.getInstance(repository).getProperty("defaultLanguage",language);        
             
             ret=new User(new SemanticObject(rep.getSemanticObject().getModel(),User.swb_User));
-            sub.getPrincipals().add(ret);
+            try
+            {
+                sub.getPrincipals().add(ret);
+            }catch(Exception e){log.error(e);}
             ret.setLanguage(language);
             //TODO: validar dispositivo
             Device dev=getDevice(request, site);

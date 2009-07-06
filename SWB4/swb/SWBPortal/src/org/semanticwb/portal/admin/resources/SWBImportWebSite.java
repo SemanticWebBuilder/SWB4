@@ -323,61 +323,61 @@ public class SWBImportWebSite extends GenericResource {
 
 
                 //Crea dispositivos de defecto
-                if (!site.hasDevice("1")) {
-                    Device dev = site.createDevice();
+                if (!site.hasDevice("pc")) {
+                    Device dev = site.createDevice("pc");
                     dev.setTitle("PC");
                     dev.setUserAgent("Mozilla");
-                    Device dev2 = site.createDevice();
+                    Device dev2 = site.createDevice("iexplorer");
                     dev2.setTitle("Internet Explorer");
                     dev2.setUserAgent("Mozilla MSIE");
                     dev2.setParent(dev);
-                    dev2 = site.createDevice();
+                    dev2 = site.createDevice("firefox");
                     dev2.setTitle("Mozilla FireFox");
                     dev2.setUserAgent("Mozilla Firefox");
                     dev2.setParent(dev);
-                    dev2 = site.createDevice();
+                    dev2 = site.createDevice("safari");
                     dev2.setTitle("Safari");
                     dev2.setUserAgent("Mozilla Safari");
                     dev2.setParent(dev);
 
-                    dev = site.createDevice();
+                    dev = site.createDevice("pda");
                     dev.setTitle("PDA");
-                    dev2 = site.createDevice();
+                    dev2 = site.createDevice("blackberry");
                     dev2.setTitle("BlackBerry");
                     dev2.setUserAgent("BlackBerry");
                     dev2.setParent(dev);
-                    dev2 = site.createDevice();
+                    dev2 = site.createDevice("iphone");
                     dev2.setTitle("iPhone");
                     dev2.setUserAgent("Mozilla iPhone Safari");
                     dev2.setParent(dev);
-                    dev2 = site.createDevice();
+                    dev2 = site.createDevice("wince");
                     dev2.setTitle("Windows CE");
                     dev2.setUserAgent("Mozilla Windows CE");
                     dev2.setParent(dev);
-                    dev2 = site.createDevice();
+                    dev2 = site.createDevice("palmos");
                     dev2.setTitle("PalmOS");
                     dev2.setUserAgent("Mozilla PalmOS");
                     dev2.setParent(dev);
-                    Device dev3 = site.createDevice();
+                    Device dev3 = site.createDevice("avantgo");
                     dev3.setTitle("AvantGo");
                     dev3.setUserAgent("Mozilla AvantGo");
                     dev3.setParent(dev2);
-                    dev3 = site.createDevice();
+                    dev3 = site.createDevice("eudoraweb");
                     dev3.setTitle("EudoraWeb");
                     dev3.setUserAgent("Mozilla PalmOS EudoraWeb");
                     dev3.setParent(dev2);
 
-                    dev = site.createDevice();
+                    dev = site.createDevice("phone");
                     dev.setTitle("Phone");
-                    dev2 = site.createDevice();
+                    dev2 = site.createDevice("midp");
                     dev2.setTitle("MIDP");
                     dev2.setUserAgent("MIDP");
                     dev2.setParent(dev);
-                    dev2 = site.createDevice();
+                    dev2 = site.createDevice("mmp");
                     dev2.setTitle("MMP");
                     dev2.setUserAgent("MMP");
                     dev2.setParent(dev);
-                    dev2 = site.createDevice();
+                    dev2 = site.createDevice("opera");
                     dev2.setTitle("Opera Mobi");
                     dev2.setUserAgent("Opera Mobi");
                     dev2.setParent(dev);

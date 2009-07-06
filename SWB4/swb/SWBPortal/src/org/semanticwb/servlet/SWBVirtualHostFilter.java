@@ -75,6 +75,8 @@ public class SWBVirtualHostFilter implements Filter
         String host = request.getServerName();
         String iserv = "";
 
+        //System.out.println("url:"+_request.getRequestURL());
+
         if (path == null || path.length() == 0)
         {
             path = "/";

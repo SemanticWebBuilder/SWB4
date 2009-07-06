@@ -26,7 +26,7 @@ import org.semanticwb.portal.db.SWBRecAdmLog;
  *
  * @author Jorge Jiménez
  */
-public class SiteLog extends GenericResource {
+public class SWBASiteLog extends GenericResource {
 
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
     private Logger log = SWBUtils.getLogger(SWBRecAdmLog.class);
