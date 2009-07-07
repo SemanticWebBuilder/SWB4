@@ -26,7 +26,7 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
 
     ByteArrayOutputStream bout = new ByteArrayOutputStream(1024);
     ServletOutputStream sout = new SWBServletOutputStreamImp(bout);
-    PrintWriter out = null;
+    PrintWriter pout = null;
     private String sendRedirect = null;
     private int err = -1;
     private String errMessage = null;
@@ -39,10 +39,6 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     public SWBHttpServletResponseWrapper(HttpServletResponse response)
     {
         super(response);
-        try
-        {
-            out = new PrintWriter(new OutputStreamWriter(sout,SWBUtils.TEXT.CHARSET_UTF8));
-        }catch(Exception e){log.error(e);}
     }
 
     @Override
@@ -50,7 +46,14 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     {
         //return response.getOutputStream();
         log.debug("WBResponse:getOutputStream");
-        out.flush();
+        if(pout!=null)
+        {
+            pout.flush();
+            String dec=new String(bout.toByteArray(),SWBUtils.TEXT.CHARSET_UTF8);
+            bout.reset();
+            sout.write(dec.getBytes());
+            pout=null;
+        }
         return sout;
     }
 
@@ -59,7 +62,12 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     {
         //return response.getWriter();
         log.debug("WBResponse:getWriter");
-        return out;
+        try
+        {
+            pout = new PrintWriter(new OutputStreamWriter(sout,SWBUtils.TEXT.CHARSET_UTF8));
+            //pout = new PrintWriter(new OutputStreamWriter(sout));
+        }catch(Exception e){log.error(e);}
+        return pout;
     }
 
     @Override
@@ -97,17 +105,27 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     {
         try
         {
-            out.flush();
-            out.close();
+            if(pout!=null)
+            {
+                pout.flush();
+                pout.close();
+            }
             bout.flush();
         } catch (Exception e)
         {
             log.error(e);
         }
-        String ret=bout.toString();
+        String ret="";
         try
         {
-            ret=SWBUtils.TEXT.decode(ret,SWBUtils.TEXT.CHARSET_UTF8);
+            if(pout!=null)
+            {
+                ret=new String(bout.toByteArray(),SWBUtils.TEXT.CHARSET_UTF8);
+                //ret=SWBUtils.TEXT.decode(ret,SWBUtils.TEXT.CHARSET_UTF8);
+            }else
+            {
+                ret=bout.toString();
+            }
         }catch(Exception e){log.error(e);}
         //log.trace("WBResponse:out:" + ret);
         return ret;
@@ -117,15 +135,27 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     {
         try
         {
-            out.flush();
-            out.close();
+            if(pout!=null)
+            {
+                pout.flush();
+                pout.close();
+            }
             bout.flush();
         } catch (Exception e)
         {
             log.error(e);
         }
-        //log.trace("WBResponse:out:" + bout.toString());
-        return bout.toByteArray();
+        byte arr[]=bout.toByteArray();
+        try
+        {
+            if(pout!=null)
+            {
+                arr=new String(arr, SWBUtils.TEXT.CHARSET_UTF8).getBytes();
+                //ret=SWBUtils.TEXT.decode(ret,SWBUtils.TEXT.CHARSET_UTF8);
+            }
+        }catch(Exception e){log.error(e);}
+
+        return arr;
     }
 
     @Override
