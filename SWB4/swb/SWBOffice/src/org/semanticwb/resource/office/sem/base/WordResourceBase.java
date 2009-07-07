@@ -3,14 +3,15 @@ package org.semanticwb.resource.office.sem.base;
 
 public class WordResourceBase extends org.semanticwb.resource.office.sem.OfficeResource 
 {
-    public static final org.semanticwb.platform.SemanticProperty swboffice_txtAnt=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#txtAnt");
     public static final org.semanticwb.platform.SemanticProperty swboffice_position=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#position");
-    public static final org.semanticwb.platform.SemanticProperty swboffice_txtSig=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#txtSig");
-    public static final org.semanticwb.platform.SemanticProperty swboffice_font=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#font");
-    public static final org.semanticwb.platform.SemanticProperty swboffice_numberOfPages=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#numberOfPages");
+    public static final org.semanticwb.platform.SemanticProperty swboffice_txtant=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#txtant");
+    public static final org.semanticwb.platform.SemanticProperty swboffice_txtsig=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#txtsig");
+    public static final org.semanticwb.platform.SemanticProperty swboffice_tfont=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#tfont");
+    public static final org.semanticwb.platform.SemanticProperty swboffice_npages=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#npages");
     public static final org.semanticwb.platform.SemanticProperty swboffice_content=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#content");
+    public static final org.semanticwb.platform.SemanticProperty swboffice_tpred=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#tpred");
     public static final org.semanticwb.platform.SemanticProperty swboffice_versionToShow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#versionToShow");
-    public static final org.semanticwb.platform.SemanticProperty swboffice_Paginated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#Paginated");
+    public static final org.semanticwb.platform.SemanticProperty swboffice_pages=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#pages");
     public static final org.semanticwb.platform.SemanticProperty swboffice_repositoryName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/office#repositoryName");
     public static final org.semanticwb.platform.SemanticClass swboffice_WordResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#WordResource");
 
@@ -24,16 +25,6 @@ public class WordResourceBase extends org.semanticwb.resource.office.sem.OfficeR
     }
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/office#WordResource");
 
-    public String getTxtAnt()
-    {
-        return getSemanticObject().getProperty(swboffice_txtAnt);
-    }
-
-    public void setTxtAnt(String txtAnt)
-    {
-        getSemanticObject().setProperty(swboffice_txtAnt, txtAnt);
-    }
-
     public int getPosition()
     {
         return getSemanticObject().getIntProperty(swboffice_position);
@@ -44,34 +35,44 @@ public class WordResourceBase extends org.semanticwb.resource.office.sem.OfficeR
         getSemanticObject().setLongProperty(swboffice_position, position);
     }
 
-    public String getTxtSig()
+    public String getTxtant()
     {
-        return getSemanticObject().getProperty(swboffice_txtSig);
+        return getSemanticObject().getProperty(swboffice_txtant);
     }
 
-    public void setTxtSig(String txtSig)
+    public void setTxtant(String txtant)
     {
-        getSemanticObject().setProperty(swboffice_txtSig, txtSig);
+        getSemanticObject().setProperty(swboffice_txtant, txtant);
     }
 
-    public String getFont()
+    public String getTxtsig()
     {
-        return getSemanticObject().getProperty(swboffice_font);
+        return getSemanticObject().getProperty(swboffice_txtsig);
     }
 
-    public void setFont(String font)
+    public void setTxtsig(String txtsig)
     {
-        getSemanticObject().setProperty(swboffice_font, font);
+        getSemanticObject().setProperty(swboffice_txtsig, txtsig);
     }
 
-    public int getNumberOfPages()
+    public String getTfont()
     {
-        return getSemanticObject().getIntProperty(swboffice_numberOfPages);
+        return getSemanticObject().getProperty(swboffice_tfont);
     }
 
-    public void setNumberOfPages(int numberOfPages)
+    public void setTfont(String tfont)
     {
-        getSemanticObject().setLongProperty(swboffice_numberOfPages, numberOfPages);
+        getSemanticObject().setProperty(swboffice_tfont, tfont);
+    }
+
+    public int getNpages()
+    {
+        return getSemanticObject().getIntProperty(swboffice_npages);
+    }
+
+    public void setNpages(int npages)
+    {
+        getSemanticObject().setLongProperty(swboffice_npages, npages);
     }
 
     public String getContent()
@@ -84,6 +85,16 @@ public class WordResourceBase extends org.semanticwb.resource.office.sem.OfficeR
         getSemanticObject().setProperty(swboffice_content, content);
     }
 
+    public boolean isTpred()
+    {
+        return getSemanticObject().getBooleanProperty(swboffice_tpred);
+    }
+
+    public void setTpred(boolean tpred)
+    {
+        getSemanticObject().setBooleanProperty(swboffice_tpred, tpred);
+    }
+
     public String getVersionToShow()
     {
         return getSemanticObject().getProperty(swboffice_versionToShow);
@@ -94,14 +105,14 @@ public class WordResourceBase extends org.semanticwb.resource.office.sem.OfficeR
         getSemanticObject().setProperty(swboffice_versionToShow, versionToShow);
     }
 
-    public boolean isPaginated()
+    public boolean isPages()
     {
-        return getSemanticObject().getBooleanProperty(swboffice_Paginated);
+        return getSemanticObject().getBooleanProperty(swboffice_pages);
     }
 
-    public void setPaginated(boolean Paginated)
+    public void setPages(boolean pages)
     {
-        getSemanticObject().setBooleanProperty(swboffice_Paginated, Paginated);
+        getSemanticObject().setBooleanProperty(swboffice_pages, pages);
     }
 
     public String getRepositoryName()
