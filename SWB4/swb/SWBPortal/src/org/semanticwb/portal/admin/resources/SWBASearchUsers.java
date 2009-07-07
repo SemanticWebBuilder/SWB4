@@ -36,8 +36,8 @@ public class SWBASearchUsers extends GenericResource
             throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer("");
-        User user = paramRequest.getUser();
         SWBResourceURL url = paramRequest.getRenderUrl();
+        User user = paramRequest.getUser();
         url.setMode("search");
         Iterator<UserRepository> itur = SWBContext.listUserRepositorys();
         ret.append("<script type=\"text/javascript\">\n" +
