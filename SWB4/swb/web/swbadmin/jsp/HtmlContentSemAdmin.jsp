@@ -14,14 +14,8 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURLImp"%>
 <%--@ taglib uri="http://java.fckeditor.net" prefix="FCK" --%>
 <%
-    //SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-    //GenericObject obj = ont.getGenericObject(request.getParameter("suri"));
-    //SWBResource swres = (SWBResource) obj;
 
-    //Resource base = swres.getResourceBase();
-    //Resource base=paramRequest.getResourceBase();
     SWBResourceURLImp url = (SWBResourceURLImp) paramRequest.getRenderUrl();
-    //url.setResourceBase(base);
     url.setCallMethod(SWBResourceURLImp.Call_DIRECT);
     url.setMode("saveContent");
     String action = (request.getParameter("tmpPath") != null) ? "tmp" : "";
@@ -29,14 +23,11 @@
                      ? Integer.parseInt(request.getParameter("numversion"))
                      : 1;
     String message = request.getParameter("message");
-    //VersionInfo versionInfo = new VersionInfo(base.getSemanticObject());
-    //version = versionInfo.getVersionNumber();
     net.fckeditor.FCKeditor fckEditor = new net.fckeditor.FCKeditor(request, "EditorDefault");
     fckEditor.setHeight("450");
     String content = (String) request.getAttribute("fileContent");
     fckEditor.setValue(content);
     SWBResourceURLImp urlNewVersion = (SWBResourceURLImp) paramRequest.getRenderUrl();
-    //urlNewVersion.setResourceBase(base);
     urlNewVersion.setCallMethod(SWBResourceURLImp.Call_DIRECT);
     urlNewVersion.setMode("selectFileInterface");
     urlNewVersion.setParameter("numversion", Integer.toString(version));
@@ -75,7 +66,6 @@
         var p = f.contentWindow || f.document;
         var emerg = p.FCKDialog || f.FCKDialog;
         //Esta liga abre el cuadro de dialogo para cargar archivos con los programas de FCKEditor
-        //p.FCKDialog.OpenDialog('FCKDialog_UploadFile', 'UploadFile', '/swb/resources/scripts/fckeditor/editor/dialog/fck_HTMLfile.html', 450, 390, null, this.window, false);
         emerg.OpenDialog('FCKDialog_UploadFile', 'UploadFile', '<%=urlNewVersion.toString()%>', 450, 390, null, this.window, false);
       }
       function sendFile() {
@@ -103,8 +93,6 @@
           document.newFileForm.submit();
       }
     </script>
-    <div></div>
-    <hr />
     <form action="<%=url.toString()%>" method="post">
     <%
         out.println(fckEditor);
@@ -114,11 +102,6 @@
         <input type="hidden" name="numversion" value="<%=version%>" />
         <input type="hidden" name="suri" value="<%=request.getParameter("suri")%>" />
     </form>
-    <!--div align="right">
-    <form name="mainFile" method="post" action="<%=urlNewVersion.toString()%>">
-        <input type="button" value="Cargar archivo" onclick="javascript:callUpload();" />
-    </form>
-    </div-->
 <%
     url.setMode(paramRequest.Mode_EDIT);
     url.setAction(SWBResourceURL.Action_EDIT);
