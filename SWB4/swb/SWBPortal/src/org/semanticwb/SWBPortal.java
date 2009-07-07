@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -38,6 +39,7 @@ import org.semanticwb.portal.access.SWBAccessIncrement;
 import org.semanticwb.portal.access.SWBAccessLog;
 import org.semanticwb.portal.db.SWBDBAdmLog;
 import org.semanticwb.portal.indexer.SWBIndexMgr;
+import org.semanticwb.portal.util.ContentStyles;
 import org.semanticwb.util.JarFile;
 import org.semanticwb.util.db.GenericDB;
 
@@ -539,88 +541,6 @@ public class SWBPortal {
             return ret.toString();
         }
 
-        /**
-         * @param datos
-         * @param ruta
-         */
-        public static String getContentByPage(String datos, int page) {
-            HtmlTag tag = new HtmlTag();
-            StringBuffer ret = new StringBuffer();
-            StringBuffer rettmp = new StringBuffer();
-            boolean flag = false;
-            boolean flag1 = false;
-            boolean flag2 = false;
-            try {
-                HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new java.io.ByteArrayInputStream(datos.getBytes()));
-                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
-                    int ttype = tok.getTokenType();
-                    if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT) {
-                        tok.parseTag(tok.getStringValue(), tag);
-                        if (tok.getRawString().toLowerCase().startsWith("<!--[if")) {
-                            continue;
-                        }
-                        if (tag.getTagString().toLowerCase().equals("div")) {
-                            flag1 = true;
-                            if (!tag.isEndTag()) {
-                                rettmp = new StringBuffer();
-                                rettmp.append("<");
-                                rettmp.append(tag.getTagString());
-                                rettmp.append(" ");
-                                Enumeration en = tag.getParamNames();
-                                String name = "";
-                                String value = "";
-                                String actionval = "";
-                                while (en.hasMoreElements()) {
-                                    name = (String) en.nextElement();
-                                    value = tag.getParam(name);
-                                    rettmp.append(name);
-                                    rettmp.append("=\"");
-                                    if (name.toLowerCase().equals("class")) {
-                                        if (value.toLowerCase().equals("section" + page)) {
-                                            flag = true;
-                                            ret.append(rettmp.toString());
-                                            ret.append(value);
-                                            ret.append("\" ");
-                                            ret.append(">");
-                                        }
-                                    } else if (flag) {
-                                        flag2 = true;
-                                        ret.append(rettmp.toString());
-                                        ret.append(value);
-                                        ret.append("\" ");
-                                        ret.append(">");
-                                    }
-                                }
-                            } else {
-                                if (flag && !flag2) {
-                                    ret.append(tok.getRawString());
-                                    ret.append("</body>");
-                                    ret.append("</html>");
-                                    break;
-                                } else if (flag && flag2) {
-                                    ret.append(tok.getRawString());
-                                    flag2 = false;
-                                }
-                            }
-                        } else {
-                            if (!flag1 || flag) {
-                                ret.append(tok.getRawString());
-                            }
-                        }
-                    } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
-                        if (!flag1 || flag) {
-                            ret.append(tok.getRawString());
-                        }
-                    }
-                }
-            } catch (NumberFormatException f) {
-                log.error(f);
-            } catch (Exception e) {
-                log.error(e);
-            }
-            return ret.toString();
-        }
-
         private static String findFileName(String value) {
             //System.out.println("value:"+value);
             String out = "";
@@ -1066,5 +986,248 @@ public class SWBPortal {
                 log.error(e);
             }
         }
+    }
+
+    /**
+     * Remueve estilos del contenido, como parte del cambio de los mismos de acuerdo a
+     * archivo de configuración Content.properties en el servidor
+     */
+    public static String removeStylesOutDivs(String content, String tmid, HashMap hTMhStyleObjs)
+    {
+        StringBuffer ret = new StringBuffer();
+        try {
+            boolean title=false;
+            boolean style=false;
+            HtmlTag tag = new HtmlTag();
+            HtmlStreamTokenizer tok = new HtmlStreamTokenizer(SWBUtils.IO.getStreamFromString(content));
+            while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
+            {
+                int ttype = tok.getTokenType();
+                if(ttype == HtmlStreamTokenizer.TT_COMMENT || ttype == HtmlStreamTokenizer.TT_TEXT)
+                {
+                    if(!title)
+                    {
+                        if(style)
+                        {
+                            ret.append(parseStyles2(tok.getRawString(),tmid, hTMhStyleObjs));
+                        }else
+                        {
+                            ret.append(tok.getRawString());
+                        }
+                    }
+                } else if (ttype == HtmlStreamTokenizer.TT_TAG)
+                {
+                    tok.parseTag(tok.getStringValue(), tag);
+
+                    String tagname=tag.getTagString();
+                    String tname=tag.getTagString().toLowerCase();
+
+
+                    if(true)   //validar si se requiere eliminar tags de
+                    {
+                        if(tname.equals("title"))
+                        {
+                            if(tag.isEndTag())title=false;
+                            else title=true;
+                        }
+                        if(tname.equals("html")
+                            || tname.equals("title")
+                            || tname.equals("head")
+                            || tname.equals("meta")
+                            || tname.equals("link")
+                            || tname.startsWith("o:")
+                            || tname.startsWith("st1:")
+                            )
+                            continue;
+
+                        if(tname.equals("body"))
+                        {
+                            if(!tag.isEndTag())
+                            {
+                                tagname="DIV";
+                                tag.removeParam("link");
+                                tag.removeParam("vlink");
+                                tag.removeParam("alink");
+                            }
+                            else
+                            {
+                                ret.append("</DIV>");
+                                continue;
+                            }
+                        }
+                    }
+
+                    if(tag.isEndTag())
+                    {
+                        ret.append(tok.getRawString());
+                        if(tname.equals("style"))
+                        {
+                            style=false;
+                        }
+                    }else
+                    {
+                        ret.append("<");
+                        ret.append(tagname);
+
+                        if(tname.equals("style"))
+                        {
+                            tag.setParam("type","text/css");
+                            style=true;
+                        }else if(tname.equals("img"))
+                        {
+                            if(!tag.hasParam("alt"))tag.setParam("alt","");
+                            if(!tag.hasParam("longdesc"))tag.setParam("longdesc","#");
+                            tag.removeParam("v:shapes");
+                        }
+
+                        Enumeration en = tag.getParamNames();
+                        while (en.hasMoreElements())
+                        {
+                            String name = (String) en.nextElement();
+                            String value = tag.getParam(name);
+                            if(name.toLowerCase().equals("style"))
+                            {
+                                ret.append(" "+name+"='");
+                                StringTokenizer st=new StringTokenizer(value,";");
+                                while(st.hasMoreTokens())
+                                {
+                                    String token=st.nextToken();
+                                    String aux=token.toLowerCase().trim();
+                                    if(!(aux.startsWith("font:") || aux.startsWith("font-")))// || aux.startsWith("color")))
+                                    {
+                                        ret.append(token+";");
+                                    }
+                                }
+                                ret.append("\'");
+                            }else
+                            {
+                                ret.append(" "+name+"=\""+value+"\"");
+                            }
+                        }
+                        ret.append(">");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error(e);
+        }
+        return ret.toString();
+    }
+
+    /**
+     * Parsea el contenido, de acuerdo a los tipos indicados en los objetos de estilo
+     */
+    private static String parseStyles2(String styles, String tmid, HashMap hTMhStyleObjs)
+    {
+        //System.out.println("STYLES:((("+styles+")))");
+        styles=parseStyles(styles,tmid, hTMhStyleObjs);
+
+        HashMap hStyleObjs=(HashMap)hTMhStyleObjs.get(tmid);
+        if(hStyleObjs!=null)
+        {
+            ContentStyles contentStyle=(ContentStyles)hStyleObjs.get("MsoNormal");
+            if(contentStyle!=null)
+            {
+                Iterator it=SWBUtils.TEXT.findInterStr(styles,"p.",", ");
+                while(it.hasNext())
+                {
+                    String name=((String)it.next()).trim();
+                    if(name.indexOf('\n')==-1)
+                    {
+                        if(!hStyleObjs.containsKey(name))
+                        {
+                            styles=findStyles(styles,name,contentStyle.getFont(),contentStyle.getSize(),contentStyle.getColor());
+                        }
+                    }
+                }
+            }
+        }
+        return styles;
+    }
+
+    /**
+     * Parsea el contenido, de acuerdo a los tipos indicados en los objetos de estilo
+     */
+    private static String parseStyles(String content,String tmid, HashMap hTMhStyleObjs)
+    {
+        HashMap hStyleObjs=(HashMap)hTMhStyleObjs.get(tmid);
+        if(hStyleObjs!=null && hStyleObjs.size()>0){ //encontro estilos
+            Iterator iStyles=hStyleObjs.keySet().iterator();
+            while(iStyles.hasNext()){
+                String styleName=(String)iStyles.next();
+                if(styleName!=null && styleName.trim().length()>0){
+                    ContentStyles contentStyle=(ContentStyles)hStyleObjs.get(styleName);
+                    if(contentStyle.getName()!=null && (contentStyle.getFont()!=null || contentStyle.getSize()!=null || contentStyle.getColor()!=null))
+                    {
+                        String sname=styleName;             //contentStyle.getName(); //cambio para soportar multiples nombres
+                        if(!sname.equals("h1") && !sname.equals("h2") && !sname.equals("h3")) {
+                            sname="p."+sname+", li."+sname+", div."+sname;
+                        }
+                        //System.out.println("sname parser:"+sname);
+                        content=findStyles(content,sname,contentStyle.getFont(),contentStyle.getSize(),contentStyle.getColor());
+                    }
+                }
+            }
+        }
+        return content;
+    }
+
+    /**
+     * Busca los estilos en el documento y si los encuentra los remplaza de acuerdo a
+     * archivo de configuración
+     * @param content
+     * @param word
+     * @param font
+     * @param size
+     * @param color
+     * @return
+     */
+    public static String findStyles(String content,String word,String font,String size,String color){
+        int pos=-1;
+        pos=content.indexOf(word);
+        if(pos>-1){
+            int pos1=-1;
+            pos1=content.indexOf("{",pos);
+            if(pos1>-1 && font!=null){
+                int ifont=-1;
+                ifont=content.indexOf("font-family:",pos1);
+                int fintot=content.indexOf("}",pos1);
+                if(ifont>-1 ){ //cambio de font
+                    int fin=-1;
+                    fin=content.indexOf(";",ifont);
+                    if(fin>-1){
+                        content=content.substring(0,ifont+12)+font+content.substring(fin);
+                    }
+                }
+            }
+            if(pos1>-1 && size!=null){
+                int isize=-1;
+                isize=content.indexOf("font-size:",pos1);
+                int fintot=content.indexOf("}",pos1);
+                if(isize>-1 && isize<fintot){ //cambio de size
+                    int fin=-1;
+                    fin=content.indexOf(";",isize);
+                    if(fin>-1){
+                        content=content.substring(0,isize+10)+size+content.substring(fin);
+                    }
+                }
+            }
+            if(pos1>-1 && color!=null){
+                int icolor=-1;
+                icolor=content.indexOf("color:",pos1);
+                int fintot=content.indexOf("}",pos1);
+                if(icolor>-1 && icolor<fintot){ //cambio de color
+                    int fin=-1;
+                    fin=content.indexOf(";",icolor);
+                    if(fin>-1){
+                        content=content.substring(0,icolor+6)+color+content.substring(fin);
+                    }
+                }
+                else if(icolor==-1 || (icolor>-1 && icolor>fintot)){ //cambio de color
+                    content=content.substring(0,fintot)+"color:"+color+";"+content.substring(fintot);
+                }
+            }
+        }
+        return content;
     }
 }
