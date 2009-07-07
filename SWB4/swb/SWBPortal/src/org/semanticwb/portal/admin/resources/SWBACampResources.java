@@ -15,6 +15,7 @@ import org.semanticwb.model.Camp;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
@@ -47,6 +48,7 @@ public class SWBACampResources extends GenericResource {
         String idcamp = request.getParameter("id");
         String idrrtype = "-1";
         String idres = "-1";
+        User user = paramRequest.getUser();
         int numpage=1;
         if(request.getParameter("idrrtype")!=null) idrrtype = request.getParameter("idrrtype");
         if(request.getParameter("idres")!=null) idres = request.getParameter("idres");
@@ -134,7 +136,7 @@ public class SWBACampResources extends GenericResource {
                     cambiaColor = !(cambiaColor);
                     out.println("<tr bgcolor=\""+rowColor+"\">");
                     out.println("<td class=valores>");
-                    out.println("<a href=\""+url.toString()+"\" class=link>"+rrtype.getTitle()+"</a>");
+                    out.println("<a href=\""+url.toString()+"\" class=link>"+rrtype.getDisplayTitle(user.getLanguage())+"</a>");
                     out.println("</td>");
                     out.println("</tr>");
                 }
@@ -153,7 +155,7 @@ public class SWBACampResources extends GenericResource {
                 //SWBContext.getWebSite("").
                 ResourceType restype = (ResourceType) hmTypes.get(idrrtype);
                 
-                String nombretipo = restype.getTitle();
+                String nombretipo = restype.getDisplayTitle(user.getLanguage());
                 //HashMap hmRec = ResourceMgr.getInstance().getResourcesBaseOfType(tmid,restype.getId(),restype.getTopicMapId());
                 //TODO: Revisar getResourcesBaseOfType() con el cambio hecho
                 // Comienza cambio >>>>>>>>>>>>>>>>>>>
@@ -232,7 +234,7 @@ public class SWBACampResources extends GenericResource {
                             existentes.append("\n</a>");
                             existentes.append("\n</td>");
                             existentes.append("\n<td class=valores>");
-                            existentes.append(rRB.getTitle());
+                            existentes.append(rRB.getDisplayTitle(user.getLanguage()));
                             existentes.append("\n</td>");
                             existentes.append("\n<td class=valores>");
                             existentes.append(rRB.getDescription());

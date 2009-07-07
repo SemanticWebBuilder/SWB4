@@ -277,7 +277,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" title=\"Eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + sobj.getDisplayName(user.getLanguage()) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/remove.gif\" border=0></a>");
+                out.println("<a href=\"#\" title=\"Eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + sobj.getDisplayName(user.getLanguage()) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
 
                 SWBResourceURL urlpre = paramRequest.getRenderUrl();
                 urlpre.setParameter("suri", id);
@@ -288,9 +288,9 @@ public class SWBAWebPageContents extends GenericResource {
                     urlpre.setParameter("sproptype", idptype);
                 }
                 urlpre.setParameter("preview", "true");
-                out.println("<a href=\"#\" title=\"Vista Preliminar\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/SEARCH.png\" border=0></a>");
+                out.println("<a href=\"#\" title=\"Vista Preliminar\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=0></a>");
 
-                out.println("<a href=\"#\"  title=\"Administrar\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/Portlet.png\" border=0></a>");
+                out.println("<a href=\"#\"  title=\"Administrar\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=0></a>");
 
                 if (send2Flow) {
                     String pfid = null;
@@ -843,7 +843,7 @@ public class SWBAWebPageContents extends GenericResource {
         out.println("<td>");
         out.println("<select name=\"pfid\">");
         for (int i = 0; i < arrPf.length; i++) {
-            out.println("<option value=\"" + arrPf[i].getURI() + "\" " + (i == 0 ? "selected" : "") + ">" + arrPf[i].getTitle() + "</option>");
+            out.println("<option value=\"" + arrPf[i].getURI() + "\" " + (i == 0 ? "selected" : "") + ">" + arrPf[i].getDisplayTitle(user.getLanguage()) + "</option>");
         }
         out.println("</select>");
         out.println("</td>");

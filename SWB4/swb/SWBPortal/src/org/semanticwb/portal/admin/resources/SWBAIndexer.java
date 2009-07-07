@@ -129,7 +129,7 @@ public class SWBAIndexer extends GenericResource {
                         }
                         out.println("<input type=\"checkbox\" name=\"tmids\" value=\"" + tmid + "\" " + str_check + ">");
                         out.println("</td><td align=left>");
-                        out.println(tmp.getTitle());
+                        out.println(tmp.getDisplayTitle(user.getLanguage()));
                         out.println("</td>");
                         out.println("</tr>");
                     }
