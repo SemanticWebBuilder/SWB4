@@ -164,6 +164,22 @@ public class SWBContext extends SWBContextBase
                         return ret;
                     }
                 }
+                if(cls.hasProperty(CalendarRefable.swb_hasCalendarRef.getName()))
+                {
+                    if(obj.listValidObjectProperties(CalendarRefable.swb_hasCalendarRef).hasNext())
+                    {
+                        ret+="F";
+                        return ret;
+                    }
+                }
+                if(cls.hasProperty(Versionable.swb_actualVersion.getName()))
+                {
+                    if(obj.getObjectProperty(Versionable.swb_actualVersion)==null)
+                    {
+                        ret+="W";
+                        return ret;
+                    }
+                }
 
             }
             return ret;
