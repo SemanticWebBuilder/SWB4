@@ -296,15 +296,9 @@ public class PFlowManager
                                 for (int j = 0; j < roles.getLength(); j++)
                                 {
                                     Element erole = (Element) roles.item(j);
-                                    Iterator<Role> itroles = user.listRoles();
-                                    while (itroles.hasNext())
-                                    {
-                                        Role role = itroles.next();
-                                        if (role.getId().equals(erole.getAttribute("id")))
-                                        {
-                                            return true;
-                                        }
-                                    }
+                                    String idrole=erole.getAttribute("id");
+                                    Role role=user.getUserRepository().getRole(idrole);
+                                    return user.hasRole(role);
                                 }
                             }
                         }
