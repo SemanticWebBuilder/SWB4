@@ -14,6 +14,7 @@
     if(user!=null)lang=user.getLanguage();
     String username=request.getParameter("wb_username");
     String password=request.getParameter("wb_password");
+    boolean error=false;
     if(username!=null)
     {
         try {
@@ -24,8 +25,7 @@
         out.println("</script>");
         return;
         } catch (Exception notLoged){
-        //TODO: Jei Error code
-            return;
+            error=true;
         }
     }
 %>
@@ -53,3 +53,9 @@
       </table>
 	</fieldset>
     </form>
+    <div class="swbError"><%
+    if(error)
+    {
+        out.println(getLocaleString("loginerror",lang));
+    }
+%></div>

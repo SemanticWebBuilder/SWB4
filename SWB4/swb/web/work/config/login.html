@@ -99,32 +99,30 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
     <form name="login" action="" method="post">
       <table>
         <tr>
-          <td><h2>Usuario:</h2></td>
+          <td><h2>User:</h2></td>
           <td><input type="text" name="wb_username" size="30" class="fieldtxt"></td>
         </tr>
         <tr>
-          <td><h2>Contrase&ntilde;a:</h2></td>
+          <td><h2>Password:</h2></td>
           <td><input type="password" name="wb_password" size="30" class="fieldtxt"></td>
         </tr>
         <tr>
-          <td><h2>Idioma:</h2></td>
-          <td ><select name="swb_lang" onChange="MM_jumpMenu('parent',this,0)">
-            <option value="_" selected>Default</option>
-            <option value="es">Español</option>
-			<option value="en">English</option>
+          <td><h2>Application:</h2></td>
+          <td ><select name="swb_app" onChange="MM_jumpMenu('parent',this,0)">
+            <option value="portal">Portal Admin</option>
+			<option value="ontedit">Ontology Editor</option>
                     </select></td>
         </tr>
         <tr>
           <td >&nbsp;</td>
-          <td ><input name="Submit2" type="submit" value="Entrar" class="botonLogin" ></td>
+          <td ><input name="Submit2" type="submit" value="Login" class="botonLogin" ></td>
         </tr>
       </table>
     </form>
-    <div id="html-login-pie"><span>SemanticWebBuilder 4.0</span> 
-      <br>
-      All rights reserved © 2009<br>
-       WebBuilder and SemanticWebBuilder
-      are registered trademarks.<br>
+    <div id="html-login-pie"><span>SemanticWebBuilder <SWBVERSION></span><br/>
+      All rights reserved © 2009<br/>
+      WebBuilder and SemanticWebBuilder
+      are registered trademarks.<br/>
     <a href="http://www.semanticwebbuilder.org">www.semanticwebbuilder.org</a></div>
     </td></tr>
   </table>
