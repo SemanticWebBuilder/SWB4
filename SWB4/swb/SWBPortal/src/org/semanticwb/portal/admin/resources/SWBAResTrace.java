@@ -45,6 +45,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.*;
+import org.semanticwb.model.User;
 
 /** Muestra el pool de conexiones a la base de datos seleccionada por el usuario
  * administrador.
@@ -121,7 +122,7 @@ public class SWBAResTrace extends GenericResource {
 
         SWBResourceTraceMgr restracer = SWBPortal.getResourceMgr().getResourceTraceMgr();
         long actual = System.currentTimeMillis();
-        
+        User user = paramsRequest.getUser();
         out.println("<div class=\"swbform\">");
         out.println("<fieldset>");
         out.println("<TABLE width=\"98%\" border=\"0\" cellpadding=\"10\" cellspacing=\"0\">");
@@ -208,7 +209,7 @@ public class SWBAResTrace extends GenericResource {
                     out.println("          <td >" + t.getDescription() + "</td>");
                     //out.println("          <td class=\"valores\">"+t.getWBParamRequest().getTopic().getMap().getDbdata().getTitle()+"</td>");
                     out.println("          <td >"
-                            + t.getWBParamRequest().getTopic().getWebSite().getTitle() + "</td>");
+                            + t.getWBParamRequest().getTopic().getWebSite().getDisplayTitle(user.getLanguage()) + "</td>");
                     out.println("          <td >"
                             + t.getWBParamRequest().getTopic().getDisplayName() + "</td>");
                     out.println("          <td >"

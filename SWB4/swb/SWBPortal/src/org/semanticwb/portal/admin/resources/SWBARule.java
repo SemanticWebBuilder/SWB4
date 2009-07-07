@@ -337,7 +337,7 @@ public class SWBARule extends GenericResource {
         Iterator<Device> eleDev = SWBContext.getWebSite(tmid).listDevices();
         while (eleDev.hasNext()) {
             Device rDev = eleDev.next();
-            hmValues.put(rDev.getURI(), rDev.getTitle());
+            hmValues.put(rDev.getURI(), rDev.getDisplayTitle(user.getLanguage()));
         }
         hmAttr.put("Valor", hmValues);
         hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
@@ -364,7 +364,7 @@ public class SWBARule extends GenericResource {
             Iterator<UserGroup> enumUsrG = usrRepo.listUserGroups();
             while (enumUsrG.hasNext()) {
                 UserGroup usrGroup = enumUsrG.next();
-                hmValues.put(usrGroup.getURI(), usrGroup.getTitle());
+                hmValues.put(usrGroup.getURI(), usrGroup.getDisplayTitle(user.getLanguage()));
             }
             hmAttr.put("Valor", hmValues);
             //TODO: RuleMgr ???ROLE
@@ -384,7 +384,7 @@ public class SWBARule extends GenericResource {
             Iterator<Role> enumRoles = SWBContext.getWebSite(tmid).getUserRepository().listRoles();
             while (enumRoles.hasNext()) {
                 Role role = enumRoles.next();
-                hmValues.put(role.getURI(), role.getTitle());
+                hmValues.put(role.getURI(), role.getDisplayTitle(user.getLanguage()));
             }
             hmAttr.put("Valor", hmValues);
             //TODO: RuleMgr ???ROLE
@@ -418,7 +418,7 @@ public class SWBARule extends GenericResource {
                 while (enumRules.hasNext()) {
                     Rule rule = enumRules.next();
                     if (!ruleid.equals(rule.getURI())) {
-                        hmValues.put(rule.getURI(), rule.getTitle());
+                        hmValues.put(rule.getURI(), rule.getDisplayTitle(user.getLanguage()));
                     }
                 }
                 hmAttr.put("Valor", hmValues);

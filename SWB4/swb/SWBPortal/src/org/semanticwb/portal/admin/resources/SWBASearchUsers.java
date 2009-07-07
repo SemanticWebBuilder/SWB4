@@ -36,6 +36,7 @@ public class SWBASearchUsers extends GenericResource
             throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer("");
+        User user = paramRequest.getUser();
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setMode("search");
         Iterator<UserRepository> itur = SWBContext.listUserRepositorys();
@@ -57,7 +58,7 @@ public class SWBASearchUsers extends GenericResource
         while (itur.hasNext())
         {
             UserRepository ur = itur.next();
-            ret.append("        <option value=\"" + ur.getId() + "\">" + ur.getTitle() + "</option>\n"); //todo Add Language
+            ret.append("        <option value=\"" + ur.getId() + "\">" + ur.getDisplayTitle(user.getLanguage()) + "</option>\n"); //todo Add Language
         }
         ret.append("<script type=\"dojo/method\" event=\"onChange\" args=\"suri\">\n");
         ret.append("    var lpan = dijit.byId('SWBASearchUsers_R');\n");
@@ -98,7 +99,7 @@ public class SWBASearchUsers extends GenericResource
         while (itroles.hasNext())
         {
             Role role = itroles.next();
-            ret.append("        <option value=\"" + role.getId() + "\">" + role.getTitle() + "</option>\n"); //todo Add Language
+            ret.append("        <option value=\"" + role.getId() + "\">" + role.getDisplayTitle(user.getLanguage()) + "</option>\n"); //todo Add Language
         }
         ret.append("    </select><div>\n");
         ret.append("    </td></tr>\n");
@@ -109,7 +110,7 @@ public class SWBASearchUsers extends GenericResource
         while (itgroup.hasNext())
         {
             UserGroup group = itgroup.next();
-            ret.append("        <option value=\"" + group.getId() + "\">" + group.getTitle() + "</option>\n"); //todo Add Language
+            ret.append("        <option value=\"" + group.getId() + "\">" + group.getDisplayTitle(user.getLanguage()) + "</option>\n"); //todo Add Language
         }
         ret.append("    </select></div>\n");
         ret.append("    </td></tr>\n");
@@ -249,13 +250,14 @@ public class SWBASearchUsers extends GenericResource
     {
         StringBuffer ret = new StringBuffer("");
         String usrep = request.getParameter("userRepository");
+        User user = paramRequest.getUser();
         Iterator<Role> itroles = SWBContext.getUserRepository(usrep).listRoles();
         ret.append("<select name=\"userRoles\" id=\"userRoles" + usrep + "\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" >\n");
         ret.append("        <option value=\"\"></option>\n");
         while (itroles.hasNext())
         {
             Role role = itroles.next();
-            ret.append("        <option value=\"" + role.getId() + "\">" + role.getTitle() + "</option>\n"); //todo Add Language
+            ret.append("        <option value=\"" + role.getId() + "\">" + role.getDisplayTitle(user.getLanguage()) + "</option>\n"); //todo Add Language
         }
         ret.append("    </select>\n");
         response.getWriter().write(ret.toString());
@@ -266,13 +268,14 @@ public class SWBASearchUsers extends GenericResource
     {
         StringBuffer ret = new StringBuffer("");
         String usrep = request.getParameter("userRepository");
+        User user = paramRequest.getUser();
         Iterator<UserGroup> itgroup = SWBContext.getUserRepository(usrep).listUserGroups();
         ret.append("<select name=\"userGroups\" id=\"userGroups" + usrep + "\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" >\n");
         ret.append("        <option value=\"\"></option>\n");
         while (itgroup.hasNext())
         {
             UserGroup group = itgroup.next();
-            ret.append("        <option value=\"" + group.getId() + "\">" + group.getTitle() + "</option>\n"); //todo Add Language
+            ret.append("        <option value=\"" + group.getId() + "\">" + group.getDisplayTitle(user.getLanguage()) + "</option>\n"); //todo Add Language
         }
         ret.append("    </select>\n");
         response.getWriter().write(ret.toString());

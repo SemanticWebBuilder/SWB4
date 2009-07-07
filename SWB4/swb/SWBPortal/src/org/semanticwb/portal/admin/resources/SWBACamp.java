@@ -129,6 +129,7 @@ public class SWBACamp extends GenericResource {
         String act = null;
         String id = request.getParameter("id");
         PrintWriter out = response.getWriter();
+        User user = paramRequest.getUser();
         String strTm = request.getParameter("tm");
         if(request.getParameter("act")!=null) act = request.getParameter("act");
         if(request.getParameter("tree")!=null&&request.getParameter("tree").equals("reload")){
@@ -186,7 +187,7 @@ public class SWBACamp extends GenericResource {
             out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgTitle")+":</td><td class=\"valores\"><input type=text class=\"campos\" name=\"title\" value=\"\" ></td></tr>");
             out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgDescription")+":</td><td class=\"valores\"><input type=text class=\"campos\" name=\"description\" value=\"\"></td></tr>");
             out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgSite")+":</td><td class=\"valores\">");
-            out.println(SWBContext.getWebSite(request.getParameter("tm")).getTitle());
+            out.println(SWBContext.getWebSite(request.getParameter("tm")).getDisplayTitle(user.getLanguage()));
             out.println("</td></tr>");
             out.println("<tr ><td colspan=2 class=\"valores\" align=right><HR size=\"1\" noshade><input type=submit class=\"boton\" value=\""+paramRequest.getLocaleString("btnSave")+"\" ><input type=hidden name=tmnid value=\""+request.getParameter("tm")+"\"></td></tr>");
             out.println("</table>");
@@ -210,10 +211,10 @@ public class SWBACamp extends GenericResource {
                     out.println("<form name=\"forma\" onSubmit=\"return (valida(forma));\"  action=\""+paramRequest.getActionUrl().setAction("update").toString()+"\" method=\"post\" class=\"box\">");
                     out.println("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
                     out.println("<tr ><td colspan=2><input type=hidden name=\"id\" value=\""+id+"\"></td></tr>");
-                    out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgTitle")+":</td><td class=\"valores\"><input type=text class=\"campos\" value=\""+rC.getTitle()+"\" name=title></td></tr>");
+                    out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgTitle")+":</td><td class=\"valores\"><input type=text class=\"campos\" value=\""+rC.getDisplayTitle(user.getLanguage())+"\" name=title></td></tr>");
                     out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgDescription")+":</td><td class=\"valores\"><input type=text class=\"campos\" name=description value=\""+rC.getDescription()+"\"></td></tr>");
                     out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgSite")+":</td><td class=\"valores\"><input type=hidden name=tmnid value=\""+rC.getWebSite().getId()+"\">");
-                    out.println(rC.getWebSite().getTitle());
+                    out.println(rC.getWebSite().getDisplayTitle(user.getLanguage()));
                     out.println("</td></tr>");
                     //TODO: Falta dateFormat
                     //out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgLastUpdate")+":</td><td class=\"valores\">"+WBUtils.dateFormat(rC.getLastupdate())+"</td></tr>");
@@ -246,10 +247,10 @@ public class SWBACamp extends GenericResource {
                     out.println("<p align=center class=\"box\">");
                     out.println("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
                     out.println("<tr ><td colspan=2><input type=hidden name=\"id\" value=\""+id+"\"></td></tr>");
-                    out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgTitle")+":</td><td class=\"valores\">"+rC.getTitle()+"</td></tr>");
+                    out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgTitle")+":</td><td class=\"valores\">"+rC.getDisplayTitle(user.getLanguage())+"</td></tr>");
                     out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgDescription")+":</td><td class=\"valores\">"+rC.getDescription()+"</td></tr>");
                     out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgSite")+":</td><td class=\"valores\">");
-                    out.println(SWBContext.getWebSite(request.getParameter("tm")).getTitle());
+                    out.println(SWBContext.getWebSite(request.getParameter("tm")).getDisplayTitle(user.getLanguage()));
                     out.println("</td></tr>");
                     //TODO: Falta implementar dateFormat
                     //out.println("<tr ><td width=\"150\" align=\"right\" class=\"datos\">"+paramRequest.getLocaleString("msgLastUpdate")+":</td><td class=\"valores\">"+WBUtils.dateFormat(rC.getLastupdate())+"</td></tr>");
