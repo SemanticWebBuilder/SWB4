@@ -109,6 +109,7 @@ public class WBADeviceReport extends GenericResource {
 
         StringBuilder ret = new StringBuilder();
         String space="";
+        String language = paramsRequest.getUser().getLanguage();
 
         WebSite webSite = SWBContext.getWebSite(request.getParameter("site"));
         String[] seldevs = (String[]) request.getSession(true).getAttribute("devs");
@@ -132,10 +133,10 @@ public class WBADeviceReport extends GenericResource {
             if(Arrays.binarySearch(seldevs, device.getId())>=0) {
                 ret.append(" selected=\"selected\"");
             }
-            ret.append(">"+space+device.getTitle()+"</option>\n");
+            ret.append(">"+space+device.getDisplayTitle(language)+"</option>\n");
             devs.remove(0);
             if(device.listChilds().hasNext()) {
-                renderSelect(devs, device, ret, space+"&nbsp;&nbsp;&nbsp;", seldevs);
+                renderSelect(devs, device, language, ret, space+"&nbsp;&nbsp;&nbsp;", seldevs);
             }
         }
         ret.append("</select>\n");
@@ -147,7 +148,7 @@ public class WBADeviceReport extends GenericResource {
         out.close();
     }
 
-    private void renderSelect(ArrayList origList, Device node, StringBuilder ret, String space, String[] seldevs) {
+    private void renderSelect(ArrayList origList, Device node, String language, StringBuilder ret, String space, String[] seldevs) {
         ArrayList<Device> devs=new ArrayList<Device>();
         Iterator<Device> itDevices = node.listChilds();
         while(itDevices.hasNext()) {
@@ -161,11 +162,11 @@ public class WBADeviceReport extends GenericResource {
             if(Arrays.binarySearch(seldevs, device.getId())>=0) {
                 ret.append(" selected=\"selected\"");
             }
-            ret.append(">"+space+device.getTitle()+"</option>\n");
+            ret.append(">"+space+device.getDisplayTitle(language)+"</option>\n");
             origList.remove(device);
             devs.remove(0);
             if(device.listChilds().hasNext()) {
-                renderSelect(origList, device, ret, space+"&nbsp;&nbsp;&nbsp;", seldevs);
+                renderSelect(origList, device, language, ret, space+"&nbsp;&nbsp;&nbsp;", seldevs);
             }
         }
     }
@@ -205,7 +206,7 @@ public class WBADeviceReport extends GenericResource {
             // If there are sites continue
             if (hm_sites.size() > I_ACCESS) {
                 String address = paramsRequest.getTopic().getUrl();
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");                
+                String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
 
                 String[] devs=request.getParameterValues("wb_device");
                 if(devs != null) {
@@ -260,7 +261,7 @@ public class WBADeviceReport extends GenericResource {
                 out.println("dojo.addOnLoad(doBlockade);");
                 // llenar el select de dispositivos
                 url.setMode("fillSelect");
-                out.println("dojo.addOnLoad(function(){postHtml('"+url+"'+'?site="+webSiteId+"','slave')});");
+                out.println("dojo.addOnLoad(function(){postHtml('"+url+"'+'?site="+websiteId+"','slave')});");
 
                 out.println("function getParams(accion) {");
                 out.println("   var dp = null;");
@@ -411,7 +412,7 @@ public class WBADeviceReport extends GenericResource {
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
                     out.println("<option value=\"" + key + "\"");
-                    if(key.equalsIgnoreCase(webSiteId)) {
+                    if(key.equalsIgnoreCase(websiteId)) {
                         out.println(" selected=\"selected\"");
                     }
                     out.println(">" + (String)hm_sites.get(key) + "</option>");
@@ -480,7 +481,7 @@ public class WBADeviceReport extends GenericResource {
                     out.println("</table>");
                     out.println("</fieldset>");
                     out.println("</form>");
-                    if(request.getParameter("wb_rtype")!=null && webSiteId!=null ) {
+                    if(request.getParameter("wb_rtype")!=null && websiteId!=null ) {
                         out.println("<fieldset>");
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
                         out.println("<tr>");
@@ -539,14 +540,14 @@ public class WBADeviceReport extends GenericResource {
                     out.println("</table>");
                     out.println("</fieldset>");
                     out.println("</form>");
-                    if(request.getParameter("wb_rtype")!=null && webSiteId!=null ) {
+                    if(request.getParameter("wb_rtype")!=null && websiteId!=null ) {
                         out.println("<fieldset>");
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
                         out.println("<tr>");
                         out.println("<td>");
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(webSiteId);
+                        filter.setSite(websiteId);
                         
                         String deviceId = Arrays.toString(request.getParameterValues("wb_device"));
                         deviceId = deviceId.replaceFirst("\\[", "");
@@ -627,8 +628,8 @@ public class WBADeviceReport extends GenericResource {
                 jrResource.exportReport(response);
             }else { // REPORTE MENSUAL                
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                filter.setSite(webSiteId);
+                String websiteId = request.getParameter("wb_site");
+                filter.setSite(websiteId);
 
                 String deviceId = Arrays.toString(request.getParameterValues("wb_device"));
                 deviceId = deviceId.replaceFirst("\\[", "");
@@ -677,8 +678,8 @@ public class WBADeviceReport extends GenericResource {
                 jrResource.exportReport(response);
             }else { // by month                
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                filter.setSite(webSiteId);
+                String websiteId = request.getParameter("wb_site");
+                filter.setSite(websiteId);
 
                 String deviceId = Arrays.toString(request.getParameterValues("wb_device"));
                 deviceId = deviceId.replaceFirst("\\[", "");
@@ -762,8 +763,8 @@ public class WBADeviceReport extends GenericResource {
                 }
             }else { // REPORTE MENSUAL
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                filter.setSite(webSiteId);
+                String websiteId = request.getParameter("wb_site");
+                filter.setSite(websiteId);
 
                 String deviceId = Arrays.toString(request.getParameterValues("wb_device"));
                 deviceId = deviceId.replaceFirst("\\[", "");
@@ -833,8 +834,8 @@ public class WBADeviceReport extends GenericResource {
                 jrResource.exportReport(response);
             }else { // REPORTE MENSUAL
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                filter.setSite(webSiteId);
+                String websiteId = request.getParameter("wb_site");
+                filter.setSite(websiteId);
 
                 String deviceId = Arrays.toString(request.getParameterValues("wb_device"));
                 deviceId = deviceId.replaceFirst("\\[", "");
@@ -877,8 +878,8 @@ public class WBADeviceReport extends GenericResource {
                 jrResource.exportReport(response);
             }else { // REPORTE MENSUAL
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                filter.setSite(webSiteId);
+                String websiteId = request.getParameter("wb_site");
+                filter.setSite(websiteId);
 
                 String deviceId = Arrays.toString(request.getParameterValues("wb_device"));
                 deviceId = deviceId.replaceFirst("\\[", "");
@@ -906,7 +907,7 @@ public class WBADeviceReport extends GenericResource {
         
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;
-        String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+        String websiteId = request.getParameter("wb_site");
 
         String deviceId = Arrays.toString(request.getParameterValues("wb_device"));
         deviceId = deviceId.replaceFirst("\\[", "");
@@ -945,7 +946,7 @@ public class WBADeviceReport extends GenericResource {
             if(groupDates==0) { // radio button was 0. Select only one date
                 String[] numFecha = fecha1.split("-");
                 filterReportBean = new WBAFilterReportBean();
-                filterReportBean.setSite(webSiteId);
+                filterReportBean.setSite(websiteId);
                 if(!deviceId.equalsIgnoreCase("null")) {
                     filterReportBean.setIdaux(deviceId);
                 }
@@ -955,7 +956,7 @@ public class WBADeviceReport extends GenericResource {
                 filterReportBean.setDayI(Integer.parseInt(numFecha[2]));
             }else { // radio button was 1. Select between two dates
                 filterReportBean = new WBAFilterReportBean();
-                filterReportBean.setSite(webSiteId);
+                filterReportBean.setSite(websiteId);
                 if(!deviceId.equalsIgnoreCase("null")) {
                     filterReportBean.setIdaux(deviceId);
                 }

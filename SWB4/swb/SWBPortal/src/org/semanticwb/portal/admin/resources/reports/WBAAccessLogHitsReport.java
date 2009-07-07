@@ -85,6 +85,7 @@ public class WBAAccessLogHitsReport extends GenericResource {
 
         StringBuilder ret = new StringBuilder();
         String space="";
+        String language = paramsRequest.getUser().getLanguage();
 
         WebSite webSite = SWBContext.getWebSite(request.getParameter("site"));
 
@@ -99,10 +100,10 @@ public class WBAAccessLogHitsReport extends GenericResource {
         while(!devs.isEmpty()) {
             Device device = devs.get(0);
             ret.append("<option value=\""+device.getId()+"\"");
-            ret.append(">"+space+device.getTitle()+"</option>\n");
+            ret.append(">"+space+device.getDisplayTitle(language)+"</option>\n");
             devs.remove(0);
             if(device.listChilds().hasNext()) {
-                renderDeviceSelect(devs, device, ret, space+"&nbsp;&nbsp;&nbsp;");
+                renderDeviceSelect(devs, device, language, ret, space+"&nbsp;&nbsp;&nbsp;");
             }
         }
         ret.append("</select>\n");
@@ -114,7 +115,7 @@ public class WBAAccessLogHitsReport extends GenericResource {
         out.close();
     }
 
-    private void renderDeviceSelect(ArrayList origList, Device node, StringBuilder ret, String space) {
+    private void renderDeviceSelect(ArrayList origList, Device node, String language, StringBuilder ret, String space) {
         ArrayList<Device> devs=new ArrayList<Device>();
         Iterator<Device> itDevices = node.listChilds();
         while(itDevices.hasNext()) {
@@ -125,11 +126,11 @@ public class WBAAccessLogHitsReport extends GenericResource {
         while(!devs.isEmpty()) {
             Device device = devs.get(0);
             ret.append("<option value=\""+device.getId()+"\"");
-            ret.append(">"+space+device.getTitle()+"</option>\n");
+            ret.append(">"+space+device.getDisplayTitle(language)+"</option>\n");
             origList.remove(device);
             devs.remove(0);
             if(device.listChilds().hasNext()) {
-                renderDeviceSelect(origList, device, ret, space+"&nbsp;&nbsp;&nbsp;");
+                renderDeviceSelect(origList, device, language, ret, space+"&nbsp;&nbsp;&nbsp;");
             }
         }
     }
@@ -139,8 +140,8 @@ public class WBAAccessLogHitsReport extends GenericResource {
 
         PrintWriter out = response.getWriter();
 
-        String webSiteId = request.getParameter("site");
-        WebSite webSite = SWBContext.getWebSite(webSiteId);
+        String websiteId = request.getParameter("site");
+        WebSite webSite = SWBContext.getWebSite(websiteId);
 
         out.println("<select name=\"wb_langid\" id=\"wb_langid\" size=\"1\">");
         out.println("<option value=\"0\"></option>");
@@ -318,9 +319,9 @@ public class WBAAccessLogHitsReport extends GenericResource {
             }
             // If there are sites continue
             if(hm_sites.size() > I_ACCESS) {
-                String address = paramsRequest.getTopic().getUrl();
-                String s_site = paramsRequest.getTopic().getWebSite().getId();
-                String repositoryName = SWBContext.getWebSite(s_site).getUserRepository().getDisplayTitle(paramsRequest.getUser().getLanguage());
+                String address = paramsRequest.getTopic().getUrl();                
+                String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
+                String repositoryName = SWBContext.getWebSite(websiteId).getUserRepository().getDisplayTitle(paramsRequest.getUser().getLanguage());
 
                 GregorianCalendar now = new GregorianCalendar();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -479,7 +480,11 @@ public class WBAAccessLogHitsReport extends GenericResource {
                 Iterator<String> itKeys = hm_sites.keySet().iterator();
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
-                    ret.append("<option value=\""+key+"\">"+(String)hm_sites.get(key)+"</option>\n");
+                    ret.append("<option value=\"" + key + "\"");
+                    if(key.equalsIgnoreCase(websiteId)) {
+                        ret.append(" selected=\"selected\"");
+                    }
+                    ret.append(">" + (String)hm_sites.get(key) + "</option>");
                 }
                 ret.append("</select>\n");
                 ret.append("</td>\n");

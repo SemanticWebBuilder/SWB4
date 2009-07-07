@@ -159,7 +159,7 @@ public class WBAAccessLoginReport extends GenericResource {
         try {
             // Evaluates if there are repository
             Iterator<UserRepository> repositories = SWBContext.listUserRepositorys();
-            while (repositories.hasNext()) {
+            while(repositories.hasNext()) {
                 UserRepository repository = repositories.next();
                 hm_repository.put(repository.getId(), repository.getSemanticObject().getDisplayName(paramsRequest.getUser().getLanguage()));
             }

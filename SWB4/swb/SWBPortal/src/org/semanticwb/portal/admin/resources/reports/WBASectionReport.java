@@ -89,14 +89,14 @@ public class WBASectionReport extends GenericResource {
         url.setCallMethod(url.Call_DIRECT);
         url.setMode("rendertree");
         
-        String webSiteId = request.getParameter("site");
+        String websiteId = request.getParameter("site");
         String section = request.getParameter("reptp");
         if(section != null) {
             out.println("<input type=\"hidden\" name=\"section\" id=\"section\" value=\""+section+"\" />");
         }
         
         SelectTree tree = new SelectTree(paramsRequest.getUser().getLanguage());
-        out.println(tree.renderXHTML(webSiteId, params, url.toString()));
+        out.println(tree.renderXHTML(websiteId, params, url.toString()));
         out.flush();
         out.close();
     }
@@ -136,16 +136,16 @@ public class WBASectionReport extends GenericResource {
 //                    i_access = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramsRequest.getUser(),site.getDbdata().getId());
 //                    if(I_ACCESS < i_access) {
 //                        if(site.getDbdata().getDeleted()==0) {                            
-                            hm_sites.put(site.getId(), site.getTitle());
+                            hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
 //                        }
 //                    }
                 }
             }
             
             // If there are sites continue
-            if(hm_sites.size() > I_ACCESS){
+            if(hm_sites.size() > I_ACCESS) {
                 String address = paramsRequest.getTopic().getUrl();
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+                String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
                 
                 int groupDates;
                 try {
@@ -194,7 +194,7 @@ public class WBASectionReport extends GenericResource {
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
                 out.println("dojo.require(\"dijit.form.ComboBox\");");
                 out.println("dojo.addOnLoad(doBlockade);");
-                out.println("dojo.addOnLoad(function(){getHtml('"+url.setMode("rendertree")+"'+'?site="+webSiteId+"','slave')});");
+                out.println("dojo.addOnLoad(function(){getHtml('"+url.setMode("rendertree")+"'+'?site="+websiteId+"','slave')});");
                 
                 out.println("function getParams(accion) { ");
                 out.println("   var params = \"?\";");
@@ -342,7 +342,7 @@ public class WBASectionReport extends GenericResource {
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
                     out.println("<option value=\"" + key + "\"");
-                    if(key.equalsIgnoreCase(webSiteId)) {
+                    if(key.equalsIgnoreCase(websiteId)) {
                         out.println(" selected=\"selected\"");
                     }
                     out.println(">" + (String)hm_sites.get(key) + "</option>");
@@ -414,7 +414,7 @@ public class WBASectionReport extends GenericResource {
                     out.println("</table>");
                     out.println("</fieldset>");
                     out.println("</form>");
-                    if(request.getParameter("wb_rtype")!=null && webSiteId!=null && request.getParameter("section")!=null) {
+                    if(request.getParameter("wb_rtype")!=null && websiteId!=null && request.getParameter("section")!=null) {
                         out.println("<fieldset>");
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");
                         out.println("<tr>");
@@ -457,7 +457,7 @@ public class WBASectionReport extends GenericResource {
                     
                     out.println("<tr>");
                     out.println("<td colspan=\"4\">");
-                    if(request.getParameter("wb_rtype")==null || webSiteId==null ) {
+                    if(request.getParameter("wb_rtype")==null || websiteId==null ) {
                         out.println("&nbsp;");
                     }else {
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
@@ -465,7 +465,7 @@ public class WBASectionReport extends GenericResource {
                         out.println("<td>");
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(webSiteId);
+                        filter.setSite(websiteId);
                         Iterator<Language> itLanguages = paramsRequest.getTopic().getWebSite().listLanguages();
                         if(deleteFilter==0) {
                             while(itLanguages.hasNext()) {
@@ -754,18 +754,9 @@ public class WBASectionReport extends GenericResource {
         
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;
-        /*ArrayList idaux = new ArrayList();
-        idaux.add(request.getParameter("reptp"));*/
-        
-        String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-        /*String lang = request.getParameter("wb_lang")==null ? "":request.getParameter("wb_lang");*/
-        /*int deleteFilter;
-        try {
-            deleteFilter = request.getParameter("wb_deletefilter")==null ? 0:Integer.parseInt(request.getParameter("wb_deletefilter"));
-        }catch(NumberFormatException e) {
-            deleteFilter = 0;
-        }*/
+        String websiteId = request.getParameter("wb_site");
         String section = request.getParameter("section");
+
         int groupDates;
         try {
             groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
@@ -807,7 +798,7 @@ public class WBASectionReport extends GenericResource {
                 if(groupDates==0) { // radio button was 0. Select only one date
                     String[] numFecha = fecha1.split("-");
                     filterReportBean = new WBAFilterReportBean();
-                    filterReportBean.setSite(webSiteId);
+                    filterReportBean.setSite(websiteId);
                     filterReportBean.setIdaux(section);
                     filterReportBean.setType(I_REPORT_TYPE);                    
                     filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
@@ -815,7 +806,7 @@ public class WBASectionReport extends GenericResource {
                     filterReportBean.setDayI(Integer.parseInt(numFecha[2]));
                 }else { // radio button was 1. Select between two dates
                     filterReportBean = new WBAFilterReportBean();
-                    filterReportBean.setSite(webSiteId);
+                    filterReportBean.setSite(websiteId);
                     filterReportBean.setIdaux(section);
                     filterReportBean.setType(I_REPORT_TYPE);
                     
@@ -834,7 +825,7 @@ public class WBASectionReport extends GenericResource {
                 if(groupDates==0) { // radio button was 0. Select only one date
                     String[] numFecha = fecha1.split("-");
                     filterReportBean = new WBAFilterReportBean();
-                    filterReportBean.setSite(webSiteId);
+                    filterReportBean.setSite(websiteId);
                     filterReportBean.setIdaux(itLanguages);
                     filterReportBean.setType(I_REPORT_TYPE);
                     filterReportBean.setYearI(Integer.parseInt(numFecha[0]));
@@ -842,7 +833,7 @@ public class WBASectionReport extends GenericResource {
                     filterReportBean.setDayI(Integer.parseInt(numFecha[2]));                    
                 }else { // radio button was 1. Select between two dates                    
                     filterReportBean = new WBAFilterReportBean();
-                    filterReportBean.setSite(webSiteId);
+                    filterReportBean.setSite(websiteId);
                     filterReportBean.setIdaux(itLanguages);
                     filterReportBean.setType(I_REPORT_TYPE);
                     

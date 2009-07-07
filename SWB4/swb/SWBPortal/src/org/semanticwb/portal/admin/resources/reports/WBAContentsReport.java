@@ -77,7 +77,7 @@ public class WBAContentsReport extends GenericResource {
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
 
-        String webSiteId = request.getParameter("site");
+        String websiteId = request.getParameter("site");
 
         SWBResourceURL url=paramsRequest.getRenderUrl();
         url.setCallMethod(url.Call_DIRECT);
@@ -95,7 +95,7 @@ public class WBAContentsReport extends GenericResource {
             params.put(name, request.getParameter(name));
         }
         SelectTree tree = new SelectTree(paramsRequest.getUser().getLanguage());
-        out.println(tree.renderXHTML(webSiteId, params, url.toString()));
+        out.println(tree.renderXHTML(websiteId, params, url.toString()));
         out.flush();
         out.close();
     }
@@ -111,9 +111,9 @@ public class WBAContentsReport extends GenericResource {
             jobj.put("items", jarr);
         }catch (JSONException jse) {
         }
-
-        String webSiteId = request.getParameter("site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("site");
-        WebSite webSite = SWBContext.getWebSite(webSiteId);
+        
+        String websiteId = request.getParameter("site");
+        WebSite webSite = SWBContext.getWebSite(websiteId);
         String webPageId = request.getParameter("section");
         WebPage webPage = webSite.getWebPage(webPageId);
 
@@ -191,6 +191,7 @@ public class WBAContentsReport extends GenericResource {
         final int I_ACCESS = 0;
         HashMap hm_sites = new HashMap();
         String rtype = null;
+        String language = paramsRequest.getUser().getLanguage();
 
         try {
             // Evaluates if there are sites
@@ -204,7 +205,7 @@ public class WBAContentsReport extends GenericResource {
 //                    i_access = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramsRequest.getUser(),site.getDbdata().getId());
 //                    if(I_ACCESS < i_access) {
 //                        if(site.getDbdata().getDeleted()==0) {
-                            hm_sites.put(site.getId(), site.getTitle());
+                            hm_sites.put(site.getId(), site.getDisplayTitle(language));
 //                        }
 //                    }
                 }
@@ -213,7 +214,7 @@ public class WBAContentsReport extends GenericResource {
             // If there are sites continue
             if(hm_sites.size() > I_ACCESS) {
                 String address = paramsRequest.getTopic().getUrl();
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+                String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
 
                 String topicId = paramsRequest.getTopic().getId();
                 if(topicId.lastIndexOf("Daily") != -1) {
@@ -235,7 +236,7 @@ public class WBAContentsReport extends GenericResource {
                 out.println("dojo.require(\"dojox.grid.DataGrid\");");
                 out.println("dojo.require(\"dojo.data.ItemFileReadStore\");");
 
-                out.println("dojo.addOnLoad(function(){renderTreeSectionsSite('"+url.toString()+"', 'rendertree','"+webSiteId+"','slave')});");
+                out.println("dojo.addOnLoad(function(){renderTreeSectionsSite('"+url.toString()+"', 'rendertree','"+websiteId+"','slave')});");
 
                 out.println("function renderTreeSectionsSite(url, mode, site, canvasId) {");
                 out.println("   postHtml(url+'/_mod/'+mode+'?site='+site, canvasId);");
@@ -357,7 +358,7 @@ public class WBAContentsReport extends GenericResource {
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
                     out.println("<option value=\"" + key + "\"");
-                    if(key.equalsIgnoreCase(webSiteId)) {
+                    if(key.equalsIgnoreCase(websiteId)) {
                         out.println(" selected=\"selected\"");
                     }
                     out.println(">" + (String)hm_sites.get(key) + "</option>");
@@ -431,6 +432,7 @@ public class WBAContentsReport extends GenericResource {
         response.setHeader("Content-Disposition", "inline; filename=\"ic.xls\"");
         PrintWriter out = response.getWriter();
         StringBuilder html = new StringBuilder();
+        String language = paramsRequest.getUser().getLanguage();
 
 
         out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
@@ -453,8 +455,8 @@ public class WBAContentsReport extends GenericResource {
         html.append("  <th>Liga rota</th>");
         html.append("</tr>");
 
-        String webSiteId = request.getParameter("site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("site");
-        WebSite webSite = SWBContext.getWebSite(webSiteId);
+        String websiteId = request.getParameter("site");
+        WebSite webSite = SWBContext.getWebSite(websiteId);
         String webPageId = request.getParameter("section");
         WebPage webPage = webSite.getWebPage(webPageId);
         Iterator<Resource> portlets = webPage.listResources();
@@ -462,10 +464,10 @@ public class WBAContentsReport extends GenericResource {
             Resource portlet = portlets.next();
             if(portlet.getResourceType().getResourceMode()==1) {
                 html.append("<tr>");
-                html.append("  <td>"+webPage.getTitle()+"</td>");
+                html.append("  <td>"+webPage.getDisplayTitle(language)+"</td>");
                 html.append("  <td>"+portlet.getId()+"</td>");
-                html.append("  <td>"+portlet.getResourceType().getTitle()+"</td>");
-                html.append("  <td>"+portlet.getTitle()+"</td>");
+                html.append("  <td>"+portlet.getResourceType().getDisplayTitle(language)+"</td>");
+                html.append("  <td>"+portlet.getDisplayTitle(language)+"</td>");
                 html.append("  <td>"+portlet.getPriority()+"</td>");
                 html.append("  <td>"+(portlet.isActive()?"Si":"No")+"</td>");
                 html.append("  <td>"+portlet.getWorkPath()+"</td>");
@@ -477,7 +479,7 @@ public class WBAContentsReport extends GenericResource {
         }
 
         if(request.getParameter("sons")!=null && request.getParameter("sons").equalsIgnoreCase("1")) {
-            html.append(getContentInHtml(webPage.listChilds()));
+            html.append(getContentInHtml(webPage.listChilds(), language));
         }
 
         html.append("</table>");
@@ -488,7 +490,7 @@ public class WBAContentsReport extends GenericResource {
         out.close();
     }
 
-    private String getContentInHtml(Iterator<WebPage> childs) {
+    private String getContentInHtml(Iterator<WebPage> childs, String language) {
         StringBuilder html = new StringBuilder();
         while(childs.hasNext()) {
             WebPage webPage = childs.next();
@@ -497,10 +499,10 @@ public class WBAContentsReport extends GenericResource {
                 Resource portlet = portlets.next();
                 if(portlet.getResourceType().getResourceMode()==1) {
                     html.append("<tr>");
-                    html.append("  <td>"+webPage.getTitle()+"</td>");
+                    html.append("  <td>"+webPage.getDisplayTitle(language)+"</td>");
                     html.append("  <td>"+portlet.getId()+"</td>");
-                    html.append("  <td>"+portlet.getResourceType().getTitle()+"</td>");
-                    html.append("  <td>"+portlet.getTitle()+"</td>");
+                    html.append("  <td>"+portlet.getResourceType().getDisplayTitle(language)+"</td>");
+                    html.append("  <td>"+portlet.getDisplayTitle(language)+"</td>");
                     html.append("  <td>"+portlet.getPriority()+"</td>");
                     html.append("  <td>"+(portlet.isActive()?"Si":"No")+"</td>");
                     html.append("  <td>"+portlet.getWorkPath()+"</td>");
@@ -510,7 +512,7 @@ public class WBAContentsReport extends GenericResource {
                 }
             }
             if(webPage.listChilds().hasNext()) {
-                html.append(getContentInHtml(webPage.listChilds()));
+                html.append(getContentInHtml(webPage.listChilds(), language));
             }
         }
         return html.toString();
@@ -527,12 +529,13 @@ public class WBAContentsReport extends GenericResource {
         response.setContentType("text/xml;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
         Document dom = SWBUtils.XML.getNewDocument();
+        String language = paramsRequest.getUser().getLanguage();
 
         Element report = dom.createElement("ContentReport");
         dom.appendChild(report);
 
-        String webSiteId = request.getParameter("site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("site");
-        WebSite webSite = SWBContext.getWebSite(webSiteId);
+        String websiteId = request.getParameter("site");
+        WebSite webSite = SWBContext.getWebSite(websiteId);
         String webPageId = request.getParameter("section");
         WebPage webPage = webSite.getWebPage(webPageId);
         Iterator<Resource> portlets = webPage.listResources();
@@ -544,16 +547,16 @@ public class WBAContentsReport extends GenericResource {
                 report.appendChild(resource);
 
                 Element section = dom.createElement("section");
-                section.appendChild(dom.createTextNode(webPage.getTitle()));
+                section.appendChild(dom.createTextNode(webPage.getDisplayTitle(language)));
                 resource.appendChild(section);
                 Element id = dom.createElement("id");
                 id.appendChild(dom.createTextNode(portlet.getId()));
                 resource.appendChild(id);
                 Element tipo = dom.createElement("type");
-                tipo.appendChild(dom.createTextNode(portlet.getResourceType().getTitle()));
+                tipo.appendChild(dom.createTextNode(portlet.getResourceType().getDisplayTitle(language)));
                 resource.appendChild(tipo);
                 Element contenido = dom.createElement("content");
-                contenido.appendChild(dom.createTextNode(portlet.getTitle()));
+                contenido.appendChild(dom.createTextNode(portlet.getDisplayTitle(language)));
                 resource.appendChild(contenido);
                 Element prior = dom.createElement("priority");
                 prior.appendChild(dom.createTextNode(Integer.toString(portlet.getPriority())));
@@ -574,7 +577,7 @@ public class WBAContentsReport extends GenericResource {
         }
 
         if(request.getParameter("sons")!=null && request.getParameter("sons").equalsIgnoreCase("1")) {
-            getContentInXml(dom, webPage.listChilds());
+            getContentInXml(dom, webPage.listChilds(), language);
         }
 
         out.print(SWBUtils.XML.domToXml(dom));
@@ -582,7 +585,7 @@ public class WBAContentsReport extends GenericResource {
         out.close();
     }
 
-    private void getContentInXml(Document dom, Iterator<WebPage> childs) {
+    private void getContentInXml(Document dom, Iterator<WebPage> childs, String language) {
         Element report = dom.getDocumentElement();
         while(childs.hasNext()) {
             WebPage webPage = childs.next();
@@ -595,16 +598,16 @@ public class WBAContentsReport extends GenericResource {
                     report.appendChild(resource);
 
                     Element section = dom.createElement("section");
-                    section.appendChild(dom.createTextNode(webPage.getTitle()));
+                    section.appendChild(dom.createTextNode(webPage.getDisplayTitle(language)));
                     resource.appendChild(section);
                     Element id = dom.createElement("id");
                     id.appendChild(dom.createTextNode(portlet.getId()));
                     resource.appendChild(id);
                     Element tipo = dom.createElement("type");
-                    tipo.appendChild(dom.createTextNode(portlet.getResourceType().getTitle()));
+                    tipo.appendChild(dom.createTextNode(portlet.getResourceType().getDisplayTitle(language)));
                     resource.appendChild(tipo);
                     Element contenido = dom.createElement("content");
-                    contenido.appendChild(dom.createTextNode(portlet.getTitle()));
+                    contenido.appendChild(dom.createTextNode(portlet.getDisplayTitle(language)));
                     resource.appendChild(contenido);
                     Element prior = dom.createElement("priority");
                     prior.appendChild(dom.createTextNode(Integer.toString(portlet.getPriority())));
@@ -624,7 +627,7 @@ public class WBAContentsReport extends GenericResource {
                 }
             }
             if(webPage.listChilds().hasNext()) {
-                getContentInXml(dom, webPage.listChilds());
+                getContentInXml(dom, webPage.listChilds(), language);
             }
         }
     }
