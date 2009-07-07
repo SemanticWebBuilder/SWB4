@@ -39,21 +39,21 @@ public class SWBACreateUser extends GenericResource {
         ret.append("<form id=\""+User.swb_User.getClassName()+"/create\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         ret.append("action=\""+url+"\" ");
         ret.append("onSubmit=\"submitForm('"+User.swb_User.getClassName()+"/create');return false;\" method=\"POST\">");
-        ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Repositorio de Usuarios</label>");
+        ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>Repositorio de Usuarios</label>");
         ret.append("\n\t\t\t</td>\n\t\t\t<td>");
         Iterator<UserRepository> itur = SWBContext.listUserRepositorys();
         ret.append("\n\t\t\t\t<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"userRepository\" id=\"userRepository\" >");
         while (itur.hasNext())
         {
             UserRepository ur = itur.next();
-            ret.append("\n\t\t\t\t\t<option value=\"" + ur.getId() + "\">" + ur.getTitle() + "</option>"); //todo Add Language
+            ret.append("\n\t\t\t\t\t<option value=\"" + ur.getId() + "\">" + ur.getDisplayTitle(paramRequest.getUser().getLanguage()) + "</option>"); //todo Add Language
         }
         ret.append("\n\t\t\t\t</select>\n\t\t\t</td>\n\t\t</tr>");
-        ret.append("\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Usuario <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
+        ret.append("\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>Usuario <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
         ret.append("<input type=\"text\" name=\"login\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" " +
                 "promptMessage=\"Captura identificador de usuario.\" invalidMessage=\"El identificador de usuario es requerido.\" isValid=\"return canAddLogin(dijit.byId('userRepository').value,this.textbox.value);\" trim=\"true\" />");
         ret.append("\n\t\t\t</td>\n\t\t</tr>");
-        ret.append("\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Contrase&ntilde;a <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
+        ret.append("\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>Contrase&ntilde;a <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
         ret.append("<input type=\"password\" name=\"passwd\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" ");
         ret.append("promptMessage=\"Captura contrase&ntilde;a de usuario.\" invalidMessage=\"La contrase&ntilde;a de usuario es requerido.\" trim=\"true\" />");
         ret.append("\n\t\t\t</td>\n\t\t</tr>\n\t<tr>\n\t\t<td align=\"center\" colspan=\"2\">");

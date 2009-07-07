@@ -124,7 +124,7 @@ public class SWBAIPFilter extends GenericResource
         while (itur.hasNext())
         {
             WebSite ur = itur.next();
-            ret.append("\n\t\t\t\t\t<option value=\"" + ur.getId() + "\">" + ur.getTitle() + "</option>"); //todo Add Language
+            ret.append("\n\t\t\t\t\t<option value=\"" + ur.getId() + "\">" + ur.getDisplayTitle(paramRequest.getUser().getLanguage()) + "</option>"); //todo Add Language
         }
         ret.append("\n\n<script type=\"dojo/method\" event=\"onChange\" args=\"suri\">\n");
         ret.append("  Global_suri = suri;\n");
@@ -173,7 +173,7 @@ public class SWBAIPFilter extends GenericResource
 
         ret.append("<div id=\"grid1\" jsid=\"grid1\" dojoType=\"dojox.grid.DataGrid\" model=\"model\" structure=\"layout\" onRowDblClick=\"openOther\" autoWidth_=\"true\" rowsPerPage=\"10\" >\n</div>");
         url.setMode(SWBResourceURL.Mode_HELP);
-        ret.append("<fieldset><button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"parent.showDialog('"+url+"');\">Agregar</button></fieldset>");
+        ret.append("<fieldset><button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"parent.showDialog('"+url+"?sele='+Global_suri);\">Agregar</button></fieldset>");
 
         response.getWriter().write(ret.toString());
     }
@@ -181,6 +181,7 @@ public class SWBAIPFilter extends GenericResource
     @Override
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        String got = request.getParameter("sele");
                 StringBuffer ret = new StringBuffer(1000);
                  SWBResourceURL url = paramRequest.getActionUrl();
 //                 ret.append("<script type=\"text/javascript\">\n"+
@@ -190,20 +191,22 @@ public class SWBAIPFilter extends GenericResource
 //        "                   dojo.require(\"dijit.form.CheckBox\");\n"+
 //        "        </script>\n");
       //http://www.semanticwebbuilder.org/swb4/ontology#User
-        ret.append("<form id=\""+IPFilter.swb_IPFilter.getClassName()+"/create\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
+        ret.append("<form id=\""+IPFilter.swb_IPFilter.getClassName()+"/create/"+got+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         ret.append("action=\""+url+"\" ");
         ret.append("onSubmit=\"submitForm('"+IPFilter.swb_IPFilter.getClassName()+"/create');return false;\" method=\"POST\">");
-        ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Sitios</label>");
+        ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>Sitios</label>");
         ret.append("\n\t\t\t</td>\n\t\t\t<td>");
         Iterator<WebSite> itur = SWBContext.listWebSites();
         ret.append("\n\t\t\t\t<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"webSite\" id=\"webSite\" >");
         while (itur.hasNext())
         {
             WebSite ur = itur.next();
-            ret.append("\n\t\t\t\t\t<option value=\"" + ur.getId() + "\">" + ur.getTitle() + "</option>"); //todo Add Language
+            String selected ="";
+            if (ur.getId().equals(got)) selected = " selected=\"selected\"";
+            ret.append("\n\t\t\t\t\t<option value=\"" + ur.getId() + "\"" +selected + ">" + ur.getDisplayTitle(paramRequest.getUser().getLanguage()) + "</option>"); //todo Add Language
         }
         ret.append("\n\t\t\t\t</select>\n\t\t\t</td>\n\t\t</tr>");
-        ret.append("\n\t\t<tr>\n\t\t\t<td width=\"200px\" align=\"right\">\n\t\t\t\t<label>Título <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
+        ret.append("\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>T&iacute;tulo <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
         ret.append("<input type=\"text\" name=\"titulo\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" " +
                 "promptMessage=\"Asigna un nombre a este filtro.\" invalidMessage=\"Título del filtro es requerido.\" trim=\"true\" />");
         ret.append("\n\t\t\t</td>\n\t\t</tr>");
