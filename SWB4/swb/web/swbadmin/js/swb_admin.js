@@ -7,9 +7,6 @@
       dojo.require("dijit.Tooltip");
       dojo.require("dijit.Tree");
 
-      dojo.require("dojox.form.TimeSpinner");
-      dojo.require("dojox.layout.ContentPane");
-
       // editor:
       dojo.require("dijit.Editor");
 
@@ -47,7 +44,15 @@
 
       dojo.require("dijit._tree.dndSource");
 
+
       dojo.require("dojo.fx");
       // for wipeTo
       dojo.require("dojox.fx");
+      
+      dojo.require("dojox.form.TimeSpinner");
+      dojo.require("dojox.layout.ContentPane");
+
+      dojo.require("dojox.grid.DataGrid");
+      dojo.require("dojox.data.QueryReadStore");
+
 
