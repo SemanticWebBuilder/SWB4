@@ -62,11 +62,14 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     {
         //return response.getWriter();
         log.debug("WBResponse:getWriter");
-        try
+        if(pout==null)
         {
-            pout = new PrintWriter(new OutputStreamWriter(sout,SWBUtils.TEXT.CHARSET_UTF8));
-            //pout = new PrintWriter(new OutputStreamWriter(sout));
-        }catch(Exception e){log.error(e);}
+            try
+            {
+                pout = new PrintWriter(new OutputStreamWriter(sout,SWBUtils.TEXT.CHARSET_UTF8));
+                //pout = new PrintWriter(new OutputStreamWriter(sout));
+            }catch(Exception e){log.error(e);}
+        }
         return pout;
     }
 

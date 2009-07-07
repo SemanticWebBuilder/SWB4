@@ -56,10 +56,10 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             throws SWBResourceException, IOException {
         
         Resource resource = paramRequest.getResourceBase();
-        HTMLContent hc = new HTMLContent();
-        hc.setResourceBase(resource);
-        Versionable versionInfo = null;
-        VersionInfo vi = hc.getActualVersion();
+//        HTMLContent hc = new HTMLContent();
+//        hc.setResourceBase(resource);
+//        Versionable versionInfo = null;
+        VersionInfo vi = getActualVersion();
         int versionNumber = vi.getVersionNumber();
         if (request.getParameter("numversion") != null &&
                 !"".equals(request.getParameter("numversion"))) {
