@@ -14,13 +14,14 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURLImp"%>
 <%--@ taglib uri="http://java.fckeditor.net" prefix="FCK" --%>
 <%
-    SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-    GenericObject obj = ont.getGenericObject(request.getParameter("suri"));
-    SWBResource swres = (SWBResource) obj;
+    //SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+    //GenericObject obj = ont.getGenericObject(request.getParameter("suri"));
+    //SWBResource swres = (SWBResource) obj;
 
-    Resource base = swres.getResourceBase();
+    //Resource base = swres.getResourceBase();
+    //Resource base=paramRequest.getResourceBase();
     SWBResourceURLImp url = (SWBResourceURLImp) paramRequest.getRenderUrl();
-    url.setResourceBase(base);
+    //url.setResourceBase(base);
     url.setCallMethod(SWBResourceURLImp.Call_DIRECT);
     url.setMode("saveContent");
     String action = (request.getParameter("tmpPath") != null) ? "tmp" : "";
@@ -35,11 +36,11 @@
     String content = (String) request.getAttribute("fileContent");
     fckEditor.setValue(content);
     SWBResourceURLImp urlNewVersion = (SWBResourceURLImp) paramRequest.getRenderUrl();
-    urlNewVersion.setResourceBase(base);
+    //urlNewVersion.setResourceBase(base);
     urlNewVersion.setCallMethod(SWBResourceURLImp.Call_DIRECT);
     urlNewVersion.setMode("selectFileInterface");
     urlNewVersion.setParameter("numversion", Integer.toString(version));
-    String portletWorkPath = base.getWorkPath() + "/" + (version > 1 ? version : 1) + "/tmp/";
+    String portletWorkPath = paramRequest.getResourceBase().getWorkPath() + "/" + (version > 1 ? version : 1) + "/tmp/";
     %>
 <%--
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
