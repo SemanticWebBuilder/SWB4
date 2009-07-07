@@ -429,8 +429,7 @@ public class SWBResourceMgr
             Device d=base.getDevice();
             if(d!=null)
             {
-                Device ud=user.getDevice();
-                if(ud==null || !(d.equals(ud) || d.hasChild(ud)))return false;
+                if(!user.hasDevice(d))return false;
             }
 
             //Filter

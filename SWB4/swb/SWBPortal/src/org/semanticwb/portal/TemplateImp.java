@@ -268,7 +268,7 @@ public class TemplateImp extends Template
                                 auxpart = new StringBuffer();
                             }else
                             {
-                                parts.add(new SWBIFMethod(opentag, auxpart.toString()));
+                                parts.add(new SWBIFMethod(opentag, auxpart.toString(), this));
                                 auxpart = new StringBuffer();
                             }
                         }else
@@ -900,7 +900,7 @@ public class TemplateImp extends Template
                                         continue;
                                     }                                    
 */                                    
-                                    if (!(!first && wbres.getResourceBase().getPriority() <= 0))
+                                    if (!(!first && wbres.getResourceBase().getIndex() <= 0))
                                     {
                                         String resCont=(String)args.get("getcontent");
                                         if(resCont!=null)
@@ -1138,7 +1138,7 @@ public class TemplateImp extends Template
                         out.print(wbm.invoke(topic, user, request,response));
                 }else if (obj instanceof SWBIFMethod)
                 {
-                    out.print(((SWBIFMethod)obj).eval(user, topic, this));
+                    out.print(((SWBIFMethod)obj).eval(user, topic));
                 }
                 log.debug("<!-- TemplateTag:"+ (System.currentTimeMillis()-tini) +"ms -->");                
             }
