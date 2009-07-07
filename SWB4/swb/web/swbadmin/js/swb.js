@@ -1274,14 +1274,18 @@ function replaceChars4Id(value, lowercase)
     return id;
 }
 
-function hideApplet(flag)
-{
-   if(flag)dojo.query(".applet", "main").style('visibility', 'hidden');
-   else dojo.query(".applet", "main").style('visibility', 'visible');
-}
+    function hideApplet(flag)
+    {
+       if(flag)dojo.query(".applet", "main").style('visibility', 'hidden');
+       else dojo.query(".applet", "main").style('visibility', 'visible');
+    }
 
-   //EditArea
-   include(context+"/swbadmin/js/editarea/edit_area/edit_area_full.js");
+    function init(ctxt)
+    {
+        context=ctxt;
+        //EditArea
+        include(context+"/swbadmin/js/editarea/edit_area/edit_area_full.js");
+    }
 
    function validateChk(name,msg)
    {
