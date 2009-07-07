@@ -147,8 +147,7 @@ public class DeviceBase extends org.semanticwb.model.SWBClass implements org.sem
 
     public boolean hasChild(org.semanticwb.model.Device device)
     {
-        if(device==null)return false;
-        return getSemanticObject().hasObjectProperty(swb_hasDvcChild,device.getSemanticObject());
+        if(device==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasDvcChild,device.getSemanticObject());
     }
 
     public org.semanticwb.model.Device getChild()
