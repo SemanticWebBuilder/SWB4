@@ -53,13 +53,13 @@ public class SWBASiteLog extends GenericResource {
                 ResultSet rs = st.executeQuery(sql);
                 while (rs.next()) {
                     SemanticObject swbobj=SemanticObject.createSemanticObject(rs.getString("log_objuri"));
-                    System.out.println("swbobj:"+swbobj);
+                    //System.out.println("swbobj:"+swbobj);
                     if(swbobj!=null){
                         String fecha=""+rs.getTimestamp("log_date");
                         if(fecha.lastIndexOf(" ")>0) fecha=fecha.substring(0,fecha.lastIndexOf(" "));
                         out.println("<tr>");
                         out.println("  <td class=\"mov-recurso\">" + rs.getString("log_action") + "</td>");
-                        System.out.println("log_objuri:"+rs.getString("log_objuri"));
+                        //System.out.println("log_objuri:"+rs.getString("log_objuri"));
                         out.println("  <td class=\"mov-recurso\">" + swbobj.getDisplayName() + "</td>");
                         out.println("  <td class=\"mov-recurso\">" + ont.getSemanticProperty(rs.getString("log_propid")).getDisplayName(user.getLanguage()) + "</td>");
                         out.println("  <td class=\"mov-fecha\">" + fecha + "</td>");

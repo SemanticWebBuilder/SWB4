@@ -6,6 +6,9 @@
 package org.semanticwb.portal.util;
 
 import com.arthurdo.parser.HtmlTag;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.*;
@@ -17,51 +20,107 @@ import org.semanticwb.model.*;
 public class SWBIFMethod
 {
     private static Logger log = SWBUtils.getLogger(SWBIFMethod.class);
+    private Template tpl;
     private HtmlTag tag;
     private String txt;
     private String type=null;
-    private String lang=null;
-    private String device=null;
+    private boolean notlangs=false;
+    private ArrayList<String> langs=null;
+    private boolean notdevices=false;
+    private ArrayList<Device> devices=null;
 
     /**
      * @param method
      * @param obj
      * @param arguments
      * @param tpl  */
-    public SWBIFMethod(HtmlTag tag, String txt)
+    public SWBIFMethod(HtmlTag tag, String txt, Template tpl)
     {
+        this.tpl=tpl;
         //System.out.println("tag:"+tag);
         this.tag = tag;
         this.txt = txt;
         type=tag.getTagString().toLowerCase();
-        lang=tag.getParam("language");
-        device=tag.getParam("device");
-        //System.out.println("lang:"+lang);
-        //System.out.println("device:"+lang);
-//        Enumeration en=tag.getParamNames();
-//        while(en.hasMoreElements())
-//        {
-//            String prm=(String)en.nextElement();
-//            System.out.println("-->"+prm+":"+tag.getParam(prm));
-//        }
+
+        initUser();
     }
 
-    public String eval(User user, WebPage webpage, Template tpl)
+    private void initUser()
+    {
+        String lang=tag.getParam("language");
+        String device=tag.getParam("device");
+        //System.out.println("lang:"+lang);
+        //System.out.println("device:"+lang);
+        langs=new ArrayList();
+        devices=new ArrayList();
+
+        try
+        {
+            if(lang!=null)
+            {
+                if(lang.startsWith("!"))
+                {
+                    lang=lang.substring(1);
+                    notlangs=true;
+                }
+                StringTokenizer st=new StringTokenizer(lang,"|");
+                while(st.hasMoreTokens())
+                {
+                    String lg=st.nextToken();
+                    langs.add(lg);
+                }
+            }
+        }catch(Exception e){log.error("Error reading if user langs...",e);}
+
+        try
+        {
+            if(device!=null)
+            {
+                if(device.startsWith("!"))
+                {
+                    device=device.substring(1);
+                    notdevices=true;
+                }
+                StringTokenizer st=new StringTokenizer(device,"|");
+                while(st.hasMoreTokens())
+                {
+                    String dv=st.nextToken();
+                    Device d=tpl.getWebSite().getDevice(dv);
+                    if(d!=null)devices.add(d);
+                }
+            }
+        }catch(Exception e){log.error("Error reading if user devices...",e);}
+    }
+
+    public String eval(User user, WebPage webpage)
     {
         String ret=txt;
         if(type.equals("if:user"))
         {
-            if(lang!=null)
+            if(!langs.isEmpty())
             {
-                String lng=user.getLanguage();
-                if(!lang.equals(lng))return "";
-            }
-            if(device!=null)
-            {
-                Device dvc=tpl.getWebSite().getDevice(device);
-                if(dvc!=null)
+                boolean cont=langs.contains(user.getLanguage());
+                if((!cont && !notlangs)||(cont && notlangs))
                 {
-                    if(!user.hasDevice(dvc))return "";
+                    return "";
+                }
+            }
+            if(!devices.isEmpty())
+            {
+                boolean cont=false;
+                Iterator<Device> it=devices.iterator();
+                while(it.hasNext())
+                {
+                    Device dvc=it.next();
+                    if(user.hasDevice(dvc))
+                    {
+                        cont=true;
+                        break;
+                    }
+                }
+                if((!cont && !notdevices)||(cont && notdevices))
+                {
+                    return "";
                 }
             }
         }else if(type.equals("if:topic") || type.equals("if:webpage"))
@@ -71,7 +130,6 @@ public class SWBIFMethod
         {
 
         }
-
         return ret;
     }
 
