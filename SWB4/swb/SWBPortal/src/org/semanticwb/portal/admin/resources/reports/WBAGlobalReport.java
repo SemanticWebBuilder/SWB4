@@ -147,7 +147,7 @@ public class WBAGlobalReport extends GenericResource {
             // If there are sites continue
             if(hm_sites.size() > I_ACCESS){
                 String address = paramsRequest.getTopic().getUrl();
-                String webSite = request.getParameter("wb_site");
+                String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
 
                 int groupDates;
                 try {
@@ -337,7 +337,7 @@ public class WBAGlobalReport extends GenericResource {
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
                     out.println("<option value=\"" + key + "\"");
-                    if(key.equalsIgnoreCase(webSite)) {
+                    if(key.equalsIgnoreCase(websiteId)) {
                         out.println(" selected=\"selected\"");
                     }
                     out.println(">" + (String)hm_sites.get(key) + "</option>");
@@ -399,7 +399,7 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("</table>");
                     out.println("</fieldset>");
                     out.println("</form>");
-                    if(request.getParameter("wb_rtype")!=null && webSite!=null) {
+                    if(request.getParameter("wb_rtype")!=null && websiteId!=null) {
                         out.println("<fieldset>");
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");
                         out.println("<tr>");
@@ -461,13 +461,13 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("</table>");
                     out.println("</fieldset>");
                     out.println("</form>");
-                    if(request.getParameter("wb_rtype")!=null && webSite!=null ) {
+                    if(request.getParameter("wb_rtype")!=null && websiteId!=null ) {
                         out.println("<fieldset>");
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");
                         out.println("<tr><td>");
 
                         WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(webSite);
+                        filter.setSite(websiteId);
                         filter.setIdaux(S_REPORT_IDAUX);
                         filter. setType(I_REPORT_TYPE);
                         filter.setYearI(year13);
@@ -547,11 +547,11 @@ public class WBAGlobalReport extends GenericResource {
                     throw new javax.servlet.ServletException(e);
                 }
             }else { // REPORTE MENSUAL
-                String webSite = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+                String websiteId = request.getParameter("wb_site");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                params.put("site", webSite);
+                params.put("site", websiteId);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                filter.setSite(webSite);
+                filter.setSite(websiteId);
                 filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
@@ -599,11 +599,11 @@ public class WBAGlobalReport extends GenericResource {
                     throw new javax.servlet.ServletException(e);
                 }
             }else { // REPORTE MENSUAL
-                String webSite = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+                String websiteId = request.getParameter("wb_site");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                params.put("site", webSite);
+                params.put("site", websiteId);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                filter.setSite(webSite);
+                filter.setSite(websiteId);
                 filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
@@ -677,10 +677,10 @@ public class WBAGlobalReport extends GenericResource {
                 }
 
             }else { // REPORTE MENSUAL
-                String webSite = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+                String websiteId = request.getParameter("wb_site");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 filter = new WBAFilterReportBean();
-                filter.setSite(webSite);
+                filter.setSite(websiteId);
                 filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
@@ -741,11 +741,11 @@ public class WBAGlobalReport extends GenericResource {
                     throw new javax.servlet.ServletException(e);
                 }
             }else { // REPORTE MENSUAL
-                String webSite = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+                String websiteId = request.getParameter("wb_site");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                params.put("site", webSite);
+                params.put("site", websiteId);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                filter.setSite(webSite);
+                filter.setSite(websiteId);
                 filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
@@ -786,11 +786,11 @@ public class WBAGlobalReport extends GenericResource {
                     throw new javax.servlet.ServletException(e);
                 }
             }else { // REPORTE MENSUAL
-                String webSite = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+                String websiteId = request.getParameter("wb_site");
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
-                params.put("site", webSite);
+                params.put("site", websiteId);
                 WBAFilterReportBean filter = new WBAFilterReportBean();
-                filter.setSite(webSite);
+                filter.setSite(websiteId);
                 filter.setIdaux(S_REPORT_IDAUX);
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
@@ -812,7 +812,7 @@ public class WBAGlobalReport extends GenericResource {
 
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;
-        String webSite = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+        String websiteId = request.getParameter("wb_site");
         int groupDates;
         try {
             groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
@@ -845,7 +845,7 @@ public class WBAGlobalReport extends GenericResource {
             if(groupDates==0) { // radio button was 0. Select only one date
                 /*String[] numFecha = fecha1.split("-");*/
                 filterReportBean = new WBAFilterReportBean();
-                filterReportBean.setSite(webSite);
+                filterReportBean.setSite(websiteId);
                 filterReportBean.setIdaux(S_REPORT_IDAUX);
                 filterReportBean.setType(I_REPORT_TYPE);
                 filterReportBean.setYearI(Integer.parseInt(fecha1.substring(0,4)));
@@ -854,7 +854,7 @@ public class WBAGlobalReport extends GenericResource {
 
             }else { // radio button was 1. Select between two dates
                 filterReportBean = new WBAFilterReportBean();
-                filterReportBean.setSite(webSite);
+                filterReportBean.setSite(websiteId);
                 filterReportBean.setIdaux(S_REPORT_IDAUX);
                 filterReportBean.setType(I_REPORT_TYPE);
 

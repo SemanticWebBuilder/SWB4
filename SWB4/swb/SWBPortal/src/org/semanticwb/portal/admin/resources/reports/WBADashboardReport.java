@@ -84,8 +84,7 @@ public class WBADashboardReport extends GenericResource {
             // If there are sites continue
             if(sites.size() > I_ACCESS) {
                 String address = paramsRequest.getTopic().getUrl();
-                //String websiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
-                String websiteId = request.getParameter("wb_site");
+                String websiteId = request.getParameter("wb_site")==null ? (String)sites.keySet().iterator().next():request.getParameter("wb_site");
                 String language = paramsRequest.getUser().getLanguage();
                 
                 GregorianCalendar now = new GregorianCalendar();

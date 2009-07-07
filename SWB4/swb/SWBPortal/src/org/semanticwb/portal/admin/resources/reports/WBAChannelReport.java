@@ -112,8 +112,8 @@ public class WBAChannelReport extends GenericResource {
 
                 // If there are sites continue
                 if (hm_sites.size() > I_ACCESS) {
-                    String webSite = request.getParameter("wb_site");
-
+                    String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
+                    
                     int groupDates;
                     try {
                         groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
@@ -250,7 +250,7 @@ public class WBAChannelReport extends GenericResource {
                     while(itKeys.hasNext()) {
                         String key = itKeys.next();
                         sb_ret.append("<option value=\"" + key + "\"");
-                        if(key.equalsIgnoreCase(webSite)) {
+                        if(key.equalsIgnoreCase(websiteId)) {
                             sb_ret.append(" selected=\"selected\"");
                         }
                         sb_ret.append(">" + (String)hm_sites.get(key) + "</option>\n");
