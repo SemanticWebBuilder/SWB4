@@ -35,7 +35,7 @@
     </servlet>
 
     <servlet>
-        <servlet-name>Quercus Servlet</servlet-name>
+        <servlet-name>QuercusServlet</servlet-name>
         <servlet-class>com.caucho.quercus.servlet.QuercusServlet</servlet-class>
         <!-- Specifies the encoding Quercus should use to read in PHP scripts.
         -->
@@ -62,18 +62,30 @@
         -->
     </servlet>
 
+    <servlet>
+	    <servlet-name>PyServlet</servlet-name>
+	    <servlet-class>org.python.util.PyServlet</servlet-class>
+	    <load-on-startup>1</load-on-startup>
+    </servlet>
+
     <servlet-mapping>
-        <servlet-name>Quercus Servlet</servlet-name>
+        <servlet-name>QuercusServlet</servlet-name>
         <url-pattern>*.php</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
-        <servlet-name>Quercus Servlet</servlet-name>
+	    <servlet-name>PyServlet</servlet-name>
+	    <url-pattern>*.py</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>QuercusServlet</servlet-name>
         <url-pattern>/mediawiki/index.php/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-            <servlet-name>dwr-invoker</servlet-name>
-            <url-pattern>/dwr/*</url-pattern>
+        <servlet-name>dwr-invoker</servlet-name>
+        <url-pattern>/dwr/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
