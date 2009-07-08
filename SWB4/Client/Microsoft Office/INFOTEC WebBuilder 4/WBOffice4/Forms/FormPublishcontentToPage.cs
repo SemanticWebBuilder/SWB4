@@ -29,21 +29,26 @@ namespace WBOffice4.Forms
 
         private void FormPublishcontentToPage_LoadSteps(object sender, EventArgs e)
         {
-
+            PropertyInfo[] properties = OfficeApplication.OfficeDocumentProxy.getResourceProperties(document.reporitoryID, document.contentID);
             if (title == null || description == null)
             {
                 this.AddStep(new TitleAndDescription(document,false));
                 this.AddStep(new SelectVersionToPublish(document));
-                this.AddStep(new ViewProperties());
-                this.AddStep(new SelectSitePublish());
+                if (properties != null && properties.Length > 0)
+                {
+                    this.AddStep(new ViewProperties());
+                }
+                this.AddStep(new SelectSitePublish(document));
                 
             }
             else
             {                
                 this.AddStep(new SelectVersionToPublish(document));
-                this.AddStep(new ViewProperties());
-                this.AddStep(new SelectSitePublish(title, description));
-                
+                if (properties != null && properties.Length > 0)
+                {
+                    this.AddStep(new ViewProperties());
+                }                
+                this.AddStep(new SelectSitePublish(title, description,document));                
             }
             
         }

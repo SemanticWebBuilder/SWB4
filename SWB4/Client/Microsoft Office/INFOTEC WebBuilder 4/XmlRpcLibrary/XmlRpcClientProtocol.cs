@@ -6,6 +6,8 @@ using System.Net;
 using System.ComponentModel;
 using System.Reflection;
 using System.Diagnostics;
+using System.Windows.Forms;
+using System.Net.Sockets;
 namespace XmlRpcLibrary
 {
     public class XmlRpcClientProtocol : Component,  IXmlRpcProxy
@@ -66,8 +68,19 @@ namespace XmlRpcLibrary
             catch (TargetInvocationException ex)
             {
                 Debug.WriteLine(ex.StackTrace);
-                throw ex.GetBaseException();
-            }
+                Exception e=ex.GetBaseException();
+                if(e is SocketException)
+                {
+                    MessageBox.Show("Existe un error de comunicación con el publicador.\r\nPuede que el sistema este inestable debido a esta situación.\r\nCierre la aplicación y vuelva a intentar la operación.\r\nDetalle: " + e.Message, "Error de comunicación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Debug.WriteLine(e.StackTrace);
+                    throw e;
+                }
+                else
+                {
+                    throw e;
+                }
+
+            }            
             catch (XmlRpcException webex)
             {
                 Debug.WriteLine(webex.StackTrace);
@@ -78,6 +91,7 @@ namespace XmlRpcLibrary
                 Debug.WriteLine(webex.StackTrace);
                 throw webex;
             }
+            
             catch (NullReferenceException webex)
             {
                 Debug.WriteLine(webex.StackTrace);

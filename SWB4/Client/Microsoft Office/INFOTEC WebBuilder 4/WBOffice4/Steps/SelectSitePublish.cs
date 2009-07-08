@@ -10,14 +10,19 @@ using WBOffice4.Forms;
 namespace WBOffice4.Steps
 {
     public class SelectSitePublish : SelectSite
-    {        
-        public SelectSitePublish() : base()
+    {
+        private OfficeDocument document;
+        public SelectSitePublish(OfficeDocument document)
+            : base()
         {            
             this.ValidateStep+=new System.ComponentModel.CancelEventHandler(SelectSitePublish_ValidateStep);
-        }
-        public SelectSitePublish(String title, String description) : base(title,description)
-        {            
+            this.document = document;
+        }        
+        public SelectSitePublish(String title, String description,OfficeDocument document)
+            : base(title, description)
+        {
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSitePublish_ValidateStep);
+            this.document = document;
         }
 
         private void SelectSitePublish_ValidateStep(object sender, CancelEventArgs e)
@@ -33,9 +38,17 @@ namespace WBOffice4.Steps
                 {
                     title = this.Wizard.Data[TitleAndDescription.TITLE].ToString();
                     description = this.Wizard.Data[TitleAndDescription.DESCRIPTION].ToString();
+                }                
+                PropertyInfo[] properties = OfficeApplication.OfficeDocumentProxy.getResourceProperties(document.reporitoryID, document.contentID);
+                String[] values = null;
+                if (properties == null || properties.Length == 0)
+                {
+                    values = new String[0];
                 }
-                PropertyInfo[] properties = (PropertyInfo[])this.Wizard.Data[ViewProperties.VIEW_PROPERTIES];
-                String[] values = (String[])this.Wizard.Data[ViewProperties.VIEW_PROPERTIES_VALUES];
+                else
+                {
+                    values = (String[])this.Wizard.Data[ViewProperties.VIEW_PROPERTIES_VALUES];
+                }
                 ResourceInfo portletInfo = OfficeApplication.OfficeDocumentProxy.publishToResourceContent(repositoryName, contentID, version, title, description, webpage,properties,values);
                 if (OfficeApplication.OfficeDocumentProxy.needsSendToPublish(portletInfo))
                 {
