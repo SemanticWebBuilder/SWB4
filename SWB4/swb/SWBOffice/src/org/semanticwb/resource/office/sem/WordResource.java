@@ -82,8 +82,8 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                             read = in.read(buffer);
                         }
                         String htmlOut = null;
-                        if (isPaginated() && getNumberOfPages() > 0) {
-                            htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath, getNumberOfPages());
+                        if (isPages() && getNpages() > 0) {
+                            htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath, getNpages());
                         } else {
                             htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
                         }
