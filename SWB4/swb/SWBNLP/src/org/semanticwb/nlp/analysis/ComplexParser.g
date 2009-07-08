@@ -7,8 +7,9 @@ options {
 }
 
 tokens {
-	LIMIT; SELECT; ASIGN; COMPL; COMPG; COMPLE; COMPGE; COMPAS;
+	LIMIT; SELECT; ASIGN; COMPL; COMPG; COMPLE; COMPGE;
 	PRECON; PREDE; OFFSET; ORDER; COMPNAME; MODTO; NAME;
+	ADJASIGN;
 }
 
 @members {
@@ -82,6 +83,7 @@ ordterm
 oquery
 :	//sent
 	|name
+	|name name PREC querylist {precon = true;} -> ^(PRECON ^(ADJASIGN name name)querylist)
 	|name PREC querylist {precon = true;} -> ^(name ^(PRECON querylist))
 	|LPAR! oquery RPAR!
 ;
@@ -123,8 +125,8 @@ sent
 	|name SIGLE val -> ^(COMPLE name val)
 	|VAR SIGGE val -> ^(COMPGE VAR val)
 	|name SIGGE val -> ^(COMPGE name val)
-        |VAR MODC val -> ^(COMPAS VAR val)
-        |name MODC val -> ^(COMPAS name val)
+	|name val -> ^(ASIGN name val)
+	|NUM name -> ^(ASIGN name NUM)
 ;
 
 /*A value can be a literal (double quoted strings), a boolean or a num*/
