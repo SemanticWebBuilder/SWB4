@@ -41,7 +41,7 @@ namespace WBOffice4.Steps
         }
 
         private void ContentProperties_ValidateStep(object sender, CancelEventArgs e)
-        {
+        {            
             FileInfo zipFile = null;
             String title = this.Wizard.Data[TitleAndDescription.TITLE].ToString();
             String description = this.Wizard.Data[TitleAndDescription.DESCRIPTION].ToString();
