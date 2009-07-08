@@ -68,6 +68,16 @@
 	    <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>Groovy</servlet-name>
+        <servlet-class>groovy.servlet.GroovyServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Groovy</servlet-name>
+        <url-pattern>*.groovy</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>QuercusServlet</servlet-name>
         <url-pattern>*.php</url-pattern>
