@@ -19,7 +19,7 @@
                     frm.height.focus();
                     return false;
                 }
-                if(frm.level.value < 1) {
+                if(frm.level.value < 0) {
                     alert("El nivel de despliegue debe ser mayor que cero.");
                     frm.level.focus();
                     return false;
