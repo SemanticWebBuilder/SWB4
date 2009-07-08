@@ -113,18 +113,19 @@ namespace WBOffice4.Forms
         }
 
         private void FormLogin_Activated(object sender, EventArgs e)
-        {
-            if (comboBoxAddresses.Items.Count == 0)
+        {            
+            
+            if (String.IsNullOrEmpty(this.textBoxPassword.Text.Trim()))
             {
-                comboBoxAddresses.Focus();
+                textBoxPassword.Focus();
             }
             if (String.IsNullOrEmpty(this.textBoxLogin.Text.Trim()))
             {
                 textBoxLogin.Focus();
             }
-            if (String.IsNullOrEmpty(this.textBoxPassword.Text.Trim()))
+            if (comboBoxAddresses.Items.Count == 0 || String.IsNullOrEmpty(comboBoxAddresses.Text))
             {
-                textBoxPassword.Focus();
+                comboBoxAddresses.Focus();
             }
         }
 

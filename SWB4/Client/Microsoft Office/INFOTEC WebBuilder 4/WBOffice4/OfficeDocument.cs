@@ -530,11 +530,12 @@ namespace WBOffice4
                 {
                     CleanContentProperties();
                     MessageBox.Show("La asociación del contenido se ha borrado", "Borrar asociación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (OfficeApplication.MenuListener != null)
+                    {
+                        OfficeApplication.MenuListener.NoDocumentPublished();
+                    }
                 }
-                if (OfficeApplication.MenuListener != null)
-                {
-                    OfficeApplication.MenuListener.NoDocumentPublished();
-                }
+                
             }
         }
         private void UpdateContent()

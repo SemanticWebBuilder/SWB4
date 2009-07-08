@@ -525,6 +525,14 @@ namespace TSWizards
 				next.Enabled = value;
 			}
 		}
+        public void changeToNext()
+        {
+            SetFinish(false);
+        }
+        public void changeToFinish()
+        {
+            SetFinish(true);
+        }
 		#endregion
 
 		#region FirstStepName

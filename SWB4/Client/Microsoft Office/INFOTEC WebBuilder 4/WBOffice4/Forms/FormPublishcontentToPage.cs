@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using WBOffice4.Steps;
+using WBOffice4.Interfaces;
 namespace WBOffice4.Forms
 {
     public partial class FormPublishcontentToPage : TSWizards.BaseWizard
@@ -15,8 +16,9 @@ namespace WBOffice4.Forms
         public FormPublishcontentToPage(OfficeDocument document)
         {
             InitializeComponent();
-            this.document = document;
-        }
+            this.document = document;            
+
+        }        
         public FormPublishcontentToPage(OfficeDocument document,String title,String description)
         {
             InitializeComponent();
