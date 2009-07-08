@@ -1,6 +1,6 @@
 ﻿namespace WBOffice4.Steps
 {
-    partial class Propertyditor
+    partial class PropertyEditor
     {
         /// <summary> 
         /// Required designer variable.

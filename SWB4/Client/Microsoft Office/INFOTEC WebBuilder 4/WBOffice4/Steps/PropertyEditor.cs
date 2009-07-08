@@ -9,10 +9,10 @@ using System.Windows.Forms;
 using System.Windows.Forms.PropertyGridInternal;
 namespace WBOffice4.Steps
 {
-    public partial class Propertyditor : UserControl
+    public partial class PropertyEditor : UserControl
     {
         PropertyGrid propertyGrid;
-        public Propertyditor()
+        public PropertyEditor()
         {
             InitializeComponent();
             propertyGrid = new PropertyGrid();

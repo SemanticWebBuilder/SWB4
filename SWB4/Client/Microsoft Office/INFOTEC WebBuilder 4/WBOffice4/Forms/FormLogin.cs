@@ -58,7 +58,7 @@ namespace WBOffice4.Forms
                 this.textBoxPassword.Focus();
                 return;
             }
-            uRIConfigurationList.Add(this.textBoxLogin.Text, uri);
+            //uRIConfigurationList.Add(this.textBoxLogin.Text, uri);
             User = this.textBoxLogin.Text;
             Password = this.textBoxPassword.Text;
             WebAddress = uri;
