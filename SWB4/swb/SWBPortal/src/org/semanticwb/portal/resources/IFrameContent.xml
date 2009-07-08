@@ -3,30 +3,37 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmIFrameContent" action="true" method="POST">
 		<admdbconnmgr defconn="true"/>
-                <fieldset>
-		<input type="TEXT" name="url" label="* Dirección web del contenido remoto (Frame):" size="50" jsrequired="true"/>
-		<input type="TEXT" name="width" label="Ancho (pixeles o nn% para porcentaje):" size="4" maxlength="4" />
-		<input type="TEXT" name="height" label="Alto (pixeles o nn% para porcentaje):" size="4" maxlength="4" />
-		<input type="TEXT" name="marginwidth" label="Ancho del margen (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-		<input type="TEXT" name="marginheight" label="Altura del margen (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-		<input type="TEXT" name="style" label="Estilo para el frame:" size="50"/>
-		<statictext name="txtAlign">Alineación:</statictext>
-		<input type="RADIO" name="align" label="Superior" value="top"/>
-		<input type="RADIO" name="align" label="Media" value="middle"/>
-		<input type="RADIO" name="align" label="Inferior" value="bottom"/>
-		<input type="RADIO" name="align" label="Derecha" value="left"/>
-		<input type="RADIO" name="align" label="Izquierda" value="right"/>
-		<input type="RADIO" name="align" label="Centrada" value="center"/>		
-		<statictext name="txtTarget">Barras de desplazamiento:</statictext>
-		<input type="RADIO" name="scrollbars" label="Automático" value="auto"/>
-		<input type="RADIO" name="scrollbars" label="Sí" value="yes"/>
-		<input type="RADIO" name="scrollbars" label="No" value="no"/>
-		<input type="CHECKBOX" name="frameborder" label="Borde del frame" value="1"/>
-                </fieldset>
-                <fieldset>
-		<input type="SUBMIT" name="btnSave"  value="Guardar"/>
-		<input type="RESET"  name="btnReset" value="Cancelar"/>
-                </fieldset>
+        <fieldset legend="Datos">
+            <input type="TEXT" name="url" label="Url del contenido remoto:" size="50" jsrequired="true"/>
+            <statictext name="txtTarget">Barras de desplazamiento:</statictext>
+            <input type="RADIO" name="scrollbars" label="Automático" value="auto" checked="true" />
+            <input type="RADIO" name="scrollbars" label="Sí" value="yes"/>
+            <input type="RADIO" name="scrollbars" label="No" value="no"/>
+            <input type="CHECKBOX" name="frameborder" label="Borde del frame" value="1"/>
+        </fieldset>
+        <fieldset legend="Forma y estilo">
+            <input type="TEXT" name="width" label="Ancho (pixeles o nn% para porcentaje):" size="4" maxlength="4" />
+            <input type="TEXT" name="height" label="Alto (pixeles o nn% para porcentaje):" size="4" maxlength="4" />
+            <input type="TEXT" name="marginwidth" label="Ancho del margen (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+            <input type="TEXT" name="marginheight" label="Altura del margen (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+            <input type="TEXT" name="style" label="Estilo para el frame:" size="50"/>
+            <statictext name="txtAlign">Alineación:</statictext>
+            <input type="RADIO" name="align" label="Superior" value="top"/>
+            <input type="RADIO" name="align" label="Media" value="middle"/>
+            <input type="RADIO" name="align" label="Inferior" value="bottom"/>
+            <input type="RADIO" name="align" label="Derecha" value="left"/>
+            <input type="RADIO" name="align" label="Izquierda" value="right"/>
+            <input type="RADIO" name="align" label="Centrada" value="center" checked="true" />
+        </fieldset>
+
+        <fieldset>
+            <statictext name="b">
+            <![CDATA[
+            <button id="btnSave" type=\"submit\" name=\"btnSave\" dojoType="dijit.form.Button">Guardar</button>
+            <button id="btnReset" type=\"reset\" name=\"btnReset\" dojoType="dijit.form.Button">Reestablecer</button>
+            ]]>
+            </statictext>
+        </fieldset>
 	</form>
 	<statictext name="txtNote">
 		<![CDATA[
@@ -37,17 +44,60 @@
 	</statictext>
 	<script language="JavaScript">
 		<![CDATA[
-			if(!document.frmIFrameContent.align[0].checked && 
-				!document.frmIFrameContent.align[1].checked &&
-				!document.frmIFrameContent.align[2].checked &&
-				!document.frmIFrameContent.align[3].checked &&
-				!document.frmIFrameContent.align[4].checked &&
-				!document.frmIFrameContent.align[5].checked)
-				document.frmIFrameContent.align[0].checked=true;
-			if(!document.frmIFrameContent.scrollbars[0].checked && 
-				!document.frmIFrameContent.scrollbars[1].checked &&
-				!document.frmIFrameContent.scrollbars[2].checked)
-				document.frmIFrameContent.scrollbars[0].checked=true;
+        dojo.require("dijit.form.Button");
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnSave"), "onClick",
+                function() {
+                    if(jsValida(dojo.byId("frmIFrameContent"))) {
+                        dojo.byId("frmIFrameContent").submit();
+                    }
+                }
+            );
+        });
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnReset"), "onClick",
+                function() {
+                    dojo.byId("frmIFrameContent").reset();
+                }
+            );
+        });
+
+        function jsValida(frm) {
+            if( frm.height.value.length>0 && isNaN(parseInt(frm.height.value, 10)) ) {
+                alert('Alto debe ser numérico.');
+                frm.height.focus();
+                return false;
+            }
+            if(frm.height.value < 0) {
+                alert("Alto debe ser mayor que cero.");
+                frm.height.focus();
+                return false;
+            }
+
+            if( frm.marginwidth.value.length>0 && isNaN(parseInt(frm.marginwidth.value, 10)) ) {
+                alert('Ancho del margen debe ser numérico.');
+                frm.marginwidth.focus();
+                return false;
+            }
+            if(frm.marginwidth.value < 0) {
+                alert("Ancho del margen debe ser mayor que cero.");
+                frm.marginwidth.focus();
+                return false;
+            }
+
+            if( frm.marginheight.value.length>0 && isNaN(parseInt(frm.marginheight.value, 10)) ) {
+                alert('Altura del margen debe ser numérico.');
+                frm.marginheight.focus();
+                return false;
+            }
+            if(frm.marginheight.value < 0) {
+                alert("Altura del margen debe ser mayor que cero.");
+                frm.marginheight.focus();
+                return false;
+            }
+
+            return true;
+        }
 		]]>
-	</script>	
+	</script>
 </admresource>
