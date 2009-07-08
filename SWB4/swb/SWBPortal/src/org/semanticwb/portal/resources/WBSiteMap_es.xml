@@ -19,7 +19,7 @@
                     frm.height.focus();
                     return false;
                 }
-                if(frm.level.value < 1) {
+                if(frm.level.value < 0) {
                     alert("El nivel de despliegue debe ser mayor que cero.");
                     frm.level.focus();
                     return false;
@@ -36,7 +36,7 @@
             <input type="TEXT" name="btntexto" label="Texto del botón en caso de no definir imagen:" size="50"/>
             <input type="TEXT" name="lnktexto" label="Texto de la liga en caso de no definir imagen ni botón:" size="50"/>
             <input type="TEXT" name="title" label="Título:" size="50"/>
-            <input type="TEXT" name="level" label="Nivel de despliegue" size="2" jsvaltype="js_numbers" />
+            <input type="TEXT" name="level" label="Nivel de despliegue" value="1" size="2" jsvaltype="js_numbers" />
             <input type="TEXT" name="url" label="Sección que despliega el mapa de sitio:" size="50"/>
         </fieldset>
 
