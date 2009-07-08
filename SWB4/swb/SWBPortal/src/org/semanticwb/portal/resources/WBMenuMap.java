@@ -1,8 +1,3 @@
-/*
- * WBMenuMap.java
- *
- * Created on 13 de septiembre de 2007, 04:25 PM
- */
 
 package org.semanticwb.portal.resources;
 
