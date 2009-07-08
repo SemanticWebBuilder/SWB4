@@ -117,7 +117,7 @@ public class SWBAIPFilter extends GenericResource
                 "        </script>\n");
         ret.append("<form id=\"" + IPFilter.swb_IPFilter.getClassName() + "/create\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         ret.append("onSubmit=\"return false;\" method=\"POST\">");
-        ret.append("\t<fieldset>\n\t<label for=\"Sitios\">Sitio</label>");
+        ret.append("\t<fieldset>\n\t<label for=\"Sitios\">"+paramRequest.getLocaleString("ipsite")+"</label>");
         Iterator<WebSite> itur = SWBContext.listWebSites();
         ret.append("\n\t\t\t\t<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"userRepository\" id=\"Sitios\"  >");
         ret.append("\n\t\t\t\t\t<option value=\"\"></option>"); //todo Add Language
@@ -144,10 +144,10 @@ public class SWBAIPFilter extends GenericResource
                 "               // Data Grid layout\n" +
                 "               // A grid view is a group of columns\n" +
                 "       var view1 = [\n" +
-                "                    {name: 'Dirección IP',width:'30%', field: \"ipAddr\"},\n" +
-                "                    {name: 'Descripción',width:'30%', field: \"desc\"},\n" +
-                "                    {name: 'Restricción',width:'20%',field: \"rest\"},\n " +
-                "                    {name: 'Ultima actualización',width:'20%',field: \"acct\"},\n " +
+                "                    {name: '"+paramRequest.getLocaleString("ipaddres")+"',width:'30%', field: \"ipAddr\"},\n" +
+                "                    {name: '"+paramRequest.getLocaleString("ipdesc")+"',width:'30%', field: \"desc\"},\n" +
+                "                    {name: '"+paramRequest.getLocaleString("iprest")+"',width:'20%',field: \"rest\"},\n " +
+                "                    {name: '"+paramRequest.getLocaleString("ipdate")+"',width:'20%',field: \"acct\"},\n " +
                 "            ]\n ;" +
                 "       var layout = [ view1 ];\n" +
                 //  "       model = new dojox.grid.data.Objects([{key: \"login\"}, {key: \"name\"},{key: \"papellid\"},{key: \"sapellid\"},{key: \"email\"}], null);\n" +
@@ -173,7 +173,7 @@ public class SWBAIPFilter extends GenericResource
 
         ret.append("<div id=\"grid1\" jsid=\"grid1\" dojoType=\"dojox.grid.DataGrid\" model=\"model\" structure=\"layout\" onRowDblClick=\"openOther\" autoWidth_=\"true\" rowsPerPage=\"10\" >\n</div>");
         url.setMode(SWBResourceURL.Mode_HELP);
-        ret.append("<fieldset><button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"parent.showDialog('"+url+"?sele='+Global_suri);\">Agregar</button></fieldset>");
+        ret.append("<fieldset><button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"parent.showDialog('"+url+"?sele='+Global_suri);\">"+paramRequest.getLocaleString("ipadd")+"</button></fieldset>");
 
         response.getWriter().write(ret.toString());
     }
@@ -194,7 +194,7 @@ public class SWBAIPFilter extends GenericResource
         ret.append("<form id=\""+IPFilter.swb_IPFilter.getClassName()+"/create/"+got+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         ret.append("action=\""+url+"\" ");
         ret.append("onSubmit=\"submitForm('"+IPFilter.swb_IPFilter.getClassName()+"/create');return false;\" method=\"POST\">");
-        ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>Sitios</label>");
+        ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>"+paramRequest.getLocaleString("ipsite")+"</label>");
         ret.append("\n\t\t\t</td>\n\t\t\t<td>");
         Iterator<WebSite> itur = SWBContext.listWebSites();
         ret.append("\n\t\t\t\t<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"webSite\" id=\"webSite\" >");
@@ -206,13 +206,13 @@ public class SWBAIPFilter extends GenericResource
             ret.append("\n\t\t\t\t\t<option value=\"" + ur.getId() + "\"" +selected + ">" + ur.getDisplayTitle(paramRequest.getUser().getLanguage()) + "</option>"); //todo Add Language
         }
         ret.append("\n\t\t\t\t</select>\n\t\t\t</td>\n\t\t</tr>");
-        ret.append("\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>T&iacute;tulo <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
+        ret.append("\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>"+paramRequest.getLocaleString("iptitle")+" <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
         ret.append("<input type=\"text\" name=\"titulo\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" " +
-                "promptMessage=\"Asigna un nombre a este filtro.\" invalidMessage=\"Título del filtro es requerido.\" trim=\"true\" />");
+                "promptMessage=\""+paramRequest.getLocaleString("ipMsgtit")+"\" invalidMessage=\""+paramRequest.getLocaleString("ipErrtit")+"\" trim=\"true\" />");
         ret.append("\n\t\t\t</td>\n\t\t</tr>");
         ret.append("\n\t<tr>\n\t\t<td align=\"center\" colspan=\"2\">");
-        ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>\n");
-        ret.append("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>\n");
+        ret.append("<button dojoType='dijit.form.Button' type=\"submit\">"+paramRequest.getLocaleString("SveBtn")+"</button>\n");
+        ret.append("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">"+paramRequest.getLocaleString("CnlBtn")+"</button>\n");
         ret.append("\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t</fieldset>\n</form>");
                  response.getWriter().write(ret.toString());
     }
@@ -222,7 +222,7 @@ public class SWBAIPFilter extends GenericResource
     {
         StringBuffer ret = new StringBuffer();
         
-        ret.append("<script type=\"text/javascript\">\n\ndojo.require(\"dojo.parser\");\ndijit.byId('swbDialog').hide();\nshowStatus('Filtro creado');\n");
+        ret.append("<script type=\"text/javascript\">\n\ndojo.require(\"dojo.parser\");\ndijit.byId('swbDialog').hide();\nshowStatus('"+paramRequest.getLocaleString("ipMsgadd")+"');\n");
         ret.append("addNewTab('"+request.getParameter("suri")+"','/"+SWBPlatform.getContextPath()+"swbadmin/jsp/objectTab.jsp','"+request.getParameter("label")+"');\n");
         ret.append("</script>");
         response.getWriter().write(ret.toString());
