@@ -44,7 +44,7 @@ public class Template extends TemplateBase
                             //"    @import \""+ctx+"/swbadmin/css/swb_portal.css\";\n" +
                             //"</style>\n" +
                             "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n" +
-                            //"<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb_.js\"></script>\n" +
+                            "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb_.js\"></script>\n" +
                             "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb.js\"></script>\n" +
                             "<!--\n" +
                             "***************************************************************************\n" +
