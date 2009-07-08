@@ -64,26 +64,32 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest)
-            throws SWBResourceException, IOException {
-        
-        Resource resource = paramRequest.getResourceBase();
+            throws SWBResourceException, IOException
+    {
+//        System.out.println("HTMLContent:doView");
+        Resource resource = getResourceBase();
         VersionInfo vi = getActualVersion();
-        int versionNumber = vi.getVersionNumber();
-        if (request.getParameter("numversion") != null &&
-                !"".equals(request.getParameter("numversion"))) {
-            versionNumber = Integer.parseInt(request.getParameter("numversion"));
-            vi = findVersion(versionNumber);
+        String numversion=request.getParameter("numversion");
+//        System.out.println("numversion:"+numversion);
+        if (numversion != null && numversion.length()>0)
+        {
+            vi = findVersion(Integer.parseInt(numversion));
         }
-
+        int versionNumber = vi.getVersionNumber();
         String fileName = vi.getVersionFile();
+
         String resourceWorkPath = SWBPlatform.getWorkPath()
                 + resource.getWorkPath() + "/" + versionNumber + "/" + fileName;
+
+//        System.out.println("resourceWorkPath:"+resourceWorkPath);
+//        System.out.println("versionNumber:"+versionNumber);
+//        System.out.println("fileName:"+fileName);
+
         String fileContent = SWBUtils.IO.getFileFromPath(resourceWorkPath);
-        response.getWriter().println(SWBUtils.TEXT.replaceAll(fileContent,
-                                     "<workpath/>",
-                                     SWBPlatform.getWebWorkPath()
-                                     + resource.getWorkPath() + "/"
-                                     + versionNumber + "/"));
+        fileContent=SWBUtils.TEXT.replaceAll(fileContent,"<workpath/>"
+            ,SWBPlatform.getWebWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/");
+        response.getWriter().println(fileContent);
+//        System.out.println("fileContent:"+fileContent);
     }
 
     /**
