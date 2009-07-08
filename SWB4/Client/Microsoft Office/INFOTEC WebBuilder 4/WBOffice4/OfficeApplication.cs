@@ -244,6 +244,14 @@ namespace WBOffice4
                     {
                         MenuListener.LogOn();
                     }
+                    URIConfigurationList uRIConfigurationList = new URIConfigurationList();
+                    String uri=OfficeApplicationProxy.WebAddress.ToString();
+                    if (uri.EndsWith("gtw"))
+                    {
+                        uri = uri.Substring(0, uri.Length - 3);
+                    }
+                    uRIConfigurationList.Add(OfficeApplicationProxy.Credentials.UserName, new Uri(uri));
+                    
                     //RtlAwareMessageBox.Show("Su sesión ha sido iniciada", "Iniciar sessión", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (HttpException e)
