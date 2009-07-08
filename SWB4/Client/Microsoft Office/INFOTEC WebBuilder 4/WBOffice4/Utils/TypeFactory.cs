@@ -109,7 +109,14 @@ namespace WBOffice4.Utils
                 System.Reflection.PropertyInfo info=type.GetProperty(name);
                 object[] index={};
                 Object value=info.GetValue(obj, index);
-                getValues[i] = value.ToString();
+                if (value != null)
+                {
+                    getValues[i] = value.ToString();
+                }
+                else
+                {
+                    getValues[i] = "";
+                }
                 i++;
             }
             return getValues;
