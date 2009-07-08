@@ -64,7 +64,7 @@ public class SelectTree {
             html.append("<ul class=\"treeres\">");
             html.append("<li>");
             html.append("<img src=\""+pathImages+"/icon_sitea.gif\" />");
-            html.append(tmit.getId());
+            html.append("<span style=\"padding-left:5px\">"+tmit.getDisplayTitle(lang)+"</span>");
             html.append("<ul class=\"treeres\">");
             html.append("<li>");
             
@@ -92,7 +92,7 @@ public class SelectTree {
             
             html.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','tree_'+'"+site+"')\" "+style+">");
             html.append("<img src=\""+pathImages+"/icon_homea.gif\" />");
-            html.append("<span>"+tmhome.getDisplayName()+"</span>");
+            html.append("<span style=\"padding-left:5px\">"+tmhome.getDisplayTitle(lang)+"</span>");
             html.append("</a>");
             
             if(tpsite!=null && toggleopen) {                
@@ -148,7 +148,7 @@ public class SelectTree {
 
                     html.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" "+style+">");
                     html.append("<img src=\""+pathImages+"/icon-section.gif\" />");
-                    html.append("<span>"+webpage.getDisplayName()+"</span>");
+                    html.append("<span style=\"padding-left:5px\">"+webpage.getDisplayTitle(lang)+"</span>");
                     html.append("</a>");
 
                     if(toggleopen) {
@@ -167,7 +167,7 @@ public class SelectTree {
                     html.append("<img src=\""+pathImages+"/trans.gif\" />");
                     html.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" "+style+">");
                     html.append("<img src=\""+pathImages+"/icon-section.gif\" />");
-                    html.append("<span>"+webpage.getDisplayName()+"</span>");
+                    html.append("<span style=\"padding-left:5px\">"+webpage.getDisplayTitle(lang)+"</span>");
                     html.append("</a>");
                     html.append("</li>");
                 }
