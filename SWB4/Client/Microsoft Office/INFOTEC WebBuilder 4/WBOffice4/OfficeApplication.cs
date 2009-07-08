@@ -287,7 +287,7 @@ namespace WBOffice4
                         RtlAwareMessageBox.Show(null, e.Message, "Iniciar sessión", MessageBoxButtons.OK, MessageBoxIcon.Error);                        
                     }
                     OfficeApplication.LogOff();
-                }
+                }               
                 catch (Exception e)
                 {
                     MenuListener.LogOff();
