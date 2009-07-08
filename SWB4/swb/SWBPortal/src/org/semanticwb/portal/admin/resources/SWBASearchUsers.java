@@ -53,7 +53,7 @@ public class SWBASearchUsers extends GenericResource
         ret.append("<table>\n");
         url.setMode("roles");
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
-        ret.append("    <tr><td width=\"200px\">Repositorio de usuarios</td>\n");
+        ret.append("    <tr><td width=\"200px\">"+paramRequest.getLocaleString("UsrRep")+"</td>\n");
         ret.append("    <td><select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"userRepository\" id=\"userRepository\" >\n");
         while (itur.hasNext())
         {
@@ -72,28 +72,28 @@ public class SWBASearchUsers extends GenericResource
 
         ret.append("    </select>\n");
         ret.append("    </td></tr>\n");
-        ret.append("    <tr><td>Correo Electr&oacute;nico</td>\n");
+        ret.append("    <tr><td>"+paramRequest.getLocaleString("UsrRepMail")+"</td>\n");
         ret.append("    <td><input type=\"text\" name=\"usrEMail\" id=\"usrEMail\" dojoType=\"dijit.form.TextBox\" />\n");
         ret.append("    </td></tr>\n");
-        ret.append("    <tr><td>Nombre(s)</td>\n");
+        ret.append("    <tr><td>"+paramRequest.getLocaleString("UsrRepName")+"</td>\n");
         ret.append("    <td><input type=\"text\" name=\"usrFirstName\" id=\"usrFirstName\" dojoType=\"dijit.form.TextBox\" />\n");
         ret.append("    </td></tr>\n");
-        ret.append("    <tr><td>Primer Apellido</td>\n");
+        ret.append("    <tr><td>"+paramRequest.getLocaleString("UsrRepFApp")+"</td>\n");
         ret.append("    <td><input type=\"text\" name=\"usrLastName\" id=\"usrLastName\" dojoType=\"dijit.form.TextBox\" />\n");
         ret.append("    </td></tr>\n");
-        ret.append("    <tr><td>Segundo Apellido</td>\n");
+        ret.append("    <tr><td>"+paramRequest.getLocaleString("UsrRepSApp")+"</td>\n");
         ret.append("    <td><input type=\"text\" name=\"usrSecondLastName\" id=\"usrSecondLastName\" dojoType=\"dijit.form.TextBox\" />\n");
         ret.append("    </td></tr>\n");
-        ret.append("    <tr><td>Activo</td>\n");
+        ret.append("    <tr><td>"+paramRequest.getLocaleString("UsrRepAct")+"</td>\n");
         ret.append("    <td><span><label for=\"activetrue\">" +
-                "<input dojoType=\"dijit.form.RadioButton\" id=\"activetrue\" name=\"active\" value=\"true\" type=\"radio\" />Activo</label></span>" +
+                "<input dojoType=\"dijit.form.RadioButton\" id=\"activetrue\" name=\"active\" value=\"true\" type=\"radio\" />"+paramRequest.getLocaleString("UsrRepAct")+"</label></span>" +
                 "<span><label for=\"activefalse\">" +
-                "<input dojoType=\"dijit.form.RadioButton\" id=\"activefalse\" name=\"active\" value=\"false\" type=\"radio\" />Inactivo</label>" +
+                "<input dojoType=\"dijit.form.RadioButton\" id=\"activefalse\" name=\"active\" value=\"false\" type=\"radio\" />"+paramRequest.getLocaleString("UsrRepInA")+"</label>" +
                 "</span>\n");
         ret.append("    </td></tr>\n");
         ret.append("<div id=\"SWBASearchUsers_GR\" name=\"SWBASearchUsers_GR\" dojoType=\"dijit.layout.ContentPane\">\n");
         Iterator<Role> itroles = SWBContext.getDefaultRepository().listRoles();
-        ret.append("    <tr><td>Roles</td>\n");
+        ret.append("    <tr><td>"+paramRequest.getLocaleString("UsrRepRol")+"</td>\n");
         ret.append("    <td><div id=\"SWBASearchUsers_R\" name=\"SWBASearchUsers_GR\" dojoType=\"dijit.layout.ContentPane\">\n<select name=\"userRoles\" id=\"userRolesdef\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" >\n");
         ret.append("        <option value=\"\"></option>\n");
         while (itroles.hasNext())
@@ -104,7 +104,7 @@ public class SWBASearchUsers extends GenericResource
         ret.append("    </select><div>\n");
         ret.append("    </td></tr>\n");
         Iterator<UserGroup> itgroup = SWBContext.getDefaultRepository().listUserGroups();
-        ret.append("    <tr><td>Grupos de usuarios</td>\n");
+        ret.append("    <tr><td>"+paramRequest.getLocaleString("UsrRepGrp")+"</td>\n");
         ret.append("    <td><div id=\"SWBASearchUsers_G\" name=\"SWBASearchUsers_GR\" dojoType=\"dijit.layout.ContentPane\">\n<select name=\"userGroups\" id=\"userGroupsdef\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" >\n");
         ret.append("        <option value=\"\"></option>\n");
         while (itgroup.hasNext())
@@ -118,7 +118,7 @@ public class SWBASearchUsers extends GenericResource
         ret.append("</div>\n");
         ret.append("</fieldset>\n");
         ret.append("<fieldset>\n");
-        ret.append("    <button  dojoType=\"dijit.form.Button\" type=\"submit\" >Buscar</button>\n");
+        ret.append("    <button  dojoType=\"dijit.form.Button\" type=\"submit\" >"+paramRequest.getLocaleString("BtnSrch")+"</button>\n");
         ret.append("</fieldset>\n");
         ret.append("  </form>\n");
         response.getWriter().write(ret.toString());
@@ -159,11 +159,11 @@ public class SWBASearchUsers extends GenericResource
                 "               // Data Grid layout\n" +
                 "               // A grid view is a group of columns\n" +
                 "       var view1 = [\n" +
-                "                    {name: 'Login',width:'20%', field: \"login\"},\n" +
-                "                    {name: 'Nombre(s)',width:'20%', field: \"name\"},\n" +
-                "                    {name: 'Primer Apellido',width:'20%',field: \"papellid\"},\n " +
-                "                    {name: 'Segundo Apellido',width:'20%',field: \"sapellid\"},\n " +
-                "                    {name: 'Correo electr&oacute;nico',width:'20%',field: \"email\"}\n                " +
+                "                    {name: '"+paramRequest.getLocaleString("UsrRepUID")+"',width:'20%', field: \"login\"},\n" +
+                "                    {name: '"+paramRequest.getLocaleString("UsrRepName")+"',width:'20%', field: \"name\"},\n" +
+                "                    {name: '"+paramRequest.getLocaleString("UsrRepFApp")+"',width:'20%',field: \"papellid\"},\n " +
+                "                    {name: '"+paramRequest.getLocaleString("UsrRepSApp")+"',width:'20%',field: \"sapellid\"},\n " +
+                "                    {name: '"+paramRequest.getLocaleString("UsrRepMail")+"',width:'20%',field: \"email\"}\n                " +
                 "            ]\n ;" +
                 "       var layout = [ view1 ];\n" +
                 //  "       model = new dojox.grid.data.Objects([{key: \"login\"}, {key: \"name\"},{key: \"papellid\"},{key: \"sapellid\"},{key: \"email\"}], null);\n" +
@@ -190,7 +190,7 @@ public class SWBASearchUsers extends GenericResource
         ret.append("<div id=\"grid1\" jsid=\"grid1\" dojoType=\"dojox.grid.DataGrid\" model=\"model\" structure=\"layout\" onRowDblClick=\"openOther\" autoWidth_=\"true\" rowsPerPage=\"10\" >\n</div>");
 
         url = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
-        ret.append("<fieldset><button dojoType=\"dijit.form.Button\" onClick=location='" + url + "'>Otra B&uacute;squeda</button></fieldset></div>");
+        ret.append("<fieldset><button dojoType=\"dijit.form.Button\" onClick=location='" + url + "'>"+paramRequest.getLocaleString("BtnOSrch")+"</button></fieldset></div>");
         response.getWriter().write(ret.toString());
     }
 

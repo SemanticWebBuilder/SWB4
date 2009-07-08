@@ -39,7 +39,8 @@ public class SWBACreateUser extends GenericResource {
         ret.append("<form id=\""+User.swb_User.getClassName()+"/create\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         ret.append("action=\""+url+"\" ");
         ret.append("onSubmit=\"submitForm('"+User.swb_User.getClassName()+"/create');return false;\" method=\"POST\">");
-        ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>Repositorio de Usuarios</label>");
+        ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>").
+                append(paramRequest.getLocaleString("userRep")).append("</label>");
         ret.append("\n\t\t\t</td>\n\t\t\t<td>");
         Iterator<UserRepository> itur = SWBContext.listUserRepositorys();
         ret.append("\n\t\t\t\t<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"userRepository\" id=\"userRepository\" >");
@@ -49,16 +50,21 @@ public class SWBACreateUser extends GenericResource {
             ret.append("\n\t\t\t\t\t<option value=\"" + ur.getId() + "\">" + ur.getDisplayTitle(paramRequest.getUser().getLanguage()) + "</option>"); //todo Add Language
         }
         ret.append("\n\t\t\t\t</select>\n\t\t\t</td>\n\t\t</tr>");
-        ret.append("\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>Usuario <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
+        ret.append("\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>"+paramRequest.getLocaleString("userID")
+                +" <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
         ret.append("<input type=\"text\" name=\"login\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" " +
-                "promptMessage=\"Captura identificador de usuario.\" invalidMessage=\"El identificador de usuario es requerido.\" isValid=\"return canAddLogin(dijit.byId('userRepository').value,this.textbox.value);\" trim=\"true\" />");
+                "promptMessage=\""+paramRequest.getLocaleString("userMsgID")
+                +"\" invalidMessage=\""+paramRequest.getLocaleString("userErrID")
+                +"\" isValid=\"return canAddLogin(dijit.byId('userRepository').value,this.textbox.value);\" trim=\"true\" />");
         ret.append("\n\t\t\t</td>\n\t\t</tr>");
-        ret.append("\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>Contrase&ntilde;a <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
+        ret.append("\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>"+paramRequest.getLocaleString("userPWD")
+                +" <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
         ret.append("<input type=\"password\" name=\"passwd\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" ");
-        ret.append("promptMessage=\"Captura contrase&ntilde;a de usuario.\" invalidMessage=\"La contrase&ntilde;a de usuario es requerido.\" trim=\"true\" />");
+        ret.append("promptMessage=\""+paramRequest.getLocaleString("userMsgPWD")
+                +"\" invalidMessage=\""+paramRequest.getLocaleString("userErrPWD")+"\" trim=\"true\" />");
         ret.append("\n\t\t\t</td>\n\t\t</tr>\n\t<tr>\n\t\t<td align=\"center\" colspan=\"2\">");
-        ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>\n");
-        ret.append("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>\n");
+        ret.append("<button dojoType='dijit.form.Button' type=\"submit\">"+paramRequest.getLocaleString("SveBtn")+"</button>\n");
+        ret.append("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">"+paramRequest.getLocaleString("CnlBtn")+"</button>\n");
         ret.append("\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t</fieldset>\n</form>");
         response.getWriter().write(ret.toString());
     }
@@ -95,7 +101,7 @@ public class SWBACreateUser extends GenericResource {
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer();
-        ret.append("<script type=\"text/javascript\">\ndijit.byId('swbDialog').hide();\nshowStatus('Usuario creado');\n");
+        ret.append("<script type=\"text/javascript\">\ndijit.byId('swbDialog').hide();\nshowStatus('"+paramRequest.getLocaleString("userOkMsg")+"');\n");
         ret.append("addNewTab('"+request.getParameter("suri")+"','/"+SWBPlatform.getContextPath()+"swbadmin/jsp/objectTab.jsp','"+request.getParameter("login")+"');\n");
         ret.append("</script>");
         response.getWriter().write(ret.toString());
