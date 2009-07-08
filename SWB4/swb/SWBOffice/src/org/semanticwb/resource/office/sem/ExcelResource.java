@@ -1,7 +1,13 @@
 package org.semanticwb.resource.office.sem;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
@@ -44,6 +50,55 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
             out.write("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">This navigator does not support iframe</iframe>");
         }
     }
+
+
+    @Override
+    public void loadContent(InputStream in)
+    {
+        clean();
+        File zipFile = null;
+        try
+        {
+            if (in != null)
+            {
+                String name = UUID.randomUUID().toString() + ".zip";
+                SWBPlatform.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + name, in, "");
+                zipFile = new File(SWBPlatform.getWorkPath() + getResourceBase().getWorkPath() + "/" + name);
+                ZipFile zip = new ZipFile(zipFile);
+                Enumeration entries = zip.entries();
+                while (entries.hasMoreElements())
+                {
+                    ZipEntry entry = (ZipEntry) entries.nextElement();
+                    if (!entry.isDirectory())
+                    {
+                        InputStream inEntry = zip.getInputStream(entry);
+                        String file=entry.getName();
+                        /*int pos=file.lastIndexOf("/");
+                        if(pos!=-1)
+                        {
+                            file=file.substring(pos+1);
+                        }*/
+                        SWBPlatform.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, inEntry, "");
+                    }
+                }
+                zip.close();
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+        finally
+        {
+            if (zipFile != null && zipFile.exists())
+            {
+                zipFile.delete();
+            }
+        }
+
+    }
+
+
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
