@@ -95,7 +95,7 @@ public class Poll extends GenericResource {
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=utf-8");
+        response.setContentType("text/html; charset=iso-8859-1");
         response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
         response.setHeader("Pragma","no-cache"); //HTTP 1.0
         response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
@@ -360,7 +360,7 @@ public class Poll extends GenericResource {
         }catch(Exception e) { 
             log.error(e); 
         }
-        response.setContentType("text/html; charset=utf-8");
+        response.setContentType("text/html; charset=iso-8859-1");
         response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
         response.setHeader("Pragma","no-cache"); //HTTP 1.0
         response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
