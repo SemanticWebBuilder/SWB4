@@ -75,19 +75,12 @@ public class SWBASOPropRefEditor extends GenericResource {
 
         out.println("<script type=\"text/javascript\">");
         String s_soid = request.getParameter("so");
-        if (s_soid != null && s_soid.trim().length() > 0) {
-            SemanticObject so = ont.getSemanticObject(s_soid);
-            out.println(" reloadTab('" + so.getURI() + "');");
-
-            out.println("updateTreeNodeByURI('" + so.getURI() + "');");
-
-            String icon = SWBContext.UTILS.getIconClass(so);
-            out.println("setTabTitle('" + so.getURI() + "','" + so.getDisplayName(user.getLanguage()) + "','" + icon + "');");
-
-        }
         if (request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
             log.debug("showStatus");
             out.println("   showStatus('" + request.getParameter("statmsg") + "');");
+            out.println("updateTreeNodeByURI('" + obj.getURI() + "');");
+            String icon = SWBContext.UTILS.getIconClass(obj);
+            out.println("setTabTitle('" + obj.getURI() + "','" + obj.getDisplayName(user.getLanguage()) + "','" + icon + "');");
         }
         if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
             log.debug("closeTab..." + request.getParameter("closetab"));
