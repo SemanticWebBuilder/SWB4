@@ -109,7 +109,7 @@ public class WBMenu extends GenericAdmResource
         try
         {   
             boolean onlychilds=new Boolean(paramRequest.getArgument("onlychilds","false")).booleanValue();
-            WebSite tm = paramRequest.getTopic().getWebSite();
+            WebSite tm = paramRequest.getWebPage().getWebSite();
             String lang=paramRequest.getUser().getLanguage();
             WebPage tpid = null;
             if (paramRequest.getArguments().get("topic") != null) 
@@ -120,7 +120,7 @@ public class WBMenu extends GenericAdmResource
                 }
             } 
             else {
-                tpid = paramRequest.getTopic();
+                tpid = paramRequest.getWebPage();
             }
             
             Document  dom = SWBUtils.XML.getNewDocument();

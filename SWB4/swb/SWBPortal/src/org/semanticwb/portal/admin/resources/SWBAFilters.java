@@ -1162,7 +1162,7 @@ public class SWBAFilters extends SWBATree {
         int access = 2; //AdmFilterMgr.getInstance().haveAccess2Server(user);
         hmclass = new HashMap();
         //tree nodes
-        Element root = addNode("node", "server", "Server", res); //Servr por tma.getTopic("WBAd_sys_Server").getDisplayName(user.getLanguage())
+        Element root = addNode("node", "server", "Server", res); //Servr por tma.getWebPage("WBAd_sys_Server").getDisplayName(user.getLanguage())
         root.setAttribute("reload", "getServer");
         root.setAttribute("icon", "global");
         root.setAttribute("access", "" + access);

@@ -122,7 +122,7 @@ public class SWBParamRequestImp implements SWBParamRequest
         this.mode=mode;
     }
     
-    public WebPage getTopic()
+    public WebPage getWebPage()
     {
         return topic;
     }
@@ -279,7 +279,7 @@ public class SWBParamRequestImp implements SWBParamRequest
         haveVirtTP=true;
     }
     
-    public boolean haveVirtualTopic()
+    public boolean haveVirtualWebPage()
     {
         return haveVirtTP;
     }

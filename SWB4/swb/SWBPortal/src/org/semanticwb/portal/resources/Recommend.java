@@ -140,12 +140,12 @@ public class Recommend extends GenericAdmResource {
             } else { // Nueva ventana con formulario
                 User user = paramRequest.getUser();
                 SWBResourceURLImp url = new SWBResourceURLImp(request, base,
-                        paramRequest.getTopic(), SWBResourceURL.UrlType_RENDER);
+                        paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
                 url.setMode(SWBResourceURLImp.Mode_VIEW);
                 url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
                 url.setParameter("rec_act", "rec_step3");
-                url.setTopic(paramRequest.getTopic());
+                url.setTopic(paramRequest.getWebPage());
                 url.setCallMethod(paramRequest.Call_DIRECT);
 
                 Element el = dom.createElement("form");
@@ -289,12 +289,12 @@ public class Recommend extends GenericAdmResource {
             else
             { // Nueva ventana con formulario
                 User user=paramRequest.getUser();
-                SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
+                SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getWebPage(),SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
                 url.setMode(url.Mode_VIEW);
                 url.setWindowState(url.WinState_MAXIMIZED);
                 url.setParameter("rec_act","rec_step3");
-                url.setTopic(paramRequest.getTopic());
+                url.setTopic(paramRequest.getWebPage());
                 url.setCallMethod(paramRequest.Call_DIRECT);
 
                 Element el = dom.createElement("form");
@@ -422,7 +422,7 @@ public class Recommend extends GenericAdmResource {
                         + (request.getServerPort() != 80 
                            ? ":" + request.getServerPort()
                            : "");
-                WebPage topic = paramRequest.getTopic();
+                WebPage topic = paramRequest.getWebPage();
                 String lang = paramRequest.getUser().getLanguage();
 
                 Element emn = dom.createElement("form");
@@ -576,12 +576,12 @@ public class Recommend extends GenericAdmResource {
             onclick += ",left=" + base.getAttribute("left", "10").trim();
 
             SWBResourceURLImp url = new SWBResourceURLImp(request, base,
-                    paramRequest.getTopic(), SWBResourceURLImp.UrlType_RENDER);
+                    paramRequest.getWebPage(), SWBResourceURLImp.UrlType_RENDER);
             url.setResourceBase(base);
             url.setMode(SWBResourceURLImp.Mode_VIEW);
             url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
             url.setParameter("rec_act", "rec_step2");
-            url.setTopic(paramRequest.getTopic());
+            url.setTopic(paramRequest.getWebPage());
             url.setCallMethod(paramRequest.Call_DIRECT);
             onclick = "javascript:window.open('" + url.toString()
                     + "','_newrec','" + onclick + "'); return false;";

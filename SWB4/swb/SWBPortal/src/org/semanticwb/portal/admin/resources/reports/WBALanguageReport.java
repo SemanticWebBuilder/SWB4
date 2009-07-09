@@ -179,7 +179,7 @@ public class WBALanguageReport extends GenericResource {
 
             // If there are sites continue
             if(hm_sites.size() > I_ACCESS) {
-                String address = paramsRequest.getTopic().getUrl();
+                String address = paramsRequest.getWebPage().getUrl();
                 String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
                 String langId = request.getParameter("wb_lang")==null? "0":request.getParameter("wb_lang");
                 
@@ -211,7 +211,7 @@ public class WBALanguageReport extends GenericResource {
                     fecha12 = sdf.format(cal.getTime());
                 }
                 
-                String topicId = paramsRequest.getTopic().getId();
+                String topicId = paramsRequest.getWebPage().getId();
                 if(topicId.lastIndexOf("Daily") != -1) {
                     rtype = "0";
                 }else if(topicId.lastIndexOf("Monthly") != -1) {
@@ -509,7 +509,7 @@ public class WBALanguageReport extends GenericResource {
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>" + paramsRequest.getLocaleString("language_report") + "</legend>");
-                out.println("<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                out.println("<form method=\"Post\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -869,7 +869,7 @@ public class WBALanguageReport extends GenericResource {
                     filterReportBean.setDayF(Integer.parseInt(numFecha[2]));
                 }
             }else {
-                /*Iterator<Language> itLanguages = paramsRequest.getTopic().getWebSite().listLanguages();*/
+                /*Iterator<Language> itLanguages = paramsRequest.getWebPage().getWebSite().listLanguages();*/
                 if(groupDates==0) { // radio button was 0. Select only one date
                     String[] numFecha = fecha1.split("-");
                     filterReportBean = new WBAFilterReportBean();

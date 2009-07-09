@@ -395,10 +395,10 @@ public class SWBAEditor extends GenericResource
         //System.out.println("path:"+path);
         Element ele=addNode("node",id,file.getName(),root);
         ele.setAttribute("path",path);
-        //ele.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_RolesInfo").getUrl()+"?id="+role.getId());
+        //ele.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_RolesInfo").getUrl()+"?id="+role.getId());
         //ele.setAttribute("target","work");
         ele.setAttribute("reload","getFile."+id);
-        //ele.setAttribute("view","showurl="+tma.getTopic("WBAd_infoi_RolesInfo").getUrl()+"?id="+role.getId());
+        //ele.setAttribute("view","showurl="+tma.getWebPage("WBAd_infoi_RolesInfo").getUrl()+"?id="+role.getId());
         //ele.setAttribute("vtarget","info");
         ele.setAttribute("type", "FILE");
         ele.setAttribute("size", ""+file.length());
@@ -449,10 +449,10 @@ public class SWBAEditor extends GenericResource
         
         //System.out.println("id:"+id);
         Element ele=addNode("node",id,dir.getName(),root);
-        //ele.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_RolesInfo").getUrl()+"?id="+role.getId());
+        //ele.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_RolesInfo").getUrl()+"?id="+role.getId());
         //ele.setAttribute("target","work");
         ele.setAttribute("reload","getDir."+id);
-        //ele.setAttribute("view","showurl="+tma.getTopic("WBAd_infoi_RolesInfo").getUrl()+"?id="+role.getId());
+        //ele.setAttribute("view","showurl="+tma.getWebPage("WBAd_infoi_RolesInfo").getUrl()+"?id="+role.getId());
         //ele.setAttribute("vtarget","info");
         ele.setAttribute("type", "DIR");
         //root.setAttribute("icon_open","folderO");
@@ -869,7 +869,7 @@ public class SWBAEditor extends GenericResource
         if(tm!=null)
         {
             
-            //WebPage tp=tm.getTopic(request.getHeader("TP"));
+            //WebPage tp=tm.getWebPage(request.getHeader("TP"));
             Document res = getService(paramsRequest, cmd, dom, paramsRequest.getUser(), request, response);
             if (res == null)
             {

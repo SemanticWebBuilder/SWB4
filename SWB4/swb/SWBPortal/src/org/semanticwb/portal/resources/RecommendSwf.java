@@ -99,12 +99,12 @@ public class RecommendSwf extends Recommend {
             } else { // Nueva ventana con formulario               
                 User user = paramRequest.getUser();
                 SWBResourceURLImp url = new SWBResourceURLImp(request, base,
-                        paramRequest.getTopic(), SWBResourceURL.UrlType_RENDER);
+                        paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
                 url.setMode(SWBResourceURL.Mode_VIEW);
                 url.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
                 url.setParameter("rec_act", "rec_step3");
-                url.setTopic(paramRequest.getTopic());
+                url.setTopic(paramRequest.getWebPage());
                 url.setCallMethod(paramRequest.Call_DIRECT);            
 
                 Element el = dom.createElement("form");
@@ -140,9 +140,9 @@ public class RecommendSwf extends Recommend {
                                 ? " " + user.getEmail().trim()
                                 : "";
                     }
-                    strSwfvar += "&txtTopic=" + paramRequest.getTopic().getTitle();
+                    strSwfvar += "&txtTopic=" + paramRequest.getWebPage().getTitle();
                     strSwfvar += "&txtTopicDesc="
-                            + paramRequest.getTopic().getDescription(lang);
+                            + paramRequest.getWebPage().getDescription(lang);
                     el.setAttribute("swfvars", strSwfvar);
                 }
                 dom.appendChild(el);

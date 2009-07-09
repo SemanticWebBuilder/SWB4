@@ -163,7 +163,7 @@ public class WBAAccessSessionReport extends GenericResource {
             }
             // If there are repositories it continues
             if (hm_repository.size() > I_ACCESS) {
-                String address = paramsRequest.getTopic().getUrl();
+                String address = paramsRequest.getWebPage().getUrl();
 
                 GregorianCalendar now = new GregorianCalendar();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -391,7 +391,7 @@ public class WBAAccessSessionReport extends GenericResource {
 
                 ret.append("</div>\n");
             } else { // There are not sites and displays a message
-                ret.append("\n<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                ret.append("\n<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 ret.append("\n<table border=0 width=\"100%\">");
                 ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");

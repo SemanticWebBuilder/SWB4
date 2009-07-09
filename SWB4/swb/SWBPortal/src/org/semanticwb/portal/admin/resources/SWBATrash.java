@@ -85,7 +85,7 @@ public class SWBATrash extends GenericResource {
         
         Resource base=getResourceBase();
         StringBuffer ret = new StringBuffer("");
-        WebPage topic = paramRequest.getTopic();
+        WebPage topic = paramRequest.getWebPage();
         int num =0;
         if(request.getParameter("ax")==null){
             
@@ -302,7 +302,7 @@ public class SWBATrash extends GenericResource {
                             while(itOcc.hasNext()){
 
                                 Resource rOcc =  itOcc.next();
-                                String strTopicAsoc=Tp.getTitle(); //TopicMgr.getInstance().getTopicMap(rOcc.getIdtm()).getTopic(rOcc.getIdtp()).getDisplayName();
+                                String strTopicAsoc=Tp.getTitle(); //TopicMgr.getInstance().getTopicMap(rOcc.getIdtm()).getWebPage(rOcc.getIdtp()).getDisplayName();
                                 String strTopicAsocID=Tp.getId(); //rOcc.getIdtp();
                                 if(rOcc.isDeleted()){
                                     num++;
@@ -582,8 +582,8 @@ public class SWBATrash extends GenericResource {
         String[] strSections=null;
         String thisToken = null;
         User user = response.getUser();
-//        if(user==null) user = new User(response.getTopic().getWebSite().getUserRepository());
-        WebPage topic = response.getTopic();
+//        if(user==null) user = new User(response.getWebPage().getWebSite().getUserRepository());
+        WebPage topic = response.getWebPage();
         String accion = response.getAction();
         if(viewSite!=null) response.setRenderParameter("tm",viewSite);
         if(accion!=null && accion.equals("update")){
@@ -629,7 +629,7 @@ public class SWBATrash extends GenericResource {
                                 for(int i=0; i<strSections.length;i++){
                                     thisToken = strSections[i];
                                     tm.removeWebPage(thisToken);
-                                    //WebPage tp = tm.getWebPage(thisToken); //tm.getTopic(thisToken,true);
+                                    //WebPage tp = tm.getWebPage(thisToken); //tm.getWebPage(thisToken,true);
                                     //WebPageSrv tpRem = new WebPageSrv();
                                     //tpRem.removeWebPageFromWastebasket(tp,user);
                                     //tpRem=null;

@@ -331,7 +331,7 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("<tr>\n");
                     sb_ret.append("<td colspan=\"4\">\n");
                     sb_ret.append("<table border=\"0\" cellpadding=\"5\" cellspacing=\"0\" width=\"100%\">\n");
-                    HashMap hm = getFileList(paramsRequest.getTopic());
+                    HashMap hm = getFileList(paramsRequest.getWebPage());
                     if (hm.size() == 0) {
                         sb_ret.append("<caption align=\"top\">" + paramsRequest.getLocaleString("noGeneratedReports") + "</caption>\n");
                     } else {
@@ -372,7 +372,7 @@ public class WBAChannelReport extends GenericResource {
                     sb_ret.append("<div class=\"swbform\">");
                     sb_ret.append("<fieldset>");
                     sb_ret.append("<legend>" + paramsRequest.getLocaleString("channel_report") + "</legend>");
-                    sb_ret.append("<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">\n");
+                    sb_ret.append("<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">\n");
                     sb_ret.append("<table border=0 width=\"100%\">\n");
                     sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
                     sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>\n");
@@ -648,7 +648,7 @@ public class WBAChannelReport extends GenericResource {
         String filename = request.getParameter("filename");
         String key = request.getParameter("key");
         String act = response.getAction();
-        WebPage topic = response.getTopic();
+        WebPage topic = response.getWebPage();
         Resource base = getResourceBase();
         if(null == act) {
             act = "";

@@ -445,15 +445,15 @@ public class SWBATree extends GenericResource
         Element event=null;
 
         //tree nodes
-        Element root=addNode("node","server","Server",res); //Servr por tma.getTopic("WBAd_sys_Server").getDisplayName(user.getLanguage())
+        Element root=addNode("node","server","Server",res); //Servr por tma.getWebPage("WBAd_sys_Server").getDisplayName(user.getLanguage())
         root.setAttribute("reload","getServer");
         root.setAttribute("icon","root");
         root.setAttribute("access",""+access);
         menu=addNode("menu","menu","Menu",root);
 
         //option=MenuElement.add(menu,"WBAd_mnui_TopicMapCreate","WBAd_sysi_TopicMapsInfo",null,user,null,null);
-        //option=addNode("option","create_site",tma.getTopic("WBAd_mnui_TopicMapCreate").getDisplayName(user.getLanguage()),menu);
-        //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicMapsInfo").getUrl()+"?title="+URLEncoder.encode(option.getAttribute("name"))+"&act=add");
+        //option=addNode("option","create_site",tma.getWebPage("WBAd_mnui_TopicMapCreate").getDisplayName(user.getLanguage()),menu);
+        //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicMapsInfo").getUrl()+"?title="+URLEncoder.encode(option.getAttribute("name"))+"&act=add");
         //option.setAttribute("target","work");
         //addSeparator(menu);
 
@@ -515,10 +515,10 @@ public class SWBATree extends GenericResource
         WebSite tm=SWBContext.getGlobalWebSite();
 
         Element ele=addNode("node",tm.getId(),tm.getTitle(),root);
-        //ele.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_ResourcesInfo").getUrl()+"?id="+rec.getId()+"&stype="+rec.getIdSubType());
+        //ele.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_ResourcesInfo").getUrl()+"?id="+rec.getId()+"&stype="+rec.getIdSubType());
         //ele.setAttribute("target","work");
         ele.setAttribute("reload","getGlobal");
-        //ele.setAttribute("view","showurl="+tma.getTopic("WBAd_infoi_ResourceInfo").getUrl()+"?id="+rec.getId());
+        //ele.setAttribute("view","showurl="+tma.getWebPage("WBAd_infoi_ResourceInfo").getUrl()+"?id="+rec.getId());
         //ele.setAttribute("vtarget","info");
         ele.setAttribute("icon","global");
         ele.setAttribute("access",""+access);
@@ -527,13 +527,13 @@ public class SWBATree extends GenericResource
         menu=addNode("menu","menu","Menu",ele);
         //option=MenuElement.addOption(menu,"WBAd_mnui_Trash","WBAd_sysi_TrashTopics",null,user, null, tm.getId(),null);
         //if(option!=null)option.setAttribute("icon","trash");
-        //option=addNode("option","trash",tma.getTopic("WBAd_sys_Trash").getDisplayName(user.getLanguage()),menu);
-        //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TrashTopics").getUrl()+"?tm="+tm.getId());
+        //option=addNode("option","trash",tma.getWebPage("WBAd_sys_Trash").getDisplayName(user.getLanguage()),menu);
+        //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TrashTopics").getUrl()+"?tm="+tm.getId());
         //option.setAttribute("target","work");
         //option=MenuElement.addOption(menu,"WBAd_mnui_ResourceTypes","WBAd_sys_ResourceCatalogInfo",null,user, null, tm.getId(), null);
         //if(option!=null)option.setAttribute("icon","catalog");
-        //option=addNode("option","resourceTypes",tma.getTopic("WBAd_sys_ResourceCatalog").getDisplayName(user.getLanguage()),menu);
-        //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sys_ResourceCatalog").getUrl()+"?tm="+tm.getId());
+        //option=addNode("option","resourceTypes",tma.getWebPage("WBAd_sys_ResourceCatalog").getDisplayName(user.getLanguage()),menu);
+        //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sys_ResourceCatalog").getUrl()+"?tm="+tm.getId());
         //option.setAttribute("target","work");
         //addSeparator(menu);
         //addOptRefresh(menu,user);
@@ -593,23 +593,23 @@ public class SWBATree extends GenericResource
 
         menu=addNode("menu","menu","Menu",topicmap);
         //option=MenuElement.edit(menu,"WBAd_mnui_TopicMapEdit","WBAd_sysi_TopicMapsInfo",null,user,tm.getId(),null);
-        //option=addNode("option","edit_site",tma.getTopic("WBAd_mnui_TopicMapEdit").getDisplayName(user.getLanguage()),menu);
-        //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicMapsInfo").getUrl()+"?tm="+tm.getId()+"&act=edit");
+        //option=addNode("option","edit_site",tma.getWebPage("WBAd_mnui_TopicMapEdit").getDisplayName(user.getLanguage()),menu);
+        //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicMapsInfo").getUrl()+"?tm="+tm.getId()+"&act=edit");
         //option.setAttribute("target","work");
         if(tm.isActive())
         {
             topicmap.setAttribute("icon","sitev");
             //option=MenuElement.unactive(menu,"WBAd_mnui_TopicMapActive","WBAd_inti_StatusTopicMap",null,user,tm.getId(),null);
             //option=addNode("option","deactivate_site",getVariantName("WBAd_mnui_TopicMapActive",user),menu);
-            //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicMapsInfo").getUrl()+"?tm="+tm.getId()+"&act=unactive&status=true");
+            //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicMapsInfo").getUrl()+"?tm="+tm.getId()+"&act=unactive&status=true");
             //option.setAttribute("target","status");
         }
         else
         {
             topicmap.setAttribute("icon","siter");
             //option=MenuElement.active(menu,"WBAd_mnui_TopicMapActive","WBAd_inti_StatusTopicMap",null,user,tm.getId(),null);
-            //option=addNode("option","activate_site",tma.getTopic("WBAd_mnui_TopicMapActive").getDisplayName(user.getLanguage()),menu);
-            //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicMapsInfo").getUrl()+"?tm="+tm.getId()+"&act=active&status=true");
+            //option=addNode("option","activate_site",tma.getWebPage("WBAd_mnui_TopicMapActive").getDisplayName(user.getLanguage()),menu);
+            //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicMapsInfo").getUrl()+"?tm="+tm.getId()+"&act=active&status=true");
             //option.setAttribute("target","status");
         }
 
@@ -674,19 +674,19 @@ public class SWBATree extends GenericResource
         //Menu
         menu=addNode("menu","menu","Menu",topic);
         //option=MenuElement.add(menu,"WBAd_mnui_TopicCreate","WBAd_sysi_TopicsInfo",tp,user,null,null);
-        //option=addNode("option","add_topic",tma.getTopic("WBAd_mnui_TopicCreate").getDisplayName(user.getLanguage()),menu);
-        //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicsInfo").getUrl(tp)+"?title="+URLEncoder.encode(option.getAttribute("name"))+"&act=add");
+        //option=addNode("option","add_topic",tma.getWebPage("WBAd_mnui_TopicCreate").getDisplayName(user.getLanguage()),menu);
+        //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicsInfo").getUrl(tp)+"?title="+URLEncoder.encode(option.getAttribute("name"))+"&act=add");
         //option.setAttribute("target","work");
         //addSeparator(menu);
         //option=MenuElement.edit(menu,"WBAd_mnui_TopicEdit","WBAd_sysi_TopicsInfo",tp,user,null,null);
-        //option=addNode("option","edit_topic",tma.getTopic("WBAd_mnui_TopicEdit").getDisplayName(user.getLanguage()),menu);
-        //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicsInfo").getUrl(tp)+"?act=edit");
+        //option=addNode("option","edit_topic",tma.getWebPage("WBAd_mnui_TopicEdit").getDisplayName(user.getLanguage()),menu);
+        //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicsInfo").getUrl(tp)+"?act=edit");
         //option.setAttribute("target","work");
         if(tp.isActive())
         {
             //option=MenuElement.unactive(menu,"WBAd_mnui_TopicActive","WBAd_inti_StatusTopic",tp,user,null,null);
             //option=addNode("option","unactive_topic",getVariantName("WBAd_mnui_TopicActive",user),menu);
-            //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicsInfo").getUrl(tp)+"?act=unactive&status=true");
+            //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicsInfo").getUrl(tp)+"?act=unactive&status=true");
             //option.setAttribute("target","status");
             if(tp==tp.getWebSite().getHomePage())
             {
@@ -700,8 +700,8 @@ public class SWBATree extends GenericResource
         else
         {
             //option=MenuElement.active(menu,"WBAd_mnui_TopicActive","WBAd_inti_StatusTopic",tp,user,null,null);
-            //option=addNode("option","active_topic",tma.getTopic("WBAd_mnui_TopicActive").getDisplayName(user.getLanguage()),menu);
-            //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicsInfo").getUrl(tp)+"?act=active&status=true");
+            //option=addNode("option","active_topic",tma.getWebPage("WBAd_mnui_TopicActive").getDisplayName(user.getLanguage()),menu);
+            //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicsInfo").getUrl(tp)+"?act=active&status=true");
             //option.setAttribute("target","status");
             if(tp==tp.getWebSite().getHomePage())
             {
@@ -719,8 +719,8 @@ public class SWBATree extends GenericResource
 //            //option=MenuElement.copy(menu,"WBAd_mnui_TopicCopy","WBAd_sysi_TopicsInfo",tp,user,"WBAd_mnui_Topic",null,null,null,"work");
 //            //addSeparator(menu);
 //            //option=MenuElement.remove(menu,"WBAd_mnui_TopicRemove","WBAd_inti_StatusTopic",tp,user,"WBAd_mnui_Topic",null,null);
-//            //option=addNode("option","remove_section",tma.getTopic("WBAd_mnui_TopicRemove").getDisplayName(user.getLanguage()),menu);
-//            //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicsInfo").getUrl(tp)+"?act=remove&status=true");
+//            //option=addNode("option","remove_section",tma.getWebPage("WBAd_mnui_TopicRemove").getDisplayName(user.getLanguage()),menu);
+//            //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicsInfo").getUrl(tp)+"?act=remove&status=true");
 //            //option.setAttribute("target","status");
 //            //option.setAttribute("confirm",getConfirm("WBAd_mnui_Topic",user));
 //            //option.setAttribute("icon","sitev");
@@ -752,36 +752,36 @@ public class SWBATree extends GenericResource
                 //Menu
                 menu=addNode("menu","menu","Menu",child);
                 //option=MenuElement.add(menu,"WBAd_mnui_TopicCreate","WBAd_sysi_TopicsInfo",tp2,user,null,null);
-                //option=addNode("option","add_topic",tma.getTopic("WBAd_mnui_TopicCreate").getDisplayName(user.getLanguage()),menu);
-                //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicsInfo").getUrl(tp2)+"?title="+URLEncoder.encode(option.getAttribute("name"))+"&act=add");
+                //option=addNode("option","add_topic",tma.getWebPage("WBAd_mnui_TopicCreate").getDisplayName(user.getLanguage()),menu);
+                //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicsInfo").getUrl(tp2)+"?title="+URLEncoder.encode(option.getAttribute("name"))+"&act=add");
                 //option.setAttribute("target","work");
                 //addSeparator(menu);
                 //option=MenuElement.edit(menu,"WBAd_mnui_TopicEdit","WBAd_sysi_TopicsInfo",tp2,user,null,null);
-                //option=addNode("option","edit_topic",tma.getTopic("WBAd_mnui_TopicEdit").getDisplayName(user.getLanguage()),menu);
-                //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicsInfo").getUrl(tp2)+"?act=edit");
+                //option=addNode("option","edit_topic",tma.getWebPage("WBAd_mnui_TopicEdit").getDisplayName(user.getLanguage()),menu);
+                //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicsInfo").getUrl(tp2)+"?act=edit");
                 //option.setAttribute("target","work");
                 if(tp2.isActive())
                 {
                     child.setAttribute("icon","hijov");
                     //option=MenuElement.unactive(menu,"WBAd_mnui_TopicActive","WBAd_inti_StatusTopic",tp2,user,null,null);
                     //option=addNode("option","unactive_topic",getVariantName("WBAd_mnui_TopicActive",user),menu);
-                    //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicsInfo").getUrl(tp2)+"?act=unactive&status=true");
+                    //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicsInfo").getUrl(tp2)+"?act=unactive&status=true");
                     //option.setAttribute("target","status");
                 }
                 else
                 {
                     child.setAttribute("icon","hijor");
                     //option=MenuElement.active(menu,"WBAd_mnui_TopicActive","WBAd_inti_StatusTopic",tp2,user,null,null);
-                    //option=addNode("option","active_topic",tma.getTopic("WBAd_mnui_TopicActive").getDisplayName(user.getLanguage()),menu);
-                    //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicsInfo").getUrl(tp2)+"?act=active&status=true");
+                    //option=addNode("option","active_topic",tma.getWebPage("WBAd_mnui_TopicActive").getDisplayName(user.getLanguage()),menu);
+                    //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicsInfo").getUrl(tp2)+"?act=active&status=true");
                     //option.setAttribute("target","status");
                 }
                 //addSeparator(menu);
                 //option=MenuElement.copy(menu,"WBAd_mnui_TopicCopy","WBAd_sysi_TopicsInfo",tp2,user,"WBAd_mnui_Topic",null,null,null,"work");
                 //addSeparator(menu);
                 //option=MenuElement.remove(menu,"WBAd_mnui_TopicRemove","WBAd_inti_StatusTopic",tp2,user,"WBAd_mnui_Topic",null,null);
-                //option=addNode("option","remove_section",tma.getTopic("WBAd_mnui_TopicRemove").getDisplayName(user.getLanguage()),menu);
-                //option.setAttribute("action","showurl="+tma.getTopic("WBAd_sysi_TopicsInfo").getUrl(tp2)+"?act=remove&status=true");
+                //option=addNode("option","remove_section",tma.getWebPage("WBAd_mnui_TopicRemove").getDisplayName(user.getLanguage()),menu);
+                //option.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_TopicsInfo").getUrl(tp2)+"?act=remove&status=true");
                 //option.setAttribute("target","status");
                 //option.setAttribute("confirm",getConfirm("WBAd_mnui_Topic",user));
                 //option.setAttribute("shortCut","DELETE");

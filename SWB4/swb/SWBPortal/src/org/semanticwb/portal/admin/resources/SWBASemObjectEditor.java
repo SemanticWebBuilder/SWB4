@@ -42,7 +42,7 @@ public class SWBASemObjectEditor extends GenericResource {
         String action = request.getParameter("act");
 
         if (id == null) {
-            id = paramRequest.getTopic().getWebSiteId();
+            id = paramRequest.getWebPage().getWebSiteId();
         }
         if (action == null) {
             action = "";
@@ -164,7 +164,7 @@ public class SWBASemObjectEditor extends GenericResource {
                         if (modificable) {
                             out.println("<a  href=\"" + urlr + "\">Remove</a>");
                         }
-                        WebSite ws = paramRequest.getTopic().getWebSite();
+                        WebSite ws = paramRequest.getWebPage().getWebSite();
                         WebPage page0 = ws.getWebPage("page0");
                         Resource portlet = ws.getResource("3");
                         SWBResourceURLImp urltest = (SWBResourceURLImp) paramRequest.getRenderUrl();

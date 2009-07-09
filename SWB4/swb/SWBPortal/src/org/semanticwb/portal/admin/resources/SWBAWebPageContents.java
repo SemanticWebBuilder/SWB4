@@ -68,7 +68,7 @@ public class SWBAWebPageContents extends GenericResource {
         String action = request.getParameter("act");
 
         if (id == null) {
-            id = paramRequest.getTopic().getWebSite().getURI();
+            id = paramRequest.getWebPage().getWebSite().getURI();
         }
         if (action == null) {
             action = "";

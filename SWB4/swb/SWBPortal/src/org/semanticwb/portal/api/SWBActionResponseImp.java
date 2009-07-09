@@ -328,7 +328,7 @@ public class SWBActionResponseImp implements SWBActionResponse
    * @return Value of property topic.
    *
    */
-  public WebPage getTopic()
+  public WebPage getWebPage()
   {
       return topic;
   }
@@ -486,7 +486,7 @@ public class SWBActionResponseImp implements SWBActionResponse
         haveVirtTP=true;
     }    
     
-    public boolean haveVirtualTopic()
+    public boolean haveVirtualWebPage()
     {
         return haveVirtTP;
     }    

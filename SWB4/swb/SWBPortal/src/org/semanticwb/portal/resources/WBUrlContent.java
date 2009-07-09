@@ -86,7 +86,7 @@ public class WBUrlContent extends GenericAdmResource {
                     NodeList url = dom.getElementsByTagName("url");
                     if(url.getLength() > 0) {
                         String surl = url.item(0).getChildNodes().item(0).getNodeValue();
-                        ret.append(CorrigeRuta(surl, paramRequest.getTopic(), param, othersparam, request,paramRequest));
+                        ret.append(CorrigeRuta(surl, paramRequest.getWebPage(), param, othersparam, request,paramRequest));
                     }
                 }else {
                     Enumeration en = request.getParameterNames();
@@ -109,12 +109,12 @@ public class WBUrlContent extends GenericAdmResource {
                     String urlwb = "";
                     String wbresid = "";
                     if(request.getParameter("urlwb")!=null) {
-                        urlwb = DeCodificaCadena(request.getParameter("urlwb"), paramRequest.getTopic());
+                        urlwb = DeCodificaCadena(request.getParameter("urlwb"), paramRequest.getWebPage());
                     }else {
                         response.getWriter().print(ret.toString());
                     }
                     if(request.getParameter("param")!=null) {
-                        param = DeCodificaCadena(request.getParameter("param"), paramRequest.getTopic());
+                        param = DeCodificaCadena(request.getParameter("param"), paramRequest.getWebPage());
                     }
                     if(request.getParameter("wbresid")!=null) {
                         wbresid = request.getParameter("wbresid");
@@ -122,13 +122,13 @@ public class WBUrlContent extends GenericAdmResource {
                         wbresid = base.getId();
                     }
                     if(!urlwb.equals("") && wbresid.equals(base.getId())) {
-                        ret.append(CorrigeRuta(urlwb, paramRequest.getTopic(), param, othersparam, request,paramRequest));
+                        ret.append(CorrigeRuta(urlwb, paramRequest.getWebPage(), param, othersparam, request,paramRequest));
                     }                    
                 }
             }catch (Exception f) {
                 ret.append("page is not in well formed..");
                 ret.append("<nocache/>");
-                log.error("Error in UrlContent resource while decoding page: "+paramRequest.getTopic().getId(), f);
+                log.error("Error in UrlContent resource while decoding page: "+paramRequest.getWebPage().getId(), f);
             }
         }catch (Exception e) { 
             log.error("Error in resource WBUrlContent while bringing HTML ", e);

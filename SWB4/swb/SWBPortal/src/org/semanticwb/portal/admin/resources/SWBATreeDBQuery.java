@@ -394,7 +394,7 @@ public class SWBATreeDBQuery extends GenericResource
         poolconn.setAttribute("view","showurl=javascript:upd('"+dbcon+"');");//+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true"
 //        poolconn.setAttribute("vtarget","");//status
         poolconn.setAttribute("reload","getPool."+dbcon);
-//                poolconn.setAttribute("view","showurl="+tma.getTopic("WBAd_infoi_TopicMapInfo").getUrl()+"?tm="+dbcon);
+//                poolconn.setAttribute("view","showurl="+tma.getWebPage("WBAd_infoi_TopicMapInfo").getUrl()+"?tm="+dbcon);
         //poolconn.setAttribute("vtarget","info");
         poolconn.setAttribute("access",""+access);
         
@@ -464,7 +464,7 @@ public class SWBATreeDBQuery extends GenericResource
         table.setAttribute("view","showurl=javascript:upd('"+dbcon+"');"); //+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true&table="+tablename
         //table.setAttribute("vtarget","");//status
         table.setAttribute("reload","getTable."+dbcon+"."+tablename);
-        //        topic.setAttribute("view","showurl="+tma.getTopic("WBAd_infoi_TopicInfo").getUrl(tp));
+        //        topic.setAttribute("view","showurl="+tma.getWebPage("WBAd_infoi_TopicInfo").getUrl(tp));
         //topic.setAttribute("vtarget","info");
         table.setAttribute("dragEnabled","true");
         table.setAttribute("dragValue","Select * from "+tablename+"");
@@ -558,7 +558,7 @@ public class SWBATreeDBQuery extends GenericResource
         node.setAttribute("view","showurl=javascript:upd('"+dbcon+"');"); //+tma.getWebPage(STATUS_TOPIC).getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true"
 //        node.setAttribute("vtarget","");//status
         node.setAttribute("reload","getColumn."+dbcon+"."+tablename+"."+columnname);
-        //        node.setAttribute("view","showurl="+tma.getTopic("WBAd_sysi_DBQuery").getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true&cmd="+thisToken);
+        //        node.setAttribute("view","showurl="+tma.getWebPage("WBAd_sysi_DBQuery").getUrl()+"?pool="+dbcon+"&act=jsupdpool&status=true&cmd="+thisToken);
         //        node.setAttribute("vtarget","info");
         node.setAttribute("icon","flow");
         
@@ -623,10 +623,10 @@ public class SWBATreeDBQuery extends GenericResource
         Element option=null;
         
         Element node=addNode("node",""+propname+"_"+valor,propname+": "+valor,res);
-//                node.setAttribute("action","showurl="+tma.getTopic("WBAd_sys_FlowsInfo").getUrl()+"?id="+dbcon+"&tm="+columnname);
+//                node.setAttribute("action","showurl="+tma.getWebPage("WBAd_sys_FlowsInfo").getUrl()+"?id="+dbcon+"&tm="+columnname);
         //        node.setAttribute("target","work");
         //        node.setAttribute("reload","getFlow."+rec.getId()+"."+tm.getId());
-        //        node.setAttribute("view","showurl="+tma.getTopic("WBAd_infoi_FlowsInfo").getUrl()+"?id="+dbcon+"&tm="+columnname);
+        //        node.setAttribute("view","showurl="+tma.getWebPage("WBAd_infoi_FlowsInfo").getUrl()+"?id="+dbcon+"&tm="+columnname);
         //        node.setAttribute("vtarget","info");
         node.setAttribute("icon","flow");
         
@@ -1003,9 +1003,9 @@ public class SWBATreeDBQuery extends GenericResource
             out.println("<select  name=\"querys\" size=\"5\" style=\"width:100%\">");
 
             HashMap queryList = null;
-            if(request.getSession().getAttribute(""+base.getId()+paramRequest.getTopic().getWebSiteId())!=null)
+            if(request.getSession().getAttribute(""+base.getId()+paramRequest.getWebPage().getWebSiteId())!=null)
             {
-                queryList = (HashMap)request.getSession().getAttribute(""+base.getId()+paramRequest.getTopic().getWebSiteId());
+                queryList = (HashMap)request.getSession().getAttribute(""+base.getId()+paramRequest.getWebPage().getWebSiteId());
                 Iterator iteQuery = queryList.keySet().iterator();
                 while(iteQuery.hasNext())
                 {
@@ -1039,7 +1039,7 @@ public class SWBATreeDBQuery extends GenericResource
             
             out.println("</select><br>");
             out.println("<input type=\"button\" name=\"copyQuery\" onclick=\"copyQueryVal(querys);\" value=\"utilizar query\">");
-            request.getSession().setAttribute(""+base.getId()+paramRequest.getTopic().getWebSiteId(), queryList);
+            request.getSession().setAttribute(""+base.getId()+paramRequest.getWebPage().getWebSiteId(), queryList);
             
             out.println("<input type=\"hidden\" name=\"dbcon\" value=\""+dbcon+"\">");
             

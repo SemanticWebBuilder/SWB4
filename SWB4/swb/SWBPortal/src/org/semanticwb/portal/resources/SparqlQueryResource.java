@@ -439,9 +439,9 @@ public class SparqlQueryResource extends GenericAdmResource {
                 a = f + 1;
                 String com = query.substring(i + 1, f);
                 if (com.equals("topicmap")) {
-                    ret += paramsRequest.getTopic().getWebSiteId();
+                    ret += paramsRequest.getWebPage().getWebSiteId();
                 } else if (com.equals("topicid")) {
-                    ret += paramsRequest.getTopic().getId();
+                    ret += paramsRequest.getWebPage().getId();
                 } else if (com.equals("userid")) {
                     ret += paramsRequest.getUser().getEmail();
                 } else if (com.startsWith("getUserAttribute(") && com.endsWith(")")) {

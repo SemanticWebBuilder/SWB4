@@ -452,7 +452,7 @@ public class SWBAFilterResource extends SWBATree {
 
     private void getIniForm(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, User user) throws IOException {
         PrintWriter out = response.getWriter();
-        //String tp=paramRequest.getTopic().getId();
+        //String tp=paramRequest.getWebPage().getId();
         String tm=request.getParameter("tm");
         String id = request.getParameter("suri");
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();

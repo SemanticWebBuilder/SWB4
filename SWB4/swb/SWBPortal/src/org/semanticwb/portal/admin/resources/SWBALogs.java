@@ -311,14 +311,14 @@ public class SWBALogs extends GenericResource {
             urlRet.setParameter("tp", request.getParameter("tp"));
             out.println("<input type=hidden name=tp value=\"" + request.getParameter("tp") + "\">");
         } else {
-            out.println("<input type=hidden name=tp value=\"" + paramRequest.getTopic().getId() + "\">");
+            out.println("<input type=hidden name=tp value=\"" + paramRequest.getWebPage().getId() + "\">");
         }
 
         if (request.getParameter("tm") != null) {
             urlRet.setParameter("tm", request.getParameter("tm"));
             out.println("<input type=hidden name=tm value=\"" + request.getParameter("tm") + "\">");
         } else {
-            out.println("<input type=hidden name=tm value=\"" + paramRequest.getTopic().getWebSiteId() + "\">");
+            out.println("<input type=hidden name=tm value=\"" + paramRequest.getWebPage().getWebSiteId() + "\">");
         }
 
         out.println("<input type=submit value=\"" + paramRequest.getLocaleString("btnSend") + "\" name=\"btn_update\">&nbsp;&nbsp;");
@@ -683,7 +683,7 @@ public class SWBALogs extends GenericResource {
             pTipo = base.getAttribute("tipo");
         }
 
-        //if(pTopic==null && pTipo.equals("Topic")) pTopic = paramRequest.getTopic().getId();
+        //if(pTopic==null && pTipo.equals("Topic")) pTopic = paramRequest.getWebPage().getId();
 
         boolean rowAction = false;
         boolean rowDescription=false;

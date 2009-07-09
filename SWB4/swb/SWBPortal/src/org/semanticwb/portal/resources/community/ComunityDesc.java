@@ -23,7 +23,7 @@ public class ComunityDesc extends GenericResource{
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out=response.getWriter();
-        String descr=paramRequest.getTopic().getDescription();
+        String descr=paramRequest.getWebPage().getDescription();
         if(descr!=null && descr.trim().length()>0){
             out.println(descr);
         }

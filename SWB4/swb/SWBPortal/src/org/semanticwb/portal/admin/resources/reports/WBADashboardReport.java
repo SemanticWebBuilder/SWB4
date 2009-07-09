@@ -83,7 +83,7 @@ public class WBADashboardReport extends GenericResource {
             }
             // If there are sites continue
             if(sites.size() > I_ACCESS) {
-                String address = paramsRequest.getTopic().getUrl();
+                String address = paramsRequest.getWebPage().getUrl();
                 String websiteId = request.getParameter("wb_site")==null ? (String)sites.keySet().iterator().next():request.getParameter("wb_site");
                 String language = paramsRequest.getUser().getLanguage();
                 
@@ -455,7 +455,7 @@ public class WBADashboardReport extends GenericResource {
             }else {   // There are not sites and displays a message
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
-                out.println("<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                out.println("<form method=\"Post\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");

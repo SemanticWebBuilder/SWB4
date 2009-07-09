@@ -51,7 +51,7 @@ public class SWBACamp extends GenericResource {
         User user = paramRequest.getUser();
         String strTm = request.getParameter("tm");
         
-        if(user==null) user = new User(paramRequest.getTopic().getWebSite().getUserRepository().getSemanticObject());
+        if(user==null) user = new User(paramRequest.getWebPage().getWebSite().getUserRepository().getSemanticObject());
         if((request.getParameter("act")!=null&&(request.getParameter("act").equals("add")||request.getParameter("act").equals("edit")))||(request.getParameter("act")==null&&request.getParameter("id")!=null)){
             doEdit(request,response,paramRequest);
         }
@@ -281,7 +281,7 @@ public class SWBACamp extends GenericResource {
         String accion = response.getAction();
         String id = request.getParameter("id");
         User user = response.getUser();
-        if(user==null) user=new User(response.getTopic().getWebSite().getUserRepository().getSemanticObject());
+        if(user==null) user=new User(response.getWebPage().getWebSite().getUserRepository().getSemanticObject());
         try{
             if(accion.equals("update")){
                 String strtm= request.getParameter("tmnid");

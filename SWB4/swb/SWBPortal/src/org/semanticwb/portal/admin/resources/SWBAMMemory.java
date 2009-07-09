@@ -93,7 +93,7 @@ public class SWBAMMemory extends GenericResource {
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         String act = request.getParameter("act");
-        //out.println("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"10; URL="+paramsRequest.getTopic().getUrl()+"/\">");        
+        //out.println("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"10; URL="+paramsRequest.getWebPage().getUrl()+"/\">");
         out.println("<div class=\"swbform\">");
         
         if (SWBPlatform.getEnv("wb/systemMonitor", "false").equals("true")) {

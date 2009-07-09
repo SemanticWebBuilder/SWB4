@@ -136,7 +136,7 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
             SWBFormMgr mgr = new SWBFormMgr(Event.eve_Event, response.getResourceBase().getSemanticObject(), null);
              try{
                 SemanticObject semObj = mgr.processForm(request);
-                Event newEvent = Event.getEvent(semObj.getId(), response.getTopic().getWebSite());
+                Event newEvent = Event.getEvent(semObj.getId(), response.getWebPage().getWebSite());
                 newEvent.setEventResource(this);
              }catch(Exception e){
 

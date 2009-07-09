@@ -27,15 +27,15 @@ public class CreateComunityLink extends GenericAdmResource{
     {
         Resource base=paramRequest.getResourceBase();
         PrintWriter out=response.getWriter();
-        WebPage currentWebPage=paramRequest.getTopic();
+        WebPage currentWebPage=paramRequest.getWebPage();
         if (currentWebPage.getParent() != null && currentWebPage.getParent().getParent() != null && currentWebPage.getParent().getParent().getParent() != null && currentWebPage.getParent().getParent().getParent().getId().equals(CreateCommunity.TEMAS_TOPIC_ID))
         {
             String params="?modeswbcreatecommunity=true" +
-            "&swbtp="+ paramRequest.getTopic().getId();
+            "&swbtp="+ paramRequest.getWebPage().getId();
             if(base.getAttribute("selecttype")!=null) {
                 params+="&selecttype=" + base.getAttribute("selecttype");
             }
-            WebPage comunityContainer=WebPage.getWebPage(CommunityConfiguration.COMMUNITY_CONTAINER_ID, paramRequest.getTopic().getWebSite());
+            WebPage comunityContainer=WebPage.getWebPage(CommunityConfiguration.COMMUNITY_CONTAINER_ID, paramRequest.getWebPage().getWebSite());
             out.print("<a href=\""+comunityContainer.getUrl() + params +"\" class=\"categoria\"><span class=\"listadocompleto\">Crear una comunidad</span></a>");
         }
     }

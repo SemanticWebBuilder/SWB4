@@ -261,7 +261,7 @@ public class SWBACampResources extends GenericResource {
                 if(todos>page_elements) {
                     out.println("<tr>");
                     out.println("<td colspan=6 class=valores align=right><HR size=1 noshade>");
-                    WebPage tp = paramRequest.getTopic();
+                    WebPage tp = paramRequest.getWebPage();
                     if(numpage>1){
                         out.println("<a class=link href=\""+tp.getUrl()+"?idrrtype="+idrrtype+"&numpage="+(numpage-1)+"&tm="+tmid+"&id="+idcamp+"&act=view\">"+paramRequest.getLocaleString("msgPreviousPage")+"</a>&nbsp;");
                     }

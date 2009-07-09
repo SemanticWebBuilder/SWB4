@@ -207,11 +207,11 @@ public class SWBAResTrace extends GenericResource {
                     out.println("          <td >" + t.getId() + "</td>");
                     out.println("          <td >" + t.getResource().getId() + "</td>");
                     out.println("          <td >" + t.getDescription() + "</td>");
-                    //out.println("          <td class=\"valores\">"+t.getWBParamRequest().getTopic().getMap().getDbdata().getTitle()+"</td>");
+                    //out.println("          <td class=\"valores\">"+t.getWBParamRequest().getWebPage().getMap().getDbdata().getTitle()+"</td>");
                     out.println("          <td >"
-                            + t.getWBParamRequest().getTopic().getWebSite().getDisplayTitle(user.getLanguage()) + "</td>");
+                            + t.getWBParamRequest().getWebPage().getWebSite().getDisplayTitle(user.getLanguage()) + "</td>");
                     out.println("          <td >"
-                            + t.getWBParamRequest().getTopic().getDisplayName() + "</td>");
+                            + t.getWBParamRequest().getWebPage().getDisplayName() + "</td>");
                     out.println("          <td >"
                             + t.getWBParamRequest().getUser().getId() + "</td>");
                     out.println("          <td >"

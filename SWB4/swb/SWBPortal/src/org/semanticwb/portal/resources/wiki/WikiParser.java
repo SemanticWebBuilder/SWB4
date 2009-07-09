@@ -72,7 +72,7 @@ public class WikiParser
     
     public String parse(String content, javax.servlet.http.HttpServletRequest request, SWBParamRequest paramsRequest)
     {
-        String mapid=paramsRequest.getTopic().getWebSiteId();
+        String mapid=paramsRequest.getWebPage().getWebSiteId();
         String base=SWBPortal.getDistributorPath()+"/"+mapid+"/";
         this.image="${image}";
         this.page=base+"${title}";

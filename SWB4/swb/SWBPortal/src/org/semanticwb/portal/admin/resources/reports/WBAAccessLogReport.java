@@ -327,7 +327,7 @@ public class WBAAccessLogReport extends GenericResource {
             }
             // If there are sites continue
             if(hm_sites.size() > I_ACCESS) {
-                String address = paramsRequest.getTopic().getUrl();
+                String address = paramsRequest.getWebPage().getUrl();
                 String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
                 String repositoryName = SWBContext.getWebSite(websiteId).getUserRepository().getDisplayTitle(paramsRequest.getUser().getLanguage());
 
@@ -636,7 +636,7 @@ public class WBAAccessLogReport extends GenericResource {
 
                 ret.append("</div>\n");
             }else { // There are not sites and displays a message
-                ret.append("\n<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                ret.append("\n<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 ret.append("\n<table border=0 width=\"100%\">");
                 ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");

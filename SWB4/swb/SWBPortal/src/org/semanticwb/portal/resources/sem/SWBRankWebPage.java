@@ -97,7 +97,7 @@ function votedPage(){
         */
 
         PrintWriter out = response.getWriter();
-        int rank = (int) Math.round(Math.floor(paramRequest.getTopic().getRank() * 10));
+        int rank = (int) Math.round(Math.floor(paramRequest.getWebPage().getRank() * 10));
         //System.out.println("Rank:" + rank);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("vote");
@@ -138,7 +138,7 @@ function votedPage(){
         Cookie[] cookies= request.getCookies();
         for (Cookie cookie: cookies){
             //System.out.println(cookie.getName());
-         if (cookie.getName().equals(response.getTopic().getId()+"_voted"))
+         if (cookie.getName().equals(response.getWebPage().getId()+"_voted"))
          {
              response.setMode(SWBResourceURL.Mode_EDIT);
              //System.out.println("VotedOff ");
@@ -150,7 +150,7 @@ function votedPage(){
         //System.out.println("value got: "+request.getParameter("value"));
         if (null!=request.getParameter("value")){
             try {vote = Integer.parseInt(request.getParameter("value"));} catch (Exception ne){}
-        WebPage ws = response.getTopic();
+        WebPage ws = response.getWebPage();
         //System.out.println("ws: "+ws+" vote:"+vote);
         double rank = ws.getRank();
         long rev = ws.getReviews();
@@ -168,7 +168,7 @@ function votedPage(){
     @Override
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        Cookie cookie = new Cookie(paramRequest.getTopic().getId()+"_voted", "true");
+        Cookie cookie = new Cookie(paramRequest.getWebPage().getId()+"_voted", "true");
         cookie.setPath("/");
         response.addCookie(cookie);
             //response.setHeader(fullStarPath, fullStarPath);

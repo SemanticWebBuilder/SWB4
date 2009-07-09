@@ -21,7 +21,7 @@ public interface SWBParameters extends SWBResourceModes
    * @return Value of property topic.
    *
    */
-  public WebPage getTopic();
+  public WebPage getWebPage();
   
   public WebPage getAdminTopic();
   
@@ -126,5 +126,5 @@ public interface SWBParameters extends SWBResourceModes
     */
     //public void setAction(java.lang.String action);
   
-    public boolean haveVirtualTopic();
+    public boolean haveVirtualWebPage();
 }

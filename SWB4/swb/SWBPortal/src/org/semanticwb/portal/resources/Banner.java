@@ -156,7 +156,7 @@ public class Banner extends GenericAdmResource
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         Resource base=getResourceBase();
-        base.addHit(request, response.getUser(), response.getTopic());
+        base.addHit(request, response.getUser(), response.getWebPage());
         String url = base.getAttribute("url", "").trim();
         if (!url.equals("")) response.sendRedirect(url);
     }

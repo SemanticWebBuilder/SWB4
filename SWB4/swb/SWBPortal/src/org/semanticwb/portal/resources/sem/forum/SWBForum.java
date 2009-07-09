@@ -73,7 +73,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
 
     public void doAddThread(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        SWBFormMgr mgr = new SWBFormMgr(Thread.frm_Thread, paramRequest.getTopic().getSemanticObject(), null);
+        SWBFormMgr mgr = new SWBFormMgr(Thread.frm_Thread, paramRequest.getWebPage().getSemanticObject(), null);
         if (paramRequest.getUser() != null) {
             lang = paramRequest.getUser().getLanguage();
         }
@@ -90,7 +90,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
 
     public void doReplyPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        WebSite website=paramRequest.getTopic().getWebSite();
+        WebSite website=paramRequest.getWebPage().getWebSite();
         SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
         Thread thread = Thread.getThread(soThread.getId(), website);
         SemanticObject soPost = null;
@@ -149,7 +149,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         mgr.setAction(url.toString());
 
         Resource base = paramRequest.getResourceBase();
-        WebSite website = paramRequest.getTopic().getWebSite();
+        WebSite website = paramRequest.getWebPage().getWebSite();
         Post post = Post.getPost(semObject.getId(), website);
         String basepath = "";
         int count = 0;
@@ -190,7 +190,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
 
 
         Resource base = paramRequest.getResourceBase();
-        WebSite website = paramRequest.getTopic().getWebSite();
+        WebSite website = paramRequest.getWebPage().getWebSite();
         Thread thread= Thread.getThread(semObject.getId(), website);
         String basepath = "";
         int count = 0;
@@ -215,7 +215,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        WebPage page = response.getTopic();
+        WebPage page = response.getWebPage();
         WebSite website = page.getWebSite();
         User user = response.getUser();
         Resource base = response.getResourceBase();
@@ -422,7 +422,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         Date date = new Date();
         Resource base = response.getResourceBase();
         User user = response.getUser();
-        WebSite website = response.getTopic().getWebSite();
+        WebSite website = response.getWebPage().getWebSite();
         String basepath=null;
         if(sobj.instanceOf(Thread.sclass)){
             basepath = SWBPlatform.getWorkPath() + base.getWorkPath() + "/threads/" + sobj.getId() + "/";

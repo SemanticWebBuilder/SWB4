@@ -26,7 +26,7 @@ public class Menu extends GenericResource
     {
         PrintWriter out=response.getWriter();
         User user=paramRequest.getUser();
-        WebPage topic=paramRequest.getTopic();
+        WebPage topic=paramRequest.getWebPage();
         WebPage parent=topic.getParent();
         if(parent!=null)
         {

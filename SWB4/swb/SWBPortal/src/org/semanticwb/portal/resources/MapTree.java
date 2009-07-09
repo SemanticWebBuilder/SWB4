@@ -36,14 +36,14 @@ public class MapTree extends GenericResource{
     {
         response.setHeader("mimetype", "text/json-comment-filtered");
         PrintWriter out = response.getWriter();
-        out.print(getData(paramsRequest.getTopic()));
+        out.print(getData(paramsRequest.getWebPage()));
     }
     
     public void doChilds(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException 
     {
         response.setHeader("mimetype", "text/json-comment-filtered");
         PrintWriter out = response.getWriter();
-        WebPage tp = paramsRequest.getTopic();
+        WebPage tp = paramsRequest.getWebPage();
         String ret = getOnlyChilds(tp);
         out.print(ret);
     }
@@ -186,7 +186,7 @@ public class MapTree extends GenericResource{
         Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
         String path = SWBPlatform.getContextPath();
-        WebPage tp = paramsRequest.getTopic();
+        WebPage tp = paramsRequest.getWebPage();
         out.println("<html>");
         out.println("    <head>");
         out.println("       <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
@@ -517,7 +517,7 @@ out.println("	                } ");
         out.println("		<td style=\"vertical-align: top;\">");
         out.println("Data:");
         out.println("<textarea id=\"resultado\" name=\"resultado\" width=\"500px\" >"); //plugins=\"['copy','cut','paste','|','bold']\" dojoType=\"dijit.Editor\" 
-        out.println(getData(paramsRequest.getTopic()));
+        out.println(getData(paramsRequest.getWebPage()));
         out.println("</textarea>");
 	out.println("		</td>");
 	out.println("	</tr>");

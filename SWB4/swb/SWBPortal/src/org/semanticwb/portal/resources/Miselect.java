@@ -29,7 +29,7 @@ public class Miselect extends GenericAdmResource {
         PrintWriter out = response.getWriter();
 
         String sectId = request.getParameter("ef");
-        WebPage wp = paramRequest.getTopic().getWebSite().getWebPage(sectId);
+        WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage(sectId);
         
         out.println("<select name=\"mun\" id=\"mun\" class=\"combos\">");
         if(wp!=null) {
@@ -57,7 +57,7 @@ public class Miselect extends GenericAdmResource {
         //out.println("dojo.addOnLoad(function(){postHtml('"+url+"','munctnr')});");
         out.println("</script>");
 
-        WebPage wp = paramRequest.getTopic().getWebSite().getWebPage("MX");
+        WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage("MX");
         String lang = paramRequest.getUser().getLanguage();
         Iterator<WebPage> webpages = wp.listVisibleChilds(lang);
 

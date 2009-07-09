@@ -280,7 +280,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
 //            TopicMap tm=TopicMgr.getInstance().getTopicMap(TopicMgr.TM_ADMIN);
 //            if(tm!=null)
 //            {
-//                if(paramRequest.getUser().havePermission(tm.getTopic("WBAd_per_Administrator")))
+//                if(paramRequest.getUser().havePermission(tm.getWebPage("WBAd_per_Administrator")))
 //                {
 //                    return true;
 //                }

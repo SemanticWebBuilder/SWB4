@@ -43,9 +43,9 @@ public class ListaCommun extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        WebPage temas = paramRequest.getTopic().getWebSite().getWebPage("Temas");
-        Model model = paramRequest.getTopic().getSemanticObject().getModel().getRDFModel();
-        WebPage locate  = paramRequest.getTopic().getWebSite().getWebPage("Tlalpan");
+        WebPage temas = paramRequest.getWebPage().getWebSite().getWebPage("Temas");
+        Model model = paramRequest.getWebPage().getSemanticObject().getModel().getRDFModel();
+        WebPage locate  = paramRequest.getWebPage().getWebSite().getWebPage("Tlalpan");
         PrintWriter out = response.getWriter();
         out.println(doSearchComm(temas, (LocationEntity)locate, model));
     }

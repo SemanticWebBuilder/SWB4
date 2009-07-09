@@ -329,8 +329,8 @@ public class WBAResTypes extends GenericResource {
             for (int i = 0; i < nlTools.getLength(); i++) {
                 Node nTool = (Node) nlTools.item(i);
                 strTitle = XPathAPI.eval(nTool, "resource-name/text()").toString();
-                strDisplayName = XPathAPI.eval(nTool, "display-name[@xml:lang='" + paramsRequest.getTopic().getWebSite().getLanguage().getId() + "']/text()").toString(); //REVISAR SI NO MANDA UN INDEX-OUT OF BOUND
-                strDescription = XPathAPI.eval(nTool, "description[@xml:lang='" + paramsRequest.getTopic().getWebSite().getLanguage().getId() + "']/text()").toString();
+                strDisplayName = XPathAPI.eval(nTool, "display-name[@xml:lang='" + paramsRequest.getWebPage().getWebSite().getLanguage().getId() + "']/text()").toString(); //REVISAR SI NO MANDA UN INDEX-OUT OF BOUND
+                strDescription = XPathAPI.eval(nTool, "description[@xml:lang='" + paramsRequest.getWebPage().getWebSite().getLanguage().getId() + "']/text()").toString();
                 strClass = XPathAPI.eval(nTool, "resource-class/text()").toString();
                 strBundle = XPathAPI.eval(nTool, "resource-bundle/text()").toString();
                 iType = Integer.parseInt(XPathAPI.eval(nTool, "resource-type/text()").toString());

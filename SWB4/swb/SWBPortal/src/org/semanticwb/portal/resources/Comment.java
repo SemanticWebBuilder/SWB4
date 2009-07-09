@@ -150,12 +150,12 @@ public class Comment extends GenericResource {
                 // Nueva ventana con formulario
                 User user = reqParams.getUser();
                 SWBResourceURLImp url = new SWBResourceURLImp(request, base,
-                        reqParams.getTopic(), SWBResourceURL.UrlType_RENDER);
+                        reqParams.getWebPage(), SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
                 url.setMode(SWBResourceURLImp.Mode_VIEW);
                 url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
                 url.setParameter("com_act", "com_step3");
-                url.setTopic(reqParams.getTopic());
+                url.setTopic(reqParams.getWebPage());
                 url.setCallMethod(reqParams.Call_DIRECT);
 
                 Element root = dom.createElement("form");
@@ -350,7 +350,7 @@ public class Comment extends GenericResource {
                     strSubject = commentType + "...";
                 }
                 
-                WebPage topic = reqParams.getTopic();
+                WebPage topic = reqParams.getWebPage();
                 String lang = reqParams.getUser().getLanguage();
                 Element emn = dom.createElement("form");
                 emn.setAttribute("path", "http://" + request.getServerName()
@@ -612,12 +612,12 @@ public class Comment extends GenericResource {
                         + base.getAttribute("left", "10").trim());
 
                 SWBResourceURLImp url = new SWBResourceURLImp(request, base,
-                        reqParams.getTopic(), SWBResourceURL.UrlType_RENDER);
+                        reqParams.getWebPage(), SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
                 url.setMode(SWBResourceURLImp.Mode_VIEW);
                 url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
                 url.setParameter("com_act", "com_step2");
-                url.setTopic(reqParams.getTopic());
+                url.setTopic(reqParams.getWebPage());
                 url.setCallMethod(reqParams.Call_DIRECT);
                 link.append("javascript:window.open('");
                 link.append(url.toString() + "','_newcom','");

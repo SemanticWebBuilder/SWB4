@@ -30,11 +30,13 @@ public class SemanticProperty
     private Boolean isInheritProperty=null;
     private Boolean isNoObservable=null;
     private Boolean isRemoveDependency=null;
+    private Boolean isCloneDependency=null;
     private Boolean isHeraquicalRelation=null;
     private Boolean isRequired=null;
     private Boolean isUsedAsName=null;
     private Boolean isLocaleable=null;
     private String m_propertyCodeName=null;
+    private String m_defaultValue=null;
 
     private SemanticObject displayProperty=null;
     private boolean dispProperty=false;
@@ -108,6 +110,21 @@ public class SemanticProperty
         }
         return m_propertyCodeName;
     }
+
+    public String getDefaultValue()
+    {
+        if(m_defaultValue==null)
+        {
+            Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_DEFAULTVALUE).getRDFProperty();
+            Statement st=m_prop.getProperty(prop);
+            if(st!=null)
+            {
+                m_defaultValue=st.getString();
+            }
+        }
+        return m_defaultValue;
+    }
+
     
     public String getURI()
     {
@@ -213,15 +230,33 @@ public class SemanticProperty
     }
 
     /**
+     * Esta propiedad se utiliza para clonar el objeto relacionado, si el objeto de dominio se clona
+     * @return
+     */
+    public boolean isCloneDependency()
+    {
+        if(isCloneDependency==null)
+        {
+            isCloneDependency=false;
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_CLONEDEPENDENCY));
+            if(st!=null)
+            {
+                isCloneDependency=st.getBoolean();
+            }
+        }
+        return isCloneDependency;
+    }
+
+    /**
      * Esta propiedad se utiliza para desabilitar el log de cambios de la propiedad
      * @return
      */
-    public boolean isNoObservable()
+    public boolean isNotObservable()
     {
         if(isNoObservable==null)
         {
             isNoObservable=false;
-            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_NOOBSERVABLE));
+            Statement st=m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_NOTOBSERVABLE));
             if(st!=null)
             {
                 isNoObservable=st.getBoolean();
