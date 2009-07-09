@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -152,7 +152,7 @@ public class IPFilterBase extends org.semanticwb.model.SWBClass implements org.s
 
     public void setAction(int ipFilterAction)
     {
-        getSemanticObject().setLongProperty(swb_ipFilterAction, ipFilterAction);
+        getSemanticObject().setIntProperty(swb_ipFilterAction, ipFilterAction);
     }
 
     public void setCreator(org.semanticwb.model.User user)

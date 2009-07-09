@@ -223,7 +223,7 @@ public class VersionInfoBase extends org.semanticwb.model.SWBClass implements or
 
     public void setVersionNumber(int versionNumber)
     {
-        getSemanticObject().setLongProperty(swb_versionNumber, versionNumber);
+        getSemanticObject().setIntProperty(swb_versionNumber, versionNumber);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

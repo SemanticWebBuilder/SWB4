@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Ruleable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable
+public class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Ruleable,org.semanticwb.model.Roleable,org.semanticwb.model.Trashable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -137,7 +137,8 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public boolean hasRule(org.semanticwb.model.Rule rule)
     {
-        if(rule==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRule,rule.getSemanticObject());
+        if(rule==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasRule,rule.getSemanticObject());
     }
 
     public void addRule(org.semanticwb.model.Rule rule)
@@ -214,7 +215,8 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public boolean hasCalendarRef(org.semanticwb.model.CalendarRef calendarref)
     {
-        if(calendarref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
+        if(calendarref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
     }
 
     public void addCalendarRef(org.semanticwb.model.CalendarRef calendarref)
@@ -250,7 +252,8 @@ public class CampBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public boolean hasRole(org.semanticwb.model.Role role)
     {
-        if(role==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRole,role.getSemanticObject());
+        if(role==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasRole,role.getSemanticObject());
     }
 
     public void addRole(org.semanticwb.model.Role role)

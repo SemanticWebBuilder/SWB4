@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -126,7 +126,8 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public boolean hasRoleRefInv(org.semanticwb.model.RoleRef roleref)
     {
-        if(roleref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRoleRefInv,roleref.getSemanticObject());
+        if(roleref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasRoleRefInv,roleref.getSemanticObject());
     }
 
     public org.semanticwb.model.RoleRef getRoleRefInv()
@@ -147,7 +148,8 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public boolean hasChild(org.semanticwb.model.Role role)
     {
-        if(role==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRoleChild,role.getSemanticObject());
+        if(role==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasRoleChild,role.getSemanticObject());
     }
 
     public org.semanticwb.model.Role getChild()
@@ -178,7 +180,8 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public boolean hasPermission(org.semanticwb.model.Permission permission)
     {
-        if(permission==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPermission,permission.getSemanticObject());
+        if(permission==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasPermission,permission.getSemanticObject());
     }
 
     public void addPermission(org.semanticwb.model.Permission permission)

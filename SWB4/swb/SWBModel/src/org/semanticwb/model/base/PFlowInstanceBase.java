@@ -116,7 +116,7 @@ public class PFlowInstanceBase extends org.semanticwb.model.SWBClass implements 
 
     public void setStatus(int pfiStatus)
     {
-        getSemanticObject().setLongProperty(swb_pfiStatus, pfiStatus);
+        getSemanticObject().setIntProperty(swb_pfiStatus, pfiStatus);
     }
 
     public int getVersion()
@@ -126,7 +126,7 @@ public class PFlowInstanceBase extends org.semanticwb.model.SWBClass implements 
 
     public void setVersion(int pfiVersion)
     {
-        getSemanticObject().setLongProperty(swb_pfiVersion, pfiVersion);
+        getSemanticObject().setIntProperty(swb_pfiVersion, pfiVersion);
     }
 
     public String getStep()

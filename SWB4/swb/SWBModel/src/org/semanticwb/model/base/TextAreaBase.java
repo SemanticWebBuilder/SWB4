@@ -52,7 +52,7 @@ public class TextAreaBase extends org.semanticwb.model.base.FormElementBase
 
     public void setRows(int textAreaRows)
     {
-        getSemanticObject().setLongProperty(swbxf_textAreaRows, textAreaRows);
+        getSemanticObject().setIntProperty(swbxf_textAreaRows, textAreaRows);
     }
 
     public int getCols()
@@ -62,7 +62,7 @@ public class TextAreaBase extends org.semanticwb.model.base.FormElementBase
 
     public void setCols(int textAreaCols)
     {
-        getSemanticObject().setLongProperty(swbxf_textAreaCols, textAreaCols);
+        getSemanticObject().setIntProperty(swbxf_textAreaCols, textAreaCols);
     }
 
     public void remove()

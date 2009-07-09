@@ -84,6 +84,6 @@ public class DisplayObjectBase extends org.semanticwb.model.SWBClass
 
     public void setDropMatchLevel(int dropMatchLevel)
     {
-        getSemanticObject().setLongProperty(swbxf_dropMatchLevel, dropMatchLevel);
+        getSemanticObject().setIntProperty(swbxf_dropMatchLevel, dropMatchLevel);
     }
 }

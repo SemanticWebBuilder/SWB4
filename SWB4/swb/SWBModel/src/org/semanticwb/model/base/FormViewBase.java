@@ -139,7 +139,8 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasFormViewRefInv(org.semanticwb.model.FormViewRef formviewref)
     {
-        if(formviewref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasFormViewRefInv,formviewref.getSemanticObject());
+        if(formviewref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasFormViewRefInv,formviewref.getSemanticObject());
     }
 
     public org.semanticwb.model.FormViewRef getFormViewRefInv()

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class CalendarBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.XMLable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class CalendarBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -143,7 +143,8 @@ public class CalendarBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasCalendarRefInv(org.semanticwb.model.CalendarRef calendarref)
     {
-        if(calendarref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasCalendarRefInv,calendarref.getSemanticObject());
+        if(calendarref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasCalendarRefInv,calendarref.getSemanticObject());
     }
 
     public org.semanticwb.model.CalendarRef getCalendarRefInv()

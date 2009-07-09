@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -152,7 +152,8 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
 
     public boolean hasSubType(org.semanticwb.model.ResourceSubType resourcesubtype)
     {
-        if(resourcesubtype==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPTSubType,resourcesubtype.getSemanticObject());
+        if(resourcesubtype==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasPTSubType,resourcesubtype.getSemanticObject());
     }
 
     public org.semanticwb.model.ResourceSubType getSubType()
@@ -173,7 +174,7 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
 
     public void setResourceMode(int resourceMode)
     {
-        getSemanticObject().setLongProperty(swb_resourceMode, resourceMode);
+        getSemanticObject().setIntProperty(swb_resourceMode, resourceMode);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources()
@@ -183,7 +184,8 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
 
     public boolean hasResource(org.semanticwb.model.Resource resource)
     {
-        if(resource==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPTResource,resource.getSemanticObject());
+        if(resource==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasPTResource,resource.getSemanticObject());
     }
 
     public org.semanticwb.model.Resource getResource()
@@ -204,7 +206,7 @@ public class ResourceTypeBase extends org.semanticwb.model.SWBClass implements o
 
     public void setResourceCache(int resourceCache)
     {
-        getSemanticObject().setLongProperty(swb_resourceCache, resourceCache);
+        getSemanticObject().setIntProperty(swb_resourceCache, resourceCache);
     }
 
     public String getResourceClassName()

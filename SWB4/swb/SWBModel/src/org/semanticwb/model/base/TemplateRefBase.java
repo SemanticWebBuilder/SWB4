@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.Inheritable,org.semanticwb.model.Priorityable
+public class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Priorityable,org.semanticwb.model.Inheritable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
     public static final org.semanticwb.platform.SemanticProperty swb_template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#template");
@@ -81,7 +81,7 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
 
     public void setPriority(int priority)
     {
-        getSemanticObject().setLongProperty(swb_priority, priority);
+        getSemanticObject().setIntProperty(swb_priority, priority);
     }
 
     public int getInherit()
@@ -91,7 +91,7 @@ public class TemplateRefBase extends org.semanticwb.model.Reference implements o
 
     public void setInherit(int inherit)
     {
-        getSemanticObject().setLongProperty(swb_inherit, inherit);
+        getSemanticObject().setIntProperty(swb_inherit, inherit);
     }
 
     public org.semanticwb.model.WebSite getWebSite()

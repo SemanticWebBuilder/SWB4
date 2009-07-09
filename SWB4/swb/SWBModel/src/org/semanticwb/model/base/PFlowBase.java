@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class PFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable
+public class PFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -136,7 +136,8 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
 
     public boolean hasPFlowRefInv(org.semanticwb.model.PFlowRef pflowref)
     {
-        if(pflowref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPFlowRefInv,pflowref.getSemanticObject());
+        if(pflowref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasPFlowRefInv,pflowref.getSemanticObject());
     }
 
     public org.semanticwb.model.PFlowRef getPFlowRefInv()
@@ -187,7 +188,8 @@ public class PFlowBase extends org.semanticwb.model.SWBClass implements org.sema
 
     public boolean hasPFlowInstance(org.semanticwb.model.PFlowInstance pflowinstance)
     {
-        if(pflowinstance==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPFlowInstance,pflowinstance.getSemanticObject());
+        if(pflowinstance==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasPFlowInstance,pflowinstance.getSemanticObject());
     }
 
     public org.semanticwb.model.PFlowInstance getPFlowInstance()
