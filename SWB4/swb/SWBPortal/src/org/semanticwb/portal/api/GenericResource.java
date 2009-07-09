@@ -254,8 +254,6 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
         WebSite tm=SWBContext.getAdminWebSite();
         if(tm!=null)
         {
-            //TODO:implementar
-            //if(paramRequest.getUser().havePermission(tm.getTopic("WBAd_per_Administrator")))
             if(paramRequest.getUser().hasUserGroup(SWBContext.getAdminRepository().getUserGroup("admin")))
             {
                 return new String[]{paramRequest.Mode_VIEW,paramRequest.Mode_ADMIN};

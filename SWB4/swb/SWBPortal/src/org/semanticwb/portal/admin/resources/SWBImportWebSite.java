@@ -135,6 +135,7 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setResourceClassName("org.semanticwb.portal.resources.sem.HTMLContent");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.sem.HTMLContent");
                     ptype.setResourceMode(1);
+                    ptype.setResourceCache(600);
                     ptype.setTitle("HTMLContent");
                 }
 
@@ -192,8 +193,17 @@ public class SWBImportWebSite extends GenericResource {
                     ResourceType ptype = site.createResourceType("QueryResource");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.QueryResource");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.QueryResource");
-                    ptype.setResourceMode(2);
+                    ptype.setResourceMode(3);
                     ptype.setTitle("QueryResource");
+                }
+
+                if (site.getResourceType("VirtualResource") == null) {
+
+                    ResourceType ptype = site.createResourceType("VirtualResource");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.VirtualResource");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.VirtualResource");
+                    ptype.setResourceMode(1);
+                    ptype.setTitle("VirtualResource");
                 }
 
                 if (site.getResourceType("RecommendSwf") == null) {
@@ -320,7 +330,31 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setResourceMode(3);
                     ptype.setTitle("Wiki");
                 }
+                
+                if (site.getResourceType("PDFContent") == null) {
+                    ResourceType ptype = site.createResourceType("PDFContent");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.PDFContent");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.PDFContent");
+                    ptype.setResourceMode(ptype.MODE_CONTENT);
+                    ptype.setTitle("PDFContent");
+                }
 
+                if (site.getResourceType("Blog") == null) {
+                    ResourceType ptype = site.createResourceType("Blog");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.blog.BlogResource");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.blog.BlogResource");
+                    ptype.setResourceMode(3);
+                    ptype.setTitle("Blog");
+                }
+
+                if (site.getResourceType("Comments") == null) {
+                    ResourceType ptype = site.createResourceType("Comments");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.SWBComments");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.SWBComments");
+                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.SWBComments");
+                    ptype.setResourceMode(3);
+                    ptype.setTitle("Comments");
+                }                   
 
                 //Crea dispositivos de defecto
                 if (!site.hasDevice("pc")) {

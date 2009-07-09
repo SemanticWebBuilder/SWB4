@@ -55,6 +55,7 @@ public class WBMenuMap extends GenericAdmResource
         }
         if(!"".equals(base.getAttribute("template","").trim()))
         {
+            System.out.println("loading template...");
             try
             {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));

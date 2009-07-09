@@ -121,13 +121,13 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         ret.append("    var img = dojo.byId(imgid);\n");
         ret.append("    if(img) {\n");
         ret.append("        var rn = Math.floor(Math.random()*99999);\n");
-        ret.append("        img.src = '/swb/jsp/securecode.jsp?nc='+rn;\n");
+        ret.append("        img.src = '"+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp?nc='+rn;\n");
         ret.append("    }\n");
         ret.append("}\n");
 
         ret.append("</script>\n");
         
-        ret.append("<table width=\"640\" class=\"cmnts\" cellpadding=\"0\" cellspacing=\"0\">\n");
+        ret.append("<table width=\"100%\" class=\"cmnts\" border=0 cellpadding=\"0\" cellspacing=\"0\">\n");
         ret.append(renderListComments());
 
         if(securCodeCreated!=null && !securCodeCreated.equalsIgnoreCase(securCodeSent)) {
@@ -183,7 +183,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         ret.append("                <input type=\"button\" value=\"Generar otro código\" onClick=\"changeSecureCodeImage('imgseccode');\"/>\n");
         ret.append("            </div>\n");
         ret.append("            <div id=\"cntseccode\" style=\"text-align:center\">\n");
-        ret.append("                <img src=\"/swb/jsp/securecode.jsp\" id=\"imgseccode\" width=\"300\" height=\"59\" />\n");
+        ret.append("                <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"300\" height=\"59\" />\n");
         ret.append("            </div>\n");        
         ret.append("            </span>\n");
         ret.append("            <p>\n");
@@ -219,10 +219,10 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         while(itComments.hasNext()) {
             Comment comment = itComments.next();
             ret.append("<tr>\n");
-            ret.append("  <td class=\"cmntimg\" width=\"30\" height=\"30\">\n");
-            ret.append("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/status_online.png\" alt=\"user comment\" />\n");
-            ret.append("  </td>\n");
-            ret.append("  <td class=\"cmnt\">"+(ordinal++)+". <strong>"+(comment.getCreator().getFullName().equalsIgnoreCase("")?"Desconocido":comment.getCreator().getFullName())+" escribió</strong> el "+sdf.format(comment.getCreated())+"<br />"+comment.getComment()+"</td>\n");
+//            ret.append("  <td class=\"cmntimg\" width=\"30\" height=\"30\">\n");
+//            ret.append("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/status_online.png\" alt=\"user comment\" />\n");
+//            ret.append("  </td>\n");
+            ret.append("  <td colspan=2 class=\"cmnt\">"+(ordinal++)+". <strong>"+(comment.getCreator().getFullName().equalsIgnoreCase("")?"Desconocido":comment.getCreator().getFullName())+" escribió</strong> el "+sdf.format(comment.getCreated())+"<br />"+comment.getComment()+"</td>\n");
             ret.append("</tr>\n");
         }
 

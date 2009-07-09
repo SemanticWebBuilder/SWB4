@@ -1007,7 +1007,10 @@ public class SWBAWebPageContents extends GenericResource {
                                     }
                                 }
                                 if (prop.isInt()) {
-                                    obj.setLongProperty(prop, Integer.parseInt(value));
+                                    obj.setIntProperty(prop, Integer.parseInt(value));
+                                }
+                                if (prop.isLong()) {
+                                    obj.setLongProperty(prop, Long.parseLong(value));
                                 }
                                 if (prop.isString()) {
                                     obj.setProperty(prop, value);
@@ -1086,8 +1089,14 @@ public class SWBAWebPageContents extends GenericResource {
                 if (prop.isBoolean()) {
                     ret = "" + obj.getBooleanProperty(prop);
                 }
-                if (prop.isInt() || prop.isFloat()) {
+                if (prop.isInt()) {
+                    ret = "" + obj.getIntProperty(prop);
+                }
+                if (prop.isLong()) {
                     ret = "" + obj.getLongProperty(prop);
+                }
+                if (prop.isFloat()) {
+                    ret = "" + obj.getFloatProperty(prop);
                 }
                 if (prop.isString()) {
                     ret = obj.getProperty(prop);
