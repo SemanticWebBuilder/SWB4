@@ -55,6 +55,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -92,6 +93,8 @@ public class SWBUtils {
     public static String LOCALE_SERVICES = null;
     private static PrintWriter log2File = new PrintWriter(System.err);
 
+    private static Vector errorElement=new Vector();
+    private static int errorElementSize=200;
 
     /** Creates new utils */
     private SWBUtils() {
@@ -118,36 +121,6 @@ public class SWBUtils {
      */
     private void init() {
         LOCALE_SERVICES = "locale_services";
-    }
-
-    public static long sizeOf(Iterator it) {
-        long size = 0;
-        while (it.hasNext()) {
-            it.next();
-            size++;
-        }
-        return size;
-    }
-
-    public static int monthToInt(String month, String language) {
-        Locale loc;
-        try {
-            loc = new Locale(language);
-        }catch(Exception e) {
-            loc = locale;
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat("MMMM");
-        GregorianCalendar gc = new GregorianCalendar(loc);
-        gc.set(Calendar.MONTH, Calendar.JANUARY);
-        gc.set(Calendar.DATE, 1);
-        int i;
-        for(i=1; i<=12; i++) {
-            if( formatter.format(gc.getTime()).equalsIgnoreCase(month) ) {
-                return i;
-            }
-            gc. add(Calendar.MONTH, 1);
-        }
-        return -1;
     }
 
     /*
@@ -209,6 +182,40 @@ public class SWBUtils {
         }
         return new Logger4jImpl(org.apache.log4j.Logger.getLogger(cls));
     }
+    
+    /**
+     * 
+     */
+    public static class ERROR 
+    {
+        /**
+         * Regresa iterador con los errores que se han enviado al log, 
+         * este iterador tiene un cierto tamaño el cual como maximo puede ser el que tiene la variable de clase errorElementSize.
+         */
+        public static Iterator getErrorElements()
+        {
+            return new Vector(errorElement).iterator();
+        }
+
+        /**
+         * Getter for property errorElementSize.
+         * @return Value of property errorElementSize.
+         */
+        public static int getErrorElementSize()
+        {
+            return errorElementSize;
+        }    
+
+        /**
+         * Setter for property errorElementSize.
+         * @param errorElementSize New value of property errorElementSize.
+         */
+        public static void setErrorElementSize(int errorElementSize)
+        {
+            SWBUtils.errorElementSize = errorElementSize;
+        }            
+    }
+
 
     /**
      * 
@@ -237,6 +244,27 @@ public class SWBUtils {
                 ret=CHARSET_UTF8;
             }
             return ret;
+        }
+
+        public static int monthToInt(String month, String language) {
+            Locale loc;
+            try {
+                loc = new Locale(language);
+            }catch(Exception e) {
+                loc = locale;
+            }
+            SimpleDateFormat formatter = new SimpleDateFormat("MMMM");
+            GregorianCalendar gc = new GregorianCalendar(loc);
+            gc.set(Calendar.MONTH, Calendar.JANUARY);
+            gc.set(Calendar.DATE, 1);
+            int i;
+            for(i=1; i<=12; i++) {
+                if( formatter.format(gc.getTime()).equalsIgnoreCase(month) ) {
+                    return i;
+                }
+                gc. add(Calendar.MONTH, 1);
+            }
+            return -1;
         }
 
         public static String getDafaultEncoding()
@@ -2478,5 +2506,15 @@ public class SWBUtils {
             }
             return ret;
         }
+
+        public static long sizeOf(Iterator it) {
+            long size = 0;
+            while (it.hasNext()) {
+                it.next();
+                size++;
+            }
+            return size;
+        }
+
     }
 }
