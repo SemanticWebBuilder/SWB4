@@ -962,7 +962,7 @@ class ReportMgr {
                         arr_data[3] = Integer.toString(section.getLevel());
                         arr_data[4] = section.getId();
                         arr_data[5] = section.isActive()?"Active":"Inactive";
-                        arr_data[6] = SWBUtils.sizeOf(section.listChilds())>0 ? "true" : "false";
+                        arr_data[6] = SWBUtils.Collections.sizeOf(section.listChilds())>0 ? "true" : "false";
                         al_pag.add(arr_data);
                         counter = l_allacumulated;
                     }
