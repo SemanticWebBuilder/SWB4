@@ -94,12 +94,12 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         boolean iswordcontent = true; 
                         int posword = htmlOut.toLowerCase().indexOf("name=\"generator\" content=\"openoffice.org"); //detección de si el contenido es de openOffice
                         if (posword > -1) iswordcontent = false;
-                        int pages=Integer.parseInt(base.getAttribute("pages","0"));
-                        System.out.println("pages:"+pages);
                         if (iswordcontent) { //Contenido MsWord
-                            contentUtils.predefinedStyles(htmlOut, base); //Estilos predefinidos
-                            if(pages==1) htmlOut = contentUtils.paginationMsWord(htmlOut, page, request.getParameter("page"), base); //Paginación
-                        } else if(pages==1){ //Contenido OpenOffice
+                            htmlOut=contentUtils.predefinedStyles(htmlOut, base); //Estilos predefinidos
+                            if(isPages()) {
+                                htmlOut = contentUtils.paginationMsWord(htmlOut, page, request.getParameter("page"), base);
+                            } //Paginación
+                        } else if(isPages()){ //Contenido OpenOffice
                             htmlOut = contentUtils.paginationOpenOffice(htmlOut, page, request.getParameter("page"), base); //Paginación
                         }
                         //Termina Agregado por Jorge Jiménez (5/07/2009)
@@ -128,7 +128,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
         try{
             ContentUtils contentUtils = new ContentUtils();
             super.setResourceBase(base);
-            contentUtils.setResourceBase(base);
+            contentUtils.setResourceBase(base, "Content");
         }catch(Exception e){
             log.error(e);
         }
