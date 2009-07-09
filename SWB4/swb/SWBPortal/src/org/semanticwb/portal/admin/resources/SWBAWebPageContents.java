@@ -788,7 +788,7 @@ public class SWBAWebPageContents extends GenericResource {
         String id = request.getParameter("sval");
         PrintWriter out = response.getWriter();
         out.println("<fieldset>");
-        out.println("<legend>Previsualizar</legend>");
+        out.println("<legend>"+paramRequest.getLocaleString("previewdocument")+"</legend>");
         try {
             SWBResource res = SWBPortal.getResourceMgr().getResource(id);
             ((SWBParamRequestImp)paramRequest).setResourceBase(res.getResourceBase());
