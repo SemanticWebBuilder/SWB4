@@ -183,7 +183,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         ret.append("                <input type=\"button\" value=\"Generar otro código\" onClick=\"changeSecureCodeImage('imgseccode');\"/>\n");
         ret.append("            </div>\n");
         ret.append("            <div id=\"cntseccode\" style=\"text-align:center\">\n");
-        ret.append("                <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"300\" height=\"59\" />\n");
+        ret.append("                <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"200\" height=\"60\" />\n");
         ret.append("            </div>\n");        
         ret.append("            </span>\n");
         ret.append("            <p>\n");
