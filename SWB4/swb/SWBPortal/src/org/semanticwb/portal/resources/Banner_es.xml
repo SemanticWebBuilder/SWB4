@@ -6,16 +6,16 @@
         <fieldset>
 		<statictext name="txtLocal">Banner local o externo:</statictext>
 		<input type="RADIO" id="local1" name="local" label="Externo" value="1"/>
-		<input type="RADIO" id="local2" name="local" label="Local" value="0"/>
+		<input type="RADIO" id="local2" name="local" label="Local" value="0" checked="true"/>
 		<textarea name="code" label="*1 Código:" rows="5" cols="50" wrap="virtual"/>
-		<input type="FILE" id="img" name="img" label="*2 Banner:" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|swf|png" isshowfiletype="true" />
+		<input type="FILE" id="img" name="img" label="*2 Banner:" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|swf" isshowfiletype="true" />
 		<input type="TEXT" id="alt" name="alt" label="Texto alterno:" size="50"/>
 		<input type="TEXT" id="width" name="width" label="Ancho (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
 		<input type="TEXT" id="height" name="height" label="Alto (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
 		<input type="TEXT" id="url" name="url" label="Dirección web" size="50"/>
 		<statictext name="txtTarget">En una nueva ventana:</statictext>
 		<input type="RADIO" id="target1" name="target" label="Sí" value="1"/>
-		<input type="RADIO" id="target2" name="target" label="No" value="0"/>
+		<input type="RADIO" id="target2" name="target" label="No" value="0" checked="true"/>
         </fieldset>
         <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
@@ -38,13 +38,7 @@
 	</statictext>
 	<script language="JavaScript">
 		<![CDATA[
-            if(!document.frmWBBanner.local[0].checked && !document.frmWBBanner.local[1].checked){
-				document.frmWBBanner.local[1].checked=true;
-            }
-			if(!document.frmWBBanner.target[0].checked && !document.frmWBBanner.target[1].checked){
-          		document.frmWBBanner.target[1].checked=true;
-            }
-			function jsValida(frm)
+           function jsValida(frm)
 			{
                 if(document.getElementById('local2').checked)
 				{
