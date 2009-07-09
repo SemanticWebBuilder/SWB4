@@ -104,15 +104,18 @@ public class Js_FileTypeFE extends WBJsValidationsFEAbs {
             strb.append("\n      var swFormat=pExt + '|';");
             strb.append("\n      sExt=pCaracter.substring(pCaracter.indexOf(\".\")).toLowerCase();");
             strb.append("\n      var sType='';");
+            strb.append("\n      var flag=false;");
             strb.append("\n      while(swFormat.length > 0 )");
             strb.append("\n      {");
             strb.append("\n         sType= swFormat.substring(0, swFormat.indexOf(\"|\"));");
-            strb.append("\n         if(sExt.indexOf(sType)!=-1) return true;");
+            strb.append("\n         if(sExt.indexOf(sType)!=-1) flag=true;");
             strb.append("\n         swFormat=swFormat.substring(swFormat.indexOf(\"|\")+1);");
             strb.append("\n      }");
+            strb.append("\n      if(!flag){");
             strb.append("\n      while(pExt.indexOf(\"|\")!=-1) pExt=pExt.replace('|',',');");
             strb.append("\n      alert('"+ SWBUtils.TEXT.getLocaleString(bundle, "msgFileType", locale) +"' + pExt.replace('|',','));");
             strb.append("\n      return false;");
+            strb.append("\n      }");
             strb.append("\n   }");
         }
         return strb.toString();
