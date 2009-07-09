@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Campable,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.Indexable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Sortable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.Deviceable,org.semanticwb.model.Referensable,org.semanticwb.model.XMLConfable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.Hitable,org.semanticwb.model.Viewable
+public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Deviceable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Hitable,org.semanticwb.model.Activeable,org.semanticwb.model.Sortable,org.semanticwb.model.Expirable,org.semanticwb.model.Campable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Localeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.XMLable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Trashable,org.semanticwb.model.RoleRefable,org.semanticwb.model.XMLConfable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
@@ -105,7 +105,8 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref)
     {
-        if(usergroupref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,usergroupref.getSemanticObject());
+        if(usergroupref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,usergroupref.getSemanticObject());
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listInheritUserGroupRefs()
@@ -271,7 +272,8 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasCalendarRef(org.semanticwb.model.CalendarRef calendarref)
     {
-        if(calendarref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
+        if(calendarref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
     }
 
     public void addCalendarRef(org.semanticwb.model.CalendarRef calendarref)
@@ -307,7 +309,8 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasResourceRefInv(org.semanticwb.model.ResourceRef resourceref)
     {
-        if(resourceref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasResourceRefInv,resourceref.getSemanticObject());
+        if(resourceref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasResourceRefInv,resourceref.getSemanticObject());
     }
 
     public org.semanticwb.model.ResourceRef getResourceRefInv()
@@ -359,7 +362,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public void setIndex(int index)
     {
-        getSemanticObject().setLongProperty(swb_index, index);
+        getSemanticObject().setIntProperty(swb_index, index);
     }
 
     public java.util.Date getCreated()
@@ -524,7 +527,7 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public void setPriority(int priority)
     {
-        getSemanticObject().setLongProperty(swb_priority, priority);
+        getSemanticObject().setIntProperty(swb_priority, priority);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
@@ -534,7 +537,8 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasRoleRef(org.semanticwb.model.RoleRef roleref)
     {
-        if(roleref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRoleRef,roleref.getSemanticObject());
+        if(roleref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasRoleRef,roleref.getSemanticObject());
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listInheritRoleRefs()
@@ -608,7 +612,8 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasResourceable(org.semanticwb.model.Resourceable resourceable)
     {
-        if(resourceable==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasResourceable,resourceable.getSemanticObject());
+        if(resourceable==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasResourceable,resourceable.getSemanticObject());
     }
 
     public org.semanticwb.model.Resourceable getResourceable()
@@ -650,7 +655,8 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasRuleRef(org.semanticwb.model.RuleRef ruleref)
     {
-        if(ruleref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRuleRef,ruleref.getSemanticObject());
+        if(ruleref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasRuleRef,ruleref.getSemanticObject());
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listInheritRuleRefs()

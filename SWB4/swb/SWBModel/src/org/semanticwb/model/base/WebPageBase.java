@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class WebPageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Undeleteable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Resourceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Viewable
+public class WebPageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Resourceable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Trashable,org.semanticwb.model.RoleRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
@@ -91,7 +91,8 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref)
     {
-        if(usergroupref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,usergroupref.getSemanticObject());
+        if(usergroupref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,usergroupref.getSemanticObject());
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listInheritUserGroupRefs()
@@ -172,7 +173,7 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public void setWebPageURLType(int webPageURLType)
     {
-        getSemanticObject().setLongProperty(swb_webPageURLType, webPageURLType);
+        getSemanticObject().setIntProperty(swb_webPageURLType, webPageURLType);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> listVirtualParents()
@@ -182,7 +183,8 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public boolean hasVirtualParent(org.semanticwb.model.WebPage webpage)
     {
-        if(webpage==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasWebPageVirtualParent,webpage.getSemanticObject());
+        if(webpage==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasWebPageVirtualParent,webpage.getSemanticObject());
     }
 
     public void addVirtualParent(org.semanticwb.model.WebPage webpage)
@@ -248,7 +250,8 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public boolean hasWebPageVirtualChild(org.semanticwb.model.WebPage webpage)
     {
-        if(webpage==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasWebPageVirtualChild,webpage.getSemanticObject());
+        if(webpage==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasWebPageVirtualChild,webpage.getSemanticObject());
     }
 
     public org.semanticwb.model.WebPage getWebPageVirtualChild()
@@ -269,7 +272,8 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public boolean hasTemplateRef(org.semanticwb.model.TemplateRef templateref)
     {
-        if(templateref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasTemplateRef,templateref.getSemanticObject());
+        if(templateref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasTemplateRef,templateref.getSemanticObject());
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listInheritTemplateRefs()
@@ -310,7 +314,8 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public boolean hasPFlowRef(org.semanticwb.model.PFlowRef pflowref)
     {
-        if(pflowref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPFlowRef,pflowref.getSemanticObject());
+        if(pflowref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasPFlowRef,pflowref.getSemanticObject());
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> listInheritPFlowRefs()
@@ -351,7 +356,8 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public boolean hasChild(org.semanticwb.model.WebPage webpage)
     {
-        if(webpage==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasWebPageChild,webpage.getSemanticObject());
+        if(webpage==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasWebPageChild,webpage.getSemanticObject());
     }
 
     public org.semanticwb.model.WebPage getChild()
@@ -372,7 +378,8 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public boolean hasCalendarRef(org.semanticwb.model.CalendarRef calendarref)
     {
-        if(calendarref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
+        if(calendarref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
     }
 
     public void addCalendarRef(org.semanticwb.model.CalendarRef calendarref)
@@ -515,7 +522,8 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public boolean hasResource(org.semanticwb.model.Resource resource)
     {
-        if(resource==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasResource,resource.getSemanticObject());
+        if(resource==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasResource,resource.getSemanticObject());
     }
 
     public void addResource(org.semanticwb.model.Resource resource)
@@ -593,7 +601,8 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public boolean hasRoleRef(org.semanticwb.model.RoleRef roleref)
     {
-        if(roleref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRoleRef,roleref.getSemanticObject());
+        if(roleref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasRoleRef,roleref.getSemanticObject());
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listInheritRoleRefs()
@@ -667,7 +676,8 @@ public class WebPageBase extends org.semanticwb.model.SWBClass implements org.se
 
     public boolean hasRuleRef(org.semanticwb.model.RuleRef ruleref)
     {
-        if(ruleref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRuleRef,ruleref.getSemanticObject());
+        if(ruleref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasRuleRef,ruleref.getSemanticObject());
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listInheritRuleRefs()

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.Deviceable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable
+public class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Deviceable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Localeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Versionable,org.semanticwb.model.RoleRefable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
@@ -85,7 +85,8 @@ public class TemplateBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref)
     {
-        if(usergroupref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,usergroupref.getSemanticObject());
+        if(usergroupref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,usergroupref.getSemanticObject());
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listInheritUserGroupRefs()
@@ -209,7 +210,8 @@ public class TemplateBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasCalendarRef(org.semanticwb.model.CalendarRef calendarref)
     {
-        if(calendarref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
+        if(calendarref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
     }
 
     public void addCalendarRef(org.semanticwb.model.CalendarRef calendarref)
@@ -342,7 +344,8 @@ public class TemplateBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasRoleRef(org.semanticwb.model.RoleRef roleref)
     {
-        if(roleref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRoleRef,roleref.getSemanticObject());
+        if(roleref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasRoleRef,roleref.getSemanticObject());
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listInheritRoleRefs()
@@ -404,7 +407,8 @@ public class TemplateBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasTemplateRefInv(org.semanticwb.model.TemplateRef templateref)
     {
-        if(templateref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasTemplateRefInv,templateref.getSemanticObject());
+        if(templateref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasTemplateRefInv,templateref.getSemanticObject());
     }
 
     public org.semanticwb.model.TemplateRef getTemplateRefInv()
@@ -446,7 +450,8 @@ public class TemplateBase extends org.semanticwb.model.SWBClass implements org.s
 
     public boolean hasRuleRef(org.semanticwb.model.RuleRef ruleref)
     {
-        if(ruleref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRuleRef,ruleref.getSemanticObject());
+        if(ruleref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasRuleRef,ruleref.getSemanticObject());
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listInheritRuleRefs()

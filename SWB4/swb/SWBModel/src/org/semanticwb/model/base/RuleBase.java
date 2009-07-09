@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class RuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Versionable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable
+public class RuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Versionable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -187,7 +187,8 @@ public class RuleBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public boolean hasRuleRefInv(org.semanticwb.model.RuleRef ruleref)
     {
-        if(ruleref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRuleRefInv,ruleref.getSemanticObject());
+        if(ruleref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasRuleRefInv,ruleref.getSemanticObject());
     }
 
     public org.semanticwb.model.RuleRef getRuleRefInv()

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -127,7 +127,8 @@ public class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implement
 
     public boolean hasResource(org.semanticwb.model.Resource resource)
     {
-        if(resource==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasPSTResource,resource.getSemanticObject());
+        if(resource==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasPSTResource,resource.getSemanticObject());
     }
 
     public org.semanticwb.model.Resource getResource()

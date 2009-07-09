@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable");
     public static final org.semanticwb.platform.SemanticProperty swb_hasGroupedUser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasGroupedUser");
@@ -68,7 +68,8 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
 
     public boolean hasUser(org.semanticwb.model.UserGroupable usergroupable)
     {
-        if(usergroupable==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasGroupedUser,usergroupable.getSemanticObject());
+        if(usergroupable==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasGroupedUser,usergroupable.getSemanticObject());
     }
 
     public org.semanticwb.model.UserGroupable getUser()
@@ -176,7 +177,8 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
 
     public boolean hasChild(org.semanticwb.model.UserGroup usergroup)
     {
-        if(usergroup==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasUsrGrpChild,usergroup.getSemanticObject());
+        if(usergroup==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasUsrGrpChild,usergroup.getSemanticObject());
     }
 
     public org.semanticwb.model.UserGroup getChild()

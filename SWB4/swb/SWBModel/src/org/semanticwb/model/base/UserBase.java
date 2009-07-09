@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable
+public class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Roleable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserFavorite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserFavorite");
     public static final org.semanticwb.platform.SemanticProperty swb_userFavorite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userFavorite");
@@ -124,7 +124,8 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public boolean hasCalendarRef(org.semanticwb.model.CalendarRef calendarref)
     {
-        if(calendarref==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
+        if(calendarref==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
     }
 
     public void addCalendarRef(org.semanticwb.model.CalendarRef calendarref)
@@ -211,7 +212,8 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public boolean hasUserGroup(org.semanticwb.model.UserGroup usergroup)
     {
-        if(usergroup==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasUserGroup,usergroup.getSemanticObject());
+        if(usergroup==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasUserGroup,usergroup.getSemanticObject());
     }
 
     public void addUserGroup(org.semanticwb.model.UserGroup usergroup)
@@ -297,7 +299,8 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public boolean hasAdminFilter(org.semanticwb.model.AdminFilter adminfilter)
     {
-        if(adminfilter==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasAdminFilter,adminfilter.getSemanticObject());
+        if(adminfilter==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasAdminFilter,adminfilter.getSemanticObject());
     }
 
     public void addAdminFilter(org.semanticwb.model.AdminFilter adminfilter)
@@ -386,7 +389,8 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public boolean hasRole(org.semanticwb.model.Role role)
     {
-        if(role==null)return false;        return getSemanticObject().hasObjectProperty(swb_hasRole,role.getSemanticObject());
+        if(role==null)return false;
+        return getSemanticObject().hasObjectProperty(swb_hasRole,role.getSemanticObject());
     }
 
     public void addRole(org.semanticwb.model.Role role)
@@ -422,7 +426,7 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
 
     public void setSecurityQuestion(int usrSecurityQuestion)
     {
-        getSemanticObject().setLongProperty(swb_usrSecurityQuestion, usrSecurityQuestion);
+        getSemanticObject().setIntProperty(swb_usrSecurityQuestion, usrSecurityQuestion);
     }
 
     public String getSecurityAnswer()

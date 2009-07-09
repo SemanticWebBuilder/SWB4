@@ -60,7 +60,7 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
 
     public void setIndex(int index)
     {
-        getSemanticObject().setLongProperty(swb_index, index);
+        getSemanticObject().setIntProperty(swb_index, index);
     }
 
     public String getSelectValues()
