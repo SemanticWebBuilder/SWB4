@@ -159,7 +159,14 @@ public class RadioFE extends WBAdmResourceAbs
                 if(align!=null) child.setAttribute("align",align);
                 if(isdisabled) child.setAttribute("disabled","true");
                 if(isreadonly) child.setAttribute("readonly","true");
-                if(ischecked || (value!=null && dbconnmgr!=null && value.equalsIgnoreCase(dbconnmgr.getAttribute(name)))) child.setAttribute("checked","true");
+                
+                if(dbconnmgr.getAttribute(name)==null && ischecked){
+                    child.setAttribute("checked","true");
+                }
+                if(dbconnmgr.getAttribute(name)!=null && value.equalsIgnoreCase(dbconnmgr.getAttribute(name))){
+                    child.setAttribute("checked","true");
+                }
+                //if(ischecked || (value!=null && dbconnmgr!=null && value.equalsIgnoreCase(dbconnmgr.getAttribute(name)))) child.setAttribute("checked","true");
                 if(accesskey!=null) child.setAttribute("accesskey",accesskey);
                 if(style!=null) child.setAttribute("style",style);
                 if(styleclass!=null) child.setAttribute("class",styleclass);
