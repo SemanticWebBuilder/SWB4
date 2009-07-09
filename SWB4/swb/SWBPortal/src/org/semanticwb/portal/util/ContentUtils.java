@@ -42,7 +42,6 @@ public class ContentUtils {
     static String cssSize = null;
     static boolean removeLinks = false;
     static boolean flag = false;
-    String nameClass = "Content";
     HashMap hStyleObjs = null;
     static HashMap hTMhStyleObjs = new HashMap();
     static HashMap hTMChangeStyles = new HashMap();
@@ -71,6 +70,7 @@ public class ContentUtils {
     private String getContentByPage(String content, int totPages, int npage, WebPage webpage, Resource base, String contentType) {
         StringBuffer strb = new StringBuffer();
         try {
+            System.out.println("baseID:"+base.getId()+",attr:"+base.getAttribute("npages"));
             int snpages = Integer.parseInt(base.getProperty("npages", "15"));
             String stxtant = base.getProperty("txtant", "Anterior");
             String stxtsig = base.getProperty("txtsig", "Siguiente");
@@ -151,6 +151,7 @@ public class ContentUtils {
 
     public String paginationMsWord(String htmlOut, WebPage page, String npage, Resource base) {
         int totPages = getMsContentPagesNumber(htmlOut);
+        System.out.println("totPages:"+totPages);
         if (totPages > 1) {
             int ipage = 1;
             if (npage != null) {
@@ -158,6 +159,7 @@ public class ContentUtils {
             } else {
                 ipage = 1;
             }
+            System.out.println("ipage:"+ipage);
             htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "MsWord");
         }
         return htmlOut;
@@ -294,7 +296,7 @@ public class ContentUtils {
     /**
      * Inicializa la clase creando objetos de configuración del recurso
      */
-    public void setResourceBase(Resource base) {
+    public void setResourceBase(Resource base, String className) {
         try {
             if (hTMhStyleObjs.get(base.getWebSiteId()) == null) {
                 hStyleObjs = null;
@@ -302,25 +304,20 @@ public class ContentUtils {
                 recproperties = new Properties();
                 InputStream file = null;
                 try {
-                    int pos = -1;
-                    pos = this.getClass().getName().lastIndexOf(".");
-                    if (pos > -1) {
-                        nameClass = this.getClass().getName().substring(pos + 1);
-                    }
                     try {
-                        String path = SWBPlatform.getWorkPath() + "/sites/" + base.getWebSiteId() + "/config/resources/" + nameClass + ".properties";
+                        String path = SWBPlatform.getWorkPath() + "/models/" + base.getWebSiteId() + "/config/resources/" + className + ".properties";
                         fptr = new FileInputStream(path);
                         file = new FileInputStream(path);
                     } catch (Exception e) {
-                        //AFUtils.log(e);
+                        //log.error(e);
                     }
                     if (fptr == null) { //busca en raiz de work/config
                         try {
-                            String path = SWBPlatform.getWorkPath() + "/config/resources/" + nameClass + ".properties";
+                            String path = SWBPlatform.getWorkPath() + "/config/resources/" + className + ".properties";
                             fptr = new FileInputStream(path);
                             file = new FileInputStream(path);
                         } catch (Exception e) {
-                            //AFUtils.log(e);
+                            //log.error(e);
                         }
                     }
                     if (fptr != null) {
@@ -348,7 +345,7 @@ public class ContentUtils {
 
                             if (file != null) {    // crea estilos de xml en el archivo Content.properties (wb3)
                                 String sdoc = SWBUtils.IO.readInputStream(file);
-                                pos = -1;
+                                int pos = -1;
                                 pos = sdoc.indexOf("<styles>");
                                 if (pos > -1) { //existe styles en propesties
                                     int posFin = -1;
