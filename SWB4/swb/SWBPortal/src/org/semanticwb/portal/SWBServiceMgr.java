@@ -126,10 +126,28 @@ public class SWBServiceMgr implements SemanticObserver {
                     {
                         SWBPortal.getIndexMgr().getDefaultIndexer().removeWebSite(obj.getId());
                     }
+                    if(obj.instanceOf(ResourceType.sclass))
+                    {
+                        try
+                        {
+                            Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(obj.getProperty(ResourceType.swb_resourceClassName));
+                            ((SWBResource)cls2.newInstance()).uninstall((ResourceType)obj.createGenericInstance());
+                        }catch(Exception e){log.error(e);}
+                    }
+
                 }
             } else if (prop instanceof SemanticProperty)
             {
-                //System.out.println("obj:"+obj+" "+Resource.sclass+"="+Resource.sclass+" prop:"+prop+"="+Resource.swb_resourceSubType);
+                //System.out.println("obj2:"+obj+" "+Resource.sclass+"="+Resource.sclass+" prop:"+prop+"="+Resource.swb_resourceSubType);
+                if(obj.instanceOf(ResourceType.sclass) && prop.equals(ResourceType.swb_resourceClassName))
+                {
+                    try
+                    {
+                        Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(obj.getProperty(ResourceType.swb_resourceClassName));
+                        ((SWBResource)cls2.newInstance()).install((ResourceType)obj.createGenericInstance());
+                    }catch(Exception e){log.error(e);}
+                }
+
                 if(obj.instanceOf(Resource.sclass) && prop.equals(Resource.swb_resourceSubType))
                 {
                     Resource res=(Resource)obj.createGenericInstance();
@@ -146,6 +164,7 @@ public class SWBServiceMgr implements SemanticObserver {
                 if(obj.instanceOf(Resource.sclass))
                 {
                     SWBResource res=SWBPortal.getResourceMgr().getResource(obj.getURI());
+                    //System.out.println("Instanceof SWBResource:"+res);
                     try
                     {
                         if(res!=null)res.setResourceBase(res.getResourceBase());
@@ -175,7 +194,7 @@ public class SWBServiceMgr implements SemanticObserver {
             //TODO:Una rapida aproximacion para no estar actualizando al modificar cada propiedad
             //if(obj.hashCode()!=lastobj || Thread.currentThread().getId()!=lastthread)
             {
-                System.out.println("updateObject:"+obj+" user:"+usr);
+                //System.out.println("updateObject:"+obj+" user:"+usr);
                 lastobj=obj.hashCode();
                 lastthread=Thread.currentThread().getId();
                 updateTraceable(obj,usr);
