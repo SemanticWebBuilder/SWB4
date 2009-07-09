@@ -38,6 +38,10 @@
 	</statictext>
 	<script language="JavaScript">
 		<![CDATA[
+           if(!document.getElementById('local1').checked && !document.getElementById('local2').checked)
+             document.getElementById('local1').checked=true;
+           if(!document.getElementById('target1').checked && !document.getElementById('target2').checked)
+             document.getElementById('target1').checked=true;
            function jsValida(frm)
 			{
                 if(document.getElementById('local2').checked)
