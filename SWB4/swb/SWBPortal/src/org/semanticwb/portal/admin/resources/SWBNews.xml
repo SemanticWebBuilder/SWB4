@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmRSSResource" action="true" method="POST">
+		<admdbconnmgr defconn="true"/>
+                <fieldset>
+		<input type="TEXT" name="url" label="* URL del RSS" size="50" jsrequired="true" />
+		        </fieldset>
+                <fieldset>
+		<input type="SUBMIT" name="btnSave"  value="Guardar"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+                </fieldset>
+	</form>
+	<statictext name="txtNote">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				* Datos requeridos
+			</font>
+		]]>
+	</statictext>
+</admresource>
