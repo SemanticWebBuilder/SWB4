@@ -59,8 +59,9 @@ public class SWBAResourceVersion extends GenericResource {
             //System.out.println("doView(dialog):"+id);
             out.println("<script type=\"javascript\">");
             out.println(" hideDialog(); ");
-            out.println(" alert('"+id+"'); ");
-            out.println(" reloadTab('" + id + "'); ");
+            GenericObject obj = ont.getGenericObject(id);
+            SWBResource swres = (SWBResource) obj;
+            if(swres!=null)out.println(" reloadTab('" + swres.getResourceBase().getURI() + "');");
             out.println("</script>");
             //out.println();
             return;
@@ -182,7 +183,7 @@ public class SWBAResourceVersion extends GenericResource {
                         urlNew.setParameter("suri", id);
                         urlNew.setParameter("act", "newversion");
                         urlNew.setMode(SWBResourceURL.Mode_EDIT);
-                        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"showDialog('" + urlNew + "','Agregar nueva versión'); hideDialog(); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
+                        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"showDialog('" + urlNew + "','Agregar nueva versión'); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
                     } else {
                         SWBResourceURL urlVR = paramRequest.getActionUrl();
                         urlVR.setParameter("suri", id);
