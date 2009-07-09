@@ -70,7 +70,6 @@ public class ContentUtils {
     private String getContentByPage(String content, int totPages, int npage, WebPage webpage, Resource base, String contentType) {
         StringBuffer strb = new StringBuffer();
         try {
-            System.out.println("baseID:"+base.getId()+",attr:"+base.getAttribute("npages"));
             int snpages = Integer.parseInt(base.getProperty("npages", "15"));
             String stxtant = base.getProperty("txtant", "Anterior");
             String stxtsig = base.getProperty("txtsig", "Siguiente");
@@ -151,7 +150,6 @@ public class ContentUtils {
 
     public String paginationMsWord(String htmlOut, WebPage page, String npage, Resource base) {
         int totPages = getMsContentPagesNumber(htmlOut);
-        System.out.println("totPages:"+totPages);
         if (totPages > 1) {
             int ipage = 1;
             if (npage != null) {
@@ -159,7 +157,6 @@ public class ContentUtils {
             } else {
                 ipage = 1;
             }
-            System.out.println("ipage:"+ipage);
             htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "MsWord");
         }
         return htmlOut;
