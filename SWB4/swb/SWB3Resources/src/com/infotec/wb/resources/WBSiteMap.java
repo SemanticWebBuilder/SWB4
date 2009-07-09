@@ -104,7 +104,7 @@ public class WBSiteMap extends GenericAdmResource
         Resource base=getResourceBase();
         try
         {
-            WebSite tm = paramRequest.getTopic().getWebSite();
+            WebSite tm = paramRequest.getWebPage().getWebSite();
             WebPage tpsite = null;
             int intLevel = 1, intWidth = 10;
             
@@ -489,19 +489,19 @@ public class WBSiteMap extends GenericAdmResource
     {
         Resource base=getResourceBase();
         String surl="";
-        if(paramRequest.getTopic()!=paramRequest.getAdminTopic())
+        if(paramRequest.getWebPage()!=paramRequest.getAdminTopic())
         {
             String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
             if("add".equals(action))
             {
-                System.out.println(paramRequest.getTopic().getId()+"-----------");
+                System.out.println(paramRequest.getWebPage().getId()+"-----------");
                 
-                SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
+                SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getWebPage(),SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
                 url.setMode(url.Mode_VIEW);
                 //url.setWindowState(url.WinState_MAXIMIZED);
                 url.setParameter("smp_act","smp_step2");
-                url.setTopic(paramRequest.getTopic());
+                url.setTopic(paramRequest.getWebPage());
                 //url.setCallMethod(paramsRequest.Call_DIRECT);
                 surl=url.toString();
             }
@@ -510,7 +510,7 @@ public class WBSiteMap extends GenericAdmResource
             }
         }
         super.doAdmin(request, response, paramRequest);
-        if(paramRequest.getTopic()!=paramRequest.getAdminTopic() && !"".equals(surl))
+        if(paramRequest.getWebPage()!=paramRequest.getAdminTopic() && !"".equals(surl))
         {
             base.setAttribute("url", surl);
             try{

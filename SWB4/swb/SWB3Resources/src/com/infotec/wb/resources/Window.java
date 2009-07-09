@@ -131,12 +131,12 @@ public class Window extends GenericAdmResource {
             props.append(",left=");
             props.append(base.getAttribute("left", "10").trim());
 
-            SWBResourceURLImp url = new SWBResourceURLImp(request, base, reqParams.getTopic(),SWBResourceURL.UrlType_RENDER);
+            SWBResourceURLImp url = new SWBResourceURLImp(request, base, reqParams.getWebPage(),SWBResourceURL.UrlType_RENDER);
             url.setResourceBase(base);
             url.setMode(SWBResourceURL.Mode_VIEW);
             url.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
             url.setParameter("ven_act","ven_step2");
-            url.setTopic(reqParams.getTopic());
+            url.setTopic(reqParams.getWebPage());
             url.setCallMethod(reqParams.Call_DIRECT);
             //response.sendRedirect(url.toString());
             String ret = null;
@@ -275,7 +275,7 @@ public class Window extends GenericAdmResource {
                               SWBActionResponse response) 
                               throws SWBResourceException, java.io.IOException {
         Resource base = getResourceBase();
-        base.addHit(request, response.getUser(), response.getTopic());
+        base.addHit(request, response.getUser(), response.getWebPage());
         String url = base.getAttribute("url", "").trim();
         if (!url.equals("")) response.sendRedirect(url);
     }

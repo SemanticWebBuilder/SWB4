@@ -131,12 +131,12 @@ public class Comment extends GenericResource {
             } else {
                 // Nueva ventana con formulario
                 User user = reqParams.getUser();
-                SWBResourceURLImp url = new SWBResourceURLImp(request, base, reqParams.getTopic(), SWBResourceURL.UrlType_RENDER);
+                SWBResourceURLImp url = new SWBResourceURLImp(request, base, reqParams.getWebPage(), SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
                 url.setMode(SWBResourceURLImp.Mode_VIEW);
                 url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
                 url.setParameter("com_act", "com_step3");
-                url.setTopic(reqParams.getTopic());
+                url.setTopic(reqParams.getWebPage());
                 url.setCallMethod(reqParams.Call_DIRECT);
 
                 Element root = dom.createElement("form");
@@ -269,7 +269,7 @@ public class Comment extends GenericResource {
                     strSubject = base.getAttribute("subject").trim();
                 else if(commentType != null ) strSubject = commentType + "...";
                 
-                WebPage topic = reqParams.getTopic();
+                WebPage topic = reqParams.getWebPage();
                 String lang = reqParams.getUser().getLanguage();
                 Element emn = dom.createElement("form");
                 emn.setAttribute("path", "http://" + request.getServerName() + (request.getServerPort() != 80 ? ":" + request.getServerPort() : "") + path);
@@ -435,12 +435,12 @@ public class Comment extends GenericResource {
                 onclick += ",top=" + base.getAttribute("top", "10").trim();
                 onclick += ",left=" + base.getAttribute("left", "10").trim();                
 
-                SWBResourceURLImp url = new SWBResourceURLImp(request, base, reqParams.getTopic(), SWBResourceURL.UrlType_RENDER);
+                SWBResourceURLImp url = new SWBResourceURLImp(request, base, reqParams.getWebPage(), SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
                 url.setMode(SWBResourceURLImp.Mode_VIEW);
                 url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
                 url.setParameter("com_act","com_step2");
-                url.setTopic(reqParams.getTopic());
+                url.setTopic(reqParams.getWebPage());
                 url.setCallMethod(reqParams.Call_DIRECT);
                 onclick="javascript:window.open('" + url.toString() +"','_newcom','" + onclick + "'); return true;";
 

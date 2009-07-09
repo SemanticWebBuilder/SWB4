@@ -149,13 +149,13 @@ public class Poll extends GenericResource
                     ret.append("</td></tr> \n");
                     ret.append("<tr><td align=\"center\" colspan=\"2\"> \n");
 
-                    SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
+                    SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getWebPage(),SWBResourceURL.UrlType_RENDER);
                     url.setResourceBase(base);
                     url.setMode(url.Mode_VIEW);
                     url.setWindowState(url.WinState_MAXIMIZED);
                     url.setParameter("enc_act","enc_step2");
                     url.setParameter("NombreCookie","VotosEncuesta"+ base.getId());
-                    url.setTopic(paramRequest.getTopic());
+                    url.setTopic(paramRequest.getWebPage());
                     url.setCallMethod(paramRequest.Call_DIRECT);
 
                     ret.append("\n<a href=\"javascript:abreresultados(\'" + url.toString(true) + "\')\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a> \n");
@@ -336,7 +336,7 @@ public class Poll extends GenericResource
                                     nres.appendChild(option);
                                 }
                                 base.setData(SWBUtils.XML.domToXml(dom));
-                                base.addHit(request, paramRequest.getUser(), paramRequest.getTopic());
+                                base.addHit(request, paramRequest.getUser(), paramRequest.getWebPage());
                             } 
                             catch (Exception e) { log.error(paramRequest.getLocaleString("error_Encuesta_doView_setData") +" "+ restype +" " + paramRequest.getLocaleString("error_Encuesta_doView_id") +" "+ base.getId() +" - "+ base.getTitle(), e); }
                         }

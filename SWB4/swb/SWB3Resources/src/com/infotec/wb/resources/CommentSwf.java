@@ -91,13 +91,13 @@ public class CommentSwf extends Comment {
         try
         {
             String lang = reqParams.getUser().getLanguage();
-            WebPage topic = reqParams.getTopic();
+            WebPage topic = reqParams.getWebPage();
             Document  dom = SWBUtils.XML.getNewDocument();
             if ("com_step3".equals(action)) dom = getDomEmail(request, response, reqParams); // Envia correo
             else {
                 // Nueva ventana con formulario
                 User user=reqParams.getUser();
-                SWBResourceURLImp url=new SWBResourceURLImp(request, base, reqParams.getTopic(), SWBResourceURL.UrlType_RENDER);
+                SWBResourceURLImp url=new SWBResourceURLImp(request, base, reqParams.getWebPage(), SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
                 url.setMode(SWBResourceURLImp.Mode_VIEW);
                 url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);

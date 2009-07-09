@@ -143,7 +143,7 @@ public class Print extends GenericResource
                     String recid = surl.substring(pos + 6, pos1);
 
                     int postm=surl.indexOf("/_idtm/",pos1);
-                    String stm=reqParams.getTopic().getMap().getId();
+                    String stm=reqParams.getWebPage().getMap().getId();
                     if(postm>-1){
                         int itm=surl.indexOf("/", postm + 7);
                         stm=surl.substring(postm + 7,itm);
@@ -174,11 +174,11 @@ public class Print extends GenericResource
 
             }**/
             //if (!rwa) {
-                SWBResourceURLImp url = new SWBResourceURLImp(request, base, reqParams.getTopic(), SWBResourceURL.UrlType_RENDER);
+                SWBResourceURLImp url = new SWBResourceURLImp(request, base, reqParams.getWebPage(), SWBResourceURL.UrlType_RENDER);
                 url.setResourceBase(base);
                 url.setMode(url.Mode_VIEW);
                 url.setWindowState(url.WinState_MAXIMIZED);
-                url.setTopic(reqParams.getTopic());
+                url.setTopic(reqParams.getWebPage());
                 url.setCallMethod(reqParams.Call_DIRECT);
                 if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
                     url.setParameter("imp_act", "imp_step2");
@@ -238,11 +238,11 @@ public class Print extends GenericResource
     public void printByPage(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest reqParams) throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer("");
-        SWBResourceURLImp url=new SWBResourceURLImp(request, getResourceBase(), reqParams.getTopic(),SWBResourceURL.UrlType_RENDER);
+        SWBResourceURLImp url=new SWBResourceURLImp(request, getResourceBase(), reqParams.getWebPage(),SWBResourceURL.UrlType_RENDER);
         url.setResourceBase(getResourceBase());
         url.setMode(url.Mode_VIEW);
         url.setWindowState(url.WinState_MAXIMIZED);
-        url.setTopic(reqParams.getTopic());
+        url.setTopic(reqParams.getWebPage());
         url.setCallMethod(reqParams.Call_DIRECT);
 
         getParams(request, url);
@@ -288,7 +288,7 @@ public class Print extends GenericResource
 //            try
 //            {
 //                Template tpl = TemplateMgr.getInstance().getTemplate(base.getTopicMapId(), Integer.parseInt(base.getAttribute("template").trim()));
-//                if(tpl!=null) tpl.build(request, response, response.getWriter(), reqParams.getUser(), reqParams.getTopic(),true,ret.toString());
+//                if(tpl!=null) tpl.build(request, response, response.getWriter(), reqParams.getUser(), reqParams.getWebPage(),true,ret.toString());
 //            }
 //            catch(Exception e) { AFUtils.log(e,"Error while getting topic to print: "+base.getId() +"-"+ base.getTitle(),true); }
 //        }
@@ -309,7 +309,7 @@ public class Print extends GenericResource
         {
             try
             {
-                Template tpl =reqParams.getTopic().getWebSite().getTemplate(base.getAttribute("template").trim());
+                Template tpl =reqParams.getWebPage().getWebSite().getTemplate(base.getAttribute("template").trim());
 
                 if(request.getParameter("page")!=null) request.setAttribute("page",request.getParameter("page"));
                 if(tpl!=null) {
@@ -318,13 +318,13 @@ public class Print extends GenericResource
                         String url2print=(String)request.getSession().getAttribute("remoteURI");
                         String sUrl2print=request.getParameter("url2print");
                         if(url2print!=null && sUrl2print!=null && url2print.equals(sUrl2print)){
-                            ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, response.getWriter(), reqParams.getUser(), reqParams.getTopic(), false, content2print);
+                            ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, response.getWriter(), reqParams.getUser(), reqParams.getWebPage(), false, content2print);
                         }else{
-                            ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, reqParams.getUser(), reqParams.getTopic());
+                            ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, reqParams.getUser(), reqParams.getWebPage());
                         }
                     }
                     else{
-                        ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, reqParams.getUser(), reqParams.getTopic());
+                        ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, reqParams.getUser(), reqParams.getWebPage());
                     }
                 }
             }
@@ -507,7 +507,7 @@ public class Print extends GenericResource
             ret.append("<td class=\"valores\">");
             ret.append("\n<select name=template>");
             ret.append("\n<option value=\"\">" + paramsRequest.getLocaleString("msgOption") + "</option>");
-            Iterator <Template> itTpl=paramsRequest.getTopic().getWebSite().listTemplates();
+            Iterator <Template> itTpl=paramsRequest.getWebPage().getWebSite().listTemplates();
             while (itTpl.hasNext())
             {
                 Template tpl = (Template) itTpl.next();

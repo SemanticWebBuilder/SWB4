@@ -102,7 +102,7 @@ public class RemoteWebApp extends GenericAdmResource
     {
         long iniTime=System.currentTimeMillis();        
         //PrintWriter ret=response.getWriter();
-        WebPage topic=paramRequest.getTopic();
+        WebPage topic=paramRequest.getWebPage();
         User user=paramRequest.getUser();
         Resource base=paramRequest.getResourceBase();
         Map args=paramRequest.getArguments();
