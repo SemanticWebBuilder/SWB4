@@ -952,6 +952,9 @@ public class SWBPortal {
         }
 
         public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, String attributeName, int size, String cad) throws ServletException, IOException {
+            final int width = 200;
+            final int height = 60;
+
             String cadena = null;
             if (null == cad) {
                 cadena = getRandString(size);
@@ -966,17 +969,17 @@ public class SWBPortal {
             Graphics2D g = buffer.createGraphics();
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g.setBackground(new Color(255, 255, 255));
-            g.clearRect(0, 0, 150, 40);
+            g.clearRect(0, 0, width, height);
             g.setColor(new Color(0, 0, 0));
             Font f = new Font("Serif", Font.BOLD, 25);
             g.setFont(f);
             g.drawString(cadena, 15, 30);
 
-            for (int i = 0; i <= 150; i += 10) {
-                g.drawLine(i, 0, i, 39);
+            for (int i = 0; i <= width; i += 19) {
+                g.drawLine(i, 0, i, height);
             }
-            for (int i = 0; i <= 40; i += 10) {
-                g.drawLine(0, i, 149, i);
+            for (int i = 0; i <= height; i += 19) {
+                g.drawLine(0, i, width, i);
             }
 
             try {
