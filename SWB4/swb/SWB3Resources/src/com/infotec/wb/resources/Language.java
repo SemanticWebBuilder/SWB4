@@ -114,7 +114,7 @@ public class Language extends GenericAdmResource
             root.setAttribute("path", path);
             dom.appendChild(root);
 
-            Iterator <org.semanticwb.model.Language> itLang=paramRequest.getTopic().getWebSite().listLanguages();
+            Iterator <org.semanticwb.model.Language> itLang=paramRequest.getWebPage().getWebSite().listLanguages();
             while(itLang.hasNext())
             {
                 org.semanticwb.model.Language lang=itLang.next();

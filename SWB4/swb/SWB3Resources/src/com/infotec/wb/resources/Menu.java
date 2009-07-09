@@ -24,7 +24,7 @@ public class Menu extends GenericResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
         PrintWriter out=response.getWriter();
-        WebPage topic=paramRequest.getTopic();
+        WebPage topic=paramRequest.getWebPage();
         WebPage parent=topic.getParent();
         if(parent!=null)
         {

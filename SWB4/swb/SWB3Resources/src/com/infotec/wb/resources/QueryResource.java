@@ -252,10 +252,10 @@ public class QueryResource extends GenericAdmResource {
                 a = f + 1;
                 String com = query.substring(i + 1, f);
                 if (com.equals("topicmap")) {
-                    //ret += paramsRequest.getTopic().getMap().getId();
-                    ret += paramsRequest.getTopic().getWebSiteId();
+                    //ret += paramsRequest.getWebPage().getMap().getId();
+                    ret += paramsRequest.getWebPage().getWebSiteId();
                 } else if (com.equals("topicid")) {
-                    ret += paramsRequest.getTopic().getId();
+                    ret += paramsRequest.getWebPage().getId();
                 } else if (com.equals("userid")) {
                     //ret += paramsRequest.getUser().getEmail();
                     ret += paramsRequest.getUser().getEmail();

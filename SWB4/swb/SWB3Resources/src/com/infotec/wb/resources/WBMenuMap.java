@@ -91,17 +91,17 @@ public class WBMenuMap extends GenericAdmResource
     public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base = paramRequest.getResourceBase();
         User user = paramRequest.getUser();
-        WebPage basetp = paramRequest.getTopic().getWebSite().getHomePage();
-        WebPage topic = paramRequest.getTopic();
+        WebPage basetp = paramRequest.getWebPage().getWebSite().getHomePage();
+        WebPage topic = paramRequest.getWebPage();
 
         String basetopic = base.getAttribute("basetopic", "_home");
         try {
             if (!"_home".equals(basetopic)) {
-                basetp = paramRequest.getTopic().getWebSite().getWebPage(basetopic);
+                basetp = paramRequest.getWebPage().getWebSite().getWebPage(basetopic);
             }
         } catch (Exception e) {
             log.error("Error. Tópico no encontrado: " + basetopic + ". WBMenuNivel.getDom()", e);
-            basetp = paramRequest.getTopic().getWebSite().getHomePage();
+            basetp = paramRequest.getWebPage().getWebSite().getHomePage();
         }
         try {
             org.semanticwb.model.Language lang = topic.getWebSite().getLanguage(user.getLanguage());
