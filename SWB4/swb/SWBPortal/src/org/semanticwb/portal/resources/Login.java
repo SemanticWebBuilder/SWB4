@@ -45,7 +45,7 @@ public class Login extends GenericAdmResource
             frmlogout = TXT_logout;
         }
 
-        String url = SWBPlatform.getContextPath() + "/login/" + paramsRequest.getTopic().getWebSiteId() + "/" + paramsRequest.getTopic().getId();
+        String url = SWBPlatform.getContextPath() + "/login/" + paramsRequest.getWebPage().getWebSiteId() + "/" + paramsRequest.getWebPage().getId();
         if (!paramsRequest.getUser().isSigned())
         {
             out.println(replaceTags(getResourceBase().getAttribute(FRM_LOGIN), request, paramsRequest, url));

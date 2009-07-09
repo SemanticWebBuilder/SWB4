@@ -1251,7 +1251,7 @@ public class CodeGenerator
             {
                 type = TYPE_INT;
                 getMethod = "getIntProperty";
-                setMethod = "setLongProperty";
+                setMethod = "setIntProperty";
             }
             else if (tpp.isFloat())
             {
@@ -1449,7 +1449,7 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public boolean has" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + tpcToReturn.getClassCodeName().toLowerCase() + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        if(" + tpcToReturn.getClassCodeName().toLowerCase() + "==null)return false;");
+                javaClassContent.append("        if(" + tpcToReturn.getClassCodeName().toLowerCase() + "==null)return false;" + ENTER);
                 javaClassContent.append("        return get" + semanticObject + "().hasObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + tpcToReturn.getClassCodeName().toLowerCase() + ".getSemanticObject());");
                 javaClassContent.append(ENTER + CLOSE_BLOCK + ENTER);
                 if (tpp.isInheritProperty())

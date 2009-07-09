@@ -29,7 +29,7 @@ public class CreateCommunity extends GenericResource
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-        WebPage currentWebPage = response.getTopic();
+        WebPage currentWebPage = response.getWebPage();
         WebSite site=currentWebPage.getWebSite();
         if(request.getParameter("swbtp")!=null && site.getWebPage(request.getParameter("swbtp"))!=null)
         {
@@ -110,7 +110,7 @@ public class CreateCommunity extends GenericResource
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        WebPage currentWebPage = paramRequest.getTopic();
+        WebPage currentWebPage = paramRequest.getWebPage();
         PrintWriter out = response.getWriter();
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");

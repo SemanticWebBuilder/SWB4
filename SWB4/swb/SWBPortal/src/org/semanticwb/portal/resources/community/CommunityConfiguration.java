@@ -443,7 +443,7 @@ public class CommunityConfiguration extends GenericResource
     {
         try{
         String[] values = request.getParameterValues("type");
-        WebPage page = response.getTopic();
+        WebPage page = response.getWebPage();
         WebSite site = page.getWebSite();
         for (String resourceTypeId : values)
         {
@@ -484,7 +484,7 @@ public class CommunityConfiguration extends GenericResource
         strbf.append("<form action='" + paramRequest.getActionUrl() + "' method='post'>");
         strbf.append("<table>");
         strbf.append("<tr><td><b>Seleccione las utilerias que desea agregar:</b></td></tr>");
-        WebPage page = paramRequest.getTopic();
+        WebPage page = paramRequest.getWebPage();
         HashSet<String> resourcesAlreadyExists = getResources(page);
         for (String resourceId : resources)
         {

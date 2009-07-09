@@ -156,7 +156,7 @@ public class WBAUserReport extends GenericResource {
         
         try {
             if(hm_sites.size() > I_ACCESS) {
-                String address = paramsRequest.getTopic().getUrl();
+                String address = paramsRequest.getWebPage().getUrl();
                 String repositoryId = request.getParameter("wb_repository");
                 String userTypeId = request.getParameter("wb_usertype");
                 
@@ -177,7 +177,7 @@ public class WBAUserReport extends GenericResource {
                 String fecha11 = request.getParameter("wb_fecha11")==null ? "":request.getParameter("wb_fecha11"); 
                 String fecha12 = request.getParameter("wb_fecha12")==null ? "":request.getParameter("wb_fecha12");
                 
-                String topicId = paramsRequest.getTopic().getId();
+                String topicId = paramsRequest.getWebPage().getId();
                 if(topicId.lastIndexOf("Daily") != -1) {
                     rtype = "0";
                 }else if(topicId.lastIndexOf("Monthly") != -1) {
@@ -511,7 +511,7 @@ public class WBAUserReport extends GenericResource {
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>" + paramsRequest.getLocaleString("user_report") + "</legend>");
-                out.println("<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                out.println("<form method=\"Post\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -556,7 +556,7 @@ public class WBAUserReport extends GenericResource {
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // REPORTE MENSUAL                
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getWebPage().getWebSite().getId():request.getParameter("wb_site");
                 String userTypeId = request.getParameter("wb_usertype")==null ? "":request.getParameter("wb_usertype");
                 int deleteFilter;
                 try {
@@ -567,7 +567,7 @@ public class WBAUserReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();*/
+                /*Iterator<String> itUserTypes = paramsRequest.getWebPage().getWebSite().getUserRepository().getUserTypes();*/
                 if(deleteFilter == 0) {                                
                     /*while(itUserTypes.hasNext()) {
                         String val = itUserTypes.next();
@@ -620,7 +620,7 @@ public class WBAUserReport extends GenericResource {
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // by month                
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getWebPage().getWebSite().getId():request.getParameter("wb_site");
                 String userTypeId = request.getParameter("wb_usertype")==null ? "":request.getParameter("wb_usertype");
                 int deleteFilter;
                 try {
@@ -631,7 +631,7 @@ public class WBAUserReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();*/
+                /*Iterator<String> itUserTypes = paramsRequest.getWebPage().getWebSite().getUserRepository().getUserTypes();*/
                 if(deleteFilter == 0) {                                
                     /*while(itUserTypes.hasNext()) {
                         String val = itUserTypes.next();
@@ -684,7 +684,7 @@ public class WBAUserReport extends GenericResource {
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // by month                
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getWebPage().getWebSite().getId():request.getParameter("wb_site");
                 String userTypeId = request.getParameter("wb_usertype")==null ? "":request.getParameter("wb_usertype");
                 int deleteFilter;
                 try {
@@ -695,7 +695,7 @@ public class WBAUserReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();*/
+                /*Iterator<String> itUserTypes = paramsRequest.getWebPage().getWebSite().getUserRepository().getUserTypes();*/
                 if(deleteFilter == 0) {                                
                     /*while(itUserTypes.hasNext()) {
                         String val = itUserTypes.next();
@@ -748,7 +748,7 @@ public class WBAUserReport extends GenericResource {
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // by month                
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getWebPage().getWebSite().getId():request.getParameter("wb_site");
                 String userTypeId = request.getParameter("wb_usertype")==null ? "":request.getParameter("wb_usertype");
                 int deleteFilter;
                 try {
@@ -759,7 +759,7 @@ public class WBAUserReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();*/
+                /*Iterator<String> itUserTypes = paramsRequest.getWebPage().getWebSite().getUserRepository().getUserTypes();*/
                 if(deleteFilter == 0) {                                
                     /*while(itUserTypes.hasNext()) {
                         String val = itUserTypes.next();
@@ -813,7 +813,7 @@ public class WBAUserReport extends GenericResource {
                 jrResource.prepareReport();
                 jrResource.exportReport(response);
             }else { // by month                
-                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+                String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getWebPage().getWebSite().getId():request.getParameter("wb_site");
                 String userTypeId = request.getParameter("wb_usertype")==null ? "":request.getParameter("wb_usertype");
                 int deleteFilter;
                 try {
@@ -824,7 +824,7 @@ public class WBAUserReport extends GenericResource {
                 int year13 = Integer.parseInt(request.getParameter("wb_year13"));
                 WBAFilterReportBean filter = new WBAFilterReportBean();
                 filter.setSite(webSiteId);
-                /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();*/
+                /*Iterator<String> itUserTypes = paramsRequest.getWebPage().getWebSite().getUserRepository().getUserTypes();*/
                 if(deleteFilter == 0) {                                
                     /*while(itUserTypes.hasNext()) {
                         String val = itUserTypes.next();
@@ -889,7 +889,7 @@ public class WBAUserReport extends GenericResource {
         GregorianCalendar gc_now = new GregorianCalendar();
         /*ArrayList idaux = new ArrayList();*/
         
-        String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+        String webSiteId = request.getParameter("wb_site")==null ? paramsRequest.getWebPage().getWebSite().getId():request.getParameter("wb_site");
         String userTypeId = request.getParameter("wb_usertype")==null ? "":request.getParameter("wb_usertype");
         int deleteFilter;
         try {
@@ -915,7 +915,7 @@ public class WBAUserReport extends GenericResource {
         
         try {
             if(deleteFilter==0) {                
-                /*Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
+                /*Iterator<String> itUserTypes = paramsRequest.getWebPage().getWebSite().getUserRepository().getUserTypes();
                 while(itUserTypes.hasNext()) {
                     String val = itUserTypes.next();
                     if(val.equalsIgnoreCase(userTypeId)) {
@@ -949,7 +949,7 @@ public class WBAUserReport extends GenericResource {
                     filterReportBean.setDayF(Integer.parseInt(numFecha[2]));
                 }
             }else {
-                Iterator<String> itUserTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
+                Iterator<String> itUserTypes = paramsRequest.getWebPage().getWebSite().getUserRepository().getUserTypes();
                 if(groupDates==0) { // radio button was 0. Select only one date
                     String[] numFecha = fecha1.split("-");
                     filterReportBean = new WBAFilterReportBean();

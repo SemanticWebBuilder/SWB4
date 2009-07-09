@@ -67,7 +67,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        WebSite model = response.getTopic().getWebSite();
+        WebSite model = response.getWebPage().getWebSite();
         String untaggedName = createId("untagged");
         String generalName = createId("general");
         String action = response.getAction();
@@ -184,7 +184,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                     entry.setTitle(title);
                     entry.setBookmarkURL(url);
                     entry.setDescription(description);
-                    updateTags(entry.getSemanticObject().getId(), entry.getTags(), tgs, response.getTopic().getWebSite());
+                    updateTags(entry.getSemanticObject().getId(), entry.getTags(), tgs, response.getWebPage().getWebSite());
                     entry.setTags(tgs);
                 }
             }
@@ -503,7 +503,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        WebSite model = paramRequest.getTopic().getWebSite();
+        WebSite model = paramRequest.getWebPage().getWebSite();
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
         String untaggedName = createId("untagged");
         String generalName = createId("general");
@@ -572,7 +572,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         //Set url call method to Call_DIRECT to make an AJAX call
         rUrl.setCallMethod(rUrl.Call_DIRECT).setMode("ADDNEW");
         rUrl.setParameter("mode", "view");
-        rUrl.setParameter("url", paramRequest.getTopic().getRealUrl());
+        rUrl.setParameter("url", paramRequest.getWebPage().getRealUrl());
         
         sbf.append("  <div class=\"swb-bkm-box\">\n" +
                    "    <div class=\"titleBar\">\n" +

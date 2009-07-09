@@ -122,22 +122,22 @@ public class TematicIndexXSL extends GenericAdmResource
             father.appendChild(dom.createTextNode(""));
             out.appendChild(father);
             Element fathertitle = dom.createElement("fathertitle");
-            fathertitle.appendChild(dom.createTextNode(paramRequest.getTopic().getDisplayName(usrlanguage)));
+            fathertitle.appendChild(dom.createTextNode(paramRequest.getWebPage().getDisplayName(usrlanguage)));
             father.setAttribute("path", path);
-            father.setAttribute("id", paramRequest.getTopic().getId());
+            father.setAttribute("id", paramRequest.getWebPage().getId());
             father.appendChild(fathertitle);
             
             if(usrlanguage!=null){
                 father.setAttribute("hasfatherdescription","1");
                 Element fatherdescription = dom.createElement("fatherdescription");
-                fatherdescription.appendChild(dom.createTextNode(paramRequest.getTopic().getDescription(usrlanguage)));
+                fatherdescription.appendChild(dom.createTextNode(paramRequest.getWebPage().getDescription(usrlanguage)));
                 father.appendChild(fatherdescription);
             }else{
-                Iterator <org.semanticwb.model.Language> itLang=paramRequest.getTopic().getWebSite().listLanguages();
+                Iterator <org.semanticwb.model.Language> itLang=paramRequest.getWebPage().getWebSite().listLanguages();
                 while(itLang.hasNext())
                 {
                     org.semanticwb.model.Language lang=itLang.next();
-                    String descr =paramRequest.getTopic().getDescription(lang.getId());
+                    String descr =paramRequest.getWebPage().getDescription(lang.getId());
                     father.setAttribute("hasfatherdescription","0");
                     Element fatherlanguage = dom.createElement("fatherlanguage");
                     fatherlanguage.appendChild(dom.createTextNode(lang.getId()));
@@ -148,7 +148,7 @@ public class TematicIndexXSL extends GenericAdmResource
                 }
             }
             
-            Iterator <WebPage> hijos = paramRequest.getTopic().listChilds(usrlanguage, true, false, false, null);
+            Iterator <WebPage> hijos = paramRequest.getWebPage().listChilds(usrlanguage, true, false, false, null);
             ison=0;
             while(hijos.hasNext())
             {
@@ -174,11 +174,11 @@ public class TematicIndexXSL extends GenericAdmResource
                         fatherdescription.appendChild(dom.createTextNode(hijo.getDescription(usrlanguage)));
                         father.appendChild(fatherdescription);
                     }else{
-                        Iterator <org.semanticwb.model.Language> itLang=paramRequest.getTopic().getWebSite().listLanguages();
+                        Iterator <org.semanticwb.model.Language> itLang=paramRequest.getWebPage().getWebSite().listLanguages();
                         while(itLang.hasNext())
                         {
                             org.semanticwb.model.Language lang=itLang.next();
-                            String descr =paramRequest.getTopic().getDescription(lang.getId());
+                            String descr =paramRequest.getWebPage().getDescription(lang.getId());
                             son.setAttribute("hassondescription","0");
                             Element sonlanguage = dom.createElement("sonlanguage");
                             sonlanguage.appendChild(dom.createTextNode(lang.getId()));
@@ -213,11 +213,11 @@ public class TematicIndexXSL extends GenericAdmResource
                                 grandsondescription.appendChild(dom.createTextNode(hijo.getDescription(usrlanguage)));
                                 grandson.appendChild(grandsondescription);
                             }else{
-                                Iterator <org.semanticwb.model.Language> itLang=paramRequest.getTopic().getWebSite().listLanguages();
+                                Iterator <org.semanticwb.model.Language> itLang=paramRequest.getWebPage().getWebSite().listLanguages();
                                 while(itLang.hasNext())
                                 {
                                     org.semanticwb.model.Language lang=itLang.next();
-                                    String descr =paramRequest.getTopic().getDescription(lang.getId());
+                                    String descr =paramRequest.getWebPage().getDescription(lang.getId());
                                     grandson.setAttribute("hasgrandsondescription","0");
                                     Element grandsonlanguage = dom.createElement("grandsonlanguage");
                                     grandsonlanguage.appendChild(dom.createTextNode(lang.getId()));

@@ -179,7 +179,7 @@ public class WBASessionReport extends GenericResource {
                     fecha12 = sdf.format(cal.getTime());
                 }
                 
-                String topicId = paramsRequest.getTopic().getId();
+                String topicId = paramsRequest.getWebPage().getId();
                 if(topicId.lastIndexOf("Daily") != -1) {
                     rtype = "0";
                 }else if(topicId.lastIndexOf("Monthly") != -1) {
@@ -476,7 +476,7 @@ public class WBASessionReport extends GenericResource {
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>" + paramsRequest.getLocaleString("session_report") + "</legend>");
-                out.println("<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                out.println("<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -786,7 +786,7 @@ public class WBASessionReport extends GenericResource {
 
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;        
-        String repositoryName = request.getParameter("wb_repository")==null ? paramsRequest.getTopic().getWebSite().getId():request.getParameter("wb_site");
+        String repositoryName = request.getParameter("wb_repository")==null ? paramsRequest.getWebPage().getWebSite().getId():request.getParameter("wb_site");
         int groupDates;
         try {
             groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));

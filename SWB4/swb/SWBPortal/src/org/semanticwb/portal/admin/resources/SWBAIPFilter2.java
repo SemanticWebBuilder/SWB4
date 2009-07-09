@@ -38,7 +38,7 @@ public class SWBAIPFilter2 extends GenericResource {
         PrintWriter out=response.getWriter();
         String iResId=request.getParameter("id")!=null?request.getParameter("id"):"0";
         int iWBPage=1;
-        String idtm=paramRequest.getTopic().getWebSiteId();
+        String idtm=paramRequest.getWebPage().getWebSiteId();
         String strOrder="order";
         String strWBAction="view";
         String strConfirm=request.getParameter("confirm");          
@@ -50,7 +50,7 @@ public class SWBAIPFilter2 extends GenericResource {
             strWBAction=request.getParameter("act");
         if(request.getParameter("idtm")!=null && !request.getParameter("idtm").trim().equals("")) idtm=request.getParameter("idtm");
         int iArraySize = getArraySize(idtm);
-        strUrl =SWBPlatform.getContextPath() + SWBPlatform.getEnv("wb/distributor") + "/" + paramRequest.getTopic().getWebSiteId() + "/";        
+        strUrl =SWBPlatform.getContextPath() + SWBPlatform.getEnv("wb/distributor") + "/" + paramRequest.getWebPage().getWebSiteId() + "/";
 
         if (strWBAction.equals("view") && iResId.equals("0")) 
         {
@@ -63,7 +63,7 @@ public class SWBAIPFilter2 extends GenericResource {
             {
                 out.println("<script>");
                 out.println("alert('"+ request.getParameter("message")+"');");
-                out.println("location='"+strUrl+paramRequest.getTopic().getId()+"';");
+                out.println("location='"+strUrl+paramRequest.getWebPage().getId()+"';");
                 out.println("</script>");
             }            
         }
@@ -399,8 +399,8 @@ public class SWBAIPFilter2 extends GenericResource {
                 js+=">"+tm.getTitle()+"</option>\n";
             }
         }
-        if(!bOk && js.indexOf(">"+paramsRequest.getTopic().getWebSiteId()+"</option>")>-1)  
-            js=js.replaceFirst(">"+paramsRequest.getTopic().getWebSiteId()+"</option>", "selected>"+paramsRequest.getTopic().getWebSiteId()+"</option>");
+        if(!bOk && js.indexOf(">"+paramsRequest.getWebPage().getWebSiteId()+"</option>")>-1)
+            js=js.replaceFirst(">"+paramsRequest.getWebPage().getWebSiteId()+"</option>", "selected>"+paramsRequest.getWebPage().getWebSiteId()+"</option>");
         sbRet.append(js);
         sbRet.append("</select></td> \n");
         sbRet.append("</tr> \n");        
@@ -534,7 +534,7 @@ public class SWBAIPFilter2 extends GenericResource {
         //sbRet.append("&nbsp;&nbsp;&nbsp; \n");
         sbRet.append("<input type=reset class=\"boton\" name=Reset value="+paramsRequest.getLocaleString("btnReset")+"> \n");
         //sbRet.append("&nbsp;&nbsp;&nbsp; \n");
-        sbRet.append("<input type=button class=\"boton\" name=Back onClick=location='"+strUrl+paramsRequest.getTopic().getId()+"'; value="+paramsRequest.getLocaleString("msgBack")+"> ");
+        sbRet.append("<input type=button class=\"boton\" name=Back onClick=location='"+strUrl+paramsRequest.getWebPage().getId()+"'; value="+paramsRequest.getLocaleString("msgBack")+"> ");
         sbRet.append("</td> \n");
         sbRet.append("</tr> \n");
         sbRet.append("</table> \n");

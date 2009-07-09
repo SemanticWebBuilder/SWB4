@@ -96,7 +96,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
     }
 
     public void doAdd(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        WebSite site=paramRequest.getTopic().getWebSite();
+        WebSite site=paramRequest.getWebPage().getWebSite();
         PrintWriter out = response.getWriter();
         SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("objUri"));
         SWBFormMgr mgr = new SWBFormMgr(cls, site.getSemanticObject(), null);
@@ -136,7 +136,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
             semObject.remove();
         }else if(action.equals(response.Action_ADD)){
             SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("objUri"));
-            SWBFormMgr mgr = new SWBFormMgr(cls, response.getTopic().getWebSite().getSemanticObject(), null);
+            SWBFormMgr mgr = new SWBFormMgr(cls, response.getWebPage().getWebSite().getSemanticObject(), null);
             try
             {
                 mgr.processForm(request);

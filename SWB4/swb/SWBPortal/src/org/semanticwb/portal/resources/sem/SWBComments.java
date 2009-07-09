@@ -32,7 +32,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
             String securCodeSent = request.getParameter("cmnt_seccode");
             String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
             if(securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
-                WebSite model = response.getTopic().getWebSite();
+                WebSite model = response.getWebPage().getWebSite();
                 Comment comment = Comment.createComment(model);
                 comment.setComment(request.getParameter("cmnt_comment"));
                 comment.setCreated(new Date());

@@ -76,7 +76,7 @@ public class WikiModel extends info.bliki.wiki.model.WikiModel
             }else
             {
                 encodedtopic = SWBPlatform.getIDGenerator().getID(link,null,false);
-                if(paramsRequest!=null)topic=paramsRequest.getTopic().getWebSite().getWebPage(encodedtopic);
+                if(paramsRequest!=null)topic=paramsRequest.getWebPage().getWebSite().getWebPage(encodedtopic);
             }
 
             if (replaceColon()) 

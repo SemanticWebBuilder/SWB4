@@ -31,9 +31,9 @@ public class ShowRelatedComm extends GenericAdmResource {
         Resource base = getResourceBase();
         String contID = base.getAttribute("containerID","Comunidades");
         if(null==contID)return;
-        WebSite ws = paramsRequest.getTopic().getWebSite();
+        WebSite ws = paramsRequest.getWebPage().getWebSite();
         WebPage wpCont = ws.getWebPage(contID);
-        WebPage wp = paramsRequest.getTopic();
+        WebPage wp = paramsRequest.getWebPage();
         PrintWriter out = response.getWriter();
         out.println("<ul class=\"comunidades\">");
         Iterator<WebPage> itwp = wpCont.listChilds();

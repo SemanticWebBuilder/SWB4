@@ -32,7 +32,7 @@ public class CommUtils extends GenericResource{
         PrintWriter out=response.getWriter();
         out.println("<h4>Mis Utiler&iacute;as</h4>");
         out.println("  <ul>");
-        GenericIterator <WebPage> gitChilds=paramRequest.getTopic().listChilds();
+        GenericIterator <WebPage> gitChilds=paramRequest.getWebPage().listChilds();
         while(gitChilds.hasNext()){
             WebPage child=gitChilds.next();
             if(child.isHidden()){
@@ -45,7 +45,7 @@ public class CommUtils extends GenericResource{
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        WebSite site=response.getTopic().getWebSite();
+        WebSite site=response.getWebPage().getWebSite();
         if(request.getParameter("topic2Remove")!=null){
             site.removeWebPage(request.getParameter("topic2Remove"));
         }

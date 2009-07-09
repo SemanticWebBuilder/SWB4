@@ -107,10 +107,10 @@ public class Registro extends GenericResource{
                 response.setRenderParameter("errMessage", " las contrase&ntilde;as no corresponden");
                 return;
             }
-            System.out.println("Topic: "+response.getTopic());
-            System.out.println("website: "+response.getTopic().getWebSite());
-            System.out.println("Repository: "+response.getTopic().getWebSite().getUserRepository());
-            UserRepository ur = response.getTopic().getWebSite().getUserRepository();
+            System.out.println("Topic: "+response.getWebPage());
+            System.out.println("website: "+response.getWebPage().getWebSite());
+            System.out.println("Repository: "+response.getWebPage().getWebSite().getUserRepository());
+            UserRepository ur = response.getWebPage().getWebSite().getUserRepository();
             System.out.println("Rep: "+ur);
             User u=ur.getUserByLogin(login);
             if (null!=u)
@@ -130,8 +130,8 @@ public class Registro extends GenericResource{
             {
                 log.error("There are no crypto algorithms!!!! ");
             }
-            String url = response.getTopic().getRealUrl();
-            Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getTopic().getWebSiteId());
+            String url = response.getWebPage().getRealUrl();
+            Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getWebPage().getWebSiteId());
             Set<Principal> principals  = subject.getPrincipals();
             principals.clear();
             principals.add(u);
@@ -163,7 +163,7 @@ public class Registro extends GenericResource{
                 Role role = user.getUserRepository().getRole(rolId);
                 if (null!=role){user.addRole(role);}
             }
-            response.sendRedirect(response.getTopic().getWebSite().getHomePage().getUrl());
+            response.sendRedirect(response.getWebPage().getWebSite().getHomePage().getUrl());
 
 
 

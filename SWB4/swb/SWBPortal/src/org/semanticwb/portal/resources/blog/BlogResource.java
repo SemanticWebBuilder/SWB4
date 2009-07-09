@@ -605,7 +605,7 @@ public class BlogResource extends GenericResource
     {
 
         User user = paramRequest.getUser();
-        UserRepository userrep = paramRequest.getTopic().getWebSite().getUserRepository();
+        UserRepository userrep = paramRequest.getWebPage().getWebSite().getUserRepository();
 
         PrintWriter out = response.getWriter();
         if ( this.getResourceBase().getAttribute("blogid") == null || this.getResourceBase().getAttribute("blogid").equals("") )
@@ -712,7 +712,7 @@ public class BlogResource extends GenericResource
     public void doAsignUser(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         User user = paramRequest.getUser();
-        UserRepository userrep = paramRequest.getTopic().getWebSite().getUserRepository();
+        UserRepository userrep = paramRequest.getWebPage().getWebSite().getUserRepository();
 
         PrintWriter out = response.getWriter();
         if ( this.getResourceBase().getAttribute("blogid") == null || this.getResourceBase().getAttribute("blogid").equals("") )
@@ -938,7 +938,7 @@ public class BlogResource extends GenericResource
                 url.setParameter("viewall", "true");
                 url.setParameter("postid", String.valueOf(postid));
                 try{
-                    Document doc = getComments(paramRequest, blogid, postid, paramRequest.getTopic().getUrl(), true, url.toString());
+                    Document doc = getComments(paramRequest, blogid, postid, paramRequest.getWebPage().getUrl(), true, url.toString());
                     XMLOutputter xMLOutputter = new XMLOutputter();
                     xMLOutputter.output(doc, out);
                 }
@@ -973,7 +973,7 @@ public class BlogResource extends GenericResource
             }
             catch ( IllegalArgumentException nfe ) // Error
             {
-                log.error("Error al tratar de buscar un blog, en el recurso " + this.getResourceBase().getId() + ", en la p�gina: " + paramRequest.getTopic().getId() + ", En el sitio " + paramRequest.getTopic().getWebSiteId(),nfe);
+                log.error("Error al tratar de buscar un blog, en el recurso " + this.getResourceBase().getId() + ", en la p�gina: " + paramRequest.getWebPage().getId() + ", En el sitio " + paramRequest.getWebPage().getWebSiteId(),nfe);
             }
             catch ( Exception nfe ) // Error
             {
@@ -2123,7 +2123,7 @@ public class BlogResource extends GenericResource
                 urlviewComents.setParameter("postid", String.valueOf(postid));
                 Document doc = null;
                 try{
-                    doc = getComments(paramRequest,blogid, postid, paramRequest.getTopic().getUrl(), viewall, urlviewComents.toString());
+                    doc = getComments(paramRequest,blogid, postid, paramRequest.getWebPage().getUrl(), viewall, urlviewComents.toString());
                 }
                 catch(SWBException e){log.error(e);}
                 String sytylePath = this.getResourceBase().getAttribute("templatecomments");
@@ -2296,7 +2296,7 @@ public class BlogResource extends GenericResource
             }
             catch ( IllegalArgumentException iae )
             {
-                log.error("Error al tratar de buscar un blog, en el recurso " + this.getResourceBase().getId() + ", en la p�gina: " + paramRequest.getTopic().getId() + ", En el sitio " + paramRequest.getTopic().getWebSiteId());
+                log.error("Error al tratar de buscar un blog, en el recurso " + this.getResourceBase().getId() + ", en la p�gina: " + paramRequest.getWebPage().getId() + ", En el sitio " + paramRequest.getWebPage().getWebSiteId());
                 log.error(iae);
                 out.println("<tr><td >");
                 createForm(out, paramRequest);

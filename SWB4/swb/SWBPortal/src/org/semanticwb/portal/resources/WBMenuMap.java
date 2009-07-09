@@ -102,8 +102,8 @@ public class WBMenuMap extends GenericAdmResource
     {
         Resource base=paramRequest.getResourceBase();
         User user=paramRequest.getUser();
-        WebPage basetp = paramRequest.getTopic().getWebSite().getHomePage();
-        WebPage topic = paramRequest.getTopic();
+        WebPage basetp = paramRequest.getWebPage().getWebSite().getHomePage();
+        WebPage topic = paramRequest.getWebPage();
 
         String basetopic = base.getAttribute("basetopic","_home");
         try

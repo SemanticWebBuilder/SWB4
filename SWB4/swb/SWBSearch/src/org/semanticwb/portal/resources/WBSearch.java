@@ -98,7 +98,7 @@ public class WBSearch extends GenericAdmResource
         //System.out.println("getDom");
         try {
             Document doc = SWBUtils.XML.getNewDocument();
-            WebSite tm = reqParams.getTopic().getWebSite();
+            WebSite tm = reqParams.getWebPage().getWebSite();
             
             String lang=reqParams.getUser().getLanguage();
 
@@ -125,7 +125,7 @@ public class WBSearch extends GenericAdmResource
                 search.setAttribute("words", q);
                 search.setAttribute("wordsEnc", java.net.URLEncoder.encode(q));
                 search.setAttribute("work", SWBPlatform.getWebWorkPath());
-                search.setAttribute("url", reqParams.getTopic().getUrl());
+                search.setAttribute("url", reqParams.getWebPage().getUrl());
                 
                 String smap=reqParams.getResourceBase().getAttribute("amaps","0");
                 //System.out.println("amaps:"+reqParams.getResourceBase().getAttribute("amaps","0"));
@@ -140,7 +140,7 @@ public class WBSearch extends GenericAdmResource
                     }
                 }
                 
-                SWBIndexer indexer=SWBPortal.getIndexMgr().getTopicMapIndexer(reqParams.getTopic().getWebSiteId());
+                SWBIndexer indexer=SWBPortal.getIndexMgr().getTopicMapIndexer(reqParams.getWebPage().getWebSiteId());
                 //System.out.println("indexer:"+indexer);
 
                 if(indexer!=null)

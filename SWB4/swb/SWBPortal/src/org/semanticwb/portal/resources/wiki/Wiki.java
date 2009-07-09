@@ -174,7 +174,7 @@ public class Wiki extends GenericResource
     
     public String readFile(SWBParamRequest paramsRequest)
     {
-        String topic=paramsRequest.getTopic().getId();
+        String topic=paramsRequest.getWebPage().getId();
         String ret=null;
         try
         {
@@ -187,7 +187,7 @@ public class Wiki extends GenericResource
     public String backUpContent(SWBParamRequest paramsRequest, String summary)
     {
         StringBuffer header=new StringBuffer();
-        String topic=paramsRequest.getTopic().getId();
+        String topic=paramsRequest.getWebPage().getId();
         String userid=paramsRequest.getUser().getId();
         try
         {
@@ -212,7 +212,7 @@ public class Wiki extends GenericResource
     
     public void writeContent(SWBParamRequest paramsRequest, String content)
     {
-        String topic=paramsRequest.getTopic().getId();
+        String topic=paramsRequest.getWebPage().getId();
         String userid=paramsRequest.getUser().getId();
         try
         {
@@ -244,7 +244,7 @@ public class Wiki extends GenericResource
     public String getResourceCacheID(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException
     {
         String retValue = super.getResourceCacheID(request, paramsRequest);
-        if(retValue!=null)retValue+="-"+paramsRequest.getTopic().getId()+"-"+paramsRequest.getUser().getLanguage();
+        if(retValue!=null)retValue+="-"+paramsRequest.getWebPage().getId()+"-"+paramsRequest.getUser().getLanguage();
         return retValue;
     }
     

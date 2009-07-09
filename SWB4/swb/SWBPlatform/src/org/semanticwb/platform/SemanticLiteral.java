@@ -36,6 +36,7 @@ public class SemanticLiteral
 
     public SemanticLiteral(Object value)
     {
+        //System.out.println("SemanticLiteral:"+value);
         m_obj=value;
     }
 
@@ -44,6 +45,38 @@ public class SemanticLiteral
         //System.out.println("Val:"+value+" lang:"+lang);
         m_obj=value;
         m_lang=lang;
+    }
+
+    public static SemanticLiteral valueOf(SemanticProperty prop, String value)
+    {
+        SemanticLiteral ret=null;
+        if (value != null)
+        {
+            //System.out.println("valueOf:"+value);
+            if(prop.isString())
+            {
+                 ret=new SemanticLiteral(value);
+            }else if(prop.isBoolean())
+            {
+                ret=new SemanticLiteral(Boolean.valueOf(value));
+            }else if(prop.isDouble())
+            {
+                ret=new SemanticLiteral(Double.valueOf(value));
+            }else if(prop.isFloat())
+            {
+                ret=new SemanticLiteral(Float.valueOf(value));
+            }else if(prop.isInt())
+            {
+                ret=new SemanticLiteral(Integer.valueOf(value));
+            }else if(prop.isLong())
+            {
+                ret=new SemanticLiteral(Long.valueOf(value));
+            }else if(prop.isDate())
+            {
+                ret=new SemanticLiteral(value);
+            }
+        }
+        return ret;
     }
 
     public Object getValue()

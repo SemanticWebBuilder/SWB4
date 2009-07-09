@@ -111,7 +111,7 @@ public class Search extends GenericAdmResource
         try
         {
             Document doc = SWBUtils.XML.getNewDocument();
-            WebSite tm = paramRequest.getTopic().getWebSite();
+            WebSite tm = paramRequest.getWebPage().getWebSite();
             String scope = paramRequest.getUser().getLanguage();
             if (scope == null) {
                 scope = tm.getLanguage().getId();
@@ -134,7 +134,7 @@ public class Search extends GenericAdmResource
                 search.setAttribute("wordsEnc", java.net.URLEncoder.encode(q));
                 //search.setAttribute("path",AFUtils.getInstance().getWebPath()+AFUtils.getInstance().getEnv("wb/distributor")+"/"+tm.getId()+"/");
                 search.setAttribute("work", SWBPlatform.getWebWorkPath());
-                search.setAttribute("url", paramRequest.getTopic().getUrl());
+                search.setAttribute("url", paramRequest.getWebPage().getUrl());
 
                 StringTokenizer st = new StringTokenizer(q, " ");
                 Vector w = new Vector();

@@ -48,10 +48,10 @@ public class SWBARule extends GenericResource {
         log.debug("getApplet: " + suri);
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         Rule rRule = (Rule) ont.getGenericObject(suri);
-        WebPage tp = paramRequest.getTopic();
+        WebPage tp = paramRequest.getWebPage();
         String tmparam = request.getParameter("tm");
         if (tmparam == null) {
-            tmparam = paramRequest.getTopic().getWebSiteId();
+            tmparam = paramRequest.getWebPage().getWebSiteId();
         }
         if (request.getParameter("tm") != null && request.getParameter("tp") != null) {
             tp = SWBContext.getWebSite(request.getParameter("tm")).getWebPage(request.getParameter("tp"));
@@ -91,7 +91,7 @@ public class SWBARule extends GenericResource {
         String accion = request.getParameter("act");
         String id = request.getParameter("id");
         User user = response.getUser();
-        WebPage WebPage = response.getTopic();
+        WebPage WebPage = response.getWebPage();
         String tmparam = request.getParameter("tm");
         try {
             if (id != null) {
@@ -214,7 +214,7 @@ public class SWBARule extends GenericResource {
         Rule rRule = (Rule) ont.getGenericObject(rrid);
         String tmsid = rRule.getWebSite().getId();
         if (tmsid == null) {
-            tmsid = paramRequest.getTopic().getWebSiteId();
+            tmsid = paramRequest.getWebPage().getWebSiteId();
         }
         comboAtt = null;
         vecOrderAtt = null;

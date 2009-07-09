@@ -138,6 +138,20 @@ public class SemanticModel
         res.addProperty(m_model.getProperty(SemanticVocabulary.RDF_TYPE), cls.getOntClass());
         SemanticObject ret=cls.newInstance(res);
         SWBPlatform.getSemanticMgr().notifyChange(ret, null, "CREATE");
+        //Default Values
+        Iterator<SemanticProperty> it=cls.listProperties();
+        while(it.hasNext())
+        {
+            SemanticProperty prop=it.next();
+            String def=prop.getDefaultValue();
+            //System.out.print("\nprop:"+prop+" def:"+def);
+            if(def!=null)
+            {
+                SemanticLiteral lit=SemanticLiteral.valueOf(prop,def);
+                //System.out.print(" lit:"+lit.getValue());
+                ret.setLiteralProperty(prop, lit);
+            }
+        }
         return ret;
     }    
     

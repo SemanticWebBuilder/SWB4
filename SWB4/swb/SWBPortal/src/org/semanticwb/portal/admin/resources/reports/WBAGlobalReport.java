@@ -146,7 +146,7 @@ public class WBAGlobalReport extends GenericResource {
             }
             // If there are sites continue
             if(hm_sites.size() > I_ACCESS){
-                String address = paramsRequest.getTopic().getUrl();
+                String address = paramsRequest.getWebPage().getUrl();
                 String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
 
                 int groupDates;
@@ -177,7 +177,7 @@ public class WBAGlobalReport extends GenericResource {
                     fecha12 = sdf.format(cal.getTime());
                 }
                 
-                String topicId = paramsRequest.getTopic().getId();
+                String topicId = paramsRequest.getWebPage().getId();
                 if(topicId.lastIndexOf("Daily") != -1) {
                     rtype = "0";
                 }else if(topicId.lastIndexOf("Monthly") != -1) {
@@ -495,7 +495,7 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 out.println("<legend>" + paramsRequest.getLocaleString("global_report") + "</legend>");
-                out.println("<form method=\"Post\" action=\"" + paramsRequest.getTopic().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                out.println("<form method=\"Post\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
                 out.println("<table border=0 width=\"100%\">");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 out.println("<tr><td colspan=\"4\">&nbsp;</td></tr>");

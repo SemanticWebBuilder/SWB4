@@ -136,7 +136,7 @@ public class Poll extends GenericResource {
                     }
                     ////out.println("</p>");
 
-                    SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
+                    SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getWebPage(),SWBResourceURL.UrlType_RENDER);
                     url.setMode("showResults");
                     url.setParameter("NombreCookie","VotosEncuesta"+ base.getId());
                     url.setCallMethod(paramRequest.Call_DIRECT);
@@ -349,7 +349,7 @@ public class Poll extends GenericResource {
                                     nres.appendChild(option);
                                 }
                                 base.setData(SWBUtils.XML.domToXml(dom));
-                                base.addHit(request, paramRequest.getUser(), paramRequest.getTopic());
+                                base.addHit(request, paramRequest.getUser(), paramRequest.getWebPage());
                             } 
                             catch (Exception e) { log.error(paramRequest.getLocaleString("error_Encuesta_doView_setData") +" "+ restype +" " + paramRequest.getLocaleString("error_Encuesta_doView_id") +" "+ base.getId() +" - "+ base.getTitle(), e); }
                         }

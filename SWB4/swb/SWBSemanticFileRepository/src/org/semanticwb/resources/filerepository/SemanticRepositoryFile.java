@@ -90,7 +90,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
 
-        WebPage wp = paramRequest.getTopic();
+        WebPage wp = paramRequest.getWebPage();
         IDREP = docRepNS(request, response, paramRequest);
 
         if (resUUID == null) {
@@ -165,7 +165,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         IDREP = docRepNS(request, response, paramRequest);
 
         if (resUUID == null) {
-            loadResUUID(paramRequest.getTopic());
+            loadResUUID(paramRequest.getWebPage());
         }
 
         if (parentUUID == null) {
@@ -378,7 +378,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
     public String doShowDirs(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer("");
         User user = paramRequest.getUser();
-        WebPage wp = paramRequest.getTopic();
+        WebPage wp = paramRequest.getWebPage();
         Session session = null;
         String path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
         IDREP = docRepNS(request, response, paramRequest);
@@ -454,7 +454,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             action = "";
         }
         IDREP = docRepNS(request, response, paramRequest);
-        WebPage dir = paramRequest.getTopic();
+        WebPage dir = paramRequest.getWebPage();
         String path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
         User user = paramRequest.getUser();
         Credentials credentials = new SWBCredentials(user);
@@ -846,7 +846,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         String strCheck = "checked";
         String strEnable = "";
 
-        System.out.println("WP-Admin: " + paramRequest.getTopic().getTitle());
+        System.out.println("WP-Admin: " + paramRequest.getWebPage().getTitle());
 
         PrintWriter out = response.getWriter();
         String accion = paramRequest.getAction();
@@ -855,7 +855,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         }
         User user = paramRequest.getUser();
 
-        WebPage wpage = paramRequest.getTopic();
+        WebPage wpage = paramRequest.getWebPage();
         WebSite wsite = wpage.getWebSite();
 
         IDREP = docRepNS(request, response, paramRequest);
@@ -1082,7 +1082,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 //                    int intDeleted = 0;
 //                    TopicMap tpMAP = TopicMgr.getInstance().getTopicMap(tmsid);
 //
-//                    Topic tpSubDir = tpMAP.getTopic(tpsid, true);
+//                    Topic tpSubDir = tpMAP.getWebPage(tpsid, true);
 //                    if (tpSubDir != null) {
 //                        if (tpSubDir.getDbdata().getDeleted() == 1) {
 //                            folderborrado = "<font size=1 color=red>&lt;folder eliminado&gt;</font>";
@@ -1091,7 +1091,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 //                        }
 //                        nameFolder = tpSubDir.getDisplayName(user.getLanguage()) + folderborrado;
 //                    } else {
-//                        tpSubDir = tpMAP.getTopic(tpsid, false);
+//                        tpSubDir = tpMAP.getWebPage(tpsid, false);
 //                        nameFolder = tpSubDir.getDisplayName(user.getLanguage());
 //                    }
 //
@@ -1182,7 +1182,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         if (null == action) {
             action = "";
         }
-        WebSite ws = response.getTopic().getWebSite();
+        WebSite ws = response.getWebPage().getWebSite();
         User user = response.getUser();
 
         Session session = null;
@@ -1250,7 +1250,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 cal.setTimeInMillis(System.currentTimeMillis());
 
                 session = rep.login(credentials, repNS);
-                Node nodePage = session.getNodeByUUID(parentUUID);//nodeRep.getNode(response.getTopic().getId());//nombre id_pagina
+                Node nodePage = session.getNodeByUUID(parentUUID);//nodeRep.getNode(response.getWebPage().getId());//nombre id_pagina
 
                 //Agregando nodo de tipo file
                 Node nodeFile = nodePage.addNode(filename, REP_FILE);
@@ -1295,7 +1295,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             }
             try {
                 session = rep.login(credentials, repNS);
-                Node nodePage = session.getNodeByUUID(pUUID); //nodeRep.getNode(response.getTopic().getId());//nombre id_pagina
+                Node nodePage = session.getNodeByUUID(pUUID); //nodeRep.getNode(response.getWebPage().getId());//nombre id_pagina
                 Node nodeFolder = nodePage.addNode(REP_FOLDER, REP_FOLDER);
                 nodeFolder.setProperty("swb:title", strTitle);
                 nodeFolder.setProperty("swb:description", strDescription);
@@ -1566,7 +1566,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
     public String docRepNS(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
         String NS = IDREP;
-        WebSite ws = paramRequest.getTopic().getWebSite();
+        WebSite ws = paramRequest.getWebPage().getWebSite();
         try {
 
             String[] lws = rep.listWorkspaces();

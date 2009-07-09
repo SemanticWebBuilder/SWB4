@@ -77,7 +77,7 @@ public class UserRegistration extends GenericAdmResource
 //        {
 //            jspfile = "/resources/jsp/UserRegistration/view.jsp";
 //        }
-        UserRepository urep = paramsRequest.getTopic().getWebSite().getUserRepository();
+        UserRepository urep = paramsRequest.getWebPage().getWebSite().getUserRepository();
 //        User currUser = paramsRequest.getUser();
 //        System.out.println("isRegistered:"+currUser.isRegistered());
 //        System.out.println("isSigned:"+currUser.isSigned());
@@ -194,14 +194,14 @@ public class UserRegistration extends GenericAdmResource
             {
                 es.printStackTrace();
             }
-            if (paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes().hasNext())
+            if (paramsRequest.getWebPage().getWebSite().getUserRepository().getUserTypes().hasNext())
             {
                 String tipoUsu = "Tipos de usuario";
                 writt.println("    <fieldset>");
                 writt.println("        <legend>" + tipoUsu + "</legend>");
                 writt.println("	    <table>");
 
-                Iterator itusrTypes = paramsRequest.getTopic().getWebSite().getUserRepository().getUserTypes();
+                Iterator itusrTypes = paramsRequest.getWebPage().getWebSite().getUserRepository().getUserTypes();
                 String labTU = "Tipo de usuario";
                 writt.println("<tr><td><label>" + labTU + "</label></td><td>");
                 writt.println("            <select name=\"wb_usr_type\" id=\"wb_usr_type\" multiple=\"yes\">");
@@ -215,7 +215,7 @@ public class UserRegistration extends GenericAdmResource
                         writt.print("selected=\"yes\"");
                     }
                     writt.print(">");
-                    writt.print(paramsRequest.getTopic().getWebSite().getUserRepository().getUserType(tipo).getDisplayName(lang));
+                    writt.print(paramsRequest.getWebPage().getWebSite().getUserRepository().getUserType(tipo).getDisplayName(lang));
                     writt.println("</option>");
                 }
 
@@ -233,7 +233,7 @@ public class UserRegistration extends GenericAdmResource
         if (null != paramsRequest.getUser().getSemanticObject().getId())
         {
             String jspfile = super.getResourceBase().getAttribute("extraJsp");
-            UserRepository urep = paramsRequest.getTopic().getWebSite().getUserRepository();
+            UserRepository urep = paramsRequest.getWebPage().getWebSite().getUserRepository();
             Iterator<SemanticProperty> itProps = urep.listExtendedAttributes();
             HashMap<String, SemanticProperty> datos = new HashMap<String, SemanticProperty>();
 //            System.out.println("Extra...");
@@ -319,8 +319,8 @@ public class UserRegistration extends GenericAdmResource
     {
         Enumeration enums = request.getParameterNames();
         User user = response.getUser();
-        Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getTopic().getWebSiteId());
-        UserRepository userRep = response.getTopic().getWebSite().getUserRepository();
+        Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getWebPage().getWebSiteId());
+        UserRepository userRep = response.getWebPage().getWebSite().getUserRepository();
         String usrLogin = request.getParameter("usrLogin");
 
         if ("first".equals(request.getParameter("type")))

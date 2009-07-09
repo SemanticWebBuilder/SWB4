@@ -139,11 +139,11 @@ public class Print extends GenericResource
             StringBuffer ret = new StringBuffer("");
             Resource base=getResourceBase();
 
-            SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
+            SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getWebPage(),SWBResourceURL.UrlType_RENDER);
             url.setResourceBase(base);
             url.setMode(url.Mode_VIEW);
             url.setWindowState(url.WinState_MAXIMIZED);
-            url.setTopic(paramRequest.getTopic());
+            url.setTopic(paramRequest.getWebPage());
             url.setCallMethod(paramRequest.Call_DIRECT);
             if(request.getParameter("page")!=null && !request.getParameter("page").trim().equals(""))
             {
@@ -213,11 +213,11 @@ public class Print extends GenericResource
     public void printByPage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         StringBuffer ret = new StringBuffer("");
-        SWBResourceURLImp url=new SWBResourceURLImp(request, getResourceBase(), paramRequest.getTopic(),SWBResourceURL.UrlType_RENDER);
+        SWBResourceURLImp url=new SWBResourceURLImp(request, getResourceBase(), paramRequest.getWebPage(),SWBResourceURL.UrlType_RENDER);
         url.setResourceBase(getResourceBase());
         url.setMode(url.Mode_VIEW);
         url.setWindowState(url.WinState_MAXIMIZED);
-        url.setTopic(paramRequest.getTopic());
+        url.setTopic(paramRequest.getWebPage());
         url.setCallMethod(paramRequest.Call_DIRECT);
 
         getParams(request, url);
@@ -266,7 +266,7 @@ public class Print extends GenericResource
 //            try
 //            {
 //                Template tpl = TemplateMgr.getInstance().getTemplate(base.getTopicMapId(), Integer.parseInt(base.getAttribute("template").trim()));
-//                if(tpl!=null) tpl.build(request, response, response.getWriter(), reqParams.getUser(), reqParams.getTopic(),true,ret.toString());
+//                if(tpl!=null) tpl.build(request, response, response.getWriter(), reqParams.getUser(), reqParams.getWebPage(),true,ret.toString());
 //            }
 //            catch(Exception e) { AFUtils.log(e,"Error while getting topic to print: "+base.getId() +"-"+ base.getTitle(),true); }
 //        }
@@ -288,7 +288,7 @@ public class Print extends GenericResource
         {
             try
             {
-                Template tpl =paramRequest.getTopic().getWebSite().getTemplate(base.getAttribute("template").trim());
+                Template tpl =paramRequest.getWebPage().getWebSite().getTemplate(base.getAttribute("template").trim());
                 if(request.getParameter("page")!=null) {
                     request.setAttribute("page",request.getParameter("page"));
                 }
@@ -296,7 +296,7 @@ public class Print extends GenericResource
                        //out.println("<script language=\"JavaScript\">");
                        //out.println("window.self.print();");
                        //out.println("</script>");
-                    ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, paramRequest.getUser(), paramRequest.getTopic());
+                    ((TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(tpl)).build(request, response, paramRequest.getUser(), paramRequest.getWebPage());
                 }
             }
             catch(Exception e) { log.error("Error while getting topic to print: "+base.getId() +"-"+ base.getTitle(), e); }
@@ -487,7 +487,7 @@ public class Print extends GenericResource
             ret.append("<td class=\"valores\">");
             ret.append("\n<select name=template>");
             ret.append("\n<option value=\"\">" + paramsRequest.getLocaleString("msgOption") + "</option>");
-            Iterator <Template> itTpl=paramsRequest.getTopic().getWebSite().listTemplates();
+            Iterator <Template> itTpl=paramsRequest.getWebPage().getWebSite().listTemplates();
             while (itTpl.hasNext())
             {
                 Template tpl = itTpl.next();

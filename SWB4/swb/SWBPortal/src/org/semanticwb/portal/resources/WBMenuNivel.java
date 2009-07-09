@@ -90,23 +90,23 @@ public class WBMenuNivel extends GenericAdmResource
         Resource base=getResourceBase();
         int niveles = Integer.parseInt(base.getAttribute("niveles","2"));
         String basetopic = base.getAttribute("basetopic","_home");
-        WebPage basetp = paramRequest.getTopic().getWebSite().getHomePage();
+        WebPage basetp = paramRequest.getWebPage().getWebSite().getHomePage();
         try
         {
             if(!"_home".equals(basetopic))
             {
-                basetp = paramRequest.getTopic().getWebSite().getWebPage(basetopic);
+                basetp = paramRequest.getWebPage().getWebSite().getWebPage(basetopic);
             }
         }
         catch(Exception e)
         {
             log.error("Error. Tópico no encontrado: "+basetopic+". WBMenuNivel.getDom()", e);
-            basetp = paramRequest.getTopic().getWebSite().getHomePage();
+            basetp = paramRequest.getWebPage().getWebSite().getHomePage();
         }
         User user=paramRequest.getUser();
         try
         {
-            WebSite tm = paramRequest.getTopic().getWebSite();
+            WebSite tm = paramRequest.getWebPage().getWebSite();
             org.semanticwb.model.Language lang=tm.getLanguage(user.getLanguage());            
             WebPage tpid = null;
             
@@ -118,7 +118,7 @@ public class WBMenuNivel extends GenericAdmResource
                 }
             }
             else {
-                tpid = paramRequest.getTopic();
+                tpid = paramRequest.getWebPage();
             }
             
             Document  dom = SWBUtils.XML.getNewDocument();

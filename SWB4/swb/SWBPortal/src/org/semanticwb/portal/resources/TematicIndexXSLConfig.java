@@ -112,7 +112,7 @@ public class TematicIndexXSLConfig extends GenericAdmResource
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Resource base=getResourceBase();
-        WebPage wp = paramRequest.getTopic();
+        WebPage wp = paramRequest.getWebPage();
         WebSite ws = wp.getWebSite();
         boolean sendparams = false;
         String querystring ="";
@@ -124,7 +124,7 @@ public class TematicIndexXSLConfig extends GenericAdmResource
             catch(Exception e)
             {
                 log.error("Error al obtener la página "+base.getAttribute(CFG_WEBPAGE),e);
-                wp=paramRequest.getTopic();
+                wp=paramRequest.getWebPage();
             }
         }
 

@@ -82,11 +82,11 @@ public class ResourceTag extends HTMLTag implements INoBodyParsingTag
                     {
                         try
                         {
-                            TemplateImp tpl=(TemplateImp)SWBPortal.getTemplateMgr().getTemplate(paramRequest.getUser(),paramRequest.getTopic());
+                            TemplateImp tpl=(TemplateImp)SWBPortal.getTemplateMgr().getTemplate(paramRequest.getUser(),paramRequest.getWebPage());
                             HashMap map=filterAttributes(attributes);
                             ResourceSubType pst=tpl.getSubType(type,stype);
                             if(stype!=null)map.put("stype",pst);
-                            Iterator it=SWBPortal.getResourceMgr().getResources(pst.getType(),pst,paramRequest.getUser(),paramRequest.getTopic(),map,tpl);
+                            Iterator it=SWBPortal.getResourceMgr().getResources(pst.getType(),pst,paramRequest.getUser(),paramRequest.getWebPage(),map,tpl);
                             
                             if(it.hasNext())
                             {
@@ -125,7 +125,7 @@ public class ResourceTag extends HTMLTag implements INoBodyParsingTag
                                         req=new SWBHttpServletRequestWrapper(request);
                                     }                                       
                                     
-                                    SWBParamRequestImp resParams = new SWBParamRequestImp(request,wbres.getResourceBase(),paramRequest.getTopic(),paramRequest.getUser());
+                                    SWBParamRequestImp resParams = new SWBParamRequestImp(request,wbres.getResourceBase(),paramRequest.getWebPage(),paramRequest.getUser());
                                     //resParams.setArguments(args);
                                     resParams.setExtURIParams(extParams);
                                     resParams.setCallMethod(resParams.Call_STRATEGY);

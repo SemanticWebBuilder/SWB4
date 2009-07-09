@@ -617,7 +617,7 @@ public class SemanticMgr implements SWBInstanceObject
         {
             if(prop !=null && prop instanceof SemanticProperty)
             {
-                if(((SemanticProperty)prop).isNoObservable())return; //No es observable
+                if(((SemanticProperty)prop).isNotObservable())return; //No es observable
             }
             Iterator it=m_observers.iterator();
             while(it.hasNext())

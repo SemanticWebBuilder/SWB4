@@ -64,7 +64,7 @@ public class SWBASchedule extends GenericResource {
         // Parámetros
         String view = request.getParameter("view");
         String action = request.getParameter("act") != null ? request.getParameter("act") : "";
-        String topic = paramRequest.getTopic().getId();
+        String topic = paramRequest.getWebPage().getId();
         //String iId = "0";
         Document doc = null;
         String strXmlConf = null;
