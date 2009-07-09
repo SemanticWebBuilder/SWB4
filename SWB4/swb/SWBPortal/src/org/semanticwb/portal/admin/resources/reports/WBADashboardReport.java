@@ -344,7 +344,7 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"400\" height=\"400\">");
                     out.println("<param name=\"GraphType\" value=\"Bar\">");
                     out.println("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("device_report")+"\">");
-                    long nc = SWBUtils.sizeOf(SWBContext.getWebSite(websiteId).listDevices());
+                    long nc = SWBUtils.Collections.sizeOf(SWBContext.getWebSite(websiteId).listDevices());
                     out.println("<param name=\"ncdata\" value=\""+nc+"\">");
                     out.println("<param name=\"percent\" value=\"false\">");
                     out.println("<param name=\"allpercent\" value=\"false\">");
@@ -400,7 +400,7 @@ public class WBADashboardReport extends GenericResource {
                     out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"400\" height=\"400\">");
                     out.println("<param name=\"GraphType\" value=\"Bar\">");
                     out.println("<param name=\"Title\" value=\""+paramsRequest.getLocaleString("language_report")+"\">");
-                    nc = SWBUtils.sizeOf(SWBContext.getWebSite(websiteId).listLanguages());
+                    nc = SWBUtils.Collections.sizeOf(SWBContext.getWebSite(websiteId).listLanguages());
                     out.println("<param name=\"ncdata\" value=\""+nc+"\">");
                     out.println("<param name=\"percent\" value=\"false\">");
                     out.println("<param name=\"allpercent\" value=\"false\">");
