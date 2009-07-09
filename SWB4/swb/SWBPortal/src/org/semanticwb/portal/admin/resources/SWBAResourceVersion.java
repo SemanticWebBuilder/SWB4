@@ -54,11 +54,15 @@ public class SWBAResourceVersion extends GenericResource {
         PrintWriter out = response.getWriter();
         String id = request.getParameter("suri");
 
+        //System.out.println("URI:"+id);
         if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
+            //System.out.println("doView(dialog):"+id);
             out.println("<script type=\"javascript\">");
             out.println(" hideDialog(); ");
+            out.println(" alert('"+id+"'); ");
             out.println(" reloadTab('" + id + "'); ");
             out.println("</script>");
+            //out.println();
             return;
         }
 
@@ -130,7 +134,7 @@ public class SWBAResourceVersion extends GenericResource {
                             urlnv.setParameter("vnum", Integer.toString(vio.getVersionNumber()));
                             urlnv.setParameter("act", "newversion");
                             urlnv.setMode(SWBResourceURL.Mode_EDIT);
-                            out.println("<a href=\"#\" onclick=\"showDialog('" + urlnv + "','Nueva versión de Recurso');\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/nueva_version.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgNewVersion") + "\"></a>");
+                            out.println("<a href=\"#\" onclick=\"showDialog('" + urlnv + "','Nueva versión de Recurso'); hideDialog(); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/nueva_version.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgNewVersion") + "\"></a>");
 
                             if (!vio.equals(via)) {
                                 SWBResourceURL urlsa = paramRequest.getActionUrl();
@@ -178,7 +182,7 @@ public class SWBAResourceVersion extends GenericResource {
                         urlNew.setParameter("suri", id);
                         urlNew.setParameter("act", "newversion");
                         urlNew.setMode(SWBResourceURL.Mode_EDIT);
-                        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"showDialog('" + urlNew + "','Agregar nueva versión');\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
+                        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"showDialog('" + urlNew + "','Agregar nueva versión'); hideDialog(); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
                     } else {
                         SWBResourceURL urlVR = paramRequest.getActionUrl();
                         urlVR.setParameter("suri", id);
@@ -390,6 +394,7 @@ public class SWBAResourceVersion extends GenericResource {
                 }
 
                 //SWBPortal.getResourceMgr().reloadTemplate(tmpl);
+
                 response.setRenderParameter("dialog", "close");
                 response.setRenderParameter("act", "");
                 response.setMode(response.Mode_VIEW);
@@ -498,7 +503,7 @@ public class SWBAResourceVersion extends GenericResource {
                 versiones = (Versionable) go;
             }
 
-            SWBResource tmpl = (SWBResource) go;
+            SWBResource wres = (SWBResource) go;
 
 
             VersionInfo va = versiones.getActualVersion();
@@ -508,25 +513,27 @@ public class SWBAResourceVersion extends GenericResource {
             VersionInfo temp2 = null;
 
             while (temp != null) {
+                //System.out.println("version anterior != null ("+temp.getVersionNumber()+")");
                 temp2 = temp;
-                String rutaFS_source_path = SWBPlatform.getWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + temp2.getVersionNumber();
+                String rutaFS_source_path = SWBPlatform.getWorkPath() + wres.getResourceBase().getWorkPath() + "/" + temp2.getVersionNumber();
                 if (SWBUtils.IO.removeDirectory(rutaFS_source_path)) {
                     //System.out.println("Remove back OK by Reset Version: " + temp2.getVersionNumber());
                 }
-                temp2.remove();
                 temp = temp.getPreviousVersion();
+                temp2.remove();
             }
 
             temp = va.getNextVersion();
             if (temp != null) {
+                //System.out.println("Borrando version anterior a la actual");
                 temp.removePreviousVersion();
             }
 
-            // eliminación de archivos de las versiones de las plantillas
+            // eliminación de archivos de las versiones de recursos
             while (temp != null) {
                 temp2 = temp;
                 temp = temp.getPreviousVersion();
-                String rutaFS_source_path = SWBPlatform.getWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + temp2.getVersionNumber();
+                String rutaFS_source_path = SWBPlatform.getWorkPath() + wres.getResourceBase().getWorkPath() + "/" + temp2.getVersionNumber();
                 if (SWBUtils.IO.removeDirectory(rutaFS_source_path)) {
                     //System.out.println("Remove next OK by Reset Version: " + temp2.getVersionNumber());
                 }
@@ -540,11 +547,12 @@ public class SWBAResourceVersion extends GenericResource {
             }
 
             int va_num = va.getVersionNumber();
+            //System.out.println("Version actual num: "+va_num);
             if (va_num != 1) {
-                String rutaFS_source_path = SWBPlatform.getWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + va_num + "/";
-                String rutaFS_target_path = SWBPlatform.getWorkPath() + tmpl.getResourceBase().getWorkPath() + "/1/";
-                String rutaWeb_source_path = SWBPlatform.getWebWorkPath() + tmpl.getResourceBase().getWorkPath() + "/" + va_num;
-                String rutaWeb_target_path = SWBPlatform.getWebWorkPath() + tmpl.getResourceBase().getWorkPath() + "/1";
+                String rutaFS_source_path = SWBPlatform.getWorkPath() + wres.getResourceBase().getWorkPath() + "/" + va_num + "/";
+                String rutaFS_target_path = SWBPlatform.getWorkPath() + wres.getResourceBase().getWorkPath() + "/1/";
+                String rutaWeb_source_path = SWBPlatform.getWebWorkPath() + wres.getResourceBase().getWorkPath() + "/" + va_num;
+                String rutaWeb_target_path = SWBPlatform.getWebWorkPath() + wres.getResourceBase().getWorkPath() + "/1";
 
                 if (SWBUtils.IO.copyStructure(rutaFS_source_path, rutaFS_target_path, true, rutaWeb_source_path, rutaWeb_target_path)) {
                     //System.out.println("Copied actual to 1 OK by Reset Version");
@@ -559,10 +567,11 @@ public class SWBAResourceVersion extends GenericResource {
                 versiones.setLastVersion(va);
 
                 //SWBResource swres = (SWBResource)sobase.getGenericInstance();
-                tmpl.setResourceBase(tmpl.getResourceBase());
+                wres.setResourceBase(wres.getResourceBase());
 
-            //SWBPortal.getTemplateMgr().reloadTemplate(tmpl);
-            //System.out.println("filename:"+va.getVersionFile());
+                response.setRenderParameter("dialog", "close");
+                response.setRenderParameter("act", "");
+                response.setMode(response.Mode_VIEW);
             }
         }
         response.setRenderParameter("suri", id);
