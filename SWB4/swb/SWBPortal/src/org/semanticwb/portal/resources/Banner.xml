@@ -1,27 +1,29 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<xslfile>admresource.xslt</xslfile>
+    <div class="swbform">
 	<form name="frmWBBanner" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
-                <fieldset>
-		<statictext name="txtLocal">Banner local o externo:</statictext>
-		<input type="RADIO" name="local" label="Externo" value="1"/>
-		<input type="RADIO" name="local" label="Local" value="0"/>
-		<textarea name="code" label="*1 Código:" rows="5" cols="50" wrap="virtual"/>
-		<input type="FILE" id="img" name="img" label="*2 Banner:" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|swf" isshowfiletype="true" />
-		<input type="TEXT" id="alt" name="alt" label="Texto alterno:" size="50"/>
-		<input type="TEXT" name="width" label="Ancho (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-		<input type="TEXT" name="height" label="Alto (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-		<input type="TEXT" name="url" label="Dirección web" size="50"/>
-		<statictext name="txtTarget">En una nueva ventana:</statictext>
-		<input type="RADIO" name="target" label="Sí" value="1"/>
-		<input type="RADIO" name="target" label="No" value="0"/>
-                </fieldset>
-                <fieldset>
-		<input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
-		<input type="RESET"  name="btnReset" value="Cancelar"/>
-                </fieldset>
+        <fieldset>
+            <statictext name="txtLocal">Banner local o externo:</statictext>
+            <input type="RADIO" name="local" label="Externo" value="1"/>
+            <input type="RADIO" name="local" label="Local" value="0"/>
+            <textarea name="code" label="*1 CÃ³digo:" rows="5" cols="50" wrap="virtual"/>
+            <input type="FILE" id="img" name="img" label="*2 Banner:" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|swf" isshowfiletype="true" />
+            <input type="TEXT" id="alt" name="alt" label="Texto alterno:" size="50"/>
+            <input type="TEXT" name="width" label="Ancho (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+            <input type="TEXT" name="height" label="Alto (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+            <input type="TEXT" name="url" label="DirecciÃ³n web:" size="50"/>
+            <statictext name="txtTarget">En una nueva ventana:</statictext>
+            <input type="RADIO" name="target" label="SÃ­" value="1"/>
+            <input type="RADIO" name="target" label="No" value="0"/>
+        </fieldset>
+        <fieldset>
+            <input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
+            <input type="RESET"  name="btnReset" value="Cancelar"/>
+        </fieldset>
 	</form>
+    </div>
 	<statictext name="txtNote1">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
@@ -57,7 +59,7 @@
 				{
 					if(frm.code.value==null || frm.code.value=='' || frm.code.value==' ')
 					{
-						alert('Defina la codificación para incluir la publicidad externa.');
+						alert('Defina la codificaciÃ³n para incluir la publicidad externa.');
 						frm.code.focus();
 						return false;
 					}

@@ -121,6 +121,11 @@ public class CommentSwf extends Comment {
                 Element root = dom.createElement("form");
                 root.setAttribute("path", path);
                 root.setAttribute("accion", url.toString());
+                root.setAttribute("styleClass",
+                        base.getAttribute("styleClass", "").equals("")
+                        ? ""
+                        : " class=\"" + base.getAttribute("styleClass", "") + "\"");
+                root.setAttribute("styleClassClose", "</div>");
                 if (!"".equals(base.getAttribute("swf", "").trim())) {
                     String strSwfvar = "accion=" + url.toString();
                     root.setAttribute("swf", webWorkPath + "/" 
@@ -313,6 +318,7 @@ public class CommentSwf extends Comment {
                 setAttribute(base, fup, "firstname", "1");
                 setAttribute(base, fup, "lastname", "1");
                 setAttribute(base, fup, "middlename", "1");
+                setAttribute(base, fup, "styleClass");
                 setAttribute(base, fup, "menubar", "yes");
                 setAttribute(base, fup, "toolbar", "yes");
                 setAttribute(base, fup, "status", "yes");
@@ -400,15 +406,16 @@ public class CommentSwf extends Comment {
             ret.append("<div class=\"swbform\">");
             ret.append("<form name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\""
                     + url.toString() + "\"> \n");
-            ret.append("<fieldset>\n");
+            ret.append("<fieldset>");
+            ret.append("<legend>"+paramsRequest.getLocaleString("msgStep1")+"</legend>");
             ret.append("<table>");
-            ret.append("<tr> \n");
+/*            ret.append("<tr> \n");
             ret.append("<td colspan=2>");
             ret.append(paramsRequest.getLocaleString("msgStep1"));
             ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("</tr> \n");*/
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\" valign=\"top\">"
                     + paramsRequest.getLocaleString("msgTemplate")
                     + " (xsl, xslt):</td> \n");
             ret.append("<td>");
@@ -429,7 +436,7 @@ public class CommentSwf extends Comment {
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgImage")
                     + " (bmp, gif, jpg, jpeg):</td> \n");
             ret.append("<td>");
@@ -446,7 +453,7 @@ public class CommentSwf extends Comment {
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgAlt") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=text name=alt ");
@@ -458,7 +465,7 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgButton") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=text name=btntexto ");
@@ -470,7 +477,7 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgLink")
                     + "</td> \n");
             ret.append("<td>");
@@ -483,7 +490,7 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgStyle") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=text name=blnstyle ");
@@ -495,7 +502,7 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td>* "
+            ret.append("<td align=\"right\">* "
                     + paramsRequest.getLocaleString("msgFlash")
                     + " (swf, emf, wmf):</td> \n");
             ret.append("<td>");
@@ -508,7 +515,7 @@ public class CommentSwf extends Comment {
             ret.append("</tr> \n");
             
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgGenerateLog")
                     + " :</td> \n");
             ret.append("<td>");
@@ -520,7 +527,7 @@ public class CommentSwf extends Comment {
             ret.append("</tr> \n");
             
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgSwfConfiguration")
                     + "</td> \n");
             ret.append("<td>");
@@ -566,7 +573,7 @@ public class CommentSwf extends Comment {
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgFirstName")
                     + "</td> \n");
             ret.append("<td>");
@@ -577,7 +584,7 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");  
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgLastName") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"checkbox\" name=\"lastname\" value=\"1\"");
@@ -587,7 +594,7 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");  
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgMiddleName")
                     + "</td> \n");
             ret.append("<td>");
@@ -598,20 +605,44 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");             
             ret.append("<tr> \n");
-            ret.append("<td colspan=2>");
+
+            ret.append("<tr> \n");
+            ret.append("<td align=\"right\">"
+                    + paramsRequest.getLocaleString("msgStyleClass") + "</td> \n");
+            ret.append("<td>");
+            ret.append("<input type=\"text\" name=\"styleClass\" value=\""
+                    + base.getAttribute("styleClass", "") + "\">");
+            ret.append("</td> \n");
+            ret.append("</tr> \n");
+
+            ret.append("</table> \n");
+            ret.append("</fieldset><br />");
+            ret.append("<fieldset>");
+            ret.append("<legend>"+paramsRequest.getLocaleString("msgStep2")+"</legend>");
+            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"0\" cellspacing=\"7\">");
+            ret.append("<tr><td width=\"35%\"></td><td width=\"65%\"></td>");
+
+/*            ret.append("<td colspan=2>");
             ret.append("<br><br>");
             ret.append(paramsRequest.getLocaleString("msgStep2") + "</font>");
             ret.append("</td> \n");
-            ret.append("</tr> \n");
-            ret.append(admResUtils.loadWindowConfiguration(base, paramsRequest));       
-            ret.append("<tr> \n");
+            ret.append("</tr> \n");*/
+            ret.append(admResUtils.loadWindowConfiguration(base, paramsRequest));
+
+            ret.append("</table> \n");
+            ret.append("</fieldset><br />");
+            ret.append("<fieldset>");
+            ret.append("<legend>"+paramsRequest.getLocaleString("msgStep3")+"</legend>");
+            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"0\" cellspacing=\"7\">");
+            ret.append("<tr><td width=\"35%\"></td><td width=\"65%\"></td>");
+/*            ret.append("<tr> \n");
             ret.append("<td colspan=2>");
             ret.append("<br><br>");
             ret.append(paramsRequest.getLocaleString("msgStep3"));
             ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("</tr> \n");*/
             ret.append("<tr> \n");
-            ret.append("<td>* "
+            ret.append("<td align=\"right\">* "
                     + paramsRequest.getLocaleString("msgArea") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=text name=area ");
@@ -623,7 +654,7 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td>* "
+            ret.append("<td align=\"right\">* "
                     + paramsRequest.getLocaleString("msgResponsable") + "</td> \n");
             ret.append("<td class=\"valores\">");
             ret.append("<input type=text name=responsable ");
@@ -635,7 +666,7 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n"); 
             ret.append("<tr> \n");
-            ret.append("<td>* "
+            ret.append("<td align=\"right\">* "
                     + paramsRequest.getLocaleString("msgEmail") + "</td> \n");
             ret.append("<td class=\"valores\">");
             ret.append("<input type=text name=email ");
@@ -647,7 +678,7 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n"); 
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgSubjectTag") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=text name=subject ");
@@ -659,7 +690,7 @@ public class CommentSwf extends Comment {
             ret.append("></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgMessageHeader")
                     + "</td> \n");
             ret.append("<td>");
@@ -670,7 +701,7 @@ public class CommentSwf extends Comment {
             ret.append("</textarea></td> \n");
             ret.append("</tr> \n");               
             ret.append("<tr> \n");
-            ret.append("<td>"
+            ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgMessageFooter") + "</td> \n");
             ret.append("<td>");
             ret.append("<textarea name=footermsg>");
