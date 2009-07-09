@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
@@ -40,6 +41,7 @@ public class SWBASiteLog extends GenericResource {
         out.println(paramRequest.getLocaleString("RecentChanges"));
         out.println("</caption>");
         out.println("<th align=\"left\">"+paramRequest.getLocaleString("action")+"</th>");
+        out.println("<th align=\"left\">"+paramRequest.getLocaleString("objType")+"</th>");
         out.println("<th align=\"left\">"+paramRequest.getLocaleString("object")+"</th>");
         out.println("<th align=\"left\">"+paramRequest.getLocaleString("property")+"</th>");
         out.println("<th align=\"left\">"+paramRequest.getLocaleString("date")+"</th>");
@@ -56,11 +58,13 @@ public class SWBASiteLog extends GenericResource {
                     //System.out.println("swbobj:"+swbobj);
                     if(swbobj!=null){
                         String fecha=""+rs.getTimestamp("log_date");
+                        String strObj="";
+                        if(swbobj.getDisplayName()!=null && swbobj.getDisplayName()!="null") strObj=swbobj.getDisplayName();
                         if(fecha.lastIndexOf(" ")>0) fecha=fecha.substring(0,fecha.lastIndexOf(" "));
                         out.println("<tr>");
                         out.println("  <td class=\"mov-recurso\">" + rs.getString("log_action") + "</td>");
-                        //System.out.println("log_objuri:"+rs.getString("log_objuri"));
-                        out.println("  <td class=\"mov-recurso\">" + swbobj.getDisplayName() + "</td>");
+                        out.println("  <td class=\"mov-recurso\">" + swbobj.getSemanticClass().getName()+"</td>");
+                        out.println("  <td class=\"mov-recurso\">" + strObj + "</td>");
                         out.println("  <td class=\"mov-recurso\">" + ont.getSemanticProperty(rs.getString("log_propid")).getDisplayName(user.getLanguage()) + "</td>");
                         out.println("  <td class=\"mov-fecha\">" + fecha + "</td>");
                         out.println("</tr>");
