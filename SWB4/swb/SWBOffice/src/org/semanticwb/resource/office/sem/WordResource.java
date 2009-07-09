@@ -51,7 +51,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         ContentUtils contentUtils = new ContentUtils();
         Resource base = paramRequest.getResourceBase();
-        WebPage page = paramRequest.getTopic();
+        WebPage page = paramRequest.getWebPage();
         String version = getVersionToShow();
         String contentId = getContent();
         String repositoryName = getRepositoryName();
