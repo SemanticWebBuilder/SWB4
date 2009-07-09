@@ -3,6 +3,7 @@ package org.semanticwb.base.util.imp;
 
 import org.semanticwb.Logger;
 import org.apache.log4j.Level;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -12,14 +13,26 @@ public class Logger4jImpl implements Logger
 {
     //Definir objetos para ambos Loggers
     private org.apache.log4j.Logger log=null;
+    //Definir objetos para ambos Loggers
+    private Class cls=null;
+
+    private static final String TRACE= "trace";
+    private static final String DEBUG= "debug";
+    private static final String INFO= "info";
+    private static final String WARN= "warn";
+    private static final String ERROR= "error";
+    private static final String FATAL= "fatal";
+    private static final String EVENT= "event";
+
     
     /**
      * 
      * @param logger
      */
-    public Logger4jImpl(org.apache.log4j.Logger logger)
+    public Logger4jImpl(Class cls)
     {
-        log=logger;
+        this.log=org.apache.log4j.Logger.getLogger(cls);
+        this.cls=cls;
     }
     
     /*
@@ -33,6 +46,7 @@ public class Logger4jImpl implements Logger
     public void trace(String txt, Throwable t)
     {
         log.trace(txt,t);
+        SWBUtils.ERROR.addError(txt, t, cls, TRACE);
     }
     
     /**
@@ -51,6 +65,7 @@ public class Logger4jImpl implements Logger
     public void trace(Throwable t)
     {
         log.trace(null,t);
+        SWBUtils.ERROR.addError(null, t, cls, TRACE);
     }
     
     /*
@@ -64,6 +79,7 @@ public class Logger4jImpl implements Logger
     public void debug(String txt, Throwable t)
     {
         log.debug(txt,t);
+        SWBUtils.ERROR.addError(txt, t, cls, DEBUG);
     }
     
     /**
@@ -82,6 +98,7 @@ public class Logger4jImpl implements Logger
     public void debug(Throwable t)
     {
         log.debug(null,t);
+        SWBUtils.ERROR.addError(null, t, cls, DEBUG);
     }
     
     /*
@@ -95,6 +112,7 @@ public class Logger4jImpl implements Logger
     public void info(String txt, Throwable t)
     {
         log.info(txt,t);
+        SWBUtils.ERROR.addError(txt, t, cls, INFO);
     }
     
     /**
@@ -113,6 +131,7 @@ public class Logger4jImpl implements Logger
     public void info(Throwable t)
     {
         log.info(null,t);
+        SWBUtils.ERROR.addError(null, t, cls, INFO);
     }
     
     /*
@@ -126,6 +145,7 @@ public class Logger4jImpl implements Logger
     public void warn(String txt, Throwable t)
     {
         log.warn(txt,t);
+        SWBUtils.ERROR.addError(txt, t, cls, WARN);
     }
     
     /**
@@ -144,6 +164,7 @@ public class Logger4jImpl implements Logger
     public void warn(Throwable t)
     {
         log.warn(null,t);
+        SWBUtils.ERROR.addError(null, t, cls, WARN);
     }
     
     /*
@@ -157,6 +178,7 @@ public class Logger4jImpl implements Logger
     public void error(String txt, Throwable t)
     {
         log.error(txt,t);
+        SWBUtils.ERROR.addError(txt, t, cls, ERROR);
     }
     
     /**
@@ -175,6 +197,7 @@ public class Logger4jImpl implements Logger
     public void error(Throwable t)
     {
         log.error(null,t);
+        SWBUtils.ERROR.addError(null, t, cls, ERROR);
     }    
 
     /*
@@ -188,6 +211,7 @@ public class Logger4jImpl implements Logger
     public void fatal(String txt, Throwable t)
     {
         log.fatal(txt,t);
+        SWBUtils.ERROR.addError(txt, t, cls, FATAL);
     }
     
     /**
@@ -206,6 +230,7 @@ public class Logger4jImpl implements Logger
     public void fatal(Throwable t)
     {
         log.fatal(null,t);
+        SWBUtils.ERROR.addError(null, t, cls, FATAL);
     }   
     
     /*
@@ -219,6 +244,7 @@ public class Logger4jImpl implements Logger
     public void event(String txt, Throwable t)
     {
         log.log(Level.OFF, txt, t);
+        SWBUtils.ERROR.addError(txt, t, cls, EVENT);
     }
     
     /**
@@ -237,5 +263,6 @@ public class Logger4jImpl implements Logger
     public void event(Throwable t)
     {
         log.log(Level.OFF, null, t);
+        SWBUtils.ERROR.addError(null, t, cls, EVENT);
     }       
 }

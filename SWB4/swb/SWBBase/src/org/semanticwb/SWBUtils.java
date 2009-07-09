@@ -70,6 +70,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.semanticwb.base.util.ErrorElement;
 import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.base.util.SWBMailSender;
 import org.semanticwb.base.util.SWBMail;
@@ -180,7 +181,7 @@ public class SWBUtils {
         if (!initLogger) {
             initLogger();
         }
-        return new Logger4jImpl(org.apache.log4j.Logger.getLogger(cls));
+        return new Logger4jImpl(cls);
     }
     
     /**
@@ -188,6 +189,18 @@ public class SWBUtils {
      */
     public static class ERROR 
     {
+
+        public static void addError(String msg, Throwable e, Class cls, String level)
+        {
+            try
+            {
+                errorElement.add(0,new ErrorElement(e, msg, cls, level));
+                if(errorElement.size()>errorElementSize)
+                {
+                    errorElement.remove(errorElementSize);
+                }
+            }catch(Exception noe){}
+        }
         /**
          * Regresa iterador con los errores que se han enviado al log, 
          * este iterador tiene un cierto tamaño el cual como maximo puede ser el que tiene la variable de clase errorElementSize.
