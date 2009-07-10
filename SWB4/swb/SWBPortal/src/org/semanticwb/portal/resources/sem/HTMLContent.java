@@ -57,7 +57,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             SWBParamRequest paramRequest)
             throws SWBResourceException, IOException
     {
-        WebPage page = paramRequest.getTopic();
+        WebPage page = paramRequest.getWebPage();
         Resource resource = getResourceBase();
         VersionInfo vi = getActualVersion();
         String numversion=request.getParameter("numversion");
