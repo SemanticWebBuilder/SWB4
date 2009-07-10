@@ -75,6 +75,10 @@ namespace WBOffice4
                     {
                         throw new WBAlertException("La versión entre el publicador y el servidor no son compatibles");
                     }
+                    else
+                    {
+                        RtlAwareMessageBox.Show("Su sesión ha sido iniciada", "Iniciar sessión", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
                 return officeApplication;
             }
@@ -251,8 +255,7 @@ namespace WBOffice4
                         uri = uri.Substring(0, uri.Length - 3);
                     }
                     uRIConfigurationList.Add(OfficeApplicationProxy.Credentials.UserName, new Uri(uri));
-                    MenuListener.LogOn();
-                    //RtlAwareMessageBox.Show("Su sesión ha sido iniciada", "Iniciar sessión", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MenuListener.LogOn();                    
                 }
                 catch (HttpException e)
                 {
