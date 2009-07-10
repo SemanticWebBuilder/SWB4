@@ -64,8 +64,8 @@ public class SWBASOPropRefEditor extends GenericResource {
             action = "";
         }
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        GenericObject gobj = ont.getGenericObject(id);
-        SemanticObject obj = gobj.getSemanticObject();
+        //GenericObject gobj = ont.getGenericObject(id);
+        SemanticObject obj = ont.getSemanticObject(id);
         SemanticProperty spro = ont.getSemanticProperty(idp);
         SemanticProperty spref = ont.getSemanticProperty(idpref);
         SemanticClass cls = obj.getSemanticClass();
