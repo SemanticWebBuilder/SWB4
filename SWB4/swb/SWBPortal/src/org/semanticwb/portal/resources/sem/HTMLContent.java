@@ -1,11 +1,7 @@
 package org.semanticwb.portal.resources.sem;
 
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import javax.servlet.http.*;
-import org.semanticwb.portal.api.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
@@ -14,21 +10,16 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.SWBPortal;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.User;
 import org.semanticwb.model.VersionInfo;
-import org.semanticwb.model.Versionable;
-import org.semanticwb.platform.SemanticOntology;
-import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.portal.resources.sem.base.HTMLContentBase;
+import org.semanticwb.portal.util.ContentUtils;
 import org.semanticwb.portal.util.WBFileUpload;
 
 public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLContentBase 
@@ -66,11 +57,10 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             SWBParamRequest paramRequest)
             throws SWBResourceException, IOException
     {
-//        System.out.println("HTMLContent:doView");
+        WebPage page = paramRequest.getTopic();
         Resource resource = getResourceBase();
         VersionInfo vi = getActualVersion();
         String numversion=request.getParameter("numversion");
-//        System.out.println("numversion:"+numversion);
         if (numversion != null && numversion.length()>0)
         {
             vi = findVersion(Integer.parseInt(numversion));
@@ -81,16 +71,18 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         String resourceWorkPath = SWBPlatform.getWorkPath()
                 + resource.getWorkPath() + "/" + versionNumber + "/" + fileName;
 
-//        System.out.println("resourceWorkPath:"+resourceWorkPath);
-//        System.out.println("versionNumber:"+versionNumber);
-//        System.out.println("fileName:"+fileName);
 
         String fileContent = SWBUtils.IO.getFileFromPath(resourceWorkPath);
         fileContent=SWBUtils.TEXT.replaceAll(fileContent,"<workpath/>"
             ,SWBPlatform.getWebWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/");
+
+        //Paginación (Jorge Jiménez-10/Julio/2009)
+        fileContent=new ContentUtils().paginationHtmlContent(fileContent, page, request.getParameter("page"), resource);
+        //Termina Páginación
+
         response.getWriter().println(fileContent);
-//        System.out.println("fileContent:"+fileContent);
     }
+
 
     /**
      * Presenta el editor de HTML para generar el contenido relacionado a la version
