@@ -257,19 +257,26 @@ guardar old */
 }
 /* ------------------------------- N O T A S ---------*/
 /* ------------------------------- M O V S   ---------*/
+
 #movs{
 	border:#666666 solid 0px;
 	padding: 70px 0px 0px 0px;
 	width: 380px;
 }
+
+.mov-fecha{
+    width: 60px;
+}
+
 #movs table{
 	color:#336699;
-	font-size:12px;
+	font-size:11px;
 	border-collapse: collapse;
 	border-spacing:0px;
 	margin: 0px 0px 0px 15px;
 	padding:0px;
 }
+
 #movs caption{
 	font-size:15px;
 	font-weight:bold;
@@ -277,9 +284,11 @@ guardar old */
 	padding-bottom:10px;
 	text-transform:capitalize;
 }
+
 #movs td {
 	height:19px;
 }
+
 #movs td a{
 	border-bottom:#FFF solid 1px;
 	display:block; 
@@ -291,6 +300,7 @@ guardar old */
 	text-decoration:underline;
 	color:blue;
 }
+
 .mov-recurso a{
 	width:170px;
 	padding-left:10px;
