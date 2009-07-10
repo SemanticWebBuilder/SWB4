@@ -33,6 +33,7 @@ namespace WBOffice4.Forms
 
         private void buttonAceptar_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
             if (!Uri.IsWellFormedUriString(this.comboBoxAddresses.Text, UriKind.Absolute))
             {
                 RtlAwareMessageBox.Show(this, "La dirección web no está bien escrita", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
