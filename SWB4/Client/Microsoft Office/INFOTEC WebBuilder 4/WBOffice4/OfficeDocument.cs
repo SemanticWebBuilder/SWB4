@@ -204,8 +204,15 @@ namespace WBOffice4
         {
             if (uri.IsFile)
             {
-                FileInfo farchivo = new FileInfo(uri.LocalPath);
-                return farchivo;
+                try
+                {
+                    FileInfo farchivo = new FileInfo(uri.LocalPath);
+                    return farchivo;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
             }
             return null;
 
