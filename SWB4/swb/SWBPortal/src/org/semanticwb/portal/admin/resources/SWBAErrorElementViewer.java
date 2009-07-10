@@ -230,8 +230,8 @@ public class SWBAErrorElementViewer extends GenericResource{
                     SWBResourceURL urlDetailn = paramRequest.getRenderUrl();
                     urlDetailn.setParameter("act","detail");
                     urlDetailn.setParameter("idErr",Long.toString(nid));
-                    //out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlDetailn + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btnprevious")+ "</button>");
-                    out.println("<input type=\"button\" value=\""+paramRequest.getLocaleString("btnprevious")+"\" onclick=\"window.location='"+urlDetailn+"'\">");
+                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlDetailn + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btnprevious")+ "</button>");
+                    //out.println("<input type=\"button\" value=\""+paramRequest.getLocaleString("btnprevious")+"\" onclick=\"window.location='"+urlDetailn+"'\">");
                 }
                 
                 out.println(" </td><td align=\"left\" width=\"50%\">");
@@ -240,8 +240,8 @@ public class SWBAErrorElementViewer extends GenericResource{
                     SWBResourceURL urlDetailp = paramRequest.getRenderUrl();
                     urlDetailp.setParameter("act","detail");
                     urlDetailp.setParameter("idErr",Long.toString(pid));
-                    //out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlDetailp + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btnnext")+ "</button>");
-                    out.println(" <input type=\"button\" value=\""+paramRequest.getLocaleString("btnnext")+"\" onclick=\"window.location='"+urlDetailp+"'\">");
+                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlDetailp + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btnnext")+ "</button>");
+                    //out.println(" <input type=\"button\" value=\""+paramRequest.getLocaleString("btnnext")+"\" onclick=\"window.location='"+urlDetailp+"'\">");
                 }
                 out.println("&nbsp;</td></tr></table></td></tr>");
                 out.println("<tr>");
@@ -296,9 +296,9 @@ public class SWBAErrorElementViewer extends GenericResource{
             out.println("<input type=\"hidden\" name=\"fecha\" value=\""+fecha+"\">");
             out.println("<input type=\"hidden\" name=\"stacktrace\" value=\""+stacktrace+"\">");
 
-            //out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('"+getResourceBase().getId()+"/ErrorEV'); return false;\">" + paramRequest.getLocaleString("msgBtnSendError")+ "</button>");
-            //out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlBack + "',this.domNode); return false;\">" + paramRequest.getLocaleString("msgBtnBack")+ "</button>");
-            out.println("<input type=submit value=\""+paramRequest.getLocaleString("msgBtnSendError")+"\" >&nbsp;<input type=button value=\""+paramRequest.getLocaleString("msgBtnBack")+"\" onclick=\"window.location='"+urlBack.toString()+"';\">");
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('"+getResourceBase().getId()+"/ErrorEV'); return false;\">" + paramRequest.getLocaleString("msgBtnSendError")+ "</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlBack + "',this.domNode); return false;\">" + paramRequest.getLocaleString("msgBtnBack")+ "</button>");
+            //out.println("<input type=\"submit\" value=\""+paramRequest.getLocaleString("msgBtnSendError")+"\" >&nbsp;<input type=button value=\""+paramRequest.getLocaleString("msgBtnBack")+"\" onclick=\"window.location='"+urlBack.toString()+"';\">");
             out.println("</form>");
             out.println("</td>");
             out.println("</tr>");
