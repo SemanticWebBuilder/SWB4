@@ -1,29 +1,54 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<xslfile>admresource.xslt</xslfile>
-	<form name="frmWBUrlContent" action="true" method="POST">
+	<form name="frmSendRedirect" action="true" method="POST">
 		<admdbconnmgr defconn="true"/>
                 <fieldset>
-		<input type="TEXT" name="url" label="URL to send redirect:" size="50" jsrequired="true"/>
+		<input type="TEXT" name="url" label="Url redirection:" size="50" jsrequired="true"/>
                 </fieldset>
                 <fieldset>
 		<input type="SUBMIT" name="btnSave"  value="Save" class="boton"/>
 		<input type="RESET"  name="btnReset" value="Cancel" class="boton"/>
                 </fieldset>
 	</form>
-	<statictext name="txt">
+	<statictext name="txtNote">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				Tags:<BR>
-                                &nbsp;&nbsp;{user.login}<BR>
-                                &nbsp;&nbsp;{user.email}<BR>
-                                &nbsp;&nbsp;{user.language}<BR>
-                                &nbsp;&nbsp;{getEnv("XXXXX")}<BR>
-                                &nbsp;&nbsp;{request.getParameter("XXXXX")}<BR>
-                                &nbsp;&nbsp;{session.getAttribute("XXXXX")}<BR>
-                                &nbsp;&nbsp;{encode("XXXXX")}<BR>
-                                <BR>&nbsp;&nbsp;XXXXX=Text, Tag<BR>
+				* Data requirements.
 			</font>
 		]]>
-	</statictext>            
+	</statictext>
+
+    <script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.form.Button");
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnSave"), "onClick",
+                function() {
+                    if(jsValida(dojo.byId("frmSendRedirect"))) {
+                        dojo.byId("frmSendRedirect").submit();
+                    }
+                }
+            );
+        });
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnReset"), "onClick",
+                function() {
+                    dojo.byId("frmSendRedirect").reset();
+                }
+            );
+        });
+
+        function jsValida(frm) {
+            if(frm.url.value==null || frm.url.value=='' || frm.url.value==' ' ) {
+                alert('Specify redirect url.');
+                frm.url.focus();
+                return false;
+            }
+            return true;
+        }
+        ]]>
+    </script>
 </admresource>
