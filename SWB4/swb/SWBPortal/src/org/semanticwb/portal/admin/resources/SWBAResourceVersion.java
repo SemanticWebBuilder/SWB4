@@ -5,6 +5,7 @@
 
 package org.semanticwb.portal.admin.resources;
 
+import com.hp.hpl.jena.sparql.syntax.Template;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -504,6 +505,7 @@ public class SWBAResourceVersion extends GenericResource {
                 versiones = (Versionable) go;
             }
 
+            SemanticObject sobase = ont.getSemanticObject(id);
             SWBResource wres = (SWBResource) go;
 
 
@@ -526,14 +528,13 @@ public class SWBAResourceVersion extends GenericResource {
 
             temp = va.getNextVersion();
             if (temp != null) {
-                //System.out.println("Borrando version anterior a la actual");
                 temp.removePreviousVersion();
             }
 
             // eliminación de archivos de las versiones de recursos
             while (temp != null) {
                 temp2 = temp;
-                temp = temp.getPreviousVersion();
+                temp = temp.getNextVersion();
                 String rutaFS_source_path = SWBPlatform.getWorkPath() + wres.getResourceBase().getWorkPath() + "/" + temp2.getVersionNumber();
                 if (SWBUtils.IO.removeDirectory(rutaFS_source_path)) {
                     //System.out.println("Remove next OK by Reset Version: " + temp2.getVersionNumber());
@@ -563,17 +564,16 @@ public class SWBAResourceVersion extends GenericResource {
                 if (SWBUtils.IO.removeDirectory(rutaFS_source_path)) {
                     //System.out.println("Remove OK actual");
                 }
+            }
                 va.setVersionNumber(1);
+
                 versiones.setActualVersion(va);
                 versiones.setLastVersion(va);
-
-                //SWBResource swres = (SWBResource)sobase.getGenericInstance();
-                wres.setResourceBase(wres.getResourceBase());
 
                 response.setRenderParameter("dialog", "close");
                 response.setRenderParameter("act", "");
                 response.setMode(response.Mode_VIEW);
-            }
+                id=sobase.getURI();           
         }
         response.setRenderParameter("suri", id);
     }

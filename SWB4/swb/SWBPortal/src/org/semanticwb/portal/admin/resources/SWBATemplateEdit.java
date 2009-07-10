@@ -522,12 +522,13 @@ public class SWBATemplateEdit extends GenericResource {
                 if (SWBUtils.IO.removeDirectory(rutaFS_source_path)) {
                     //System.out.println("Remove OK actual");
                 }
-                va.setVersionNumber(1);
-                tmpl.setActualVersion(va);
-                tmpl.setLastVersion(va);
-                SWBPortal.getTemplateMgr().reloadTemplate(tmpl);
+                
                 //System.out.println("filename:"+va.getVersionFile());
             }
+            va.setVersionNumber(1);
+            tmpl.setActualVersion(va);
+            tmpl.setLastVersion(va);
+            SWBPortal.getTemplateMgr().reloadTemplate(tmpl);
         }
         response.setRenderParameter("suri", id);
     }
