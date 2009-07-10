@@ -132,7 +132,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
 
         if(securCodeCreated!=null && !securCodeCreated.equalsIgnoreCase(securCodeSent)) {
             ret.append("<tr><td class=\"espcmnt\" height=\"30\" colspan=\"2\">\n");
-            ret.append("<div id=\"cmnt_msg\" style=\"background-color:#F89C9E; color:#CCCCCC; font-size:12px; text-align:center\">");
+            ret.append("<div id=\"cmnt_msg\" style=\"background-color:#F89C9E; color:#333333; font-size:12px; text-align:center\">");
             ret.append("El código de seguridad es incorrecto. En caso de no ser claro cámbialo haciendo clic en \"Obtener otro código\".");
             ret.append("</div>");
             ret.append("</td></tr>");
@@ -147,7 +147,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         ret.append("<form name=\"cmnt\" id=\"cmnt\" target=\"\" action=\""+rUrl+"\" method=\"post\">\n");
         ret.append("	<table border=\"0\" width=\"100%\">\n");
         ret.append("      <tr class=\"f\">\n");
-        ret.append("        <td width=\"312\">\n");
+        ret.append("        <td width=\"50%\">\n");
         // Fullname
         ret.append("            <p>\n");
         ret.append("            <label for=\"cmnt_name\">Nombre Completo:</label><br/>\n");
@@ -173,7 +173,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         ret.append("            <textarea id=\"cmnt_comment\" name=\"cmnt_comment\" cols=\"32\" rows=\"3\" >"+comment+"</textarea>\n");
         ret.append("            </p>\n");
         ret.append("        </td>\n");
-        ret.append("        <td width=\"312\">\n");
+        ret.append("        <td width=\"50%\">\n");
         ret.append("            <p style=\"text-align:justify\">\n");
         ret.append("                Para enviar tu comentario ingresa la palabras que se muestra abajo.\n");
         ret.append("                En caso de no ser suficientemente claras, las puedes cambiar dando clic en \"Otro código\".\n");
@@ -183,7 +183,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         ret.append("                <input type=\"button\" value=\"Generar otro código\" onClick=\"changeSecureCodeImage('imgseccode');\"/>\n");
         ret.append("            </div>\n");
         ret.append("            <div id=\"cntseccode\" style=\"text-align:center\">\n");
-        ret.append("                <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"150\" height=\"60\" />\n");
+        ret.append("                <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"155\" height=\"65\" />\n");
         ret.append("            </div>\n");        
         ret.append("            </span>\n");
         ret.append("            <p>\n");
