@@ -128,12 +128,12 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         ret.append("</script>\n");
         
         ret.append("<table width=\"99%\" class=\"cmnts\" border=0 cellpadding=\"0\" cellspacing=\"0\">\n");
-        ret.append(renderListComments());
+        ret.append(renderListComments(paramRequest));
 
         if(securCodeCreated!=null && !securCodeCreated.equalsIgnoreCase(securCodeSent)) {
             ret.append("<tr><td class=\"espcmnt\" height=\"30\" colspan=\"2\">\n");
             ret.append("<div id=\"cmnt_msg\" style=\"background-color:#F89C9E; color:#333333; font-size:12px; text-align:center\">");
-            ret.append("El código de seguridad es incorrecto. En caso de no ser claro cámbialo haciendo clic en \"Obtener otro código\".");
+            ret.append(paramRequest.getLocaleString("msgWrongCode"));
             ret.append("</div>");
             ret.append("</td></tr>");
             request.getSession(true).removeAttribute("cs");
@@ -143,14 +143,14 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         
         ret.append("<tr>\n");
         ret.append("<td colspan=\"2\" class=\"creacmnt\">\n");
-        ret.append("<h4>Agrega tu comentario</h4>\n");
+        ret.append("<h4>"+paramRequest.getLocaleString("add")+"</h4>\n");
         ret.append("<form name=\"cmnt\" id=\"cmnt\" target=\"\" action=\""+rUrl+"\" method=\"post\">\n");
         ret.append("	<table border=\"0\" width=\"100%\">\n");
         ret.append("      <tr class=\"f\">\n");
         ret.append("        <td width=\"50%\">\n");
         // Fullname
         ret.append("            <p>\n");
-        ret.append("            <label for=\"cmnt_name\">Nombre Completo:</label><br/>\n");
+        ret.append("            <label for=\"cmnt_name\">"+paramRequest.getLocaleString("nameLabel")+":</label><br/>\n");
         User user = paramRequest.getUser();
         if(user.isSigned()) {
             ret.append("            <input type=\"text\" id=\"cmnt_name\" name=\"cmnt_name\" value=\""+user.getFullName()+"\" size=\"34\" />\n");
@@ -160,7 +160,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         ret.append("            </p>\n");
         // Email
         ret.append("            <p>\n");
-        ret.append("            <label for=\"email\">Tu correo electrónico válido:</label><br/>\n");
+        ret.append("            <label for=\"email\">"+paramRequest.getLocaleString("emailLabel")+":</label><br/>\n");
         if(user.isSigned()) {
             ret.append("            <input type=\"text\" id=\"cmnt_email\" name=\"cmnt_email\" value=\""+user.getEmail()+"\" size=\"34\" />\n");
         }else {
@@ -169,18 +169,17 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         ret.append("            </p>\n");
         //Comment
         ret.append("            <p>\n");
-        ret.append("            <label for=\"comment\">Comentario:</label><br/>\n");
+        ret.append("            <label for=\"comment\">"+paramRequest.getLocaleString("comment")+":</label><br/>\n");
         ret.append("            <textarea id=\"cmnt_comment\" name=\"cmnt_comment\" cols=\"32\" rows=\"3\" >"+comment+"</textarea>\n");
         ret.append("            </p>\n");
         ret.append("        </td>\n");
         ret.append("        <td width=\"50%\">\n");
         ret.append("            <p style=\"text-align:justify\">\n");
-        ret.append("                Para enviar tu comentario ingresa la palabras que se muestra abajo.\n");
-        ret.append("                En caso de no ser suficientemente claras, las puedes cambiar dando clic en \"Otro código\".\n");
+        ret.append(paramRequest.getLocaleString("msgSpam"));
         ret.append("            </p>\n");
         ret.append("            <span>\n");
         ret.append("            <div style=\"text-align:right\">\n");
-        ret.append("                <input type=\"button\" value=\"Generar otro código\" onClick=\"changeSecureCodeImage('imgseccode');\"/>\n");
+        ret.append("                <input type=\"button\" value=\""+paramRequest.getLocaleString("anotherCode")+"\" onClick=\"changeSecureCodeImage('imgseccode');\"/>\n");
         ret.append("            </div>\n");
         ret.append("            <div id=\"cntseccode\" style=\"text-align:center\">\n");
         ret.append("                <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"155\" height=\"65\" />\n");
@@ -193,10 +192,8 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         ret.append("      </tr>\n");
         ret.append("      <tr>\n");
         ret.append("        <td colspan=\"2\">\n");
-        ret.append("        <p>\n");
-        ret.append("        	Aviso: Esta herramienta tiene la finalidad de permitir el intercambio de ideas de manera responsable, por este motivo nos reservamos el derecho de remover o editar comentarios de contenido obsceno, injurioso, pornográfico o sin relación al tema publicado.\n");
-        ret.append("        </p>\n");
-        ret.append("        <p><input type=\"button\" id=\"cmnt_send\" name=\"cmnt_send\" value=\"publicar comentario\" onClick=\"doApply();\" /></p>\n");
+        ret.append("        <p>"+paramRequest.getLocaleString("msgEditorial")+"</p>\n");
+        ret.append("        <p><input type=\"button\" id=\"cmnt_send\" name=\"cmnt_send\" value=\""+paramRequest.getLocaleString("publish")+"\" onClick=\"doApply();\" /></p>\n");
         ret.append("        </td>\n");
         ret.append("      </tr>\n");
         ret.append("    </table>\n");
@@ -209,7 +206,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         out.close();
     }
 
-    private String renderListComments() {
+    private String renderListComments(SWBParamRequest paramRequest) throws SWBResourceException{
         StringBuilder ret = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");
         //long ordinal = SWBUtils.sizeOf(listComments());
@@ -222,7 +219,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
 //            ret.append("  <td class=\"cmntimg\" width=\"30\" height=\"30\">\n");
 //            ret.append("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/status_online.png\" alt=\"user comment\" />\n");
 //            ret.append("  </td>\n");
-            ret.append("  <td colspan=2 class=\"cmnt\">"+(ordinal++)+". <strong>"+(comment.getCreator().getFullName().equalsIgnoreCase("")?"Desconocido":comment.getCreator().getFullName())+" escribió</strong> el "+sdf.format(comment.getCreated())+"<br />"+comment.getComment()+"</td>\n");
+            ret.append("  <td colspan=2 class=\"cmnt\">"+(ordinal++)+". <strong>"+(comment.getCreator().getFullName().equalsIgnoreCase("")?"Desconocido":comment.getCreator().getFullName())+" "+paramRequest.getLocaleString("writeAtLabel")+"</strong> "+sdf.format(comment.getCreated())+"<br />"+comment.getComment()+"</td>\n");
             ret.append("</tr>\n");
         }
 
