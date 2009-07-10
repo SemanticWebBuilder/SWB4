@@ -51,7 +51,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         ContentUtils contentUtils = new ContentUtils();
         Resource base = paramRequest.getResourceBase();
-        WebPage page = paramRequest.getWebPage();
+        WebPage page = paramRequest.getTopic();
         String version = getVersionToShow();
         String contentId = getContent();
         String repositoryName = getRepositoryName();
@@ -91,7 +91,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         beforePrintDocument(out);
 
                         //Agregado por Jorge Jiménez para poner estilos predefinidos y paginación MsWord y OpenOffice (5/07/2009)
-                        boolean iswordcontent = true; 
+                        boolean iswordcontent = true;
                         int posword = htmlOut.toLowerCase().indexOf("name=\"generator\" content=\"openoffice.org"); //detección de si el contenido es de openOffice
                         if (posword > -1) iswordcontent = false;
                         if (iswordcontent) { //Contenido MsWord
@@ -134,6 +134,6 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
         }
 
     }
-    
+
 }
 
