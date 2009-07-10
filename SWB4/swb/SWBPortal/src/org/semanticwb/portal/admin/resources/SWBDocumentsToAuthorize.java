@@ -7,6 +7,7 @@ package org.semanticwb.portal.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -22,7 +23,11 @@ import org.semanticwb.portal.PFlowManager;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBParamRequestImp;
+import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.api.SWBResourceURLImp;
 
 /**
  *
@@ -178,6 +183,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("<form class=\"swbform\" name='swbfrmResourcesAuhotrize' method='post' action='" + paramRequest.getActionUrl() + "'>");
                 out.println("<fieldset>");
                 out.println("<input type='hidden' name='wbaction' value=''></input>");
+                out.println("<input type='hidden' name='url' value=''></input>");
                 out.println("<input type='hidden' name='site' value='" + sitetoShow.getId() + "'></input>");
                 out.println("<table width=\"100%\">");
                 out.println("<tr>");
@@ -199,7 +205,15 @@ public class SWBDocumentsToAuthorize extends GenericResource
                     out.println("<tr>");
                     out.println("<td width='10%'>");
                     PFlowManager manager=new PFlowManager();
-                    out.println("<input type=\"radio\" onClick=\"javascript:habilita("+ manager.isReviewer(resource, user) +")\" name=\"res\" value=\"" + resource.getId() + "\"></input>");
+                    //SWBResource res = SWBPortal.getResourceMgr().getResource(resource.getId());
+                    //resource.getResourceable()
+                    //SWBResourceURLImp urlpre = (SWBResourceURLImp)paramRequest.getRenderUrl();
+                    //urlpre.setResourceBase(resource);
+                    //urlpre.set
+                    SWBParamRequestImp  paramreq=new SWBParamRequestImp(request, resource, paramRequest.getTopic(), user);
+
+                    out.println("<input type=\"radio\" onClick=\"javascript:habilita("+ manager.isReviewer(resource, user) +",'"+paramreq.getRenderUrl().setCallMethod(paramreq.Call_DIRECT)+"')\" name=\"res\" value=\"" + resource.getId() + "\"></input>");
+
                     out.println("</td>");
                     out.println("<td width='30%'>");
                     out.println(resource.getTitle());
@@ -264,15 +278,16 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("}");
                 out.println("function view()");
                 out.println("{");
-                out.println("   var tDiv = document.getElementById(\"previewcontent\");");
-                out.println("   tDiv.innerHTML='<iframe width=\'100%\' height=\'500\' src=\'http://www.infotec.com.mx\'></iframe>';");
+                out.println("   var tDiv = document.getElementById(\"previewcontent\");");                
+                out.println("   var url=swbfrmResourcesAuhotrize.url.value;");                
+                out.println("   tDiv.innerHTML=\"<iframe width='100%' height='500' src='\"+ url +\"'></iframe>\";");
 
                 out.println("}");
-                out.println("function habilita(valor)");
+                out.println("function habilita(valor,url)");
                 out.println("{");
                 out.println("   if(valor)");
                 out.println("   {");
-                
+                out.println("       swbfrmResourcesAuhotrize.url.value=url;");
                 out.println("       swbfrmResourcesAuhotrize.msg.disabled=false;");
                 out.println("       var button = dijit.byId(\"authorize\");");
                 out.println("       button.setDisabled(false);");
@@ -282,15 +297,15 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("       button.setDisabled(false);");
                 out.println("   }");
                 out.println("   else");
-                out.println("   {");
-                 out.println("       var button = dijit.byId(\"authorize\");");
+                out.println("   {");                
+                out.println("       var button = dijit.byId(\"authorize\");");
                 out.println("       button.setDisabled(true);");
                 out.println("       button = dijit.byId(\"reject\");");
                 out.println("       button.setDisabled(true);");
                 out.println("       button = dijit.byId(\"view\");");
                 out.println("       button.setDisabled(true);");
                 out.println("       swbfrmResourcesAuhotrize.msg.disabled=true;");
-                
+                out.println("       alert('Usted no tiene permisos para autorizar o recharzar este contenido');");
                 out.println("   }");
                 out.println("}");                
                 out.println("function reject()");
