@@ -493,7 +493,7 @@ public class SWBATemplateEdit extends GenericResource {
             // eliminación de archivos de las versiones de las plantillas
             while (temp != null) {
                 temp2 = temp;
-                temp = temp.getPreviousVersion();
+                temp = temp.getNextVersion();
                 String rutaFS_source_path = SWBPlatform.getWorkPath() + tmpl.getWorkPath() + "/" + temp2.getVersionNumber();
                 if (SWBUtils.IO.removeDirectory(rutaFS_source_path)) {
                     //System.out.println("Remove next OK by Reset Version: " + temp2.getVersionNumber());
