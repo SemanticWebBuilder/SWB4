@@ -43,18 +43,13 @@ public class SWBDocumentsToAuthorize extends GenericResource
             WebSite site = SWBContext.getWebSite(request.getParameter("site"));            
             if (site != null)
             {
-                Resource resource = site.getResource(request.getParameter("res"));
-                System.out.println("res "+request.getParameter("res"));
-                System.out.println("resource "+resource.getId());
+                Resource resource = site.getResource(request.getParameter("res"));                
                 if (resource != null && SWBPortal.getPFlowManager().isReviewer(resource, user))
                 {
-
-                    String msg = request.getParameter("msg");
-                    System.out.println("msg "+msg);
+                    String msg = request.getParameter("msg");                    
                     if (!msg.trim().equals(""))
                     {
-                        String action = request.getParameter("wbaction");
-                        System.out.println("wbaction "+action);
+                        String action = request.getParameter("wbaction");                        
                         if (action.equals("a"))
                         {
                             SWBPortal.getPFlowManager().approveResource(resource, user, msg);
@@ -64,11 +59,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                             SWBPortal.getPFlowManager().rejectResource(resource, user, msg);
                         }
                     }
-                }
-                else
-                {
-                    System.out.println("is not reviewer");
-                }
+                }                
             }
         }        
     }
@@ -245,9 +236,9 @@ public class SWBDocumentsToAuthorize extends GenericResource
 
                 out.println("<tr>");
                 out.println("<td colspan='4'>");
-                out.println("<button onClick='authorize();' dojoType=\"dijit.form.Button\" name='authorize' id='authorize' type='button'>"+ paramRequest.getLocaleString("authorize") +"</button>");
-                out.println("<button onClick='reject();' dojoType=\"dijit.form.Button\" name='reject' id='reject' type='button'>"+ paramRequest.getLocaleString("reject") +"</button>");
-                out.println("<button onClick='view();' dojoType=\"dijit.form.Button\" name='view' id='view' type='button'>Ver contenido</button>");
+                out.println("<button onClick='authorize();' dojoType=\"dijit.form.Button\" disabled=\"true\" name='authorize' id='authorize' type='button'>"+ paramRequest.getLocaleString("authorize") +"</button>");
+                out.println("<button onClick='reject();' dojoType=\"dijit.form.Button\" disabled=\"true\" name='reject' id='reject' type='button'>"+ paramRequest.getLocaleString("reject") +"</button>");
+                out.println("<button onClick='view();' dojoType=\"dijit.form.Button\" disabled=\"true\" name='view' id='view' type='button'>Ver contenido</button>");
 
                
                 out.println("</td>");
@@ -257,6 +248,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("</form>");
 
                 out.println("<script type=\"text/javascript\">");
+                out.println("swbfrmResourcesAuhotrize.msg.disabled=true;");                
                 out.println("dojo.require(\"dijit.form.Button\");");
                 out.println("dojo.require(\"dijit.form.Textarea\");");
                 out.println("dojo.require(\"dojox.form.DropDownSelect\");");
@@ -272,18 +264,33 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("}");
                 out.println("function view()");
                 out.println("{");
+                out.println("   var tDiv = document.getElementById(\"previewcontent\");");
+                out.println("   tDiv.innerHTML='<iframe width=\'100%\' height=\'500\' src=\'http://www.infotec.com.mx\'></iframe>';");
+
                 out.println("}");
                 out.println("function habilita(valor)");
                 out.println("{");
                 out.println("   if(valor)");
                 out.println("   {");
-                out.println("       swbfrmResourcesAuhotrize.authorize.enabled=true;");
-                out.println("       swbfrmResourcesAuhotrize.reject.enabled=false;");
+                
+                out.println("       swbfrmResourcesAuhotrize.msg.disabled=false;");
+                out.println("       var button = dijit.byId(\"authorize\");");
+                out.println("       button.setDisabled(false);");
+                out.println("       button = dijit.byId(\"reject\");");
+                out.println("       button.setDisabled(false);");
+                out.println("       button = dijit.byId(\"view\");");
+                out.println("       button.setDisabled(false);");
                 out.println("   }");
                 out.println("   else");
                 out.println("   {");
-                out.println("       swbfrmResourcesAuhotrize.authorize.enabled=false;");
-                out.println("       swbfrmResourcesAuhotrize.reject.enabled=true;");
+                 out.println("       var button = dijit.byId(\"authorize\");");
+                out.println("       button.setDisabled(true);");
+                out.println("       button = dijit.byId(\"reject\");");
+                out.println("       button.setDisabled(true);");
+                out.println("       button = dijit.byId(\"view\");");
+                out.println("       button.setDisabled(true);");
+                out.println("       swbfrmResourcesAuhotrize.msg.disabled=true;");
+                
                 out.println("   }");
                 out.println("}");                
                 out.println("function reject()");
@@ -312,7 +319,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
             out.println("<p>" + paramRequest.getLocaleString("messageNoSites") + "</p>");
             out.println("</div>");
         }
-        out.println("<div id='previewconten'>");
+        out.println("<div id='previewcontent'>");
         out.println("</div>");
         out.close();
     }
