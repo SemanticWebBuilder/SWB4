@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
@@ -126,6 +127,7 @@ public class ContentUtils {
             String data=null;
             if(contentType.equals("MsWord")) data=getContentByPage(content, npage);
             else if(contentType.equals("OpenOffice")) data=getContentOpenOfficeByPage(content, npage);
+            else if(contentType.equals("HtmlContent")) data=getHtmlContentByPage(content, npage);
 
             if (position == 1) {
                 strb.append(data);
@@ -588,6 +590,62 @@ public class ContentUtils {
             log.error(e);
         }
         return ret.toString();
+    }
+
+
+    //////////METODOS PARA MANEJO DE HTMLCONTENT////////////////////////////
+
+
+     public String paginationHtmlContent(String htmlOut, WebPage page, String npage, Resource base) {
+        int totPages = getHtmlContentPagesNumber(htmlOut);
+        if (totPages > 1) {
+            int ipage = 1;
+            if (npage != null) {
+                ipage = Integer.parseInt(npage);
+            } else {
+                ipage = 1;
+            }
+            htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "HtmlContent");
+        }
+        return htmlOut;
+    }
+
+      /**
+     * Metodo que regresa el número de páginas con las que cuenta el contenido
+     */
+    private int getHtmlContentPagesNumber(String content) {
+        Iterator <String>itStr=SWBUtils.TEXT.findInterStr(content, "div style=\"","always\">");
+        int size = 1;
+        while (itStr.hasNext()) {
+            String str=itStr.next();
+            if(str!=null && str.equals("page-break-after: ")){
+                    size++;
+            }
+        }
+        return size;
+    }
+
+    private String getHtmlContentByPage(String datos, int page){
+        int off = 0;
+        int cont = 0;
+        String matchPatron="<div style=\"page-break-after: always\">";
+        int f = -1;
+        String data="";
+        do {
+            f = datos.indexOf(matchPatron, off);
+            if (f >-1) {
+                cont++;
+                data=datos.substring(off, f);
+                if(page==cont) break;
+                off = f + matchPatron.length();
+            }else if(off>0){
+                data=datos.substring(off-matchPatron.length());
+            }
+            else { //Solo hay una pagina
+                data=datos;
+            }
+        } while (f > -1);
+        return data;
     }
 
 }
