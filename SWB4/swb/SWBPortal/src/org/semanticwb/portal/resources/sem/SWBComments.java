@@ -127,12 +127,12 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
 
         ret.append("</script>\n");
         
-        ret.append("<table width=\"100%\" class=\"cmnts\" border=0 cellpadding=\"0\" cellspacing=\"0\">\n");
+        ret.append("<table width=\"99%\" class=\"cmnts\" border=0 cellpadding=\"0\" cellspacing=\"0\">\n");
         ret.append(renderListComments());
 
         if(securCodeCreated!=null && !securCodeCreated.equalsIgnoreCase(securCodeSent)) {
             ret.append("<tr><td class=\"espcmnt\" height=\"30\" colspan=\"2\">\n");
-            ret.append("<div id=\"cmnt_msg\" style=\"background-color:#F89C9E; color:#FF0000; font-size:12px; text-align:center\">");
+            ret.append("<div id=\"cmnt_msg\" style=\"background-color:#F89C9E; color:#CCCCCC; font-size:12px; text-align:center\">");
             ret.append("El código de seguridad es incorrecto. En caso de no ser claro cámbialo haciendo clic en \"Obtener otro código\".");
             ret.append("</div>");
             ret.append("</td></tr>");
@@ -183,7 +183,7 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         ret.append("                <input type=\"button\" value=\"Generar otro código\" onClick=\"changeSecureCodeImage('imgseccode');\"/>\n");
         ret.append("            </div>\n");
         ret.append("            <div id=\"cntseccode\" style=\"text-align:center\">\n");
-        ret.append("                <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"200\" height=\"60\" />\n");
+        ret.append("                <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"150\" height=\"60\" />\n");
         ret.append("            </div>\n");        
         ret.append("            </span>\n");
         ret.append("            <p>\n");
