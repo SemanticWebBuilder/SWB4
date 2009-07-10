@@ -210,7 +210,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                     //SWBResourceURLImp urlpre = (SWBResourceURLImp)paramRequest.getRenderUrl();
                     //urlpre.setResourceBase(resource);
                     //urlpre.set
-                    SWBParamRequestImp  paramreq=new SWBParamRequestImp(request, resource, paramRequest.getTopic(), user);
+                    SWBParamRequestImp  paramreq=new SWBParamRequestImp(request, resource, paramRequest.getWebPage(), user);
 
                     out.println("<input type=\"radio\" onClick=\"javascript:habilita("+ manager.isReviewer(resource, user) +",'"+paramreq.getRenderUrl().setCallMethod(paramreq.Call_DIRECT)+"')\" name=\"res\" value=\"" + resource.getId() + "\"></input>");
 
