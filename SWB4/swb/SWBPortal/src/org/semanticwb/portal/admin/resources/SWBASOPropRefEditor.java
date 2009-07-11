@@ -96,6 +96,10 @@ public class SWBASOPropRefEditor extends GenericResource {
             SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
             SemanticClass clsprop = prop.getRangeClass();
 
+            //System.out.println("prop:"+prop);
+            //System.out.println("range:"+prop.getRange());
+            //System.out.println("rangeClass:"+prop.getRangeClass());
+
             log.debug("CLASE: " + clsprop.getClassName());
             HashMap hmprop = new HashMap();
             Iterator<SemanticProperty> ite_sp = clsprop.listProperties();
