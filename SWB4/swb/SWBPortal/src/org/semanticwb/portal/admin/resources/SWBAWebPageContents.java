@@ -7,7 +7,6 @@ package org.semanticwb.portal.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
-import java.util.Date;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -281,7 +280,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" title=\"Eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + sobj.getDisplayName(user.getLanguage()) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
+                out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("remove")+"\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + sobj.getDisplayName(user.getLanguage()) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("remove")+"\"></a>");
 
                 SWBResourceURL urlpre = paramRequest.getRenderUrl();
                 urlpre.setParameter("suri", id);
@@ -292,9 +291,9 @@ public class SWBAWebPageContents extends GenericResource {
                     urlpre.setParameter("sproptype", idptype);
                 }
                 urlpre.setParameter("preview", "true");
-                out.println("<a href=\"#\" title=\"Vista Preliminar\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=0></a>");
+                out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("previewdocument")+"\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("previewdocument")+"\"></a>");
 
-                out.println("<a href=\"#\"  title=\"Administrar\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=0></a>");
+                out.println("<a href=\"#\"  title=\""+ paramRequest.getLocaleString("documentAdmin")+"\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\""+"documentAdmin"+"\"></a>");
 
                 if (send2Flow) {
                     String pfid = null;
@@ -311,11 +310,11 @@ public class SWBAWebPageContents extends GenericResource {
                     if (idptype != null) {
                         url2flow.setParameter("sproptype", idptype);
                     }
-                    out.println("<a href=\"#\" title=\"Enviar a flujo\" onclick=\"showDialog('" + url2flow + "','Comentario flujo'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\"></a>");
+                    out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("senddocument2flow")+"\" onclick=\"showDialog('" + url2flow + "','"+ paramRequest.getLocaleString("comentary")+"'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("senddocument2flow")+"\"></a>");
                 } else if (isInFlow && !isAuthorized) {
-                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/espera_autorizacion.gif\" border=\"0\" alt=\"En espera de autorización\">");
+                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/espera_autorizacion.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("documentwaiting")+"\">");
                 } else if (isInFlow && isAuthorized) {
-                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enlinea.gif\" border=\"0\" alt=\"Contenido Autorizado\">");
+                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enlinea.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("Caccepted")+"\">");
                 }
                 out.println("</td>");
                 out.println("<td>");
@@ -871,16 +870,16 @@ public class SWBAWebPageContents extends GenericResource {
         out.println("<tbody>");
         out.println("<tr>");
         out.println("<td>");
-        out.println("Comentario");
+        out.println(paramRequest.getLocaleString("comentary"));
         out.println("</td>");
         out.println("<td>");
         out.println("<input type=\"text\" name=\"usrmsg\" value=\"\" dojoType=\"dijit.form.TextBox\" required=\"true\"	");
-        out.println(" promptMessage=\"Comentario para el enviar el documento al flujo. \"  />");
+        out.println(" promptMessage=\""+paramRequest.getLocaleString("commentsend2flow")+"\"  />");
         out.println("</td>");
         out.println("</tr>");
         out.println("<tr>");
         out.println("<td>");
-        out.println("Flujo de publicación");
+        out.println(paramRequest.getLocaleString("publishflow"));
         out.println("</td>");
         out.println("<td>");
         out.println("<select name=\"pfid\">");
@@ -895,9 +894,9 @@ public class SWBAWebPageContents extends GenericResource {
         out.println("</filedset>");
         out.println("<filedset>");
 
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >Enviar</button>"); //_onclick=\"submitForm('"+id+"/"+idvi+"/"+base.getId()+"/FVIComment');return false;\"
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >"+paramRequest.getLocaleString("btnSend2flow")+"</button>"); //_onclick=\"submitForm('"+id+"/"+idvi+"/"+base.getId()+"/FVIComment');return false;\"
 
-        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"hideDialog(); return false;\">Cancelar</button>"); //submitUrl('" + urlb + "',this.domNode); hideDialog();
+        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"hideDialog(); return false;\">"+paramRequest.getLocaleString("btnCancel")+"</button>"); //submitUrl('" + urlb + "',this.domNode); hideDialog();
         out.println("</filedset>");
         out.println("</form>");
         out.println("</div>");
@@ -955,7 +954,7 @@ public class SWBAWebPageContents extends GenericResource {
                     response.setRenderParameter("nsuri", nso.getURI());
                 }
             } catch (FormValidateException e) {
-                throw new SWBResourceException("Error ro process form...", e);
+                throw new SWBResourceException("Error to process form...", e);
             }
 
             response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
