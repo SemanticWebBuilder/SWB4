@@ -1696,7 +1696,7 @@ public class SWBUtils {
 
             SWBMailSender swbMailSender = new SWBMailSender();
             swbMailSender.addEMail(message);
-            swbMailSender.run();
+            swbMailSender.start();
         }
 
         /**
@@ -1707,7 +1707,7 @@ public class SWBUtils {
         public static void sendBGEmail(SWBMail message) throws java.net.SocketException {
             SWBMailSender swbMailSender = new SWBMailSender();
             swbMailSender.addEMail(message);
-            swbMailSender.run();
+            swbMailSender.start();
         }
 
         public static void setSMTPUser(String smtpuser) {
