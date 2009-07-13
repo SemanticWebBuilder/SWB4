@@ -899,7 +899,7 @@ public class SWBPortal {
             }
             return value;
         }
-        private final String ALPHABETH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        private final static String ALPHABETH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
         private String getRandString(int size) {
             StringBuilder sb = new StringBuilder(size);
