@@ -60,7 +60,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
-        mgr.setSubmitByAjax(true);
+        mgr.setSubmitByAjax(false);
         mgr.setType(mgr.TYPE_XHTML);
         if(paramRequest.getAction().equals(paramRequest.Action_REMOVE))
         {
@@ -70,7 +70,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
             url.setAction(url.Action_REMOVE);
             mgr.setAction(url.toString());
         }
-        mgr.addButton(SWBFormButton.newCancelButton());
+        mgr.addButton(SWBFormButton.newBackButton());
         out.println(mgr.renderForm(request));
     }
 
@@ -84,14 +84,14 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
-        mgr.setSubmitByAjax(true);
+        mgr.setSubmitByAjax(false);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("objInstUri", semObject.getURI());
         url.setAction(url.Action_EDIT);
         mgr.setAction(url.toString());
         mgr.addButton(SWBFormButton.newSaveButton());
-        mgr.addButton(SWBFormButton.newCancelButton());
+        mgr.addButton(SWBFormButton.newBackButton());
         out.println(mgr.renderForm(request));
     }
 
@@ -105,7 +105,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
-        mgr.setSubmitByAjax(true);
+        mgr.setSubmitByAjax(false);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("objUri", cls.getURI());
@@ -113,7 +113,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
         mgr.setAction(url.toString());
 
         mgr.addButton(SWBFormButton.newSaveButton());
-        mgr.addButton(SWBFormButton.newCancelButton());
+        mgr.addButton(SWBFormButton.newBackButton());
         out.println(mgr.renderForm(request));
     }
 
