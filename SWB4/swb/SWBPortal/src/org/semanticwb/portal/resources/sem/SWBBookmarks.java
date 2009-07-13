@@ -9,8 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import javax.servlet.http.*;
-import org.semanticwb.Logger;
-import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
@@ -20,10 +18,10 @@ import org.semanticwb.portal.api.*;
 /**
  *
  * @author Hasdai Pacheco {haxdai(at)gmail.com}
- * A Bookmarks manager. The bookmarks are sorted in groups.
+ * A Bookmarks manager resource. The bookmarks are sorted in groups.
  */
 public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBookmarksBase {
-    private Logger log=SWBUtils.getLogger(SWBBookmarks.class);
+
     /**Undefined sorting constant.*/
     public static final int SORT_NOSORTED = 0;
     /**Name-based sorting constant.*/
@@ -74,6 +72,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         WebSite model = response.getWebPage().getWebSite();
 
         if (action.equals("ADDNEW")) {
+            //Create new bookmark entry and fill data
             BookmarkEntry entry = BookmarkEntry.createBookmarkEntry(model);
             String tgs = stripHtmlTags(request.getParameter("tags").trim());
             entry.setTitle(stripHtmlTags(request.getParameter("title")));
@@ -81,6 +80,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             entry.setDescription(stripHtmlTags(request.getParameter("description")));
             entry.setTags(tgs);
 
+            //Separate tags string
             String tags[] = tgs.split(",");
 
             //If no tags, add entry to untagged group
@@ -91,26 +91,24 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 if (group == null) {
                     group = createUserBookmarkGroup(model, user, "untagged");
                     addGroup(group);
-                    System.out.println("Untagged group created: " + group.getTitle());
                 }
 
-                //Add entry
+                //Add entry to untagged group
                 if (group != null) {
                     group.addEntry(entry);
                 }
             } else {
+                //For each tag
                 for (int i = 0; i < tags.length; i++) {
                     BookmarkGroup group = getUserBookmarkGroupByName(user, tags[i].trim());
 
-                    //If group does not exist, create group
+                    //If group named as tag does not exist, create it
                     if (group == null) {
                         group = createUserBookmarkGroup(model, user, tags[i].trim());
-                        System.out.println("Group created: " + group.getTitle());
-                        group.addEntry(entry);
                         addGroup(group);
-                    } else {
-                        group.addEntry(entry);
                     }
+                    //Add entry to group
+                    group.addEntry(entry);
                 }
             }
 
@@ -119,10 +117,74 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             if (group == null) {
                 group = createUserBookmarkGroup(model, user, "general");
                 addGroup(group);
-                System.out.println("General group created: " + group.getTitle());
             }
             group.addEntry(entry);
+            response.setCallMethod(response.Call_CONTENT);
+            response.setMode(response.Mode_VIEW);
+        } else if (action.equals("DELALL")) {
+            //Get user's bookmark groups
+            ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(user);
 
+            for (BookmarkGroup group : groups) {
+                Iterator<BookmarkEntry> entries = group.listEntrys();
+
+                //Remove all entries from group
+                while (entries.hasNext()) {
+                    BookmarkEntry entry = entries.next();
+                    group.removeEntry(entry);
+                }
+
+                //If empty, remove group
+                if (group.getEntryCount() == 0) {
+                    removeGroup(group);
+                }
+            }
+            response.setCallMethod(response.Call_CONTENT);
+            response.setMode(response.Mode_VIEW);
+        } else if (action.equals("SORT")) {
+            setSortType(Integer.parseInt(request.getParameter("oType")));
+            response.setCallMethod(response.Call_CONTENT);
+            response.setMode(response.Mode_VIEW);
+        } else if (action.equals("DELETE")) {
+            //Get user's bookmark groups
+            ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(user);
+
+            for (BookmarkGroup group : groups) {
+                //Get entry in group
+                BookmarkEntry entry = group.getEntryById(request.getParameter("id"));
+
+                //If entry exists, remove it from group
+                if (entry != null) {
+                    group.removeEntry(entry);
+                    //If group is empty, remove it
+                    if (group.getEntryCount() == 0) {
+                        removeGroup(group);
+                    }
+                }
+            }
+            response.setCallMethod(response.Call_CONTENT);
+            response.setMode(response.Mode_VIEW);
+        } else if (action.equals("EDIT")) {
+            //Get bookmarkgroup data from request
+            String title = stripHtmlTags(request.getParameter("title"));
+            String tgs = stripHtmlTags(request.getParameter("tags").trim());
+            String url = stripHtmlTags(request.getParameter("urllink"));
+            String description = stripHtmlTags(request.getParameter("description"));
+
+            //Get general group
+            BookmarkGroup group = getUserBookmarkGroupByName(user, "general");
+
+            if (group != null) {
+                BookmarkEntry entry = group.getEntryById(request.getParameter("id"));
+                //Update entry data
+                if (entry != null) {
+                    entry.setTitle(title);
+                    entry.setBookmarkURL(url);
+                    entry.setDescription(description);
+                    updateTags(user, entry.getSemanticObject().getId(), entry.getTags(), tgs, response.getWebPage().getWebSite());
+                    entry.setTags(tgs);
+                }
+            }
             response.setCallMethod(response.Call_CONTENT);
             response.setMode(response.Mode_VIEW);
         } else {
@@ -133,11 +195,25 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
-        if (mode.equals("ADDNEW")) {
+
+        if (mode.equals(paramRequest.Mode_VIEW)) {
+            doView(request, response, paramRequest);
+        } else if (mode.equals("ADDNEW")) {
             doAddNew(request, response, paramRequest);
+        } else if (mode.equals("RLIST")) {
+            doRenderList(request, response, paramRequest);
+        } else if (mode.equals("RCONTENT")) {
+            doRenderContent(request, response, paramRequest);
+        } else if (mode.equals("EDIT")) {
+            doEdit(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
+    }
+
+    public void doRenderList(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        out.print(renderEntriesByUserGroup(request.getParameter("gid"), Boolean.getBoolean(request.getParameter("mode")), getSortType(), paramRequest));
     }
 
     public void doAddNew(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -151,7 +227,12 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
-        if(paramRequest.getUser() != null) {
+        if (!paramRequest.getUser().isSigned()) {
+            out.print(paramRequest.getLocaleString("msgNotLogged"));
+            return;
+        }
+
+        if (paramRequest.getUser() != null) {
             lang = paramRequest.getUser().getLanguage();
         }
 
@@ -160,74 +241,180 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         String desc = SWBUtils.TEXT.replaceSpecialCharacters(BookmarkEntry.swb_description.getDisplayName(lang), false);
         String tags = SWBUtils.TEXT.replaceSpecialCharacters(BookmarkEntry.swb_res_bkm_tags.getDisplayName(lang), false);
 
-        aUrl.setAction("ADDNEW");
-        
         //TODO: Cambiar por un FormManager
         sbf.append("<div class=\"swbform\">\n" +
-                   "  <form dojoType=\"dijit.form.Form\" " +
-                      "id=\"" + createId("bookmark") +" \" " +
-                      "action=\"" + aUrl + "\" method=\"post\" " +
-                      "onsubmit=\"submitForm('"+ createId("bookmark") + "');" +
-                      " return false;\">\n" +
-                   "    <fieldset>\n" +
-                   "      <table>\n" +
-                   "        <tr>\n" +
-                   "          <td width=\"200px\" align=\"right\">\n" +
-                   "            <label for=\"title\">" + title + ": </label>\n" +
-                   "          </td>\n" +
-                   "          <td>\n" +
-                   "            <input dojoType=\"dijit.form.ValidationTextBox\" " +
-                                "required=\"true\" id=\"" + createId("bkm-title") + "\" " +
-                                "promptMessage=\"" + paramRequest.getLocaleString("promptField") +
-                                " " + title + "\" " +
-                                "name=\"title\"></input>\n" +
-                   "          </td>\n" +
-                   "        </tr>\n" +
-                   "        <tr>\n" +
-                   "          <td width=\"200px\" align=\"right\">\n" +
-                   "            <label for=\"urllink\">" + link + ": </label>\n" +
-                   "          </td>\n" +
-                   "          <td width=\"200px\" align=\"right\">\n" +
-                   "            <input dojoType=\"dijit.form.ValidationTextBox\" " +
-                                "id=\"" + createId("bkm-url") + "\" name=\"urllink\" " +
-                                "value=\""+ ((url==null)?"http://":url) +"\" "+
-                                ((url!=null)?" readonly=\"readonly\" ":"") +"></input>\n" +
-                   "          </td>\n" +
-                   "        </tr>\n" +
-                   "        <tr>\n" +
-                   "          <td width=\"200px\" align=\"right\">\n" +
-                   "            <label for=\"description\">" + desc + ": </label>\n" +
-                   "          </td>\n" +
-                   "          <td>\n" +
-                   "            <input dojoType=\"dijit.form.ValidationTextBox\" " +
-                                "required=\"true\" id=\"" + createId("bkm-desc") + "\" " +
-                                "name=\"description\" " +
-                                "promptMessage=\"" + paramRequest.getLocaleString("promptField") +
-                                " " + desc + "\"></input>\n" +
-                   "          </td>\n" +
-                   "        </tr>\n" +
-                   "        <tr>\n" +
-                   "          <td width=\"200px\" align=\"right\">\n" +
-                   "            <label for=\"tags\">" + tags + ": </label>\n" +
-                   "          </td>\n" +
-                   "          <td>\n" +
-                   "            <input dojoType=\"dijit.form.ValidationTextBox\" " +
-                                "name=\"tags\" promptMessage=\"" +
-                                paramRequest.getLocaleString("promptField") + " " +
-                                tags + "\"></input>\n" +
-                   "          </td>\n" +
-                   "        </tr>\n" +
-                   "        <tr>\n" +
-                   "          <td align=\"right\" colspan=\"2\">\n" +
-                   "            <button onclick=\"doApply();\" " +
-                                "dojoType=\"dijit.form.Button\" id=\"" + createId("bkm-send") + "\">" +
-                                 paramRequest.getLocaleString("add") + "</button>\n" +
-                   "          </td>\n" +
-                   "        </tr>\n" +
-                   "      </table>\n" +
-                   "    </fieldset>\n" +
-                   "  </form>" +
-                   "</div>");
+                "  <form dojoType=\"dijit.form.Form\" " +
+                "id=\"" + createId("bookmark") + " \" " +
+                "action=\"" + aUrl + "\" method=\"post\" " +
+                "onsubmit=\"submitForm('" + createId("bookmark") + "');" +
+                " return false;\">\n" +
+                "    <fieldset>\n" +
+                "      <table>\n" +
+                "        <tr>\n" +
+                "          <td width=\"200px\" align=\"right\">\n" +
+                "            <label for=\"title\">" + title + ": </label>\n" +
+                "          </td>\n" +
+                "          <td>\n" +
+                "            <input dojoType=\"dijit.form.ValidationTextBox\" " +
+                "required=\"true\" id=\"" + createId("bkm-title") + "\" " +
+                "promptMessage=\"" + paramRequest.getLocaleString("promptField") +
+                " " + title + "\" " +
+                "name=\"title\"></input>\n" +
+                "          </td>\n" +
+                "        </tr>\n" +
+                "        <tr>\n" +
+                "          <td width=\"200px\" align=\"right\">\n" +
+                "            <label for=\"urllink\">" + link + ": </label>\n" +
+                "          </td>\n" +
+                "          <td width=\"200px\" align=\"right\">\n" +
+                "            <input dojoType=\"dijit.form.ValidationTextBox\" " +
+                "id=\"" + createId("bkm-url") + "\" name=\"urllink\" " +
+                "value=\"" + ((url == null) ? "http://" : url) + "\" " +
+                ((url != null) ? " readonly=\"readonly\" " : "") + "></input>\n" +
+                "          </td>\n" +
+                "        </tr>\n" +
+                "        <tr>\n" +
+                "          <td width=\"200px\" align=\"right\">\n" +
+                "            <label for=\"description\">" + desc + ": </label>\n" +
+                "          </td>\n" +
+                "          <td>\n" +
+                "            <input dojoType=\"dijit.form.ValidationTextBox\" " +
+                "required=\"true\" id=\"" + createId("bkm-desc") + "\" " +
+                "name=\"description\" " +
+                "promptMessage=\"" + paramRequest.getLocaleString("promptField") +
+                " " + desc + "\"></input>\n" +
+                "          </td>\n" +
+                "        </tr>\n" +
+                "        <tr>\n" +
+                "          <td width=\"200px\" align=\"right\">\n" +
+                "            <label for=\"tags\">" + tags + ": </label>\n" +
+                "          </td>\n" +
+                "          <td>\n" +
+                "            <input dojoType=\"dijit.form.ValidationTextBox\" " +
+                "name=\"tags\" promptMessage=\"" +
+                paramRequest.getLocaleString("promptField") + " " +
+                tags + "\"></input>\n" +
+                "          </td>\n" +
+                "        </tr>\n" +
+                "        <tr>\n" +
+                "          <td align=\"right\" colspan=\"2\">\n" +
+                "            <button onclick=\"doApply();\" " +
+                "dojoType=\"dijit.form.Button\" id=\"" + createId("bkm-send") + "\">" +
+                paramRequest.getLocaleString("lblAdd") + "</button>\n" +
+                "          </td>\n" +
+                "        </tr>\n" +
+                "      </table>\n" +
+                "    </fieldset>\n" +
+                "  </form>" +
+                "</div>");
+        out.print(sbf.toString());
+    }
+
+    @Override
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        BookmarkGroup generalGp = getUserBookmarkGroupByName(paramRequest.getUser(), "general");
+        SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("EDIT");
+        PrintWriter out = response.getWriter();
+        String id = request.getParameter("id");
+        StringBuffer sbf = new StringBuffer();
+        String lang = "es";
+
+        response.setContentType("text/html;");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
+        //If user is not logged, abort
+        if (!paramRequest.getUser().isSigned()) {
+            out.print(paramRequest.getLocaleString("msgNotLogged"));
+            return;
+        }
+
+        //If no entries in general group, abort
+        if (generalGp == null) {
+            return;
+        }
+
+        //Get user language
+        if (paramRequest.getUser() != null) {
+            lang = paramRequest.getUser().getLanguage();
+        }
+
+        //Sanitize input
+        String title = SWBUtils.TEXT.replaceSpecialCharacters(BookmarkEntry.swb_title.getDisplayName(lang), false);
+        String link = SWBUtils.TEXT.replaceSpecialCharacters(BookmarkEntry.swb_res_bkm_bookmarkURL.getDisplayName(lang), false);
+        String desc = SWBUtils.TEXT.replaceSpecialCharacters(BookmarkEntry.swb_description.getDisplayName(lang), false);
+        String tags = SWBUtils.TEXT.replaceSpecialCharacters(BookmarkEntry.swb_res_bkm_tags.getDisplayName(lang), false);
+
+        //Get bookmark entry from general group
+        BookmarkEntry entry = generalGp.getEntryById(id);
+        aUrl.setParameter("id", id);
+
+        //Render form to edit entry
+        sbf.append("  <div class=\"swbform\">\n" +
+                "    <form dojoType=\"dijit.form.Form\" id=\"" + createId("bookmark") + "\" " +
+                "action=\"" + aUrl + "\" method=\"post\" " +
+                "onsubmit=\"submitForm('" + createId("bookmark") + "'); " +
+                "return false;\">\n" +
+                "      <fieldset>\n" +
+                "        <table>\n" +
+                "          <tr>\n" +
+                "            <td width=\"200px\" align=\"right\">\n" +
+                "              <label for=\"title\">" + title + ": </label>\n" +
+                "            </td>\n" +
+                "            <td>\n" +
+                "              <input dojoType=\"dijit.form.ValidationTextBox\" " +
+                "required=\"true\" id=\"" + createId("bkm-title") + "\" " +
+                "promptMessage=\"" + paramRequest.getLocaleString("promptField") +
+                " " + title + "\" " +
+                "name=\"title\" value=\"" + entry.getTitle() + "\"></input>\n" +
+                "            </td>\n" +
+                "          </tr>\n" +
+                "          <tr>\n" +
+                "            <td width=\"200px\" align=\"right\">\n" +
+                "              <label for=\"urllink\">" + link + ": </label>\n" +
+                "            </td>\n" +
+                "            <td width=\"200px\" align=\"right\">\n" +
+                "              <input dojoType=\"dijit.form.ValidationTextBox\" " +
+                "id=\"" + createId("bkm-url") + "\" name=\"urllink\" " +
+                "value=\"" + entry.getBookmarkURL() + "\" readonly=\"readonly\"></input>\n" +
+                "            </td>\n" +
+                "          </tr>\n" +
+                "          <tr>\n" +
+                "            <td width=\"200px\" align=\"right\">\n" +
+                "              <label for=\"description\">" + desc + ": </label>\n" +
+                "            </td>\n" +
+                "            <td>\n" +
+                "              <input dojoType=\"dijit.form.ValidationTextBox\" " +
+                "required=\"true\" id=\"" + createId("bkm-desc") + "\" " +
+                "name=\"description\" " +
+                "promptMessage=\"" + paramRequest.getLocaleString("promptField") +
+                " " + desc + "\" " +
+                "value=\"" + entry.getDescription() + "\"></input>\n" +
+                "            </td>\n" +
+                "          </tr>\n" +
+                "          <tr>\n" +
+                "            <td width=\"200px\" align=\"right\">\n" +
+                "              <label for=\"tags\">" + tags + ": </label>\n" +
+                "            </td>\n" +
+                "            <td>\n" +
+                "              <input dojoType=\"dijit.form.ValidationTextBox\" " +
+                "name=\"tags\" promptMessage=\"" +
+                paramRequest.getLocaleString("promptField") + " " +
+                tags + "\" " +
+                "value=\"" + entry.getTags() + "\"></input>\n" +
+                "            </td>\n" +
+                "          </tr>\n" +
+                "          <tr>\n" +
+                "            <td align=\"right\" colspan=\"2\">\n" +
+                "              <button onclick=\"doApply();\" " +
+                "dojoType=\"dijit.form.Button\" id=\"" + createId("bkm-send") + "\">" +
+                paramRequest.getLocaleString("lblOk") + "</button>\n" +
+                "            </td>\n" +
+                "          </tr>\n" +
+                "        </table>\n" +
+                "      </fieldset>\n" +
+                "    </form>" +
+                "  </div>");
         out.print(sbf.toString());
     }
 
@@ -260,76 +447,81 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
+        //If user is not logged, abort
+        if (!paramRequest.getUser().isSigned()) {
+            out.print(paramRequest.getLocaleString("msgNotLogged"));
+            return;
+        }
+
         //Add necesary scripting
         sbf.append("<script type=\"text/javascript\">\n" +
-                   "  dojo.require(\"dijit.form.Form\");\n" +
-                   "  dojo.require(\"dijit.form.Button\");\n" +
-                   "  dojo.require(\"dijit.form.ValidationTextBox\");\n" +
-                   "  dojo.require(\"dijit.form.FilteringSelect\");\n" +
-                   "  dojo.require(\"dijit.Dialog\");\n" +
-                   "  dojo.require(\"dojox.layout.ContentPane\");\n" +
-                   "  dojo.require(\"dojo.parser\");\n\n" +
-                   "  var eCount;\n" +
-                   "  function isEmpty(objid) {\n" +
-                   "    var obj = dojo.byId(objid);\n" +
-                   "    if (obj == null || obj.value == '' \n" +
-                   "        || obj.value.charAt(0) == ' ') {\n" +
-                   "      return true;\n" +
-                   "    }else {\n" +
-                   "      return false;\n" +
-                   "    }\n" +
-                   "  }\n" +
-                   "  function doApply() {\n" +
-                   "    eCount=0;\n" +
-                   "    if (isEmpty('" + createId("bkm-title") + "')) eCount++;\n" +
-                   "    if (isEmpty('" + createId("bkm-url") + "')) eCount++;\n" +
-                   "    if (isEmpty('" + createId("bkm-desc") + "')) eCount++;\n" +
-                   "    if (eCount > 0) {\n" +
-                   "      alert('"+ paramRequest.getLocaleString("msgFieldError") +"');\n" +
-                   "    } else {\n" +
-                   "      dojo.byId('" + createId("bkm-send") + "').form.submit();\n" +
-                   "    }\n" +
-                   "  }\n" +
-                   "</script>\n");
+                "  dojo.require(\"dijit.form.Form\");\n" +
+                "  dojo.require(\"dijit.form.Button\");\n" +
+                "  dojo.require(\"dijit.form.ValidationTextBox\");\n" +
+                "  dojo.require(\"dijit.form.FilteringSelect\");\n" +
+                "  dojo.require(\"dijit.Dialog\");\n" +
+                "  dojo.require(\"dojox.layout.ContentPane\");\n" +
+                "  dojo.require(\"dojo.parser\");\n\n" +
+                "  var eCount;\n" +
+                "  function isEmpty(objid) {\n" +
+                "    var obj = dojo.byId(objid);\n" +
+                "    if (obj == null || obj.value == '' \n" +
+                "        || obj.value.charAt(0) == ' ') {\n" +
+                "      return true;\n" +
+                "    }else {\n" +
+                "      return false;\n" +
+                "    }\n" +
+                "  }\n" +
+                "  function doApply() {\n" +
+                "    eCount=0;\n" +
+                "    if (isEmpty('" + createId("bkm-title") + "')) eCount++;\n" +
+                "    if (isEmpty('" + createId("bkm-url") + "')) eCount++;\n" +
+                "    if (isEmpty('" + createId("bkm-desc") + "')) eCount++;\n" +
+                "    if (eCount > 0) {\n" +
+                "      alert('" + paramRequest.getLocaleString("msgFieldError") + "');\n" +
+                "    } else {\n" +
+                "      dojo.byId('" + createId("bkm-send") + "').form.submit();\n" +
+                "    }\n" +
+                "  }\n" +
+                "</script>\n");
 
         sbf.append("<div class=\"swb-bkm-container\">\n" +
-                   "  <div class=\"swb-bkm-header\">\n" +
-                   "    <h1>" + paramRequest.getLocaleString("manage") + "</h1>\n" +
-                   "    <div class=\"swb-bkm-navmenu\">\n");
+                "  <div class=\"swb-bkm-header\">\n" +
+                "    <h1>" + paramRequest.getLocaleString("lblManage") + "</h1>\n" +
+                "    <div class=\"swb-bkm-navmenu\">\n");
 
         //Set aUrl action to ORDER
         aUrl.setAction("SORT");
         aUrl.setParameter("oType", String.valueOf(SORT_BYNAME));
-        sbf.append((sType==SORT_BYNAME)?"      <b>":"      <a href=\""+ aUrl +"\">");
-        sbf.append(paramRequest.getLocaleString("byname"));
-        sbf.append((sType==SORT_BYNAME)?"</b> |":"</a> |");
+        sbf.append((sType == SORT_BYNAME) ? "      <b>" : "      <a href=\"" + aUrl + "\">");
+        sbf.append(paramRequest.getLocaleString("lblByname"));
+        sbf.append((sType == SORT_BYNAME) ? "</b> |" : "</a> |");
         aUrl.setParameter("oType", String.valueOf(SORT_BYDATE));
-        sbf.append((sType==SORT_BYDATE)?"<b>":"<a href=\""+ aUrl +"\">");
-        sbf.append(paramRequest.getLocaleString("bydate"));
-        sbf.append((sType==SORT_BYDATE)?"</b> |":"</a> |");
+        sbf.append((sType == SORT_BYDATE) ? "<b>" : "<a href=\"" + aUrl + "\">");
+        sbf.append(paramRequest.getLocaleString("lblBydate"));
+        sbf.append((sType == SORT_BYDATE) ? "</b> |" : "</a> |");
         aUrl.setParameter("oType", String.valueOf(SORT_BYTAGS));
-        sbf.append((sType==SORT_BYTAGS)?"<b>":"<a href=\""+ aUrl +"\">");
-        sbf.append(paramRequest.getLocaleString("bytag"));
-        sbf.append((sType==SORT_BYTAGS)?"</b> |":"</a> |");
+        sbf.append((sType == SORT_BYTAGS) ? "<b>" : "<a href=\"" + aUrl + "\">");
+        sbf.append(paramRequest.getLocaleString("lblBytag"));
+        sbf.append((sType == SORT_BYTAGS) ? "</b> |" : "</a> |");
 
         BookmarkGroup generalGp = getUserBookmarkGroupByName(paramRequest.getUser(), "general");
         //Set url mode to VIEW
         rUrl.setMode(rUrl.Mode_VIEW);
-        sbf.append("<a href=\""+ rUrl +"\">" + paramRequest.getLocaleString("exit") + "</a>\n" +
-                   "    </div>\n" +
-                   "  </div>\n" +
-                   "  <div class=\"swb-bkm-wrapper\">\n" +
-                   "    <div class=\"swb-bkm-content\" id=\"" +
-                          createId("swb-bkm-content") + "\">\n" +
-                          (generalGp == null?"":renderContent(generalGp.getSemanticObject().getId(), paramRequest)) +
-                          //listEntriesByGroup(generalGp.getSemanticObject().getId(), "manage", sType, paramRequest) +
-                   "    </div>\n" +
-                   "  </div>\n" +
-                   renderMenu(paramRequest) +
-                   "</div>\n" +
-                   "<div class=\"swb-bkm-footer\">\n" +
-                   "  <p><br></p>\n" +
-                   "</div>\n");
+        sbf.append("<a href=\"#\" onClick=\"window.close();\">" + paramRequest.getLocaleString("lblExit") + "</a>\n" +
+                "    </div>\n" +
+                "  </div>\n" +
+                "  <div class=\"swb-bkm-wrapper\">\n" +
+                "    <div class=\"swb-bkm-content\" id=\"" +
+                createId("swb-bkm-content") + "\">\n" +
+                (generalGp == null ? "" : renderEntriesByUserGroup(generalGp.getSemanticObject().getId(), paramRequest)) +
+                "    </div>\n" +
+                "  </div>\n" +
+                renderMenu(paramRequest) +
+                "</div>\n" +
+                "<div class=\"swb-bkm-footer\">\n" +
+                "  <p><br></p>\n" +
+                "</div>\n");
         out.print(sbf.toString());
     }
 
@@ -344,6 +536,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         response.setHeader("Cache-control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
+        //Get user language
         if (user != null) {
             lang = user.getLanguage();
         }
@@ -352,10 +545,6 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         if (getSortType() == SORT_NOSORTED) {
             setSortType(SORT_BYDATE);
         }
-
-        System.out.println("1");
-        //Initialize general bookmarks group
-        BookmarkGroup generalGp = getUserBookmarkGroupByName(user, "general");
 
         //Add necesary scripting
         sbf.append("<script type=\"text/javascript\" charset=\"utf-8\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb.js\"></script>\n");
@@ -414,20 +603,23 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         //If user is signed, show options and bookmark list
         if (user.isSigned()) {
             sbf.append("          <a href=\"#\" onclick=\"showDialog('" + rUrl +
-                    "', '" + paramRequest.getLocaleString("add") +
+                    "', '" + paramRequest.getLocaleString("lblAdd") +
                     " " + BookmarkEntry.sclass.getDisplayName(lang) +
                     "'); return false;\">" +
-                    paramRequest.getLocaleString("mark") + "</a> \n" +
+                    paramRequest.getLocaleString("lblMark") + "</a> \n" +
                     "          <a href=\"#\" onClick=\"openWindow('" +
                     getAdmUrl() + "','')\">" +
-                    paramRequest.getLocaleString("manage") + "</a>\n");
+                    paramRequest.getLocaleString("lblManage") + "</a>\n");
+
+            //Get general bookmarks group
+            BookmarkGroup generalGp = getUserBookmarkGroupByName(user, "general");
 
             //If user has groups, show display options and bookmarks list
             if (generalGp != null) {
                 //Set url call method to Call_DIRECT to make an AJAX call
                 rUrl = paramRequest.getRenderUrl();
                 rUrl.setCallMethod(rUrl.Call_DIRECT).setMode("RLIST");
-                
+
                 sbf.append("          <div class=\"bookmarksFrame\">\n" +
                         "            <form>\n" +
                         "              <label for=\"" + createId("bkm-selector") + "\">\n" +
@@ -444,19 +636,18 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                     if (group.getTitle().equals("general")) {
                         sbf.append("                <option value=\"" +
                                 group.getSemanticObject().getId() + "\">" +
-                                paramRequest.getLocaleString("showAll") + "</option>\n");
+                                paramRequest.getLocaleString("lblShowAll") + "</option>\n");
                     } else if (group.getEntryCount() > 0) {
                         sbf.append("                <option value=\"" +
                                 group.getSemanticObject().getId() + "\">");
                         if (group.getTitle().equals("untagged")) {
-                            sbf.append(paramRequest.getLocaleString("notags") +
+                            sbf.append(paramRequest.getLocaleString("lblNotags") +
                                     "</option>\n");
                         } else {
                             sbf.append(group.getTitle() + "</option>\n");
                         }
                     }
                 }
-
                 sbf.append("              </select>\n" +
                         "            </form>\n" +
                         "            <div id=\"" + createId("bookmarksList") + "\">\n" +
@@ -482,6 +673,11 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         BookmarkGroup group = getUserBookmarkGroupById(user, groupId);
         StringBuffer sbf = new StringBuffer();
         String lang = "es";
+
+        //If user is not logged, abort
+        if (!user.isSigned()) {
+            return paramRequest.getLocaleString("msgNotLogged");
+        }
 
         if (group == null || group.getEntryCount() == 0) {
             return " ";
@@ -529,17 +725,17 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                         formatter.format(entry.getCreated()) + "&nbsp;");
 
                 //Set url call method to Call_DIRECT to make an AJAX call
-                rUrl.setCallMethod(rUrl.Call_DIRECT).setMode(rUrl.Mode_EDIT);
+                rUrl.setCallMethod(rUrl.Call_DIRECT).setMode("EDIT");
                 rUrl.setParameter("id", eid);
 
                 //Add EDIT link
-                sbf.append("<a title=\"" + paramRequest.getLocaleString("edit") +
+                sbf.append("<a title=\"" + paramRequest.getLocaleString("lblEdit") +
                         "\" href=\"#\" onclick=\"showDialog('" + rUrl +
-                        "', '" + paramRequest.getLocaleString("edit") + " " +
+                        "', '" + paramRequest.getLocaleString("lblEdit") + " " +
                         BookmarkEntry.sclass.getDisplayName(lang) + "');\">" +
                         "<img src=\"" + SWBPlatform.getContextPath() +
                         "/swbadmin/icons/editar_1.gif\" border=\"0\" " +
-                        "alt=\"" + paramRequest.getLocaleString("edit") + "\">" +
+                        "alt=\"" + paramRequest.getLocaleString("lblEdit") + "\">" +
                         "</a>&nbsp;");
 
                 //Set aUrl action to DELETE and attach entry id
@@ -547,14 +743,13 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 aUrl.setParameter("id", eid);
 
                 //Add DELETE link
-                sbf.append("<a title=\"" + paramRequest.getLocaleString("delete") +
-                        "\" href=\"#\" " +
-                        "onclick=\"if (confirm('" +
+                sbf.append("<a title=\"" + paramRequest.getLocaleString("lblDelete") +
+                        "\" href=\"#\" " + "onclick=\"if (confirm('" +
                         paramRequest.getLocaleString("msgRemove") + "'))" +
                         "{location='" + aUrl + "'} else {return false;}\">" +
                         "<img src=\"" + SWBPlatform.getContextPath() +
                         "/swbadmin/images/delete.gif\" border=\"0\" " +
-                        "alt=\"" + paramRequest.getLocaleString("delete") +
+                        "alt=\"" + paramRequest.getLocaleString("lblDelete") +
                         "\"></a><br>");
 
                 //Add tags and descriptions
@@ -590,34 +785,37 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     }
 
     public BookmarkGroup createUserBookmarkGroup(WebSite model, User user, String groupTitle) {
-        BookmarkGroup res = BookmarkGroup.createBookmarkGroup(model);
-        res.setTitle(groupTitle);
-        res.setCreator(user);
+        BookmarkGroup res = null;
+        if (user.isSigned()) {
+            res = BookmarkGroup.createBookmarkGroup(model);
+            res.setTitle(groupTitle);
+            res.setCreator(user);
+        }
         return res;
     }
 
     public BookmarkGroup getUserBookmarkGroupByName(User user, String name) {
-        Iterator<BookmarkGroup> groups = listGroups();
+        if (user.isSigned()) {
+            ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(user);
 
-        System.out.println("Obteniendo grupo " + name + " de usuario " + user.getFullName());
-        while (groups.hasNext()) {
-            BookmarkGroup group = groups.next();
-
-            if (group.getTitle().equals(name) && group.getCreator().equals(user)) {
-                System.out.println("Obtenido grupo " + group.getTitle());
-                return group;
+            //System.out.println("Obteniendo grupo " + name + " de usuario " + user.getFullName());
+            for (BookmarkGroup group : groups) {
+                if (group.getTitle().equals(name)) {
+                    //      System.out.println("Obtenido grupo " + group.getTitle());
+                    return group;
+                }
             }
         }
         return null;
     }
 
     public BookmarkGroup getUserBookmarkGroupById(User user, String gId) {
-        Iterator<BookmarkGroup> groups = listGroups();
-        while (groups.hasNext()) {
-            BookmarkGroup group = groups.next();
-
-            if (group.getSemanticObject().getId().equals(gId) && group.getCreator().equals(user)) {
-                return group;
+        if (user.isSigned()) {
+            ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(user);
+            for (BookmarkGroup group : groups) {
+                if (group.getSemanticObject().getId().equals(gId)) {
+                    return group;
+                }
             }
         }
         return null;
@@ -626,14 +824,15 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     public ArrayList<BookmarkGroup> getUserBookmarkGroups(User user) {
         ArrayList<BookmarkGroup> groups = new ArrayList<BookmarkGroup>();
 
-        Iterator<BookmarkGroup> git = listGroups();
-        while (git.hasNext()) {
-            BookmarkGroup gp = git.next();
-            if (gp.getCreator().equals(user)) {
-                groups.add(gp);
+        if (user.isSigned()) {
+            Iterator<BookmarkGroup> git = listGroups();
+            while (git.hasNext()) {
+                BookmarkGroup gp = git.next();
+                if (gp.getCreator().equals(user)) {
+                    groups.add(gp);
+                }
             }
         }
-
         return groups;
     }
 
@@ -648,6 +847,12 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         SWBResourceURL aUrl = paramRequest.getActionUrl();
         StringBuffer sbf = new StringBuffer();
         String lang = "es";
+        User user = paramRequest.getUser();
+
+        //If user is not logged, abort
+        if (!user.isSigned()) {
+            return paramRequest.getLocaleString("msgNotLogged");
+        }
 
         //Get user language
         if (paramRequest.getUser() != null) {
@@ -658,9 +863,9 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         rUrl.setCallMethod(rUrl.Call_DIRECT).setMode("RCONTENT");
 
         sbf.append("<div class=\"swb-bkm-navbarmain\">\n" +
-                   "  <div class=\"swb-bkm-navigation\">\n");
+                "  <div class=\"swb-bkm-navigation\">\n");
 
-        //List group links
+        //Render group links
         ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(paramRequest.getUser());
         for (BookmarkGroup group : groups) {
             String gid = group.getSemanticObject().getId();
@@ -670,100 +875,105 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 if (!group.getTitle().equals("")) {
                     if (group.getEntryCount() > 0) {
                         sbf.append("    <a class=\"swb-bkm-menuOpt\" id=\"" +
-                        createId(gid) + "\" href=\"#\" " +
-                        "onclick=\"dojo.query('.swb-bkm-menuOpt').removeClass('swb-bkm-boldElement');" +
-                        "dojo.addClass(dojo.byId('" + createId(gid) + "'), 'swb-bkm-boldElement');" +
-                        "getHtml('" + rUrl + "', '" + createId("swb-bkm-content") + "');\">" +
-                        group.getTitle() + "(" + group.getEntryCount() + ")</a><br>\n");
+                                createId(gid) + "\" href=\"#\" " +
+                                "onclick=\"dojo.query('.swb-bkm-menuOpt').removeClass('swb-bkm-boldElement');" +
+                                "dojo.addClass(dojo.byId('" + createId(gid) + "'), 'swb-bkm-boldElement');" +
+                                "getHtml('" + rUrl + "', '" + createId("swb-bkm-content") + "');\">" +
+                                group.getTitle() + "(" + group.getEntryCount() + ")</a><br>\n");
                     }
-                }
-                else if (group.getEntryCount() > 0) {
+                } else if (group.getEntryCount() > 0) {
                     sbf.append("    <a class=\"swb-bkm-menuOpt\" id=\"" +
-                    createId(gid) + "\" href=\"#\" " +
-                    "onclick=\"dojo.query('.swb-bkm-menuOpt').removeClass('swb-bkm-boldElement');" +
-                    "dojo.addClass(dojo.byId('" + createId(gid) + "'), 'swb-bkm-boldElement');" +
-                    "getHtml('"+ rUrl +"', '" + createId("swb-bkm-content") + "');\">" +
-                    paramRequest.getLocaleString("notags") + "(" +
-                    group.getEntryCount() + ")" + "</a><br>\n");
+                            createId(gid) + "\" href=\"#\" " +
+                            "onclick=\"dojo.query('.swb-bkm-menuOpt').removeClass('swb-bkm-boldElement');" +
+                            "dojo.addClass(dojo.byId('" + createId(gid) + "'), 'swb-bkm-boldElement');" +
+                            "getHtml('" + rUrl + "', '" + createId("swb-bkm-content") + "');\">" +
+                            paramRequest.getLocaleString("lblNotags") + "(" +
+                            group.getEntryCount() + ")" + "</a><br>\n");
                 }
             }
         }
+
+        //Render 'SHOW ALL' link
         BookmarkGroup generalGp = getUserBookmarkGroupByName(paramRequest.getUser(), "general");
         if (generalGp != null) {
-        rUrl.setParameter("gid", generalGp.getSemanticObject().getId());
-        sbf.append("    <a href=\"#\" class=\"swb-bkm-menuOpt\" " +
-                        "id=\"" + createId("bkm-showAll") + "\" " +
-                        "onclick=\"dojo.query('.swb-bkm-menuOpt').removeClass('swb-bkm-boldElement');" +
-                        "dojo.addClass(dojo.byId('" + createId("bkm-showAll") + "'),'swb-bkm-boldElement');" +
-                        "getHtml('" + rUrl + "', '" + createId("swb-bkm-content") + "');\">" +
-                        paramRequest.getLocaleString("showAll") + "</a><br>\n");
+            rUrl.setParameter("gid", generalGp.getSemanticObject().getId());
+            sbf.append("    <a href=\"#\" class=\"swb-bkm-menuOpt\" " +
+                    "id=\"" + createId("bkm-showAll") + "\" " +
+                    "onclick=\"dojo.query('.swb-bkm-menuOpt').removeClass('swb-bkm-boldElement');" +
+                    "dojo.addClass(dojo.byId('" + createId("bkm-showAll") + "'),'swb-bkm-boldElement');" +
+                    "getHtml('" + rUrl + "', '" + createId("swb-bkm-content") + "');\">" +
+                    paramRequest.getLocaleString("lblShowAll") + "</a><br>\n");
         }
-                   sbf.append("  </div>\n" +
-                   "  <div class=\"swb-bkm-extra\">\n");
+        sbf.append("  </div>\n" +
+                "  <div class=\"swb-bkm-extra\">\n");
 
         //Set url call method to Call_DIRECT to make an AJAX call
         rUrl = paramRequest.getRenderUrl();
         rUrl.setCallMethod(rUrl.Call_DIRECT).setMode("ADDNEW");
-        rUrl.setParameter("mode", "manage");
 
-        //Add NEW Bookmark link
+        //Add 'NEW BOOKMARK' link
         sbf.append("    <a href=\"#\" onclick=\"showDialog('" + rUrl + "', '" +
-                paramRequest.getLocaleString("add") + " " +
+                paramRequest.getLocaleString("lblAdd") + " " +
                 BookmarkEntry.sclass.getDisplayName(lang) + "');return false;\">" +
-                paramRequest.getLocaleString("add") + " " +
+                paramRequest.getLocaleString("lblAdd") + " " +
                 BookmarkEntry.sclass.getDisplayName(lang) + "</a><br>\n");
 
-        //Add DELETE ALL link
+        //Add 'DELETE ALL' link
         if (generalGp != null) {
-        if (generalGp.getEntryCount() > 0) {
-            aUrl.setAction("DELALL");
-            sbf.append("    <a href=\"#\" onclick=\"if(confirm('" +
-                paramRequest.getLocaleString("msgRemoveAll") +
-                "')){location='" + aUrl + "'} else {return false;}\">" +
-                paramRequest.getLocaleString("delall") + "</a>\n");
-        }
+            if (generalGp.getEntryCount() > 0) {
+                aUrl.setAction("DELALL");
+                sbf.append("    <a href=\"#\" onclick=\"if(confirm('" +
+                        paramRequest.getLocaleString("msgRemoveAll") +
+                        "')){location='" + aUrl + "'} else {return false;}\">" +
+                        paramRequest.getLocaleString("lblDelall") + "</a>\n");
+            }
         }
 
         sbf.append("  </div>\n" +
-                   "</div>\n" +
-                   "  <script type=\"text/javascript\">\n" +
-                   "    dojo.addClass(dojo.byId('" + createId("bkm-showAll") + "'), 'swb-bkm-boldElement');\n" +
-                   "  </script>\n");
+                "</div>\n" +
+                "  <script type=\"text/javascript\">\n" +
+                "    dojo.addClass(dojo.byId('" + createId("bkm-showAll") + "'), 'swb-bkm-boldElement');\n" +
+                "  </script>\n");
         return sbf.toString();
     }
 
     public void doRenderContent(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        out.print(renderContent(request.getParameter("gid"), paramRequest));
+        out.print(renderEntriesByUserGroup(request.getParameter("gid"), paramRequest));
     }
 
-    public String renderContent(String gid, SWBParamRequest paramRequest) throws IOException, SWBResourceException {
-        String untaggedName = createId("untagged");
-        String generalName = createId("general");
+    public String renderEntriesByUserGroup(String gid, SWBParamRequest paramRequest) throws IOException, SWBResourceException {
         BookmarkGroup group = getUserBookmarkGroupById(paramRequest.getUser(), gid);
         StringBuffer sbf = new StringBuffer();
         int sType = getSortType();
 
-        if (group == null) return " ";
+        if (group == null) {
+            return " ";
+        }
 
-        if (sType == SORT_BYTAGS && group.getTitle().equals(generalName)) {
-            Iterator<BookmarkGroup> groups = listGroups();
-            while (groups.hasNext()) {
-                group = groups.next();
-                if (!group.getTitle().equals(generalName)) {
-                    if (group.getTitle().equals(untaggedName)) {
-                        sbf.append("<h1>" + paramRequest.getLocaleString("notags") + "</h1>\n");
+        if (!paramRequest.getUser().isSigned()) {
+            return paramRequest.getLocaleString("msgNotLogged");
+        }
+
+        //If content will be showed ordered by tag
+        if (sType == SORT_BYTAGS && group.getTitle().equals("general")) {
+            //Get user's bookmark groups
+            ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(paramRequest.getUser());
+            for (BookmarkGroup group2 : groups) {
+                if (!group2.getTitle().equals("general")) {
+                    if (group2.getTitle().equals("untagged")) {
+                        sbf.append("<h1>" + paramRequest.getLocaleString("lblNotags") + "</h1>\n");
                     } else {
-                        sbf.append("<h1>" + group.getTitle() + "</h1>\n");
+                        sbf.append("<h1>" + group2.getTitle() + "</h1>\n");
                     }
-                    sbf.append(renderEntriesByUserGroup(group.getSemanticObject().getId(), true, SORT_BYDATE, paramRequest));
+                    sbf.append(renderEntriesByUserGroup(group2.getSemanticObject().getId(), true, SORT_BYDATE, paramRequest));
                 }
             }
         } else if (sType == SORT_BYTAGS) {
-            if (!group.getTitle().equals(untaggedName)) {
+            if (!group.getTitle().equals("untagged")) {
                 sbf.append("<h1>" + group.getTitle() + "</h1>\n");
             } else {
-                sbf.append("<h1>" + paramRequest.getLocaleString("notags") + "</h1>\n");
+                sbf.append("<h1>" + paramRequest.getLocaleString("lblNotags") + "</h1>\n");
             }
             sbf.append(renderEntriesByUserGroup(gid, true, SORT_BYDATE, paramRequest));
         } else {
@@ -773,11 +983,74 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     }
 
     /**
-    * Strips all HTML tags from the input string.
-    * @param input
-    * @return
-    */
+     * Strips all HTML tags from the input string.
+     * @param input
+     * @return
+     */
     public String stripHtmlTags(String input) {
         return input.replaceAll("<(.|\n)+?>", "");
+    }
+
+    public void updateTags(User user, String eId, String oldTags, String newTags, WebSite model) {
+        BookmarkGroup generalGp = getUserBookmarkGroupByName(user, "general");
+        BookmarkGroup untaggedGp = getUserBookmarkGroupByName(user, "untagged");
+        BookmarkEntry entry = generalGp.getEntryById(eId);
+
+        //If entry does not exist or there is no changes, return
+        if (entry == null || oldTags.equals(newTags) || !user.isSigned()) {
+            return;
+        }
+
+        String[] oTags = oldTags.split(",");
+        String[] nTags = newTags.split(",");
+
+        //Remove BookmarkEntry from groups
+        if (oldTags.equals("")) {
+            if (untaggedGp != null) {
+                untaggedGp.removeEntry(entry);
+                System.out.println(">>>Removing entry from untagged group");
+            }
+        } else {
+            for (int i = 0; i < oTags.length; i++) {
+                String groupName = oTags[i].trim();
+
+                BookmarkGroup group = getUserBookmarkGroupByName(user, groupName);
+                if (group != null) {
+                    //entry = group.getEntryById(eId);
+                    //if (entry != null) {
+                    System.out.println(">>>Removing entry from " + groupName + " group");
+                    group.removeEntry(entry);
+                    if (group.getEntryCount() == 0) {
+                        System.out.println(">>>Removing group " + groupName + " with no entries");
+                        removeGroup(group);
+                    }
+                    //}
+                }
+            }
+        }
+
+        entry = generalGp.getEntryById(eId);
+        //Add BookmarkEntry to new groups
+        if (newTags.equals("")) {
+            if (untaggedGp == null) {
+                untaggedGp = createUserBookmarkGroup(model, user, "untagged");
+                addGroup(untaggedGp);
+            }
+            untaggedGp.addEntry(entry);
+        } else {
+            for (int i = 0; i < nTags.length; i++) {
+                String groupName = nTags[i].trim();
+
+                BookmarkGroup group = getUserBookmarkGroupByName(user, groupName);
+                if (group != null) {
+                    group.addEntry(entry);
+                } else {
+                    group = BookmarkGroup.createBookmarkGroup(model);
+                    group.setTitle(nTags[i].trim());
+                    group.addEntry(entry);
+                    addGroup(group);
+                }
+            }
+        }
     }
 }
