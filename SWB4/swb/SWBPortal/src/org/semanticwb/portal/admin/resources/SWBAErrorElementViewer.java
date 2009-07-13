@@ -108,7 +108,7 @@ public class SWBAErrorElementViewer extends GenericResource{
                 urlDetail.setParameter("act","detail");
                 urlDetail.setParameter("idErr",Long.toString(e.getId()));
                 out.println("<tr bgcolor=\""+rowColor+"\">");
-                out.println(" <td><a href=\""+urlDetail.toString()+"\" >"+e.getId()+"</a></td>");
+                out.println(" <td><a href=\"#\" onclick=\"submitUrl('" +urlDetail.toString()+ "',this.domNode); return false;\">"+e.getId()+"</a></td>");
                 out.println(" <td>"+SWBUtils.XML.replaceXMLChars(e.getMessage())+"</td>");
                 out.println(" <td>"+e.getDate()+"</td>");
                 out.println("</tr>");
