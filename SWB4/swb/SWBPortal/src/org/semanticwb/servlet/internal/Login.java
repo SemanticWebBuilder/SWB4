@@ -135,7 +135,7 @@ public class Login implements InternalServlet
             LoginContext lc;
             try
             {
-                log.trace("Sending calback:"+callbackHandler);
+                log.trace("Sending calback:"+callbackHandler+" "+context+" "+ur.getId());
                // request.getSession(true).invalidate();
                 lc = new LoginContext(context, subject, callbackHandler);
                 lc.login();
