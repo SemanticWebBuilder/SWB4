@@ -85,7 +85,15 @@ public class User extends UserBase implements Principal
 
     public void checkCredential(Object credential) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        this.login = getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)));
+        if(getUserRepository().isExternal())
+        {
+            this.login = getUserRepository().getBridge().validateCredential(getLogin(), credential);
+        }
+        else
+        {
+            this.login = getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)));
+        }
+        
     }
 
     public void setUserTypeAttribute(String userType, String name, Object value) throws SWBException
