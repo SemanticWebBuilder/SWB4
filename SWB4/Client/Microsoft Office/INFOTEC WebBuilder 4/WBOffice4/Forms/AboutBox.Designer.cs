@@ -62,7 +62,7 @@
             this.Name = "AboutBox";
             this.Padding = new System.Windows.Forms.Padding(9);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Acerca de Semantic INFOTEC WebBuilder 4.0";
+            this.Text = "Acerca de Semantic WebBuilder 4.0";
             this.ResumeLayout(false);
 
         }
