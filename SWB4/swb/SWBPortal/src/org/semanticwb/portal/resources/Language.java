@@ -2,26 +2,23 @@
 package org.semanticwb.portal.resources;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Resource;
-import org.semanticwb.model.SWBContext;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.User;
-import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.api.GenericAdmResource;
-import org.semanticwb.portal.api.SWBParamRequest;
-import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBActionResponse;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.SWBResourceException;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.Document;
 
 /** Esta clase se encarga de desplegar los lenguajes disponibles en WebBuilder bajo ciertos
  * criterios (configuraci�n de recurso) para actulizar el lenguaje del usuario final. Puede ser un
@@ -31,7 +28,7 @@ import org.w3c.dom.Element;
  * resource configuration. In addition can update language for user. this resource
  * could be installed as a content resource or a strategy resource.
  *
- * @author : Vanessa Arredondo N��ez
+ * @author : Vanessa Arredondo Nunez
  * @version 1.0
  */
 public class Language extends GenericAdmResource
@@ -39,62 +36,50 @@ public class Language extends GenericAdmResource
     private static Logger log = SWBUtils.getLogger(Language.class);
     
     javax.xml.transform.Templates tpl; 
-    String path = SWBPlatform.getContextPath() +"swbadmin/xsl/Language/";
-
-    /** 
-     * Creates a new instance of Language 
-     */      
-    public Language(){
-    }
-
-    /**
-     * @param base
-     */    
+    String path = SWBPlatform.getContextPath()+"swbadmin/xsl/Language/";
+    
     @Override
-    public void setResourceBase(Resource base)
-    {
-        try { super.setResourceBase(base); }
-        catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
+    public void setResourceBase(Resource base) throws SWBResourceException {
+        super.setResourceBase(base);
+        
         if(!"".equals(base.getAttribute("template","").trim()))
         {
             try 
             {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
-                path=SWBPlatform.getWebWorkPath() +  base.getWorkPath() + "/";
+                //path=SWBPlatform.getWebWorkPath() +  base.getWorkPath() + "/";
+                path = SWBPlatform.getContextPath()+"swbadmin/xsl/Language/";
+            }catch(Exception e) {
+                log.error("Error while loading resource template: "+base.getId(), e);
             }
-            catch(Exception e) { log.error("Error while loading resource template: "+base.getId(), e); }
         }
         if(tpl==null)
         {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/Language/Language.xslt"));
-            }catch(Exception e) { log.error("Error while loading default resource template: "+base.getId(), e); }
+            }catch(Exception e) {
+                log.error("Error while loading default resource template: "+base.getId(), e);
+            }
         }
     }
 
-
-    /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @return <b>Document</b>
-     * @throws AFException
-     * @throws IOException
-     */
     public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        Document  dom = null;
         try
         {
             SWBResourceURL url = paramRequest.getActionUrl().setMode(paramRequest.Mode_VIEW);                        
-            Document  dom = SWBUtils.XML.getNewDocument();
+            dom = SWBUtils.XML.getNewDocument();
             Element root = dom.createElement("resource");
             root.setAttribute("currentlang", paramRequest.getUser().getLanguage());
+
+            System.out.println("\n\npath="+path);
+
             root.setAttribute("path", path);
             dom.appendChild(root);
 
             Iterator<org.semanticwb.model.Language> itLang = paramRequest.getWebPage().getWebSite().listLanguages();
-            while(itLang.hasNext())
-            {
+            while(itLang.hasNext()) {
                 org.semanticwb.model.Language lang = itLang.next();
                 Element elang = dom.createElement("language");
                 elang.setAttribute("id", String.valueOf(lang.getId()));
@@ -104,15 +89,15 @@ public class Language extends GenericAdmResource
                 url.setParameter("language", lang.getId());//
                 elang.setAttribute("ref", url.toString());
                 root.appendChild(elang);
-            }
-            return dom;
+            }            
+        }catch (Exception e) {
+            log.error("Error while generating DOM in resource "+ getResourceBase().getResourceType().getResourceClassName() +" with identifier " + getResourceBase().getId() + " - " + getResourceBase().getTitle(), e);
         }
-        catch (Exception e) { log.error("Error while generating DOM in resource "+ getResourceBase().getResourceType().getResourceClassName() +" with identifier " + getResourceBase().getId() + " - " + getResourceBase().getTitle(), e); }
-        return null;            
+        return dom;
     }
     
     
-    public static ArrayList getAppLanguages() {
+    /*public static ArrayList getAppLanguages() {
         ArrayList languages = new ArrayList();
         Iterator<WebSite> it = SWBContext.listWebSites();
         while (it.hasNext()) {
@@ -126,7 +111,7 @@ public class Language extends GenericAdmResource
             }
         }
         return languages;
-    }
+    }*/
     
     
     
