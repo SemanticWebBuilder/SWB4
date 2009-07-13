@@ -424,7 +424,7 @@ public class SWBAWebPageContents extends GenericResource {
                 }
                 urlDAll.setParameter("sval", "remove");
                 urlDAll.setAction("deleteall");
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlDAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_dallnew") + "</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"if(confirm('"+paramRequest.getLocaleString("qshure2delete")+"?')){submitUrl('" + urlDAll + "',this.domNode);} return false;\">" + paramRequest.getLocaleString("btn_dallnew") + "</button>");
             }
             out.println("</fieldset>");
 
