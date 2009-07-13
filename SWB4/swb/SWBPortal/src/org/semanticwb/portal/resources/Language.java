@@ -1,26 +1,3 @@
-/*
- * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboraci�n e integraci�n para Internet,
- * la cual, es una creaci�n original del Fondo de Informaci�n y Documentaci�n para la Industria INFOTEC, misma que se encuentra
- * debidamente registrada ante el Registro P�blico del Derecho de Autor de los Estados Unidos Mexicanos con el
- * No. 03-2002-052312015400-14, para la versi�n 1; No. 03-2003-012112473900 para la versi�n 2, y No. 03-2006-012012004000-01
- * para la versi�n 3, respectivamente.
- *
- * INFOTEC pone a su disposici�n la herramienta INFOTEC WebBuilder a trav�s de su licenciamiento abierto al p�blico (�open source�),
- * en virtud del cual, usted podr� usarlo en las mismas condiciones con que INFOTEC lo ha dise�ado y puesto a su disposici�n;
- * aprender de �l; distribuirlo a terceros; acceder a su c�digo fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los t�rminos y condiciones de la LICENCIA ABIERTA AL P�BLICO que otorga INFOTEC para la utilizaci�n
- * de INFOTEC WebBuilder 3.2.
- *
- * INFOTEC no otorga garant�a sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni impl�cita ni expl�cita,
- * siendo usted completamente responsable de la utilizaci�n que le d� y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposici�n la siguiente
- * direcci�n electr�nica:
- *
- *                                          http://www.webbuilder.org.mx
- */
-
 
 package org.semanticwb.portal.resources;
 
@@ -81,16 +58,17 @@ public class Language extends GenericAdmResource
         if(!"".equals(base.getAttribute("template","").trim()))
         {
             try 
-            { 
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim())); 
+            {
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
                 path=SWBPlatform.getWebWorkPath() +  base.getWorkPath() + "/";
             }
             catch(Exception e) { log.error("Error while loading resource template: "+base.getId(), e); }
         }
         if(tpl==null)
         {
-            try { tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/Language/Language.xslt")); } 
-            catch(Exception e) { log.error("Error while loading default resource template: "+base.getId(), e); }
+            try {
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/Language/Language.xslt"));
+            }catch(Exception e) { log.error("Error while loading default resource template: "+base.getId(), e); }
         }
     }
 
@@ -114,16 +92,16 @@ public class Language extends GenericAdmResource
             root.setAttribute("path", path);
             dom.appendChild(root);
 
-            Iterator <org.semanticwb.model.Language> itLang=paramRequest.getWebPage().getWebSite().listLanguages();
+            Iterator<org.semanticwb.model.Language> itLang = paramRequest.getWebPage().getWebSite().listLanguages();
             while(itLang.hasNext())
             {
-                org.semanticwb.model.Language lang=itLang.next();
+                org.semanticwb.model.Language lang = itLang.next();
                 Element elang = dom.createElement("language");
                 elang.setAttribute("id", String.valueOf(lang.getId()));
                 elang.setAttribute("idtm", lang.getWebSite().getId());
-                //elang.setAttribute("lang", lang.getLang());
-                elang.setAttribute("title",lang.getTitle());
-                //url.setParameter("language", lang.getLang());
+                elang.setAttribute("lang", lang.getDisplayTitle(paramRequest.getUser().getLanguage()));//
+                elang.setAttribute("title", lang.getDisplayTitle(paramRequest.getUser().getLanguage()));
+                url.setParameter("language", lang.getId());//
                 elang.setAttribute("ref", url.toString());
                 root.appendChild(elang);
             }
@@ -182,14 +160,13 @@ public class Language extends GenericAdmResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String action = null != request.getParameter("lng_act") && !"".equals(request.getParameter("lng_act").trim()) ? request.getParameter("lng_act").trim() : "lng_step1";
-        /*
-        if("lng_step2".equals(action)) {
+        
+        /*if("lng_step2".equals(action)) {
             paramRequest.getUser().icooklanguage(request,response,request.getParameter("language"));
-        }**/
+        }*/
         try
         {
             Document dom =getDom(request, response, paramRequest);
-            //System.out.println(AFUtils.getInstance().DomtoXml(dom));
             if(dom != null)  {
                 response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
             }
@@ -219,6 +196,8 @@ public class Language extends GenericAdmResource
                 response.setRenderParameter("lng_act","lng_step2");
                 response.setRenderParameter("language",language);
             }**/
+            response.setRenderParameter("lng_act","lng_step2");
+            response.setRenderParameter("language",language);
         }
     }    
 }
