@@ -105,17 +105,17 @@ if (sobj != null) {
     </tr>
 </table>
 
-<table id="K2BTABLEWWPAGECONTENT" class="K2BTableWWPageContent" border="  0" cellpadding="0" cellspacing="0" style="border-width:  0;" > 
+<table id="SWBTABLEWWPAGECONTENT" class="SWBTableWWPageContent" border="  0" cellpadding="0" cellspacing="0" style="border-width:  0;" >
     <TBODY> <TR> <TD>
-        <table id="K2BTABLEWWGRIDCONTENT" class="K2BTableWWGridContent" border="  0" cellpadding="0" cellspacing="0" style="border-width:  0;" >
+        <table id="SWBTABLEWWGRIDCONTENT" class="SWBTableWWGridContent" border="  0" cellpadding="0" cellspacing="0" style="border-width:  0;" >
             <TBODY> <TR> <TD>
-                <table id="GRID1" class="K2BWorkWithGrid" cellpadding="0" cellspacing="1">
+                <table id="GRID1" class="SWBWorkWithGrid" cellpadding="0" cellspacing="1">
                     <tr>
-                        <th align="CENTER" width=14px class="K2BWorkWithGridTitle"></th>
-                        <th align="CENTER" width=14px class="K2BWorkWithGridTitle"></th>
-                        <th align="CENTER" width=14px class="K2BWorkWithGridTitle"></th>
-                        <th align="LEFT" width=125px class="K2BWorkWithGridTitle"><%=paramRequest.getLocaleString("code")%></th>
-                        <th align="LEFT" nowrap class="K2BWorkWithGridTitle"><%=paramRequest.getLocaleString("description")%></th>
+                        <th align="CENTER" width=14px class="SWBWorkWithGridTitle"></th>
+                        <th align="CENTER" width=14px class="SWBWorkWithGridTitle"></th>
+                        <th align="CENTER" width=14px class="SWBWorkWithGridTitle"></th>
+                        <th align="LEFT" width=125px class="SWBWorkWithGridTitle"><%=paramRequest.getLocaleString("code")%></th>
+                        <th align="LEFT" nowrap class="SWBWorkWithGridTitle"><%=paramRequest.getLocaleString("description")%></th>
                     </tr>
         <%
             //Empieza paginación
@@ -167,20 +167,20 @@ if (sobj != null) {
                 url.setCallMethod(url.Call_CONTENT);
                 url.setParameter("objInstUri", uri);
                             %>
-                            <tr class="K2BWorkWithGridOdd"><td valign=top align="CENTER">
+                            <tr class="SWBWorkWithGridOdd"><td valign=top align="CENTER">
                                 <%url.setMode(url.Mode_VIEW+"2");%>
-                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridopen.gif" title="<%=paramRequest.getLocaleString("open")%>" class="K2BWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
+                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridopen.gif" title="<%=paramRequest.getLocaleString("open")%>" class="SWBWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
                                 <td valign=top align="CENTER">
                                 <%url.setMode(url.Mode_EDIT);%>
-                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridupdate.gif" title="<%=paramRequest.getLocaleString("edit")%>" class="K2BWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
+                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridupdate.gif" title="<%=paramRequest.getLocaleString("edit")%>" class="SWBWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
                                 <td valign=top align="CENTER">
                                 <%url.setMode(url.Mode_VIEW+"2");%>
-                                <a href="<%=url.setAction(url.Action_REMOVE).toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/griddelete.gif" title="<%=paramRequest.getLocaleString("remove")%>" class="K2BWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
+                                <a href="<%=url.setAction(url.Action_REMOVE).toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/griddelete.gif" title="<%=paramRequest.getLocaleString("remove")%>" class="SWBWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
                                 <td valign=top align="RIGHT" style="display:none;" >
                                 <td valign=top align="LEFT">
-                                <span id="" class="ReadonlyK2BGridAttribute"><%=title%></span></td>
+                                <span id="" class="ReadonlySWBGridAttribute"><%=title%></span></td>
                                 <td valign=top align="LEFT">
-                                <span id="span_CUENTACONTABLEDESCRIPCION_0001" class="ReadonlyK2BGridAttribute">
+                                <span id="span_CUENTACONTABLEDESCRIPCION_0001" class="ReadonlySWBGridAttribute">
                                     <%if(description!=null && !description.equals("null")){%>
                                     <%=description%>
                                 <%}url.setAction("add");%>
