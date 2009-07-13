@@ -12,6 +12,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Properties;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -20,6 +21,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
+import org.semanticwb.security.auth.ExtUserRepInt;
 
 public class UserRepository extends UserRepositoryBase
 {
@@ -35,12 +37,35 @@ public class UserRepository extends UserRepositoryBase
     private static ArrayList<String> userTypes = new ArrayList<String>();
     private static final String NL = System.getProperty("line.separator");
     private final boolean EXTERNAL;
-   // private final UserRepositoryBridge
+    private final ExtUserRepInt bridge;
 
     public UserRepository(SemanticObject base)
     {
         super(base);
-        if (null==super.getUserRepExternalConfigFile()) EXTERNAL = false; else EXTERNAL = true;
+        boolean ret = false;
+        ExtUserRepInt classRet = null;
+        if (null == super.getUserRepExternalConfigFile())
+        {
+            ret = false;
+        } else
+        {
+            try
+            {
+                Properties props = SWBUtils.TEXT.getPropertyFile(super.getUserRepExternalConfigFile());
+                String className = props.getProperty("class");
+                Class clase = Class.forName(className);
+                classRet = (ExtUserRepInt) clase.getConstructor(UserRepository.class, Properties.class).newInstance(this, props);
+                log.trace("External User Bridge Creado!"+classRet);
+                ret = true;
+            } catch (Exception ex)
+            {
+                ret = false;
+                log.debug("Can't load class for External Repository Bridge", ex);
+            }
+
+        }
+        EXTERNAL = ret;
+        bridge = classRet;
         //System.out.println("***********UserRepository***************");
         StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
         while (ptopIt.hasNext())
@@ -51,11 +76,11 @@ public class UserRepository extends UserRepositoryBase
             {
                 String uri = sp.getObject().toString();
                 userTypes.add(uri.split("#")[1]);
-                //System.out.println("userTypes:"+uri.split("#")[1]);
+            //System.out.println("userTypes:"+uri.split("#")[1]);
             //getSemanticObject().getModel().registerClass(uri);
             }
         }
-        //System.out.println("***********end***************");
+    //System.out.println("***********end***************");
 
     /*
     String uri = getProperty(SWBUR_ClassHold);
@@ -165,7 +190,7 @@ public class UserRepository extends UserRepositoryBase
 
                 "}";
 
-          //  System.out.println(queryString);
+        //  System.out.println(queryString);
         Query query = QueryFactory.create(queryString);
 
         // System.out.println(getId());
@@ -201,14 +226,10 @@ public class UserRepository extends UserRepositoryBase
         return ret;
     }
 
-    private void syncUser(String login){
-
-    }
-
     public User getUserByLogin(String login)
     {
         User ret = null;
-        if (EXTERNAL) syncUser(login);
+        log.debug("Login a buscar: "+login+" External:"+EXTERNAL);
         if (null != login)
         {
             Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
@@ -217,8 +238,30 @@ public class UserRepository extends UserRepositoryBase
             {
                 ret = (User) it.next();
             }
+            if (EXTERNAL)
+            {
+                if (bridge.syncUser(login, ret))
+                {
+                    if (null == ret)
+                    {
+                        it = new GenericIterator(aux, true);
+                        if (it.hasNext())
+                        {
+                            ret = (User) it.next();
+                        }
+                    }
+                }
+            }
         }
         return ret;
+    }
+
+    public void syncUsers()
+    {
+        if (EXTERNAL)
+        {   System.out.println("entrando a syncUsers");
+            bridge.syncUsers(); System.out.println("UsersSynced");
+        }
     }
 
     public SemanticProperty getExtendedAttribute(String name)
@@ -454,7 +497,7 @@ public class UserRepository extends UserRepositoryBase
         while (itsp.hasNext())
         {
             SemanticProperty sp = itsp.next();
-            log.debug("Encontrada... " + sp +" - "+ sp.getURI());
+            log.debug("Encontrada... " + sp + " - " + sp.getURI());
             if (null == sp.getRange() || null == sp.getDisplayProperty() || !sp.getURI().startsWith(getId()))
             {
                 continue;
@@ -472,7 +515,7 @@ public class UserRepository extends UserRepositoryBase
         while (itsp.hasNext())
         {
             SemanticProperty sp = itsp.next();
-            log.debug("Encontrada... " + sp +" - "+ sp.getURI());
+            log.debug("Encontrada... " + sp + " - " + sp.getURI());
             if (null == sp.getRange() || null == sp.getDisplayProperty() || !sp.getURI().startsWith(getId()))
             {
                 continue;
@@ -607,4 +650,13 @@ public class UserRepository extends UserRepositoryBase
         return userTypes.contains(name);
     }
 
+    public boolean isExternal()
+    {
+        return EXTERNAL;
+    }
+
+    ExtUserRepInt getBridge()
+    {
+        return bridge;
+    }
 }
