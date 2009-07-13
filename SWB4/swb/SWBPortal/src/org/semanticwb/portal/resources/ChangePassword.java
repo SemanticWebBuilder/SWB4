@@ -1,30 +1,10 @@
-/*
- * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboraci�n e integraci�n para Internet,
- * la cual, es una creaci�n original del Fondo de Informaci�n y Documentaci�n para la Industria INFOTEC, misma que se encuentra
- * debidamente registrada ante el Registro P�blico del Derecho de Autor de los Estados Unidos Mexicanos con el
- * No. 03-2002-052312015400-14, para la versi�n 1; No. 03-2003-012112473900 para la versi�n 2, y No. 03-2006-012012004000-01
- * para la versi�n 3, respectivamente.
- *
- * INFOTEC pone a su disposici�n la herramienta INFOTEC WebBuilder a trav�s de su licenciamiento abierto al p�blico (�open source�),
- * en virtud del cual, usted podr� usarlo en las mismas condiciones con que INFOTEC lo ha dise�ado y puesto a su disposici�n;
- * aprender de �l; distribuirlo a terceros; acceder a su c�digo fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los t�rminos y condiciones de la LICENCIA ABIERTA AL P�BLICO que otorga INFOTEC para la utilizaci�n
- * de INFOTEC WebBuilder 3.2.
- *
- * INFOTEC no otorga garant�a sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni impl�cita ni expl�cita,
- * siendo usted completamente responsable de la utilizaci�n que le d� y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposici�n la siguiente
- * direcci�n electr�nica:
- *
- *                                          http://www.webbuilder.org.mx
- */
+
 package org.semanticwb.portal.resources;
 
 import java.io.ByteArrayOutputStream;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.Transformer;
@@ -47,7 +27,7 @@ import org.w3c.dom.Element;
  * @author Sergio T�llez
  * @version 1.0
  * 
- * Recurso de Cambio de contrase�a.
+ * Recurso de Cambio de contrasena.
  */
 public class ChangePassword extends GenericAdmResource 
 {
@@ -69,7 +49,7 @@ public class ChangePassword extends GenericAdmResource
             } else {
              **/
             if (request.getParameter("_msg") != null) {
-                alert = "<script language=\"JavaScript\">\n" +
+                alert = "<script type=\"text/javascript\" language=\"JavaScript\">\n" +
                         "   alert('" + request.getParameter("_msg") + "');\n" +
                         "</script>\n";
             }
@@ -101,28 +81,35 @@ public class ChangePassword extends GenericAdmResource
     }
 
     @Override
-    public void processAction(HttpServletRequest request, org.semanticwb.portal.api.SWBActionResponse response) throws SWBResourceException, IOException 
+    public void processAction(HttpServletRequest request, org.semanticwb.portal.api.SWBActionResponse response) throws SWBResourceException, IOException
     {
-        String msg = response.getLocaleString("msgErrUpdate");
+        String msg = null;
         String curPassword = null != request.getParameter("curPassword") && !"".equals(request.getParameter("curPassword").trim()) ? request.getParameter("curPassword").trim() : "";
         String newPassword = null != request.getParameter("newPassword") && !"".equals(request.getParameter("newPassword").trim()) ? request.getParameter("newPassword").trim() : null;
         String rePassword = null != request.getParameter("rePassword") && !"".equals(request.getParameter("rePassword").trim()) ? request.getParameter("rePassword").trim() : null;
 
+        System.out.println("curPassword="+curPassword);
+        System.out.println("newPassword="+newPassword);
+        System.out.println("rePassword="+rePassword);
+
         User user = response.getUser();
-        if ((user.getPassword() != null && !user.getPassword().trim().equals("")) && !user.getPassword().equals(curPassword)) {
-            msg = response.getLocaleString("msgErrCurrentPassword");
-        } else if (newPassword != null && rePassword != null && newPassword.equals(rePassword)) {
-            try {
-                /*  TODO: VER 4.0
-                UserSrv srv = new UserSrv();
-                if (srv.changePassword(user.getRepository(), user.getId(), newPassword, response.getUser().getId())) {
-                    msg = response.getLocaleString("msgOkUpdate");
-                }
-                 **/
-            } catch (Exception e) {
+
+        try{
+            if( user.getPassword()!=null && !user.getPassword().trim().equals("") && !SWBUtils.CryptoWrapper.comparablePassword(curPassword).equals(user.getPassword()) ) {
+                msg = response.getLocaleString("msgErrCurrentPassword");
+                System.out.println("user password="+user.getPassword());
+                System.out.println("comparablePassword="+SWBUtils.CryptoWrapper.comparablePassword(user.getPassword()));
+                System.out.println("el password actual esta mal");
+            }else if(newPassword != null && rePassword != null && newPassword.equals(rePassword)) {
+                user.setPassword(newPassword);
+                msg = response.getLocaleString("msgOkUpdate");
+                System.out.println("nuevo password asignado");
+            } else {
+                msg = response.getLocaleString("msgErrNewPassword");
+                System.out.println("algo anda mal");
             }
-        } else {
-            msg = response.getLocaleString("msgErrNewPassword");
+        }catch(NoSuchAlgorithmException nse) {
+            msg = response.getLocaleString("msgErrUpdate");
         }
         response.setRenderParameter("_msg", msg);
     }
