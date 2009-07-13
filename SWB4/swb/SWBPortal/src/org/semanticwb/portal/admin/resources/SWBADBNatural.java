@@ -16,6 +16,8 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -51,19 +53,23 @@ public class SWBADBNatural extends GenericResource {
 
    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        StringBuffer sbf = new StringBuffer();
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
         SWBResourceURL aUrl = paramRequest.getActionUrl();
         String query = request.getParameter("naturalQuery");
         String errCount = request.getParameter("errCode");
         String sparqlQuery = request.getParameter("sparqlQuery");
         String dym = request.getParameter("didYouMean");
-        User user = null;
+        User user = paramRequest.getUser();
+        StringBuffer sbf = new StringBuffer();
+
+        /*response.setContentType("text/html; charset=iso-8859-1");
+        response.setHeader("Cache-control", "no-cache");
+        response.setHeader("Pragma", "no-cache");*/
 
         //Get user language if any
         if (user != null) {
-            if (!lang.equals(paramRequest.getUser().getLanguage())) {
-                lang = paramRequest.getUser().getLanguage();
+            if (!lang.equals(user.getLanguage())) {
+                lang = user.getLanguage();
             }
         } else {
             if (!lang.equals("es")) {
@@ -71,19 +77,25 @@ public class SWBADBNatural extends GenericResource {
             }
         }
 
+        //Create lexicon for NLP
         lex = new SWBLexicon(lang);
 
         //Assert query string
         query = (query == null?"":query.trim());
 
+        //Assert suggested query
         if (dym == null || dym.equals("")) {
             dym = "";
         } else {
             dym = "<b>" + paramRequest.getLocaleString("didYouMean") + "</b> " + dym.trim();
         }
 
-        rUrl.setMode("SUGGEST");
+
+        //Set URL call method to call_DIRECT to make an AJAX call
         rUrl.setCallMethod(rUrl.Call_DIRECT);
+        rUrl.setMode("SUGGEST");
+
+        //Add necesary scripting
         sbf.append("<script type=\"text/javascript\">\n" +
                 "dojo.require(\"dijit.form.Form\");\n" +
                 "dojo.require(\"dijit.form.Button\");\n" +
@@ -273,7 +285,7 @@ public class SWBADBNatural extends GenericResource {
                 "if (dojo.byId('results') && word.word != '') {" +
                 "dojo.byId('results').innerHTML = '<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\" width=\"20\" height=\"20\"/>" + paramRequest.getLocaleString("loading") + "...';" +
                 "}" +
-                "getHtml(src + \"?word=\" + word.word + \"&lang=\" + lang + \"&props=\" + props, 'results');" +
+                "getHtml(src + \"?word=\" + escape(word.word) + \"&lang=\" + lang + \"&props=\" + props, 'results');" +
                 "displayed = true;" +
                 "highLightSelection(0, true);" +
                 "}");
@@ -347,10 +359,8 @@ public class SWBADBNatural extends GenericResource {
                 "}");
         sbf.append("</script>");
 
-        //rUrl = paramRequest.getActionUrl();
-        //aUrl.setParameter("lang", lang);
         sbf.append("<form id=\"" + getResourceBase().getId() + "/natural\" dojoType=\"dijit.form.Form\" class=\"swbform\" " +
-                   "action=\"" + aUrl + "\" method=\"post\">\n" +
+                   "action=\"" + aUrl + "\" method=\"post\" >\n" +
         //sbf.append("onsubmit=\"submitForm('" + getResourceBase().getId() + "/natural'); return false;\">");
                    "  <fieldset>\n" +
                    "    Natural Language Query Examples" +
@@ -363,7 +373,8 @@ public class SWBADBNatural extends GenericResource {
                    paramRequest.getLocaleString("prompt") +
                    "      </PRE>\n" +
                    "Natural Language Query:<BR>\n" +
-                   "    <textarea id=\"naturalQuery\" name=\"naturalQuery\" rows=5 cols=70>" + query + "</textarea>\n" +
+                   "    <textarea id=\"naturalQuery\" name=\"naturalQuery\" rows=5 cols=70 >" +
+                   query + "</textarea>\n" +
                    "    <div id=\"results\"></div>\n" +
                    "    <div>" + dym + "</div>" +
                    "  </fieldset>" +
@@ -373,6 +384,7 @@ public class SWBADBNatural extends GenericResource {
                      "</button>\n" +
                    "  </fieldset>");
 
+        //If no translation errors, execute SparQl query
         if (errCount != null) {
             if (Integer.parseInt(errCount) == 0) {
                 /*sbf.append("<fieldset>");
@@ -484,13 +496,16 @@ public class SWBADBNatural extends GenericResource {
         String queryString = "";
         String dym = "";
 
+        //Assert query string
         query = (query == null ? "" : query.trim());
 
         if (!query.equals("")) {
+            //Create SparQl translator
             tr = new SWBSparqlTranslator(lex);
             queryString = lex.getPrefixString() + "\n" + tr.translateSentence(query);
             dym = tr.didYouMean(query);
-            
+
+            //If no different suggestion
             if (query.toLowerCase().equals(dym.toLowerCase())) {
                 dym = "";
             }
@@ -505,7 +520,7 @@ public class SWBADBNatural extends GenericResource {
             response.setRenderParameter("naturalQuery", query);
             response.setRenderParameter("didYouMean", dym);
         }
-        response.setMode(SWBResourceURL.Mode_VIEW);
+        response.setMode(response.Mode_VIEW);
     }
 
     public void doSuggest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -519,6 +534,13 @@ public class SWBADBNatural extends GenericResource {
         boolean lPar = false;
         boolean rPar = false;
         int idCounter = 0;
+
+        word = URLDecoder.decode(word, "iso-8859-1");
+        System.out.println(">>>>Finding suggestions for " + word);
+
+        response.setContentType("text/html; charset=iso-8859-1");
+        response.setHeader("Cache-control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
        
         if (word.indexOf("(") != -1) {
             lPar = true;
@@ -553,6 +575,18 @@ public class SWBADBNatural extends GenericResource {
                         proOptions.add(tempcDn);
                     }
                 }
+            }
+
+            for (Object obj : objOptions) {
+                String res = (String)obj;
+
+                System.out.println("++" + res);
+            }
+
+            for (Object obj : proOptions) {
+                String res = (String)obj;
+
+                System.out.println("++" + res);
             }
 
             if (proOptions.size() != 0 || objOptions.size() != 0) {
