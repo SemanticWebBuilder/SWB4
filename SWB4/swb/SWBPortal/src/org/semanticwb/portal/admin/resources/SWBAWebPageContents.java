@@ -1207,9 +1207,9 @@ public class SWBAWebPageContents extends GenericResource {
 //            out.println(" reloadTab('" + obj.getURI() + "');");//so
 //            out.println(" setTabTitle('" + obj.getURI() + "','" + obj.getDisplayName(user.getLanguage()) + "','" + SWBContext.UTILS.getIconClass(obj) + "');");
             out.println(sbreload.toString());
-            
+            out.println("   showStatus('" + actmsg + "');");
             out.println("</script>");
-            out.println(actmsg);
+            //out.println(actmsg);
         } else {
             out.println(errormsg);
         }
