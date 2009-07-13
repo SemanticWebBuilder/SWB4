@@ -536,7 +536,6 @@ public class SWBADBNatural extends GenericResource {
         int idCounter = 0;
 
         word = URLDecoder.decode(word, "iso-8859-1");
-        System.out.println(">>>>Finding suggestions for " + word);
 
         response.setContentType("text/html; charset=iso-8859-1");
         response.setHeader("Cache-control", "no-cache");
@@ -575,18 +574,6 @@ public class SWBADBNatural extends GenericResource {
                         proOptions.add(tempcDn);
                     }
                 }
-            }
-
-            for (Object obj : objOptions) {
-                String res = (String)obj;
-
-                System.out.println("++" + res);
-            }
-
-            for (Object obj : proOptions) {
-                String res = (String)obj;
-
-                System.out.println("++" + res);
             }
 
             if (proOptions.size() != 0 || objOptions.size() != 0) {
