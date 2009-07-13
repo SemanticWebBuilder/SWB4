@@ -122,43 +122,49 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             response.setCallMethod(response.Call_CONTENT);
             response.setMode(response.Mode_VIEW);
         } else if (action.equals("DELALL")) {
-            //Get user's bookmark groups
-            ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(user);
+            if (user.isSigned()) {
+                //Get user's bookmark groups
+                ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(user);
 
-            for (BookmarkGroup group : groups) {
-                Iterator<BookmarkEntry> entries = group.listEntrys();
+                for (BookmarkGroup group : groups) {
+                    Iterator<BookmarkEntry> entries = group.listEntrys();
 
-                //Remove all entries from group
-                while (entries.hasNext()) {
-                    BookmarkEntry entry = entries.next();
-                    group.removeEntry(entry);
-                }
+                    //Remove all entries from group
+                    while (entries.hasNext()) {
+                        BookmarkEntry entry = entries.next();
+                        group.removeEntry(entry);
+                    }
 
-                //If empty, remove group
-                if (group.getEntryCount() == 0) {
-                    removeGroup(group);
+                    //If empty, remove group
+                    if (group.getEntryCount() == 0) {
+                        removeGroup(group);
+                    }
                 }
             }
             response.setCallMethod(response.Call_CONTENT);
             response.setMode(response.Mode_VIEW);
         } else if (action.equals("SORT")) {
-            setSortType(Integer.parseInt(request.getParameter("oType")));
+            if (user.isSigned()) {
+                setSortType(Integer.parseInt(request.getParameter("oType")));
+            }
             response.setCallMethod(response.Call_CONTENT);
             response.setMode(response.Mode_VIEW);
         } else if (action.equals("DELETE")) {
-            //Get user's bookmark groups
-            ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(user);
+            if (user.isSigned()) {
+                //Get user's bookmark groups
+                ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(user);
 
-            for (BookmarkGroup group : groups) {
-                //Get entry in group
-                BookmarkEntry entry = group.getEntryById(request.getParameter("id"));
+                for (BookmarkGroup group : groups) {
+                    //Get entry in group
+                    BookmarkEntry entry = group.getEntryById(request.getParameter("id"));
 
-                //If entry exists, remove it from group
-                if (entry != null) {
-                    group.removeEntry(entry);
-                    //If group is empty, remove it
-                    if (group.getEntryCount() == 0) {
-                        removeGroup(group);
+                    //If entry exists, remove it from group
+                    if (entry != null) {
+                        group.removeEntry(entry);
+                        //If group is empty, remove it
+                        if (group.getEntryCount() == 0) {
+                            removeGroup(group);
+                        }
                     }
                 }
             }
