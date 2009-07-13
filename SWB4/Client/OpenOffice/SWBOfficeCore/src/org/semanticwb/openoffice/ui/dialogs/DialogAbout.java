@@ -37,7 +37,7 @@ public class DialogAbout extends javax.swing.JDialog {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Acerca de Semantic INFOTEC WebBuilder 4");
+        setTitle("Acerca de Semantic WebBuilder 4");
         setModal(true);
         setResizable(false);
 
