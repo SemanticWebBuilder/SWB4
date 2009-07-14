@@ -1594,6 +1594,10 @@ public class SimpleNode implements Node
             try
             {
                 addProperty(getName(Versionable.jcr_isCheckedOut)).setValueInternal(false);
+                if(node!=null)
+                {
+                    node.getSemanticObject().setBooleanProperty(Versionable.jcr_isCheckedOut, false);
+                }
                 BaseNode version = node.checkin();
                 return new VersionImp(version, this.versionHistory, session);
             }
@@ -1615,7 +1619,12 @@ public class SimpleNode implements Node
                 throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
             }
 
-            addProperty(getName(Versionable.jcr_isCheckedOut)).setValueInternal(true);
+            PropertyImp jcr_isCheckedOut=addProperty(getName(Versionable.jcr_isCheckedOut));
+            jcr_isCheckedOut.setValueInternal(true);
+            if(node!=null)
+            {
+                node.getSemanticObject().setBooleanProperty(Versionable.jcr_isCheckedOut, true);
+            }
             return;
 
         }
