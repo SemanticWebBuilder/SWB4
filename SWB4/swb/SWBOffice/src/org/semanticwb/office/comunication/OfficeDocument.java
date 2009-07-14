@@ -811,11 +811,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName))
                     {
                         Resource base = site.getResource(obj.getId());
-                        officeResource.setResourceBase(base);
-                        ResourceInfo info = getResourceInfo(officeResource);
-                        if (info != null)
+                        if (base != null)
                         {
-                            listResources.add(info);
+                            officeResource.setResourceBase(base);
+                            ResourceInfo info = getResourceInfo(officeResource);
+                            if (info != null)
+                            {
+                                listResources.add(info);
+                            }
                         }
                     }
                 }
