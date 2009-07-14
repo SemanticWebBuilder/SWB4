@@ -17,7 +17,7 @@ import org.semanticwb.portal.api.*;
 
 /**
  *
- * @author Hasdai Pacheco {haxdai(at)gmail.com}
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  * A Bookmarks manager resource. The bookmarks are sorted in groups.
  */
 public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBookmarksBase {
@@ -538,8 +538,6 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         StringBuffer sbf = new StringBuffer();
         String lang = "es";
 
-        System.out.println(">>>>>>trabajando con usuario " + user.getFullName());
-
         response.setContentType("text/html");
         response.setHeader("Cache-control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -718,8 +716,6 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         //Print bookmarks list
         entries = sEntries.iterator();
         for (BookmarkEntry entry : sEntries) {
-            //while (entries.hasNext()) {
-            //  BookmarkEntry entry = entries.next();
             String eid = entry.getSemanticObject().getId();
             sbf.append("                    <tr class=\"entry\">\n" +
                     "                      <td>\n" +
@@ -804,13 +800,10 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     public BookmarkGroup getUserBookmarkGroupByName(User user, String name) {
         if (user.isSigned()) {
-            System.out.println(">>>Obteniendo grupo de nombre " + name + " de usuario " + user.getFullName());
             ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(user);
 
-            //System.out.println("Obteniendo grupo " + name + " de usuario " + user.getFullName());
             for (BookmarkGroup group : groups) {
                 if (group.getTitle().equals(name)) {
-                    //      System.out.println("Obtenido grupo " + group.getTitle());
                     return group;
                 }
             }
@@ -837,9 +830,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             Iterator<BookmarkGroup> git = listGroups();
             while (git.hasNext()) {
                 BookmarkGroup gp = git.next();
-                System.out.println("+++Revisando grupo " + gp.getTitle());
                 if (gp.getCreator().equals(user)) {
-                    System.out.println(" +++Grupo pertenece a usuario " +  user.getFullName());
                     groups.add(gp);
                 }
             }
@@ -1020,7 +1011,6 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         if (oldTags.equals("")) {
             if (untaggedGp != null) {
                 untaggedGp.removeEntry(entry);
-                System.out.println(">>>Removing entry from untagged group");
             }
         } else {
             for (int i = 0; i < oTags.length; i++) {
@@ -1028,15 +1018,10 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
                 BookmarkGroup group = getUserBookmarkGroupByName(user, groupName);
                 if (group != null) {
-                    //entry = group.getEntryById(eId);
-                    //if (entry != null) {
-                    System.out.println(">>>Removing entry from " + groupName + " group");
                     group.removeEntry(entry);
                     if (group.getEntryCount() == 0) {
-                        System.out.println(">>>Removing group " + groupName + " with no entries");
                         removeGroup(group);
                     }
-                    //}
                 }
             }
         }
