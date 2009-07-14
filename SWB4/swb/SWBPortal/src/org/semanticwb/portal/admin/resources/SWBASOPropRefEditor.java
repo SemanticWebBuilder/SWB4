@@ -293,7 +293,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 SemanticObject sobj = itso.next();
                 SemanticClass clsobj = sobj.getSemanticClass();
                 //log.debug("Clase: " + clsobj.getName()+" -- "+sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title));
-                String stitle = getDisplaySemObj(sobj, user.getLanguage());
+                //String stitle = getDisplaySemObj(sobj, user.getLanguage());
                 if (clsobj.getName().trim().equals("UserGroupRef")) {
                     title = sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title);
                 }
@@ -560,7 +560,7 @@ public class SWBASOPropRefEditor extends GenericResource {
                 urlDAll.setParameter("spropref", idpref);
                 urlDAll.setParameter("sval", "remove");
                 urlDAll.setAction("deleteall");
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlDAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_dallnew") + "</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgQremoveAll")+"?')){submitUrl('" + urlDAll + "',this.domNode);} return false;\">" + paramRequest.getLocaleString("btn_dallnew") + "</button>");
             }
             //out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">Add New</a>");
             out.println("</fieldset>");
