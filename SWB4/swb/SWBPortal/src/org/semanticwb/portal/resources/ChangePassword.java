@@ -12,12 +12,16 @@ import javax.xml.transform.Templates;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.semanticwb.SWBPlatform;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.User;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBParamRequest;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -29,8 +33,34 @@ import org.w3c.dom.Element;
  * 
  * Recurso de Cambio de contrasena.
  */
-public class ChangePassword extends GenericAdmResource 
-{
+public class ChangePassword extends GenericAdmResource {
+    private static Logger log = SWBUtils.getLogger(Language.class);
+    Templates template;
+    String path = SWBPlatform.getContextPath()+"swbadmin/xsl/ChangePassword/";
+
+    @Override
+    public void setResourceBase(Resource base) throws SWBResourceException {
+        super.setResourceBase(base);
+
+        if(!"".equals(base.getAttribute("template","").trim()))
+        {
+            try
+            {
+                template = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                path = SWBPlatform.getContextPath()+"swbadmin/xsl/ChangePassword/";
+            }catch(Exception e) {
+                log.error("Error while loading resource template: "+base.getId(), e);
+            }
+        }
+        if(template==null)
+        {
+            try {
+                template = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/ChangePassword/ChangePassword.xslt"));
+            }catch(Exception e) {
+                log.error("Error while loading default resource template: "+base.getId(), e);
+            }
+        }
+    }
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
@@ -39,7 +69,7 @@ public class ChangePassword extends GenericAdmResource
         User user = paramRequest.getUser();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
-            Templates templates = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(getResourceBase().getWorkPath() + "/" + getResourceBase().getAttribute("template")));
+            //Templates template = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(getResourceBase().getWorkPath() + "/" + getResourceBase().getAttribute("template")));
             Document document = SWBUtils.XML.getNewDocument();
             Element euser = document.createElement("USER");
             document.appendChild(euser);
@@ -53,28 +83,27 @@ public class ChangePassword extends GenericAdmResource
                         "   alert('" + request.getParameter("_msg") + "');\n" +
                         "</script>\n";
             }
-            if (user.getPassword() != null && !user.getPassword().trim().equals("")) {
-                userattr.setAttribute("msgCurrentPassword", paramRequest.getLocaleString("msgCurrentPassword"));
-            }
-            userattr.setAttribute("msgNewPassword", paramRequest.getLocaleString("msgNewPassword"));
-            userattr.setAttribute("msgConfirmPassword", paramRequest.getLocaleString("msgConfirmPassword"));
-            userattr.setAttribute("name", user.getName());
-            userattr.setAttribute("lastName", user.getLastName());
-            userattr.setAttribute("firstName", user.getFirstName());
-            userattr.setAttribute("middleName", user.getSecondLastName());
-            userattr.setAttribute("email", user.getEmail());
-            userattr.setAttribute("login", user.getLogin());
-            //}
-            
-            org.semanticwb.portal.api.SWBResourceURL url=paramRequest.getActionUrl();
-            euser.appendChild(userattr);
-            DOMSource domSource = new DOMSource(document);
-            StreamResult streamResult = new StreamResult(outputStream);
-            Transformer transformer = templates.newTransformer();
-            url.setAction("change");
-            transformer.setParameter("actionUrl", url.toString());
-            transformer.transform(domSource, streamResult);
-            response.getWriter().println(alert + outputStream.toString());
+            /*if( user.getPassword()!=null && !user.getPassword().trim().equals("")) {*/
+                userattr.setAttribute("msgCurrentPassword", paramRequest.getLocaleString("msgCurrentPassword"));            
+                userattr.setAttribute("msgNewPassword", paramRequest.getLocaleString("msgNewPassword"));
+                userattr.setAttribute("msgConfirmPassword", paramRequest.getLocaleString("msgConfirmPassword"));
+                userattr.setAttribute("name", user.getName());
+                userattr.setAttribute("lastName", user.getLastName());
+                userattr.setAttribute("firstName", user.getFirstName());
+                userattr.setAttribute("middleName", user.getSecondLastName());
+                userattr.setAttribute("email", user.getEmail());
+                userattr.setAttribute("login", user.getLogin());
+                
+                org.semanticwb.portal.api.SWBResourceURL url=paramRequest.getActionUrl();
+                euser.appendChild(userattr);
+                DOMSource domSource = new DOMSource(document);
+                StreamResult streamResult = new StreamResult(outputStream);
+                Transformer transformer = template.newTransformer();
+                url.setAction("change");
+                transformer.setParameter("actionUrl", url.toString());
+                transformer.transform(domSource, streamResult);
+                response.getWriter().println(alert + outputStream.toString());
+            /*}*/
         } catch (Exception e) {
             throw new SWBResourceException(e.toString());
         }
@@ -84,9 +113,9 @@ public class ChangePassword extends GenericAdmResource
     public void processAction(HttpServletRequest request, org.semanticwb.portal.api.SWBActionResponse response) throws SWBResourceException, IOException
     {
         String msg = null;
-        String curPassword = null != request.getParameter("curPassword") && !"".equals(request.getParameter("curPassword").trim()) ? request.getParameter("curPassword").trim() : "";
-        String newPassword = null != request.getParameter("newPassword") && !"".equals(request.getParameter("newPassword").trim()) ? request.getParameter("newPassword").trim() : null;
-        String rePassword = null != request.getParameter("rePassword") && !"".equals(request.getParameter("rePassword").trim()) ? request.getParameter("rePassword").trim() : null;
+        String curPassword = request.getParameter("curPassword");
+        String newPassword = request.getParameter("newPassword");
+        String rePassword = request.getParameter("rePassword");
 
         System.out.println("curPassword="+curPassword);
         System.out.println("newPassword="+newPassword);
