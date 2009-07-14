@@ -25,14 +25,6 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-/**
- * ChangePassword.java
- * 
- * @author Sergio T�llez
- * @version 1.0
- * 
- * Recurso de Cambio de contrasena.
- */
 public class ChangePassword extends GenericAdmResource {
     private static Logger log = SWBUtils.getLogger(Language.class);
     Templates template;
@@ -74,14 +66,13 @@ public class ChangePassword extends GenericAdmResource {
             Element euser = document.createElement("USER");
             document.appendChild(euser);
             Element userattr = document.createElement("userattr");
-            /*if (!user.isRegistered() || !user.isLoged()) { //TODO:Se va ha defirnir en esta ver. 4 como saber si el usuario esta registrado y logeado
-            userattr.setAttribute("msgErrLogin", paramsRequest.getLocaleString("msgErrLogin"));
-            } else {
-             **/
-            if (request.getParameter("_msg") != null) {
+
+            if(request.getSession(true).getAttribute("_msg")!= null) {
                 alert = "<script type=\"text/javascript\" language=\"JavaScript\">\n" +
-                        "   alert('" + request.getParameter("_msg") + "');\n" +
+                        "   alert('" + request.getSession(true).getAttribute("_msg") + "');\n" +
                         "</script>\n";
+                request.getSession(true).setAttribute("_msg", null);
+                request.removeAttribute("_msg");
             }
             /*if( user.getPassword()!=null && !user.getPassword().trim().equals("")) {*/
                 userattr.setAttribute("msgCurrentPassword", paramRequest.getLocaleString("msgCurrentPassword"));            
@@ -116,31 +107,21 @@ public class ChangePassword extends GenericAdmResource {
         String curPassword = request.getParameter("curPassword");
         String newPassword = request.getParameter("newPassword");
         String rePassword = request.getParameter("rePassword");
-
-        System.out.println("curPassword="+curPassword);
-        System.out.println("newPassword="+newPassword);
-        System.out.println("rePassword="+rePassword);
-
         User user = response.getUser();
 
         try{
             if( user.getPassword()!=null && !user.getPassword().trim().equals("") && !SWBUtils.CryptoWrapper.comparablePassword(curPassword).equals(user.getPassword()) ) {
                 msg = response.getLocaleString("msgErrCurrentPassword");
-                System.out.println("user password="+user.getPassword());
-                System.out.println("comparablePassword="+SWBUtils.CryptoWrapper.comparablePassword(user.getPassword()));
-                System.out.println("el password actual esta mal");
-            }else if(newPassword != null && rePassword != null && newPassword.equals(rePassword)) {
-                user.setPassword(newPassword);
+            }else if( newPassword!=null && rePassword!=null && newPassword.trim().equals(rePassword.trim()) && !newPassword.trim().equals("") ) {
+                user.setPassword(newPassword.trim());
                 msg = response.getLocaleString("msgOkUpdate");
-                System.out.println("nuevo password asignado");
             } else {
                 msg = response.getLocaleString("msgErrNewPassword");
-                System.out.println("algo anda mal");
             }
         }catch(NoSuchAlgorithmException nse) {
             msg = response.getLocaleString("msgErrUpdate");
         }
-        response.setRenderParameter("_msg", msg);
+        request.getSession(true).setAttribute("_msg", msg);
     }
 }
 
