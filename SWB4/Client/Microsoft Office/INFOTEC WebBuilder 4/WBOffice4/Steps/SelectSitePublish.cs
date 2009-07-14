@@ -64,7 +64,7 @@ namespace WBOffice4.Steps
                     }
                     else
                     {
-                        MessageBox.Show(this, "Para activar el conteneido deberá enviar primero esta publicación a autorizar", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(this, "Para activar el contenido deberá enviar primero esta publicación a autorizar", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 else
