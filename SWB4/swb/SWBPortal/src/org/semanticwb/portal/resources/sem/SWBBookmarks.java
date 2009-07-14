@@ -538,6 +538,8 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         StringBuffer sbf = new StringBuffer();
         String lang = "es";
 
+        System.out.println(">>>>>>trabajando con usuario " + user.getFullName());
+
         response.setContentType("text/html");
         response.setHeader("Cache-control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -588,7 +590,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 "      function refreshContent(url) {\n" +
                 "        var val = dijit.byId('" + createId("swb-bkm-select") + "').value;\n" +
                 "        dojo.byId('" + createId("bookmarksList") + "').innerHtml='';\n" +
-                "        getHtml(url + '&gid=' + val, '" + createId("bookmarksList") + "');\n" +
+                "        getHtml(url + '?gid=' + val, '" + createId("bookmarksList") + "');\n" +
                 "      }\n\n" +
                 "      function openWindow(loc, args) {\n" +
                 "        window.open(loc, '' ,args);" +
@@ -640,7 +642,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(user);
                 for (BookmarkGroup group : groups) {
                     if (group.getTitle().equals("general")) {
-                        sbf.append("                <option value=\"" +
+                        sbf.append("                <option selected value=\"" +
                                 group.getSemanticObject().getId() + "\">" +
                                 paramRequest.getLocaleString("lblShowAll") + "</option>\n");
                     } else if (group.getEntryCount() > 0) {
@@ -802,6 +804,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
     public BookmarkGroup getUserBookmarkGroupByName(User user, String name) {
         if (user.isSigned()) {
+            System.out.println(">>>Obteniendo grupo de nombre " + name + " de usuario " + user.getFullName());
             ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(user);
 
             //System.out.println("Obteniendo grupo " + name + " de usuario " + user.getFullName());
@@ -834,7 +837,9 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             Iterator<BookmarkGroup> git = listGroups();
             while (git.hasNext()) {
                 BookmarkGroup gp = git.next();
+                System.out.println("+++Revisando grupo " + gp.getTitle());
                 if (gp.getCreator().equals(user)) {
+                    System.out.println(" +++Grupo pertenece a usuario " +  user.getFullName());
                     groups.add(gp);
                 }
             }
@@ -885,7 +890,8 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                                 "onclick=\"dojo.query('.swb-bkm-menuOpt').removeClass('swb-bkm-boldElement');" +
                                 "dojo.addClass(dojo.byId('" + createId(gid) + "'), 'swb-bkm-boldElement');" +
                                 "getHtml('" + rUrl + "', '" + createId("swb-bkm-content") + "');\">" +
-                                group.getTitle() + "(" + group.getEntryCount() + ")</a><br>\n");
+                                (group.getTitle().equals("untagged")?paramRequest.getLocaleString("lblNotags"):group.getTitle()) +
+                                "(" + group.getEntryCount() + ")</a><br>\n");
                     }
                 } else if (group.getEntryCount() > 0) {
                     sbf.append("    <a class=\"swb-bkm-menuOpt\" id=\"" +
