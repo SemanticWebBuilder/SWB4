@@ -1485,7 +1485,10 @@ public class SimpleNode implements Node
             while(it.hasNext())
             {
                 Property prop=it.nextProperty();
-                this.setProperty(prop.getName(), prop.getValues());
+                if(this.existsProperty(prop.getName()))
+                {
+                    this.setProperty(prop.getName(), prop.getValues());
+                }
             }
             if(removeExisting)
             {
