@@ -30,9 +30,7 @@
         dojo.addOnLoad(function(){
             dojo.connect(dijit.byId("btnSave"), "onClick",
                 function() {
-                    if(jsValida(dojo.byId("frmAdmin"))) {
-                        dojo.byId("frmAdmin").submit();
-                    }
+                    dojo.byId("frmAdmin").submit();
                 }
             );
         });
