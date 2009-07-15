@@ -273,9 +273,11 @@ public class SimpleNode implements Node
             }
         }
         //loading undeclared properties
-        if(node!=null)
+        Iterator<SemanticProperty> props=node.getSemanticObject().listProperties();
+        while(props.hasNext())
         {
-            //node.getSemanticObject().
+            SemanticProperty prop=props.next();
+            addProperty(prop, node, clazz, modified);
         }
         if (node.isVersionable())
         {
@@ -1500,7 +1502,7 @@ public class SimpleNode implements Node
         }
         else
         {
-
+            throw new RepositoryException("The method restore with path "+relPath+" is not defined");
         }
         if(nodeTorestore==null)
         {
@@ -1514,7 +1516,8 @@ public class SimpleNode implements Node
             {
                 Property prop=it.nextProperty();
                 if(this.existsProperty(prop.getName()) && !prop.getDefinition().isProtected())
-                {                    
+                {
+                    log.trace("restoring property "+prop.getName());
                     this.setProperty(prop.getName(), prop.getValues());
                 }
             }
