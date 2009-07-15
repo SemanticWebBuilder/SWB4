@@ -1150,7 +1150,7 @@ public class SemanticObject
             Object vals[]=null;
             GenericObject obj = this.createGenericInstance();
             Class cls = obj.getClass();
-            Method method=extSetMethods.get(cls.getName()+"-"+prop.getURI());
+            Method method=extSetMethods.get(cls.getName()+"-"+prop.getURI()+"-"+values.length);
             if(method==null)
             {
                 String name = prop.getPropertyCodeName();
@@ -1196,7 +1196,7 @@ public class SemanticObject
                     }
                     //System.out.println("getMethod:"+name+" "+types);
                     method = cls.getMethod(name,types);
-                    extSetMethods.put(cls.getName()+"-"+prop.getURI(), method);
+                    extSetMethods.put(cls.getName()+"-"+prop.getURI()+"-"+values.length, method);
                 }
                 catch (Exception e)
                 {
