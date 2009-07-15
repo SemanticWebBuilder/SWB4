@@ -17,12 +17,9 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import org.semanticwb.Logger;
-import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.nlp.SWBLexicon;
 import org.semanticwb.platform.SemanticClass;
@@ -36,7 +33,6 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class SWBADBNatural extends GenericResource {
 
-    private Logger log = SWBUtils.getLogger(SWBAListRelatedObjects.class);
     private String lang = "x-x";
     private SWBLexicon lex = null;
     private SWBSparqlTranslator tr;
@@ -89,7 +85,6 @@ public class SWBADBNatural extends GenericResource {
         } else {
             dym = "<b>" + paramRequest.getLocaleString("didYouMean") + "</b> " + dym.trim();
         }
-
 
         //Set URL call method to call_DIRECT to make an AJAX call
         rUrl.setCallMethod(rUrl.Call_DIRECT);
@@ -362,8 +357,7 @@ public class SWBADBNatural extends GenericResource {
         sbf.append("<form id=\"" + getResourceBase().getId() + "/natural\" dojoType=\"dijit.form.Form\" class=\"swbform\" " +
                    "action=\"" + aUrl + "\" method=\"post\" >\n" +
         //sbf.append("onsubmit=\"submitForm('" + getResourceBase().getId() + "/natural'); return false;\">");
-                   "  <fieldset>\n" +
-                   "    Natural Language Query Examples" +
+                   "  <fieldset>\n" + paramRequest.getLocaleString("lblExamples") +
                    "      <PRE>\n" +
                    "1. Usuario con activo = true, [Primer Apellido]\n" +
                    "2. Activo, idioma de usuario con [nombre(s)]=\"admin\"\n" +
@@ -372,7 +366,7 @@ public class SWBADBNatural extends GenericResource {
                    "5. todo de [Página Web] con [Usuario Creador] con [nombre(s)] = \"admin\"\n" +
                    paramRequest.getLocaleString("prompt") +
                    "      </PRE>\n" +
-                   "Natural Language Query:<BR>\n" +
+                   paramRequest.getLocaleString("lblPromptQuery") + "<BR>\n" +
                    "    <textarea id=\"naturalQuery\" name=\"naturalQuery\" rows=5 cols=70 >" +
                    query + "</textarea>\n" +
                    "    <div id=\"results\"></div>\n" +
