@@ -559,6 +559,10 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             setSortType(SORT_BYDATE);
         }
 
+        if (!user.isSigned()) {
+            return;
+        }
+
         //Add necesary scripting
         sbf.append("<script type=\"text/javascript\" charset=\"utf-8\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb.js\"></script>\n");
         sbf.append("<script type=\"text/javascript\" charset=\"utf-8\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb_admin.js\"></script>\n");
