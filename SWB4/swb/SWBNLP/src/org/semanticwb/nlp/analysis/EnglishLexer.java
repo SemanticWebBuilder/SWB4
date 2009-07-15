@@ -3,6 +3,10 @@ package org.semanticwb.nlp.analysis;
 // $ANTLR 3.1.2 /home/hasdai/Documentos/INFOTEC/EnglishLexer.g 2009-07-15 13:26:23
 import org.antlr.runtime.*;
 
+/**
+ * ANTLR generated lexer for english to SparQl translation.
+ * @author Hasdai Pacheco {haxdai@gmail.com}
+ */
 public class EnglishLexer extends Lexer {
 
     public static final int MODO = 16;
@@ -36,7 +40,6 @@ public class EnglishLexer extends Lexer {
     // delegates
     // delegators
     public EnglishLexer() {
-        ;
     }
 
     public EnglishLexer(CharStream input) {
@@ -48,6 +51,7 @@ public class EnglishLexer extends Lexer {
 
     }
 
+    @Override
     public String getGrammarFileName() {
         return "/home/hasdai/Documentos/INFOTEC/EnglishLexer.g";
     }
