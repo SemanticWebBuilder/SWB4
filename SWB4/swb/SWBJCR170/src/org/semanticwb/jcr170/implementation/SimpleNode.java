@@ -1466,6 +1466,12 @@ public class SimpleNode implements Node
             {
                 return new VersionImp(baseVersion, versionHistory, session);
             }
+            else
+            {
+                RepositoryException re=new RepositoryException("The base version was not found, internal error");
+                log.debug(re);
+                throw re;
+            }
         }
         throw new UnsupportedRepositoryOperationException("The node is new or is not versionable");
     }
