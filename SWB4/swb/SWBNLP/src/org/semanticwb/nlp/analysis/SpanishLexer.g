@@ -1,3 +1,5 @@
+//ANTLRWorks grammar to generate a spanish lexer
+
 lexer grammar SpanishLexer;
 
 WHITESPACE
