@@ -223,7 +223,7 @@ public class SWBSparqlTranslator {
         List<String> sw = Arrays.asList(stopWords);
 
         ANTLRStringStream sinput = new ANTLRStringStream(input);
-        SpanishLexer stokenizer = new SpanishLexer(sinput);
+        Lexer stokenizer = getLocaleLexer(lex.getLanguage(), sinput);
         CommonTokenStream stokens = new CommonTokenStream(stokenizer);
 
         if (speller == null) {
