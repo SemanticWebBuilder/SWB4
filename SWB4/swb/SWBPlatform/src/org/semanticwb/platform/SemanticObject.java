@@ -1143,7 +1143,7 @@ public class SemanticObject
 
     private Object externalInvokerSet(SemanticProperty prop, Object... values)
     {
-        //System.out.println("externalInvokerSet:"+prop+" "+values);
+//        System.out.println("externalInvokerSet:"+prop+" "+values);
         Object ret = null;
         if (!m_virtual)
         {
@@ -1159,19 +1159,19 @@ public class SemanticObject
                     name = prop.getName();
                 }
                 name = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
-                //System.out.println("name:"+name);
+//                System.out.println("name:"+name);
                 try
                 {
                     Class types[]=null;
                     if(prop.isLocaleable())
                     {
                         types=new Class[values.length];
-                        vals=values;
+                        //vals=values;
                     }else
                     {
                         types=new Class[1];
-                        vals=new Object[1];
-                        vals[0]=values[0];
+                        //vals=new Object[1];
+                        //vals[0]=values[0];
                     }
 
                     Object o=values[0];
@@ -1194,13 +1194,23 @@ public class SemanticObject
                         if(o==null)types[1]=String.class;
                         else types[1]=o.getClass();
                     }
-                    //System.out.println("getMethod:"+name+" "+types);
+//                    System.out.println("getMethod:"+name+" "+types);
                     method = cls.getMethod(name,types);
                     extSetMethods.put(cls.getName()+"-"+prop.getURI()+"-"+values.length, method);
                 }
                 catch (Exception e)
                 {
                     log.error(e);
+                }
+            } else // Movi la generación de "vals" a esta posición
+            {      // por que si esta en caché se pasaba un null al invoke - MAPS
+                if (prop.isLocaleable())
+                {
+                    vals = values;
+                } else
+                {
+                    vals = new Object[1];
+                    vals[0] = values[0];
                 }
             }
             try
@@ -1211,7 +1221,7 @@ public class SemanticObject
             {
                 log.error(e);
             }
-        //System.out.println("externalInvoker:"+ret);
+        System.out.println("externalInvoker:"+ret);
         }
         return ret;
     }
