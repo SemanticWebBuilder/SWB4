@@ -491,6 +491,13 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 "  }\n" +
                 "</script>\n");
 
+        sbf.append("<div dojoType=\"dijit.Dialog\" style=\"display:none;\" id=\"swbDialog\" " +
+                "title=\"Agregar\" onFocus=\"hideApplet(true);\" onBlur=\"if(!this.open)hideApplet(false);\" >\n" +
+                 "  <div dojoType=\"dojox.layout.ContentPane\" id=\"swbDialogImp\" executeScripts=\"true\">\n" +
+                "    Cargando...\n" +
+            "  </div>\n" +
+        "</div>\n");
+
         sbf.append("<div class=\"swb-bkm-container\">\n" +
                 "  <div class=\"swb-bkm-header\">\n" +
                 "    <h1>" + paramRequest.getLocaleString("lblManage") + "</h1>\n" +
@@ -598,6 +605,13 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         //Set url call method to Call_DIRECT to make an AJAX call
         rUrl.setCallMethod(rUrl.Call_DIRECT).setMode("ADDNEW");
         rUrl.setParameter("url", paramRequest.getWebPage().getRealUrl());
+
+        sbf.append("<div dojoType=\"dijit.Dialog\" style=\"display:none;\" id=\"swbDialog\" " +
+                "title=\"Agregar\" onFocus=\"hideApplet(true);\" onBlur=\"if(!this.open)hideApplet(false);\" >\n" +
+                 "  <div dojoType=\"dojox.layout.ContentPane\" id=\"swbDialogImp\" executeScripts=\"true\">\n" +
+                "    Cargando...\n" +
+            "  </div>\n" +
+        "</div>\n");
 
         sbf.append("    <div class=\"swb-bkm-box\">\n" +
                 "      <div class=\"titleBar\">\n" +
