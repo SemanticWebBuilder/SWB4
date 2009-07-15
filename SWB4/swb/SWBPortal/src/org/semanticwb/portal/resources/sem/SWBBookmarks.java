@@ -491,9 +491,9 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 "  }\n" +
                 "</script>\n");
 
-        sbf.append("<div dojoType=\"dijit.Dialog\" style=\"display:none;\" id=\"swbDialog\" " +
+        sbf.append("<div dojoType=\"dijit.Dialog\" class=\"soria\" style=\"display:none;\" id=\"swbDialog\" " +
                 "title=\"Agregar\" onFocus=\"hideApplet(true);\" onBlur=\"if(!this.open)hideApplet(false);\" >\n" +
-                 "  <div dojoType=\"dojox.layout.ContentPane\" id=\"swbDialogImp\" executeScripts=\"true\">\n" +
+                 "  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"swbDialogImp\" executeScripts=\"true\">\n" +
                 "    Cargando...\n" +
             "  </div>\n" +
         "</div>\n");
@@ -606,9 +606,9 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         rUrl.setCallMethod(rUrl.Call_DIRECT).setMode("ADDNEW");
         rUrl.setParameter("url", paramRequest.getWebPage().getRealUrl());
 
-        sbf.append("<div dojoType=\"dijit.Dialog\" style=\"display:none;\" id=\"swbDialog\" " +
+        sbf.append("<div dojoType=\"dijit.Dialog\" class=\"soria\" style=\"display:none;\" id=\"swbDialog\" " +
                 "title=\"Agregar\" onFocus=\"hideApplet(true);\" onBlur=\"if(!this.open)hideApplet(false);\" >\n" +
-                 "  <div dojoType=\"dojox.layout.ContentPane\" id=\"swbDialogImp\" executeScripts=\"true\">\n" +
+                 "  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"swbDialogImp\" executeScripts=\"true\">\n" +
                 "    Cargando...\n" +
             "  </div>\n" +
         "</div>\n");
@@ -641,11 +641,11 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 rUrl.setCallMethod(rUrl.Call_DIRECT).setMode("RLIST");
 
                 sbf.append("          <div class=\"bookmarksFrame\">\n" +
-                        "            <form>\n" +
+                        "            <form class=\"soria\">\n" +
                         "              <label for=\"" + createId("bkm-selector") + "\">\n" +
                         BookmarkGroup.sclass.getDisplayName(lang) + ": \n" +
                         "              </label>\n" +
-                        "              <select id=\"" + createId("swb-bkm-select") + "\" " +
+                        "              <select class=\"soria\" id=\"" + createId("swb-bkm-select") + "\" " +
                         "dojoType=\"dijit.form.FilteringSelect\" " +
                         "autoComplete=\"false\" " +
                         "onChange=\"refreshContent('" + rUrl + "');\">\n");
