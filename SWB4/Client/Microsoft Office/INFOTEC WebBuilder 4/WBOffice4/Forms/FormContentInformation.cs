@@ -188,8 +188,13 @@ namespace WBOffice4.Forms
             if (this.listViewPages.SelectedItems.Count > 0 && this.listViewPages.SelectedItems[0].Tag is ResourceInfo)
             {
                 ResourceInfo portletInfo = (ResourceInfo)this.listViewPages.SelectedItems[0].Tag;
-                OfficeApplication.OfficeDocumentProxy.deleteResource(portletInfo);
+                DialogResult res = MessageBox.Show(this, "¿Desea borrar la publicación " + portletInfo.title + "?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (res == DialogResult.Yes)
+                {
+                    OfficeApplication.OfficeDocumentProxy.deleteResource(portletInfo);
+                }
             }
+            this.loadPorlets();
         }
 
         private void listViewPages_SelectedIndexChanged(object sender, EventArgs e)
