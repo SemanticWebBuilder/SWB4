@@ -33,7 +33,7 @@ public class SWBSparqlTranslator {
     private SWBLexicon lex;        //Dictionary
     private CommonTokenStream tokens;   //TokenStream for parsing
     private ANTLRStringStream input;    //StringStream to parse
-    private String nodeLabels = "SELECT|PRECON|PREDE|ASIGN|COMPL|COMPG|COMPLE|COMPGE|OFFSET|LIMIT|ORDER";
+    private String nodeLabels = "SELECT|PRECON|PREDE|ASIGN|COMPL|COMPG|COMPLE|COMPGE|OFFSET|LIMIT|ORDER|LIKE";
     private String eLog = "";   //Error log
     private int errCode = 0;    //Last error code
     private SWBSpellChecker speller = null;
@@ -314,7 +314,7 @@ public class SWBSparqlTranslator {
                 }
             }
         } else if (nname.equals("ASIGN") || nname.equals("COMPG") || nname.equals("COMPL") ||
-                nname.equals("COMPLE") || nname.equals("COMPGE")) {
+                nname.equals("COMPLE") || nname.equals("COMPGE") || nname.equals("LIKE")) {
             res = res + processStatement(root, parent, parentLabel);
         } else if (nname.equals("PREDE")) {
             if (!root.getChild(0).getText().equals("MODTO")) {
@@ -430,6 +430,7 @@ public class SWBSparqlTranslator {
      * or a triple and a FILTER clause for the node.
      */
     private String processStatement(CommonTree root, String parent, String parentLabel) {
+        System.out.println("parent " + parent + ", root " + root.getText());
         String res = "";
         String pName = assertPropertyType(root.getChild(0).getText(), parent);
         //System.out.println("verificando " + root.getChild(0).getText() + " de " + parent + " con etiqueta " + parentLabel);
@@ -524,7 +525,7 @@ public class SWBSparqlTranslator {
             if (parser.getErrorCount() == 0) {
                 sTree = (CommonTree) qres.getTree();
                 fixNames(sTree);
-                //traverseAST(sTree, "");
+                traverseAST(sTree, "");
                 res += processSelectQuery(sTree, parser.hasPrecon(), parser.hasPrede());
                 //System.out.println(res);
                 return res;
