@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import org.semanticwb.Logger;
@@ -875,6 +876,18 @@ public class SemanticObject
         return new SemanticLiteralIterator(m_res.listProperties(prop.getRDFProperty()));
     }
 
+    public Iterator<SemanticProperty> listProperties()
+    {
+        HashSet<SemanticProperty> properties=new HashSet<SemanticProperty>();
+        StmtIterator props=this.m_res.listProperties();
+        while(props.hasNext())
+        {
+            Statement stmt=props.nextStatement();
+            Property prop=stmt.getPredicate();
+            properties.add(this.m_model.getSemanticProperty(prop.getURI()));
+        }
+        return properties.iterator();
+    }
     public Iterator<SemanticObject> listObjectProperties(SemanticProperty prop)
     {
         if (m_virtual)
