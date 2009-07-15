@@ -1211,7 +1211,7 @@ public class BaseNode extends BaseNodeBase
         SemanticProperty isCheckoutPropety = Versionable.jcr_isCheckedOut;
         setPropertyInternal(isCheckoutPropety, "false");
         BaseNode versionNode = addVersionToHistoryNode();
-        log.debug("Version created " + versionNode.getName());
+        log.trace("Version created " + versionNode.getName());
         return versionNode;
 
     /*if (isChekedOut())
