@@ -3,6 +3,10 @@ package org.semanticwb.nlp.analysis;
 // $ANTLR 3.1.2 /home/hasdai/Documentos/INFOTEC/SpanishLexer.g 2009-07-15 13:28:22
 import org.antlr.runtime.*;
 
+/**
+ * ANTLR generated lexer for spanish to SparQl translation.
+ * @author Hasdai Pacheco {haxdai@gmail.com}
+ */
 public class SpanishLexer extends Lexer {
 
     public static final int MODO = 16;
@@ -36,7 +40,6 @@ public class SpanishLexer extends Lexer {
     // delegates
     // delegators
     public SpanishLexer() {
-        ;
     }
 
     public SpanishLexer(CharStream input) {
