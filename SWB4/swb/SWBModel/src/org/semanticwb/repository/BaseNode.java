@@ -1020,8 +1020,10 @@ public class BaseNode extends BaseNodeBase
 
     private void doCopyToFrozenNode(BaseNode frozenNode) throws SWBException
     {
+        log.trace("Copiando propiedades a Nodo FrozenNode...");
         if (frozenNode.isFrozenNode())
         {
+            log.trace("El nodo "+frozenNode.getName()+" es un frozenNode");
             initializeFrozenProperties(frozenNode.getSemanticObject());
             doCopy(this, frozenNode);
             Iterator<SemanticProperty> properties = this.getSemanticObject().getSemanticClass().listProperties();
@@ -1036,23 +1038,34 @@ public class BaseNode extends BaseNodeBase
                     {
                         if (property.isBinary())
                         {
+                            log.trace("Copiando propiedad "+property.getURI());
                             frozenNode.setInputStreamPropertyInternal(property, getInputStreamProperty(property));
                         }
                         else
                         {
+                            log.trace("Copiando propiedad "+property.getURI());
                             frozenNode.setPropertyInternal(property, getProperty(property));
                         }
                     }
-                    if (property.isObjectProperty() && onParentVersion.equals(ONPARENTVERSION_COPY))
+                    else if (property.isObjectProperty() && onParentVersion.equals(ONPARENTVERSION_COPY))
                     {
+                        log.trace("Copiando propiedad "+property.getURI());
                         frozenNode.getSemanticObject().setObjectProperty(property, this.getSemanticObject().getObjectProperty(property));
                     }
+                    else
+                    {
+                        log.trace("La propiedad "+property.getURI()+" no es DataTypeProperty ó ObjectProperty");
+                    }
+                }
+                else
+                {
+                    log.trace("La propiedad "+property.getURI()+" es internal y no puede ser copiada");
                 }
             }
-
         }
         else
         {
+            log.trace("El nodo "+frozenNode.getName()+" no es un frozenNode");
             throw new SWBException("The node is not a frozen node");
         }
     }
