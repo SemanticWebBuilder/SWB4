@@ -596,7 +596,11 @@
         while(it.hasNext())
         {
             OntClass cls=it.next();
-            addClass(arr, cls, ont);
+            if(!cls.isAnon())
+            {
+                //System.out.println("cls:"+cls+" "+cls.isAnon()+" "+cls.getLocalName());
+                addClass(arr, cls, ont);
+            }
         }
         addClass(arr, ont.getRDFOntModel().getOntClass(SemanticVocabulary.RDF_PROPERTY), ont);
         addClass(arr, ont.getRDFOntModel().getOntClass(SemanticVocabulary.OWL_CLASS), ont);
