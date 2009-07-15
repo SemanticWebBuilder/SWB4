@@ -1161,7 +1161,7 @@ public class SimpleNode implements Node
             {
                 Version[] versions=((VersionImp)this).getPredecessors();
                 SemanticObject newBase=((VersionImp)versions[versions.length-1]).node.getSemanticObject();
-                vh.node.getSemanticObject().setObjectProperty(org.semanticwb.repository.Versionable.jcr_baseVersion, newBase);
+                nodeParent.node.getSemanticObject().setObjectProperty(org.semanticwb.repository.Versionable.jcr_baseVersion, newBase);
             }
         }
     }
