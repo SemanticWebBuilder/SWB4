@@ -1020,7 +1020,7 @@ public class BaseNode extends BaseNodeBase
 
     private void doCopyToFrozenNode(BaseNode frozenNode) throws SWBException
     {
-        log.trace("Copiando propiedades a Nodo FrozenNode...");
+        log.trace("Copiando propiedades a Nodo FrozenNode con UDDI ..."+frozenNode.getUUID());
         if (frozenNode.isFrozenNode())
         {
             log.trace("El nodo "+frozenNode.getName()+" es un frozenNode");
