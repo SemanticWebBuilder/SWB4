@@ -1,15 +1,17 @@
 package org.semanticwb.nlp.translation;
 
-import org.semanticwb.nlp.analysis.SimpleLexer;
+import org.semanticwb.nlp.analysis.SpanishLexer;
 import org.semanticwb.nlp.analysis.ComplexParser;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.Lexer;
 import org.antlr.runtime.tree.CommonTree;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.nlp.SWBLexicon;
+import org.semanticwb.nlp.analysis.EnglishLexer;
 import org.semanticwb.nlp.spell.SWBSpellChecker;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
@@ -29,7 +31,7 @@ import org.semanticwb.platform.SemanticProperty;
 public class SWBSparqlTranslator {
 
     private ComplexParser parser;     //ANTLR parser
-    private SimpleLexer tokenizer;   //ANTLR tokenizer
+    private Lexer tokenizer;   //ANTLR tokenizer
     private SWBLexicon lex;        //Dictionary
     private CommonTokenStream tokens;   //TokenStream for parsing
     private ANTLRStringStream input;    //StringStream to parse
@@ -182,20 +184,46 @@ public class SWBSparqlTranslator {
     }
 
     /**
+     * Changes the characters of the words in the input string to lower case
+     * in order to simplify lexical analysis. Words enclosed by double quotes
+     * are not lower cased.
+     * @param input Original string.
+     * @return lower cased string.
+     */
+    public String lowerCase(String input) {
+        ANTLRStringStream sinput = new ANTLRStringStream(input);
+        Lexer stokenizer = getLocaleLexer(lex.getLanguage(), sinput);//new SpanishLexer(sinput);
+        CommonTokenStream stokens = new CommonTokenStream(stokenizer);
+        String res = "";
+        
+        org.antlr.runtime.Token tk;
+        while ((tk = stokens.LT(1)) != org.antlr.runtime.Token.EOF_TOKEN) {
+            String tkText = tk.getText().trim();
+            if (!tkText.startsWith("\"") && !tkText.endsWith("\"")) {
+                res = res + tkText.toLowerCase() + " ";
+            } else {
+                res = res + tkText + " ";
+            }
+            stokens.consume();
+        }
+        return res.trim();
+    }
+
+    /**
      * Gets a suggested query string correcting spelling errors.
-     * @param sent Original mispelled query.
+     * @param input Original mispelled query.
      * @return Query String without spelling errors or the same string if there
      * is not suggestion.
      */
-    public String didYouMean(String sent) {
+    public String didYouMean(String input) {
         String res = "";
         String[] stopWords = {"de", "of", "con", "with", "=", "<", ">",
             "<=", ">=", ",", "like", "como", "true", "false"};
 
         List<String> sw = Arrays.asList(stopWords);
 
-        ANTLRStringStream sinput = new ANTLRStringStream(sent);
-        SimpleLexer stokenizer = new SimpleLexer(sinput);
+        ANTLRStringStream sinput = new ANTLRStringStream(input);
+        SpanishLexer stokenizer = new SpanishLexer(sinput);
         CommonTokenStream stokens = new CommonTokenStream(stokenizer);
 
         if (speller == null) {
@@ -523,8 +551,8 @@ public class SWBSparqlTranslator {
     public String translateSentence(String sent) {
         String res = "";
         CommonTree sTree = null;
-        input = new ANTLRStringStream(sent);
-        tokenizer = new SimpleLexer(input);
+        input = new ANTLRStringStream(lowerCase(sent));
+        tokenizer = getLocaleLexer(lex.getLanguage(), input);
         tokens = new CommonTokenStream(tokenizer);
         parser = new ComplexParser(tokens);
 
@@ -566,5 +594,22 @@ public class SWBSparqlTranslator {
                 traverseAST(t, indent + "  ");
             }
         }
+    }
+
+    /**
+     * Gets a lexer for a specific locale. To add support for more languages,
+     * you need to add a clause to return the corresponding lexer. Default
+     * supported languages are Spanish, English and Portuguese.
+     * @param language Language of the returned lexer.
+     * @param input stream for the lexer.
+     * @return Lexer for the given language code.
+     */
+    public Lexer getLocaleLexer(String language, ANTLRStringStream input) {
+        if (language.equals("es")) {
+            return new SpanishLexer(input);
+        } else if (language.equals("en")) {
+            return new EnglishLexer(input);
+        }
+        return null;
     }
 }
