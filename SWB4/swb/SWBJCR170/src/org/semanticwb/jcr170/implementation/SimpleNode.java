@@ -1471,18 +1471,22 @@ public class SimpleNode implements Node
     }
 
     public void restore(String versionName, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
-    {
+    {        
         Version version=getVersionHistory().getVersion(versionName);
         restore(version, null, removeExisting);
     }
 
     public void restore(Version version, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, RepositoryException
-    {
+    {        
         restore(version, ".", removeExisting);
     }
 
     public void restore(Version version, String relPath, boolean removeExisting) throws PathNotFoundException, ItemExistsException, VersionException, ConstraintViolationException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
     {
+        if(version.getName().equals(BaseNode.JCR_ROOTVERSION))
+        {
+            throw new VersionException("The root version can be used as restore version");
+        }
         SimpleNode nodeTorestore=null;
         if(relPath.equals("."))
         {
