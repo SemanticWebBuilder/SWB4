@@ -1036,7 +1036,7 @@ public class SimpleNode implements Node
                 createChilds();
                 saveProperties();
                 checkVersionable();
-                modified = false;
+                modified = false;                
             }
             catch (SWBException swbe)
             {
@@ -1146,6 +1146,18 @@ public class SimpleNode implements Node
         session.removeSimpleNode(this);
         parent.modified = true;
         this.modified = true;
+        if(this.node!=null && this.node.getSemanticObject().getSemanticClass().equals(org.semanticwb.repository.Version.sclass) && this instanceof VersionImp)
+        {
+            VersionHistoryImp vh=(VersionHistoryImp)((VersionImp)this).getContainingHistory();
+            SimpleNode nodeParent=vh.parent;
+            Version base=nodeParent.getBaseVersion();
+            if(base.getName().equals(this.getName()))
+            {
+                Version[] versions=((VersionImp)this).getPredecessors();
+                SemanticObject newBase=((VersionImp)versions[versions.length-1]).node.getSemanticObject();
+                vh.node.getSemanticObject().setObjectProperty(org.semanticwb.repository.Versionable.jcr_baseVersion, newBase);
+            }
+        }
     }
 
     protected SessionImp getSessionImp()
