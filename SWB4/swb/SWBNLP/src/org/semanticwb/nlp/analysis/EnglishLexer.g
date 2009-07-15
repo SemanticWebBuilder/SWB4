@@ -1,3 +1,5 @@
+//ANTLRWorks grammar to generate an english lexer
+
 lexer grammar EnglishLexer;
 
 WHITESPACE
