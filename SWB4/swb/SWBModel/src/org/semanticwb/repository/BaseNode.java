@@ -1423,7 +1423,7 @@ public class BaseNode extends BaseNodeBase
     {
         boolean canAddAnyProperty = false;
 
-        for (SemanticObject propertyDefinition : this.getPropertyDefinition(clazz))
+        for (SemanticObject propertyDefinition : BaseNode.getPropertyDefinition(clazz))
         {
             String name = propertyDefinition.getProperty(Nameable.jcr_name);
             if (name != null)
