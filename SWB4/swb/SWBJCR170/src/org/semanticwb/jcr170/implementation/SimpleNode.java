@@ -248,7 +248,7 @@ public class SimpleNode implements Node
                 }
             }
         }
-
+        // loading declared properties
         Iterator<SemanticProperty> semanticProperties = clazz.listProperties();
         while (semanticProperties.hasNext())
         {
@@ -268,8 +268,14 @@ public class SimpleNode implements Node
                 }
                 catch (Exception e)
                 {
+                    log.debug(e);
                 }
             }
+        }
+        //loading undeclared properties
+        if(node!=null)
+        {
+            //node.getSemanticObject().
         }
         if (node.isVersionable())
         {
