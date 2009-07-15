@@ -1202,17 +1202,17 @@ public class SemanticObject
                 {
                     log.error(e);
                 }
-            } else // Movi la generación de "vals" a esta posición
-            {      // por que si esta en caché se pasaba un null al invoke - MAPS
-                if (prop.isLocaleable())
-                {
-                    vals = values;
-                } else
-                {
-                    vals = new Object[1];
-                    vals[0] = values[0];
-                }
+            }  // Movi la generación de "vals" a esta posición
+            // por que si esta en caché se pasaba un null al invoke - MAPS
+            if (prop.isLocaleable())
+            {
+                vals = values;
+            } else
+            {
+                vals = new Object[1];
+                vals[0] = values[0];
             }
+
             try
             {
                 ret = method.invoke(obj,vals);
