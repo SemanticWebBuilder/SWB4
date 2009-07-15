@@ -277,7 +277,7 @@ public class SimpleNode implements Node
         while(props.hasNext())
         {
             SemanticProperty prop=props.next();
-            addProperty(prop, node, clazz, modified);
+            addProperty(prop, node, clazz, prop.isObjectProperty());
         }
         if (node.isVersionable())
         {
