@@ -279,6 +279,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
         catch (InvocationTargetException inte)
         {
+            log.debug(inte.getTargetException());
             throw new XmlRpcException(inte.getTargetException().getLocalizedMessage(), inte.getTargetException());
         }
 
