@@ -430,11 +430,19 @@ public class SWBSparqlTranslator {
      * or a triple and a FILTER clause for the node.
      */
     private String processStatement(CommonTree root, String parent, String parentLabel) {
-        System.out.println("parent " + parent + ", root " + root.getText());
+        //System.out.println("parent " + parent + ", root " + root.getText());
         String res = "";
         String pName = assertPropertyType(root.getChild(0).getText(), parent);
         //System.out.println("verificando " + root.getChild(0).getText() + " de " + parent + " con etiqueta " + parentLabel);
-        if (root.getText().equals("ASIGN")) {
+        if (root.getText().equals("LIKE")) {
+            if (!pName.equals("")) {
+                res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        " " + pName + " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        ".\n";
+                res = res + "FILTER regex( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        ", " + root.getChild(1).getText() + ", \"i\").\n";
+            }
+        } else if (root.getText().equals("ASIGN")) {
             if (!pName.equals("")) {
                 res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
                         " " + pName + " " + root.getChild(1).getText() + ".\n";
@@ -525,7 +533,7 @@ public class SWBSparqlTranslator {
             if (parser.getErrorCount() == 0) {
                 sTree = (CommonTree) qres.getTree();
                 fixNames(sTree);
-                traverseAST(sTree, "");
+                //traverseAST(sTree, "");
                 res += processSelectQuery(sTree, parser.hasPrecon(), parser.hasPrede());
                 //System.out.println(res);
                 return res;
