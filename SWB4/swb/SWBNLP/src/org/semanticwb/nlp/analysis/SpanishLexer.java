@@ -48,9 +48,9 @@ public class SpanishLexer extends Lexer {
 
     public SpanishLexer(CharStream input, RecognizerSharedState state) {
         super(input, state);
-
     }
 
+    @Override
     public String getGrammarFileName() {
         return "/home/hasdai/Documentos/INFOTEC/SpanishLexer.g";
     }
@@ -62,20 +62,14 @@ public class SpanishLexer extends Lexer {
             int _channel = DEFAULT_TOKEN_CHANNEL;
             // /home/hasdai/Documentos/INFOTEC/SpanishLexer.g:4:2: ( ( ' ' | '\\t' | '\\f' | '\\n' | '\\r' ) )
             // /home/hasdai/Documentos/INFOTEC/SpanishLexer.g:4:4: ( ' ' | '\\t' | '\\f' | '\\n' | '\\r' )
-            {
                 if ((input.LA(1) >= '\t' && input.LA(1) <= '\n') || (input.LA(1) >= '\f' && input.LA(1) <= '\r') || input.LA(1) == ' ') {
                     input.consume();
-
                 } else {
                     MismatchedSetException mse = new MismatchedSetException(null, input);
                     recover(mse);
                     throw mse;
                 }
-
                 _channel = HIDDEN;
-
-            }
-
             state.type = _type;
             state.channel = _channel;
         } finally {
@@ -93,16 +87,12 @@ public class SpanishLexer extends Lexer {
             {
                 if (input.LA(1) == '+' || input.LA(1) == '-') {
                     input.consume();
-
                 } else {
                     MismatchedSetException mse = new MismatchedSetException(null, input);
                     recover(mse);
                     throw mse;
                 }
-
-
             }
-
             state.type = _type;
             state.channel = _channel;
         } finally {
@@ -119,9 +109,7 @@ public class SpanishLexer extends Lexer {
             // /home/hasdai/Documentos/INFOTEC/SpanishLexer.g:6:8: '<'
             {
                 match('<');
-
             }
-
             state.type = _type;
             state.channel = _channel;
         } finally {
@@ -138,9 +126,7 @@ public class SpanishLexer extends Lexer {
             // /home/hasdai/Documentos/INFOTEC/SpanishLexer.g:7:8: '>'
             {
                 match('>');
-
             }
-
             state.type = _type;
             state.channel = _channel;
         } finally {
@@ -157,9 +143,7 @@ public class SpanishLexer extends Lexer {
             // /home/hasdai/Documentos/INFOTEC/SpanishLexer.g:8:8: '='
             {
                 match('=');
-
             }
-
             state.type = _type;
             state.channel = _channel;
         } finally {
@@ -176,10 +160,7 @@ public class SpanishLexer extends Lexer {
             // /home/hasdai/Documentos/INFOTEC/SpanishLexer.g:9:9: '<='
             {
                 match("<=");
-
-
             }
-
             state.type = _type;
             state.channel = _channel;
         } finally {
@@ -196,10 +177,7 @@ public class SpanishLexer extends Lexer {
             // /home/hasdai/Documentos/INFOTEC/SpanishLexer.g:10:9: '>='
             {
                 match(">=");
-
-
             }
-
             state.type = _type;
             state.channel = _channel;
         } finally {
