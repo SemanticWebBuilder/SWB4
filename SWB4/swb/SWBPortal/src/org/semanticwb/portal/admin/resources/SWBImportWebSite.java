@@ -339,13 +339,13 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("PDFContent");
                 }
 
-                if (site.getResourceType("Blog") == null) {
-                    ResourceType ptype = site.createResourceType("Blog");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.blog.BlogResource");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.blog.BlogResource");
-                    ptype.setResourceMode(3);
-                    ptype.setTitle("Blog");
-                }
+//                if (site.getResourceType("Blog") == null) {
+//                    ResourceType ptype = site.createResourceType("Blog");
+//                    ptype.setResourceClassName("org.semanticwb.portal.resources.blog.BlogResource");
+//                    ptype.setResourceBundle("org.semanticwb.portal.resources.blog.BlogResource");
+//                    ptype.setResourceMode(3);
+//                    ptype.setTitle("Blog");
+//                }
 
                 if (site.getResourceType("Comments") == null) {
                     ResourceType ptype = site.createResourceType("Comments");
