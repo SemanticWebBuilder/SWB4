@@ -273,18 +273,29 @@ public class SimpleNode implements Node
                 }
             }
         }
+
         //loading undeclared properties
         Iterator<SemanticProperty> props = node.getSemanticObject().listProperties();
         while (props.hasNext())
         {
             SemanticProperty prop = props.next();
-            if (prop.isObjectProperty())
+            if (!node.isInternal(prop))
             {
-                addProperty(prop, node, false, clazz, true);
-            }
-            else
-            {
-                addProperty(prop, node, false, clazz, false);
+                try
+                {
+                    if (prop.isObjectProperty())
+                    {
+                        addProperty(prop, node, false, clazz, true);
+                    }
+                    else
+                    {
+                        addProperty(prop, node, false, clazz, false);
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                }
             }
         }
         if (node.isVersionable())
