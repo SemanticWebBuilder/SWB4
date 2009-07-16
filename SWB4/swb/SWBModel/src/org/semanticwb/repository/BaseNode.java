@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -468,7 +469,46 @@ public class BaseNode extends BaseNodeBase
         }
         else
         {
-            getSemanticObject().setProperty(property, value);
+            if(property.isBoolean())
+            {
+                getSemanticObject().setBooleanProperty(property, Boolean.parseBoolean(value));
+            }
+            else if(property.isLong())
+            {
+                getSemanticObject().setLongProperty(property, Long.parseLong(value));
+            }
+            else if(property.isInt())
+            {
+                getSemanticObject().setIntProperty(property, Integer.parseInt(value));
+            }
+            else if(property.isDouble())
+            {
+                getSemanticObject().setDoubleProperty(property, Double.parseDouble(value));
+            }
+            else if(property.isFloat())
+            {
+                getSemanticObject().setDoubleProperty(property, Float.parseFloat(value));
+            }
+            else if(property.isShort())
+            {
+                getSemanticObject().setDoubleProperty(property, Short.parseShort(value));
+            }
+            else if(property.isDate() || property.isDateTime())
+            {
+                try
+                {
+                    Date date = SWBUtils.TEXT.iso8601DateParse(value);
+                    getSemanticObject().setDateProperty(property,date);
+                }
+                catch(Exception e)
+                {
+                    log.error(e);
+                }
+            }
+            else
+            {
+                getSemanticObject().setProperty(property, value);
+            }
         }
     }
 
