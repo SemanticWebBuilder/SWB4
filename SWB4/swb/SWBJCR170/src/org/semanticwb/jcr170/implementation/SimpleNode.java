@@ -67,6 +67,7 @@ import org.semanticwb.repository.Versionable;
  */
 public class SimpleNode implements Node
 {
+
     private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
     private static Logger log = SWBUtils.getLogger(SimpleNode.class);
     private String id;
@@ -273,11 +274,18 @@ public class SimpleNode implements Node
             }
         }
         //loading undeclared properties
-        Iterator<SemanticProperty> props=node.getSemanticObject().listProperties();
-        while(props.hasNext())
+        Iterator<SemanticProperty> props = node.getSemanticObject().listProperties();
+        while (props.hasNext())
         {
-            SemanticProperty prop=props.next();
-            addProperty(prop, node, clazz, prop.isObjectProperty());
+            SemanticProperty prop = props.next();
+            if (prop.isObjectProperty())
+            {
+                addProperty(prop, node, false, clazz, true);
+            }
+            else
+            {
+                addProperty(prop, node, false, clazz, false);
+            }
         }
         if (node.isVersionable())
         {
@@ -539,7 +547,7 @@ public class SimpleNode implements Node
         {
             if (!getPrimaryNodeType().canSetProperty(name, value))
             {
-                throw new ConstraintViolationException("The property " + name + " is not defined in this nodeType("+getPrimaryNodeType().getName()+")");
+                throw new ConstraintViolationException("The property " + name + " is not defined in this nodeType(" + getPrimaryNodeType().getName() + ")");
             }
             property = addProperty(name);
             property.setValue(value);
@@ -681,7 +689,7 @@ public class SimpleNode implements Node
         }
         else
         {
-            throw new PathNotFoundException("The property " + relPath + WAS_NOT_FOUND+" for the NodeType("+getPrimaryNodeType().getName()+")");
+            throw new PathNotFoundException("The property " + relPath + WAS_NOT_FOUND + " for the NodeType(" + getPrimaryNodeType().getName() + ")");
         }
     }
 
@@ -1044,7 +1052,7 @@ public class SimpleNode implements Node
                 createChilds();
                 saveProperties();
                 checkVersionable();
-                modified = false;                
+                modified = false;
             }
             catch (SWBException swbe)
             {
@@ -1154,15 +1162,15 @@ public class SimpleNode implements Node
         session.removeSimpleNode(this);
         parent.modified = true;
         this.modified = true;
-        if(this.node!=null && this.node.getSemanticObject().getSemanticClass().equals(org.semanticwb.repository.Version.sclass) && this instanceof VersionImp)
+        if (this.node != null && this.node.getSemanticObject().getSemanticClass().equals(org.semanticwb.repository.Version.sclass) && this instanceof VersionImp)
         {
-            VersionHistoryImp vh=(VersionHistoryImp)((VersionImp)this).getContainingHistory();
-            SimpleNode nodeParent=vh.parent;
-            Version base=nodeParent.getBaseVersion();
-            if(base.getName().equals(this.getName()))
+            VersionHistoryImp vh = (VersionHistoryImp) ((VersionImp) this).getContainingHistory();
+            SimpleNode nodeParent = vh.parent;
+            Version base = nodeParent.getBaseVersion();
+            if (base.getName().equals(this.getName()))
             {
-                Version[] versions=((VersionImp)this).getPredecessors();
-                SemanticObject newBase=((VersionImp)versions[versions.length-1]).node.getSemanticObject();
+                Version[] versions = ((VersionImp) this).getPredecessors();
+                SemanticObject newBase = ((VersionImp) versions[versions.length - 1]).node.getSemanticObject();
                 nodeParent.node.getSemanticObject().setObjectProperty(org.semanticwb.repository.Versionable.jcr_baseVersion, newBase);
             }
         }
@@ -1470,7 +1478,7 @@ public class SimpleNode implements Node
             }
             else
             {
-                RepositoryException re=new RepositoryException("The base version was not found, internal error");
+                RepositoryException re = new RepositoryException("The base version was not found, internal error");
                 log.debug(re);
                 throw re;
             }
@@ -1479,49 +1487,49 @@ public class SimpleNode implements Node
     }
 
     public void restore(String versionName, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
-    {        
-        Version version=getVersionHistory().getVersion(versionName);
+    {
+        Version version = getVersionHistory().getVersion(versionName);
         restore(version, null, removeExisting);
     }
 
     public void restore(Version version, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, RepositoryException
-    {        
+    {
         restore(version, ".", removeExisting);
     }
 
     public void restore(Version version, String relPath, boolean removeExisting) throws PathNotFoundException, ItemExistsException, VersionException, ConstraintViolationException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
     {
-        if(version.getName().equals(BaseNode.JCR_ROOTVERSION))
+        if (version.getName().equals(BaseNode.JCR_ROOTVERSION))
         {
             throw new VersionException("The root version can be used as restore version");
         }
-        SimpleNode nodeTorestore=null;
-        if(relPath.equals("."))
+        SimpleNode nodeTorestore = null;
+        if (relPath.equals("."))
         {
-            nodeTorestore=this;
+            nodeTorestore = this;
         }
         else
         {
-            throw new RepositoryException("The method restore with path "+relPath+" is not defined");
+            throw new RepositoryException("The method restore with path " + relPath + " is not defined");
         }
-        if(nodeTorestore==null)
+        if (nodeTorestore == null)
         {
-            throw new PathNotFoundException("The node with path "+ relPath +" was not found");
+            throw new PathNotFoundException("The node with path " + relPath + " was not found");
         }
         else
         {
-            Node nodeFrozen=version.getNode(JCR_FROZENNODE_NAME);
-            PropertyIterator it= nodeFrozen.getProperties();
-            while(it.hasNext())
+            Node nodeFrozen = version.getNode(JCR_FROZENNODE_NAME);
+            PropertyIterator it = nodeFrozen.getProperties();
+            while (it.hasNext())
             {
-                Property prop=it.nextProperty();
-                if(this.existsProperty(prop.getName()) && !prop.getDefinition().isProtected())
+                Property prop = it.nextProperty();
+                if (this.existsProperty(prop.getName()) && !prop.getDefinition().isProtected())
                 {
-                    log.trace("restoring property "+prop.getName());
+                    log.trace("restoring property " + prop.getName());
                     this.setProperty(prop.getName(), prop.getValues());
                 }
             }
-            if(removeExisting)
+            if (removeExisting)
             {
                 version.remove();
             }
@@ -1529,8 +1537,8 @@ public class SimpleNode implements Node
     }
 
     public void restoreByLabel(String label, boolean removeExisting) throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException, LockException, InvalidItemStateException, RepositoryException
-    {        
-        Version version=getVersionHistory().getVersionByLabel(label);
+    {
+        Version version = getVersionHistory().getVersionByLabel(label);
         restore(version, removeExisting);
     }
 
@@ -1628,7 +1636,7 @@ public class SimpleNode implements Node
             try
             {
                 addProperty(getName(Versionable.jcr_isCheckedOut)).setValueInternal(false);
-                if(node!=null)
+                if (node != null)
                 {
                     node.getSemanticObject().setBooleanProperty(Versionable.jcr_isCheckedOut, false);
                 }
@@ -1653,9 +1661,9 @@ public class SimpleNode implements Node
                 throw new UnsupportedRepositoryOperationException("The node must be saved before, because has changes or is new");
             }
 
-            PropertyImp jcr_isCheckedOut=addProperty(getName(Versionable.jcr_isCheckedOut));
+            PropertyImp jcr_isCheckedOut = addProperty(getName(Versionable.jcr_isCheckedOut));
             jcr_isCheckedOut.setValueInternal(true);
-            if(node!=null)
+            if (node != null)
             {
                 node.getSemanticObject().setBooleanProperty(Versionable.jcr_isCheckedOut, true);
             }
