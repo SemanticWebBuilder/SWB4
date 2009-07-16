@@ -608,7 +608,25 @@ public class BaseNode extends BaseNodeBase
         {
             throw new SWBException("the property " + property.getPrefix() + ":" + property.getName() + " is internal");
         }
-        getProperty = getSemanticObject().getProperty(property);
+        if(property.isDataTypeProperty())
+        {
+            if(property.isDate() || property.isDateTime())
+            {
+                Date date= getSemanticObject().getDateProperty(property);
+                getProperty=SWBUtils.TEXT.iso8601DateFormat(date);
+            }
+            else
+            {
+                getProperty = getSemanticObject().getProperty(property);
+            }
+
+        }
+        else
+        {
+            SWBException swbe=new SWBException("The property is an object property and can not be transform to String");
+            log.trace(swbe);
+            throw swbe;
+        }
         return getProperty;
     }
 
