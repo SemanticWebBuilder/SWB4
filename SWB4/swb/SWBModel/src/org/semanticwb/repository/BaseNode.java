@@ -469,38 +469,38 @@ public class BaseNode extends BaseNodeBase
         }
         else
         {
-            if(property.isBoolean())
+            if (property.isBoolean())
             {
                 getSemanticObject().setBooleanProperty(property, Boolean.parseBoolean(value));
             }
-            else if(property.isLong())
+            else if (property.isLong())
             {
                 getSemanticObject().setLongProperty(property, Long.parseLong(value));
             }
-            else if(property.isInt())
+            else if (property.isInt())
             {
                 getSemanticObject().setIntProperty(property, Integer.parseInt(value));
             }
-            else if(property.isDouble())
+            else if (property.isDouble())
             {
                 getSemanticObject().setDoubleProperty(property, Double.parseDouble(value));
             }
-            else if(property.isFloat())
+            else if (property.isFloat())
             {
                 getSemanticObject().setDoubleProperty(property, Float.parseFloat(value));
             }
-            else if(property.isShort())
+            else if (property.isShort())
             {
                 getSemanticObject().setDoubleProperty(property, Short.parseShort(value));
             }
-            else if(property.isDate() || property.isDateTime())
+            else if (property.isDate() || property.isDateTime())
             {
                 try
                 {
                     Date date = SWBUtils.TEXT.iso8601DateParse(value);
-                    getSemanticObject().setDateProperty(property,date);
+                    getSemanticObject().setDateProperty(property, date);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     log.error(e);
                 }
@@ -729,7 +729,7 @@ public class BaseNode extends BaseNodeBase
         for (SemanticObject nodeDefinition : getChildNodeDefinition(clazz))
         {
             String name = nodeDefinition.getProperty(ChildNodeDefinition.jcr_name);
-            if (name!=null && name.equals(nodeName))
+            if (name != null && name.equals(nodeName))
             {
                 return nodeDefinition;
             }
@@ -737,7 +737,7 @@ public class BaseNode extends BaseNodeBase
         for (SemanticObject nodeDefinition : getChildNodeDefinition(clazz))
         {
             String name = nodeDefinition.getProperty(ChildNodeDefinition.jcr_name);
-            if (name!=null && name.equals("*"))
+            if (name != null && name.equals("*"))
             {
                 return nodeDefinition;
             }
@@ -774,7 +774,7 @@ public class BaseNode extends BaseNodeBase
         {
             String name = nodeDefinition.getProperty(Nameable.jcr_name);
             String requiredType = nodeDefinition.getProperty(ChildNodeDefinition.jcr_requiredPrimaryTypes);
-            if (name!=null && name.equals(nameTocreate) && requiredType != null)
+            if (name != null && name.equals(nameTocreate) && requiredType != null)
             {
                 try
                 {
@@ -795,7 +795,7 @@ public class BaseNode extends BaseNodeBase
             }
             if (!allowsSameNameSiblings)
             {
-                if (name!=null && name.equals("*") && requiredType != null)
+                if (name != null && name.equals("*") && requiredType != null)
                 {
                     try
                     {
@@ -1060,10 +1060,10 @@ public class BaseNode extends BaseNodeBase
 
     private void doCopyToFrozenNode(BaseNode frozenNode) throws SWBException
     {
-        log.trace("Copiando propiedades a Nodo FrozenNode con UDDI ..."+frozenNode.getUUID());
+        log.trace("Copiando propiedades a Nodo FrozenNode con UDDI ..." + frozenNode.getUUID());
         if (frozenNode.isFrozenNode())
         {
-            log.trace("El nodo "+frozenNode.getName()+" es un frozenNode");
+            log.trace("El nodo " + frozenNode.getName() + " es un frozenNode");
             initializeFrozenProperties(frozenNode.getSemanticObject());
             doCopy(this, frozenNode);
             Iterator<SemanticProperty> properties = this.getSemanticObject().getSemanticClass().listProperties();
@@ -1078,34 +1078,34 @@ public class BaseNode extends BaseNodeBase
                     {
                         if (property.isBinary())
                         {
-                            log.trace("Copiando propiedad "+property.getURI());
+                            log.trace("Copiando propiedad " + property.getURI());
                             frozenNode.setInputStreamPropertyInternal(property, getInputStreamProperty(property));
                         }
                         else
                         {
-                            log.trace("Copiando propiedad "+property.getURI());
+                            log.trace("Copiando propiedad " + property.getURI());
                             frozenNode.setPropertyInternal(property, getProperty(property));
                         }
                     }
                     else if (property.isObjectProperty() && onParentVersion.equals(ONPARENTVERSION_COPY))
                     {
-                        log.trace("Copiando propiedad "+property.getURI());
+                        log.trace("Copiando propiedad " + property.getURI());
                         frozenNode.getSemanticObject().setObjectProperty(property, this.getSemanticObject().getObjectProperty(property));
                     }
                     else
                     {
-                        log.trace("La propiedad "+property.getURI()+" no es DataTypeProperty ó ObjectProperty");
+                        log.trace("La propiedad " + property.getURI() + " no es DataTypeProperty ó ObjectProperty");
                     }
                 }
                 else
                 {
-                    log.trace("La propiedad "+property.getURI()+" es internal y no puede ser copiada");
+                    log.trace("La propiedad " + property.getURI() + " es internal y no puede ser copiada");
                 }
             }
         }
         else
         {
-            log.trace("El nodo "+frozenNode.getName()+" no es un frozenNode");
+            log.trace("El nodo " + frozenNode.getName() + " no es un frozenNode");
             throw new SWBException("The node is not a frozen node");
         }
     }
@@ -1479,9 +1479,9 @@ public class BaseNode extends BaseNodeBase
 
     }
 
-    public static String getRequiredProperty(SemanticObject object,SemanticProperty prop)
+    public static String getRequiredProperty(SemanticObject object, SemanticProperty prop)
     {
-        if(object.getSemanticClass().getRequiredProperty(prop)!=null)
+        if (object.getSemanticClass().getRequiredProperty(prop) != null)
         {
             return object.getSemanticClass().getRequiredProperty(prop).getString();
         }
@@ -1490,6 +1490,7 @@ public class BaseNode extends BaseNodeBase
             return null;
         }
     }
+
     public static SemanticObject[] getPropertyDefinition(SemanticClass clazz)
     {
         ArrayList<SemanticObject> propertyDefinitions = new ArrayList<SemanticObject>();
@@ -1684,10 +1685,21 @@ public class BaseNode extends BaseNodeBase
                 SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
                 if (prop != null)
                 {
-                    String value = getSemanticObject().getProperty(prop);
-                    if (value != null)
+                    if (prop.isDataTypeProperty())
                     {
-                        existsProperty = true;
+                        String value = getSemanticObject().getProperty(prop);
+                        if (value != null)
+                        {
+                            existsProperty = true;
+                        }
+                    }
+                    else
+                    {
+                        SemanticObject value=getSemanticObject().getObjectProperty(prop);
+                        if (value != null)
+                        {
+                            existsProperty = true;
+                        }
                     }
                 }
             }
@@ -1725,7 +1737,7 @@ public class BaseNode extends BaseNodeBase
                     }
                     else
                     {
-                        if(namespace.endsWith("#"))
+                        if (namespace.endsWith("#"))
                         {
                             uri = namespace + values[1];
                         }
