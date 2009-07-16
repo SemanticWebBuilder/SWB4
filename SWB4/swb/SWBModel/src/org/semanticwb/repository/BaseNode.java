@@ -497,6 +497,7 @@ public class BaseNode extends BaseNodeBase
             {
                 try
                 {
+                    log.trace("Property value to set a date is "+value);
                     Date date = SWBUtils.TEXT.iso8601DateParse(value);
                     getSemanticObject().setDateProperty(property, date);
                 }
@@ -614,6 +615,7 @@ public class BaseNode extends BaseNodeBase
             {
                 Date date= getSemanticObject().getDateProperty(property);
                 getProperty=SWBUtils.TEXT.iso8601DateFormat(date);
+                log.trace("Property value of date is "+getProperty);
             }
             else
             {
