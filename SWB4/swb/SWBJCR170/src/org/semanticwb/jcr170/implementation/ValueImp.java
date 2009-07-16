@@ -28,8 +28,7 @@ public class ValueImp implements Value
 {
 
     static Logger log = SWBUtils.getLogger(ValueImp.class);
-    private static SimpleDateFormat iso8601dateFormat =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-    //private static SimpleDateFormat iso8601dateFormat =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private static SimpleDateFormat iso8601dateFormat =  new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");    
     private final int type;
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     Object value;
