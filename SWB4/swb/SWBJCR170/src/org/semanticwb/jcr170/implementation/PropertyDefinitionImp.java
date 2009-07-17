@@ -12,6 +12,7 @@ import javax.jcr.version.OnParentVersionAction;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.repository.BaseNode;
 
 /**
  *
@@ -34,7 +35,7 @@ public class PropertyDefinitionImp implements PropertyDefinition
     PropertyDefinitionImp(SessionImp session, SemanticProperty property)
     {
         this.name = property.getPrefix() + ":" + property.getName();
-        multiple = session.getRootBaseNode().isMultiple(property);
+        multiple = BaseNode.isMultiple(property);
         int type = PropertyType.UNDEFINED;
         if ( property.isObjectProperty() )
         {
