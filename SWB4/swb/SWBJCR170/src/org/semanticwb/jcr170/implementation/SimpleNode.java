@@ -279,7 +279,7 @@ public class SimpleNode implements Node
         while (props.hasNext())
         {
             SemanticProperty prop = props.next();
-            if (!prop.getPrefix().equals("rdf") && !node.isInternal(prop))
+            if (!node.isInternal(prop))
             {
                 try
                 {
@@ -287,7 +287,7 @@ public class SimpleNode implements Node
                     {
                         addProperty(prop, node, false, clazz, true);
                     }
-                    else
+                    else if (prop.isDataTypeProperty())
                     {
                         addProperty(prop, node, false, clazz, false);
                     }
