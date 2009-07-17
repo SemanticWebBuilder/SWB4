@@ -613,12 +613,12 @@
     <rdfs:domain rdf:resource="#ClassDefinition"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.jcp.org/jcr/1.0#frozenUuid">
-    <jcr:requiredType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >STRING</jcr:requiredType>
+    <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ABORT</jcr:onParentVersion>
     <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</jcr:protected>
-    <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >STRING</jcr:onParentVersion>
+    <jcr:requiredType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >STRING</jcr:requiredType>
     <jcr:multiple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</jcr:multiple>
     <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
