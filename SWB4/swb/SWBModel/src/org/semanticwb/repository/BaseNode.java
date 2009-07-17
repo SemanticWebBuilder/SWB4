@@ -1753,8 +1753,7 @@ public class BaseNode extends BaseNodeBase
                     uri = this.getURI().replaceAll("#", "/") + "#" + name;
                 }
                 else
-                {
-                    log.trace("prefix to get the uri "+values[0]);
+                {                    
                     String namespace = listUris().get(values[0]);
                     if (namespace == null)
                     {
