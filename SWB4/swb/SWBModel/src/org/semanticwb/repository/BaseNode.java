@@ -33,8 +33,7 @@ public class BaseNode extends BaseNodeBase
     private static final String JCR_VERSIONLABELS_NAME = "jcr:versionLabels";
     private static final String ONPARENTVERSION_COPY = "COPY";
     private static final String ONPARENTVERSION_VERSION = "VERSION";
-    private static final String WAS_NOT_FOUND = " was not found";
-    private static SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private static final String WAS_NOT_FOUND = " was not found";    
 
 
     static
@@ -1462,7 +1461,7 @@ public class BaseNode extends BaseNodeBase
             SemanticProperty jcr_created = Traceable.jcr_created;
             if (jcr_created != null)
             {
-                String value = iso8601dateFormat.format(Calendar.getInstance().getTime());
+                String value = SWBUtils.TEXT.iso8601DateFormat(Calendar.getInstance().getTime());
                 setPropertyInternal(jcr_created, value);
             }
         }
