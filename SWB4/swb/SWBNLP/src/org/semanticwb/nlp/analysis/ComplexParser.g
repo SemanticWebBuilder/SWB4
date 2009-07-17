@@ -1,15 +1,14 @@
-parser grammar ComplexParser;
+parser grammar nested;
 
 options {
 	backtrack = true;
-	tokenVocab = SpanishLexer;
+	tokenVocab = sLexer;
 	output = AST;
 }
 
 tokens {
-	LIMIT; SELECT; ASIGN; COMPL; COMPG; COMPLE; COMPGE;
+	LIMIT; SELECT; ASIGN; COMPL; COMPG; COMPLE; COMPGE; COMPAS;
 	PRECON; PREDE; OFFSET; ORDER; COMPNAME; MODTO; NAME;
-	ADJASIGN; PREEN; LIKE;
 }
 
 @members {
@@ -83,9 +82,6 @@ ordterm
 oquery
 :	//sent
 	|name
-	|name PREN name -> ^(PREEN name name)
-	|name PREN name PREC querylist -> ^(PRECON ^(PREEN name name) querylist)
-	|name name PREC querylist {precon = true;} -> ^(PRECON ^(ADJASIGN name name)querylist)
 	|name PREC querylist {precon = true;} -> ^(name ^(PRECON querylist))
 	|LPAR! oquery RPAR!
 ;
@@ -101,7 +97,6 @@ querylist
 /*A properties query is a list of properties of an object. The object could have more properties.*/
 pquery
 :	plist PRED oquery {prede = true;} -> ^(oquery ^(PREDE plist))
-	//|name PRED pquery {prede = true;} -> ^(
 	|MODT PRED oquery {prede = true;} -> ^(oquery ^(PREDE MODTO))
 ;
 
@@ -128,10 +123,8 @@ sent
 	|name SIGLE val -> ^(COMPLE name val)
 	|VAR SIGGE val -> ^(COMPGE VAR val)
 	|name SIGGE val -> ^(COMPGE name val)
-	|VAR MODC val -> ^(LIKE VAR val)
-	|name MODC val -> ^(LIKE name val)
-	|name val -> ^(ASIGN name val)
-	|NUM name -> ^(ASIGN name NUM)
+        |VAR MODC val -> ^(COMPAS VAR val)
+        |name MODC val -> ^(COMPAS name val)
 ;
 
 /*A value can be a literal (double quoted strings), a boolean or a num*/
