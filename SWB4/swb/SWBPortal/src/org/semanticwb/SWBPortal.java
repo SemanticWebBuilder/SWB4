@@ -952,7 +952,7 @@ public class SWBPortal {
         }
 
         public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, String attributeName, int size, String cad) throws ServletException, IOException {
-            final int width = 200;
+            final int width = 150;
             final int height = 60;
 
             String cadena = null;
@@ -975,11 +975,11 @@ public class SWBPortal {
             g.setFont(f);
             g.drawString(cadena, 15, 30);
 
-            for (int i = 0; i <= width; i += 19) {
+            for (int i = 0; i <= width; i += 17) {
                 g.drawLine(i, 0, i, height);
             }
             for (int i = 0; i <= height; i += 19) {
-                g.drawLine(0, i, width, i);
+                g.drawLine(0, i, width-1, i);
             }
 
             try {
