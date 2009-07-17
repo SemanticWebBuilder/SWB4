@@ -74,7 +74,7 @@ public class SWBADBNatural extends GenericResource {
         }
 
         //Create lexicon for NLP
-        lex = new SWBLexicon(lang, "");
+        lex = new SWBLexicon(lang);
 
         //Assert query string
         query = (query == null?"":query.trim());
