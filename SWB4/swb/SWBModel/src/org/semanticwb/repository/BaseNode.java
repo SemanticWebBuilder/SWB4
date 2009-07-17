@@ -44,6 +44,11 @@ public class BaseNode extends BaseNodeBase
         namespaces.put("cm", "http://www.semanticwb.org.mx/swb4/content");
         namespaces.put("swbrep", "http://www.semanticwebbuilder.org/swb4/repository");
         namespaces.put("swb", "http://www.semanticwebbuilder.org/swb4/ontology");
+        namespaces.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns");
+        namespaces.put("owl", "http://www.w3.org/2002/07/owl");
+        namespaces.put("xsd", "http://www.w3.org/2001/XMLSchema");
+        namespaces.put("rdfs", "http://www.w3.org/2000/01/rdf-schema");
+        namespaces.put("swbxf", "http://www.semanticwebbuilder.org/swb4/xforms/ontology");
     }
 
     public BaseNode(SemanticObject base)
@@ -1820,7 +1825,6 @@ public class BaseNode extends BaseNodeBase
 
     public static Hashtable<String, String> listUris()
     {
-
         Iterator<SemanticClass> tpcit = nt_BaseNode.listSubClasses();
         while (tpcit.hasNext())
         {
