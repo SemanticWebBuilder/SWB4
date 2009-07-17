@@ -22,6 +22,8 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -86,12 +88,12 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
-                lex = new SWBLexicon(lang, "");
+                lex = new SWBLexicon(lang);
             }
         } else {
             if (!lang.equals("es")) {
                 lang = "es";
-                lex = new SWBLexicon(lang, "");
+                lex = new SWBLexicon(lang);
             }
         }
 
@@ -101,6 +103,7 @@ public class SemanticSearch extends GenericAdmResource {
         query = (query == null?"":query.trim());
 
         rUrl.setMode("SUGGEST");
+        rUrl.setParameter("prefixes", "swb,swbc");
         rUrl.setCallMethod(rUrl.Call_DIRECT);
 
         sbf.append("      <script type=\"text/javascript\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n" +
@@ -439,6 +442,17 @@ public class SemanticSearch extends GenericAdmResource {
         //SWBLexicon lex = new SWBLexicon(lan);
         StringBuffer sbf = new StringBuffer();
 
+        String px = request.getParameter("prefixes");
+        if (px == null) {
+            px = "";
+        }
+
+        ArrayList<String> lprex = null;
+
+        if (!px.equals("")) {
+            lprex = new ArrayList(Arrays.asList(px.trim().split(",")));
+        }
+
         response.setContentType("text/html; charset=utf-8");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -586,12 +600,12 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
-                lex = new SWBLexicon(lang, "");
+                lex = new SWBLexicon(lang);
             }
         } else {
             if (!lang.equals("es")) {
                 lang = "es";
-                lex = new SWBLexicon(lang, "");
+                lex = new SWBLexicon(lang);
             }
         }
 
