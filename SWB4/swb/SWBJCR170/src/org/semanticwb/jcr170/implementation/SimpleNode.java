@@ -541,7 +541,7 @@ public class SimpleNode implements Node
         return nodeDefinition;
     }
 
-    public Property setProperty(String name, Value[] value, int arg2) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, Value[] value, int type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         session.checksLock(this);
         if (!isCheckedOut())
@@ -1229,7 +1229,7 @@ public class SimpleNode implements Node
         throw new UnsupportedRepositoryOperationException("The node " + this.getName() + " is not lockable or is not locked");
     }
 
-    public Property setProperty(String name, String[] value, int arg2) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, String[] value, int type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         Value[] values = new Value[value.length];
         int i = 0;
@@ -1250,7 +1250,7 @@ public class SimpleNode implements Node
         return setProperty(name, values, 0);
     }
 
-    public Property setProperty(String name, String value, int arg2) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, String value, int type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         Value[] values =
         {
@@ -1454,13 +1454,13 @@ public class SimpleNode implements Node
         return setProperty(name, value, 0);
     }
 
-    public Property setProperty(String name, Value value, int arg2) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, Value value, int type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         Value[] values =
         {
             value
         };
-        return setProperty(name, values, arg2);
+        return setProperty(name, values, type);
     }
 
     public Property setProperty(String name, Value[] value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
