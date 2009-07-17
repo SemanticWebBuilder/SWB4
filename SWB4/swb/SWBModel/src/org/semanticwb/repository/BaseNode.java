@@ -495,7 +495,7 @@ public class BaseNode extends BaseNodeBase
             }
             else if (property.isShort())
             {
-                getSemanticObject().setDoubleProperty(property, Short.parseShort(value));
+                getSemanticObject().setIntProperty(property, Short.parseShort(value));
             }
             else if (property.isDate() || property.isDateTime())
             {
@@ -1109,6 +1109,7 @@ public class BaseNode extends BaseNodeBase
                         {
                             log.trace("Copiando propiedad " + property.getURI());
                             frozenNode.setPropertyInternal(property, getProperty(property));
+
                         }
                     }
                     else if (property.isObjectProperty() && onParentVersion.equals(ONPARENTVERSION_COPY))
