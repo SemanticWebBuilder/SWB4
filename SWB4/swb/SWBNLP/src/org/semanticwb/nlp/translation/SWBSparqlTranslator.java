@@ -1,6 +1,5 @@
 package org.semanticwb.nlp.translation;
 
-import org.semanticwb.nlp.analysis.SpanishLexer;
 import org.semanticwb.nlp.analysis.ComplexParser;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -12,6 +11,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.nlp.SWBLexicon;
 import org.semanticwb.nlp.analysis.EnglishLexer;
+import org.semanticwb.nlp.analysis.SpanishLexer;
 import org.semanticwb.nlp.spell.SWBSpellChecker;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
@@ -35,7 +35,7 @@ public class SWBSparqlTranslator {
     private SWBLexicon lex;        //Dictionary
     private CommonTokenStream tokens;   //TokenStream for parsing
     private ANTLRStringStream input;    //StringStream to parse
-    private String nodeLabels = "SELECT|PRECON|PREDE|ASIGN|COMPL|COMPG|COMPLE|COMPGE|OFFSET|LIMIT|ORDER|LIKE";
+    private String nodeLabels = "SELECT|PRECON|PREDE|ASIGN|COMPL|COMPG|COMPLE|COMPGE|OFFSET|LIMIT|ORDER|LIKE|COMPRNG|INTERVAL";
     private String eLog = "";   //Error log
     private int errCode = 0;    //Last error code
     private SWBSpellChecker speller = null;
@@ -184,45 +184,19 @@ public class SWBSparqlTranslator {
     }
 
     /**
-     * Changes the characters of the words in the input string to lower case
-     * in order to simplify lexical analysis. Words enclosed by double quotes
-     * are not lower cased.
-     * @param input Original string.
-     * @return lower cased string.
-     */
-    public String lowerCase(String input) {
-        ANTLRStringStream sinput = new ANTLRStringStream(input);
-        Lexer stokenizer = getLocaleLexer(lex.getLanguage(), sinput);//new SpanishLexer(sinput);
-        CommonTokenStream stokens = new CommonTokenStream(stokenizer);
-        String res = "";
-        
-        org.antlr.runtime.Token tk;
-        while ((tk = stokens.LT(1)) != org.antlr.runtime.Token.EOF_TOKEN) {
-            String tkText = tk.getText().trim();
-            if (!tkText.startsWith("\"") && !tkText.endsWith("\"")) {
-                res = res + tkText.toLowerCase() + " ";
-            } else {
-                res = res + tkText + " ";
-            }
-            stokens.consume();
-        }
-        return res.trim();
-    }
-
-    /**
      * Gets a suggested query string correcting spelling errors.
-     * @param input Original mispelled query.
+     * @param sent Original mispelled query.
      * @return Query String without spelling errors or the same string if there
      * is not suggestion.
      */
-    public String didYouMean(String input) {
+    public String didYouMean(String sent) {
         String res = "";
         String[] stopWords = {"de", "of", "con", "with", "=", "<", ">",
             "<=", ">=", ",", "like", "como", "true", "false"};
 
         List<String> sw = Arrays.asList(stopWords);
 
-        ANTLRStringStream sinput = new ANTLRStringStream(input);
+        ANTLRStringStream sinput = new ANTLRStringStream(sent);
         Lexer stokenizer = getLocaleLexer(lex.getLanguage(), sinput);
         CommonTokenStream stokens = new CommonTokenStream(stokenizer);
 
@@ -342,7 +316,8 @@ public class SWBSparqlTranslator {
                 }
             }
         } else if (nname.equals("ASIGN") || nname.equals("COMPG") || nname.equals("COMPL") ||
-                nname.equals("COMPLE") || nname.equals("COMPGE") || nname.equals("LIKE")) {
+                nname.equals("COMPLE") || nname.equals("COMPGE") || nname.equals("LIKE") ||
+                nname.equals("COMPRNG")) {
             res = res + processStatement(root, parent, parentLabel);
         } else if (nname.equals("PREDE")) {
             if (!root.getChild(0).getText().equals("MODTO")) {
@@ -458,22 +433,31 @@ public class SWBSparqlTranslator {
      * or a triple and a FILTER clause for the node.
      */
     private String processStatement(CommonTree root, String parent, String parentLabel) {
-        //System.out.println("parent " + parent + ", root " + root.getText());
         String res = "";
         String pName = assertPropertyType(root.getChild(0).getText(), parent);
         //System.out.println("verificando " + root.getChild(0).getText() + " de " + parent + " con etiqueta " + parentLabel);
-        if (root.getText().equals("LIKE")) {
+        if (root.getText().equals("ASIGN")) {
+            if (!pName.equals("")) {
+                res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        " " + pName + " " + root.getChild(1).getText() + ".\n";
+            }
+        } else if (root.getText().equals("LIKE")) {
             if (!pName.equals("")) {
                 res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
                         " " + pName + " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
                         ".\n";
                 res = res + "FILTER regex( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
-                        ", " + root.getChild(1).getText() + ", \"i\").\n";
+                        ", "+ root.getChild(1).getText() +", \"i\").\n";
             }
-        } else if (root.getText().equals("ASIGN")) {
+        } else if (root.getText().equals("COMPRNG")) {
             if (!pName.equals("")) {
                 res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
-                        " " + pName + " " + root.getChild(1).getText() + ".\n";
+                        " " + pName + " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        ".\n";
+                res = res + "FILTER ( ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
+                        " >= " + root.getChild(1).getChild(0).getText() + " && ?v_" +
+                        root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " <= " +
+                        root.getChild(1).getChild(1).getText() +").\n";
             }
         } else if (root.getText().equals("COMPL")) {
             if (!pName.equals("")) {
@@ -551,7 +535,7 @@ public class SWBSparqlTranslator {
     public String translateSentence(String sent) {
         String res = "";
         CommonTree sTree = null;
-        input = new ANTLRStringStream(lowerCase(sent));
+        input = new ANTLRStringStream(sent);
         tokenizer = getLocaleLexer(lex.getLanguage(), input);
         tokens = new CommonTokenStream(tokenizer);
         parser = new ComplexParser(tokens);
@@ -597,17 +581,17 @@ public class SWBSparqlTranslator {
     }
 
     /**
-     * Gets a lexer for a specific locale. To add support for more languages,
-     * you need to add a clause to return the corresponding lexer. Default
-     * supported languages are Spanish, English and Portuguese.
-     * @param language Language of the returned lexer.
-     * @param input stream for the lexer.
-     * @return Lexer for the given language code.
+     * Gets a custom lexer for a specific language. To add support for more
+     * languages you should create a 'Lang'Lexer class (where lang stands for
+     * your language name) and add astatement to this method to return such lexer.
+     * @param langCode code of the language to create a lexer for.
+     * @param input ANTLRStringStream to analyze.
+     * @return Specific lexer for the given language.
      */
-    public Lexer getLocaleLexer(String language, ANTLRStringStream input) {
-        if (language.equals("es")) {
+    public Lexer getLocaleLexer(String langCode, ANTLRStringStream input) {
+        if (langCode.equals("es")) {
             return new SpanishLexer(input);
-        } else if (language.equals("en")) {
+        } else if (langCode.equals("en")) {
             return new EnglishLexer(input);
         }
         return null;
