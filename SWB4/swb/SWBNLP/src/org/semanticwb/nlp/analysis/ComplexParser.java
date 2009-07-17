@@ -10,128 +10,125 @@ package org.semanticwb.nlp.analysis;
  * 
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
-// $ANTLR 3.1.2 /home/hasdai/Documentos/INFOTEC/ComplexParser.g 2009-07-15 13:30:40
+// $ANTLR 3.1.2 /home/hasdai/Documentos/INFOTEC/ComplexParser.g 2009-07-17 11:16:40
+
 import org.antlr.runtime.*;
 
 import org.antlr.runtime.tree.*;
 
 public class ComplexParser extends Parser {
-
-    public static final String[] tokenNames = new String[]{
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "WHITESPACE", "SIGN", "SIGL", "SIGG", "SIGE", "SIGLE", "SIGGE", "PREC", "MODT", "PRED", "PREN", "MODE", "MODO", "MODC", "BOL", "NUM", "LIT", "LBRK", "RBRK", "BVAR", "ORDOP", "VAR", "LPAR", "RPAR", "DEL", "SIGI", "LIMIT", "SELECT", "ASIGN", "COMPL", "COMPG", "COMPLE", "COMPGE", "PRECON", "PREDE", "OFFSET", "ORDER", "COMPNAME", "MODTO", "NAME", "ADJASIGN", "PREEN", "LIKE"
+    public static final String[] tokenNames = new String[] {
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "WHITESPACE", "SIGN", "SIGL", "SIGG", "SIGE", "SIGLE", "SIGGE", "PREC", "MODT", "PRED", "PREN", "MODE", "MODN", "MODO", "MODC", "BOL", "NUM", "LIT", "LBRK", "RBRK", "BVAR", "ORDOP", "DELY", "VAR", "LPAR", "RPAR", "DEL", "SIGI", "LIMIT", "SELECT", "ASIGN", "COMPL", "COMPG", "COMPLE", "COMPGE", "COMPAS", "PRECON", "PREDE", "OFFSET", "ORDER", "COMPNAME", "MODTO", "NAME", "COMPRNG", "INTERVAL"
     };
-    public static final int SIGL = 6;
-    public static final int PREC = 11;
-    public static final int LPAR = 26;
-    public static final int MODE = 15;
-    public static final int COMPGE = 36;
-    public static final int SIGI = 29;
-    public static final int ORDER = 40;
-    public static final int COMPNAME = 41;
-    public static final int SELECT = 31;
-    public static final int COMPG = 34;
-    public static final int SIGN = 5;
-    public static final int COMPL = 33;
-    public static final int DEL = 28;
-    public static final int SIGE = 8;
-    public static final int PRECON = 37;
-    public static final int RBRK = 22;
-    public static final int PREEN = 45;
-    public static final int ADJASIGN = 44;
-    public static final int ASIGN = 32;
-    public static final int MODO = 16;
-    public static final int RPAR = 27;
-    public static final int SIGGE = 10;
-    public static final int SIGG = 7;
-    public static final int OFFSET = 39;
-    public static final int PREDE = 38;
-    public static final int COMPLE = 35;
-    public static final int LIT = 20;
-    public static final int BOL = 18;
-    public static final int PRED = 13;
-    public static final int LIKE = 46;
-    public static final int SIGLE = 9;
-    public static final int WHITESPACE = 4;
-    public static final int ORDOP = 24;
-    public static final int VAR = 25;
-    public static final int MODT = 12;
-    public static final int MODC = 17;
-    public static final int PREN = 14;
-    public static final int LBRK = 21;
-    public static final int EOF = -1;
-    public static final int NUM = 19;
-    public static final int MODTO = 42;
-    public static final int NAME = 43;
-    public static final int BVAR = 23;
-    public static final int LIMIT = 30;
+    public static final int INTERVAL=48;
+    public static final int SIGL=6;
+    public static final int PREC=11;
+    public static final int LPAR=28;
+    public static final int MODE=15;
+    public static final int COMPGE=38;
+    public static final int DELY=26;
+    public static final int SIGI=31;
+    public static final int ORDER=43;
+    public static final int COMPNAME=44;
+    public static final int SELECT=33;
+    public static final int COMPRNG=47;
+    public static final int COMPG=36;
+    public static final int SIGN=5;
+    public static final int COMPL=35;
+    public static final int DEL=30;
+    public static final int SIGE=8;
+    public static final int PRECON=40;
+    public static final int RBRK=23;
+    public static final int ASIGN=34;
+    public static final int MODO=17;
+    public static final int RPAR=29;
+    public static final int SIGGE=10;
+    public static final int MODN=16;
+    public static final int SIGG=7;
+    public static final int OFFSET=42;
+    public static final int PREDE=41;
+    public static final int COMPLE=37;
+    public static final int LIT=21;
+    public static final int BOL=19;
+    public static final int PRED=13;
+    public static final int SIGLE=9;
+    public static final int WHITESPACE=4;
+    public static final int ORDOP=25;
+    public static final int VAR=27;
+    public static final int MODT=12;
+    public static final int MODC=18;
+    public static final int PREN=14;
+    public static final int LBRK=22;
+    public static final int COMPAS=39;
+    public static final int EOF=-1;
+    public static final int NUM=20;
+    public static final int MODTO=45;
+    public static final int NAME=46;
+    public static final int BVAR=24;
+    public static final int LIMIT=32;
 
     // delegates
     // delegators
-    public ComplexParser(TokenStream input) {
-        this(input, new RecognizerSharedState());
-    }
 
-    public ComplexParser(TokenStream input, RecognizerSharedState state) {
-        super(input, state);
 
-    }
+        public ComplexParser(TokenStream input) {
+            this(input, new RecognizerSharedState());
+        }
+        public ComplexParser(TokenStream input, RecognizerSharedState state) {
+            super(input, state);
+
+        }
+
     protected TreeAdaptor adaptor = new CommonTreeAdaptor();
 
     public void setTreeAdaptor(TreeAdaptor adaptor) {
         this.adaptor = adaptor;
     }
-
     public TreeAdaptor getTreeAdaptor() {
         return adaptor;
     }
 
-    public String[] getTokenNames() {
-        return ComplexParser.tokenNames;
-    }
+    public String[] getTokenNames() { return ComplexParser.tokenNames; }
+    public String getGrammarFileName() { return "/home/hasdai/Documentos/INFOTEC/ComplexParser.g"; }
 
-    public String getGrammarFileName() {
-        return "/home/hasdai/Documentos/INFOTEC/ComplexParser.g";
-    }
-    private int errCount = 0;
-    private boolean precon = false;
-    private boolean prede = false;
 
-    /*
-     * Overrides default displayRecognitionError method in ANTLR to count total
-     * recognition errors.
-     */
-    public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
-        errCount++;
-    }
+    	private int errCount = 0;
+    	private boolean precon = false;
+    	private boolean prede = false;
 
-    /*
-     *  Gets the number of total recognition errors.
-     */
-    public int getErrorCount() {
-        return errCount;
-    }
+    	/*
+    	 * Overrides default displayRecognitionError method in ANTLR to count total
+    	 * recognition errors.
+    	 */
+    	public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
+            	errCount++;
+        	}
 
-    /*
-     * Verifies if query AST has node 'PRECON'
-     */
-    public boolean hasPrecon() {
-        return precon;
-    }
+        	/*
+        	 *  Gets the number of total recognition errors.
+        	 */
+        	public int getErrorCount() {
+        		return errCount;
+        	}
 
-    /*
-     * Verifies if query AST has node 'PREDE'
-     */
-    public boolean hasPrede() {
-        return prede;
-    }
+        	/*
+        	 * Verifies if query AST has node 'PRECON'
+        	 */
+    	public boolean hasPrecon() {
+    		return precon;
+    	}
+
+    	/*
+        	 * Verifies if query AST has node 'PREDE'
+        	 */
+    	public boolean hasPrede() {
+    		return prede;
+    	}
+
 
     public static class squery_return extends ParserRuleReturnScope {
-
         Object tree;
-
-        public Object getTree() {
-            return tree;
-        }
+        public Object getTree() { return tree; }
     };
 
     // $ANTLR start "squery"
@@ -142,8 +139,8 @@ public class ComplexParser extends Parser {
 
         Object root_0 = null;
 
-        Token EOF4 = null;
-        Token EOF8 = null;
+        Token EOF4=null;
+        Token EOF8=null;
         ComplexParser.limiter_return limiter1 = null;
 
         ComplexParser.oquery_return oquery2 = null;
@@ -157,177 +154,162 @@ public class ComplexParser extends Parser {
         ComplexParser.modifier_return modifier7 = null;
 
 
-        Object EOF4_tree = null;
-        Object EOF8_tree = null;
-        RewriteRuleTokenStream stream_EOF = new RewriteRuleTokenStream(adaptor, "token EOF");
-        RewriteRuleSubtreeStream stream_oquery = new RewriteRuleSubtreeStream(adaptor, "rule oquery");
-        RewriteRuleSubtreeStream stream_modifier = new RewriteRuleSubtreeStream(adaptor, "rule modifier");
-        RewriteRuleSubtreeStream stream_pquery = new RewriteRuleSubtreeStream(adaptor, "rule pquery");
-        RewriteRuleSubtreeStream stream_limiter = new RewriteRuleSubtreeStream(adaptor, "rule limiter");
+        Object EOF4_tree=null;
+        Object EOF8_tree=null;
+        RewriteRuleTokenStream stream_EOF=new RewriteRuleTokenStream(adaptor,"token EOF");
+        RewriteRuleSubtreeStream stream_oquery=new RewriteRuleSubtreeStream(adaptor,"rule oquery");
+        RewriteRuleSubtreeStream stream_modifier=new RewriteRuleSubtreeStream(adaptor,"rule modifier");
+        RewriteRuleSubtreeStream stream_pquery=new RewriteRuleSubtreeStream(adaptor,"rule pquery");
+        RewriteRuleSubtreeStream stream_limiter=new RewriteRuleSubtreeStream(adaptor,"rule limiter");
         try {
             // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:52:1: ( ( limiter )? oquery ( modifier )? EOF -> ^( SELECT ( limiter )? oquery ( modifier )? ) | ( limiter )? pquery ( modifier )? EOF -> ^( SELECT ( limiter )? pquery ( modifier )? ) )
-            int alt5 = 2;
-            switch (input.LA(1)) {
-                case NUM: {
-                    switch (input.LA(2)) {
-                        case EOF:
-                        case MODE:
-                        case MODO:
-                        case LPAR: {
-                            alt5 = 1;
-                        }
-                        break;
-                        case BVAR:
-                        case VAR: {
-                            int LA5_3 = input.LA(3);
-
-                            if ((LA5_3 == PRED || LA5_3 == DEL)) {
-                                alt5 = 2;
-                            } else if ((LA5_3 == EOF || LA5_3 == PREC || (LA5_3 >= PREN && LA5_3 <= MODO) || LA5_3 == BVAR || LA5_3 == VAR)) {
-                                alt5 = 1;
-                            } else {
-                                if (state.backtracking > 0) {
-                                    state.failed = true;
-                                    return retval;
-                                }
-                                NoViableAltException nvae =
-                                        new NoViableAltException("", 5, 3, input);
-
-                                throw nvae;
-                            }
-                        }
-                        break;
-                        case MODT: {
-                            alt5 = 2;
-                        }
-                        break;
-                        default:
-                            if (state.backtracking > 0) {
-                                state.failed = true;
-                                return retval;
-                            }
-                            NoViableAltException nvae =
-                                    new NoViableAltException("", 5, 1, input);
-
-                            throw nvae;
-                    }
-
-                }
-                break;
-                case EOF:
-                case MODE:
-                case MODO:
-                case LPAR: {
-                    alt5 = 1;
-                }
-                break;
+            int alt5=2;
+            switch ( input.LA(1) ) {
+            case NUM:
+                {
+                switch ( input.LA(2) ) {
                 case BVAR:
-                case VAR: {
-                    int LA5_3 = input.LA(2);
+                case VAR:
+                    {
+                    int LA5_3 = input.LA(3);
 
-                    if ((LA5_3 == PRED || LA5_3 == DEL)) {
-                        alt5 = 2;
-                    } else if ((LA5_3 == EOF || LA5_3 == PREC || (LA5_3 >= PREN && LA5_3 <= MODO) || LA5_3 == BVAR || LA5_3 == VAR)) {
-                        alt5 = 1;
-                    } else {
-                        if (state.backtracking > 0) {
-                            state.failed = true;
-                            return retval;
-                        }
+                    if ( (LA5_3==EOF||LA5_3==PREC||LA5_3==MODE||LA5_3==MODO) ) {
+                        alt5=1;
+                    }
+                    else if ( (LA5_3==PRED||LA5_3==DEL) ) {
+                        alt5=2;
+                    }
+                    else {
+                        if (state.backtracking>0) {state.failed=true; return retval;}
                         NoViableAltException nvae =
-                                new NoViableAltException("", 5, 3, input);
+                            new NoViableAltException("", 5, 3, input);
 
                         throw nvae;
                     }
-                }
-                break;
-                case MODT: {
-                    alt5 = 2;
-                }
-                break;
-                default:
-                    if (state.backtracking > 0) {
-                        state.failed = true;
-                        return retval;
                     }
+                    break;
+                case MODT:
+                    {
+                    alt5=2;
+                    }
+                    break;
+                case EOF:
+                case MODE:
+                case MODO:
+                case LPAR:
+                    {
+                    alt5=1;
+                    }
+                    break;
+                default:
+                    if (state.backtracking>0) {state.failed=true; return retval;}
                     NoViableAltException nvae =
-                            new NoViableAltException("", 5, 0, input);
+                        new NoViableAltException("", 5, 1, input);
 
                     throw nvae;
+                }
+
+                }
+                break;
+            case EOF:
+            case MODE:
+            case MODO:
+            case LPAR:
+                {
+                alt5=1;
+                }
+                break;
+            case BVAR:
+            case VAR:
+                {
+                int LA5_3 = input.LA(2);
+
+                if ( (LA5_3==EOF||LA5_3==PREC||LA5_3==MODE||LA5_3==MODO) ) {
+                    alt5=1;
+                }
+                else if ( (LA5_3==PRED||LA5_3==DEL) ) {
+                    alt5=2;
+                }
+                else {
+                    if (state.backtracking>0) {state.failed=true; return retval;}
+                    NoViableAltException nvae =
+                        new NoViableAltException("", 5, 3, input);
+
+                    throw nvae;
+                }
+                }
+                break;
+            case MODT:
+                {
+                alt5=2;
+                }
+                break;
+            default:
+                if (state.backtracking>0) {state.failed=true; return retval;}
+                NoViableAltException nvae =
+                    new NoViableAltException("", 5, 0, input);
+
+                throw nvae;
             }
 
             switch (alt5) {
-                case 1: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:52:3: ( limiter )? oquery ( modifier )? EOF
-                {
+                case 1 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:52:3: ( limiter )? oquery ( modifier )? EOF
+                    {
                     // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:52:3: ( limiter )?
-                    int alt1 = 2;
+                    int alt1=2;
                     int LA1_0 = input.LA(1);
 
-                    if ((LA1_0 == NUM)) {
-                        alt1 = 1;
+                    if ( (LA1_0==NUM) ) {
+                        alt1=1;
                     }
                     switch (alt1) {
-                        case 1: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:0:0: limiter
-                        {
-                            pushFollow(FOLLOW_limiter_in_squery108);
-                            limiter1 = limiter();
+                        case 1 :
+                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:0:0: limiter
+                            {
+                            pushFollow(FOLLOW_limiter_in_squery109);
+                            limiter1=limiter();
 
                             state._fsp--;
-                            if (state.failed) {
-                                return retval;
-                            }
-                            if (state.backtracking == 0) {
-                                stream_limiter.add(limiter1.getTree());
-                            }
+                            if (state.failed) return retval;
+                            if ( state.backtracking==0 ) stream_limiter.add(limiter1.getTree());
 
-                        }
-                        break;
+                            }
+                            break;
 
                     }
 
-                    pushFollow(FOLLOW_oquery_in_squery111);
-                    oquery2 = oquery();
+                    pushFollow(FOLLOW_oquery_in_squery112);
+                    oquery2=oquery();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_oquery.add(oquery2.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_oquery.add(oquery2.getTree());
                     // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:52:19: ( modifier )?
-                    int alt2 = 2;
+                    int alt2=2;
                     int LA2_0 = input.LA(1);
 
-                    if (((LA2_0 >= MODE && LA2_0 <= MODO))) {
-                        alt2 = 1;
+                    if ( (LA2_0==MODE||LA2_0==MODO) ) {
+                        alt2=1;
                     }
                     switch (alt2) {
-                        case 1: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:0:0: modifier
-                        {
-                            pushFollow(FOLLOW_modifier_in_squery113);
-                            modifier3 = modifier();
+                        case 1 :
+                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:0:0: modifier
+                            {
+                            pushFollow(FOLLOW_modifier_in_squery114);
+                            modifier3=modifier();
 
                             state._fsp--;
-                            if (state.failed) {
-                                return retval;
+                            if (state.failed) return retval;
+                            if ( state.backtracking==0 ) stream_modifier.add(modifier3.getTree());
+
                             }
-                            if (state.backtracking == 0) {
-                                stream_modifier.add(modifier3.getTree());
-                            }
-
-                        }
-                        break;
+                            break;
 
                     }
 
-                    EOF4 = (Token) match(input, EOF, FOLLOW_EOF_in_squery116);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_EOF.add(EOF4);
-                    }
+                    EOF4=(Token)match(input,EOF,FOLLOW_EOF_in_squery117); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_EOF.add(EOF4);
 
 
 
@@ -338,184 +320,166 @@ public class ComplexParser extends Parser {
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 52:33: -> ^( SELECT ( limiter )? oquery ( modifier )? )
+                    root_0 = (Object)adaptor.nil();
+                    // 52:33: -> ^( SELECT ( limiter )? oquery ( modifier )? )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:52:36: ^( SELECT ( limiter )? oquery ( modifier )? )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:52:36: ^( SELECT ( limiter )? oquery ( modifier )? )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(SELECT, "SELECT"), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(SELECT, "SELECT"), root_1);
 
-                                // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:52:45: ( limiter )?
-                                if (stream_limiter.hasNext()) {
-                                    adaptor.addChild(root_1, stream_limiter.nextTree());
-
-                                }
-                                stream_limiter.reset();
-                                adaptor.addChild(root_1, stream_oquery.nextTree());
-                                // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:52:61: ( modifier )?
-                                if (stream_modifier.hasNext()) {
-                                    adaptor.addChild(root_1, stream_modifier.nextTree());
-
-                                }
-                                stream_modifier.reset();
-
-                                adaptor.addChild(root_0, root_1);
-                            }
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:52:45: ( limiter )?
+                        if ( stream_limiter.hasNext() ) {
+                            adaptor.addChild(root_1, stream_limiter.nextTree());
 
                         }
+                        stream_limiter.reset();
+                        adaptor.addChild(root_1, stream_oquery.nextTree());
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:52:61: ( modifier )?
+                        if ( stream_modifier.hasNext() ) {
+                            adaptor.addChild(root_1, stream_modifier.nextTree());
 
-                        retval.tree = root_0;
+                        }
+                        stream_modifier.reset();
+
+                        adaptor.addChild(root_0, root_1);
+                        }
+
                     }
-                }
-                break;
-                case 2: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:53:3: ( limiter )? pquery ( modifier )? EOF
-                {
+
+                    retval.tree = root_0;}
+                    }
+                    break;
+                case 2 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:53:3: ( limiter )? pquery ( modifier )? EOF
+                    {
                     // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:53:3: ( limiter )?
-                    int alt3 = 2;
+                    int alt3=2;
                     int LA3_0 = input.LA(1);
 
-                    if ((LA3_0 == NUM)) {
-                        alt3 = 1;
+                    if ( (LA3_0==NUM) ) {
+                        alt3=1;
                     }
                     switch (alt3) {
-                        case 1: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:0:0: limiter
-                        {
-                            pushFollow(FOLLOW_limiter_in_squery134);
-                            limiter5 = limiter();
+                        case 1 :
+                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:0:0: limiter
+                            {
+                            pushFollow(FOLLOW_limiter_in_squery135);
+                            limiter5=limiter();
 
                             state._fsp--;
-                            if (state.failed) {
-                                return retval;
-                            }
-                            if (state.backtracking == 0) {
-                                stream_limiter.add(limiter5.getTree());
-                            }
+                            if (state.failed) return retval;
+                            if ( state.backtracking==0 ) stream_limiter.add(limiter5.getTree());
 
-                        }
-                        break;
+                            }
+                            break;
 
                     }
 
-                    pushFollow(FOLLOW_pquery_in_squery137);
-                    pquery6 = pquery();
+                    pushFollow(FOLLOW_pquery_in_squery138);
+                    pquery6=pquery();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_pquery.add(pquery6.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_pquery.add(pquery6.getTree());
                     // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:53:19: ( modifier )?
-                    int alt4 = 2;
+                    int alt4=2;
                     int LA4_0 = input.LA(1);
 
-                    if (((LA4_0 >= MODE && LA4_0 <= MODO))) {
-                        alt4 = 1;
+                    if ( (LA4_0==MODE||LA4_0==MODO) ) {
+                        alt4=1;
                     }
                     switch (alt4) {
-                        case 1: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:0:0: modifier
-                        {
-                            pushFollow(FOLLOW_modifier_in_squery139);
-                            modifier7 = modifier();
+                        case 1 :
+                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:0:0: modifier
+                            {
+                            pushFollow(FOLLOW_modifier_in_squery140);
+                            modifier7=modifier();
 
                             state._fsp--;
-                            if (state.failed) {
-                                return retval;
+                            if (state.failed) return retval;
+                            if ( state.backtracking==0 ) stream_modifier.add(modifier7.getTree());
+
                             }
-                            if (state.backtracking == 0) {
-                                stream_modifier.add(modifier7.getTree());
-                            }
-
-                        }
-                        break;
+                            break;
 
                     }
 
-                    EOF8 = (Token) match(input, EOF, FOLLOW_EOF_in_squery142);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_EOF.add(EOF8);
-                    }
+                    EOF8=(Token)match(input,EOF,FOLLOW_EOF_in_squery143); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_EOF.add(EOF8);
 
 
 
                     // AST REWRITE
-                    // elements: limiter, modifier, pquery
+                    // elements: pquery, limiter, modifier
                     // token labels:
                     // rule labels: retval
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 53:33: -> ^( SELECT ( limiter )? pquery ( modifier )? )
+                    root_0 = (Object)adaptor.nil();
+                    // 53:33: -> ^( SELECT ( limiter )? pquery ( modifier )? )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:53:36: ^( SELECT ( limiter )? pquery ( modifier )? )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:53:36: ^( SELECT ( limiter )? pquery ( modifier )? )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(SELECT, "SELECT"), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(SELECT, "SELECT"), root_1);
 
-                                // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:53:45: ( limiter )?
-                                if (stream_limiter.hasNext()) {
-                                    adaptor.addChild(root_1, stream_limiter.nextTree());
-
-                                }
-                                stream_limiter.reset();
-                                adaptor.addChild(root_1, stream_pquery.nextTree());
-                                // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:53:61: ( modifier )?
-                                if (stream_modifier.hasNext()) {
-                                    adaptor.addChild(root_1, stream_modifier.nextTree());
-
-                                }
-                                stream_modifier.reset();
-
-                                adaptor.addChild(root_0, root_1);
-                            }
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:53:45: ( limiter )?
+                        if ( stream_limiter.hasNext() ) {
+                            adaptor.addChild(root_1, stream_limiter.nextTree());
 
                         }
+                        stream_limiter.reset();
+                        adaptor.addChild(root_1, stream_pquery.nextTree());
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:53:61: ( modifier )?
+                        if ( stream_modifier.hasNext() ) {
+                            adaptor.addChild(root_1, stream_modifier.nextTree());
 
-                        retval.tree = root_0;
+                        }
+                        stream_modifier.reset();
+
+                        adaptor.addChild(root_0, root_1);
+                        }
+
                     }
-                }
-                break;
+
+                    retval.tree = root_0;}
+                    }
+                    break;
 
             }
             retval.stop = input.LT(-1);
 
-            if (state.backtracking == 0) {
+            if ( state.backtracking==0 ) {
 
-                retval.tree = (Object) adaptor.rulePostProcessing(root_0);
-                adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
             }
-        } catch (RecognitionException re) {
+        }
+        catch (RecognitionException re) {
             reportError(re);
-            recover(input, re);
-            retval.tree = (Object) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+            recover(input,re);
+    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
-        } finally {
+        }
+        finally {
         }
         return retval;
     }
     // $ANTLR end "squery"
 
     public static class limiter_return extends ParserRuleReturnScope {
-
         Object tree;
-
-        public Object getTree() {
-            return tree;
-        }
+        public Object getTree() { return tree; }
     };
 
     // $ANTLR start "limiter"
@@ -526,80 +490,72 @@ public class ComplexParser extends Parser {
 
         Object root_0 = null;
 
-        Token NUM9 = null;
+        Token NUM9=null;
 
-        Object NUM9_tree = null;
-        RewriteRuleTokenStream stream_NUM = new RewriteRuleTokenStream(adaptor, "token NUM");
+        Object NUM9_tree=null;
+        RewriteRuleTokenStream stream_NUM=new RewriteRuleTokenStream(adaptor,"token NUM");
 
         try {
             // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:58:1: ( NUM -> ^( LIMIT NUM ) )
             // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:58:3: NUM
             {
-                NUM9 = (Token) match(input, NUM, FOLLOW_NUM_in_limiter167);
-                if (state.failed) {
-                    return retval;
+            NUM9=(Token)match(input,NUM,FOLLOW_NUM_in_limiter168); if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_NUM.add(NUM9);
+
+
+
+            // AST REWRITE
+            // elements: NUM
+            // token labels:
+            // rule labels: retval
+            // token list labels:
+            // rule list labels:
+            // wildcard labels:
+            if ( state.backtracking==0 ) {
+            retval.tree = root_0;
+            RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
+
+            root_0 = (Object)adaptor.nil();
+            // 58:7: -> ^( LIMIT NUM )
+            {
+                // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:58:10: ^( LIMIT NUM )
+                {
+                Object root_1 = (Object)adaptor.nil();
+                root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(LIMIT, "LIMIT"), root_1);
+
+                adaptor.addChild(root_1, stream_NUM.nextNode());
+
+                adaptor.addChild(root_0, root_1);
                 }
-                if (state.backtracking == 0) {
-                    stream_NUM.add(NUM9);
-                }
 
+            }
 
-
-                // AST REWRITE
-                // elements: NUM
-                // token labels:
-                // rule labels: retval
-                // token list labels:
-                // rule list labels:
-                // wildcard labels:
-                if (state.backtracking == 0) {
-                    retval.tree = root_0;
-                    RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
-
-                    root_0 = (Object) adaptor.nil();
-                    // 58:7: -> ^( LIMIT NUM )
-                    {
-                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:58:10: ^( LIMIT NUM )
-                        {
-                            Object root_1 = (Object) adaptor.nil();
-                            root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(LIMIT, "LIMIT"), root_1);
-
-                            adaptor.addChild(root_1, stream_NUM.nextNode());
-
-                            adaptor.addChild(root_0, root_1);
-                        }
-
-                    }
-
-                    retval.tree = root_0;
-                }
+            retval.tree = root_0;}
             }
 
             retval.stop = input.LT(-1);
 
-            if (state.backtracking == 0) {
+            if ( state.backtracking==0 ) {
 
-                retval.tree = (Object) adaptor.rulePostProcessing(root_0);
-                adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
             }
-        } catch (RecognitionException re) {
+        }
+        catch (RecognitionException re) {
             reportError(re);
-            recover(input, re);
-            retval.tree = (Object) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+            recover(input,re);
+    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
-        } finally {
+        }
+        finally {
         }
         return retval;
     }
     // $ANTLR end "limiter"
 
     public static class modifier_return extends ParserRuleReturnScope {
-
         Object tree;
-
-        public Object getTree() {
-            return tree;
-        }
+        public Object getTree() { return tree; }
     };
 
     // $ANTLR start "modifier"
@@ -620,111 +576,99 @@ public class ComplexParser extends Parser {
 
         try {
             // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:65:1: ( ordterm ( offsetterm )? | offsetterm )
-            int alt7 = 2;
+            int alt7=2;
             int LA7_0 = input.LA(1);
 
-            if ((LA7_0 == MODO)) {
-                alt7 = 1;
-            } else if ((LA7_0 == MODE)) {
-                alt7 = 2;
-            } else {
-                if (state.backtracking > 0) {
-                    state.failed = true;
-                    return retval;
-                }
+            if ( (LA7_0==MODO) ) {
+                alt7=1;
+            }
+            else if ( (LA7_0==MODE) ) {
+                alt7=2;
+            }
+            else {
+                if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                        new NoViableAltException("", 7, 0, input);
+                    new NoViableAltException("", 7, 0, input);
 
                 throw nvae;
             }
             switch (alt7) {
-                case 1: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:65:3: ordterm ( offsetterm )?
-                {
-                    root_0 = (Object) adaptor.nil();
+                case 1 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:65:3: ordterm ( offsetterm )?
+                    {
+                    root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_ordterm_in_modifier186);
-                    ordterm10 = ordterm();
+                    pushFollow(FOLLOW_ordterm_in_modifier187);
+                    ordterm10=ordterm();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, ordterm10.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, ordterm10.getTree());
                     // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:65:11: ( offsetterm )?
-                    int alt6 = 2;
+                    int alt6=2;
                     int LA6_0 = input.LA(1);
 
-                    if ((LA6_0 == MODE)) {
-                        alt6 = 1;
+                    if ( (LA6_0==MODE) ) {
+                        alt6=1;
                     }
                     switch (alt6) {
-                        case 1: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:0:0: offsetterm
-                        {
-                            pushFollow(FOLLOW_offsetterm_in_modifier188);
-                            offsetterm11 = offsetterm();
+                        case 1 :
+                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:0:0: offsetterm
+                            {
+                            pushFollow(FOLLOW_offsetterm_in_modifier189);
+                            offsetterm11=offsetterm();
 
                             state._fsp--;
-                            if (state.failed) {
-                                return retval;
-                            }
-                            if (state.backtracking == 0) {
-                                adaptor.addChild(root_0, offsetterm11.getTree());
-                            }
+                            if (state.failed) return retval;
+                            if ( state.backtracking==0 ) adaptor.addChild(root_0, offsetterm11.getTree());
 
-                        }
-                        break;
+                            }
+                            break;
 
                     }
 
 
-                }
-                break;
-                case 2: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:66:3: offsetterm
-                {
-                    root_0 = (Object) adaptor.nil();
+                    }
+                    break;
+                case 2 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:66:3: offsetterm
+                    {
+                    root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_offsetterm_in_modifier193);
-                    offsetterm12 = offsetterm();
+                    pushFollow(FOLLOW_offsetterm_in_modifier194);
+                    offsetterm12=offsetterm();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, offsetterm12.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, offsetterm12.getTree());
 
-                }
-                break;
+                    }
+                    break;
 
             }
             retval.stop = input.LT(-1);
 
-            if (state.backtracking == 0) {
+            if ( state.backtracking==0 ) {
 
-                retval.tree = (Object) adaptor.rulePostProcessing(root_0);
-                adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
             }
-        } catch (RecognitionException re) {
+        }
+        catch (RecognitionException re) {
             reportError(re);
-            recover(input, re);
-            retval.tree = (Object) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+            recover(input,re);
+    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
-        } finally {
+        }
+        finally {
         }
         return retval;
     }
     // $ANTLR end "modifier"
 
     public static class offsetterm_return extends ParserRuleReturnScope {
-
         Object tree;
-
-        public Object getTree() {
-            return tree;
-        }
+        public Object getTree() { return tree; }
     };
 
     // $ANTLR start "offsetterm"
@@ -735,91 +679,78 @@ public class ComplexParser extends Parser {
 
         Object root_0 = null;
 
-        Token MODE13 = null;
-        Token NUM14 = null;
+        Token MODE13=null;
+        Token NUM14=null;
 
-        Object MODE13_tree = null;
-        Object NUM14_tree = null;
-        RewriteRuleTokenStream stream_MODE = new RewriteRuleTokenStream(adaptor, "token MODE");
-        RewriteRuleTokenStream stream_NUM = new RewriteRuleTokenStream(adaptor, "token NUM");
+        Object MODE13_tree=null;
+        Object NUM14_tree=null;
+        RewriteRuleTokenStream stream_MODE=new RewriteRuleTokenStream(adaptor,"token MODE");
+        RewriteRuleTokenStream stream_NUM=new RewriteRuleTokenStream(adaptor,"token NUM");
 
         try {
             // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:71:1: ( MODE NUM -> ^( OFFSET NUM ) )
             // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:71:3: MODE NUM
             {
-                MODE13 = (Token) match(input, MODE, FOLLOW_MODE_in_offsetterm204);
-                if (state.failed) {
-                    return retval;
+            MODE13=(Token)match(input,MODE,FOLLOW_MODE_in_offsetterm205); if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_MODE.add(MODE13);
+
+            NUM14=(Token)match(input,NUM,FOLLOW_NUM_in_offsetterm207); if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_NUM.add(NUM14);
+
+
+
+            // AST REWRITE
+            // elements: NUM
+            // token labels:
+            // rule labels: retval
+            // token list labels:
+            // rule list labels:
+            // wildcard labels:
+            if ( state.backtracking==0 ) {
+            retval.tree = root_0;
+            RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
+
+            root_0 = (Object)adaptor.nil();
+            // 71:12: -> ^( OFFSET NUM )
+            {
+                // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:71:15: ^( OFFSET NUM )
+                {
+                Object root_1 = (Object)adaptor.nil();
+                root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(OFFSET, "OFFSET"), root_1);
+
+                adaptor.addChild(root_1, stream_NUM.nextNode());
+
+                adaptor.addChild(root_0, root_1);
                 }
-                if (state.backtracking == 0) {
-                    stream_MODE.add(MODE13);
-                }
 
-                NUM14 = (Token) match(input, NUM, FOLLOW_NUM_in_offsetterm206);
-                if (state.failed) {
-                    return retval;
-                }
-                if (state.backtracking == 0) {
-                    stream_NUM.add(NUM14);
-                }
+            }
 
-
-
-                // AST REWRITE
-                // elements: NUM
-                // token labels:
-                // rule labels: retval
-                // token list labels:
-                // rule list labels:
-                // wildcard labels:
-                if (state.backtracking == 0) {
-                    retval.tree = root_0;
-                    RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
-
-                    root_0 = (Object) adaptor.nil();
-                    // 71:12: -> ^( OFFSET NUM )
-                    {
-                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:71:15: ^( OFFSET NUM )
-                        {
-                            Object root_1 = (Object) adaptor.nil();
-                            root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(OFFSET, "OFFSET"), root_1);
-
-                            adaptor.addChild(root_1, stream_NUM.nextNode());
-
-                            adaptor.addChild(root_0, root_1);
-                        }
-
-                    }
-
-                    retval.tree = root_0;
-                }
+            retval.tree = root_0;}
             }
 
             retval.stop = input.LT(-1);
 
-            if (state.backtracking == 0) {
+            if ( state.backtracking==0 ) {
 
-                retval.tree = (Object) adaptor.rulePostProcessing(root_0);
-                adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
             }
-        } catch (RecognitionException re) {
+        }
+        catch (RecognitionException re) {
             reportError(re);
-            recover(input, re);
-            retval.tree = (Object) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+            recover(input,re);
+    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
-        } finally {
+        }
+        finally {
         }
         return retval;
     }
     // $ANTLR end "offsetterm"
 
     public static class ordterm_return extends ParserRuleReturnScope {
-
         Object tree;
-
-        public Object getTree() {
-            return tree;
-        }
+        public Object getTree() { return tree; }
     };
 
     // $ANTLR start "ordterm"
@@ -830,793 +761,483 @@ public class ComplexParser extends Parser {
 
         Object root_0 = null;
 
-        Token MODO15 = null;
-        Token LPAR16 = null;
-        Token RPAR18 = null;
+        Token MODO15=null;
+        Token LPAR16=null;
+        Token RPAR18=null;
         ComplexParser.plist_return plist17 = null;
 
 
-        Object MODO15_tree = null;
-        Object LPAR16_tree = null;
-        Object RPAR18_tree = null;
-        RewriteRuleTokenStream stream_MODO = new RewriteRuleTokenStream(adaptor, "token MODO");
-        RewriteRuleTokenStream stream_RPAR = new RewriteRuleTokenStream(adaptor, "token RPAR");
-        RewriteRuleTokenStream stream_LPAR = new RewriteRuleTokenStream(adaptor, "token LPAR");
-        RewriteRuleSubtreeStream stream_plist = new RewriteRuleSubtreeStream(adaptor, "rule plist");
+        Object MODO15_tree=null;
+        Object LPAR16_tree=null;
+        Object RPAR18_tree=null;
+        RewriteRuleTokenStream stream_MODO=new RewriteRuleTokenStream(adaptor,"token MODO");
+        RewriteRuleTokenStream stream_RPAR=new RewriteRuleTokenStream(adaptor,"token RPAR");
+        RewriteRuleTokenStream stream_LPAR=new RewriteRuleTokenStream(adaptor,"token LPAR");
+        RewriteRuleSubtreeStream stream_plist=new RewriteRuleSubtreeStream(adaptor,"rule plist");
         try {
             // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:76:1: ( MODO LPAR plist RPAR -> ^( ORDER plist ) )
             // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:76:3: MODO LPAR plist RPAR
             {
-                MODO15 = (Token) match(input, MODO, FOLLOW_MODO_in_ordterm225);
-                if (state.failed) {
-                    return retval;
+            MODO15=(Token)match(input,MODO,FOLLOW_MODO_in_ordterm226); if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_MODO.add(MODO15);
+
+            LPAR16=(Token)match(input,LPAR,FOLLOW_LPAR_in_ordterm228); if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_LPAR.add(LPAR16);
+
+            pushFollow(FOLLOW_plist_in_ordterm230);
+            plist17=plist();
+
+            state._fsp--;
+            if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_plist.add(plist17.getTree());
+            RPAR18=(Token)match(input,RPAR,FOLLOW_RPAR_in_ordterm232); if (state.failed) return retval;
+            if ( state.backtracking==0 ) stream_RPAR.add(RPAR18);
+
+
+
+            // AST REWRITE
+            // elements: plist
+            // token labels:
+            // rule labels: retval
+            // token list labels:
+            // rule list labels:
+            // wildcard labels:
+            if ( state.backtracking==0 ) {
+            retval.tree = root_0;
+            RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
+
+            root_0 = (Object)adaptor.nil();
+            // 76:24: -> ^( ORDER plist )
+            {
+                // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:76:27: ^( ORDER plist )
+                {
+                Object root_1 = (Object)adaptor.nil();
+                root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(ORDER, "ORDER"), root_1);
+
+                adaptor.addChild(root_1, stream_plist.nextTree());
+
+                adaptor.addChild(root_0, root_1);
                 }
-                if (state.backtracking == 0) {
-                    stream_MODO.add(MODO15);
-                }
 
-                LPAR16 = (Token) match(input, LPAR, FOLLOW_LPAR_in_ordterm227);
-                if (state.failed) {
-                    return retval;
-                }
-                if (state.backtracking == 0) {
-                    stream_LPAR.add(LPAR16);
-                }
+            }
 
-                pushFollow(FOLLOW_plist_in_ordterm229);
-                plist17 = plist();
-
-                state._fsp--;
-                if (state.failed) {
-                    return retval;
-                }
-                if (state.backtracking == 0) {
-                    stream_plist.add(plist17.getTree());
-                }
-                RPAR18 = (Token) match(input, RPAR, FOLLOW_RPAR_in_ordterm231);
-                if (state.failed) {
-                    return retval;
-                }
-                if (state.backtracking == 0) {
-                    stream_RPAR.add(RPAR18);
-                }
-
-
-
-                // AST REWRITE
-                // elements: plist
-                // token labels:
-                // rule labels: retval
-                // token list labels:
-                // rule list labels:
-                // wildcard labels:
-                if (state.backtracking == 0) {
-                    retval.tree = root_0;
-                    RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
-
-                    root_0 = (Object) adaptor.nil();
-                    // 76:24: -> ^( ORDER plist )
-                    {
-                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:76:27: ^( ORDER plist )
-                        {
-                            Object root_1 = (Object) adaptor.nil();
-                            root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(ORDER, "ORDER"), root_1);
-
-                            adaptor.addChild(root_1, stream_plist.nextTree());
-
-                            adaptor.addChild(root_0, root_1);
-                        }
-
-                    }
-
-                    retval.tree = root_0;
-                }
+            retval.tree = root_0;}
             }
 
             retval.stop = input.LT(-1);
 
-            if (state.backtracking == 0) {
+            if ( state.backtracking==0 ) {
 
-                retval.tree = (Object) adaptor.rulePostProcessing(root_0);
-                adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
             }
-        } catch (RecognitionException re) {
+        }
+        catch (RecognitionException re) {
             reportError(re);
-            recover(input, re);
-            retval.tree = (Object) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+            recover(input,re);
+    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
-        } finally {
+        }
+        finally {
         }
         return retval;
     }
     // $ANTLR end "ordterm"
 
     public static class oquery_return extends ParserRuleReturnScope {
-
         Object tree;
-
-        public Object getTree() {
-            return tree;
-        }
+        public Object getTree() { return tree; }
     };
 
     // $ANTLR start "oquery"
-    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:83:1: oquery : ( | name | name PREN name -> ^( PREEN name name ) | name PREN name PREC querylist -> ^( PRECON ^( PREEN name name ) querylist ) | name name PREC querylist -> ^( PRECON ^( ADJASIGN name name ) querylist ) | name PREC querylist -> ^( name ^( PRECON querylist ) ) | LPAR oquery RPAR );
+    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:83:1: oquery : ( | name | name PREC querylist -> ^( name ^( PRECON querylist ) ) | LPAR oquery RPAR );
     public final ComplexParser.oquery_return oquery() throws RecognitionException {
         ComplexParser.oquery_return retval = new ComplexParser.oquery_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token PREN21 = null;
-        Token PREN24 = null;
-        Token PREC26 = null;
-        Token PREC30 = null;
-        Token PREC33 = null;
-        Token LPAR35 = null;
-        Token RPAR37 = null;
+        Token PREC21=null;
+        Token LPAR23=null;
+        Token RPAR25=null;
         ComplexParser.name_return name19 = null;
 
         ComplexParser.name_return name20 = null;
 
-        ComplexParser.name_return name22 = null;
+        ComplexParser.querylist_return querylist22 = null;
 
-        ComplexParser.name_return name23 = null;
-
-        ComplexParser.name_return name25 = null;
-
-        ComplexParser.querylist_return querylist27 = null;
-
-        ComplexParser.name_return name28 = null;
-
-        ComplexParser.name_return name29 = null;
-
-        ComplexParser.querylist_return querylist31 = null;
-
-        ComplexParser.name_return name32 = null;
-
-        ComplexParser.querylist_return querylist34 = null;
-
-        ComplexParser.oquery_return oquery36 = null;
+        ComplexParser.oquery_return oquery24 = null;
 
 
-        Object PREN21_tree = null;
-        Object PREN24_tree = null;
-        Object PREC26_tree = null;
-        Object PREC30_tree = null;
-        Object PREC33_tree = null;
-        Object LPAR35_tree = null;
-        Object RPAR37_tree = null;
-        RewriteRuleTokenStream stream_PREN = new RewriteRuleTokenStream(adaptor, "token PREN");
-        RewriteRuleTokenStream stream_PREC = new RewriteRuleTokenStream(adaptor, "token PREC");
-        RewriteRuleSubtreeStream stream_querylist = new RewriteRuleSubtreeStream(adaptor, "rule querylist");
-        RewriteRuleSubtreeStream stream_name = new RewriteRuleSubtreeStream(adaptor, "rule name");
+        Object PREC21_tree=null;
+        Object LPAR23_tree=null;
+        Object RPAR25_tree=null;
+        RewriteRuleTokenStream stream_PREC=new RewriteRuleTokenStream(adaptor,"token PREC");
+        RewriteRuleSubtreeStream stream_querylist=new RewriteRuleSubtreeStream(adaptor,"rule querylist");
+        RewriteRuleSubtreeStream stream_name=new RewriteRuleSubtreeStream(adaptor,"rule name");
         try {
-            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:84:1: ( | name | name PREN name -> ^( PREEN name name ) | name PREN name PREC querylist -> ^( PRECON ^( PREEN name name ) querylist ) | name name PREC querylist -> ^( PRECON ^( ADJASIGN name name ) querylist ) | name PREC querylist -> ^( name ^( PRECON querylist ) ) | LPAR oquery RPAR )
-            int alt8 = 7;
-            alt8 = dfa8.predict(input);
+            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:84:1: ( | name | name PREC querylist -> ^( name ^( PRECON querylist ) ) | LPAR oquery RPAR )
+            int alt8=4;
+            switch ( input.LA(1) ) {
+            case EOF:
+            case MODE:
+            case MODO:
+            case RPAR:
+            case DEL:
+                {
+                alt8=1;
+                }
+                break;
+            case BVAR:
+            case VAR:
+                {
+                int LA8_2 = input.LA(2);
+
+                if ( (LA8_2==EOF||LA8_2==MODE||LA8_2==MODO||(LA8_2>=RPAR && LA8_2<=DEL)) ) {
+                    alt8=2;
+                }
+                else if ( (LA8_2==PREC) ) {
+                    alt8=3;
+                }
+                else {
+                    if (state.backtracking>0) {state.failed=true; return retval;}
+                    NoViableAltException nvae =
+                        new NoViableAltException("", 8, 2, input);
+
+                    throw nvae;
+                }
+                }
+                break;
+            case LPAR:
+                {
+                alt8=4;
+                }
+                break;
+            default:
+                if (state.backtracking>0) {state.failed=true; return retval;}
+                NoViableAltException nvae =
+                    new NoViableAltException("", 8, 0, input);
+
+                throw nvae;
+            }
+
             switch (alt8) {
-                case 1: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:85:2:
-                {
-                    root_0 = (Object) adaptor.nil();
+                case 1 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:85:2:
+                    {
+                    root_0 = (Object)adaptor.nil();
 
-                }
-                break;
-                case 2: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:85:3: name
-                {
-                    root_0 = (Object) adaptor.nil();
-
-                    pushFollow(FOLLOW_name_in_oquery253);
-                    name19 = name();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
                     }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, name19.getTree());
-                    }
+                    break;
+                case 2 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:85:3: name
+                    {
+                    root_0 = (Object)adaptor.nil();
 
-                }
-                break;
-                case 3: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:86:3: name PREN name
-                {
-                    pushFollow(FOLLOW_name_in_oquery257);
-                    name20 = name();
+                    pushFollow(FOLLOW_name_in_oquery254);
+                    name19=name();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name20.getTree());
-                    }
-                    PREN21 = (Token) match(input, PREN, FOLLOW_PREN_in_oquery259);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_PREN.add(PREN21);
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name19.getTree());
 
-                    pushFollow(FOLLOW_name_in_oquery261);
-                    name22 = name();
+                    }
+                    break;
+                case 3 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:86:3: name PREC querylist
+                    {
+                    pushFollow(FOLLOW_name_in_oquery258);
+                    name20=name();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name22.getTree());
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_name.add(name20.getTree());
+                    PREC21=(Token)match(input,PREC,FOLLOW_PREC_in_oquery260); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_PREC.add(PREC21);
+
+                    pushFollow(FOLLOW_querylist_in_oquery262);
+                    querylist22=querylist();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_querylist.add(querylist22.getTree());
+                    if ( state.backtracking==0 ) {
+                      precon = true;
                     }
 
 
                     // AST REWRITE
-                    // elements: name, name
+                    // elements: querylist, name
                     // token labels:
                     // rule labels: retval
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 86:18: -> ^( PREEN name name )
+                    root_0 = (Object)adaptor.nil();
+                    // 86:40: -> ^( name ^( PRECON querylist ) )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:86:43: ^( name ^( PRECON querylist ) )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:86:21: ^( PREEN name name )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(PREEN, "PREEN"), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot(stream_name.nextNode(), root_1);
 
-                                adaptor.addChild(root_1, stream_name.nextTree());
-                                adaptor.addChild(root_1, stream_name.nextTree());
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:86:50: ^( PRECON querylist )
+                        {
+                        Object root_2 = (Object)adaptor.nil();
+                        root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(PRECON, "PRECON"), root_2);
 
-                                adaptor.addChild(root_0, root_1);
-                            }
+                        adaptor.addChild(root_2, stream_querylist.nextTree());
 
+                        adaptor.addChild(root_1, root_2);
                         }
 
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 4: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:87:3: name PREN name PREC querylist
-                {
-                    pushFollow(FOLLOW_name_in_oquery275);
-                    name23 = name();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name23.getTree());
-                    }
-                    PREN24 = (Token) match(input, PREN, FOLLOW_PREN_in_oquery277);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_PREN.add(PREN24);
-                    }
-
-                    pushFollow(FOLLOW_name_in_oquery279);
-                    name25 = name();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name25.getTree());
-                    }
-                    PREC26 = (Token) match(input, PREC, FOLLOW_PREC_in_oquery281);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_PREC.add(PREC26);
-                    }
-
-                    pushFollow(FOLLOW_querylist_in_oquery283);
-                    querylist27 = querylist();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_querylist.add(querylist27.getTree());
-                    }
-
-
-                    // AST REWRITE
-                    // elements: name, querylist, name
-                    // token labels:
-                    // rule labels: retval
-                    // token list labels:
-                    // rule list labels:
-                    // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
-
-                        root_0 = (Object) adaptor.nil();
-                        // 87:33: -> ^( PRECON ^( PREEN name name ) querylist )
-                        {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:87:36: ^( PRECON ^( PREEN name name ) querylist )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(PRECON, "PRECON"), root_1);
-
-                                // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:87:45: ^( PREEN name name )
-                                {
-                                    Object root_2 = (Object) adaptor.nil();
-                                    root_2 = (Object) adaptor.becomeRoot((Object) adaptor.create(PREEN, "PREEN"), root_2);
-
-                                    adaptor.addChild(root_2, stream_name.nextTree());
-                                    adaptor.addChild(root_2, stream_name.nextTree());
-
-                                    adaptor.addChild(root_1, root_2);
-                                }
-                                adaptor.addChild(root_1, stream_querylist.nextTree());
-
-                                adaptor.addChild(root_0, root_1);
-                            }
-
+                        adaptor.addChild(root_0, root_1);
                         }
 
-                        retval.tree = root_0;
                     }
-                }
-                break;
-                case 5: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:88:3: name name PREC querylist
-                {
-                    pushFollow(FOLLOW_name_in_oquery303);
-                    name28 = name();
+
+                    retval.tree = root_0;}
+                    }
+                    break;
+                case 4 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:87:3: LPAR oquery RPAR
+                    {
+                    root_0 = (Object)adaptor.nil();
+
+                    LPAR23=(Token)match(input,LPAR,FOLLOW_LPAR_in_oquery280); if (state.failed) return retval;
+                    pushFollow(FOLLOW_oquery_in_oquery283);
+                    oquery24=oquery();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, oquery24.getTree());
+                    RPAR25=(Token)match(input,RPAR,FOLLOW_RPAR_in_oquery285); if (state.failed) return retval;
+
                     }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name28.getTree());
-                    }
-                    pushFollow(FOLLOW_name_in_oquery305);
-                    name29 = name();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name29.getTree());
-                    }
-                    PREC30 = (Token) match(input, PREC, FOLLOW_PREC_in_oquery307);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_PREC.add(PREC30);
-                    }
-
-                    pushFollow(FOLLOW_querylist_in_oquery309);
-                    querylist31 = querylist();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_querylist.add(querylist31.getTree());
-                    }
-                    if (state.backtracking == 0) {
-                        precon = true;
-                    }
-
-
-                    // AST REWRITE
-                    // elements: name, name, querylist
-                    // token labels:
-                    // rule labels: retval
-                    // token list labels:
-                    // rule list labels:
-                    // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
-
-                        root_0 = (Object) adaptor.nil();
-                        // 88:45: -> ^( PRECON ^( ADJASIGN name name ) querylist )
-                        {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:88:48: ^( PRECON ^( ADJASIGN name name ) querylist )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(PRECON, "PRECON"), root_1);
-
-                                // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:88:57: ^( ADJASIGN name name )
-                                {
-                                    Object root_2 = (Object) adaptor.nil();
-                                    root_2 = (Object) adaptor.becomeRoot((Object) adaptor.create(ADJASIGN, "ADJASIGN"), root_2);
-
-                                    adaptor.addChild(root_2, stream_name.nextTree());
-                                    adaptor.addChild(root_2, stream_name.nextTree());
-
-                                    adaptor.addChild(root_1, root_2);
-                                }
-                                adaptor.addChild(root_1, stream_querylist.nextTree());
-
-                                adaptor.addChild(root_0, root_1);
-                            }
-
-                        }
-
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 6: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:89:3: name PREC querylist
-                {
-                    pushFollow(FOLLOW_name_in_oquery330);
-                    name32 = name();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name32.getTree());
-                    }
-                    PREC33 = (Token) match(input, PREC, FOLLOW_PREC_in_oquery332);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_PREC.add(PREC33);
-                    }
-
-                    pushFollow(FOLLOW_querylist_in_oquery334);
-                    querylist34 = querylist();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_querylist.add(querylist34.getTree());
-                    }
-                    if (state.backtracking == 0) {
-                        precon = true;
-                    }
-
-
-                    // AST REWRITE
-                    // elements: name, querylist
-                    // token labels:
-                    // rule labels: retval
-                    // token list labels:
-                    // rule list labels:
-                    // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
-
-                        root_0 = (Object) adaptor.nil();
-                        // 89:40: -> ^( name ^( PRECON querylist ) )
-                        {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:89:43: ^( name ^( PRECON querylist ) )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot(stream_name.nextNode(), root_1);
-
-                                // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:89:50: ^( PRECON querylist )
-                                {
-                                    Object root_2 = (Object) adaptor.nil();
-                                    root_2 = (Object) adaptor.becomeRoot((Object) adaptor.create(PRECON, "PRECON"), root_2);
-
-                                    adaptor.addChild(root_2, stream_querylist.nextTree());
-
-                                    adaptor.addChild(root_1, root_2);
-                                }
-
-                                adaptor.addChild(root_0, root_1);
-                            }
-
-                        }
-
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 7: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:90:3: LPAR oquery RPAR
-                {
-                    root_0 = (Object) adaptor.nil();
-
-                    LPAR35 = (Token) match(input, LPAR, FOLLOW_LPAR_in_oquery352);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    pushFollow(FOLLOW_oquery_in_oquery355);
-                    oquery36 = oquery();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, oquery36.getTree());
-                    }
-                    RPAR37 = (Token) match(input, RPAR, FOLLOW_RPAR_in_oquery357);
-                    if (state.failed) {
-                        return retval;
-                    }
-
-                }
-                break;
+                    break;
 
             }
             retval.stop = input.LT(-1);
 
-            if (state.backtracking == 0) {
+            if ( state.backtracking==0 ) {
 
-                retval.tree = (Object) adaptor.rulePostProcessing(root_0);
-                adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
             }
-        } catch (RecognitionException re) {
+        }
+        catch (RecognitionException re) {
             reportError(re);
-            recover(input, re);
-            retval.tree = (Object) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+            recover(input,re);
+    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
-        } finally {
+        }
+        finally {
         }
         return retval;
     }
     // $ANTLR end "oquery"
 
     public static class querylist_return extends ParserRuleReturnScope {
-
         Object tree;
-
-        public Object getTree() {
-            return tree;
-        }
+        public Object getTree() { return tree; }
     };
 
     // $ANTLR start "querylist"
-    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:94:1: querylist : ( oquery DEL querylist | sent DEL querylist | oquery | sent );
+    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:91:1: querylist : ( oquery DEL querylist | sent DEL querylist | oquery | sent );
     public final ComplexParser.querylist_return querylist() throws RecognitionException {
         ComplexParser.querylist_return retval = new ComplexParser.querylist_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token DEL39 = null;
-        Token DEL42 = null;
-        ComplexParser.oquery_return oquery38 = null;
+        Token DEL27=null;
+        Token DEL30=null;
+        ComplexParser.oquery_return oquery26 = null;
 
-        ComplexParser.querylist_return querylist40 = null;
+        ComplexParser.querylist_return querylist28 = null;
 
-        ComplexParser.sent_return sent41 = null;
+        ComplexParser.sent_return sent29 = null;
 
-        ComplexParser.querylist_return querylist43 = null;
+        ComplexParser.querylist_return querylist31 = null;
 
-        ComplexParser.oquery_return oquery44 = null;
+        ComplexParser.oquery_return oquery32 = null;
 
-        ComplexParser.sent_return sent45 = null;
+        ComplexParser.sent_return sent33 = null;
 
 
-        Object DEL39_tree = null;
-        Object DEL42_tree = null;
+        Object DEL27_tree=null;
+        Object DEL30_tree=null;
 
         try {
-            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:95:1: ( oquery DEL querylist | sent DEL querylist | oquery | sent )
-            int alt9 = 4;
+            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:92:1: ( oquery DEL querylist | sent DEL querylist | oquery | sent )
+            int alt9=4;
             alt9 = dfa9.predict(input);
             switch (alt9) {
-                case 1: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:95:3: oquery DEL querylist
-                {
-                    root_0 = (Object) adaptor.nil();
+                case 1 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:92:3: oquery DEL querylist
+                    {
+                    root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_oquery_in_querylist369);
-                    oquery38 = oquery();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, oquery38.getTree());
-                    }
-                    DEL39 = (Token) match(input, DEL, FOLLOW_DEL_in_querylist371);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    pushFollow(FOLLOW_querylist_in_querylist374);
-                    querylist40 = querylist();
+                    pushFollow(FOLLOW_oquery_in_querylist297);
+                    oquery26=oquery();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, querylist40.getTree());
-                    }
-
-                }
-                break;
-                case 2: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:96:3: sent DEL querylist
-                {
-                    root_0 = (Object) adaptor.nil();
-
-                    pushFollow(FOLLOW_sent_in_querylist378);
-                    sent41 = sent();
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, oquery26.getTree());
+                    DEL27=(Token)match(input,DEL,FOLLOW_DEL_in_querylist299); if (state.failed) return retval;
+                    pushFollow(FOLLOW_querylist_in_querylist302);
+                    querylist28=querylist();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, querylist28.getTree());
+
                     }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, sent41.getTree());
-                    }
-                    DEL42 = (Token) match(input, DEL, FOLLOW_DEL_in_querylist380);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    pushFollow(FOLLOW_querylist_in_querylist383);
-                    querylist43 = querylist();
+                    break;
+                case 2 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:93:3: sent DEL querylist
+                    {
+                    root_0 = (Object)adaptor.nil();
+
+                    pushFollow(FOLLOW_sent_in_querylist306);
+                    sent29=sent();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, querylist43.getTree());
-                    }
-
-                }
-                break;
-                case 3: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:97:3: oquery
-                {
-                    root_0 = (Object) adaptor.nil();
-
-                    pushFollow(FOLLOW_oquery_in_querylist387);
-                    oquery44 = oquery();
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, sent29.getTree());
+                    DEL30=(Token)match(input,DEL,FOLLOW_DEL_in_querylist308); if (state.failed) return retval;
+                    pushFollow(FOLLOW_querylist_in_querylist311);
+                    querylist31=querylist();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, oquery44.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, querylist31.getTree());
 
-                }
-                break;
-                case 4: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:98:3: sent
-                {
-                    root_0 = (Object) adaptor.nil();
+                    }
+                    break;
+                case 3 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:94:3: oquery
+                    {
+                    root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_sent_in_querylist391);
-                    sent45 = sent();
+                    pushFollow(FOLLOW_oquery_in_querylist315);
+                    oquery32=oquery();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, sent45.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, oquery32.getTree());
 
-                }
-                break;
+                    }
+                    break;
+                case 4 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:95:3: sent
+                    {
+                    root_0 = (Object)adaptor.nil();
+
+                    pushFollow(FOLLOW_sent_in_querylist319);
+                    sent33=sent();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, sent33.getTree());
+
+                    }
+                    break;
 
             }
             retval.stop = input.LT(-1);
 
-            if (state.backtracking == 0) {
+            if ( state.backtracking==0 ) {
 
-                retval.tree = (Object) adaptor.rulePostProcessing(root_0);
-                adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
             }
-        } catch (RecognitionException re) {
+        }
+        catch (RecognitionException re) {
             reportError(re);
-            recover(input, re);
-            retval.tree = (Object) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+            recover(input,re);
+    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
-        } finally {
+        }
+        finally {
         }
         return retval;
     }
     // $ANTLR end "querylist"
 
     public static class pquery_return extends ParserRuleReturnScope {
-
         Object tree;
-
-        public Object getTree() {
-            return tree;
-        }
+        public Object getTree() { return tree; }
     };
 
     // $ANTLR start "pquery"
-    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:102:1: pquery : ( plist PRED oquery -> ^( oquery ^( PREDE plist ) ) | MODT PRED oquery -> ^( oquery ^( PREDE MODTO ) ) );
+    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:99:1: pquery : ( plist PRED oquery -> ^( oquery ^( PREDE plist ) ) | MODT PRED oquery -> ^( oquery ^( PREDE MODTO ) ) );
     public final ComplexParser.pquery_return pquery() throws RecognitionException {
         ComplexParser.pquery_return retval = new ComplexParser.pquery_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token PRED47 = null;
-        Token MODT49 = null;
-        Token PRED50 = null;
-        ComplexParser.plist_return plist46 = null;
+        Token PRED35=null;
+        Token MODT37=null;
+        Token PRED38=null;
+        ComplexParser.plist_return plist34 = null;
 
-        ComplexParser.oquery_return oquery48 = null;
+        ComplexParser.oquery_return oquery36 = null;
 
-        ComplexParser.oquery_return oquery51 = null;
+        ComplexParser.oquery_return oquery39 = null;
 
 
-        Object PRED47_tree = null;
-        Object MODT49_tree = null;
-        Object PRED50_tree = null;
-        RewriteRuleTokenStream stream_MODT = new RewriteRuleTokenStream(adaptor, "token MODT");
-        RewriteRuleTokenStream stream_PRED = new RewriteRuleTokenStream(adaptor, "token PRED");
-        RewriteRuleSubtreeStream stream_plist = new RewriteRuleSubtreeStream(adaptor, "rule plist");
-        RewriteRuleSubtreeStream stream_oquery = new RewriteRuleSubtreeStream(adaptor, "rule oquery");
+        Object PRED35_tree=null;
+        Object MODT37_tree=null;
+        Object PRED38_tree=null;
+        RewriteRuleTokenStream stream_MODT=new RewriteRuleTokenStream(adaptor,"token MODT");
+        RewriteRuleTokenStream stream_PRED=new RewriteRuleTokenStream(adaptor,"token PRED");
+        RewriteRuleSubtreeStream stream_plist=new RewriteRuleSubtreeStream(adaptor,"rule plist");
+        RewriteRuleSubtreeStream stream_oquery=new RewriteRuleSubtreeStream(adaptor,"rule oquery");
         try {
-            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:103:1: ( plist PRED oquery -> ^( oquery ^( PREDE plist ) ) | MODT PRED oquery -> ^( oquery ^( PREDE MODTO ) ) )
-            int alt10 = 2;
+            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:100:1: ( plist PRED oquery -> ^( oquery ^( PREDE plist ) ) | MODT PRED oquery -> ^( oquery ^( PREDE MODTO ) ) )
+            int alt10=2;
             int LA10_0 = input.LA(1);
 
-            if ((LA10_0 == BVAR || LA10_0 == VAR)) {
-                alt10 = 1;
-            } else if ((LA10_0 == MODT)) {
-                alt10 = 2;
-            } else {
-                if (state.backtracking > 0) {
-                    state.failed = true;
-                    return retval;
-                }
+            if ( (LA10_0==BVAR||LA10_0==VAR) ) {
+                alt10=1;
+            }
+            else if ( (LA10_0==MODT) ) {
+                alt10=2;
+            }
+            else {
+                if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                        new NoViableAltException("", 10, 0, input);
+                    new NoViableAltException("", 10, 0, input);
 
                 throw nvae;
             }
             switch (alt10) {
-                case 1: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:103:3: plist PRED oquery
-                {
-                    pushFollow(FOLLOW_plist_in_pquery402);
-                    plist46 = plist();
+                case 1 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:100:3: plist PRED oquery
+                    {
+                    pushFollow(FOLLOW_plist_in_pquery330);
+                    plist34=plist();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_plist.add(plist46.getTree());
-                    }
-                    PRED47 = (Token) match(input, PRED, FOLLOW_PRED_in_pquery404);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_PRED.add(PRED47);
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_plist.add(plist34.getTree());
+                    PRED35=(Token)match(input,PRED,FOLLOW_PRED_in_pquery332); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_PRED.add(PRED35);
 
-                    pushFollow(FOLLOW_oquery_in_pquery406);
-                    oquery48 = oquery();
+                    pushFollow(FOLLOW_oquery_in_pquery334);
+                    oquery36=oquery();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_oquery.add(oquery48.getTree());
-                    }
-                    if (state.backtracking == 0) {
-                        prede = true;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_oquery.add(oquery36.getTree());
+                    if ( state.backtracking==0 ) {
+                      prede = true;
                     }
 
 
@@ -1627,67 +1248,53 @@ public class ComplexParser extends Parser {
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 103:37: -> ^( oquery ^( PREDE plist ) )
+                    root_0 = (Object)adaptor.nil();
+                    // 100:37: -> ^( oquery ^( PREDE plist ) )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:100:40: ^( oquery ^( PREDE plist ) )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:103:40: ^( oquery ^( PREDE plist ) )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot(stream_oquery.nextNode(), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot(stream_oquery.nextNode(), root_1);
 
-                                // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:103:49: ^( PREDE plist )
-                                {
-                                    Object root_2 = (Object) adaptor.nil();
-                                    root_2 = (Object) adaptor.becomeRoot((Object) adaptor.create(PREDE, "PREDE"), root_2);
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:100:49: ^( PREDE plist )
+                        {
+                        Object root_2 = (Object)adaptor.nil();
+                        root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(PREDE, "PREDE"), root_2);
 
-                                    adaptor.addChild(root_2, stream_plist.nextTree());
+                        adaptor.addChild(root_2, stream_plist.nextTree());
 
-                                    adaptor.addChild(root_1, root_2);
-                                }
-
-                                adaptor.addChild(root_0, root_1);
-                            }
-
+                        adaptor.addChild(root_1, root_2);
                         }
 
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 2: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:105:3: MODT PRED oquery
-                {
-                    MODT49 = (Token) match(input, MODT, FOLLOW_MODT_in_pquery426);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_MODT.add(MODT49);
+                        adaptor.addChild(root_0, root_1);
+                        }
+
                     }
 
-                    PRED50 = (Token) match(input, PRED, FOLLOW_PRED_in_pquery428);
-                    if (state.failed) {
-                        return retval;
+                    retval.tree = root_0;}
                     }
-                    if (state.backtracking == 0) {
-                        stream_PRED.add(PRED50);
-                    }
+                    break;
+                case 2 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:101:3: MODT PRED oquery
+                    {
+                    MODT37=(Token)match(input,MODT,FOLLOW_MODT_in_pquery352); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_MODT.add(MODT37);
 
-                    pushFollow(FOLLOW_oquery_in_pquery430);
-                    oquery51 = oquery();
+                    PRED38=(Token)match(input,PRED,FOLLOW_PRED_in_pquery354); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_PRED.add(PRED38);
+
+                    pushFollow(FOLLOW_oquery_in_pquery356);
+                    oquery39=oquery();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_oquery.add(oquery51.getTree());
-                    }
-                    if (state.backtracking == 0) {
-                        prede = true;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_oquery.add(oquery39.getTree());
+                    if ( state.backtracking==0 ) {
+                      prede = true;
                     }
 
 
@@ -1698,284 +1305,270 @@ public class ComplexParser extends Parser {
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 105:36: -> ^( oquery ^( PREDE MODTO ) )
+                    root_0 = (Object)adaptor.nil();
+                    // 101:36: -> ^( oquery ^( PREDE MODTO ) )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:101:39: ^( oquery ^( PREDE MODTO ) )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:105:39: ^( oquery ^( PREDE MODTO ) )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot(stream_oquery.nextNode(), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot(stream_oquery.nextNode(), root_1);
 
-                                // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:105:48: ^( PREDE MODTO )
-                                {
-                                    Object root_2 = (Object) adaptor.nil();
-                                    root_2 = (Object) adaptor.becomeRoot((Object) adaptor.create(PREDE, "PREDE"), root_2);
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:101:48: ^( PREDE MODTO )
+                        {
+                        Object root_2 = (Object)adaptor.nil();
+                        root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(PREDE, "PREDE"), root_2);
 
-                                    adaptor.addChild(root_2, (Object) adaptor.create(MODTO, "MODTO"));
+                        adaptor.addChild(root_2, (Object)adaptor.create(MODTO, "MODTO"));
 
-                                    adaptor.addChild(root_1, root_2);
-                                }
-
-                                adaptor.addChild(root_0, root_1);
-                            }
-
+                        adaptor.addChild(root_1, root_2);
                         }
 
-                        retval.tree = root_0;
+                        adaptor.addChild(root_0, root_1);
+                        }
+
                     }
-                }
-                break;
+
+                    retval.tree = root_0;}
+                    }
+                    break;
 
             }
             retval.stop = input.LT(-1);
 
-            if (state.backtracking == 0) {
+            if ( state.backtracking==0 ) {
 
-                retval.tree = (Object) adaptor.rulePostProcessing(root_0);
-                adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
             }
-        } catch (RecognitionException re) {
+        }
+        catch (RecognitionException re) {
             reportError(re);
-            recover(input, re);
-            retval.tree = (Object) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+            recover(input,re);
+    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
-        } finally {
+        }
+        finally {
         }
         return retval;
     }
     // $ANTLR end "pquery"
 
     public static class plist_return extends ParserRuleReturnScope {
-
         Object tree;
-
-        public Object getTree() {
-            return tree;
-        }
+        public Object getTree() { return tree; }
     };
 
     // $ANTLR start "plist"
-    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:109:1: plist : ( name DEL plist | name );
+    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:105:1: plist : ( name DEL plist | name );
     public final ComplexParser.plist_return plist() throws RecognitionException {
         ComplexParser.plist_return retval = new ComplexParser.plist_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token DEL53 = null;
-        ComplexParser.name_return name52 = null;
+        Token DEL41=null;
+        ComplexParser.name_return name40 = null;
 
-        ComplexParser.plist_return plist54 = null;
+        ComplexParser.plist_return plist42 = null;
 
-        ComplexParser.name_return name55 = null;
+        ComplexParser.name_return name43 = null;
 
 
-        Object DEL53_tree = null;
+        Object DEL41_tree=null;
 
         try {
-            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:110:1: ( name DEL plist | name )
-            int alt11 = 2;
+            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:106:1: ( name DEL plist | name )
+            int alt11=2;
             int LA11_0 = input.LA(1);
 
-            if ((LA11_0 == BVAR || LA11_0 == VAR)) {
+            if ( (LA11_0==BVAR||LA11_0==VAR) ) {
                 int LA11_1 = input.LA(2);
 
-                if ((LA11_1 == DEL)) {
-                    alt11 = 1;
-                } else if ((LA11_1 == EOF || LA11_1 == PRED || LA11_1 == RPAR)) {
-                    alt11 = 2;
-                } else {
-                    if (state.backtracking > 0) {
-                        state.failed = true;
-                        return retval;
-                    }
+                if ( (LA11_1==DEL) ) {
+                    alt11=1;
+                }
+                else if ( (LA11_1==EOF||LA11_1==PRED||LA11_1==RPAR) ) {
+                    alt11=2;
+                }
+                else {
+                    if (state.backtracking>0) {state.failed=true; return retval;}
                     NoViableAltException nvae =
-                            new NoViableAltException("", 11, 1, input);
+                        new NoViableAltException("", 11, 1, input);
 
                     throw nvae;
                 }
-            } else {
-                if (state.backtracking > 0) {
-                    state.failed = true;
-                    return retval;
-                }
+            }
+            else {
+                if (state.backtracking>0) {state.failed=true; return retval;}
                 NoViableAltException nvae =
-                        new NoViableAltException("", 11, 0, input);
+                    new NoViableAltException("", 11, 0, input);
 
                 throw nvae;
             }
             switch (alt11) {
-                case 1: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:110:3: name DEL plist
-                {
-                    root_0 = (Object) adaptor.nil();
+                case 1 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:106:3: name DEL plist
+                    {
+                    root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_name_in_plist455);
-                    name52 = name();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, name52.getTree());
-                    }
-                    DEL53 = (Token) match(input, DEL, FOLLOW_DEL_in_plist457);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    pushFollow(FOLLOW_plist_in_plist460);
-                    plist54 = plist();
+                    pushFollow(FOLLOW_name_in_plist381);
+                    name40=name();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, plist54.getTree());
-                    }
-
-                }
-                break;
-                case 2: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:111:3: name
-                {
-                    root_0 = (Object) adaptor.nil();
-
-                    pushFollow(FOLLOW_name_in_plist464);
-                    name55 = name();
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name40.getTree());
+                    DEL41=(Token)match(input,DEL,FOLLOW_DEL_in_plist383); if (state.failed) return retval;
+                    pushFollow(FOLLOW_plist_in_plist386);
+                    plist42=plist();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, name55.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, plist42.getTree());
 
-                }
-                break;
+                    }
+                    break;
+                case 2 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:107:3: name
+                    {
+                    root_0 = (Object)adaptor.nil();
+
+                    pushFollow(FOLLOW_name_in_plist390);
+                    name43=name();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, name43.getTree());
+
+                    }
+                    break;
 
             }
             retval.stop = input.LT(-1);
 
-            if (state.backtracking == 0) {
+            if ( state.backtracking==0 ) {
 
-                retval.tree = (Object) adaptor.rulePostProcessing(root_0);
-                adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
             }
-        } catch (RecognitionException re) {
+        }
+        catch (RecognitionException re) {
             reportError(re);
-            recover(input, re);
-            retval.tree = (Object) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+            recover(input,re);
+    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
-        } finally {
+        }
+        finally {
         }
         return retval;
     }
     // $ANTLR end "plist"
 
     public static class name_return extends ParserRuleReturnScope {
-
         Object tree;
-
-        public Object getTree() {
-            return tree;
-        }
+        public Object getTree() { return tree; }
     };
 
     // $ANTLR start "name"
-    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:115:1: name : ( BVAR | VAR );
+    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:111:1: name : ( BVAR | VAR );
     public final ComplexParser.name_return name() throws RecognitionException {
         ComplexParser.name_return retval = new ComplexParser.name_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token set56 = null;
+        Token set44=null;
 
-        Object set56_tree = null;
+        Object set44_tree=null;
 
         try {
-            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:116:1: ( BVAR | VAR )
+            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:112:1: ( BVAR | VAR )
             // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:
             {
-                root_0 = (Object) adaptor.nil();
+            root_0 = (Object)adaptor.nil();
 
-                set56 = (Token) input.LT(1);
-                if (input.LA(1) == BVAR || input.LA(1) == VAR) {
-                    input.consume();
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, (Object) adaptor.create(set56));
-                    }
-                    state.errorRecovery = false;
-                    state.failed = false;
-                } else {
-                    if (state.backtracking > 0) {
-                        state.failed = true;
-                        return retval;
-                    }
-                    MismatchedSetException mse = new MismatchedSetException(null, input);
-                    throw mse;
-                }
+            set44=(Token)input.LT(1);
+            if ( input.LA(1)==BVAR||input.LA(1)==VAR ) {
+                input.consume();
+                if ( state.backtracking==0 ) adaptor.addChild(root_0, (Object)adaptor.create(set44));
+                state.errorRecovery=false;state.failed=false;
+            }
+            else {
+                if (state.backtracking>0) {state.failed=true; return retval;}
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                throw mse;
+            }
 
 
             }
 
             retval.stop = input.LT(-1);
 
-            if (state.backtracking == 0) {
+            if ( state.backtracking==0 ) {
 
-                retval.tree = (Object) adaptor.rulePostProcessing(root_0);
-                adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
             }
-        } catch (RecognitionException re) {
+        }
+        catch (RecognitionException re) {
             reportError(re);
-            recover(input, re);
-            retval.tree = (Object) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+            recover(input,re);
+    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
-        } finally {
+        }
+        finally {
         }
         return retval;
     }
     // $ANTLR end "name"
 
     public static class sent_return extends ParserRuleReturnScope {
-
         Object tree;
-
-        public Object getTree() {
-            return tree;
-        }
+        public Object getTree() { return tree; }
     };
 
     // $ANTLR start "sent"
-    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:121:1: sent : ( name SIGE val -> ^( ASIGN name val ) | VAR SIGL val -> ^( COMPL VAR val ) | name SIGL val -> ^( COMPL name val ) | VAR SIGG val -> ^( COMPG VAR val ) | name SIGG val -> ^( COMPG name val ) | VAR SIGLE val -> ^( COMPLE VAR val ) | name SIGLE val -> ^( COMPLE name val ) | VAR SIGGE val -> ^( COMPGE VAR val ) | name SIGGE val -> ^( COMPGE name val ) | VAR MODC val -> ^( LIKE VAR val ) | name MODC val -> ^( LIKE name val ) | name val -> ^( ASIGN name val ) | NUM name -> ^( ASIGN name NUM ) );
+    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:117:1: sent : ( name SIGE val -> ^( ASIGN name val ) | VAR SIGL val -> ^( COMPL VAR val ) | name SIGL val -> ^( COMPL name val ) | VAR SIGG val -> ^( COMPG VAR val ) | name SIGG val -> ^( COMPG name val ) | VAR SIGLE val -> ^( COMPLE VAR val ) | name SIGLE val -> ^( COMPLE name val ) | VAR SIGGE val -> ^( COMPGE VAR val ) | name SIGGE val -> ^( COMPGE name val ) | VAR MODC val -> ^( COMPAS VAR val ) | name MODC val -> ^( COMPAS name val ) | name MODN val DELY val ( VAR )? -> ^( COMPRNG name ^( INTERVAL val val ) ) );
     public final ComplexParser.sent_return sent() throws RecognitionException {
         ComplexParser.sent_return retval = new ComplexParser.sent_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token SIGE58 = null;
-        Token VAR60 = null;
-        Token SIGL61 = null;
-        Token SIGL64 = null;
-        Token VAR66 = null;
-        Token SIGG67 = null;
-        Token SIGG70 = null;
-        Token VAR72 = null;
-        Token SIGLE73 = null;
-        Token SIGLE76 = null;
-        Token VAR78 = null;
-        Token SIGGE79 = null;
-        Token SIGGE82 = null;
-        Token VAR84 = null;
-        Token MODC85 = null;
-        Token MODC88 = null;
-        Token NUM92 = null;
+        Token SIGE46=null;
+        Token VAR48=null;
+        Token SIGL49=null;
+        Token SIGL52=null;
+        Token VAR54=null;
+        Token SIGG55=null;
+        Token SIGG58=null;
+        Token VAR60=null;
+        Token SIGLE61=null;
+        Token SIGLE64=null;
+        Token VAR66=null;
+        Token SIGGE67=null;
+        Token SIGGE70=null;
+        Token VAR72=null;
+        Token MODC73=null;
+        Token MODC76=null;
+        Token MODN79=null;
+        Token DELY81=null;
+        Token VAR83=null;
+        ComplexParser.name_return name45 = null;
+
+        ComplexParser.val_return val47 = null;
+
+        ComplexParser.val_return val50 = null;
+
+        ComplexParser.name_return name51 = null;
+
+        ComplexParser.val_return val53 = null;
+
+        ComplexParser.val_return val56 = null;
+
         ComplexParser.name_return name57 = null;
 
         ComplexParser.val_return val59 = null;
@@ -1998,211 +1591,66 @@ public class ComplexParser extends Parser {
 
         ComplexParser.val_return val77 = null;
 
+        ComplexParser.name_return name78 = null;
+
         ComplexParser.val_return val80 = null;
 
-        ComplexParser.name_return name81 = null;
-
-        ComplexParser.val_return val83 = null;
-
-        ComplexParser.val_return val86 = null;
-
-        ComplexParser.name_return name87 = null;
-
-        ComplexParser.val_return val89 = null;
-
-        ComplexParser.name_return name90 = null;
-
-        ComplexParser.val_return val91 = null;
-
-        ComplexParser.name_return name93 = null;
+        ComplexParser.val_return val82 = null;
 
 
-        Object SIGE58_tree = null;
-        Object VAR60_tree = null;
-        Object SIGL61_tree = null;
-        Object SIGL64_tree = null;
-        Object VAR66_tree = null;
-        Object SIGG67_tree = null;
-        Object SIGG70_tree = null;
-        Object VAR72_tree = null;
-        Object SIGLE73_tree = null;
-        Object SIGLE76_tree = null;
-        Object VAR78_tree = null;
-        Object SIGGE79_tree = null;
-        Object SIGGE82_tree = null;
-        Object VAR84_tree = null;
-        Object MODC85_tree = null;
-        Object MODC88_tree = null;
-        Object NUM92_tree = null;
-        RewriteRuleTokenStream stream_VAR = new RewriteRuleTokenStream(adaptor, "token VAR");
-        RewriteRuleTokenStream stream_MODC = new RewriteRuleTokenStream(adaptor, "token MODC");
-        RewriteRuleTokenStream stream_SIGL = new RewriteRuleTokenStream(adaptor, "token SIGL");
-        RewriteRuleTokenStream stream_SIGGE = new RewriteRuleTokenStream(adaptor, "token SIGGE");
-        RewriteRuleTokenStream stream_SIGE = new RewriteRuleTokenStream(adaptor, "token SIGE");
-        RewriteRuleTokenStream stream_NUM = new RewriteRuleTokenStream(adaptor, "token NUM");
-        RewriteRuleTokenStream stream_SIGLE = new RewriteRuleTokenStream(adaptor, "token SIGLE");
-        RewriteRuleTokenStream stream_SIGG = new RewriteRuleTokenStream(adaptor, "token SIGG");
-        RewriteRuleSubtreeStream stream_val = new RewriteRuleSubtreeStream(adaptor, "rule val");
-        RewriteRuleSubtreeStream stream_name = new RewriteRuleSubtreeStream(adaptor, "rule name");
+        Object SIGE46_tree=null;
+        Object VAR48_tree=null;
+        Object SIGL49_tree=null;
+        Object SIGL52_tree=null;
+        Object VAR54_tree=null;
+        Object SIGG55_tree=null;
+        Object SIGG58_tree=null;
+        Object VAR60_tree=null;
+        Object SIGLE61_tree=null;
+        Object SIGLE64_tree=null;
+        Object VAR66_tree=null;
+        Object SIGGE67_tree=null;
+        Object SIGGE70_tree=null;
+        Object VAR72_tree=null;
+        Object MODC73_tree=null;
+        Object MODC76_tree=null;
+        Object MODN79_tree=null;
+        Object DELY81_tree=null;
+        Object VAR83_tree=null;
+        RewriteRuleTokenStream stream_VAR=new RewriteRuleTokenStream(adaptor,"token VAR");
+        RewriteRuleTokenStream stream_MODC=new RewriteRuleTokenStream(adaptor,"token MODC");
+        RewriteRuleTokenStream stream_SIGL=new RewriteRuleTokenStream(adaptor,"token SIGL");
+        RewriteRuleTokenStream stream_DELY=new RewriteRuleTokenStream(adaptor,"token DELY");
+        RewriteRuleTokenStream stream_SIGGE=new RewriteRuleTokenStream(adaptor,"token SIGGE");
+        RewriteRuleTokenStream stream_MODN=new RewriteRuleTokenStream(adaptor,"token MODN");
+        RewriteRuleTokenStream stream_SIGE=new RewriteRuleTokenStream(adaptor,"token SIGE");
+        RewriteRuleTokenStream stream_SIGLE=new RewriteRuleTokenStream(adaptor,"token SIGLE");
+        RewriteRuleTokenStream stream_SIGG=new RewriteRuleTokenStream(adaptor,"token SIGG");
+        RewriteRuleSubtreeStream stream_val=new RewriteRuleSubtreeStream(adaptor,"rule val");
+        RewriteRuleSubtreeStream stream_name=new RewriteRuleSubtreeStream(adaptor,"rule name");
         try {
-            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:122:1: ( name SIGE val -> ^( ASIGN name val ) | VAR SIGL val -> ^( COMPL VAR val ) | name SIGL val -> ^( COMPL name val ) | VAR SIGG val -> ^( COMPG VAR val ) | name SIGG val -> ^( COMPG name val ) | VAR SIGLE val -> ^( COMPLE VAR val ) | name SIGLE val -> ^( COMPLE name val ) | VAR SIGGE val -> ^( COMPGE VAR val ) | name SIGGE val -> ^( COMPGE name val ) | VAR MODC val -> ^( LIKE VAR val ) | name MODC val -> ^( LIKE name val ) | name val -> ^( ASIGN name val ) | NUM name -> ^( ASIGN name NUM ) )
-            int alt12 = 13;
-            alt12 = dfa12.predict(input);
-            switch (alt12) {
-                case 1: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:122:3: name SIGE val
-                {
-                    pushFollow(FOLLOW_name_in_sent490);
-                    name57 = name();
+            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:118:1: ( name SIGE val -> ^( ASIGN name val ) | VAR SIGL val -> ^( COMPL VAR val ) | name SIGL val -> ^( COMPL name val ) | VAR SIGG val -> ^( COMPG VAR val ) | name SIGG val -> ^( COMPG name val ) | VAR SIGLE val -> ^( COMPLE VAR val ) | name SIGLE val -> ^( COMPLE name val ) | VAR SIGGE val -> ^( COMPGE VAR val ) | name SIGGE val -> ^( COMPGE name val ) | VAR MODC val -> ^( COMPAS VAR val ) | name MODC val -> ^( COMPAS name val ) | name MODN val DELY val ( VAR )? -> ^( COMPRNG name ^( INTERVAL val val ) ) )
+            int alt13=12;
+            alt13 = dfa13.predict(input);
+            switch (alt13) {
+                case 1 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:118:3: name SIGE val
+                    {
+                    pushFollow(FOLLOW_name_in_sent416);
+                    name45=name();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name57.getTree());
-                    }
-                    SIGE58 = (Token) match(input, SIGE, FOLLOW_SIGE_in_sent492);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_SIGE.add(SIGE58);
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_name.add(name45.getTree());
+                    SIGE46=(Token)match(input,SIGE,FOLLOW_SIGE_in_sent418); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGE.add(SIGE46);
 
-                    pushFollow(FOLLOW_val_in_sent494);
-                    val59 = val();
+                    pushFollow(FOLLOW_val_in_sent420);
+                    val47=val();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_val.add(val59.getTree());
-                    }
-
-
-                    // AST REWRITE
-                    // elements: name, val
-                    // token labels:
-                    // rule labels: retval
-                    // token list labels:
-                    // rule list labels:
-                    // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
-
-                        root_0 = (Object) adaptor.nil();
-                        // 122:17: -> ^( ASIGN name val )
-                        {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:122:20: ^( ASIGN name val )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(ASIGN, "ASIGN"), root_1);
-
-                                adaptor.addChild(root_1, stream_name.nextTree());
-                                adaptor.addChild(root_1, stream_val.nextTree());
-
-                                adaptor.addChild(root_0, root_1);
-                            }
-
-                        }
-
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 2: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:123:3: VAR SIGL val
-                {
-                    VAR60 = (Token) match(input, VAR, FOLLOW_VAR_in_sent508);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_VAR.add(VAR60);
-                    }
-
-                    SIGL61 = (Token) match(input, SIGL, FOLLOW_SIGL_in_sent510);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_SIGL.add(SIGL61);
-                    }
-
-                    pushFollow(FOLLOW_val_in_sent512);
-                    val62 = val();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_val.add(val62.getTree());
-                    }
-
-
-                    // AST REWRITE
-                    // elements: val, VAR
-                    // token labels:
-                    // rule labels: retval
-                    // token list labels:
-                    // rule list labels:
-                    // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
-
-                        root_0 = (Object) adaptor.nil();
-                        // 123:16: -> ^( COMPL VAR val )
-                        {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:123:19: ^( COMPL VAR val )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(COMPL, "COMPL"), root_1);
-
-                                adaptor.addChild(root_1, stream_VAR.nextNode());
-                                adaptor.addChild(root_1, stream_val.nextTree());
-
-                                adaptor.addChild(root_0, root_1);
-                            }
-
-                        }
-
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 3: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:124:3: name SIGL val
-                {
-                    pushFollow(FOLLOW_name_in_sent526);
-                    name63 = name();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name63.getTree());
-                    }
-                    SIGL64 = (Token) match(input, SIGL, FOLLOW_SIGL_in_sent528);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_SIGL.add(SIGL64);
-                    }
-
-                    pushFollow(FOLLOW_val_in_sent530);
-                    val65 = val();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_val.add(val65.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val47.getTree());
 
 
                     // AST REWRITE
@@ -2212,58 +1660,44 @@ public class ComplexParser extends Parser {
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 124:17: -> ^( COMPL name val )
+                    root_0 = (Object)adaptor.nil();
+                    // 118:17: -> ^( ASIGN name val )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:118:20: ^( ASIGN name val )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:124:20: ^( COMPL name val )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(COMPL, "COMPL"), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(ASIGN, "ASIGN"), root_1);
 
-                                adaptor.addChild(root_1, stream_name.nextTree());
-                                adaptor.addChild(root_1, stream_val.nextTree());
+                        adaptor.addChild(root_1, stream_name.nextTree());
+                        adaptor.addChild(root_1, stream_val.nextTree());
 
-                                adaptor.addChild(root_0, root_1);
-                            }
-
+                        adaptor.addChild(root_0, root_1);
                         }
 
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 4: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:125:3: VAR SIGG val
-                {
-                    VAR66 = (Token) match(input, VAR, FOLLOW_VAR_in_sent544);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_VAR.add(VAR66);
                     }
 
-                    SIGG67 = (Token) match(input, SIGG, FOLLOW_SIGG_in_sent546);
-                    if (state.failed) {
-                        return retval;
+                    retval.tree = root_0;}
                     }
-                    if (state.backtracking == 0) {
-                        stream_SIGG.add(SIGG67);
-                    }
+                    break;
+                case 2 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:119:3: VAR SIGL val
+                    {
+                    VAR48=(Token)match(input,VAR,FOLLOW_VAR_in_sent434); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_VAR.add(VAR48);
 
-                    pushFollow(FOLLOW_val_in_sent548);
-                    val68 = val();
+                    SIGL49=(Token)match(input,SIGL,FOLLOW_SIGL_in_sent436); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGL.add(SIGL49);
+
+                    pushFollow(FOLLOW_val_in_sent438);
+                    val50=val();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_val.add(val68.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val50.getTree());
 
 
                     // AST REWRITE
@@ -2273,60 +1707,47 @@ public class ComplexParser extends Parser {
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 125:16: -> ^( COMPG VAR val )
+                    root_0 = (Object)adaptor.nil();
+                    // 119:16: -> ^( COMPL VAR val )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:119:19: ^( COMPL VAR val )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:125:19: ^( COMPG VAR val )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(COMPG, "COMPG"), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPL, "COMPL"), root_1);
 
-                                adaptor.addChild(root_1, stream_VAR.nextNode());
-                                adaptor.addChild(root_1, stream_val.nextTree());
+                        adaptor.addChild(root_1, stream_VAR.nextNode());
+                        adaptor.addChild(root_1, stream_val.nextTree());
 
-                                adaptor.addChild(root_0, root_1);
-                            }
-
+                        adaptor.addChild(root_0, root_1);
                         }
 
-                        retval.tree = root_0;
                     }
-                }
-                break;
-                case 5: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:126:3: name SIGG val
-                {
-                    pushFollow(FOLLOW_name_in_sent562);
-                    name69 = name();
+
+                    retval.tree = root_0;}
+                    }
+                    break;
+                case 3 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:120:3: name SIGL val
+                    {
+                    pushFollow(FOLLOW_name_in_sent452);
+                    name51=name();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name69.getTree());
-                    }
-                    SIGG70 = (Token) match(input, SIGG, FOLLOW_SIGG_in_sent564);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_SIGG.add(SIGG70);
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_name.add(name51.getTree());
+                    SIGL52=(Token)match(input,SIGL,FOLLOW_SIGL_in_sent454); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGL.add(SIGL52);
 
-                    pushFollow(FOLLOW_val_in_sent566);
-                    val71 = val();
+                    pushFollow(FOLLOW_val_in_sent456);
+                    val53=val();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_val.add(val71.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val53.getTree());
 
 
                     // AST REWRITE
@@ -2336,58 +1757,44 @@ public class ComplexParser extends Parser {
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 126:17: -> ^( COMPG name val )
+                    root_0 = (Object)adaptor.nil();
+                    // 120:17: -> ^( COMPL name val )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:120:20: ^( COMPL name val )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:126:20: ^( COMPG name val )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(COMPG, "COMPG"), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPL, "COMPL"), root_1);
 
-                                adaptor.addChild(root_1, stream_name.nextTree());
-                                adaptor.addChild(root_1, stream_val.nextTree());
+                        adaptor.addChild(root_1, stream_name.nextTree());
+                        adaptor.addChild(root_1, stream_val.nextTree());
 
-                                adaptor.addChild(root_0, root_1);
-                            }
-
+                        adaptor.addChild(root_0, root_1);
                         }
 
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 6: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:127:3: VAR SIGLE val
-                {
-                    VAR72 = (Token) match(input, VAR, FOLLOW_VAR_in_sent580);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_VAR.add(VAR72);
                     }
 
-                    SIGLE73 = (Token) match(input, SIGLE, FOLLOW_SIGLE_in_sent582);
-                    if (state.failed) {
-                        return retval;
+                    retval.tree = root_0;}
                     }
-                    if (state.backtracking == 0) {
-                        stream_SIGLE.add(SIGLE73);
-                    }
+                    break;
+                case 4 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:121:3: VAR SIGG val
+                    {
+                    VAR54=(Token)match(input,VAR,FOLLOW_VAR_in_sent470); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_VAR.add(VAR54);
 
-                    pushFollow(FOLLOW_val_in_sent584);
-                    val74 = val();
+                    SIGG55=(Token)match(input,SIGG,FOLLOW_SIGG_in_sent472); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGG.add(SIGG55);
+
+                    pushFollow(FOLLOW_val_in_sent474);
+                    val56=val();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_val.add(val74.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val56.getTree());
 
 
                     // AST REWRITE
@@ -2397,60 +1804,47 @@ public class ComplexParser extends Parser {
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 127:17: -> ^( COMPLE VAR val )
+                    root_0 = (Object)adaptor.nil();
+                    // 121:16: -> ^( COMPG VAR val )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:121:19: ^( COMPG VAR val )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:127:20: ^( COMPLE VAR val )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(COMPLE, "COMPLE"), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPG, "COMPG"), root_1);
 
-                                adaptor.addChild(root_1, stream_VAR.nextNode());
-                                adaptor.addChild(root_1, stream_val.nextTree());
+                        adaptor.addChild(root_1, stream_VAR.nextNode());
+                        adaptor.addChild(root_1, stream_val.nextTree());
 
-                                adaptor.addChild(root_0, root_1);
-                            }
-
+                        adaptor.addChild(root_0, root_1);
                         }
 
-                        retval.tree = root_0;
                     }
-                }
-                break;
-                case 7: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:128:3: name SIGLE val
-                {
-                    pushFollow(FOLLOW_name_in_sent598);
-                    name75 = name();
+
+                    retval.tree = root_0;}
+                    }
+                    break;
+                case 5 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:122:3: name SIGG val
+                    {
+                    pushFollow(FOLLOW_name_in_sent488);
+                    name57=name();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name75.getTree());
-                    }
-                    SIGLE76 = (Token) match(input, SIGLE, FOLLOW_SIGLE_in_sent600);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_SIGLE.add(SIGLE76);
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_name.add(name57.getTree());
+                    SIGG58=(Token)match(input,SIGG,FOLLOW_SIGG_in_sent490); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGG.add(SIGG58);
 
-                    pushFollow(FOLLOW_val_in_sent602);
-                    val77 = val();
+                    pushFollow(FOLLOW_val_in_sent492);
+                    val59=val();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_val.add(val77.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val59.getTree());
 
 
                     // AST REWRITE
@@ -2460,58 +1854,141 @@ public class ComplexParser extends Parser {
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 128:18: -> ^( COMPLE name val )
+                    root_0 = (Object)adaptor.nil();
+                    // 122:17: -> ^( COMPG name val )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:122:20: ^( COMPG name val )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:128:21: ^( COMPLE name val )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(COMPLE, "COMPLE"), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPG, "COMPG"), root_1);
 
-                                adaptor.addChild(root_1, stream_name.nextTree());
-                                adaptor.addChild(root_1, stream_val.nextTree());
+                        adaptor.addChild(root_1, stream_name.nextTree());
+                        adaptor.addChild(root_1, stream_val.nextTree());
 
-                                adaptor.addChild(root_0, root_1);
-                            }
-
+                        adaptor.addChild(root_0, root_1);
                         }
 
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 8: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:129:3: VAR SIGGE val
-                {
-                    VAR78 = (Token) match(input, VAR, FOLLOW_VAR_in_sent616);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_VAR.add(VAR78);
                     }
 
-                    SIGGE79 = (Token) match(input, SIGGE, FOLLOW_SIGGE_in_sent618);
-                    if (state.failed) {
-                        return retval;
+                    retval.tree = root_0;}
                     }
-                    if (state.backtracking == 0) {
-                        stream_SIGGE.add(SIGGE79);
-                    }
+                    break;
+                case 6 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:123:3: VAR SIGLE val
+                    {
+                    VAR60=(Token)match(input,VAR,FOLLOW_VAR_in_sent506); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_VAR.add(VAR60);
 
-                    pushFollow(FOLLOW_val_in_sent620);
-                    val80 = val();
+                    SIGLE61=(Token)match(input,SIGLE,FOLLOW_SIGLE_in_sent508); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGLE.add(SIGLE61);
+
+                    pushFollow(FOLLOW_val_in_sent510);
+                    val62=val();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val62.getTree());
+
+
+                    // AST REWRITE
+                    // elements: val, VAR
+                    // token labels:
+                    // rule labels: retval
+                    // token list labels:
+                    // rule list labels:
+                    // wildcard labels:
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
+
+                    root_0 = (Object)adaptor.nil();
+                    // 123:17: -> ^( COMPLE VAR val )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:123:20: ^( COMPLE VAR val )
+                        {
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPLE, "COMPLE"), root_1);
+
+                        adaptor.addChild(root_1, stream_VAR.nextNode());
+                        adaptor.addChild(root_1, stream_val.nextTree());
+
+                        adaptor.addChild(root_0, root_1);
+                        }
+
                     }
-                    if (state.backtracking == 0) {
-                        stream_val.add(val80.getTree());
+
+                    retval.tree = root_0;}
                     }
+                    break;
+                case 7 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:124:3: name SIGLE val
+                    {
+                    pushFollow(FOLLOW_name_in_sent524);
+                    name63=name();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_name.add(name63.getTree());
+                    SIGLE64=(Token)match(input,SIGLE,FOLLOW_SIGLE_in_sent526); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGLE.add(SIGLE64);
+
+                    pushFollow(FOLLOW_val_in_sent528);
+                    val65=val();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val65.getTree());
+
+
+                    // AST REWRITE
+                    // elements: name, val
+                    // token labels:
+                    // rule labels: retval
+                    // token list labels:
+                    // rule list labels:
+                    // wildcard labels:
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
+
+                    root_0 = (Object)adaptor.nil();
+                    // 124:18: -> ^( COMPLE name val )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:124:21: ^( COMPLE name val )
+                        {
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPLE, "COMPLE"), root_1);
+
+                        adaptor.addChild(root_1, stream_name.nextTree());
+                        adaptor.addChild(root_1, stream_val.nextTree());
+
+                        adaptor.addChild(root_0, root_1);
+                        }
+
+                    }
+
+                    retval.tree = root_0;}
+                    }
+                    break;
+                case 8 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:125:3: VAR SIGGE val
+                    {
+                    VAR66=(Token)match(input,VAR,FOLLOW_VAR_in_sent542); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_VAR.add(VAR66);
+
+                    SIGGE67=(Token)match(input,SIGGE,FOLLOW_SIGGE_in_sent544); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGGE.add(SIGGE67);
+
+                    pushFollow(FOLLOW_val_in_sent546);
+                    val68=val();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val68.getTree());
 
 
                     // AST REWRITE
@@ -2521,239 +1998,47 @@ public class ComplexParser extends Parser {
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 129:17: -> ^( COMPGE VAR val )
+                    root_0 = (Object)adaptor.nil();
+                    // 125:17: -> ^( COMPGE VAR val )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:125:20: ^( COMPGE VAR val )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:129:20: ^( COMPGE VAR val )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(COMPGE, "COMPGE"), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPGE, "COMPGE"), root_1);
 
-                                adaptor.addChild(root_1, stream_VAR.nextNode());
-                                adaptor.addChild(root_1, stream_val.nextTree());
+                        adaptor.addChild(root_1, stream_VAR.nextNode());
+                        adaptor.addChild(root_1, stream_val.nextTree());
 
-                                adaptor.addChild(root_0, root_1);
-                            }
-
+                        adaptor.addChild(root_0, root_1);
                         }
 
-                        retval.tree = root_0;
                     }
-                }
-                break;
-                case 9: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:130:3: name SIGGE val
-                {
-                    pushFollow(FOLLOW_name_in_sent634);
-                    name81 = name();
+
+                    retval.tree = root_0;}
+                    }
+                    break;
+                case 9 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:126:3: name SIGGE val
+                    {
+                    pushFollow(FOLLOW_name_in_sent560);
+                    name69=name();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name81.getTree());
-                    }
-                    SIGGE82 = (Token) match(input, SIGGE, FOLLOW_SIGGE_in_sent636);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_SIGGE.add(SIGGE82);
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_name.add(name69.getTree());
+                    SIGGE70=(Token)match(input,SIGGE,FOLLOW_SIGGE_in_sent562); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_SIGGE.add(SIGGE70);
 
-                    pushFollow(FOLLOW_val_in_sent638);
-                    val83 = val();
+                    pushFollow(FOLLOW_val_in_sent564);
+                    val71=val();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_val.add(val83.getTree());
-                    }
-
-
-                    // AST REWRITE
-                    // elements: val, name
-                    // token labels:
-                    // rule labels: retval
-                    // token list labels:
-                    // rule list labels:
-                    // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
-
-                        root_0 = (Object) adaptor.nil();
-                        // 130:18: -> ^( COMPGE name val )
-                        {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:130:21: ^( COMPGE name val )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(COMPGE, "COMPGE"), root_1);
-
-                                adaptor.addChild(root_1, stream_name.nextTree());
-                                adaptor.addChild(root_1, stream_val.nextTree());
-
-                                adaptor.addChild(root_0, root_1);
-                            }
-
-                        }
-
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 10: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:131:3: VAR MODC val
-                {
-                    VAR84 = (Token) match(input, VAR, FOLLOW_VAR_in_sent652);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_VAR.add(VAR84);
-                    }
-
-                    MODC85 = (Token) match(input, MODC, FOLLOW_MODC_in_sent654);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_MODC.add(MODC85);
-                    }
-
-                    pushFollow(FOLLOW_val_in_sent656);
-                    val86 = val();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_val.add(val86.getTree());
-                    }
-
-
-                    // AST REWRITE
-                    // elements: VAR, val
-                    // token labels:
-                    // rule labels: retval
-                    // token list labels:
-                    // rule list labels:
-                    // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
-
-                        root_0 = (Object) adaptor.nil();
-                        // 131:16: -> ^( LIKE VAR val )
-                        {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:131:19: ^( LIKE VAR val )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(LIKE, "LIKE"), root_1);
-
-                                adaptor.addChild(root_1, stream_VAR.nextNode());
-                                adaptor.addChild(root_1, stream_val.nextTree());
-
-                                adaptor.addChild(root_0, root_1);
-                            }
-
-                        }
-
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 11: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:132:3: name MODC val
-                {
-                    pushFollow(FOLLOW_name_in_sent670);
-                    name87 = name();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name87.getTree());
-                    }
-                    MODC88 = (Token) match(input, MODC, FOLLOW_MODC_in_sent672);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_MODC.add(MODC88);
-                    }
-
-                    pushFollow(FOLLOW_val_in_sent674);
-                    val89 = val();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_val.add(val89.getTree());
-                    }
-
-
-                    // AST REWRITE
-                    // elements: val, name
-                    // token labels:
-                    // rule labels: retval
-                    // token list labels:
-                    // rule list labels:
-                    // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
-
-                        root_0 = (Object) adaptor.nil();
-                        // 132:17: -> ^( LIKE name val )
-                        {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:132:20: ^( LIKE name val )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(LIKE, "LIKE"), root_1);
-
-                                adaptor.addChild(root_1, stream_name.nextTree());
-                                adaptor.addChild(root_1, stream_val.nextTree());
-
-                                adaptor.addChild(root_0, root_1);
-                            }
-
-                        }
-
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 12: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:133:3: name val
-                {
-                    pushFollow(FOLLOW_name_in_sent688);
-                    name90 = name();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name90.getTree());
-                    }
-                    pushFollow(FOLLOW_val_in_sent690);
-                    val91 = val();
-
-                    state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_val.add(val91.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val71.getTree());
 
 
                     // AST REWRITE
@@ -2763,261 +2048,422 @@ public class ComplexParser extends Parser {
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 133:12: -> ^( ASIGN name val )
+                    root_0 = (Object)adaptor.nil();
+                    // 126:18: -> ^( COMPGE name val )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:126:21: ^( COMPGE name val )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:133:15: ^( ASIGN name val )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(ASIGN, "ASIGN"), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPGE, "COMPGE"), root_1);
 
-                                adaptor.addChild(root_1, stream_name.nextTree());
-                                adaptor.addChild(root_1, stream_val.nextTree());
+                        adaptor.addChild(root_1, stream_name.nextTree());
+                        adaptor.addChild(root_1, stream_val.nextTree());
 
-                                adaptor.addChild(root_0, root_1);
-                            }
-
+                        adaptor.addChild(root_0, root_1);
                         }
 
-                        retval.tree = root_0;
-                    }
-                }
-                break;
-                case 13: // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:134:3: NUM name
-                {
-                    NUM92 = (Token) match(input, NUM, FOLLOW_NUM_in_sent704);
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_NUM.add(NUM92);
                     }
 
-                    pushFollow(FOLLOW_name_in_sent706);
-                    name93 = name();
+                    retval.tree = root_0;}
+                    }
+                    break;
+                case 10 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:127:10: VAR MODC val
+                    {
+                    VAR72=(Token)match(input,VAR,FOLLOW_VAR_in_sent585); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_VAR.add(VAR72);
+
+                    MODC73=(Token)match(input,MODC,FOLLOW_MODC_in_sent587); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_MODC.add(MODC73);
+
+                    pushFollow(FOLLOW_val_in_sent589);
+                    val74=val();
 
                     state._fsp--;
-                    if (state.failed) {
-                        return retval;
-                    }
-                    if (state.backtracking == 0) {
-                        stream_name.add(name93.getTree());
-                    }
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val74.getTree());
 
 
                     // AST REWRITE
-                    // elements: name, NUM
+                    // elements: VAR, val
                     // token labels:
                     // rule labels: retval
                     // token list labels:
                     // rule list labels:
                     // wildcard labels:
-                    if (state.backtracking == 0) {
-                        retval.tree = root_0;
-                        RewriteRuleSubtreeStream stream_retval = new RewriteRuleSubtreeStream(adaptor, "rule retval", retval != null ? retval.tree : null);
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
 
-                        root_0 = (Object) adaptor.nil();
-                        // 134:12: -> ^( ASIGN name NUM )
+                    root_0 = (Object)adaptor.nil();
+                    // 127:23: -> ^( COMPAS VAR val )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:127:26: ^( COMPAS VAR val )
                         {
-                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:134:15: ^( ASIGN name NUM )
-                            {
-                                Object root_1 = (Object) adaptor.nil();
-                                root_1 = (Object) adaptor.becomeRoot((Object) adaptor.create(ASIGN, "ASIGN"), root_1);
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPAS, "COMPAS"), root_1);
 
-                                adaptor.addChild(root_1, stream_name.nextTree());
-                                adaptor.addChild(root_1, stream_NUM.nextNode());
+                        adaptor.addChild(root_1, stream_VAR.nextNode());
+                        adaptor.addChild(root_1, stream_val.nextTree());
 
-                                adaptor.addChild(root_0, root_1);
-                            }
-
+                        adaptor.addChild(root_0, root_1);
                         }
 
-                        retval.tree = root_0;
                     }
-                }
-                break;
+
+                    retval.tree = root_0;}
+                    }
+                    break;
+                case 11 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:128:10: name MODC val
+                    {
+                    pushFollow(FOLLOW_name_in_sent610);
+                    name75=name();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_name.add(name75.getTree());
+                    MODC76=(Token)match(input,MODC,FOLLOW_MODC_in_sent612); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_MODC.add(MODC76);
+
+                    pushFollow(FOLLOW_val_in_sent614);
+                    val77=val();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val77.getTree());
+
+
+                    // AST REWRITE
+                    // elements: name, val
+                    // token labels:
+                    // rule labels: retval
+                    // token list labels:
+                    // rule list labels:
+                    // wildcard labels:
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
+
+                    root_0 = (Object)adaptor.nil();
+                    // 128:24: -> ^( COMPAS name val )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:128:27: ^( COMPAS name val )
+                        {
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPAS, "COMPAS"), root_1);
+
+                        adaptor.addChild(root_1, stream_name.nextTree());
+                        adaptor.addChild(root_1, stream_val.nextTree());
+
+                        adaptor.addChild(root_0, root_1);
+                        }
+
+                    }
+
+                    retval.tree = root_0;}
+                    }
+                    break;
+                case 12 :
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:129:10: name MODN val DELY val ( VAR )?
+                    {
+                    pushFollow(FOLLOW_name_in_sent635);
+                    name78=name();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_name.add(name78.getTree());
+                    MODN79=(Token)match(input,MODN,FOLLOW_MODN_in_sent637); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_MODN.add(MODN79);
+
+                    pushFollow(FOLLOW_val_in_sent639);
+                    val80=val();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val80.getTree());
+                    DELY81=(Token)match(input,DELY,FOLLOW_DELY_in_sent641); if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_DELY.add(DELY81);
+
+                    pushFollow(FOLLOW_val_in_sent643);
+                    val82=val();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) stream_val.add(val82.getTree());
+                    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:129:33: ( VAR )?
+                    int alt12=2;
+                    int LA12_0 = input.LA(1);
+
+                    if ( (LA12_0==VAR) ) {
+                        alt12=1;
+                    }
+                    switch (alt12) {
+                        case 1 :
+                            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:0:0: VAR
+                            {
+                            VAR83=(Token)match(input,VAR,FOLLOW_VAR_in_sent645); if (state.failed) return retval;
+                            if ( state.backtracking==0 ) stream_VAR.add(VAR83);
+
+
+                            }
+                            break;
+
+                    }
+
+
+
+                    // AST REWRITE
+                    // elements: val, val, name
+                    // token labels:
+                    // rule labels: retval
+                    // token list labels:
+                    // rule list labels:
+                    // wildcard labels:
+                    if ( state.backtracking==0 ) {
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
+
+                    root_0 = (Object)adaptor.nil();
+                    // 129:38: -> ^( COMPRNG name ^( INTERVAL val val ) )
+                    {
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:129:41: ^( COMPRNG name ^( INTERVAL val val ) )
+                        {
+                        Object root_1 = (Object)adaptor.nil();
+                        root_1 = (Object)adaptor.becomeRoot((Object)adaptor.create(COMPRNG, "COMPRNG"), root_1);
+
+                        adaptor.addChild(root_1, stream_name.nextTree());
+                        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:129:56: ^( INTERVAL val val )
+                        {
+                        Object root_2 = (Object)adaptor.nil();
+                        root_2 = (Object)adaptor.becomeRoot((Object)adaptor.create(INTERVAL, "INTERVAL"), root_2);
+
+                        adaptor.addChild(root_2, stream_val.nextTree());
+                        adaptor.addChild(root_2, stream_val.nextTree());
+
+                        adaptor.addChild(root_1, root_2);
+                        }
+
+                        adaptor.addChild(root_0, root_1);
+                        }
+
+                    }
+
+                    retval.tree = root_0;}
+                    }
+                    break;
 
             }
             retval.stop = input.LT(-1);
 
-            if (state.backtracking == 0) {
+            if ( state.backtracking==0 ) {
 
-                retval.tree = (Object) adaptor.rulePostProcessing(root_0);
-                adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
             }
-        } catch (RecognitionException re) {
+        }
+        catch (RecognitionException re) {
             reportError(re);
-            recover(input, re);
-            retval.tree = (Object) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+            recover(input,re);
+    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
-        } finally {
+        }
+        finally {
         }
         return retval;
     }
     // $ANTLR end "sent"
 
     public static class val_return extends ParserRuleReturnScope {
-
         Object tree;
-
-        public Object getTree() {
-            return tree;
-        }
+        public Object getTree() { return tree; }
     };
 
     // $ANTLR start "val"
-    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:138:1: val : ( LIT | BOL | NUM );
+    // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:133:1: val : ( LIT | BOL | NUM );
     public final ComplexParser.val_return val() throws RecognitionException {
         ComplexParser.val_return retval = new ComplexParser.val_return();
         retval.start = input.LT(1);
 
         Object root_0 = null;
 
-        Token set94 = null;
+        Token set84=null;
 
-        Object set94_tree = null;
+        Object set84_tree=null;
 
         try {
-            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:139:1: ( LIT | BOL | NUM )
+            // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:134:1: ( LIT | BOL | NUM )
             // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:
             {
-                root_0 = (Object) adaptor.nil();
+            root_0 = (Object)adaptor.nil();
 
-                set94 = (Token) input.LT(1);
-                if ((input.LA(1) >= BOL && input.LA(1) <= LIT)) {
-                    input.consume();
-                    if (state.backtracking == 0) {
-                        adaptor.addChild(root_0, (Object) adaptor.create(set94));
-                    }
-                    state.errorRecovery = false;
-                    state.failed = false;
-                } else {
-                    if (state.backtracking > 0) {
-                        state.failed = true;
-                        return retval;
-                    }
-                    MismatchedSetException mse = new MismatchedSetException(null, input);
-                    throw mse;
-                }
+            set84=(Token)input.LT(1);
+            if ( (input.LA(1)>=BOL && input.LA(1)<=LIT) ) {
+                input.consume();
+                if ( state.backtracking==0 ) adaptor.addChild(root_0, (Object)adaptor.create(set84));
+                state.errorRecovery=false;state.failed=false;
+            }
+            else {
+                if (state.backtracking>0) {state.failed=true; return retval;}
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                throw mse;
+            }
 
 
             }
 
             retval.stop = input.LT(-1);
 
-            if (state.backtracking == 0) {
+            if ( state.backtracking==0 ) {
 
-                retval.tree = (Object) adaptor.rulePostProcessing(root_0);
-                adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
+            retval.tree = (Object)adaptor.rulePostProcessing(root_0);
+            adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
             }
-        } catch (RecognitionException re) {
+        }
+        catch (RecognitionException re) {
             reportError(re);
-            recover(input, re);
-            retval.tree = (Object) adaptor.errorNode(input, retval.start, input.LT(-1), re);
+            recover(input,re);
+    	retval.tree = (Object)adaptor.errorNode(input, retval.start, input.LT(-1), re);
 
-        } finally {
+        }
+        finally {
         }
         return retval;
     }
     // $ANTLR end "val"
 
-    // $ANTLR start synpred14_ComplexParser
-    public final void synpred14_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:95:3: ( oquery DEL querylist )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:95:3: oquery DEL querylist
+    // $ANTLR start synpred11_ComplexParser
+    public final void synpred11_ComplexParser_fragment() throws RecognitionException {
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:92:3: ( oquery DEL querylist )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:92:3: oquery DEL querylist
         {
-            pushFollow(FOLLOW_oquery_in_synpred14_ComplexParser369);
-            oquery();
+        pushFollow(FOLLOW_oquery_in_synpred11_ComplexParser297);
+        oquery();
 
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
-            match(input, DEL, FOLLOW_DEL_in_synpred14_ComplexParser371);
-            if (state.failed) {
-                return;
-            }
-            pushFollow(FOLLOW_querylist_in_synpred14_ComplexParser374);
-            querylist();
+        state._fsp--;
+        if (state.failed) return ;
+        match(input,DEL,FOLLOW_DEL_in_synpred11_ComplexParser299); if (state.failed) return ;
+        pushFollow(FOLLOW_querylist_in_synpred11_ComplexParser302);
+        querylist();
 
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
+        state._fsp--;
+        if (state.failed) return ;
 
         }
     }
-    // $ANTLR end synpred14_ComplexParser
+    // $ANTLR end synpred11_ComplexParser
 
-    // $ANTLR start synpred15_ComplexParser
-    public final void synpred15_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:96:3: ( sent DEL querylist )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:96:3: sent DEL querylist
+    // $ANTLR start synpred12_ComplexParser
+    public final void synpred12_ComplexParser_fragment() throws RecognitionException {
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:93:3: ( sent DEL querylist )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:93:3: sent DEL querylist
         {
-            pushFollow(FOLLOW_sent_in_synpred15_ComplexParser378);
-            sent();
+        pushFollow(FOLLOW_sent_in_synpred12_ComplexParser306);
+        sent();
 
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
-            match(input, DEL, FOLLOW_DEL_in_synpred15_ComplexParser380);
-            if (state.failed) {
-                return;
-            }
-            pushFollow(FOLLOW_querylist_in_synpred15_ComplexParser383);
-            querylist();
+        state._fsp--;
+        if (state.failed) return ;
+        match(input,DEL,FOLLOW_DEL_in_synpred12_ComplexParser308); if (state.failed) return ;
+        pushFollow(FOLLOW_querylist_in_synpred12_ComplexParser311);
+        querylist();
 
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
+        state._fsp--;
+        if (state.failed) return ;
 
         }
     }
-    // $ANTLR end synpred15_ComplexParser
+    // $ANTLR end synpred12_ComplexParser
 
-    // $ANTLR start synpred16_ComplexParser
-    public final void synpred16_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:97:3: ( oquery )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:97:3: oquery
+    // $ANTLR start synpred13_ComplexParser
+    public final void synpred13_ComplexParser_fragment() throws RecognitionException {
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:94:3: ( oquery )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:94:3: oquery
         {
-            pushFollow(FOLLOW_oquery_in_synpred16_ComplexParser387);
-            oquery();
+        pushFollow(FOLLOW_oquery_in_synpred13_ComplexParser315);
+        oquery();
 
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
+        state._fsp--;
+        if (state.failed) return ;
 
         }
     }
-    // $ANTLR end synpred16_ComplexParser
+    // $ANTLR end synpred13_ComplexParser
+
+    // $ANTLR start synpred18_ComplexParser
+    public final void synpred18_ComplexParser_fragment() throws RecognitionException {
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:119:3: ( VAR SIGL val )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:119:3: VAR SIGL val
+        {
+        match(input,VAR,FOLLOW_VAR_in_synpred18_ComplexParser434); if (state.failed) return ;
+        match(input,SIGL,FOLLOW_SIGL_in_synpred18_ComplexParser436); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred18_ComplexParser438);
+        val();
+
+        state._fsp--;
+        if (state.failed) return ;
+
+        }
+    }
+    // $ANTLR end synpred18_ComplexParser
+
+    // $ANTLR start synpred19_ComplexParser
+    public final void synpred19_ComplexParser_fragment() throws RecognitionException {
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:120:3: ( name SIGL val )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:120:3: name SIGL val
+        {
+        pushFollow(FOLLOW_name_in_synpred19_ComplexParser452);
+        name();
+
+        state._fsp--;
+        if (state.failed) return ;
+        match(input,SIGL,FOLLOW_SIGL_in_synpred19_ComplexParser454); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred19_ComplexParser456);
+        val();
+
+        state._fsp--;
+        if (state.failed) return ;
+
+        }
+    }
+    // $ANTLR end synpred19_ComplexParser
+
+    // $ANTLR start synpred20_ComplexParser
+    public final void synpred20_ComplexParser_fragment() throws RecognitionException {
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:121:3: ( VAR SIGG val )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:121:3: VAR SIGG val
+        {
+        match(input,VAR,FOLLOW_VAR_in_synpred20_ComplexParser470); if (state.failed) return ;
+        match(input,SIGG,FOLLOW_SIGG_in_synpred20_ComplexParser472); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred20_ComplexParser474);
+        val();
+
+        state._fsp--;
+        if (state.failed) return ;
+
+        }
+    }
+    // $ANTLR end synpred20_ComplexParser
 
     // $ANTLR start synpred21_ComplexParser
     public final void synpred21_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:123:3: ( VAR SIGL val )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:123:3: VAR SIGL val
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:122:3: ( name SIGG val )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:122:3: name SIGG val
         {
-            match(input, VAR, FOLLOW_VAR_in_synpred21_ComplexParser508);
-            if (state.failed) {
-                return;
-            }
-            match(input, SIGL, FOLLOW_SIGL_in_synpred21_ComplexParser510);
-            if (state.failed) {
-                return;
-            }
-            pushFollow(FOLLOW_val_in_synpred21_ComplexParser512);
-            val();
+        pushFollow(FOLLOW_name_in_synpred21_ComplexParser488);
+        name();
 
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
+        state._fsp--;
+        if (state.failed) return ;
+        match(input,SIGG,FOLLOW_SIGG_in_synpred21_ComplexParser490); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred21_ComplexParser492);
+        val();
+
+        state._fsp--;
+        if (state.failed) return ;
 
         }
     }
@@ -3025,27 +2471,16 @@ public class ComplexParser extends Parser {
 
     // $ANTLR start synpred22_ComplexParser
     public final void synpred22_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:124:3: ( name SIGL val )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:124:3: name SIGL val
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:123:3: ( VAR SIGLE val )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:123:3: VAR SIGLE val
         {
-            pushFollow(FOLLOW_name_in_synpred22_ComplexParser526);
-            name();
+        match(input,VAR,FOLLOW_VAR_in_synpred22_ComplexParser506); if (state.failed) return ;
+        match(input,SIGLE,FOLLOW_SIGLE_in_synpred22_ComplexParser508); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred22_ComplexParser510);
+        val();
 
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
-            match(input, SIGL, FOLLOW_SIGL_in_synpred22_ComplexParser528);
-            if (state.failed) {
-                return;
-            }
-            pushFollow(FOLLOW_val_in_synpred22_ComplexParser530);
-            val();
-
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
+        state._fsp--;
+        if (state.failed) return ;
 
         }
     }
@@ -3053,24 +2488,20 @@ public class ComplexParser extends Parser {
 
     // $ANTLR start synpred23_ComplexParser
     public final void synpred23_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:125:3: ( VAR SIGG val )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:125:3: VAR SIGG val
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:124:3: ( name SIGLE val )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:124:3: name SIGLE val
         {
-            match(input, VAR, FOLLOW_VAR_in_synpred23_ComplexParser544);
-            if (state.failed) {
-                return;
-            }
-            match(input, SIGG, FOLLOW_SIGG_in_synpred23_ComplexParser546);
-            if (state.failed) {
-                return;
-            }
-            pushFollow(FOLLOW_val_in_synpred23_ComplexParser548);
-            val();
+        pushFollow(FOLLOW_name_in_synpred23_ComplexParser524);
+        name();
 
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
+        state._fsp--;
+        if (state.failed) return ;
+        match(input,SIGLE,FOLLOW_SIGLE_in_synpred23_ComplexParser526); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred23_ComplexParser528);
+        val();
+
+        state._fsp--;
+        if (state.failed) return ;
 
         }
     }
@@ -3078,27 +2509,16 @@ public class ComplexParser extends Parser {
 
     // $ANTLR start synpred24_ComplexParser
     public final void synpred24_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:126:3: ( name SIGG val )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:126:3: name SIGG val
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:125:3: ( VAR SIGGE val )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:125:3: VAR SIGGE val
         {
-            pushFollow(FOLLOW_name_in_synpred24_ComplexParser562);
-            name();
+        match(input,VAR,FOLLOW_VAR_in_synpred24_ComplexParser542); if (state.failed) return ;
+        match(input,SIGGE,FOLLOW_SIGGE_in_synpred24_ComplexParser544); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred24_ComplexParser546);
+        val();
 
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
-            match(input, SIGG, FOLLOW_SIGG_in_synpred24_ComplexParser564);
-            if (state.failed) {
-                return;
-            }
-            pushFollow(FOLLOW_val_in_synpred24_ComplexParser566);
-            val();
-
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
+        state._fsp--;
+        if (state.failed) return ;
 
         }
     }
@@ -3106,24 +2526,20 @@ public class ComplexParser extends Parser {
 
     // $ANTLR start synpred25_ComplexParser
     public final void synpred25_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:127:3: ( VAR SIGLE val )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:127:3: VAR SIGLE val
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:126:3: ( name SIGGE val )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:126:3: name SIGGE val
         {
-            match(input, VAR, FOLLOW_VAR_in_synpred25_ComplexParser580);
-            if (state.failed) {
-                return;
-            }
-            match(input, SIGLE, FOLLOW_SIGLE_in_synpred25_ComplexParser582);
-            if (state.failed) {
-                return;
-            }
-            pushFollow(FOLLOW_val_in_synpred25_ComplexParser584);
-            val();
+        pushFollow(FOLLOW_name_in_synpred25_ComplexParser560);
+        name();
 
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
+        state._fsp--;
+        if (state.failed) return ;
+        match(input,SIGGE,FOLLOW_SIGGE_in_synpred25_ComplexParser562); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred25_ComplexParser564);
+        val();
+
+        state._fsp--;
+        if (state.failed) return ;
 
         }
     }
@@ -3131,27 +2547,16 @@ public class ComplexParser extends Parser {
 
     // $ANTLR start synpred26_ComplexParser
     public final void synpred26_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:128:3: ( name SIGLE val )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:128:3: name SIGLE val
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:127:10: ( VAR MODC val )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:127:10: VAR MODC val
         {
-            pushFollow(FOLLOW_name_in_synpred26_ComplexParser598);
-            name();
+        match(input,VAR,FOLLOW_VAR_in_synpred26_ComplexParser585); if (state.failed) return ;
+        match(input,MODC,FOLLOW_MODC_in_synpred26_ComplexParser587); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred26_ComplexParser589);
+        val();
 
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
-            match(input, SIGLE, FOLLOW_SIGLE_in_synpred26_ComplexParser600);
-            if (state.failed) {
-                return;
-            }
-            pushFollow(FOLLOW_val_in_synpred26_ComplexParser602);
-            val();
-
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
+        state._fsp--;
+        if (state.failed) return ;
 
         }
     }
@@ -3159,394 +2564,240 @@ public class ComplexParser extends Parser {
 
     // $ANTLR start synpred27_ComplexParser
     public final void synpred27_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:129:3: ( VAR SIGGE val )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:129:3: VAR SIGGE val
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:128:10: ( name MODC val )
+        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:128:10: name MODC val
         {
-            match(input, VAR, FOLLOW_VAR_in_synpred27_ComplexParser616);
-            if (state.failed) {
-                return;
-            }
-            match(input, SIGGE, FOLLOW_SIGGE_in_synpred27_ComplexParser618);
-            if (state.failed) {
-                return;
-            }
-            pushFollow(FOLLOW_val_in_synpred27_ComplexParser620);
-            val();
+        pushFollow(FOLLOW_name_in_synpred27_ComplexParser610);
+        name();
 
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
+        state._fsp--;
+        if (state.failed) return ;
+        match(input,MODC,FOLLOW_MODC_in_synpred27_ComplexParser612); if (state.failed) return ;
+        pushFollow(FOLLOW_val_in_synpred27_ComplexParser614);
+        val();
+
+        state._fsp--;
+        if (state.failed) return ;
 
         }
     }
     // $ANTLR end synpred27_ComplexParser
 
-    // $ANTLR start synpred28_ComplexParser
-    public final void synpred28_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:130:3: ( name SIGGE val )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:130:3: name SIGGE val
-        {
-            pushFollow(FOLLOW_name_in_synpred28_ComplexParser634);
-            name();
-
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
-            match(input, SIGGE, FOLLOW_SIGGE_in_synpred28_ComplexParser636);
-            if (state.failed) {
-                return;
-            }
-            pushFollow(FOLLOW_val_in_synpred28_ComplexParser638);
-            val();
-
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
-
-        }
-    }
-    // $ANTLR end synpred28_ComplexParser
-
-    // $ANTLR start synpred29_ComplexParser
-    public final void synpred29_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:131:3: ( VAR MODC val )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:131:3: VAR MODC val
-        {
-            match(input, VAR, FOLLOW_VAR_in_synpred29_ComplexParser652);
-            if (state.failed) {
-                return;
-            }
-            match(input, MODC, FOLLOW_MODC_in_synpred29_ComplexParser654);
-            if (state.failed) {
-                return;
-            }
-            pushFollow(FOLLOW_val_in_synpred29_ComplexParser656);
-            val();
-
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
-
-        }
-    }
-    // $ANTLR end synpred29_ComplexParser
-
-    // $ANTLR start synpred30_ComplexParser
-    public final void synpred30_ComplexParser_fragment() throws RecognitionException {
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:132:3: ( name MODC val )
-        // /home/hasdai/Documentos/INFOTEC/ComplexParser.g:132:3: name MODC val
-        {
-            pushFollow(FOLLOW_name_in_synpred30_ComplexParser670);
-            name();
-
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
-            match(input, MODC, FOLLOW_MODC_in_synpred30_ComplexParser672);
-            if (state.failed) {
-                return;
-            }
-            pushFollow(FOLLOW_val_in_synpred30_ComplexParser674);
-            val();
-
-            state._fsp--;
-            if (state.failed) {
-                return;
-            }
-
-        }
-    }
-    // $ANTLR end synpred30_ComplexParser
-
     // Delegated rules
+
     public final boolean synpred27_ComplexParser() {
         state.backtracking++;
         int start = input.mark();
         try {
             synpred27_ComplexParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
+            System.err.println("impossible: "+re);
         }
         boolean success = !state.failed;
         input.rewind(start);
         state.backtracking--;
-        state.failed = false;
+        state.failed=false;
         return success;
     }
-
-    public final boolean synpred28_ComplexParser() {
-        state.backtracking++;
-        int start = input.mark();
-        try {
-            synpred28_ComplexParser_fragment(); // can never throw exception
-        } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
-        }
-        boolean success = !state.failed;
-        input.rewind(start);
-        state.backtracking--;
-        state.failed = false;
-        return success;
-    }
-
     public final boolean synpred25_ComplexParser() {
         state.backtracking++;
         int start = input.mark();
         try {
             synpred25_ComplexParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
+            System.err.println("impossible: "+re);
         }
         boolean success = !state.failed;
         input.rewind(start);
         state.backtracking--;
-        state.failed = false;
+        state.failed=false;
         return success;
     }
-
     public final boolean synpred21_ComplexParser() {
         state.backtracking++;
         int start = input.mark();
         try {
             synpred21_ComplexParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
+            System.err.println("impossible: "+re);
         }
         boolean success = !state.failed;
         input.rewind(start);
         state.backtracking--;
-        state.failed = false;
+        state.failed=false;
         return success;
     }
-
-    public final boolean synpred16_ComplexParser() {
+    public final boolean synpred19_ComplexParser() {
         state.backtracking++;
         int start = input.mark();
         try {
-            synpred16_ComplexParser_fragment(); // can never throw exception
+            synpred19_ComplexParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
+            System.err.println("impossible: "+re);
         }
         boolean success = !state.failed;
         input.rewind(start);
         state.backtracking--;
-        state.failed = false;
+        state.failed=false;
         return success;
     }
-
-    public final boolean synpred15_ComplexParser() {
+    public final boolean synpred20_ComplexParser() {
         state.backtracking++;
         int start = input.mark();
         try {
-            synpred15_ComplexParser_fragment(); // can never throw exception
+            synpred20_ComplexParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
+            System.err.println("impossible: "+re);
         }
         boolean success = !state.failed;
         input.rewind(start);
         state.backtracking--;
-        state.failed = false;
+        state.failed=false;
         return success;
     }
-
     public final boolean synpred26_ComplexParser() {
         state.backtracking++;
         int start = input.mark();
         try {
             synpred26_ComplexParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
+            System.err.println("impossible: "+re);
         }
         boolean success = !state.failed;
         input.rewind(start);
         state.backtracking--;
-        state.failed = false;
+        state.failed=false;
         return success;
     }
-
     public final boolean synpred23_ComplexParser() {
         state.backtracking++;
         int start = input.mark();
         try {
             synpred23_ComplexParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
+            System.err.println("impossible: "+re);
         }
         boolean success = !state.failed;
         input.rewind(start);
         state.backtracking--;
-        state.failed = false;
+        state.failed=false;
         return success;
     }
-
     public final boolean synpred24_ComplexParser() {
         state.backtracking++;
         int start = input.mark();
         try {
             synpred24_ComplexParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
+            System.err.println("impossible: "+re);
         }
         boolean success = !state.failed;
         input.rewind(start);
         state.backtracking--;
-        state.failed = false;
+        state.failed=false;
         return success;
     }
-
-    public final boolean synpred30_ComplexParser() {
+    public final boolean synpred12_ComplexParser() {
         state.backtracking++;
         int start = input.mark();
         try {
-            synpred30_ComplexParser_fragment(); // can never throw exception
+            synpred12_ComplexParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
+            System.err.println("impossible: "+re);
         }
         boolean success = !state.failed;
         input.rewind(start);
         state.backtracking--;
-        state.failed = false;
+        state.failed=false;
         return success;
     }
-
-    public final boolean synpred29_ComplexParser() {
+    public final boolean synpred13_ComplexParser() {
         state.backtracking++;
         int start = input.mark();
         try {
-            synpred29_ComplexParser_fragment(); // can never throw exception
+            synpred13_ComplexParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
+            System.err.println("impossible: "+re);
         }
         boolean success = !state.failed;
         input.rewind(start);
         state.backtracking--;
-        state.failed = false;
+        state.failed=false;
         return success;
     }
-
-    public final boolean synpred14_ComplexParser() {
+    public final boolean synpred18_ComplexParser() {
         state.backtracking++;
         int start = input.mark();
         try {
-            synpred14_ComplexParser_fragment(); // can never throw exception
+            synpred18_ComplexParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
+            System.err.println("impossible: "+re);
         }
         boolean success = !state.failed;
         input.rewind(start);
         state.backtracking--;
-        state.failed = false;
+        state.failed=false;
         return success;
     }
-
+    public final boolean synpred11_ComplexParser() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred11_ComplexParser_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
     public final boolean synpred22_ComplexParser() {
         state.backtracking++;
         int start = input.mark();
         try {
             synpred22_ComplexParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
-            System.err.println("impossible: " + re);
+            System.err.println("impossible: "+re);
         }
         boolean success = !state.failed;
         input.rewind(start);
         state.backtracking--;
-        state.failed = false;
+        state.failed=false;
         return success;
     }
-    protected DFA8 dfa8 = new DFA8(this);
+
+
     protected DFA9 dfa9 = new DFA9(this);
-    protected DFA12 dfa12 = new DFA12(this);
-    static final String DFA8_eotS =
-            "\13\uffff";
-    static final String DFA8_eofS =
-            "\1\1\1\uffff\1\4\5\uffff\1\12\2\uffff";
-    static final String DFA8_minS =
-            "\1\17\1\uffff\1\13\3\uffff\1\27\1\uffff\1\13\2\uffff";
-    static final String DFA8_maxS =
-            "\1\34\1\uffff\1\34\3\uffff\1\31\1\uffff\1\34\2\uffff";
-    static final String DFA8_acceptS =
-            "\1\uffff\1\1\1\uffff\1\7\1\2\1\5\1\uffff\1\6\1\uffff\1\4\1\3";
-    static final String DFA8_specialS =
-            "\13\uffff}>";
-    static final String[] DFA8_transitionS = {
-        "\2\1\6\uffff\1\2\1\uffff\1\2\1\3\2\1",
-        "",
-        "\1\7\2\uffff\1\6\2\4\6\uffff\1\5\1\uffff\1\5\1\uffff\2\4",
-        "",
-        "",
-        "",
-        "\1\10\1\uffff\1\10",
-        "",
-        "\1\11\3\uffff\2\12\12\uffff\2\12",
-        "",
-        ""
-    };
-    static final short[] DFA8_eot = DFA.unpackEncodedString(DFA8_eotS);
-    static final short[] DFA8_eof = DFA.unpackEncodedString(DFA8_eofS);
-    static final char[] DFA8_min = DFA.unpackEncodedStringToUnsignedChars(DFA8_minS);
-    static final char[] DFA8_max = DFA.unpackEncodedStringToUnsignedChars(DFA8_maxS);
-    static final short[] DFA8_accept = DFA.unpackEncodedString(DFA8_acceptS);
-    static final short[] DFA8_special = DFA.unpackEncodedString(DFA8_specialS);
-    static final short[][] DFA8_transition;
-
-    static {
-        int numStates = DFA8_transitionS.length;
-        DFA8_transition = new short[numStates][];
-        for (int i = 0; i < numStates; i++) {
-            DFA8_transition[i] = DFA.unpackEncodedString(DFA8_transitionS[i]);
-        }
-    }
-
-    class DFA8 extends DFA {
-
-        public DFA8(BaseRecognizer recognizer) {
-            this.recognizer = recognizer;
-            this.decisionNumber = 8;
-            this.eot = DFA8_eot;
-            this.eof = DFA8_eof;
-            this.min = DFA8_min;
-            this.max = DFA8_max;
-            this.accept = DFA8_accept;
-            this.special = DFA8_special;
-            this.transition = DFA8_transition;
-        }
-
-        public String getDescription() {
-            return "83:1: oquery : ( | name | name PREN name -> ^( PREEN name name ) | name PREN name PREC querylist -> ^( PRECON ^( PREEN name name ) querylist ) | name name PREC querylist -> ^( PRECON ^( ADJASIGN name name ) querylist ) | name PREC querylist -> ^( name ^( PRECON querylist ) ) | LPAR oquery RPAR );";
-        }
-    }
+    protected DFA13 dfa13 = new DFA13(this);
     static final String DFA9_eotS =
-            "\15\uffff";
+        "\14\uffff";
     static final String DFA9_eofS =
-            "\1\6\14\uffff";
+        "\1\5\13\uffff";
     static final String DFA9_minS =
-            "\1\17\5\0\7\uffff";
+        "\1\17\4\0\7\uffff";
     static final String DFA9_maxS =
-            "\1\34\5\0\7\uffff";
+        "\1\36\4\0\7\uffff";
     static final String DFA9_acceptS =
-            "\6\uffff\1\3\3\uffff\1\1\1\2\1\4";
+        "\5\uffff\1\3\3\uffff\1\1\1\2\1\4";
     static final String DFA9_specialS =
-            "\1\uffff\1\0\1\1\1\2\1\3\1\4\7\uffff}>";
+        "\1\uffff\1\0\1\1\1\2\1\3\7\uffff}>";
     static final String[] DFA9_transitionS = {
-        "\2\6\2\uffff\1\5\3\uffff\1\4\1\uffff\1\2\1\3\1\6\1\1",
-        "\1\uffff",
-        "\1\uffff",
-        "\1\uffff",
-        "\1\uffff",
-        "\1\uffff",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""
+            "\1\5\1\uffff\1\5\6\uffff\1\4\2\uffff\1\2\1\3\1\5\1\1",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
     };
+
     static final short[] DFA9_eot = DFA.unpackEncodedString(DFA9_eotS);
     static final short[] DFA9_eof = DFA.unpackEncodedString(DFA9_eofS);
     static final char[] DFA9_min = DFA.unpackEncodedStringToUnsignedChars(DFA9_minS);
@@ -3558,7 +2809,7 @@ public class ComplexParser extends Parser {
     static {
         int numStates = DFA9_transitionS.length;
         DFA9_transition = new short[numStates][];
-        for (int i = 0; i < numStates; i++) {
+        for (int i=0; i<numStates; i++) {
             DFA9_transition[i] = DFA.unpackEncodedString(DFA9_transitionS[i]);
         }
     }
@@ -3576,443 +2827,371 @@ public class ComplexParser extends Parser {
             this.special = DFA9_special;
             this.transition = DFA9_transition;
         }
-
         public String getDescription() {
-            return "94:1: querylist : ( oquery DEL querylist | sent DEL querylist | oquery | sent );";
+            return "91:1: querylist : ( oquery DEL querylist | sent DEL querylist | oquery | sent );";
         }
-
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
-            TokenStream input = (TokenStream) _input;
-            int _s = s;
-            switch (s) {
-                case 0:
-                    int LA9_1 = input.LA(1);
+            TokenStream input = (TokenStream)_input;
+        	int _s = s;
+            switch ( s ) {
+                    case 0 :
+                        int LA9_1 = input.LA(1);
 
 
-                    int index9_1 = input.index();
-                    input.rewind();
-                    s = -1;
-                    if ((synpred14_ComplexParser())) {
-                        s = 10;
-                    } else if ((synpred16_ComplexParser())) {
-                        s = 6;
-                    }
+                        int index9_1 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred11_ComplexParser()) ) {s = 9;}
+
+                        else if ( (synpred13_ComplexParser()) ) {s = 5;}
 
 
-                    input.seek(index9_1);
-                    if (s >= 0) {
-                        return s;
-                    }
-                    break;
-                case 1:
-                    int LA9_2 = input.LA(1);
+                        input.seek(index9_1);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 :
+                        int LA9_2 = input.LA(1);
 
 
-                    int index9_2 = input.index();
-                    input.rewind();
-                    s = -1;
-                    if ((synpred14_ComplexParser())) {
-                        s = 10;
-                    } else if ((synpred15_ComplexParser())) {
-                        s = 11;
-                    } else if ((synpred16_ComplexParser())) {
-                        s = 6;
-                    } else if ((true)) {
-                        s = 12;
-                    }
+                        int index9_2 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred11_ComplexParser()) ) {s = 9;}
+
+                        else if ( (synpred12_ComplexParser()) ) {s = 10;}
+
+                        else if ( (synpred13_ComplexParser()) ) {s = 5;}
+
+                        else if ( (true) ) {s = 11;}
 
 
-                    input.seek(index9_2);
-                    if (s >= 0) {
-                        return s;
-                    }
-                    break;
-                case 2:
-                    int LA9_3 = input.LA(1);
+                        input.seek(index9_2);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 2 :
+                        int LA9_3 = input.LA(1);
 
 
-                    int index9_3 = input.index();
-                    input.rewind();
-                    s = -1;
-                    if ((synpred14_ComplexParser())) {
-                        s = 10;
-                    } else if ((synpred16_ComplexParser())) {
-                        s = 6;
-                    }
+                        int index9_3 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred11_ComplexParser()) ) {s = 9;}
+
+                        else if ( (synpred13_ComplexParser()) ) {s = 5;}
 
 
-                    input.seek(index9_3);
-                    if (s >= 0) {
-                        return s;
-                    }
-                    break;
-                case 3:
-                    int LA9_4 = input.LA(1);
+                        input.seek(index9_3);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 3 :
+                        int LA9_4 = input.LA(1);
 
 
-                    int index9_4 = input.index();
-                    input.rewind();
-                    s = -1;
-                    if ((synpred14_ComplexParser())) {
-                        s = 10;
-                    } else if ((synpred15_ComplexParser())) {
-                        s = 11;
-                    } else if ((synpred16_ComplexParser())) {
-                        s = 6;
-                    } else if ((true)) {
-                        s = 12;
-                    }
+                        int index9_4 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred11_ComplexParser()) ) {s = 9;}
+
+                        else if ( (synpred12_ComplexParser()) ) {s = 10;}
+
+                        else if ( (synpred13_ComplexParser()) ) {s = 5;}
+
+                        else if ( (true) ) {s = 11;}
 
 
-                    input.seek(index9_4);
-                    if (s >= 0) {
-                        return s;
-                    }
-                    break;
-                case 4:
-                    int LA9_5 = input.LA(1);
-
-
-                    int index9_5 = input.index();
-                    input.rewind();
-                    s = -1;
-                    if ((synpred15_ComplexParser())) {
-                        s = 11;
-                    } else if ((true)) {
-                        s = 12;
-                    }
-
-
-                    input.seek(index9_5);
-                    if (s >= 0) {
-                        return s;
-                    }
-                    break;
+                        input.seek(index9_4);
+                        if ( s>=0 ) return s;
+                        break;
             }
-            if (state.backtracking > 0) {
-                state.failed = true;
-                return -1;
-            }
+            if (state.backtracking>0) {state.failed=true; return -1;}
             NoViableAltException nvae =
-                    new NoViableAltException(getDescription(), 9, _s, input);
+                new NoViableAltException(getDescription(), 9, _s, input);
             error(nvae);
             throw nvae;
         }
     }
-    static final String DFA12_eotS =
-            "\32\uffff";
-    static final String DFA12_eofS =
-            "\32\uffff";
-    static final String DFA12_minS =
-            "\1\23\2\6\1\uffff\5\22\7\uffff\5\0\5\uffff";
-    static final String DFA12_maxS =
-            "\1\31\2\24\1\uffff\5\24\7\uffff\5\0\5\uffff";
-    static final String DFA12_acceptS =
-            "\3\uffff\1\15\5\uffff\1\1\1\14\1\3\1\5\1\13\1\11\1\7\5\uffff\1\2" +
-            "\1\4\1\6\1\10\1\12";
-    static final String DFA12_specialS =
-            "\20\uffff\1\3\1\4\1\1\1\2\1\0\5\uffff}>";
-    static final String[] DFA12_transitionS = {
-        "\1\3\3\uffff\1\2\1\uffff\1\1",
-        "\1\4\1\5\1\11\1\6\1\7\6\uffff\1\10\3\12",
-        "\1\13\1\14\1\11\1\17\1\16\6\uffff\1\15\3\12",
-        "",
-        "\3\20",
-        "\3\21",
-        "\3\22",
-        "\3\23",
-        "\3\24",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "\1\uffff",
-        "\1\uffff",
-        "\1\uffff",
-        "\1\uffff",
-        "\1\uffff",
-        "",
-        "",
-        "",
-        "",
-        ""
+    static final String DFA13_eotS =
+        "\31\uffff";
+    static final String DFA13_eofS =
+        "\31\uffff";
+    static final String DFA13_minS =
+        "\1\30\2\6\5\23\7\uffff\5\0\5\uffff";
+    static final String DFA13_maxS =
+        "\1\33\2\22\5\25\7\uffff\5\0\5\uffff";
+    static final String DFA13_acceptS =
+        "\10\uffff\1\1\1\14\1\7\1\5\1\3\1\13\1\11\5\uffff\1\2\1\4\1\6\1\10"+
+        "\1\12";
+    static final String DFA13_specialS =
+        "\17\uffff\1\0\1\2\1\1\1\4\1\3\5\uffff}>";
+    static final String[] DFA13_transitionS = {
+            "\1\2\2\uffff\1\1",
+            "\1\3\1\4\1\10\1\5\1\6\5\uffff\1\11\1\uffff\1\7",
+            "\1\14\1\13\1\10\1\12\1\16\5\uffff\1\11\1\uffff\1\15",
+            "\3\17",
+            "\3\20",
+            "\3\21",
+            "\3\22",
+            "\3\23",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "",
+            "",
+            "",
+            "",
+            ""
     };
-    static final short[] DFA12_eot = DFA.unpackEncodedString(DFA12_eotS);
-    static final short[] DFA12_eof = DFA.unpackEncodedString(DFA12_eofS);
-    static final char[] DFA12_min = DFA.unpackEncodedStringToUnsignedChars(DFA12_minS);
-    static final char[] DFA12_max = DFA.unpackEncodedStringToUnsignedChars(DFA12_maxS);
-    static final short[] DFA12_accept = DFA.unpackEncodedString(DFA12_acceptS);
-    static final short[] DFA12_special = DFA.unpackEncodedString(DFA12_specialS);
-    static final short[][] DFA12_transition;
+
+    static final short[] DFA13_eot = DFA.unpackEncodedString(DFA13_eotS);
+    static final short[] DFA13_eof = DFA.unpackEncodedString(DFA13_eofS);
+    static final char[] DFA13_min = DFA.unpackEncodedStringToUnsignedChars(DFA13_minS);
+    static final char[] DFA13_max = DFA.unpackEncodedStringToUnsignedChars(DFA13_maxS);
+    static final short[] DFA13_accept = DFA.unpackEncodedString(DFA13_acceptS);
+    static final short[] DFA13_special = DFA.unpackEncodedString(DFA13_specialS);
+    static final short[][] DFA13_transition;
 
     static {
-        int numStates = DFA12_transitionS.length;
-        DFA12_transition = new short[numStates][];
-        for (int i = 0; i < numStates; i++) {
-            DFA12_transition[i] = DFA.unpackEncodedString(DFA12_transitionS[i]);
+        int numStates = DFA13_transitionS.length;
+        DFA13_transition = new short[numStates][];
+        for (int i=0; i<numStates; i++) {
+            DFA13_transition[i] = DFA.unpackEncodedString(DFA13_transitionS[i]);
         }
     }
 
-    class DFA12 extends DFA {
+    class DFA13 extends DFA {
 
-        public DFA12(BaseRecognizer recognizer) {
+        public DFA13(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 12;
-            this.eot = DFA12_eot;
-            this.eof = DFA12_eof;
-            this.min = DFA12_min;
-            this.max = DFA12_max;
-            this.accept = DFA12_accept;
-            this.special = DFA12_special;
-            this.transition = DFA12_transition;
+            this.decisionNumber = 13;
+            this.eot = DFA13_eot;
+            this.eof = DFA13_eof;
+            this.min = DFA13_min;
+            this.max = DFA13_max;
+            this.accept = DFA13_accept;
+            this.special = DFA13_special;
+            this.transition = DFA13_transition;
         }
-
         public String getDescription() {
-            return "121:1: sent : ( name SIGE val -> ^( ASIGN name val ) | VAR SIGL val -> ^( COMPL VAR val ) | name SIGL val -> ^( COMPL name val ) | VAR SIGG val -> ^( COMPG VAR val ) | name SIGG val -> ^( COMPG name val ) | VAR SIGLE val -> ^( COMPLE VAR val ) | name SIGLE val -> ^( COMPLE name val ) | VAR SIGGE val -> ^( COMPGE VAR val ) | name SIGGE val -> ^( COMPGE name val ) | VAR MODC val -> ^( LIKE VAR val ) | name MODC val -> ^( LIKE name val ) | name val -> ^( ASIGN name val ) | NUM name -> ^( ASIGN name NUM ) );";
+            return "117:1: sent : ( name SIGE val -> ^( ASIGN name val ) | VAR SIGL val -> ^( COMPL VAR val ) | name SIGL val -> ^( COMPL name val ) | VAR SIGG val -> ^( COMPG VAR val ) | name SIGG val -> ^( COMPG name val ) | VAR SIGLE val -> ^( COMPLE VAR val ) | name SIGLE val -> ^( COMPLE name val ) | VAR SIGGE val -> ^( COMPGE VAR val ) | name SIGGE val -> ^( COMPGE name val ) | VAR MODC val -> ^( COMPAS VAR val ) | name MODC val -> ^( COMPAS name val ) | name MODN val DELY val ( VAR )? -> ^( COMPRNG name ^( INTERVAL val val ) ) );";
         }
-
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
-            TokenStream input = (TokenStream) _input;
-            int _s = s;
-            switch (s) {
-                case 0:
-                    int LA12_20 = input.LA(1);
+            TokenStream input = (TokenStream)_input;
+        	int _s = s;
+            switch ( s ) {
+                    case 0 :
+                        int LA13_15 = input.LA(1);
 
 
-                    int index12_20 = input.index();
-                    input.rewind();
-                    s = -1;
-                    if ((synpred29_ComplexParser())) {
-                        s = 25;
-                    } else if ((synpred30_ComplexParser())) {
-                        s = 13;
-                    }
+                        int index13_15 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred18_ComplexParser()) ) {s = 20;}
+
+                        else if ( (synpred19_ComplexParser()) ) {s = 12;}
 
 
-                    input.seek(index12_20);
-                    if (s >= 0) {
-                        return s;
-                    }
-                    break;
-                case 1:
-                    int LA12_18 = input.LA(1);
+                        input.seek(index13_15);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 :
+                        int LA13_17 = input.LA(1);
 
 
-                    int index12_18 = input.index();
-                    input.rewind();
-                    s = -1;
-                    if ((synpred25_ComplexParser())) {
-                        s = 23;
-                    } else if ((synpred26_ComplexParser())) {
-                        s = 15;
-                    }
+                        int index13_17 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred22_ComplexParser()) ) {s = 22;}
+
+                        else if ( (synpred23_ComplexParser()) ) {s = 10;}
 
 
-                    input.seek(index12_18);
-                    if (s >= 0) {
-                        return s;
-                    }
-                    break;
-                case 2:
-                    int LA12_19 = input.LA(1);
+                        input.seek(index13_17);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 2 :
+                        int LA13_16 = input.LA(1);
 
 
-                    int index12_19 = input.index();
-                    input.rewind();
-                    s = -1;
-                    if ((synpred27_ComplexParser())) {
-                        s = 24;
-                    } else if ((synpred28_ComplexParser())) {
-                        s = 14;
-                    }
+                        int index13_16 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred20_ComplexParser()) ) {s = 21;}
+
+                        else if ( (synpred21_ComplexParser()) ) {s = 11;}
 
 
-                    input.seek(index12_19);
-                    if (s >= 0) {
-                        return s;
-                    }
-                    break;
-                case 3:
-                    int LA12_16 = input.LA(1);
+                        input.seek(index13_16);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 3 :
+                        int LA13_19 = input.LA(1);
 
 
-                    int index12_16 = input.index();
-                    input.rewind();
-                    s = -1;
-                    if ((synpred21_ComplexParser())) {
-                        s = 21;
-                    } else if ((synpred22_ComplexParser())) {
-                        s = 11;
-                    }
+                        int index13_19 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred26_ComplexParser()) ) {s = 24;}
+
+                        else if ( (synpred27_ComplexParser()) ) {s = 13;}
 
 
-                    input.seek(index12_16);
-                    if (s >= 0) {
-                        return s;
-                    }
-                    break;
-                case 4:
-                    int LA12_17 = input.LA(1);
+                        input.seek(index13_19);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 4 :
+                        int LA13_18 = input.LA(1);
 
 
-                    int index12_17 = input.index();
-                    input.rewind();
-                    s = -1;
-                    if ((synpred23_ComplexParser())) {
-                        s = 22;
-                    } else if ((synpred24_ComplexParser())) {
-                        s = 12;
-                    }
+                        int index13_18 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred24_ComplexParser()) ) {s = 23;}
+
+                        else if ( (synpred25_ComplexParser()) ) {s = 14;}
 
 
-                    input.seek(index12_17);
-                    if (s >= 0) {
-                        return s;
-                    }
-                    break;
+                        input.seek(index13_18);
+                        if ( s>=0 ) return s;
+                        break;
             }
-            if (state.backtracking > 0) {
-                state.failed = true;
-                return -1;
-            }
+            if (state.backtracking>0) {state.failed=true; return -1;}
             NoViableAltException nvae =
-                    new NoViableAltException(getDescription(), 12, _s, input);
+                new NoViableAltException(getDescription(), 13, _s, input);
             error(nvae);
             throw nvae;
         }
     }
-    public static final BitSet FOLLOW_limiter_in_squery108 = new BitSet(new long[]{0x0000000006818000L});
-    public static final BitSet FOLLOW_oquery_in_squery111 = new BitSet(new long[]{0x0000000000018000L});
-    public static final BitSet FOLLOW_modifier_in_squery113 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_squery116 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_limiter_in_squery134 = new BitSet(new long[]{0x0000000002801000L});
-    public static final BitSet FOLLOW_pquery_in_squery137 = new BitSet(new long[]{0x0000000000018000L});
-    public static final BitSet FOLLOW_modifier_in_squery139 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_squery142 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NUM_in_limiter167 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ordterm_in_modifier186 = new BitSet(new long[]{0x0000000000018002L});
-    public static final BitSet FOLLOW_offsetterm_in_modifier188 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_offsetterm_in_modifier193 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MODE_in_offsetterm204 = new BitSet(new long[]{0x0000000000080000L});
-    public static final BitSet FOLLOW_NUM_in_offsetterm206 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MODO_in_ordterm225 = new BitSet(new long[]{0x0000000004000000L});
-    public static final BitSet FOLLOW_LPAR_in_ordterm227 = new BitSet(new long[]{0x0000000002800000L});
-    public static final BitSet FOLLOW_plist_in_ordterm229 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_RPAR_in_ordterm231 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_oquery253 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_oquery257 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_PREN_in_oquery259 = new BitSet(new long[]{0x0000000002800000L});
-    public static final BitSet FOLLOW_name_in_oquery261 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_oquery275 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_PREN_in_oquery277 = new BitSet(new long[]{0x0000000002800000L});
-    public static final BitSet FOLLOW_name_in_oquery279 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_PREC_in_oquery281 = new BitSet(new long[]{0x0000000016880000L});
-    public static final BitSet FOLLOW_querylist_in_oquery283 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_oquery303 = new BitSet(new long[]{0x0000000002800000L});
-    public static final BitSet FOLLOW_name_in_oquery305 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_PREC_in_oquery307 = new BitSet(new long[]{0x0000000016880000L});
-    public static final BitSet FOLLOW_querylist_in_oquery309 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_oquery330 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_PREC_in_oquery332 = new BitSet(new long[]{0x0000000016880000L});
-    public static final BitSet FOLLOW_querylist_in_oquery334 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LPAR_in_oquery352 = new BitSet(new long[]{0x000000000E800000L});
-    public static final BitSet FOLLOW_oquery_in_oquery355 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_RPAR_in_oquery357 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_oquery_in_querylist369 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_DEL_in_querylist371 = new BitSet(new long[]{0x0000000016880000L});
-    public static final BitSet FOLLOW_querylist_in_querylist374 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_sent_in_querylist378 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_DEL_in_querylist380 = new BitSet(new long[]{0x0000000016880000L});
-    public static final BitSet FOLLOW_querylist_in_querylist383 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_oquery_in_querylist387 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_sent_in_querylist391 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_plist_in_pquery402 = new BitSet(new long[]{0x0000000000002000L});
-    public static final BitSet FOLLOW_PRED_in_pquery404 = new BitSet(new long[]{0x0000000006800000L});
-    public static final BitSet FOLLOW_oquery_in_pquery406 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MODT_in_pquery426 = new BitSet(new long[]{0x0000000000002000L});
-    public static final BitSet FOLLOW_PRED_in_pquery428 = new BitSet(new long[]{0x0000000006800000L});
-    public static final BitSet FOLLOW_oquery_in_pquery430 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_plist455 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_DEL_in_plist457 = new BitSet(new long[]{0x0000000002800000L});
-    public static final BitSet FOLLOW_plist_in_plist460 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_plist464 = new BitSet(new long[]{0x0000000000000002L});
+
+
+    public static final BitSet FOLLOW_limiter_in_squery109 = new BitSet(new long[]{0x0000000019028000L});
+    public static final BitSet FOLLOW_oquery_in_squery112 = new BitSet(new long[]{0x0000000000028000L});
+    public static final BitSet FOLLOW_modifier_in_squery114 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_squery117 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_limiter_in_squery135 = new BitSet(new long[]{0x0000000009001000L});
+    public static final BitSet FOLLOW_pquery_in_squery138 = new BitSet(new long[]{0x0000000000028000L});
+    public static final BitSet FOLLOW_modifier_in_squery140 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_squery143 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NUM_in_limiter168 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ordterm_in_modifier187 = new BitSet(new long[]{0x0000000000028002L});
+    public static final BitSet FOLLOW_offsetterm_in_modifier189 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_offsetterm_in_modifier194 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MODE_in_offsetterm205 = new BitSet(new long[]{0x0000000000100000L});
+    public static final BitSet FOLLOW_NUM_in_offsetterm207 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MODO_in_ordterm226 = new BitSet(new long[]{0x0000000010000000L});
+    public static final BitSet FOLLOW_LPAR_in_ordterm228 = new BitSet(new long[]{0x0000000009000000L});
+    public static final BitSet FOLLOW_plist_in_ordterm230 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_RPAR_in_ordterm232 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_oquery254 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_oquery258 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_PREC_in_oquery260 = new BitSet(new long[]{0x0000000059000000L});
+    public static final BitSet FOLLOW_querylist_in_oquery262 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LPAR_in_oquery280 = new BitSet(new long[]{0x0000000039000000L});
+    public static final BitSet FOLLOW_oquery_in_oquery283 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_RPAR_in_oquery285 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_oquery_in_querylist297 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_DEL_in_querylist299 = new BitSet(new long[]{0x0000000059000000L});
+    public static final BitSet FOLLOW_querylist_in_querylist302 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_sent_in_querylist306 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_DEL_in_querylist308 = new BitSet(new long[]{0x0000000059000000L});
+    public static final BitSet FOLLOW_querylist_in_querylist311 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_oquery_in_querylist315 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_sent_in_querylist319 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_plist_in_pquery330 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_PRED_in_pquery332 = new BitSet(new long[]{0x0000000019000000L});
+    public static final BitSet FOLLOW_oquery_in_pquery334 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MODT_in_pquery352 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_PRED_in_pquery354 = new BitSet(new long[]{0x0000000019000000L});
+    public static final BitSet FOLLOW_oquery_in_pquery356 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_plist381 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_DEL_in_plist383 = new BitSet(new long[]{0x0000000009000000L});
+    public static final BitSet FOLLOW_plist_in_plist386 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_plist390 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_name0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent490 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_SIGE_in_sent492 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_sent494 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_sent508 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_SIGL_in_sent510 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_sent512 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent526 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_SIGL_in_sent528 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_sent530 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_sent544 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_SIGG_in_sent546 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_sent548 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent562 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_SIGG_in_sent564 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_sent566 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_sent580 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_SIGLE_in_sent582 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_sent584 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent598 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_SIGLE_in_sent600 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_sent602 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_sent616 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_SIGGE_in_sent618 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_sent620 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent634 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_SIGGE_in_sent636 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_sent638 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_sent652 = new BitSet(new long[]{0x0000000000020000L});
-    public static final BitSet FOLLOW_MODC_in_sent654 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_sent656 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent670 = new BitSet(new long[]{0x0000000000020000L});
-    public static final BitSet FOLLOW_MODC_in_sent672 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_sent674 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_sent688 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_sent690 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NUM_in_sent704 = new BitSet(new long[]{0x0000000002800000L});
-    public static final BitSet FOLLOW_name_in_sent706 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent416 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_SIGE_in_sent418 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent420 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_sent434 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_SIGL_in_sent436 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent438 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent452 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_SIGL_in_sent454 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent456 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_sent470 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_SIGG_in_sent472 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent474 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent488 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_SIGG_in_sent490 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent492 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_sent506 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_SIGLE_in_sent508 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent510 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent524 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_SIGLE_in_sent526 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent528 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_sent542 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_SIGGE_in_sent544 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent546 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent560 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_SIGGE_in_sent562 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent564 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_sent585 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_MODC_in_sent587 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent589 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent610 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_MODC_in_sent612 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent614 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_sent635 = new BitSet(new long[]{0x0000000000010000L});
+    public static final BitSet FOLLOW_MODN_in_sent637 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent639 = new BitSet(new long[]{0x0000000004000000L});
+    public static final BitSet FOLLOW_DELY_in_sent641 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_sent643 = new BitSet(new long[]{0x0000000008000002L});
+    public static final BitSet FOLLOW_VAR_in_sent645 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_val0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_oquery_in_synpred14_ComplexParser369 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_DEL_in_synpred14_ComplexParser371 = new BitSet(new long[]{0x0000000016880000L});
-    public static final BitSet FOLLOW_querylist_in_synpred14_ComplexParser374 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_sent_in_synpred15_ComplexParser378 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_DEL_in_synpred15_ComplexParser380 = new BitSet(new long[]{0x0000000016880000L});
-    public static final BitSet FOLLOW_querylist_in_synpred15_ComplexParser383 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_oquery_in_synpred16_ComplexParser387 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_synpred21_ComplexParser508 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_SIGL_in_synpred21_ComplexParser510 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_synpred21_ComplexParser512 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_synpred22_ComplexParser526 = new BitSet(new long[]{0x0000000000000040L});
-    public static final BitSet FOLLOW_SIGL_in_synpred22_ComplexParser528 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_synpred22_ComplexParser530 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_synpred23_ComplexParser544 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_SIGG_in_synpred23_ComplexParser546 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_synpred23_ComplexParser548 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_synpred24_ComplexParser562 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_SIGG_in_synpred24_ComplexParser564 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_synpred24_ComplexParser566 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_synpred25_ComplexParser580 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_SIGLE_in_synpred25_ComplexParser582 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_synpred25_ComplexParser584 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_synpred26_ComplexParser598 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_SIGLE_in_synpred26_ComplexParser600 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_synpred26_ComplexParser602 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_synpred27_ComplexParser616 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_SIGGE_in_synpred27_ComplexParser618 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_synpred27_ComplexParser620 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_synpred28_ComplexParser634 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_SIGGE_in_synpred28_ComplexParser636 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_synpred28_ComplexParser638 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_synpred29_ComplexParser652 = new BitSet(new long[]{0x0000000000020000L});
-    public static final BitSet FOLLOW_MODC_in_synpred29_ComplexParser654 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_synpred29_ComplexParser656 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_synpred30_ComplexParser670 = new BitSet(new long[]{0x0000000000020000L});
-    public static final BitSet FOLLOW_MODC_in_synpred30_ComplexParser672 = new BitSet(new long[]{0x00000000001C0000L});
-    public static final BitSet FOLLOW_val_in_synpred30_ComplexParser674 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_oquery_in_synpred11_ComplexParser297 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_DEL_in_synpred11_ComplexParser299 = new BitSet(new long[]{0x0000000059000000L});
+    public static final BitSet FOLLOW_querylist_in_synpred11_ComplexParser302 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_sent_in_synpred12_ComplexParser306 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_DEL_in_synpred12_ComplexParser308 = new BitSet(new long[]{0x0000000059000000L});
+    public static final BitSet FOLLOW_querylist_in_synpred12_ComplexParser311 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_oquery_in_synpred13_ComplexParser315 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_synpred18_ComplexParser434 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_SIGL_in_synpred18_ComplexParser436 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_synpred18_ComplexParser438 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_synpred19_ComplexParser452 = new BitSet(new long[]{0x0000000000000040L});
+    public static final BitSet FOLLOW_SIGL_in_synpred19_ComplexParser454 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_synpred19_ComplexParser456 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_synpred20_ComplexParser470 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_SIGG_in_synpred20_ComplexParser472 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_synpred20_ComplexParser474 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_synpred21_ComplexParser488 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_SIGG_in_synpred21_ComplexParser490 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_synpred21_ComplexParser492 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_synpred22_ComplexParser506 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_SIGLE_in_synpred22_ComplexParser508 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_synpred22_ComplexParser510 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_synpred23_ComplexParser524 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_SIGLE_in_synpred23_ComplexParser526 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_synpred23_ComplexParser528 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_synpred24_ComplexParser542 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_SIGGE_in_synpred24_ComplexParser544 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_synpred24_ComplexParser546 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_synpred25_ComplexParser560 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_SIGGE_in_synpred25_ComplexParser562 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_synpred25_ComplexParser564 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_synpred26_ComplexParser585 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_MODC_in_synpred26_ComplexParser587 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_synpred26_ComplexParser589 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_synpred27_ComplexParser610 = new BitSet(new long[]{0x0000000000040000L});
+    public static final BitSet FOLLOW_MODC_in_synpred27_ComplexParser612 = new BitSet(new long[]{0x0000000000380000L});
+    public static final BitSet FOLLOW_val_in_synpred27_ComplexParser614 = new BitSet(new long[]{0x0000000000000002L});
+
 }
