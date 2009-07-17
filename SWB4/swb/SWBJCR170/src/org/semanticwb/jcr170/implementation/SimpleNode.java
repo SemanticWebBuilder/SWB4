@@ -279,7 +279,7 @@ public class SimpleNode implements Node
         while (props.hasNext())
         {
             SemanticProperty prop = props.next();
-            if (!node.isInternal(prop))
+            if (!prop.getPrefix().equals("rdf") && !node.isInternal(prop))
             {
                 try
                 {
