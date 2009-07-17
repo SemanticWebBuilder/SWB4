@@ -7,10 +7,8 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 import org.semanticwb.Logger;
@@ -30,14 +28,16 @@ public class UserRepository extends UserRepositoryBase
     //public static final String SWBUR_AuthMethod = "SWBUR_AuthMethod";
     //public static final String SWBUR_LoginContext = "SWBUR_LoginContext";
     //public static final String SWBUR_CallBackHandlerClassName = "SWBUR_CallBackHandlerClassName";
-    public static final String SWBUR_ClassHold = "extendedAttributes";
-    public static final String SWBUR_ClassPost = "#clsExtendedAttibutes";
-    public static final String SWBUR_ClassUserTypeHold = "userType";
-    public static final String SWBUR_ClassUserTypePost = "/clsUserType";
-    private static ArrayList<String> userTypes = new ArrayList<String>();
+//    public static final String SWBUR_ClassHold = "extendedAttributes";
+//    public static final String SWBUR_ClassPost = "#clsExtendedAttibutes";
+//    public static final String SWBUR_ClassUserTypeHold = "userType";
+//    public static final String SWBUR_ClassUserTypePost = "/clsUserType";
+    private static HashMap<String, SemanticClass> userTypes = new HashMap<String, SemanticClass>();
     private static final String NL = System.getProperty("line.separator");
     private final boolean EXTERNAL;
     private final ExtUserRepInt bridge;
+    private static final String DEFTYPE = "_ExtendedAttributes";
+    private static SemanticClass DEFSEMCLASS;
 
     public UserRepository(SemanticObject base)
     {
@@ -66,8 +66,17 @@ public class UserRepository extends UserRepositoryBase
         }
         EXTERNAL = ret;
         bridge = classRet;
+        //Reemplazando el código posterior:
+        Iterator<SemanticClass> it = UserTypeDef.sclass.listSubClasses();
+        while (it.hasNext()){
+            SemanticClass utd = it.next();
+            //System.out.println("Adding: "+utd.getName());
+            if (!DEFTYPE.equals(utd.getName()))
+            userTypes.put(utd.getName(),utd);
+            else DEFSEMCLASS = utd;
+        }
         //System.out.println("***********UserRepository***************");
-        StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
+/*        StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
         while (ptopIt.hasNext())
         {
             Statement sp = (Statement) ptopIt.next();
@@ -79,7 +88,7 @@ public class UserRepository extends UserRepositoryBase
             //System.out.println("userTypes:"+uri.split("#")[1]);
             //getSemanticObject().getModel().registerClass(uri);
             }
-        }
+        }*/
     //System.out.println("***********end***************");
 
     /*
@@ -269,7 +278,7 @@ public class UserRepository extends UserRepositoryBase
         return getExtendedAttributesClass().getProperty(name);
     }
 
-    public SemanticProperty createIntExtendedAttribute(String name)
+    /*public SemanticProperty createIntExtendedAttribute(String name)
     {
         return createIntExtendedAttribute(name, null);
     }
@@ -489,7 +498,8 @@ public class UserRepository extends UserRepositoryBase
         }
         return sp;
     }
-
+/*/
+    
     public Iterator<SemanticProperty> listAttributesofUserType(String name)
     {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
@@ -602,7 +612,8 @@ public class UserRepository extends UserRepositoryBase
         }
         return alsp.iterator();
     }
-
+    
+/*
     public SemanticClass getExtendedAttributesClass()
     {
         SemanticClass cls = null;
@@ -639,15 +650,25 @@ public class UserRepository extends UserRepositoryBase
         }
         return cls;
     }
+*/
+    public SemanticClass getExtendedAttributesClass()
+    {
+        return DEFSEMCLASS;
+    }
+
+    public SemanticClass getUserType(String name)
+    {
+        return userTypes.get(name);
+    }
 
     public Iterator<String> getUserTypes()
     {
-        return userTypes.iterator();
+        return userTypes.keySet().iterator();
     }
 
     public boolean hasUserType(String name)
     {
-        return userTypes.contains(name);
+        return userTypes.keySet().contains(name);
     }
 
     public boolean isExternal()

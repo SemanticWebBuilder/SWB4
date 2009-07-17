@@ -1,6 +1,5 @@
 package org.semanticwb.model;
 
-import com.hp.hpl.jena.rdf.model.Statement;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
@@ -11,7 +10,6 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
@@ -46,8 +44,8 @@ public class User extends UserBase implements Principal
             super.setPassword(tmpPasswd);
             setPasswordChanged(new Date());
         } catch (Exception ex)
-                //NoSuchAlgorithmException & UnsupportedEncodingException,
-                //Wrapped up, it doesn't matter which one, we just can't do anything else
+        //NoSuchAlgorithmException & UnsupportedEncodingException,
+        //Wrapped up, it doesn't matter which one, we just can't do anything else
         {
             log.error("User: Can't set a crypted Password", ex);
         }
@@ -85,15 +83,14 @@ public class User extends UserBase implements Principal
 
     public void checkCredential(Object credential) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        if(getUserRepository().isExternal())
+        if (getUserRepository().isExternal())
         {
             this.login = getUserRepository().getBridge().validateCredential(getLogin(), credential);
-        }
-        else
+        } else
         {
             this.login = getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)));
         }
-        
+
     }
 
     public void setUserTypeAttribute(String userType, String name, Object value) throws SWBException
@@ -119,12 +116,15 @@ public class User extends UserBase implements Principal
     public void setExtendedAttribute(String name, Object value) throws SWBException
     {
         SemanticProperty prop = getSemanticObject().getSemanticClass().getProperty(name);
-        if ( null == prop) prop = getSemanticObject().getModel().getSemanticProperty(getUserRepository().getId()+"#" + name);
+        if (null == prop)
+        {
+            prop = getSemanticObject().getModel().getSemanticProperty(getUserRepository().getId() + "#" + name);
+        }
         setExtendedAttribute(prop, value);
     }
 
     public void setExtendedAttribute(SemanticProperty prop, Object value) throws SWBException
-    {   
+    {
         if (null == value)
         {
             throw new SWBException("Can't set a null value");
@@ -207,27 +207,43 @@ public class User extends UserBase implements Principal
     public Object getExtendedAttribute(String name)
     {
         SemanticProperty prop = getSemanticObject().getSemanticClass().getProperty(name);
-        if ( null == prop) prop = new SemanticProperty(getSemanticObject().getModel().getRDFModel().getProperty(getUserRepository().getId()+"#" + name));
+        if (null == prop)
+        {
+            prop = new SemanticProperty(getSemanticObject().getModel().getRDFModel().getProperty(getUserRepository().getId() + "#" + name));
+        }
 
         return getExtendedAttribute(prop);
     }
 
     public String getFullName()
     {
-        String fn=getFirstName();
-        if(fn==null)fn="";
-        String ln=getLastName();
-        if(ln==null)ln="";
-        else ln=" "+ln;
-        String sln=getSecondLastName();
-        if(sln==null)sln="";
-        else sln=" "+sln;
-        return fn+ln+sln;
+        String fn = getFirstName();
+        if (fn == null)
+        {
+            fn = "";
+        }
+        String ln = getLastName();
+        if (ln == null)
+        {
+            ln = "";
+        } else
+        {
+            ln = " " + ln;
+        }
+        String sln = getSecondLastName();
+        if (sln == null)
+        {
+            sln = "";
+        } else
+        {
+            sln = " " + sln;
+        }
+        return fn + ln + sln;
     }
 
     public Object getExtendedAttribute(SemanticProperty prop)
     {
-        Object obj = null; 
+        Object obj = null;
         if (null != prop && null != prop.getRange())
         {
             if (SemanticVocabulary.XMLS_BOOLEAN.equals(prop.getRange().toString()))
@@ -278,45 +294,62 @@ public class User extends UserBase implements Principal
             throw new SWBException("Property null or maybe not an extended attribute");
         }
     }
-
+    /*
     public void addUserType(String userType)
     {
-        if (null!=userType && !"".equals(userType.trim()) && !hasUserType(userType))
-        {
-            getSemanticObject().addSemanticClass(getUserRepository().getUserType(userType));
-        }
+    if (null!=userType && !"".equals(userType.trim()) && !hasUserType(userType))
+    {
+    getSemanticObject().addSemanticClass(getUserRepository().getUserType(userType));
+    }
     }
 
     public void removeUserType(String userType)
     {
-        if (hasUserType(userType))
-        {
-            getSemanticObject().removeSemanticClass(getUserRepository().getUserType(userType));
-        }
+    if (hasUserType(userType))
+    {
+    getSemanticObject().removeSemanticClass(getUserRepository().getUserType(userType));
+    }
     }
 
     public boolean hasUserType(String userType)
     {
-        Iterator<SemanticClass> itse = getSemanticObject().listSemanticClasses();
-        SemanticClass current = null;
-        while (itse.hasNext())
+    Iterator<SemanticClass> itse = getSemanticObject().listSemanticClasses();
+    SemanticClass current = null;
+    while (itse.hasNext())
+    {
+    current = itse.next();
+    if (userType.equals(current.getName()))
+    {
+    break;
+    }
+    }
+    return userType.equals(current.getName());
+    }
+     */
+
+    public boolean hasUserType(String userType)
+    {
+        boolean ret = false;
+        Iterator<String> its = this.listUserTypes();
+        while (its.hasNext())
         {
-            current = itse.next();
-            if (userType.equals(current.getName()))
+            String currUT = its.next();
+            if (currUT.equals(userType))
             {
+                ret = true;
                 break;
             }
         }
-        return userType.equals(current.getName());
+        return ret;
     }
 
     public boolean hasFavorite(SemanticObject obj)
     {
-        boolean ret=false;
-        UserFavorite fav=getUserFavorite();
-        if(fav!=null)
+        boolean ret = false;
+        UserFavorite fav = getUserFavorite();
+        if (fav != null)
         {
-            ret=fav.getSemanticObject().hasObjectProperty(fav.swb_usrfHasObject, obj);
+            ret = fav.getSemanticObject().hasObjectProperty(fav.swb_usrfHasObject, obj);
         }
         return ret;
     }
@@ -324,48 +357,51 @@ public class User extends UserBase implements Principal
     public boolean haveAccess(GenericObject obj)
     {
         //System.out.println(this+" haveAccess:"+obj);
-        boolean ret=true;
-        if(obj instanceof RoleRefable)
+        boolean ret = true;
+        if (obj instanceof RoleRefable)
         {
-            Iterator<RoleRef> it=((RoleRefable)obj).listInheritRoleRefs();
-            while(it.hasNext())
+            Iterator<RoleRef> it = ((RoleRefable) obj).listInheritRoleRefs();
+            while (it.hasNext())
             {
-                RoleRef ref=it.next();
+                RoleRef ref = it.next();
                 //System.out.println("ref:"+ref+" role:"+ref.getRole());
-                if(!hasRole(ref.getRole()))
+                if (!hasRole(ref.getRole()))
                 {
-                    ret=false;
+                    ret = false;
                     //System.out.println("hasRole:false");
                     break;
                 }
             }
         }
-        if(ret && obj instanceof RuleRefable)
+        if (ret && obj instanceof RuleRefable)
         {
-            Iterator<RuleRef> it=((RuleRefable)obj).listInheritRuleRefs();
-            while(it.hasNext())
+            Iterator<RuleRef> it = ((RuleRefable) obj).listInheritRuleRefs();
+            while (it.hasNext())
             {
-                RuleRef ref=it.next();
+                RuleRef ref = it.next();
                 //System.out.println("ref:"+ref+" role:"+ref.getRole());
-                Rule rule=ref.getRule();
-                if(rule!=null)
+                Rule rule = ref.getRule();
+                if (rule != null)
                 {
-                    ret=Rule.getRuleMgr().eval(this, rule.getURI());
-                    if(!ret)break;
+                    ret = Rule.getRuleMgr().eval(this, rule.getURI());
+                    if (!ret)
+                    {
+                        break;
+                    }
                 }
             }
         }
-        if(ret && obj instanceof UserGroupRefable)
+        if (ret && obj instanceof UserGroupRefable)
         {
-            Iterator<UserGroupRef> it=((UserGroupRefable)obj).listInheritUserGroupRefs();
-            while(it.hasNext())
+            Iterator<UserGroupRef> it = ((UserGroupRefable) obj).listInheritUserGroupRefs();
+            while (it.hasNext())
             {
-                UserGroupRef ref=it.next();
+                UserGroupRef ref = it.next();
                 //System.out.println("ref:"+ref+" role:"+ref.getRole());
-                UserGroup usrgrp=ref.getUserGroup();
-                if(!hasUserGroup(usrgrp))
+                UserGroup usrgrp = ref.getUserGroup();
+                if (!hasUserGroup(usrgrp))
                 {
-                    ret=false;
+                    ret = false;
                     break;
                 }
             }
@@ -377,16 +413,16 @@ public class User extends UserBase implements Principal
     @Override
     public boolean hasRole(Role role)
     {
-        boolean ret=false;
-        while(role!=null)
+        boolean ret = false;
+        while (role != null)
         {
-            if(super.hasRole(role))
+            if (super.hasRole(role))
             {
-                ret=true;
+                ret = true;
                 break;
-            }else
+            } else
             {
-                role=role.getParent();
+                role = role.getParent();
             }
         }
         return ret;
@@ -394,20 +430,20 @@ public class User extends UserBase implements Principal
 
     public boolean hasDevice(Device device)
     {
-        boolean ret=false;
-        Device act=getDevice();
+        boolean ret = false;
+        Device act = getDevice();
         //System.out.println(act+" "+device);
-        if(act!=null)
+        if (act != null)
         {
-            while(act!=null)
+            while (act != null)
             {
-                if(device==act)
+                if (device == act)
                 {
-                    ret=true;
+                    ret = true;
                     break;
-                }else
+                } else
                 {
-                    act=act.getParent();
+                    act = act.getParent();
                 }
             }
         }
@@ -417,25 +453,23 @@ public class User extends UserBase implements Principal
     @Override
     public boolean hasUserGroup(UserGroup group)
     {
-        boolean ret=false;
-        Iterator<UserGroup> grpit=listUserGroups();
-        while(grpit.hasNext())
+        boolean ret = false;
+        Iterator<UserGroup> grpit = listUserGroups();
+        while (grpit.hasNext())
         {
-            UserGroup grp=grpit.next();
-            while(grp!=null)
+            UserGroup grp = grpit.next();
+            while (grp != null)
             {
-                if(grp.equals(group))
+                if (grp.equals(group))
                 {
-                    ret=true;
+                    ret = true;
                     break;
-                }else
+                } else
                 {
-                    grp=grp.getParent();
+                    grp = grp.getParent();
                 }
             }
         }
         return ret;
     }
-
-
 }
