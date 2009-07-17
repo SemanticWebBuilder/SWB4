@@ -74,7 +74,14 @@ public class PropertyDefinitionImp implements PropertyDefinition
         String svalue=BaseNode.getOnParentVersion(property);
         if(svalue!=null)
         {
-            onParentVersion=OnParentVersionAction.valueFromName(svalue);
+            try
+            {
+                onParentVersion=OnParentVersionAction.valueFromName(svalue);
+            }
+            catch(Exception e)
+            {
+                log.debug("Error to get the OnParentVersionAction for the property "+this.name, e);
+            }
         }
         isProtected=BaseNode.isProtected(property);
     }
