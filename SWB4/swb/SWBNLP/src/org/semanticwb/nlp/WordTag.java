@@ -82,7 +82,6 @@ public class WordTag {
     /**
      * Gets the range class name of the tag.
      * Obtiene el nombre del rango de la etiqueta.
-     * @return
      */
     public String getRangeClassId() {
         return rangeName;
@@ -109,7 +108,6 @@ public class WordTag {
     /**
      * Gets the class ID of the tag.
      * Obtiene el ID de la clase de la etiqueta.
-     * @return
      */
     public String getObjId() {
         return oId;
