@@ -45,6 +45,7 @@ public class WBMenuMap extends GenericAdmResource
      */
     public void setResourceBase(Resource base)
     {
+        //System.out.println("WBMenuMap");
         try
         {
             super.setResourceBase(base);
@@ -53,9 +54,10 @@ public class WBMenuMap extends GenericAdmResource
         {
             log.debug("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
+        //System.out.println("WBMenuMap:"+base.getAttribute("template"));
         if(!"".equals(base.getAttribute("template","").trim()))
         {
-            System.out.println("loading template...");
+            //System.out.println("loading template...");
             try
             {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));

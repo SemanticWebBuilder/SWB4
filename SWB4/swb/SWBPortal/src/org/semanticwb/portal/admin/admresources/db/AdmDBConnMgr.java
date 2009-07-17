@@ -241,6 +241,7 @@ public class AdmDBConnMgr {
                     while (itparams.hasNext()) {
                         String pname = (String) itparams.next();
                         String value = (String) hparams.get(pname);
+                        //System.out.println("pname:"+pname+" value:"+value);
                         if (value.trim().equals("")) {
                             if (((String) hparams.get("wbfile_" + pname)) != null && hparams.get("wbNoFile_" + pname) == null) {
                                 child = dom.createElement(pname);

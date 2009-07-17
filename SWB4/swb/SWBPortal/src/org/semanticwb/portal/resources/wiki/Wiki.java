@@ -130,7 +130,7 @@ public class Wiki extends GenericResource
         out.println("  <div id=\"WBWikiPreview\">"+preview+"</div>");
         out.println("  <form name=\"WBWikiEditForm\" id=\"WBWikiEditForm\" method=\"post\" action=\""+url+"\">");
         out.println("    <div id=\"WBWikiToolBar\"></div>");
-        out.println("    <textarea tabindex='1' accesskey=\",\" name=\"WBWikiTextbox\" id=\"WBWikiTextbox\" rows='25' cols='80' >"+content+"</textarea><br>");
+        out.println("    <textarea tabindex='1' accesskey=\",\" name=\"WBWikiTextbox\" id=\"WBWikiTextbox\" >"+content+"</textarea><br>");
         out.println("    <span>Comentario de los cambios</small></span>");
         out.println("    <br>");
         out.println("    <div class='editOptions'>");
