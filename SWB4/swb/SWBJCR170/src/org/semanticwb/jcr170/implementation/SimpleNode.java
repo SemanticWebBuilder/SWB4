@@ -1534,7 +1534,8 @@ public class SimpleNode implements Node
             while (it.hasNext())
             {
                 Property prop = it.nextProperty();
-                if (this.existsProperty(prop.getName()) && !prop.getDefinition().isProtected())
+                SemanticProperty semanticProp=node.getSemanticProperty(prop.getName(), clazz);
+                if (this.existsProperty(prop.getName()) && !node.isInternal(semanticProp)  && !prop.getDefinition().isProtected())
                 {
                     log.trace("restoring property " + prop.getName());
                     this.setProperty(prop.getName(), prop.getValues());
