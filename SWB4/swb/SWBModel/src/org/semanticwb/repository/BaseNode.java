@@ -130,7 +130,7 @@ public class BaseNode extends BaseNodeBase
         return value;
     }
 
-    public String getOnParentVersion(SemanticProperty property)
+    public static String getOnParentVersion(SemanticProperty property)
     {
         String value = ONPARENTVERSION_COPY;
         SemanticProperty onParentVersionProperty = CommonPropertiesforDefinition.jcr_onParentVersion;
@@ -402,7 +402,7 @@ public class BaseNode extends BaseNodeBase
         return allowsSameNameSiblings(this.getSemanticObject().getSemanticClass(), clazz, nameToCreate);
     }
 
-    public boolean isMandatory(SemanticProperty property)
+    public static boolean isMandatory(SemanticProperty property)
     {
         boolean isMandatory = false;
         SemanticLiteral literal = property.getRequiredProperty(CommonPropertiesforDefinition.jcr_mandatory);
@@ -717,7 +717,7 @@ public class BaseNode extends BaseNodeBase
         return isAutocreated;
     }
 
-    public final boolean isAutocreated(SemanticProperty property)
+    public final static boolean isAutocreated(SemanticProperty property)
     {
         boolean isAutocreated = false;
         SemanticLiteral value = property.getRequiredProperty(CommonPropertiesforDefinition.jcr_autoCreated);
@@ -728,7 +728,7 @@ public class BaseNode extends BaseNodeBase
         return isAutocreated;
     }
 
-    public final boolean isProtected(SemanticProperty property)
+    public static final boolean isProtected(SemanticProperty property)
     {
         boolean isProtected = false;
         try
