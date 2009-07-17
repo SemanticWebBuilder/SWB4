@@ -346,7 +346,7 @@ public class SimpleNode implements Node
         else
         {
             PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(session, property);
-            PropertyImp prop = new PropertyImp(this, clazz, getName(property), propertyDefinition, isNode);
+            PropertyImp prop = new PropertyImp(this, clazz, getName(property), propertyDefinition, isNode,session);
             this.properties.put(prop.getName(), prop);
             return prop;
         }
@@ -361,13 +361,13 @@ public class SimpleNode implements Node
             {
                 SemanticProperty property = session.getRootBaseNode().getSemanticProperty(name, clazz);
                 PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(session, property);
-                prop = new PropertyImp(this, clazz, name, propertyDefinition, isNode);
+                prop = new PropertyImp(this, clazz, name, propertyDefinition, isNode,session);
                 this.properties.put(name, prop);
             }
             else
             {
                 PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(name);
-                prop = new PropertyImp(this, clazz, name, propertyDefinition, false);
+                prop = new PropertyImp(this, clazz, name, propertyDefinition, false,session);
                 this.properties.put(name, prop);
             }
         }
