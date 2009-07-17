@@ -1560,7 +1560,7 @@ public class BaseNode extends BaseNodeBase
         return existsNodeName;
     }
 
-    public boolean isMultiple(SemanticProperty property)
+    public static boolean isMultiple(SemanticProperty property)
     {
         boolean isMultiple = false;
         SemanticLiteral literal = property.getRequiredProperty(PropertyDefinition.jcr_multiple);
