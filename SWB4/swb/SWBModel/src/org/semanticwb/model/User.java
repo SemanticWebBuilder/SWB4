@@ -3,6 +3,7 @@ package org.semanticwb.model;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import org.semanticwb.Logger;
@@ -96,7 +97,7 @@ public class User extends UserBase implements Principal
     public void setUserTypeAttribute(String userType, String name, Object value) throws SWBException
     {
         SemanticProperty prop = null;
-        Iterator<SemanticClass> itsc = getSemanticObject().listSemanticClasses();
+        Iterator<SemanticClass> itsc = getAsociatedUserTypes(); //getSemanticObject().listSemanticClasses();
         SemanticClass current = null;
         while (itsc.hasNext())
         {
@@ -115,11 +116,11 @@ public class User extends UserBase implements Principal
 
     public void setExtendedAttribute(String name, Object value) throws SWBException
     {
-        SemanticProperty prop = getSemanticObject().getSemanticClass().getProperty(name);
-        if (null == prop)
-        {
-            prop = getSemanticObject().getModel().getSemanticProperty(getUserRepository().getId() + "#" + name);
-        }
+        SemanticProperty prop = getUserRepository().getSemanticPropertyOf(name);//getSemanticObject().getSemanticClass().getProperty(name);
+//        if (null == prop)
+//        {
+//            prop = getSemanticObject().getModel().getSemanticProperty(getUserRepository().getId() + "#" + name);
+//        }
         setExtendedAttribute(prop, value);
     }
 
@@ -206,11 +207,11 @@ public class User extends UserBase implements Principal
 
     public Object getExtendedAttribute(String name)
     {
-        SemanticProperty prop = getSemanticObject().getSemanticClass().getProperty(name);
-        if (null == prop)
-        {
-            prop = new SemanticProperty(getSemanticObject().getModel().getRDFModel().getProperty(getUserRepository().getId() + "#" + name));
-        }
+        SemanticProperty prop = getUserRepository().getSemanticPropertyOf(name);//getSemanticObject().getSemanticClass().getProperty(name);
+//        if (null == prop)
+//        {
+//            prop = new SemanticProperty(getSemanticObject().getModel().getRDFModel().getProperty(getUserRepository().getId() + "#" + name));
+//        }
 
         return getExtendedAttribute(prop);
     }
@@ -280,7 +281,7 @@ public class User extends UserBase implements Principal
 
     public void removeExtendedAttribute(String name) throws SWBException
     {
-        SemanticProperty prop = getSemanticObject().getSemanticClass().getProperty(name);
+        SemanticProperty prop = getUserRepository().getSemanticPropertyOf(name);//getSemanticObject().getSemanticClass().getProperty(name);
         removeExtendedAttribute(prop);
     }
 
@@ -472,4 +473,18 @@ public class User extends UserBase implements Principal
         }
         return ret;
     }
+
+    private Iterator<SemanticClass> getAsociatedUserTypes()
+    {
+        ArrayList<SemanticClass> lista = new ArrayList<SemanticClass>();
+        Iterator<String> curr = listUserTypes();
+        while(curr.hasNext())
+        {
+            String ut = curr.next();
+            SemanticClass sc = getUserRepository().getUserType(ut);
+            if (null!=sc) lista.add(sc);
+        }
+        return lista.iterator();
+    }
+
 }
