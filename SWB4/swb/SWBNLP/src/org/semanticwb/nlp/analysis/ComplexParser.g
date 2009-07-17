@@ -1,14 +1,15 @@
-parser grammar nested;
+parser grammar ComplexParser;
 
 options {
 	backtrack = true;
-	tokenVocab = sLexer;
+	tokenVocab = SpanishLexer;
 	output = AST;
 }
 
 tokens {
 	LIMIT; SELECT; ASIGN; COMPL; COMPG; COMPLE; COMPGE; COMPAS;
-	PRECON; PREDE; OFFSET; ORDER; COMPNAME; MODTO; NAME;
+	PRECON; PREDE; OFFSET; ORDER; COMPNAME; MODTO; NAME; COMPRNG;
+	INTERVAL;
 }
 
 @members {
@@ -125,6 +126,7 @@ sent
 	|name SIGGE val -> ^(COMPGE name val)
         |VAR MODC val -> ^(COMPAS VAR val)
         |name MODC val -> ^(COMPAS name val)
+        |name MODN val DELY val VAR? -> ^(COMPRNG name ^(INTERVAL val val))
 ;
 
 /*A value can be a literal (double quoted strings), a boolean or a num*/
