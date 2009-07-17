@@ -1749,9 +1749,11 @@ public class BaseNode extends BaseNodeBase
                 }
                 else
                 {
+                    log.trace("prefix to get the uri "+values[0]);
                     String namespace = listUris().get(values[0]);
                     if (namespace == null)
                     {
+                        log.trace("The uri for the prefix "+values[0]+" was not found");
                         throw new SWBException("The namespace for the prefix " + values[0] + WAS_NOT_FOUND);
                     }
                     else
