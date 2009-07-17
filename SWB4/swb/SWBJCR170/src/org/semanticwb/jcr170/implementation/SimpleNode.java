@@ -179,6 +179,7 @@ public class SimpleNode implements Node
                 }
                 catch (Exception e)
                 {
+                    log.debug(e);
                 }
             }
         }
