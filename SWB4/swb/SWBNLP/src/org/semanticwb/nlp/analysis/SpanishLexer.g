@@ -1,5 +1,3 @@
-//ANTLRWorks grammar to generate a spanish lexer
-
 lexer grammar SpanishLexer;
 
 WHITESPACE
@@ -15,6 +13,7 @@ MODT	:	'todo';
 PRED	:	'de';
 PREN	:	'en';
 MODE	:	'desde';
+MODN	:	'entre';
 MODO	:	'ordenar'|'ordenado';
 MODC   	:    	'como';
 BOL	:	'true'|'false';
@@ -22,6 +21,7 @@ NUM	:	SIGN? ('0'..'9'+ | ('0'..'9'* '.' '0'..'9'+));
 LIT	:	'"'(~('"'|'\n'|'\r'|'\t'))*'"';
 BVAR	:	LBRK(~(']'|'['|'\n'|'\r'|'\t'))*RBRK;
 ORDOP	:	'asc'|'des';
+DELY	:	'y';
 VAR	:	('0'..'9'|'a'..'z'|'A'..'Z'|'_'|'-'|'á'|'é'|'í'|'ó'|'ú'|'ä'|'ë'|'ï'|'ö'|'ü'|'Ä'|'Ë'|'Ï'|'Ö'|'Ü'|'Á'|'É'|'Í'|'Ó'|'Ú'|'Ñ'|'ñ')+;
 LPAR	:	'(';
 RPAR	:	')';
