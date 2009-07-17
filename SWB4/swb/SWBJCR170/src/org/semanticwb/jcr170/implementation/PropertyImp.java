@@ -64,6 +64,7 @@ public final class PropertyImp implements Property
         {
             throw new IllegalArgumentException();
         }
+        this.session=session;
         this.name = name;
         this.propertyDefinition = propertyDefinition;
         if(parent.toString().endsWith("/"))
