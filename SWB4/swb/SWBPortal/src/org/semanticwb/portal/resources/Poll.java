@@ -1339,7 +1339,7 @@ public class Poll extends GenericResource {
             ret.append("<fieldset>");
             ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
             ret.append("\n <tr><td>");
-            ret.append("\n <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submitImgGal\" value=\"Submit\" onclick=\"if(jsValida(this.form)) return true; else return false;\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_submit")+"</button>&nbsp;");
+            ret.append("\n <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submitImgGal\" value=\"Submit\" onclick=\"if(jsValida(dojo.byId('frmResource'))) return true; else return false;\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_submit")+"</button>&nbsp;");
             ret.append("\n <button dojoType=\"dijit.form.Button\" type=\"reset\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_reset")+"</button>");
             ret.append("\n </td></tr>");
             ret.append("\n</table> ");
