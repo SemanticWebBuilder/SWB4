@@ -64,7 +64,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/forum/swbForum.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath()+"swbadmin/jsp/forum/swbForum.jsp");
             rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
