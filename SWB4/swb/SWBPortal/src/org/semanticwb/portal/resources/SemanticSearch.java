@@ -86,12 +86,12 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
-                lex = new SWBLexicon(lang);
+                lex = new SWBLexicon(lang, "");
             }
         } else {
             if (!lang.equals("es")) {
                 lang = "es";
-                lex = new SWBLexicon(lang);
+                lex = new SWBLexicon(lang, "");
             }
         }
 
@@ -586,12 +586,12 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
-                lex = new SWBLexicon(lang);
+                lex = new SWBLexicon(lang, "");
             }
         } else {
             if (!lang.equals("es")) {
                 lang = "es";
-                lex = new SWBLexicon(lang);
+                lex = new SWBLexicon(lang, "");
             }
         }
 
