@@ -263,7 +263,7 @@ public class SimpleNode implements Node
                         PropertyImp proptest=addProperty(prop, node, false, clazz, true);
                         log.trace("name: "+proptest.getName());
                         log.trace("proptest.getValue().getType(): "+proptest.getValue().getType());
-                        log.trace("proptest.getDefinition().getRequiredType(): "+proptest.getDefinition().getRequiredType());
+                        //log.trace("proptest.getDefinition().getRequiredType(): "+proptest.getDefinition().getRequiredType());
                     }
                     else
                     {
