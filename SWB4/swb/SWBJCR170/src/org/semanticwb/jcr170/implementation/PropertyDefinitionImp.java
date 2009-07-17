@@ -69,14 +69,14 @@ public class PropertyDefinitionImp implements PropertyDefinition
             }
         }
         this.requiredType = type;
-        mandatory=session.getRootBaseNode().isMandatory(property);
-        autocreated=session.getRootBaseNode().isAutocreated(property);
-        String svalue=session.getRootBaseNode().getOnParentVersion(property);
+        mandatory=BaseNode.isMandatory(property);
+        autocreated=BaseNode.isAutocreated(property);
+        String svalue=BaseNode.getOnParentVersion(property);
         if(svalue!=null)
         {
             onParentVersion=OnParentVersionAction.valueFromName(svalue);
         }
-        isProtected=session.getRootBaseNode().isProtected(property);
+        isProtected=BaseNode.isProtected(property);
     }
 
     public void setRequiredType(int requiredType)
