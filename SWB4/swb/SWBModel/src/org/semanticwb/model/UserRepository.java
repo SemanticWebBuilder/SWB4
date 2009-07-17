@@ -33,11 +33,13 @@ public class UserRepository extends UserRepositoryBase
 //    public static final String SWBUR_ClassUserTypeHold = "userType";
 //    public static final String SWBUR_ClassUserTypePost = "/clsUserType";
     private static HashMap<String, SemanticClass> userTypes = new HashMap<String, SemanticClass>();
+    private static HashMap<String, SemanticProperty> userProps = new HashMap<String, SemanticProperty>();
     private static final String NL = System.getProperty("line.separator");
     private final boolean EXTERNAL;
     private final ExtUserRepInt bridge;
     private static final String DEFTYPE = "_ExtendedAttributes";
     private static SemanticClass DEFSEMCLASS;
+
 
     public UserRepository(SemanticObject base)
     {
@@ -70,12 +72,26 @@ public class UserRepository extends UserRepositoryBase
         Iterator<SemanticClass> it = UserTypeDef.sclass.listSubClasses();
         while (it.hasNext()){
             SemanticClass utd = it.next();
-            //System.out.println("Adding: "+utd.getName());
+            System.out.println("Adding: "+utd.getName());
             if (!DEFTYPE.equals(utd.getName()))
             userTypes.put(utd.getName(),utd);
             else DEFSEMCLASS = utd;
+            Iterator<SemanticProperty> itsp = utd.listProperties();
+            while(itsp.hasNext()){
+                System.out.println("=======================================");
+                SemanticProperty sp = itsp.next();
+                System.out.println("testing:"+sp.getURI()+"-"+getId());
+                System.out.println("Range:"+sp.getRange());
+                System.out.println("dip:"+sp.getDisplayProperty());
+                if (null == sp.getRange() || null == sp.getDisplayProperty() ) //|| !sp.getURI().startsWith(getId()))
+            {
+                continue;
+            }
+                userProps.put(sp.getName(),sp);
+                System.out.println("Nombre:"+ sp.getName());
+            }
         }
-        //System.out.println("***********UserRepository***************");
+        System.out.println("***********UserRepository***************");
 /*        StmtIterator ptopIt = getSemanticObject().getModel().getRDFModel().listStatements(getSemanticObject().getRDFResource(), null, (String) null);
         while (ptopIt.hasNext())
         {
@@ -679,5 +695,10 @@ public class UserRepository extends UserRepositoryBase
     ExtUserRepInt getBridge()
     {
         return bridge;
+    }
+
+    public SemanticProperty getSemanticPropertyOf(String name)
+    {
+        return userProps.get(name);
     }
 }

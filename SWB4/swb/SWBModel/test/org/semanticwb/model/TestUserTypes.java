@@ -104,31 +104,31 @@ public class TestUserTypes {
         }
     }
 
-    @Test
+    //@Test
     public void setValues(){
         UserRepository repository = null;
         repository = SWBContext.getDefaultRepository();
         repository.setUserRepSecurityQuestionList("1:Pasaporte num|2:Licencia num|3:nombre de tu mascota");
     }
     
-    @Test
-    public void createUserTypes(){
-        UserRepository repository = null;
-        repository = SWBContext.getDefaultRepository();
-        repository.createIntExtendedAttribute("edad");
-        SemanticClass cls = repository.getUserType("estudiante");
-        repository.createStringExtendedAttribute("escuela", "estudiante");
-        repository.createBooleanExtendedAttribute("inscrtito", "estudiante");
-        String [] al = new String[3];
-        al[0] = "primaria:secundaria:preparatoria:universidad:maestria:doctorado";
-        al[1] = "es|primaria:secundaria:preparatoria:universidad:maestria:doctorado";
-        al[2] = "en|elementary:13-15grade:high:university:degree:doctordegre";
-        repository.createListExtendedAttribute("grado", "estudiante", al);
-        cls = repository.getUserType("empleado");
-        repository.createStringExtendedAttribute("empresa", "empleado");
-        repository.createDateTimeExtendedAttribute("fingreso","empleado");
-
-    }
+    //@Test
+//    public void createUserTypes(){
+//        UserRepository repository = null;
+//        repository = SWBContext.getDefaultRepository();
+//        repository.createIntExtendedAttribute("edad");
+//        SemanticClass cls = repository.getUserType("estudiante");
+//        repository.createStringExtendedAttribute("escuela", "estudiante");
+//        repository.createBooleanExtendedAttribute("inscrtito", "estudiante");
+//        String [] al = new String[3];
+//        al[0] = "primaria:secundaria:preparatoria:universidad:maestria:doctorado";
+//        al[1] = "es|primaria:secundaria:preparatoria:universidad:maestria:doctorado";
+//        al[2] = "en|elementary:13-15grade:high:university:degree:doctordegre";
+//        repository.createListExtendedAttribute("grado", "estudiante", al);
+//        cls = repository.getUserType("empleado");
+//        repository.createStringExtendedAttribute("empresa", "empleado");
+//        repository.createDateTimeExtendedAttribute("fingreso","empleado");
+//
+//    }
 
     //@Test
     public void setUserTypes() throws SWBException{
@@ -164,6 +164,32 @@ public class TestUserTypes {
                 usr.setExtendedAttribute("inscrtito", new Boolean(((int)Math.floor(Math.random()*5)==0)?false:true));
             }
         }
+    }
+
+    @Test
+    public void userAtts() throws SWBException
+    {
+        System.out.println("****************************************************");
+        Iterator<User>itus = SWBContext.getUserRepository("nuevo_usr").listUsers();
+        User usr = null;
+//        while (itus.hasNext()){
+//            usr = itus.next();
+//            System.out.println("usuario:"+usr.getLogin());
+//            usr.addUserType("Empleado");
+//            usr.setExtendedAttribute("age", new Integer(((int)Math.floor(Math.random()*30))+20));
+//            usr.setExtendedAttribute("sex", 1);
+//            usr.setExtendedAttribute("nombreEmpresa", "INFOTEC");
+//        }
+//        itus = SWBContext.getUserRepository("nuevo_usr").listUsers();
+        while(itus.hasNext())
+        {
+            usr = itus.next();
+            System.out.println("Log:"+usr.getLogin());
+            System.out.println("age:"+usr.getExtendedAttribute("age"));
+            System.out.println("sex:"+usr.getExtendedAttribute("sex"));
+            System.out.println("empresa:"+usr.getExtendedAttribute("nombreEmpresa"));
+        }
+
     }
 
 }
