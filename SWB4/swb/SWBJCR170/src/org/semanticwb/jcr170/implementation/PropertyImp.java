@@ -56,8 +56,9 @@ public final class PropertyImp implements Property
     private final SimpleNode parent;
     private final SemanticClass clazz;
     private boolean isNode=false;
+    private SessionImp session;
 
-    PropertyImp(SimpleNode parent, SemanticClass clazz, String name, PropertyDefinitionImp propertyDefinition,boolean isNode)
+    PropertyImp(SimpleNode parent, SemanticClass clazz, String name, PropertyDefinitionImp propertyDefinition,boolean isNode,SessionImp session)
     {
         if (name == null)
         {
@@ -237,17 +238,67 @@ public final class PropertyImp implements Property
                     }
                     else
                     {
+                        int type=PropertyType.UNDEFINED;
+                        if(property.isBoolean())
+                        {
+                            type=PropertyType.BOOLEAN;
+                        }
+                        else if(property.isDate() || property.isDateTime())
+                        {
+                            type=PropertyType.DATE;
+                        }
+                        else if(property.isDouble())
+                        {
+                            type=PropertyType.DOUBLE;
+                        }
+                        else if(property.isFloat())
+                        {
+                            type=PropertyType.DOUBLE;
+                        }
+                        else if(property.isInt() || property.isLong())
+                        {
+                            type=PropertyType.LONG;
+                        }
+                        else if(property.isShort())
+                        {
+                            type=PropertyType.LONG;
+                        }
+                        else
+                        {
+                            type=PropertyType.STRING;
+                        }
                         Iterator<SemanticLiteral> literals = node.getSemanticObject().listLiteralProperties(property);
                         while (literals.hasNext())
                         {
-                            values.add(factory.createValue(literals.next().getString()));
+                            try
+                            {
+                                values.add(factory.createValue(literals.next().getString(),type));
+                            }
+                            catch(ValueFormatException e)
+                            {
+                                log.debug(e);
+                                throw new SWBException("The value can not be converted", e);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    Iterator<SemanticObject> value = node.getSemanticObject().listObjectProperties(property);
-                // TODO
+                    Iterator<SemanticObject> ovalues = node.getSemanticObject().listObjectProperties(property);
+                    while(ovalues.hasNext())
+                    {
+                        SemanticObject obj=ovalues.next();
+                        try
+                        {
+                            values.add(factory.createValue(new SimpleNode(node, session)));
+                        }
+                        catch(RepositoryException re)
+                        {
+                            log.debug(re);
+                            throw new SWBException("Error trying to get the Node of the property "+this.name, re);
+                        }
+                    }
+                
                 }
             }
 
