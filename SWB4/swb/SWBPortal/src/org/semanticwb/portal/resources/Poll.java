@@ -929,7 +929,7 @@ public class Poll extends GenericResource {
             url.setAction("update");
             
             ret.append("<div class=\"swbform\"> ");
-            ret.append("<form name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> ");
+            ret.append("<form id=\"frmResource\" name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> ");
             
             ret.append("<fieldset> ");
             ret.append("<legend>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_section1")+"</legend>");
