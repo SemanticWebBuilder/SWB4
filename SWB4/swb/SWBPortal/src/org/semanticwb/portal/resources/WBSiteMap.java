@@ -244,12 +244,18 @@ public class WBSiteMap extends GenericAdmResource
                     params.put(name, request.getParameter(name));
                 }
 
-                System.out.println("base.getAttribute(width)="+base.getAttribute("width"));
-                System.out.println("base.getAttribute(height)="+base.getAttribute("height"));
-                if( base.getAttribute("width")!=null ) {
+                String width = base.getAttribute("width");
+                String height = base.getAttribute("height");
+                if(width != null) {
+                    if(!width.endsWith("%")) {
+                        width += "px";
+                    }
                     tree.setWidth(base.getAttribute("width"));
                 }
-                if( base.getAttribute("height")!=null ) {
+                if(height != null) {
+                    if(!height.endsWith("%")) {
+                        height += "px";
+                    }
                     tree.setHeight(base.getAttribute("height"));
                 }
                 
