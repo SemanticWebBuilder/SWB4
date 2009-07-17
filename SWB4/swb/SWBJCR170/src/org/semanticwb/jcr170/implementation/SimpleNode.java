@@ -260,10 +260,7 @@ public class SimpleNode implements Node
                 {
                     if (prop.isObjectProperty())
                     {
-                        PropertyImp proptest=addProperty(prop, node, false, clazz, true);
-                        log.trace("name: "+proptest.getName());
-                        log.trace("proptest.getValue().getType(): "+proptest.getValue().getType());
-                        //log.trace("proptest.getDefinition().getRequiredType(): "+proptest.getDefinition().getRequiredType());
+                        addProperty(prop, node, false, clazz, true);                        
                     }
                     else
                     {
