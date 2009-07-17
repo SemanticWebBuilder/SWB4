@@ -53,7 +53,6 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.repository.BaseNode;
 import org.semanticwb.repository.ChildNodeDefinition;
-import org.semanticwb.repository.FrozenNode;
 import org.semanticwb.repository.HierarchyNode;
 import org.semanticwb.repository.LockUserComparator;
 import org.semanticwb.repository.Lockable;
