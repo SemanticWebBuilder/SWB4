@@ -2189,6 +2189,35 @@ public class SWBUtils {
         }
 
         /**
+         * Reemplaza caracteres especiales de tags en un xml
+         * @param txt
+         * @return  */
+        static public String replaceXMLTags(String txt)
+        {
+            if(txt==null)return null;
+            StringBuffer str = new StringBuffer(txt);
+            for (int x = 0; x < str.length(); x++)
+            {
+                char ch = str.charAt(x);
+                if (ch == '&')
+                {
+                    if (str.substring(x, x + 4).equals("&lt;"))
+                    {
+                        str.replace(x, x + 4, "<");
+                    } else if (str.substring(x, x + 4).equals("&gt;"))
+                    {
+                        str.replace(x, x + 4, ">");
+                    } else if (str.substring(x, x + 5).equals("&amp;"))
+                    {
+                        str.replace(x, x + 5, "&");
+                    }
+                }
+            }
+            return str.toString();
+    }
+
+
+        /**
          * Creates a node as child of other one
          * @param ele Node pather
          * @param name Node name to create
