@@ -135,7 +135,7 @@ public final class PropertyImp implements Property
             }
             if (errorRequiredType)
             {
-                throw new ValueFormatException("A value is " + PropertyType.nameFromValue(type) + " and the property is defined as " + PropertyType.nameFromValue(requiredType));
+                throw new ValueFormatException("A value is " + PropertyType.nameFromValue(type) + " and the property is defined as " + PropertyType.nameFromValue(requiredType)+" for the property "+this.name);
             }
             this.values.clear();
             if (getDefinition().isMultiple())
