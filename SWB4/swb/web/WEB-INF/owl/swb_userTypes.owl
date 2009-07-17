@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <rdf:RDF
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
     xmlns:swbusertype="http://www.semanticwebbuilder.org/swb4/users/userTypes#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
   xml:base="http://www.semanticwebbuilder.org/swb4/users/userTypes">
   <owl:Ontology rdf:about="">
     <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
@@ -16,26 +18,70 @@
     <rdfs:label xml:lang="es">Estudiante</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserTypeDef"/>
   </owl:Class>
+  <owl:Class rdf:ID="_ExtendedAttributes">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserTypeDef"/>
+    <rdfs:comment>Estas propiedades se asignarán por defecto a todo usuario</rdfs:comment>
+  </owl:Class>
   <owl:Class rdf:ID="Empresario">
     <rdfs:label xml:lang="en">Company Owner</rdfs:label>
     <rdfs:label xml:lang="es">Empresario</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserTypeDef"/>
   </owl:Class>
   <owl:DatatypeProperty rdf:ID="numeroEmpleados">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_numeroEmpleados">
+        <rdfs:label xml:lang="es">Número de Empleados</rdfs:label>
+        <rdfs:label xml:lang="en">Number of Employes</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:label xml:lang="es">Número de Empleados</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#Empresario"/>
     <rdfs:label xml:lang="en">Number of Employed</rdfs:label>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="age">
+    <rdfs:domain rdf:resource="#_ExtendedAttributes"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_usrAge"/>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Edad</rdfs:label>
+    <rdfs:label xml:lang="en">Age</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="nombreEmpresa">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_nombreEmpresa">
+        <rdfs:label xml:lang="es">Nombre de la Empresa</rdfs:label>
+        <rdfs:label xml:lang="en">Company Name</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Empresario"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="nombreEscuela">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_nombreEscuela">
+        <rdfs:label xml:lang="en">School Name</rdfs:label>
+        <rdfs:label xml:lang="es">Nombre de la Escuela</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:label xml:lang="en">School name</rdfs:label>
     <rdfs:label xml:lang="es">Nombre de la escuela</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Estudiante"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="nombreEmpresa">
-    <rdfs:domain rdf:resource="#Empresario"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  <owl:DatatypeProperty rdf:ID="sex">
+    <rdfs:domain rdf:resource="#_ExtendedAttributes"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_usrSex">
+        <rdfs:label xml:lang="en">Gender</rdfs:label>
+        <rdfs:label xml:lang="es">Género</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
+        <swbxf:propSelectValues xml:lang="es">1:Hombre|2:Mujer</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="en">1:Male|2:Female</swbxf:propSelectValues>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:DatatypeProperty>
 </rdf:RDF>
 
