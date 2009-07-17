@@ -8,7 +8,6 @@ import java.io.StringReader;
 import java.io.Writer;
 import org.apache.lucene.analysis.Analyzer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -43,6 +42,7 @@ public class SWBLexicon {
     private String language = "es";
     private String spellDictPath;
     private String prefixString = "";
+    private String prexs;
     private HashMap<String, WordTag> objHash = null;
     private HashMap<String, WordTag> propHash = null;
     private HashMap<String, String> langCodes;
@@ -71,12 +71,15 @@ public class SWBLexicon {
      * correspondiente.
      *
      * @param lang language for the new SWBLexicon. Idioma del nuevo diccionario.
+     * @param prexs pipe-separated prefixes to filter SemanticClasses. Prefijos
+     * para el filtrado de clases semánticas separados por pipes.
      */
-    public SWBLexicon(String lang) {
+    public SWBLexicon(String lang, String prefxs) {
         language = lang;
         spellDictPath = SWBPlatform.getWorkPath() + "/index/spell_" + 
                 language + ".txt";
 
+        prexs = prefxs;
         //Create word hashes
         objHash = new HashMap<String, WordTag>();
         propHash = new HashMap<String, WordTag>();
@@ -164,14 +167,16 @@ public class SWBLexicon {
         WordTag wt = objHash.get(getSnowballForm(oName));
 
         if (wt == null) {
-            if (outr != null) {
-                try {
-                    outr.write(oName + "\n");
-                } catch (IOException ex) {
-                    log.error(ex);
+            if (prexs.contains(o.getPrefix()) || prexs.equals("")) {
+                if (outr != null) {
+                    try {
+                        outr.write(oName + "\n");
+                    } catch (IOException ex) {
+                        log.error(ex);
+                    }
                 }
+                objHash.put(getSnowballForm(oName), new WordTag("OBJ", oName, o.getPrefix() + ":" + o.getName(), o.getClassName(), o.getClassId(), ""));
             }
-            objHash.put(getSnowballForm(oName), new WordTag("OBJ", oName, o.getPrefix() + ":" + o.getName(), o.getClassName(), o.getClassId(), ""));
         }
     }
 
@@ -191,21 +196,23 @@ public class SWBLexicon {
         WordTag wt = propHash.get(getSnowballForm(pName));
 
         if (wt == null) {
-            if (outr != null) {
-                try {
-                    outr.write(pName + "\n");
-                } catch (IOException ex) {
-                    log.error(ex);
+            if (prexs.contains(p.getPrefix()) || prexs.equals("")) {
+                if (outr != null) {
+                    try {
+                        outr.write(pName + "\n");
+                    } catch (IOException ex) {
+                        log.error(ex);
+                    }
                 }
-            }
 
-            //If it is an object property
-            if (p.isObjectProperty()) {
-                //Attempt to get range class object
-                SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(p.getRangeClass().getURI());
-                propHash.put(getSnowballForm(pName), new WordTag("PRO", pName, p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), rg.getClassId()));
-            } else {
-                propHash.put(getSnowballForm(pName), new WordTag("PRO", pName, p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), ""));
+                //If it is an object property
+                if (p.isObjectProperty()) {
+                    //Attempt to get range class object
+                    SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(p.getRangeClass().getURI());
+                    propHash.put(getSnowballForm(pName), new WordTag("PRO", pName, p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), rg.getClassId()));
+                } else {
+                    propHash.put(getSnowballForm(pName), new WordTag("PRO", pName, p.getPrefix() + ":" + p.getName(), p.getName(), p.getPropId(), ""));
+                }
             }
         }
     }
