@@ -40,39 +40,43 @@ public class NodeDefinitionImp implements NodeDefinition
         {
             BaseNode parent = node.getParent();
             SemanticObject childNodeDefinition = BaseNode.getChildNodeDefinition(parent.getSemanticObject().getSemanticClass(), node.getName());
-            String sdefaultPrimaryType = childNodeDefinition.getProperty(ChildNodeDefinition.jcr_defaultPrimaryType);
-            if (sdefaultPrimaryType != null)
+            if (childNodeDefinition != null)
             {
-                try
+                String sdefaultPrimaryType = childNodeDefinition.getProperty(ChildNodeDefinition.jcr_defaultPrimaryType);
+                if (sdefaultPrimaryType != null)
                 {
-                    SemanticClass classdefaultPrimaryType = parent.getSemanticClass(sdefaultPrimaryType);
-                    defaultPrimaryType = new NodeTypeImp(classdefaultPrimaryType, session);
+                    try
+                    {
+                        SemanticClass classdefaultPrimaryType = parent.getSemanticClass(sdefaultPrimaryType);
+                        defaultPrimaryType = new NodeTypeImp(classdefaultPrimaryType, session);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
-                catch (Exception e)
+                autocreated = childNodeDefinition.getBooleanProperty(ChildNodeDefinition.jcr_autoCreated, false);
+                mandatory = childNodeDefinition.getBooleanProperty(ChildNodeDefinition.jcr_mandatory, false);
+                String sOnParentVersion = childNodeDefinition.getProperty(ChildNodeDefinition.jcr_onParentVersion);
+                if (sOnParentVersion != null)
                 {
-                    e.printStackTrace();
+                    onParentVerion = OnParentVersionAction.valueFromName(sOnParentVersion);
                 }
-            }
-            autocreated = childNodeDefinition.getBooleanProperty(ChildNodeDefinition.jcr_autoCreated, false);
-            mandatory = childNodeDefinition.getBooleanProperty(ChildNodeDefinition.jcr_mandatory, false);
-            String sOnParentVersion = childNodeDefinition.getProperty(ChildNodeDefinition.jcr_onParentVersion);
-            if (sOnParentVersion != null)
-            {
-                onParentVerion = OnParentVersionAction.valueFromName(sOnParentVersion);
-            }
-            isProtected = childNodeDefinition.getBooleanProperty(ChildNodeDefinition.jcr_protected, false);
-            allowsSameNameSiblings = childNodeDefinition.getBooleanProperty(ChildNodeDefinition.jcr_sameNameSiblings, false);
-            Iterator<SemanticLiteral> values = childNodeDefinition.getSemanticClass().listRequiredProperties(ChildNodeDefinition.jcr_requiredPrimaryTypes);
-            while (values.hasNext())
-            {
-                String value = values.next().getString();
-                try
+                isProtected = childNodeDefinition.getBooleanProperty(ChildNodeDefinition.jcr_protected, false);
+                allowsSameNameSiblings = childNodeDefinition.getBooleanProperty(ChildNodeDefinition.jcr_sameNameSiblings, false);
+                Iterator<SemanticLiteral> values = childNodeDefinition.getSemanticClass().listRequiredProperties(ChildNodeDefinition.jcr_requiredPrimaryTypes);
+
+                while (values.hasNext())
                 {
-                    SemanticClass clazz = node.getSemanticClass(value);
-                    requiredPrimaryTypes.add(new NodeTypeImp(clazz, session));
-                }
-                catch (Exception e)
-                {
+                    String value = values.next().getString();
+                    try
+                    {
+                        SemanticClass clazz = node.getSemanticClass(value);
+                        requiredPrimaryTypes.add(new NodeTypeImp(clazz, session));
+                    }
+                    catch (Exception e)
+                    {
+                    }
                 }
             }
         }
