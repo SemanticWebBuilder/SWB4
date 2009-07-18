@@ -15,6 +15,7 @@ import javax.jcr.NodeIterator;
 //import javax.jcr.PropertyIterator;
 import javax.jcr.Session;
 import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
@@ -1547,9 +1548,12 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     Node fnode = session.getNodeByUUID(UUID);
                     Node contenido = fnode.getNode(JCR_CONTENT);
                     contenido.restore(contenido.getBaseVersion(), false);
-                    //System.out.println("CheckedOut?: " +contenido.isCheckedOut());
                     contenido.save();
-                    contenido.checkin();
+                    Version ver = contenido.checkin();
+                    VersionHistory history=ver.getContainingHistory();
+                    ver.remove();
+                    history.save();
+
                 } catch (Exception e) {
                     log.error("Error al hacer el UndoCheckOut processAction.undo", e);
                 } finally {
