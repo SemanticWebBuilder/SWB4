@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>DataBaseResource</resource-name>
+        <display-name xml:lang="es">DataBaseResource</display-name>
+        <display-name xml:lang="en">DataBaseResource</display-name>
+        <description xml:lang="es">Recurso que permite la generación de sistemas ABC completos dentro de la estructura de WB</description>
+        <description xml:lang="en">Resource that allows to generate complete CRUD systems inside the WB Structure</description>
+        <resource-class>com.infotec.wb.resources.database.DataBaseResource</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.database.DataBaseResource</resource-bundle>
+        <resource-type>3</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
