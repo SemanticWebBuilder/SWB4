@@ -88,12 +88,12 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
-                lex = new SWBLexicon(lang);
+                lex = new SWBLexicon(lang, "");
             }
         } else {
             if (!lang.equals("es")) {
                 lang = "es";
-                lex = new SWBLexicon(lang);
+                lex = new SWBLexicon(lang, "");
             }
         }
 
@@ -481,7 +481,9 @@ public class SemanticSearch extends GenericAdmResource {
                 tempcDn = tempc.getDisplayName(lan);
 
                 if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
-                    objOptions.add(tempcDn);
+                    if (lprex.contains(tempc.getPrefix())) {
+                        objOptions.add(tempcDn);
+                    }
                 }
 
                 Iterator<SemanticProperty> sit = tempc.listProperties();
@@ -490,7 +492,9 @@ public class SemanticSearch extends GenericAdmResource {
                     tempcDn = tempp.getDisplayName(lan);
 
                     if (tempcDn.toLowerCase().indexOf(word.toLowerCase()) != -1) {
-                        proOptions.add(tempcDn);
+                        if (lprex.contains(tempc.getPrefix())) {
+                            proOptions.add(tempcDn);
+                        }
                     }
                 }
             }
@@ -600,12 +604,12 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
-                lex = new SWBLexicon(lang);
+                lex = new SWBLexicon(lang, "");
             }
         } else {
             if (!lang.equals("es")) {
                 lang = "es";
-                lex = new SWBLexicon(lang);
+                lex = new SWBLexicon(lang, "");
             }
         }
 
