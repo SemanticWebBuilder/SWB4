@@ -37,12 +37,6 @@ public class RoleBase extends org.semanticwb.model.SWBClass implements org.seman
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(it, true);
     }
 
-    public static org.semanticwb.model.Role createRole(org.semanticwb.model.SWBModel model)
-    {
-        long id=model.getSemanticObject().getModel().getCounter(sclass);
-        return org.semanticwb.model.Role.createRole(String.valueOf(id), model);
-    }
-
     public static org.semanticwb.model.Role getRole(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.model.Role)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
