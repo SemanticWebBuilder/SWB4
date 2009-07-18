@@ -43,6 +43,7 @@ public class SWBLexicon {
     private String language = "es";
     private String spellDictPath;
     private String prefixString = "";
+    private ArrayList<String> preflist = null;
     private HashMap<String, WordTag> objHash = null;
     private HashMap<String, WordTag> propHash = null;
     private HashMap<String, String> langCodes;
@@ -74,10 +75,12 @@ public class SWBLexicon {
      * @param prexs comma-separated prefixes to filter SemanticClasses. Prefijos
      * para el filtrado de clases semánticas separados por comas.
      */
-    public SWBLexicon(String lang) {
+    public SWBLexicon(String lang, String prexs) {
         language = lang;
         spellDictPath = SWBPlatform.getWorkPath() + "/index/spell_" +
                 language + ".txt";
+
+        preflist = new ArrayList<String>(Arrays.asList(prexs.split(",")));
 
         //Create word hashes
         objHash = new HashMap<String, WordTag>();
@@ -99,6 +102,7 @@ public class SWBLexicon {
             Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
             while (its.hasNext()) {
                 SemanticClass sc = its.next();
+                if (preflist.contains(sc.getPrefix())) {
                     addWord(sc);
 
                     //Add class prefix to the prefixes string (for SparQl queries)
@@ -126,6 +130,7 @@ public class SWBLexicon {
                                 namespaces.add(sp.getRDFProperty().getNameSpace());
                             }
                     }
+                }
             }
 
             //Build prefixes string for SparQL queries
@@ -333,7 +338,7 @@ public class SWBLexicon {
      * Returns an iterator to the list of lexemes for the SemanticClases in the
      * Lexicon.
      */
-    public Iterator listClassNames() {
+    public Iterator<String> listClassNames() {
         List res = new ArrayList();
 
         Iterator it = objHash.values().iterator();
@@ -348,7 +353,7 @@ public class SWBLexicon {
      * Returns an iterator to the list of lexemes for the SemanticProperties in
      * the Lexicon.
      */
-    public Iterator listPropertyNames() {
+    public Iterator<String> listPropertyNames() {
         List res = new ArrayList();
 
         Iterator it = propHash.values().iterator();
