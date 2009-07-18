@@ -35,12 +35,6 @@ public class UserGroupBase extends org.semanticwb.model.SWBClass implements org.
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(it, true);
     }
 
-    public static org.semanticwb.model.UserGroup createUserGroup(org.semanticwb.model.SWBModel model)
-    {
-        long id=model.getSemanticObject().getModel().getCounter(sclass);
-        return org.semanticwb.model.UserGroup.createUserGroup(String.valueOf(id), model);
-    }
-
     public static org.semanticwb.model.UserGroup getUserGroup(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.model.UserGroup)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);

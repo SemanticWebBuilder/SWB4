@@ -278,12 +278,6 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
         return org.semanticwb.model.UserGroup.createUserGroup(id,this);
     }
 
-    public org.semanticwb.model.UserGroup createUserGroup()
-    {
-        long id=getSemanticObject().getModel().getCounter(swb_UserGroup);
-        return org.semanticwb.model.UserGroup.createUserGroup(String.valueOf(id),this);
-    } 
-
     public void removeUserGroup(String id)
     {
         org.semanticwb.model.UserGroup.removeUserGroup(id, this);
@@ -367,12 +361,6 @@ public class UserRepositoryBase extends org.semanticwb.model.SWBModel implements
     {
         return org.semanticwb.model.Role.createRole(id,this);
     }
-
-    public org.semanticwb.model.Role createRole()
-    {
-        long id=getSemanticObject().getModel().getCounter(swb_Role);
-        return org.semanticwb.model.Role.createRole(String.valueOf(id),this);
-    } 
 
     public void removeRole(String id)
     {
