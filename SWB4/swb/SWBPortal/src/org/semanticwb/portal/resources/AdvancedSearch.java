@@ -51,7 +51,7 @@ public class AdvancedSearch extends GenericAdmResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
         SWBResourceURL aUrl = paramRequest.getActionUrl();
-        String query = request.getParameter("naturalQuery");
+        String query = request.getParameter("q");
         String errCount = request.getParameter("errCode");
         String sparqlQuery = request.getParameter("sparqlQuery");
         String dym = request.getParameter("didYouMean");
@@ -466,7 +466,7 @@ public class AdvancedSearch extends GenericAdmResource {
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        String query = request.getParameter("naturalQuery");
+        String query = request.getParameter("q");
         String queryString = "";
         String dym = "";
 
