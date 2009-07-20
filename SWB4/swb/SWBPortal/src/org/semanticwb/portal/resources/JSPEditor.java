@@ -118,17 +118,21 @@ public class JSPEditor extends GenericAdmResource {
         ret.append("\n");
         ret.append("\n  function editorValidate(forma) {\n");
         ret.append("\n    if (this.area.textarea.value == \"\") {");
-        ret.append("\n      alert(\"Debe capturar texto para almacenarlo\")");
+        ret.append("\n      alert(\"" + paramReq.getLocaleString("MsgOnSubmit")
+                + "\")");
         ret.append("\n      return false;");
         ret.append("\n    }");
         ret.append("\n    return true;");
         ret.append("\n  }\n");
         ret.append("\n</script>");
         ret.append("\n<div class=\"swbform\">");
-        ret.append("\n  <form name=\"frmJSPEditor\" id=\"frmJSPEditor\" method=\"post\" onSubmit=\"return editorValidate(this);\" action=\"" + url.toString() + "\"> ");
+        ret.append("\n  <form name=\"frmJSPEditor\" id=\"frmJSPEditor\" method=\"post\" onSubmit=\"return editorValidate(this);\" action=\""
+                + url.toString() + "\"> ");
         ret.append("\n    <fieldset> ");
-        ret.append("\n      <legend>Edici&oacute;n del c&oacute;digo fuente</legend>");
-        ret.append("\n      <textarea id=\"JSPEditor" + base.getId() + "\" name=\"JSPEditor" + base.getId() + "\" rows=\"25\"");
+        ret.append("\n      <legend>" + paramReq.getLocaleString("LblPageTitle")
+                + "</legend>");
+        ret.append("\n      <textarea id=\"JSPEditor" + base.getId()
+                + "\" name=\"JSPEditor" + base.getId() + "\" rows=\"25\"");
         ret.append(" cols=\"90\">" + code + "</textarea>\n");
         ret.append("\n      <br />");
         ret.append("\n    </fieldset>");
@@ -143,14 +147,12 @@ public class JSPEditor extends GenericAdmResource {
         if (action != null && action.equalsIgnoreCase(JSPEditor.ACTION_SAVE)) {
             String show = request.getParameter("_msg");
             if (show != null && !"null".equalsIgnoreCase(show)) {
-                show = paramReq.getLocaleString("MsgStoreSuccess");
-            } else {
                 show = paramReq.getLocaleString("MsgStoreError");
+                String alert = "\n<script type=\"text/javascript\">"
+                        + "\n   this.onload = function() {alert('" + show
+                        + "');}" + "\n</script>";
+                ret.append(alert);
             }
-            String alert = "\n<script type=\"text/javascript\">" +
-                    "\n   this.onload = function() {alert('" + show + "');}" +
-                    "\n</script>";
-            ret.append(alert);
         }
         out.println(ret.toString());
     }
@@ -169,7 +171,6 @@ public class JSPEditor extends GenericAdmResource {
             SWBActionResponse response)
             throws SWBResourceException, IOException {
 
-        //System.out.println("Primera linea de processAction");
         String msg = null;
         Resource base = getResourceBase();
         String code = null;
@@ -178,7 +179,6 @@ public class JSPEditor extends GenericAdmResource {
         File pathToWrite = new File(resourcePath);
 
         code = request.getParameter("JSPEditor" + base.getId());
-        //System.out.println("code: JSPEditor" + base.getId()+":"+code);
 
         if (code != null && !"".equals(code)) {
             try {
@@ -193,20 +193,17 @@ public class JSPEditor extends GenericAdmResource {
                         pathToWrite.mkdirs();
                     }
                     pathToWrite = new File(resourcePath + "/" + fileName);
-                    //System.out.println("pathToWrite.canWrite() en ruta (pathToWrite): " + pathToWrite + " - " + pathToWrite.canWrite());
                     FileWriter writer = new FileWriter(pathToWrite);
                     writer.write(code);
                     writer.flush();
                     writer.close();
-                    msg = "ok";
                 }
             } catch (Exception e) {
+                msg = "not ok";
                 log.error("Al escribir en disco.", e);
-                e.printStackTrace();
             }
             response.setRenderParameter("_msg", msg);
         }
-        //System.out.println("Ultima linea de processAction");
     }
 
     /**
