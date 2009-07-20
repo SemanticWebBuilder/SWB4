@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>JSPResource</resource-name>
+        <display-name xml:lang="es">Contenido Groovy</display-name>
+        <display-name xml:lang="en">Groovy Resource</display-name>
+        <description xml:lang="es">Recurso que se encarga de integrar código en Groovy como contenido en una sección (tópico)</description>
+        <description xml:lang="en">Resource used to integrate code in Groovy like a main content into a section (topic)</description>
+        <resource-class>org.semanticwb.portal.resources.GroovyResource</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>org.semanticwb.portal.resources.GroovyResource</resource-bundle>
+        <resource-type>1</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
