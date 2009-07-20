@@ -80,7 +80,9 @@ public class SWBLexicon {
         spellDictPath = SWBPlatform.getWorkPath() + "/index/spell_" +
                 language + ".txt";
 
-        preflist = new ArrayList<String>(Arrays.asList(prexs.split(",")));
+        if (!prexs.trim().equals("")) {
+            preflist = new ArrayList<String>(Arrays.asList(prexs.split(",")));
+        }
 
         //Create word hashes
         objHash = new HashMap<String, WordTag>();
@@ -102,7 +104,8 @@ public class SWBLexicon {
             Iterator<SemanticClass> its = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
             while (its.hasNext()) {
                 SemanticClass sc = its.next();
-                if (preflist.contains(sc.getPrefix())) {
+                if (preflist == null || (preflist != null && preflist.contains(sc.getPrefix()))) {
+                    System.out.println("Agregando " + sc.getDisplayName(lang));
                     addWord(sc);
 
                     //Add class prefix to the prefixes string (for SparQl queries)
