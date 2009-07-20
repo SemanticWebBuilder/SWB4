@@ -58,8 +58,7 @@ public class PythonEditor extends GenericAdmResource {
         SWBResourceURL url = paramReq.getActionUrl().setMode(
                 SWBResourceURL.Mode_ADMIN);
         String action = paramReq.getAction();
-        String context = !SWBPlatform.getContextPath().equals("")
-                ? "/" + SWBPlatform.getContextPath() : "";
+        String context = SWBPlatform.getContextPath();
         boolean empty = false;
 
         //Uso del lenguaje del usuario en cuestion
