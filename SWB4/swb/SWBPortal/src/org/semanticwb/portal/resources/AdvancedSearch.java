@@ -333,7 +333,12 @@ public class AdvancedSearch extends GenericAdmResource {
         sbf.append("      function setSelection(selected, prep) {\n" +
                 "        var word = getCurrentWord('naturalQuery');\n" +
                 "        var newText = dojo.byId('id' + selected).innerHTML.replace(/<(.|\\n)+?>/g, \"\");\n" +
-                "        newText = prep + \"[\" + newText + \"]\";\n" +
+                "        var word_array = newText.split(\" \");" +
+                "        if (word_array.length > 1) {\n" +
+                "          newText = prep + \"[\" + newText + \"]\";\n" +
+                "        } else {\n" +
+                "          newText = prep + newText;\n" +
+                "        }" +
                 "        var valText = dojo.byId('naturalQuery').value;\n" +
                 "        dojo.byId('naturalQuery').value = valText.substring(0, word.startP) +" +
                 "        newText + valText.substring(word.endP, valText.length);\n" +
