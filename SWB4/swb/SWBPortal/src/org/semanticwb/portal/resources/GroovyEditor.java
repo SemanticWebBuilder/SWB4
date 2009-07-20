@@ -118,38 +118,26 @@ public class GroovyEditor extends GenericAdmResource {
         ret.append("\n");
         ret.append("\n  function editorValidate(forma) {\n");
         ret.append("\n    if (this.area.textarea.value == \"\") {");
-        ret.append("\n      alert(\"Debe capturar texto para almacenarlo\")");
+        ret.append("\n      alert(\"" + paramReq.getLocaleString("MsgOnSubmit")
+                + "\")");
         ret.append("\n      return false;");
-        ret.append("\n    } else {");
-        ret.append("\n      copyData(forma.id);");
-        ret.append("\n      forma.submit();");
         ret.append("\n    }");
+        ret.append("\n    return true;");
         ret.append("\n  }\n");
-        ret.append("\n  function copyData(formid) {");
-        ret.append("\n    var framesNames = \"\";");
-        ret.append("\n    for (var i = 0; i < window.frames.length; i++) {");
-        ret.append("\n        framesNames += window.frames[i].name;");
-        ret.append("\n        if (framesNames && framesNames.indexOf(\"_GroovyEditor\") != -1) {");
-        ret.append("\n            id = framesNames.substr(6);");
-        ret.append("\n            document.getElementById(id).value = this.area.textarea.value;");
-        ret.append("\n            i = window.frames.length;");
-        ret.append("\n        }");
-        ret.append("\n    }");
-        ret.append("\n    return;");
-        ret.append("\n}");
         ret.append("\n</script>");
         ret.append("\n<div class=\"swbform\">");
-        ret.append("\n  <form name=\"frmGroovyEditor\" id=\"frmGroovyEditor\" method=\"post\" action=\""
+        ret.append("\n  <form name=\"frmGroovyEditor\" id=\"frmGroovyEditor\" method=\"post\" onSubmit=\"return editorValidate(this);\" action=\""
                 + url.toString() + "\"> ");
         ret.append("\n    <fieldset> ");
-        ret.append("\n      <legend>Edici&oacute;n del c&oacute;digo fuente</legend>");
+        ret.append("\n      <legend>" + paramReq.getLocaleString("LblPageTitle")
+                + "</legend>");
         ret.append("\n      <textarea id=\"GroovyEditor" + base.getId() + "\" name=\"GroovyEditor"
                 + base.getId() + "\" rows=\"25\"");
         ret.append(" cols=\"90\">" + code + "</textarea>\n");
         ret.append("\n      <br />");
         ret.append("\n    </fieldset>");
         ret.append("\n    <fieldset>");
-        ret.append("\n      <input type=\"button\" value=\"Guardar\" onclick=\"if(editorValidate(this.form)) return true; else return false;\" />&nbsp;");
+        ret.append("\n      <input type=\"submit\" value=\"Guardar\" />&nbsp;");
         ret.append("\n      <input type=\"reset\" value=\"Cancelar\" />");
         ret.append("\n    </fieldset>");
         ret.append("\n  </form> ");
@@ -159,14 +147,12 @@ public class GroovyEditor extends GenericAdmResource {
         if (action != null && action.equalsIgnoreCase(GroovyEditor.ACTION_SAVE)) {
             String show = request.getParameter("_msg");
             if (show != null && !"null".equalsIgnoreCase(show)) {
-                show = paramReq.getLocaleString("MsgStoreSuccess");
-            } else {
                 show = paramReq.getLocaleString("MsgStoreError");
+                String alert = "\n<script type=\"text/javascript\">"
+                        + "\n   this.onload = function() {alert('" + show
+                        + "');}" + "\n</script>";
+                ret.append(alert);
             }
-            String alert = "\n<script type=\"text/javascript\">"
-                    + "\n   this.onload = function() {alert('" + show
-                    + "');}" + "\n</script>";
-            ret.append(alert);
         }
         out.println(ret.toString());
     }
@@ -185,7 +171,6 @@ public class GroovyEditor extends GenericAdmResource {
             SWBActionResponse response)
             throws SWBResourceException, IOException {
 
-        System.out.println("Primera linea de processAction");
         String msg = null;
         Resource base = getResourceBase();
         String code = null;
@@ -207,20 +192,17 @@ public class GroovyEditor extends GenericAdmResource {
                         pathToWrite.mkdirs();
                     }
                     pathToWrite = new File(resourcePath + "/" + fileName);
-                    System.out.println("pathToWrite.canWrite() en ruta (pathToWrite): " + pathToWrite + " - " + pathToWrite.canWrite());
                     FileWriter writer = new FileWriter(pathToWrite);
                     writer.write(code);
                     writer.flush();
                     writer.close();
-                    msg = "ok";
                 }
             } catch (Exception e) {
+                msg = "not ok";
                 log.error("Al escribir en disco.", e);
-                e.printStackTrace();
             }
             response.setRenderParameter("_msg", msg);
         }
-        System.out.println("Ultima linea de processAction");
     }
 
     /**
