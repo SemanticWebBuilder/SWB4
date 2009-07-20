@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.model.Resource;
 import org.semanticwb.nlp.translation.SWBSparqlTranslator;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -18,6 +19,9 @@ import java.net.URLDecoder;
 import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -37,6 +41,40 @@ public class AdvancedSearch extends GenericAdmResource {
     private String lang = "x-x";
     private SWBLexicon lex = null;
     private SWBSparqlTranslator tr;
+    javax.xml.transform.Templates tpl;
+    String path = SWBPlatform.getContextPath() + "swbadmin/xsl/Search/";
+    private Logger log = SWBUtils.getLogger(AdvancedSearch.class);
+
+    public AdvancedSearch() {
+    }
+
+    @Override
+    public void setResourceBase(Resource base) throws SWBResourceException {
+        try {
+            super.setResourceBase(base);
+        } catch(Exception e) {
+            log.error("Error while setting resource base: " + base.getId() +
+                    "-" + base.getTitle(), e);
+        }
+        
+        if(!base.getAttribute("template","").trim().equals("")) {
+            try {
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                path= SWBPlatform.getWebWorkPath() +  base.getWorkPath() + "/";
+            } catch (Exception e) {
+                log.error("Error while loading resource template: " + base.getId(), e);
+            }
+        }
+
+        if(tpl == null)
+        {
+            try {
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/Search/Search.xslt")); 
+            } catch(Exception e) {
+                log.error("Error while loading default resource template: " + base.getId(), e);
+            }
+        }
+    }
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -71,8 +109,6 @@ public class AdvancedSearch extends GenericAdmResource {
             pf = "";
         }
         lex = new SWBLexicon(lang, pf);
-
-        
 
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
             //Set URL call method to call_DIRECT to make an AJAX call
@@ -291,7 +327,6 @@ public class AdvancedSearch extends GenericAdmResource {
                 "      }\n");
 
         sbf.append("      function getPreviousName (word) {\n" +
-                "console.log(word.word);" +
                 "        var pName = \"\";\n" +
                 "        var prevBrk = -1;\n" +
                 "        var firstBrk = -1;\n" +
@@ -373,7 +408,7 @@ public class AdvancedSearch extends GenericAdmResource {
                 "          handleAs: \"text\"\n" +
                 "        });\n" +
                 "      }\n" +
-        "</script>");
+                "    </script>");
         
             String url = "";
             //String url = getResourceBase().getAttribute("destUrl");
