@@ -58,7 +58,7 @@ public class WBMenu extends GenericAdmResource
     
     javax.xml.transform.Templates tpl; 
     String webWorkPath = "/work";  
-    String path = SWBPlatform.getContextPath() +"swbadmin/xsl/WBMenu/";
+    String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBMenu/";
     
     /** Creates a new instance of WBMenu */
     public WBMenu() {
