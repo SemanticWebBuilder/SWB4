@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.nlp.translation.SWBSparqlTranslator;
-import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -67,180 +66,187 @@ public class AdvancedSearch extends GenericAdmResource {
         }
 
         //Create lexicon for NLP
-        lex = new SWBLexicon(lang, "emex,swbc");
+        String pf = getResourceBase().getAttribute("prefixFilter");
+        if (pf == null) {
+            pf = "";
+        }
+        lex = new SWBLexicon(lang, pf);
 
-        //Set URL call method to call_DIRECT to make an AJAX call
+        
+
+        if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
+            //Set URL call method to call_DIRECT to make an AJAX call
         rUrl.setCallMethod(rUrl.Call_DIRECT);
         rUrl.setMode("SUGGEST");
 
         //Add necesary scripting
-        sbf.append("<script type=\"text/javascript\">\n" +
-                "dojo.addOnLoad(function () {\n" +
-                "dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyDown');\n" +
-                "dojo.connect(dojo.byId('naturalQuery'), 'onkeyup', 'queryOnKeyUp');\n" +
-                "dojo.connect(dojo.byId('naturalQuery'), 'onblur', function () {\n" +
-                "clearSuggestions();\n" +
-                "});\n" +
-                "});\n" +
-                "var source =\"" + rUrl + "\";\n" +
-                "var lang =\"" + lang + "\";\n" +
-                "var displayed;\n" +
-                "var pdisplayed;\n" +
-                "</script>\n");
+        sbf.append("    \n<script type=\"text/javascript\">\n" +
+                "      dojo.addOnLoad(function () {\n" +
+                "        dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyDown');\n" +
+                "        dojo.connect(dojo.byId('naturalQuery'), 'onkeyup', 'queryOnKeyUp');\n" +
+                "        dojo.connect(dojo.byId('naturalQuery'), 'onblur', function () {\n" +
+                "          clearSuggestions();\n" +
+                "        });\n" +
+                "      });\n" +
+                "      var source =\"" + rUrl + "\";\n" +
+                "      var lang =\"" + lang + "\";\n" +
+                "      var displayed;\n" +
+                "      var pdisplayed;\n" +
+                "    </script>\n");
         /**
          * Clears the suggestions list and gives focus to the textarea.
          */
-        sbf.append("<script type=\"text/javascript\">" +
-                "function clearSuggestions() {\n" +
-                "if (dojo.byId('results')) {\n" +
-                "dojo.byId('results').innerHTML = \"\";\n" +
-                "}\n" +
-                "displayed = false;\n" +
-                "curSelected = 0;\n" +
-                "dojo.byId('naturalQuery').focus();\n" +
-                "}\n");
+        sbf.append("    <script type=\"text/javascript\">\n" +
+                "      function clearSuggestions() {\n" +
+                "        if (dojo.byId('results')) {\n" +
+                "          dojo.byId('results').innerHTML = \"\";\n" +
+                "        }\n" +
+                "        displayed = false;\n" +
+                "        curSelected = 0;\n" +
+                "        dojo.byId('naturalQuery').focus();\n" +
+                "      }\n");
 
-        sbf.append("function queryOnKeyDown (evt) {\n" +
-                "var wd = getCurrentWord('naturalQuery');\n" +
-                "if (evt.target.value == '' || wd.word.length < 3) {\n" +
-                "clearSuggestions();\n" +
-                "return;\n" +
-                "}\n" +
+        sbf.append("      function queryOnKeyDown (evt) {\n" +
+                "        var wd = getCurrentWord('naturalQuery');\n" +
+                "        if (evt.target.value == '' || wd.word.length < 3) {\n" +
+                "          clearSuggestions();\n" +
+                "          return;\n" +
+                "        }\n" +
                 //CTRL+SHIFT+SPACE
-                "if (evt.ctrlKey && evt.shiftKey && evt.keyCode == dojo.keys.SPACE) {\n" +
-                "getSuggestions(wd, source, true, false);\n" +
-                "dojo.stopEvent(evt);\n" +
-                "} else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.ENTER) {\n" +
-                "setSelection(curSelected, (wd.word == \"con\")?\"con \":\"\");\n" +
-                "clearSuggestions();\n" +
-                "pdisplayed = false;\n" +
-                "dojo.stopEvent(evt);\n" +
-                "}\n" +
-                "}\n");
+                "        if (evt.ctrlKey && evt.shiftKey && evt.keyCode == dojo.keys.SPACE) {\n" +
+                "          getSuggestions(wd, source, true, false);\n" +
+                "          dojo.stopEvent(evt);\n" +
+                "        } else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.ENTER) {\n" +
+                "          setSelection(curSelected, (wd.word == \"con\")?\"con \":\"\");\n" +
+                "          clearSuggestions();\n" +
+                "          pdisplayed = false;\n" +
+                "          dojo.stopEvent(evt);\n" +
+                "        }\n" +
+                "      }\n");
 
-        sbf.append("function queryOnKeyUp (evt) {\n" +
-                "var wd = getCurrentWord('naturalQuery');\n" +
-                "if (evt.target.value == '' || wd.word.length < 3) {\n" +
-                "clearSuggestions();\n" +
-                "return;\n" +
-                "}\n" +
-                "if((displayed || pdisplayed) && evt.keyCode == dojo.keys.ENTER) {\n" +
-                "} else if (!displayed && !pdisplayed && wd.word == \"con\") {\n" +
-                "var pwd = getPreviousName(wd);\n" +
-                "if (pwd != \"undefined\") {\n" +
-                "getSuggestions(getPreviousName(wd), source, true, true);\n" +
-                "pdisplayed = true;\n" +
-                "}\n" +
-                "} else if (!displayed && pdisplayed && wd.word != \"con\") {\n" +
-                "clearSuggestions();\n" +
-                "pdisplayed = false;\n" +
-                "} else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.ESCAPE) {\n" +
-                "clearSuggestions();\n" +
-                "pdisplayed = false;\n" +
-                "}" +
+        sbf.append("      function queryOnKeyUp (evt) {\n" +
+                "        var wd = getCurrentWord('naturalQuery');\n" +
+                "        if (evt.target.value == '' || wd.word.length < 3) {\n" +
+                "          clearSuggestions();\n" +
+                "          return;\n" +
+                "        }\n" +
+                "        if((displayed || pdisplayed) && evt.keyCode == dojo.keys.ENTER) {\n" +
+                "        } else if (!displayed && !pdisplayed && wd.word == \"con\") {\n" +
+                "          var pwd = getPreviousName(wd);\n" +
+                "          if (pwd != \"undefined\") {\n" +
+                "            getSuggestions(getPreviousName(wd), source, true, true);\n" +
+                "            pdisplayed = true;\n" +
+                "          }\n" +
+                "        } else if (!displayed && pdisplayed && wd.word != \"con\") {\n" +
+                "          clearSuggestions();\n" +
+                "          pdisplayed = false;\n" +
+                "        } else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.ESCAPE) {\n" +
+                "          clearSuggestions();\n" +
+                "          pdisplayed = false;\n" +
+                "        }" +
                 //UP_ARROW
-                "else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.UP_ARROW) {\n" +
-                "dojo.query('.resultEntry').style('background', 'white');\n" +
-                "curSelected--;\n" +
-                "if (curSelected < 0) {\n" +
-                "curSelected = 0;\n" +
-                "}" +
-                "console.log(curSelected);\n" +
-                "highLightSelection(curSelected, true);\n" +
-                "dojo.byId('resultlist').scrollTop = dojo.coords(dojo.byId('id' + curSelected)).t;\n" +
-                "dojo.byId('naturalQuery').focus();\n" +
-                "dojo.stopEvent(evt);\n" +
+                "        else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.UP_ARROW) {\n" +
+                "          dojo.query('.resultEntry').style('background', 'white');\n" +
+                "          curSelected--;\n" +
+                "          if (curSelected < 0) {\n" +
+                "            curSelected = 0;\n" +
+                "          }" +
+                "          console.log(curSelected);\n" +
+                "          highLightSelection(curSelected, true);\n" +
+                "          dojo.byId('resultlist').scrollTop = dojo.coords(dojo.byId('id' + curSelected)).t;\n" +
+                "          dojo.byId('naturalQuery').focus();\n" +
+                "          dojo.stopEvent(evt);\n" +
                 //DOWN_ARROW
-                "} else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.DOWN_ARROW) {\n" +
-                "dojo.query('.resultEntry').style('background', 'white');\n" +
-                "curSelected++;\n" +
-                "if (curSelected > dojo.byId('resultlist').childNodes.length - 2) {\n" +
-                "curSelected = dojo.byId('resultlist').childNodes.length - 2;\n" +
-                "}\n" +
-                "console.log(curSelected);\n" +
-                "highLightSelection(curSelected, true);\n" +
-                "dojo.byId('resultlist').scrollTop = dojo.coords(dojo.byId('id'+curSelected)).t;\n" +
-                "dojo.byId('naturalQuery').focus();\n" +
-                "dojo.stopEvent(evt);\n" +
-                "}\n" +
-                "}\n");
+                "        } else if ((displayed || pdisplayed) && evt.keyCode == dojo.keys.DOWN_ARROW) {\n" +
+                "          dojo.query('.resultEntry').style('background', 'white');\n" +
+                "          curSelected++;\n" +
+                "          if (curSelected > dojo.byId('resultlist').childNodes.length - 2) {\n" +
+                "            curSelected = dojo.byId('resultlist').childNodes.length - 2;\n" +
+                "          }\n" +
+                "          console.log(curSelected);\n" +
+                "          highLightSelection(curSelected, true);\n" +
+                "          dojo.byId('resultlist').scrollTop = dojo.coords(dojo.byId('id'+curSelected)).t;\n" +
+                "          dojo.byId('naturalQuery').focus();\n" +
+                "          dojo.stopEvent(evt);\n" +
+                "        }\n" +
+                "      }\n");
 
         /**
          * Gets the word at current cursor position in a textarea.
          * @param elm textarea to extract word from.
          */
-        sbf.append("function getCurrentWord(elm) {" +
-                "var cPos = getCaretPos(elm);" +
-                "var txt = dojo.byId(elm).value;" +
-                "var prevBlank = -1;" +
-                "var aftBlank = -1;" +
-                "var found = false;" +
-                "var wd = null;" +
-                "var wo = \"undefined\";" +
-                "var delimiters = \"\\n\\t \";" +
-                "if (txt != '') {" +
-                "for (var i = 0; i < txt.length; i++) {" +
-                "if (delimiters.indexOf(txt.charAt(i)) != -1 && cPos > i) {" +
-                "prevBlank = i;" +
-                "}" +
-                "}" +
-                "for (i = cPos; i < txt.length && !found; i++) {" +
-                "if (delimiters.indexOf(txt.charAt(i)) != -1) {" +
-                "aftBlank = i;" +
-                "found = true;" +
-                "}" +
-                "}" +
-                "if (prevBlank == -1) {" +
-                "if (aftBlank == -1) {" +
-                "wd = txt;" +
-                "wo = {" +
-                "word: wd," +
-                "startP: 0," +
-                "endP: txt.length" +
-                "};" +
-                "} else {" +
-                "wd = txt.substring(0, aftBlank);" +
-                "wo = {" +
-                "word: wd," +
-                "startP: 0," +
-                "endP: aftBlank" +
-                "};" +
-                "}" +
-                "} else if (aftBlank == -1) {" +
-                "wd = txt.substring(prevBlank + 1, txt.length);" +
-                "wo = {" +
-                "word: wd," +
-                "startP: prevBlank + 1," +
-                "endP: txt.length" +
-                "};" +
-                "} else {" +
-                "wd = txt.substring(prevBlank + 1, aftBlank);" +
-                "wo = {" +
-                "word: wd," +
-                "startP: prevBlank + 1," +
-                "endP: aftBlank" +
-                "};" +
-                "}" +
-                "}" +
-                "return wo;" +
-                "}");
+        sbf.append("      function getCurrentWord(elm) {\n" +
+                "        var cPos = getCaretPos(elm);\n" +
+                "        var txt = dojo.byId(elm).value;\n" +
+                "        var prevBlank = -1;\n" +
+                "        var aftBlank = -1;\n" +
+                "        var found = false;\n" +
+                "        var wd = null;\n" +
+                "        var wo = \"undefined\";\n" +
+                "        var delimiters = \"\\n\\t \";\n" +
+                "        if (txt != '') {\n" +
+                "          for (var i = 0; i < txt.length; i++) {\n" +
+                "            if (delimiters.indexOf(txt.charAt(i)) != -1 && cPos > i) {\n" +
+                "              prevBlank = i;\n" +
+                "            }\n" +
+                "          }\n" +
+                "          for (i = cPos; i < txt.length && !found; i++) {\n" +
+                "            if (delimiters.indexOf(txt.charAt(i)) != -1) {\n" +
+                "              aftBlank = i;\n" +
+                "              found = true;\n" +
+                "            }\n" +
+                "          }\n" +
+                "          if (prevBlank == -1) {\n" +
+                "            if (aftBlank == -1) {\n" +
+                "              wd = txt;\n" +
+                "              wo = {\n" +
+                "                word: wd,\n" +
+                "                startP: 0,\n" +
+                "                endP: txt.length\n" +
+                "              };\n" +
+                "            } else {\n" +
+                "              wd = txt.substring(0, aftBlank);\n" +
+                "              wo = {\n" +
+                "                word: wd,\n" +
+                "                startP: 0,\n" +
+                "                endP: aftBlank\n" +
+                "              };\n" +
+                "            }\n" +
+                "          } else if (aftBlank == -1) {\n" +
+                "            wd = txt.substring(prevBlank + 1, txt.length);\n" +
+                "            wo = {\n" +
+                "              word: wd,\n" +
+                "              startP: prevBlank + 1,\n" +
+                "              endP: txt.length\n" +
+                "            };\n" +
+                "          } else {\n" +
+                "            wd = txt.substring(prevBlank + 1, aftBlank);\n" +
+                "            wo = {\n" +
+                "              word: wd,\n" +
+                "              startP: prevBlank + 1,\n" +
+                "              endP: aftBlank\n" +
+                "            };\n" +
+                "          }\n" +
+                "        }\n" +
+                "        return wo;\n" +
+                "      }\n");
 
         /**
          * Gets cursor current position in a textarea.
          * @param elm textarea to calculate caret position from.
          */
-        sbf.append("function getCaretPos(elm) {" +
-                "var pos;" +
-                "if (dojo.doc.selection) {" +
-                "var Sel = document.selection.createRange();" +
-                "var SelLength = document.selection.createRange().text.length;" +
-                "Sel.moveStart ('character', -dojo.byId(elm).value.length);" +
-                "pos = Sel.text.length - SelLength;" +
-                "} else if (typeof dojo.byId(elm).selectionStart != undefined) {" +
-                "pos = dojo.byId(elm).selectionStart;" +
-                "}" +
-                "return pos;" +
-                "}");
+        sbf.append("      function getCaretPos(elm) {\n" +
+                "        var pos;\n" +
+                "        if (dojo.doc.selection) {\n" +
+                "          var Sel = document.selection.createRange();\n" +
+                "          var SelLength = document.selection.createRange().text.length;\n" +
+                "          Sel.moveStart ('character', -dojo.byId(elm).value.length);\n" +
+                "          pos = Sel.text.length - SelLength;\n" +
+                "        } else if (typeof dojo.byId(elm).selectionStart != undefined) {\n" +
+                "          pos = dojo.byId(elm).selectionStart;\n" +
+                "        }\n" +
+                "          return pos;\n" +
+                "      }\n");
 
         /**
          * Creates a suggestion list based on word at current cursor position.
@@ -249,101 +255,125 @@ public class AdvancedSearch extends GenericAdmResource {
          * @param clear wheter or not to clear previous list
          * @param props wheter or not to get properties of the current word as SemanticClass
          */
-        sbf.append("function getSuggestions(word, src, clear, props) {" +
-                "if (clear) {" +
-                "clearSuggestions();" +
-                "}" +
-                "if(word.word == '') {" +
-                "return;" +
-                "}" +
-                "if (dojo.byId('results') && word.word != '') {" +
-                "dojo.byId('results').innerHTML = '<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\" width=\"20\" height=\"20\"/>...';" +
-                "}" +
-                "getHtml(src + \"?word=\" + escape(word.word) + \"&lang=\" + lang + \"&props=\" + props, 'results');" +
-                "displayed = true;" +
-                "highLightSelection(0, true);" +
-                "}");
+        sbf.append("      function getSuggestions(word, src, clear, props) {\n" +
+                "        if (clear) {\n" +
+                "          clearSuggestions();\n" +
+                "        }\n" +
+                "        if(word.word == '') {\n" +
+                "          return;\n" +
+                "        }\n" +
+                "        if (dojo.byId('results') && word.word != '') {\n" +
+                "          dojo.byId('results').innerHTML = '<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\" width=\"20\" height=\"20\"/>...';\n" +
+                "        }\n" +
+                "        getHtml(src + \"?word=\" + escape(word.word) + \"&lang=\" + lang + \"&props=\" + props, 'results');\n" +
+                "        displayed = true;\n" +
+                "        highLightSelection(0, true);\n" +
+                "      }\n");
 
         /**
          * Highlights an option in the suggestions list.
          * @param id identifier of the list item to highlight
          * @param high toggles highlight color.
          */
-        sbf.append("function highLightSelection(id, high) {" +
-                "var ele = dojo.byId('id' + id);" +
-                "console.log('buscando id' + id);" +
-                "if (high) {" +
-                "dojo.style(ele, {" +
-                "\"background\":\"LightBlue\"" +
-                "});" +
-                "} else {" +
-                "dojo.style(ele, {" +
-                "\"background\":\"white\"" +
-                "});" +
-                "}" +
-                "}");
+        sbf.append("      function highLightSelection(id, high) {\n" +
+                "        var ele = dojo.byId('id' + id);\n" +
+                "        if (high) {\n" +
+                "          dojo.style(ele, {\n" +
+                "            \"background\":\"LightBlue\"\n" +
+                "          });\n" +
+                "        } else {\n" +
+                "          dojo.style(ele, {\n" +
+                "            \"background\":\"white\"\n" +
+                "          });\n" +
+                "        }\n" +
+                "      }\n");
 
-        sbf.append("function getPreviousName (word) {" +
-                "var pName = \"\";" +
-                "var prevBrk = -1;" +
-                "var firstBrk = -1;" +
-                "var txt = dojo.byId('naturalQuery').value;" +
-                "var cPos = word.startP;" +
-                "var wd = null;" +
-                "var wo = \"undefined\";" +
-                "var found = false;" +
-                "for (var i = cPos; i >= 0 && !found; i--) {" +
-                "if (txt.charAt(i) == ']') {" +
-                "prevBrk = i;" +
-                "found = true;" +
-                "}" +
-                "}" +
-                "found = false;" +
-                "for (i = prevBrk; i > 0 && !found; i--) {" +
-                "if (txt.charAt(i) == '[') {" +
-                "firstBrk = i;" +
-                "found = true;" +
-                "}" +
-                "}" +
-                "if (prevBrk == -1) {" +
-                "return wo;" +
-                "}" +
-                "firstBrk++;" +
-                "wd = txt.substring((firstBrk==0)?++firstBrk:firstBrk, prevBrk);" +
-                "wo = {" +
-                "word: wd," +
-                "startP: firstBrk," +
-                "endP: prevBrk" +
-                "};" +
-                "return wo;" +
-                "}");
+        sbf.append("      function getPreviousName (word) {\n" +
+                "        var pName = \"\";\n" +
+                "        var prevBrk = -1;\n" +
+                "        var firstBrk = -1;\n" +
+                "        var txt = dojo.byId('naturalQuery').value;\n" +
+                "        var cPos = word.startP;\n" +
+                "        var wd = null;\n" +
+                "        var wo = \"undefined\";\n" +
+                "        var found = false;" +
+                "        for (var i = cPos; i >= 0 && !found; i--) {\n" +
+                "          if (txt.charAt(i) == ']') {\n" +
+                "            prevBrk = i;\n" +
+                "            found = true;\n" +
+                "          }\n" +
+                "        }\n" +
+                "        found = false;\n" +
+                "        for (i = prevBrk; i > 0 && !found; i--) {\n" +
+                "          if (txt.charAt(i) == '[') {\n" +
+                "            firstBrk = i;\n" +
+                "            found = true;\n" +
+                "          }\n" +
+                "        }\n" +
+                "        if (prevBrk == -1) {\n" +
+                "          return wo;\n" +
+                "        }\n" +
+                "        firstBrk++;\n" +
+                "        wd = txt.substring((firstBrk==0)?++firstBrk:firstBrk, prevBrk);\n" +
+                "        wo = {\n" +
+                "          word: wd,\n" +
+                "          startP: firstBrk,\n" +
+                "          endP: prevBrk\n" +
+                "        };\n" +
+                "        return wo;\n" +
+                "      }\n");
         /**
          * Replaces the current word in the textarea with the selected word from the
          * suggestions list.
          * @param selected index of current selected item
          * @param prep
          */
-        sbf.append("function setSelection(selected, prep) {" +
-                "var word = getCurrentWord('naturalQuery');" +
-                "var newText = dojo.byId('id' + selected).innerHTML.replace(/<(.|\\n)+?>/g, \"\");" +
-                "newText = prep + \"[\" + newText + \"]\";" +
-                "var valText = dojo.byId('naturalQuery').value;" +
-                "dojo.byId('naturalQuery').value = valText.substring(0, word.startP) +" +
-                "newText + valText.substring(word.endP, valText.length);" +
-                "}");
-        sbf.append("</script>");
-        response.getWriter().print(sbf.toString());
-
-//        String url = "";
-//        Resourceable resourceable = getResourceBase().getResourceable();
-//        if (resourceable != null && resourceable instanceof WebPage) {
-//
-//            WebPage wp = (WebPage) resourceable;
-//            url = wp.getUrl();
-//        }
-
-        if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
-            String url = getResourceBase().getAttribute("destUrl");
+        sbf.append("      function setSelection(selected, prep) {\n" +
+                "        var word = getCurrentWord('naturalQuery');\n" +
+                "        var newText = dojo.byId('id' + selected).innerHTML.replace(/<(.|\\n)+?>/g, \"\");\n" +
+                "        newText = prep + \"[\" + newText + \"]\";\n" +
+                "        var valText = dojo.byId('naturalQuery').value;\n" +
+                "        dojo.byId('naturalQuery').value = valText.substring(0, word.startP) +" +
+                "        newText + valText.substring(word.endP, valText.length);\n" +
+                "      }\n\n" +
+                "      function getHtml(url, tagid) {\n" +
+                "        dojo.xhrGet({\n" +
+                "          url: url,\n" +
+                "          load: function(response)\n" +
+                "          {\n" +
+                "            var tag=dojo.byId(tagid);\n" +
+                "            if(tag) {\n" +
+                "              var pan=dijit.byId(tagid);\n" +
+                "              if(pan && pan.attr) {\n" +
+                "                pan.attr('content',response);\n" +
+                "              } else {\n" +
+                "                tag.innerHTML = response;\n" +
+                "              }\n" +
+                "            } else {\n" +
+                "              alert(\"No existe ningún elemento con id \" + tagid);\n" +
+                "            }\n" +
+                "            return response;\n" +
+                "          },\n" +
+                "          error: function(response) {\n" +
+                "            if(dojo.byId(tagid)) {\n" +
+                "              dojo.byId(tagid).innerHTML = \"<p>Ocurrió un error con respuesta:<br />\" + response + \"</p>\";\n" +
+                "            } else {\n" +
+                "              alert(\"No existe ningún elemento con id \" + tagid);\n" +
+                "            }\n" +
+                "              return response;\n" +
+                "          },\n" +
+                "          handleAs: \"text\"\n" +
+                "        });\n" +
+                "      }\n" +
+        "</script>");
+        
+            String url = "";
+            //String url = getResourceBase().getAttribute("destUrl");
+            Resourceable rsa = getResourceBase().getResourceable();
+            if (rsa != null && rsa instanceof WebPage)
+            {
+                url = ((WebPage)rsa).getUrl();
+            }
             sbf.append("    <form id=\"" + getResourceBase().getId() + "/natural\" " +
                     "action=\"" + url + "\" method=\"post\" >\n" +
                     "      <input type=\"text\" id=\"naturalQuery\" name=\"q\" />\n" +
@@ -355,40 +385,7 @@ public class AdvancedSearch extends GenericAdmResource {
         }
     }
 
-    @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        String query = request.getParameter("q");
-        String queryString = "";
-        String dym = "";
-
-        //Assert query string
-        query = (query == null ? "" : query.trim());
-
-        if (!query.equals("")) {
-            //Create SparQl translator
-            tr = new SWBSparqlTranslator(lex);
-            queryString = lex.getPrefixString() + "\n" + tr.translateSentence(query);
-            dym = tr.didYouMean(query);
-
-            //If no different suggestion
-            if (query.toLowerCase().equals(dym.toLowerCase())) {
-                dym = "";
-            }
-
-            response.setRenderParameter("errCode", Integer.toString(tr.getErrCode()));
-            response.setRenderParameter("sparqlQuery", queryString);
-            response.setRenderParameter("naturalQuery", query);
-            response.setRenderParameter("didYouMean", dym);
-        } else {
-            response.setRenderParameter("errCode", Integer.toString(1));
-            response.setRenderParameter("sparqlQuery", "");
-            response.setRenderParameter("naturalQuery", query);
-            response.setRenderParameter("didYouMean", dym);
-        }
-        response.setMode(response.Mode_VIEW);
-    }
-
-    public void doSuggest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+   public void doSuggest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         StringBuffer sbf = new StringBuffer();
         SortedSet objOptions = new TreeSet();
@@ -418,8 +415,9 @@ public class AdvancedSearch extends GenericAdmResource {
         word = word.replace("]", "");
         word = word.trim();
 
+        System.out.println("Suggesting for " + word);
         if (!props) {
-            System.out.println("Suggesting for " + word);
+            
             Iterator<String> cit = lex.listClassNames();
             while (cit.hasNext()) {
                 String tempc = cit.next();
@@ -541,6 +539,7 @@ public class AdvancedSearch extends GenericAdmResource {
         System.out.println("\n+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
         System.out.println(sparqlQuery);
         String errCount = Integer.toString(tr.getErrCode());
+        StringBuffer sbf2 = new StringBuffer();
 
         if (errCount != null) {
             /*sbf.append("<fieldset>");
@@ -556,22 +555,22 @@ public class AdvancedSearch extends GenericAdmResource {
                 time = System.currentTimeMillis();
 
                 try {
-                    sbf.append("<h2>Resultados de la búsqueda</h2>");
-                    sbf.append("<table>");
+                    sbf2.append("<h2>Resultados de la búsqueda</h2>");
+                    sbf2.append("<table>");
                     ResultSet rs = qexec.execSelect();
-                    sbf.append("<thead>");
-                    sbf.append("<tr>");
+                    sbf2.append("<thead>");
+                    sbf2.append("<tr>");
 
                     if (rs.hasNext()) {
                         Iterator<String> itcols = rs.getResultVars().iterator();
                         while (itcols.hasNext()) {
-                            sbf.append("<th>");
-                            sbf.append(itcols.next());
-                            sbf.append("</th>");
+                            sbf2.append("<th>");
+                            sbf2.append(itcols.next());
+                            sbf2.append("</th>");
                         }
-                        sbf.append("</tr>");
-                        sbf.append("</thead>");
-                        sbf.append("<tbody>");
+                        sbf2.append("</tr>");
+                        sbf2.append("</thead>");
+                        sbf2.append("<tbody>");
 
                         boolean odd = true;
                         while (rs.hasNext()) {
@@ -579,9 +578,9 @@ public class AdvancedSearch extends GenericAdmResource {
                             QuerySolution rb = rs.nextSolution();
 
                             if (odd) {
-                                sbf.append("<tr bgcolor=\"#EFEDEC\">");
+                                sbf2.append("<tr bgcolor=\"#EFEDEC\">");
                             } else {
-                                sbf.append("<tr>");
+                                sbf2.append("<tr>");
                             }
 
                             Iterator<String> it = rs.getResultVars().iterator();
@@ -589,42 +588,43 @@ public class AdvancedSearch extends GenericAdmResource {
                             while (it.hasNext()) {
                                 String name = it.next();
                                 RDFNode x = rb.get(name);
-                                sbf.append("<td >");
+                                sbf2.append("<td >");
                                 SemanticObject so = SemanticObject.createSemanticObject(x.toString());
 
                                 if (so != null) {
                                     if (first) {
-                                        sbf.append("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI() + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '" + so.getDisplayName(lang) + "');\">" + so.getDisplayName(lang) + "</a>");
+                                        sbf2.append("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI() + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '" + so.getDisplayName(lang) + "');\">" + so.getDisplayName(lang) + "</a>");
                                         first = false;
                                     } else {
                                         SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
                                         if (tt != null) {
-                                            sbf.append(tt.getDisplayName(lang));
+                                            sbf2.append(tt.getDisplayName(lang));
                                         } else {
                                             SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
-                                            sbf.append(stt.getDisplayName(lang));
+                                            sbf2.append(stt.getDisplayName(lang));
                                         }
                                     }
                                 } else {
                                     if (x != null) {
                                         sbf.append(x);
                                     } else {
-                                        sbf.append(" - ");
+                                        sbf2.append(" - ");
                                     }
                                 }
-                                sbf.append("</td>");
+                                sbf2.append("</td>");
                             }
-                            sbf.append("</tr>");
+                            sbf2.append("</tr>");
                         }
                     } else {
-                        sbf.append("<font color='red'>Sin resultados</font>");
-                        sbf.append("</tr>");
-                        sbf.append("</thead>");
+                        sbf2.append("<font color='red'>Sin resultados</font>");
+                        sbf2.append("</tr>");
+                        sbf2.append("</thead>");
                     }
-                    sbf.append("</tbody>");
-                    sbf.append("</table>");
-                    sbf.append("Tiempo de ejecución " + (System.currentTimeMillis() - time) + "ms.");
+                    sbf2.append("</tbody>");
+                    sbf2.append("</table>");
+                    sbf2.append("Tiempo de ejecución " + (System.currentTimeMillis() - time) + "ms.");
                 } finally {
+                    sbf.append(sbf2.toString());
                     qexec.close();
                 }
             } catch (Exception e) {
