@@ -291,6 +291,7 @@ public class AdvancedSearch extends GenericAdmResource {
                 "      }\n");
 
         sbf.append("      function getPreviousName (word) {\n" +
+                "console.log(word.word);" +
                 "        var pName = \"\";\n" +
                 "        var prevBrk = -1;\n" +
                 "        var firstBrk = -1;\n" +
@@ -300,14 +301,14 @@ public class AdvancedSearch extends GenericAdmResource {
                 "        var wo = \"undefined\";\n" +
                 "        var found = false;" +
                 "        for (var i = cPos; i >= 0 && !found; i--) {\n" +
-                "          if (txt.charAt(i) == ']') {\n" +
+                "          if (txt.charAt(i) == ']' || txt.charAt(i) == ' ') {\n" +
                 "            prevBrk = i;\n" +
                 "            found = true;\n" +
                 "          }\n" +
                 "        }\n" +
                 "        found = false;\n" +
-                "        for (i = prevBrk; i > 0 && !found; i--) {\n" +
-                "          if (txt.charAt(i) == '[') {\n" +
+                "        for (i = prevBrk - 1; i > 0 && !found; i--) {\n" +
+                "          if (txt.charAt(i) == '[' || txt.charAt(i) == ' ') {\n" +
                 "            firstBrk = i;\n" +
                 "            found = true;\n" +
                 "          }\n" +
@@ -482,6 +483,7 @@ public class AdvancedSearch extends GenericAdmResource {
                 sbf.append("</ul>");
             }
         } else {
+            System.out.println("Suggesting for " + word);
             String tag = lex.getObjWordTag(word).getObjId();
 
             sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
