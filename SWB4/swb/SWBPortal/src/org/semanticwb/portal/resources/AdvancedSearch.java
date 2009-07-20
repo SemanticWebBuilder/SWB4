@@ -67,17 +67,13 @@ public class AdvancedSearch extends GenericAdmResource {
         }
 
         //Create lexicon for NLP
-        lex = new SWBLexicon(lang, "");
+        lex = new SWBLexicon(lang, "emex,swbc");
 
         //Set URL call method to call_DIRECT to make an AJAX call
         rUrl.setCallMethod(rUrl.Call_DIRECT);
         rUrl.setMode("SUGGEST");
 
         //Add necesary scripting
-        sbf.append("<script type=\"text/javascript\">\n" +
-                "dojo.require(\"dijit.form.Form\");\n" +
-                "dojo.require(\"dijit.form.Button\");\n" +
-                "</script>\n");
         sbf.append("<script type=\"text/javascript\">\n" +
                 "dojo.addOnLoad(function () {\n" +
                 "dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyDown');\n" +
@@ -338,14 +334,16 @@ public class AdvancedSearch extends GenericAdmResource {
         sbf.append("</script>");
         response.getWriter().print(sbf.toString());
 
-        String url = "";
-        Resourceable resourceable = getResourceBase().getResourceable();
-        if (resourceable != null && resourceable instanceof WebPage) {
-            WebPage wp = (WebPage) resourceable;
-            url = wp.getUrl();
-        }
+//        String url = "";
+//        Resourceable resourceable = getResourceBase().getResourceable();
+//        if (resourceable != null && resourceable instanceof WebPage) {
+//
+//            WebPage wp = (WebPage) resourceable;
+//            url = wp.getUrl();
+//        }
 
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
+            String url = getResourceBase().getAttribute("destUrl");
             sbf.append("    <form id=\"" + getResourceBase().getId() + "/natural\" " +
                     "action=\"" + url + "\" method=\"post\" >\n" +
                     "      <input type=\"text\" id=\"naturalQuery\" name=\"q\" />\n" +
@@ -355,7 +353,6 @@ public class AdvancedSearch extends GenericAdmResource {
         } else {
             doShowResults(request, response, paramRequest);
         }
-
     }
 
     @Override
@@ -422,9 +419,11 @@ public class AdvancedSearch extends GenericAdmResource {
         word = word.trim();
 
         if (!props) {
+            System.out.println("Suggesting for " + word);
             Iterator<String> cit = lex.listClassNames();
             while (cit.hasNext()) {
                 String tempc = cit.next();
+                System.out.println(tempc);
                 if (tempc.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                     objOptions.add(tempc);
                 }
@@ -433,6 +432,7 @@ public class AdvancedSearch extends GenericAdmResource {
             Iterator<String> sit = lex.listPropertyNames();
             while (sit.hasNext()) {
                 String tempp = sit.next();
+                System.out.println(tempp);
                 if (tempp.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                     proOptions.add(tempp);
                 }
@@ -531,6 +531,7 @@ public class AdvancedSearch extends GenericAdmResource {
         String query = request.getParameter("q");
         StringBuffer sbf = new StringBuffer();
 
+        //new Search().doView(request, response, paramRequest);
         //Assert query string
         query = (query == null ? "" : query.trim());
 
@@ -622,10 +623,7 @@ public class AdvancedSearch extends GenericAdmResource {
                     }
                     sbf.append("</tbody>");
                     sbf.append("</table>");
-                    sbf.append("</fieldset>");
-                    sbf.append("<fieldset>");
                     sbf.append("Tiempo de ejecución " + (System.currentTimeMillis() - time) + "ms.");
-                    sbf.append("</fieldset>");
                 } finally {
                     qexec.close();
                 }
