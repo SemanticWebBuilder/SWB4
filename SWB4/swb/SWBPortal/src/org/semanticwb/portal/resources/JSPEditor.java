@@ -120,26 +120,12 @@ public class JSPEditor extends GenericAdmResource {
         ret.append("\n    if (this.area.textarea.value == \"\") {");
         ret.append("\n      alert(\"Debe capturar texto para almacenarlo\")");
         ret.append("\n      return false;");
-        ret.append("\n    } else {");
-        ret.append("\n      copyData(forma.id);");
-        ret.append("\n      forma.submit();");
         ret.append("\n    }");
+        ret.append("\n    return true;");
         ret.append("\n  }\n");
-        ret.append("\n  function copyData(formid) {");
-        ret.append("\n    var framesNames = \"\";");
-        ret.append("\n    for (var i = 0; i < window.frames.length; i++) {");
-        ret.append("\n        framesNames += window.frames[i].name;");
-        ret.append("\n        if (framesNames && framesNames.indexOf(\"_JSPEditor\") != -1) {");
-        ret.append("\n            id = framesNames.substr(6);");
-        ret.append("\n            document.getElementById(id).value = this.area.textarea.value;");
-        ret.append("\n            i = window.frames.length;");
-        ret.append("\n        }");
-        ret.append("\n    }");
-        ret.append("\n    return;");
-        ret.append("\n}");
         ret.append("\n</script>");
         ret.append("\n<div class=\"swbform\">");
-        ret.append("\n  <form name=\"frmJSPEditor\" id=\"frmJSPEditor\" method=\"post\" action=\"" + url.toString() + "\"> ");
+        ret.append("\n  <form name=\"frmJSPEditor\" id=\"frmJSPEditor\" method=\"post\" onSubmit=\"return editorValidate(this);\" action=\"" + url.toString() + "\"> ");
         ret.append("\n    <fieldset> ");
         ret.append("\n      <legend>Edici&oacute;n del c&oacute;digo fuente</legend>");
         ret.append("\n      <textarea id=\"JSPEditor" + base.getId() + "\" name=\"JSPEditor" + base.getId() + "\" rows=\"25\"");
@@ -147,7 +133,7 @@ public class JSPEditor extends GenericAdmResource {
         ret.append("\n      <br />");
         ret.append("\n    </fieldset>");
         ret.append("\n    <fieldset>");
-        ret.append("\n      <input type=\"button\" value=\"Guardar\" onclick=\"if(editorValidate(this.form)) return true; else return false;\" />&nbsp;");
+        ret.append("\n      <input type=\"submit\" value=\"Guardar\" />&nbsp;");
         ret.append("\n      <input type=\"reset\" value=\"Cancelar\" />");
         ret.append("\n    </fieldset>");
         ret.append("\n  </form> ");
@@ -183,7 +169,7 @@ public class JSPEditor extends GenericAdmResource {
             SWBActionResponse response)
             throws SWBResourceException, IOException {
 
-        System.out.println("Primera linea de processAction");
+        //System.out.println("Primera linea de processAction");
         String msg = null;
         Resource base = getResourceBase();
         String code = null;
@@ -192,6 +178,8 @@ public class JSPEditor extends GenericAdmResource {
         File pathToWrite = new File(resourcePath);
 
         code = request.getParameter("JSPEditor" + base.getId());
+        //System.out.println("code: JSPEditor" + base.getId()+":"+code);
+
         if (code != null && !"".equals(code)) {
             try {
                 if (fileName == null) {
@@ -205,7 +193,7 @@ public class JSPEditor extends GenericAdmResource {
                         pathToWrite.mkdirs();
                     }
                     pathToWrite = new File(resourcePath + "/" + fileName);
-                    System.out.println("pathToWrite.canWrite() en ruta (pathToWrite): " + pathToWrite + " - " + pathToWrite.canWrite());
+                    //System.out.println("pathToWrite.canWrite() en ruta (pathToWrite): " + pathToWrite + " - " + pathToWrite.canWrite());
                     FileWriter writer = new FileWriter(pathToWrite);
                     writer.write(code);
                     writer.flush();
@@ -218,7 +206,7 @@ public class JSPEditor extends GenericAdmResource {
             }
             response.setRenderParameter("_msg", msg);
         }
-        System.out.println("Ultima linea de processAction");
+        //System.out.println("Ultima linea de processAction");
     }
 
     /**
