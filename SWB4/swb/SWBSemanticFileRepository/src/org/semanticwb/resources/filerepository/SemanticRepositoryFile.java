@@ -37,12 +37,11 @@ import org.semanticwb.portal.util.FileUpload;
 //import org.semanticwb.repository.VersionHistory;
 
 //org.semanticwb.resources.filerepository.SemanticRepositoryFile
-
 public class SemanticRepositoryFile extends org.semanticwb.resources.filerepository.base.SemanticRepositoryFileBase {
+
     protected static final String JCR_LASTMODIFIED = "jcr:lastModified";
     protected static final String SWBFILEREPFILESIZE = "swbfilerep:filesize";
     protected static final String SWBFILEREPUSERID = "swbfilerep:userid";
-
     private static final String SWBFILEREPCOMMENT = "swbfilerep:comment";
     private static SWBRepository rep = null;
     private static Logger log = SWBUtils.getLogger(SemanticRepositoryFile.class);
@@ -51,7 +50,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
     private static final String MODE_ADDFORM = "getAddForm";
     private static final String MODE_GETFILE = "getFile";
     private static final String FILE_DETAIL = "fdetail";
-    private static final String REP_FILE = "swbfilerep:RepositoryFile"; 
+    private static final String REP_FILE = "swbfilerep:RepositoryFile";
     private static final String REP_FOLDER = "swbfilerep:RepositoryFolder";
     private static final String REP_NODE = "swbfilerep:RepositoryNode";
     private static final String JCR_CONTENT = "jcr:content";
@@ -99,14 +98,19 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
+        User user = paramRequest.getUser();
 
         WebPage wp = paramRequest.getWebPage();
         IDREP = docRepNS(request, response, paramRequest);
 
-        if (resUUID == null) {
-            loadResUUID(wp);
+        resUUID = getResourceBase().getAttribute(wp.getId() + "_uuid");
+
+        //System.out.println("doView before: "+wp.getId() + "_uuid: "+resUUID);
+        if (resUUID == null ) {
+            loadResUUID(wp,user);
         }
 
+        //System.out.println("doView after: "+wp.getId() + "_uuid: "+resUUID);
         String path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
 
         out.println("<div style=\"font-family:verdana; font-size:10px;\">"); //class=\"SemanticRepositoryFile\"
@@ -118,32 +122,22 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         } else {
             out.println(doShowDirs(request, response, paramRequest));
         }
-//
-//        if(request.getParameter("getfile")!=null&&request.getParameter("getfile").equals("true"))
-//        {
-//            SWBParamRequestImp primp = (SWBParamRequestImp) paramRequest;
-//            primp.setAction("inline");
-//            primp.setMode(MODE_GETFILE);
-//            primp.setCallMethod(SWBResourceURL.Call_DIRECT);
-//            primp.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
-//            doGetFile(request, response, primp);
-//        }
         out.println("</fieldset>");
         out.println("</div>");
     }
 
-    private void loadResUUID(WebPage wp) {
+    private void loadResUUID(WebPage wp,User user) {
         Session session = null;
-        resUUID = getResourceBase().getAttribute(wp.getId()+"_uuid");
 
         if (resUUID == null) {
             try {
                 User usrcreator = getResourceBase().getCreator();
+                if(usrcreator==null&&user!=null) usrcreator = user;
+                //System.out.println("usuario:"+usrcreator);
                 session = rep.login(new SWBCredentials(usrcreator), IDREP);
                 Node root = null;
                 Node nodeRep = null;
                 Node nodePage = null;
-
                 root = session.getRootNode();
                 if (!root.hasNode(getResourceBase().getId())) {
                     nodeRep = root.addNode(getResourceBase().getId(), REP_NODE);
@@ -152,16 +146,26 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 }
 
                 //Revisando el nodo asociado a la página
-                if (nodeRep != null && !nodeRep.hasNode(wp.getId())) {
+
+                if (nodeRep != null && wp != null && !nodeRep.hasNode(wp.getId())) {
+                    //System.out.println("---creando nodo de la WebPage---");
                     nodePage = nodeRep.addNode(wp.getId(), REP_FOLDER);
                     nodePage.setProperty("swb:title", wp.getDisplayName());
                     nodePage.setProperty(SWBFILEREPUSERID, usrcreator.getId());
                     nodePage.setProperty("swb:description", "");
                     nodePage.setProperty("swbfilerep:deleted", Boolean.FALSE);
                 }
+
                 root.save();
+
                 resUUID = nodePage.getUUID();
-                getResourceBase().setAttribute(wp.getId()+"_uuid", resUUID);
+
+                //getResourceBase().setAttribute("res_uuid", nodeRep.getUUID());
+                
+                if (wp != null) {
+                    getResourceBase().setAttribute(wp.getId() + "_uuid", resUUID);
+                }
+
                 getResourceBase().updateAttributesToDB();
 
             } catch (Exception e) {
@@ -171,7 +175,6 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     session.logout();
                 }
             }
-
         }
     }
 
@@ -184,11 +187,17 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
         String parentUUID = request.getParameter("parentUUID");
         IDREP = docRepNS(request, response, paramRequest);
+        WebPage wp = paramRequest.getWebPage();
 
-        if (resUUID == null) {
-            loadResUUID(paramRequest.getWebPage());
+        resUUID = getResourceBase().getAttribute(wp.getId() + "_uuid");
+
+
+        //System.out.println("doView before: "+wp.getId() + "_uuid: "+resUUID);
+        if (resUUID == null ) { 
+            loadResUUID(paramRequest.getWebPage(),user);
         }
 
+        //System.out.println("doView after: "+wp.getId() + "_uuid: "+resUUID);
         if (parentUUID == null) {
             parentUUID = resUUID;
         }
@@ -219,10 +228,10 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             urladd.setParameter("parentUUID", parentUUID);
             urladd.setMode(MODE_ADDFORM);
 
-            if(user!=null&&luser>1){
+            if (user != null && luser > 1) {
                 ret.append("\n<a href=\"" + urladd + "\">");
                 ret.append("\n<img src=\"" + path + "add.gif\" border=\"0\" alt=\"Agregar archivo\"/>");
-                ret.append("\n"+"Agregar archivo");
+                ret.append("\n" + "Agregar archivo");
                 ret.append("\n</a>");
             }
             ret.append("\n</th>");
@@ -230,22 +239,22 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
             ret.append("\n<tr>");
             ret.append("\n<th >");
-            ret.append("\n"+"Info");
+            ret.append("\n" + "Info");
             ret.append("\n</th>");
             ret.append("\n<th>");
-            ret.append("\n"+"Icono");
+            ret.append("\n" + "Icono");
             ret.append("\n</th>");
             ret.append("\n<th>");
-            ret.append("\n"+"Título");
+            ret.append("\n" + "Título");
             ret.append("\n</th>");
             ret.append("\n<th>");
-            ret.append("\n"+"Fecha");
+            ret.append("\n" + "Fecha");
             ret.append("\n</th>");
             ret.append("\n<th>");
-            ret.append("\n"+"Marcar");
+            ret.append("\n" + "Marcar");
             ret.append("\n</th>");
             ret.append("\n<th>");
-            ret.append("\n"+"Acción");
+            ret.append("\n" + "Acción");
             ret.append("\n</th>");
             ret.append("\n</tr>");
             ret.append("\n</thead>");
@@ -314,17 +323,8 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                             }
 
 
-                            if (!ndata.isCheckedOut()&&luser>1) {
+                            if (!ndata.isCheckedOut() && luser > 1) {
                                 SWBResourceURL duout = paramRequest.getActionUrl();
-
-//                                duout.setMode(MODE_GETFILE);
-//                                duout.setParameter("uuid", UUID);
-//                                duout.setParameter("repNS", IDREP);
-//                                duout.setAction("inline");
-//                                duout.setCallMethod(SWBResourceURL.Call_DIRECT);
-//                                duout.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
-//                                duout.setParameter("faction", "checkout");
-
                                 duout.setParameter("uuid", UUID);
                                 duout.setParameter("repNS", IDREP);
                                 duout.setAction("check");
@@ -333,13 +333,12 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                                 ret.append("\n<a href=\"#\" onclick=\"window.location='" + duout + "';\">");
                                 ret.append("\n<img src=\"" + path + "out.gif\" border=\"0\"/>");
                                 ret.append("\n</a>");
-                            } else if(paramRequest.getUser().getId().equals(autor.getId())) {
+                            } else if (paramRequest.getUser().getId().equals(autor.getId())) {
                                 //ret.append("\n<img src=\"" + path + "reserved.gif\" border=\"0\"/>");
                                 SWBResourceURL uin = paramRequest.getRenderUrl();
                                 uin.setParameter("uuid", UUID);
                                 uin.setParameter("repNS", IDREP);
                                 uin.setMode(SWBResourceURL.Mode_EDIT);
-                                //uin.setParameter("faction", "in");
                                 uin.setAction("checkin");
                                 ret.append("\n<a href=\"#\" onclick=\"window.location='" + uin + "';\">");
                                 ret.append("\n<img src=\"" + path + "in.gif\" border=\"0\"/>");
@@ -349,12 +348,13 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                                 ret.append("\n<a href=\"#\" onclick=\"window.location='" + uout + "';\">");
                                 ret.append("\n<img src=\"" + path + "undo.gif\" border=\"0\" alt=\"Undo out\"/>");
                                 ret.append("\n</a>");
-                            } else
-                            {
-                                ret.append("\n<img src=\"" + path + "reserved.gif\" border=\"0\"/>");
+                            } else {
+                                if (luser > 1) {
+                                    ret.append("\n<img src=\"" + path + "reserved.gif\" border=\"0\"/>");
+                                }
                             }
-                            
-                            if (luser == 3 && ndata.isCheckedOut()&&!paramRequest.getUser().getId().equals(autor.getId())) {
+
+                            if (luser == 3 && ndata.isCheckedOut() && !paramRequest.getUser().getId().equals(autor.getId())) {
                                 uout.setParameter("faction", "undo");
                                 uout.setAction("check");
                                 ret.append("\n<a href=\"#\" onclick=\"window.location='" + uout + "';\">");
@@ -373,13 +373,12 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                             //ret.append("\n<img src=\"" + path + "suscribe.gif\" border=\"0\"/>");
                             ret.append("\n<a href=\"#\" onclick=\"window.location='" + urlgetfile + "';\" alt=\"\"><img src=\"" + path + "preview.gif\" border=\"0\" alt=\"ver archivo\"/></a>");
 
-                            if(paramRequest.getUser().getId().equals(autor.getId())||luser == 3)
-                            {
+                            if (paramRequest.getUser().getId().equals(autor.getId()) || luser == 3) {
                                 SWBResourceURL udel = paramRequest.getActionUrl();
                                 udel.setParameter("uuid", UUID);
                                 udel.setParameter("repNS", IDREP);
                                 udel.setAction("removefile");
-                                ret.append("\n<a href=\"#\" onclick=\"if(confirm('¿Estás seguro de querer eliminar el archivo" +" "+ nodo.getName() + "?')){ window.location='" + udel + "';} else { return false; }\">");
+                                ret.append("\n<a href=\"#\" onclick=\"if(confirm('¿Estás seguro de querer eliminar el archivo" + " " + nodo.getName() + "?')){ window.location='" + udel + "';} else { return false; }\">");
                                 ret.append("\n<img src=\"" + path + "delete.gif\" border=\"0\"/>");
                                 ret.append("\n</a>");
                             }
@@ -408,16 +407,16 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             ret.append("\n<tfoot>");
             ret.append("\n<tr>");
             ret.append("\n<th colspan=\"3\">");
-            ret.append("\n"+nfiles + " archivos");
+            ret.append("\n" + nfiles + " archivos");
             ret.append("\n</th>");
             ret.append("\n<th colspan=\"3\" align=\"right\">");
-            if(user!=null&&luser>1){
+            if (user != null && luser > 1) {
                 ret.append("\n<a href=\"" + urladd + "\">");
-                ret.append("\n<img src=\"" + path + "add.gif\" border=\"0\" alt=\""+"Agregar archivo"+"\"/>");
-                ret.append("\n"+"Agregar archivo");
+                ret.append("\n<img src=\"" + path + "add.gif\" border=\"0\" alt=\"" + "Agregar archivo" + "\"/>");
+                ret.append("\n" + "Agregar archivo");
                 ret.append("\n</a>");
             }
-            
+
             ret.append("\n</th>");
             ret.append("\n</tr>");
             ret.append("\n</tfoot>");
@@ -433,8 +432,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             }
         }
 
-        if(request.getParameter("getfile")!=null&&request.getParameter("getfile").equals("true"))
-        {
+        if (request.getParameter("getfile") != null && request.getParameter("getfile").equals("true")) {
 
             SWBResourceURL urlgetfile = paramRequest.getRenderUrl();
             urlgetfile.setMode(MODE_GETFILE);
@@ -443,7 +441,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             urlgetfile.setAction("inline");
             urlgetfile.setCallMethod(SWBResourceURL.Call_DIRECT);
             urlgetfile.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
-            ret.append("<div style=\"diplay:none;\"><iframe src=\""+urlgetfile+"\" style=\"display: none;\"/></div>");
+            ret.append("<div style=\"diplay:none;\"><iframe src=\"" + urlgetfile + "\" style=\"display: none;\"/></div>");
         }
 
 
@@ -468,7 +466,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         String path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
         IDREP = docRepNS(request, response, paramRequest);
         if (resUUID == null) {
-            loadResUUID(wp);
+            loadResUUID(wp,user);
         }
         ret.append("\n<script>include_dom('" + SWBPlatform.getContextPath() + "/swbadmin/js/repositoryfile.js');</script>");
         ret.append("\n<div>");
@@ -518,7 +516,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             urladd.setMode(MODE_ADDFORM);
             ret.append("\n<form name=\"" + formid + "\" action=\"" + urladd + "\" method=\"post\">");
             ret.append("\n<input type=\"hidden\" name=\"parentUUID\" value=\"" + resUUID + "\">");
-            ret.append("\n<input type=\"submit\" value=\""+"Crear carpeta"+"\">");
+            ret.append("\n<input type=\"submit\" value=\"" + "Crear carpeta" + "\">");
             ret.append("\n</form>");
             ret.append("\n</fieldset>");
         }
@@ -549,7 +547,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         }
 
         int luser = getLevelUser(user);
-        if (luser < 2) {
+        if (luser < 1) {
             return;
         }
 
@@ -628,7 +626,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             ret.append("\n<table width=\"100%\"  border=\"0\">");
             ret.append("\n<tr>");
             ret.append("\n<td width=\"200\">");
-            ret.append("\n"+"Nombre de la carpeta");
+            ret.append("\n" + "Nombre de la carpeta");
             ret.append("\n</td>");
             ret.append("\n<td>");
             ret.append("\n<input  type=\"text\" maxlength=\"99\" name=\"repftitle\">");
@@ -694,7 +692,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     Node nc = nodo.getNode(JCR_CONTENT);
                     ret.append("\n<tr>");
                     ret.append("\n<td>");
-                    ret.append("\n"+"Título:");
+                    ret.append("\n" + "Título:");
                     ret.append("\n</td>");
                     ret.append("\n<td>");
                     ret.append("\n" + nodo.getProperty("swb:title").getString());
@@ -702,7 +700,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     ret.append("\n</tr>");
                     ret.append("\n<tr>");
                     ret.append("\n<td>");
-                    ret.append("\n"+"Descripción:");
+                    ret.append("\n" + "Descripción:");
                     ret.append("\n</td>");
                     ret.append("\n<td>");
                     ret.append("\n" + nodo.getProperty("swb:description").getString());
@@ -712,7 +710,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
                     ret.append("\n<tr>");
                     ret.append("\n<td>");
-                    ret.append("\n"+"Última actualización:");
+                    ret.append("\n" + "Última actualización:");
                     ret.append("\n</td>");
                     ret.append("\n<td>");
                     ret.append("\n" + nc.getProperty(JCR_LASTMODIFIED).getString());
@@ -730,7 +728,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
                     ret.append("\n<tr>");
                     ret.append("\n<td>");
-                    ret.append("\n"+"Autor:");
+                    ret.append("\n" + "Autor:");
                     ret.append("\n</td>");
                     ret.append("\n<td>");
                     ret.append("\n" + fullname);
@@ -739,7 +737,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
                     ret.append("\n<tr>");
                     ret.append("\n<td>");
-                    ret.append("\n"+"Versión Actual:");
+                    ret.append("\n" + "Versión Actual:");
                     ret.append("\n</td>");
                     ret.append("\n<td>");
                     SWBResourceURL urlv = paramRequest.getRenderUrl();
@@ -748,7 +746,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     urlv.setParameter("uuid", UUID);
                     urlv.setParameter("repNS", IDREP);
 
-                    ret.append("\n<a href=\"" + urlv + "\">" + vn + "</a>");
+                    ret.append("\n"+ vn +" (<a href=\"" + urlv + "\">" + "ver historial de versiones" + "</a>)");
                     ret.append("\n</td>");
                     ret.append("\n</tr>");
 
@@ -756,7 +754,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     ret.append("\n<td>");
                     String file = nodo.getName();
                     String type = getFileName(file);
-                    ret.append("\n"+"Nombre del archivo:");
+                    ret.append("\n" + "Nombre del archivo:");
                     ret.append("\n</td>");
                     ret.append("\n<td>");
                     ret.append("\n" + file);
@@ -765,7 +763,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
                     ret.append("\n<tr>");
                     ret.append("\n<td>");
-                    ret.append("\n"+"Tipo de archivo:");
+                    ret.append("\n" + "Tipo de archivo:");
                     ret.append("\n</td>");
                     ret.append("\n<td>");
                     ret.append("\n" + getFileType(file));
@@ -774,7 +772,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
                     ret.append("\n<tr>");
                     ret.append("\n<td>");
-                    ret.append("\n"+"Tamaño:");
+                    ret.append("\n" + "Tamaño:");
                     ret.append("\n</td>");
                     ret.append("\n<td>");
                     ret.append("\n" + nc.getProperty(SWBFILEREPFILESIZE).getString() + " bytes");
@@ -797,12 +795,12 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     urlgetfile.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
                     ret.append("\n<a href=\"#\" onclick=\"window.location='" + urlgetfile + "';\" title=\"Ver archivo\"><img border=\"0\" src=\"" + path + "preview.gif\" alt=\"\" /></a>");
 
-                    if(luser==3||paramRequest.getUser().getId().equals(autor.getId())){
+                    if (luser == 3 || paramRequest.getUser().getId().equals(autor.getId())) {
                         SWBResourceURL udel = paramRequest.getActionUrl();
                         udel.setParameter("uuid", UUID);
                         udel.setParameter("repNS", IDREP);
                         udel.setAction("removefile");
-                        ret.append("\n<a href=\"#\" onclick=\"if(confirm('"+"¿Estás seguro de querer eliminar el archivo "+" " + nodo.getName() + "?')){ window.location='" + udel + "';} else { return false; }\">");
+                        ret.append("\n<a href=\"#\" onclick=\"if(confirm('" + "¿Estás seguro de querer eliminar el archivo " + " " + nodo.getName() + "?')){ window.location='" + udel + "';} else { return false; }\">");
                         ret.append("\n<img src=\"" + path + "delete.gif\" border=\"0\"/>");
                         ret.append("\n</a>");
                     }
@@ -939,13 +937,13 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                             ret.append("\n" + numversion);
                             ret.append("\n</td>");
                             ret.append("\n<td>");
-                            ret.append("\n"+comment);
+                            ret.append("\n" + comment);
                             ret.append("\n</td>");
                             ret.append("\n<td>");
-                            ret.append("\n"+lastModified);
+                            ret.append("\n" + lastModified);
                             ret.append("\n</td>");
                             ret.append("\n<td>");
-                            ret.append("\n"+fullname);
+                            ret.append("\n" + fullname);
                             ret.append("\n</td>");
 
 
@@ -960,7 +958,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                             urlgetfile.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
 
                             ret.append("\n<td>");
-                            ret.append("\n<a href=\"#\" onclick=\"window.location='" + urlgetfile + "';\" alt=\"\"><img border=\"0\" src=\"" + path + "preview.gif\" alt=\""+"ver versión"+"\" /></a>");
+                            ret.append("\n<a href=\"#\" onclick=\"window.location='" + urlgetfile + "';\" alt=\"\"><img border=\"0\" src=\"" + path + "preview.gif\" alt=\"" + "ver versión" + "\" /></a>");
                             ret.append("\n</td>");
                             ret.append("\n</tr>");
                         }
@@ -1006,9 +1004,12 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         WebSite wsite = wpage.getWebSite();
 
         IDREP = docRepNS(request, response, paramRequest);
-        if (resUUID == null) {
-            loadResUUID(wpage);
-        }
+
+//        System.out.println("WP:" + wpage == null ? "true" : "false");
+
+//        if (resUUID == null && wpage != null) {
+//            loadResUUID(wpage);
+//        }
 
         long id = 0;
         boolean flag = false;
@@ -1407,7 +1408,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 nodeRes.setProperty("jcr:data", new ByteArrayInputStream(bcont));
                 nodeRes.addMixin("mix:versionable");
                 nodeRes.setProperty("jcr:encoding", "");
-                nodeRes.setProperty( JCR_LASTMODIFIED,cal);
+                nodeRes.setProperty(JCR_LASTMODIFIED, cal);
                 nodeRes.setProperty("jcr:mimeType", fup.getContentType());
                 nodeRes.setProperty(SWBFILEREPCOMMENT, "Nuevo");
                 nodeRes.setProperty(SWBFILEREPUSERID, user.getId());
@@ -1464,7 +1465,9 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 session = rep.login(credentials, repNS);
                 Node fnode = session.getNodeByUUID(UUID);
                 Node fc = fnode.getNode(JCR_CONTENT);
-                if(!fnode.isCheckedOut()) fc.checkout();
+                if (!fnode.isCheckedOut()) {
+                    fc.checkout();
+                }
                 fnode.checkout();
                 fnode.setProperty("swbfilerep:deleted", Boolean.TRUE);
                 fnode.save();
@@ -1476,7 +1479,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 }
             }
             response.setMode(SWBActionResponse.Mode_VIEW);
-            //System.out.println("fin:" + System.currentTimeMillis());
+        //System.out.println("fin:" + System.currentTimeMillis());
 
         } else if ("removefolder".equals(action)) // marcar folder como eliminado
         {
@@ -1548,7 +1551,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     Node nodeRes = nodeFile.getNode(JCR_CONTENT);
                     nodeRes.setProperty("jcr:data", new ByteArrayInputStream(bcont));
                     nodeRes.setProperty("jcr:encoding", "");
-                    nodeRes.setProperty( JCR_LASTMODIFIED,cal);
+                    nodeRes.setProperty(JCR_LASTMODIFIED, cal);
                     nodeRes.setProperty("jcr:mimeType", fup.getContentType());
                     nodeRes.setProperty(SWBFILEREPCOMMENT, comentario);
                     nodeRes.setProperty(SWBFILEREPUSERID, user.getId());
@@ -1580,7 +1583,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     contenido.restore(contenido.getBaseVersion(), false);
                     contenido.save();
                     Version ver = contenido.checkin();
-                    VersionHistory history=ver.getContainingHistory();
+                    VersionHistory history = ver.getContainingHistory();
                     ver.remove();
                     history.save();
 
@@ -1591,9 +1594,8 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                         session.logout();
                     }
                 }
-            } else if("out".equals(faction))
-            {
-                    String UUID = request.getParameter("uuid");
+            } else if ("out".equals(faction)) {
+                String UUID = request.getParameter("uuid");
                 try {
                     session = rep.login(credentials, repNS);
                     Node fnode = session.getNodeByUUID(UUID);
@@ -1604,10 +1606,10 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 } catch (Exception e) {
                     log.error("Error al hacer check out del archivo. processAction.checkOut()", e);
                 }
-                    response.setRenderParameter("fuuid", UUID);
-                    response.setRenderParameter("repNS",repNS);
-                    response.setRenderParameter("getfile", "true");
-                    response.setMode(SWBActionResponse.Mode_VIEW);
+                response.setRenderParameter("fuuid", UUID);
+                response.setRenderParameter("repNS", repNS);
+                response.setRenderParameter("getfile", "true");
+                response.setMode(SWBActionResponse.Mode_VIEW);
 
             }
         }
@@ -1633,57 +1635,58 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         if ("checkin".equals(action)) {
             out.println("<script>include_dom('" + SWBPlatform.getContextPath() + "/swbadmin/js/repositoryfile.js');</script>");
 
-        try {
+            try {
 
-            session = rep.login(credentials, ns);
-            Node nodo = session.getNodeByUUID(uuid);
-            String filename = nodo.getName();
-            String vernum = getLastVersionOfcontent(session, ns, uuid);
+                session = rep.login(credentials, ns);
+                Node nodo = session.getNodeByUUID(uuid);
+                String filename = nodo.getName();
+                String vernum = getLastVersionOfcontent(session, ns, uuid);
 
-            Node nc = nodo.getNode(JCR_CONTENT);
-            SWBResourceURL urla = paramRequest.getActionUrl();
-            urla.setParameter("faction", "in");
-            urla.setAction("check");
-            out.println("<div >");
-            out.println("<form method=\"post\" action=\"" + urla + "\" enctype=\"multipart/form-data\" >");
-            out.println("<input type=\"hidden\" name=\"uuid\" value=\"" + uuid + "\" />");
-            out.println("<input type=\"hidden\" name=\"repNS\" value=\"" + ns + "\" />");
-            out.println("<fieldset>");
-            out.println("<legend>" + "Actualizando version" + "</legend>");
+                Node nc = nodo.getNode(JCR_CONTENT);
+                SWBResourceURL urla = paramRequest.getActionUrl();
+                urla.setParameter("faction", "in");
+                urla.setAction("check");
+                out.println("<div >");
+                out.println("<form method=\"post\" action=\"" + urla + "\" enctype=\"multipart/form-data\" >");
+                out.println("<input type=\"hidden\" name=\"uuid\" value=\"" + uuid + "\" />");
+                out.println("<input type=\"hidden\" name=\"repNS\" value=\"" + ns + "\" />");
+                out.println("<fieldset>");
+                out.println("<legend>" + "Actualizando version" + "</legend>");
 
-            out.println("<table width=\"100%\" border=\"0\">");
-            out.println("<tr>");
-            out.println("<td>"+"Título:"+"</td>");
-            out.println("<td>"+nodo.getProperty("swb:title").getString()+"</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td>"+"Descripción:"+"</td>");
-            out.println("<td>"+nodo.getProperty("swb:description").getString()+"</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td>"+"Archivo:"+"</td>");
-            out.println("<td>"+filename+" ver. "+vernum+"</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td>"+"Comentario de la nueva versión:"+"</td>");
-            out.println("<td><textarea id=\"commentversion\" name=\"commentversion\" rows=\"5\" cols=\"20\"></textarea></td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td>"+"Nuevo archivo:"+"</td>");
-            out.println("<td><input type=\"file\" id=\"fileversion\" name=\"fileversion\" /></td>");
-            out.println("</tr>");
-            out.println("</table>");
-            out.println("</fieldset>");
-            out.println("<fieldset>");
-            SWBResourceURL urlb = paramRequest.getRenderUrl();
-            urlb.setMode(SWBResourceURL.Mode_VIEW);
-            out.println("<input type=\"submit\" name=\"Actualizar\" value=\""+"Actualzar"+"\"/>");
-            out.println("<input type=\"button\" name=\"Cancelar\" onclick=\"window.location='" + urlb + "';\" value=\"Cancelar\" />");
-            out.println("</fieldset>");
-            out.println("</form>");
-            out.println("</div>");
-        }
-        catch(Exception e){log.error("Error ",e);}
+                out.println("<table width=\"100%\" border=\"0\">");
+                out.println("<tr>");
+                out.println("<td>" + "Título:" + "</td>");
+                out.println("<td>" + nodo.getProperty("swb:title").getString() + "</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td>" + "Descripción:" + "</td>");
+                out.println("<td>" + nodo.getProperty("swb:description").getString() + "</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td>" + "Archivo:" + "</td>");
+                out.println("<td>" + filename + " ver. " + vernum + "</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td>" + "Comentario de la nueva versión:" + "</td>");
+                out.println("<td><textarea id=\"commentversion\" name=\"commentversion\" rows=\"5\" cols=\"20\"></textarea></td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td>" + "Nuevo archivo:" + "</td>");
+                out.println("<td><input type=\"file\" id=\"fileversion\" name=\"fileversion\" /></td>");
+                out.println("</tr>");
+                out.println("</table>");
+                out.println("</fieldset>");
+                out.println("<fieldset>");
+                SWBResourceURL urlb = paramRequest.getRenderUrl();
+                urlb.setMode(SWBResourceURL.Mode_VIEW);
+                out.println("<input type=\"submit\" name=\"Actualizar\" value=\"" + "Actualzar" + "\"/>");
+                out.println("<input type=\"button\" name=\"Cancelar\" onclick=\"window.location='" + urlb + "';\" value=\"Cancelar\" />");
+                out.println("</fieldset>");
+                out.println("</form>");
+                out.println("</div>");
+            } catch (Exception e) {
+                log.error("Error ", e);
+            }
         }
     }
 
@@ -1710,7 +1713,9 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             }
             String filename = nodo.getName();
             String vernum = getLastVersionOfcontent(session, ns, uuid);
-            if(versionfile!=null&&versionfile.trim().length()>0) vernum = versionfile;
+            if (versionfile != null && versionfile.trim().length() > 0) {
+                vernum = versionfile;
+            }
             String str_file = getContentFile(session, ns, uuid, vernum);
             Node nc = nodo.getNode(JCR_CONTENT);
 //            if ("checkout".equals(faction)) {
@@ -1729,7 +1734,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 } catch (Exception e) {
                     mime = DEFAULT_MIME_TYPE;
                 }
-                response.setHeader("Content-type", mime+";");
+                response.setHeader("Content-type", mime + ";");
             }
             if (action != null && "inline".equals(action)) {
                 response.setContentType(mime);
@@ -1768,54 +1773,63 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         UserGroup ugrp = null;
         Role urole = null;
 
-        if (gobj != null) {
-            if (gobj instanceof UserGroup) {
-                ugrp = (UserGroup) gobj;
-                if (user.hasUserGroup(ugrp)) {
-                    level = 3;
-                }
-            } else if (gobj instanceof Role) {
-                urole = (Role) gobj;
-                if (user.hasRole(urole)) {
-                    level = 3;
-                }
-            }
-        } else {
-            level = 3;
-        }
-
-        if (level == 0) {
-            gobj = ont.getGenericObject(uriModify);
+        if (!uriAdmin.equals("0")) {
             if (gobj != null) {
                 if (gobj instanceof UserGroup) {
                     ugrp = (UserGroup) gobj;
                     if (user.hasUserGroup(ugrp)) {
-                        level = 2;
+                        level = 3;
                     }
                 } else if (gobj instanceof Role) {
                     urole = (Role) gobj;
                     if (user.hasRole(urole)) {
-                        level = 2;
+                        level = 3;
                     }
                 }
             } else {
-                level = 2;
+                level = 3;
             }
+        } else level=3;
+
+        if (level == 0) {
+            if (!uriModify.equals("0")) {
+                gobj = ont.getGenericObject(uriModify);
+                if (gobj != null) {
+                    if (gobj instanceof UserGroup) {
+                        ugrp = (UserGroup) gobj;
+                        if (user.hasUserGroup(ugrp)) {
+                            level = 2;
+                        }
+                    } else if (gobj instanceof Role) {
+                        urole = (Role) gobj;
+                        if (user.hasRole(urole)) {
+                            level = 2;
+                        }
+                    }
+                } else {
+                    level = 2;
+                }
+            }
+            else level=2;
         }
 
         if (level == 0) {
-            gobj = ont.getGenericObject(uriView);
-            if (gobj != null) {
-                if (gobj instanceof UserGroup) {
-                    ugrp = (UserGroup) gobj;
-                    if (user.hasUserGroup(ugrp)) {
-                        level = 1;
+            if (!uriView.equals("0")) {
+                gobj = ont.getGenericObject(uriView);
+                if (gobj != null) {
+                    if (gobj instanceof UserGroup) {
+                        ugrp = (UserGroup) gobj;
+                        if (user.hasUserGroup(ugrp)) {
+                            level = 1;
+                        }
+                    } else if (gobj instanceof Role) {
+                        urole = (Role) gobj;
+                        if (user.hasRole(urole)) {
+                            level = 1;
+                        }
                     }
-                } else if (gobj instanceof Role) {
-                    urole = (Role) gobj;
-                    if (user.hasRole(urole)) {
-                        level = 1;
-                    }
+                } else {
+                    level = 1;
                 }
             } else {
                 level = 1;
