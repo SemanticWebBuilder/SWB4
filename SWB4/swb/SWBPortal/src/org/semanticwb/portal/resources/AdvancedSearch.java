@@ -92,7 +92,9 @@ public class AdvancedSearch extends GenericAdmResource {
                 "      var lang =\"" + lang + "\";\n" +
                 "      var displayed;\n" +
                 "      var pdisplayed;\n" +
-                "    </script>\n");
+                "    </script>\n" +
+                "    <script type=\"text/javascript\" charset=\"utf-8\" src=\"" +
+                            SWBPlatform.getContextPath() + "/swbadmin/js/swb_admin.js\" ></script>\n\n");
         /**
          * Clears the suggestions list and gives focus to the textarea.
          */
@@ -376,7 +378,7 @@ public class AdvancedSearch extends GenericAdmResource {
             }
             sbf.append("    <form id=\"" + getResourceBase().getId() + "/natural\" " +
                     "action=\"" + url + "\" method=\"post\" >\n" +
-                    "      <input type=\"text\" id=\"naturalQuery\" name=\"q\" />\n" +
+                    "      <input type=\"text\" id=\"naturalQuery\" name=\"q\" autocomplete=\"off\">\n" +
                     "    </form>" +
                     "    <div id=\"results\"></div>\n");
             response.getWriter().print(sbf.toString());
@@ -415,13 +417,11 @@ public class AdvancedSearch extends GenericAdmResource {
         word = word.replace("]", "");
         word = word.trim();
 
-        System.out.println("Suggesting for " + word);
         if (!props) {
-            
             Iterator<String> cit = lex.listClassNames();
             while (cit.hasNext()) {
                 String tempc = cit.next();
-                System.out.println(tempc);
+                //System.out.println(tempc);
                 if (tempc.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                     objOptions.add(tempc);
                 }
@@ -430,7 +430,7 @@ public class AdvancedSearch extends GenericAdmResource {
             Iterator<String> sit = lex.listPropertyNames();
             while (sit.hasNext()) {
                 String tempp = sit.next();
-                System.out.println(tempp);
+                //System.out.println(tempp);
                 if (tempp.toLowerCase().indexOf(word.toLowerCase()) != -1) {
                     proOptions.add(tempp);
                 }
