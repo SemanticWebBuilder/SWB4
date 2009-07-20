@@ -236,36 +236,37 @@ public class UserRegistration extends GenericAdmResource
             UserRepository urep = paramsRequest.getWebPage().getWebSite().getUserRepository();
             Iterator<SemanticProperty> itProps = urep.listExtendedAttributes();
             HashMap<String, SemanticProperty> datos = new HashMap<String, SemanticProperty>();
-//            System.out.println("Extra...");
+            //System.out.println("Extra..."+itProps);
             while (itProps.hasNext())
             {
                 SemanticProperty sp = itProps.next();
+                //System.out.println("Trying: "+sp.getName());
                 if (null == sp.getDisplayProperty())
                 {
                     continue;
                 }
                 datos.put(sp.getName(), sp);
-//                System.out.println("Adding: "+sp.getName());
+               // System.out.println("Adding: "+sp.getName());
             }
             Iterator<String> itur = urep.getUserTypes();
             while (itur.hasNext())
             {
                 String curr = itur.next();
-//                System.out.println("usuario: "+curr);
+               // System.out.println("usuario: "+curr);
                 if (paramsRequest.getUser().hasUserType(curr))
                 {
-//                    System.out.println("Procesando...");
+                   // System.out.println("Procesando...");
                     itProps = urep.listAttributesofUserType(curr);
                     while (itProps.hasNext())
                     {
                         SemanticProperty sp = itProps.next();
-//                        System.out.println("..."+sp.getName());
+                      //  System.out.println("..."+sp.getName());
                         if (null == sp.getDisplayProperty())
                         {
                             continue;
                         }
                         datos.put(sp.getName(), sp);
-//                        System.out.println("Adding: "+sp.getName());
+                 //       System.out.println("Adding: "+sp.getName());
                     }
 
                 }
