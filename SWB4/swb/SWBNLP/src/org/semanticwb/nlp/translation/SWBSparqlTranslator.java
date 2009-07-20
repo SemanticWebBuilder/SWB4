@@ -39,6 +39,7 @@ public class SWBSparqlTranslator {
     private String eLog = "";   //Error log
     private int errCode = 0;    //Last error code
     private SWBSpellChecker speller = null;
+    private boolean emptyQuery = false;
 
     /**
      * Creates a new instance of SWBSparqlTranslator with the given SWBLexicon.
@@ -48,6 +49,14 @@ public class SWBSparqlTranslator {
     public SWBSparqlTranslator(SWBLexicon dict) {
         lex = dict;
         speller = new SWBSpellChecker(dict.getSpellDictPath());
+    }
+
+    /**
+     * Wheter the query has graph patterns.
+     * @return true if query has patterns, false otherwise.
+     */
+    public boolean isEmptyQuery() {
+        return emptyQuery;
     }
 
     /**
@@ -382,6 +391,7 @@ public class SWBSparqlTranslator {
         String order = "";
         String res = "";
         String varList = "";
+        String patterns = "";
 
         List<CommonTree> child = root.getChildren();
         if (child != null) {
@@ -410,8 +420,8 @@ public class SWBSparqlTranslator {
                     res = res + varList + "\nWHERE \n{\n";
                     String etype = lex.getObjWordTag(t.getText()).getType();
                     if (!etype.equals("")) {
-                        res = res + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + etype + ".\n";
-                        res += startParsing(t);
+                        patterns = patterns + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + etype + ".\n";
+                        patterns += startParsing(t);
                     } else {
                         errCode = 2;
                         eLog = eLog + t.getText() + " no es una clase.";
@@ -419,7 +429,10 @@ public class SWBSparqlTranslator {
                 }
             }
         }
-        return res + "}" + order + limitoff;
+        if (patterns.equals("")) {
+            emptyQuery = true;
+        }
+        return res + patterns + "}" + order + limitoff;
     }
 
     /**
