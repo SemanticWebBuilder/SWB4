@@ -3,8 +3,6 @@ package org.semanticwb.model.base;
 
 public class SWBModelBase extends org.semanticwb.model.base.GenericObjectBase 
 {
-    public static final org.semanticwb.platform.SemanticClass swb_WebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
-    public static final org.semanticwb.platform.SemanticProperty swb_parentWebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#parentWebSite");
     public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
 
@@ -43,27 +41,6 @@ public class SWBModelBase extends org.semanticwb.model.base.GenericObjectBase
     public static boolean hasSWBModel(String id, org.semanticwb.model.SWBModel model)
     {
         return (getSWBModel(id, model)!=null);
-    }
-
-    public void setParentWebSite(org.semanticwb.model.WebSite website)
-    {
-        getSemanticObject().setObjectProperty(swb_parentWebSite, website.getSemanticObject());
-    }
-
-    public void removeParentWebSite()
-    {
-        getSemanticObject().removeProperty(swb_parentWebSite);
-    }
-
-    public org.semanticwb.model.WebSite getParentWebSite()
-    {
-         org.semanticwb.model.WebSite ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_parentWebSite);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.WebSite)obj.createGenericInstance();
-         }
-         return ret;
     }
 
     public void remove()
