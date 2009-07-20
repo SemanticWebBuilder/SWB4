@@ -185,6 +185,7 @@ public class GroovyEditor extends GenericAdmResource {
             SWBActionResponse response)
             throws SWBResourceException, IOException {
 
+        System.out.println("Primera linea de processAction");
         String msg = null;
         Resource base = getResourceBase();
         String code = null;
@@ -206,6 +207,7 @@ public class GroovyEditor extends GenericAdmResource {
                         pathToWrite.mkdirs();
                     }
                     pathToWrite = new File(resourcePath + "/" + fileName);
+                    System.out.println("pathToWrite.canWrite() en ruta (pathToWrite): " + pathToWrite + " - " + pathToWrite.canWrite());
                     FileWriter writer = new FileWriter(pathToWrite);
                     writer.write(code);
                     writer.flush();
@@ -213,10 +215,12 @@ public class GroovyEditor extends GenericAdmResource {
                     msg = "ok";
                 }
             } catch (Exception e) {
-                log.error(e);
+                log.error("Al escribir en disco.", e);
+                e.printStackTrace();
             }
             response.setRenderParameter("_msg", msg);
         }
+        System.out.println("Ultima linea de processAction");
     }
 
     /**
