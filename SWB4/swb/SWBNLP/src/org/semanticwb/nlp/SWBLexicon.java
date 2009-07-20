@@ -105,7 +105,7 @@ public class SWBLexicon {
             while (its.hasNext()) {
                 SemanticClass sc = its.next();
                 if (preflist == null || (preflist != null && preflist.contains(sc.getPrefix()))) {
-                    System.out.println("Agregando " + sc.getDisplayName(lang));
+                    //System.out.println("Agregando " + sc.getDisplayName(lang));
                     addWord(sc);
 
                     //Add class prefix to the prefixes string (for SparQl queries)
