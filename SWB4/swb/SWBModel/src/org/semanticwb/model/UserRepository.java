@@ -524,7 +524,7 @@ public class UserRepository extends UserRepositoryBase
         {
             SemanticProperty sp = itsp.next();
             log.debug("Encontrada... " + sp + " - " + sp.getURI());
-            if (null == sp.getRange() || null == sp.getDisplayProperty() || !sp.getURI().startsWith(getId()))
+            if (null == sp.getRange() || null == sp.getDisplayProperty())// || !sp.getURI().startsWith(getId()))
             {
                 continue;
             }
@@ -542,7 +542,7 @@ public class UserRepository extends UserRepositoryBase
         {
             SemanticProperty sp = itsp.next();
             log.debug("Encontrada... " + sp + " - " + sp.getURI());
-            if (null == sp.getRange() || null == sp.getDisplayProperty() || !sp.getURI().startsWith(getId()))
+            if (null == sp.getRange() || null == sp.getDisplayProperty())// || !sp.getURI().startsWith(getId()))
             {
                 continue;
             }

@@ -1,5 +1,6 @@
 package org.semanticwb.portal;
 
+import java.util.Iterator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -7,7 +8,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.UserRepository;
+import org.semanticwb.model.*;
+import org.semanticwb.platform.SemanticClass;
 
 /**
  *
@@ -39,10 +41,31 @@ public class ExternalRepositoryTest
     {
     }
 
-    @Test
+    //@Test
     public void syncAll(){
         UserRepository repository = null;
         repository = SWBContext.getUserRepository("nuevo_usr");
         repository.syncUsers();
+    }
+
+    @Test
+    public void setExternalAtts(){
+        UserRepository repository = null;
+        repository = SWBContext.getUserRepository("nuevo_usr");
+        User user = repository.getUserByLogin("alma");
+        if (null==user){
+            System.out.println("Creando User alma");
+            user = repository.createUser();
+            user.setLogin("alma");
+            user.setActive(true);
+            user.setPassword("alma");
+            
+        }
+        Iterator<SemanticClass> it = UserTypeDef.sclass.listSubClasses();
+        while (it.hasNext()){
+            SemanticClass utd = it.next();
+            //user.addUserType(utd.getName());
+            System.out.println(utd.getName());
+        }
     }
 }
