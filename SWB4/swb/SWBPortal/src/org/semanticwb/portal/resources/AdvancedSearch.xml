@@ -3,11 +3,10 @@
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmSemSearch" action="true" method="POST" enctype="multipart/form-data">
         <fieldset>
-            <input type="TEXT" name="destUrl" label="Página de resultados:"/>
+            <input type="TEXT" name="prefixFilter" label="Prefijos utilizados:"/>
         </fieldset>
         <fieldset>
             <input type="SUBMIT" name="btnSave" value="Guardar"/>
-            <input type="RESET" name="btnReset" value="Cancelar"/>
         </fieldset>
     </form>
 </admresource>
