@@ -68,8 +68,6 @@
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="UserGroup">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
     <rdfs:label xml:lang="es">Grupo de Usuarios</rdfs:label>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_UserGroup">
@@ -200,27 +198,6 @@
   <owl:Class rdf:ID="Iconable">
     <rdfs:subClassOf rdf:resource="#SWBInterface"/>
     <rdf:type rdf:resource="#Interface"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Role">
-    <rdfs:subClassOf rdf:resource="#Traceable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-    <rdf:type rdf:resource="#Class"/>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Undeleteable"/>
-    </rdfs:subClassOf>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_Role">
-        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swbxf:dragSupport>
-        <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >2</swbxf:dropMatchLevel>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
-    <rdfs:label xml:lang="en">Role</rdfs:label>
-    <rdfs:label xml:lang="es">Rol</rdfs:label>
   </owl:Class>
   <owl:Class rdf:ID="PFlowRef">
     <rdfs:subClassOf>
@@ -981,7 +958,25 @@
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Roles">
             <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >swbIconRoles</swb:iconClass>
-            <swbxf:heClass rdf:resource="#Role"/>
+            <swbxf:heClass>
+              <swb:Class rdf:ID="Role">
+                <rdfs:label xml:lang="es">Rol</rdfs:label>
+                <rdfs:label xml:lang="en">Role</rdfs:label>
+                <swb:displayObject>
+                  <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_Role">
+                    <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                    >true</swbxf:dragSupport>
+                    <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                    >2</swbxf:dropMatchLevel>
+                  </swbxf:DisplayObject>
+                </swb:displayObject>
+                <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+                <rdfs:subClassOf rdf:resource="#Undeleteable"/>
+                <rdfs:subClassOf rdf:resource="#SWBClass"/>
+                <rdfs:subClassOf rdf:resource="#Traceable"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </swbxf:heClass>
             <swb:title xml:lang="es">Roles</swb:title>
             <swb:title xml:lang="en">Roles</swb:title>
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -1140,15 +1135,12 @@
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasSubModel">
-    <rdfs:range rdf:resource="#SWBModel"/>
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
     <rdfs:domain rdf:resource="#WebSite"/>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="parentWebSite"/>
-    </owl:inverseOf>
+    <rdfs:range rdf:resource="#SWBModel"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="usrgrpParent">
     <rdfs:domain rdf:resource="#UserGroup"/>
@@ -2276,6 +2268,8 @@
         >65</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >3</swb:defaultValue>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="maxHits">
     <rdfs:domain rdf:resource="#Hitable"/>
