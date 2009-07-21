@@ -172,35 +172,46 @@ public class SelectVersionToOpen extends WizardPage
 
 private void jButtonViewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonViewActionPerformed
 {//GEN-HEADEREND:event_jButtonViewActionPerformed
-    if(Search.map.get(Search.WORKSPACE)!=null && jTableVersion.getSelectedRow()!=-1)
+    if (Search.map.get(Search.WORKSPACE) != null && jTableVersion.getSelectedRow() != -1)
     {
         String workspace = Search.map.get(Search.WORKSPACE).toString();
-        DefaultTableModel model=(DefaultTableModel)jTableVersion.getModel();
+        DefaultTableModel model = (DefaultTableModel) jTableVersion.getModel();
 
-        VersionInfo version=(VersionInfo)model.getValueAt(jTableVersion.getSelectedRow(), 2);
-        String name=null;
+        VersionInfo version = (VersionInfo) model.getValueAt(jTableVersion.getSelectedRow(), 2);
+        String name = null;
         try
         {
-            name=OfficeApplication.getOfficeDocumentProxy().createPreview(workspace, version.contentId, version.nameOfVersion);
+            name = OfficeApplication.getOfficeDocumentProxy().createPreview(workspace, version.contentId, version.nameOfVersion);
             String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
+            if (!urlproxy.endsWith("/gtw"))
+            {
+                if (!urlproxy.endsWith("/"))
+                {
+                    urlproxy += "/";
+                }
+                if (!urlproxy.endsWith("gtw"))
+                {
+                    urlproxy += "gtw";
+                }
+            }
             URL url = new URL(urlproxy + "?contentId=" + version.contentId + "&versionName=" + version.nameOfVersion + "&repositoryName=" + workspace + "&name=" + name);
-            String title=OfficeApplication.getOfficeDocumentProxy().getTitle(workspace, version.contentId)+" ("+version.nameOfVersion+") ";
-            DialogPreview dialogPreview=new DialogPreview(url,false,title);
+            String title = OfficeApplication.getOfficeDocumentProxy().getTitle(workspace, version.contentId) + " (" + version.nameOfVersion + ") ";
+            DialogPreview dialogPreview = new DialogPreview(url, false, title);
             dialogPreview.setVisible(true);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
         finally
         {
-            if(name!=null)
+            if (name != null)
             {
                 try
                 {
                     OfficeApplication.getOfficeDocumentProxy().deletePreview(name);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
