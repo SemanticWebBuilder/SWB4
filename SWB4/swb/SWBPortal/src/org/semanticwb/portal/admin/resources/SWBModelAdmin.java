@@ -24,7 +24,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticModel;
@@ -34,7 +33,6 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.repository.Workspace;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -425,6 +423,7 @@ public class SWBModelAdmin extends GenericResource {
                 log.debug(e);
             }
         }else if (response.getAction().equals("install")) {
+            try{
             String siteInfo = SWBUtils.IO.readFileFromZip(request.getParameter("zipName"), "siteInfo.xml");
             String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
             Document dom = SWBUtils.XML.xmlToDom(siteInfo);
@@ -450,6 +449,7 @@ public class SWBModelAdmin extends GenericResource {
                         iteraModels(node, smodels);
                     }
                 }
+
 
                 String newId = request.getParameter("wsid");
                 String newTitle = request.getParameter("wstitle");
@@ -500,10 +500,10 @@ public class SWBModelAdmin extends GenericResource {
                 rdfcontent = rdfcontent.replaceAll(newNs+oldIDModel, newNs+newId); //Reempplazar namespace y id anterior x nuevos
 
                 //Reemplaza ids de repositorios de usuarios y documentos x nuevos
-                //rdfcontent = rdfcontent.replaceAll(oldIDModel + "_usr", newId + "_usr");
-                //rdfcontent = rdfcontent.replaceAll("http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
-                //rdfcontent = rdfcontent.replaceAll(oldIDModel + "_rep", newId + "_rep");
-                //rdfcontent = rdfcontent.replaceAll("http://rep." + oldIDModel + ".swb#", "http://rep." + newId + ".swb#");
+                rdfcontent = rdfcontent.replaceAll(oldIDModel + "_usr", newId + "_usr");
+                rdfcontent = rdfcontent.replaceAll("http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
+                rdfcontent = rdfcontent.replaceAll(oldIDModel + "_rep", newId + "_rep");
+                rdfcontent = rdfcontent.replaceAll("http://repository." + oldIDModel + ".swb#", "http://repository." + newId + ".swb#");
 
                 //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
                 //rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
@@ -549,7 +549,18 @@ public class SWBModelAdmin extends GenericResource {
                                 SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
                             }
                         }if (key.endsWith("_rep")) { //Para los submodelos de dosumentos
-                            //TODO
+                            int pos = xmodelID.lastIndexOf("_rep");
+                            if (pos > -1) {
+                                xmodelID = xmodelID.substring(0, pos);
+                                rdfmodel = rdfmodel.replaceAll(xmodelID, newId);
+                                io = SWBUtils.IO.getStreamFromString(rdfmodel);
+                                File file = new File("c:/tmp/rep.txt");
+                                FileOutputStream out = new FileOutputStream(file);
+                                out.write(rdfmodel.getBytes());
+                                out.flush();
+                                out.close();
+                                SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
+                            }
                         }
                         fileModel.delete();
                     }
@@ -558,6 +569,9 @@ public class SWBModelAdmin extends GenericResource {
                 response.setRenderParameter("msgKey", "siteCreated");
                 response.setRenderParameter("wsUri", website.getURI());
             }
+        }catch(Exception e){
+            log.error(e);
         }
+      }
     }
 }
