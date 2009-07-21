@@ -3,11 +3,11 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmLogin" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
-                <fieldset>
+                <!--fieldset>
 		<input type="FILE" name="viewJsp" label="Plantilla (jsp):" jsrequired="false" showfile="true" msg="Básicos " bydefault="{@webpath}resources/jsp/UserReposiroty/view.jsp" msgbydefault="Plantilla por defecto " filetype="jsp" isshowfiletype="true" size="40"/>
         <input type="FILE" name="extraJsp" label="Plantilla (jsp):" jsrequired="false" showfile="true" msg="Extendidos " bydefault="{@webpath}resources/jsp/UserReposiroty/extra.jsp" msgbydefault="Plantilla por defecto " filetype="jsp" isshowfiletype="true" size="40"/>
 
-                </fieldset>
+                </fieldset-->
                 <fieldset>
                    <statictext name="txtTarget">Solicitar datos extendidos:</statictext>
 		<input type="RADIO" name="target" label="Sí" value="1"/>
