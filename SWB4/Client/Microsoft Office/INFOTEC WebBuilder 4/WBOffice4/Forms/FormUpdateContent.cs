@@ -120,9 +120,21 @@ namespace WBOffice4.Forms
                 try
                 {
                     String version = this.listViewVersions.SelectedItems[0].Text;
-                    name = OfficeApplication.OfficeDocumentProxy.createPreview(this.document.reporitoryID, this.document.contentID, version);
+                    String type = document.DocumentType.ToString().ToLower();
+                    name = OfficeApplication.OfficeDocumentProxy.createPreview(this.document.reporitoryID, this.document.contentID, version,type);
                     String urlproxy = OfficeApplication.OfficeDocumentProxy.WebAddress.ToString();
-                    Uri url = new Uri(urlproxy + "?contentId=" + this.document.contentID + "&versionName=" + version + "&repositoryName=" + this.document.reporitoryID + "&name=" + name);
+                    if (!urlproxy.EndsWith("/gtw"))
+                    {
+                        if (!urlproxy.EndsWith("/"))
+                        {
+                            urlproxy += "/";
+                        }
+                        if (!urlproxy.EndsWith("gtw"))
+                        {
+                            urlproxy += "gtw";
+                        }
+                    }
+                    Uri url = new Uri(urlproxy + "?contentId=" + this.document.contentID + "&versionName=" + version + "&repositoryName=" + this.document.reporitoryID + "&name=" + name + "&type=" + type);
                     String title = OfficeApplication.OfficeDocumentProxy.getTitle(this.document.reporitoryID, this.document.contentID);
                     FormPreview dialogPreview = new FormPreview(url,false,title);
                     dialogPreview.ShowDialog(this);
