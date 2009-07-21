@@ -44,11 +44,12 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private String contentId,  repository;
     private OfficeDocument document;
-
+    private String type;
     /** Creates new form DialogContentInformation */
     public DialogContentInformation(String contentId, String repository, OfficeDocument document)
     {
         super((Frame) null, ModalityType.TOOLKIT_MODAL);
+        type=document.getDocumentType().toString().toLowerCase();
         initComponents();
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
@@ -937,7 +938,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                     }
                     urlproxy += "gtw";
                 }
-                name = OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version);
+                name = OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version,type);
                 URL url = new URL(urlproxy + "?contentId=" + contentId + "&versionName=" + version + "&repositoryName=" + repository + "&name=" + name);
                 String title = OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId) + " (" + version + ") ";
                 DialogPreview preview = new DialogPreview(url, false, title);
