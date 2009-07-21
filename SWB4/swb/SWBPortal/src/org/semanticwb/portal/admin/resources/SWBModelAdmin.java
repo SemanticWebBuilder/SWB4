@@ -554,11 +554,6 @@ public class SWBModelAdmin extends GenericResource {
                                 xmodelID = xmodelID.substring(0, pos);
                                 rdfmodel = rdfmodel.replaceAll(xmodelID, newId);
                                 io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                File file = new File("c:/tmp/rep.txt");
-                                FileOutputStream out = new FileOutputStream(file);
-                                out.write(rdfmodel.getBytes());
-                                out.flush();
-                                out.close();
                                 SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
                             }
                         }
