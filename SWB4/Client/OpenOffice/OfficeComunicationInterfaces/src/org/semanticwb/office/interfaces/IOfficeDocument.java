@@ -93,7 +93,7 @@ public interface IOfficeDocument
     public String getVersionToShow(ResourceInfo info) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.createPreview")
-    public String createPreview(String repositoryName, String contentId, String version) throws Exception;
+    public String createPreview(String repositoryName, String contentId, String version,String type) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.deletePreview")
     public void deletePreview(String dir) throws Exception;
