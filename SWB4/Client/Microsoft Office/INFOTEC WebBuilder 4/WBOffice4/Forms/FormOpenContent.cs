@@ -23,7 +23,7 @@ namespace WBOffice4.Forms
         private void FormOpenContent_LoadSteps(object sender, EventArgs e)
         {
             this.AddStep(new Search(documentType));
-            this.AddStep(new SelectVersionToOpen());
+            this.AddStep(new SelectVersionToOpen(documentType.ToString().ToLower()));
             this.AddStep(new SelectDirectory(application));
         }
     }

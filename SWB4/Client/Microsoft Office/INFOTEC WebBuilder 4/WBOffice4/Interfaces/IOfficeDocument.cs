@@ -86,7 +86,7 @@ namespace WBOffice4.Interfaces
         String getVersionToShow(ResourceInfo info);
 
         [XmlRpcMethod("OfficeDocument.createPreview")]
-        String createPreview(String repositoryName, String contentId, String version);
+        String createPreview(String repositoryName, String contentId, String version,String type);
 
         [XmlRpcMethod("OfficeDocument.deletePreview")]
         void deletePreview(String dir);

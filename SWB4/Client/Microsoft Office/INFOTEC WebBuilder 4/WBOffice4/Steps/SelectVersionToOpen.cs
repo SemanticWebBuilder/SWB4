@@ -12,9 +12,12 @@ namespace WBOffice4.Steps
     internal partial class SelectVersionToOpen : TSWizards.BaseInteriorStep
     {
         public static readonly String VERSION = "VERSION";        
-        public SelectVersionToOpen()
-        {
-            InitializeComponent();            
+        String type;
+        public SelectVersionToOpen(String type)
+        {           
+            InitializeComponent();
+            this.type = type;
+            
         }
 
         private void SelectVersionToOpen_ShowStep(object sender, TSWizards.ShowStepEventArgs e)
@@ -54,10 +57,10 @@ namespace WBOffice4.Steps
                 VersionInfo version = (VersionInfo)this.listView1.SelectedItems[0].Tag;
                 String name = null;
                 try
-                {
-                    name = OfficeApplication.OfficeDocumentProxy.createPreview(repository, version.contentId, version.nameOfVersion);
+                {                    
+                    name = OfficeApplication.OfficeDocumentProxy.createPreview(repository, version.contentId, version.nameOfVersion,type);
                     String urlproxy = OfficeApplication.OfficeDocumentProxy.WebAddress.ToString();
-                    Uri url = new Uri(urlproxy + "?contentId=" + version.contentId + "&versionName=" + version.nameOfVersion + "&repositoryName=" + repository + "&name=" + name);
+                    Uri url = new Uri(urlproxy + "?contentId=" + version.contentId + "&versionName=" + version.nameOfVersion + "&repositoryName=" + repository + "&name=" + name + "&type=" + type);
                     String title = OfficeApplication.OfficeDocumentProxy.getTitle(repository, version.contentId);
                     FormPreview formPreview = new FormPreview(url,false,title);
                     formPreview.ShowDialog(this);                    
