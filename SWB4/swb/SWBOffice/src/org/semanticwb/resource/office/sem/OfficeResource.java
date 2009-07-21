@@ -146,8 +146,21 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                     ZipEntry entry = (ZipEntry) entries.nextElement();
                     if (!entry.isDirectory())
                     {
+                        /*InputStream inEntry = zip.getInputStream(entry);
+                        int pos=file.lastIndexOf("/");
+                        if(pos!=-1)
+                        {
+                            file=file.substring(pos+1);
+                        }
+                        SWBPlatform.writeFileToWorkPath(dir + "/" + entry.getName(), inEntry, "");*/
                         InputStream inEntry = zip.getInputStream(entry);
-                        SWBPlatform.writeFileToWorkPath(dir + "/" + entry.getName(), inEntry, "");
+                        String file=entry.getName();
+                        int pos=file.lastIndexOf("/");
+                        if(pos!=-1)
+                        {
+                            file=file.substring(pos+1);
+                        }
+                        SWBPlatform.writeFileToWorkPath(dir + "/" + file, inEntry, "");
                     }
                 }
                 zip.close();
