@@ -1353,7 +1353,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    public String createPreview(String repositoryName, String contentId, String version,type) throws Exception
+    public String createPreview(String repositoryName, String contentId, String version,String type) throws Exception
     {
         String name = UUID.randomUUID().toString();
         String dir = "/" + name;
