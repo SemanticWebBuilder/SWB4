@@ -40,6 +40,7 @@ public class SWBSparqlTranslator {
     private int errCode = 0;    //Last error code
     private SWBSpellChecker speller = null;
     private boolean emptyQuery = false;
+    private String subject = "";
 
     /**
      * Creates a new instance of SWBSparqlTranslator with the given SWBLexicon.
@@ -57,6 +58,14 @@ public class SWBSparqlTranslator {
      */
     public boolean isEmptyQuery() {
         return emptyQuery;
+    }
+
+    /**
+     * Gets the main subject of the query, that is, the object that contains
+     * properties.
+     */
+    public String getSubject() {
+        return subject;
     }
 
     /**
@@ -408,6 +417,7 @@ public class SWBSparqlTranslator {
                 } else if (t.getText().equals("OFFSET")) {
                     limitoff = limitoff + " OFFSET " + t.getChild(0).getText() + "\n";
                 } else {
+                    subject = t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "");
                     if (hasPrede) {
                         if (hasPrecon) {
                             varList += getVarList((CommonTree) t.getChild(1), t.getText());
@@ -417,7 +427,11 @@ public class SWBSparqlTranslator {
                     } else {
                         varList = varList + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "");
                     }
-                    res = res + varList + "\nWHERE \n{\n";
+                    if (!varList.contains(subject)) {
+                        res = res + "?" + subject + " " + varList + "\nWHERE \n{\n";
+                    } else {
+                        res = res + varList + "\nWHERE \n{\n";
+                    }
                     String etype = lex.getObjWordTag(t.getText()).getType();
                     if (!etype.equals("")) {
                         patterns = patterns + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + etype + ".\n";
