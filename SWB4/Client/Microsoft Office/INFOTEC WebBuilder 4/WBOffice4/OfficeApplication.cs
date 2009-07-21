@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using XmlRpcLibrary;
 using WBOffice4.Interfaces;
 using System.Globalization;
+using System.Diagnostics;
 using System.Net;
 
 
@@ -317,8 +318,16 @@ namespace WBOffice4
         }
         public static void ShowHelp()
         {
-            AboutBox frmAbout = new AboutBox();
-            frmAbout.ShowDialog();
+            try
+            {
+                System.Diagnostics.Process.Start("explorer.exe", "\"http://www.semanticwebbuilder.org.mx/OS/wb/COSWB/documentation\"");
+
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine(err.Message);
+            }
+
         }
         public static void ShowAbout()
         {
