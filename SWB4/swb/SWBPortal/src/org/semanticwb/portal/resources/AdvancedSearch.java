@@ -49,34 +49,6 @@ public class AdvancedSearch extends GenericAdmResource {
     public AdvancedSearch() {
     }
 
-    /*@Override
-    public void setResourceBase(Resource base) throws SWBResourceException {
-        try {
-            super.setResourceBase(base);
-        } catch(Exception e) {
-            log.error("Error while setting resource base: " + base.getId() +
-                    "-" + base.getTitle(), e);
-        }
-
-        if(!base.getAttribute("template","").trim().equals("")) {
-            try {
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPlatform.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
-                path= SWBPlatform.getWebWorkPath() +  base.getWorkPath() + "/";
-            } catch (Exception e) {
-                log.error("Error while loading resource template: " + base.getId(), e);
-            }
-        }
-
-        if(tpl == null)
-        {
-            try {
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/Search/Search.xslt"));
-            } catch(Exception e) {
-                log.error("Error while loading default resource template: " + base.getId(), e);
-            }
-        }
-    }*/
-
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
