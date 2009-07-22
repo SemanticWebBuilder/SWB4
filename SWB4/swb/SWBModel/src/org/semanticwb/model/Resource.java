@@ -257,11 +257,28 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
     }
 
     /**
+     * @param key
+     */
+    public String getData(String key)
+    {
+        return getProperty("data/"+key);
+    }
+    
+
+    /**
      * @param data
      * @throws AFException  */
     public void setData(String data)
     {
         setProperty("data", data);
+    }
+
+    /**
+     * @param data
+     * @throws AFException  */
+    public void setData(String key, String data)
+    {
+        setProperty("data/"+key, data);
     }
 
     /**
