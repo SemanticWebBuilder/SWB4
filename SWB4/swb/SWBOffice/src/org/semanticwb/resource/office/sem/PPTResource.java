@@ -35,7 +35,12 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
     {
         try
         {
-            out.write("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">" + paramReq.getLocaleString("frameNotsupport") + "</iframe>");
+            out.write("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">" + paramReq.getLocaleString("frameNotsupport") + "</iframe><br>");
+            if(this.isShowDownload())
+            {
+
+                out.write("<p><a href=''>"+paramReq.getLocaleString("download")+"</a></p>");
+            }
         }
         catch (Exception e)
         {
@@ -46,6 +51,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+
         String version = getVersionToShow();
         String contentId = getContent();
         String repositoryName = getRepositoryName();
