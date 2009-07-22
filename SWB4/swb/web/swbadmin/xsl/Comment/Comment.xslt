@@ -3,7 +3,8 @@
 <xsl:output method="html" encoding="ISO-8859-1"/>
 <xsl:template match="/form">
 	<LINK href="{@path}swb-estilo.css" rel="stylesheet" type="text/css"></LINK>
-	<DIV id="swb-comentar">
+    <xsl:value-of select="@styleClass" disable-output-escaping="yes" />
+	<DIV class="swb-comentar">
 	<xsl:choose>
 		<xsl:when test="@email ='1'">
                     <h1><xsl:value-of select="site" /></h1>
@@ -135,5 +136,6 @@
 		</xsl:otherwise>
 	</xsl:choose>
 	</DIV>
+	<xsl:value-of select="@styleClassClose" disable-output-escaping="yes" />
 </xsl:template>
 </xsl:stylesheet>

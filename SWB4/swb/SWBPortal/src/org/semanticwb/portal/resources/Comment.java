@@ -31,6 +31,7 @@
 package org.semanticwb.portal.resources;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -162,6 +163,11 @@ public class Comment extends GenericResource {
                 root.setAttribute("path",
                         SWBPlatform.getContextPath() + "/swbadmin/css/");
                 root.setAttribute("accion", url.toString());
+                root.setAttribute("styleClass",
+                        base.getAttribute("styleClass", "").equals("")
+                        ? "<div>"
+                        : "<div class=\"" + base.getAttribute("styleClass", "") + "\">");
+                root.setAttribute("styleClassClose", "</div>");
                 dom.appendChild(root);
                 Element emn = null;
                 
@@ -192,11 +198,6 @@ public class Comment extends GenericResource {
                 }
 
                 emn = dom.createElement("ftext");
-                emn.setAttribute("styleClass",
-                        base.getAttribute("styleClass", "").equals("")
-                        ? ""
-                        : " class=\"" + base.getAttribute("styleClass", "") + "\"");
-                emn.setAttribute("styleClassClose", "</div>");
                 emn.setAttribute("tag", reqParams.getLocaleString("msgName"));
                 emn.setAttribute("inname", "txtFromName");
                 if (user.isSigned()) {
@@ -668,6 +669,7 @@ public class Comment extends GenericResource {
         } else {
             try {
                 Document dom = getDom(request, response, reqParams);
+                String generateLog = base.getAttribute("generatelog", "");
                 
                 if (dom != null) {
                     ret.append(SWBUtils.XML.transformDom(tpl, dom));
@@ -687,8 +689,6 @@ public class Comment extends GenericResource {
                         ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
                         aAddress.add(address1);
                         
-                        //TODO: Quitar la siguiente linea para ambientes de produccion
-                        SWBUtils.EMAIL.setSMTPServer("webmail.infotec.com.mx");
                         if ((from != null && to != null && subject != null)
                                 && (SWBUtils.EMAIL.sendMail(from, fromname, aAddress,
                                         null, null, subject, "HTML",
@@ -709,7 +709,7 @@ public class Comment extends GenericResource {
                             ret.append("\nhistory.go(-1);");
                             ret.append("\n</script>");
                         }
-                        if (mailSent) {
+                        if (mailSent && generateLog.length() > 0) {
                             try {
                                 feedCommentLog(dom, reqParams.getUser());
                             } catch (Exception e) {
@@ -1739,6 +1739,7 @@ public class Comment extends GenericResource {
                 + "/Comment.log";
         StringBuilder toLog = new StringBuilder(500);
         Date now = new Date();
+        NodeList nl = null;
 
         toLog.append(SWBUtils.TEXT.iso8601DateFormat(now));
         
@@ -1760,25 +1761,38 @@ public class Comment extends GenericResource {
         
 /*        toLog.append("\n    Site:" + dom.getElementsByTagName("site").item(
                                 0).getFirstChild().getNodeValue()); */
-        toLog.append("\n    From:" + dom.getElementsByTagName("fromname").item(
-                                0).getFirstChild().getNodeValue());
-        toLog.append("<" + dom.getElementsByTagName("fromemail").item(
-                                0).getFirstChild().getNodeValue() + ">");
+        nl = dom.getElementsByTagName("fromname");
+        toLog.append("\n    From:" + (nl != null && nl.getLength() > 0
+                ? nl.item(0).getFirstChild().getNodeValue() : ""));
+        nl = dom.getElementsByTagName("fromemail");
+        if (nl != null && nl.getLength() > 0) {
+            toLog.append("<" + nl.item(0).getFirstChild().getNodeValue() + ">");
+        }
 /*        toLog.append("\n    To:" + dom.getElementsByTagName("responsable").item(
                                 0).getFirstChild().getNodeValue());
         toLog.append("<" + dom.getElementsByTagName("toemail").item(
                                 0).getFirstChild().getNodeValue() + ">"); */
-        toLog.append("\n    Subject:" + dom.getElementsByTagName("subject").item(
-                                0).getFirstChild().getNodeValue());
+        nl = dom.getElementsByTagName("subject");
+        toLog.append("\n    Subject:" + (nl != null && nl.getLength() > 0
+                ? nl.item(0).getFirstChild().getNodeValue() : ""));
 /*        toLog.append("\n    Area:" + dom.getElementsByTagName("area").item(
                                 0).getFirstChild().getNodeValue()); */
-        toLog.append("\n    Phone:" + dom.getElementsByTagName("phone").item(
-                                0).getFirstChild().getNodeValue());
-        toLog.append("\n    Fax:" + dom.getElementsByTagName("fax").item(
-                                0).getFirstChild().getNodeValue());
-        toLog.append("\n    Message:" + dom.getElementsByTagName("message").item(
-                                0).getFirstChild().getNodeValue());
+        nl = dom.getElementsByTagName("phone");
+        System.out.println("nl = " + nl.toString() + ", elementos:" + nl.getLength());
+        toLog.append("\n    Phone:" + (nl != null && nl.getLength() > 0
+                ? nl.item(0).getFirstChild().getNodeValue() : ""));
+        nl = dom.getElementsByTagName("fax");
+        toLog.append("\n    Fax:" + (nl != null && nl.getLength() > 0
+                ? nl.item(0).getFirstChild().getNodeValue() : ""));
+        nl = dom.getElementsByTagName("message");
+        toLog.append("\n    Message:" + (nl != null && nl.getLength() > 0
+                ? nl.item(0).getFirstChild().getNodeValue() : ""));
         toLog.append("\n");
+
+        File file = new File(SWBPlatform.getWorkPath() + base.getWorkPath());
+        if (!file.exists()) {
+            file.mkdirs();
+        }
         SWBUtils.IO.log2File(logPath, toLog.toString());
     }
 }

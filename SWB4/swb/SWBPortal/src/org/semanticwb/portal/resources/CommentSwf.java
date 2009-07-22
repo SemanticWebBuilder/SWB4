@@ -123,8 +123,8 @@ public class CommentSwf extends Comment {
                 root.setAttribute("accion", url.toString());
                 root.setAttribute("styleClass",
                         base.getAttribute("styleClass", "").equals("")
-                        ? ""
-                        : " class=\"" + base.getAttribute("styleClass", "") + "\"");
+                        ? "<div>"
+                        : "<div class=\"" + base.getAttribute("styleClass", "") + "\">");
                 root.setAttribute("styleClassClose", "</div>");
                 if (!"".equals(base.getAttribute("swf", "").trim())) {
                     String strSwfvar = "accion=" + url.toString();
