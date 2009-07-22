@@ -651,7 +651,7 @@ public class SemanticSearch extends GenericAdmResource {
 
         tr = new SWBSparqlTranslator(lex);
         long time = System.currentTimeMillis();
-        String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query);
+        String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query, false);
         System.out.println("\n+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
         System.out.println(sparqlQuery);
         String errCount = Integer.toString(tr.getErrCode());
