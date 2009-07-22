@@ -131,6 +131,9 @@ public class AdvancedSearch extends GenericAdmResource {
                                     } else {
                                         segment.append("<b><font size=\"2\" face=\"verdana\">" +
                                                 so.getDisplayName(lang) + "</b></font>" + "<br>");
+                                        if (rs.getResultVars().size() == 1) {
+                                            segment.append(buildAbstract(so));
+                                        }
                                     }
                                 } else {
                                     segment.append("<b><font size=\"2\" face=\"verdana\">" +
@@ -672,8 +675,7 @@ public class AdvancedSearch extends GenericAdmResource {
         SWBResourceURL rUrl = paramRequest.getRenderUrl().setMode("PAGE");
         PrintWriter out = response.getWriter();
         StringBuffer sbf = new StringBuffer();
-        String page = request.getParameter("s");
-
+        
         if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
             sbf.append("<script type=\"text/javascript\">\n" +
                     "function openMap(loc, title, args) {\n" +
@@ -686,31 +688,74 @@ public class AdvancedSearch extends GenericAdmResource {
                     "        <td align=\"left\" width=\"100%\">\n" +
                     "          <font size=\"2\" face=\"verdana\">" +
                     paramRequest.getLocaleString("msgResults") +
-                    "<b><font color=\"#0000FF\"> " + queryString + "</font></b><br/></font>\n" +
-                    "          <hr color=\"#16458D\" width=\"100%\" size=\"1\" /><BR/>\n");
-
-            page = (page == null) ? "1" : page;
-            System.out.println("Mostrando página " + page);
+                    "<b><font color=\"#0000FF\"> " + queryString + "</font></b><br/></font>\n");
+                    
 
             if (solutions != null && solutions.size() > 0) {
-                for (String s : solutions) {
-                    sbf.append(s);
+                int step = 10;
+                String page = request.getParameter("p");
+                int _start = 0;
+                int _end = 0;
+
+                if (page == null) {
+                    page = "1";
                 }
+                
+                _start = step * (Integer.valueOf(page) - 1);
+                _end = _start + step - 1;
+                if (_end > solutions.size() - 1) {
+                    _end = solutions.size() - 1;
+                }
+
+                //System.out.println("page: " + page + ", start: " + _start + ", end: " + _end);
+
+                sbf.append("Mostrando resultados " + (_start + 1) + " - " + (_end + 1) + " de " + solutions.size() + "<br>" +
+                        "          <hr color=\"#16458D\" width=\"100%\" size=\"1\" /><BR/>\n");
+
+                for (int i = _start; i <= _end; i++) {
+                     sbf.append(solutions.get(i));
+                }
+
+                double pages = Math.ceil((double)solutions.size() / (double)step);
+                for (int i = 1; i <= pages; i++) {
+                    _start = step * (i - 1);
+                    if ((_start + step) - 1 > solutions.size() - 1) {
+                        _end = solutions.size() - 1;
+                    } else {
+                        _end = (_start + step) - 1;
+                    }
+                    if (Integer.valueOf(page) == i) {
+                        sbf.append("<span>" + i + "</span> ");
+                    } else {
+                        rUrl = paramRequest.getRenderUrl().setMode("PAGE");
+                        rUrl.setParameter("p", String.valueOf(i));
+                        sbf.append("<a href =\""+ rUrl +"\">"+ i +"</a> ");
+                    }
+                }
+                rUrl = paramRequest.getRenderUrl().setMode("PAGE");
+                rUrl.setParameter("p", String.valueOf(Integer.valueOf(page) + 1));
+                sbf.append("<a href=" + rUrl + ">" + paramRequest.getLocaleString("lblNext") + "</a>\n" +
+                        "<hr width=\"100%\" size=\"1\" /><br/>\n");
             } else {
+                sbf.append("          <hr color=\"#16458D\" width=\"100%\" size=\"1\" /><BR/>\n");
                 sbf.append("<font size=\"2\" face=\"verdana\" color=\"red\"><b>" +
                         paramRequest.getLocaleString("msgNoResults") + "</b><br/></font>" +
                         (dym.equals("") ? "" : "<font size=\"2\" face=\"verdana\">" +
-                        paramRequest.getLocaleString("msgDidYouMean") + " </font><b>" + dym + "</b><br/>"));
+                        paramRequest.getLocaleString("msgDidYouMean") + " </font><b>" + dym + "</b><br/>" +
+                "    <hr width=\"100%\" size=\"1\" /><br/>\n"));
             }
 
             sbf.append("        </td>\n" +
                     "      </tr>\n" +
                     "    </table>\n" +
                     "    <BR/>\n" +
-                    "    <hr width=\"100%\" size=\"1\" /><br/>\n");
+                    "<img src=\"http://maps.google.com/staticmap?center=47.238336,8.827171&zoom=12&size=100x100&" +
+                    "markers=47.238336,8.827171,blues%7C40.711614,-74.012318,greeng&key=\">");
 
-            rUrl.setParameter("s", String.valueOf(Integer.valueOf(page) + 1));
-            sbf.append("<a href=\"" + rUrl + "\">Siguiente</a>");
+
+
+            //rUrl.setParameter("p", String.valueOf(Integer.valueOf(page) + 1));
+            //sbf.append("<a href=\"" + rUrl + "\">Siguiente</a>");
             out.println(sbf.toString());
         } else {
             doView(request, response, paramRequest);
