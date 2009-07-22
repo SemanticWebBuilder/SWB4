@@ -21,8 +21,8 @@ import org.semanticwb.platform.SemanticProperty;
  * (AST) of a sentence obtained with the antlr generated parser ({@link ComplexParser})
  * in order to build a structured SparQl query.
  *
- * Un traductor de consultas en lenguaje natural a consultas SparQl. Usa el árbol
- * de sintaxis abstracta (AST) de una oración obtenido con el analizador generado
+ * Un traductor de consultas en lenguaje natural a consultas SparQl. Usa el √°rbol
+ * de sintaxis abstracta (AST) de una oraci√≥n obtenido con el analizador generado
  * por antlr ({@link ComplexParser}) para construir una consulta SparQl
  * estructurada.
  *
@@ -395,7 +395,7 @@ public class SWBSparqlTranslator {
      * Indica si el AST contiene una preposición DE.
      * @return String of a SparQL query fragment. Fragmento de consulta SparQl.
      */
-    private String processSelectQuery(CommonTree root, boolean hasPrecon, boolean hasPrede) {
+    private String processSelectQuery(CommonTree root, boolean hasPrecon, boolean hasPrede, boolean subjectRequired) {
         String limitoff = "";
         String order = "";
         String res = "";
@@ -427,7 +427,7 @@ public class SWBSparqlTranslator {
                     } else {
                         varList = varList + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "");
                     }
-                    if (!varList.contains(subject)) {
+                    if (!varList.contains(subject) && subjectRequired) {
                         res = res + "?" + subject + " " + varList + "\nWHERE \n{\n";
                     } else {
                         res = res + varList + "\nWHERE \n{\n";
@@ -559,7 +559,7 @@ public class SWBSparqlTranslator {
      * Oración en lenguaje natural restringido para la consulta.
      * @return SparQL query sentence. Sentencia de la consulta SparQl.
      */
-    public String translateSentence(String sent) {
+    public String translateSentence(String sent, boolean sRequired) {
         String res = "";
         CommonTree sTree = null;
         input = new ANTLRStringStream(sent);
@@ -573,7 +573,7 @@ public class SWBSparqlTranslator {
                 sTree = (CommonTree) qres.getTree();
                 fixNames(sTree);
                 //traverseAST(sTree, "");
-                res += processSelectQuery(sTree, parser.hasPrecon(), parser.hasPrede());
+                res += processSelectQuery(sTree, parser.hasPrecon(), parser.hasPrede(), sRequired);
                 //System.out.println(res);
                 return res;
             } else {
