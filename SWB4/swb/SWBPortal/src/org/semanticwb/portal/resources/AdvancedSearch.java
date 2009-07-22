@@ -394,40 +394,53 @@ public class AdvancedSearch extends GenericAdmResource {
                 "        }\n" +
                 "      }\n");
 
-        sbf.append("      function getPreviousName (word) {\n" +
-                "        var pName = \"\";\n" +
-                "        var prevBrk = -1;\n" +
-                "        var firstBrk = -1;\n" +
-                "        var txt = dojo.byId('naturalQuery').value;\n" +
-                "        var cPos = word.startP;\n" +
-                "        var wd = null;\n" +
-                "        var wo = \"undefined\";\n" +
-                "        var found = false;" +
-                "        for (var i = cPos; i >= 0 && !found; i--) {\n" +
-                "          if (txt.charAt(i) == ']' || txt.charAt(i) == ' ') {\n" +
-                "            prevBrk = i;\n" +
-                "            found = true;\n" +
-                "          }\n" +
+        sbf.append("  function getPreviousName (word) {\n" +
+                "    var pName = \"\";\n" +
+                "    var prevBrk = -1;\n" +
+                "    var firstBrk = -1;\n" +
+                "    var brkFound = false;" +
+                "    var txt = dojo.byId('naturalQuery').value;\n" +
+                "    var cPos = word.startP;\n" +
+                "    var wd = null;\n" +
+                "    var wo = \"undefined\";\n" +
+                "    var found = false;\n" +
+                "    for (var i = cPos; i >= 0 && !found; i--) {\n" +
+                "      if (txt.charAt(i) == ']' || txt.charAt(i) == ' ') {\n" +
+                "        if (txt.charAt(i) == ']') {" +
+                "          brkFound = true;" +
+                "        }" +
+                "        prevBrk = i;\n" +
+                "        found = true;\n" +
+                "      }\n" +
+                "    }\n" +
+                "    found = false;\n" +
+                "    if (brkFound) {\n" +
+                "      for (i = prevBrk - 1; i > 0 && !found; i--) {\n" +
+                "        if (brkFound && txt.charAt(i) == '[') {\n" +
+                "          firstBrk = i;\n" +
+                "          found = true;\n" +
                 "        }\n" +
-                "        found = false;\n" +
-                "        for (i = prevBrk - 1; i > 0 && !found; i--) {\n" +
-                "          if (txt.charAt(i) == '[' || txt.charAt(i) == ' ') {\n" +
-                "            firstBrk = i;\n" +
-                "            found = true;\n" +
-                "          }\n" +
+                "      }\n" +
+                "    } else {\n" +
+                "      for (i = prevBrk - 1; i > 0 && !found; i--) {\n" +
+                "        if (brkFound && txt.charAt(i) == ' ') {\n" +
+                "          firstBrk = i;\n" +
+                "          found = true;\n" +
                 "        }\n" +
-                "        if (prevBrk == -1) {\n" +
-                "          return wo;\n" +
-                "        }\n" +
-                "        firstBrk++;\n" +
-                "        wd = txt.substring((firstBrk==0)?++firstBrk:firstBrk, prevBrk);\n" +
-                "        wo = {\n" +
-                "          word: wd,\n" +
-                "          startP: firstBrk,\n" +
-                "          endP: prevBrk\n" +
-                "        };\n" +
-                "        return wo;\n" +
-                "      }\n");
+                "      }\n" +
+                "    }\n" +
+                "    if (prevBrk == -1) {\n" +
+                "      return wo;\n" +
+                "    }\n" +
+                //"    firstBrk++;\n" +
+                "    wd = txt.substring((firstBrk==0)?++firstBrk:firstBrk, prevBrk);\n" +
+                "    wo = {\n" +
+                "      word: wd,\n" +
+                "      startP: firstBrk,\n" +
+                "      endP: prevBrk\n" +
+                "    };\n" +
+                "    return wo;\n" +
+                "  }\n\n");
         /**
          * Replaces the current word in the textarea with the selected word from the
          * suggestions list.
