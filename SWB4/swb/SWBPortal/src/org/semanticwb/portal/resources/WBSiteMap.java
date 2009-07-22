@@ -305,14 +305,6 @@ public class WBSiteMap extends GenericAdmResource
         }
 
         public String renderXHTMLFirstTime(HashMap request) throws SWBResourceException, IOException {
-
-            System.out.println("website="+website);
-            System.out.println("url="+url);
-            System.out.println("openOnClick="+openOnClick);
-            System.out.println("level="+level);
-            System.out.println("title="+title);
-
-
             StringBuilder html = new StringBuilder();
             StringBuilder params = new StringBuilder("&site="+website);
             String whoOpen = "";
@@ -341,25 +333,17 @@ public class WBSiteMap extends GenericAdmResource
                 }
 
                 WebSite tmit = SWBContext.getWebSite(website);
-                System.out.println("tmit.getId()="+tmit.getId());
                 WebPage tmhome=tmit.getHomePage();
-                System.out.println("tmhome.getId()="+tmhome.getId());
 
                 boolean opened = Boolean.parseBoolean(request.get(tmhome.getId())==null?"false":((String)request.get(tmhome.getId())).equals("1")?"true":"false");
                 if(level>0) {
                     opened=true;
                 }
-
-                System.out.println("\n\n**********width="+width);
-                System.out.println("**********height="+height);
-
                 html.append("<div class=\"swb-mapa\" id=\"tree_"+website+"\" style=\"");
                 if(width!=null) {
-                    System.out.println("width...");
                     html.append("width:"+width+";");
                 }
                 if(height!=null) {
-                    System.out.println("height...");
                     html.append("height:"+height+";");
                 }
                 html.append("\" >");
@@ -412,7 +396,6 @@ public class WBSiteMap extends GenericAdmResource
             }
             catch(Exception e) {
                 log.error("Error on method WebSiteSectionTree.render()", e);
-                System.out.println(e);
                 html.append("\n\nError:"+e);
             }
             return html.toString();
@@ -446,18 +429,15 @@ public class WBSiteMap extends GenericAdmResource
                 WebPage tmhome=tmit.getHomePage();
 
                 boolean opened = Boolean.parseBoolean(request.get(tmhome.getId())==null?"false":((String)request.get(tmhome.getId())).equals("1")?"true":"false");
-                if(level>0)opened=true;
-
-                System.out.println("\n\n**********width="+width);
-                System.out.println("**********height="+height);
+                if(level>0) {
+                    opened=true;
+                }
 
                 html.append("<div class=\"swb-mapa\" id=\"tree_"+website+"\" style=\"");
                 if(width!=null) {
-                    System.out.println("width...");
                     html.append("width:"+width+";");
                 }
                 if(height!=null) {
-                    System.out.println("height...");
                     html.append("height:"+height+";");
                 }
                 html.append("\" >");
