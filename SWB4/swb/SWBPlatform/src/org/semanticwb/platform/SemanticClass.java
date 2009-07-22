@@ -90,6 +90,7 @@ public class SemanticClass
             Property prop=(Property)i.next();
             x++;
             SemanticProperty p=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(prop);
+            //System.out.println("cls:"+this+" prop:"+prop+" name:"+p.isUsedAsName()+" he:"+p.isHeraquicalRelation()+" inv:"+p.isInverseHeraquicalRelation()+" dom:"+p.getDomainClass());
             if(p.isUsedAsName())displayNameProperty=p;
             if(p.isHeraquicalRelation())herarquicalProps.add(p);
             if(p.isInverseHeraquicalRelation())inverseHerarquicalProps.add(p);
