@@ -25,10 +25,11 @@ public class SummaryPublish extends javax.swing.JPanel
 {
 
     private String contentId,  repositoryName;
-
+    private String type;
     public SummaryPublish()
     {
         initComponents();
+        this.type=type;
         ListSelectionModel listSelectionModel = jTableSummary1.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
@@ -46,10 +47,12 @@ public class SummaryPublish extends javax.swing.JPanel
         });
     }
 
+
     /** Creates new form SummaryPublish */
-    public SummaryPublish(String contentId, String repositoryName)
+    public SummaryPublish(String contentId, String repositoryName,String type)
     {
         this();
+        this.type=type;
         this.repositoryName = repositoryName;
         this.contentId = contentId;
         loadVersions(contentId, repositoryName);
@@ -57,6 +60,10 @@ public class SummaryPublish extends javax.swing.JPanel
 
     }
 
+    public void setType(String type)
+    {
+        this.type=type;
+    }
     public void loadVersions(String contentId, String repositoryName)
     {
         this.jButtonDelete.setEnabled(false);
@@ -194,12 +201,10 @@ public class SummaryPublish extends javax.swing.JPanel
             String versionInfo = (String) model.getValueAt(this.jTableSummary1.getSelectedRow(), 0);
             String name = null;
             try
-            {
-
-
-                name = OfficeApplication.getOfficeDocumentProxy().createPreview(this.repositoryName, this.contentId, versionInfo);
+            {                
+                name = OfficeApplication.getOfficeDocumentProxy().createPreview(this.repositoryName, this.contentId, versionInfo,type);
                 String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
-                URL url = new URL(urlproxy + "?contentId=" + contentId+ "&versionName=" + versionInfo + "&repositoryName=" + repositoryName + "&name=" + name);
+                URL url = new URL(urlproxy + "?contentId=" + contentId+ "&versionName=" + versionInfo + "&repositoryName=" + repositoryName + "&name=" + name+"&type="+type);
                 String title=OfficeApplication.getOfficeDocumentProxy().getTitle(repositoryName, contentId)+" ("+ versionInfo+") ";
                 DialogPreview dialogPreview = new DialogPreview(url,false,title);
                 dialogPreview.setVisible(true);
