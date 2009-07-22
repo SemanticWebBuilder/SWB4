@@ -12,7 +12,6 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Frame;
 import java.io.InputStream;
-import javax.swing.text.Caret;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
 
 /**
