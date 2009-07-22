@@ -1778,7 +1778,6 @@ public class Comment extends GenericResource {
 /*        toLog.append("\n    Area:" + dom.getElementsByTagName("area").item(
                                 0).getFirstChild().getNodeValue()); */
         nl = dom.getElementsByTagName("phone");
-        System.out.println("nl = " + nl.toString() + ", elementos:" + nl.getLength());
         toLog.append("\n    Phone:" + (nl != null && nl.getLength() > 0
                 ? nl.item(0).getFirstChild().getNodeValue() : ""));
         nl = dom.getElementsByTagName("fax");
