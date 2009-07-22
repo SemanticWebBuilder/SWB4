@@ -29,11 +29,12 @@ public class SelectVersionToOpen extends WizardPage
 {
 
     public static final String VERSION = "version";
-
+    private String type;
     /** Creates new form SelectVersionToOpen */
-    public SelectVersionToOpen()
+    public SelectVersionToOpen(String type)
     {
         initComponents();
+        this.type=type;
         ListSelectionModel listSelectionModel = jTableVersion.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
@@ -180,8 +181,8 @@ private void jButtonViewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
         VersionInfo version = (VersionInfo) model.getValueAt(jTableVersion.getSelectedRow(), 2);
         String name = null;
         try
-        {
-            name = OfficeApplication.getOfficeDocumentProxy().createPreview(workspace, version.contentId, version.nameOfVersion);
+        {            
+            name = OfficeApplication.getOfficeDocumentProxy().createPreview(workspace, version.contentId, version.nameOfVersion,type);
             String urlproxy = OfficeApplication.getOfficeApplicationProxy().getWebAddress().toString();
             if (!urlproxy.endsWith("/gtw"))
             {
@@ -194,7 +195,7 @@ private void jButtonViewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
                     urlproxy += "gtw";
                 }
             }
-            URL url = new URL(urlproxy + "?contentId=" + version.contentId + "&versionName=" + version.nameOfVersion + "&repositoryName=" + workspace + "&name=" + name);
+            URL url = new URL(urlproxy + "?contentId=" + version.contentId + "&versionName=" + version.nameOfVersion + "&repositoryName=" + workspace + "&name=" + name+"&type="+type);
             String title = OfficeApplication.getOfficeDocumentProxy().getTitle(workspace, version.contentId) + " (" + version.nameOfVersion + ") ";
             DialogPreview dialogPreview = new DialogPreview(url, false, title);
             dialogPreview.setVisible(true);
