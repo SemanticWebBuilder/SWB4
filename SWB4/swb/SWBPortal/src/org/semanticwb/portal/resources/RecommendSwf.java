@@ -110,6 +110,13 @@ public class RecommendSwf extends Recommend {
                 Element el = dom.createElement("form");
                 el.setAttribute("path", path);
                 el.setAttribute("accion", url.toString());
+
+                el.setAttribute("styleClass",
+                        base.getAttribute("styleClass", "").equals("")
+                        ? "<div>"
+                        : "<div class=\"" + base.getAttribute("styleClass", "") + "\">");
+                el.setAttribute("styleClassClose", "</div>");
+                
                 if (!"".equals(base.getAttribute("swf", "").trim())) {
                     String strSwfvar = "accion=" + url.toString();
                     el.setAttribute("swf",
@@ -267,6 +274,7 @@ public class RecommendSwf extends Recommend {
                 setAttribute(base, fup, "subject");
                 setAttribute(base, fup, "headermsg");
                 setAttribute(base, fup, "footermsg");
+                setAttribute(base, fup, "styleClass");
 
                 value = (null != fup.getFileName("swf")
                         && !"".equals(fup.getFileName("swf").trim()))
@@ -597,7 +605,7 @@ public class RecommendSwf extends Recommend {
                         + "\"");
             }
             ret.append("</textarea></td> \n");
-            ret.append("</tr> \n");               
+            ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td>" + paramRequest.getLocaleString("msgMessageFooter")
                     + "</td> \n");
@@ -609,6 +617,16 @@ public class RecommendSwf extends Recommend {
                         + "\"");
             }
             ret.append("</textarea></td> \n");
+            ret.append("</tr> \n");
+            ret.append("<tr> \n");
+            ret.append("<td>" + paramRequest.getLocaleString("msgStyleClassName")
+                    + "</td> \n");
+            ret.append("<td>");
+            ret.append("<input type=\"text\" name=\"styleClass\" value=\"");
+            if (!"".equals(base.getAttribute("styleClass", "").trim())) {
+                ret.append(base.getAttribute("styleClass").replaceAll("\"", "&#34;"));
+            }
+            ret.append("\"></td> \n");
             ret.append("</tr> \n");
             ret.append("</table> \n");
             ret.append("</fieldset>");

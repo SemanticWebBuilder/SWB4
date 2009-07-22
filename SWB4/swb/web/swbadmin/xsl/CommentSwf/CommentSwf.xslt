@@ -5,7 +5,8 @@
 	<LINK href="{@path}swb-estilo.css" rel="stylesheet" type="text/css"></LINK>
 	<xsl:choose>
 		<xsl:when test="@email ='1'">
-			<DIV id="swb-comentar">
+            <xsl:value-of select="styleClass" />
+			<DIV class="swb-comentar">
 			<TABLE align="center"> 
 			<TR><TD>
 				<label><BR />
@@ -60,6 +61,7 @@
 			</TD> </TR>
 			</TABLE>
 			</DIV>
+            <xsl:value-of select="styleClassClose" />
 		</xsl:when>
 		<xsl:otherwise>
 			<BODY leftmargin="0" topmargin="0">

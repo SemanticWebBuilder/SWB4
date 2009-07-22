@@ -5,6 +5,8 @@
 	<LINK href="{@path}images/RecommendSwf.css" rel="stylesheet" type="text/css"></LINK>
 	<xsl:choose>
 		<xsl:when test="@email ='1'">
+        <xsl:value-of select="styleClass"/>
+    	<DIV class="swb-recomendar">
 			<TR><TD class="rec_data">
 				<BR/><FONT face="Verdana, Arial, Helvetica, sans-serif" size="2">
 				----------------------------------------------------------------------<BR/>
@@ -36,6 +38,8 @@
 				<xsl:text disable-output-escaping="yes">&lt;/A&gt;</xsl:text>
 				</FONT><BR/><BR/>
 			</TD></TR>
+    	</DIV>
+    	<xsl:value-of select="styleClassClose"/>
 		</xsl:when>
 		<xsl:otherwise>
 			<BODY leftmargin="0" topmargin="0">
