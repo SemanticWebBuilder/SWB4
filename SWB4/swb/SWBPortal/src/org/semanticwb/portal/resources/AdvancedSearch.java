@@ -617,9 +617,10 @@ public class AdvancedSearch extends GenericAdmResource {
                 }
                 sbf.append("</ul>");
             } else {
-                sbf.append("");
+                sbf.append("<font size=\"2\" face=\"verdana\" color=\"red\">" + paramRequest.getLocaleString("msgNoSuggestions") + "</font>");
             }
         } else {
+            System.out.println("Suggesting for " + word);
             String tag = lex.getObjWordTag(word).getObjId();
 
             sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
@@ -722,8 +723,10 @@ public class AdvancedSearch extends GenericAdmResource {
         //Assert query string
         queryString = (queryString == null ? "" : queryString.trim());
 
-        solutions = getResults(queryString);
-        doShowPage(request, response, paramRequest);
+        if (!queryString.equals("")) {
+            solutions = getResults(queryString);
+            doShowPage(request, response, paramRequest);
+        }
     }
 
     public String buildAbstract(SemanticObject o) {
