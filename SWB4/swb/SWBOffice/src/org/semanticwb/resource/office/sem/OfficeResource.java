@@ -129,7 +129,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
 
     }
 
-    public static void loadContent(InputStream in, String dir)
+    public static void loadContent(InputStream in, String dir,String type)
     {
         File zipFile = null;
         try
@@ -155,10 +155,13 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                         SWBPlatform.writeFileToWorkPath(dir + "/" + entry.getName(), inEntry, "");*/
                         InputStream inEntry = zip.getInputStream(entry);
                         String file=entry.getName();
+                        if(!type.equals("excel"))
+                        {
                         int pos=file.lastIndexOf("/");
                         if(pos!=-1)
                         {
                             file=file.substring(pos+1);
+                        }
                         }
                         SWBPlatform.writeFileToWorkPath(dir + "/" + file, inEntry, "");
                     }
