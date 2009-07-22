@@ -122,7 +122,8 @@ public abstract class OfficeServlet extends XMLRPCServlet
         String contentId = request.getParameter("contentId");
         String versionName = request.getParameter("versionName");
         String repositoryName = request.getParameter("repositoryName");
-        if (contentId == null || versionName == null || repositoryName == null)
+        String type = request.getParameter("type");
+        if (contentId == null || versionName == null || repositoryName == null || type == null)
         {
             PrintWriter out = response.getWriter();
             out.println("<html>");
@@ -145,7 +146,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
                 InputStream in = doc.getContent(repositoryName, contentId, versionName);
                 String name=UUID.randomUUID().toString();
                 String dir=SWBPlatform.getWorkPath()+"/"+name;
-                OfficeResource.loadContent(in, dir);
+                OfficeResource.loadContent(in, dir,type);
                 String file = doc.getContentFile(repositoryName, contentId, versionName);
                 if (file != null)
                 {
