@@ -326,7 +326,7 @@ public class GoogleGadget extends GenericResource
         replace(html, "<a href=\"javascript:openAddByUrl();\">", "</a>", "");
 
 
-        int pos = html.indexOf("/ig/f/ZtcZ_UMr1Ww/ig.js");
+        //int pos = html.indexOf("/ig/f/ZtcZ_UMr1Ww/ig.js");
         /*if(pos==-1)
         {
         pos = html.indexOf("/ig/f/s-9mlIkxfvs/ig.js");
@@ -335,18 +335,20 @@ public class GoogleGadget extends GenericResource
         {
         pos = html.indexOf("/ig/f/C0R-Dtev__A/ig.js");
         }*/
-        if (pos == -1)
+        /*if (pos == -1)
         {
             pos = html.indexOf("<script src=\"/ig/f/");
-        }
-        if (pos != -1)
-        {
-            html.insert(pos + 13, GOOGLE_URL);
-            String pathTofound = "\"" + PATH_DIRECTORY;
-            replace(html, pathTofound, "\"");
-            pathTofound = GOOGLE_URL + PATH_DIRECTORY + "?";
+        }*/
+        /*if (pos != -1)
+        {*/
+            //html.insert(pos + 13, GOOGLE_URL);
+            String pathTofound = "\"" + "/gadgets/directory";
+            replace(html, pathTofound, "\"http://www.google.com/gadgets/directory");
+            pathTofound = GOOGLE_URL + "/gadgets/directory" + "?";
             replace(html, pathTofound, "http://" + request.getServerName() + ":" + request.getServerPort() + "" + paramsRequest.getRenderUrl() + "?");
-            replace(html, "_IFPC.call(\"tr_moduleDirectory-iframegoog_1221086410332\", \"pickGadget\", [url], \"/ifpc_relay\", null, null);", "if(confirm('¿Desea agregar este gadget?'))location='" + urlaction + "?url='+url;");
+            //replace(html, "_IFPC.call(\"tr_moduleDirectory-iframegoog_1221086410332\", \"pickGadget\", [url], \"/ifpc_relay\", null, null);", "if(confirm('¿Desea agregar este gadget?'))location='" + urlaction + "?url='+url;");
+            replace(html, "function _addModule(url) {", "}","function _addModule(url) {\r\nif(confirm('¿Desea agregar este gadget?'))location='" + urlaction + "?url='+url;}");
+            
             PrintWriter out = response.getWriter();
             out.println("<div>");
             String urlGadget = this.getResourceBase().getAttribute("url");
@@ -363,11 +365,11 @@ public class GoogleGadget extends GenericResource
             out.println("</div>");
 
             out.close();
-        }
+        /*}
         else
         {
             doAddFromList2(request, response, paramsRequest);
-        }
+        }*/
     }
 
     private Set<URL> getGadgets(String html)
