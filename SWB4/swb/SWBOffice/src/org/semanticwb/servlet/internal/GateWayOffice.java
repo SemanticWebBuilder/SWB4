@@ -132,8 +132,7 @@ public class GateWayOffice implements InternalServlet
             while (read != -1)
             {
                 html.append(new String(buffer, 0, read));
-                read =
-                        inFile.read(buffer);
+                read =inFile.read(buffer);
             }
 
             inFile.close();
@@ -220,8 +219,7 @@ public class GateWayOffice implements InternalServlet
                         OfficeDocument doc = new OfficeDocument();
                         doc.setUser(pUserName);
                         doc.setPassword(pPassword);
-                        dir =
-                                "/" + dir;
+                        dir ="/" + dir;
                         PrintWriter out = response.getWriter();
 
                         try
