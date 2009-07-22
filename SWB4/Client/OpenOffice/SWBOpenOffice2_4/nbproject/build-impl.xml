@@ -189,7 +189,7 @@ is divided into following sections:
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="${javac.debug}" name="debug"/>
-            <attribute default="" name="sourcepath"/>
+            <attribute default="/does/not/exist" name="sourcepath"/>
             <element name="customize" optional="true"/>
             <sequential>
                 <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" executable="${platform.javac}" fork="yes" includeantruntime="false" includes="@{includes}" source="${javac.source}" sourcepath="@{sourcepath}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
@@ -360,6 +360,7 @@ is divided into following sections:
             -->
     <target depends="init" name="deps-jar" unless="no.deps">
         <ant antfile="${project.OfficeComunicationInterfaces-1}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBOfficeComunicationInterfaces}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBOfficeCore}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBOpenOffice2_4Implementation}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.XMLRPCClient-1}/build.xml" inheritall="false" target="jar"/>
@@ -679,6 +680,7 @@ is divided into following sections:
             -->
     <target depends="init" name="deps-clean" unless="no.deps">
         <ant antfile="${project.OfficeComunicationInterfaces-1}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBOfficeComunicationInterfaces}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBOfficeCore}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBOpenOffice2_4Implementation}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.XMLRPCClient-1}/build.xml" inheritall="false" target="clean"/>
