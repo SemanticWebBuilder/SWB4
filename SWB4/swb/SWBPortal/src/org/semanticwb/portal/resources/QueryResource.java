@@ -24,6 +24,7 @@
 
 package org.semanticwb.portal.resources;
 
+
 import java.io.*;
 import java.sql.*;
 import javax.servlet.http.*;
@@ -38,6 +39,7 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+
 /** Despliega el resultado de un query proporcionado por el usuario.
  *
  * Displays results of a database query provided by the user.
@@ -46,6 +48,8 @@ import org.semanticwb.portal.api.SWBResourceException;
  * @version 1.1
  */
 public class QueryResource extends GenericAdmResource {
+
+
     private javax.xml.transform.Templates tpl;
 
     /**
@@ -53,6 +57,7 @@ public class QueryResource extends GenericAdmResource {
      */
     /*private String xml;*/
     String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/QueryResource/";
+
     private static Logger log = SWBUtils.getLogger(QueryResource.class);
     
     @Override
@@ -69,6 +74,7 @@ public class QueryResource extends GenericAdmResource {
     
     @Override
     public void setResourceBase(Resource base) {
+
         try {
             super.setResourceBase(base);
         } catch(Exception e) {
@@ -129,6 +135,14 @@ public class QueryResource extends GenericAdmResource {
                         ? ":" + request.getServerPort()
                         : "")
                         + SWBPlatform.getContextPath() + "/swbadmin/css/");
+                equery.setAttribute("styleClass",
+                        base.getAttribute("styleClass", "").equals("")
+                        ? ""
+                        : "<div class=\"" + base.getAttribute("styleClass", "") + "\">");
+                equery.setAttribute("styleClassClose",
+                        base.getAttribute("styleClass", "").equals("")
+                        ? ""
+                        : "</div>");
                 addElem(doc, equery, "title", base.getTitle());
                 addElem(doc, equery, "description", base.getDescription());
                 Connection con = null;
@@ -173,6 +187,7 @@ public class QueryResource extends GenericAdmResource {
                         "error_QueryResource_getDom"), e);
             }
         }
+//        System.out.println("doc generado:" + SWBUtils.XML.domToXml(doc));
         return doc;
     }
 
@@ -188,7 +203,10 @@ public class QueryResource extends GenericAdmResource {
      * @throws IOException if streaming causes an I/O problem.
      */    
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {        
+    public void doView(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramsRequest)
+            throws SWBResourceException, IOException {
+
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         PrintWriter out = new PrintWriter(bout);
         try {
@@ -258,6 +276,7 @@ public class QueryResource extends GenericAdmResource {
         int a = 0;
         int i = 0;
         int f = 0;
+
         while ((i = query.indexOf("{", a)) > -1) {
             ret += query.substring(a, i);
             if ((f = query.indexOf("}", i)) > -1) {
@@ -293,7 +312,9 @@ public class QueryResource extends GenericAdmResource {
         return ret;
     }
     
-    public void doExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+    public void doExcel(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramsRequest)
+            throws SWBResourceException, IOException {
         
         request.setAttribute("excelFile", "yes");
         doView(request, response, paramsRequest);

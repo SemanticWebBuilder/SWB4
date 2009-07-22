@@ -41,6 +41,7 @@
                filetype="xsl|xslt"
                isshowfiletype="true"
                size="40"/>
+            <input type="text" name="styleClass" label="Nombre de grupo de estilos:" moreattr="class=&#34;datos&#34;"/>
                </fieldset>
                <fieldset>
         <input type="SUBMIT" name="btnSave" value="Guardar"/>
