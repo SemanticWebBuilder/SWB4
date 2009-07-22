@@ -77,7 +77,7 @@ public class PublishResultProducer implements WizardResultProducer
                         document.publish(title,description,null);
                     }
                 }
-                Summary summary = Summary.create(new SummaryPublish(contentID, repositoryName), null);
+                Summary summary = Summary.create(new SummaryPublish(contentID, repositoryName,document.getDocumentType().toString().toUpperCase()), null);
                 progress.finished(summary);
             }
             catch (Exception e)
