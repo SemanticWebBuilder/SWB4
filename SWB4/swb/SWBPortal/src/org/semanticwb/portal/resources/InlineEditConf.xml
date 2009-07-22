@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>InlineEdit</resource-name>
+        <display-name xml:lang="es">Editor en linea</display-name>
+        <display-name xml:lang="en">In line Edit</display-name>
+        <description xml:lang="es">Editor en linea</description>
+        <description xml:lang="en">In line Edit</description>
+        <resource-class>org.semanticwb.portal.resources.InlineEdit</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>org.semanticwb.portal.resources.InlineEdit</resource-bundle>
+        <resource-type>2</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
