@@ -53,11 +53,13 @@ public final class wb4writeraddon extends WeakBase
     }
 
     // com.sun.star.lang.XServiceInfo:
+    @Override
     public String getImplementationName()
     {
         return m_implementationName;
     }
 
+    @Override
     public boolean supportsService(String sService)
     {
         int len = m_serviceNames.length;
@@ -71,7 +73,7 @@ public final class wb4writeraddon extends WeakBase
         }
         return false;
     }
-
+    @Override
     public String[] getSupportedServiceNames()
     {
         return m_serviceNames;
@@ -82,147 +84,154 @@ public final class wb4writeraddon extends WeakBase
             String sTargetFrameName,
             int iSearchFlags)
     {
-
-        if (aURL.Protocol.compareTo("org.semanticwb.openoffice.writer.wb4writeraddon:") == 0)
+        try
         {
-
-            try
+            if (aURL.Protocol.compareTo("org.semanticwb.openoffice.writer.wb4writeraddon:") == 0)
             {
-                OfficeDocument document = new WB4Writer(this.m_xContext);
-                if (aURL.Path.compareTo("save") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("open") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("publish") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                if (aURL.Path.compareTo("delete") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                if (aURL.Path.compareTo("view") == 0)
-                {
-                    if (document.isPublicated())
-                    {
-                        return this;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                if (aURL.Path.compareTo("information") == 0)
-                {
 
-                    if (document.isPublicated())
+                try
+                {
+                    OfficeDocument document = new WB4Writer(this.m_xContext);
+                    if (aURL.Path.compareTo("save") == 0)
                     {
                         return this;
                     }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                if (aURL.Path.compareTo("rules") == 0)
-                {
-                    if (document.isPublicated())
+                    if (aURL.Path.compareTo("open") == 0)
                     {
                         return this;
                     }
-                    else
+                    if (aURL.Path.compareTo("publish") == 0)
                     {
-                        return null;
+                        if (document.isPublicated())
+                        {
+                            return this;
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     }
-                }
-                if (aURL.Path.compareTo("showDocumentsToAuthorize") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("deleteAssociation") == 0)
-                {
-                    if (document.isPublicated())
+                    if (aURL.Path.compareTo("delete") == 0)
                     {
-                        return this;
+                        if (document.isPublicated())
+                        {
+                            return this;
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     }
-                    else
+                    if (aURL.Path.compareTo("view") == 0)
                     {
-                        return null;
+                        if (document.isPublicated())
+                        {
+                            return this;
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     }
-                }
-                if (aURL.Path.compareTo("addLink") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("createSection") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("changePassword") == 0)
-                {
-                    if (WB4WriterApplication.isLogged())
+                    if (aURL.Path.compareTo("information") == 0)
                     {
-                        return this;
-                    }
-                }
-                if (aURL.Path.compareTo("help") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("about") == 0)
-                {
-                    return this;
-                }
-                if (aURL.Path.compareTo("openSession") == 0)
-                {
-                    if (OfficeApplication.isLogged())
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        return this;
-                    }
-                }
 
-                if (aURL.Path.compareTo("closeSession") == 0)
-                {
-                    if (!OfficeApplication.isLogged())
-                    {
-                        return null;
+                        if (document.isPublicated())
+                        {
+                            return this;
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     }
-                    else
+                    if (aURL.Path.compareTo("rules") == 0)
+                    {
+                        if (document.isPublicated())
+                        {
+                            return this;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                    if (aURL.Path.compareTo("showDocumentsToAuthorize") == 0)
                     {
                         return this;
                     }
+                    if (aURL.Path.compareTo("deleteAssociation") == 0)
+                    {
+                        if (document.isPublicated())
+                        {
+                            return this;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                    if (aURL.Path.compareTo("addLink") == 0)
+                    {
+                        return this;
+                    }
+                    if (aURL.Path.compareTo("createSection") == 0)
+                    {
+                        return this;
+                    }
+                    if (aURL.Path.compareTo("changePassword") == 0)
+                    {
+                        if (WB4WriterApplication.isLogged())
+                        {
+                            return this;
+                        }
+                    }
+                    if (aURL.Path.compareTo("help") == 0)
+                    {
+                        return this;
+                    }
+                    if (aURL.Path.compareTo("about") == 0)
+                    {
+                        return this;
+                    }
+                    if (aURL.Path.compareTo("openSession") == 0)
+                    {
+                        if (OfficeApplication.isLogged())
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            return this;
+                        }
+                    }
+
+                    if (aURL.Path.compareTo("closeSession") == 0)
+                    {
+                        if (!OfficeApplication.isLogged())
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            return this;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
                 }
             }
-            catch (Exception e)
-            {
-            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
         return null;
     }
 
     // com.sun.star.frame.XDispatchProvider:
+    @Override
     public com.sun.star.frame.XDispatch[] queryDispatches(
             com.sun.star.frame.DispatchDescriptor[] seqDescriptors)
     {
@@ -240,6 +249,7 @@ public final class wb4writeraddon extends WeakBase
     }
 
     // com.sun.star.lang.XInitialization:
+    @Override
     public void initialize(Object[] object)
             throws com.sun.star.uno.Exception
     {
@@ -250,7 +260,7 @@ public final class wb4writeraddon extends WeakBase
         }
     }
     // com.sun.star.frame.XDispatch:
-
+    @Override
     public void dispatch(com.sun.star.util.URL aURL,
             com.sun.star.beans.PropertyValue[] aArguments)
     {
@@ -357,7 +367,7 @@ public final class wb4writeraddon extends WeakBase
             return;
         }
     }
-
+    @Override
     public void addStatusListener(com.sun.star.frame.XStatusListener xControl,
             com.sun.star.util.URL aURL)
     {
@@ -373,7 +383,7 @@ public final class wb4writeraddon extends WeakBase
         }
         xControl.statusChanged(aState);
     }
-
+    @Override
     public void removeStatusListener(com.sun.star.frame.XStatusListener xControl,
             com.sun.star.util.URL aURL)
     {
