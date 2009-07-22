@@ -111,14 +111,28 @@ public class Poll extends GenericResource {
             Document dom=SWBUtils.XML.xmlToDom(base.getXml());
             if(dom!=null) {
                 NodeList node = dom.getElementsByTagName("option");            
-                if (!"".equals(base.getAttribute("question", "").trim()) && node.getLength() > 1) {                    
-                    out.println("<div class=\"swb-encuesta\">");
+                if (!"".equals(base.getAttribute("question", "").trim()) && node.getLength() > 1) {
+                    if( base.getAttribute("cssClass")!=null && !base.getAttribute("cssClass").trim().equals("") ) {
+                        out.println("<div class=\""+base.getAttribute("cssClass")+"\">");
+                    }else {
+                        out.println("<div class=\"swb-encuesta\">");
+                    }
+
+
+                    if( base.getAttribute("header")!=null ) {
+                        String style = "";
+                        if( base.getAttribute("headerStyle")!=null ) {
+                            style = "style=\""+base.getAttribute("headerStyle")+"\"";
+                        }
+                        out.println("<h1 "+style+">"+base.getAttribute("header")+"</h1>");
+                    }
+
                     out.println("<form name=\"frmEncuesta\" id=\"frmEncuesta_"+base.getId()+"\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\" style=\"color:"+base.getAttribute("textcolor")+";\" >");
                     if (!"".equals(base.getAttribute("imgencuesta", "").trim())) {
                         out.println("<img src=\""+webWorkPath+"/"+base.getAttribute("imgencuesta")+"\" border=\"0\" alt=\""+base.getAttribute("question")+"\" />");
                     }
                     
-                    out.println("<br />"+base.getAttribute("question"));
+                    out.println("<p>"+base.getAttribute("question")+"</p>");
 
                     out.println("<p>");
                     for (int i = 0; i < node.getLength(); i++) {
@@ -127,14 +141,13 @@ public class Poll extends GenericResource {
                     }
                     out.println("</p>");
 
-                    //out.println("<br />");
-                    ////out.println("<p>");
+                    out.println("<p><span>");
                     if(!"".equals(base.getAttribute("button", ""))) {
                         out.println("<input type=\"image\" name=\"votar\" src=\"" + webWorkPath +"/"+ base.getAttribute("button").trim() +"\" onClick=\"buscaCookie(this.form); return false;\"/>");
                     }else {
                         out.println("<input type=\"button\" name=\"votar\" value=\"" + base.getAttribute("msg_tovote",paramRequest.getLocaleString("msg_tovote")) +"\" onClick=\"buscaCookie(this.form);\"/>");
                     }
-                    ////out.println("</p>");
+                    out.println("</span></p>");
 
                     SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getWebPage(),SWBResourceURL.UrlType_RENDER);
                     url.setMode("showResults");
@@ -148,9 +161,7 @@ public class Poll extends GenericResource {
                         out.println("</p>");
                         
                         if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
-                            ////out.println("<p>");
                             out.println(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
-                            ////out.println("</p>");
                         }
                         
                         out.println("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/>");
@@ -163,9 +174,7 @@ public class Poll extends GenericResource {
                         out.println("</p>");
                         
                         if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
-                            ////out.println("<p>");
                             out.println(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink")));
-                            ////out.println("</p>");
                         }
 
                         out.println("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/>");
@@ -798,14 +807,16 @@ public class Poll extends GenericResource {
                     setAttribute(base, fup, "msg_totvotes");
                     setAttribute(base, fup, "msg_tovote");
 
+                    setAttribute(base, fup, "cssClass");
+                    setAttribute(base, fup, "header");
+                    setAttribute(base, fup, "headerStyle");
+
                     base.updateAttributesToDB();
                     //Document dom=base.getDom();
                     Document dom=SWBUtils.XML.xmlToDom(base.getXml());
                     if(dom!=null) {
                         removeAllNodes(dom, Node.ELEMENT_NODE, "option");
-                    }
-                    else
-                    {
+                    }else {
                         dom = SWBUtils.XML.getNewDocument();
                         Element root = dom.createElement("resource");
                         dom.appendChild(root);
@@ -935,11 +946,6 @@ public class Poll extends GenericResource {
             ret.append("<legend>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_section1")+"</legend>");
             ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"0\" cellspacing=\"5\"> ");
             ret.append("<tr><td width=\"30%\"></td><td width=\"70%\"></td>");
-            /*ret.append("<tr> ");
-            ret.append("<td colspan=\"2\"> ");
-            ret.append(paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_section1"));
-            ret.append("</td> ");
-            ret.append("</tr> ");*/
 
             ret.append("<tr>");
             ret.append("<td align=\"right\">* " + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_question") + "</td>");
@@ -1096,6 +1102,50 @@ public class Poll extends GenericResource {
             ret.append("<legend>"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_lookfeel1")+"</legend>");
             ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"0\" cellspacing=\"5\"> ");
             ret.append("<tr><td width=\"30%\"></td><td width=\"70%\"></td>");
+
+            ret.append("<tr>");
+            ret.append("<td align=\"right\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cssClass")+":</td>");
+            ret.append("<td>");
+            ret.append("<input type=\"text\" name=\"cssClass\"");
+            if(!"".equals(base.getAttribute("cssClass", "").trim())) {
+                ret.append( "value=\""+base.getAttribute("cssClass").trim()+"\"");
+            }
+            ret.append("/>");
+            ret.append("</td>");
+            ret.append("</tr>");
+
+            ret.append("<tr>");
+            ret.append("<td align=\"right\">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgTitle") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg, png):</font></td>");
+            ret.append("<td>");
+            ret.append("<input type=\"file\" size=\"40\" name=\"imgencuesta\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif|png');\"/>");
+            if(!"".equals(base.getAttribute("imgencuesta", "").trim())) {
+                ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("imgencuesta").trim(), "imgencuesta") +"<input type=\"checkbox\" name=\"noimgencuesta\" value=\"1\"/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cutImage") + " <i>" + base.getAttribute("imgencuesta").trim() + "</i></p>");
+            }
+            ret.append("</td>");
+            ret.append("</tr>");
+
+            ret.append("<tr>");
+            ret.append("<td align=\"right\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_header")+":</td>");
+            ret.append("<td>");
+            ret.append("<input type=\"text\" name=\"header\"");
+            if(!"".equals(base.getAttribute("header", "").trim())) {
+                ret.append( "value=\""+base.getAttribute("header").trim()+"\"");
+            }
+            ret.append("/>");
+            ret.append("</td>");
+            ret.append("</tr>");
+
+            ret.append("<tr>");
+            ret.append("<td align=\"right\">"+paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_headerStyle")+":</td>");
+            ret.append("<td>");
+            ret.append("<input type=\"text\" name=\"headerStyle\"");
+            if(!"".equals(base.getAttribute("headerStyle", "").trim())) {
+                ret.append( "value=\""+base.getAttribute("headerStyle").trim()+"\"");
+            }
+            ret.append("/>");
+            ret.append("</td>");
+            ret.append("</tr>");
+
             ret.append("<tr>");
             ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_textcolor") + "</td>");
             ret.append("<td>");
@@ -1125,16 +1175,6 @@ public class Poll extends GenericResource {
             ret.append("</td>");
             ret.append("</tr>");
             
-            ret.append("<tr>");
-            ret.append("<td align=\"right\">" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgTitle") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg, png):</font></td>");
-            ret.append("<td>");
-            ret.append("<input type=\"file\" size=\"40\" name=\"imgencuesta\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif|png');\"/>");
-            if(!"".equals(base.getAttribute("imgencuesta", "").trim())) {
-                ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("imgencuesta").trim(), "imgencuesta") +"<input type=\"checkbox\" name=\"noimgencuesta\" value=\"1\"/>" + paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_cutImage") + " <i>" + base.getAttribute("imgencuesta").trim() + "</i></p>");
-            }
-            ret.append("</td>");
-            ret.append("</tr>");
-
             ret.append("<tr>");
             ret.append("<td align=\"right\">"+ paramRequest.getLocaleString("usrmsg_Encuesta_doAdmin_imgVote") + "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\">(bmp, gif, jpg, jpeg, png):</font></td>");
             ret.append("<td>");
