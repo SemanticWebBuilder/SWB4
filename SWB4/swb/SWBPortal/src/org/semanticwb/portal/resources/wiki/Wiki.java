@@ -229,6 +229,7 @@ public class Wiki extends GenericResource
         parser=new WikiParser();
     }
     
+    @Override
     public String[] getModes(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
         String arr[]=super.getModes(request,paramRequest);
@@ -241,6 +242,7 @@ public class Wiki extends GenericResource
         return ret;
     }
 
+    @Override
     public String getResourceCacheID(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException
     {
         String retValue = super.getResourceCacheID(request, paramsRequest);
