@@ -14,12 +14,11 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import org.semanticwb.Logger;
-import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -39,12 +38,13 @@ public class AdvancedSearch extends GenericAdmResource {
     private String lang = "x-x";
     private SWBLexicon lex = null;
     private SWBSparqlTranslator tr;
-    javax.xml.transform.Templates tpl;
-    String path = SWBPlatform.getContextPath() + "swbadmin/xsl/Search/";
-    private Logger log = SWBUtils.getLogger(AdvancedSearch.class);
-    SemanticProperty so_lat = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#latitude");
-    SemanticProperty so_long = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#longitude");
-    SemanticClass org = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/emexcatalog.owl#Organisation");
+    private SemanticProperty so_lat = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#latitude");
+    private SemanticProperty so_long = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#longitude");
+    private SemanticClass org = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/emexcatalog.owl#Organisation");
+    private ArrayList<String> solutions = null;
+    private String queryString = "";
+    private String dym = "";
+
 
     public AdvancedSearch() {
     }
@@ -54,9 +54,104 @@ public class AdvancedSearch extends GenericAdmResource {
         String mode = paramRequest.getMode();
         if (mode.equals("SUGGEST")) {
             doSuggest(request, response, paramRequest);
+        } else if (mode.equals("PAGE")) {
+            doShowPage(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
+    }
+
+    public ArrayList<String> getResults(String query) {
+        ArrayList<String> res = new ArrayList<String>();
+
+        //Assert query string
+        query = (query == null ? "" : query.trim());
+
+        //Create SparQl Translator
+        tr = new SWBSparqlTranslator(lex);
+
+        //Translate query to SparQl
+        String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query, true);
+        dym = tr.didYouMean(query);
+        dym = (dym.equalsIgnoreCase(query)?"":dym);
+
+        System.out.println(sparqlQuery);
+
+        //If no errors and query is not empty, show results
+        if (tr.getErrCode() == 0 && !tr.isEmptyQuery()) {
+
+            //Get model to query
+            SemanticModel model = new SemanticModel("model", SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel());
+
+            //Execute select query
+            QueryExecution qexec = model.sparQLQuery(sparqlQuery);
+
+            //Get results of query as a result set
+            ResultSet rs = qexec.execSelect();
+
+            //If there are results
+            if (rs != null && rs.hasNext()) {
+
+                //Get nexr result set
+                while (rs.hasNext()) {
+                    boolean first = true;
+
+                    //Get next solution of the result set (var set)
+                    QuerySolution qs = rs.nextSolution();
+                    StringBuffer segment = new StringBuffer();
+
+                    //For each variable
+                    for (String vName : (List<String>) rs.getResultVars()) {
+
+                        //Get node
+                        RDFNode x = qs.get(vName);
+
+                        //If node is not null
+                        if (x != null) {
+                            //If node is the first in the solution (there is always a subject),
+                            //display node in bold
+                            if (first) {
+                                //Get SemanticObject of current node
+                                SemanticObject so = SemanticObject.createSemanticObject(x.toString());
+                                if (so != null) {
+                                    if (so.instanceOf(org)) {
+                                        String r = getResourceBase().getAttribute("mapUrl");
+                                        if (r == null) r= "#";
+                                        String mapUrl = r.replace(" ", "%20") +
+                                                "?lat=" + so.getProperty(so_lat) + "&long=" + so.getProperty(so_long);
+
+                                        segment.append("<a href=\"#\" onclick=\"openMap('" + mapUrl +
+                                                "','','menubar=0,width=420,height=420');\">" + "<b><font size=\"2\" face=\"verdana\">" +
+                                                so.getDisplayName(lang) + "(" + so.getSemanticClass().getDisplayName(lang) + ")</b></font></a><br>");
+                                        if (rs.getResultVars().size() == 1) {
+                                            segment.append(buildAbstract(so));
+                                        }
+                                    } else {
+                                        segment.append("<b><font size=\"2\" face=\"verdana\">" +
+                                                so.getDisplayName(lang) + "</b></font>" + "<br>");
+                                    }
+                                } else {
+                                    segment.append("<b><font size=\"2\" face=\"verdana\">" +
+                                            lex.getObjWordTag(vName).getDisplayName() + "</b></font>" + "<br>");
+                                }
+                                first = false;
+                            } else {
+                                //If node is a literal, display a name, value pair
+                                if (x.isLiteral()) {
+                                    segment.append("<font size=\"2\" face=\"verdana\">" +
+                                    vName + ":<i>" + x.asNode().getLiteral().getLexicalForm() + "</i></font>" + "<br>");
+                                }
+                            }
+                        } else {
+                            segment.append("<font size=\"2\" face=\"verdana\">" + vName + ": </font>" + "-<br>");
+                        }
+                    }
+                    segment.append("<br>");
+                    res.add(segment.toString());
+                }
+            }
+        }
+        return res;
     }
 
     @Override
@@ -539,222 +634,63 @@ public class AdvancedSearch extends GenericAdmResource {
         out.println(sbf.toString());
     }
 
-    public void doShowResults(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String query = request.getParameter("q");
-        StringBuffer sbf = new StringBuffer();
+   public void doShowPage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+       SWBResourceURL rUrl = paramRequest.getRenderUrl().setMode("PAGE");
+       PrintWriter out = response.getWriter();
+       StringBuffer sbf = new StringBuffer();
+       String page = request.getParameter("s");
 
-        //Assert query string
-        query = (query == null ? "" : query.trim());
-
-        //Create SparQl Translator
-        tr = new SWBSparqlTranslator(lex);
-
-        //Translate query to SparQl
-        String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query, true);
-
-        sbf.append("<script type=\"text/javascript\">\n" +
+       if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
+           sbf.append("<script type=\"text/javascript\">\n" +
                 "function openMap(loc, title, args) {\n" +
                 "  window.open(loc, '', args);" +
                 "}\n" +
                 "</script>");
 
-        System.out.println(sparqlQuery);
         sbf.append("    <table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" >\n" +
                     "      <tr>\n" +
                     "        <td align=\"left\" width=\"100%\">\n" +
-                    "          <font size=\"2\" face=\"verdana\">" + paramRequest.getLocaleString("msgResults") +
-                    "<b><font color=\"#0000FF\"> "+ query +"</font></b><br/></font>\n" +
+                    "          <font size=\"2\" face=\"verdana\">" +
+                    paramRequest.getLocaleString("msgResults") +
+                    "<b><font color=\"#0000FF\"> "+ queryString +"</font></b><br/></font>\n" +
                     "          <hr color=\"#16458D\" width=\"100%\" size=\"1\" /><BR/>\n");
 
-        //If no errors and query is not empty, show results
-        if (tr.getErrCode() == 0 && !tr.isEmptyQuery()) {
+       page = (page == null)?"1":page;
+       System.out.println("Mostrando página " + page);
 
-            //Get model to query
-            SemanticModel model = new SemanticModel("model", SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel());
-            long time = System.currentTimeMillis();
-
-            //Execute select query
-            QueryExecution qexec = model.sparQLQuery(sparqlQuery);
-
-            //Get results of query as a result set
-            ResultSet rs = qexec.execSelect();
-
-            //If there are results
-            if (rs != null && rs.hasNext()) {
-                
-
-                //Get nexr result set
-                while (rs.hasNext()) {
-                    boolean first = true;
-
-                    //Get next solution of the result set (var set)
-                    QuerySolution qs = rs.nextSolution();
-
-                    //For each variable
-                    for (String vName : (List<String>) rs.getResultVars()) {
-
-                        //Get node
-                        RDFNode x = qs.get(vName);
-
-                        //If node is not null
-                        if (x != null) {
-                            //If node is the first in the solution (there is always a subject),
-                            //display node in bold
-                            if (first) {
-                                //Get SemanticObject of current node
-                                SemanticObject so = SemanticObject.createSemanticObject(x.toString());
-                                if (so != null) {
-                                    if (so.instanceOf(org)) {
-                                        String r = getResourceBase().getAttribute("mapUrl");
-                                        if (r == null) r= "#";
-                                        String mapUrl = r.replace(" ", "%20") +
-                                                "?lat=" + so.getProperty(so_lat) + "&long=" + so.getProperty(so_long);
-
-                                        sbf.append("<a href=\"#\" onclick=\"openMap('" + mapUrl +
-                                                "','','menubar=0,width=420,height=420');\">" + "<b><font size=\"2\" face=\"verdana\">" +
-                                                so.getDisplayName(lang) + "</b></font></a><br>");
-                                     //               } else {
-                                        //sbf.append("<b><font size=\"2\" face=\"verdana\">" +
-                                        //  so.getDisplayName(lang) + "</b></font>" + "<br>");
-                                        //System.out.println(so.getDisplayName(lang));
-                                        if (rs.getResultVars().size() == 1) {
-                                            sbf.append(buildAbstract(so));
-                                        }
-                                    } else {
-                                        sbf.append("<b><font size=\"2\" face=\"verdana\">" +
-                                                so.getDisplayName(lang) + "</b></font>" + "<br>");
-                                    }
-                                } else {
-                                    sbf.append("<b><font size=\"2\" face=\"verdana\">" +
-                                            lex.getObjWordTag(vName).getDisplayName() + "</b></font>" + "<br>");
-                                }
-                                first = false;
-                            } else {
-                                //If node is a literal, display a name, value pair
-                                if (x.isLiteral()) {
-                                    sbf.append("<font size=\"2\" face=\"verdana\">" +
-                                    vName + ":<i>" + x.asNode().getLiteral().getLexicalForm() + "</i></font>" + "<br>");
-                                }
-                            }
-                        } else {
-                            sbf.append("<font size=\"2\" face=\"verdana\">" + vName + ": </font>" + "-<br>");
-                        }
-                    }
-                    sbf.append("<br>");
-                }
-
-                System.out.println("Hay resultados");
-            } else {
-                sbf.append("<b><font size=\"2\" face=\"verdana\" color=\"red\">" + paramRequest.getLocaleString("msgNoResults") +
-                    "</b><br/></font>\n");
+       if (solutions != null && solutions.size() > 0) {
+            for(String s : solutions) {
+                sbf.append(s);
             }
+       } else {
+           sbf.append("<font size=\"2\" face=\"verdana\" color=\"red\"><b>" +
+                   paramRequest.getLocaleString("msgNoResults") + "</b><br/></font>" +
+                    (dym.equals("")?"":"<font size=\"2\" face=\"verdana\">" + 
+                    paramRequest.getLocaleString("msgDidYouMean") + " </font><b>" + dym + "</b><br/>"));
+       }
 
-
-            /*sbf.append("<fieldset>");
-            sbf.append("<textarea rows=5 cols=70>");
-            sbf.append(request.getParameter("sparqlQuery"));
-            sbf.append("</textarea>");
-            sbf.append("</fieldset>");*/
-
-            /*try {
-                Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
-                SemanticModel mod = new SemanticModel("local", model);
-                QueryExecution qexec = mod.sparQLQuery(sparqlQuery);
-                time = System.currentTimeMillis();
-
-                try {
-                    sbf2.append("<h2>Resultados de la b√∫squeda</h2>");
-                    sbf2.append("<table>");
-                    ResultSet rs = qexec.execSelect();
-                    sbf2.append("<thead>");
-                    sbf2.append("<tr>");
-
-                    if (rs.hasNext()) {
-                        Iterator<String> itcols = rs.getResultVars().iterator();
-                        while (itcols.hasNext()) {
-                            sbf2.append("<th>");
-                            sbf2.append(itcols.next());
-                            sbf2.append("</th>");
-                        }
-                        sbf2.append("</tr>");
-                        sbf2.append("</thead>");
-                        sbf2.append("<tbody>");
-
-                        boolean odd = true;
-                        while (rs.hasNext()) {
-                            odd = !odd;
-                            QuerySolution rb = rs.nextSolution();
-
-                            if (odd) {
-                                sbf2.append("<tr bgcolor=\"#EFEDEC\">");
-                            } else {
-                                sbf2.append("<tr>");
-                            }
-
-                            Iterator<String> it = rs.getResultVars().iterator();
-                            boolean first = true;
-                            while (it.hasNext()) {
-                                String name = it.next();
-                                RDFNode x = rb.get(name);
-                                sbf2.append("<td >");
-                                SemanticObject so = SemanticObject.createSemanticObject(x.toString());
-
-                                if (so != null) {
-                                    if (first) {
-                                        sbf2.append("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI() + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '" + so.getDisplayName(lang) + "');\">" + so.getDisplayName(lang) + "</a>");
-                                        first = false;
-                                    } else {
-                                        SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
-                                        if (tt != null) {
-                                            sbf2.append(tt.getDisplayName(lang));
-                                        } else {
-                                            SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
-                                            sbf2.append(stt.getDisplayName(lang));
-                                        }
-                                    }
-                                } else {
-                                    if (x != null) {
-                                        sbf.append(x);
-                                    } else {
-                                        sbf2.append(" - ");
-                                    }
-                                }
-                                sbf2.append("</td>");
-                            }
-                            sbf2.append("</tr>");
-                        }
-                    } else {
-                        sbf2.append("<font color='red'>Sin resultados</font>");
-                        sbf2.append("</tr>");
-                        sbf2.append("</thead>");
-                    }
-                    sbf2.append("</tbody>");
-                    sbf2.append("</table>");
-                    sbf2.append("Tiempo de ejecuci√≥n " + (System.currentTimeMillis() - time) + "ms.");
-                } finally {
-                    sbf.append(sbf2.toString());
-                    qexec.close();
-                }
-            } catch (Exception e) {
-                if (tr.getErrCode() != 0) {
-                    sbf.append("<script language=\"javascript\" type=\"text/javascript\">alert('error');</script>");
-                }
-            }
-        } else {
-            sbf.append("<script language=\"javascript\" type=\"text/javascript\">");
-            sbf.append("alert(\"" + tr.getErrors().replace("\n", "\\n") + "\");");
-            sbf.append("</script>");
-        }*/
-    } else {
-           sbf.append("<b><font size=\"2\" face=\"verdana\" color=\"red\">" + paramRequest.getLocaleString("msgNoResults") +
-                    "</b><br/></font>\n");
-    }
-    sbf.append("        </td>\n" +
+       sbf.append("        </td>\n" +
              "      </tr>\n" +
              "    </table>\n" +
              "    <BR/>\n" +
              "    <hr width=\"100%\" size=\"1\" /><br/>\n");
-    response.getWriter().print(sbf.toString());
+    
+        rUrl.setParameter("s", String.valueOf(Integer.valueOf(page) + 1));
+        sbf.append("<a href=\"" + rUrl + "\">Siguiente</a>");
+        out.println(sbf.toString());
+       } else {
+           doView(request, response, paramRequest);
+       }
+   }
+
+    public void doShowResults(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        queryString = request.getParameter("q");
+
+        //Assert query string
+        queryString = (queryString == null ? "" : queryString.trim());
+
+        solutions = getResults(queryString);
+        doShowPage(request, response, paramRequest);        
     }
 
     public String buildAbstract(SemanticObject o) {
