@@ -304,7 +304,7 @@ public abstract class OfficeApplication
             OpenResultProducer resultProducer = new OpenResultProducer(this);
             WizardPage[] clazz = new WizardPage[]
             {
-                new Search(type), new SelectVersionToOpen(), new SelectDirectory()
+                new Search(type), new SelectVersionToOpen(type.toString().toLowerCase()), new SelectDirectory()
             };
             Wizard wiz = WizardPage.createWizard("Asistente de apertura de contenido", clazz, resultProducer);
             wiz.show();
