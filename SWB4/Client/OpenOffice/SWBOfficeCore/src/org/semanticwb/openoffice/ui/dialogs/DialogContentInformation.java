@@ -939,7 +939,7 @@ public class DialogContentInformation extends javax.swing.JDialog
                     urlproxy += "gtw";
                 }
                 name = OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version,type);
-                URL url = new URL(urlproxy + "?contentId=" + contentId + "&versionName=" + version + "&repositoryName=" + repository + "&name=" + name);
+                URL url = new URL(urlproxy + "?contentId=" + contentId + "&versionName=" + version + "&repositoryName=" + repository + "&name=" + name+"&type="+type);
                 String title = OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId) + " (" + version + ") ";
                 DialogPreview preview = new DialogPreview(url, false, title);
                 preview.setVisible(true);
