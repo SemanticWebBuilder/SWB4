@@ -119,7 +119,7 @@ public class Promo extends GenericAdmResource {
 
         try {
             //marco
-            out.append("<div style=\"");
+            out.append("<div class=\"___swb-promo\" style=\"");
             if(textcolor != null) {
                 out.append("color:"+textcolor+";");
             }
