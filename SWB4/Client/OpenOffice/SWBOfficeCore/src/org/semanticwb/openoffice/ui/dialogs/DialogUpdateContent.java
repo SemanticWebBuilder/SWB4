@@ -76,7 +76,7 @@ public class DialogUpdateContent extends javax.swing.JDialog
         super((Frame)null, ModalityType.TOOLKIT_MODAL);
         initComponents();
         this.setIconImage(ImageLoader.images.get("semius").getImage());
-        
+        summaryPublish1.setType(document.getDocumentType().toString().toLowerCase());
         this.setModal(true);
         this.workspaceid = wokspaceid;
         this.contentid = contentid;
