@@ -317,7 +317,7 @@ public class GoogleGadget extends GenericResource
         URL urlPage = new URL(url);
         URLConnection con = urlPage.openConnection();
         InputStream in = con.getInputStream();
-        String html2 = SWBUtils.IO.readInputStream(in); //AFUtils.getInstance().readInputStream(in);
+        String html2 = SWBUtils.IO.readInputStream(in,"utf-8"); //AFUtils.getInstance().readInputStream(in);
         StringBuffer html = new StringBuffer(html2);
         replace(html, "<html>", "");
         replace(html, "</html>", "");
@@ -344,11 +344,13 @@ public class GoogleGadget extends GenericResource
             //html.insert(pos + 13, GOOGLE_URL);
             String pathTofound = "\"" + "/gadgets/directory";
             replace(html, pathTofound, "\"http://www.google.com/gadgets/directory");
+            
+
             pathTofound = GOOGLE_URL + "/gadgets/directory" + "?";
             replace(html, pathTofound, "http://" + request.getServerName() + ":" + request.getServerPort() + "" + paramsRequest.getRenderUrl() + "?");
             //replace(html, "_IFPC.call(\"tr_moduleDirectory-iframegoog_1221086410332\", \"pickGadget\", [url], \"/ifpc_relay\", null, null);", "if(confirm('¿Desea agregar este gadget?'))location='" + urlaction + "?url='+url;");
             replace(html, "function _addModule(url) {", "}","function _addModule(url) {\r\nif(confirm('¿Desea agregar este gadget?'))location='" + urlaction + "?url='+url;}");
-            
+            replace(html, "action=\"http://www.google.com/gadgets/directory\"", "action=\"#\"");
             PrintWriter out = response.getWriter();
             out.println("<div>");
             String urlGadget = this.getResourceBase().getAttribute("url");
