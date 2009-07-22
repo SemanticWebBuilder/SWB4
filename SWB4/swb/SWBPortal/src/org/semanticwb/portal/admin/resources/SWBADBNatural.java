@@ -496,7 +496,7 @@ public class SWBADBNatural extends GenericResource {
         if (!query.equals("")) {
             //Create SparQl translator
             tr = new SWBSparqlTranslator(lex);
-            queryString = lex.getPrefixString() + "\n" + tr.translateSentence(query);
+            queryString = lex.getPrefixString() + "\n" + tr.translateSentence(query, false);
             dym = tr.didYouMean(query);
 
             //If no different suggestion
