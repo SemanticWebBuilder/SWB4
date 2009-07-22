@@ -40,6 +40,7 @@ public class AboutBackGound extends javax.swing.JPanel {
     private void initComponents() {
 
         jButtonClose = new javax.swing.JButton();
+        jButtonCloseLicense = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(500, 300));
 
@@ -56,12 +57,27 @@ public class AboutBackGound extends javax.swing.JPanel {
             }
         });
 
+        jButtonCloseLicense.setBackground(new java.awt.Color(51, 102, 153));
+        jButtonCloseLicense.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonCloseLicense.setText("Ver Licencia");
+        jButtonCloseLicense.setBorder(null);
+        jButtonCloseLicense.setBorderPainted(false);
+        jButtonCloseLicense.setDoubleBuffered(true);
+        jButtonCloseLicense.setMargin(new java.awt.Insets(0, 14, 2, 14));
+        jButtonCloseLicense.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCloseLicenseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(375, Short.MAX_VALUE)
+                .addContainerGap(273, Short.MAX_VALUE)
+                .addComponent(jButtonCloseLicense, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33))
         );
@@ -69,7 +85,9 @@ public class AboutBackGound extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(223, Short.MAX_VALUE)
-                .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonCloseLicense, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(50, 50, 50))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -79,9 +97,17 @@ public class AboutBackGound extends javax.swing.JPanel {
         parent.setVisible(false);
 }//GEN-LAST:event_jButtonCloseActionPerformed
 
+    private void jButtonCloseLicenseActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonCloseLicenseActionPerformed
+    {//GEN-HEADEREND:event_jButtonCloseLicenseActionPerformed
+        DialogSeeLicense dialogSeeLicense=new DialogSeeLicense();
+        dialogSeeLicense.setSize(500, 400);
+        dialogSeeLicense.setVisible(true);
+}//GEN-LAST:event_jButtonCloseLicenseActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClose;
+    private javax.swing.JButton jButtonCloseLicense;
     // End of variables declaration//GEN-END:variables
 
    
