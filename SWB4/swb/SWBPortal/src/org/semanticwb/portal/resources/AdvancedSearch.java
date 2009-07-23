@@ -78,7 +78,7 @@ public class AdvancedSearch extends GenericAdmResource {
         dym = tr.didYouMean(query);
         dym = (dym.equalsIgnoreCase(query) ? "" : dym);
 
-        System.out.println(sparqlQuery);
+        //System.out.println(sparqlQuery);
 
         //If no errors and query is not empty, show results
         if (tr.getErrCode() == 0 && !tr.isEmptyQuery()) {
@@ -644,7 +644,7 @@ public class AdvancedSearch extends GenericAdmResource {
                 sbf.append("<font size=\"2\" face=\"verdana\" color=\"red\">" + paramRequest.getLocaleString("msgNoSuggestions") + "</font>");
             }
         } else {
-            System.out.println("Suggesting for " + word);
+            //System.out.println("Suggesting for " + word);
             String tag = lex.getObjWordTag(word).getObjId();
 
             sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
