@@ -35,7 +35,7 @@ public class SWBSparqlTranslator {
     private SWBLexicon lex;        //Dictionary
     private CommonTokenStream tokens;   //TokenStream for parsing
     private ANTLRStringStream input;    //StringStream to parse
-    private String nodeLabels = "SELECT|PRECON|PREDE|ASIGN|COMPL|COMPG|COMPLE|COMPGE|OFFSET|LIMIT|ORDER|LIKE|COMPRNG|INTERVAL";
+    private String nodeLabels = "SELECT|PRECON|PREDE|ASIGN|COMPL|COMPG|COMPLE|COMPGE|OFFSET|LIMIT|ORDER|COMPAS|COMPRNG|INTERVAL";
     private String eLog = "";   //Error log
     private int errCode = 0;    //Last error code
     private SWBSpellChecker speller = null;
@@ -334,7 +334,7 @@ public class SWBSparqlTranslator {
                 }
             }
         } else if (nname.equals("ASIGN") || nname.equals("COMPG") || nname.equals("COMPL") ||
-                nname.equals("COMPLE") || nname.equals("COMPGE") || nname.equals("LIKE") ||
+                nname.equals("COMPLE") || nname.equals("COMPGE") || nname.equals("COMPAS") ||
                 nname.equals("COMPRNG")) {
             res = res + processStatement(root, parent, parentLabel);
         } else if (nname.equals("PREDE")) {
@@ -468,7 +468,7 @@ public class SWBSparqlTranslator {
                 res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
                         " " + pName + " " + root.getChild(1).getText() + ".\n";
             }
-        } else if (root.getText().equals("LIKE")) {
+        } else if (root.getText().equals("COMPAS")) {
             if (!pName.equals("")) {
                 res = res + "?" + parentLabel.replace(" ", "_").replaceAll("[\\(|\\)]", "") +
                         " " + pName + " ?v_" + root.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") +
