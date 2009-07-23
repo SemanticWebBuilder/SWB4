@@ -262,8 +262,35 @@ public class SWBImportWebSite extends GenericResource {
                     ResourceType ptype = site.createResourceType("JSPResource");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.JSPResource");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.JSPResource");
-                    ptype.setResourceMode(3);
+                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
                     ptype.setTitle("JSPResource");
+                }
+
+                if (site.getResourceType("PHPResource") == null) {
+
+                    ResourceType ptype = site.createResourceType("PHPResource");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.PHPResource");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.PHPResource");
+                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                    ptype.setTitle("PHPResource");
+                }
+
+                if (site.getResourceType("PythonResource") == null) {
+
+                    ResourceType ptype = site.createResourceType("PythonResource");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.PythonResource");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.PythonResource");
+                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                    ptype.setTitle("PythonResource");
+                }
+
+                if (site.getResourceType("GroovyResource") == null) {
+
+                    ResourceType ptype = site.createResourceType("GroovyResource");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.GroovyResource");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.GroovyResource");
+                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                    ptype.setTitle("GroovyResource");
                 }
 
                 if (site.getResourceType("GroovyEditor") == null)
@@ -271,7 +298,7 @@ public class SWBImportWebSite extends GenericResource {
                     ResourceType ptype = site.createResourceType("GroovyEditor");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.GroovyEditor");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.GroovyEditor");
-                    ptype.setResourceMode(3);
+                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
                     ptype.setTitle("GroovyEditor");
                 }
 
@@ -280,7 +307,7 @@ public class SWBImportWebSite extends GenericResource {
                     ResourceType ptype = site.createResourceType("JSPEditor");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.JSPEditor");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.JSPEditor");
-                    ptype.setResourceMode(3);
+                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
                     ptype.setTitle("JSPEditor");
                 }
 
@@ -289,7 +316,7 @@ public class SWBImportWebSite extends GenericResource {
                     ResourceType ptype = site.createResourceType("PythonEditor");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.PythonEditor");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.PythonEditor");
-                    ptype.setResourceMode(3);
+                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
                     ptype.setTitle("PythonEditor");
                 }
 
@@ -298,7 +325,7 @@ public class SWBImportWebSite extends GenericResource {
                     ResourceType ptype = site.createResourceType("PHPEditor");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.PHPEditor");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.PHPEditor");
-                    ptype.setResourceMode(3);
+                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
                     ptype.setTitle("PHPEditor");
                 }
 
@@ -396,7 +423,7 @@ public class SWBImportWebSite extends GenericResource {
                     ResourceType ptype = site.createResourceType("PDFContent");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.PDFContent");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.PDFContent");
-                    ptype.setResourceMode(ptype.MODE_CONTENT);
+                    ptype.setResourceMode(ResourceType.MODE_CONTENT);
                     ptype.setTitle("PDFContent");
                 }
 
@@ -432,14 +459,13 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("DataBaseResource");
                 }
 
-
-//                if (site.getResourceType("Blog") == null) {
-//                    ResourceType ptype = site.createResourceType("Blog");
-//                    ptype.setResourceClassName("org.semanticwb.portal.resources.blog.BlogResource");
-//                    ptype.setResourceBundle("org.semanticwb.portal.resources.blog.BlogResource");
-//                    ptype.setResourceMode(3);
-//                    ptype.setTitle("Blog");
-//                }
+                if (site.getResourceType("Blog") == null) {
+                    ResourceType ptype = site.createResourceType("Blog");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.blog.BlogResource");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.blog.BlogResource");
+                    ptype.setResourceMode(3);
+                    ptype.setTitle("Blog");
+                }
 
                 if (site.getResourceType("Comments") == null) {
                     ResourceType ptype = site.createResourceType("Comments");
@@ -450,9 +476,8 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("Comments");
                 }
 
-
                 if (site.getResourceType("Forum") == null) {
-                    ResourceType ptype = site.createResourceType("Form");
+                    ResourceType ptype = site.createResourceType("Forum");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.sem.forum.SWBForum");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.sem.forum.SWBForum");
                     ptype.setResourceOWL("org.semanticwb.portal.resources.sem.forum.SWBForum");
@@ -476,6 +501,46 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setResourceOWL("org.semanticwb.portal.resources.sem.events.Events");
                     ptype.setResourceMode(ResourceType.MODE_SYSTEM);
                     ptype.setTitle("Events");
+                }
+
+                if (site.getResourceType("WebPageOnLineCreate") == null) {
+                    ResourceType ptype = site.createResourceType("WebPageOnLineCreate");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.WebPageOnLineCreate");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.WebPageOnLineCreate");
+                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                    ptype.setTitle("WebPageOnLineCreate");
+                }
+
+                if (site.getResourceType("WebPageOnLineCreate") == null) {
+                    ResourceType ptype = site.createResourceType("WebPageOnLineCreate");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.WebPageOnLineCreate");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.WebPageOnLineCreate");
+                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                    ptype.setTitle("WebPageOnLineCreate");
+                }
+
+                if (site.getResourceType("RSSResource") == null) {
+                    ResourceType ptype = site.createResourceType("WebPageOnLineCreate");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.RSSResource");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.RSSResource");
+                    ptype.setResourceMode(ResourceType.MODE_CONTENT);
+                    ptype.setTitle("RSSResource");
+                }
+
+                if (site.getResourceType("InlineEdit") == null) {
+                    ResourceType ptype = site.createResourceType("InlineEdit");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.InlineEdit");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.InlineEdit");
+                    ptype.setResourceMode(ResourceType.MODE_STRATEGY);
+                    ptype.setTitle("InlineEdit");
+                }
+
+                if (site.getResourceType("ImageGallery") == null) {
+                    ResourceType ptype = site.createResourceType("ImageGallery");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.ImageGallery");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.ImageGallery");
+                    ptype.setResourceMode(ResourceType.MODE_CONTENT);
+                    ptype.setTitle("ImageGallery");
                 }
 
 
