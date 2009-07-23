@@ -341,6 +341,9 @@ public class SemanticProperty
             if(lang!=null)
             {
                 ret=obj.getProperty(obj.getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL),null,lang);
+            }else
+            {
+                ret=obj.getProperty(obj.getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL),null,"es");
             }
             if(ret==null)ret=obj.getProperty(obj.getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL));
         }
