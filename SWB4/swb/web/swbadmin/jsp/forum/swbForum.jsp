@@ -23,7 +23,7 @@
 <table>
     <tr><td>
             <%
-        WebPage webpage = paramRequest.getTopic();
+        WebPage webpage = paramRequest.getWebPage();
         Resource base = paramRequest.getResourceBase();
         WebSite website = webpage.getWebSite();
         SWBResourceURL urlthread = paramRequest.getRenderUrl();
@@ -502,7 +502,7 @@
             <%} else {
                     actionURL.setAction("removePost");
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
-                    Post post = Post.getPost(semObject.getId(), paramRequest.getTopic().getWebSite());
+                    Post post = Post.getPost(semObject.getId(), paramRequest.getWebPage().getWebSite());
             %>
             <table width="100%">
                 <tr><td>
