@@ -1014,7 +1014,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public void setViewPropertyValue(ResourceInfo resourceInfo, PropertyInfo propertyInfo, String value) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
-        Resource resource = site.getResource(resourceInfo.id);
+        OfficeResource resource = OfficeResource.getOfficeResource(resourceInfo.id, site);
         SemanticProperty prop = site.getSemanticObject().getModel().getSemanticProperty(propertyInfo.id);
         resource.getSemanticObject().setProperty(prop, value);
     }
