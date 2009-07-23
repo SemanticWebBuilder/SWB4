@@ -40,7 +40,7 @@ public class SelectTemplate extends GenericResource{
     {
         SWBResourceURL url = paramRequest.getActionUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
         PrintWriter out = response.getWriter();
-        out.print("<div style=\"position: relative; float: right; width: 360px; height: 30px; background-color: azure;  }\"><table border=\"0\"><tr><td>");
+        out.print("<div style=\"position: relative; float: right; width: 360px; height: 30px; background-color: azure;  }\"><table border=\"0\" valign=\"top\"><tr><td>");
         ResourceType rt=paramRequest.getWebPage().getWebSite().getResourceType("WebPageOnLineCreate");
         TemplateImp tpl=(TemplateImp)SWBPortal.getTemplateMgr().getTemplate(paramRequest.getUser(),paramRequest.getWebPage());
         HashMap<String, String> map = new HashMap<String,String>();
