@@ -47,7 +47,6 @@
                 </library>
                 <library>
                     <file>${file.reference.informix.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library>
                     <file>${file.reference.mysql-connector-java-5.0.3-bin.jar}</file>
@@ -369,6 +368,14 @@
                     <file>${file.reference.groovy-all-1.6.3.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
+                <library>
+                    <file>${reference.SWBSemanticFileRepository.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.SWBPortlet.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
             <source-roots>
@@ -452,6 +459,14 @@
                 <id>jar</id>
             </reference>
             <reference>
+                <foreign-project>SWBPortlet</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>SWBRepositoryManager</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
@@ -461,6 +476,14 @@
             </reference>
             <reference>
                 <foreign-project>SWBSearch</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>SWBSemanticFileRepository</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
