@@ -94,6 +94,57 @@ public class BlogResource extends GenericResource
             }
         }
     }
+    public void installHyperSonic(ResourceType type) throws SWBResourceException
+    {
+        uninstallMySql(type);
+        Connection con = SWBUtils.DB.getDefaultConnection();
+        try
+        {
+            con.setAutoCommit(false);
+
+            PreparedStatement pt=con.prepareStatement("create table wbblog (blogid integer  NOT NULL, blogname varchar(255)  NOT NULL)");
+            pt.execute();
+
+            pt=con.prepareStatement("create table wbblogcomments (blogid integer  NOT NULL, postid integer  NOT NULL, commentid integer  NOT NULL, comment varchar(5000)  NOT NULL, userid varchar(40)  NOT NULL,fec_alta timestamp  NOT NULL)");
+
+            pt.execute();
+
+            pt=con.prepareStatement("create table wbblogpermissions (blogid integer  NOT NULL, userid varchar(45)  NOT NULL, level integer  NOT NULL, isrol integer  NOT NULL)");
+            pt.execute();
+
+            pt=con.prepareStatement("create table wbblogpost (postid integer  NOT NULL, blogid integer  NOT NULL, title varchar(255), description varchar(5000)  NOT NULL, fec_alta timestamp  NOT NULL, userid varchar(255)  NOT NULL);");
+            pt.execute();
+
+            pt=con.prepareStatement("ALTER TABLE wbblog ADD CONSTRAINT wbblog_pk0 PRIMARY KEY (  blogid)");
+            pt.execute();
+            pt=con.prepareStatement("ALTER TABLE wbblogcomments ADD CONSTRAINT wbblogcomments_pk1 PRIMARY KEY (  blogid, postid, commentid)");
+            pt.execute();
+            pt=con.prepareStatement("ALTER TABLE wbblogpermissions ADD CONSTRAINT wbblogpermissions_pk2 PRIMARY KEY (  blogid, userid)");
+            pt.execute();
+
+            pt=con.prepareStatement("ALTER TABLE wbblogpost ADD CONSTRAINT wbblogpost_pk3 PRIMARY KEY (  postid, blogid)");
+            pt.execute();
+
+            con.commit();
+            con.setAutoCommit(true);
+        }
+        catch(SQLException sqle)
+        {
+             log.error(sqle);
+             throw new SWBResourceException("It was not possible to create the tables of the BlogResource: "+sqle.getMessage(),sqle);
+        }
+        finally
+        {
+            try
+            {
+                con.close();
+            }
+            catch(SQLException sqle)
+            {
+                log.error(sqle);
+            }
+        }
+    }
     public void uninstallMySql(ResourceType type) throws SWBResourceException
     {
         Connection con = SWBUtils.DB.getDefaultConnection();
@@ -128,6 +179,40 @@ public class BlogResource extends GenericResource
             }
         }
     }
+    public void uninstallHypersonic(ResourceType type) throws SWBResourceException
+    {
+        Connection con = SWBUtils.DB.getDefaultConnection();
+        try
+        {
+            con.setAutoCommit(false);
+            PreparedStatement pt=con.prepareStatement("DROP TABLE IF EXISTS wbblog");
+            pt.execute();
+            pt=con.prepareStatement("DROP TABLE IF EXISTS wbblogcomments");
+            pt.execute();
+            pt=con.prepareStatement("DROP TABLE IF EXISTS wbblogpermissions");
+            pt.execute();
+            pt=con.prepareStatement("DROP TABLE IF EXISTS wbblogpost");
+            pt.execute();
+            con.commit();
+            con.setAutoCommit(true);
+        }
+        catch(SQLException sqle)
+        {
+             log.error(sqle);
+             throw new SWBResourceException("It was not possible to create the tables of the BlogResource: "+sqle.getMessage(),sqle);
+        }
+        finally
+        {
+            try
+            {
+                con.close();
+            }
+            catch(SQLException sqle)
+            {
+                log.error(sqle);
+            }
+        }
+    }
 
     @Override
     public void install(ResourceType recobj) throws SWBResourceException {
@@ -135,6 +220,10 @@ public class BlogResource extends GenericResource
         if(dbname.startsWith("MySQL") && dbname.indexOf("")!=-1)
         {
             this.installMySql(recobj);
+        }
+        if(dbname.startsWith("HSQL"))
+        {
+            this.installHyperSonic(recobj);
         }
         else
         {
@@ -149,6 +238,10 @@ public class BlogResource extends GenericResource
         if(dbname.startsWith("MySQL") && dbname.indexOf("5.0")!=-1)
         {
             uninstallMySql(type);
+        }
+        if(dbname.startsWith("HSQL"))
+        {
+            uninstallHypersonic(type);
         }
         else
         {
