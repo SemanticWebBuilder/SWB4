@@ -970,7 +970,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     SemanticProperty semanticProperty = semanticProperties.next();
                     if (semanticProperty.getURI().equals(prop.id))
                     {
-                        resource.getSemanticObject().setProperty(semanticProperty, value);
+                        officeResource.getSemanticObject().setProperty(semanticProperty, value);
                     }
                 }
                 i++;
