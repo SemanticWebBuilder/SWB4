@@ -651,11 +651,14 @@ public class AdvancedSearch extends GenericAdmResource {
             //System.out.println("Suggesting for " + word);
             String tag = lex.getObjWordTag(word).getObjId();
 
-            sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
+           /* sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                     "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
-                    "200px;width:300px;border:1px solid #a0a0ff;\">");
+                    "200px;width:300px;border:1px solid #a0a0ff;\">");*/
 
             if (!tag.equals("")) {
+                sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
+                    "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
+                    "200px;width:300px;border:1px solid #a0a0ff;\">");
                 SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
                 idCounter = 0;
                 Iterator<SemanticProperty> sit = sc.listProperties();
@@ -671,9 +674,13 @@ public class AdvancedSearch extends GenericAdmResource {
                             (lPar ? ")" : "") + "</li>");
                     idCounter++;
                 }
+                sbf.append("</ul>");
             } else {
                 tag = lex.getPropWordTag(word).getRangeClassId();
                 if (!tag.equals("")) {
+                    sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
+                    "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
+                    "200px;width:300px;border:1px solid #a0a0ff;\">");
                     SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(tag);
                     idCounter = 0;
                     Iterator<SemanticProperty> sit = sc.listProperties();
@@ -689,9 +696,12 @@ public class AdvancedSearch extends GenericAdmResource {
                                 (lPar ? ")" : "") + "</li>");
                         idCounter++;
                     }
+                    sbf.append("</ul>");
+                } else {
+                    sbf.append("<font size=\"2\" face=\"verdana\" color=\"red\">" + paramRequest.getLocaleString("msgNoSuggestions") + "</font>");
                 }
             }
-            sbf.append("</ul>");
+            //sbf.append("</ul>");
         }
         out.println(sbf.toString());
     }
