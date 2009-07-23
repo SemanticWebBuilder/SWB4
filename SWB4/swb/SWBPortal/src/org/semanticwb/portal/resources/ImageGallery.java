@@ -17,7 +17,7 @@ import org.semanticwb.portal.util.FileUpload;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 
 
-public class ImageGallery extends GenericAdmResource {
+public class ImageGallery extends GenericResource {
     private static Logger log = SWBUtils.getLogger(ImageGallery.class);
     private WBAdmResourceUtils admResUtils=new WBAdmResourceUtils();
     private String workPath;
@@ -229,19 +229,19 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
 
             ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_title") + "</td>");
+            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_title") + "</td>");
             ret.append("\n<td>");
             ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"title\" ");
             ret.append("\n value=\"" + base.getAttribute("title", "").trim().replaceAll("\"", "&#34;") + "\" />");
             ret.append("\n</td> ");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\">* " + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_img") + "&nbsp;(<i>bmp, jpg, jpeg, gif, png</i>)</td>");
+            ret.append("\n<td width=\"200\" align=\"right\">* " + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_img") + "&nbsp;(<i>bmp, jpg, jpeg, gif, png</i>)</td>");
             ret.append("\n<td>");
             ret.append("\n<div id=\"igcontainer_"+base.getId()+"\" style=\"background-color:#F0F0F0; width:602px; height:432px; overflow:visible\"> ");
             ret.append("\n<table width=\"99%\" border=\"0\" align=\"center\"> ");
             ret.append("\n<tr> ");
-            ret.append("\n<td width=\"200\"><span>" + paramRequest.getLocaleString("usrmsg_ImageGallery_imggrid") + "</span></td> ");
+            ret.append("\n<td width=\"200\" align=\"right\"><span>" + paramRequest.getLocaleString("usrmsg_ImageGallery_imggrid") + "</span></td> ");
             ret.append("\n<td align=\"right\"></td> ");
             ret.append("\n<td align=\"right\"> ");
             ret.append("\n    <input type=\"button\" value=\"Agregar\" onclick=\"addRowToTable('igtbl_"+base.getId()+"');\" />&nbsp;  ");
@@ -264,7 +264,7 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("\n</tr>  ");
             
             ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_autoplay") + "</td>");
+            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_autoplay") + "</td>");
             ret.append("\n<td>");
             ret.append("\n<input type=\"checkbox\" value=\"true\" name=\"autoplay\" ");
             if ("true".equals(base.getAttribute("autoplay", "false"))) {
@@ -274,7 +274,7 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_pause") + "</td>");
+            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_pause") + "</td>");
             ret.append("\n<td>");
             //ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"pause\" ");
             //ret.append("\n value=\"" + base.getAttribute("pause", "2500").replaceAll("\"", "&#34;") + "\" />");
@@ -282,7 +282,7 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fadetime") + "</td>");
+            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fadetime") + "</td>");
             ret.append("\n<td>");
             //ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"fadetime\" ");
             //ret.append("\n value=\"" + base.getAttribute("fadetime", "500").replaceAll("\"", "&#34;") + "\" />");
@@ -296,7 +296,7 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("\n<legend>"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_LaF")+"</legend>");
             ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
             ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_titleStyle") + "</td>");
+            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_titleStyle") + "</td>");
             ret.append("\n<td>");
             ret.append("\n<input type=\"text\" size=\"50\" name=\"titlestyle\" ");
             ret.append("\n value=\"" + base.getAttribute("titlestyle", "").replaceAll("\"", "&#34;") + "\" />");
@@ -304,15 +304,13 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("\n</tr>");
 
             ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_imgwidth") + "</td>");
+            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_imgwidth") + "</td>");
             ret.append("\n<td>");
-            //ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"imgwidth\" ");
-            //ret.append("\n value=\"" + base.getAttribute("imgwidth", "220").replaceAll("\"", "&#34;") + "\" />");
             ret.append("\n<input id=\"imgwidth\" name=\"imgwidth\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("imgwidth", "220")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_imgheight") + "</td>");
+            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_imgheight") + "</td>");
             ret.append("\n<td>");
             //ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"imgheight\" ");
             //ret.append("\n value=\"" + base.getAttribute("imgheight", "150").replaceAll("\"", "&#34;") + "\" />");
@@ -321,7 +319,7 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("\n</tr>");
 
             ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fullwidth") + "</td>");
+            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fullwidth") + "</td>");
             ret.append("\n<td>");
             //ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"fullwidth\" ");
             //ret.append("\n value=\"" + base.getAttribute("fullwidth", "350").replaceAll("\"", "&#34;") + "\" />");
@@ -329,7 +327,7 @@ public class ImageGallery extends GenericAdmResource {
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fullheight") + "</td>");
+            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fullheight") + "</td>");
             ret.append("\n<td>");
             //ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"fullheight\" ");
             //ret.append("\n value=\"" + base.getAttribute("fullheight", "280").replaceAll("\"", "&#34;") + "\" />");
