@@ -223,7 +223,7 @@ public final class wb4writeraddon extends WeakBase
                 }
             }
         }
-        catch (Exception e)
+        catch (Throwable e)
         {
             e.printStackTrace();
         }
