@@ -67,6 +67,9 @@ public class AdvancedSearch extends GenericAdmResource {
         //Assert query string
         query = (query == null ? "" : query.trim());
 
+        String mapKey = getResourceBase().getAttribute("mapKey");
+        mapKey = (mapKey == null ? "" : mapKey);
+
         //Create SparQl Translator
         tr = new SWBSparqlTranslator(lex);
 
@@ -91,14 +94,17 @@ public class AdvancedSearch extends GenericAdmResource {
 
             //If there are results
             if (rs != null && rs.hasNext()) {
-
+                
                 //Get nexr result set
                 while (rs.hasNext()) {
+                    String mapbox = "";
+                    boolean requiresMap = false;
                     boolean first = true;
 
                     //Get next solution of the result set (var set)
                     QuerySolution qs = rs.nextSolution();
                     StringBuffer segment = new StringBuffer();
+                    segment.append("<tr><td>");
 
                     //For each variable
                     for (String vName : (List<String>) rs.getResultVars()) {
@@ -108,6 +114,7 @@ public class AdvancedSearch extends GenericAdmResource {
 
                         //If node is not null
                         if (x != null) {
+
                             //If node is the first in the solution (there is always a subject),
                             //display node in bold
                             if (first) {
@@ -119,8 +126,18 @@ public class AdvancedSearch extends GenericAdmResource {
                                         if (r == null) {
                                             r = "#";
                                         }
+                                        
                                         String mapUrl = r.replace(" ", "%20") +
                                                 "?lat=" + so.getProperty(so_lat) + "&long=" + so.getProperty(so_long);
+                                        
+                                        requiresMap = true;
+                                        mapbox = mapbox + "<a href=\"#\" onclick=\"openMap('" + mapUrl +
+                                                "','','menubar=0,width=420,height=420');\"><img src=\"http://maps.google.com/staticmap?center=" +
+                                                so.getProperty(so_lat) + "," + so.getProperty(so_long) + "&zoom=12&size=100x100&markers=" +
+                                                so.getProperty(so_lat) + "," + so.getProperty(so_long) + ",blues&key=" +
+                                                mapKey + "\"></a>";
+                                        
+                                        
 
                                         segment.append("<a href=\"#\" onclick=\"openMap('" + mapUrl +
                                                 "','','menubar=0,width=420,height=420');\">" + "<b><font size=\"2\" face=\"verdana\">" +
@@ -131,9 +148,9 @@ public class AdvancedSearch extends GenericAdmResource {
                                     } else {
                                         segment.append("<b><font size=\"2\" face=\"verdana\">" +
                                                 so.getDisplayName(lang) + "</b></font>" + "<br>");
-                                        if (rs.getResultVars().size() == 1) {
-                                            segment.append(buildAbstract(so));
-                                        }
+                                        /*if (rs.getResultVars().size() == 1) {
+                                        segment.append(buildAbstract(so));
+                                        }*/
                                     }
                                 } else {
                                     segment.append("<b><font size=\"2\" face=\"verdana\">" +
@@ -151,7 +168,11 @@ public class AdvancedSearch extends GenericAdmResource {
                             segment.append("<font size=\"2\" face=\"verdana\">" + vName + ": </font>" + "-<br>");
                         }
                     }
-                    segment.append("<br>");
+                    segment.append("<br></td>");
+                    if (requiresMap) {
+                        segment.append("<td height=\"115\"> " + mapbox + "</td>");
+                    }
+                    segment.append("</tr>");
                     res.add(segment.toString());
                 }
             }
@@ -675,7 +696,7 @@ public class AdvancedSearch extends GenericAdmResource {
         SWBResourceURL rUrl = paramRequest.getRenderUrl().setMode("PAGE");
         PrintWriter out = response.getWriter();
         StringBuffer sbf = new StringBuffer();
-        
+
         if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
             sbf.append("<script type=\"text/javascript\">\n" +
                     "function openMap(loc, title, args) {\n" +
@@ -684,12 +705,12 @@ public class AdvancedSearch extends GenericAdmResource {
                     "</script>");
 
             sbf.append("    <table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" >\n" +
-                    "      <tr>\n" +
-                    "        <td align=\"left\" width=\"100%\">\n" +
+                    "      <tr><td>\n" +
+                    //                "        <td align=\"left\" width=\"100%\">\n" +
                     "          <font size=\"2\" face=\"verdana\">" +
                     paramRequest.getLocaleString("msgResults") +
                     "<b><font color=\"#0000FF\"> " + queryString + "</font></b><br/></font>\n");
-                    
+
 
             if (solutions != null && solutions.size() > 0) {
                 int step = 10;
@@ -700,7 +721,7 @@ public class AdvancedSearch extends GenericAdmResource {
                 if (page == null) {
                     page = "1";
                 }
-                
+
                 _start = step * (Integer.valueOf(page) - 1);
                 _end = _start + step - 1;
                 if (_end > solutions.size() - 1) {
@@ -710,13 +731,14 @@ public class AdvancedSearch extends GenericAdmResource {
                 //System.out.println("page: " + page + ", start: " + _start + ", end: " + _end);
 
                 sbf.append("Mostrando resultados " + (_start + 1) + " - " + (_end + 1) + " de " + solutions.size() + "<br>" +
-                        "          <hr color=\"#16458D\" width=\"100%\" size=\"1\" /><BR/>\n");
+                        "          <hr color=\"#16458D\" width=\"100%\" size=\"1\" /><BR/></td></tr>\n");
 
                 for (int i = _start; i <= _end; i++) {
-                     sbf.append(solutions.get(i));
+                    sbf.append(solutions.get(i));
                 }
 
-                double pages = Math.ceil((double)solutions.size() / (double)step);
+                sbf.append("<tr><td align=\"center\" colspan=\"2\"><hr width=\"100%\" size=\"1\" /><br/>\n");
+                double pages = Math.ceil((double) solutions.size() / (double) step);
                 for (int i = 1; i <= pages; i++) {
                     _start = step * (i - 1);
                     if ((_start + step) - 1 > solutions.size() - 1) {
@@ -729,33 +751,27 @@ public class AdvancedSearch extends GenericAdmResource {
                     } else {
                         rUrl = paramRequest.getRenderUrl().setMode("PAGE");
                         rUrl.setParameter("p", String.valueOf(i));
-                        sbf.append("<a href =\""+ rUrl +"\">"+ i +"</a> ");
+                        sbf.append("<a href =\"" + rUrl + "\">" + i + "</a> ");
                     }
                 }
-                rUrl = paramRequest.getRenderUrl().setMode("PAGE");
-                rUrl.setParameter("p", String.valueOf(Integer.valueOf(page) + 1));
-                sbf.append("<a href=" + rUrl + ">" + paramRequest.getLocaleString("lblNext") + "</a>\n" +
-                        "<hr width=\"100%\" size=\"1\" /><br/>\n");
+
+                if (Integer.valueOf(page) < pages) {
+                    rUrl = paramRequest.getRenderUrl().setMode("PAGE");
+                    rUrl.setParameter("p", String.valueOf(Integer.valueOf(page) + 1));
+                    sbf.append("<a href=" + rUrl + ">" + paramRequest.getLocaleString("lblNext") + "</a>\n");
+                }
+                sbf.append("</td></tr>");
             } else {
-                sbf.append("          <hr color=\"#16458D\" width=\"100%\" size=\"1\" /><BR/>\n");
+                sbf.append("          <td align=\"center\" colspan=\"2\"><tr><hr color=\"#16458D\" width=\"100%\" size=\"1\" /><BR/>\n");
                 sbf.append("<font size=\"2\" face=\"verdana\" color=\"red\"><b>" +
                         paramRequest.getLocaleString("msgNoResults") + "</b><br/></font>" +
                         (dym.equals("") ? "" : "<font size=\"2\" face=\"verdana\">" +
                         paramRequest.getLocaleString("msgDidYouMean") + " </font><b>" + dym + "</b><br/>" +
-                "    <hr width=\"100%\" size=\"1\" /><br/>\n"));
+                        "    <hr width=\"100%\" size=\"1\" /><br/></td></tr>\n"));
             }
 
-            sbf.append("        </td>\n" +
-                    "      </tr>\n" +
-                    "    </table>\n" +
-                    "    <BR/>\n" +
-                    "<img src=\"http://maps.google.com/staticmap?center=47.238336,8.827171&zoom=12&size=100x100&" +
-                    "markers=47.238336,8.827171,blues%7C40.711614,-74.012318,greeng&key=\">");
-
-
-
-            //rUrl.setParameter("p", String.valueOf(Integer.valueOf(page) + 1));
-            //sbf.append("<a href=\"" + rUrl + "\">Siguiente</a>");
+            sbf.append("    </table>\n" +
+                    "    <BR/>\n");
             out.println(sbf.toString());
         } else {
             doView(request, response, paramRequest);
