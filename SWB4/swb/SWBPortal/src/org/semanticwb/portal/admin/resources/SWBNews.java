@@ -48,7 +48,7 @@ public class SWBNews extends GenericAdmResource
             URLConnection urlconn = url.openConnection();
             InputStream is = urlconn.getInputStream();
             String rss=SWBUtils.IO.readInputStream(is);
-            Document dom = SWBUtils.XML.xmlToDom(rss);
+            Document dom = SWBUtils.XML.xmlToDom(SWBUtils.TEXT.encode(rss,"utf-8"));
             return dom;
         }
         catch (Exception e) {
