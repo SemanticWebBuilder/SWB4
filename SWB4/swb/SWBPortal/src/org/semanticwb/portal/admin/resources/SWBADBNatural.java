@@ -18,6 +18,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.net.URLDecoder;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import org.semanticwb.model.User;
@@ -423,11 +424,10 @@ public class SWBADBNatural extends GenericResource {
                                     sbf.append("<tr>");
                                 }
 
-                                Iterator<String> it = rs.getResultVars().iterator();
                                 boolean first = true;
-                                while (it.hasNext()) {
-                                    String name = it.next();
+                                for (String name : (List<String>)rs.getResultVars()) {
                                     RDFNode x = rb.get(name);
+                                    //System.out.println(x.toString());
                                     sbf.append("<td >");
                                     SemanticObject so = SemanticObject.createSemanticObject(x.toString());
 
