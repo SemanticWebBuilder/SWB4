@@ -431,15 +431,22 @@ public class AdvancedSearch extends GenericAdmResource {
                 "var cPos = word.startP;" +
                 "var wd = null;" +
                 "var wo = \"undefined\";" +
+                "console.log(txt, cPos);" +
                 "var found = false;" +
-                "for (var i = cPos; i >= 0 && !found; i--) {" +
-                "  if (txt.charAt(i) == ']' || txt.charAt(i) == ' ') {" +
-                "    if(txt.charAt(i) == ']') {" +
-                "      brkFound=true;" +
-                "    }" +
-                "    prevBrk = i;" +
-                "    found = true;" +
+                "for(var i = cPos; i >= 0 && !found; i--) {" +
+                "  if (txt.charAt(i) == ']') {" +
+                "     brkFound = true;" +
+                "     prevBrk = i;" +
                 "  }" +
+                "}" +
+                "if (!brkFound) {" +
+                "  prevBrk = cPos - 1;" +
+                "}" +
+
+                
+                "console.log('prev:' + prevBrk);" +
+                "if (prevBrk == -1) {" +
+                "  prevBrk = cPos - 1;" +
                 "}" +
                 "found = false;" +
                 "if (brkFound) {" +
@@ -460,7 +467,7 @@ public class AdvancedSearch extends GenericAdmResource {
                 "if (prevBrk == -1) {" +
                 "return wo;" +
                 "}" +
-                "if (firstBrk < 0) {" +
+                "if (!found) {" +
                 "  firstBrk = 0;" +
                 "}" +
                 //"firstBrk++;" +
@@ -648,7 +655,7 @@ public class AdvancedSearch extends GenericAdmResource {
                 sbf.append("<font size=\"2\" face=\"verdana\" color=\"red\">" + paramRequest.getLocaleString("msgNoSuggestions") + "</font>");
             }
         } else {
-            //System.out.println("Suggesting for " + word);
+            System.out.println("Suggesting for " + word);
             String tag = lex.getObjWordTag(word).getObjId();
 
            /* sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
