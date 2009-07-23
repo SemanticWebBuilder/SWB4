@@ -17,6 +17,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.util.ContentUtils;
@@ -632,5 +633,43 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         }
         return ver;
     }
+
+    @Override
+    public String[] getModes(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
+    {
+        String editable=paramRequest.getArgument("editable","false");
+        String usergroup=paramRequest.getArgument("usergroup");
+        String role=paramRequest.getArgument("role");
+        if(editable.equals("true"))
+        {
+            User user=paramRequest.getUser();
+            boolean add=true;
+            if(role!=null && !user.hasRole(user.getUserRepository().getRole(role)))add=false;
+            if(usergroup!=null && !user.hasRole(user.getUserRepository().getRole(role)))add=false;
+            if(add)return new String[]{paramRequest.Mode_VIEW,paramRequest.Mode_EDIT};
+        }
+        return super.getModes(request, paramRequest);
+    }
+
+    @Override
+    public boolean windowSupport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        String editable=paramRequest.getArgument("editable","false");
+        String usergroup=paramRequest.getArgument("usergroup");
+        String role=paramRequest.getArgument("role");
+        if(editable.equals("true"))
+        {
+            User user=paramRequest.getUser();
+            boolean add=true;
+            if(role!=null && !user.hasRole(user.getUserRepository().getRole(role)))add=false;
+            if(usergroup!=null && !user.hasRole(user.getUserRepository().getRole(role)))add=false;
+            if(add)return true;
+        }
+        return super.windowSupport(request, paramRequest);
+    }
+
+
+
+
 
 }
