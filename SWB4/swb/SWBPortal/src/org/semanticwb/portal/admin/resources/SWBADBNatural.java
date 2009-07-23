@@ -427,28 +427,34 @@ public class SWBADBNatural extends GenericResource {
                                 boolean first = true;
                                 for (String name : (List<String>)rs.getResultVars()) {
                                     RDFNode x = rb.get(name);
-                                    //System.out.println(x.toString());
                                     sbf.append("<td >");
-                                    SemanticObject so = SemanticObject.createSemanticObject(x.toString());
 
-                                    if (so != null) {
-                                        if (first) {
-                                            sbf.append("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI() + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '" + so.getDisplayName(lang) + "');\">" + so.getDisplayName(lang) + "</a>");
-                                            first = false;
-                                        } else {
-                                            SemanticClass tt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
-                                            if (tt != null) {
-                                                sbf.append(tt.getDisplayName(lang));
-                                            } else {
-                                                SemanticProperty stt = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
-                                                sbf.append(stt.getDisplayName(lang));
-                                            }
-                                        }
+                                    //Check if it is a literal node
+                                    if (x != null && x.isLiteral()) {
+                                        sbf.append(x.asNode().getLiteral().getLexicalForm());
                                     } else {
-                                        if (x != null) {
-                                            sbf.append(x);
+                                        //Not a literal node, try to get a semantic object
+                                        SemanticObject so = SemanticObject.createSemanticObject(x.toString());
+                                        if (so != null) {
+                                            if (first) {
+                                                sbf.append("<a href=\"#\" onclick=\"parent.addNewTab('" + so.getURI() + "', '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp', '" + so.getDisplayName(lang) + "');\">" + so.getDisplayName(lang) + "</a>");
+                                                first = false;
+                                            } else {
+                                                SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(so.getURI());
+                                                if (sc != null) {
+                                                    sbf.append(sc.getDisplayName(lang));
+                                                } else {
+                                                    SemanticProperty sp = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(so.getURI());
+                                                    if (sp != null) {
+                                                        sbf.append(sp.getDisplayName(lang));
+                                                    } else {
+                                                        sbf.append(x.toString());
+                                                    }
+                                                }
+                                            }
                                         } else {
-                                            sbf.append(" - ");
+                                            //Not a semantic object, that is, not a semantic class nor a semantic property
+                                            sbf.append(x);
                                         }
                                     }
                                     sbf.append("</td>");
