@@ -433,14 +433,14 @@ public class WBSiteMap extends GenericAdmResource
                     opened=true;
                 }
 
-                html.append("<div class=\"swb-mapa\" id=\"tree_"+website+"\" style=\"");
+                /*html.append("<div class=\"swb-mapa\" id=\"tree_"+website+"\" style=\"");
                 if(width!=null) {
                     html.append("width:"+width+";");
                 }
                 if(height!=null) {
                     html.append("height:"+height+";");
                 }
-                html.append("\" >");
+                html.append("\" >");*/
                 if(title!=null) {
                     html.append("<h1>mapa de sitio</h1>");
                 }
