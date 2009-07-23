@@ -970,7 +970,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     SemanticProperty semanticProperty = semanticProperties.next();
                     if (semanticProperty.getURI().equals(prop.id))
                     {
-                        officeResource.getSemanticObject().setProperty(semanticProperty, value);
+                        if (semanticProperty.isBoolean())
+                        {
+                            boolean bvalue = Boolean.parseBoolean(value);
+                            officeResource.getSemanticObject().setBooleanProperty(semanticProperty, bvalue);
+                        }
+                        else
+                        {
+                            officeResource.getSemanticObject().setProperty(semanticProperty, value);
+                        }
                     }
                 }
                 i++;
@@ -1008,7 +1016,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
         OfficeResource resource = OfficeResource.getOfficeResource(resourceInfo.id, site);
         SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propertyInfo.id);
-        resource.getSemanticObject().setProperty(prop, value);
+        if (prop.isBoolean())
+        {
+            boolean bvalue = Boolean.parseBoolean(value);
+            resource.getSemanticObject().setBooleanProperty(prop, bvalue);
+        }
+        else
+        {
+            resource.getSemanticObject().setProperty(prop, value);
+        }
     }
 
     public void setViewPropertyValue(ResourceInfo resourceInfo, PropertyInfo propertyInfo, String value) throws Exception
@@ -1016,7 +1032,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
         OfficeResource resource = OfficeResource.getOfficeResource(resourceInfo.id, site);
         SemanticProperty prop = site.getSemanticObject().getModel().getSemanticProperty(propertyInfo.id);
-        resource.getSemanticObject().setProperty(prop, value);
+        if (prop.isBoolean())
+        {
+            boolean bvalue = Boolean.parseBoolean(value);
+            resource.getSemanticObject().setBooleanProperty(prop, bvalue);
+        }
+        else
+        {
+            resource.getSemanticObject().setProperty(prop, value);
+        }
     }
 
     public CalendarInfo[] getCalendarsOfResource(ResourceInfo resourceInfo) throws Exception
@@ -1063,7 +1087,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public String getViewPropertyValue(ResourceInfo resourceInfo, PropertyInfo propertyInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
-        OfficeResource resource = OfficeResource.getOfficeResource(resourceInfo.id,site);
+        OfficeResource resource = OfficeResource.getOfficeResource(resourceInfo.id, site);
         SemanticProperty prop = site.getSemanticObject().getModel().getSemanticProperty(propertyInfo.id);
         return resource.getSemanticObject().getProperty(prop);
     }
@@ -1353,12 +1377,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    public String createPreview(String repositoryName, String contentId, String version,String type) throws Exception
+    public String createPreview(String repositoryName, String contentId, String version, String type) throws Exception
     {
         String name = UUID.randomUUID().toString();
         String dir = "/" + name;
         InputStream in = getContent(repositoryName, contentId, version);
-        OfficeResource.loadContent(in, dir,type);
+        OfficeResource.loadContent(in, dir, type);
         in.close();
         return name;
     }
