@@ -23,6 +23,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.ResourceSubType;
+import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.TemplateImp;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -55,7 +56,7 @@ public class ResourceTag extends HTMLTag implements INoBodyParsingTag
             while(it.hasNext())
             {
                 String key=(String)it.next();
-                if(!key.equals("stype"))
+                //if(!key.equals("stype"))
                 {
                     map.put(key,attributes.get(key));
                     //System.out.println("Attribute:"+key+"-"+attributes.get(key));
@@ -84,9 +85,10 @@ public class ResourceTag extends HTMLTag implements INoBodyParsingTag
                         {
                             TemplateImp tpl=(TemplateImp)SWBPortal.getTemplateMgr().getTemplate(paramRequest.getUser(),paramRequest.getWebPage());
                             HashMap map=filterAttributes(attributes);
+                            ResourceType rt=tpl.getWebSite().getResourceType(type);
                             ResourceSubType pst=tpl.getSubType(type,stype);
                             if(stype!=null)map.put("stype",pst);
-                            Iterator it=SWBPortal.getResourceMgr().getResources(pst.getType(),pst,paramRequest.getUser(),paramRequest.getWebPage(),map,tpl);
+                            Iterator it=SWBPortal.getResourceMgr().getResources(rt,pst,paramRequest.getUser(),paramRequest.getWebPage(),map,tpl);
                             
                             if(it.hasNext())
                             {
