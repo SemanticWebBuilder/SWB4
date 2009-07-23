@@ -189,7 +189,7 @@ is divided into following sections:
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="${javac.debug}" name="debug"/>
-            <attribute default="" name="sourcepath"/>
+            <attribute default="/does/not/exist" name="sourcepath"/>
             <element name="customize" optional="true"/>
             <sequential>
                 <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" executable="${platform.javac}" fork="yes" includeantruntime="false" includes="@{includes}" source="${javac.source}" sourcepath="@{sourcepath}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
@@ -363,7 +363,6 @@ is divided into following sections:
         <ant antfile="${project.SWBOfficeCore-1}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBXMLRPCClient}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.XMLRPCClient-1}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init,-check-automatic-build,-clean-after-automatic-build" name="-verify-automatic-build"/>
     <target depends="init" name="-check-automatic-build">
@@ -682,7 +681,6 @@ is divided into following sections:
         <ant antfile="${project.SWBOfficeCore-1}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBXMLRPCClient}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.XMLRPCClient-1}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>
