@@ -1785,7 +1785,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 } catch (Exception e) {
                     mime = DEFAULT_MIME_TYPE;
                 }
-                response.setHeader("Content-type", mime + ";");
+                //response.setHeader("Content-type", mime + ";");
             }
             if (action != null && "inline".equals(action)) {
                 response.setContentType(mime);
