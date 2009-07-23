@@ -323,7 +323,15 @@ public class WebPage extends WebPageBase
     public String getDisplayName(HashMap args)
     {
         String language = (String) args.get("language");
-        return getDisplayName(language);
+        String id = (String) args.get("id");
+        if(id!=null)
+        {
+            WebPage page=getWebSite().getWebPage(id);
+            return page.getDisplayName(language);
+        }else
+        {
+            return getDisplayName(language);
+        }
     }    
     
     /**
