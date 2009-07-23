@@ -362,6 +362,8 @@ is divided into following sections:
         <ant antfile="${project.SWBOfficeComunicationInterfaces}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBOfficeCore}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBOpenOffice2_4Implementation}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBXMLRPCClient}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init,-check-automatic-build,-clean-after-automatic-build" name="-verify-automatic-build"/>
     <target depends="init" name="-check-automatic-build">
@@ -679,6 +681,8 @@ is divided into following sections:
         <ant antfile="${project.SWBOfficeComunicationInterfaces}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBOfficeCore}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBOpenOffice2_4Implementation}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBXMLRPCClient}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>
