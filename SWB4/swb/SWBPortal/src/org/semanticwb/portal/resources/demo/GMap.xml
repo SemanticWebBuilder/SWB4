@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<form name="frmWBGMap" action="true" method="POST" enctype="multipart/form-data">
+		<input type="TEXT" name="map_key" label="Key(O definir gm/domain en wb.properties):" size="86"/>
+		<input type="TEXT" name="map_width" label="Ancho(pixeles):" size="4" maxlength="4" value="550"/>
+		<input type="TEXT" name="map_height" label="Alto(pixeles):" size="4" maxlength="4" value="400"/>
+                <select name="map_type" label="Tipo de Mapa?">
+                    <option label="Normal" value="G_NORMAL_MAP" />
+                    <option label="Satelite" value="G_SATELLITE_MAP" />
+                    <option label="Hibrido" value="G_HYBRID_MAP" />
+                </select>
+		<input type="TEXT" name="map_lat" label="Latitud:" value="19.49419516889648"/>
+		<input type="TEXT" name="map_lng" label="Longitud:" value="-99.04441952705383"/>
+		<input type="TEXT" name="map_zoom" label="Zoom(0-18):" size="4" maxlength="2" value="13" jsvaltype="js_numbers"/>
+                <select name="glmcontrol" label="Mostrar GLargeMapControl?" >
+                    <option label="Si" value="true" />
+                    <option label="No" value="false" />
+                </select>
+                <select name="gmtcontrol" label="Mostrar GMapTypeControl?" >
+                    <option label="Si" value="true" />
+                    <option label="No" value="false" />
+                </select>
+                <select name="overmap" label="Mostrar Overview Map?" >
+                    <option label="Si" value="true" />
+                    <option label="No" value="false" />
+                </select>
+		<input type="TEXT" name="overmap_x" label="Posición X del Overview Map(pixeles):" size="4" maxlength="4"/>
+		<input type="TEXT" name="overmap_y" label="Posición Y del Overview Map(pixeles):" size="4" maxlength="4"/>
+		<input type="TEXT" name="overmap_width" label="Ancho Overview Map(pixeles):" size="4" maxlength="4" value="150" jsvaltype="js_numbers"/>
+		<input type="TEXT" name="overmap_height" label="Alto Overview Map(pixeles):" size="4" maxlength="4" value="150" jsvaltype="js_numbers"/>
+                <select name="overmap_type" label="Tipo de Overview Mapa?">
+                    <option label="Normal" value="G_NORMAL_MAP" />
+                    <option label="Satelite" value="G_SATELLITE_MAP" />
+                    <option label="Hibrido" value="G_HYBRID_MAP" />
+                </select>
+		<input type="SUBMIT" name="btnSave"  value="Guardar"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+</admresource>

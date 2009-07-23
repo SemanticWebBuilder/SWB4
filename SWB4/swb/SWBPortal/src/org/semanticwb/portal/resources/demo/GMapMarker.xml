@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<form name="frmWBGMap" action="true" method="POST" enctype="multipart/form-data">
+		<input type="TEXT" name="mark_lat" label="Latitud:" value="19.49419516889648"/>
+		<input type="TEXT" name="mark_lng" label="Longitud:" value="-99.04441952705383"/>
+		<input type="TEXT" name="details" label="URL de maximizar:"/>
+		<input type="SUBMIT" name="btnSave"  value="Guardar"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+</admresource>
