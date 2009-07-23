@@ -227,7 +227,7 @@
         jobj.putOpt("children", childs);
         Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang),pf);
 
-        System.out.println("obj:"+obj.getId()+" cls:"+cls);
+        //System.out.println("obj:"+obj.getId()+" cls:"+cls);
         //drop acceptance
         JSONArray dropacc=new JSONArray();
         jobj.putOpt("dropacc", dropacc);
@@ -263,7 +263,7 @@
         Iterator<SemanticProperty> hprops=cls.listInverseHerarquicalProperties();
         if(hprops.hasNext())herarprop=hprops.next();
 
-        System.out.println("herarprop:"+herarprop);
+        //System.out.println("herarprop:"+herarprop);
 
         if(addChilds)
         {
