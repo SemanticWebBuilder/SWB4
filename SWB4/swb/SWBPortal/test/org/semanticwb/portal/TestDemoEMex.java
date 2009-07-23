@@ -74,57 +74,57 @@ public class TestDemoEMex {
     {
     }
 
-    //@Test
-    public void configUserRec() throws SQLException
-    {
-
-        UserRepository repository = null;
-        repository = SWBContext.getUserRepository("nuevo_usr");
-      //  repository.setUserRepSecurityQuestionList("1:Pasaporte num|2:Licencia num|3:nombre de tu mascota","es");
-      //  repository.setUserRepSecurityQuestionList("1:Passport number|2:Drivers number|3:petsname","en");
-System.out.println("inicio...");
-        repository.createDateTimeExtendedAttribute("fechaNac");
-System.out.println("creado fecha nac");
-        String [] sex = new String[3];
-        sex[0] = "hombre:mujer";
-        sex[1] = "es|hombre:mujer";
-        sex[2] = "en|man:woman";
-
-        repository.createListExtendedAttribute("sexo", sex);
-System.out.println("creado sexo");
-      String [] al = new String[3];
-        al[0] = "primaria:secundaria:preparatoria:universidad:maestria:doctorado";
-        al[1] = "es|primaria:secundaria:preparatoria:universidad:maestria:doctorado";
-        al[2] = "en|elementary:13-15grade:high:university:degree:doctordegre";
-        repository.createListExtendedAttribute("grado", al);
-System.out.println("Creado grado");
-
-        repository.createStringExtendedAttribute("ciudad");
-System.out.println("Creado ciudad");
-        al = new String[3];
-        al[0] = "empleado:estudiante:hogar:otro:por mi cuenta";
-        al[1] = "es|empleado:estudiante:hogar:otro:por mi cuenta";
-        al[2] = "en|employed:student:home:other:at my own";
-        repository.createListExtendedAttribute("ocupacion", al);
-System.out.println("Creado ocupacion");
-        Connection con = SWBUtils.DB.getConnection("catalogs", "Conexion Carga CP's");
-        PreparedStatement ps = con.prepareStatement("select entidad_federativa from entidad_relacion order by id_entidad_federativa2");
-        ResultSet rs = ps.executeQuery();
-        String cadena="";
-        while (rs.next()){
-            cadena = cadena + rs.getString(1) +":";
-        }
-        rs.close();
-        ps.close();
-        con.close();
-        cadena = cadena.substring(1, cadena.length()-1);
-System.out.println("cadena: "+cadena);
-        al[0]=cadena;
-        al[1]="es|"+cadena;
-        al[2]="en|"+cadena;
-        repository.createListExtendedAttribute("estado", al);
-System.out.println("Creado estado");
-    }
+//    //@Test
+//    public void configUserRec() throws SQLException
+//    {
+//
+//        UserRepository repository = null;
+//        repository = SWBContext.getUserRepository("nuevo_usr");
+//      //  repository.setUserRepSecurityQuestionList("1:Pasaporte num|2:Licencia num|3:nombre de tu mascota","es");
+//      //  repository.setUserRepSecurityQuestionList("1:Passport number|2:Drivers number|3:petsname","en");
+//System.out.println("inicio...");
+//        repository.createDateTimeExtendedAttribute("fechaNac");
+//System.out.println("creado fecha nac");
+//        String [] sex = new String[3];
+//        sex[0] = "hombre:mujer";
+//        sex[1] = "es|hombre:mujer";
+//        sex[2] = "en|man:woman";
+//
+//        repository.createListExtendedAttribute("sexo", sex);
+//System.out.println("creado sexo");
+//      String [] al = new String[3];
+//        al[0] = "primaria:secundaria:preparatoria:universidad:maestria:doctorado";
+//        al[1] = "es|primaria:secundaria:preparatoria:universidad:maestria:doctorado";
+//        al[2] = "en|elementary:13-15grade:high:university:degree:doctordegre";
+//        repository.createListExtendedAttribute("grado", al);
+//System.out.println("Creado grado");
+//
+//        repository.createStringExtendedAttribute("ciudad");
+//System.out.println("Creado ciudad");
+//        al = new String[3];
+//        al[0] = "empleado:estudiante:hogar:otro:por mi cuenta";
+//        al[1] = "es|empleado:estudiante:hogar:otro:por mi cuenta";
+//        al[2] = "en|employed:student:home:other:at my own";
+//        repository.createListExtendedAttribute("ocupacion", al);
+//System.out.println("Creado ocupacion");
+//        Connection con = SWBUtils.DB.getConnection("catalogs", "Conexion Carga CP's");
+//        PreparedStatement ps = con.prepareStatement("select entidad_federativa from entidad_relacion order by id_entidad_federativa2");
+//        ResultSet rs = ps.executeQuery();
+//        String cadena="";
+//        while (rs.next()){
+//            cadena = cadena + rs.getString(1) +":";
+//        }
+//        rs.close();
+//        ps.close();
+//        con.close();
+//        cadena = cadena.substring(1, cadena.length()-1);
+//System.out.println("cadena: "+cadena);
+//        al[0]=cadena;
+//        al[1]="es|"+cadena;
+//        al[2]="en|"+cadena;
+//        repository.createListExtendedAttribute("estado", al);
+//System.out.println("Creado estado");
+//    }
 
 //@Test
 public void userdemo() throws SWBException{
