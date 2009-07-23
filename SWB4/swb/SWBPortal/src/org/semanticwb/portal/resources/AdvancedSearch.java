@@ -211,13 +211,13 @@ public class AdvancedSearch extends GenericAdmResource {
 
             //Add necesary scripting
             sbf.append("<script type=\"text/javascript\">\n" +
-                "dojo.addOnLoad(function () {\n" +
-                "dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyDown');\n" +
-                "dojo.connect(dojo.byId('naturalQuery'), 'onkeyup', 'queryOnKeyUp');\n" +
-                "dojo.connect(dojo.byId('naturalQuery'), 'onblur', function () {\n" +
-                "clearSuggestions();\n" +
-                "});\n" +
-                "});\n" +
+                "  dojo.addOnLoad(function () {\n" +
+                "  dojo.connect(dojo.byId('naturalQuery'), 'onkeydown', 'queryOnKeyDown');\n" +
+                "  dojo.connect(dojo.byId('naturalQuery'), 'onkeyup', 'queryOnKeyUp');\n" +
+                "  dojo.connect(dojo.byId('naturalQuery'), 'onblur', function () {\n" +
+                "      clearSuggestions();\n" +
+                "    });\n" +
+                "  });\n" +
                 "var source =\"" + rUrl + "\";\n" +
                 "var lang =\"" + lang + "\";\n" +
                 "var displayed;\n" +
@@ -443,15 +443,15 @@ public class AdvancedSearch extends GenericAdmResource {
                 "}" +
                 "found = false;" +
                 "if (brkFound) {" +
-                "  for (i = prevBrk - 1; i > 0 && !found; i--) {" +
+                "  for (i = prevBrk - 1; i >= 0 && !found; i--) {" +
                 "    if (txt.charAt(i) == '[') {" +
                 "      firstBrk = i;" +
                 "      found = true;" +
                 "    }" +
                 "}" +
                 "} else {" +
-                "  for (i = prevBrk - 1; i > 0 && !found; i--) {" +
-                "    if (txt.charAt(i) == '[') {" +
+                "  for (i = prevBrk - 1; i >= 0 && !found; i--) {" +
+                "    if (txt.charAt(i) == ' ') {" +
                 "      firstBrk = i;" +
                 "      found = true;" +
                 "    }" +
@@ -460,8 +460,11 @@ public class AdvancedSearch extends GenericAdmResource {
                 "if (prevBrk == -1) {" +
                 "return wo;" +
                 "}" +
+                "if (firstBrk < 0) {" +
+                "  firstBrk = 0;" +
+                "}" +
                 //"firstBrk++;" +
-                "wd = txt.substring((firstBrk==0)?++firstBrk:firstBrk, prevBrk);" +
+                "wd = txt.substring(firstBrk, prevBrk);" +
                 "wo = {" +
                 "word: wd," +
                 "startP: firstBrk," +
@@ -478,7 +481,12 @@ public class AdvancedSearch extends GenericAdmResource {
         sbf.append("function setSelection(selected, prep) {" +
                 "var word = getCurrentWord('naturalQuery');" +
                 "var newText = dojo.byId('id' + selected).innerHTML.replace(/<(.|\\n)+?>/g, \"\");" +
-                "newText = prep + \"[\" + newText + \"]\";" +
+                "        var word_array = newText.split(\" \");" +
+                "        if (word_array.length > 1) {\n" +
+                "          newText = prep + \"[\" + newText + \"]\";\n" +
+                "        } else {\n" +
+                "          newText = prep + newText;\n" +
+                "        }" +
                 "var valText = dojo.byId('naturalQuery').value;" +
                 "dojo.byId('naturalQuery').value = valText.substring(0, word.startP) +" +
                 "newText + valText.substring(word.endP, valText.length);" +
@@ -640,7 +648,7 @@ public class AdvancedSearch extends GenericAdmResource {
                 sbf.append("<font size=\"2\" face=\"verdana\" color=\"red\">" + paramRequest.getLocaleString("msgNoSuggestions") + "</font>");
             }
         } else {
-            System.out.println("Suggesting for " + word);
+            //System.out.println("Suggesting for " + word);
             String tag = lex.getObjWordTag(word).getObjId();
 
             sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
@@ -788,7 +796,7 @@ public class AdvancedSearch extends GenericAdmResource {
 
     public String buildAbstract(SemanticObject o) {
         StringBuffer res = new StringBuffer();
-
+        //System.out.println(lang);
         //Get list of object properties
         Iterator<SemanticProperty> pit = o.listProperties();
         while (pit.hasNext()) {
