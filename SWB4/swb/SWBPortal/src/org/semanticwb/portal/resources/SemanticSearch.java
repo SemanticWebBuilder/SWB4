@@ -652,8 +652,8 @@ public class SemanticSearch extends GenericAdmResource {
         tr = new SWBSparqlTranslator(lex);
         long time = System.currentTimeMillis();
         String sparqlQuery = lex.getPrefixString() + "\n" + tr.translateSentence(query, false);
-        System.out.println("\n+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
-        System.out.println(sparqlQuery);
+        //System.out.println("\n+++Tiempo de traducción: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
+        //System.out.println(sparqlQuery);
         String errCount = Integer.toString(tr.getErrCode());
 
         if (errCount != null) {
@@ -699,7 +699,7 @@ public class SemanticSearch extends GenericAdmResource {
                                     "<http://dbpedia.org/resource/" + dbName + "> geo:long ?long.\n" +
                                     "<http://dbpedia.org/resource/" + dbName + "> foaf:page ?page.\n" +
                                     "}\n";
-                            System.out.println("<<<<<" + dbPediaQuery);
+                            //System.out.println("<<<<<" + dbPediaQuery);
                             //Query dbpedia
                             SemanticModel dbpModel = SWBPlatform.getSemanticMgr().getModel("DBPedia");
                             QueryExecution dbQexec = dbpModel.sparQLQuery(dbPediaQuery);
@@ -738,7 +738,7 @@ public class SemanticSearch extends GenericAdmResource {
                                     "<hr><br>");
                         }
                         sbf.append("<br>" + paramRequest.getLocaleString("msgSearch") + ": " + query + ".<br>");
-                    System.out.println("+++Tiempo de consulta dbPedia: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
+                    //System.out.println("+++Tiempo de consulta dbPedia: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
                     Model model = SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel();
                     SemanticModel mo = new SemanticModel("test", model);
                     //Query squery = QueryFactory.create(sparqlQuery);
@@ -842,7 +842,7 @@ public class SemanticSearch extends GenericAdmResource {
                         sbf.append("  </tbody>\n");
                         sbf.append("</table>\n");
                         sbf.append("<p aling=\"center\">\n" + hitsCount + " coincidencias en " + paramRequest.getLocaleString("exectime") + ": " + (System.currentTimeMillis() - time) + "ms." + "</p>\n");
-                        System.out.println("+++Tiempo de consulta modelo local: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
+                        //System.out.println("+++Tiempo de consulta modelo local: " + String.valueOf(System.currentTimeMillis() - time) + "milisegundos");
                     } finally {
                         qexec.close();
                     }
@@ -873,7 +873,7 @@ public class SemanticSearch extends GenericAdmResource {
                 "  ?org rdf:type emex:Organisation.\n" +
                 "  ?org emex:name  \"" + name + "\".\n" +
                 "}\n";
-        System.out.println(sparqlQuery);
+        //System.out.println(sparqlQuery);
         Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
         Query squery = QueryFactory.create(sparqlQuery);
         squery.serialize();
