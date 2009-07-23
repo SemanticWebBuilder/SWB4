@@ -147,7 +147,31 @@
               url: url,
               load: function(response, ioArgs){
                   //alert(response);
+                  //dijit.byId('swbDialogImp').attr('content',response);
                   dijit.byId('swbDialogImp').attr('content',response);
+                  dijit.byId('swbDialog').show();
+                  setDialogTitle(title);
+                  return response;
+              },
+              error: function(response, ioArgs){
+                  showStatus('Error:'+response);
+                  //dijit.byId('swbDialogImp').attr('content','Error: '+response);
+                  //dijit.byId('swbDialog').show();
+                  return response;
+              },
+              handleAs: "text"
+          });
+      }
+
+      function showDialog2(url, title)
+      {
+          //alert("url:"+url);
+          dojo.xhrGet({
+              url: url,
+              load: function(response, ioArgs){
+                  //alert(response);
+                  //dijit.byId('swbDialogImp').attr('content',response);
+                  dijit.byId('swbDialogImp').domNode.innerHTML=response;
                   dijit.byId('swbDialog').show();
                   setDialogTitle(title);
                   return response;
