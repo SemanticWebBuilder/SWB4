@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<form name="frmWBBanner" action="true" method="POST" enctype="multipart/form-data">
+		<input type="TEXT" name="cto" label="Dirección de Correo Electrónico del Contacto:" size="50"/>
+		<input type="SUBMIT" name="btnSave"  value="Guardar"/>
+		<input type="RESET"  name="btnReset" value="Cancelar"/>
+	</form>
+</admresource>
