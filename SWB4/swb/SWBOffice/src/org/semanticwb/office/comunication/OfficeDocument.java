@@ -1006,7 +1006,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public void setResourceProperties(ResourceInfo resourceInfo, PropertyInfo propertyInfo, String value) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
-        Resource resource = site.getResource(resourceInfo.id);
+        OfficeResource resource = OfficeResource.getOfficeResource(resourceInfo.id, site);
         SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propertyInfo.id);
         resource.getSemanticObject().setProperty(prop, value);
     }
@@ -1016,7 +1016,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
         OfficeResource resource = OfficeResource.getOfficeResource(resourceInfo.id, site);
         SemanticProperty prop = site.getSemanticObject().getModel().getSemanticProperty(propertyInfo.id);
-        resource.getSemanticObject().setProperty(prop, value);
+        if(prop.isBoolean() && value!=null)
+        {
+            boolean ovalue=Boolean.parseBoolean(value);
+            resource.getSemanticObject().setBooleanProperty(prop, ovalue);
+        }
+        else
+        {
+            resource.getSemanticObject().setProperty(prop, value);
+        }
     }
 
     public CalendarInfo[] getCalendarsOfResource(ResourceInfo resourceInfo) throws Exception
