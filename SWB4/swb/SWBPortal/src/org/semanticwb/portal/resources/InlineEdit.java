@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
@@ -18,7 +17,6 @@ import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticOntology;
-import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -197,45 +195,50 @@ public class InlineEdit extends GenericResource
     private boolean userCanEdit(SWBParamRequest paramrequest)
     {
         boolean access = false;
-        try{
+        String str_role = getResourceBase().getAttribute("editRole", "0");
         User user = paramrequest.getUser();
-        String str_role = getResourceBase().getAttribute("editRole","0");
-
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        GenericObject gobj = null;
         try {
-            gobj = ont.getGenericObject(str_role);
-        } catch (Exception e) {
-            log.error("Errror InlineEdit.userCanEdit()",e);
-        }
-
-        UserGroup ugrp = null;
-        Role urole = null;
-
-        if (!str_role.equals("0")) {
-            if (gobj != null) {
-                if (gobj instanceof UserGroup) {
-                    ugrp = (UserGroup) gobj;
-                    if (user.hasUserGroup(ugrp)) {
-                        access = true;
-                    }
-                } else if (gobj instanceof Role) {
-                    urole = (Role) gobj;
-                    if (user.hasRole(urole)) {
-                        access = true;
-                    }
+            if (user != null&&!str_role.equals("0")) {
+                SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+                GenericObject gobj = null;
+                try {
+                    gobj = ont.getGenericObject(str_role);
+                } catch (Exception e) {
+                    log.error("Errror InlineEdit.userCanEdit()", e);
                 }
-            } else {
-                access = true;
+
+                UserGroup ugrp = null;
+                Role urole = null;
+
+                if (!str_role.equals("0")) {
+                    if (gobj != null) {
+                        if (gobj instanceof UserGroup) {
+                            ugrp = (UserGroup) gobj;
+                            if (user.hasUserGroup(ugrp)) {
+                                access = true;
+                            }
+                        } else if (gobj instanceof Role) {
+                            urole = (Role) gobj;
+                            if (user.hasRole(urole)) {
+                                access = true;
+                            }
+                        }
+                    } else {
+                        access = true;
+                    }
+                } else {
+                    access = true;
+                }
             }
-        } else {
-            access = true;
         }
-        }
-        catch(Exception e)
-        {
+        catch  (Exception e) {
             access = false;
         }
-        return access;
+
+        if(str_role.equals("0")&&user==null) access=true;
+        else if(!str_role.equals("0")&&user==null) access=false;
+        else if(str_role.equals("0")&&user!=null) access=true;
+
+    return   access ;
     }
 }
