@@ -73,8 +73,7 @@ public class Wiki extends GenericResource {
         PrintWriter out = response.getWriter();
         String content = getContent(readFile(paramsRequest));
 
-        if(userCanEdit(paramsRequest))
-        {
+        if (userCanEdit(paramsRequest)) {
             out.println("<p style=\"text-align:right;\"><a href=\"" + paramsRequest.getRenderUrl().setMode(SWBParamRequest.Mode_EDIT) + "\">[editar]</a></p>");
         }
         String pre = "<div class=\"wikiContent\">";
@@ -241,7 +240,7 @@ public class Wiki extends GenericResource {
         WebPage wpage = paramRequest.getWebPage();
         WebSite wsite = wpage.getWebSite();
 
-        String str_role = base.getAttribute("editRole","0");
+        String str_role = base.getAttribute("editRole", "0");
         out.println("<div class=\"swbform\">");
         SWBResourceURL urlA = paramRequest.getActionUrl();
         urlA.setAction("admin_update");
@@ -255,8 +254,10 @@ public class Wiki extends GenericResource {
         Iterator<Role> iRoles = wsite.getUserRepository().listRoles(); //DBRole.getInstance().getRoles(topicmap.getDbdata().getRepository());
         StringBuffer strRules = new StringBuffer("");
         String selected = "";
-        if(str_role.equals("0")) selected = "selected";
-        strRules.append("\n<option value=\"0\" " + selected +" >" + "Ninguno" + "</option>");
+        if (str_role.equals("0")) {
+            selected = "selected";
+        }
+        strRules.append("\n<option value=\"0\" " + selected + " >" + "Ninguno" + "</option>");
         strRules.append("\n<optgroup label=\"Roles\">");
         while (iRoles.hasNext()) {
             Role oRole = iRoles.next();
@@ -282,7 +283,7 @@ public class Wiki extends GenericResource {
             strTemp = strRules.toString();
         }
         out.println("<tr><td colspan=\"2\"><b>" + "Role / UserGroup para edición" + "</b></td></tr>");
-        out.println("<tr><td align=\"right\" width=\"150\">" + "Editar"+ ":</td>");
+        out.println("<tr><td align=\"right\" width=\"150\">" + "Editar" + ":</td>");
         out.println("<td><select name=\"editar\">" + strTemp + "</select></td></tr>");
         out.println("</table>");
         out.println("</fieldset>");
@@ -306,17 +307,17 @@ public class Wiki extends GenericResource {
 //        }
 //        ResourceMgr.getInstance().getResourceCacheMgr().removeResource(response.getResourceBase().getRecResource());
         String action = response.getAction();
-        if(action==null) action="";
-        if(action.equals("admin_update"))
-        {
+        if (action == null) {
+            action = "";
+        }
+        if (action.equals("admin_update")) {
             String editaccess = request.getParameter("editar");
-            if(editaccess!=null)
-            {
+            if (editaccess != null) {
                 getResourceBase().setAttribute("editRole", editaccess);
                 try {
                     getResourceBase().updateAttributesToDB();
                 } catch (Exception e) {
-                    log.error("Error al guardar Role/UserGroup para acceso al wiki.",e);
+                    log.error("Error al guardar Role/UserGroup para acceso al wiki.", e);
                 }
 
             }
@@ -326,45 +327,51 @@ public class Wiki extends GenericResource {
     private boolean userCanEdit(SWBParamRequest paramrequest)
     {
         boolean access = false;
-        try{
+        String str_role = getResourceBase().getAttribute("editRole", "0");
         User user = paramrequest.getUser();
-        String str_role = getResourceBase().getAttribute("editRole","0");
-
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        GenericObject gobj = null;
         try {
-            gobj = ont.getGenericObject(str_role);
-        } catch (Exception e) {
-            log.error("Errror InlineEdit.userCanEdit()",e);
-        }
-
-        UserGroup ugrp = null;
-        Role urole = null;
-
-        if (!str_role.equals("0")) {
-            if (gobj != null) {
-                if (gobj instanceof UserGroup) {
-                    ugrp = (UserGroup) gobj;
-                    if (user.hasUserGroup(ugrp)) {
-                        access = true;
-                    }
-                } else if (gobj instanceof Role) {
-                    urole = (Role) gobj;
-                    if (user.hasRole(urole)) {
-                        access = true;
-                    }
+            if (user != null&&!str_role.equals("0")) {
+                SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+                GenericObject gobj = null;
+                try {
+                    gobj = ont.getGenericObject(str_role);
+                } catch (Exception e) {
+                    log.error("Errror InlineEdit.userCanEdit()", e);
                 }
-            } else {
-                access = true;
+
+                UserGroup ugrp = null;
+                Role urole = null;
+
+                if (!str_role.equals("0")) {
+                    if (gobj != null) {
+                        if (gobj instanceof UserGroup) {
+                            ugrp = (UserGroup) gobj;
+                            if (user.hasUserGroup(ugrp)) {
+                                access = true;
+                            }
+                        } else if (gobj instanceof Role) {
+                            urole = (Role) gobj;
+                            if (user.hasRole(urole)) {
+                                access = true;
+                            }
+                        }
+                    } else {
+                        access = true;
+                    }
+                } else {
+                    access = true;
+                }
             }
-        } else {
-            access = true;
         }
-        }
-        catch(Exception e)
-        {
+        catch  (Exception e) {
             access = false;
         }
-        return access;
-    }
+
+        if(str_role.equals("0")&&user==null) access=true;
+        else if(!str_role.equals("0")&&user==null) access=false;
+        else if(str_role.equals("0")&&user!=null) access=true;
+
+    return   access ;
+}
+
 }
