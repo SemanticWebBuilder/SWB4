@@ -9,9 +9,11 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Vector"%>
 <%@page import="java.util.Arrays"%>
+<%@page import="java.util.StringTokenizer"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.platform.SemanticProperty"%>
 <%@page import="org.semanticwb.model.SWBModel"%>
 <%@page import="org.semanticwb.model.Descriptiveable"%>
 <%@page import="org.semanticwb.platform.SemanticClass"%>
@@ -25,6 +27,31 @@ private final int I_INIT_PAGE = 1;
 <%
 String action=paramRequest.getAction();
 SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
+SemanticClass semClass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
+
+/*
+Iterator <SemanticProperty> itPropsJ=semClass.listProperties();
+while(itPropsJ.hasNext()){
+    SemanticProperty semProp=itPropsJ.next();
+    System.out.println("semProp:"+semProp.getName());
+}
+ * */
+
+
+ArrayList aprops2display=new ArrayList();
+String props2display=(String)request.getAttribute("props2display");
+if(props2display!=null && semClass!=null){
+    StringTokenizer strTokens=new StringTokenizer(props2display,",");
+    while(strTokens.hasMoreTokens()){
+        String token=strTokens.nextToken();
+        if(token==null) return;
+        SemanticProperty semProp=semClass.getProperty(token);
+        if(semProp!=null){
+            aprops2display.add(semProp);
+        }
+    }
+}
+
 if (sobj != null) {
     if(action.equals("excel")){
         %>
@@ -34,12 +61,20 @@ if (sobj != null) {
                     <tr><td>
                         <table>
                             <tr>
-                            <th><%=paramRequest.getLocaleString("code")%></th>
-                                <th><%=paramRequest.getLocaleString("description")%></th>
+                                <%
+                                Iterator<SemanticProperty> itProps=aprops2display.iterator();
+                                while(itProps.hasNext())
+                                {
+                                   SemanticProperty semProp=itProps.next();
+                                %>
+                                    <th><%=semProp.getDisplayName()%></th>
+                                <%
+                                }
+                                %>
                             </tr>
                             <%
                             int actualPage = 1;
-                            String strResTypes[] = getCatSortArray(sobj, actualPage, request.getParameter("txtFind"));
+                            String strResTypes[] = getCatSortArray(sobj, actualPage, request.getParameter("txtFind"), paramRequest);
                             String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
                             int iIniPage = Integer.parseInt(pageParams[0]);
                             int iFinPage = Integer.parseInt(pageParams[1]);
@@ -48,25 +83,38 @@ if (sobj != null) {
                                 iFinPage = iFinPage - 1;
                             }
                             for (int i = iIniPage; i < strResTypes.length-1; i++)
-                             {
+                            {
                                 try{
+                                    %>
+                                       <tr>
+                                    <%
                                     String[] strFields = strResTypes[i].toString().split(":swbp4g1:");
-                                    String title = strFields[0];
-                                    String description = strFields[1];
-                            %>
-                            <tr>
-                                <td><%=title%></td>
-                                <td>
-                                <%if(description!=null && !description.equals("null")){%>
-                                    <%=description%>
-                                <%}%>
-                                </td>
-                            </tr>
-                            <%
-                            }catch(Exception e){
-                            }
-                           }
-                            %>
+                                    String orderField = strFields[0];
+                                    String ObjUri = strFields[1];
+                                    SemanticObject semObject = SemanticObject.createSemanticObject(ObjUri);
+                                    Iterator <SemanticProperty> itObjProps=semObject.getSemanticClass().listProperties();
+                                    while(itObjProps.hasNext()){
+                                        SemanticProperty semProp=itObjProps.next();
+                                        if(aprops2display.contains(semProp))
+                                        {
+                                            String propValue=semObject.getProperty(semProp);
+                                        %>
+                                                 <td>
+                                                     <%if(propValue!=null && !propValue.equals("null")){%>
+                                                    <%=propValue%>
+                                                <%}%>
+                                                </td>
+                                        <%
+                                        }
+                                     }
+                                    %>
+                                         </tr>
+                                    <%
+                                    }catch(Exception e){
+                                        e.printStackTrace();
+                                    }
+                                  }
+                               %>
                 </table>
              </td>
            </tr>
@@ -114,8 +162,17 @@ if (sobj != null) {
                         <th align="CENTER" width=14px class="SWBWorkWithGridTitle"></th>
                         <th align="CENTER" width=14px class="SWBWorkWithGridTitle"></th>
                         <th align="CENTER" width=14px class="SWBWorkWithGridTitle"></th>
-                        <th align="LEFT" width=125px class="SWBWorkWithGridTitle"><%=paramRequest.getLocaleString("code")%></th>
-                        <th align="LEFT" nowrap class="SWBWorkWithGridTitle"><%=paramRequest.getLocaleString("description")%></th>
+
+                        <%
+                                Iterator<SemanticProperty> itProps=aprops2display.iterator();
+                                while(itProps.hasNext())
+                                {
+                                   SemanticProperty semProp=itProps.next();
+                                %>
+                                    <th align="LEFT" width=125px class="SWBWorkWithGridTitle"><%=semProp.getDisplayName()%></th>
+                                <%
+                                }
+                                %>
                     </tr>
         <%
             //Empieza paginación
@@ -124,7 +181,7 @@ if (sobj != null) {
             if (request.getParameter("actualPage") != null) {
                 actualPage = Integer.parseInt(request.getParameter("actualPage"));
             }
-            String strResTypes[] = getCatSortArray(sobj, actualPage, request.getParameter("txtFind"));
+            String strResTypes[] = getCatSortArray(sobj, actualPage, request.getParameter("txtFind"), paramRequest);
 
             String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
             int iIniPage = Integer.parseInt(pageParams[0]);
@@ -133,7 +190,7 @@ if (sobj != null) {
             if (iFinPage == strResTypes.length) {
                 iFinPage = iFinPage - 1;
             }
-           
+
             if (actualPage > 1) {
                  int gotop = (actualPage - 1);
                  urlPag.setParameter("actualPage", ""+gotop);
@@ -161,36 +218,45 @@ if (sobj != null) {
              for (int i = iIniPage; i < iFinPage; i++)
              {
                 String[] strFields = strResTypes[i].toString().split(":swbp4g1:");
-                String title = strFields[0];
-                String description = strFields[1];
-                String uri = strFields[2];
+                String orderField = strFields[0];
+                String ObjUri = strFields[1];
                 url.setCallMethod(url.Call_CONTENT);
-                url.setParameter("objInstUri", uri);
-                            %>
-                            <tr class="SWBWorkWithGridOdd"><td valign=top align="CENTER">
-                                <%url.setMode(url.Mode_VIEW+"2");%>
-                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridopen.gif" title="<%=paramRequest.getLocaleString("open")%>" class="SWBWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
-                                <td valign=top align="CENTER">
-                                <%url.setMode(url.Mode_EDIT);%>
-                                <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridupdate.gif" title="<%=paramRequest.getLocaleString("edit")%>" class="SWBWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
-                                <td valign=top align="CENTER">
-                                <%url.setMode(url.Mode_VIEW+"2");%>
-                                <a href="<%=url.setAction(url.Action_REMOVE).toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/griddelete.gif" title="<%=paramRequest.getLocaleString("remove")%>" class="SWBWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
-                                <td valign=top align="RIGHT" style="display:none;" >
-                                <td valign=top align="LEFT">
-                                <span id="" class="ReadonlySWBGridAttribute"><%=title%></span></td>
+                url.setParameter("objInstUri", ObjUri);
+                %>
+                <tr class="SWBWorkWithGridOdd"><td valign=top align="CENTER">
+                    <%url.setMode(url.Mode_VIEW+"2");%>
+                    <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridopen.gif" title="<%=paramRequest.getLocaleString("open")%>" class="SWBWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
+                    <td valign=top align="CENTER">
+                    <%url.setMode(url.Mode_EDIT);%>
+                    <a href="<%=url.toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/gridupdate.gif" title="<%=paramRequest.getLocaleString("edit")%>" class="SWBWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
+                    <td valign=top align="CENTER">
+                    <%url.setMode(url.Mode_VIEW+"2");%>
+                    <a href="<%=url.setAction(url.Action_REMOVE).toString()%>"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/griddelete.gif" title="<%=paramRequest.getLocaleString("remove")%>" class="SWBWorkWithGridOdd" style=";width: 14"  usemap="''"/></a></td>
+
+                    <%
+                    SemanticObject semObject = SemanticObject.createSemanticObject(ObjUri);
+                    Iterator <SemanticProperty> itObjProps=semObject.getSemanticClass().listProperties();
+                    while(itObjProps.hasNext()){
+                        SemanticProperty semProp=itObjProps.next();
+                        if(aprops2display.contains(semProp))
+                        {
+                            String propValue=semObject.getProperty(semProp);
+                        %>
                                 <td valign=top align="LEFT">
                                 <span id="span_CUENTACONTABLEDESCRIPCION_0001" class="ReadonlySWBGridAttribute">
-                                    <%if(description!=null && !description.equals("null")){%>
-                                    <%=description%>
-                                <%}url.setAction("add");%>
+                                    <%if(propValue!=null && !propValue.equals("null")){%>
+                                       <%=propValue%>
+                                    <%}url.setAction("add");%>
                                 </span>
                                 </td>
-                            </tr>
-                            <%
-              }
-                            %>
-
+                        <%
+                        }
+                     }
+                    %>
+                </tr>
+                <%
+                }
+                %>
                 </table>
              </TD>
            </TR>
@@ -205,15 +271,19 @@ if (sobj != null) {
 
 
 <%!
-private String[] getCatSortArray(SemanticObject sobj, int actualPage, String txtFind) {
+private String[] getCatSortArray(SemanticObject sobj, int actualPage, String txtFind, org.semanticwb.portal.api.SWBParamRequest paramRequest)
+{
+    String[] strArray=null;
+    try{
         Vector vRO = new Vector();
         SemanticClass swbClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
-        Iterator<SemanticObject> itSebObj = swbClass.listInstances();
+        Iterator<SemanticObject> itSebObj = paramRequest.getWebPage().getSemanticObject().getModel().listInstancesOfClass(swbClass);
+        //Iterator<SemanticObject> itSebObj = swbClass.listInstances();  //Para cuando se pide el objeto de global
         while (itSebObj.hasNext()) {
              SemanticObject semObj = itSebObj.next();
              if(txtFind!=null && txtFind.trim().length()>0){
-                 String title=semObj.getProperty(Descriptiveable.swb_title).toLowerCase();
-                 if(title.startsWith(txtFind.toLowerCase())){
+                 SemanticProperty semProp=semObj.getSemanticClass().getProperty("title");
+                 if(semObj.getProperty(semProp).toLowerCase().startsWith(txtFind.toLowerCase())){
                      vRO.add(semObj);
                  }
              }else{
@@ -221,13 +291,14 @@ private String[] getCatSortArray(SemanticObject sobj, int actualPage, String txt
              }
         }
 
-        String[] strArray = new String[vRO.size() + 1];
+        strArray = new String[vRO.size() + 1];
 
         Iterator itSObjs=vRO.iterator();
         int cont=0;
         while(itSObjs.hasNext()){
             SemanticObject semObj=(SemanticObject)itSObjs.next();
-            String value=semObj.getProperty(Descriptiveable.swb_title)+":swbp4g1:"+semObj.getProperty(Descriptiveable.swb_description)+":swbp4g1:"+semObj.getURI();
+            SemanticProperty semPropName=semObj.getSemanticClass().getProperty("title");
+            String value=semObj.getProperty(semPropName)+":swbp4g1:"+semObj.getURI();
             strArray[cont]=value;
             cont++;
         }
@@ -236,6 +307,12 @@ private String[] getCatSortArray(SemanticObject sobj, int actualPage, String txt
         Arrays.sort(strArray, String.CASE_INSENSITIVE_ORDER);
         String pageparams = getPageRange(strArray.length-1, actualPage);
         strArray[cont] = pageparams;
+
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
         return strArray;
     }
 
