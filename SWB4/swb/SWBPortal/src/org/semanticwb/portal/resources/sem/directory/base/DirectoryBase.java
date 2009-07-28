@@ -5,6 +5,7 @@ public class DirectoryBase extends org.semanticwb.portal.api.GenericSemResource
 {
     public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
     public static final org.semanticwb.platform.SemanticProperty dir_classBase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/Directory#classBase");
+    public static final org.semanticwb.platform.SemanticProperty dir_properties2Display=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/Directory#properties2Display");
     public static final org.semanticwb.platform.SemanticProperty dir_range=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/Directory#range");
     public static final org.semanticwb.platform.SemanticClass dir_Directory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/Directory#Directory");
 
@@ -33,6 +34,16 @@ public class DirectoryBase extends org.semanticwb.portal.api.GenericSemResource
          org.semanticwb.platform.SemanticObject ret=null;
          ret=getSemanticObject().getObjectProperty(dir_classBase);
          return ret;
+    }
+
+    public String getProperties2Display()
+    {
+        return getSemanticObject().getProperty(dir_properties2Display);
+    }
+
+    public void setProperties2Display(String properties2Display)
+    {
+        getSemanticObject().setProperty(dir_properties2Display, properties2Display);
     }
 
     public String getRange()
