@@ -26,6 +26,8 @@ private final int I_INIT_PAGE = 1;
 
 <%
 String action=paramRequest.getAction();
+String scope = (String) request.getAttribute("scope");
+
 SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
 SemanticClass semClass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
 
@@ -74,7 +76,7 @@ if (sobj != null) {
                             </tr>
                             <%
                             int actualPage = 1;
-                            String strResTypes[] = getCatSortArray(sobj, actualPage, request.getParameter("txtFind"), paramRequest);
+                            String strResTypes[] = getCatSortArray(sobj, actualPage, request.getParameter("txtFind"), paramRequest, scope);
                             String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
                             int iIniPage = Integer.parseInt(pageParams[0]);
                             int iFinPage = Integer.parseInt(pageParams[1]);
@@ -181,7 +183,7 @@ if (sobj != null) {
             if (request.getParameter("actualPage") != null) {
                 actualPage = Integer.parseInt(request.getParameter("actualPage"));
             }
-            String strResTypes[] = getCatSortArray(sobj, actualPage, request.getParameter("txtFind"), paramRequest);
+            String strResTypes[] = getCatSortArray(sobj, actualPage, request.getParameter("txtFind"), paramRequest, scope);
 
             String[] pageParams = strResTypes[strResTypes.length - 1].toString().split(":swbp4g1:");
             int iIniPage = Integer.parseInt(pageParams[0]);
@@ -271,42 +273,47 @@ if (sobj != null) {
 
 
 <%!
-private String[] getCatSortArray(SemanticObject sobj, int actualPage, String txtFind, org.semanticwb.portal.api.SWBParamRequest paramRequest)
+private String[] getCatSortArray(SemanticObject sobj, int actualPage, String txtFind, org.semanticwb.portal.api.SWBParamRequest paramRequest, String scope)
 {
     String[] strArray=null;
     try{
         Vector vRO = new Vector();
         SemanticClass swbClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
-        Iterator<SemanticObject> itSebObj = paramRequest.getWebPage().getSemanticObject().getModel().listInstancesOfClass(swbClass);
-        //Iterator<SemanticObject> itSebObj = swbClass.listInstances();  //Para cuando se pide el objeto de global
-        while (itSebObj.hasNext()) {
-             SemanticObject semObj = itSebObj.next();
-             if(txtFind!=null && txtFind.trim().length()>0){
-                 SemanticProperty semProp=semObj.getSemanticClass().getProperty("title");
-                 if(semObj.getProperty(semProp).toLowerCase().startsWith(txtFind.toLowerCase())){
+        Iterator<SemanticObject> itSebObj=null;
+        if(scope!=null && scope.equals("gl")) itSebObj = swbClass.listInstances();  //Para cuando se pide el objeto de global (todos los modelos)
+        else if(scope!=null && scope.equals("ml")) itSebObj = paramRequest.getWebPage().getSemanticObject().getModel().listInstancesOfClass(swbClass);
+
+        if(itSebObj!=null)
+        {
+            while (itSebObj.hasNext()) {
+                 SemanticObject semObj = itSebObj.next();
+                 if(txtFind!=null && txtFind.trim().length()>0){
+                     SemanticProperty semProp=semObj.getSemanticClass().getProperty("title");
+                     if(semObj.getProperty(semProp).toLowerCase().startsWith(txtFind.toLowerCase())){
+                         vRO.add(semObj);
+                     }
+                 }else{
                      vRO.add(semObj);
                  }
-             }else{
-                 vRO.add(semObj);
-             }
+            }
+
+            strArray = new String[vRO.size() + 1];
+
+            Iterator itSObjs=vRO.iterator();
+            int cont=0;
+            while(itSObjs.hasNext()){
+                SemanticObject semObj=(SemanticObject)itSObjs.next();
+                SemanticProperty semPropName=semObj.getSemanticClass().getProperty("title");
+                String value=semObj.getProperty(semPropName)+":swbp4g1:"+semObj.getURI();
+                strArray[cont]=value;
+                cont++;
+            }
+            strArray[cont] = "zzzzz:zzzz:zzzzz";
+
+            Arrays.sort(strArray, String.CASE_INSENSITIVE_ORDER);
+            String pageparams = getPageRange(strArray.length-1, actualPage);
+            strArray[cont] = pageparams;
         }
-
-        strArray = new String[vRO.size() + 1];
-
-        Iterator itSObjs=vRO.iterator();
-        int cont=0;
-        while(itSObjs.hasNext()){
-            SemanticObject semObj=(SemanticObject)itSObjs.next();
-            SemanticProperty semPropName=semObj.getSemanticClass().getProperty("title");
-            String value=semObj.getProperty(semPropName)+":swbp4g1:"+semObj.getURI();
-            strArray[cont]=value;
-            cont++;
-        }
-        strArray[cont] = "zzzzz:zzzz:zzzzz";
-
-        Arrays.sort(strArray, String.CASE_INSENSITIVE_ORDER);
-        String pageparams = getPageRange(strArray.length-1, actualPage);
-        strArray[cont] = pageparams;
 
         }catch(Exception e)
         {
