@@ -64,7 +64,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath()+"swbadmin/jsp/forum/swbForum.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath()+"/swbadmin/jsp/forum/swbForum.jsp");
             rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,11 +78,13 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
-        mgr.setSubmitByAjax(true);
+        mgr.setSubmitByAjax(false);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("addThread");
         mgr.setAction(url.toString());
+
+        request.setAttribute("formName", mgr.getFormName());
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newCancelButton());
         out.println(mgr.renderForm(request));
@@ -113,7 +115,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
-        mgr.setSubmitByAjax(true);
+        mgr.setSubmitByAjax(false);
         mgr.setType(mgr.TYPE_XHTML);
         url.setAction("replyPost");
         mgr.setAction(url.toString());
@@ -127,8 +129,10 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             out.println("<tr><td>"+paramRequest.getLocaleString("msg")+":</td><td><b>"+thread.getBody()+"</b></td></tr>");
         }
         out.println("</table>");
+
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newCancelButton());
+        request.setAttribute("formName", mgr.getFormName());
         out.println(mgr.renderForm(request));
     }
 
@@ -140,7 +144,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
-        mgr.setSubmitByAjax(true);
+        mgr.setSubmitByAjax(false);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("threadUri", request.getParameter("threadUri"));
@@ -170,6 +174,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         }
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newCancelButton());
+        request.setAttribute("formName", mgr.getFormName());
         out.println(mgr.renderForm(request));
     }
 
@@ -181,7 +186,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
-        mgr.setSubmitByAjax(true);
+        mgr.setSubmitByAjax(false);
         mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("threadUri", semObject.getURI());
@@ -210,6 +215,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         }
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newCancelButton());
+        request.setAttribute("formName", mgr.getFormName());
         out.println(mgr.renderForm(request));
     }
 
