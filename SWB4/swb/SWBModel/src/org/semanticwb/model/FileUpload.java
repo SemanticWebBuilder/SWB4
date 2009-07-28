@@ -87,19 +87,20 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
                             attchMsg+="<br/>";
                         }
             }
+            String formName=(String)request.getAttribute("formName");
             //Página ejemplo de implementación:http://blog.tremend.ro/2007/03/01/ajax-file-upload-monitoring-monitor-your-file-upload-with-dwr-and-commons-fileupload/
             //Fecha de implemetación:26/Febrero/2009
             //TODO:Haecer que este Bloque solo sea puesto una vez, independientemente de cuantos fileuploads tiene mi forma
-            ret = "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"/swb/swbadmin/css/upload/upload.css\"/>\n"+
-                  "<script type='text/javascript' src=\"/swb/dwr/util.js\"></script>\n"+
-                  "<script type='text/javascript' src=\"/swb/dwr/engine.js\"></script>\n"+
-                  "<script type=\"text/javascript\" src=\"/swb/dwr/interface/uploadProxy.js\"></script>\n"+
-                  "<script type='text/javascript' src=\"/swb/swbadmin/js/upload/upload.js\"></script>\n";
+            ret = "<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\""+SWBPlatform.getContextPath()+"/swbadmin/css/upload/upload.css\"/>\n"+
+                  "<script type='text/javascript' src=\""+SWBPlatform.getContextPath()+"/dwr/util.js\"></script>\n"+
+                  "<script type='text/javascript' src=\""+SWBPlatform.getContextPath()+"/dwr/engine.js\"></script>\n"+
+                  "<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/dwr/interface/uploadProxy.js\"></script>\n"+
+                  "<script type='text/javascript' src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/upload/upload.js\"></script>\n";
                   //TODO:Haecer que esta linea solo sea puesta una vez, independientemente de cuantos fileuploads tiene mi forma
             ret += "<iframe id='target_upload_"+name+"' name='target_upload_"+name+"' src='' style='display: none'></iframe><br/>" +  //
                     attchMsg+
                     "<input id=\""+name+"\" name=\""+name+"\" type=\"file\"> <br/>" +
-                    "<a href=\"#\" onClick=\"javascript:if(uploadjs_"+name+"(document.forms[0])) {return startUploadMonitoring('"+name+"');}\">Subir</a>\n" + 
+                    "<a href=\"#\" onClick=\"javascript:if(uploadjs_"+name+"(document.getElementById('"+formName+"'))) {return startUploadMonitoring('"+name+"');}\">Subir</a>\n" +
                     "<div id=\"uploadStatus_"+name+"\" style=\"width:230px\">\n" +
                     "   <div id=\"uploadProgressBar_"+name+"\" style=\"width:200px; height: 2px; border: 0px solid #BBB; text-align: center; float: left;\">\n" +
                     "       <div id=\"uploadIndicator_"+name+"\" style=\" height: 1px; position: relative; margin: 0px; padding: 1px; background: #9DC0F4; width: 0; float: left;\"></div>\n" +
