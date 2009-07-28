@@ -41,7 +41,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if(paramRequest.getAction().equals("excel")) response.setContentType("application/vnd.ms-excel");
         try {
-            request.setAttribute("range", getRange());
+            request.setAttribute("scope", getScope());
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("sobj", getClassBase());
             request.setAttribute("props2display", getProperties2Display());

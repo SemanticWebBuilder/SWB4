@@ -29,7 +29,9 @@
       </swb:SemanticResource>
     </rdfs:domain>
   </owl:ObjectProperty>
-  <owl:DatatypeProperty rdf:ID="range">
+  <owl:DatatypeProperty rdf:ID="scope">
+    <rdfs:domain rdf:resource="#Directory"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_range">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -39,8 +41,6 @@
         <swbxf:propSelectValues xml:lang="en">gl:Global|ml:model</swbxf:propSelectValues>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Directory"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="OrderField">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
