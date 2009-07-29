@@ -525,7 +525,7 @@
         }
 
         menus.put(getMenuItem(getLocaleString("edit",lang), getLocaleString("icon_edit",null), getNewTabAction()));
-        menus.put(getMenuItem(getLocaleString("clone",lang), getLocaleString("icon_clone",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/clone.jsp?suri="+obj.getEncodedURI(),getLocaleString("clone",lang)+" "+cls.getDisplayName(lang))));
+        //menus.put(getMenuItem(getLocaleString("clone",lang), getLocaleString("icon_clone",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/clone.jsp?suri="+obj.getEncodedURI(),getLocaleString("clone",lang)+" "+cls.getDisplayName(lang))));
         //menu remove
         if(!obj.instanceOf(Undeleteable.swb_Undeleteable) ||  (obj.instanceOf(Undeleteable.swb_Undeleteable) && obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false))
         {
