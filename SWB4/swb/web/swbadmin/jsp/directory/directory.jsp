@@ -237,23 +237,25 @@ if (sobj != null) {
 
                     <%
                     SemanticObject semObject = SemanticObject.createSemanticObject(ObjUri);
-                    Iterator <SemanticProperty> itObjProps=semObject.getSemanticClass().listProperties();
-                    while(itObjProps.hasNext()){
-                        SemanticProperty semProp=itObjProps.next();
-                        if(aprops2display.contains(semProp))
-                        {
-                            String propValue=semObject.getProperty(semProp);
-                        %>
-                                <td valign=top align="LEFT">
-                                <span id="span_CUENTACONTABLEDESCRIPCION_0001" class="ReadonlySWBGridAttribute">
-                                    <%if(propValue!=null && !propValue.equals("null")){%>
-                                       <%=propValue%>
-                                    <%}url.setAction("add");%>
-                                </span>
-                                </td>
+                    Iterator<SemanticProperty> itProps1=aprops2display.iterator();
+                    while(itProps1.hasNext())
+                    {
+                       SemanticProperty semProp=itProps1.next();
+                       SemanticProperty semProp1=semObject.getSemanticClass().getProperty(semProp.getName());
+                       String propValue=semObject.getProperty(semProp1);
+                       %>
+                            <td valign=top align="LEFT">
+                            <span id="span_CUENTACONTABLEDESCRIPCION_0001" class="ReadonlySWBGridAttribute">
+                                <%if(propValue!=null && !propValue.equals("null")){%>
+                                   <%=propValue%>
+                                <%}else%>&nbs;
+                                <%
+                                    url.setAction("add");
+                                %>
+                            </span>
+                            </td>
                         <%
-                        }
-                     }
+                    }
                     %>
                 </tr>
                 <%
