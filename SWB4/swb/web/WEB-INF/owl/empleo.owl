@@ -99,9 +99,10 @@
       <swb:Class rdf:ID="Ocupacion">
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
-        <rdfs:label xml:lang="es">Ocupaciín</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:label xml:lang="es">Ocupación</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:range>
@@ -562,6 +563,12 @@
     <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >MOZO DE CUADRA</swb:title>
   </stps:Ocupacion>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >stps</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >gov.stps.empleo</swb:package>
+  </swb:CodePackage>
   <stps:AreaLaboral rdf:ID="AreaLaboral_32">
     <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >SERVICIOS DE LIMPIEZA</swb:title>
