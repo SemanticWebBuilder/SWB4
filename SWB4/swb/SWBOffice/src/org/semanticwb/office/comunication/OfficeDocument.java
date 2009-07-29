@@ -33,8 +33,14 @@ import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Resourceable;
+import org.semanticwb.model.Role;
+import org.semanticwb.model.RoleRef;
+import org.semanticwb.model.Rule;
+import org.semanticwb.model.RuleRef;
 import org.semanticwb.model.SWBContext;
 
+import org.semanticwb.model.UserGroup;
+import org.semanticwb.model.UserGroupRef;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.office.interfaces.CalendarInfo;
@@ -45,6 +51,7 @@ import org.semanticwb.office.interfaces.PageInfo;
 
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.ResourceInfo;
+import org.semanticwb.office.interfaces.ElementInfo;
 import org.semanticwb.office.interfaces.SiteInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
@@ -1820,6 +1827,178 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         WebSite site = SWBContext.getWebSite(siteInfo.id);
         org.semanticwb.model.Calendar cal = site.getCalendar(calendarIndo.id);
         site.removeCalendar(calendarIndo.id);
+    }
+
+    public ElementInfo[] getElementsOfResource(ResourceInfo info) throws Exception
+    {
+        HashSet<ElementInfo> rules = new HashSet<ElementInfo>();
+        WebSite site = SWBContext.getWebSite(info.page.site.id);
+        Resource resource = site.getResource(info.id);
+        {
+            GenericIterator<RuleRef> refs = resource.listRuleRefs();
+            while (refs.hasNext())
+            {
+                RuleRef ref = refs.next();
+                Rule rule = ref.getRule();
+                ElementInfo rinfo = new ElementInfo();
+                rinfo.id = rule.getId();
+                rinfo.title = rule.getTitle();
+                rinfo.active = ref.isActive();
+                rinfo.type = Rule.sclass.getName();
+                rules.add(rinfo);
+            }
+        }
+        {
+            GenericIterator<RoleRef> refs = resource.listRoleRefs();
+            while (refs.hasNext())
+            {
+                RoleRef ref = refs.next();
+                Role role = ref.getRole();
+                ElementInfo rinfo = new ElementInfo();
+                rinfo.id = role.getId();
+                rinfo.title = role.getTitle();
+                rinfo.active = ref.isActive();
+                rinfo.type = Role.sclass.getName();
+                rules.add(rinfo);
+            }
+        }
+        {
+            GenericIterator<UserGroupRef> refs = resource.listUserGroupRefs();
+            while (refs.hasNext())
+            {
+                UserGroupRef ref = refs.next();
+                UserGroup userGroupRef = ref.getUserGroup();
+                ElementInfo rinfo = new ElementInfo();
+                rinfo.id = userGroupRef.getId();
+                rinfo.title = userGroupRef.getTitle();
+                rinfo.active = ref.isActive();
+                rinfo.type = Role.sclass.getName();
+                rules.add(rinfo);
+            }
+        }
+        return rules.toArray(new ElementInfo[rules.size()]);
+    }
+
+    public void addElementToResource(ResourceInfo info, ElementInfo ruleInfo) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(info.page.site.id);
+        Resource resource = Resource.getResource(info.id, site);
+        if (ruleInfo.type.equals(Rule.sclass.getName()))
+        {
+            GenericIterator<RuleRef> refs = resource.listRuleRefs();
+            boolean exists = false;
+            while (refs.hasNext())
+            {
+                RuleRef ref = refs.next();
+                Rule rule = ref.getRule();
+                if (rule.getId().equals(ruleInfo.id))
+                {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists)
+            {
+                RuleRef ref = RuleRef.createRuleRef(site);
+                ref.setActive(ruleInfo.active);
+                ref.setRule(Rule.getRule(ruleInfo.id, site));
+                resource.addRuleRef(ref);
+            }
+        }
+        if (ruleInfo.type.equals(Role.sclass.getName()))
+        {
+            GenericIterator<RoleRef> refs = resource.listRoleRefs();
+            boolean exists = false;
+            while (refs.hasNext())
+            {
+                RoleRef ref = refs.next();
+                Role rule = ref.getRole();
+                if (rule.getId().equals(ruleInfo.id))
+                {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists)
+            {
+                RoleRef ref = RoleRef.createRoleRef(site);
+                ref.setActive(ruleInfo.active);
+                ref.setRole(site.getUserRepository().getRole(ruleInfo.id));
+                resource.addRoleRef(ref);
+            }
+        }
+        if (ruleInfo.type.equals(UserGroup.sclass.getName()))
+        {
+            GenericIterator<UserGroupRef> refs = resource.listUserGroupRefs();
+            boolean exists = false;
+            while (refs.hasNext())
+            {
+                UserGroupRef ref = refs.next();
+                UserGroup rule = ref.getUserGroup();
+                if (rule.getId().equals(ruleInfo.id))
+                {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists)
+            {
+                UserGroupRef ref = UserGroupRef.createUserGroupRef(site);
+                ref.setActive(ruleInfo.active);
+                ref.setUserGroup(site.getUserRepository().getUserGroup(ruleInfo.id));
+                resource.addUserGroupRef(ref);
+            }
+        }
+
+    }
+
+    public void deleteElementToResource(ResourceInfo info, ElementInfo ruleInfo) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(info.page.site.id);
+        Resource resource = site.getResource(info.id);
+        if (ruleInfo.type.equals(Rule.sclass.getName()))
+        {
+            GenericIterator<RuleRef> refs = resource.listRuleRefs();
+            while (refs.hasNext())
+            {
+                RuleRef ref = refs.next();
+                Rule rule = ref.getRule();
+                if (rule.getId().equals(ruleInfo.id))
+                {
+                    resource.removeRuleRef(ref);
+                    break;
+                }
+            }
+        }
+        if (ruleInfo.type.equals(Role.sclass.getName()))
+        {
+            GenericIterator<RoleRef> refs = resource.listRoleRefs();
+            while (refs.hasNext())
+            {
+                RoleRef ref = refs.next();
+                Role rule = ref.getRole();
+                if (rule.getId().equals(ruleInfo.id))
+                {
+                    resource.removeRoleRef(ref);
+                    break;
+                }
+            }
+        }
+        if (ruleInfo.type.equals(UserGroup.sclass.getName()))
+        {
+            GenericIterator<UserGroupRef> refs = resource.listUserGroupRefs();
+            while (refs.hasNext())
+            {
+                UserGroupRef ref = refs.next();
+                UserGroup rule = ref.getUserGroup();
+                if (rule.getId().equals(ruleInfo.id))
+                {
+                    resource.removeUserGroupRef(ref);
+                    break;
+                }
+            }
+        }
+
     }
 }
 

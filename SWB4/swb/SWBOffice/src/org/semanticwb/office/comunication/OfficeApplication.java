@@ -30,7 +30,11 @@ import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Resourceable;
+import org.semanticwb.model.Role;
+import org.semanticwb.model.RoleRef;
+import org.semanticwb.model.Rule;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.office.interfaces.CalendarInfo;
@@ -43,6 +47,7 @@ import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.office.interfaces.PageInfo;
 import org.semanticwb.office.interfaces.RepositoryInfo;
 import org.semanticwb.office.interfaces.ResourceInfo;
+import org.semanticwb.office.interfaces.ElementInfo;
 import org.semanticwb.office.interfaces.SiteInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
@@ -884,11 +889,11 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     }
 
     public boolean canDeleteCalendar(SiteInfo siteInfo, CalendarInfo CalendarInfo) throws Exception
-    {        
+    {
         WebSite site = SWBContext.getWebSite(siteInfo.id);
         org.semanticwb.model.Calendar cal = site.getCalendar(CalendarInfo.id);
-        GenericIterator<CalendarRef> refs=cal.listCalendarRefInvs();
-        if(refs.hasNext())
+        GenericIterator<CalendarRef> refs = cal.listCalendarRefInvs();
+        if (refs.hasNext())
         {
             return false;
         }
@@ -902,7 +907,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     {
         WebSite site = SWBContext.getWebSite(siteInfo.id);
         org.semanticwb.model.Calendar cal = site.getCalendar(CalendarInfo.id);
-        if(cal==null)
+        if (cal == null)
         {
             return false;
         }
@@ -910,5 +915,50 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             return true;
         }
+    }
+
+    public ElementInfo[] getElementsToAdd(SiteInfo siteInfo) throws Exception
+    {
+        HashSet<ElementInfo> rules = new HashSet<ElementInfo>();
+        WebSite site = SWBContext.getWebSite(siteInfo.id);
+        {
+            Iterator<Rule> orules = site.listRules();
+            while (orules.hasNext())
+            {
+                Rule rule = orules.next();
+                ElementInfo info = new ElementInfo();
+                info.id = rule.getId();
+                info.title = rule.getTitle();
+                info.type = Rule.sclass.getName();
+                rules.add(info);
+            }
+        }
+        {
+            Iterator<Role> roles = site.getUserRepository().listRoles();
+            while (roles.hasNext())
+            {
+                Role role = roles.next();
+                ElementInfo info = new ElementInfo();
+                info.id = role.getId();
+                info.title = role.getTitle();
+                info.type = Role.sclass.getName();
+                rules.add(info);
+            }
+        }
+        {
+
+            Iterator<UserGroup> userGroups = site.getUserRepository().listUserGroups();
+            while (userGroups.hasNext())
+            {
+                UserGroup role = userGroups.next();
+                ElementInfo info = new ElementInfo();
+                info.id = role.getId();
+                info.title = role.getTitle();
+                info.type = UserGroup.sclass.getName();
+                rules.add(info);
+            }
+        }
+
+        return rules.toArray(new ElementInfo[rules.size()]);
     }
 }
