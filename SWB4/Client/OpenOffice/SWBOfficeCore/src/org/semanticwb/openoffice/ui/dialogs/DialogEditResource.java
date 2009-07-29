@@ -14,12 +14,14 @@ import java.util.HashMap;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
+import org.semanticwb.office.interfaces.ElementInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.components.PanelPropertyEditor;
@@ -57,6 +59,25 @@ public class DialogEditResource extends javax.swing.JDialog
         this.jCheckBoxActive.setSelected(pageInformation.active);
         this.jLabelSite.setText(pageInformation.page.site.title);
         this.jLabelPage.setText(pageInformation.page.title);
+        ListSelectionModel listSelectionModel = jTableRules.getSelectionModel();
+        listSelectionModel.addListSelectionListener(new ListSelectionListener()
+        {
+
+            public void valueChanged(ListSelectionEvent e)
+            {
+                DefaultTableModel model = (DefaultTableModel) jTableRules.getModel();
+                if (model.getRowCount() == 0 || jTableRules.getSelectedRow() == -1)
+                {
+                    jButtonDeleteRule.setEnabled(false);
+                }
+                else
+                {
+                    jButtonDeleteRule.setEnabled(true);
+                }
+            }
+        });
+
+
         loadProperties();
         loadCalendars();
         setLocationRelativeTo(null);
@@ -150,7 +171,38 @@ public class DialogEditResource extends javax.swing.JDialog
         {
             e.printStackTrace();
         }
+        loadRules();
 
+    }
+
+    private void loadRules()
+    {
+        DefaultTableModel model = (DefaultTableModel) jTableRules.getModel();
+        int rows = model.getRowCount();
+        for (int i = 1; i <= rows; i++)
+        {
+            model.removeRow(0);
+        }
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        try
+        {
+            for (ElementInfo info : OfficeApplication.getOfficeDocumentProxy().getElementsOfResource(pageInformation))
+            {
+                Object[] data =
+                {
+                    info, info.active, info.type
+                };
+                model.addRow(data);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
     }
 
     private void loadCalendars()
@@ -261,6 +313,14 @@ public class DialogEditResource extends javax.swing.JDialog
         jButtonAddCalendar = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jButtonDeleteScheduler = new javax.swing.JButton();
+        jPanelElementsToAdd = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jToolBarRules = new javax.swing.JToolBar();
+        jButtonAddRule = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        jButtonDeleteRule = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableRules = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Editar Propiedades");
@@ -344,7 +404,7 @@ public class DialogEditResource extends javax.swing.JDialog
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextFieldTitle, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)))
@@ -355,7 +415,7 @@ public class DialogEditResource extends javax.swing.JDialog
                             .addComponent(jLabel6)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jCheckBoxActive, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabelSite, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -403,7 +463,7 @@ public class DialogEditResource extends javax.swing.JDialog
                     .addComponent(jLabel5)
                     .addComponent(jSpinnerEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCheckBoxEndDateActive))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Información", jPanel2);
@@ -476,6 +536,96 @@ public class DialogEditResource extends javax.swing.JDialog
         jPanelSchedule.add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
         jTabbedPane1.addTab("Calendarización", jPanelSchedule);
+
+        jPanelElementsToAdd.setLayout(new java.awt.BorderLayout());
+
+        jPanel4.setPreferredSize(new java.awt.Dimension(448, 30));
+
+        jToolBarRules.setFloatable(false);
+        jToolBarRules.setRollover(true);
+
+        jButtonAddRule.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/add.png"))); // NOI18N
+        jButtonAddRule.setToolTipText("Agregar una calendarizacin para la publicación actual");
+        jButtonAddRule.setFocusable(false);
+        jButtonAddRule.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonAddRule.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonAddRule.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddRuleActionPerformed(evt);
+            }
+        });
+        jToolBarRules.add(jButtonAddRule);
+        jToolBarRules.add(jSeparator2);
+
+        jButtonDeleteRule.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/semanticwb/openoffice/ui/icons/delete.png"))); // NOI18N
+        jButtonDeleteRule.setToolTipText("Eliminar la calendarización seleccionada");
+        jButtonDeleteRule.setEnabled(false);
+        jButtonDeleteRule.setFocusable(false);
+        jButtonDeleteRule.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonDeleteRule.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonDeleteRule.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteRuleActionPerformed(evt);
+            }
+        });
+        jToolBarRules.add(jButtonDeleteRule);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 489, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGap(0, 20, Short.MAX_VALUE)
+                    .addComponent(jToolBarRules, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 21, Short.MAX_VALUE)))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 30, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGap(0, 1, Short.MAX_VALUE)
+                    .addComponent(jToolBarRules, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 2, Short.MAX_VALUE)))
+        );
+
+        jPanelElementsToAdd.add(jPanel4, java.awt.BorderLayout.NORTH);
+
+        jTableRules.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Título", "Activar", "Tipo"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTableRules.setColumnSelectionAllowed(true);
+        jScrollPane1.setViewportView(jTableRules);
+        jTableRules.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        jPanelElementsToAdd.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jTabbedPane1.addTab("Reglas / Roles o Grupos de Usuarios", jPanelElementsToAdd);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
@@ -624,7 +774,14 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 added.remove(cal);
                 OfficeApplication.getOfficeDocumentProxy().activeCalendar(pageInformation, cal, active);
             }
-
+            model = (DefaultTableModel) jTableRules.getModel();
+            for (int i = 0; i < jTableRules.getRowCount(); i++)
+            {
+                ElementInfo ruleInfo = (ElementInfo) model.getValueAt(i, 0);
+                Boolean active = (Boolean) model.getValueAt(i, 1);
+                ruleInfo.active = active.booleanValue();
+                OfficeApplication.getOfficeDocumentProxy().addElementToResource(pageInformation, ruleInfo);
+            }
 
             for (PropertyInfo prop : this.panelPropertyEditor1.getProperties().keySet())
             {
@@ -768,7 +925,6 @@ private void jButtonSendToAuthorizeActionPerformed(java.awt.event.ActionEvent ev
 
 private void jCheckBoxEndDateActiveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jCheckBoxEndDateActiveActionPerformed
 {//GEN-HEADEREND:event_jCheckBoxEndDateActiveActionPerformed
-    
 }//GEN-LAST:event_jCheckBoxEndDateActiveActionPerformed
 
 private void jCheckBoxEndDateActiveItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_jCheckBoxEndDateActiveItemStateChanged
@@ -783,10 +939,80 @@ private void jCheckBoxEndDateActiveItemStateChanged(java.awt.event.ItemEvent evt
     }
 }//GEN-LAST:event_jCheckBoxEndDateActiveItemStateChanged
 
+private void jButtonAddRuleActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAddRuleActionPerformed
+{//GEN-HEADEREND:event_jButtonAddRuleActionPerformed
+    DialogAddRule dialogAddRule = new DialogAddRule(this.pageInformation.page.site, this.pageInformation);
+    dialogAddRule.setVisible(true);
+    if (!dialogAddRule.isCanceled())
+    {
+        ElementInfo rule = dialogAddRule.getRule();
+        try
+        {
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            OfficeApplication.getOfficeDocumentProxy().addElementToResource(pageInformation, rule);
+            loadRules();
+            DefaultTableModel model = (DefaultTableModel) jTableRules.getModel();
+            if (model.getRowCount() == 0 || jTableRules.getSelectedRow() == -1)
+            {
+                jButtonDeleteRule.setEnabled(false);
+            }
+            else
+            {
+                jButtonDeleteRule.setEnabled(true);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+    }
+}//GEN-LAST:event_jButtonAddRuleActionPerformed
+
+private void jButtonDeleteRuleActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonDeleteRuleActionPerformed
+{//GEN-HEADEREND:event_jButtonDeleteRuleActionPerformed
+    if (this.jTableRules.getModel().getRowCount() > 0 && this.jTableRules.getSelectedRow() != -1)
+    {
+        DefaultTableModel model = (DefaultTableModel) jTableRules.getModel();
+        ElementInfo info = (ElementInfo) model.getValueAt(this.jTableRules.getSelectedRow(), 0);
+        int res = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la regla / rol ó grupo de usuario " + info.title, this.getTitle(), JOptionPane.YES_NO_OPTION);
+        if (res == JOptionPane.YES_OPTION)
+        {
+            try
+            {
+                this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                OfficeApplication.getOfficeDocumentProxy().deleteElementToResource(pageInformation, info);
+                loadRules();
+                if (model.getRowCount() == 0 || jTableRules.getSelectedRow() == -1)
+                {
+                    jButtonDeleteRule.setEnabled(false);
+                }
+                else
+                {
+                    jButtonDeleteRule.setEnabled(true);
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            finally
+            {
+                this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        }
+    }
+}//GEN-LAST:event_jButtonDeleteRuleActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonAddCalendar;
+    private javax.swing.JButton jButtonAddRule;
     private javax.swing.JButton jButtonCancel;
+    private javax.swing.JButton jButtonDeleteRule;
     private javax.swing.JButton jButtonDeleteScheduler;
     private javax.swing.JButton jButtonOK;
     private javax.swing.JButton jButtonSendToAuthorize;
@@ -804,17 +1030,23 @@ private void jCheckBoxEndDateActiveItemStateChanged(java.awt.event.ItemEvent evt
     private javax.swing.JLabel jLabelSite;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanelElementsToAdd;
     private javax.swing.JPanel jPanelInformation;
     private javax.swing.JPanel jPanelOptions;
     private javax.swing.JPanel jPanelSchedule;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JSpinner jSpinnerEndDate;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTableRules;
     private javax.swing.JTable jTableScheduler;
     private javax.swing.JTextArea jTextAreaDescription;
     private javax.swing.JTextField jTextFieldTitle;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBarRules;
     // End of variables declaration//GEN-END:variables
 }
