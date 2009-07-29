@@ -47,8 +47,8 @@ public class FacebookLogin extends GenericAdmResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        //redirect=paramRequest.getResourceBase().getAttribute("redirect",paramRequest.getWebPage().getUrl());
-        redirect=paramRequest.getResourceBase().getAttribute("redirect");
+        redirect=paramRequest.getResourceBase().getAttribute("redirect",paramRequest.getWebPage().getUrl());
+       
         PrintWriter out = response.getWriter();
         String sessionKey = "";
         HttpSession session = request.getSession(true);
