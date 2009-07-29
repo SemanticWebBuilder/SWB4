@@ -171,6 +171,14 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.isAuthorized")
     public boolean isAuthorized(ResourceInfo info);
 
+    @XmlRpcMethod(methodName = "OfficeDocument.getElementsOfResource")
+    public ElementInfo[] getElementsOfResource(ResourceInfo info) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.addElementToResource")
+    public void addElementToResource(ResourceInfo info, ElementInfo ruleInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.deleteElementToResource")
+    public void deleteElementToResource(ResourceInfo info, ElementInfo ruleInfo) throws Exception;
 }
 
 

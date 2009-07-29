@@ -13,7 +13,7 @@ import org.semanticwb.xmlrpc.XmlRpcMethod;
 public interface IOfficeApplication
 {
 
-    public static double version = 0.1;
+    public static double version = 1.1;
 
     @XmlRpcMethod(methodName = "OfficeApplication.isValidVersion")
     public boolean isValidVersion(double version) throws Exception;
@@ -98,4 +98,7 @@ public interface IOfficeApplication
 
     @XmlRpcMethod(methodName = "OfficeApplication.existCalendar")
     public boolean existCalendar(SiteInfo siteInfo,CalendarInfo CalendarInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.getElementsToAdd")
+    public ElementInfo[] getElementsToAdd(SiteInfo siteInfo) throws Exception;
 }
