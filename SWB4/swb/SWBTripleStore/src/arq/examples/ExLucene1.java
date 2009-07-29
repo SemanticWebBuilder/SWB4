@@ -58,7 +58,7 @@ public class ExLucene1
         IndexBuilderString larqBuilder = new IndexBuilderString() ;
         
         // Index statements as they are added to the model.
-        model.register(larqBuilder) ;
+        model.register(larqBuilder);
         
         // To just build the index, create a model that does not store statements 
         // Model model2 = ModelFactory.createModelForGraph(new GraphSink()) ;
