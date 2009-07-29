@@ -54,6 +54,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                     response.setRenderParameter(key, request.getParameter(key));
                 }
             }
+            response.setRenderParameter("uri", uri);
         } else {
             super.processAction(request, response);
         }
