@@ -1998,7 +1998,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 }
             }
         }
-
+    }
+    public void changeResourceOfWebPage(ResourceInfo info, WebPageInfo webPageInfo) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(info.page.site.id);
+        Resource resource = site.getResource(info.id);
+        WebPage oldWebPage=site.getWebPage(info.page.id);
+        WebPage newpageofResource=site.getWebPage(webPageInfo.id);
+        newpageofResource.addResource(resource);
+        oldWebPage.removeResource(resource);
     }
 }
 
