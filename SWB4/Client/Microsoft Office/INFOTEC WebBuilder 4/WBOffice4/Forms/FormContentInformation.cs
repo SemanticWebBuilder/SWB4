@@ -76,8 +76,8 @@ namespace WBOffice4.Forms
                 VersionInfo selected = new VersionInfo();
                 selected.nameOfVersion = portletInfo.version;
                 ListViewItem item = new ListViewItem(portletInfo.title);
-                item.SubItems.Add(portletInfo.page.title);
                 item.SubItems.Add(portletInfo.page.site.title);
+                item.SubItems.Add(portletInfo.page.title);                
                 if (portletInfo.active)
                 {
                     item.SubItems.Add("Sí");

@@ -172,5 +172,8 @@ namespace WBOffice4.Interfaces
 
         [XmlRpcMethod("OfficeDocument.deleteElementToResource")]
         void deleteElementToResource(ResourceInfo info, ElementInfo ruleInfo);
+
+        [XmlRpcMethod("OfficeDocument.changeResourceOfWebPage")]
+        void changeResourceOfWebPage(ResourceInfo info, WebPageInfo webPageInfo);
     }
 }
