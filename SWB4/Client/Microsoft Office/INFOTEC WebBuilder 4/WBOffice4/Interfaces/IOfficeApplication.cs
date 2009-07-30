@@ -6,8 +6,7 @@ using XmlRpcLibrary;
 namespace WBOffice4.Interfaces
 {
     public interface IOfficeApplication : IXmlRpcProxy
-    {
-        //static int version = "1.0";
+    {        
         [XmlRpcMethod("OfficeApplication.isValidVersion")]
         bool isValidVersion(double version);
 
@@ -92,7 +91,8 @@ namespace WBOffice4.Interfaces
         [XmlRpcMethod("OfficeApplication.existCalendar")]
         bool existCalendar(SiteInfo siteInfo, CalendarInfo CalendarInfo);
 
-
+        [XmlRpcMethod("OfficeApplication.getElementsToAdd")]
+        public ElementInfo[] getElementsToAdd(SiteInfo siteInfo);
 
 
     }
