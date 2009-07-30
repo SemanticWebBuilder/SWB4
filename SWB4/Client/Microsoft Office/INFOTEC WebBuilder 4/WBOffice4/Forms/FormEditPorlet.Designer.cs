@@ -69,6 +69,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDeleteRule = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonMove = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.tabControlProperties.SuspendLayout();
             this.tabPageInformation.SuspendLayout();
@@ -124,6 +125,7 @@
             // 
             // tabPageInformation
             // 
+            this.tabPageInformation.Controls.Add(this.buttonMove);
             this.tabPageInformation.Controls.Add(this.dateTimePickerEndDate);
             this.tabPageInformation.Controls.Add(this.checkBoxEndDate);
             this.tabPageInformation.Controls.Add(this.label7);
@@ -384,9 +386,9 @@
             this.columnHeader4,
             this.columnHeader5});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.Location = new System.Drawing.Point(3, 28);
+            this.listView1.Location = new System.Drawing.Point(3, 3);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(495, 223);
+            this.listView1.Size = new System.Drawing.Size(495, 248);
             this.listView1.TabIndex = 2;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -445,6 +447,16 @@
             this.toolStripButtonDeleteRule.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonDeleteRule.ToolTipText = "Eliminar la calendarización seleccionada";
             this.toolStripButtonDeleteRule.Click += new System.EventHandler(this.toolStripButtonDeleteRule_Click);
+            // 
+            // buttonMove
+            // 
+            this.buttonMove.Location = new System.Drawing.Point(221, 124);
+            this.buttonMove.Name = "buttonMove";
+            this.buttonMove.Size = new System.Drawing.Size(75, 27);
+            this.buttonMove.TabIndex = 15;
+            this.buttonMove.Text = "Mover";
+            this.buttonMove.UseVisualStyleBackColor = true;
+            this.buttonMove.Click += new System.EventHandler(this.buttonMove_Click);
             // 
             // FormEditPorlet
             // 
@@ -519,5 +531,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.Button buttonMove;
     }
 }

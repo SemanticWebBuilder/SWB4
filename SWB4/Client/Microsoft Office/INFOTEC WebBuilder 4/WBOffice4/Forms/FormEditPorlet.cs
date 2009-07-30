@@ -446,6 +446,11 @@ namespace WBOffice4.Forms
             }
         }
 
+        private void buttonMove_Click(object sender, EventArgs e)
+        {
+
+        }
+
 
     }
 }
