@@ -14,12 +14,7 @@ namespace WBOffice4.Forms
         public AboutBox()
         {
             InitializeComponent();
-            //this.Text = String.Format("About {0} {0}", AssemblyTitle);
-            //this.labelProductName.Text = AssemblyProduct;
-            //this.labelVersion.Text = String.Format(CultureInfo.CurrentCulture,"Version {0} {0}", AssemblyVersion);
-            //this.labelCopyright.Text = AssemblyCopyright;
-            //this.labelCompanyName.Text = AssemblyCompany;
-            //this.textBoxDescription.Text = AssemblyDescription;
+            this.label1.Text += OfficeApplication.version.ToString();
         }
 
         #region Assembly Attribute Accessors

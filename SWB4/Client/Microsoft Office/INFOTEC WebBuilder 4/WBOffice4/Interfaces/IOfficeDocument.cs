@@ -165,12 +165,12 @@ namespace WBOffice4.Interfaces
         bool isAuthorized(ResourceInfo info);
 
         [XmlRpcMethod("OfficeDocument.getElementsOfResource")]
-        public ElementInfo[] getElementsOfResource(ResourceInfo info);
+        ElementInfo[] getElementsOfResource(ResourceInfo info);
 
         [XmlRpcMethod("OfficeDocument.addElementToResource")]
-        public void addElementToResource(ResourceInfo info, ElementInfo ruleInfo);
+        void addElementToResource(ResourceInfo info, ElementInfo ruleInfo);
 
         [XmlRpcMethod("OfficeDocument.deleteElementToResource")]
-        public void deleteElementToResource(ResourceInfo info, ElementInfo ruleInfo);
+        void deleteElementToResource(ResourceInfo info, ElementInfo ruleInfo);
     }
 }
