@@ -62,7 +62,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
         }
         mgr.setLang(lang);
         mgr.setSubmitByAjax(false);
-        mgr.setType(mgr.TYPE_XHTML);
+        mgr.setType(mgr.TYPE_DOJO);
         if(paramRequest.getAction().equals(paramRequest.Action_REMOVE))
         {
             mgr.addButton(SWBFormButton.newDeleteButton().setAttribute("type", "submit"));
@@ -86,7 +86,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
         }
         mgr.setLang(lang);
         mgr.setSubmitByAjax(false);
-        mgr.setType(mgr.TYPE_XHTML);
+        mgr.setType(mgr.TYPE_DOJO);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("objInstUri", semObject.getURI());
         url.setAction(url.Action_EDIT);
@@ -107,7 +107,7 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
         }
         mgr.setLang(lang);
         mgr.setSubmitByAjax(false);
-        mgr.setType(mgr.TYPE_XHTML);
+        mgr.setType(mgr.TYPE_DOJO);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setParameter("objUri", cls.getURI());
         url.setAction(url.Action_ADD);

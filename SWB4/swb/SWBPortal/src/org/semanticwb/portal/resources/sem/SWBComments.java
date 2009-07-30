@@ -35,9 +35,9 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
                 WebSite model = response.getWebPage().getWebSite();
                 Comment comment = Comment.createComment(model);
                 comment.setComment(request.getParameter("cmnt_comment"));
-                comment.setCreated(new Date());
+                //comment.setCreated(new Date());
                 //User user = response.getUser();
-                comment.setCreator(response.getUser());
+                //comment.setCreator(response.getUser());
                 addComment(comment);
                 request.getSession(true).removeAttribute("cs");
             }else {
