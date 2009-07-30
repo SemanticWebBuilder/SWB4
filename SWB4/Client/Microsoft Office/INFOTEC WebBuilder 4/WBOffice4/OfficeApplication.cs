@@ -25,7 +25,7 @@ namespace WBOffice4
         private static IMenuListener _MenuListener;
         private static IOfficeDocument officedocument;
         private static IOfficeApplication officeApplication;
-        private static double version = 0.1;
+        private static double version = 1.1;
         protected OfficeApplication()
         {
            

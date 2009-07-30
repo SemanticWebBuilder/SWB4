@@ -256,6 +256,9 @@
     <EmbeddedResource Include="Forms\FormAddCategory.resx">
       <DependentUpon>FormAddCategory.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAddElement.resx">
+      <DependentUpon>FormAddElement.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAddLink.resx">
       <DependentUpon>FormAddLink.cs</DependentUpon>
     </EmbeddedResource>
@@ -397,7 +400,15 @@
   <ItemGroup>
     <Compile Include="Controls\EditableListView.Designer.cs" />
     <Compile Include="Forms\CalendarItem.cs" />
+    <Compile Include="Forms\Element.cs">
+    </Compile>
     <Compile Include="Forms\FlowItem.cs" />
+    <Compile Include="Forms\FormAddElement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAddElement.Designer.cs">
+      <DependentUpon>FormAddElement.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormAddLink.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -438,6 +449,7 @@
       <DependentUpon>FormSendToAutorize.cs</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\CalendarInfo.cs" />
+    <Compile Include="Interfaces\ElementInfo.cs" />
     <Compile Include="Interfaces\FlowContentInformation.cs" />
     <Compile Include="Interfaces\PageInfo.cs" />
     <Compile Include="Interfaces\PFlow.cs" />

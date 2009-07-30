@@ -86,7 +86,7 @@ namespace WBOffice4.Interfaces
         String getVersionToShow(ResourceInfo info);
 
         [XmlRpcMethod("OfficeDocument.createPreview")]
-        String createPreview(String repositoryName, String contentId, String version,String type);
+        String createPreview(String repositoryName, String contentId, String version, String type);
 
         [XmlRpcMethod("OfficeDocument.deletePreview")]
         void deletePreview(String dir);
@@ -163,5 +163,14 @@ namespace WBOffice4.Interfaces
 
         [XmlRpcMethod("OfficeDocument.isAuthorized")]
         bool isAuthorized(ResourceInfo info);
+
+        [XmlRpcMethod("OfficeDocument.getElementsOfResource")]
+        public ElementInfo[] getElementsOfResource(ResourceInfo info);
+
+        [XmlRpcMethod("OfficeDocument.addElementToResource")]
+        public void addElementToResource(ResourceInfo info, ElementInfo ruleInfo);
+
+        [XmlRpcMethod("OfficeDocument.deleteElementToResource")]
+        public void deleteElementToResource(ResourceInfo info, ElementInfo ruleInfo);
     }
 }

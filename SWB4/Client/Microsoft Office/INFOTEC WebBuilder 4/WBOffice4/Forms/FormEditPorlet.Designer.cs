@@ -59,12 +59,23 @@
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonAddRule = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonDeleteRule = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             this.tabControlProperties.SuspendLayout();
             this.tabPageInformation.SuspendLayout();
             this.tabPageCalendar.SuspendLayout();
             this.toolStripCalendar.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -74,7 +85,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 280);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(419, 42);
+            this.panel1.Size = new System.Drawing.Size(509, 42);
             this.panel1.TabIndex = 1;
             // 
             // buttonOK
@@ -103,11 +114,12 @@
             this.tabControlProperties.Controls.Add(this.tabPageInformation);
             this.tabControlProperties.Controls.Add(this.tabPageProperties);
             this.tabControlProperties.Controls.Add(this.tabPageCalendar);
+            this.tabControlProperties.Controls.Add(this.tabPage1);
             this.tabControlProperties.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlProperties.Location = new System.Drawing.Point(0, 0);
             this.tabControlProperties.Name = "tabControlProperties";
             this.tabControlProperties.SelectedIndex = 0;
-            this.tabControlProperties.Size = new System.Drawing.Size(419, 280);
+            this.tabControlProperties.Size = new System.Drawing.Size(509, 280);
             this.tabControlProperties.TabIndex = 2;
             // 
             // tabPageInformation
@@ -130,7 +142,7 @@
             this.tabPageInformation.Location = new System.Drawing.Point(4, 22);
             this.tabPageInformation.Name = "tabPageInformation";
             this.tabPageInformation.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageInformation.Size = new System.Drawing.Size(411, 254);
+            this.tabPageInformation.Size = new System.Drawing.Size(501, 254);
             this.tabPageInformation.TabIndex = 0;
             this.tabPageInformation.Text = "Información";
             this.tabPageInformation.UseVisualStyleBackColor = true;
@@ -273,7 +285,7 @@
             this.tabPageProperties.Location = new System.Drawing.Point(4, 22);
             this.tabPageProperties.Name = "tabPageProperties";
             this.tabPageProperties.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageProperties.Size = new System.Drawing.Size(411, 254);
+            this.tabPageProperties.Size = new System.Drawing.Size(501, 254);
             this.tabPageProperties.TabIndex = 1;
             this.tabPageProperties.Text = "Propiedades de publicación";
             this.tabPageProperties.UseVisualStyleBackColor = true;
@@ -284,7 +296,7 @@
             this.tabPageCalendar.Controls.Add(this.toolStripCalendar);
             this.tabPageCalendar.Location = new System.Drawing.Point(4, 22);
             this.tabPageCalendar.Name = "tabPageCalendar";
-            this.tabPageCalendar.Size = new System.Drawing.Size(411, 254);
+            this.tabPageCalendar.Size = new System.Drawing.Size(501, 254);
             this.tabPageCalendar.TabIndex = 2;
             this.tabPageCalendar.Text = "Calendarización";
             this.tabPageCalendar.UseVisualStyleBackColor = true;
@@ -298,7 +310,7 @@
             this.listViewCalendar.FullRowSelect = true;
             this.listViewCalendar.Location = new System.Drawing.Point(0, 25);
             this.listViewCalendar.Name = "listViewCalendar";
-            this.listViewCalendar.Size = new System.Drawing.Size(411, 229);
+            this.listViewCalendar.Size = new System.Drawing.Size(501, 229);
             this.listViewCalendar.TabIndex = 1;
             this.listViewCalendar.UseCompatibleStateImageBehavior = false;
             this.listViewCalendar.View = System.Windows.Forms.View.Details;
@@ -323,7 +335,7 @@
             this.toolStripButtonDelete});
             this.toolStripCalendar.Location = new System.Drawing.Point(0, 0);
             this.toolStripCalendar.Name = "toolStripCalendar";
-            this.toolStripCalendar.Size = new System.Drawing.Size(411, 25);
+            this.toolStripCalendar.Size = new System.Drawing.Size(501, 25);
             this.toolStripCalendar.TabIndex = 0;
             this.toolStripCalendar.Text = "toolStrip1";
             // 
@@ -353,13 +365,94 @@
             this.toolStripButtonDelete.ToolTipText = "Eliminar la calendarización seleccionada";
             this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.listView1);
+            this.tabPage1.Controls.Add(this.toolStrip1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(501, 254);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "Reglas / Roles ó Grupos de Usuarios";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // listView1
+            // 
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader5});
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.Location = new System.Drawing.Point(3, 28);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(495, 223);
+            this.listView1.TabIndex = 2;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Título";
+            this.columnHeader3.Width = 200;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Activo";
+            this.columnHeader4.Width = 100;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Tipo";
+            this.columnHeader5.Width = 120;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonAddRule,
+            this.toolStripSeparator1,
+            this.toolStripButtonDeleteRule});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 3);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(495, 25);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip1.Visible = false;
+            // 
+            // toolStripButtonAddRule
+            // 
+            this.toolStripButtonAddRule.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonAddRule.Image = global::WBOffice4.Properties.Resources.add;
+            this.toolStripButtonAddRule.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAddRule.Name = "toolStripButtonAddRule";
+            this.toolStripButtonAddRule.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonAddRule.ToolTipText = "Agregar una calendarizacin para la publicación actual";
+            this.toolStripButtonAddRule.Click += new System.EventHandler(this.toolStripButtonAddRule_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButtonDeleteRule
+            // 
+            this.toolStripButtonDeleteRule.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonDeleteRule.Enabled = false;
+            this.toolStripButtonDeleteRule.Image = global::WBOffice4.Properties.Resources.delete;
+            this.toolStripButtonDeleteRule.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonDeleteRule.Name = "toolStripButtonDeleteRule";
+            this.toolStripButtonDeleteRule.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonDeleteRule.ToolTipText = "Eliminar la calendarización seleccionada";
+            this.toolStripButtonDeleteRule.Click += new System.EventHandler(this.toolStripButtonDeleteRule_Click);
+            // 
             // FormEditPorlet
             // 
             this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(419, 322);
+            this.ClientSize = new System.Drawing.Size(509, 322);
             this.Controls.Add(this.tabControlProperties);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -377,6 +470,10 @@
             this.tabPageCalendar.PerformLayout();
             this.toolStripCalendar.ResumeLayout(false);
             this.toolStripCalendar.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -413,5 +510,14 @@
         private System.Windows.Forms.DateTimePicker dateTimePickerEndDate;
         private System.Windows.Forms.CheckBox checkBoxEndDate;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonAddRule;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonDeleteRule;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
     }
 }

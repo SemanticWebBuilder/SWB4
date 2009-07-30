@@ -53,25 +53,45 @@ namespace WBOffice4.Forms
             }
             comboBoxVersiones.SelectedItem = selected;
             loadProperties();
-
+            loadRules();
             try
             {
                 DateTime date = OfficeApplication.OfficeDocumentProxy.getEndDate(pageInformation);
                 if (date == null)
                 {
-                    this.checkBoxEndDate.Checked=false;
-                    this.dateTimePickerEndDate.Enabled=false;
+                    this.checkBoxEndDate.Checked = false;
+                    this.dateTimePickerEndDate.Enabled = false;
                 }
                 else
                 {
                     this.checkBoxEndDate.Checked = true;
                     this.dateTimePickerEndDate.Enabled = true;
-                    this.dateTimePickerEndDate.Value=date;
+                    this.dateTimePickerEndDate.Value = date;
                 }
             }
             catch (Exception ue)
             {
                 Debug.WriteLine(ue.StackTrace);
+            }
+        }
+        private void loadRules()
+        {
+            this.listView1.Items.Clear();
+            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+                foreach (ElementInfo info in OfficeApplication.OfficeDocumentProxy.getElementsOfResource(pageInformation))
+                {
+                    this.listView1.Items.Add(new ElementListView(info));
+                }
+            }
+            catch (Exception ue)
+            {
+                Debug.WriteLine(ue.StackTrace);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
             }
         }
         private void loadProperties()
@@ -318,7 +338,7 @@ namespace WBOffice4.Forms
 
         private void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
-            if (this.listViewCalendar.SelectedItems.Count>0)
+            if (this.listViewCalendar.SelectedItems.Count > 0)
             {
                 DialogResult res = MessageBox.Show(this, "¿Desea eliminar la calendarización?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (res == DialogResult.Yes)
@@ -327,9 +347,9 @@ namespace WBOffice4.Forms
                     this.listViewCalendar.Items.Remove((CalendarItem)this.listViewCalendar.SelectedItems[0]);
 
 
-                    if (this.listViewCalendar.Items.Count== 0 || listViewCalendar.SelectedItems.Count == 0)
+                    if (this.listViewCalendar.Items.Count == 0 || listViewCalendar.SelectedItems.Count == 0)
                     {
-                        this.toolStripButtonDelete.Enabled=false;
+                        this.toolStripButtonDelete.Enabled = false;
                     }
                     try
                     {
@@ -345,7 +365,7 @@ namespace WBOffice4.Forms
             }
             if (this.listViewCalendar.SelectedItems.Count == 0)
             {
-                this.toolStripButtonDelete.Enabled=false;
+                this.toolStripButtonDelete.Enabled = false;
             }
         }
 
@@ -357,6 +377,72 @@ namespace WBOffice4.Forms
             {
                 this.toolStripButtonDelete.Enabled = true;
                 //this.toolStripButtonEdit.Enabled = true;
+            }
+        }
+
+        private void toolStripButtonAddRule_Click(object sender, EventArgs e)
+        {
+            FormAddElement frm = new FormAddElement(this.pageInformation.page.site, this.pageInformation);
+            DialogResult res = frm.ShowDialog(this);
+            if (res == DialogResult.OK)
+            {
+                ElementInfo element = frm.ElementInfo;
+                try
+                {
+                    this.Cursor = Cursors.WaitCursor;
+                    OfficeApplication.OfficeDocumentProxy.addElementToResource(this.pageInformation, element);
+                    loadRules();
+                    if (listView1.Items.Count == 0 || listView1.SelectedIndices.Count == 0)
+                    {
+                        toolStripButtonDeleteRule.Enabled = false;
+                    }
+                    else
+                    {
+                        toolStripButtonDeleteRule.Enabled = true;
+                    }
+                }
+                catch (Exception ue)
+                {
+                    Debug.WriteLine(ue.StackTrace);
+                }
+                finally
+                {
+                    this.Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        private void toolStripButtonDeleteRule_Click(object sender, EventArgs e)
+        {
+            if (this.listView1.Items.Count > 0 && this.listView1.SelectedIndices.Count > 0)
+            {
+                ElementInfo info = ((ElementListView)listView1.SelectedItems[0]).ElementInfo;
+                DialogResult res = MessageBox.Show(this, "¿Desea eliminar la regla / rol ó grupo de usuario " + info.title, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Question);
+                if (res == DialogResult.OK)
+                {
+                    try
+                    {
+                        this.Cursor = Cursors.WaitCursor;
+                        OfficeApplication.OfficeDocumentProxy.deleteElementToResource(pageInformation, info);
+                        loadRules();
+                        if (listView1.Items.Count == 0 || listView1.SelectedIndices.Count == 0)
+                        {
+                            toolStripButtonDeleteRule.Enabled = false;
+                        }
+                        else
+                        {
+                            toolStripButtonDeleteRule.Enabled = true;
+                        }
+                    }
+                    catch (Exception ue)
+                    {
+                        Debug.WriteLine(ue.StackTrace);
+                    }
+                    finally
+                    {
+                        this.Cursor = Cursors.Default;
+                    }
+                }
             }
         }
 
