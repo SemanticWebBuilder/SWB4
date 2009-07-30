@@ -6,15 +6,22 @@ import javax.servlet.http.*;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
 
 public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWBRankWebPageBase
 {
 
+    // http://www.semanticwebbuilder.org/swb4/ontology#rank
+    // http://www.semanticwebbuilder.org/swb4/ontology#reviews
+
+
     private String fullStarPath;
     private String halfStarPath;
     private String emptyStarPath;
+    private static final org.semanticwb.platform.SemanticProperty sp_rank = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#rank");
+    private static final org.semanticwb.platform.SemanticProperty sp_reviews = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#reviews");
 
     public SWBRankWebPage()
     {
@@ -95,9 +102,20 @@ function votedPage(){
 
 </script>
         */
-
+        String tmpUrl = "";
+        String URI = request.getParameter("uri");
+        SemanticObject obj = SemanticObject.createSemanticObject(URI);// paramRequest.getWebPage().getWebSite().;
         PrintWriter out = response.getWriter();
-        int rank = (int) Math.round(Math.floor(paramRequest.getWebPage().getRank() * 10));
+        int rank = 0;
+        if (null!=obj)
+        {
+            tmpUrl = "+\"&uri=\"+escape('"+URI+"')";
+            rank = (int) Math.round(Math.floor(obj.getDoubleProperty(sp_rank)* 10));
+        }
+        else
+        {
+         rank = (int) Math.round(Math.floor(paramRequest.getWebPage().getRank() * 10));
+        }
         //System.out.println("Rank:" + rank);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("vote");
@@ -106,7 +124,7 @@ function votedPage(){
         out.println("\n<script language=\"javascript\" type=\"text/javascript\">\nvar request = false;\ntry {\n  request = new XMLHttpRequest();\n} " +
                 "catch (trymicrosoft) {\n  try {\n    request = new ActiveXObject(\"Msxml2.XMLHTTP\");\n  } catch (othermicrosoft) {\n    try {\n " +
                 "      request = new ActiveXObject(\"Microsoft.XMLHTTP\");\n    } catch (failed) {\n      request = false;\n    }\n  }\n}\nif " +
-                "(!request)\n  alert(\"Error initializing XMLHttpRequest!\");\n\nfunction vote(val){\n    if (!invoke) return;\n    var url = \""+url+"?value=\"+escape(val);\n" +
+                "(!request)\n  alert(\"Error initializing XMLHttpRequest!\");\n\nfunction vote(val){\n    if (!invoke) return;\n    var url = \""+url+"?value=\"+escape(val)"+tmpUrl+";\n" +
                 "    request.open(\"GET\", url, true);\n    request.onreadystatechange = votedPage;\n    request.send(null);\n}\n\nfunction votedPage(){\n" +
                 "    var response = request.responseText;\n    if ('OK'==response)\n        alert('Vote acepted!');\n\n    invoke = false;}\nvar invoke = true;\n</script>\n");
         out.print("<table boder=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
@@ -135,10 +153,15 @@ function votedPage(){
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
+        String URI = request.getParameter("uri");
+        SemanticObject obj = null;
+        if (null!=URI) obj = SemanticObject.createSemanticObject(URI);
         Cookie[] cookies= request.getCookies();
         for (Cookie cookie: cookies){
             //System.out.println(cookie.getName());
-         if (cookie.getName().equals(response.getWebPage().getId()+"_voted"))
+            SemanticObject tmp = response.getWebPage().getSemanticObject();
+            if (null!=obj) tmp = obj;
+         if (cookie.getName().equals(tmp.getId()+"_voted"))
          {
              response.setMode(SWBResourceURL.Mode_EDIT);
              //System.out.println("VotedOff ");
@@ -152,14 +175,36 @@ function votedPage(){
             try {vote = Integer.parseInt(request.getParameter("value"));} catch (Exception ne){}
         WebPage ws = response.getWebPage();
         //System.out.println("ws: "+ws+" vote:"+vote);
-        double rank = ws.getRank();
-        long rev = ws.getReviews();
+        double rank = 0;
+        long rev = 0;
+        String tmpUrl = "";
+        
+        if (null==obj)
+        {
+            rank = ws.getRank();
+            rev = ws.getReviews();
+        }
+        else
+        {
+            rank = obj.getDoubleProperty(sp_rank);
+            rev = obj.getLongProperty(sp_reviews);
+            response.setRenderParameter("uri", URI);
+        }
         rank = rank * rev;
         rev++;
         rank = rank + vote;
         rank = rank / rev;
+
+        if (null==obj)
+        {
         ws.setRank(rank);
         ws.setReviews(rev);
+        }
+        else
+        {
+            obj.setDoubleProperty(sp_rank, rank);
+            obj.setLongProperty(sp_reviews, rev);
+        }
         //System.out.println("rev:"+rev+" rank:"+rank);
         }
 
@@ -168,7 +213,11 @@ function votedPage(){
     @Override
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        Cookie cookie = new Cookie(paramRequest.getWebPage().getId()+"_voted", "true");
+        String URI = request.getParameter("uri");
+        SemanticObject obj = null;
+        if (null!=URI) obj = SemanticObject.createSemanticObject(URI);
+        else obj = paramRequest.getWebPage().getSemanticObject();
+        Cookie cookie = new Cookie(obj.getId()+"_voted", "true");
         cookie.setPath("/");
         response.addCookie(cookie);
             //response.setHeader(fullStarPath, fullStarPath);
@@ -183,11 +232,7 @@ function votedPage(){
              out.print("Not OK");
     }
 
-    @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-
-    }
+   
 
 
 
