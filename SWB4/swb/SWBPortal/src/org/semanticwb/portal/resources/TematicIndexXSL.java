@@ -127,21 +127,12 @@ public class TematicIndexXSL extends GenericAdmResource
             father.setAttribute("id", paramRequest.getWebPage().getId());
             father.appendChild(fathertitle);
             
-            if(usrlanguage!=null){
-                father.setAttribute("hasfatherdescription","1");
-                Element fatherdescription = dom.createElement("fatherdescription");
-                fatherdescription.appendChild(dom.createTextNode(paramRequest.getWebPage().getDescription(usrlanguage)));
-                father.appendChild(fatherdescription);
-            }else{
-                Iterator <org.semanticwb.model.Language> itLang=paramRequest.getWebPage().getWebSite().listLanguages();
-                while(itLang.hasNext())
+            if(usrlanguage!=null)
+            {
+                String descr=paramRequest.getWebPage().getDisplayDescription(usrlanguage);
+                if(descr!=null)
                 {
-                    org.semanticwb.model.Language lang=itLang.next();
-                    String descr =paramRequest.getWebPage().getDescription(lang.getId());
-                    father.setAttribute("hasfatherdescription","0");
-                    Element fatherlanguage = dom.createElement("fatherlanguage");
-                    fatherlanguage.appendChild(dom.createTextNode(lang.getId()));
-                    father.appendChild(fatherlanguage);
+                    father.setAttribute("hasfatherdescription","1");
                     Element fatherdescription = dom.createElement("fatherdescription");
                     fatherdescription.appendChild(dom.createTextNode(descr));
                     father.appendChild(fatherdescription);
@@ -169,20 +160,10 @@ public class TematicIndexXSL extends GenericAdmResource
                     
                     if(usrlanguage!=null)
                     {
-                        father.setAttribute("hassondescription","1");
-                        Element fatherdescription = dom.createElement("sondescription");
-                        fatherdescription.appendChild(dom.createTextNode(hijo.getDescription(usrlanguage)));
-                        father.appendChild(fatherdescription);
-                    }else{
-                        Iterator <org.semanticwb.model.Language> itLang=paramRequest.getWebPage().getWebSite().listLanguages();
-                        while(itLang.hasNext())
+                        String descr=hijo.getDisplayDescription(usrlanguage);
+                        if(descr!=null)
                         {
-                            org.semanticwb.model.Language lang=itLang.next();
-                            String descr =paramRequest.getWebPage().getDescription(lang.getId());
-                            son.setAttribute("hassondescription","0");
-                            Element sonlanguage = dom.createElement("sonlanguage");
-                            sonlanguage.appendChild(dom.createTextNode(lang.getId()));
-                            father.appendChild(sonlanguage);
+                            son.setAttribute("hassondescription","1");
                             Element sondescription = dom.createElement("sondescription");
                             sondescription.appendChild(dom.createTextNode(descr));
                             son.appendChild(sondescription);
@@ -208,20 +189,10 @@ public class TematicIndexXSL extends GenericAdmResource
                             
                             if(usrlanguage!=null)
                             {
-                                grandson.setAttribute("hasgrandsondescription","1");
-                                Element grandsondescription = dom.createElement("grandsondescription");
-                                grandsondescription.appendChild(dom.createTextNode(hijo.getDescription(usrlanguage)));
-                                grandson.appendChild(grandsondescription);
-                            }else{
-                                Iterator <org.semanticwb.model.Language> itLang=paramRequest.getWebPage().getWebSite().listLanguages();
-                                while(itLang.hasNext())
+                                String descr=nieto.getDisplayDescription(usrlanguage);
+                                if(descr!=null)
                                 {
-                                    org.semanticwb.model.Language lang=itLang.next();
-                                    String descr =paramRequest.getWebPage().getDescription(lang.getId());
-                                    grandson.setAttribute("hasgrandsondescription","0");
-                                    Element grandsonlanguage = dom.createElement("grandsonlanguage");
-                                    grandsonlanguage.appendChild(dom.createTextNode(lang.getId()));
-                                    grandson.appendChild(grandsonlanguage);
+                                    grandson.setAttribute("hasgrandsondescription","1");
                                     Element grandsondescription = dom.createElement("grandsondescription");
                                     grandsondescription.appendChild(dom.createTextNode(descr));
                                     grandson.appendChild(grandsondescription);
