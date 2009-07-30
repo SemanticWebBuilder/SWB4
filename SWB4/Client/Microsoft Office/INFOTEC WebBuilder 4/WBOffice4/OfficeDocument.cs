@@ -23,18 +23,18 @@ namespace WBOffice4
 
         public const String CONTENT_ID_NAME = "CONTENT_ID_NAME";
         public const String REPOSITORY_ID_NAME = "REPOSITORY_ID_NAME";
-        public string contentID=null;
+        public string contentID = null;
         public string reporitoryID = null;
         protected OfficeDocument()
         {
-            
+
         }
         /// <summary>
         /// Verify if the content is published or not, and if it exists or not. 
         /// </summary>
         protected bool SetupDocument()
-        {            
-            bool setupDocument=false;
+        {
+            bool setupDocument = false;
             if (this.CustomProperties.ContainsKey(CONTENT_ID_NAME) && this.CustomProperties.ContainsKey(REPOSITORY_ID_NAME))
             {
                 contentID = this.CustomProperties[CONTENT_ID_NAME];
@@ -43,13 +43,13 @@ namespace WBOffice4
             try
             {
                 contentID = OfficeApplication.SetupDocument(reporitoryID, contentID);
-                setupDocument=true;
-            }            
+                setupDocument = true;
+            }
             catch (HttpException e)
             {
-                if(e.Code==HttpStatusCode.NotFound)
+                if (e.Code == HttpStatusCode.NotFound)
                 {
-                    RtlAwareMessageBox.Show(null,"El sitio al que desea conectarse, indica que no tiene habilitada la función de publicación de contenidos", "Verificación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    RtlAwareMessageBox.Show(null, "El sitio al que desea conectarse, indica que no tiene habilitada la función de publicación de contenidos", "Verificación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else if (e.Code == HttpStatusCode.Forbidden)
                 {
@@ -57,7 +57,7 @@ namespace WBOffice4
                 }
                 else
                 {
-                    RtlAwareMessageBox.Show(null,e.Message,"Verificación de contenido",MessageBoxButtons.OK,MessageBoxIcon.Error,MessageBoxDefaultButton.Button1);
+                    RtlAwareMessageBox.Show(null, e.Message, "Verificación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
                 }
                 OfficeApplication.LogOff();
             }
@@ -65,8 +65,8 @@ namespace WBOffice4
             {
                 if (e.Status == WebExceptionStatus.ConnectFailure)
                 {
-                    RtlAwareMessageBox.Show(null, "El sitio web con el que intenta trabajar, se encuentra apagado o no se puede acceder al mismo.", "Verificación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);                    
-                }                
+                    RtlAwareMessageBox.Show(null, "El sitio web con el que intenta trabajar, se encuentra apagado o no se puede acceder al mismo.", "Verificación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 else
                 {
                     RtlAwareMessageBox.Show(null, e.Message, "Verificación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -80,7 +80,7 @@ namespace WBOffice4
             }
             return setupDocument;
         }
-        
+
         protected static readonly string Separator = @"\";
         #region Abstract methods and properties
         /// <summary>
@@ -89,7 +89,7 @@ namespace WBOffice4
         protected abstract string ApplicationVersion
         {
             get;
-        }       
+        }
         /// <summary>
         /// Gets the path of the fisical document, if the document is nos saved returns a null
         /// </summary>
@@ -159,7 +159,7 @@ namespace WBOffice4
         protected abstract void SaveCustomProperties(Dictionary<String, String> properties);
 
         protected abstract void CleanContentProperties();
-               
+
 
         /// <summary>
         /// Save the document as Html format
@@ -181,7 +181,7 @@ namespace WBOffice4
         protected abstract FileInfo SaveAs(DirectoryInfo dir, SaveDocument format);
 
 
-        public abstract void InsertLink(String path,String titulo);
+        public abstract void InsertLink(String path, String titulo);
 
         /// <summary>
         /// Save the document
@@ -194,7 +194,7 @@ namespace WBOffice4
         protected abstract void Save(FileInfo file);
         #endregion
         #region Static methods
-        
+
         /// <summary>
         /// Coverts the uri string path to FileInfo
         /// </summary>
@@ -265,7 +265,7 @@ namespace WBOffice4
         private void SaveHtmlPrepareAndGetFiles(String guid)
         {
             FileInfo file = SaveOnGuidDirectoryAsHtml(guid);
-            PrepareHtmlFileToSend(file);            
+            PrepareHtmlFileToSend(file);
         }
         /// <summary>
         /// If the document is new, and has not been saved before
@@ -275,8 +275,8 @@ namespace WBOffice4
         {
             get
             {
-                
-                if (this.contentID == null || reporitoryID==null)
+
+                if (this.contentID == null || reporitoryID == null)
                 {
                     if (this.CustomProperties.ContainsKey(CONTENT_ID_NAME) && this.CustomProperties.ContainsKey(REPOSITORY_ID_NAME))
                     {
@@ -288,7 +288,7 @@ namespace WBOffice4
                         return false;
                     }
                     return true;
-                    
+
                 }
                 else
                 {
@@ -301,10 +301,14 @@ namespace WBOffice4
             foreach (FileInfo attachment in this.NotMissingAttachments)
             {
                 string destFileName = temporalFile.FullName + @"\" + attachment.Name;
+                if (!temporalFile.Exists)
+                {
+                    temporalFile.Create();
+                }
                 attachment.CopyTo(destFileName, true);
             }
         }
-        private void addFiles(Crc32 crc32,ZipOutputStream zip, DirectoryInfo parent,bool includeDir)
+        private void addFiles(Crc32 crc32, ZipOutputStream zip, DirectoryInfo parent, bool includeDir)
         {
             foreach (FileInfo file in parent.GetFiles())
             {
@@ -314,27 +318,27 @@ namespace WBOffice4
                 ZipEntry entry;
                 if (includeDir)
                 {
-                    entry = new ZipEntry(parent.Name+"/"+file.Name);
+                    entry = new ZipEntry(parent.Name + "/" + file.Name);
                 }
                 else
                 {
                     entry = new ZipEntry(file.Name);
                 }
-                
+
                 entry.DateTime = file.LastWriteTime;
-                entry.Size = file.Length;                
-                fileStream.Read(buffer,0,buffer.Length);                
+                entry.Size = file.Length;
+                fileStream.Read(buffer, 0, buffer.Length);
                 fileStream.Close();
                 crc32.Reset();
                 crc32.Update(buffer);
                 //entry.Crc = crc32.Value;                
-                zip.PutNextEntry(entry);                
+                zip.PutNextEntry(entry);
                 zip.Write(buffer, 0, buffer.Length);
                 zip.CloseEntry();
-            }            
+            }
             foreach (DirectoryInfo dir in parent.GetDirectories())
-            {                
-                addFiles(crc32,zip, dir,true);
+            {
+                addFiles(crc32, zip, dir, true);
             }
         }
         internal FileInfo CreateZipFile()
@@ -342,7 +346,7 @@ namespace WBOffice4
             String guid = Guid.NewGuid().ToString().Replace('-', '_');
             DirectoryInfo temporalFile = new DirectoryInfo(this.FilePath.Directory + Separator + guid);
             CopyAttachmentsToDirectory(temporalFile);
-            SaveHtmlPrepareAndGetFiles(guid);                   
+            SaveHtmlPrepareAndGetFiles(guid);
             FileInfo zipFile = new FileInfo(this.FilePath.Directory + Separator + guid + ".zip");
             if (zipFile.Exists)
             {
@@ -351,7 +355,7 @@ namespace WBOffice4
             ZipOutputStream zip = new ZipOutputStream(File.Create(zipFile.FullName));
             Crc32 crc32 = new Crc32();
             zip.SetLevel(9);
-            addFiles(crc32,zip, temporalFile,false);
+            addFiles(crc32, zip, temporalFile, false);
             zip.Finish();
             zip.Close();
             temporalFile.Delete(true);
@@ -365,7 +369,14 @@ namespace WBOffice4
         /// <returns>FileInfo width the path of the file, null is the uri is not a local path, for example: http://www.infotec.com.mx</returns>
         protected FileInfo UriToFile(string uri)
         {
-            FileInfo file=null;            
+            FileInfo file=null;
+            if (uri.StartsWith("..") || uri.StartsWith("."))
+            {
+                Uri filepath = new Uri(new Uri(this.FilePath.DirectoryName + Separator), new Uri(uri, UriKind.Relative));
+                file = UriToFile(filepath);
+            }
+            else
+            {
             if (Uri.IsWellFormedUriString(uri, UriKind.Relative))
             {
                 Uri filepath = new Uri(new Uri(this.FilePath.DirectoryName + Separator), new Uri(uri, UriKind.Relative));
@@ -374,7 +385,8 @@ namespace WBOffice4
             else if (Uri.IsWellFormedUriString(uri, UriKind.Absolute))
             {
                 file = UriToFile(new Uri(uri));
-            }            
+            }
+            }
             return file;
         }
         #endregion
@@ -384,8 +396,8 @@ namespace WBOffice4
         public override bool Equals(object obj)
         {
             OfficeDocument officeDocument = obj as OfficeDocument;
-            if (obj!=null)
-            {                
+            if (obj != null)
+            {
                 return officeDocument.FilePath.FullName.ToUpperInvariant().Equals(this.FilePath.FullName.ToUpperInvariant());
             }
             return false;
@@ -410,11 +422,11 @@ namespace WBOffice4
                 frm.ShowDialog();
             }
         }
-        public void Publish(String title,String description)
+        public void Publish(String title, String description)
         {
             if (OfficeApplication.TryLogOn() && SetupDocument() && IsPublished)
             {
-                FormPublishcontentToPage frm = new FormPublishcontentToPage(this,title,description);
+                FormPublishcontentToPage frm = new FormPublishcontentToPage(this, title, description);
                 frm.ShowDialog();
             }
         }
@@ -489,7 +501,7 @@ namespace WBOffice4
                     Save(file);
                     new FormSaveContent(this).ShowDialog();
                 }
-                else if (!IsNew && this.IsPublished && OfficeApplication.OfficeDocumentProxy.exists(this.reporitoryID,this.contentID))
+                else if (!IsNew && this.IsPublished && OfficeApplication.OfficeDocumentProxy.exists(this.reporitoryID, this.contentID))
                 {
                     // update the content
                     Save();
@@ -515,18 +527,18 @@ namespace WBOffice4
             this.contentID = contentId;
             this.reporitoryID = repositoryName;
             Dictionary<String, String> values = new Dictionary<string, string>();
-            values[CONTENT_ID_NAME]=contentId.ToString(CultureInfo.InvariantCulture);
-            values[REPOSITORY_ID_NAME]= repositoryName.ToString(CultureInfo.InvariantCulture);
+            values[CONTENT_ID_NAME] = contentId.ToString(CultureInfo.InvariantCulture);
+            values[REPOSITORY_ID_NAME] = repositoryName.ToString(CultureInfo.InvariantCulture);
             SaveCustomProperties(values);
         }
         public void showContentInformation()
         {
             if (OfficeApplication.TryLogOn() && SetupDocument())
             {
-                FormContentInformation formContentInformation = new FormContentInformation(reporitoryID, contentID,this);
+                FormContentInformation formContentInformation = new FormContentInformation(reporitoryID, contentID, this);
                 formContentInformation.ShowDialog();
             }
-        }       
+        }
         public void DeleteAsociation()
         {
 
@@ -542,7 +554,7 @@ namespace WBOffice4
                         OfficeApplication.MenuListener.NoDocumentPublished();
                     }
                 }
-                
+
             }
         }
         private void UpdateContent()
@@ -563,6 +575,6 @@ namespace WBOffice4
             }
         }
 
-        
+
     }
 }
