@@ -35,6 +35,7 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.tabControlProperties = new System.Windows.Forms.TabControl();
             this.tabPageInformation = new System.Windows.Forms.TabPage();
+            this.buttonMove = new System.Windows.Forms.Button();
             this.dateTimePickerEndDate = new System.Windows.Forms.DateTimePicker();
             this.checkBoxEndDate = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -69,7 +70,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDeleteRule = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonMove = new System.Windows.Forms.Button();
+            this.checkBoxActivePag = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.tabControlProperties.SuspendLayout();
             this.tabPageInformation.SuspendLayout();
@@ -125,6 +126,7 @@
             // 
             // tabPageInformation
             // 
+            this.tabPageInformation.Controls.Add(this.checkBoxActivePag);
             this.tabPageInformation.Controls.Add(this.buttonMove);
             this.tabPageInformation.Controls.Add(this.dateTimePickerEndDate);
             this.tabPageInformation.Controls.Add(this.checkBoxEndDate);
@@ -148,6 +150,16 @@
             this.tabPageInformation.TabIndex = 0;
             this.tabPageInformation.Text = "Información";
             this.tabPageInformation.UseVisualStyleBackColor = true;
+            // 
+            // buttonMove
+            // 
+            this.buttonMove.Location = new System.Drawing.Point(221, 124);
+            this.buttonMove.Name = "buttonMove";
+            this.buttonMove.Size = new System.Drawing.Size(75, 27);
+            this.buttonMove.TabIndex = 15;
+            this.buttonMove.Text = "Mover";
+            this.buttonMove.UseVisualStyleBackColor = true;
+            this.buttonMove.Click += new System.EventHandler(this.buttonMove_Click);
             // 
             // dateTimePickerEndDate
             // 
@@ -448,15 +460,15 @@
             this.toolStripButtonDeleteRule.ToolTipText = "Eliminar la calendarización seleccionada";
             this.toolStripButtonDeleteRule.Click += new System.EventHandler(this.toolStripButtonDeleteRule_Click);
             // 
-            // buttonMove
+            // checkBoxActivePag
             // 
-            this.buttonMove.Location = new System.Drawing.Point(221, 124);
-            this.buttonMove.Name = "buttonMove";
-            this.buttonMove.Size = new System.Drawing.Size(75, 27);
-            this.buttonMove.TabIndex = 15;
-            this.buttonMove.Text = "Mover";
-            this.buttonMove.UseVisualStyleBackColor = true;
-            this.buttonMove.Click += new System.EventHandler(this.buttonMove_Click);
+            this.checkBoxActivePag.AutoSize = true;
+            this.checkBoxActivePag.Location = new System.Drawing.Point(312, 130);
+            this.checkBoxActivePag.Name = "checkBoxActivePag";
+            this.checkBoxActivePag.Size = new System.Drawing.Size(91, 17);
+            this.checkBoxActivePag.TabIndex = 16;
+            this.checkBoxActivePag.Text = "Página activa";
+            this.checkBoxActivePag.UseVisualStyleBackColor = true;
             // 
             // FormEditPorlet
             // 
@@ -532,5 +544,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.Button buttonMove;
+        private System.Windows.Forms.CheckBox checkBoxActivePag;
     }
 }

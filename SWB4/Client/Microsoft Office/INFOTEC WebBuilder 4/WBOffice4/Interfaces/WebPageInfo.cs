@@ -13,5 +13,6 @@ namespace WBOffice4.Interfaces
         public String description;
         public int childs = 0;
         public String url;
+        public bool active;
     }
 }

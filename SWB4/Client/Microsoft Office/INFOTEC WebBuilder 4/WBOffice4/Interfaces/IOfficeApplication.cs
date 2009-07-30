@@ -94,6 +94,9 @@ namespace WBOffice4.Interfaces
         [XmlRpcMethod("OfficeApplication.getElementsToAdd")]
         ElementInfo[] getElementsToAdd(SiteInfo siteInfo);
 
+        [XmlRpcMethod("OfficeApplication.activePage")]
+        void activePage(PageInfo webPageInfo, bool active);
+
 
     }
 }
