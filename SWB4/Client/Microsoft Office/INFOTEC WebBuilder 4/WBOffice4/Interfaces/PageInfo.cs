@@ -12,5 +12,6 @@ namespace WBOffice4.Interfaces
         public String description;
         public SiteInfo site;
         public String url;
+        public bool active;
     }
 }

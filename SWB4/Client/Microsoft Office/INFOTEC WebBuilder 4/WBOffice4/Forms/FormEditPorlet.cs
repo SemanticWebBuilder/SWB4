@@ -30,6 +30,7 @@ namespace WBOffice4.Forms
         }
         private void initizalize()
         {
+            this.checkBoxActivePag.Checked = pageInformation.page.active;
             this.dateTimePickerEndDate.Value = DateTime.Now;
             
             this.textBoxTitle.Text = pageInformation.title;
@@ -296,6 +297,7 @@ namespace WBOffice4.Forms
                     added.Remove(cal);
                     OfficeApplication.OfficeDocumentProxy.activeCalendar(pageInformation, cal, active);
                 }
+                OfficeApplication.OfficeApplicationProxy.activePage(this.pageInformation.page,this.checkBoxActivePag.Checked);
 
                 PropertyInfo[] properties = null;
                 String[] values = null;
