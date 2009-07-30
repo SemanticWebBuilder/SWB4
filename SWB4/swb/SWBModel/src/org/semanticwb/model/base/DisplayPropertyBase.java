@@ -143,6 +143,18 @@ public class DisplayPropertyBase extends org.semanticwb.model.SWBClass implement
         getSemanticObject().removeProperty(swbxf_formElement);
     }
 
+   public static java.util.Iterator<org.semanticwb.model.DisplayProperty> listDisplayPropertyByFormElement(org.semanticwb.model.DisplayProperty displayproperty,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.DisplayProperty> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbxf_formElement, displayproperty.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.DisplayProperty> listDisplayPropertyByFormElement(org.semanticwb.model.DisplayProperty displayproperty)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.DisplayProperty> it=new org.semanticwb.model.GenericIterator(displayproperty.getSemanticObject().getModel().listSubjects(swbxf_formElement,displayproperty.getSemanticObject()));
+       return it;
+   }
+
     public org.semanticwb.platform.SemanticObject getFormElement()
     {
          org.semanticwb.platform.SemanticObject ret=null;

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.RuleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Sortable,org.semanticwb.model.Indexable,org.semanticwb.model.XMLable,org.semanticwb.model.XMLConfable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Deviceable,org.semanticwb.model.Expirable,org.semanticwb.model.Priorityable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.Hitable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Campable
+public class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Deviceable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Hitable,org.semanticwb.model.Activeable,org.semanticwb.model.Sortable,org.semanticwb.model.Expirable,org.semanticwb.model.Campable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Localeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.XMLable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Trashable,org.semanticwb.model.RoleRefable,org.semanticwb.model.XMLConfable
 {
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasUserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUserGroupRef");
@@ -415,6 +415,18 @@ public class ResourceBase extends org.semanticwb.model.SWBClass implements org.s
     {
         getSemanticObject().removeProperty(swb_resourceData);
     }
+
+   public static java.util.Iterator<org.semanticwb.model.Resource> listResourceByResourceData(org.semanticwb.model.Resource resource,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_resourceData, resource.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.Resource> listResourceByResourceData(org.semanticwb.model.Resource resource)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> it=new org.semanticwb.model.GenericIterator(resource.getSemanticObject().getModel().listSubjects(swb_resourceData,resource.getSemanticObject()));
+       return it;
+   }
 
     public org.semanticwb.platform.SemanticObject getResourceData()
     {

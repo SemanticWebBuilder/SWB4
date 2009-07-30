@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Iconable,org.semanticwb.model.Sortable,org.semanticwb.model.Descriptiveable
+public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Iconable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Sortable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
     public static final org.semanticwb.platform.SemanticProperty swbxf_heTreeController=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#heTreeController");
@@ -117,6 +117,18 @@ public class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implement
     {
         getSemanticObject().removeProperty(swbxf_heClass);
     }
+
+   public static java.util.Iterator<org.semanticwb.model.HerarquicalNode> listHerarquicalNodeByHClass(org.semanticwb.model.HerarquicalNode herarquicalnode,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.HerarquicalNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbxf_heClass, herarquicalnode.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.HerarquicalNode> listHerarquicalNodeByHClass(org.semanticwb.model.HerarquicalNode herarquicalnode)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.HerarquicalNode> it=new org.semanticwb.model.GenericIterator(herarquicalnode.getSemanticObject().getModel().listSubjects(swbxf_heClass,herarquicalnode.getSemanticObject()));
+       return it;
+   }
 
     public org.semanticwb.platform.SemanticObject getHClass()
     {

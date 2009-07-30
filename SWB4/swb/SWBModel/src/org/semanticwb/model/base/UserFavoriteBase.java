@@ -72,6 +72,18 @@ public class UserFavoriteBase extends org.semanticwb.model.SWBClass
         getSemanticObject().removeObjectProperty(swb_usrfHasObject,semanticobject);
     }
 
+   public static java.util.Iterator<org.semanticwb.model.UserFavorite> listUserFavoriteByHasObject(org.semanticwb.model.UserFavorite userfavorite,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.UserFavorite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_usrfHasObject, userfavorite.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.UserFavorite> listUserFavoriteByHasObject(org.semanticwb.model.UserFavorite userfavorite)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.UserFavorite> it=new org.semanticwb.model.GenericIterator(userfavorite.getSemanticObject().getModel().listSubjects(swb_usrfHasObject,userfavorite.getSemanticObject()));
+       return it;
+   }
+
     public org.semanticwb.platform.SemanticObject getObject()
     {
          org.semanticwb.platform.SemanticObject ret=null;
