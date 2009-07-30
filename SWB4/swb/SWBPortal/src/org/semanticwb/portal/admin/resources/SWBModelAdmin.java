@@ -160,13 +160,14 @@ public class SWBModelAdmin extends GenericResource {
         PrintWriter out = response.getWriter();
         out.println("<div class=\"swbform\">");
         out.println("<form>");
-        out.println("<table width=\"75%\">");
-        out.println("<tr><td><b>" + paramRequest.getLocaleLogString("fileContent") + request.getParameter("zipName") + ":</b><br/><br/><br/></td></tr>");
+        out.println("<table width=\"75%\" border=\"1\">");
+        out.println("<tr><td colspan=\"2\" align=\"center\"><b>" + paramRequest.getLocaleLogString("fileContent") + "  " +request.getParameter("zipName") + ":</b></td></tr>");
+        out.println("<tr><td align=\"center\"><b>"+paramRequest.getLocaleString("file")+"</b></td><td align=\"center\"><b>"+paramRequest.getLocaleString("size")+" (bytes)</b></td></tr>");
         for (Iterator<ZipEntry> itfiles = SWBUtils.IO.readZip(request.getParameter("zipName")); itfiles.hasNext();) {
             ZipEntry zen = itfiles.next();
-            out.println("<tr><td>" + zen.getName() + "</td></tr>");
+            out.println("<tr><td>" + zen.getName() + "</td><td>"+zen.getSize()+"</td></tr>");
         }
-        out.println("<tr><td><button id=\"send\" dojoType=\"dijit.form.Button\" value=\"" + paramRequest.getLocaleLogString("return") + "\" onClick=\"javascript:history.go(-1);\"/></td></tr>");
+        out.println("<tr><td colspan=\"2\" align=\"center\"><button id=\"send\" dojoType=\"dijit.form.Button\" value=\"" + paramRequest.getLocaleLogString("return") + "\" onClick=\"javascript:history.go(-1);\"/></td></tr>");
         out.println("</table>");
         out.println("</form>");
         out.println("</div>");
@@ -498,6 +499,8 @@ public class SWBModelAdmin extends GenericResource {
 
                 rdfcontent = rdfcontent.replaceAll(oldNamespace, newNs); //Reempplazar namespace anterior x nuevo
                 rdfcontent = rdfcontent.replaceAll(newNs+oldIDModel, newNs+newId); //Reempplazar namespace y id anterior x nuevos
+
+                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent,"<topicmap id=\\\""+oldIDModel+"\\\">", "<topicmap id=\\\""+newId+"\\\">"); // Rempalzar el tag: <topicmap id=\"[oldIDModel]\"> del xml de filtros de recursos
 
                 //Reemplaza ids de repositorios de usuarios y documentos x nuevos
                 rdfcontent = rdfcontent.replaceAll(oldIDModel + "_usr", newId + "_usr");
