@@ -65,10 +65,10 @@ namespace WBOffice4.Steps
                 zipFile = document.CreateZipFile();
                 this.Wizard.SetProgressBarInit(3, 2, "Publicando Documento...");
                 IOfficeDocument openOfficeDocument = OfficeDocument.OfficeDocumentProxy;
-                openOfficeDocument.Attachments.Add(new Attachment(zipFile, zipFile.Name));                
-                String name = document.FilePath.Name.Replace(document.DefaultExtension, document.PublicationExtension);                
+                openOfficeDocument.Attachments.Add(new Attachment(zipFile, zipFile.Name));
+                String name = document.FilePath.Name.Replace(document.DefaultExtension, document.PublicationExtension);
                 String contentID = openOfficeDocument.save(title, description, repositoryName, categoryID, document.DocumentType.ToString().ToUpper(), contentType.id, name, properties, values);
-                this.Wizard.Data[TitleAndDescription.CONTENT_ID] = contentID;        
+                this.Wizard.Data[TitleAndDescription.CONTENT_ID] = contentID;
 
 
                 document.SaveContentProperties(contentID, repositoryName);
@@ -82,6 +82,10 @@ namespace WBOffice4.Steps
                 {
                     document.Publish(title, description);
                 }
+            }
+            catch (Exception ue)
+            {
+                MessageBox.Show(this, "Error al tratar de publicar un documento " + ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {

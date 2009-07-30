@@ -92,7 +92,7 @@ namespace WBOffice4.Interfaces
         bool existCalendar(SiteInfo siteInfo, CalendarInfo CalendarInfo);
 
         [XmlRpcMethod("OfficeApplication.getElementsToAdd")]
-        public ElementInfo[] getElementsToAdd(SiteInfo siteInfo);
+        ElementInfo[] getElementsToAdd(SiteInfo siteInfo);
 
 
     }
