@@ -197,6 +197,7 @@
             this.buttonAddLink.Label = "Agregar liga de página";
             this.buttonAddLink.Name = "buttonAddLink";
             this.buttonAddLink.ShowImage = true;
+            this.buttonAddLink.Visible = false;
             this.buttonAddLink.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonAddLink_Click);
             // 
             // buttonDocstoAuthorize

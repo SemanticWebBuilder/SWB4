@@ -301,7 +301,7 @@ namespace WB4Office2007Library
         public override void InsertLink(String path, String titulo)
         {
             object missing = Type.Missing;
-            Excel.Range selection=(Excel.Range)workbook.Application.Selection;
+            Excel.Range selection=(Excel.Range)workbook.Application.Selection;            
             selection.Hyperlinks.Add(missing, path, missing, missing, titulo);            
         }
         
