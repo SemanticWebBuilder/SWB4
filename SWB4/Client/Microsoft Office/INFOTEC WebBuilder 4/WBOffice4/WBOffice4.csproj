@@ -291,6 +291,9 @@
     <EmbeddedResource Include="Forms\FormLogin.resx">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormMoveContent.resx">
+      <DependentUpon>FormMoveContent.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormOpenContent.resx">
       <DependentUpon>FormOpenContent.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -439,6 +442,12 @@
     <Compile Include="Forms\FormEditPorlet.Designer.cs">
       <DependentUpon>FormEditPorlet.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormMoveContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormMoveContent.Designer.cs">
+      <DependentUpon>FormMoveContent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormPeriodicidad.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -471,6 +480,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Steps\SelectSiteInsertLink.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectSiteMoveContent.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Steps\SelectSitePublish.cs">

@@ -23,10 +23,15 @@ namespace WBOffice4.Forms
         public FormEditPorlet(ResourceInfo pageInformation, String repositoryName, String contentID)
         {
             InitializeComponent();
-            this.dateTimePickerEndDate.Value = DateTime.Now;
             this.pageInformation = pageInformation;
             this.repositoryName = repositoryName;
             this.contentID = contentID;
+            initizalize();
+        }
+        private void initizalize()
+        {
+            this.dateTimePickerEndDate.Value = DateTime.Now;
+            
             this.textBoxTitle.Text = pageInformation.title;
             this.textBoxDescription.Text = pageInformation.description;
             this.checkBoxActive.Checked = pageInformation.active;
@@ -448,7 +453,22 @@ namespace WBOffice4.Forms
 
         private void buttonMove_Click(object sender, EventArgs e)
         {
-
+            FormMoveContent FormMoveContent = new FormMoveContent(this.pageInformation);
+            DialogResult res=FormMoveContent.ShowDialog(this);
+            if (res == DialogResult.OK)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                foreach (ResourceInfo portletInfo in OfficeApplication.OfficeDocumentProxy.listResources(repositoryName, contentID))
+                {
+                    if (portletInfo.id.Equals(this.pageInformation.id))
+                    {
+                        pageInformation = portletInfo;
+                        break;
+                    }
+                }
+                initizalize();
+                this.Cursor = Cursors.Default;
+            }
         }
 
 
