@@ -179,6 +179,9 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.deleteElementToResource")
     public void deleteElementToResource(ResourceInfo info, ElementInfo ruleInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.changeResourceOfWebPage")
+    public void changeResourceOfWebPage(ResourceInfo info, WebPageInfo webPageInfo) throws Exception;
 }
 
 

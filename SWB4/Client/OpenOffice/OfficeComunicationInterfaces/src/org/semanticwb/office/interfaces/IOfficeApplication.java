@@ -101,4 +101,7 @@ public interface IOfficeApplication
 
     @XmlRpcMethod(methodName = "OfficeApplication.getElementsToAdd")
     public ElementInfo[] getElementsToAdd(SiteInfo siteInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.activePage")
+    public void activePage(PageInfo webPageInfo,boolean active) throws Exception;
 }
