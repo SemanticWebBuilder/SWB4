@@ -16,6 +16,7 @@ public class WebPageInfo {
     public String description;
     public int childs;
     public String url;
+    public boolean active;
     @Override
     public boolean equals(Object obj)
     {
