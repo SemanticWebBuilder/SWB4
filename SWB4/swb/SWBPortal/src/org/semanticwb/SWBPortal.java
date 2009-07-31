@@ -63,7 +63,6 @@ public class SWBPortal {
     private static HashMap<String, SessionUser> m_sessions;
 
     static public synchronized SWBPortal createInstance() {
-        //System.out.println("Entra a createInstance");
         if (instance == null) {
             instance = new SWBPortal();
         }
@@ -188,7 +187,6 @@ public class SWBPortal {
                 log.event("Creating Logs Tables...");
                 GenericDB db = new GenericDB();
                 String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_logs.xml");
-                //System.out.println("xml:"+xml);
                 db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
             }
             st.close();
@@ -481,7 +479,7 @@ public class SWBPortal {
                                     value = SWBUtils.TEXT.replaceAll(value, "%3F", "?");
 
                                     String sruta = null;
-                                    if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("https://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("../") && !value.startsWith("{")) {
+                                    if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) && !value.startsWith("http://") && !value.startsWith("https://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("../") && !value.startsWith("{")) { //Comentado Jorge Jiménez y Vic Lorenzana (30/07/2009)
                                         if (!tag.getTagString().toLowerCase().equals("input") && !value.toLowerCase().equals("true") && !value.toLowerCase().equals("false") && value.indexOf(".") > -1) {
                                             sruta = ruta;
                                         }
@@ -490,7 +488,8 @@ public class SWBPortal {
                                             value = findFileName(value);
                                         }
                                     } else if (name.toLowerCase().equals("href") && value.startsWith("../")) {
-                                        value = "/" + takeOffString(value, "../");
+                                        sruta = ruta; //Agregado 29/07/2009 (Jorge Jiménez-Vic Lorenzana)
+                                        value = findFileName(value); 
                                     } else if (name.toLowerCase().equals("href") && value.startsWith("#_") && pages > 1) { //Es un ancla
                                         int page = findAnchorInContent(datos, value, pages);
                                         if (page > 0) {
@@ -542,7 +541,6 @@ public class SWBPortal {
         }
 
         private static String findFileName(String value) {
-            //System.out.println("value:"+value);
             String out = "";
             if (value.startsWith("../")) {
                 out = takeOffString(value, "../");
@@ -554,16 +552,13 @@ public class SWBPortal {
             if (x > -1) {
                 int y = value.lastIndexOf("\\", x);
                 if (y > -1) {
-                    //System.out.println("entra a y:"+x);
                     value = value.substring(y + 1);
                 }
                 y = value.lastIndexOf("/", x);
                 if (y > -1) {
-                    //System.out.println("entra a y :"+y);
                     value = value.substring(y + 1);
                 }
             }
-            //System.out.println("regresa:"+value);
             return value;
         }
 
@@ -751,7 +746,6 @@ public class SWBPortal {
                                         if (!out.equals("")) {
                                             value = out;
                                         }
-                                    //System.out.println("out:"+out);
                                     }
                                     ret.append(value);
                                     ret.append("\" ");
@@ -881,7 +875,6 @@ public class SWBPortal {
             } catch (Exception e) {
                 log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_IOHTML"), e);
             }
-            //System.out.println("entra a FindAttaches regresando:"+ret.toString());
             return ret.toString();
         }
 
@@ -1122,7 +1115,6 @@ public class SWBPortal {
      */
     private static String parseStyles2(String styles, String tmid, HashMap hTMhStyleObjs)
     {
-        //System.out.println("STYLES:((("+styles+")))");
         styles=parseStyles(styles,tmid, hTMhStyleObjs);
 
         HashMap hStyleObjs=(HashMap)hTMhStyleObjs.get(tmid);
@@ -1166,7 +1158,6 @@ public class SWBPortal {
                         if(!sname.equals("h1") && !sname.equals("h2") && !sname.equals("h3")) {
                             sname="p."+sname+", li."+sname+", div."+sname;
                         }
-                        //System.out.println("sname parser:"+sname);
                         content=findStyles(content,sname,contentStyle.getFont(),contentStyle.getSize(),contentStyle.getColor());
                     }
                 }
