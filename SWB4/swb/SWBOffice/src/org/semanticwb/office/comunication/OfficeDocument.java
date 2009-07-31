@@ -788,6 +788,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     info.page = new PageInfo();
                     WebPage page = (WebPage) resourceable;
                     info.page.title = page.getTitle();
+                    info.page.active=page.isActive();
                     info.page.id = page.getId();
                     info.page.description = page.getDescription();
                     info.page.site = new SiteInfo();

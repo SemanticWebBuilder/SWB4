@@ -31,7 +31,6 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.Role;
-import org.semanticwb.model.RoleRef;
 import org.semanticwb.model.Rule;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.UserGroup;
@@ -631,6 +630,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         WebSite site = SWBContext.getWebSite(website.id);
         WebPageInfo info = new WebPageInfo();
         info.id = site.getHomePage().getId();
+        info.active=site.getHomePage().isActive();
         info.title = site.getHomePage().getTitle();
         site.getHomePage().getUrl();
         info.siteID = website.id;
@@ -658,6 +658,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             WebPage page = pages.next();
             WebPageInfo info = new WebPageInfo();
             info.id = page.getId();
+            info.active=page.isActive();
             info.title = page.getTitle();
             info.siteID = webpage.siteID;
             info.description = page.getDescription();
@@ -722,8 +723,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     flowContentInformation.title = res.getPflowInstance().getPflow().getTitle();
                     flowContentInformation.resourceInfo = new ResourceInfo();
                     flowContentInformation.resourceInfo.active = res.isActive();
-                    flowContentInformation.resourceInfo.description = res.getDescription();
-                    flowContentInformation.resourceInfo.page = new PageInfo();
+                    flowContentInformation.resourceInfo.description = res.getDescription();                    
                     Iterator<Resourceable> resourceables = res.listResourceables();
                     while (resourceables.hasNext())
                     {
@@ -732,6 +732,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                         {
                             WebPage webpage = (WebPage) resourceable;
                             flowContentInformation.resourceInfo.page.id = webpage.getId();
+                            flowContentInformation.resourceInfo.page.active=webpage.isActive();
                             flowContentInformation.resourceInfo.page.description = webpage.getDescription();
                             flowContentInformation.resourceInfo.page.title = webpage.getTitle();
                             flowContentInformation.resourceInfo.page.site = new SiteInfo();
@@ -785,8 +786,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     flowContentInformation.title = res.getPflowInstance().getPflow().getTitle();
                     flowContentInformation.resourceInfo = new ResourceInfo();
                     flowContentInformation.resourceInfo.active = res.isActive();
-                    flowContentInformation.resourceInfo.description = res.getDescription();
-                    flowContentInformation.resourceInfo.page = new PageInfo();
+                    flowContentInformation.resourceInfo.description = res.getDescription();                    
                     Iterator<Resourceable> resourceables = res.listResourceables();
                     while (resourceables.hasNext())
                     {
@@ -795,6 +795,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                         {
                             WebPage webpage = (WebPage) resourceable;
                             flowContentInformation.resourceInfo.page.id = webpage.getId();
+                            flowContentInformation.resourceInfo.page.active=webpage.isActive();
                             flowContentInformation.resourceInfo.page.description = webpage.getDescription();
                             flowContentInformation.resourceInfo.page.title = webpage.getTitle();
                             flowContentInformation.resourceInfo.page.site = new SiteInfo();
@@ -835,8 +836,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                     flowContentInformation.title = res.getPflowInstance().getPflow().getTitle();
                     flowContentInformation.resourceInfo = new ResourceInfo();
                     flowContentInformation.resourceInfo.active = res.isActive();
-                    flowContentInformation.resourceInfo.description = res.getDescription();
-                    flowContentInformation.resourceInfo.page = new PageInfo();
+                    flowContentInformation.resourceInfo.description = res.getDescription();                    
                     Iterator<Resourceable> resourceables = res.listResourceables();
                     while (resourceables.hasNext())
                     {
@@ -845,6 +845,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                         {
                             WebPage webpage = (WebPage) resourceable;
                             flowContentInformation.resourceInfo.page.id = webpage.getId();
+                            flowContentInformation.resourceInfo.page.active=webpage.isActive();
                             flowContentInformation.resourceInfo.page.description = webpage.getDescription();
                             flowContentInformation.resourceInfo.page.title = webpage.getTitle();
                             flowContentInformation.resourceInfo.page.site = new SiteInfo();
@@ -960,5 +961,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
 
         return rules.toArray(new ElementInfo[rules.size()]);
+    }
+
+    public void activePage(PageInfo webPageInfo, boolean active) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(webPageInfo.site.id);
+        WebPage page=site.getWebPage(webPageInfo.id);
+        page.setActive(active);
+
     }
 }
