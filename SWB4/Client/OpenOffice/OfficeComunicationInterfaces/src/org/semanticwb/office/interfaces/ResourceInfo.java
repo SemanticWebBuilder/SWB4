@@ -10,9 +10,15 @@ package org.semanticwb.office.interfaces;
  * @author victor.lorenzana
  */
 public class ResourceInfo {
+
     public ResourceInfo()
     {
-        page=new PageInfo();
+        
+    }
+    public ResourceInfo(String id,String pageid)
+    {
+        this.id=id;
+        page=new PageInfo(pageid);
     }
     public String id;    
     public String title;

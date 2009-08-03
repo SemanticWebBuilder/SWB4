@@ -10,8 +10,14 @@ package org.semanticwb.office.interfaces;
  * @author victor.lorenzana
  */
 public class PageInfo {
+    public boolean active;
     public PageInfo()
     {
+        
+    }
+    public PageInfo(String id)
+    {
+        this.id=id;
         active=false;
     }
     public String id;
@@ -19,5 +25,5 @@ public class PageInfo {
     public String description;
     public SiteInfo site;
     public String url;
-    public boolean active;
+    
 }
