@@ -4,12 +4,15 @@
  */
 package org.semanticwb.openoffice;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
+import org.netbeans.spi.wizard.Summary;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.semanticwb.office.interfaces.ResourceInfo;
@@ -19,6 +22,7 @@ import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogSelectFlow;
 import org.semanticwb.openoffice.ui.wizard.PublishVersion;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
+import org.semanticwb.openoffice.ui.wizard.SummaryError;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 import org.semanticwb.openoffice.ui.wizard.ViewProperties;
 
@@ -113,7 +117,9 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
                 progress.finished(null);
             }
             catch (Exception e)
-            {
+            {                
+                Summary err=Summary.create(new SummaryError("Error al publicar contenido:",e), null);
+                progress.finished(err);                
                 e.printStackTrace();
             }
 
