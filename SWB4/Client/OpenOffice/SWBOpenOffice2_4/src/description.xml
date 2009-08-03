@@ -6,4 +6,22 @@
     <dependencies>
         <OpenOffice.org-minimal-version xmlns:d="http://openoffice.org/extensions/description/2006" d:name="OpenOffice.org 2.4" value="2.4"/>
     </dependencies>
+    <icon>
+        <default xlink:href="images/semius.png"/>
+        <high-contrast xlink:href="images/semius.png"/>
+    </icon>
+    <display-name>
+        <name lang="en">Semantic Webbuilder 4.0 for Open Office</name>
+    </display-name>
+    <publisher>
+        <name lang="en" xlink:href="http://www.infotec.com.mx">INFOTEC</name>
+    </publisher>
+    <extension-description>
+        <src lang="en" xlink:href="description/Licencia_SWB.rtf"/>
+    </extension-description>
+    <registration>
+        <simple-license accept-by="user" default-license-id="en">
+            <license-text lang="en" license-id="en" xlink:href="licenses/Licencia_SWB.rtf"/>
+        </simple-license>
+    </registration>
 </description>
