@@ -990,6 +990,26 @@ public class DialogContentInformation extends javax.swing.JDialog
                     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
             }
+            else
+            {
+                ResourceInfo info=dialogEditPorlet.getResourceInfo();
+                if(!info.page.id.equals(resourceInfo.page.id))
+                {
+                    try
+                    {
+                        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                        loadPorlets();
+                    }
+                    catch(Exception ue)
+                    {
+                        ue.printStackTrace();
+                    }
+                    finally
+                    {
+                        this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    }
+                }
+            }
         }
     }//GEN-LAST:event_jButtonEditActionPerformed
 
