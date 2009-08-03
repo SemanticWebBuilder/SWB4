@@ -45,11 +45,12 @@ public class DialogContentInformation extends javax.swing.JDialog
     private String contentId,  repository;
     private OfficeDocument document;
     private String type;
+
     /** Creates new form DialogContentInformation */
     public DialogContentInformation(String contentId, String repository, OfficeDocument document)
     {
         super((Frame) null, ModalityType.TOOLKIT_MODAL);
-        type=document.getDocumentType().toString().toLowerCase();
+        type = document.getDocumentType().toString().toLowerCase();
         initComponents();
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
@@ -91,6 +92,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         listSelectionModel = jTableSummary1.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
+
             @Override
             public void valueChanged(ListSelectionEvent e)
             {
@@ -299,6 +301,8 @@ public class DialogContentInformation extends javax.swing.JDialog
 
     private void loadPorlets()
     {
+
+
         DefaultTableModel model = (DefaultTableModel) jTablePages.getModel();
         int rows = model.getRowCount();
         for (int i = 1; i <= rows; i++)
@@ -324,6 +328,12 @@ public class DialogContentInformation extends javax.swing.JDialog
         catch (Exception e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            this.jButtonEdit.setEnabled(false);
+            this.jButtonDeletePage.setEnabled(false);
+            this.jButtonViewPage.setEnabled(false);
         }
     }
 
@@ -783,11 +793,11 @@ public class DialogContentInformation extends javax.swing.JDialog
                                 }
                             }
                         }
-                        else if(OfficeApplication.getOfficeDocumentProxy().isInFlow(resourceInfo))
+                        else if (OfficeApplication.getOfficeDocumentProxy().isInFlow(resourceInfo))
                         {
                             JOptionPane.showMessageDialog(null, "¡Este contenido se encuentra en proceso de autorización, para activar este contenido debe terminar primero el proceso de autorización!", this.getTitle(), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                         }
-                        else if(OfficeApplication.getOfficeDocumentProxy().isAuthorized(resourceInfo))
+                        else if (OfficeApplication.getOfficeDocumentProxy().isAuthorized(resourceInfo))
                         {
                             OfficeApplication.getOfficeDocumentProxy().activateResource(resourceInfo, newactive);
                         }
@@ -938,8 +948,8 @@ public class DialogContentInformation extends javax.swing.JDialog
                     }
                     urlproxy += "gtw";
                 }
-                name = OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version,type);
-                URL url = new URL(urlproxy + "?contentId=" + contentId + "&versionName=" + version + "&repositoryName=" + repository + "&name=" + name+"&type="+type);
+                name = OfficeApplication.getOfficeDocumentProxy().createPreview(repository, contentId, version, type);
+                URL url = new URL(urlproxy + "?contentId=" + contentId + "&versionName=" + version + "&repositoryName=" + repository + "&name=" + name + "&type=" + type);
                 String title = OfficeApplication.getOfficeDocumentProxy().getTitle(repository, contentId) + " (" + version + ") ";
                 DialogPreview preview = new DialogPreview(url, false, title);
                 preview.setVisible(true);
@@ -992,15 +1002,15 @@ public class DialogContentInformation extends javax.swing.JDialog
             }
             else
             {
-                ResourceInfo info=dialogEditPorlet.getResourceInfo();
-                if(!info.page.id.equals(resourceInfo.page.id))
+                ResourceInfo info = dialogEditPorlet.getResourceInfo();
+                if (!info.page.id.equals(resourceInfo.page.id))
                 {
                     try
                     {
                         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                         loadPorlets();
                     }
-                    catch(Exception ue)
+                    catch (Exception ue)
                     {
                         ue.printStackTrace();
                     }
