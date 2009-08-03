@@ -1038,7 +1038,10 @@ private void jButtonDeleteRuleActionPerformed(java.awt.event.ActionEvent evt)//G
         }
     }
 }//GEN-LAST:event_jButtonDeleteRuleActionPerformed
-
+public ResourceInfo getResourceInfo()
+{
+    return pageInformation;
+}
 private void jButtonMoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonMoveActionPerformed
 {//GEN-HEADEREND:event_jButtonMoveActionPerformed
 
