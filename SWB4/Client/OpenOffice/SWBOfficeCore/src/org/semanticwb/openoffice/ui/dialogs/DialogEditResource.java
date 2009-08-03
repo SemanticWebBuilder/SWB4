@@ -18,14 +18,19 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import org.netbeans.spi.wizard.Wizard;
+import org.netbeans.spi.wizard.WizardPage;
 import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.ElementInfo;
+import org.semanticwb.office.interfaces.PageInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
+import org.semanticwb.openoffice.MoveContentResultProducer;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.components.PanelPropertyEditor;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
+import org.semanticwb.openoffice.ui.wizard.SelectPage;
 
 /**
  *
@@ -37,8 +42,8 @@ public class DialogEditResource extends javax.swing.JDialog
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final SimpleDateFormat DATE_SIMPLEFORMAT = new SimpleDateFormat(DATE_FORMAT);
     private PanelPropertyEditor panelPropertyEditor1 = new PanelPropertyEditor();
-    private String repositoryName,  contentID;
-    private ResourceInfo pageInformation;
+    public final String repositoryName,  contentID;
+    public ResourceInfo pageInformation;
     public boolean isCancel = true;
     ArrayList<CalendarInfo> added = new ArrayList<CalendarInfo>();
 
@@ -51,14 +56,7 @@ public class DialogEditResource extends javax.swing.JDialog
         this.jPanelInformation.add(panelPropertyEditor1);
         this.setIconImage(ImageLoader.images.get("semius").getImage());
         this.setModal(true);
-        this.pageInformation = pageInformation;
-        this.repositoryName = repositoryName;
-        this.contentID = contentID;
-        this.jTextFieldTitle.setText(pageInformation.title);
-        this.jTextAreaDescription.setText(pageInformation.description);
-        this.jCheckBoxActive.setSelected(pageInformation.active);
-        this.jLabelSite.setText(pageInformation.page.site.title);
-        this.jLabelPage.setText(pageInformation.page.title);
+        setLocationRelativeTo(null);
         ListSelectionModel listSelectionModel = jTableRules.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
@@ -76,11 +74,26 @@ public class DialogEditResource extends javax.swing.JDialog
                 }
             }
         });
+        this.pageInformation = pageInformation;
+        this.repositoryName = repositoryName;
+        this.contentID = contentID;
+        initialize();
+    }
+
+    public void initialize()
+    {
+        this.jCheckBoxPageActive.setSelected(this.pageInformation.page.active);
+        this.jTextFieldTitle.setText(pageInformation.title);
+        this.jTextAreaDescription.setText(pageInformation.description);
+        this.jCheckBoxActive.setSelected(pageInformation.active);
+        this.jLabelSite.setText(pageInformation.page.site.title);
+        this.jLabelPage.setText(pageInformation.page.title);
+
 
 
         loadProperties();
         loadCalendars();
-        setLocationRelativeTo(null);
+
 
 
         try
@@ -172,7 +185,6 @@ public class DialogEditResource extends javax.swing.JDialog
             e.printStackTrace();
         }
         loadRules();
-
     }
 
     private void loadRules()
@@ -305,6 +317,8 @@ public class DialogEditResource extends javax.swing.JDialog
         jLabel5 = new javax.swing.JLabel();
         jSpinnerEndDate = new javax.swing.JSpinner();
         jCheckBoxEndDateActive = new javax.swing.JCheckBox();
+        jButtonMove = new javax.swing.JButton();
+        jCheckBoxPageActive = new javax.swing.JCheckBox();
         jPanelInformation = new javax.swing.JPanel();
         jPanelSchedule = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -354,7 +368,7 @@ public class DialogEditResource extends javax.swing.JDialog
 
         getContentPane().add(jPanelOptions, java.awt.BorderLayout.SOUTH);
 
-        jTabbedPane1.setPreferredSize(new java.awt.Dimension(457, 300));
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(457, 320));
 
         jLabel1.setText("Título:");
 
@@ -393,6 +407,15 @@ public class DialogEditResource extends javax.swing.JDialog
             }
         });
 
+        jButtonMove.setText("Mover");
+        jButtonMove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonMoveActionPerformed(evt);
+            }
+        });
+
+        jCheckBoxPageActive.setText("Página activa");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -411,17 +434,22 @@ public class DialogEditResource extends javax.swing.JDialog
                     .addComponent(jLabel8)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel6)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxActive, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabelSite, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabelPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jCheckBoxActive, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabelPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jButtonMove)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jCheckBoxPageActive))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                     .addGap(1, 1, 1)
                                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addGroup(jPanel2Layout.createSequentialGroup()
@@ -449,21 +477,24 @@ public class DialogEditResource extends javax.swing.JDialog
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jLabelPage))
-                .addGap(5, 5, 5)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(jCheckBoxActive))
+                    .addComponent(jLabelPage)
+                    .addComponent(jButtonMove)
+                    .addComponent(jCheckBoxPageActive))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBoxActive)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jComboBoxVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jSpinnerEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBoxEndDateActive))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jSpinnerEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jCheckBoxEndDateActive))
+                    .addComponent(jLabel5))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Información", jPanel2);
@@ -765,6 +796,7 @@ private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     e.printStackTrace();
                 }
             }
+            OfficeApplication.getOfficeApplicationProxy().activePage(this.pageInformation.page, this.jCheckBoxPageActive.isSelected());
             DefaultTableModel model = (DefaultTableModel) jTableScheduler.getModel();
             for (int i = 0; i < jTableScheduler.getRowCount(); i++)
             {
@@ -1007,6 +1039,30 @@ private void jButtonDeleteRuleActionPerformed(java.awt.event.ActionEvent evt)//G
     }
 }//GEN-LAST:event_jButtonDeleteRuleActionPerformed
 
+private void jButtonMoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonMoveActionPerformed
+{//GEN-HEADEREND:event_jButtonMoveActionPerformed
+
+    try
+    {
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        MoveContentResultProducer resultProducer = new MoveContentResultProducer(this);
+        WizardPage[] clazz = new WizardPage[]
+        {
+            new SelectPage(this.pageInformation.page.site.id)
+        };
+        Wizard wiz = WizardPage.createWizard("Mover Contenido de Página", clazz, resultProducer);
+        wiz.show();
+    }
+    catch (Exception ue)
+    {
+        ue.printStackTrace();
+    }
+    finally
+    {
+        this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    }
+}//GEN-LAST:event_jButtonMoveActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonAddCalendar;
@@ -1014,10 +1070,12 @@ private void jButtonDeleteRuleActionPerformed(java.awt.event.ActionEvent evt)//G
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonDeleteRule;
     private javax.swing.JButton jButtonDeleteScheduler;
+    private javax.swing.JButton jButtonMove;
     private javax.swing.JButton jButtonOK;
     private javax.swing.JButton jButtonSendToAuthorize;
     private javax.swing.JCheckBox jCheckBoxActive;
     private javax.swing.JCheckBox jCheckBoxEndDateActive;
+    private javax.swing.JCheckBox jCheckBoxPageActive;
     private javax.swing.JComboBox jComboBoxVersion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
