@@ -61,7 +61,6 @@ public class MapTree extends GenericResource{
         ret.append("  children: 'childs',");
         ret.append("  loaded: 'boolean',");
         ret.append("  items: [");
-        //Iterator<WebPage>  ittp = tm.getHome().getChild().iterator();
         if(tp.getParent()==null) tptmp = tm.getHomePage();
         else tptmp = tp.getParent();
         
@@ -98,11 +97,6 @@ public class MapTree extends GenericResource{
                         {
                             ret.append(", children: []");
                         }
-
-//                        else
-//                        {
-//                           ret.append(" type:'"+tp1.getType().getId()+"'"); 
-//                        }
                         ret.append(" }");
                         if(ittp.hasNext()) ret.append(", ");
                     }
@@ -124,19 +118,6 @@ public class MapTree extends GenericResource{
         if(ittp.hasNext())
         {
             ret.append(", children: [");    
-            //ret.append("{ id:'dummy-"+tptmp.getId()+"', name:'"+tptmp.getDisplayName()+"', tpurl:'"+tptmp.getUrl()+"', type:'dummy' }");
-//            while(ittp.hasNext())
-//            {
-//                WebPage tp1 = ittp.next();
-//                if(null!=tp1)
-//                {
-//                    ret.append(" {");
-//                    ret.append(" id:'"+tp1.getId()+"', name:'"+tp1.getDisplayName()+"', tpurl:'"+tp1.getUrl()+"', type:'"+tp1.getType().getId()+"'");
-//                    if(tp1.getChild().iterator().hasNext()) ret.append(getChilds(tp1));
-//                    ret.append(" }");
-//                    if(ittp.hasNext()) ret.append(", ");
-//                }
-//            }
             ret.append("]");
         }        
         return ret.toString();
@@ -147,8 +128,7 @@ public class MapTree extends GenericResource{
         StringBuffer ret = new StringBuffer();
         Iterator<WebPage>  ittp = tptmp.listChilds();        
         if(ittp.hasNext())
-        {
-            //ret.append(", children: [");            
+        {      
             while(ittp.hasNext())
             {
                 WebPage tp1 = ittp.next();
@@ -156,7 +136,7 @@ public class MapTree extends GenericResource{
                 {
                     ret.append(" {");
                     ret.append(" id:'"+tp1.getId()+"', ");
-                    if(tp1.listChilds().hasNext()) //ret.append(getChilds(tp1));
+                    if(tp1.listChilds().hasNext())
                     {
                         ret.append("carpeta:'true', loaded:'false', ");
                     }
@@ -165,7 +145,7 @@ public class MapTree extends GenericResource{
                         ret.append("carpeta:'false', loaded:'true', ");
                     }
                     ret.append("name:'"+tp1.getTitle()+"', tpurl:'"+tp1.getUrl()+"', type:'"+tp1.getParent().getId()+"'");
-                    if(tp1.listChilds().hasNext()) //ret.append(getChilds(tp1));
+                    if(tp1.listChilds().hasNext())
                     {
                         ret.append(", children: [] ");
                     }
@@ -174,7 +154,6 @@ public class MapTree extends GenericResource{
                     if(ittp.hasNext()) ret.append(", ");
                 }
             }
-            //ret.append("]");
         }        
         return ret.toString();
     }
@@ -191,77 +170,31 @@ public class MapTree extends GenericResource{
         out.println("    <head>");
         out.println("       <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
 
-        out.println("<style type=\"text/css\">");
+        /*out.println("<style type=\"text/css\">");
         out.println("        @import \""+path+"dojo1/dijit/themes/tundra/tundra.css\";");
         out.println("        @import \""+path+"dojo1/dojo/resources/dojo.css\";");
         out.println("        @import \""+path+"dojo1/dojo/resources/dnd.css\";");
         out.println("        @import \""+path+"dojo1/dijit/themes/tundra/tundra_rtl.css\";");
         out.println("        @import \""+path+"dojo1/dijit/tests/css/dijitTests.css\";");
+        out.println("</style>");*/
 
-        out.println("</style>");    // djConfig.usePlainJson=true  //djConfig=\"parseOnLoad: true, isDebug:false, usePlainJson:true \"
-        out.println("<script type=\"text/javascript\" src=\""+path+"dojo1/dojo/dojo.js\" djConfig=\"parseOnLoad:true, usePlainJson:true\"></script>");
+        /*out.println("<script type=\"text/javascript\" src=\""+path+"dojo1/dojo/dojo.js\" djConfig=\"parseOnLoad:true, usePlainJson:true\"></script>");*/
         
         out.println("<script language=\"JavaScript\" type=\"text/javascript\">");
         out.println("  dojo.require(\"dojo.data.ItemFileReadStore\"); ");
         out.println("  dojo.require(\"dojo.data.ItemFileWriteStore\"); ");
+        out.println("  dojo.require(\"dojo.dnd.Source\");");
+        out.println("  dojo.require(\"dojo.dnd.common\");");
+        //out.println("  dojo.require(\"dojo.parser\"); ");
         out.println("  dojo.require(\"dijit.Tree\"); ");
         out.println("  dojo.require(\"dijit.Menu\"); ");
-        out.println("  dojo.require(\"dojo.dnd.Source\");");
-//        out.println("  dojo.require(\"dojo.dnd.Container\");");
-//        out.println("  dojo.require(\"dojo.dnd.Manager\");");
-//        out.println("  dojo.require(\"dojo.dnd.Mover\");");
-//        out.println("  dojo.require(\"dojo.dnd.Moveable\");");
-        out.println("  dojo.require(\"dojo.dnd.common\");");
-        out.println("  dojo.require(\"dijit._tree.dndSource\");");
-        //out.println("  dojo.require(\"dojo.data.JsonItemStore\");");
-       
-//        out.println("  dojo.require(\"dijit._Calendar\");");
-//        out.println("  dojo.require(\"dijit.form.DateTextBox\");");
-//        
-//        out.println("  dojo.require(\"dijit.form.CurrencyTextBox\");");
-//        out.println("  dojo.require(\"dijit.form.NumberSpinner\");");
-//        out.println("  dojo.require(\"dijit.form.ComboBox\");");
-        out.println("  dojo.require(\"dijit.Editor\");");
-        
-        out.println("  dojo.require(\"dojo.parser\"); "); 
+        out.println("  dojo.require(\"dijit.MenuItem\"); ");
+        out.println("  dojo.require(\"dijit.PopupMenuBarItem\"); ");
+        out.println("  dojo.require(\"dijit.Editor\");");        
+
 
         out.println(" dojo.addOnLoad(function(){ ");
-	                        //record the selection from tree 1     
-//out.println("         dojo.subscribe(\"mytreetp\", null, function(message){ ");
-//out.println("         if(message.event==\"execute\"){ ");
-//out.println("	                 console.log(\"Tree1 Select: \",dijit.byId(\"mytreetp\").store.getLabel(message.item)); ");
-//out.println("	                 lastSelected=selected[\"mytreetp\"]=message.item;                                    ");
-//out.println("	               } ");
-//out.println("	              }); ");
-	
-	                        //record the selection from tree 2     
-//out.println("	                        dojo.subscribe(\"myTree2\", null, function(message){ ");
-//out.println("	                                if(message.event==\"execute\"){ ");
-//out.println("	                                        console.log(\"Tree2 Select: \",dijit.byId(\"myTree2\").store.getLabel(message.item)); ");
-//out.println("	                                        lastSelected=selected[\"myTree2\"]=message.item;                                  ");
-//out.println("	                                } ");
-//out.println("	                        }); ");
-	
-	                        //connect to the add button and have it add a new container to the store as necessary
-//out.println("	                        dojo.connect(dijit.byId(\"addButton\"), \"onClick\", function(){ ");
-//out.println("	                                var pInfo = { ");
-//out.println("	                                        parent: lastSelected,            ");
-//out.println("	                                        attribute: \"children\"    ");
-//out.println("	                                }; ");
-//	
-//	                                //store.newItem({name: dojo.byId('newCat').value, id:globalId++, numberOfItems:dojo.byId('numItems').value}, pInfo);
-//out.println("	                                catStore.newItem({name: dojo.byId('newCat').value, numberOfItems:0,id:globalId++}, pInfo); ");
-//out.println("	                        }); ");
-	
-	                        //since we don't have a server, we're going to connect to the store and do a few things the server/store combination would normal be taking care of for us
-//out.println("	                        dojo.connect(catStore, \"onNew\", function(item, pInfo){ ");
-//out.println("	                                var p = pInfo.item; ");
-//out.println("	                                if (p) {        ");
-//out.println("	                                        var currentTotal = catStore.getValues(p, \"numberOfItems\")[0]; ");
-//out.println("	                                        catStore.setValue(p, \"numberOfItems\", ++currentTotal); ");
-//out.println("	                                } ");
-//out.println("	                        }); ");
-	
+
 out.println("	                        var tree1 = dijit.byId('mytreetp'); ");
 out.println("	                }); ");
 	
@@ -290,16 +223,9 @@ out.println("	                function tree2CheckItemAcceptance(node,source) { "
 out.println("	                        //return true; ");
 out.println("	                        var item = dijit.getEnclosingWidget(node).item; "); //var item = this.tree.getEnclosingWidget(node).item;
 out.println("	                        if (!item.root){ ");
-//out.println("	                                var numItems=this.tree.store.getValues(item, \"type\"); ");
-//out.println("                                   alert('Items:'+numItems); ");
 out.println("	                                return true; ");
 out.println("	                        } ");
 
-
-//out.println("	                        if (item && this.tree.store.hasAttribute(item,\"type\")){ ");
-//out.println("	                                var numItems=this.tree.store.getValues(item, \"type\"); ");
-//out.println("	                                return true; ");
-//out.println("	                        } ");
 out.println("	                        return false; ");
 out.println("	                } ");
 
@@ -416,26 +342,18 @@ out.println("	                } ");
         
 	out.println("    <div dojoType=\"dijit.tree.ForestStoreModel\" jsId=\"modeltp\" store=\"storetp\" >"); 
 //		<!-- Override all the data access functions to work from the I18N data store -->
-        out.println("    	<script type=\"dojo/method\" event=\"getChildren\" args=\"item, onComplete\">");
+    out.println("    	<script type=\"dojo/method\" event=\"getChildren\" args=\"item, onComplete\">");
 	out.println("    		switch(item.root ?  \"top\" : storetp.getValue(item, \"type\")){");
 	out.println("    			case \"top\":");
 	out.println("    				return storetp.fetch({query: {type:'home'}, onComplete: onComplete});");
-//	out.println("    			case \"dummy\":");
-//        out.println("    				return dijit.tree.ForestStoreModel.prototype.newItem.apply(getData(storetp.getValue(item, \"tpurl\")));");
-        //out.println("    				return intoNode(item,storetp.getValue(item, \"tpurl\"));");
-        
-//	//out.println("    				return item.addChild(getData(storetp.getValue(item, \"tpurl\")));");
 	out.println("    			default:");
 	out.println("    				return dijit.tree.ForestStoreModel.prototype.getChildren.apply(this, arguments);");
-//        out.println("    				return intoNode(item,storetp.getValue(item, \"tpurl\"));");
-//        out.println("    				return getData(storetp.getValue(item, \"tpurl\"));");
 	out.println("    		}");
 	out.println("    	</script>");
 
 	out.println("    	<script type=\"dojo/method\" event=\"mayHaveChildren\" args=\"item\">");
 	out.println("    		if(item.root){ return true; }");	// top level
 	out.println("    		var folder = storetp.getValue(item, \"carpeta\");");
-//        out.println("    		var id = storetp.getValue(item, \"id\");");
 	out.println("    		return (folder=='true');");
 	out.println("    	</script>");
 	out.println("    </div>");
@@ -454,16 +372,8 @@ out.println("	                } ");
         out.println("	    var menu = dijit.byId(\"tree_menu\");");
             // when we right-click anywhere on the tree, make sure we open the menu
         out.println("	    menu.bindDomNode(this.domNode);");
-        //out.println("	    menu.bindDomNode(item);");
         out.println("	    dojo.connect(menu, \"_openMyself\", this, function(e, item){");
-        
-              // get a hold of, and log out, the tree node that was the source of this open event
-//        out.println("	    var tn = this._domElement2TreeNode(e.target);");
-//        out.println("	    console.debug(tn);");
-//              // now inspect the data store item that backs the tree node:
-//        out.println("	    console.debug(tn.item);");
-              // contrived condition: if this tree node doesn't have any children, disable all of the menu items
-//        out.println("	    menu.getChildren().forEach(function(i){ i.setDisabled(!tn.item.children); });");
+
               // IMPLEMENT CUSTOM MENU BEHAVIOR HERE
         out.println("	    });");
         out.println("	  </script>");
@@ -483,7 +393,6 @@ out.println("	                } ");
         out.println("				<script type=\"dojo/method\" event=\"onClick\" args=\"item, node\">");
         out.println("                               if(item){");
         out.println("					if(item.root){ ");
-//        out.println("                                       return \"WebSite\"; ");
         out.println("                                       window.location='"+tp.getWebSite().getHomePage().getUrl()+"';");
         out.println("                                       ");
         out.println("					 }");
@@ -495,21 +404,7 @@ out.println("	                } ");
         out.println("                                     window.location=storetp.getValue(item,\"tpurl\");");
         out.println("                               }");
         out.println("                           </script>");
-	//				<!-- clicking a node refreshes the page with new locale setting -->
-//	out.println("				<script type=\"dojo/method\" event=\"onClick\" args=\"item, node\">");
-////        out.println("                                           window.location=storetp.getValue(item,\"tpurl\");");  
-//        out.println("                                           storetp.getChildren(item,\"type\");");  
-//	out.println("					var type = storetp.getValue(item, \"type\");");
-//	out.println("					if(type == \""+tp.getLevel()+"\"){");
-////	out.println("						var lang = storetp.getIdentity(item),");
-////	out.println("							locale = lang + \"-\" + storetp .getIdentity(node.getParent().item).toLowerCase(),");
-////	out.println("						dir = /ar|fa|he|ps|ur|yi/i.test(lang) ? \"rtl\" : \"ltr\";");
-////	out.println("						window.location.href = window.location.href.replace(/\\?.*/, \"\") + \"?locale=\" + locale + \"&dir=\" + dir;");
-////	out.println("					}else{");
-//	out.println("						alert(\"WebPage.\"+storetp.getIdentity(item));");
-//        out.println("                                           window.location=storetp.getValue(item,\"tpurl\");");
-//	out.println("					}");
-//	out.println("				</script>");
+
 	out.println("			</div>");
 	out.println("		</td>");
 	out.println("	</tr>");

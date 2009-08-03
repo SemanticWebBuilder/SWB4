@@ -222,6 +222,11 @@ public class ImageGallery extends GenericResource {
             SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN);
             url.setAction("update");
             
+            ret.append("<script type=\"text/javascript\">");
+            ret.append("  dojo.require(\"dijit.form.NumberTextBox\");");
+            ret.append("  dojo.require(\"dijit.form.Button\");");
+            ret.append("</script>");
+
             ret.append("\n<div class=\"swbform\"> ");
             ret.append("\n<form id=\"frmIG_"+base.getId()+"\" name=\"frmIG_"+base.getId()+"\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> ");
             ret.append("\n<fieldset> ");

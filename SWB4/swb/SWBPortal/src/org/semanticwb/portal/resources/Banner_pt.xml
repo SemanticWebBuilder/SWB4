@@ -3,39 +3,69 @@
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmWBBanner" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
-                <fieldset>
-		<statictext name="txtLocal">Banner local ou externo:</statictext>
-		<input type="RADIO" name="local" label="Externo" value="1"/>
-		<input type="RADIO" name="local" label="Local" value="0"/>
-		<textarea name="code" label="*1 Código:" rows="5" cols="50" wrap="virtual"/>
-		<input type="FILE" name="img" label="*2 Banner:" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|swf" isshowfiletype="true" />
-		<input type="TEXT" name="alt" label="Texto alternativo:" size="50"/>
-		<input type="TEXT" name="width" label="Largura (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-		<input type="TEXT" name="height" label="Altura (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-		<input type="TEXT" name="url" label="Endereço web" size="50"/>
-		<statictext name="txtTarget">Em uma nova janela:</statictext>
-		<input type="RADIO" name="target" label="Sim" value="1"/>
-		<input type="RADIO" name="target" label="Não" value="0"/>
-                </fieldset>
-                <fieldset>
-		<input type="SUBMIT" name="btnSave"  value="Salvar" onclick="if(jsValida(this.form)) return true; else return false;"/>
-		<input type="RESET"  name="btnReset" value="Cancelar"/>
-                </fieldset>
+        <fieldset>
+            <statictext name="txtLocal">Banner local ou externo:</statictext>
+            <input type="RADIO" name="local" label="Externo" value="1"/>
+            <input type="RADIO" name="local" label="Local" value="0"/>
+            <textarea name="code" label="* Código:" rows="5" cols="50" wrap="virtual"/>
+            <input type="FILE" name="img" label="** Imagem (bmp, gif, jpg, jpeg, png, swf):" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|png|swf" isshowfiletype="true" />
+            <input type="TEXT" name="alt" label="Texto alternativo:" size="50"/>
+            <input type="TEXT" name="width" label="Largura (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+            <input type="TEXT" name="height" label="Altura (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+            <input type="TEXT" name="url" label="Endereço web" size="50"/>
+            <statictext name="txtTarget">Em uma nova janela:</statictext>
+            <input type="RADIO" name="target" label="Sim" value="1"/>
+            <input type="RADIO" name="target" label="Não" value="0"/>
+        </fieldset>
+
+        <fieldset>
+            <statictext name="b">
+            <![CDATA[
+            <button id="btnSave" dojoType="dijit.form.Button">Salvar</button>
+            <button id="btnReset" dojoType="dijit.form.Button">Reestablecer</button>
+            ]]>
+            </statictext>
+        </fieldset>
 	</form>
 	<statictext name="txtNote1">
 		<![CDATA[
-                	<font style="color: #428AD4; font-family: Verdana; font-size:10px;">
-	                        *1 Dado obrigatório para publicidade externa
-        	        </font>
+        <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
+            * Dado obrigatório para publicidade externa
+        </font>
 		]]>
 	</statictext>
 	<statictext name="txtNote2">
 		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				*2 Dado requerido para publicidade local
-			</font>
+        <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+            ** Dado requerido para publicidade local
+        </font>
 		]]>
 	</statictext>
+
+    <script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.form.Button");
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnSave"), "onClick",
+                function() {
+                    if(jsValida(dojo.byId("frmWBBanner"))) {
+                        dojo.byId("frmWBBanner").submit();
+                    }
+                }
+            );
+        });
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnReset"), "onClick",
+                function() {
+                    dojo.byId("frmWBBanner").reset();
+                }
+            );
+        });
+        ]]>
+    </script>
+
 	<script language="JavaScript">
 		<![CDATA[
 			if(!document.frmWBBanner.local[0].checked && !document.frmWBBanner.local[1].checked)

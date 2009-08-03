@@ -66,13 +66,12 @@ public class InlineTextArea extends GenericAdmResource {
 
     @Override
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        System.out.println("************** txt="+request.getParameter("txt"));
         Resource base = response.getResourceBase();
         base.setAttribute("text", request.getParameter("txt"));
         try{
             base.updateAttributesToDB();
         }catch(Exception e){
-            System.out.println("\n\n*******************\n"+e);
+            System.out.println(e);
         }
     }
 

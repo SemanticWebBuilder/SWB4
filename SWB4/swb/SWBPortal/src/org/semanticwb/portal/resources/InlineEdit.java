@@ -79,16 +79,13 @@ public class InlineEdit extends GenericResource
             out.println(
                     "<script type=\"text/javascript\">" +
                     "  dojo.require(\"dijit.InlineEditBox\");" +
-                    "  dojo.require(\"dojo.parser\");" +
                     "  function editableHeaderOnChange"+id+"(arg)" +
                     "  {    " +
                     "      getSyncHtml(\""+url2+"txt=\"+arg);"+
-    //                "      alert(\"editableHeader changed with arguments \"+arg+\" "+url2+"?url=\"+arg);" +
                     "  }" +
                     "</script>"
             );
-            out.println(
-                    "<span onChange=\"editableHeaderOnChange"+id+"(arguments[0])\" autosave=\"true\" dojotype=\"dijit.InlineEditBox\">"+data+"</span>");
+            out.println("<span onChange=\"editableHeaderOnChange"+id+"(arguments[0])\" autosave=\"true\" dojotype=\"dijit.InlineEditBox\">"+data+"</span>");
         }else
         {
             if(data!=null)out.println(data);

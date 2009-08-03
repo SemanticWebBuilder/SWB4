@@ -92,6 +92,11 @@ public class Login extends GenericAdmResource
             }
         }
 
+        out.println("<script type=\"text/javascript\">");
+        out.println("  dojo.require(\"dijit.form.Form\");");
+        out.println("  dojo.require(\"dijit.form.Button\");");
+        out.println("</script>");
+
         out.println("<div class=\"swbform\">");
         out.println("<form dojoType=\"dijit.form.Form\" id=\"" + getResourceBase().getId() + "/sparql\" action=\"" + paramsRequest.getRenderUrl() + "\" method=\"post\" >");
         out.println("<input type=\"hidden\" name=\"act\" value=\"upd\">");
