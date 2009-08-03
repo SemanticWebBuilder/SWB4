@@ -757,53 +757,6 @@
           }
       }
 
-
-//      getParentIds : function(/* string */ id, /* string[] */ list)
-//      {
-//          list.push(id);
-//          // Iterate through each ReverseReference.
-//          for (var i in this._store._getItemByIdentity(id)._RRM)
-//          {
-//              this.getParentIds(i, list);
-//          }
-//      }
-//
-//      function focusNodeByURI(uri)
-//      {
-//          for(x=0;x<trees.length;x++)
-//          {
-//              var s=trees[x];
-//              try
-//              {
-//                var n=s._itemNodeMap[uri];
-//                //printObjProp(node);
-//                if(n && n!=null)
-//                {
-//                    //s.focusNode(node);
-//
-//                    // Begin here.  "id" is the identity value you're looking for.  This code assumes it does exist.
-//                    var list = [];
-//                    getParentIds(uri, list);
-//                    printObjProp(list);
-//                    var node;
-//                    // Walk through the list (in reverse) so you're expanding from the top down.
-//                    for (var i = list.length - 1; i > 0; i--)
-//                    {
-//                        node = s._itemNodeMap[list[i]];
-//
-//                        if (node.isExpandable)
-//                        {
-//                             s._expandNode(node);
-//                        }
-//                    }
-//                }
-//              }catch(e)
-//              {
-//                //printObjProp(e);
-//              }
-//          }
-//      }
-
       //recarca nodo e hijos
       function reloadTreeNode(store, item)
       {
