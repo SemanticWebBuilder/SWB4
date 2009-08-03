@@ -1,8 +1,3 @@
-/*
- * Poll.java
- *
- * Created on 20 de junio de 2002, 16:38
- */
 
 package org.semanticwb.portal.resources;
 
@@ -1167,6 +1162,8 @@ public class Poll extends GenericResource {
             
             ret.append("<script type=\"text/javascript\">");
             ret.append("   dojo.require(\"dijit.ColorPalette\");");
+            ret.append("   dojo.require(\"dijit.form.Button\");");
+
             ret.append("   dojo.addOnLoad(function(){");
             ret.append("       var myPalette = new dijit.ColorPalette( {palette:\"7x10\", onChange: function(val){ dojo.byId(\"textcolor_"+base.getId()+"\").value=val;}}, \"cptextcolor_"+base.getId()+"\" );");
             ret.append("   });");            
@@ -1330,6 +1327,8 @@ public class Poll extends GenericResource {
 
             ret.append("<script type=\"text/javascript\">");
             ret.append("   dojo.require(\"dijit.ColorPalette\");");
+            ret.append("   dojo.require(\"dijit.form.Button\");");
+            
             ret.append("   dojo.addOnLoad(function(){");
             ret.append("       var myPalette = new dijit.ColorPalette( {palette:\"7x10\", onChange: function(val){ dojo.byId(\"textcolorres_"+base.getId()+"\").value=val;}}, \"cptextcolorres_"+base.getId()+"\" );");
             ret.append("   });");
@@ -1358,13 +1357,6 @@ public class Poll extends GenericResource {
             ret.append("/>");
             ret.append("</td>");
             ret.append("</tr>");
-
-            /*ret.append("<tr><td colspan=\"2\"><hr noshade=\"noshade\" color=\"#66CCFF\" /></td></tr>");
-            ret.append("<tr>");
-            ret.append("<td colspan=\"2\">");
-            ret.append(paramRequest.getLocaleString("usrmsg_SettingsNewWindow"));
-            ret.append("</td>");
-            ret.append("</tr>");*/
             ret.append("</table>");
             ret.append("</fieldset>");
             

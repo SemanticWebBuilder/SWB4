@@ -105,7 +105,7 @@ public class WBSiteMap extends GenericAdmResource
             json.append("items:[");
 
             json.append("{");
-            json.append("name:'"+home.getDisplayName(lang)+"',");
+            json.append("name:'"+home.getDisplayTitle(lang)+"',");
             json.append("id:'"+home.getId()+"',");
             json.append("purl:'"+home.getUrl()+"',");
             json.append("type:'home'");
@@ -136,7 +136,7 @@ public class WBSiteMap extends GenericAdmResource
         Iterator<WebPage> itwps = node.listChilds(lang, true, false, false, false);
         while(itwps.hasNext()) {
             WebPage wp = itwps.next();
-            json.append("{_reference:'"+wp.getDisplayName(lang)+"'}");
+            json.append("{_reference:'"+wp.getDisplayTitle(lang)+"'}");
             if(itwps.hasNext()) {
                 json.append(",");
             }
@@ -151,7 +151,7 @@ public class WBSiteMap extends GenericAdmResource
         while(itwps.hasNext()) {
             WebPage wp = itwps.next();
             json.append("{");
-            json.append("name:'"+wp.getDisplayName(lang)+"',");
+            json.append("name:'"+wp.getDisplayTitle(lang)+"',");
             json.append("id:'"+wp.getId()+"',");
             json.append("purl:'"+wp.getUrl()+"'");
             if(wp.listChilds(lang, true, false, false, false).hasNext()) {
@@ -376,11 +376,11 @@ public class WBSiteMap extends GenericAdmResource
 
                 if(openOnClick) {
                     html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','tree_'+'"+website+"')\" "+style+">");
-                    html.append(tmhome.getDisplayName());
+                    html.append(tmhome.getDisplayTitle(this.language));
                     html.append("</a>");
                 }else {
                     html.append("<a onclick=\"window.location='"+tmhome.getUrl()+"'\">");
-                    html.append(tmhome.getDisplayName());
+                    html.append(tmhome.getDisplayTitle(this.language));
                     html.append("</a>");
                 }
 
@@ -470,11 +470,11 @@ public class WBSiteMap extends GenericAdmResource
 
                 if(openOnClick) {
                     html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','tree_'+'"+website+"')\">");
-                    html.append(tmhome.getDisplayName());
+                    html.append(tmhome.getDisplayTitle(this.language));
                     html.append("</a>");
                 }else {
                     html.append("<a onclick=\"window.location='"+tmhome.getUrl()+"'\">");
-                    html.append(tmhome.getDisplayName());
+                    html.append(tmhome.getDisplayTitle(this.language));
                     html.append("</a>");
                 }
 
@@ -530,11 +530,11 @@ public class WBSiteMap extends GenericAdmResource
 
                         if(openOnClick) {
                             html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
-                            html.append(webpage.getDisplayName());
+                            html.append(webpage.getDisplayTitle(this.language));
                             html.append("</a>");
                         }else {
                             html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
-                            html.append(webpage.getDisplayName());
+                            html.append(webpage.getDisplayTitle(this.language));
                             html.append("</a>");
                         }
 
@@ -548,11 +548,11 @@ public class WBSiteMap extends GenericAdmResource
                         //html.append("<img src=\""+pathImages+"/trans.gif\" />");
                         if(openOnClick) {
                             html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
-                            html.append(webpage.getDisplayName());
+                            html.append(webpage.getDisplayTitle(this.language));
                             html.append("</a>");
                         }else {
                             html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
-                            html.append(webpage.getDisplayName());
+                            html.append(webpage.getDisplayTitle(this.language));
                             html.append("</a>");
                         }
                         html.append("</li>");
@@ -599,11 +599,11 @@ public class WBSiteMap extends GenericAdmResource
 
                         if(openOnClick) {
                             html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
-                            html.append(webpage.getDisplayName());
+                            html.append(webpage.getDisplayTitle(this.language));
                             html.append("</a>");
                         }else {
                             html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
-                            html.append(webpage.getDisplayName());
+                            html.append(webpage.getDisplayTitle(this.language));
                             html.append("</a>");
                         }
 
@@ -617,11 +617,11 @@ public class WBSiteMap extends GenericAdmResource
                         //html.append("<img src=\""+pathImages+"/trans.gif\" />");
                         if(openOnClick) {
                             html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
-                            html.append(webpage.getDisplayName());
+                            html.append(webpage.getDisplayTitle(this.language));
                             html.append("</a>");
                         }else {
                             html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
-                            html.append(webpage.getDisplayName());
+                            html.append(webpage.getDisplayTitle(this.language));
                             html.append("</a>");
                         }
                         html.append("</li>");

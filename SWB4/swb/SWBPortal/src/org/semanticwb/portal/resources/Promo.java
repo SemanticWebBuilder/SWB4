@@ -119,7 +119,7 @@ public class Promo extends GenericAdmResource {
 
         try {
             //marco
-            out.append("<div class=\"___swb-promo\" style=\"");
+            out.append("<div class=\"swb-promo\" style=\"");
             if(textcolor != null) {
                 out.append("color:"+textcolor+";");
             }
@@ -366,64 +366,7 @@ public class Promo extends GenericAdmResource {
         }
         return out.toString();
     }
- 
-    /*@Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=utf-8");
-        PrintWriter out = response.getWriter();
-        Resource base=getResourceBase();
-        
-        try {
-            String position = base.getAttribute("pos", "3").trim();
-
-            System.out.println("promo...");
-
-            out.println("<div id=\"swb--promo\">");
-
-            System.out.println("out="+out);
-
-            out.println("<table border=\"0\"  width=\"99%\"> \n");
-            out.println("<tr> \n");
-            if(!"".equalsIgnoreCase(base.getAttribute("title", ""))) {
-                if ("5".equalsIgnoreCase(position)) {
-                    out.println("<td colspan=\"2\"> \n");
-                    out.println("<h1>"+base.getAttribute("title")+"</h1>");
-                    out.println("</td> \n");
-                    out.println("</tr> \n");
-                    out.println("<tr> \n");
-                    out.println("<td align=\"justify\" valign=\"top\"> \n");
-                }else {
-                    out.println("<td align=\"justify\"> \n");
-                    out.println("<h1>"+base.getAttribute("title")+"</h1>");
-                }
-            }else {
-                if ("5".equalsIgnoreCase(position)) {
-                    out.println("<td align=\"justify\" valign=\"top\"> \n");
-                }else {
-                    out.println("<td align=\"justify\"> \n");
-                }
-            }
-            if (!"".equalsIgnoreCase(base.getAttribute("url", ""))) {
-                out.println(getUrlHtml(paramRequest, base));
-            }
-            if (!"".equalsIgnoreCase(base.getAttribute("img", ""))) {
-                out.println(getImgPromo(paramRequest, base));
-            }else {
-                out.println(getTextHtml(base));
-            }
-            if (!"".equalsIgnoreCase(base.getAttribute("url", ""))) {
-                out.println("</a>\n");
-            }
-            out.println("</td> \n");
-            out.println("</tr> \n");
-            out.println("</table> \n");
-            out.println("</div>");
-        }catch (Exception e) {
-            log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
-        }        
-        out.flush();
-    }*/
-    
+     
     /**
      * Obtiene las ligas de redireccionamiento del promocional
      */    
@@ -456,8 +399,6 @@ public class Promo extends GenericAdmResource {
             ret.append(getImgHtml(reqParams, base));
             if(!img.endsWith(".swf")) {
                 ret.append(" align=\"left\" vspace=\"1\" hspace=\"5\" /> \n");
-                ////ret.append("<h6>"+base.getAttribute("caption", "")+"</h6>");
-                ////ret.append("</div>");
             }
             ret.append(getTextHtml(base));
         }else if("2".equals(position)) {
@@ -473,16 +414,12 @@ public class Promo extends GenericAdmResource {
             ret.append(getImgHtml(reqParams, base));
             if(!img.endsWith(".swf")) {
                 ret.append(" align=\"left\" vspace=\"1\" hspace=\"5\" /> \n");
-                ////ret.append("<h6>"+base.getAttribute("caption", "")+"</h6>");
-                ////ret.append("</div>");
             }
         }else if("3".equals(position)) {
             ret.append("<center> \n");
             ret.append(getImgHtml(reqParams, base));
             if(!img.endsWith(".swf")) {
                 ret.append(" align=\"left\" /> \n");
-                ////ret.append("<h6>"+base.getAttribute("caption", "")+"</h6>");
-                ///ret.append("</div>");
             }
             ret.append("</center> \n");
             if(!"".equals(url)) {
@@ -500,16 +437,12 @@ public class Promo extends GenericAdmResource {
             ret.append(getImgHtml(reqParams, base));
             if(!img.endsWith(".swf")) {
                 ret.append(" align=\"right\" vspace=\"1\" hspace=\"10\" /> \n");
-                ////ret.append("<h6>"+base.getAttribute("caption", "")+"</h6>");
-                ////ret.append("</div>");
             }
             ret.append(getTextHtml(base));
         }else if("5".equals(position)) {
             ret.append(getImgHtml(reqParams, base));
             if(!img.endsWith(".swf")) {
                 ret.append(" /> \n");
-                ////ret.append("<h6>"+base.getAttribute("caption", "")+"</h6>");
-                ////ret.append("</div>");
             }
             if(!"".equals(url)) {
                 ret.append("</a> \n");
@@ -535,24 +468,18 @@ public class Promo extends GenericAdmResource {
             ret.append(getImgHtml(reqParams, base));
             if(!img.endsWith(".swf")) {
                 ret.append(" /> \n");
-                ////ret.append("<h6>"+base.getAttribute("caption", "")+"</h6>");
-                ////ret.append("</div>");
             }
         }else if("7".equals(position)) {
             ret.append(getTextHtml(base));
             ret.append(getImgHtml(reqParams, base));
             if(!img.endsWith(".swf")) {
                 ret.append(" align=\"left\" vspace=\"1\" hspace=\"5\" /> \n");
-                ////ret.append("<h6>"+base.getAttribute("caption", "")+"</h6>");
-                ////ret.append("</div>");
             }
         }else if("8".equals(position)) {
             ret.append(getTextHtml(base));
             ret.append(getImgHtml(reqParams, base));
             if(!img.endsWith(".swf")) {
                 ret.append(" align=\"right\" vspace=\"1\" hspace=\"10\" /> \n");
-                ////ret.append("<h6>"+base.getAttribute("caption", "")+"</h6>");
-                ////ret.append("</div>");
             }
         }
         return ret.toString();

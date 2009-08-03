@@ -8,8 +8,8 @@
             <statictext name="txtLocal">Banner local o externo:</statictext>
             <input type="RADIO" name="local" label="Externo" value="1"/>
             <input type="RADIO" name="local" label="Local" value="0"/>
-            <textarea name="code" label="*1 Código:" rows="5" cols="50" wrap="virtual"/>
-            <input type="FILE" id="img" name="img" label="*2 Banner:" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|swf" isshowfiletype="true" />
+            <textarea name="code" label="* Código:" rows="5" cols="50" wrap="virtual"/>
+            <input type="FILE" id="img" name="img" label="** Imagen (bmp, gif, jpg, jpeg, png, swf):" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|png|swf" isshowfiletype="true" />
             <input type="TEXT" id="alt" name="alt" label="Texto alterno:" size="50"/>
             <input type="TEXT" name="width" label="Ancho (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
             <input type="TEXT" name="height" label="Alto (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
@@ -18,26 +18,56 @@
             <input type="RADIO" name="target" label="Sí" value="1"/>
             <input type="RADIO" name="target" label="No" value="0"/>
         </fieldset>
+
         <fieldset>
-            <input type="SUBMIT" name="btnSave"  value="Guardar" onclick="if(jsValida(this.form)) return true; else return false;"/>
-            <input type="RESET"  name="btnReset" value="Cancelar"/>
+            <statictext name="b">
+            <![CDATA[
+            <button id="btnSave" dojoType="dijit.form.Button">Guardar</button>
+            <button id="btnReset" dojoType="dijit.form.Button">Reestablecer</button>
+            ]]>
+            </statictext>
         </fieldset>
 	</form>
     </div>
 	<statictext name="txtNote1">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				*1 Dato requerido para publicidad externa
+				* Dato requerido para publicidad externa
 			</font>
 		]]>
 	</statictext>
 	<statictext name="txtNote2">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				*2 Dato requerido para publicidad local
+				** Dato requerido para publicidad local
 			</font>
 		]]>
 	</statictext>
+
+    <script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.form.Button");
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnSave"), "onClick",
+                function() {
+                    if(jsValida(dojo.byId("frmWBBanner"))) {
+                        dojo.byId("frmWBBanner").submit();
+                    }
+                }
+            );
+        });
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnReset"), "onClick",
+                function() {
+                    dojo.byId("frmWBBanner").reset();
+                }
+            );
+        });
+        ]]>
+    </script>
+    
 	<script language="JavaScript">
 		<![CDATA[
 			if(!document.frmWBBanner.local[0].checked && !document.frmWBBanner.local[1].checked)
