@@ -779,17 +779,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 Resourceable resourceable = portlables.next();
                 if (resourceable != null && resourceable instanceof WebPage)
                 {
-                    info = new ResourceInfo();
+                    WebPage page = (WebPage) resourceable;
+                    info = new ResourceInfo(officeResource.getId(), page.getId());
                     info.active = officeResource.getResourceBase().isActive();
                     info.description = officeResource.getResourceBase().getDescription();
-                    info.id = officeResource.getId();
                     info.title = officeResource.getResourceBase().getTitle();
                     info.version = officeResource.getVersionToShow();
-                    info.page = new PageInfo();
-                    WebPage page = (WebPage) resourceable;
                     info.page.title = page.getTitle();
-                    info.page.active=page.isActive();
-                    info.page.id = page.getId();
+                    info.page.active = page.isActive();
                     info.page.description = page.getDescription();
                     info.page.site = new SiteInfo();
                     info.page.site.title = page.getWebSite().getTitle();
@@ -999,10 +996,20 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             {
                 log.error(e);
             }
-            InputStream in = getContent(repositoryName, contentId, version);
-            officeResource.loadContent(in);
-            ResourceInfo info = getResourceInfo(officeResource);
-            return info;
+            try
+            {
+                InputStream in = getContent(repositoryName, contentId, version);
+                officeResource.loadContent(in);
+                ResourceInfo info = getResourceInfo(officeResource);
+                return info;
+            }
+            catch (Exception e)
+            {
+                officeResource.getResourceBase().remove();
+                officeResource.getSemanticObject().remove();
+                throw e;
+            }
+            
 
         }
         catch (Exception e)
@@ -2000,12 +2007,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
     }
+
     public void changeResourceOfWebPage(ResourceInfo info, WebPageInfo webPageInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
         Resource resource = site.getResource(info.id);
-        WebPage oldWebPage=site.getWebPage(info.page.id);
-        WebPage newpageofResource=site.getWebPage(webPageInfo.id);
+        WebPage oldWebPage = site.getWebPage(info.page.id);
+        WebPage newpageofResource = site.getWebPage(webPageInfo.id);
         newpageofResource.addResource(resource);
         oldWebPage.removeResource(resource);
     }
