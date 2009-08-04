@@ -291,8 +291,6 @@ public class DialogEditResource extends javax.swing.JDialog
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
         jPanelOptions = new javax.swing.JPanel();
         jButtonSendToAuthorize = new javax.swing.JButton();
         jButtonOK = new javax.swing.JButton();
@@ -1064,7 +1062,6 @@ private void jButtonMoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
     }
 }//GEN-LAST:event_jButtonMoveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonAddCalendar;
     private javax.swing.JButton jButtonAddRule;
     private javax.swing.JButton jButtonCancel;
@@ -1086,7 +1083,6 @@ private void jButtonMoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelPage;
     private javax.swing.JLabel jLabelSite;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanelElementsToAdd;
