@@ -122,7 +122,7 @@ public class AdvancedSearch extends GenericAdmResource {
                                 //Get SemanticObject of current node
                                 SemanticObject so = SemanticObject.createSemanticObject(x.toString());
                                 if (so != null) {
-                                    String dUrl = getResourceBase().getAttribute("detailURL") + "?uri=" + URLEncoder.encode(so.getURI());
+                                    String dUrl = getResourceBase().getAttribute("detailUrl") + "?uri=" + URLEncoder.encode(so.getURI());
                                     if (so.instanceOf(org)) {
                                         String r = getResourceBase().getAttribute("mapUrl");
                                         if (r == null) {
