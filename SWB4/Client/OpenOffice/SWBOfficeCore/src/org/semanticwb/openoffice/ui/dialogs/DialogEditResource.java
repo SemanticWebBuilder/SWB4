@@ -7,7 +7,6 @@ package org.semanticwb.openoffice.ui.dialogs;
 
 import java.awt.Cursor;
 import java.awt.Frame;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +23,6 @@ import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.ElementInfo;
-import org.semanticwb.office.interfaces.PageInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.MoveContentResultProducer;
 import org.semanticwb.openoffice.OfficeApplication;
@@ -40,9 +38,9 @@ public class DialogEditResource extends javax.swing.JDialog
 {
 
     private static final String DATE_FORMAT = "dd/MM/yyyy";
-    private static final SimpleDateFormat DATE_SIMPLEFORMAT = new SimpleDateFormat(DATE_FORMAT);
+    //private static final SimpleDateFormat DATE_SIMPLEFORMAT = new SimpleDateFormat(DATE_FORMAT);
     private PanelPropertyEditor panelPropertyEditor1 = new PanelPropertyEditor();
-    public final String repositoryName,  contentID;
+    public final String repositoryName, contentID;
     public ResourceInfo pageInformation;
     public boolean isCancel = true;
     ArrayList<CalendarInfo> added = new ArrayList<CalendarInfo>();
@@ -1038,10 +1036,10 @@ private void jButtonDeleteRuleActionPerformed(java.awt.event.ActionEvent evt)//G
         }
     }
 }//GEN-LAST:event_jButtonDeleteRuleActionPerformed
-public ResourceInfo getResourceInfo()
-{
-    return pageInformation;
-}
+    public ResourceInfo getResourceInfo()
+    {
+        return pageInformation;
+    }
 private void jButtonMoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonMoveActionPerformed
 {//GEN-HEADEREND:event_jButtonMoveActionPerformed
 
@@ -1065,7 +1063,6 @@ private void jButtonMoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
         this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 }//GEN-LAST:event_jButtonMoveActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonAddCalendar;
