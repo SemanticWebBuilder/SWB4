@@ -14,6 +14,7 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -121,6 +122,7 @@ public class AdvancedSearch extends GenericAdmResource {
                                 //Get SemanticObject of current node
                                 SemanticObject so = SemanticObject.createSemanticObject(x.toString());
                                 if (so != null) {
+                                    String dUrl = getResourceBase().getAttribute("detailURL") + "?uri=" + URLEncoder.encode(so.getURI());
                                     if (so.instanceOf(org)) {
                                         String r = getResourceBase().getAttribute("mapUrl");
                                         if (r == null) {
@@ -139,8 +141,7 @@ public class AdvancedSearch extends GenericAdmResource {
                                         
                                         
 
-                                        segment.append("<a href=\"#\" onclick=\"openMap('" + mapUrl +
-                                                "','','menubar=0,width=420,height=420');\">" + "<b><font size=\"2\" face=\"verdana\">" +
+                                        segment.append("<a href=\"" + dUrl + "\">" + "<b><font size=\"2\" face=\"verdana\">" +
                                                 so.getDisplayName(lang) + "(" + so.getSemanticClass().getDisplayName(lang) + ")</b></font></a><br>");
                                         if (rs.getResultVars().size() == 1) {
                                             segment.append(buildAbstract(so));
