@@ -5,6 +5,7 @@
         <fieldset>
             <input type="TEXT" name="prefixFilter" label="Prefijos utilizados (separados por comas):"/>
             <input type="TEXT" name="mapUrl" label="Página del Google map:"/>
+            <input type="TEXT" name="detailUrl" label="Página de detalle:"/>
             <input type="TEXT" name="mapKey" label="Llave del API de Google maps:"/>
         </fieldset>
         <fieldset>
