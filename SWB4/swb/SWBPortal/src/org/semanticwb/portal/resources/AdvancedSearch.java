@@ -147,8 +147,8 @@ public class AdvancedSearch extends GenericAdmResource {
                                             segment.append(buildAbstract(so));
                                         }
                                     } else {
-                                        segment.append("<b><font size=\"2\" face=\"verdana\">" +
-                                                so.getDisplayName(lang) + "</b></font>" + "<br>");
+                                        segment.append("<a href=\"" + dUrl + "\">" + "<b><font size=\"2\" face=\"verdana\">" +
+                                                so.getDisplayName(lang) + "</b></font></a><br>");
                                         if (rs.getResultVars().size() == 1) {
                                           segment.append(buildAbstract(so));
                                         }
