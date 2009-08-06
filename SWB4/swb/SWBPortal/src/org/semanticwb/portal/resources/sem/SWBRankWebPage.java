@@ -349,7 +349,9 @@ function votedPage(){
                 boolean isMultipart = ServletFileUpload.isMultipartContent(request);
                 HashMap<String,String> params = new HashMap<String,String>();
                 // Create a factory for disk-based file items
-                FileItemFactory factory = new DiskFileItemFactory(10*1024*1024,new File(SWBPlatform.getWorkPath()+"/tmp"));
+                File tmpwrk = new File(SWBPlatform.getWorkPath()+"/tmp");
+                if (!tmpwrk.exists()) tmpwrk.mkdirs();
+                FileItemFactory factory = new DiskFileItemFactory(1*1024*1024,tmpwrk);
                 // Create a new file upload handler
                 ServletFileUpload upload = new ServletFileUpload(factory);
                 //Create a progress listener
@@ -396,19 +398,19 @@ function votedPage(){
                 String name = currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
                 currentFile.write(new File(path+"/"+name));
                 path = SWBPlatform.getWebWorkPath()+getResourceBase().getWorkPath();
-                if (currentFile.getName().equals("fullStar"))
+                if (currentFile.getFieldName().equals("fullStar"))
                 {
-                    setFullStar(path+name);
+                    setFullStar(path+"/"+name);
                     fullStarPath=getFullStar();
                 }
-                if (currentFile.getName().equals("halfStar"))
+                if (currentFile.getFieldName().equals("halfStar"))
                 {
-                    setHalfStar(path+name);
+                    setHalfStar(path+"/"+name);
                     halfStarPath=getHalfStar();
                 }
-                if (currentFile.getName().equals("emptyStar"))
+                if (currentFile.getFieldName().equals("emptyStar"))
                 {
-                    setEmptyStar(path+name);
+                    setEmptyStar(path+"/"+name);
                     emptyStarPath=getEmptyStar();
                 }
                 per.setPercentage(100);
