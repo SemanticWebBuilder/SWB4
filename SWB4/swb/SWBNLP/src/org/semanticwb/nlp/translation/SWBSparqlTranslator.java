@@ -210,7 +210,7 @@ public class SWBSparqlTranslator {
     public String didYouMean(String sent) {
         String res = "";
         String[] stopWords = {"de", "of", "con", "with", "=", "<", ">",
-            "<=", ">=", ",", "like", "como", "true", "false"};
+            "<=", ">=", ",", "like", "como", "true", "false", "+"};
 
         List<String> sw = Arrays.asList(stopWords);
 
