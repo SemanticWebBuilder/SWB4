@@ -1,18 +1,28 @@
 package org.semanticwb.portal.resources;
 
+import com.hp.hpl.jena.query.Query;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.model.Resource;
 import org.semanticwb.nlp.translation.SWBSparqlTranslator;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.query.larq.IndexBuilderString;
+import com.hp.hpl.jena.query.larq.IndexLARQ;
+import com.hp.hpl.jena.query.larq.LARQ;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.sparql.util.StringUtils;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -21,6 +31,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -37,6 +49,7 @@ import org.semanticwb.portal.api.GenericAdmResource;
  */
 public class AdvancedSearch extends GenericAdmResource {
 
+    private static Logger log = SWBUtils.getLogger(AdvancedSearch.class);
     private String lang = "x-x";
     private SWBLexicon lex = null;
     private SWBSparqlTranslator tr;
@@ -46,9 +59,22 @@ public class AdvancedSearch extends GenericAdmResource {
     private ArrayList<String> solutions = null;
     private String queryString = "";
     private String dym = "";
+    private IndexLARQ index;
+    Model smodel;
 
     public AdvancedSearch() {
     }
+
+    @Override
+    public void setResourceBase(Resource base) throws SWBResourceException {
+        super.setResourceBase(base);
+        try {
+            smodel = smodel = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+            index = buildIndex();
+        }catch (Exception e) {
+            log.error(e);
+        }
+    }    
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -68,6 +94,7 @@ public class AdvancedSearch extends GenericAdmResource {
         //Assert query string
         query = (query == null ? "" : query.trim());
 
+        //Get google maps API key
         String mapKey = getResourceBase().getAttribute("mapKey");
         mapKey = (mapKey == null ? "" : mapKey);
 
@@ -96,7 +123,7 @@ public class AdvancedSearch extends GenericAdmResource {
             //If there are results
             if (rs != null && rs.hasNext()) {
                 
-                //Get nexr result set
+                //Get next result set
                 while (rs.hasNext()) {
                     String mapbox = "";
                     boolean requiresMap = false;
@@ -109,63 +136,64 @@ public class AdvancedSearch extends GenericAdmResource {
 
                     //For each variable
                     for (String vName : (List<String>) rs.getResultVars()) {
-
                         //Get node
                         RDFNode x = qs.get(vName);
 
                         //If node is not null
                         if (x != null) {
-
                             //If node is the first in the solution (there is always a subject),
                             //display node in bold
                             if (first) {
                                 //Get SemanticObject of current node
                                 SemanticObject so = SemanticObject.createSemanticObject(x.toString());
                                 if (so != null) {
+                                    //Get url for viewing the object detail
                                     String dUrl = getResourceBase().getAttribute("detailUrl") + "?uri=" + URLEncoder.encode(so.getURI());
+                                    //If object is an organization
+                                    //TODO: compare to GeoTaggable instead of org
                                     if (so.instanceOf(org)) {
+                                        //Get url for viewing maps
                                         String r = getResourceBase().getAttribute("mapUrl");
                                         if (r == null) {
                                             r = "#";
                                         }
-                                        
+
+                                        //Build map url
                                         String mapUrl = r.replace(" ", "%20") +
                                                 "?lat=" + so.getProperty(so_lat) + "&long=" + so.getProperty(so_long);
-                                        
+
+                                        //Create static minimap
                                         requiresMap = true;
                                         mapbox = mapbox + "<a href=\"#\" onclick=\"openMap('" + mapUrl +
                                                 "','','menubar=0,width=420,height=420');\"><img src=\"http://maps.google.com/staticmap?center=" +
                                                 so.getProperty(so_lat) + "," + so.getProperty(so_long) + "&zoom=12&size=100x100&markers=" +
                                                 so.getProperty(so_lat) + "," + so.getProperty(so_long) + ",blues&key=" +
                                                 mapKey + "\"></a>";
-                                        
-                                        
 
+                                        //Add detail link in object title
                                         segment.append("<a href=\"" + dUrl + "\">" + "<b><font size=\"2\" face=\"verdana\">" +
-                                                so.getDisplayName(lang) + "(" + so.getSemanticClass().getDisplayName(lang) + ")</b></font></a><br>");
-                                        if (rs.getResultVars().size() == 1) {
-                                            segment.append(buildAbstract(so));
-                                        }
-                                    } else {
+                                                so.getDisplayName(lang) + "(" + so.getSemanticClass().getDisplayName(lang) + ")</b></font></a><br>");                                        
+                                    } else { //Not an organization
                                         segment.append("<a href=\"" + dUrl + "\">" + "<b><font size=\"2\" face=\"verdana\">" +
-                                                so.getDisplayName(lang) + "</b></font></a><br>");
-                                        if (rs.getResultVars().size() == 1) {
-                                          segment.append(buildAbstract(so));
-                                        }
+                                                so.getDisplayName(lang) + "</b></font></a><br>");                                        
+                                    }
+                                    //If only one object requested, build object abstract
+                                    if (rs.getResultVars().size() == 1) {
+                                        segment.append(buildAbstract(so));
                                     }
                                 } else {
                                     segment.append("<b><font size=\"2\" face=\"verdana\">" +
                                             lex.getObjWordTag(vName).getDisplayName() + "</b></font>" + "<br>");
                                 }
                                 first = false;
-                            } else {
+                            } else { //Not a semantic object
                                 //If node is a literal, display a name, value pair
                                 if (x.isLiteral()) {
                                     segment.append("<font size=\"2\" face=\"verdana\">" +
                                             vName + ":<i>" + x.asNode().getLiteral().getLexicalForm() + "</i></font>" + "<br>");
                                 }
                             }
-                        } else {
+                        } else { //If empty node
                             segment.append("<font size=\"2\" face=\"verdana\">" + vName + ": </font>" + "-<br>");
                         }
                     }
@@ -176,7 +204,12 @@ public class AdvancedSearch extends GenericAdmResource {
                     segment.append("</tr>");
                     res.add(segment.toString());
                 }
-            }
+                qexec.close();
+            } else { //If no results in natural language query, try open-text search
+                res = getOpenTextResults(query);
+            }            
+        } else {  //If natural language query could not be processed, try open-text search
+            res = getOpenTextResults(query);
         }
         return res;
     }
@@ -186,7 +219,7 @@ public class AdvancedSearch extends GenericAdmResource {
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
         User user = paramRequest.getUser();
         StringBuffer sbf = new StringBuffer();
-
+        
         //Get user language if any
         if (user != null) {
             if (!lang.equals(user.getLanguage())) {
@@ -196,7 +229,7 @@ public class AdvancedSearch extends GenericAdmResource {
             if (!lang.equals("es")) {
                 lang = "es";
             }
-        }
+        }        
 
         //Create lexicon for NLP
         String pf = getResourceBase().getAttribute("prefixFilter");
@@ -808,7 +841,7 @@ public class AdvancedSearch extends GenericAdmResource {
 
         if (!queryString.equals("")) {
             solutions = getResults(queryString);
-            doShowPage(request, response, paramRequest);
+                doShowPage(request, response, paramRequest);
         }
     }
 
@@ -820,15 +853,19 @@ public class AdvancedSearch extends GenericAdmResource {
         while (pit.hasNext()) {
             //Get next property
             SemanticProperty sp = pit.next();
+            System.out.println("...." + sp.toString());
             //Do not display rdf and owl properties
             if (!sp.isObjectProperty() && (!sp.getPrefix().equals("rdf") && !sp.getPrefix().equals("owl") && !sp.getPrefix().equals("rdfs"))) {
                 //Get property value, if any, and display it
-                String val = o.getProperty(sp);
-                if (val != null) {
-                    res.append("<font size=\"2\" face=\"verdana\">" +
+                if (sp != null) {
+                    String val = o.getProperty(sp);
+
+                    if (val != null) {
+                        res.append("<font size=\"2\" face=\"verdana\">" +
                             sp.getDisplayName(lang) + ": <i>" + o.getProperty(sp) + "</i></font>" + "<br>");
+                    }
                 }
-            } /*else if (sp.isObjectProperty()) {
+            }/*else if (sp.isObjectProperty()) {
                 SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
                 if (rg != null) {
                     res.append("<font size=\"2\" face=\"verdana\">" +
@@ -837,5 +874,121 @@ public class AdvancedSearch extends GenericAdmResource {
             }*/
         }
         return res.toString();
+    }    
+
+    public IndexLARQ buildIndex()
+    {
+        // ---- Read and index all literal strings.
+        IndexBuilderString larqBuilder = new IndexBuilderString() ;
+
+        // Index statements as they are added to the model.
+        //smodel.register(larqBuilder);
+
+        // ---- Alternatively build the index after the model has been created.
+        larqBuilder.indexStatements(smodel.listStatements()) ;
+
+        // ---- Finish indexing
+        larqBuilder.closeWriter() ;
+        //smodel.unregister(larqBuilder) ;
+
+        // ---- Create the access index
+        index = larqBuilder.getIndex() ;
+        return index ;
+    }
+
+    public ArrayList<String> getOpenTextResults(String q) {
+        ArrayList<String> res = new ArrayList<String>();
+
+        //Assert query string
+        q = (q == null ? "" : q.trim());
+
+        String mapKey = getResourceBase().getAttribute("mapKey");
+        mapKey = (mapKey == null ? "" : mapKey);
+
+        //Build query to return classes with literal values in their properties
+        String queryString = StringUtils.join("\n", new String[]{
+                    "PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>",
+                    "PREFIX pf:     <http://jena.hpl.hp.com/ARQ/property#>",
+                    "PREFIX swb:    <http://www.semanticwebbuilder.org/swb4/ontology#>",
+                    "PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+                    "PREFIX owl:    <http://www.w3.org/2002/07/owl#>",
+                    "SELECT ?obj ?prop ?lit {",
+                    "    ?lit pf:textMatch '" + q + "'.",
+                    "    ?obj ?prop ?lit.",
+                    "    ?obj rdf:type ?type.",
+                    "    ?type rdf:type swb:Class",
+                    "}"
+                });
+
+        // Make globally available
+        LARQ.setDefaultIndex(index);
+        Query query = QueryFactory.create(queryString);
+
+        QueryExecution qExec = QueryExecutionFactory.create(query, smodel);
+        ResultSet rs = qExec.execSelect();
+        //ResultSetFormatter.out(System.out, rs, query);
+
+        //If there are results
+        if (rs != null && rs.hasNext()) {
+            //Get next result set
+            while (rs.hasNext()) {
+                String mapbox = "";
+                boolean requiresMap = false;
+
+                //Get next solution of the result set (var set)
+                QuerySolution qs = rs.nextSolution();
+                StringBuffer segment = new StringBuffer();
+                segment.append("<tr><td>");
+
+                //Get node object from solution
+                RDFNode x = qs.get("obj");
+
+                //If node is not null
+                if (x != null) {
+                    //Get SemanticObject of current node
+                    SemanticObject so = SemanticObject.createSemanticObject(x.toString());
+                    if (so != null) {
+                        String dUrl = getResourceBase().getAttribute("detailUrl") + "?uri=" + URLEncoder.encode(so.getURI());
+                        //If object is an organization
+                        //TODO: compare to GeoTaggable instead of org
+                        if (so.instanceOf(org)) {
+                            String r = getResourceBase().getAttribute("mapUrl");
+                            if (r == null) {
+                                r = "#";
+                            }
+
+                            String mapUrl = r.replace(" ", "%20") +
+                                    "?lat=" + so.getProperty(so_lat) + "&long=" + so.getProperty(so_long);
+
+                            requiresMap = true;
+                            mapbox = mapbox + "<a href=\"#\" onclick=\"openMap('" + mapUrl +
+                                    "','','menubar=0,width=420,height=420');\"><img src=\"http://maps.google.com/staticmap?center=" +
+                                    so.getProperty(so_lat) + "," + so.getProperty(so_long) + "&zoom=12&size=100x100&markers=" +
+                                    so.getProperty(so_lat) + "," + so.getProperty(so_long) + ",blues&key=" +
+                                    mapKey + "\"></a>";
+
+                            segment.append("<a href=\"" + dUrl + "\">" + "<b><font size=\"2\" face=\"verdana\">" +
+                                    so.getDisplayName(lang) + "(" + so.getSemanticClass().getDisplayName(lang) + ")</b></font></a><br>");
+                            if (rs.getResultVars().size() == 1) {
+                                segment.append(buildAbstract(so));
+                            }
+                        } else { //Not an organization
+                            segment.append("<a href=\"" + dUrl + "\">" + "<b><font size=\"2\" face=\"verdana\">" +
+                                    so.getDisplayName(lang) + "</b></font></a><br>");                            
+                        }
+                        //Append object abstract
+                        segment.append(buildAbstract(so));
+                    }
+                }
+                segment.append("<br></td>");
+                if (requiresMap) {
+                    segment.append("<td height=\"115\"> " + mapbox + "</td>");
+                }
+                segment.append("</tr>");
+                res.add(segment.toString());
+            }
+        }
+        qExec.close();
+        return res;
     }
 }
