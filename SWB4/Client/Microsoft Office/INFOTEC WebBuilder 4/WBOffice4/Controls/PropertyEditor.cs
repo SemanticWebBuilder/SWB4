@@ -21,7 +21,7 @@ namespace Editor
         {
             get
             {
-                if (properties != null)
+                if (properties != null && properties.Length>0)
                 {
                     String[] values = new String[properties.Length];
                     int i = 0;
@@ -108,7 +108,7 @@ namespace Editor
         }
         private void DrawProperties()
         {            
-            if (this.properties != null)
+            if (this.properties != null && this.properties.Length>0)
             {
                 this.paneProperties.Controls.Clear();
                 Array.Reverse(this.properties);
@@ -217,57 +217,7 @@ namespace Editor
             return new Label();
         }
 
-        private void paneProperties_Resize(object sender, EventArgs e)
-        {
-            //this.drawProperties();
-        }
+        
     }
-    /*internal class KeyValue
-    {
-        private String m_key,m_value;
-        public KeyValue(String key, String value)
-        {
-            this.m_key = key;
-            this.m_value = value;
-        }
-        public KeyValue(String key_value)
-        {
-            String[] values=key_value.Split(new char[] { ':' });
-            if (values.Length == 2)
-            {
-                m_key = values[0];
-                m_value = values[1];
-            }
-        }
-        public String Key
-        {
-            get
-            {
-                return m_key;
-            }
-        }
-        public String Value
-        {
-            get
-            {
-                return m_value;
-            }
-        }
-        public override string ToString()
-        {
-            return m_value.ToString();
-        }
-        public override bool Equals(object obj)
-        {
-            if(obj is KeyValue)
-            {
-                return Key.Equals(((KeyValue)obj).Key);
-            }
-            return false;            
-        }
-        public override int GetHashCode()
-        {
-            return Key.GetHashCode();
-        }
-    }*/
+    
 }
