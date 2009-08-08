@@ -68,6 +68,7 @@
             this.toolStripButtonViewVersion = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonDeleteVersion = new System.Windows.Forms.ToolStripButton();
             this.tabPageProperties = new System.Windows.Forms.TabPage();
+            this.propertyEditor1 = new Editor.PropertyEditor();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPageInformation.SuspendLayout();
@@ -75,6 +76,7 @@
             this.toolStripPublication.SuspendLayout();
             this.tabPageVersions.SuspendLayout();
             this.toolStripVersions.SuspendLayout();
+            this.tabPageProperties.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -436,12 +438,22 @@
             // 
             // tabPageProperties
             // 
+            this.tabPageProperties.Controls.Add(this.propertyEditor1);
             this.tabPageProperties.Location = new System.Drawing.Point(4, 22);
             this.tabPageProperties.Name = "tabPageProperties";
             this.tabPageProperties.Size = new System.Drawing.Size(486, 211);
             this.tabPageProperties.TabIndex = 3;
             this.tabPageProperties.Text = "Propiedades";
             this.tabPageProperties.UseVisualStyleBackColor = true;
+            // 
+            // propertyEditor1
+            // 
+            this.propertyEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyEditor1.Location = new System.Drawing.Point(0, 0);
+            this.propertyEditor1.Name = "propertyEditor1";
+            this.propertyEditor1.Properties = null;
+            this.propertyEditor1.Size = new System.Drawing.Size(486, 211);
+            this.propertyEditor1.TabIndex = 0;
             // 
             // FormContentInformation
             // 
@@ -469,6 +481,7 @@
             this.tabPageVersions.PerformLayout();
             this.toolStripVersions.ResumeLayout(false);
             this.toolStripVersions.PerformLayout();
+            this.tabPageProperties.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -514,5 +527,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader10;
         private System.Windows.Forms.ToolStripButton toolStripButtonDeleteVersion;
         private System.Windows.Forms.TabPage tabPageProperties;
+        private Editor.PropertyEditor propertyEditor1;
     }
 }

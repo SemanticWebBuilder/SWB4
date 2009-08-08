@@ -118,12 +118,6 @@
     <Compile Include="Interfaces\WebSiteInfo.cs" />
     <Compile Include="MenuListener.cs" />
     <Compile Include="RtlAwareMessageBox.cs" />
-    <Compile Include="Steps\PropertyEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Steps\PropertyEditor.Designer.cs">
-      <DependentUpon>PropertyEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Steps\SelectTitle.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -249,6 +243,9 @@
     <EmbeddedResource Include="Controls\EditableListView.resx">
       <DependentUpon>EditableListView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PropertyEditor.resx">
+      <DependentUpon>PropertyEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -318,9 +315,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Steps\ContentProperties.resx">
       <DependentUpon>ContentProperties.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Steps\PropertyEditor.resx">
-      <DependentUpon>PropertyEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Steps\SelectTitle.resx">
       <DependentUpon>SelectTitle.cs</DependentUpon>
@@ -402,6 +396,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\EditableListView.Designer.cs" />
+    <Compile Include="Controls\PropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PropertyEditor.Designer.cs">
+      <DependentUpon>PropertyEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CalendarItem.cs" />
     <Compile Include="Forms\Element.cs">
     </Compile>

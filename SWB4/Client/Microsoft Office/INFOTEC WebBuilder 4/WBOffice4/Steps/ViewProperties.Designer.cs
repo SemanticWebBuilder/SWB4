@@ -28,23 +28,39 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.propertyEditor1 = new Editor.PropertyEditor();
+            
             this.SuspendLayout();
             // 
             // Description
             // 
             this.Description.Text = "Indique las propiedades de presentación";
             // 
+            // propertyEditor1
+            // 
+            this.propertyEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyEditor1.Location = new System.Drawing.Point(0, 0);
+            this.propertyEditor1.Name = "propertyEditor1";
+            this.propertyEditor1.Properties = null;
+            this.propertyEditor1.Size = new System.Drawing.Size(472, 236);
+            this.propertyEditor1.TabIndex = 1;
+            // 
             // ViewProperties
             // 
+            this.Controls.Add(this.propertyEditor1);
             this.Name = "ViewProperties";
             this.StepDescription = "Indique las propiedades de presentación";
             this.StepTitle = "Propiedades de presentación";
             this.ShowStep += new TSWizards.ShowStepEventHandler(this.ViewProperties_ShowStep);
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(this.ViewProperties_ValidateStep);
+            this.Controls.SetChildIndex(this.propertyEditor1, 0);
+            this.Controls.SetChildIndex(this.Description, 0);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private Editor.PropertyEditor propertyEditor1;
     }
 }

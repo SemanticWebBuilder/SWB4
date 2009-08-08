@@ -11,7 +11,7 @@ namespace WBOffice4.Interfaces
         public String title;
         public String type;
         public bool isRequired;
-        public Value[] values;
+        public String[] values;
         public override string ToString()
         {
             return title.ToString();

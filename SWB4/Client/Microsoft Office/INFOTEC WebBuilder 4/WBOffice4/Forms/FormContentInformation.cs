@@ -15,9 +15,7 @@ namespace WBOffice4.Forms
 {
     public partial class FormContentInformation : Form
     {
-        private Object obj;
-        private PropertyGrid grid = new PropertyGrid();
-        //private listViewPages listViewPages;
+        
         private String repositoryName, contentID;
         private OfficeDocument document;
         private ContentType contentType;
@@ -44,8 +42,7 @@ namespace WBOffice4.Forms
         }
         private void loadProperties()
         {
-            grid.ToolbarVisible = false;
-            grid.Dock = DockStyle.Fill;            
+                       
             String type = OfficeApplication.OfficeDocumentProxy.getNameOfContent(repositoryName, contentID);
 
             foreach (ContentType contentType in OfficeApplication.OfficeApplicationProxy.getContentTypes(repositoryName))
@@ -54,16 +51,19 @@ namespace WBOffice4.Forms
                 {
                     this.contentType = contentType;
                     PropertyInfo[] props = OfficeApplication.OfficeDocumentProxy.getContentProperties(repositoryName, contentType.id);
-                    obj = TypeFactory.getObject(props, contentType.title);
+                    this.propertyEditor1.Properties = props;
+                    String[] values = new String[props.Length];
+                    int i=0;
                     foreach (PropertyInfo prop in props)
                     {
                         String value=OfficeApplication.OfficeDocumentProxy.getContentProperty(prop, repositoryName, contentID);
-                        TypeFactory.setValue(prop, obj, value);
+                        values[i] = value;
+                        i++;
                     }
-                    this.grid.SelectedObject = obj;
+                    this.propertyEditor1.Values = values;                    
                 }
             }
-            tabPageProperties.Controls.Add(grid);
+            
         }
         private void loadPorlets()
         {
@@ -227,10 +227,10 @@ namespace WBOffice4.Forms
             }
             PropertyInfo[] props = null;
             String[] values = null;
-            if (obj != null && contentType!=null)
+            if (contentType!=null)
             {
                 props=OfficeApplication.OfficeDocumentProxy.getContentProperties(repositoryName,contentType.id);
-                values=TypeFactory.getValues(props, obj);
+                values = this.propertyEditor1.Values;
                 try
                 {
                     OfficeApplication.OfficeDocumentProxy.validateContentValues(repositoryName, props, values, this.contentType.id);
