@@ -20,7 +20,9 @@ namespace WBOffice4.Forms
         {
             InitializeComponent();
             this.comboBoxAddresses.Items.Clear();
-            foreach (Uri uri in uRIConfigurationList.Addresses)
+            Uri[] addresses=this.uRIConfigurationList.Addresses;
+            Array.Reverse(addresses);
+            foreach (Uri uri in addresses)
             {
                 this.comboBoxAddresses.Items.Add(uri);
             }
@@ -28,6 +30,7 @@ namespace WBOffice4.Forms
             {
                 this.comboBoxAddresses.SelectedIndex = 0;
             }
+            Array.Reverse(addresses);
 
         }
 

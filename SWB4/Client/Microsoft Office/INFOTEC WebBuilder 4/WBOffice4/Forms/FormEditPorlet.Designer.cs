@@ -35,6 +35,7 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.tabControlProperties = new System.Windows.Forms.TabControl();
             this.tabPageInformation = new System.Windows.Forms.TabPage();
+            this.checkBoxActivePag = new System.Windows.Forms.CheckBox();
             this.buttonMove = new System.Windows.Forms.Button();
             this.dateTimePickerEndDate = new System.Windows.Forms.DateTimePicker();
             this.checkBoxEndDate = new System.Windows.Forms.CheckBox();
@@ -70,10 +71,11 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDeleteRule = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxActivePag = new System.Windows.Forms.CheckBox();
+            this.propertyEditor1 = new Editor.PropertyEditor();
             this.panel1.SuspendLayout();
             this.tabControlProperties.SuspendLayout();
             this.tabPageInformation.SuspendLayout();
+            this.tabPageProperties.SuspendLayout();
             this.tabPageCalendar.SuspendLayout();
             this.toolStripCalendar.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -150,6 +152,16 @@
             this.tabPageInformation.TabIndex = 0;
             this.tabPageInformation.Text = "Información";
             this.tabPageInformation.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxActivePag
+            // 
+            this.checkBoxActivePag.AutoSize = true;
+            this.checkBoxActivePag.Location = new System.Drawing.Point(312, 130);
+            this.checkBoxActivePag.Name = "checkBoxActivePag";
+            this.checkBoxActivePag.Size = new System.Drawing.Size(91, 17);
+            this.checkBoxActivePag.TabIndex = 16;
+            this.checkBoxActivePag.Text = "Página activa";
+            this.checkBoxActivePag.UseVisualStyleBackColor = true;
             // 
             // buttonMove
             // 
@@ -296,6 +308,7 @@
             // 
             // tabPageProperties
             // 
+            this.tabPageProperties.Controls.Add(this.propertyEditor1);
             this.tabPageProperties.Location = new System.Drawing.Point(4, 22);
             this.tabPageProperties.Name = "tabPageProperties";
             this.tabPageProperties.Padding = new System.Windows.Forms.Padding(3);
@@ -460,15 +473,14 @@
             this.toolStripButtonDeleteRule.ToolTipText = "Eliminar la calendarización seleccionada";
             this.toolStripButtonDeleteRule.Click += new System.EventHandler(this.toolStripButtonDeleteRule_Click);
             // 
-            // checkBoxActivePag
+            // propertyEditor1
             // 
-            this.checkBoxActivePag.AutoSize = true;
-            this.checkBoxActivePag.Location = new System.Drawing.Point(312, 130);
-            this.checkBoxActivePag.Name = "checkBoxActivePag";
-            this.checkBoxActivePag.Size = new System.Drawing.Size(91, 17);
-            this.checkBoxActivePag.TabIndex = 16;
-            this.checkBoxActivePag.Text = "Página activa";
-            this.checkBoxActivePag.UseVisualStyleBackColor = true;
+            this.propertyEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyEditor1.Location = new System.Drawing.Point(3, 3);
+            this.propertyEditor1.Name = "propertyEditor1";
+            this.propertyEditor1.Properties = null;
+            this.propertyEditor1.Size = new System.Drawing.Size(495, 248);
+            this.propertyEditor1.TabIndex = 0;
             // 
             // FormEditPorlet
             // 
@@ -490,6 +502,7 @@
             this.tabControlProperties.ResumeLayout(false);
             this.tabPageInformation.ResumeLayout(false);
             this.tabPageInformation.PerformLayout();
+            this.tabPageProperties.ResumeLayout(false);
             this.tabPageCalendar.ResumeLayout(false);
             this.tabPageCalendar.PerformLayout();
             this.toolStripCalendar.ResumeLayout(false);
@@ -545,5 +558,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.Button buttonMove;
         private System.Windows.Forms.CheckBox checkBoxActivePag;
+        private Editor.PropertyEditor propertyEditor1;
     }
 }

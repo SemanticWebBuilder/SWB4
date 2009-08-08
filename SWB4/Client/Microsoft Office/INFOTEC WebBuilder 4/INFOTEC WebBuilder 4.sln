@@ -39,6 +39,10 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SemanticWebBuilderOffice200
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SemanticWebBuilderOffice2003Setup", "SemanticWebBuilderOffice2003Setup\SemanticWebBuilderOffice2003Setup.vdproj", "{10888BA6-BC8C-4A6E-86E3-E462A33EB298}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyEditor", "PropertyEditor\PropertyEditor.csproj", "{ECA89F57-01D6-4F5D-96EB-001209E79504}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsPropertyEditorTest", "WindowsFormsPropertyEditorTest\WindowsFormsPropertyEditorTest.csproj", "{3E9193A8-B060-468B-99EB-AE628A1BAFDC}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -112,6 +116,14 @@ Global
 		{AC2289C4-3C56-4C9D-B7C1-3BEA11E8F58A}.Release|Any CPU.ActiveCfg = Release
 		{10888BA6-BC8C-4A6E-86E3-E462A33EB298}.Debug|Any CPU.ActiveCfg = Debug
 		{10888BA6-BC8C-4A6E-86E3-E462A33EB298}.Release|Any CPU.ActiveCfg = Release
+		{ECA89F57-01D6-4F5D-96EB-001209E79504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECA89F57-01D6-4F5D-96EB-001209E79504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECA89F57-01D6-4F5D-96EB-001209E79504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECA89F57-01D6-4F5D-96EB-001209E79504}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E9193A8-B060-468B-99EB-AE628A1BAFDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E9193A8-B060-468B-99EB-AE628A1BAFDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E9193A8-B060-468B-99EB-AE628A1BAFDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E9193A8-B060-468B-99EB-AE628A1BAFDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

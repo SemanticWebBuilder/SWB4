@@ -11,28 +11,21 @@ namespace WBOffice4.Steps
 {
     public partial class ViewProperties : TSWizards.BaseInteriorStep
     {
-        private Object obj;
-        private PropertyGrid grid = new PropertyGrid();
+        
         public static readonly String VIEW_PROPERTIES = "VIEW_PROPERTIES";
         public static readonly String VIEW_PROPERTIES_VALUES = "VIEW_PROPERTIES_VALUES";
         public ViewProperties()
         {
-            InitializeComponent();
-            grid.ToolbarVisible = false;
-            grid.Dock = DockStyle.Fill;
-            this.Controls.Add(grid);
+            InitializeComponent();            
         }
 
         private void ViewProperties_ShowStep(object sender, TSWizards.ShowStepEventArgs e)
         {
-            if (obj == null)
-            {
+            
                 string repositoryName = this.Wizard.Data[SelectVersionToPublish.REPOSITORY_ID_NAME].ToString();
                 string contentID = this.Wizard.Data[SelectVersionToPublish.CONTENT_ID_NAME].ToString();
                 PropertyInfo[] properties = OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
-                obj = TypeFactory.getObject(properties, "Propiedades de presentación");
-            }
-            grid.SelectedObject = obj;
+                this.propertyEditor1.Properties = properties;
             
         }
 
@@ -40,8 +33,8 @@ namespace WBOffice4.Steps
         {
             string repositoryName = this.Wizard.Data[SelectVersionToPublish.REPOSITORY_ID_NAME].ToString();
             string contentID = this.Wizard.Data[SelectVersionToPublish.CONTENT_ID_NAME].ToString();
-            PropertyInfo[] properties=OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
-            Object[] values=TypeFactory.getValues(properties, obj);
+            PropertyInfo[] properties=OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);            
+            Object[] values = this.propertyEditor1.Values;
             try
             {
                 OfficeApplication.OfficeDocumentProxy.validateViewValues(repositoryName, contentID, properties, values);

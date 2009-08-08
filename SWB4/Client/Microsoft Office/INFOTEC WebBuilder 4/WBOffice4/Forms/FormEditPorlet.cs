@@ -15,8 +15,6 @@ namespace WBOffice4.Forms
 {
     public partial class FormEditPorlet : Form
     {
-        private Object obj;
-        private PropertyGrid grid = new PropertyGrid();
         private ResourceInfo pageInformation;
         private String repositoryName, contentID;
         List<CalendarInfo> added = new List<CalendarInfo>();
@@ -32,7 +30,7 @@ namespace WBOffice4.Forms
         {
             this.checkBoxActivePag.Checked = pageInformation.page.active;
             this.dateTimePickerEndDate.Value = DateTime.Now;
-            
+
             this.textBoxTitle.Text = pageInformation.title;
             this.textBoxDescription.Text = pageInformation.description;
             this.checkBoxActive.Checked = pageInformation.active;
@@ -102,17 +100,18 @@ namespace WBOffice4.Forms
         }
         private void loadProperties()
         {
-            grid.ToolbarVisible = false;
-            grid.Dock = DockStyle.Fill;
             PropertyInfo[] props = OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
-            obj = TypeFactory.getObject(props, "Propiedades de presentación");
+            this.propertyEditor1.Properties = props;
+            String[] values = new String[props.Length];
+            int i = 0;
             foreach (PropertyInfo prop in props)
             {
                 String value = OfficeApplication.OfficeDocumentProxy.getViewPropertyValue(this.pageInformation, prop);
-                TypeFactory.setValue(prop, obj, value);
+                values[i] = value;
+                i++;
             }
-            this.grid.SelectedObject = obj;
-            tabPageProperties.Controls.Add(grid);
+            this.propertyEditor1.Values = values;
+
         }
         private void loadCalendars()
         {
@@ -297,25 +296,24 @@ namespace WBOffice4.Forms
                     added.Remove(cal);
                     OfficeApplication.OfficeDocumentProxy.activeCalendar(pageInformation, cal, active);
                 }
-                OfficeApplication.OfficeApplicationProxy.activePage(this.pageInformation.page,this.checkBoxActivePag.Checked);
+                OfficeApplication.OfficeApplicationProxy.activePage(this.pageInformation.page, this.checkBoxActivePag.Checked);
 
                 PropertyInfo[] properties = null;
                 String[] values = null;
-                if (obj != null)
+
+                properties = OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
+                values = this.propertyEditor1.Values;
+                try
                 {
-                    properties = OfficeApplication.OfficeDocumentProxy.getResourceProperties(repositoryName, contentID);
-                    values = TypeFactory.getValues(properties, obj);
-                    try
-                    {
-                        OfficeApplication.OfficeDocumentProxy.validateViewValues(repositoryName, contentID, properties, values);
-                    }
-                    catch (Exception ue)
-                    {
-                        MessageBox.Show(this, ue.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        tabPageProperties.Focus();
-                        return;
-                    }
+                    OfficeApplication.OfficeDocumentProxy.validateViewValues(repositoryName, contentID, properties, values);
                 }
+                catch (Exception ue)
+                {
+                    MessageBox.Show(this, ue.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    tabPageProperties.Focus();
+                    return;
+                }
+
                 try
                 {
                     this.Cursor = Cursors.WaitCursor;
@@ -456,7 +454,7 @@ namespace WBOffice4.Forms
         private void buttonMove_Click(object sender, EventArgs e)
         {
             FormMoveContent FormMoveContent = new FormMoveContent(this.pageInformation);
-            DialogResult res=FormMoveContent.ShowDialog(this);
+            DialogResult res = FormMoveContent.ShowDialog(this);
             if (res == DialogResult.OK)
             {
                 this.Cursor = Cursors.WaitCursor;
