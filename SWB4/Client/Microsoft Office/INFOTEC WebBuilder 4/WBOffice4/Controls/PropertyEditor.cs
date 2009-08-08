@@ -126,6 +126,7 @@ namespace Editor
                     plabel.Dock = DockStyle.Top;
 
                     Control box = getControl(prop);
+                    toolTip1.SetToolTip(box, prop.title);
                     box.Name = prop.id;
                     box.TabIndex = i;
                     box.Height = 20;
