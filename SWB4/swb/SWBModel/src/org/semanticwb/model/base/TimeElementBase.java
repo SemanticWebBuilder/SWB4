@@ -1,0 +1,66 @@
+package org.semanticwb.model.base;
+
+
+public class TimeElementBase extends org.semanticwb.model.base.FormElementBase 
+{
+    public static final org.semanticwb.platform.SemanticProperty swb_timeConstraints=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#timeConstraints");
+    public static final org.semanticwb.platform.SemanticClass swb_TimeElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TimeElement");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TimeElement");
+
+    public TimeElementBase(org.semanticwb.platform.SemanticObject base)
+    {
+        super(base);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.TimeElement> listTimeElements(org.semanticwb.model.SWBModel model)
+    {
+        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TimeElement>(it, true);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.TimeElement> listTimeElements()
+    {
+        java.util.Iterator it=sclass.listInstances();
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TimeElement>(it, true);
+    }
+
+    public static org.semanticwb.model.TimeElement getTimeElement(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.TimeElement)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.model.TimeElement createTimeElement(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.model.TimeElement)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
+    public static void removeTimeElement(String id, org.semanticwb.model.SWBModel model)
+    {
+        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+    }
+
+    public static boolean hasTimeElement(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (getTimeElement(id, model)!=null);
+    }
+
+    public String getTimeConstraints()
+    {
+        return getSemanticObject().getProperty(swb_timeConstraints);
+    }
+
+    public void setTimeConstraints(String timeConstraints)
+    {
+        getSemanticObject().setProperty(swb_timeConstraints, timeConstraints);
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
+    }
+}
