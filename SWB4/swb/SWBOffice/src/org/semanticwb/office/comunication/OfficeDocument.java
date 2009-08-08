@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import java.util.UUID;
 
 import javax.jcr.ItemExistsException;
@@ -47,12 +48,12 @@ import org.semanticwb.office.interfaces.CalendarInfo;
 import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.IOfficeDocument;
 import org.semanticwb.office.interfaces.PFlow;
-import org.semanticwb.office.interfaces.PageInfo;
 
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.ElementInfo;
 import org.semanticwb.office.interfaces.SiteInfo;
+import org.semanticwb.office.interfaces.Value;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.platform.SemanticClass;
@@ -1009,7 +1010,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 officeResource.getSemanticObject().remove();
                 throw e;
             }
-            
+
 
         }
         catch (Exception e)
@@ -1223,6 +1224,28 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         info.id = prop.getURI();
                         info.isRequired = prop.isRequired();
                         info.title = prop.getDisplayName();
+                        String values = propDisplay.getSelectValues("es");
+                        if (values != null)
+                        {
+                            StringTokenizer st = new StringTokenizer(values, "|");
+                            if (st.countTokens() > 0)
+                            {
+                                info.values = new Value[st.countTokens()];
+                                int i = 0;
+                                while (st.hasMoreTokens())
+                                {
+                                    String value = st.nextToken();
+                                    int pos = value.indexOf(":");
+                                    if (pos != -1)
+                                    {
+                                        info.values[i] = new Value();
+                                        info.values[i].key = value.substring(0, pos);
+                                        info.values[i].title = value.substring(pos + 1);
+                                    }
+                                    i++;
+                                }
+                            }
+                        }
                         if (prop.isString())
                         {
                             info.type = "String";
