@@ -16,7 +16,6 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.larq.IndexBuilderString;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
 import com.hp.hpl.jena.query.larq.LARQ;
@@ -25,11 +24,17 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.util.StringUtils;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -846,32 +851,58 @@ public class AdvancedSearch extends GenericAdmResource {
     }
 
     public String buildAbstract(SemanticObject o) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         StringBuffer res = new StringBuffer();
+        HashMap properties = new HashMap<String, String>();
         //System.out.println(lang);
         //Get list of object properties
         Iterator<SemanticProperty> pit = o.listProperties();
         while (pit.hasNext()) {
             //Get next property
             SemanticProperty sp = pit.next();
-            System.out.println("...." + sp.toString());
+            //System.out.println("...." + sp.toString());
             //Do not display rdf and owl properties
             if (!sp.isObjectProperty() && (!sp.getPrefix().equals("rdf") && !sp.getPrefix().equals("owl") && !sp.getPrefix().equals("rdfs"))) {
                 //Get property value, if any, and display it
                 if (sp != null) {
-                    String val = o.getProperty(sp);
+                    String val = "";
 
-                    if (val != null) {
-                        res.append("<font size=\"2\" face=\"verdana\">" +
-                            sp.getDisplayName(lang) + ": <i>" + o.getProperty(sp) + "</i></font>" + "<br>");
+                    /*if (sp.isDate()) {
+                        val = dateFormat.format(SWBUtils.TEXT.iso8601DateFormat(o.getDateProperty(sp)));
+                    } else if (sp.isDateTime()) {
+                        System.out.println("......its a datetime");
+                        Timestamp dt = o.getDateTimeProperty(sp);
+                        if (dt != null) {
+                            val = timeFormat.format(dt);
+                        }
+                    } else {*/
+                        val = o.getProperty(sp);
+                    //}
+                    if (val != null && !val.equals("")) {
+
+                        properties.put(sp.getDisplayName(lang).toUpperCase(), o.getProperty(sp));
+                        //res.append("<font size=\"2\" face=\"verdana\">" +
+                        //  sp.getDisplayName(lang) + ": <i>" + o.getProperty(sp) + "</i></font>" + "<br>");
                     }
                 }
-            }/*else if (sp.isObjectProperty()) {
-                SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
+            } else if (sp.isObjectProperty()) {
+                SemanticObject rg = o.getObjectProperty(sp);
                 if (rg != null) {
-                    res.append("<font size=\"2\" face=\"verdana\">" +
-                            sp.getDisplayName(lang) + ": <i>" + rg. + "</i></font>" + "<br>");
+                    properties.put(sp.getDisplayName(lang).toUpperCase(), rg.getDisplayName(lang));
+                    //res.append("<font size=\"2\" face=\"verdana\">" +
+                      //      sp.getDisplayName(lang) + ": <i>" + rg.getDisplayName(lang) + "</i></font>" + "<br>");
                 }
-            }*/
+            }
+        }
+        Map sorted = new TreeMap(properties);
+        Set names = sorted.keySet();
+        Iterator<String> it = names.iterator();
+        while (it.hasNext()) {
+            String name = it.next();
+            String value = (String)sorted.get(name);
+            res.append("<font size=\"2\" face=\"verdana\">" +
+                  name + ": <i>" + value + "</i></font>" + "<br>");
         }
         return res.toString();
     }    
