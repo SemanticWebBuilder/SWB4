@@ -680,7 +680,7 @@ public class PFlowManager
                             {
                                 log.error(e);
                             }
-                            ResourceBundle resourceBundle = ResourceBundle.getBundle("com/infotec/wb/services/PFlowSrv", locale);
+                            ResourceBundle resourceBundle = ResourceBundle.getBundle("org/semanticwb/portal/PFlowManager", locale);
                             String subject = resourceBundle.getString("subjectReject");
                             String msg = resourceBundle.getString("msg1") + " " + resource.getId() + " " + resourceBundle.getString("msg3") + " " + activityName + resourceBundle.getString("msg2") + wbUser.getFirstName() + " " + wbUser.getLastName();
                             msg += "\r\n\r\n" + resourceBundle.getString("title") + " " + resource.getTitle();
@@ -838,11 +838,11 @@ public class PFlowManager
             ResourceBundle bundle = null;
             try
             {
-                bundle = ResourceBundle.getBundle("/org/semanticwb/portal/PFlowManager", locale);
+                bundle = ResourceBundle.getBundle("org/semanticwb/portal/PFlowManager", locale);
             }
             catch (Exception e)
             {
-                bundle = ResourceBundle.getBundle("/org/semanticwb/portal/PFlowManager");
+                bundle = ResourceBundle.getBundle("org/semanticwb/portal/PFlowManager");
             }
             if (resource.getPflowInstance() != null)
             {
