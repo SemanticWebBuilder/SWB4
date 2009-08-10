@@ -21,6 +21,9 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticMgr;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -46,8 +49,24 @@ public class SWBImportWebSite extends GenericResource {
                 String title = request.getParameter("wstitle");
                 String id = request.getParameter("wsid");
                 String usrRep = request.getParameter("wsrepository");
+                String wstype = request.getParameter("wstype");
 
-                WebSite site = SWBContext.createWebSite(id, "http://www." + id + ".swb#");
+                WebSite site = null;
+                String ns="http://www." + id + ".swb#";
+                if(wstype==null)
+                {
+                    site = SWBContext.createWebSite(id, ns);
+                }else
+                {
+                    SemanticMgr mgr=SWBPlatform.getSemanticMgr();
+                    SemanticClass sclass=mgr.getVocabulary().getSemanticClassById(wstype);
+                    if(sclass!=null)
+                    {
+                        SemanticModel model=mgr.createModel(id, ns);
+                        site=(WebSite)model.createGenericObject(model.getObjectUri(id, sclass), sclass);
+                    }
+                }
+
                 site.getSemanticObject().getModel().setTraceable(false);
                 //site.setCreated(new java.util.Date(System.currentTimeMillis()));
                 site.setTitle(title);
@@ -607,9 +626,11 @@ public class SWBImportWebSite extends GenericResource {
 
                 //Crear lenguajes por defecto
                 Language lang = site.createLanguage("es");
+                lang.setTitle("Español");
                 lang.setTitle("Español", "es");
                 lang.setTitle("Spanish", "en");
                 lang = site.createLanguage("en");
+                lang.setTitle("Ingles");
                 lang.setTitle("Ingles", "es");
                 lang.setTitle("English", "en");
                 //Envia estatus a pantalla
@@ -630,7 +651,9 @@ public class SWBImportWebSite extends GenericResource {
         }
     }
 
-    private void getStep1(PrintWriter out, SWBResourceURL url, SWBParamRequest paramRequest) {
+    private void getStep1(PrintWriter out, SWBResourceURL url, SWBParamRequest paramRequest) 
+    {
+        String lang=paramRequest.getUser().getLanguage();
         try {
 
             out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');try{document.getElementById('csLoading').style.display='inline';}catch(noe){};return false;\" method=\"post\">");
@@ -658,10 +681,27 @@ public class SWBImportWebSite extends GenericResource {
             Iterator<UserRepository> itUsrReps = SWBContext.listUserRepositorys();
             while (itUsrReps.hasNext()) {
                 UserRepository usrRep = itUsrReps.next();
-                out.println("<option value=\"" + usrRep.getId() + "\">" + usrRep.getTitle() + "</option>");
+                out.println("<option value=\"" + usrRep.getId() + "\">" + usrRep.getDisplayTitle(lang) + "</option>");
             }
             out.println("</select>");
             out.println("</td></tr>");
+
+            Iterator<SemanticClass> itcls = WebSite.sclass.listSubClasses();
+            if(itcls.hasNext())
+            {
+                out.append("<tr><td align=\"right\">");
+                out.println(paramRequest.getLocaleLogString("wstype")+" <em>*</em>");
+                out.println("</td><td>");
+                out.println("<select name=\"wstype\">");
+                out.println("<option value=\""+WebSite.sclass.getClassId()+"\">" + WebSite.sclass.getDisplayName(lang) + "</option>");
+                while (itcls.hasNext()) {
+                    SemanticClass cls = itcls.next();
+                    out.println("<option value=\"" + cls.getClassId() + "\">" + cls.getDisplayName(lang) + "</option>");
+                }
+                out.println("</select>");
+                out.println("</td></tr>");
+            }
+
             out.println("<td colspan=\"2\" align=\"center\">");
             out.println("<button dojoType='dijit.form.Button' type=\"submit\">"+paramRequest.getLocaleLogString("save")+"</button>");
             out.println("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">"+paramRequest.getLocaleLogString("cancel")+"</button>");
