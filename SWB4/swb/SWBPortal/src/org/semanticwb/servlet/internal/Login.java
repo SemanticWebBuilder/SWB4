@@ -348,7 +348,7 @@ public class Login implements InternalServlet
     }
 */
     private void doResponse(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert, String authMethod) throws IOException
-    {
+    {System.out.println("authMethod: "+authMethod);
         if ("BASIC".equals(authMethod))
         {
             String realm = (null != distributorParams.getWebPage().getDescription(distributorParams.getUser().getLanguage()) ? distributorParams.getWebPage().getDescription(distributorParams.getUser().getLanguage()) : _realm);
@@ -358,6 +358,11 @@ public class Login implements InternalServlet
         if ("FORM".equals(authMethod))
         {
             formChallenge(request, response, distributorParams, alert);
+        }
+
+        if ("OTHER".equals(authMethod))
+        {
+            redirectAlternateLogin(request, response, distributorParams, alert);
         }
 
     }
@@ -465,5 +470,14 @@ public class Login implements InternalServlet
         }
         return (CallbackHandler) constructor[method].newInstance(request, response, authType, website);
 
+    }
+
+    private void redirectAlternateLogin(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert) throws IOException
+    {
+        String altURL = distributorParams.getWebPage().getWebSite().getUserRepository().getAlternateLoginURL();
+        if (null == altURL)
+            formChallenge(request, response, distributorParams, alert);
+        else
+            sendRedirect(response, altURL);
     }
 }
