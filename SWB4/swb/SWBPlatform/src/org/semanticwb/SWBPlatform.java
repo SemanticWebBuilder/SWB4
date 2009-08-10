@@ -79,6 +79,7 @@ public class SWBPlatform
         SWBUtils.EMAIL.setSMTPServer(getEnv("swb/smtpServer"));
         SWBUtils.EMAIL.setSMTPUser(getEnv("swb/smtpUser"));
         SWBUtils.EMAIL.setSMTPPassword(getEnv("swb/smtpPassword"));
+        SWBUtils.EMAIL.setAdminEmail(getEnv("af/adminEmail"));
 
         try {
             //TODO:revisar sincronizacion
