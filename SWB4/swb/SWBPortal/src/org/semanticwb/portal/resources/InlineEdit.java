@@ -151,14 +151,14 @@ public class InlineEdit extends GenericResource
         Iterator<Role> iRoles = wsite.getUserRepository().listRoles(); //DBRole.getInstance().getRoles(topicmap.getDbdata().getRepository());
         StringBuffer strRules = new StringBuffer("");
         String selected = "";
-        if(str_role.equals("0")) selected = "selected";
+        if(str_role.equals("0")) selected = "selected=\"selected\"";
         strRules.append("\n<option value=\"0\" " + selected +" >" + "Ninguno" + "</option>");
         strRules.append("\n<optgroup label=\"Roles\">");
         while (iRoles.hasNext()) {
             Role oRole = iRoles.next();
             selected = "";
             if (str_role.trim().equals(oRole.getURI())) {
-                selected = "selected";
+                selected = "selected=\"selected\"";
             }
             strRules.append("\n<option value=\"" + oRole.getURI() + "\" " + selected + ">" + oRole.getDisplayTitle(user.getLanguage()) + "</option>");
         }
@@ -169,7 +169,7 @@ public class InlineEdit extends GenericResource
             UserGroup oUG = iugroups.next();
             selected = "";
             if (str_role.trim().equals(oUG.getURI())) {
-                selected = "selected";
+                selected = "selected=\"selected\"";
             }
             strRules.append("\n<option value=\"" + oUG.getURI() + "\" " + selected + " >" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
         }
