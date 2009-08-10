@@ -9,577 +9,589 @@
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
   xml:base="http://www.stps.gob.mx/empleo">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwb.org/swbcatalogs"/>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+    <owl:imports rdf:resource="http://www.semanticwb.org/swbcatalogs"/>
   </owl:Ontology>
+  <owl:Class rdf:ID="Especialidad">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:label xml:lang="es">Especialidad</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Empresa">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:label xml:lang="es">Empresa</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Vacante">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
+    <rdfs:label xml:lang="es">Vacante</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ActividadEconomica">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:label xml:lang="es">Actividad económica</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Aplicante">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:label xml:lang="es">Aplicante</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Contacto">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:label xml:lang="es">Contacto</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Escolaridad">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Escolaridad</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="SWBEmpleo">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
   </owl:Class>
+  <owl:Class rdf:ID="AreaLaboral">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Área laboral</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_WebPage">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconWebPage</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Requisito">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Requisito</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Ocupacion">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <rdfs:label xml:lang="es">Ocupación</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject rdf:resource="#do_WebPage"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Domicilio">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label xml:lang="es">Domicilio</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:ObjectProperty rdf:ID="especialidad">
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:label xml:lang="es">Especialidad</rdfs:label>
-    <rdfs:range>
-      <swb:Class rdf:ID="Especialidad">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:label xml:lang="es">Especialidad</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
     <rdfs:domain>
       <owl:Class>
         <owl:unionOf rdf:parseType="Collection">
-          <swb:Class rdf:ID="Escolaridad">
-            <rdfs:label xml:lang="es">Escolaridad</rdfs:label>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swb:autogenId>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Class>
-          <swb:Class rdf:ID="Vacante">
-            <rdfs:label xml:lang="es">Vacante</rdfs:label>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swb:autogenId>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Class>
+          <owl:Class rdf:about="#Escolaridad"/>
+          <owl:Class rdf:about="#Vacante"/>
         </owl:unionOf>
       </owl:Class>
     </rdfs:domain>
+    <rdfs:range rdf:resource="#Especialidad"/>
+    <rdfs:label xml:lang="es">Especialidad</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="municipio">
-    <rdfs:domain rdf:resource="#Vacante"/>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:label xml:lang="en">County</rdfs:label>
-    <rdfs:label xml:lang="es">Municipio</rdfs:label>
-    <rdfs:range rdf:resource="http://www.semanticwb.org/swbcatalogs#County"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_municipio">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobalWithBlank"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >36</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobalWithBlank"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasPerfilBusqueda">
-    <rdfs:label xml:lang="es">Perfil</rdfs:label>
-    <rdfs:domain>
-      <swb:Class rdf:ID="Aplicante">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:label xml:lang="es">Aplicante</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
-    <rdfs:range rdf:resource="#Vacante"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="ocupacion">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_ocupaciones">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >20</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.semanticwb.org/swbcatalogs#County"/>
+    <rdfs:label xml:lang="es">Municipio</rdfs:label>
+    <rdfs:label xml:lang="en">County</rdfs:label>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
-    <rdfs:label xml:lang="es">Ocupación</rdfs:label>
-    <rdfs:range>
-      <swb:Class rdf:ID="Ocupacion">
-        <swb:displayObject>
-          <swbxf:DisplayObject rdf:ID="do_WebPage">
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconWebPage</swb:iconClass>
-          </swbxf:DisplayObject>
-        </swb:displayObject>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdfs:label xml:lang="es">Ocupación</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
     <rdfs:domain rdf:resource="#Vacante"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPerfilBusqueda">
+    <rdfs:range rdf:resource="#Vacante"/>
+    <rdfs:domain rdf:resource="#Aplicante"/>
+    <rdfs:label xml:lang="es">Perfil</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="ocupacion">
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="#Ocupacion"/>
+    <rdfs:label xml:lang="es">Ocupación</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_ocupaciones">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="empresa">
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="#Empresa"/>
+    <rdfs:label xml:lang="es">Empresa ofertante</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_empresa">
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:label xml:lang="es">Empresa ofertante</rdfs:label>
-    <rdfs:range>
-      <swb:Class rdf:ID="Empresa">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:label xml:lang="es">Empresa</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:domain rdf:resource="#Vacante"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="area">
-    <rdfs:domain rdf:resource="#Vacante"/>
-    <rdfs:label xml:lang="es">Área laboral</rdfs:label>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:range>
-      <swb:Class rdf:ID="AreaLaboral">
-        <swb:displayObject rdf:resource="#do_WebPage"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-        <rdfs:label xml:lang="es">Área laboral</rdfs:label>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_area">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >10</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:range rdf:resource="#AreaLaboral"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:label xml:lang="es">Área laboral</rdfs:label>
+    <rdfs:domain rdf:resource="#Vacante"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasVacante">
-    <rdfs:label xml:lang="es">Vacante</rdfs:label>
-    <rdfs:range rdf:resource="#Vacante"/>
     <rdfs:domain>
       <owl:Class>
         <owl:unionOf rdf:parseType="Collection">
-          <swb:Class rdf:about="#Empresa"/>
+          <owl:Class rdf:about="#Empresa"/>
           <owl:Class rdf:about="#SWBEmpleo"/>
         </owl:unionOf>
       </owl:Class>
     </rdfs:domain>
+    <rdfs:range rdf:resource="#Vacante"/>
+    <rdfs:label xml:lang="es">Vacante</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="contacto">
-    <rdfs:label xml:lang="es">Contacto</rdfs:label>
-    <rdfs:range>
-      <swb:Class rdf:ID="Contacto">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:label xml:lang="es">Contacto</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
     <rdfs:domain>
       <owl:Class>
         <owl:unionOf rdf:parseType="Collection">
-          <swb:Class rdf:about="#Empresa"/>
-          <swb:Class rdf:about="#Vacante"/>
+          <owl:Class rdf:about="#Empresa"/>
+          <owl:Class rdf:about="#Vacante"/>
         </owl:unionOf>
       </owl:Class>
     </rdfs:domain>
+    <rdfs:range rdf:resource="#Contacto"/>
+    <rdfs:label xml:lang="es">Contacto</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasRequisito">
-    <rdfs:label xml:lang="es">Requisito</rdfs:label>
-    <rdfs:range>
-      <swb:Class rdf:ID="Requisito">
-        <rdfs:label xml:lang="es">Requisito</rdfs:label>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
     <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="#Requisito"/>
+    <rdfs:label xml:lang="es">Requisito</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="escolaridad">
-    <rdfs:domain>
-      <owl:Class>
-        <owl:unionOf rdf:parseType="Collection">
-          <swb:Class rdf:about="#Vacante"/>
-          <swb:Class rdf:about="#Aplicante"/>
-        </owl:unionOf>
-      </owl:Class>
-    </rdfs:domain>
-    <rdfs:label xml:lang="es">Escolaridad</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
     <rdfs:range rdf:resource="#Escolaridad"/>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasDomicilio">
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:label xml:lang="es">Domicilio</rdfs:label>
-    <rdfs:range>
-      <swb:Class rdf:ID="Domicilio">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:label xml:lang="es">Domicilio</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:domain rdf:resource="#Empresa"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasEmpresa">
-    <rdfs:domain rdf:resource="#SWBEmpleo"/>
-    <rdfs:range rdf:resource="#Empresa"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="actividad">
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:label xml:lang="es">Actividad económica</rdfs:label>
-    <rdfs:range>
-      <swb:Class rdf:ID="ActividadEconomica">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:label xml:lang="es">Actividad económica</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:domain rdf:resource="#Empresa"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="entidad">
-    <rdfs:domain rdf:resource="#Vacante"/>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:label xml:lang="en">State</rdfs:label>
-    <rdfs:label xml:lang="es">Entidad</rdfs:label>
-    <rdfs:range rdf:resource="http://www.semanticwb.org/swbcatalogs#State"/>
+    <rdfs:label xml:lang="es">Escolaridad</rdfs:label>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_entidad">
+      <swbxf:DisplayProperty rdf:ID="dp_escolaridad">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >35</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobalWithBlank"/>
+        >200</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Vacante"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasDomicilio">
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="#Domicilio"/>
+    <rdfs:label xml:lang="es">Domicilio</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasEmpresa">
+    <rdfs:range rdf:resource="#Empresa"/>
+    <rdfs:domain rdf:resource="#SWBEmpleo"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="actividad">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_actividad">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="#ActividadEconomica"/>
+    <rdfs:label xml:lang="es">Actividad económica</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="entidad">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_entidad">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobalWithBlank"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >35</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.semanticwb.org/swbcatalogs#State"/>
+    <rdfs:label xml:lang="es">Entidad</rdfs:label>
+    <rdfs:label xml:lang="en">State</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:domain rdf:resource="#Vacante"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasOcupacion">
-    <rdfs:domain rdf:resource="#AreaLaboral"/>
-    <rdfs:range rdf:resource="#Ocupacion"/>
-    <rdfs:label xml:lang="es">Ocupación</rdfs:label>
     <swb:displayProperty rdf:resource="#dp_ocupaciones"/>
+    <rdfs:label xml:lang="es">Ocupación</rdfs:label>
+    <rdfs:range rdf:resource="#Ocupacion"/>
+    <rdfs:domain rdf:resource="#AreaLaboral"/>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="fax">
-    <rdfs:label xml:lang="es">Fax</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Fax</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="webPage">
-    <rdfs:label xml:lang="es">Página web</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Página web</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="shortName">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.semanticwb.org/swbcatalogs#LocationEntity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="DatatypeProperty_1"/>
+  <owl:DatatypeProperty rdf:ID="empleados">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_empleados">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="situacionAcademica">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Situación académica</rdfs:label>
+    <rdfs:domain rdf:resource="#Vacante"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_situacionAcademica">
         <swbxf:propSelectValues rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >TRUNCA:TRUNCA|TERMINADA:TERMINADA</swbxf:propSelectValues>
+        >NINGUNO:NINGUNO|ESTUDIANTE:ESTUDIANTE|DIPLOMA O CERTIFICADO:DIPLOMA O CERTIFICADO|TRUNCA:TRUNCA|PASANTE:PASANTE|TITULADO:TITULADO</swbxf:propSelectValues>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >200</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#Vacante"/>
-    <rdfs:label xml:lang="es">Situación académica</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="salarioMaximo">
-    <rdfs:label xml:lang="es">Salario máximo ofrecido</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <rdfs:domain rdf:resource="#Vacante"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_salarioMax">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >160</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:label xml:lang="es">Salario máximo ofrecido</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="plazas">
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:label xml:lang="es">Número de plazas disponibles</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#Vacante"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_plazas">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >120</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Número de plazas disponibles</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="dicapacidadAceptada">
-    <rdfs:label xml:lang="es">Tipo de discapacidad aceptada</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Vacante"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_discapacidad">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >30</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="funciones">
-    <rdfs:label xml:lang="es">Funciones</rdfs:label>
     <rdfs:domain rdf:resource="#Vacante"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Tipo de discapacidad aceptada</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="funciones">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_funciones">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >80</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:label xml:lang="es">Funciones</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="edadMaxima">
-    <rdfs:label xml:lang="es">Edad máxima requerida</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#Vacante"/>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_edad">
+      <swbxf:DisplayProperty rdf:ID="dp_edadMax">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Edad máxima requerida</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasTelefono">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasTelefono">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:label xml:lang="es">Teléfono</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="radicarFuera">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_radicarFuera">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >150</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">Disponibilidad para radicar fuera</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="calleYNum">
+    <rdfs:domain rdf:resource="#Domicilio"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Calle y número</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="salarioMinimo">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_salarioMin">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >160</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:label xml:lang="es">Salario mínimo ofrecido</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="temporalidad">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_temporalidad">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >170</swb:index>
+        <swbxf:propSelectValues rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >TODOS:TODOS|TIEMPO COMPLETO:TIEMPO COMPLETO|MEDIO TIEMPO:MEDIO TIEMPO|BECARIO:BECARIO|ESTUDIANTE:ESTUDIANTE|FINES DE SEMANA:FINES DE SEMANA|SIN CLASIFICAR:SIN CLASIFICAR|TEMPORAL:TEMPORAL</swbxf:propSelectValues>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Tipo de empleo</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="mobilidadRequerida">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_mobilidad">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >110</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">Disponibilidad para viajar</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="horarioEntrada">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_horarioEnt">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TimeElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >90</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:label xml:lang="es">Hora de entrada</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="nombre">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_nombre">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:label xml:lang="es">Nombre</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="codigoPostal">
+    <rdfs:domain rdf:resource="#Domicilio"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Código postal</rdfs:label>
+    <rdfs:label xml:lang="en">Postal code</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="experienciaMinima">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_experienciaMin">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Experiencia mínima</rdfs:label>
+    <rdfs:domain rdf:resource="#Vacante"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="logo">
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Logotipo</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="experienciaMaxima">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_experienciaMax">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >70</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Experiencia Máxima</rdfs:label>
+    <rdfs:domain rdf:resource="#Vacante"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="edadMinima">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_edadMin">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >40</swb:index>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="hasTelefono">
-    <rdfs:label xml:lang="es">Teléfono</rdfs:label>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:domain rdf:resource="#Empresa"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="radicarFuera">
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:label xml:lang="es">Disponibilidad para radicar fuera</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#Vacante"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_radicarFuera">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >150</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="calleYNum">
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:label xml:lang="es">Calle y número</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Domicilio"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="temporalidad">
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:label xml:lang="es">Tipo de empleo</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Vacante"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_temporalidad">
-        <swbxf:propSelectValues rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >TODOS:TODOS|TIEMPO COMPLETO:TIEMPO COMPLETO|MEDIO TIEMPO:MEDIO TIEMPO|BECARIO:BECARIO|ESTUDIANTE:ESTUDIANTE|FINES DE SEMANA:FINES DE SEMANA|SIN CLASIFICAR:SIN CLASIFICAR|TEMPORAL:TEMPORAL</swbxf:propSelectValues>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >170</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="mobilidadRequerida">
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:label xml:lang="es">Disponibilidad para viajar</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#Vacante"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_mobilidad">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >110</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="salarioMinimo">
-    <rdfs:label xml:lang="es">Salario mínimo ofrecido</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <rdfs:domain rdf:resource="#Vacante"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_salarioMin">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >160</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="horarioEntrada">
-    <rdfs:label xml:lang="es">Hora de entrada</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
-    <rdfs:domain rdf:resource="#Vacante"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_horarioEnt">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >90</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="nombre">
-    <rdfs:label xml:lang="es">Nombre</rdfs:label>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:canUsedAsName>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="experienciaMinima">
-    <rdfs:label xml:lang="es">Experiencia mínima</rdfs:label>
-    <rdfs:domain>
-      <owl:Class>
-        <owl:unionOf rdf:parseType="Collection">
-          <swb:Class rdf:about="#Requisito"/>
-          <swb:Class rdf:about="#Vacante"/>
-        </owl:unionOf>
-      </owl:Class>
-    </rdfs:domain>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_experienciaMin">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >60</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="codigoPostal">
-    <rdfs:label xml:lang="en">Postal code</rdfs:label>
-    <rdfs:label xml:lang="es">Código postal</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#Domicilio"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="logo">
-    <rdfs:label xml:lang="es">Logotipo</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="experienciaMaxima">
-    <rdfs:label xml:lang="es">Experiencia Máxima</rdfs:label>
-    <rdfs:domain>
-      <owl:Class>
-        <owl:unionOf rdf:parseType="Collection">
-          <swb:Class rdf:about="#Requisito"/>
-          <swb:Class rdf:about="#Vacante"/>
-        </owl:unionOf>
-      </owl:Class>
-    </rdfs:domain>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_experienciaMax">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >70</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Edad mínima requerida</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="puesto">
-    <rdfs:label xml:lang="es">Puesto</rdfs:label>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Vacante"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_puesto">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >140</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="edadMinima">
-    <rdfs:label xml:lang="es">Edad mínima requerida</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#Vacante"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_edadMin">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >50</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:label xml:lang="es">Puesto</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="colonia">
-    <rdfs:label xml:lang="es">Colonia</rdfs:label>
+    <rdfs:domain rdf:resource="#Domicilio"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Domicilio"/>
+    <rdfs:label xml:lang="es">Colonia</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="email">
-    <rdfs:label xml:lang="en">E-mail</rdfs:label>
-    <rdfs:label xml:lang="es">Correo electrónico</rdfs:label>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="horarioSalida">
-    <rdfs:label xml:lang="es">Hora de salida</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
-    <rdfs:domain rdf:resource="#Vacante"/>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_horarioSal">
+      <swbxf:DisplayProperty rdf:ID="dp_email">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >100</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        >70</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:label xml:lang="es">Correo electrónico</rdfs:label>
+    <rdfs:label xml:lang="en">E-mail</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="horarioSalida">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_horarioSal">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TimeElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:label xml:lang="es">Hora de salida</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="zoneID">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="http://www.semanticwb.org/swbcatalogs#LocationEntity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <swb:CodePackage rdf:ID="pkg">
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >stps</swb:prefix>
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >gov.stps.empleo</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >stps</swb:prefix>
   </swb:CodePackage>
-  <stps:Empresa rdf:ID="Empresa_1">
-    <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:valid>
-    <stps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >contacto@infotec.com.mx</stps:email>
-    <stps:nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >INFOTEC</stps:nombre>
-  </stps:Empresa>
+  <swbxf:FormView rdf:ID="VacanteSearch"/>
+  <swb:RageProperty rdf:ID="edad">
+    <swb:displayProperty rdf:resource="#dp_edadMax"/>
+    <rdfs:label>Edad</rdfs:label>
+    <swb:minProperty rdf:resource="#edadMinima"/>
+    <swb:maxProperty rdf:resource="#edadMinima"/>
+    <rdfs:domain rdf:resource="#Vacante"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </swb:RageProperty>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
