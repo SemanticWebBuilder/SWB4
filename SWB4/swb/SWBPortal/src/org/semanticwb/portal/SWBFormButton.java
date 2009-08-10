@@ -18,6 +18,7 @@ public class SWBFormButton
 {
     private HashMap<String,String> attributes=null;
     private HashMap<String,String> titles=null;
+    private boolean busyButton=false;
 
     public SWBFormButton()
     {
@@ -42,7 +43,17 @@ public class SWBFormButton
         if(codetype.equals(SWBFormMgr.TYPE_IPHONE))IPHONE=true;
         StringBuffer ret=new StringBuffer();
         ret.append("<button");
-        if(DOJO)ret.append(" dojoType='dijit.form.Button'");
+        if(DOJO)
+        {
+            //TODO: Bug in IE
+//            if(busyButton)
+//            {
+//                ret.append(" dojoType=\"dojox.form.BusyButton\" busyLabel=\""+getTitle(lang)+"\" timeout=\"10000\"");
+//            }else
+//            {
+                ret.append(" dojoType=\"dijit.form.Button\"");
+//            }
+        }
         ret.append(" "+getAttributes());
         ret.append(">");
         ret.append(getTitle(lang));
@@ -87,7 +98,7 @@ public class SWBFormButton
 
     public static SWBFormButton newSaveButton()
     {
-        return new SWBFormButton().setTitle("Guardar", "es").setTitle("Save", "en").setAttribute("type", "submit");
+        return new SWBFormButton().setTitle("Guardar", "es").setTitle("Save", "en").setAttribute("type", "submit").setBusyButton(true);
     }
 
     public static SWBFormButton newCancelButtonDlg()
@@ -112,12 +123,27 @@ public class SWBFormButton
 
     public static SWBFormButton newDeleteButton()
     {
-        return new SWBFormButton().setTitle("Eliminar", "es").setTitle("Delete", "en");
+        return new SWBFormButton().setTitle("Eliminar", "es").setTitle("Delete", "en").setBusyButton(true);
     }
 
     public static SWBFormButton newResetButton()
     {
         return new SWBFormButton().setTitle("Restaurar", "es").setTitle("Reset", "en");
+    }
+
+    /**
+     * @return the busyButton
+     */
+    public boolean isBusyButton() {
+        return busyButton;
+    }
+
+    /**
+     * @param busyButton the busyButton to set
+     */
+    public SWBFormButton setBusyButton(boolean busyButton) {
+        this.busyButton = busyButton;
+        return this;
     }
 
 }
