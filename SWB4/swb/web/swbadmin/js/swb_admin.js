@@ -14,6 +14,7 @@
       dojo.require("dojo.dnd.Source");
 
       // various Form elemetns
+      dojo.require("dijit.form.Form");
       dojo.require("dijit.form.CheckBox");
       dojo.require("dijit.form.Textarea");
       dojo.require("dijit.form.FilteringSelect");
@@ -21,6 +22,7 @@
       dojo.require("dijit.form.DateTextBox");
       dojo.require("dijit.form.TimeTextBox");
       dojo.require("dijit.form.Button");
+      dojo.require("dojox.form.BusyButton");
       dojo.require("dijit.InlineEditBox");
       dojo.require("dijit.form.NumberSpinner");
       dojo.require("dijit.form.Slider");
