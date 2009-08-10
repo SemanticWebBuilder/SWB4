@@ -702,4 +702,19 @@ public class UserRepository extends UserRepositoryBase
     {
         return userProps.get(name);
     }
+
+    public User getUserByExternalID(String externalID)
+    {
+        User ret = null;
+        if (null != externalID)
+        {
+            Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_externalID.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(externalID));
+            Iterator it = new GenericIterator(aux, true);
+            if (it.hasNext())
+            {
+                ret = (User) it.next();
+            }
+        }
+        return ret;
+    }
 }
