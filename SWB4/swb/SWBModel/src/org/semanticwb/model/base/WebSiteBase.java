@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable
+public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -22,7 +22,6 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
     public static final org.semanticwb.platform.SemanticProperty swb_hasSubModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasSubModel");
     public static final org.semanticwb.platform.SemanticProperty swb_undeleteable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#undeleteable");
-    public static final org.semanticwb.platform.SemanticClass swb_Community=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Community");
     public static final org.semanticwb.platform.SemanticClass swb_ResourceSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceSubType");
     public static final org.semanticwb.platform.SemanticClass swb_ResourceRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceRef");
     public static final org.semanticwb.platform.SemanticClass swb_RuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
@@ -351,30 +350,6 @@ public class WebSiteBase extends org.semanticwb.model.SWBModel implements org.se
     public void setUndeleteable(boolean undeleteable)
     {
         getSemanticObject().setBooleanProperty(swb_undeleteable, undeleteable);
-    }
-
-    public org.semanticwb.model.Community getCommunity(String id)
-    {
-        return org.semanticwb.model.Community.getCommunity(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.model.Community> listCommunitys()
-    {
-        return org.semanticwb.model.Community.listCommunitys(this);
-    }
-
-    public org.semanticwb.model.Community createCommunity(String id)
-    {
-        return org.semanticwb.model.Community.createCommunity(id,this);
-    }
-
-    public void removeCommunity(String id)
-    {
-        org.semanticwb.model.Community.removeCommunity(id, this);
-    }
-    public boolean hasCommunity(String id)
-    {
-        return org.semanticwb.model.Community.hasCommunity(id, this);
     }
 
     public org.semanticwb.model.ResourceSubType getResourceSubType(String id)

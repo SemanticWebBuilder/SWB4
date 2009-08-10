@@ -41,10 +41,14 @@ public class SelectOne extends SelectOneBase
             DisplayProperty dobj=new DisplayProperty(sobj);
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
-            selectValues=dobj.getSelectValues(lang);
+            selectValues=dobj.getDisplaySelectValues(lang);
             disabled=dobj.isDisabled();
         }
-
+/*
+        System.out.println("prop:"+prop);
+        System.out.println("sobj:"+sobj);
+        System.out.println("selectValues:"+selectValues);
+*/
         if(DOJO)
         {
             if(imsg==null)
@@ -116,16 +120,20 @@ public class SelectOne extends SelectOneBase
                     }
                 }else
                 {
-                    if(!obj.isVirtual())it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
+                    it=SWBComparator.sortSermanticObjects(getModel().listInstancesOfClass(cls),lang);
                 }
-                while(it.hasNext())
+                if(it!=null)
                 {
-                    SemanticObject sob=it.next();
-                    if(sob.getURI()!=null)
+                    while(it.hasNext())
                     {
-                        ret.append("<option value=\""+sob.getURI()+"\" ");
-                        if(sob.getURI().equals(uri))ret.append("selected");
-                        ret.append(">"+sob.getDisplayName(lang)+"</option>");
+                        SemanticObject sob=it.next();
+                        //System.out.println("display:"+sob.getDisplayName(lang));
+                        if(sob.getURI()!=null)
+                        {
+                            ret.append("<option value=\""+sob.getURI()+"\" ");
+                            if(sob.getURI().equals(uri))ret.append("selected");
+                            ret.append(">"+sob.getDisplayName(lang)+"</option>");
+                        }
                     }
                 }
                 ret.append("</select>");

@@ -82,10 +82,16 @@ public class SWBContext extends SWBContextBase
 
     public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites()
     {
+        return listWebSites(false);
+    }
+
+
+    public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites(boolean direct)
+    {
         if(SWBPlatform.getEnv("swb/adminShow","false").equals("false"))
         {
             ArrayList<org.semanticwb.model.WebSite> arr=new ArrayList();
-            Iterator<org.semanticwb.model.WebSite> it=swb_WebSite.listGenericInstances();
+            Iterator<org.semanticwb.model.WebSite> it=swb_WebSite.listGenericInstances(direct);
             while(it.hasNext())
             {
                 WebSite ws=it.next();
@@ -97,7 +103,7 @@ public class SWBContext extends SWBContextBase
             return arr.iterator();
         }else
         {
-            return (java.util.Iterator<org.semanticwb.model.WebSite>)swb_WebSite.listGenericInstances();
+            return (java.util.Iterator<org.semanticwb.model.WebSite>)swb_WebSite.listGenericInstances(direct);
             //return SWBContextBase.listWebSites();
         }
     }
@@ -116,6 +122,16 @@ public class SWBContext extends SWBContextBase
             {
                 ret=obj.getProperty(Iconable.swb_iconClass);
             }
+
+            if(ret==null)
+            {
+                SemanticObject cobj=cls.getDisplayObject();
+                if(cobj!=null)
+                {
+                    ret=cobj.getProperty(DisplayObject.swb_iconClass);
+                }
+            }
+            
             if(ret==null)
             {
                 //System.out.println("getIconClass:1");
