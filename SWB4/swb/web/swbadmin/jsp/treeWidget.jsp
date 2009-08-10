@@ -76,14 +76,23 @@
             executeTreeNodeEvent(<%=store%>,item,"onOpen");
         }
     </script>
-    <script type="dojo/method" event="onDblClick" args="event">
+    <script type="dojo/method" event="onDblClick" args="item, node">
+        //printObjProp(event);
+        if(item)
+        {
+            act_treeNode=node;
+            executeTreeNodeEvent(<%=store%>,item,"onDblClick");
+        }
+
         //alert("onDblClick:"+event);
+        /*
         var domElement = event.target;
         var nodeWidget = dijit.getEnclosingWidget(domElement);
         act_treeNode=nodeWidget;
         if(nodeWidget && nodeWidget.isTreeNode){
             executeTreeNodeEvent(<%=store%>,nodeWidget.item,"onDblClick");
         }
+        */
     </script>
 <!--
     <script type="dojo/method" event="onEnterKey" args="event">
@@ -204,6 +213,7 @@
         //if (this.tree.id=="myTree"){
         //    return false;
         //}
+        act_treeNode=null;
         dojo.forEach(nodes, function(node, idx)
         {
             act_treeNode=dijit.getEnclosingWidget(node);

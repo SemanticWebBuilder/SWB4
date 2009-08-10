@@ -291,6 +291,8 @@ private String[] getCatSortArray(SemanticObject sobj, int actualPage, String txt
                  SemanticObject semObj = itSebObj.next();
                  if(txtFind!=null && txtFind.trim().length()>0){
                      SemanticProperty semProp=semObj.getSemanticClass().getProperty("title");
+                     //revisar esto con George
+                     if(semProp==null)semProp=semObj.getSemanticClass().getProperty("nombre");
                      if(semObj.getProperty(semProp).toLowerCase().startsWith(txtFind.toLowerCase())){
                          vRO.add(semObj);
                      }
@@ -306,6 +308,8 @@ private String[] getCatSortArray(SemanticObject sobj, int actualPage, String txt
             while(itSObjs.hasNext()){
                 SemanticObject semObj=(SemanticObject)itSObjs.next();
                 SemanticProperty semPropName=semObj.getSemanticClass().getProperty("title");
+                //revisar esto con George
+                if(semPropName==null)semPropName=semObj.getSemanticClass().getProperty("nombre");
                 String value=semObj.getProperty(semPropName)+":swbp4g1:"+semObj.getURI();
                 strArray[cont]=value;
                 cont++;

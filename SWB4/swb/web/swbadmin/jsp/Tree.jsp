@@ -93,6 +93,7 @@
     public void addWebSites(JSONArray arr, String lang)  throws JSONException
     {
         //System.out.println("addWebSites");
+
         Iterator<WebSite> it=SWBComparator.sortSermanticObjects(SWBContext.listWebSites(),lang);
         while(it.hasNext())
         {
