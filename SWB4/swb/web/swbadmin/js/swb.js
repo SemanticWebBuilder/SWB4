@@ -512,8 +512,8 @@
               var arr=tab.getChildren();
               for (var n = 0; n < arr.length; n++)
               {
-                  //arr[n].refresh();
-                  arr[n]._prepareLoad();
+                  arr[n].refresh();
+                  //arr[n]._prepareLoad();
               }
           }
       }
@@ -1069,8 +1069,9 @@
           //alert("onclick:"+button+" "+button.tab);
           if(_oldTabButton==button)
           {
-              //printObjProp(button);
-              button.tab._prepareLoad();
+              //printObjProp(button.tab);
+              //button.tab._prepareLoad();
+              button.tab.refresh();
           }
           _oldTabButton=button;
       }
