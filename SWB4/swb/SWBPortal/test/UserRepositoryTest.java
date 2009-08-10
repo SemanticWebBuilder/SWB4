@@ -28,7 +28,7 @@ public class UserRepositoryTest {
     public void Test()
     {
          UserRepository urep=SWBContext.getDefaultRepository();
-         SemanticProperty prop = urep.createIntExtendedAttribute("Edad");
+         //SemanticProperty prop = urep.createIntExtendedAttribute("Edad");
 
     }
 
