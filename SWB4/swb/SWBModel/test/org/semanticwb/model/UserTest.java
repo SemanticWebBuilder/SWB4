@@ -5,26 +5,12 @@
 
 package org.semanticwb.model;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
-import static org.junit.Assert.*;
 
 import com.hp.hpl.jena.query.*;
-import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.util.IndentedWriter;
@@ -72,8 +58,8 @@ public class UserTest {
         System.out.println("Repository:"+repository);
         System.out.println("Model:"+repository.getSemanticObject().getModel().getRDFModel());
         SemanticClass cls = repository.getUserType("estudiante");
-        repository.createStringExtendedAttribute("escuela", "estudiante");
-        repository.createIntExtendedAttribute("edad");
+//        repository.createStringExtendedAttribute("escuela", "estudiante");
+//        repository.createIntExtendedAttribute("edad");
         User instance = repository.getUserByLogin("admin");
         instance.addUserType("estudiante");
         //instance.getSemanticObject().addSemanticClass(cls);
@@ -221,23 +207,23 @@ public class UserTest {
         }
     }
 
-    //@Test
-    public void addRyG(){
-        UserRepository rep = SWBContext.createUserRepository("externalUsers", "ussrepext");
-        rep.setTitle("Usuarios Externos");
-        Role role = rep.createRole();
-        role.setTitle("Director");
-        role = rep.createRole();
-        role.setTitle("Gerente");
-        role = rep.createRole();
-        role.setTitle("Analista");
-        role = rep.createRole();
-        role.setTitle("Operador");
-        UserGroup group = rep.createUserGroup("OPER");
-        group = rep.createUserGroup("CAT");
-        group = rep.createUserGroup("SALES");
-        group = rep.createUserGroup("INVEST");
-    }
+//    //@Test
+//    public void addRyG(){
+//        UserRepository rep = SWBContext.createUserRepository("externalUsers", "ussrepext");
+//        rep.setTitle("Usuarios Externos");
+//        Role role = rep.createRole();
+//        role.setTitle("Director");
+//        role = rep.createRole();
+//        role.setTitle("Gerente");
+//        role = rep.createRole();
+//        role.setTitle("Analista");
+//        role = rep.createRole();
+//        role.setTitle("Operador");
+//        UserGroup group = rep.createUserGroup("OPER");
+//        group = rep.createUserGroup("CAT");
+//        group = rep.createUserGroup("SALES");
+//        group = rep.createUserGroup("INVEST");
+//    }
 
     //@Test
     public void FillUsers(){
@@ -291,7 +277,7 @@ public class UserTest {
         al[0] = "primaria:secundaria:preparatoria:universidad:maestria:doctorado";
         al[1] = "es|primaria:secundaria:preparatoria:universidad:maestria:doctorado";
         al[2] = "en|elementary:13-15grade:high:university:degree:doctordegre";
-        SWBContext.getDefaultRepository().createListExtendedAttribute("escolaridad", al);
+//        SWBContext.getDefaultRepository().createListExtendedAttribute("escolaridad", al);
         try
         {
             SWBContext.getDefaultRepository().getUserByLogin("admin").setExtendedAttribute("escolaridad", "universidad");
