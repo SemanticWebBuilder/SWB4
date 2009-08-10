@@ -914,7 +914,7 @@ public class PFlowManager
                                     {
                                         Element user = (Element) users.item(j);
                                         String userid = user.getAttribute("id");
-                                        User recuser = site.getUserRepository().getUser(userid);
+                                        User recuser = SWBContext.getAdminRepository().getUser(userid);
                                         husers.add(recuser);
                                     }
                                     NodeList roles = activity.getElementsByTagName("role");
