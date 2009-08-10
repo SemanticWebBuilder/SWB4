@@ -173,14 +173,15 @@ public class InlineTextArea extends GenericResource {
         out.println("</tr>");
 
         out.println("<tr>");
-        out.println("<td align=\"right\" width=\"150\">" + paramRequest.getLocaleString("usrmsg_Inline_doAdmin_Style") + ":</td>");
+        out.println("<td align=\"right\" width=\"150\">" + paramRequest.getLocaleString("usrmsg_Inline_doAdmin_TextStyle") + ":</td>");
         out.println("<td><input type=\"text\" name=\"style\" value=\"" + base.getAttribute("style", "") + "\" size=\"40\" /></td>");
         out.println("</tr>");
         out.println("</table>");
         out.println("</fieldset>");
 
         out.println("<fieldset>");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btn\" >" + "Aceptar" + "</button>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("usrmsg_Inline_doAdmin_btnGuardar") + "</button>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"reset\" >" + paramRequest.getLocaleString("usrmsg_Inline_doAdmin_btnReset") + "</button>");
         out.println("</fieldset>");
         out.println("</form>");
         out.println("</div>");
