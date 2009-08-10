@@ -56,7 +56,7 @@ public class AdvancedSearch extends GenericAdmResource {
 
     private static Logger log = SWBUtils.getLogger(AdvancedSearch.class);
     private String lang = "x-x";
-    private SWBLexicon lex = null;
+    private SWBLexicon lex;
     private SWBSparqlTranslator tr;
     private SemanticProperty so_lat = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#latitude");
     private SemanticProperty so_long = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#longitude");
@@ -65,7 +65,7 @@ public class AdvancedSearch extends GenericAdmResource {
     private String queryString = "";
     private String dym = "";
     private IndexLARQ index;
-    Model smodel;
+    private Model smodel;
 
     public AdvancedSearch() {
     }
@@ -74,7 +74,7 @@ public class AdvancedSearch extends GenericAdmResource {
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
         try {
-            smodel = smodel = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+            smodel = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
             index = buildIndex();
         }catch (Exception e) {
             log.error(e);
@@ -93,6 +93,12 @@ public class AdvancedSearch extends GenericAdmResource {
         }
     }
 
+    /**
+     * Execute a query and gather the results. A natural language query is done
+     * in first place. If there is no results a second query (using lucene) is
+     * executed.
+     * @param query
+     */
     public ArrayList<String> getResults(String query) {
         ArrayList<String> res = new ArrayList<String>();
 
@@ -635,9 +641,7 @@ public class AdvancedSearch extends GenericAdmResource {
                 SemanticClass sc = cit.next();
                 String tempc = sc.getDisplayName(lang);
                 if (tempc.toLowerCase().indexOf(word.toLowerCase()) != -1) {
-                    //if (preflist != null && preflist.contains(sc.getPrefix())) {
                         objOptions.add(tempc);
-                    //}
                 }
             }
 
@@ -697,10 +701,6 @@ public class AdvancedSearch extends GenericAdmResource {
             System.out.println("Suggesting for " + word);
             String tag = lex.getObjWordTag(word).getObjId();
 
-           /* sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
-                    "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
-                    "200px;width:300px;border:1px solid #a0a0ff;\">");*/
-
             if (!tag.equals("")) {
                 sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
                     "position:absolute;margin:0;padding:0;overflow:auto;max-height:" +
@@ -747,7 +747,6 @@ public class AdvancedSearch extends GenericAdmResource {
                     sbf.append("<font size=\"2\" face=\"verdana\" color=\"red\">" + paramRequest.getLocaleString("msgNoSuggestions") + "</font>");
                 }
             }
-            //sbf.append("</ul>");
         }
         out.println(sbf.toString());
     }
@@ -766,7 +765,6 @@ public class AdvancedSearch extends GenericAdmResource {
 
             sbf.append("    <table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" >\n" +
                     "      <tr><td>\n" +
-                    //                "        <td align=\"left\" width=\"100%\">\n" +
                     "          <font size=\"2\" face=\"verdana\">" +
                     paramRequest.getLocaleString("msgResults") +
                     "<b><font color=\"#0000FF\"> " + queryString + "</font></b><br/></font></td></tr>\n");
@@ -829,7 +827,6 @@ public class AdvancedSearch extends GenericAdmResource {
                         paramRequest.getLocaleString("msgDidYouMean") + " </font><b>" + dym + "</b><br/>" +
                         "    <hr width=\"100%\" size=\"1\" /><br/></td></tr>\n"));
             }
-
             sbf.append("    </table>\n" +
                     "    <BR/>\n");
             out.println(sbf.toString());
@@ -850,18 +847,20 @@ public class AdvancedSearch extends GenericAdmResource {
         }
     }
 
+    /**
+     * Gathers information of a Semantic Object.
+     * @param o Semantic Object to gather information from.
+     */
     public String buildAbstract(SemanticObject o) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         StringBuffer res = new StringBuffer();
         HashMap properties = new HashMap<String, String>();
-        //System.out.println(lang);
         //Get list of object properties
         Iterator<SemanticProperty> pit = o.listProperties();
         while (pit.hasNext()) {
             //Get next property
             SemanticProperty sp = pit.next();
-            //System.out.println("...." + sp.toString());
             //Do not display rdf and owl properties
             if (!sp.isObjectProperty() && (!sp.getPrefix().equals("rdf") && !sp.getPrefix().equals("owl") && !sp.getPrefix().equals("rdfs"))) {
                 //Get property value, if any, and display it
@@ -882,16 +881,12 @@ public class AdvancedSearch extends GenericAdmResource {
                     if (val != null && !val.equals("")) {
 
                         properties.put(sp.getDisplayName(lang).toUpperCase(), o.getProperty(sp));
-                        //res.append("<font size=\"2\" face=\"verdana\">" +
-                        //  sp.getDisplayName(lang) + ": <i>" + o.getProperty(sp) + "</i></font>" + "<br>");
                     }
                 }
             } else if (sp.isObjectProperty()) {
                 SemanticObject rg = o.getObjectProperty(sp);
                 if (rg != null) {
                     properties.put(sp.getDisplayName(lang).toUpperCase(), rg.getDisplayName(lang));
-                    //res.append("<font size=\"2\" face=\"verdana\">" +
-                      //      sp.getDisplayName(lang) + ": <i>" + rg.getDisplayName(lang) + "</i></font>" + "<br>");
                 }
             }
         }
@@ -907,20 +902,19 @@ public class AdvancedSearch extends GenericAdmResource {
         return res.toString();
     }    
 
+    /**
+     * Builds an index to perform searchs.
+     */
     public IndexLARQ buildIndex()
     {
         // ---- Read and index all literal strings.
         IndexBuilderString larqBuilder = new IndexBuilderString() ;
-
-        // Index statements as they are added to the model.
-        //smodel.register(larqBuilder);
 
         // ---- Alternatively build the index after the model has been created.
         larqBuilder.indexStatements(smodel.listStatements()) ;
 
         // ---- Finish indexing
         larqBuilder.closeWriter() ;
-        //smodel.unregister(larqBuilder) ;
 
         // ---- Create the access index
         index = larqBuilder.getIndex() ;
