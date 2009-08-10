@@ -138,11 +138,11 @@ try
             if(!isfavo)
             {
                 //frm.addButton("<button dojoType='dijit.form.Button' onclick=\"showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active"+"');\">Agregar a Favoritos</button>");
-                frm.addButton(new SWBFormButton().setTitle("Agregar a Favoritos", "es").setTitle("Add to Favorites", "en").setAttribute("onclick", "showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active"+"');"));
+                frm.addButton(new SWBFormButton().setTitle("Agregar a Favoritos", "es").setTitle("Add to Favorites", "en").setAttribute("onclick", "showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active"+"');").setBusyButton(true));
             }else
             {
                 //frm.addButton("<button dojoType='dijit.form.Button' onclick=\"showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive"+"');\">Eliminar de Favoritos</button>");
-                frm.addButton(new SWBFormButton().setTitle("Eliminar de Favoritos", "es").setTitle("Remove of Favorites", "en").setAttribute("onclick", "showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive"+"');"));
+                frm.addButton(new SWBFormButton().setTitle("Eliminar de Favoritos", "es").setTitle("Remove of Favorites", "en").setAttribute("onclick", "showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive"+"');").setBusyButton(true));
             }
         }
         if(obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false)

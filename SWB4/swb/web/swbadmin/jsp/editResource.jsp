@@ -8,4 +8,4 @@
     Resource obj=(Resource)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(id);
     //System.out.println("suri:"+obj.getSemanticObject().getEncodedURI());
     String url=SWBPlatform.getContextPath()+"/swb/SWBAdmin/bh_AdminPorltet/_vtp/"+obj.getWebSiteId()+"/"+obj.getWebSite().getHomePage().getId()+"/_rid/"+obj.getId()+"/_mod/admin/_wst/maximized";
-%><iframe dojoType_="dijit.layout.ContentPane" src="<%=url%>" width="100%" height="100%" frameborder="0" scrolling="yes"></iframe>
+%><iframe dojoType_="dijit.layout.ContentPane" src="<%=url%>" style="border:0px; width:100%; height:100%" frameborder="0" scrolling="yes"></iframe>
