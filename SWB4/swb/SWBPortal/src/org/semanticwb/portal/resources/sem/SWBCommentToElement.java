@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.*;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -42,9 +43,9 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                 CommentToElement comment = CommentToElement.createCommentToElement(model);
                 comment.setCommentToElement(request.getParameter("cmnt_comment"));
                 comment.setObjid(uri);
-                comment.setCreated(new Date());
+                //comment.setCreated(new Date());
                 //User user = response.getUser();
-                comment.setCreator(response.getUser());
+                //comment.setCreator(response.getUser());
                 addComment(comment);
                 request.getSession(true).removeAttribute("cs");
             } else {
@@ -54,7 +55,8 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                     response.setRenderParameter(key, request.getParameter(key));
                 }
             }
-            response.setRenderParameter("uri", uri);
+            response.sendRedirect(response.getWebPage().getUrl()+"?uri="+URLEncoder.encode(uri));
+            //response.setRenderParameter("uri", uri);
         } else {
             super.processAction(request, response);
         }
@@ -230,7 +232,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
     //            ret.append("  <td class=\"cmntimg\" width=\"30\" height=\"30\">\n");
     //            ret.append("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/icons/status_online.png\" alt=\"user comment\" />\n");
     //            ret.append("  </td>\n");
-                ret.append("  <td colspan=2 class=\"cmnt\">"+(ordinal++)+". <strong>"+(comment.getCreator().getFullName().equalsIgnoreCase("")?"Desconocido":comment.getCreator().getFullName())+" "+paramRequest.getLocaleString("writeAtLabel")+"</strong> "+sdf.format(comment.getCreated())+"<br />"+comment.getCommentToElement()+"</td>\n");
+                ret.append("  <td colspan=2 class=\"cmnt\">"+(ordinal++)+". <strong>"+(comment.getCreator().getFullName().equalsIgnoreCase("")?"Desconocido":comment.getCreator().getFullName())+" "+paramRequest.getLocaleString("writeAtLabel")+"</strong> "+sdf.format(comment.getCreated())+"<br/><div class\"cmnttxt\">"+comment.getCommentToElement()+"</div></td>\n");
                 ret.append("</tr>\n");
             }
         }
