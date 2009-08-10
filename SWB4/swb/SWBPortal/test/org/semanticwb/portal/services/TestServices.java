@@ -7,7 +7,6 @@ package org.semanticwb.portal.services;
 
 import org.junit.*;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.portal.SWBDBAdmLog;
 
 
 /**
