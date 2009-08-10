@@ -1667,7 +1667,14 @@ public class SWBUtils {
 
         public static void sendBGEmail(String toEmail, String subject, String body) throws java.net.SocketException{
              ArrayList acol=new ArrayList();
-             acol.add(toEmail);
+             StringTokenizer strTokens=new StringTokenizer(toEmail,";");
+             while(strTokens.hasMoreTokens()){
+                 String token=strTokens.nextToken();
+                 if(token==null) continue;
+                 javax.mail.internet.InternetAddress address = new javax.mail.internet.InternetAddress();
+                 address.setAddress(token);
+                 acol.add(address);
+             }
              EMAIL.sendBGEmail(adminEmail, null, acol, null, null, subject, null, body, null, null, null);
         }
 
@@ -1681,18 +1688,19 @@ public class SWBUtils {
         public static void sendBGEmail(String fromEmail, String fromName, Collection address, Collection ccEmail, Collection bccEmail,
                 String subject, String contentType, String data, String login, String password, ArrayList<EmailAttachment> attachments) throws java.net.SocketException {
             SWBMail message = new SWBMail();
-            message.setFromEmail(fromEmail);
-            message.setFromName(fromName);
-            message.setAddress((ArrayList) address);
-            message.setCcEmail(ccEmail);
-            message.setBccEmail(bccEmail);
-            message.setSubject(subject);
+            if(fromEmail==null && adminEmail!=null) fromEmail=adminEmail;
+            if(fromEmail!=null) message.setFromEmail(fromEmail);
+            if(fromName!=null) message.setFromName(fromName);
+            if(address!=null) message.setAddress((ArrayList) address);
+            if(ccEmail!=null) message.setCcEmail(ccEmail);
+            if(bccEmail!=null) message.setBccEmail(bccEmail);
+            if(subject!=null) message.setSubject(subject);
             if(contentType==null) contentType="HTML";
-            message.setContentType(contentType);
-            message.setData(data);
-            message.setLogin(login);
-            message.setPassword(password);
-            message.setAttachments(attachments);
+            if(contentType!=null) message.setContentType(contentType);
+            if(data!=null) message.setData(data);
+            if(login!=null) message.setLogin(login);
+            if(password!=null) message.setPassword(password);
+            if(attachments!=null) message.setAttachments(attachments);
 
             SWBMailSender swbMailSender = new SWBMailSender();
             swbMailSender.addEMail(message);
