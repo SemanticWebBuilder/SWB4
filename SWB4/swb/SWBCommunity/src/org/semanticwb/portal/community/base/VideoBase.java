@@ -1,0 +1,123 @@
+package org.semanticwb.portal.community.base;
+
+
+public class VideoBase extends org.semanticwb.portal.community.CommunityElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Rankable,org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable
+{
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_videoType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#videoType");
+    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_videoWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#videoWebPage");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_videoDuration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#videoDuration");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_videoCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#videoCode");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_videoPreview=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#videoPreview");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_videoSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#videoSize");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_Video=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Video");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Video");
+
+    public VideoBase(org.semanticwb.platform.SemanticObject base)
+    {
+        super(base);
+    }
+
+    public static java.util.Iterator<org.semanticwb.portal.community.Video> listVideos(org.semanticwb.model.SWBModel model)
+    {
+        java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Video>(it, true);
+    }
+
+    public static java.util.Iterator<org.semanticwb.portal.community.Video> listVideos()
+    {
+        java.util.Iterator it=sclass.listInstances();
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Video>(it, true);
+    }
+
+    public static org.semanticwb.portal.community.Video getVideo(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.portal.community.Video)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+    }
+
+    public static org.semanticwb.portal.community.Video createVideo(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (org.semanticwb.portal.community.Video)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+    }
+
+    public static void removeVideo(String id, org.semanticwb.model.SWBModel model)
+    {
+        model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+    }
+
+    public static boolean hasVideo(String id, org.semanticwb.model.SWBModel model)
+    {
+        return (getVideo(id, model)!=null);
+    }
+
+    public String getType()
+    {
+        return getSemanticObject().getProperty(swbcomm_videoType);
+    }
+
+    public void setType(String videoType)
+    {
+        getSemanticObject().setProperty(swbcomm_videoType, videoType);
+    }
+
+    public void setWebPage(org.semanticwb.model.WebPage webpage)
+    {
+        getSemanticObject().setObjectProperty(swbcomm_videoWebPage, webpage.getSemanticObject());
+    }
+
+    public void removeWebPage()
+    {
+        getSemanticObject().removeProperty(swbcomm_videoWebPage);
+    }
+
+    public org.semanticwb.model.WebPage getWebPage()
+    {
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_videoWebPage);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public int getDuration()
+    {
+        return getSemanticObject().getIntProperty(swbcomm_videoDuration);
+    }
+
+    public void setDuration(int videoDuration)
+    {
+        getSemanticObject().setIntProperty(swbcomm_videoDuration, videoDuration);
+    }
+
+    public String getCode()
+    {
+        return getSemanticObject().getProperty(swbcomm_videoCode);
+    }
+
+    public void setCode(String videoCode)
+    {
+        getSemanticObject().setProperty(swbcomm_videoCode, videoCode);
+    }
+
+    public String getPreview()
+    {
+        return getSemanticObject().getProperty(swbcomm_videoPreview);
+    }
+
+    public void setPreview(String videoPreview)
+    {
+        getSemanticObject().setProperty(swbcomm_videoPreview, videoPreview);
+    }
+
+    public int getSize()
+    {
+        return getSemanticObject().getIntProperty(swbcomm_videoSize);
+    }
+
+    public void setSize(int videoSize)
+    {
+        getSemanticObject().setIntProperty(swbcomm_videoSize, videoSize);
+    }
+}
