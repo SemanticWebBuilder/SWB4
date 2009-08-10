@@ -8,7 +8,6 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 import javax.servlet.http.*;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -255,7 +254,7 @@ function votedPage(){
             out.println("            <script language=\"javascript\" type=\"text/javascript\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/upload.js\"></script>");
             out.println("	<style type=\"text/css\">\n @import \"" + SWBPlatform.getContextPath() + "/swbadmin/css/upload.css\";\n </style>");
             out.println("    <script type=\"text/javascript\">");
-            out.println("  dojo.require(\"dojo.parser\");");
+           // out.println("  dojo.require(\"dojo.parser\");");
             out.println("    var uploads_in_progress = 0;");
             out.println();
             out.println("    function beginAsyncUpload(ul,sid) {");
@@ -331,6 +330,10 @@ function votedPage(){
             out.println("                        <div class=\"progresscontainer\" style=\"display: none;\"><div class=\"progressbar\" id=\"emptyStar_progress\"></div></div>");
             out.println("                        </form>");
             out.println("                    </td></tr>");
+            out.println("                    <tr><td width=\"200px\" align=\"right\"><label for=\"cleanStars\">Limpiar estrellas &nbsp;</label></td>");
+            out.println("                    <td><form action=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP)
+                    .setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_REMOVE)+"\">");
+            out.println("                    <button type=\"submit\">Limpiar</button></form></td></tr>");
             out.println("                </table>");
             out.println("            </fieldset>");
             out.println("</div>");
@@ -432,6 +435,20 @@ function votedPage(){
             {
                 out.println(0);
             }
+        }else if (SWBResourceURL.Action_REMOVE.equals(paramRequest.getAction()))
+        {
+            getSemanticObject().removeProperty(SWBRankWebPage.rankwebpage_fullStar);
+            getSemanticObject().removeProperty(SWBRankWebPage.rankwebpage_halfStar);
+            getSemanticObject().removeProperty(SWBRankWebPage.rankwebpage_emptyStar);
+            fullStarPath = "/swbadmin/resources/ranking/fullstar.png";
+            halfStarPath = "/swbadmin/resources/ranking/halfstar.png";
+            emptyStarPath = "/swbadmin/resources/ranking/emptystar.png";
+            //doAdmin(request, response, paramRequest);
+
+            SWBResourceURL url = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMIN).setCallMethod(SWBResourceURL.Call_CONTENT);
+            PrintWriter out = response.getWriter();
+            out.println("<html><head><meta http-equiv=\"Refresh\" CONTENT=\"0; URL=" + url + "\" /><script>window.location='" + url + "';</script></head></html>");
+            out.flush();
         }
     }
 
