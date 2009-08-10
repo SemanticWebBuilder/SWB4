@@ -10,7 +10,7 @@ public class GenericFormElement extends FormElementBase
 {
     public GenericFormElement()
     {
-        super(null);
+        super(new SemanticObject());
     }
 
     public GenericFormElement(SemanticObject obj)
@@ -43,7 +43,7 @@ public class GenericFormElement extends FormElementBase
             DisplayProperty dobj=new DisplayProperty(sobj);
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
-            selectValues=dobj.getSelectValues(lang);
+            selectValues=dobj.getDisplaySelectValues(lang);
             disabled=dobj.isDisabled();
         }
 

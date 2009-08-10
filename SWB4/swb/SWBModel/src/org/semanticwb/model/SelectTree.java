@@ -75,7 +75,7 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
             DisplayProperty dobj=new DisplayProperty(sobj);
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
-            selectValues=dobj.getSelectValues(lang);
+            selectValues=dobj.getDisplaySelectValues(lang);
         }
 
         if(DOJO)
@@ -136,7 +136,7 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
                         }
                     }else
                     {
-                        if(!obj.isVirtual())it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
+                        it=SWBComparator.sortSermanticObjects(getModel().listInstancesOfClass(cls),lang);
                     }
                     boolean hp=false;
                     if(cls!=null)hp=cls.hasHerarquicalProperties();
@@ -160,7 +160,7 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
                 }
                 else
                 {
-                    WebSite site=SWBContext.getWebSite(obj.getModel().getName());
+                    WebSite site=SWBContext.getWebSite(getModel().getName());
                     if(site!=null)
                     {
                         WebPage home=site.getHomePage();

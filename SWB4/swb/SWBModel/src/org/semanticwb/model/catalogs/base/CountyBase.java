@@ -1,7 +1,7 @@
 package org.semanticwb.model.catalogs.base;
 
 
-public class CountyBase extends org.semanticwb.model.catalogs.LocationEntity implements org.semanticwb.model.Viewable,org.semanticwb.model.catalogs.GeoTaggable,org.semanticwb.model.Rankable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Filterable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable
+public class CountyBase extends org.semanticwb.model.catalogs.LocationEntity implements org.semanticwb.model.TemplateRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.catalogs.GeoTaggable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.Resourceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.Expirable,org.semanticwb.model.RuleRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Viewable
 {
     public static final org.semanticwb.platform.SemanticClass swbc_City=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/swbcatalogs#City");
     public static final org.semanticwb.platform.SemanticProperty swbc_hasCityInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/swbcatalogs#hasCityInv");
@@ -55,7 +55,8 @@ public class CountyBase extends org.semanticwb.model.catalogs.LocationEntity imp
 
     public boolean hasCity(org.semanticwb.model.catalogs.City city)
     {
-        if(city==null)return false;        return getSemanticObject().hasObjectProperty(swbc_hasCityInv,city.getSemanticObject());
+        if(city==null)return false;
+        return getSemanticObject().hasObjectProperty(swbc_hasCityInv,city.getSemanticObject());
     }
 
     public org.semanticwb.model.catalogs.City getCity()

@@ -64,7 +64,7 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
             DisplayProperty dobj=new DisplayProperty(sobj);
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
-            selectValues= SWBContext.getUserRepository(obj.getModel().getName()).getUserRepSecurityQuestionList();
+            selectValues= SWBContext.getUserRepository(getModel().getName()).getUserRepSecurityQuestionList();
                     //dobj.getSelectValues(lang); //TODO:
         }
 
@@ -107,7 +107,7 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
                 SemanticClass cls=prop.getRangeClass();
                 Iterator<SemanticObject> it=null;
 
-                    if(!obj.isVirtual())it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
+                it=SWBComparator.sortSermanticObjects(getModel().listInstancesOfClass(cls),lang);
 
                 while(it!=null && it.hasNext())
                 {

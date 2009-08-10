@@ -51,7 +51,7 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
             DisplayProperty dobj=new DisplayProperty(sobj);
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
-            selectValues=dobj.getSelectValues(lang);
+            selectValues=dobj.getDisplaySelectValues(lang);
             disabled=dobj.isDisabled();
         }
 
@@ -125,7 +125,7 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
                     }
                 }else
                 {
-                    if(!obj.isVirtual())it=SWBComparator.sortSermanticObjects(obj.getModel().listInstancesOfClass(cls),lang);
+                    it=SWBComparator.sortSermanticObjects(getModel().listInstancesOfClass(cls),lang);
                 }
                 while(it.hasNext())
                 {

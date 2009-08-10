@@ -53,7 +53,8 @@ public class PostalCodeBase extends org.semanticwb.model.SWBClass
 
     public boolean hasCity(org.semanticwb.model.catalogs.City city)
     {
-        if(city==null)return false;        return getSemanticObject().hasObjectProperty(swbc_pchasCityInv,city.getSemanticObject());
+        if(city==null)return false;
+        return getSemanticObject().hasObjectProperty(swbc_pchasCityInv,city.getSemanticObject());
     }
 
     public org.semanticwb.model.catalogs.City getCity()

@@ -1,7 +1,7 @@
 package org.semanticwb.model.catalogs.base;
 
 
-public class LocationEntityBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.catalogs.GeoTaggable,org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable
+public class LocationEntityBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Hiddenable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.Rankable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable,org.semanticwb.model.catalogs.GeoTaggable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.Resourceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Viewable
 {
     public static final org.semanticwb.platform.SemanticClass swbc_LocationEntity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/swbcatalogs#LocationEntity");
     public static final org.semanticwb.platform.SemanticProperty swbc_belongsTo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/swbcatalogs#belongsTo");
@@ -86,7 +86,8 @@ public class LocationEntityBase extends org.semanticwb.model.WebPage implements 
 
     public boolean hasLocation(org.semanticwb.model.catalogs.LocationEntity locationentity)
     {
-        if(locationentity==null)return false;        return getSemanticObject().hasObjectProperty(swbc_hasLocation,locationentity.getSemanticObject());
+        if(locationentity==null)return false;
+        return getSemanticObject().hasObjectProperty(swbc_hasLocation,locationentity.getSemanticObject());
     }
 
     public org.semanticwb.model.catalogs.LocationEntity getLocation()
