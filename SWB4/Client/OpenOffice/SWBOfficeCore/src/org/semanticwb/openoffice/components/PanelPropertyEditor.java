@@ -16,6 +16,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Date;
@@ -47,7 +49,7 @@ public class PanelPropertyEditor extends javax.swing.JPanel
         initComponents();
     }
 
-    class PropertyEditor extends AbstractCellEditor implements TableCellEditor, ChangeListener, KeyListener, ActionListener
+    class PropertyEditor extends AbstractCellEditor implements TableCellEditor, ChangeListener, KeyListener, ActionListener, ItemListener
     {
 
         public PropertyEditor()
@@ -158,29 +160,46 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 }
                 if (propertyInfo.type.equalsIgnoreCase("integer"))
                 {
-                    IntegerEditor integerEditor = new IntegerEditor(row, column);
-                    integerEditor.addChangeListener(this);
-                    integerEditor.addKeyListener(this);
-                    if (value == null)
+                    if (propertyInfo.values == null)
                     {
-                        integerEditor.setValue(0);
+                        IntegerEditor integerEditor = new IntegerEditor(row, column);
+                        integerEditor.addChangeListener(this);
+                        integerEditor.addKeyListener(this);
+                        if (value == null)
+                        {
+                            integerEditor.setValue(0);
+                        }
+                        else
+                        {
+                            int ivalue = 0;
+                            try
+                            {
+                                ivalue = Integer.parseInt(value.toString());
+
+                            }
+                            catch (NumberFormatException nfe)
+                            {
+                                nfe.printStackTrace();
+                            }
+                            integerEditor.setValue(ivalue);
+                        }
+
+                        return integerEditor;
                     }
                     else
                     {
-                        int ivalue = 0;
-                        try
+                        MultiValueEditor editor = new MultiValueEditor(row, column);
+                        editor.addItemListener(this);
+                        for (Value o_value : propertyInfo.values)
                         {
-                            ivalue = Integer.parseInt(value.toString());
-
+                            editor.addItem(o_value);
                         }
-                        catch (NumberFormatException nfe)
+                        if (value != null && value instanceof Value)
                         {
-                            nfe.printStackTrace();
+                            editor.setSelectedItem(value);
                         }
-                        integerEditor.setValue(ivalue);
+                        return editor;
                     }
-
-                    return integerEditor;
                 }
                 if (propertyInfo.type.equalsIgnoreCase("decimal"))
                 {
@@ -353,6 +372,17 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 model.setValueAt(valueSelected, multiValueEditor.row, multiValueEditor.col);
             }
         }
+
+        public void itemStateChanged(ItemEvent e)
+        {
+            if (e.getSource() instanceof MultiValueEditor)
+            {
+                MultiValueEditor multiValueEditor = (MultiValueEditor) e.getSource();
+                DefaultTableModel model = (DefaultTableModel) jTableProperties.getModel();
+                Value valueSelected = ((Value) multiValueEditor.getSelectedItem());
+                model.setValueAt(valueSelected, multiValueEditor.row, multiValueEditor.col);
+            }
+        }
     }
 
     public void removeProperties()
@@ -402,23 +432,41 @@ public class PanelPropertyEditor extends javax.swing.JPanel
             }
             else if (property.type.equalsIgnoreCase("integer"))
             {
-                try
+                if (property.values == null)
                 {
-                    Boolean.parseBoolean(value.toString());
-                    Object[] data =
+                    try
                     {
-                        property, value
-                    };
-                    model.addRow(data);
+                        Integer.parseInt(value.toString());
+                        Object[] data =
+                        {
+                            property, value
+                        };
+                        model.addRow(data);
+                    }
+                    catch (NumberFormatException nfe)
+                    {
+                        nfe.printStackTrace();
+                        Object[] data =
+                        {
+                            property, null
+                        };
+                        model.addRow(data);
+                    }
                 }
-                catch (NumberFormatException nfe)
+                else
                 {
-                    nfe.printStackTrace();
-                    Object[] data =
+                    for (Value o_value : property.values)
                     {
-                        property, null
-                    };
-                    model.addRow(data);
+                        if (o_value.key.equals(value.toString()))
+                        {
+                            Object[] data =
+                            {
+                                property, o_value
+                            };
+                            model.addRow(data);
+                            break;
+                        }
+                    }
                 }
             }
             else
@@ -572,27 +620,43 @@ public class PanelPropertyEditor extends javax.swing.JPanel
                 }
                 if (propertyInfo.type.equalsIgnoreCase("integer"))
                 {
-                    IntegerEditor JTextField = new IntegerEditor(row, column);
-
-                    if (value == null)
+                    if (propertyInfo.values == null)
                     {
-                        JTextField.setValue(0);
+                        IntegerEditor JTextField = new IntegerEditor(row, column);
+
+                        if (value == null)
+                        {
+                            JTextField.setValue(0);
+                        }
+                        else
+                        {
+                            int ivalue = 0;
+                            try
+                            {
+                                ivalue = Integer.parseInt(value.toString());
+
+                            }
+                            catch (NumberFormatException nfe)
+                            {
+                                nfe.printStackTrace();
+                            }
+                            JTextField.setValue(ivalue);
+                        }
+                        return JTextField;
                     }
                     else
                     {
-                        int ivalue = 0;
-                        try
+                        MultiValueEditor editor = new MultiValueEditor(row, column);
+                        for (Value o_value : propertyInfo.values)
                         {
-                            ivalue = Integer.parseInt(value.toString());
-
+                            editor.addItem(o_value);
                         }
-                        catch (NumberFormatException nfe)
+                        if (value !=null && value instanceof Value)
                         {
-                            nfe.printStackTrace();
+                            editor.setSelectedItem(value);
                         }
-                        JTextField.setValue(ivalue);
+                        return editor;
                     }
-                    return JTextField;
                 }
                 if (propertyInfo.type.equalsIgnoreCase("String"))
                 {
