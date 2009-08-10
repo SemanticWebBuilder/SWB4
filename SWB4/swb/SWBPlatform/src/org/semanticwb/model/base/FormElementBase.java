@@ -17,6 +17,7 @@ import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormElementURL;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -29,6 +30,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     private static Logger log = SWBUtils.getLogger(FormElementBase.class);
 
     protected HashMap attributes=null;
+    private SemanticModel model=null;
 
     public FormElementBase(SemanticObject obj)
     {
@@ -181,6 +183,20 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
             ret=SWBUtils.TEXT.getLocaleString(this.getClass().getName(), key, new Locale(lang),this.getClass().getClassLoader());
         }catch(Exception e){log.error(e);}
         return ret;
+    }
+
+    /**
+     * @return the model
+     */
+    public SemanticModel getModel() {
+        return model;
+    }
+
+    /**
+     * @param model the model to set
+     */
+    public void setModel(SemanticModel model) {
+        this.model = model;
     }
 
 
