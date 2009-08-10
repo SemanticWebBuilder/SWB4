@@ -36,6 +36,7 @@ public class Promo extends GenericAdmResource {
      */    
     @Override
     public void setResourceBase(Resource base) {
+        //System.out.println("setResourceBase");
         try {
             super.setResourceBase(base);
             webWorkPath = (String) SWBPlatform.getWebWorkPath() +  base.getWorkPath();
@@ -46,6 +47,7 @@ public class Promo extends GenericAdmResource {
     
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        //System.out.println("doView");
         response.setContentType("text/html; charset=utf-8");
         Resource base=getResourceBase();
         String out;
@@ -57,8 +59,11 @@ public class Promo extends GenericAdmResource {
             out = render();
         }
         
+        //System.out.println("out");
         PrintWriter pw = response.getWriter();
+        //pw.println("-ini-");
         pw.println(out);
+        //pw.println("-end-");
         pw.flush();
     }
 
