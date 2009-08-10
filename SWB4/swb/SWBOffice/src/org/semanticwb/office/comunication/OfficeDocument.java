@@ -1224,7 +1224,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         info.id = prop.getURI();
                         info.isRequired = prop.isRequired();
                         info.title = prop.getDisplayName();
-                        String values = propDisplay.getSelectValues("es");
+                        String values = propDisplay.getDisplaySelectValues("es");
                         if (values != null)
                         {
                             StringTokenizer st = new StringTokenizer(values, "|");
