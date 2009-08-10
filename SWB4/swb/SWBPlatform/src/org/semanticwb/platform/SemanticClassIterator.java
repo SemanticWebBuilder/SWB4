@@ -21,6 +21,7 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
     private boolean create=false;
     private SemanticClass tmp=null;
     private boolean next=false;
+    private boolean retnext=false;
     
     
     public SemanticClassIterator(Iterator it)
@@ -30,14 +31,18 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
 
     public boolean hasNext() 
     {
-        next=true;
-        boolean ret=m_it.hasNext();
-        if(ret)
+        if(!next)
         {
-            tmp=_next();    
-            if(tmp==null)ret=hasNext();
+            boolean ret=m_it.hasNext();
+            if(ret)
+            {
+                tmp=_next();
+                if(tmp==null)ret=hasNext();
+            }
+            next=true;
+            retnext=ret;
         }
-        return ret;
+        return retnext;
     }
     
     private SemanticClass _next()

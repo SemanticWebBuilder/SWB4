@@ -6,6 +6,7 @@
 package org.semanticwb.model;
 
 import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -32,4 +33,8 @@ public interface FormElement extends GenericObject
     public FormElementURL getProcessURL(SemanticObject obj, SemanticProperty prop);
 
     public String getLocaleString(String key, String lang);
+
+    public SemanticModel getModel();
+
+    public void setModel(SemanticModel model);
 }

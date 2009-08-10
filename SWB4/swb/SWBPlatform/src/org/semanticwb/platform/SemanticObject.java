@@ -2031,7 +2031,7 @@ public class SemanticObject
                 ret = obj.getDisplayName(lang);
             }
         }
-        else
+        if(ret==null)
         {
             ret = getLocaleProperty(getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL), lang);
             if(ret==null)

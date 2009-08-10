@@ -237,6 +237,10 @@ public class SemanticClass
 //        return isdragSupport;
 //    }
 
+    /**
+     * Regresa prefix:name
+     * @return
+     */
     public String getClassId()
     {
         return getPrefix()+":"+getName();
