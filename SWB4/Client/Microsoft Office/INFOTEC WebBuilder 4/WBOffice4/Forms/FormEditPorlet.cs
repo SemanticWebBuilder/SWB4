@@ -50,6 +50,11 @@ namespace WBOffice4.Forms
             if (OfficeApplication.OfficeDocumentProxy.needsSendToPublish(pageInformation))
             {
                 this.toolTip1.SetToolTip(this.checkBoxActive, "Necesita enviar a flujo el contenido para activarlo");
+                this.buttonSenttoAuthorize.Visible = true;
+            }
+            else
+            {
+                this.buttonSenttoAuthorize.Visible = false;
             }
             if (OfficeApplication.OfficeDocumentProxy.isInFlow(pageInformation))
             {
@@ -239,6 +244,7 @@ namespace WBOffice4.Forms
                                 if (formSendToAutorize.DialogResult == DialogResult.OK)
                                 {
                                     OfficeApplication.OfficeDocumentProxy.sendToAuthorize(pageInformation, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
+                                    this.buttonSenttoAuthorize.Visible = false;
                                 }
                                 else
                                 {
@@ -469,6 +475,17 @@ namespace WBOffice4.Forms
                 initizalize();
                 this.Cursor = Cursors.Default;
             }
+        }
+
+        private void buttonSenttoAuthorize_Click(object sender, EventArgs e)
+        {
+            FormSendToAutorize formSendToAutorize = new FormSendToAutorize(pageInformation);
+            formSendToAutorize.ShowDialog();
+            if (formSendToAutorize.DialogResult == DialogResult.OK)
+            {
+                OfficeApplication.OfficeDocumentProxy.sendToAuthorize(pageInformation, formSendToAutorize.pflow, formSendToAutorize.textBoxMessage.Text);
+                this.buttonSenttoAuthorize.Visible = false;
+            }            
         }
 
 

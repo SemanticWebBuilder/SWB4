@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEditPorlet));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonSenttoAuthorize = new System.Windows.Forms.Button();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.tabControlProperties = new System.Windows.Forms.TabControl();
@@ -53,6 +54,7 @@
             this.textBoxTitle = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPageProperties = new System.Windows.Forms.TabPage();
+            this.propertyEditor1 = new Editor.PropertyEditor();
             this.tabPageCalendar = new System.Windows.Forms.TabPage();
             this.listViewCalendar = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
@@ -71,7 +73,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDeleteRule = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.propertyEditor1 = new Editor.PropertyEditor();
             this.panel1.SuspendLayout();
             this.tabControlProperties.SuspendLayout();
             this.tabPageInformation.SuspendLayout();
@@ -84,6 +85,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.buttonSenttoAuthorize);
             this.panel1.Controls.Add(this.buttonOK);
             this.panel1.Controls.Add(this.buttonCancel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -92,9 +94,19 @@
             this.panel1.Size = new System.Drawing.Size(509, 42);
             this.panel1.TabIndex = 1;
             // 
+            // buttonSenttoAuthorize
+            // 
+            this.buttonSenttoAuthorize.Location = new System.Drawing.Point(178, 7);
+            this.buttonSenttoAuthorize.Name = "buttonSenttoAuthorize";
+            this.buttonSenttoAuthorize.Size = new System.Drawing.Size(122, 23);
+            this.buttonSenttoAuthorize.TabIndex = 2;
+            this.buttonSenttoAuthorize.Text = "Enviar a autorización";
+            this.buttonSenttoAuthorize.UseVisualStyleBackColor = true;
+            this.buttonSenttoAuthorize.Click += new System.EventHandler(this.buttonSenttoAuthorize_Click);
+            // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(251, 9);
+            this.buttonOK.Location = new System.Drawing.Point(341, 7);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 1;
@@ -105,7 +117,7 @@
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(332, 9);
+            this.buttonCancel.Location = new System.Drawing.Point(422, 7);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 0;
@@ -317,6 +329,16 @@
             this.tabPageProperties.Text = "Propiedades de publicación";
             this.tabPageProperties.UseVisualStyleBackColor = true;
             // 
+            // propertyEditor1
+            // 
+            this.propertyEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyEditor1.Location = new System.Drawing.Point(3, 3);
+            this.propertyEditor1.Name = "propertyEditor1";
+            this.propertyEditor1.Properties = null;
+            this.propertyEditor1.Size = new System.Drawing.Size(495, 248);
+            this.propertyEditor1.TabIndex = 0;
+            this.propertyEditor1.Values = new string[0];
+            // 
             // tabPageCalendar
             // 
             this.tabPageCalendar.Controls.Add(this.listViewCalendar);
@@ -473,15 +495,6 @@
             this.toolStripButtonDeleteRule.ToolTipText = "Eliminar la calendarización seleccionada";
             this.toolStripButtonDeleteRule.Click += new System.EventHandler(this.toolStripButtonDeleteRule_Click);
             // 
-            // propertyEditor1
-            // 
-            this.propertyEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyEditor1.Location = new System.Drawing.Point(3, 3);
-            this.propertyEditor1.Name = "propertyEditor1";
-            this.propertyEditor1.Properties = null;
-            this.propertyEditor1.Size = new System.Drawing.Size(495, 248);
-            this.propertyEditor1.TabIndex = 0;
-            // 
             // FormEditPorlet
             // 
             this.AcceptButton = this.buttonOK;
@@ -559,5 +572,6 @@
         private System.Windows.Forms.Button buttonMove;
         private System.Windows.Forms.CheckBox checkBoxActivePag;
         private Editor.PropertyEditor propertyEditor1;
+        private System.Windows.Forms.Button buttonSenttoAuthorize;
     }
 }
