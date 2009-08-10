@@ -57,6 +57,8 @@ public class SWBFormMgr
     private HashMap<String, String> hidden=null;
     private ArrayList hiddenProps=null;
     private ArrayList<Object> buttons=null;
+
+    private boolean filterRequired=true;
     
     private HashMap<PropertyGroup, TreeSet> groups=null;
 
@@ -106,9 +108,15 @@ public class SWBFormMgr
             addProperty(prop);
         }
     }
+
+    public HashMap<PropertyGroup, TreeSet> getGroups()
+    {
+        return groups;
+    }
     
     public void addProperty(SemanticProperty prop)
     {
+        System.out.println("prop:"+prop);
         boolean createGroup=false;
         boolean addProp=false;
         SemanticObject obj=prop.getDisplayProperty();
@@ -148,7 +156,8 @@ public class SWBFormMgr
             }
         }else
         {
-            if(m_mode.equals(MODE_CREATE))      //solo se agregan las requeridas
+            System.out.println("filterRequired:"+filterRequired+" m_mode:"+m_mode);
+            if(filterRequired && m_mode.equals(MODE_CREATE))      //solo se agregan las requeridas
             {
                 if(required)
                 {
@@ -171,7 +180,6 @@ public class SWBFormMgr
 //            {
 //                hiddenProps.add(prop);
 //            }
-
             //System.out.println("put:"+grp);
             if(createGroup)groups.put(grp, props);
         }
@@ -494,7 +502,7 @@ public class SWBFormMgr
         return renderElement(request, propName,m_mode);
     }
     
-    private FormElement getFormElement(SemanticProperty prop)
+    public FormElement getFormElement(SemanticProperty prop)
     {
         SemanticObject obj=prop.getDisplayProperty();
         FormElement ele=null;
@@ -509,6 +517,13 @@ public class SWBFormMgr
         }
         //System.out.println("obj:"+obj+" prop:"+prop+" ele:"+ele);
         if(ele==null)ele=new GenericFormElement();
+        if(ele!=null)
+        {
+            if(m_obj!=null)
+                ele.setModel(m_obj.getModel());
+            else if(m_ref!=null)
+                ele.setModel(m_ref.getModel());
+        }
         return ele;
     }
 
@@ -570,5 +585,15 @@ public class SWBFormMgr
     public void setSubmitByAjax(boolean submitByAjax)
     {
         this.submitByAjax=submitByAjax;
+    }
+
+    /**
+     * Filtra solo requeridas en la creacion, por default = true
+     * @param onlyRequired
+     */
+    public void setFilterRequired(boolean onlyRequired)
+    {
+        filterRequired=onlyRequired;
+        init();
     }
 }
