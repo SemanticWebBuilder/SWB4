@@ -8,7 +8,7 @@
 
 
 <%
-            String path="C:/tmp/SWB4/";
+            String path="D:/programming/proys/SWB4/";
             File dir=new File(path);
             findFiles(dir);
 %>
@@ -62,7 +62,7 @@ Termina..
                  "* \n"+
                  "* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente \n"+
                  "* dirección electrónica: \n"+
-                 "*  http://www.webbuilder.org.mx \n"+
+                 "*  http://www.semanticwebbuilder.org\n"+
                  "**/ \n \n";
 
                 sLicence=SWBUtils.TEXT.encode(sLicence, "utf-8");

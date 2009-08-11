@@ -8,7 +8,7 @@
 
 
 <%
-            String path="C:/tmp/SWB4/";
+            String path="D:/programming/proys/SWB4/";
             //System.out.println("path:"+path);
             File dir=new File(path);
             findFiles(dir);
