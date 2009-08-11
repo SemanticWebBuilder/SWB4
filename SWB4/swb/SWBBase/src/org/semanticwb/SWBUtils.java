@@ -1667,14 +1667,23 @@ public class SWBUtils {
 
         public static void sendBGEmail(String toEmail, String subject, String body) throws java.net.SocketException{
              ArrayList acol=new ArrayList();
-             StringTokenizer strTokens=new StringTokenizer(toEmail,";");
-             while(strTokens.hasMoreTokens()){
-                 String token=strTokens.nextToken();
-                 if(token==null) continue;
+             if(toEmail!=null && toEmail.indexOf(";")>0)
+             {
+                 StringTokenizer strTokens=new StringTokenizer(toEmail,";");
+                 while(strTokens.hasMoreTokens()){
+                     String token=strTokens.nextToken();
+                     if(token==null) continue;
+                     javax.mail.internet.InternetAddress address = new javax.mail.internet.InternetAddress();
+                     address.setAddress(token);
+                     acol.add(address);
+                 }
+             }else if(toEmail!=null)
+             {
                  javax.mail.internet.InternetAddress address = new javax.mail.internet.InternetAddress();
-                 address.setAddress(token);
+                 address.setAddress(toEmail);
                  acol.add(address);
              }
+
              EMAIL.sendBGEmail(adminEmail, null, acol, null, null, subject, null, body, null, null, null);
         }
 
