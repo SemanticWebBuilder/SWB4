@@ -1,33 +1,10 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
 package org.semanticwb.portal.community.base;
 
 
-public class CommUtilBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable,org.semanticwb.model.Sortable,org.semanticwb.model.Descriptiveable
+public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Sortable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Resourceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#active");
-    public static final org.semanticwb.platform.SemanticClass swbcomm_CommSiteUtil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#CommSiteUtil");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteWebPageUtil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteWebPageUtil");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_hasCommSiteUtilsInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasCommSiteUtilsInv");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
@@ -39,44 +16,44 @@ public class CommUtilBase extends org.semanticwb.model.SWBClass implements org.s
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
-    public static final org.semanticwb.platform.SemanticClass swbcomm_CommUtil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#CommUtil");
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#CommUtil");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteUtil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteUtil");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteUtil");
 
-    public CommUtilBase(org.semanticwb.platform.SemanticObject base)
+    public MicroSiteUtilBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
-    public static java.util.Iterator<org.semanticwb.portal.community.CommUtil> listCommUtils(org.semanticwb.model.SWBModel model)
+    public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtils(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.CommUtil>(it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteUtil>(it, true);
     }
 
-    public static java.util.Iterator<org.semanticwb.portal.community.CommUtil> listCommUtils()
+    public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtils()
     {
         java.util.Iterator it=sclass.listInstances();
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.CommUtil>(it, true);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteUtil>(it, true);
     }
 
-    public static org.semanticwb.portal.community.CommUtil getCommUtil(String id, org.semanticwb.model.SWBModel model)
+    public static org.semanticwb.portal.community.MicroSiteUtil getMicroSiteUtil(String id, org.semanticwb.model.SWBModel model)
     {
-        return (org.semanticwb.portal.community.CommUtil)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        return (org.semanticwb.portal.community.MicroSiteUtil)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
-    public static org.semanticwb.portal.community.CommUtil createCommUtil(String id, org.semanticwb.model.SWBModel model)
+    public static org.semanticwb.portal.community.MicroSiteUtil createMicroSiteUtil(String id, org.semanticwb.model.SWBModel model)
     {
-        return (org.semanticwb.portal.community.CommUtil)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+        return (org.semanticwb.portal.community.MicroSiteUtil)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
-    public static void removeCommUtil(String id, org.semanticwb.model.SWBModel model)
+    public static void removeMicroSiteUtil(String id, org.semanticwb.model.SWBModel model)
     {
         model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
     }
 
-    public static boolean hasCommUtil(String id, org.semanticwb.model.SWBModel model)
+    public static boolean hasMicroSiteUtil(String id, org.semanticwb.model.SWBModel model)
     {
-        return (getCommUtil(id, model)!=null);
+        return (getMicroSiteUtil(id, model)!=null);
     }
 
     public boolean isActive()
@@ -87,6 +64,28 @@ public class CommUtilBase extends org.semanticwb.model.SWBClass implements org.s
     public void setActive(boolean active)
     {
         getSemanticObject().setBooleanProperty(swb_active, active);
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteWebPageUtil> listCommSiteUtils()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteWebPageUtil>(getSemanticObject().listObjectProperties(swbcomm_hasCommSiteUtilsInv));
+    }
+
+    public boolean hasCommSiteUtil(org.semanticwb.portal.community.MicroSiteWebPageUtil micrositewebpageutil)
+    {
+        if(micrositewebpageutil==null)return false;
+        return getSemanticObject().hasObjectProperty(swbcomm_hasCommSiteUtilsInv,micrositewebpageutil.getSemanticObject());
+    }
+
+    public org.semanticwb.portal.community.MicroSiteWebPageUtil getCommSiteUtil()
+    {
+         org.semanticwb.portal.community.MicroSiteWebPageUtil ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_hasCommSiteUtilsInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.portal.community.MicroSiteWebPageUtil)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public java.util.Date getCreated()
