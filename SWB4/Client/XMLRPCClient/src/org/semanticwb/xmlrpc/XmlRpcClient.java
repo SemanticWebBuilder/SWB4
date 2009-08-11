@@ -234,7 +234,7 @@ class XmlRpcClient
                 case HTTP_NOT_FOUND:
                     throw new HttpException("The path " + connection.getURL() + " was not found", HTTP_NOT_FOUND, getDetail(error, contentType));
                 case HTTP_FORBIDDEN:
-                    throw new HttpException("Clave o contraseña incorrecta", HTTP_FORBIDDEN, getDetail(error, contentType));
+                    throw new HttpException("Clave o contraseÃ±a incorrecta", HTTP_FORBIDDEN, getDetail(error, contentType));
                 default:
                     throw new HttpException(connection.getResponseMessage(), responseCode, getDetail(error, contentType));
             }
@@ -305,7 +305,7 @@ class XmlRpcClient
                 }
                 catch (IOException ioe)
                 {
-                    throw new XmlRpcException("Error closing conexión in the detail of response", ioe);
+                    throw new XmlRpcException("Error closing conexiÃ³n in the detail of response", ioe);
                 }
             }
         }
