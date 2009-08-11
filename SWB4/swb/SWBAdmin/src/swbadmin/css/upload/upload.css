@@ -1,0 +1,25 @@
+#uploadStatus {
+    width: 230px;
+}
+
+#uploadProgressBar {
+    height: 2px;
+    border: 0px solid #BBB;
+    text-align: center;
+    float: left;
+}
+
+#uploadIndicator {
+    height: 1px;
+    position: relative;
+    margin: 0px;
+    padding: 1px;
+    background: #9DC0F4;
+    width: 0;
+    float: left;
+}
+
+#uploadPercentage {
+    width:5px;
+    float: right;
+}
