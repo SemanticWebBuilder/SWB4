@@ -796,7 +796,7 @@ public class SessionImp implements Session
 
     public void move(String srcAbsPath, String destAbsPath) throws ItemExistsException, PathNotFoundException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
-        //TODO: revisar esto para los demas tipos de movimientos, este moviento debería ser temporal, pero por tiempo se deja así
+        //TODO: revisar esto para los demas tipos de movimientos, este moviento deberÃ­a ser temporal, pero por tiempo se deja asÃ­
         Item srcItem = this.getItem(srcAbsPath);
         Item destItem = this.getItem(destAbsPath);
         if(srcItem==null)
