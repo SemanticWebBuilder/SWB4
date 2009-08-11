@@ -70,7 +70,7 @@ public class VersionInfo {
     {
         if(nameOfVersion.equals("*"))
         {
-            return "Mostrar la última version";
+            return "Mostrar la Ãºltima version";
         }
         return nameOfVersion;
     }
