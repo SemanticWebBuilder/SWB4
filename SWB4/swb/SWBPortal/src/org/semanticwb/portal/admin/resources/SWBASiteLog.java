@@ -39,6 +39,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
@@ -86,7 +87,14 @@ public class SWBASiteLog extends GenericResource {
                         if(fecha.lastIndexOf(" ")>0) fecha=fecha.substring(0,fecha.lastIndexOf(" "));
                         out.println("<tr>");
                         out.println("  <td class=\"mov-recurso\">" + rs.getString("log_action") + "</td>");
-                        out.println("  <td class=\"mov-recurso\">" + swbobj.getSemanticClass().getName()+"</td>");
+                        SemanticClass cls=swbobj.getSemanticClass();
+                        if(cls!=null)
+                        {
+                            out.println("  <td class=\"mov-recurso\">" + cls.getName()+"</td>");
+                        }else
+                        {
+                            out.println("  <td class=\"mov-recurso\">[NO NAME]</td>");
+                        }
                         out.println("  <td class=\"mov-recurso\">" + strObj + "</td>");
                         out.println("  <td class=\"mov-recurso\">" + ont.getSemanticProperty(rs.getString("log_propid")).getDisplayName(user.getLanguage()) + "</td>");
                         out.println("  <td class=\"mov-fecha\">" + fecha + "</td>");
