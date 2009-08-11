@@ -371,7 +371,7 @@ public class Login implements InternalServlet
     }
 */
     private void doResponse(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert, String authMethod) throws IOException
-    {System.out.println("authMethod: "+authMethod);
+    {
         if ("BASIC".equals(authMethod))
         {
             String realm = (null != distributorParams.getWebPage().getDescription(distributorParams.getUser().getLanguage()) ? distributorParams.getWebPage().getDescription(distributorParams.getUser().getLanguage()) : _realm);
