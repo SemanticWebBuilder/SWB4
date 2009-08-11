@@ -116,7 +116,7 @@ public class SWBFormMgr
     
     public void addProperty(SemanticProperty prop)
     {
-        System.out.println("prop:"+prop);
+        //System.out.println("prop:"+prop);
         boolean createGroup=false;
         boolean addProp=false;
         SemanticObject obj=prop.getDisplayProperty();
@@ -156,7 +156,7 @@ public class SWBFormMgr
             }
         }else
         {
-            System.out.println("filterRequired:"+filterRequired+" m_mode:"+m_mode);
+            //System.out.println("filterRequired:"+filterRequired+" m_mode:"+m_mode);
             if(filterRequired && m_mode.equals(MODE_CREATE))      //solo se agregan las requeridas
             {
                 if(required)
