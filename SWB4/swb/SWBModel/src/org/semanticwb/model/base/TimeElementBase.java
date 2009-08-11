@@ -3,9 +3,9 @@ package org.semanticwb.model.base;
 
 public class TimeElementBase extends org.semanticwb.model.base.FormElementBase 
 {
-    public static final org.semanticwb.platform.SemanticProperty swb_timeConstraints=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#timeConstraints");
-    public static final org.semanticwb.platform.SemanticClass swb_TimeElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TimeElement");
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TimeElement");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_timeConstraints=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#timeConstraints");
+    public static final org.semanticwb.platform.SemanticClass swbxf_TimeElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#TimeElement");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#TimeElement");
 
     public TimeElementBase(org.semanticwb.platform.SemanticObject base)
     {
@@ -42,16 +42,6 @@ public class TimeElementBase extends org.semanticwb.model.base.FormElementBase
     public static boolean hasTimeElement(String id, org.semanticwb.model.SWBModel model)
     {
         return (getTimeElement(id, model)!=null);
-    }
-
-    public String getTimeConstraints()
-    {
-        return getSemanticObject().getProperty(swb_timeConstraints);
-    }
-
-    public void setTimeConstraints(String timeConstraints)
-    {
-        getSemanticObject().setProperty(swb_timeConstraints, timeConstraints);
     }
 
     public void remove()
