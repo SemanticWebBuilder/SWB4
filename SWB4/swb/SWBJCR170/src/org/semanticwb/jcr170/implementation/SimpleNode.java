@@ -1143,7 +1143,7 @@ public class SimpleNode implements Node
         if (isLockable() && isLocked())
         {
 
-            // por el momento sólo puede desbloquear el mismo usuario, deberia verse como un super usurio lo puede desbloquear
+            // por el momento sÃ³lo puede desbloquear el mismo usuario, deberia verse como un super usurio lo puede desbloquear
             LockImp lock = getLockImp();
             properties.remove(getName(Lockable.jcr_lockOwner));
             properties.remove(getName(Lockable.jcr_lockIsDeep));
