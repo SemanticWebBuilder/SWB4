@@ -1,0 +1,1600 @@
+
+/* Forum Plugin specific CSS */
+.codeblock  { 
+  background-color:#ECE9D8; 
+  color:#000;
+  width: 550px;
+  height: 160px;
+  overflow: auto;
+  min-height: 50px;
+  max-height: 120px;
+  margin: 5px 0px 5px 5px;
+  padding:5px;
+  border: 1px dashed black;
+}
+.quotemain
+{
+  background:#FAFCFE url('forum/image_set/img_quote.gif') no-repeat top right;      
+  border: 1px dotted #000;
+  border-left: 4px solid #8394B2;
+  color:#465584;
+  padding: 4px;
+  margin: 5px auto 8px auto;
+}
+
+/* CSS Declarations for Code block feature - default will use the .php one */
+div .php { max-height:400px; overflow:auto; height:auto; width:auto; min-height:100px; }
+div .html { height:300px; overflow:auto; width:auto; min-height:100px; }  
+div .css { height:300px; overflow:auto; width:auto; min-height:100px; }  
+
+
+a:link.non-ul {
+  padding-left: 0px;
+  padding-right:0px;
+  text-decoration: none;
+  font-weight: normal;
+  font-family: Verdana;
+  font-size:12px;
+  color:#000000;
+}
+a:visited.non-ul {
+  padding-left: 0px;
+  padding-right: 0px;
+  text-decoration: none;
+  font-weight: normal;
+  font-family: Verdana;
+  font-size: 12px;
+  color:#000000;
+}
+a:hover.non-ul {
+  padding-left: 0px;
+  padding-right: 0px;
+  text-decoration: none;
+  font-weight: normal;
+  font-family: Verdana;
+  font-size: 12px;
+  color:#000000;
+}
+a:active.non-ul {
+  padding-left: 0px;
+  padding-right: 0px;
+  text-decoration: none;
+  font-weight: normal;
+  font-family: Verdana;
+  font-size: 12px;
+  color:#000000;
+}
+
+a:link {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-decoration: none;
+  font-weight: normal;
+  font-family: Verdana;
+  font-size: 12px;
+  color:#000000;
+}
+a:visited {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-decoration: none;
+  font-weight: normal;
+  font-family: Verdana;
+  font-size: 12px;
+  color:#000000;
+}
+a:hover {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-decoration: none;
+  font-weight: normal;
+  font-family: Verdana;
+  font-size: 12px;
+  color:#000000;
+}
+
+a:active {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-decoration: none;
+  font-weight: normal;
+  font-family: Verdana;
+  font-size: 12px;
+  color:#000000;
+}
+
+body {
+  /*background: #06437d;*/
+  background: #FFFFFF;  
+  color: #000000;
+  font-size: 9pt;
+  font-family: verdana;
+  /*
+    scrollbar-3dlight-color:#D1D7DC;
+    scrollbar-arrow-color:#006699;
+    scrollbar-darkshadow-color:#98AAB1;
+    scrollbar-face-color:#DEE3E7;
+    scrollbar-highlight-color:#FFFFFF;
+    scrollbar-shadow-color:#DEE3E7;
+    scrollbar-track-color:#EFEFEF;
+  */
+  margin:0px
+}
+h1 {
+  font-size: 12pt;
+  font-weight: bold;
+}
+h2 {
+  font-size: 11pt;
+  font-weight: bold;
+}
+h3
+{
+  font-size: 9pt;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+h4
+{
+  font-size: 9pt;
+  font-weight: bold;
+}
+
+input, submit {
+  color:#000000;
+  font-size: 9pt;
+  font-family: verdana;
+}
+select {
+  color:#000000;
+  font-size: 9pt;
+  font-family: verdana;
+}
+td {
+  color:#56585A; 
+  font-size: 9pt;
+  font-family: verdana;
+}
+textarea {
+  color:#000000;
+  font-size: 9pt;
+  font-family: verdana;
+}
+th {
+  color:#000000;
+  font-weight: bold;
+  font-size: 9pt;
+  font-family: verdana;
+}
+
+
+p
+{
+        font-size: 9pt;
+        font-family: verdana;
+}
+address
+{
+        font-size: 9pt;
+        font-family: verdana;
+}
+pre
+{
+        font-size: 9pt;
+	font-family: Monospace, courier new, fixed;
+	color: black;
+}
+code
+{
+        font-size: 9pt;
+	font-family: Monospace, courier new, fixed;
+	color: black;
+}
+
+acronym 
+{
+        cursor: help;
+        border-bottom: 1px dashed #FF0000;        
+}
+
+abbr 
+{
+        cursor: help;
+        border-bottom: 1px dashed #FF0000;        
+}
+.menus {
+		  border-top:2px solid #FFFFFF;
+        border-bottom: 2px solid #DEE1E3;        
+		  border-left:2px solid #FFFFFF;
+        border-right:0px solid #F3F5F6;
+}
+.menus:hover {
+		  border-top:2px solid #F3F5F6;
+        border-bottom: 2px solid #AEB6BE;        
+		  border-left:2px solid #F3F5F6;
+        border-right:0px solid #AEB6BE;
+}
+
+.block-divider {
+  background:#FFFFFF;
+  border-bottom:1px solid #F7F7F7;
+  border-top:1px solid #E7E7E7;
+  color:#000000
+}
+.block-divider-left {
+  background:#FFFFFF;
+  border-top:1px solid #E7E7E7;
+  color:#000000
+}
+.block-divider-right {
+  background:#FFFFFF;
+  border-top:1px solid #CCCCCC;
+  color:#000000
+}
+.block-featured-left, .block-featured-right {
+
+	/*
+  border-right:0px solid #FFFFFF;
+  color:#000000;
+  font: verdana*/
+}
+.block-info {
+  background:#FFFFFF; /*transparent;*/
+  color:#000000;
+  font: 10pt verdana;  
+}
+.blocktable-left  {
+   border-top:2px solid #FFFFFF;
+   border-bottom: 1px solid #E2E7EA;  /* #E2E7EA;         */
+   border-left: 0px solid #FFFFFF;  /* #E2E7EA; */
+   border-right:0px solid #FFFFFF;
+}
+.blocktable-left:hover  {
+   border-top:2px solid #FFFFFF;
+   border-bottom: 1px solid #39C955;        
+   border-left: 0px solid #FFFFFF;
+   border-right: 0px solid #FFFFFF;
+}
+.blocktable-right  {
+   border-top:6px solid #FFFFFF;
+   border-bottom: 1px solid  #E2E7EA;       
+   border-left:0px solid #E2E7EA;
+   border-right:0px solid #FFFFFF;
+}
+.block-info-left, .block-info-right {
+  /*background:transparent;*/
+  font:10pt verdana;
+  padding-bottom:0px;
+  padding-right:0px;
+  padding-top:0px
+   padding-left:0px
+}
+.block-info-left a:hover, .block-info-right a:hover  {
+  color:#000099;
+  text-decoration: none ;
+  font-weight: none; 
+}
+.block-info-left a, .block-info-left a:visited, .block-info-right a, .block-info-right a:visited  {
+  color:#000099;
+  text-decoration: none;
+  font-weight: none; 
+   font-size:10pt ;
+  /*background:url(images/lateral/flecha.png) no-repeat;*/   
+}
+.block-info-left ul, .block-info-right ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 2px;
+  padding-left: 0;
+  border: none;
+}
+.block-outerborder-left {
+  border-left:0px solid #FFFFFF;
+}
+.block-outerborder-right {
+  border-right:0px solid #FFFFFF;
+}
+.block-title {
+	font-size: 13px;
+   	font-weight: bold;	
+   	color: #000099;
+	width:510px;
+	background:#FFFFFF;
+}
+.block-title-left {
+  margin: 0;
+  font-weight: bold;
+  font-family: Verdana;
+  font-size: 10px;
+  color:#ffffff;
+  padding-left: 10px;
+  padding-top: 3px;
+  margin-bottom: 0px;
+  background: url(images/lateral/boton_menu.png) no-repeat;  
+}
+.block-title-right {
+  margin: 0;
+  font-weight: bold;
+  font-family: Verdana;
+  font-size: 10px;
+  color:#ffffff;
+  padding-left: 10px;
+  padding-top: 3px;
+  margin-bottom: 0px;
+  background: url(images/lateral/boton_menu.png) no-repeat; 
+}
+.block-vote {
+  background:#FFFFFF; /*transparent;*/
+  color:#000000;
+  font:90% verdana
+}
+.block-vote-results {
+  background:#FFFFFF; /*transparent;*/
+  color:#000000;
+  font:90% verdana
+}
+.cal-body {
+  background:#FFFFFF;
+  border-bottom:#E7E7E7 1px solid;
+  border-left:#E7E7E7 1px solid;
+  border-right:#E7E7E7 1px solid;
+  border-top:#E7E7E7 1px solid;
+  color:#000000;
+  font:bold 120% verdana
+}
+.cal-day,cal_day {
+  background:transparent;
+  border-bottom:#F7F7F7 1px dashed;
+  border-left:#F7F7F7 1px dashed;
+  border-top:#1A3955 2px solid;
+  color:#000000;
+  font:bold 8pt verdana
+}
+.cal-dayview-times {
+  background:#F7F7F7;
+  border-bottom:#E7E7E7 1px solid;
+  border-left:#E7E7E7 1px solid;
+  border-right:#E7E7E7 1px solid;
+  border-top:#1A3955 1px dashed;
+  color:#000000;
+  font:bold 80% verdana
+}
+.cal-dayx-body {
+  background:#E7E7E7
+}
+.cal-dayx-cur {
+  background:#FFFFFF;
+  color:#000000;
+  font:bold 9pt verdana
+}
+.cal-dayx-subcur {
+  background:#FFFFFF;
+  color:#000000;
+  font:bold 80% verdana;
+  padding-top:4px
+}
+.cal-dayx-times {
+  border-bottom:#FFFFFF 1px solid;
+  border-left:#FFFFFF 1px solid;
+  border-right:#FFFFFF 1px solid
+}
+.cal-dayx-times2 {
+  background:#FFFFFF
+}
+.cal-dayx-weekevent {
+  border-bottom:#FFFFFF 1px solid;
+  border-left:#FFFFFF 1px dashed;
+  border-right:#FFFFFF 1px dashed;
+  border-top:#E7E7E7 1px solid
+}
+.cal-futureday {
+  background:#F7F7F7
+}
+.cal-header {
+  background:#FFFFFF;
+  border-bottom:#F7F7F7 1px solid;
+  border-left:#F7F7F7 1px solid;
+  border-right:#F7F7F7 1px solid;
+  border-top:#F7F7F7 1px solid
+}
+.cal-hr {
+  background:#FFFFFF
+}
+.cal-month,cal_month {
+  background:#F7F7F7;
+  color:#000000
+}
+.cal-nullday {
+  background:#FFFFFF;
+  border-bottom:#F7F7F7 1px dashed;
+  border-left:#F7F7F7 1px dashed;
+  border-top:#F7F7F7 1px dashed;
+  color:#000000
+}
+.cal-oldday {
+  background:#E7E7E7;
+  color:#000000
+}
+.cal-quickadd,quickadd {
+  background:#F7F7F7;
+  border-bottom:#E7E7E7 1px solid;
+  border-left:#E7E7E7 1px solid;
+  border-right:#E7E7E7 1px solid;
+  border-top:#E7E7E7 1px solid;
+  padding:4px
+}
+.cal-today {
+  background:#FFFFFF;
+  border-bottom:#1A3955 1px dashed;
+  border-left:#1A3955 1px dashed;
+  border-right:#1A3955 1px dashed;
+  border-top:#1A3955 1px dashed
+}
+.cal-weekpointers {
+  border-bottom:#F7F7F7 1px dashed;
+  border-left:#F7F7F7 1px dashed
+}
+.cal-weekview-addevent {
+  background:#FFFFFF;
+  border-right:#E7E7E7 1px solid;
+  border-top:#E7E7E7 1px solid;
+  color:#000000;
+  font:bold 80% verdana;
+  padding:4px
+}
+.cal-weekview-caltitle {
+  background:#FFFFFF;
+  border-bottom:#E7E7E7 1px solid;
+  border-left:#E7E7E7 1px solid;
+  border-right:#E7E7E7 1px solid;
+  color:#000000;
+  font:bold 9pt verdana;
+  padding:4px
+}
+.cal-weekview-curday,weekview_curday {
+  background:#F7F7F7;
+  color:#000000
+}
+.cal-weekview-daterange {
+  background:#FFFFFF;
+  border-left:#E7E7E7 1px solid;
+  border-right:#E7E7E7 1px solid;
+  border-top:#E7E7E7 1px solid;
+  color:#000000;
+  font:bold 80% verdana;
+  padding:4px
+}
+.cal-weekview-dayformat {
+  background:#FFFFFF;
+  border-left:#E7E7E7 1px solid;
+  border-top:#E7E7E7 1px solid;
+  color:#000000;
+  font:bold 9pt verdana;
+  padding:4px
+}
+.cal-weekview-offday,weekview_offday {
+  background:transparent;
+  color:#000000
+}
+.commentbar1 {
+  background:transparent;
+  color:#000000;
+  font: 8pt verdana;
+  padding:3px 3px
+}
+.commentbar2 {
+  background:#E7E7E7;
+  border-bottom:1px solid #FFFFFF;
+  border-top:1px solid #FFFFFF;
+  font: 8pt verdana
+}
+.commentbar3 {
+  background:#FFFFFF;
+  border-bottom:1px solid #FFFFFF;
+  border-top:1px solid #E7E7E7;
+  color:#000000;
+  font: 8pt verdana;
+  padding:3px 3px
+}
+.commentbar4 {
+  background:#E7E7E7;
+  color:#000000;
+  font: 8pt verdana
+}
+.commenttitle {
+  background:#F7F7F7;
+  border-bottom:1px solid #E7E7E7;
+  border-left:1px solid #E7E7E7;
+  border-right:1px solid #E7E7E7;
+  border-top:1px solid #E7E7E7;
+  font-weight: bold;
+  font-size: 10pt;
+  font-family: verdana;
+  padding:3px 0px 3px 10px;
+}
+.comment {
+  background:#F7F7F7;
+  border-bottom:1px solid #E7E7E7;
+  border-left:1px solid #E7E7E7;
+  border-right:1px solid #E7E7E7;
+  border-top:1px solid #E7E7E7;
+  font-size: 9pt;
+  font-family: verdana;
+}
+.footerblock {
+  background:#FFFFFF;
+  border-top:0px solid #CCCCCC;
+  color:#000000;
+  font: 7pt verdana;
+  padding-bottom:10px;
+  padding-top:10px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.footerblock a:link, .footerblock a:visited {
+  background:transparent;
+  color:#000000;
+  font: 8pt bold verdana;
+  text-decoration:none
+}
+.footerblock a:hover, .footerblock a:active  {
+  background:transparent;
+  color:#000000;
+  font: 8pt bold verdana;
+  text-decoration:none
+}
+
+.header-envelope {
+
+}  
+.noticias-envelope {
+  /*background:#FFFFFF; /*transparent;*/ /*#ffffff;*/
+  border-bottom:1px solid #E7E7E7;
+  border-left:1px solid #E7E7E7;
+  border-right:1px solid #E7E7E7;
+  border-top:1px solid #E7E7E7;
+  padding:2px;
+}
+.noticias-envelope:hover {
+  background:#EEF0FD; /*transparent;*/ /*#ffffff;*/
+}
+.header-logobg {
+  padding-top:4px
+}
+.header-logobg-container-inner {
+  background:#FFFFFF;
+  background:url(images/header-bg.png) #1A3955;
+  border-bottom:1px solid #CCCCCC
+}
+.header-logobg-container-outer {
+  background:#FFFFFF;
+  padding-bottom:1px
+}
+.header-navigation {
+  background:#06437d;
+  border-bottom:1px solid #CCCCCC;
+  color:#FFFFFF;
+  font: 8pt verdana;
+  padding-bottom:3px;
+  padding-top:4px
+}
+.header-navigation a:link {
+  background:transparent;
+  border-bottom:0px solid #CCCCCC;
+  color:#0000FF;
+  font: 8pt verdana
+}
+.header-navigation a:visited {
+  background:transparent;
+  border-bottom:0px solid #CCCCCC;
+  color:#800080;
+  font: 8pt verdana
+}
+.header-navigation a:hover {
+  background:transparent;
+  border-bottom:0px solid #CCCCCC;
+  color:#008000;
+  font: 8pt verdana
+}
+.header-navigation a:active {
+  background:transparent;
+  border-bottom:0px solid #CCCCCC;
+  color:#FF0000;
+  font: 8pt verdana
+}
+.header-navigation-container {
+  border-bottom:0px solid #FFFFFF
+}
+.header-welcomeanddate {
+  border-bottom:1px solid #CCCCCC;
+  height:53px
+}
+.highlight {
+  color: #000000;
+  background-color: yellow;
+  text-decoration: none;
+}
+.pagenav {
+  text-align: center;
+}
+.searchauth {
+  background:transparent;
+  color:#000000;
+  font: 9pt verdana;
+  text-align:left
+}
+.searchdate {
+  background:transparent;
+  color:#000000;
+  font: 9pt verdana;
+  text-align:right
+}
+.searchform {
+  background:#E7E7E7;
+  border-bottom:1px solid #CCCCCC;
+  height:53px;
+  padding:6px 4px 6px 1px
+}
+.searchhits {
+  background:transparent;
+  color:#000000;
+  font: 9pt verdana;
+  text-align:right
+}
+.site-slogan {
+  color:#ffffff;
+  background:transparent;
+}
+.smallcal-week-even {
+  background:#E7E7E7;
+  color:#000000;
+}
+.story-box {
+  background:#FFFFFF; /*transparent;*/
+  color:#000000;
+  font: 9pt verdana
+}
+.story-byline,storybyline {
+  background:transparent;
+  color:#000000;
+  font:9pt verdana
+}
+.story-container {
+  padding-top:5px;
+  padding-right:10px;
+  padding-left:10px;
+    padding-left: 8px;	
+	border-right-width: 2px;
+	border-left-width: 2px;
+	border-right-style: solid;
+	border-left-style: solid;
+	border-right-color: #56585a;
+	border-left-color: #56585a;	
+}
+.story-information {
+ // background:transparent; /* background:transparent;*/
+  color:#000000;
+  font:8pt verdana
+}
+.story-title {
+	border-bottom-width: 1px;
+	margin-right: 15px;
+	border-bottom-style: solid;
+	border-bottom-color: #56585a;
+	padding-bottom: 0px;padding-top: 0px;
+	margin-bottom:0px; margin-top:0px;
+	font-size: 13px;
+   font-weight: bold;	
+   color: #000099;
+	width:610px;
+}
+.story-title-featured {
+/*  background:url(/geeklog/images/titulos.png); 
+  padding-left:10px;
+  color:#FFFFFF;
+  font:bold 13pt verdana;
+    text-decoration: none;*/
+    background:url(/geeklog/images/titulos.png);
+    	border-bottom-width: 1px;
+	margin-right: 16px;
+	border-bottom-style: solid;
+	border-bottom-color: #56585a;
+	padding-bottom: 0px;padding-top: 0px;
+	margin-bottom:0px; margin-top:0px;
+	font-size: 15px;
+   font-weight: bold;	
+   color: #000099;
+	width:610px;
+}
+a.story-title-featured {
+color: #000099;
+ font-weight: bold;	
+ 	font-size: 15px;
+}
+.warning {
+  background:transparent;
+  color:#FF0000;
+  font:bold 100% verdana
+}
+.warningsmall {
+  background:transparent;
+  color:#FF0000;
+  font: 9pt verdana
+}
+.xpinputfield {
+  border:1px solid #7B9EBD
+}
+
+/******************   NEW CSS ADDED FOR FORUM Ver 2.3 ************************/
+
+TD.navbar      {
+    color: #FFFFFF;
+    background-color: #666666;
+    font-family: Verdana, sans-serif;
+    font-size: 10px;
+    line-height: 32px;
+    vertical-align: middle;
+    text-align: center;
+    font-weight: bold;
+    }
+
+TD.navbar a:link, TD.navbar a:visited { 
+    color: #FFFFFF;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    font-family: Verdana, sans-serif;
+    text-decoration: none;
+    padding: 2px
+    }
+
+TD.navbar a:hover { 
+    color: #FFCC00;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 10px;
+    font-family: Verdana, sans-serif;
+    text-decoration: none;
+    padding: 2px;
+    }
+
+#forumheading          { text-align:left; background-color: #FFFFFF; }
+.forumtext             { color: #000; }
+.forumclass1           { text-align:left; background-color: #BFBFBF; }
+.forumclass2           { text-align:left; background-color: #CCCCCC; }
+.forumclass3           { text-align:left; background-color: #EFEFEF; }
+.forumclass4           { text-align:left; background-color: #CCCCCC; }
+.forumoutline          { background-color: #CCCCCC; }
+
+/* These CSS declarations for links are used in a few places but are here for theme designers to use if needed - can be added to templates  */
+.forumlinks A:link            { color: #000000; font-style: normal; font-size: 11px; font-family: Verdana, sans-serif; text-decoration: underline }
+.forumlinks A:visited        { color: #000000; font-style: normal; font-size: 11px; font-family: Verdana, sans-serif; text-decoration: underline }
+.forumlinks A:hover            { color: #000000; font-style: normal; font-size: 11px; font-family: Verdana, sans-serif; text-decoration: underline }
+
+/* alternate table row colours */
+.forumAlt1   { background-color: #F5F5F5; }
+.forumAlt2   { background-color: #FFFFFF; }
+
+.quotebox   { 
+     border-style: ridge; 
+     background-color: #ECE9D8; 
+     padding:10px;
+     margin: 0px;
+     }
+
+.quotetext {
+     color:#000; 
+     font-weight: normal; 
+     background-color: #ECE9D8; 
+     font-family: Verdana, sans-serif; 
+     font-size: 9px; 
+     }
+
+.forumCode  { 
+    background-color: #ECE9D8; 
+    color: #000;
+    width: 470px;
+    height: 160px;
+    overflow: auto;
+    font-size: 11px;
+    min-height: 50px;
+    max-height: 120px;
+    margin: 5px 0px 5px 5px;
+    padding:5px;
+    border: 1px dashed black;
+    }
+
+.forumTitle   {
+    color: #000000;
+    background-color: #EFEFEF;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14pt;
+    font-family: Verdana, Helvetica, sans-serif; }
+
+TD.forumRollOver  { 
+    text-align:left;
+    background-color: #FFFFFF; 
+    font-family: Verdana, Helvetica, sans-serif; 
+    color: #000033  
+    }
+TD.forumRollOut   { 
+    text-align:left;
+    background-color: #EFEFEF; 
+    font-family: Verdana, Helvetica, sans-serif; 
+    color: #000033  
+    }
+
+.cblockTitle    {
+    color: #FFFFFF;
+    background-color: #506790;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16pt;
+    padding-left:5px;
+    font-family: Verdana, Helvetica, sans-serif;
+}
+.mycalTopTitle { background-color:#4682B4 }
+.mycalTitle { background-color:#B0C4DE }
+.mycalDateField { background-color:#F9F9F9 }
+.mycalEventHighlight { background-color:#8FBC8F }
+.mycalTodayHighlight { background-color:#EEDD82 }
+.mycalNextMonth { background-color:#DCDCDC }
+#deed {
+	width: 620px; 
+	padding: 15px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	margin-right: auto;
+	margin-left: auto; 	
+	/* opera does not like 'margin:20px auto' */
+	background: #ffc;
+	border: 3px groove #333;
+	text-align:left; 
+	/* part 2 of 2 centering hack */
+	width: 620px; /* ie5win fudge begins */
+	voice-family: "\"}\"";
+	voice-family:inherit;
+	width: 584px;
+	}
+.block2
+{
+	margin-left: 40px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+	background-color: rgb(245,245,245);
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 1px;
+	padding-bottom: 5px;
+	width: 85%;
+}
+.myboxtitle
+{
+        background-color: #CCCCFF;
+        border-bottom: 1px solid black;
+}
+.menu
+{
+	font-size: 8pt;
+	text-align: left;
+}
+
+.menuwarning
+{
+	font-size: 14pt;
+	color: red;
+	text-align: left;
+}
+
+.tabla1
+{
+	background-color: rgb(240,240,240);
+	border: 1px solid black;
+	margin: 10px;
+}
+
+.capamarconegro 
+{ 
+	background-color: black; width: 100%;
+}
+
+.small8pt
+{
+	font-size: 8pt;
+}
+
+.block1
+{
+	margin-left: 40px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+	background-color: rgb(245,245,245);
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 1px;
+	padding-bottom: 5px;
+}
+.block2
+{
+	margin-left: 40px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+	background-color: rgb(245,245,245);
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 1px;
+	padding-bottom: 5px;
+	width: 85%;
+}
+
+/* Forum Plugin specific CSS */
+.codeblock  { 
+  background-color:#ECE9D8; 
+  color:#000;
+  width: 550px;
+  height: 160px;
+  overflow: auto;
+  min-height: 50px;
+  max-height: 120px;
+  margin: 5px 0px 5px 5px;
+  padding:5px;
+  border: 1px dashed black;
+}
+.quotemain
+{
+  background:#FAFCFE url('forum/image_set/img_quote.gif') no-repeat top right;      
+  border: 1px dotted #000;
+  border-left: 4px solid #8394B2;
+  color:#465584;
+  padding: 4px;
+  margin: 5px auto 8px auto;
+}
+
+/* CSS Declarations for Code block feature - default will use the .php one */
+div .php { max-height:400px; overflow:auto; height:auto; width:auto; min-height:100px; }
+div .html { height:300px; overflow:auto; width:auto; min-height:100px; }  
+div .css { height:300px; overflow:auto; width:auto; min-height:100px; }  
+
+/* END of Forum Plugin CSS *//******************   NEW CSS ADDED FOR FORUM Ver 2.3 ************************/
+
+TD.navbar      {
+    color: #FFFFFF;
+    background-color: #666666;
+    font-family: Verdana;
+    font-size: 10px;
+    line-height: 32px;
+    verticle-align: middle;
+    text-align: center;
+    font-weight: bold;
+    }
+
+TD.navbar a:link, TD.navbar a:visited { 
+    color: #FFFFFF;
+    font-style: normal;
+    font-weight: plain;
+    font-size: 10px;
+    font-family: Verdana, sans-serif;
+    text-decoration: none;
+    padding: 2px
+    }
+
+TD.navbar a:hover { 
+    color: #FFCC00;
+    font-style: normal;
+    font-weight: plain;
+    font-size: 10px;
+    font-family: Verdana, sans-serif;
+    text-decoration: none;
+    padding: 2px;
+    }
+
+#forumheading          { text-align:left; background-color: #FFFFFF; }
+.forumtext             { color: #000; }
+.forumclass1           { text-align:left; background-color: #BFBFBF; }
+.forumclass2           { text-align:left; background-color: #CCCCCC; }
+.forumclass3           { text-align:left; background-color: #EFEFEF; }
+.forumclass4           { text-align:left; background-color: #CCCCCC; }
+.forumoutline          { background-color: #CCCCCC; }
+
+/* These CSS declarations for links are used in a few places but are here for theme designers to use if needed - can be added to templates  */
+.forumlinks A:link            { color: #000000; font-style: normal; font-size: 11px; font-family: Verdana, sans-serif; text-decoration: underline }
+.forumlinks A:visited        { color: #000000; font-style: normal; font-size: 11px; font-family: Verdana, sans-serif; text-decoration: underline }
+.forumlinks A:hover            { color: #000000; font-style: normal; font-size: 11px; font-family: Verdana, sans-serif; text-decoration: underline }
+
+/* alternate table row colours */
+.forumAlt1   { background-color: #F5F5F5; }
+.forumAlt2   { background-color: #FFFFFF; }
+
+.quotebox   { 
+     border-style: ridge; 
+     background-color: #ECE9D8; 
+     padding:10px;
+     margin: 0px;
+     }
+
+.quotetext {
+     color:#000; 
+     font-weight: plain; 
+     background-color: #ECE9D8; 
+     font-family: Verdana; 
+     font-size: 9px; 
+     }
+
+.forumCode  { 
+    background-color: #ECE9D8; 
+    color: #000;
+    width: 470px;
+    height: 160px;
+    overflow: auto;
+    font-size: 11px;
+    min-height: 50px;
+    max-height: 120px;
+    margin: 5px, 0px,5px,5px;
+    padding:5px;
+    border: 1px dashed black;
+    }
+
+.forumTitle   {
+    color: #000000;
+    background-color: #EFEFEF;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14pt;
+    font-family: Verdana, Helvetica, sans-serif; }
+
+TD.forumRollOver  { 
+    text-align:left;
+    background-color: #FFFFFF; 
+    font-family: Verdana, Helvetica, sans-serif; 
+    color: #000033  
+    }
+TD.forumRollOut   { 
+    text-align:left;
+    background-color: #EFEFEF; 
+    font-family: Verdana, Helvetica, sans-serif; 
+    color: #000033  
+    }
+
+.cblockTitle    {
+    color: #FFFFFF;
+    background-color: #506790;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16pt;
+    padding-left:5px;
+    font-family: Verdana, Helvetica, sans-serif;
+}/* Default Plugin CSS Declarations */
+/* Recommended CSS to be used by Plugin Authors - allows easier site themeing */
+
+.plugin {
+  color:#000000;
+  background-color:#EFEFEF;
+  font-weight:normal;
+  border:1px solid #CCCCCC;
+}
+.plugin th {
+  color:#000000;
+  background-color:#B7C1DC;
+  padding:5px;
+  text-align:left;
+}
+.plugin tr {
+  vertical-align:top;
+}
+.plugin td {
+  padding:2px 5px 2px 5px;
+}
+.pluginBG {
+  color:#FEFEFE;
+  background-color:#7398BA;
+}
+.pluginAltBG {
+  background-color:#7398BA;
+}
+.pluginAltBG td {
+  color:#FFFFFF
+}
+.pluginCellTitle {
+  color:#FFFFFF;
+  font-weight:bold;
+  background-color:#7398BA;
+  padding:5px;
+}
+.pluginCellFill {
+  background-color:#F8FAFD;
+}
+.pluginCellText {
+  color:#636363;
+  font-weight:normal;
+}
+.pluginHeader {
+  color:#204275; 
+  font-weight:bolder; 
+  padding-top:3px; 
+  padding-bottom:3px;
+}
+.pluginFooter, .pluginFooter td {
+  background-color:#507AA1;
+  color:#FFFFFF;
+  }
+.pluginAlert {
+  padding:5px 15px 5px 15px;
+  color:#D8010E;
+  background-color:#FEF1B4;
+  font-weight:bold;
+}
+.pluginInfo {
+  padding:5px 15px 5px 15px;
+  color:#707070;
+  background-color:#FEF1B4;
+  font-weight:normal;
+}
+.pluginSubTable {
+  color:#000000;
+  background-color:#CCCCCC;
+  font-weight:normal;
+  border:1px solid #CCCCCC;
+}
+.pluginSubTable th {
+  color:#000000;
+  background-color:#C9D1E4;
+  padding:5px;
+  text-align:left;
+}
+.pluginSubTable tr {
+  vertical-align:top;
+}
+.pluginSolidOutline {
+  background-color:#CCCCCC;
+}
+.pluginSolidFill {
+  background-color:#1A3955;
+}
+.pluginTitle {
+  background-color:#507AA1;
+  color:#F5F9FF;
+  padding:4px;
+  padding-left:6px;
+  padding-right:6px; 
+}
+.pluginCellSubTitle { 
+  background-color:#F7F7F7;
+  color:#000000;
+  padding:4px;
+  padding-left:6px;
+  padding-right:6px; 
+}
+.pluginTinyText {
+  font-size:0.70em;
+}
+.pluginSmallText {
+  font-size:0.8em;
+}
+.pluginMediumText {
+  font-size:1em;
+}
+.pluginLargeText {
+  font-size:1.25em;
+}
+.pluginAltText {
+  color:#FFFFFF;
+}
+.pluginRow1, .pluginRow1 td {
+  color:#000000;
+  background-color:#F7F7F7; 
+  line-height:120%;
+}
+.pluginRow2, .pluginRow2 td { 
+  color:#000000;
+  background-color:#E7E7E7; 
+  line-height: 120%;
+}
+.pluginRow1 .pluginRollOver,
+.pluginRow2 .pluginRollOver,
+.pluginRollOver { 
+  color:#000000;
+  background-color:#FFFFFF;
+  line-height:120%;
+}
+.pluginRow1 .pluginRollOut,
+.pluginRow2 .pluginRollOut,
+.pluginRollOut { 
+  color:#000000;
+  background-color:#F7F7F7;
+  line-height:120%;
+}
+.pluginLinks A:link {
+  color:#000000;
+  font-style:normal;
+  font-weight:normal;
+  text-decoration:none;
+}
+.pluginLinks A:visited {
+  color:#000000;
+  font-style:normal;
+  font-weight:normal;
+  text-decoration:none;
+}
+.pluginLinks A:hover {
+  color:#000000;
+  font-style:normal;
+  font-weight:normal;
+  text-decoration:underline;
+}
+.pluginBreadCrumbs,
+.pluginBreadCrumbs A:link {
+  color:#FFFFFF;
+  font-style:normal;
+  font-weight:normal;
+  text-decoration:none;
+}
+.pluginBreadCrumbs A:visited {
+  color:#FFFFFF;
+  font-style:normal;
+  font-weight:normal;
+  text-decoration:none;
+}
+.pluginBreadCrumbs A:hover {
+  color:#FFFFFF;
+  font-style:normal;
+  font-weight:normal;
+  text-decoration:none;
+}
+a.pluginButton:link, a.pluginButton:visited {
+  color:#000000;
+  text-align:center;
+  padding-top:2px;
+  display:block;
+  height:19px;
+  text-decoration:none;
+  background-color:transparent;
+}
+a.pluginButton:hover {
+  color:blue;
+  text-align:center;
+  padding-top:2px;
+  background:center url(navbar/images/button_over.gif);
+  background-repeat:repeat-x;
+  display:block;
+  height:19px;
+  text-decoration:none;
+  background-color:transparent;
+}
+
+/* Navbar Class CSS ***********************************************************/
+#navcontainer {
+  float:left;
+  width:100%;
+  background:#F4F4F4;
+  font-size:93%;
+  line-height:normal;
+  border-bottom:1px solid #24618E;
+  }
+#navcontainer ul {
+  margin:0px;
+  padding:10px 10px 0 50px;
+  list-style:none;
+}
+#navcontainer li {
+  display:inline;
+  margin:0px;
+  padding:0px;
+}
+#navcontainer a {
+  float:left;
+  background:url("navbar/images/tableftJ.gif") no-repeat left top;
+  margin:0px;
+  padding:0px 0px 0px 5px;
+  text-decoration:none;
+}
+#navcontainer a span {
+  float:left;
+  display:block;
+  background:url("navbar/images/tabrightJ.gif") no-repeat right top;
+  padding:5px 15px 4px 6px;
+  color:#24618E;
+}
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+#navcontainer a span {
+  float:none;
+}
+/* End IE5-Mac hack */
+#navcontainer a:hover span {
+  color:#FFFFFF;
+}
+#navcontainer a:hover {
+  background-position:0% -42px;
+}
+#navcontainer a:hover span {
+  background-position:100% -42px;
+}
+#navcontainer a#current span {
+  background:url("navbar/images/tabrightI.gif") no-repeat left top;
+  background-position:100% -42px;
+  color:#FFFFFF;
+}
+#navcontainer a:link#current,
+#navcontainer a:visited#current,
+#navcontainer a:hover#current {
+  background:url("navbar/images/tableftI.gif") no-repeat left top;
+  background-position:0% -42px;
+}
+
+/* Common CSS for on-hover tooltip feature */
+a.tooltip {
+  position: relative; /*this is the key*/
+  z-index:10;
+  color:#000;
+  text-decoration:none;   
+}
+a.tooltip:hover  {
+  z-index:100;
+  text-decoration:none
+}
+a.tooltip span { 
+  display: none
+}
+a.tooltip:hover span { 
+  /*the span will display just on :hover state*/
+  z-index:100;    
+  color:#033666;
+  font-style:normal;
+  font-size:.8em;
+  line-height: 125%;
+  display:block;
+  position:absolute;
+  border:1px solid #C8DAF7;
+  background-color:#E5EFFF;
+  padding:4px;
+  text-align: left;
+  text-decoration:none;
+  left:-20px;
+  top:10px;
+  min-width:150px;
+}
+/* End of common CSS for on-hover info feature */
+
+/* Forum Plugin specific CSS */
+.codeblock  { 
+  background-color:#ECE9D8; 
+  color:#000;
+  width: 550px;
+  height: 160px;
+  overflow: auto;
+  min-height: 50px;
+  max-height: 120px;
+  margin: 5px 0px 5px 5px;
+  padding:5px;
+  border: 1px dashed black;
+}
+
+.quotemain
+{
+  background:#FAFCFE url('forum/image_set/img_quote.gif') no-repeat top right;      
+  border: 1px dotted #000;
+  border-left: 4px solid #8394B2;
+  color:#465584;
+  padding: 4px;
+  margin: 5px auto 8px auto;
+}
+
+/* CSS Declarations for Code block feature - default will use the .php one */
+div .php { max-height:400px; overflow:auto; height:auto; width:auto; min-height:100px; }
+div .html { height:300px; overflow:auto; width:auto; min-height:100px; }  
+div .css { height:300px; overflow:auto; width:auto; min-height:100px; }  
+
+/* END of Forum Plugin CSS */
+.bannerazul
+{
+  background: url('images/cabeza/banner_LPT.png') no-repeat;      
+  padding: 0px;
+  margin: 0;
+  width: 998px;
+  height:69px;
+}
+.barrasup {
+
+	padding: 0;
+
+	margin: 0;
+
+	margin-top: -0px;
+
+	padding-top: 0px;	
+	height:5px;
+
+	background: url(images/cabeza/barra_azul.png);
+
+}
+.lista ul{
+
+margin:0; padding:0;
+text-align: left;
+}
+
+.menu a{ margin-left:-10px; color: #000000;text-decoration: none;    font-weight: normal;}
+
+.menu a:visited{color: #000000;text-decoration: none;}
+
+.menu a:hover{color: #000099;text-decoration: none;}
+
+.submenu {
+
+	font-weight: normal;
+
+	font-size: 11px;
+
+}
+
+.submenu a {
+
+	text-align: left;
+
+	padding-left: 12px;
+	
+	color: #000000;
+
+	text-decoration: none;
+
+   font-weight: normal;
+   
+   font-size: 11px;
+  
+}
+
+.submenu a:hover{
+
+	padding-left: 12px;
+
+	color: #000099;
+
+	text-decoration: none;
+	
+	font-size: 11px;
+
+}
+.submenu a:visited{
+
+	text-align: left;
+
+
+	color: #000000;
+
+	text-decoration: none;
+
+   font-weight: normal;
+   font-size:11px;
+   
+   padding-left: 12px;
+
+}
+
+
+.block-info-left li {
+
+	margin-left: 25px;
+
+	margin-right: 10px;
+
+	border-bottom-style: solid;
+
+	border-bottom-color: #56585a;
+
+	border-bottom-width: 1px;
+
+	padding-bottom: 10px; padding-top: 5px;
+
+	font-size: 10px;
+
+   font-weight: normal;	  
+
+   color:#000000;
+
+   text-align: left;   
+   list-style-image: url(images/lateral/flecha.png);
+	text-indent: -5px;
+}
+
+.block-info a{
+  padding-left: 0px;
+  padding-right: 0px;
+  text-decoration: none;
+  font-weight: normal;
+  font-family: Verdana;
+  font-size: 12px;
+  color:#000099;
+}
+
+.submenu li {
+   margin-left: 27px;
+
+	margin-right: 10px;
+
+	border-bottom-style: solid;
+
+	border-bottom-color: #56585a;
+
+	border-bottom-width: 1px;
+
+	padding-bottom: 10px; padding-top: 5px;
+
+	font-size: 10px;
+
+   font-weight: normal;	  
+
+   color:#000000;
+
+   text-align: left;   
+
+   list-style-image: url(images/menus/linea.png);   
+
+}
+
+ li{
+
+	border-bottom-width: 1px;	
+	
+	margin-left: 25px;
+
+	margin-right: 10px;
+
+	padding-bottom: 3px; padding-top: 3px;
+
+	font-size: 10px;
+
+   font-weight: normal;	  
+
+  color:#56585A; 
+  font-size: 9pt;
+  font-family: verdana;
+
+   text-align: left;   
+   list-style-image: url(images/lateral/circulo.png);
+	text-indent: -5px;
+}
+
+.textoespecial {
+    font-family: verdana;
+	font-size: 13px;
+
+   font-weight: normal;	  
+
+   color:#3e0808;
+}
+
+a.mainlevelsup:link, a.mainlevelsup:visited
+
+ {
+
+  padding-left: 10px;
+
+  padding-right: 10px;
+
+  text-decoration: none;
+
+  font-weight: bold;
+
+  font-family: Verdana;
+
+  font-size: 12px;
+
+  color:#808080;
+
+  margin-bottom: 0px;
+
+  text-align: right;
+
+
+}
+
+a.mainlevelsup:hover {
+
+   color:#c8d8e5;	
+
+   font-weight: bold;
+font-size: 12px;
+}
+
+/* END of Forum Plugin CSS */

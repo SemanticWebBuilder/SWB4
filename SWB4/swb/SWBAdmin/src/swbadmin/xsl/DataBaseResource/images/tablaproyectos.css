@@ -1,0 +1,111 @@
+.contenido {
+	color: #005500;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+	background-color: #F2FFF3;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	border: 1px outset #999999;
+}
+.combos {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	line-height: normal;
+	color: #666666;
+	background-color: #ECFFEC;
+	border: 1px solid #006600;
+	font-weight: bold;
+
+}
+.combosSup {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-style: normal;
+	line-height: normal;
+	color: #333333;
+	background-color: #F3F3F3;
+	border: 1px solid #666666;
+	font-weight: normal;
+}
+.pestanas {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	color: #666666;
+	background-color: #eeeeee;
+	text-decoration: none;
+}
+.txt {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #333333;
+	border: none;
+
+}
+.Estados {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12pt;
+	font-weight: bold;
+	color: #006600;
+	text-transform: uppercase;
+	background-color: #F9F9F9;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #666666;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #797979;
+	line-height: 30px;
+}
+.txtgreen {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	font-variant: normal;
+	color: #006600;
+}
+.txtul {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	color: #333333;
+	border-top: none;
+	border-right: none;
+	border-bottom: thin solid #666666;
+	border-left: none;
+}
+.style5 {
+	font-size: 9pt;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+.boton {
+	color:#FFFFFF;
+	background-color:#2A5216;
+	border-color:#77AE4D;
+	FONT-FAMILY: verdana,arial,helvetica,sans-serif;
+	FONT-SIZE: 10pt;
+}
+.titulos {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	color: #006600;
+	text-transform: capitalize;
+	background-color: #F9F9F9;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #666666;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #797979;
+	line-height: 20px;
+}

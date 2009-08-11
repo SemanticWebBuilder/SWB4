@@ -1,0 +1,463 @@
+/* CSS Document */
+
+body {
+	font-size: 100.1%;
+}
+
+/*------------------- Menu ---------*/
+
+#swb-menu {
+	width: 11.23em;
+	border:#336699 solid 0.06em;
+	font-family:Arial;
+	font-size:1em;
+}
+#swb-menu h1{
+	background: url(bg_titulos.gif) #336699 repeat-x;
+	margin: 0 0 0.63em 0;
+	padding: 0;
+	line-height:1.56em;
+	font-size:0.88em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: center;
+	text-transform: capitalize;
+}
+#swb-menu h1 a:link{
+	color: #FFFFFF;
+	text-decoration:none;
+}
+#swb-menu h1 a:visited{
+	color: #FFFFFF;
+	text-decoration:none;
+}
+#swb-menu h1 a:hover{
+	color: #FFFFFF;
+	text-decoration:none;
+}
+#swb-menu h1 a:active{
+	color: #FFFFFF;
+	text-decoration:none;
+}
+#swb-menu ul{
+	margin: 0;
+	padding: 0.31em;
+	font-size: 0.75em;
+	list-style:none;
+	list-style-position:inside;
+}
+#swb-menu li {
+	padding: 0.31em 0.31em 0.31em 0.31em;
+}
+#swb-menu li a:link{
+	color: #336699;
+	text-decoration:none;
+}
+#swb-menu li a:visited{
+	color: #336699;
+	text-decoration:none;
+}
+#swb-menu li a:hover{
+	color: #99ccff;
+	text-decoration:none;
+}
+#swb-menu li a:active{
+	color: #FFFFFF;
+	text-decoration:none;
+}
+#swb-menu span {
+	color:#990000;
+}
+/*------------------- Menu ---------*/
+/*------------------- Encuesta  ----*/
+
+#swb-encuesta {
+	width: 11.23em;
+	border:#336699 solid .06em;
+	font-family:Arial;
+	font-size:1em;
+}
+#swb-encuesta h1{
+	background: url(bg_titulos.gif) #336699 repeat-x;
+	margin: 0 0 0.63em 0;
+	padding: 0;
+	line-height:1.56em;
+	font-size:0.88em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: center;
+	text-transform: capitalize;
+}
+#swb-encuesta label{
+	/* margin-top:.63;  Activar para */
+	/* display: block;   espaciar opciones*/
+	padding-left:1.25em;
+	font-size: 0.75em;
+	color:#336699;
+}
+.swb-encuesta-boton {
+	/* class en codigo para funcionar en IE y FFox*/
+	background-color:#336699;
+	color:#FFFFFF;
+	margin: 0.3em 1.25em 0.3em 1.25em;
+	font-size:.75em;
+}
+#swb-encuesta p{
+	line-height:0em;
+	text-align:center;
+	font-size: 0.75em;
+}
+#swb-encuesta a{
+	text-decoration:none;
+	color:#336699;
+}
+
+/*------------------- Encuesta  ----*/
+/*------------------- Recomendar  ----*/
+#swb-recomendar {
+	width: 23.33em;
+	border:#336699 solid .05em;
+	font-family:Arial;
+	font-size:1em;
+}
+#swb-recomendar h1{
+	background: url(bg_titulos.gif) #336699 repeat-x;
+	margin: 0 0 0.63em 0;
+	padding: 0;
+	line-height:1.56em;
+	font-size:0.88em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: center;
+	text-transform: capitalize;
+}
+#swb-recomendar fieldset{
+	margin-left:1em;
+	margin-right:1em;
+	margin-bottom:1em;
+	background: #d6e7f8 url(bg_fieldset.jpg) top repeat-x;
+	border:#336699 solid 0.06em;
+}
+#swb-recomendar legend{
+	padding: .3em .6em .3em .6em;
+	margin-left:2em;
+	margin-bottom:0.5em;
+	font-size:.75em;
+	font-weight:bold;
+	color: #FFFFFF;
+	border:#336699 solid 0.06em;
+	background: #6699cc;
+}
+#swb-recomendar table{
+	padding: .6em .6em .6em .6em;
+	margin-left:1.25em;
+}
+#swb-recomendar td{
+	vertical-align: top;
+}
+#swb-recomendar label{
+	font-size: 0.75em;
+	color:#336699;
+	float:right;
+}
+.swb-recomendar-text {
+	/* class en c�digo para funcionar en IE y FFox*/
+	color:#336699;
+	width:15em;
+	float:left;
+}
+#swb-recomendar textarea{
+	width:16.7em;
+	height:4.7em;
+	color:#336699;
+	font-family:Arial;
+	font-size:0.75em;
+	float:left;
+}
+.swb-recomendar-boton {
+	/* class en c�digo para funcionar en IE y FFox*/
+	background:#336699;
+	width:auto;
+	color:#FFFFFF;
+	margin: .3em 1.25em .3em 1.25em;
+	font-size:.75em;
+}
+#swb-recomendar p {
+	text-align:center;
+	font-size:.75em;
+}
+#swb-recomendar a {
+	color:#336699;
+}
+/*------------------- Recomendar  ----*/
+/*------------------- Comentarios  ----*/
+#swb-comentar {
+	width: 21.33em;
+	border:#336699 solid .05em;
+	font-family:Arial;
+	font-size:1em;
+}
+#swb-comentar h1{
+	background: url(bg_titulos.gif) #336699 repeat-x;
+	margin: 0 0 0.63em 0;
+	padding: 0;
+	line-height:1.56em;
+	font-size:0.88em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: center;
+	text-transform: capitalize;
+}
+#swb-comentar h2{
+	font-size:0.8em;
+	font-weight: bold;
+	color: #336699;
+	text-align: center;
+}
+#swb-comentar table{
+	padding: .6em .6em .6em .6em;
+	margin-left:1.25em;
+	font-size:.75em;
+	color:#336699;
+}
+#swb-comentar td{
+	vertical-align: top;
+}
+#swb-comentar label{
+	font-size: 0.75em;
+	color:#336699;
+	float:right;
+}
+#swb-comentar select{
+	height:1.6em;
+	font-size: 0.8em;
+	color:#336699;
+	float:left;
+}
+.swb-comentar-text {
+	/* class en c�digo para funcionar en IE y FFox*/
+	color:#336699;
+	width:15em;
+	float:left;
+}
+#swb-comentar textarea{
+	width:16.7em;
+	height:4.7em;
+	color:#336699;
+	font-family:Arial;
+	font-size:0.75em;
+	float:left;
+}
+.swb-comentar-boton {
+	/* class en c�digo para funcionar en IE y FFox*/
+	background:#336699;
+	width:auto;
+	color:#FFFFFF;
+	margin: .3em 1.25em .3em 1.25em;
+	font-size:.75em;
+}
+#swb-comentar p {
+	text-align:center;
+	font-size:.75em;
+	color:#336699;
+}
+#swb-comentar a {
+	color:#336699;
+}
+#swb-comentar fieldset{
+	margin:1em 1em 1em 1em;
+	padding-bottom:.6em;
+	background: #d6e7f8 url(bg_fieldset.jpg) top repeat-x;
+	border:#336699 solid 0.06em;
+}
+#swb-comentar legend{
+	padding: .3em .6em .3em .6em;
+	margin-left:2em;
+	margin-bottom:0.5em;
+	font-size:.75em;
+	font-weight:bold;
+	color: #FFFFFF;
+	border:#336699 solid 0.06em;
+	background: #6699cc;
+}
+/*------------------- Comentarios  ----*/
+/*------------------- PROMO        ----*/
+#swb-promo {
+	width: 21.3em;
+	min-height: 12em;
+	border: #336699 solid .06em;
+	padding: .6em .6em .6em .6em;
+}
+#swb-promo h1{
+	font-family:Arial;
+	font-size: 1em;
+	font-weight: bold;
+	color: #336699;
+	text-align:center;
+	margin: 0;
+	padding:0;
+}
+#swb-promo h2{
+	font-family:Arial;
+	font-size: .75em;
+	font-weight: bold;
+	color: #336699;
+	text-align:center;
+}
+#swb-promo img{
+	width: 120px;
+	height: 100px;
+	border: #999999 solid 1px;
+	margin: .3em .3em 0em .3em;
+	display:block;
+	float: left;
+}
+#swb-promo h6{
+	width:120px;
+	border:#999999 solid 1px;
+	background-color: #999999;
+	font-family:Arial;
+	font-size: .6em;
+	font-weight: bold;
+	text-align:center;
+	color: #FFFFFF;
+	float: left;
+	clear:left;
+	margin: 0em .3em 1em .5em;
+}
+#swb-promo p{
+	font-family:Arial;
+	font-size: .75em;
+	color: #336699;
+	text-align:justify;
+}
+#swb-promo ul {
+	padding: 0;
+	margin: 0;
+	font-family:Arial;
+	font-size: 0.75em;
+	margin-left: 13em;
+}
+#swb-promo li{
+	list-style:url(bullet-mas1.gif);
+	color:#336699;
+}
+#swb-promo li a:link{
+	list-style:url(bullet-mas1.gif);
+	color:#336699;
+}
+#swb-promo li a:visited{
+	list-style:url(bullet-mas1.gif);
+	color: #336699;
+}
+#swb-promo li a:hover{
+	list-style:url(bullet-mas2.gif);
+	color: #99ccff;
+}
+#swb-promo li a:active{
+	list-style:url(bullet-mas3.gif);
+	color:#FFFFFF;
+}
+
+
+/*------------------- PROMO        ----*/
+/*------------------- Mapa de sitio ---*/
+#swb-mapa {
+	border:#336699 solid 0.06em;
+	font-family:Arial;
+	font-size:1em;
+}
+#swb-mapa h1{
+	background: url(bg_titulos.gif) #336699 repeat-x;
+	margin: 0 0 0.63em 0;
+	padding: 0;
+	font-size: 1em;
+	font-family:Arial;
+	text-transform:capitalize;
+	text-align:center;
+	color: #FFFFFF;
+}
+#swb-mapa li {
+	font-size: 12px;
+	font-family:Arial;
+	list-style: url(bullet-menu-cerrado.jpg);
+	line-height: 20px;
+	display:compact;
+	border:#00FF33 solid 0;
+}
+#swb-mapa li a:link {
+	color:#336699;
+	text-decoration:none;
+}
+#swb-mapa li a:visited {
+	color:#336699;
+	text-decoration:none;
+}
+#swb-mapa li a:hover {
+	color:#000000;
+	text-decoration: underline;
+	background-color:#EEEEEE;
+}
+#swb-mapa li a:active {
+	color:#FFFFFF;
+	text-decoration:none;
+}
+#swb-mapa li span {
+	font-size: 12px;
+	font-family:Arial;
+	list-style:  url(bullet-vacio.gif);
+	line-height: 20px;
+	display:compact;
+	border:#00FF33 solid 0;
+}
+
+/*------------------- Mapa de sitio ---*/
+/*------------------- Query ---*/
+#swb-query {
+	border: #336699 solid .06em;
+	padding: .2em .2em .2em .2em;
+	font-family:Arial;
+}
+#swb-query table {
+	width:100%;
+	border: #336699 solid .06em;
+	border-collapse:collapse;
+	text-align:center;
+	font-size: 1em;
+}
+#swb-query caption {
+	background: url(bg_titulos.gif) #336699 repeat-x;
+	margin: 0 0 0 0;
+	padding: 0;
+	line-height:1.56em;
+	font-size:0.88em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-transform: capitalize;
+}
+#swb-query thead {
+	font-size: .75em;
+}
+#swb-query tbody {
+}
+#swb-query tfoot td {
+	font-size: .6em;
+	color:#FFFFFF;
+	background: #6699CC;
+}
+#swb-query th {
+	background: #CCE6FF;
+	color: #336699;
+	border-bottom: #336699 solid .06em;
+	padding:5px;
+}
+#swb-query span {
+	background: red;
+}
+#swb-query td {
+	border-bottom: #CEDAE6 solid .06em;
+	background: #EFF6FF;
+	font-size: .75em;
+	padding:5px;
+}
+/*------------------- Query ---*/
