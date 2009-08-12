@@ -298,7 +298,7 @@ public class SWBResourceURLImp implements SWBResourceURL
    *                    if the method is invoked after <code>sendRedirect</code> has been called.
    */
 
-  public void setParameters(java.util.Map parameters)
+  public SWBResourceURL setParameters(java.util.Map parameters)
   {
       if(parameters!=null)
       {
@@ -309,6 +309,7 @@ public class SWBResourceURLImp implements SWBResourceURL
               map.put(key, parameters.get(key));
           }
       }
+      return this;
   }
 
 
@@ -334,10 +335,11 @@ public class SWBResourceURLImp implements SWBResourceURL
    *                    if the method is invoked after <code>sendRedirect</code> has been called.
    */
 
-  public void setParameter(String key, String value)
+  public SWBResourceURL setParameter(String key, String value)
   {
       if(key!=null && value!=null)
         map.put(key, value);
+      return this;
   }
 
 
@@ -363,10 +365,11 @@ public class SWBResourceURLImp implements SWBResourceURL
    *                    if the method is invoked after <code>sendRedirect</code> has been called.
    */
 
-    public void setParameter(String key, String[] values)
+    public SWBResourceURL setParameter(String key, String[] values)
     {
-      if(key!=null && values!=null)
-        map.put(key, values);
+        if(key!=null && values!=null)
+          map.put(key, values);
+        return this;
     }
 
     /** Getter for property adminTopic.
@@ -424,9 +427,10 @@ public class SWBResourceURLImp implements SWBResourceURL
      * Setter for property onlyContent.
      * @param onlyContent New value of property onlyContent.
      */
-    public void setOnlyContent(boolean onlyContent)
+    public SWBResourceURL setOnlyContent(boolean onlyContent)
     {
         this.onlyContent = onlyContent;
+        return this;
     }    
     
     /**
