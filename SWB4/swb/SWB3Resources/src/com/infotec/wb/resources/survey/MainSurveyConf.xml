@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>MainSurvey</resource-name>
+        <display-name xml:lang="es">Formularios</display-name>
+        <display-name xml:lang="en">Main Survey</display-name>
+        <description xml:lang="es">Recurso que permite la generación de cuestionarios y formularios complejos y a partir de ellos generar estadisticas y reportes</description>
+        <description xml:lang="en">resource that allows to create multiple and complex surveys, with the posibilility to generate statistics and reports</description>
+        <resource-class>com.infotec.wb.resources.survey.MainSurvey</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.survey.MainSurvey</resource-bundle>
+        <resource-type>3</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
