@@ -62,7 +62,7 @@ public class CodeGeneratorCommunity {
     {
     }
 
-    @Test
+    //@Test
     public void generateCatalogs()
     {
         try
