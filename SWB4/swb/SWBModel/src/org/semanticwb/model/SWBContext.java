@@ -154,11 +154,12 @@ public class SWBContext extends SWBContextBase
                     ret=cobj.getProperty(DisplayObject.swb_iconClass);
                 }
             }
+
+            if(ret==null)ret="swbIcon"+cls.getName();
             
-            if(ret==null)
+            //if(ret!=null)
             {
                 //System.out.println("getIconClass:1");
-                ret="swbIcon"+cls.getName();
                 if(cls.hasProperty(Activeable.swb_active.getName()))
                 {
                     if(!obj.getBooleanProperty(Activeable.swb_active))

@@ -93,12 +93,14 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
         String pmsg=null;
         String imsg=null;
         String selectValues=null;
+        boolean disabled=false;
         if(sobj!=null)
         {
             DisplayProperty dobj=new DisplayProperty(sobj);
             pmsg=dobj.getPromptMessage();
             imsg=dobj.getInvalidMessage();
             selectValues=dobj.getDisplaySelectValues(lang);
+            disabled=dobj.isDisabled();
         }
 
         if(DOJO)
@@ -125,6 +127,12 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
             }
         }
 
+        String ext="";
+        if(disabled)
+        {
+            ext+=" disabled=\"disabled\"";
+        }
+
         if(prop.isObjectProperty())
         {
             SemanticObject val=null;
@@ -141,7 +149,10 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
             if(mode.equals("edit") || mode.equals("create") )
             {
                 ret.append("<select name=\""+name+"\"");
-                if(DOJO)ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">");
+                if(DOJO)ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\"");
+                ret.append(" required=\""+required+"\"");
+                if(isBlankSuport() && (uri==null || uri.length()==0))ret.append(" displayedvalue=\"\"");
+                ret.append(" "+ext+">");
                 //onChange="dojo.byId('oc1').value=arguments[0]"
                 if(isBlankSuport())ret.append("<option value=\"\"></option>");
                 SemanticClass cls=prop.getRangeClass();
@@ -202,7 +213,8 @@ public class SelectTree extends org.semanticwb.model.base.SelectTreeBase
                 String value=request.getParameter(prop.getName());
                 if(value==null)value=obj.getProperty(prop);
                 ret.append("<select name=\""+name+"\"");
-                if(DOJO)ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\">");
+                if(DOJO)ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\"");
+                ret.append(" "+ext+">");
                 StringTokenizer st=new StringTokenizer(selectValues,"|");
                 while(st.hasMoreTokens())
                 {

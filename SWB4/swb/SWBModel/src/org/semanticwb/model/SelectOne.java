@@ -127,9 +127,16 @@ public class SelectOne extends SelectOneBase
             {
                 ret.append("<select name=\""+name+"\"");
                 if(DOJO)ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\"");
+                ret.append(" required=\""+required+"\"");
+                if(isBlankSuport() && (uri==null || uri.length()==0))ret.append(" displayedvalue=\"\"");
                 ret.append(" "+ext+">");
                 //onChange="dojo.byId('oc1').value=arguments[0]"
-                if(isBlankSuport())ret.append("<option value=\"\"></option>");
+                if(isBlankSuport())
+                {
+                    ret.append("<option");
+                    //if(uri==null || uri.length()==0)ret.append(" selected");
+                    ret.append(" value=\"\"></option>");
+                }
                 SemanticClass cls=prop.getRangeClass();
                 Iterator<SemanticObject> it=null;
                 if(isGlobalScope())
