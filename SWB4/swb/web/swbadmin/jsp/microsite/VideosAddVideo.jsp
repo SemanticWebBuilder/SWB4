@@ -24,5 +24,5 @@
             <a class="button" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
         </p>
     </div>
-    <input type="hidden" name="act" value="addVideo"/>
+    <input type="hidden" name="act" value="add"/>
 </form>

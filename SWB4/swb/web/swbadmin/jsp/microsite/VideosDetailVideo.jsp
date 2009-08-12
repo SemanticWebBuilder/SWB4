@@ -8,7 +8,7 @@
 %>
 <%
         String uri=request.getParameter("uri");
-        Video rec=(Video)SemanticObject.createSemanticObject(uri).getGenericInstance();
+        Video rec=(Video)SemanticObject.createSemanticObject(uri).createGenericInstance();
         if(rec!=null)
         {
 %>
@@ -28,7 +28,7 @@
 %>        
 
 <center>
-    <a href="<portlet:renderURL/>">Regresar</a> 
+    <a href="<%=paramRequest.getRenderUrl()%>">Regresar</a>
     <%if(rec.canModify(member)){%><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",rec.getURI())%>">Editar Información</a><%}%>
-    <%if(rec.canModify(member)){%><a href="<%=paramRequest.getActionUrl().setParameter("act","removeVideo").setParameter("uri",rec.getURI())%>">Eliminar Video</a><%}%>
+    <%if(rec.canModify(member)){%><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",rec.getURI())%>">Eliminar Video</a><%}%>
 </center>
