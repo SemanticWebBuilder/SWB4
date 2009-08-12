@@ -8,7 +8,7 @@
 %>
 <%
         String uri=request.getParameter("uri");
-        Video rec=(Video)SemanticObject.createSemanticObject(uri).getGenericInstance();
+        Video rec=(Video)SemanticObject.createSemanticObject(uri).createGenericInstance();
         if(rec==null)
         {
 %>
@@ -98,6 +98,6 @@
             <a class="button" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
         </p>
     </div>
-    <input type="hidden" name="video_id" value="<%=rec.getURI()%>"/>
-    <input type="hidden" name="act" value="editVideo"/>
+    <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
+    <input type="hidden" name="act" value="edit"/>
 </form>

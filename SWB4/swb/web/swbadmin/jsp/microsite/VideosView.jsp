@@ -13,7 +13,7 @@
     while(it.hasNext())
     {
         Video video=it.next();
-        SWBResourceURL viewurl=paramRequest.getRenderUrl().setParameter("act","detailVideo").setParameter("uri",video.getURI());
+        SWBResourceURL viewurl=paramRequest.getRenderUrl().setParameter("act","detail").setParameter("uri",video.getURI());
         if(video.canView(member))
         {
             if(i%2==0)out.println("<tr>");
