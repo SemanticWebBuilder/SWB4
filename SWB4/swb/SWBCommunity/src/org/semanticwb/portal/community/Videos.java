@@ -96,7 +96,7 @@ public class Videos extends org.semanticwb.portal.community.base.VideosBase
 
         String action=request.getParameter("act");
         System.out.println("act:"+action);
-        if("addVideo".equals(action) && mem.canAdd())
+        if("add".equals(action) && mem.canAdd())
         {
             String code=request.getParameter("video_code");
             Video rec=Video.createVideo(getResourceBase().getWebSite());
@@ -114,10 +114,10 @@ public class Videos extends org.semanticwb.portal.community.base.VideosBase
                 response.setRenderParameter("act","add");               //regresa a agregar codigo
                 response.setRenderParameter("err","true");              //envia parametro de error
             }
-        }else if("editVideo".equals(action))
+        }else if("edit".equals(action))
         {
-            String uri=request.getParameter("video_id");
-            Video rec=(Video)SemanticObject.createSemanticObject(uri).getGenericInstance();
+            String uri=request.getParameter("uri");
+            Video rec=(Video)SemanticObject.createSemanticObject(uri).createGenericInstance();
             if(rec!=null && rec.canModify(mem))
             {
                 rec.setTitle(request.getParameter("video_title"));
@@ -125,10 +125,10 @@ public class Videos extends org.semanticwb.portal.community.base.VideosBase
                 rec.setTags(request.getParameter("video_tags"));
                 rec.setVisibility(Integer.parseInt(request.getParameter("level")));   //hace convercion a int en automatico
             }
-        }else if("removeVideo".equals(action))
+        }else if("remove".equals(action))
         {
-            String uri=request.getParameter("video_id");
-            Video rec=(Video)SemanticObject.createSemanticObject(uri).getGenericInstance();
+            String uri=request.getParameter("uri");
+            Video rec=(Video)SemanticObject.createSemanticObject(uri).createGenericInstance();
 
             if(rec!=null && rec.canModify(mem))
             {
