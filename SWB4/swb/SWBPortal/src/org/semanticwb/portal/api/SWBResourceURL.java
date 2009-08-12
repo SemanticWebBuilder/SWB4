@@ -177,7 +177,7 @@ public interface SWBResourceURL extends SWBResourceModes
      *                    if the method is invoked after <code>sendRedirect</code> has been called.
      */
     
-    public void setParameters(java.util.Map parameters);
+    public SWBResourceURL setParameters(java.util.Map parameters);
     
     
     /**
@@ -202,7 +202,7 @@ public interface SWBResourceURL extends SWBResourceModes
      *                    if the method is invoked after <code>sendRedirect</code> has been called.
      */
     
-    public void setParameter(String key, String value);
+    public SWBResourceURL setParameter(String key, String value);
     
     
     /**
@@ -227,7 +227,7 @@ public interface SWBResourceURL extends SWBResourceModes
      *                    if the method is invoked after <code>sendRedirect</code> has been called.
      */
     
-    public void setParameter(String key, String[] values);
+    public SWBResourceURL setParameter(String key, String[] values);
     
     
     /**
@@ -247,6 +247,6 @@ public interface SWBResourceURL extends SWBResourceModes
      * Setter for property onlyContent.
      * @param onlyContent New value of property onlyContent.
      */
-    public void setOnlyContent(boolean onlyContent);
+    public SWBResourceURL setOnlyContent(boolean onlyContent);
     
 }

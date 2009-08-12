@@ -381,6 +381,7 @@ public class DistributorParams
                     webpage=tm.getHomePage();
                 }
             }
+            //System.out.println("tm:"+tm);
         }else
         {
             Dns dns=Dns.getDns(request.getServerName());
