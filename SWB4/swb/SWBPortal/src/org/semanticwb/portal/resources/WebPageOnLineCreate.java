@@ -1,34 +1,34 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
+/**
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+*
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* del SemanticWebBuilder 4.0.
+*
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* de la misma.
+*
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+* dirección electrónica:
 *  http://www.semanticwebbuilder.org
-**/ 
- 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+**/
+
 package org.semanticwb.portal.resources;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,16 +41,21 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
+import org.semanticwb.model.VersionInfo;
+import org.semanticwb.model.Versionable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+//import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
-import org.semanticwb.portal.SWBFormMgr;
+//import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+//import org.semanticwb.portal.resources.sem.HTMLContent;
 
 /**
  *
@@ -66,7 +71,7 @@ public class WebPageOnLineCreate extends GenericResource {
         PrintWriter out = response.getWriter();
 
         WebPage wpParent = paramRequest.getWebPage();
-        
+
 
 
         if (userCanEdit(paramRequest)) {
@@ -79,8 +84,7 @@ public class WebPageOnLineCreate extends GenericResource {
             out.println("  dojo.require(\"dijit.form.ValidationTextBox\");");
             out.println("  dojo.require(\"dijit.form.Button\");");
             out.println("</script>");
-            out.println("<a href=\"#\" onclick=\"dijit.byId('tooltipDlg').show();\">" + "Crear página" + "</a>"); //<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/nueva_version.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgNewVersion") + "\">
-            //out.println("<input type=\"button\" value=\"Agregar Sección\" onclick=\"dijit.byId('tooltipDlg').show()\">");
+            out.println("<a href=\"#\" onclick=\"dijit.byId('tooltipDlg').show();\">" + "Crear página" + "</a>");
             out.println("<div dojoType=\"dijit.Dialog\" style=\"display:none;\" id=\"tooltipDlg\" title=\"Agregar Sección\">");
             out.println("  <form id=\"addtpf\" action=\""+urladd+"\">");
             out.println("    <table>");
@@ -111,12 +115,6 @@ public class WebPageOnLineCreate extends GenericResource {
             out.println("    </table>");
             out.println("  </form>");
             out.println("</div>");
-
-//            if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
-//                out.println("<script type=\"javascript\">");
-//                out.println(" dijit.byId('tooltipDlg').hide(); ");
-//                out.println("</script>");
-//            }
         }
     }
 
@@ -128,15 +126,16 @@ public class WebPageOnLineCreate extends GenericResource {
         } else {
             response.getResourceBase().setData(request.getParameter("txt"));
         }
-        //System.out.println("txt:"+request.getParameter("txt"));
         String action = response.getAction();
         if (action == null) {
             action = "";
         }
         if (action.equals("admin_update")) {
             String editaccess = request.getParameter("editar");
+            String createContent = request.getParameter("content");
             if (editaccess != null) {
                 getResourceBase().setAttribute("editRole", editaccess);
+                if(createContent!=null) getResourceBase().setAttribute("createContent", createContent);
                 try {
                     getResourceBase().updateAttributesToDB();
                 } catch (Exception e) {
@@ -151,13 +150,54 @@ public class WebPageOnLineCreate extends GenericResource {
             WebSite wsite = wpage.getWebSite();
 
             try {
-                WebPage wp = wsite.createWebPage(request.getParameter("id").toLowerCase());
+                WebPage wp = wsite.createWebPage(request.getParameter("id"));
                 wp.setParent(wpage);
                 wp.setTitle(request.getParameter("title"));
                 wp.setActive(Boolean.TRUE);
 
+                String canCreate = getResourceBase().getAttribute("createContent", "0");
+                if(canCreate.equals("1"))
+                {
+                    Resource res = wsite.createResource();
+                    res.setResourceType(wsite.getResourceType("HTMLContent"));
+                    res.setTitle("Contenido autogenerado");
+                    res.setActive(Boolean.FALSE);
+                    wp.addResource(res);
+
+//                    SemanticObject so =  res.getResourceData();
+//                    GenericObject go =  so.getGenericInstance();
+//
+//
+//                    VersionInfo vi = wsite.createVersionInfo();
+//                    vi.setVersionFile("index.html");
+//                    vi.setVersionNumber(1);
+//                    vi.setVersionComment("Versión inicial");
+//
+//                    SWBResource swres = (SWBResource) go;
+//
+//                    Versionable vswres = (Versionable) go;
+//                    vswres.setActualVersion(vi);
+//                    vswres.setLastVersion(vi);
+//
+//                    String rutaFS_target_path = SWBPlatform.getWorkPath() + swres.getResourceBase().getWorkPath() + "/1/";
+//                    File f = new File(rutaFS_target_path);
+//                    if (!f.exists()) {
+//                        f.mkdirs();
+//                    }
+//
+//                    File ftmpl = new File(SWBPlatform.getWorkPath() + swres.getResourceBase().getWorkPath() + "/1/index.html");
+//                    Writer output = new BufferedWriter(new FileWriter(ftmpl));
+//                    try {
+//                        output.write("Contenido HTML...");
+//                    } finally {
+//                        output.close();
+//                    }
+
+
+                }
+
             } catch (Exception e) {
-                throw new SWBResourceException("Error to process form...", e);
+                throw new SWBResourceException("Error al agregar la nueva página con contenido...", e);
             }
 
             response.setRenderParameter("dialog", "close");
@@ -181,6 +221,7 @@ public class WebPageOnLineCreate extends GenericResource {
         WebSite wsite = wpage.getWebSite();
 
         String str_role = base.getAttribute("editRole", "0");
+        String str_create = base.getAttribute("createContent", "0");
         out.println("<div class=\"swbform\">");
         SWBResourceURL urlA = paramRequest.getActionUrl();
         urlA.setAction("admin_update");
@@ -225,6 +266,15 @@ public class WebPageOnLineCreate extends GenericResource {
         out.println("<tr><td colspan=\"2\"><b>" + "Role / UserGroup para edición" + "</b></td></tr>");
         out.println("<tr><td align=\"right\" width=\"150\">" + "Editar" + ":</td>");
         out.println("<td><select name=\"editar\">" + strTemp + "</select></td></tr>");
+        out.println("<tr><td align=\"right\" width=\"150\">" + "Agregar HTML-Content" + ":</td>");
+
+        String str_checked="";
+        if(!str_create.equals("0"))
+        {
+            str_checked="checked";
+        }
+
+        out.println("<td><input type=\"checkbox\" name=\"content\" value=\"1\" "+str_checked+" /></td></tr>");
         out.println("</table>");
         out.println("</fieldset>");
         out.println("<fieldset>");
@@ -236,43 +286,50 @@ public class WebPageOnLineCreate extends GenericResource {
 
     private boolean userCanEdit(SWBParamRequest paramrequest) {
         boolean access = false;
+        String str_role = getResourceBase().getAttribute("editRole", "0");
+        User user = paramrequest.getUser();
         try {
-            User user = paramrequest.getUser();
-            String str_role = getResourceBase().getAttribute("editRole", "0");
+            if (user != null&&!str_role.equals("0")) {
+                SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+                GenericObject gobj = null;
+                try {
+                    gobj = ont.getGenericObject(str_role);
+                } catch (Exception e) {
+                    log.error("Errror InlineEdit.userCanEdit()", e);
+                }
 
-            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-            GenericObject gobj = null;
-            try {
-                gobj = ont.getGenericObject(str_role);
-            } catch (Exception e) {
-                log.error("Errror InlineEdit.userCanEdit()", e);
-            }
+                UserGroup ugrp = null;
+                Role urole = null;
 
-            UserGroup ugrp = null;
-            Role urole = null;
-
-            if (!str_role.equals("0")) {
-                if (gobj != null) {
-                    if (gobj instanceof UserGroup) {
-                        ugrp = (UserGroup) gobj;
-                        if (user.hasUserGroup(ugrp)) {
-                            access = true;
+                if (!str_role.equals("0")) {
+                    if (gobj != null) {
+                        if (gobj instanceof UserGroup) {
+                            ugrp = (UserGroup) gobj;
+                            if (user.hasUserGroup(ugrp)) {
+                                access = true;
+                            }
+                        } else if (gobj instanceof Role) {
+                            urole = (Role) gobj;
+                            if (user.hasRole(urole)) {
+                                access = true;
+                            }
                         }
-                    } else if (gobj instanceof Role) {
-                        urole = (Role) gobj;
-                        if (user.hasRole(urole)) {
-                            access = true;
-                        }
+                    } else {
+                        access = true;
                     }
                 } else {
                     access = true;
                 }
-            } else {
-                access = true;
             }
-        } catch (Exception e) {
+        }
+        catch  (Exception e) {
             access = false;
         }
-        return access;
+
+        if(str_role.equals("0")&&user==null) access=true;
+        else if(!str_role.equals("0")&&user==null) access=false;
+        else if(str_role.equals("0")&&user!=null) access=true;
+
+    return   access ;
     }
 }
