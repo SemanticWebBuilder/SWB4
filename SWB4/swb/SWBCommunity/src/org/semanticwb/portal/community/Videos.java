@@ -25,16 +25,16 @@ package org.semanticwb.portal.community;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Iterator;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
-import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
-import org.semanticwb.portal.resources.community.CommUtils;
 
 public class Videos extends org.semanticwb.portal.community.base.VideosBase
 {
+    private static Logger log=SWBUtils.getLogger(Videos.class);
 
     public Videos()
     {
@@ -48,34 +48,93 @@ public class Videos extends org.semanticwb.portal.community.base.VideosBase
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        User user=paramRequest.getUser();
-        WebPage page=paramRequest.getWebPage();
-        PrintWriter out=response.getWriter();
-        out.println("Hello Videos...");
+        String act=request.getParameter("act");
+        if(act==null)act="view";
+        String path="/swbadmin/jsp/microsite/VideosView.jsp";
 
-        //Para ver, editar, agragr, eliminar
-        int userLevel=CommUtils.getUerLevel(user,page);
+        if(act.equals("add"))path="/swbadmin/jsp/microsite/VideosAddVideo.jsp";
+        if(act.equals("edit"))path="/swbadmin/jsp/microsite/VideosEditVideo.jsp";
+        if(act.equals("detail"))path="/swbadmin/jsp/microsite/VideosDetailVideo.jsp";
 
-        Iterator<Video> it=Video.listVideosByWebPage(page.getWebSite(),page);
-        while(it.hasNext())
+        RequestDispatcher dis=request.getRequestDispatcher(path);
+        try
         {
-            Video video=it.next();
-            int vis=video.getVisibility();
-            //if user puede ver un elemento de comunidad
-                out.println("Titulo:"+video.getTitle());
-                out.println("Descrip:"+video.getDescription());
-        }
-
+            request.setAttribute("paramRequest", paramRequest);
+            dis.include(request, response);
+        }catch(Exception e){log.error(e);}
     }
 
-    public void add(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    private String getPreview(String code)
     {
-        WebPage page=paramRequest.getWebPage();
+        String ret=null;
+       //******************  is YouTube  ***********************************
+        String pre="http://www.youtube.com/v/";
+        String post="\">";
+        int s=code.indexOf(pre);
+        if(s>=0)
+        {
+            int f=code.indexOf(post,s);
+            if(f>s)
+            {
+                ret=code.substring(s+pre.length(),f);
+                int a=ret.indexOf('&');
+                if(a>0)
+                {
+                    ret=ret.substring(0,a);
+                }
+            }
+        }
+        if(ret!=null)ret="http://i.ytimg.com/vi/"+ret+"/default.jpg";
+        return ret;
+    }
 
-        Video video=Video.createVideo(page.getWebSite());
-        video.setWebPage(page);
-        video.setVisibility(visibility);
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException 
+    {
+        Member mem=Member.getMember(response.getUser(),response.getWebPage());
+        if(!mem.canView())return;                                       //si el usuario no pertenece a la red sale;
 
+        String action=request.getParameter("act");
+        System.out.println("act:"+action);
+        if("addVideo".equals(action) && mem.canAdd())
+        {
+            String code=request.getParameter("video_code");
+            Video rec=Video.createVideo(getResourceBase().getWebSite());
+            rec.setCode(code);
+            rec.setPreview(getPreview(code));
+            rec.setWebPage(response.getWebPage());
+            //addVideo(rec);
+            try
+            {
+                response.setRenderParameter("act","edit");
+                response.setRenderParameter("uri",rec.getURI());
+            }catch(Exception e)
+            {
+                log.error(e);
+                response.setRenderParameter("act","add");               //regresa a agregar codigo
+                response.setRenderParameter("err","true");              //envia parametro de error
+            }
+        }else if("editVideo".equals(action))
+        {
+            String uri=request.getParameter("video_id");
+            Video rec=(Video)SemanticObject.createSemanticObject(uri).getGenericInstance();
+            if(rec!=null && rec.canModify(mem))
+            {
+                rec.setTitle(request.getParameter("video_title"));
+                rec.setDescription(request.getParameter("video_description"));
+                rec.setTags(request.getParameter("video_tags"));
+                rec.setVisibility(Integer.parseInt(request.getParameter("level")));   //hace convercion a int en automatico
+            }
+        }else if("removeVideo".equals(action))
+        {
+            String uri=request.getParameter("video_id");
+            Video rec=(Video)SemanticObject.createSemanticObject(uri).getGenericInstance();
+
+            if(rec!=null && rec.canModify(mem))
+            {
+                rec.remove();                                       //elimina el registro
+            }
+        }
     }
 
 }
