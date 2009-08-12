@@ -74,7 +74,7 @@ public class InlineEdit extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
-        
+
         SWBResourceURL url=paramRequest.getActionUrl();
         url.setCallMethod(url.Call_DIRECT);
 
@@ -112,13 +112,13 @@ public class InlineEdit extends GenericResource
         }else
         {
             if(data!=null)out.println(data);
-            
+
         }
     }
 
-    
+
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException 
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         String name=request.getParameter("name");
         if(name!=null)
@@ -167,21 +167,21 @@ public class InlineEdit extends GenericResource
         out.println("<form id=\"" + base.getId() + "/InLineEditRes\" name=\"" + getResourceBase().getId() + "/InLineEditRes\" action=\"" + urlA + "\" method=\"post\" >");
         out.println("<fieldset>");
         out.println("<legend>");
-        out.println("InlineEdit Resource");
+        out.println("Datos");
         out.println("</legend>");
         out.println("<table width=\"100%\" border=\"0\" >");
         String strTemp = "<option value=\"-1\">" + "No se encontaron roles" + "</option>";
         Iterator<Role> iRoles = wsite.getUserRepository().listRoles(); //DBRole.getInstance().getRoles(topicmap.getDbdata().getRepository());
         StringBuffer strRules = new StringBuffer("");
         String selected = "";
-        if(str_role.equals("0")) selected = "selected=\"selected\"";
+        if(str_role.equals("0")) selected = "selected";
         strRules.append("\n<option value=\"0\" " + selected +" >" + "Ninguno" + "</option>");
         strRules.append("\n<optgroup label=\"Roles\">");
         while (iRoles.hasNext()) {
             Role oRole = iRoles.next();
             selected = "";
             if (str_role.trim().equals(oRole.getURI())) {
-                selected = "selected=\"selected\"";
+                selected = "selected";
             }
             strRules.append("\n<option value=\"" + oRole.getURI() + "\" " + selected + ">" + oRole.getDisplayTitle(user.getLanguage()) + "</option>");
         }
@@ -192,7 +192,7 @@ public class InlineEdit extends GenericResource
             UserGroup oUG = iugroups.next();
             selected = "";
             if (str_role.trim().equals(oUG.getURI())) {
-                selected = "selected=\"selected\"";
+                selected = "selected";
             }
             strRules.append("\n<option value=\"" + oUG.getURI() + "\" " + selected + " >" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
         }
