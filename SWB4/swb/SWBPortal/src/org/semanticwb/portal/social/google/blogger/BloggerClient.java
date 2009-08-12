@@ -23,7 +23,6 @@ package org.semanticwb.portal.social.google.blogger;
 
 import com.google.gdata.client.Query;
 import com.google.gdata.client.blogger.BloggerService;
-import sample.util.SimpleCommandLineParser;
 import com.google.gdata.data.DateTime;
 import com.google.gdata.data.Entry;
 import com.google.gdata.data.Feed;
@@ -397,16 +396,16 @@ public class BloggerClient {
   public static void main(String[] args) {
 
     // Set username, password and feed URI from command-line arguments.
-    SimpleCommandLineParser parser = new SimpleCommandLineParser(args);
+    //SimpleCommandLineParser parser = new SimpleCommandLineParser(args);
     //String userName = parser.getValue("username", "user", "u");
     //String userPassword = parser.getValue("password", "pass", "p");
     String userName = "george24Infotec@gmail.com";
     String userPassword = "george24";
-    boolean help = parser.containsKey("help", "h");
-    if (help || (userName == null) || (userPassword == null)) {
-      usage();
-      System.exit(1);
-    }
+//    boolean help = parser.containsKey("help", "h");
+//    if (help || (userName == null) || (userPassword == null)) {
+//      usage();
+//      System.exit(1);
+//    }
 
     BloggerService myService = new BloggerService("exampleCo-exampleApp-1");
 
