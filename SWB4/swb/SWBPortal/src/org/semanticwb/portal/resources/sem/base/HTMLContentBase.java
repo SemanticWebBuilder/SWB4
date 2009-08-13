@@ -1,26 +1,3 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
 package org.semanticwb.portal.resources.sem.base;
 
 
@@ -51,6 +28,18 @@ public class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content
         getSemanticObject().removeProperty(swb_actualVersion);
     }
 
+   public static java.util.Iterator<org.semanticwb.portal.resources.sem.HTMLContent> listHTMLContentByActualVersion(org.semanticwb.model.VersionInfo actualversion,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.HTMLContent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_actualVersion, actualversion.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.resources.sem.HTMLContent> listHTMLContentByActualVersion(org.semanticwb.model.VersionInfo actualversion)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.HTMLContent> it=new org.semanticwb.model.GenericIterator(actualversion.getSemanticObject().getModel().listSubjects(swb_actualVersion,actualversion.getSemanticObject()));
+       return it;
+   }
+
     public org.semanticwb.model.VersionInfo getActualVersion()
     {
          org.semanticwb.model.VersionInfo ret=null;
@@ -71,6 +60,18 @@ public class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content
     {
         getSemanticObject().removeProperty(swb_lastVersion);
     }
+
+   public static java.util.Iterator<org.semanticwb.portal.resources.sem.HTMLContent> listHTMLContentByLastVersion(org.semanticwb.model.VersionInfo lastversion,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.HTMLContent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_lastVersion, lastversion.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.resources.sem.HTMLContent> listHTMLContentByLastVersion(org.semanticwb.model.VersionInfo lastversion)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.HTMLContent> it=new org.semanticwb.model.GenericIterator(lastversion.getSemanticObject().getModel().listSubjects(swb_lastVersion,lastversion.getSemanticObject()));
+       return it;
+   }
 
     public org.semanticwb.model.VersionInfo getLastVersion()
     {
