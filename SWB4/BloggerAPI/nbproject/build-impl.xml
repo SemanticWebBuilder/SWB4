@@ -340,6 +340,7 @@ is divided into following sections:
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBPortal}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBRepositoryManager}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SWBXMRPCServer}/build.xml" inheritall="false" target="jar"/>
@@ -698,6 +699,7 @@ is divided into following sections:
         <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBPortal}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBRepositoryManager}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBXMRPCServer}/build.xml" inheritall="false" target="clean"/>
