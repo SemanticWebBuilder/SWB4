@@ -29,11 +29,14 @@ import java.util.Calendar;
 import java.util.HashSet;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
+import javax.security.auth.Subject;
+import javax.security.auth.login.LoginContext;
 import javax.servlet.http.HttpServletResponse;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -43,6 +46,11 @@ import org.semantic.blogger.interfaces.CategoryInfo;
 import org.semantic.blogger.interfaces.MetaWeblog;
 import org.semantic.blogger.interfaces.Post;
 import org.semantic.blogger.interfaces.UserBlog;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
+import org.semanticwb.model.UserRepository;
 import org.semanticwb.repository.RepositoryManagerLoader;
 
 
@@ -52,12 +60,13 @@ import org.semanticwb.repository.RepositoryManagerLoader;
  */
 public final class MetaWeblogImp implements MetaWeblog
 {
-
+    static Logger log = SWBUtils.getLogger(MetaWeblogImp.class);
     private static final String BLOG_TYPE_NAME = "Blog";
-    private static final String BLOG_POST_NAME = "Post";
-    private static final String BLOG_MODEL_PREFIX = "blognode";    
+    private static final String BLOG_POST_NAME = "Post";    
+    private static final String BLOG_MODEL_PREFIX = "blognode";
+    private static final String BLOG_OWNER_PROPERTY = BLOG_MODEL_PREFIX + ":owner";
     private static final String BLOG_DESCRIPTION = BLOG_MODEL_PREFIX + ":description";
-    private static final String BLOG_CATEGORY = BLOG_MODEL_PREFIX + ":category";
+    private static final String BLOG_CATEGORY_PROPERTY = BLOG_MODEL_PREFIX + ":category";
     private static final String BLOG_NAME_PROPERTY = BLOG_MODEL_PREFIX + ":name";
     private static final String BLOG_TITLE_PROPERTY = BLOG_MODEL_PREFIX + ":title";
     private static final String BLOG_URL_PROPERTY = BLOG_MODEL_PREFIX + ":url";
@@ -66,6 +75,7 @@ public final class MetaWeblogImp implements MetaWeblog
     private static final String BLOG_DATE_CREATED_PROPERTY = BLOG_MODEL_PREFIX + ":dateCreated";
     private static final String BLOG_HTMLURL_PROPERTY = BLOG_MODEL_PREFIX + ":htmlUrl";
     private static final String ID_SEPARATOR = ":";
+    private static final String SPARQL = "SPARQL";
     private static final RepositoryManagerLoader loader=RepositoryManagerLoader.getInstance();
     static
     {
@@ -134,6 +144,10 @@ public final class MetaWeblogImp implements MetaWeblog
      */
     public void removePost(String postid, String username, String password) throws Exception
     {
+        if(!isAuthenticate(username, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         Session session = null;
         try
         {
@@ -166,6 +180,10 @@ public final class MetaWeblogImp implements MetaWeblog
      */
     public void removeBlog(String blogid, String username, String password) throws Exception
     {
+        if(!isAuthenticate(username, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         Session session = null;
         try
         {
@@ -205,9 +223,38 @@ public final class MetaWeblogImp implements MetaWeblog
      */
     public String updateBlog(String repositoryName, String name, String description, String url, String username, String password) throws Exception
     {
+        if(!isAuthenticate(username, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         return createBlog(repositoryName, name, description, url, username, password);
     }
 
+    private User getUser(String login)
+    {
+        UserRepository ur = SWBContext.getAdminWebSite().getUserRepository();
+        return ur.getUserByLogin(login);
+    }
+    private boolean isAuthenticate(String pUserName, String pPassword)
+    {
+        UserRepository ur = SWBContext.getAdminWebSite().getUserRepository();
+        String context = ur.getLoginContext();
+        Subject subject = new Subject();
+        LoginContext lc;
+        try
+        {
+            SWB4CallbackHandlerBlogger callbackHandler = new SWB4CallbackHandlerBlogger(pUserName, pPassword);
+            lc = new LoginContext(context, subject, callbackHandler);
+            lc.login();
+            return true;
+        }
+        catch (Exception e)
+        {
+            log.debug("Can't log User", e);
+        }
+        return false;
+
+    }
     /**
      * Create a blog into the repository
      * @param repositoryName Name of repository to create the blog
@@ -220,6 +267,10 @@ public final class MetaWeblogImp implements MetaWeblog
      */
     public String createBlog(String repositoryName, String name, String description, String url, String username, String password) throws Exception
     {
+        if(!isAuthenticate(username, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         Session session = null;
         if ( repositoryName.indexOf(ID_SEPARATOR) == -1 )
         {
@@ -228,7 +279,15 @@ public final class MetaWeblogImp implements MetaWeblog
         try
         {
             session = loader.openSession(repositoryName, username, password);
-            Query query = session.getWorkspace().getQueryManager().createQuery("//blog[@"+BLOG_MODEL_PREFIX+":"+ BLOG_NAME_PROPERTY +"='" + name + "']", Query.XPATH);
+            Query query = null; 
+            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+            {
+                query = session.getWorkspace().getQueryManager().createQuery("SELECT DISTINCT ?x WHERE {?x " + BLOG_NAME_PROPERTY + " ?name FILTER (?name=\"" + name + "\").  and rdf:type "+ BLOG_MODEL_PREFIX+":"+BLOG_TYPE_NAME +". }", "SPARQL");
+            }
+            else
+            {
+                query = session.getWorkspace().getQueryManager().createQuery("//blog[@"+ BLOG_NAME_PROPERTY +"='" + name + "']", Query.XPATH);
+            }
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
             Node blogNode = null;
@@ -273,6 +332,11 @@ public final class MetaWeblogImp implements MetaWeblog
      */
     public UserBlog[] getUsersBlogs(String appkey, String username, String password) throws Exception
     {
+        if(!isAuthenticate(username, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
+        User user=getUser(username);
         HashSet<UserBlog> blogs = new HashSet<UserBlog>();
         Session session = null;
         for ( String repositoryName : loader.getWorkspaces() )
@@ -280,7 +344,16 @@ public final class MetaWeblogImp implements MetaWeblog
             try
             {
                 session = loader.openSession(repositoryName, username, password);
-                Query query = session.getWorkspace().getQueryManager().createQuery("//blog", Query.XPATH);
+                Query query =null;
+                if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+                {
+                    query = session.getWorkspace().getQueryManager().createQuery("SELECT DISTINCT ?x WHERE {?x " + BLOG_OWNER_PROPERTY + " ?owner FILTER (?owner=\"" + user.getLogin() + "\").  and rdf:type "+ BLOG_MODEL_PREFIX+":"+BLOG_TYPE_NAME +". }", "SPARQL");
+                }
+                else
+                {
+                    query = session.getWorkspace().getQueryManager().createQuery("//blog["+ BLOG_OWNER_PROPERTY +"]='"+ user.getLogin() +"'", Query.XPATH);
+                }
+                
                 QueryResult result = query.execute();
                 NodeIterator nodeIterator = result.getNodes();
                 while (nodeIterator.hasNext())
@@ -320,6 +393,10 @@ public final class MetaWeblogImp implements MetaWeblog
      */
     public Post[] getRecentPosts(String blogid, String username, String password, int numberOfPosts) throws Exception
     {
+        if(!isAuthenticate(username, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         ArrayList<Post> posts = new ArrayList<Post>();
         Session session = null;
         try
@@ -334,9 +411,9 @@ public final class MetaWeblogImp implements MetaWeblog
                 Node postNode = postNodes.nextNode();
                 Post value = new Post();
                 ArrayList<String> categories = new ArrayList<String>();
-                if ( postNode.hasProperty(BLOG_CATEGORY) )
+                if ( postNode.hasProperty(BLOG_CATEGORY_PROPERTY) )
                 {
-                    for ( Value categoryValue : postNode.getProperty(BLOG_CATEGORY).getValues() )
+                    for ( Value categoryValue : postNode.getProperty(BLOG_CATEGORY_PROPERTY).getValues() )
                     {
                         categories.add(categoryValue.getString());
                     }
@@ -410,6 +487,10 @@ public final class MetaWeblogImp implements MetaWeblog
     
     public void showCategoriesAsHtml(String blogid, String categoryName,Document xslt, HttpServletResponse response, String userid, String password) throws Exception
     {
+        if(!isAuthenticate(userid, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         OutputStream out=response.getOutputStream();
         response.setContentType("text/html");
         Document document = getCategoriesAsRss(blogid, categoryName, userid, password);        
@@ -430,6 +511,10 @@ public final class MetaWeblogImp implements MetaWeblog
 
     public void showCategoriesAsRss(String blogid, String categoryName, HttpServletResponse response, String userid, String password) throws Exception
     {
+        if(!isAuthenticate(userid, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         OutputStream out=response.getOutputStream();
         response.setContentType("text/xml");
         Document document = getCategoriesAsRss(blogid, categoryName, userid, password);
@@ -440,6 +525,10 @@ public final class MetaWeblogImp implements MetaWeblog
 
     private Document getCategoriesAsRss(String blogid, String categoryName, String userid, String password) throws Exception
     {
+        if(!isAuthenticate(userid, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         Document document = new Document();
         Element rss = new Element("rss");
         rss.setAttribute("version", "2.0");
@@ -464,8 +553,15 @@ public final class MetaWeblogImp implements MetaWeblog
                 chanel.addContent(title);
                 chanel.addContent(link);
                 chanel.addContent(description);
+            }Query query = null;
+            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+            {
+                query = session.getWorkspace().getQueryManager().createQuery("/blog/post[@"+BLOG_MODEL_PREFIX+":category='" + categoryName + "']",SPARQL);
             }
-            Query query = session.getWorkspace().getQueryManager().createQuery("/blog/post[@"+BLOG_MODEL_PREFIX+":category='" + categoryName + "']", Query.XPATH);
+            else
+            {
+                query = session.getWorkspace().getQueryManager().createQuery("/blog/post[@"+BLOG_MODEL_PREFIX+":category='" + categoryName + "']", Query.XPATH);
+            }
             QueryResult queryResult = query.execute();
             NodeIterator nodes = queryResult.getNodes();
             while (nodes.hasNext())
@@ -522,6 +618,10 @@ public final class MetaWeblogImp implements MetaWeblog
      */
     public boolean editPost(String postid, String userid, String password, Post post, boolean publish) throws Exception
     {
+        if(!isAuthenticate(userid, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         Session session = null;
         try
         {
@@ -542,7 +642,7 @@ public final class MetaWeblogImp implements MetaWeblog
             postNode.setProperty(BLOG_DESCRIPTION, post.description);
             if ( post.categories != null )
             {
-                postNode.setProperty(BLOG_CATEGORY, post.categories);
+                postNode.setProperty(BLOG_CATEGORY_PROPERTY, post.categories);
                 for ( String category : post.categories )
                 {
                     createCategory(repositoryName, postNode.getParent().getUUID(), category, category, userid, password);
@@ -575,6 +675,10 @@ public final class MetaWeblogImp implements MetaWeblog
      */
     public Post getPost(String postid, String userid, String password) throws Exception
     {
+        if(!isAuthenticate(userid, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         Session session = null;
         try
         {
@@ -584,9 +688,9 @@ public final class MetaWeblogImp implements MetaWeblog
             Node postNode = session.getNodeByUUID(postid);
             Post value = new Post();
             ArrayList<String> categories = new ArrayList<String>();
-            if ( postNode.hasProperty(BLOG_CATEGORY) )
+            if ( postNode.hasProperty(BLOG_CATEGORY_PROPERTY) )
             {
-                for ( Value categoryValue : postNode.getProperty(BLOG_CATEGORY).getValues() )
+                for ( Value categoryValue : postNode.getProperty(BLOG_CATEGORY_PROPERTY).getValues() )
                 {
                     categories.add(categoryValue.getString());
                 }
@@ -625,6 +729,10 @@ public final class MetaWeblogImp implements MetaWeblog
      */
     public String newPost(String blogid, String userid, String password, Post post, boolean publish) throws Exception
     {
+        if(!isAuthenticate(userid, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         Session session = null;
         try
         {
@@ -646,11 +754,34 @@ public final class MetaWeblogImp implements MetaWeblog
             postNode.setProperty(BLOG_DATE_CREATED_PROPERTY, Calendar.getInstance());
             if ( post.categories != null )
             {
-                postNode.setProperty(BLOG_CATEGORY, post.categories);
-                for ( String category : post.categories )
+
+                Value[] categories=new Value[post.categories.length];
+                int i=0;
+                for(String categoryName : post.categories)
                 {
-                    createCategory(repositoryName, blogid, category, category, userid, password);
+                    Node nodeCategory=null;
+                    Query query =null;
+                    if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+                    {
+                        query=session.getWorkspace().getQueryManager().createQuery("//blog/category["+BLOG_NAME_PROPERTY+"='" + categoryName + "']", SPARQL);
+                    }
+                    else
+                    {
+                        query=session.getWorkspace().getQueryManager().createQuery("//blog/category["+BLOG_NAME_PROPERTY+"='" + categoryName + "']", Query.XPATH);
+                    }
+                    NodeIterator nodeit=query.execute().getNodes();
+                    if(nodeit.hasNext())
+                    {
+                        nodeCategory=nodeit.nextNode();
+                    }
+                    if(nodeCategory==null)
+                    {
+                        createCategory(repositoryName, blogid, categoryName, "", userid, password);
+                    }
+                    categories[i]=session.getValueFactory().createValue(nodeCategory);
+                    i++;
                 }
+                postNode.setProperty(BLOG_CATEGORY_PROPERTY, categories);                
             }
             session.save();
             return repositoryName + ID_SEPARATOR + postNode.getUUID();
@@ -679,13 +810,25 @@ public final class MetaWeblogImp implements MetaWeblog
      * @throws java.lang.Exception
      */
     public CategoryInfo createCategory(String repositoryName, String blogid, String name, String description, String username, String password) throws Exception
-    {        
+    {
+        if(!isAuthenticate(username, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         Session session = null;
         try
         {
 
             session = loader.openSession(repositoryName, username, password);
-            Query query = session.getWorkspace().getQueryManager().createQuery("//blog/category["+BLOG_MODEL_PREFIX+":name='" + name + "']", Query.XPATH);
+            Query query = null;
+            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+            {
+                query = session.getWorkspace().getQueryManager().createQuery("SELECT DISTINCT ?x WHERE {?x " + BLOG_NAME_PROPERTY + " ?name FILTER (?name=\"" + name + "\").  and rdf:type "+ BLOG_MODEL_PREFIX+":"+"Category" +". }",SPARQL);
+            }
+            else
+            {
+                query = session.getWorkspace().getQueryManager().createQuery("//blog/category["+BLOG_NAME_PROPERTY+"='" + name + "']", Query.XPATH);
+            }
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
             CategoryInfo category = new CategoryInfo();
@@ -697,7 +840,7 @@ public final class MetaWeblogImp implements MetaWeblog
             else
             {
                 Node nodeBlog = session.getNodeByUUID(blogid);
-                categoryNode = nodeBlog.addNode("category", BLOG_MODEL_PREFIX+"categoryType");
+                categoryNode = nodeBlog.addNode("category");
                 categoryNode.setProperty(BLOG_NAME_PROPERTY, name);
                 categoryNode.setProperty(BLOG_DESCRIPTION, description);
                 categoryNode.setProperty(BLOG_HTMLURL_PROPERTY, getHtmlUrlForCategories(nodeBlog));
@@ -734,6 +877,10 @@ public final class MetaWeblogImp implements MetaWeblog
      */
     public CategoryInfo[] getCategories(String blogid, String username, String password) throws Exception
     {
+        if(!isAuthenticate(username, password))
+        {
+            throw new Exception("The user can not be authenticated");
+        }
         ArrayList<CategoryInfo> categories = new ArrayList<CategoryInfo>();
         Session session = null;
         try
@@ -741,7 +888,16 @@ public final class MetaWeblogImp implements MetaWeblog
             String repositoryName = getRepositoryName(blogid);
             blogid = getID(blogid);
             session = loader.openSession(repositoryName, username, password);
-            Query query = session.getWorkspace().getQueryManager().createQuery("//blog/category", Query.XPATH);
+            Query query = null;
+            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+            {
+                query = session.getWorkspace().getQueryManager().createQuery("//blog/category", SPARQL);
+            }
+            else
+            {
+                query = session.getWorkspace().getQueryManager().createQuery("//blog/category", Query.XPATH);
+            }
+            
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
             while (nodeIterator.hasNext())
