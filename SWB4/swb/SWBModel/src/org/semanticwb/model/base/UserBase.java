@@ -1,26 +1,3 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
 package org.semanticwb.model.base;
 
 
@@ -48,10 +25,11 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
     public static final org.semanticwb.platform.SemanticProperty swb_usrPasswordChanged=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrPasswordChanged");
     public static final org.semanticwb.platform.SemanticClass swb_AdminFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter");
     public static final org.semanticwb.platform.SemanticProperty swb_hasAdminFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasAdminFilter");
+    public static final org.semanticwb.platform.SemanticProperty swb_ursPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#ursPhoto");
     public static final org.semanticwb.platform.SemanticProperty swb_usrLastLogin=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLastLogin");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
-    public static final org.semanticwb.platform.SemanticProperty swb_usrLogin=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLogin");
     public static final org.semanticwb.platform.SemanticProperty swb_usrPassword=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrPassword");
+    public static final org.semanticwb.platform.SemanticProperty swb_usrLogin=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLogin");
     public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRole");
     public static final org.semanticwb.platform.SemanticProperty swb_usrSecurityQuestion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrSecurityQuestion");
@@ -110,6 +88,18 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
     {
         getSemanticObject().removeProperty(swb_userFavorite);
     }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByUserFavorite(org.semanticwb.model.UserFavorite userfavorite,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_userFavorite, userfavorite.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByUserFavorite(org.semanticwb.model.UserFavorite userfavorite)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(userfavorite.getSemanticObject().getModel().listSubjects(swb_userFavorite,userfavorite.getSemanticObject()));
+       return it;
+   }
 
     public org.semanticwb.model.UserFavorite getUserFavorite()
     {
@@ -178,6 +168,18 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         getSemanticObject().removeObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
     }
 
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasCalendarRef(org.semanticwb.model.CalendarRef hascalendarref,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasCalendarRef, hascalendarref.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasCalendarRef(org.semanticwb.model.CalendarRef hascalendarref)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(hascalendarref.getSemanticObject().getModel().listSubjects(swb_hasCalendarRef,hascalendarref.getSemanticObject()));
+       return it;
+   }
+
     public org.semanticwb.model.CalendarRef getCalendarRef()
     {
          org.semanticwb.model.CalendarRef ret=null;
@@ -218,6 +220,18 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
     {
         getSemanticObject().removeProperty(swb_modifiedBy);
     }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByModifiedBy(org.semanticwb.model.User modifiedby)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
+       return it;
+   }
 
     public org.semanticwb.model.User getModifiedBy()
     {
@@ -265,6 +279,18 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
     {
         getSemanticObject().removeObjectProperty(swb_hasUserGroup,usergroup.getSemanticObject());
     }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasUserGroup(org.semanticwb.model.UserGroup hasusergroup,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasUserGroup, hasusergroup.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasUserGroup(org.semanticwb.model.UserGroup hasusergroup)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(hasusergroup.getSemanticObject().getModel().listSubjects(swb_hasUserGroup,hasusergroup.getSemanticObject()));
+       return it;
+   }
 
     public org.semanticwb.model.UserGroup getUserGroup()
     {
@@ -380,6 +406,18 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         getSemanticObject().removeObjectProperty(swb_hasAdminFilter,adminfilter.getSemanticObject());
     }
 
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasAdminFilter(org.semanticwb.model.AdminFilter hasadminfilter,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasAdminFilter, hasadminfilter.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasAdminFilter(org.semanticwb.model.AdminFilter hasadminfilter)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(hasadminfilter.getSemanticObject().getModel().listSubjects(swb_hasAdminFilter,hasadminfilter.getSemanticObject()));
+       return it;
+   }
+
     public org.semanticwb.model.AdminFilter getAdminFilter()
     {
          org.semanticwb.model.AdminFilter ret=null;
@@ -389,6 +427,16 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
              ret=(org.semanticwb.model.AdminFilter)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public String getPhoto()
+    {
+        return getSemanticObject().getProperty(swb_ursPhoto);
+    }
+
+    public void setPhoto(String ursPhoto)
+    {
+        getSemanticObject().setProperty(swb_ursPhoto, ursPhoto);
     }
 
     public java.util.Date getLastLogin()
@@ -411,6 +459,18 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
         getSemanticObject().removeProperty(swb_creator);
     }
 
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByCreator(org.semanticwb.model.User creator)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
+       return it;
+   }
+
     public org.semanticwb.model.User getCreator()
     {
          org.semanticwb.model.User ret=null;
@@ -420,16 +480,6 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
-    }
-
-    public String getLogin()
-    {
-        return getSemanticObject().getProperty(swb_usrLogin);
-    }
-
-    public void setLogin(String usrLogin)
-    {
-        getSemanticObject().setProperty(swb_usrLogin, usrLogin);
     }
 
     public String getPassword()
@@ -442,6 +492,16 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
     {
         //Override this method in User object
         getSemanticObject().setProperty(swb_usrPassword, usrPassword,false);
+    }
+
+    public String getLogin()
+    {
+        return getSemanticObject().getProperty(swb_usrLogin);
+    }
+
+    public void setLogin(String usrLogin)
+    {
+        getSemanticObject().setProperty(swb_usrLogin, usrLogin);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listRoles()
@@ -469,6 +529,18 @@ public class UserBase extends org.semanticwb.model.SWBClass implements org.seman
     {
         getSemanticObject().removeObjectProperty(swb_hasRole,role.getSemanticObject());
     }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasRole(org.semanticwb.model.Role hasrole,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasRole, hasrole.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.User> listUserByHasRole(org.semanticwb.model.Role hasrole)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(hasrole.getSemanticObject().getModel().listSubjects(swb_hasRole,hasrole.getSemanticObject()));
+       return it;
+   }
 
     public org.semanticwb.model.Role getRole()
     {
