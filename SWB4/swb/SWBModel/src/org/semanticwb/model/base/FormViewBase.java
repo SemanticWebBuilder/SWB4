@@ -1,26 +1,3 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
 package org.semanticwb.model.base;
 
 
@@ -119,18 +96,6 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
         getSemanticObject().removeObjectProperty(swbxf_hasCreateProperty,semanticobject);
     }
 
-   public static java.util.Iterator<org.semanticwb.model.FormView> listFormViewByHasCreateProperty(org.semanticwb.model.FormView formview,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbxf_hasCreateProperty, formview.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.FormView> listFormViewByHasCreateProperty(org.semanticwb.model.FormView formview)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView> it=new org.semanticwb.model.GenericIterator(formview.getSemanticObject().getModel().listSubjects(swbxf_hasCreateProperty,formview.getSemanticObject()));
-       return it;
-   }
-
     public org.semanticwb.platform.SemanticObject getCreateProperty()
     {
          org.semanticwb.platform.SemanticObject ret=null;
@@ -159,18 +124,6 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
         getSemanticObject().removeObjectProperty(swbxf_hasViewProperty,semanticobject);
     }
 
-   public static java.util.Iterator<org.semanticwb.model.FormView> listFormViewByHasViewProperty(org.semanticwb.model.FormView formview,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbxf_hasViewProperty, formview.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.FormView> listFormViewByHasViewProperty(org.semanticwb.model.FormView formview)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView> it=new org.semanticwb.model.GenericIterator(formview.getSemanticObject().getModel().listSubjects(swbxf_hasViewProperty,formview.getSemanticObject()));
-       return it;
-   }
-
     public org.semanticwb.platform.SemanticObject getViewProperty()
     {
          org.semanticwb.platform.SemanticObject ret=null;
@@ -188,6 +141,18 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
         if(formviewref==null)return false;
         return getSemanticObject().hasObjectProperty(swb_hasFormViewRefInv,formviewref.getSemanticObject());
     }
+
+   public static java.util.Iterator<org.semanticwb.model.FormView> listFormViewByHasFormViewRefInv(org.semanticwb.model.FormViewRef hasformviewrefinv,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasFormViewRefInv, hasformviewrefinv.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.model.FormView> listFormViewByHasFormViewRefInv(org.semanticwb.model.FormViewRef hasformviewrefinv)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView> it=new org.semanticwb.model.GenericIterator(hasformviewrefinv.getSemanticObject().getModel().listSubjects(swb_hasFormViewRefInv,hasformviewrefinv.getSemanticObject()));
+       return it;
+   }
 
     public org.semanticwb.model.FormViewRef getFormViewRefInv()
     {
@@ -220,18 +185,6 @@ public class FormViewBase extends org.semanticwb.model.SWBClass implements org.s
     {
         getSemanticObject().removeObjectProperty(swbxf_hasEditProperty,semanticobject);
     }
-
-   public static java.util.Iterator<org.semanticwb.model.FormView> listFormViewByHasEditProperty(org.semanticwb.model.FormView formview,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbxf_hasEditProperty, formview.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.model.FormView> listFormViewByHasEditProperty(org.semanticwb.model.FormView formview)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView> it=new org.semanticwb.model.GenericIterator(formview.getSemanticObject().getModel().listSubjects(swbxf_hasEditProperty,formview.getSemanticObject()));
-       return it;
-   }
 
     public org.semanticwb.platform.SemanticObject getEditProperty()
     {
