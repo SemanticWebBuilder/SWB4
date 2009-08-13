@@ -9,6 +9,7 @@
 <%
         String uri=request.getParameter("uri");
         Video rec=(Video)SemanticObject.createSemanticObject(uri).createGenericInstance();
+        rec.incViews();                             //Incrementar apariciones
         if(rec!=null)
         {
 %>
