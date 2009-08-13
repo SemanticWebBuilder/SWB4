@@ -41,7 +41,7 @@ public final class wb4calcaddon extends WeakBase
         com.sun.star.lang.XInitialization,
         com.sun.star.frame.XDispatch
 {
-    private static final String INICIADO_SESION_MESSAGE = "¡Se ha iniciado una sesión!";
+    
 
     private final XComponentContext m_xContext;
     private com.sun.star.frame.XFrame m_xFrame;
@@ -330,13 +330,13 @@ public final class wb4calcaddon extends WeakBase
                     OfficeApplication.openSession();
                     if (OfficeApplication.isLogged() == true && logged == false)
                     {
-                        JOptionPane.showMessageDialog(null,INICIADO_SESION_MESSAGE, "Iniciar sesión", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null,"¡Se ha iniciado una sesión!", "Iniciar sesión", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
                 if (aURL.Path.compareTo("closeSession") == 0)
                 {
                     OfficeApplication.closeSession();
-                    JOptionPane.showMessageDialog(null, "¡se ha cerrado la sesión!", "Cerrar sesión", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "¡Se ha cerrado la sesión!", "Cerrar sesión", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
                 if (aURL.Path.compareTo("showDocumentsToAuthorize") == 0)
