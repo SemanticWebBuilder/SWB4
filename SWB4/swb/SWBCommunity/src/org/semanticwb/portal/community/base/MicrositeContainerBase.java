@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class MicrositeContainerBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable
+public class MicrositeContainerBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticClass swbcomm_OrganizationComm=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#OrganizationComm");
     public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSite");
@@ -228,6 +228,12 @@ public class MicrositeContainerBase extends org.semanticwb.model.WebSite impleme
     {
         return org.semanticwb.portal.community.Comment.createComment(id,this);
     }
+
+    public org.semanticwb.portal.community.Comment createComment()
+    {
+        long id=getSemanticObject().getModel().getCounter(swbcomm_Comment);
+        return org.semanticwb.portal.community.Comment.createComment(String.valueOf(id),this);
+    } 
 
     public void removeComment(String id)
     {

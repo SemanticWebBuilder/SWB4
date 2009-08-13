@@ -31,6 +31,12 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Comment>(it, true);
     }
 
+    public static org.semanticwb.portal.community.Comment createComment(org.semanticwb.model.SWBModel model)
+    {
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
+        return org.semanticwb.portal.community.Comment.createComment(String.valueOf(id), model);
+    }
+
     public static org.semanticwb.portal.community.Comment getComment(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.portal.community.Comment)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
