@@ -205,6 +205,19 @@
     </owl:inverseOf>
     <rdfs:range rdf:resource="#MicroSiteWebPageUtil"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="productWebPage">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >webPage</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <rdfs:domain>
+      <swb:Class rdf:ID="ProductElement">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="#MicroSiteElement"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPhoto">
     <rdfs:domain rdf:resource="#PhotoResource"/>
     <rdfs:range rdf:resource="#PhotoElement"/>
@@ -222,14 +235,7 @@
     >hasSubscribedMember</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasProduct">
-    <rdfs:range>
-      <swb:Class rdf:ID="ProductElement">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="#MicroSiteElement"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
+    <rdfs:range rdf:resource="#ProductElement"/>
     <rdfs:domain>
       <swb:SemanticResource rdf:ID="ProductResource">
         <rdfs:subClassOf rdf:resource="#CommunityResource"/>
