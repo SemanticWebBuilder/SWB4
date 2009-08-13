@@ -13,12 +13,7 @@
     >Created with TopBraid Composer</owl:versionInfo>
     <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
-  <owl:Class rdf:ID="ProductResource">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="CommunityResource"/>
-    </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="#CommunityResource">
+  <owl:Class rdf:ID="CommunityResource">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
   </owl:Class>
@@ -58,32 +53,19 @@
     <swb:displayObject rdf:resource="#do_WebPage"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="ProductElement">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="MicroSiteElement"/>
-    </rdfs:subClassOf>
-  </owl:Class>
   <owl:Class rdf:ID="EventResource">
     <rdfs:subClassOf rdf:resource="#CommunityResource"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
   </owl:Class>
   <owl:Class rdf:ID="VideoElement">
     <rdfs:subClassOf>
-      <owl:Class rdf:about="#MicroSiteElement"/>
+      <owl:Class rdf:ID="MicroSiteElement"/>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="EventElement">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#MicroSiteElement"/>
-    </rdfs:subClassOf>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="PhotoElement">
     <rdfs:subClassOf>
       <owl:Class rdf:about="#MicroSiteElement"/>
     </rdfs:subClassOf>
@@ -98,6 +80,14 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PhotoElement">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#MicroSiteElement"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#MicroSiteElement">
@@ -232,8 +222,20 @@
     >hasSubscribedMember</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasProduct">
-    <rdfs:range rdf:resource="#ProductElement"/>
-    <rdfs:domain rdf:resource="#ProductResource"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="ProductElement">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="#MicroSiteElement"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain>
+      <swb:SemanticResource rdf:ID="ProductResource">
+        <rdfs:subClassOf rdf:resource="#CommunityResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="microSiteUtil">
     <rdfs:domain rdf:resource="#MicroSiteWebPageUtil"/>
