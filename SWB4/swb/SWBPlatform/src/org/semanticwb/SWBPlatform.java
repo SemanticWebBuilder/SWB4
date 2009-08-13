@@ -258,9 +258,9 @@ public class SWBPlatform
 //            objs.add(WBTopicAccessIncrement.getInstance());
 //            objs.add(WBMonitor.getInstance());
 //
-//            //cargando clases de startup.properties
-//            WBStartup startup = new WBStartup(objs);
-//            startup.load("startup.properties");
+            //cargando clases de startup.properties
+            SWBStartup startup = new SWBStartup(new ArrayList()); //objs);
+            startup.load("startup.properties");
 //
 //            Runtime.getRuntime().gc();
 //            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_totalMemory") + Runtime.getRuntime().totalMemory(), true);
