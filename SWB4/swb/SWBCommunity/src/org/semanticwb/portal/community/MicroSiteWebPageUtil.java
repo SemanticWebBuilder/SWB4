@@ -106,4 +106,20 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
         }
         return sended;
     }
+
+    public boolean subscribeToElement(Member member)
+    {
+        return Boolean.TRUE;
+    }
+
+    public boolean unSubscribeFromElement(Member member)
+    {
+        return Boolean.TRUE;
+    }
+
+
+    public boolean isSubscribed(Member member)
+    {
+        return Boolean.TRUE;
+    }
 }
