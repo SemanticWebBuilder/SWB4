@@ -6,14 +6,14 @@ import java.io.PrintWriter;
 import javax.servlet.http.*;
 import org.semanticwb.portal.api.*;
 
-public class Alerts extends org.semanticwb.portal.community.base.AlertsBase 
+public class MembershipResource extends org.semanticwb.portal.community.base.MembershipResourceBase 
 {
 
-    public Alerts()
+    public MembershipResource()
     {
     }
 
-    public Alerts(org.semanticwb.platform.SemanticObject base)
+    public MembershipResource(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
@@ -22,6 +22,6 @@ public class Alerts extends org.semanticwb.portal.community.base.AlertsBase
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out=response.getWriter();
-        out.println("Hello Alerts...");    }
+        out.println("Hello MembershipResource...");    }
 
 }
