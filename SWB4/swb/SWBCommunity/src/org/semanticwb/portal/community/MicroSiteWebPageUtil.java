@@ -52,25 +52,23 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
             data.append("\n<body>");
 
             data.append("\n<div id=\"notify\">");
-            data.append("\n<h3>Notificación de cambios en la comunidad "+commTitle+"</h3>");
-            data.append("\n<table>");
-            data.append("\n<tr>");
-            data.append("\n<td>En la utilería "+utilName+"</td>");
-            data.append("\n<td>&nbsp;"+utilDesc+"</td>");
-            data.append("\n</tr>");
-            data.append("\n</dd>");
+            data.append("\n<fieldset>");
+            data.append("\n<legend>Notificación de cambios en la comunidad <i>"+commTitle+"</i></legend>");
+            data.append("\n  <dl>");
+            data.append("\n   <dt>Utilería <strong>"+utilName+"</strong></dt>");
+            data.append("\n   <dd><p>"+utilDesc+"</p></dd>");
 
-            data.append("\n<tr>");
-            data.append("\n<td>Se modificó el elemento "+title+"</td>");
-            data.append("\n<td>&nbsp;"+description+", el día "+sdf.format(element.getUpdated())+"</td>");
-            data.append("\n</tr>");
+            data.append("\n   <dt>Elemento <strong>"+title+"</strong></dt>");
+            data.append("\n   <dd><p>"+description+"</p></dd>"); 
 
-            data.append("\n<tr>");
-            data.append("\n<td>Por el usuario: "+creator.getName()+"</td>");
-            data.append("\n<td colspan=\"2\"><a href=\"mailto:"+creator.getEmail()+"?subject=RE:"+txtSubject+"\">"+creator.getEmail()+"</a></td>");
-            data.append("\n</tr>");
-            data.append("\n</table>");
-
+            data.append("\n  </dl>");
+            data.append("\n</fieldset>");
+            data.append("\n<fieldset>");
+            data.append("\n  <p>Por el usuario: <strong>"+creator.getName()+"</strong>");
+            data.append("\n( <a href=\"mailto:"+creator.getEmail()+"?subject=RE:"+txtSubject+"\">"+creator.getEmail()+"</a><br/>");
+            data.append("\nFecha del cambio: "+sdf.format(element.getUpdated()));
+            data.append("\n  </p>");
+            data.append("\n</fieldset>");
             data.append("\n</div>");
             data.append("\n</body>");
             data.append("\n</html>");
