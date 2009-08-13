@@ -80,7 +80,7 @@ public class SWBPlatform
     /**
      * 
      */
-    protected static String version = "4.0.0.0";
+    protected static String version = "4.0.0.1";
     
     private SWBPlatform()
     {
