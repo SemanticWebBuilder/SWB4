@@ -30,6 +30,12 @@ public class MemberBase extends org.semanticwb.model.SWBClass
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Member>(it, true);
     }
 
+    public static org.semanticwb.portal.community.Member createMember(org.semanticwb.model.SWBModel model)
+    {
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
+        return org.semanticwb.portal.community.Member.createMember(String.valueOf(id), model);
+    }
+
     public static org.semanticwb.portal.community.Member getMember(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.portal.community.Member)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
