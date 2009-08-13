@@ -366,14 +366,14 @@ public final class wb4writeraddon extends WeakBase
                     OfficeApplication.openSession();
                     if (OfficeApplication.isLogged() == true && logged == false)
                     {
-                        JOptionPane.showMessageDialog(null, "e ha iniciado una sesi髇", "Iniciar sesi髇", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "隆Se ha iniciado una sesi贸n!", "Iniciar sesi贸n", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     }
 
                 }
                 if (aURL.Path.compareTo("closeSession") == 0)
                 {
                     OfficeApplication.closeSession();
-                    JOptionPane.showMessageDialog(null, "e ha cerrado la sesi髇", "Cerrar sesi髇", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "隆Se ha cerrado la sesi贸n!", "Cerrar sesi贸n", JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
                 if (aURL.Path.compareTo("showDocumentsToAuthorize") == 0)
