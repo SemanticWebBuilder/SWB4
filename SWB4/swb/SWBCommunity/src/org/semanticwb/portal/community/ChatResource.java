@@ -6,14 +6,14 @@ import java.io.PrintWriter;
 import javax.servlet.http.*;
 import org.semanticwb.portal.api.*;
 
-public class Twitter extends org.semanticwb.portal.community.base.TwitterBase 
+public class ChatResource extends org.semanticwb.portal.community.base.ChatResourceBase 
 {
 
-    public Twitter()
+    public ChatResource()
     {
     }
 
-    public Twitter(org.semanticwb.platform.SemanticObject base)
+    public ChatResource(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
@@ -22,6 +22,6 @@ public class Twitter extends org.semanticwb.portal.community.base.TwitterBase
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out=response.getWriter();
-        out.println("Hello Twitter...");    }
+        out.println("Hello ChatResource...");    }
 
 }
