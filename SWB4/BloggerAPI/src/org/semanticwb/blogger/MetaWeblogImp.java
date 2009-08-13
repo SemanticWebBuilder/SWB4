@@ -1,23 +1,23 @@
 /**
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integraciÃ³n,
+* colaboraciÃ³n y conocimiento, que gracias al uso de tecnologÃ­a semÃ¡ntica puede generar contextos de
+* informaciÃ³n alrededor de algÃºn tema de interÃ©s o bien integrar informaciÃ³n y aplicaciones de diferentes
+* fuentes, donde a la informaciÃ³n se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creaciÃ³n original del Fondo de InformaciÃ³n y DocumentaciÃ³n
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trÃ¡mite.
 *
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* INFOTEC pone a su disposiciÃ³n la herramienta SemanticWebBuilder a travÃ©s de su licenciamiento abierto al pÃºblico (â€˜open sourceâ€™),
+* en virtud del cual, usted podrÃ¡ usarlo en las mismas condiciones con que INFOTEC lo ha diseÃ±ado y puesto a su disposiciÃ³n;
+* aprender de Ã©l; distribuirlo a terceros; acceder a su cÃ³digo fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los tÃ©rminos y condiciones de la LICENCIA ABIERTA AL PÃšBLICO que otorga INFOTEC para la utilizaciÃ³n
 * del SemanticWebBuilder 4.0.
 *
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* INFOTEC no otorga garantÃ­a sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implÃ­cita ni explÃ­cita,
+* siendo usted completamente responsable de la utilizaciÃ³n que le dÃ© y asumiendo la totalidad de los riesgos que puedan derivar
 * de la misma.
 *
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
-* dirección electrónica:
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposiciÃ³n la siguiente
+* direcciÃ³n electrÃ³nica:
 *  http://www.semanticwebbuilder.org
 **/ 
 package org.semanticwb.blogger;
@@ -53,19 +53,18 @@ import org.semanticwb.repository.RepositoryManagerLoader;
 public final class MetaWeblogImp implements MetaWeblog
 {
 
-    private static final String BLOG_PREFIX = "blog";
-    private static final String BLOG_MODEL_URI = "http://www.semanticwb.org.mx/model/blog/1.0";
-    private static final String BLOG_MODEL_PREFIX = "blognode";
-    private static final String BLOG_URI = "http://www.semanticwb.org.mx/blog/1.0/";
-    private static final String BLOG_DESCRIPTION = BLOG_PREFIX + ":description";
-    private static final String BLOG_CATEGORY = BLOG_PREFIX + ":category";
-    private static final String BLOG_NAME = BLOG_PREFIX + ":name";
-    private static final String BLOG_TITLE = BLOG_PREFIX + ":title";
-    private static final String BLOG_URL = BLOG_PREFIX + ":url";
-    private static final String BLOG_USERID = BLOG_PREFIX + ":userid";
-    private static final String BLOG_RSSURL = BLOG_PREFIX + ":rssUrl";
-    private static final String BLOG_DATE_CREATED = BLOG_PREFIX + ":dateCreated";
-    private static final String BLOG_HTMLURL = BLOG_PREFIX + ":htmlUrl";
+    private static final String BLOG_TYPE_NAME = "Blog";
+    private static final String BLOG_POST_NAME = "Post";
+    private static final String BLOG_MODEL_PREFIX = "blognode";    
+    private static final String BLOG_DESCRIPTION = BLOG_MODEL_PREFIX + ":description";
+    private static final String BLOG_CATEGORY = BLOG_MODEL_PREFIX + ":category";
+    private static final String BLOG_NAME_PROPERTY = BLOG_MODEL_PREFIX + ":name";
+    private static final String BLOG_TITLE_PROPERTY = BLOG_MODEL_PREFIX + ":title";
+    private static final String BLOG_URL_PROPERTY = BLOG_MODEL_PREFIX + ":url";
+    private static final String BLOG_USERID_PROPERTY = BLOG_MODEL_PREFIX + ":userid";
+    private static final String BLOG_RSSURL_PROPERTY = BLOG_MODEL_PREFIX + ":rssUrl";
+    private static final String BLOG_DATE_CREATED_PROPERTY = BLOG_MODEL_PREFIX + ":dateCreated";
+    private static final String BLOG_HTMLURL_PROPERTY = BLOG_MODEL_PREFIX + ":htmlUrl";
     private static final String ID_SEPARATOR = ":";
     private static final RepositoryManagerLoader loader=RepositoryManagerLoader.getInstance();
     static
@@ -229,23 +228,23 @@ public final class MetaWeblogImp implements MetaWeblog
         try
         {
             session = loader.openSession(repositoryName, username, password);
-            Query query = session.getWorkspace().getQueryManager().createQuery("//blog[@blog:name='" + name + "']", Query.XPATH);
+            Query query = session.getWorkspace().getQueryManager().createQuery("//blog[@"+BLOG_MODEL_PREFIX+":"+ BLOG_NAME_PROPERTY +"='" + name + "']", Query.XPATH);
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
             Node blogNode = null;
             if ( nodeIterator.hasNext() )
             {
                 blogNode = nodeIterator.nextNode();
-                blogNode.setProperty(BLOG_NAME, name);
-                blogNode.setProperty(BLOG_URL, url);
+                blogNode.setProperty(BLOG_NAME_PROPERTY, name);
+                blogNode.setProperty(BLOG_URL_PROPERTY, url);
                 blogNode.setProperty(BLOG_DESCRIPTION, description);
             }
             else
             {
                 Node root = session.getRootNode();
-                blogNode = root.addNode("blog", "blognode:blogType");
-                blogNode.setProperty(BLOG_NAME, name);
-                blogNode.setProperty(BLOG_URL, url);
+                blogNode = root.addNode("blog", BLOG_MODEL_PREFIX+":"+BLOG_TYPE_NAME);
+                blogNode.setProperty(BLOG_NAME_PROPERTY, name);
+                blogNode.setProperty(BLOG_URL_PROPERTY, url);
                 session.save();
             }
             return blogNode.getUUID();
@@ -288,10 +287,10 @@ public final class MetaWeblogImp implements MetaWeblog
                 {
                     UserBlog userblog = new UserBlog();
                     Node nodeBlog = nodeIterator.nextNode();
-                    userblog.blogName = nodeBlog.getProperty(BLOG_NAME).getString();
+                    userblog.blogName = nodeBlog.getProperty(BLOG_NAME_PROPERTY).getString();
                     userblog.blogid = repositoryName + ID_SEPARATOR + nodeBlog.getUUID();
                     userblog.isAdmin = false;
-                    userblog.url = nodeBlog.getProperty(BLOG_URL).getString();
+                    userblog.url = nodeBlog.getProperty(BLOG_URL_PROPERTY).getString();
                     blogs.add(userblog);
                 }
             }
@@ -315,7 +314,7 @@ public final class MetaWeblogImp implements MetaWeblog
      * @param blogid the Blog ID
      * @param username The user name
      * @param password The password
-     * @param numberOfPosts Number of máx posts to retrive
+     * @param numberOfPosts Number of mÃ¡x posts to retrive
      * @return The list of recently posts
      * @throws java.lang.Exception
      */
@@ -343,11 +342,11 @@ public final class MetaWeblogImp implements MetaWeblog
                     }
                 }
                 value.categories = categories.toArray(new String[categories.size()]);
-                value.dateCreated = postNode.getProperty(BLOG_DATE_CREATED).getDate().getTime();
+                value.dateCreated = postNode.getProperty(BLOG_DATE_CREATED_PROPERTY).getDate().getTime();
                 value.description = postNode.getProperty(BLOG_DESCRIPTION).getString();
                 value.postid = repositoryName + ID_SEPARATOR + postNode.getUUID();
-                value.title = postNode.getProperty(BLOG_TITLE).getString();
-                value.userid = postNode.getProperty(BLOG_USERID).getString();
+                value.title = postNode.getProperty(BLOG_TITLE_PROPERTY).getString();
+                value.userid = postNode.getProperty(BLOG_USERID_PROPERTY).getString();
                 posts.add(value);
             }
         }
@@ -381,7 +380,7 @@ public final class MetaWeblogImp implements MetaWeblog
      */
     private String getHtmlUrlForCategories(Node blogNode) throws RepositoryException
     {
-        String url = blogNode.getProperty(BLOG_URL).getString();
+        String url = blogNode.getProperty(BLOG_URL_PROPERTY).getString();
         url += "/mode/categorieshtml";
         return url;
     }
@@ -394,7 +393,7 @@ public final class MetaWeblogImp implements MetaWeblog
      */
     private String getRssUrlForCategories(Node blogNode) throws RepositoryException
     {
-        String url = blogNode.getProperty(BLOG_URL).getString();
+        String url = blogNode.getProperty(BLOG_URL_PROPERTY).getString();
         url += "/mode/categoriesrss";
         return url;
     }
@@ -461,12 +460,12 @@ public final class MetaWeblogImp implements MetaWeblog
 
                 title.setText(categoryName);
                 description.setText(blogNode.getProperty(BLOG_DESCRIPTION).getString());
-                link.setText(blogNode.getProperty(BLOG_URL).getString());
+                link.setText(blogNode.getProperty(BLOG_URL_PROPERTY).getString());
                 chanel.addContent(title);
                 chanel.addContent(link);
                 chanel.addContent(description);
             }
-            Query query = session.getWorkspace().getQueryManager().createQuery("/blog/post[@blog:category='" + categoryName + "']", Query.XPATH);
+            Query query = session.getWorkspace().getQueryManager().createQuery("/blog/post[@"+BLOG_MODEL_PREFIX+":category='" + categoryName + "']", Query.XPATH);
             QueryResult queryResult = query.execute();
             NodeIterator nodes = queryResult.getNodes();
             while (nodes.hasNext())
@@ -481,10 +480,10 @@ public final class MetaWeblogImp implements MetaWeblog
                     Element description = new Element("description");
                     Element category = new Element("category");
 
-                    title.setText(nodePost.getProperty(BLOG_TITLE).getString());
+                    title.setText(nodePost.getProperty(BLOG_TITLE_PROPERTY).getString());
                     description.setText(nodePost.getProperty(BLOG_DESCRIPTION).getString());
-                    link.setText(nodePost.getParent().getProperty(BLOG_URL).getString());
-                    pubDate.setText(nodePost.getProperty(BLOG_DATE_CREATED).getString());
+                    link.setText(nodePost.getParent().getProperty(BLOG_URL_PROPERTY).getString());
+                    pubDate.setText(nodePost.getProperty(BLOG_DATE_CREATED_PROPERTY).getString());
                     category.setText(categoryName);
 
                     chanel.addContent(item);
@@ -531,14 +530,14 @@ public final class MetaWeblogImp implements MetaWeblog
             session = loader.openSession(repositoryName, userid, password);
             Node postNode = session.getNodeByUUID(postid);
             postNode.checkout();
-            postNode.setProperty(BLOG_TITLE, post.title);
+            postNode.setProperty(BLOG_TITLE_PROPERTY, post.title);
             if ( post.userid != null )
             {
-                postNode.setProperty(BLOG_USERID, post.userid);
+                postNode.setProperty(BLOG_USERID_PROPERTY, post.userid);
             }
             else
             {
-                postNode.setProperty(BLOG_USERID, userid);
+                postNode.setProperty(BLOG_USERID_PROPERTY, userid);
             }
             postNode.setProperty(BLOG_DESCRIPTION, post.description);
             if ( post.categories != null )
@@ -593,11 +592,11 @@ public final class MetaWeblogImp implements MetaWeblog
                 }
             }
             value.categories = categories.toArray(new String[categories.size()]);
-            value.dateCreated = postNode.getProperty(BLOG_DATE_CREATED).getDate().getTime();
+            value.dateCreated = postNode.getProperty(BLOG_DATE_CREATED_PROPERTY).getDate().getTime();
             value.description = postNode.getProperty(BLOG_DESCRIPTION).getString();
             value.postid = postid;
-            value.title = postNode.getProperty(BLOG_TITLE).getString();
-            value.userid = postNode.getProperty(BLOG_USERID).getString();
+            value.title = postNode.getProperty(BLOG_TITLE_PROPERTY).getString();
+            value.userid = postNode.getProperty(BLOG_USERID_PROPERTY).getString();
             return value;
         }
         catch ( Exception ex )
@@ -633,18 +632,18 @@ public final class MetaWeblogImp implements MetaWeblog
             blogid = getID(blogid);
             session = loader.openSession(repositoryName, userid, password);
             Node blogNode = session.getNodeByUUID(blogid);
-            Node postNode = blogNode.addNode("post", "blognode:blogEntry");
-            postNode.setProperty(BLOG_TITLE, post.title);
+            Node postNode = blogNode.addNode(BLOG_MODEL_PREFIX+":"+BLOG_POST_NAME);
+            postNode.setProperty(BLOG_TITLE_PROPERTY, post.title);
             if ( post.userid != null )
             {
-                postNode.setProperty(BLOG_USERID, post.userid);
+                postNode.setProperty(BLOG_USERID_PROPERTY, post.userid);
             }
             else
             {
-                postNode.setProperty(BLOG_USERID, userid);
+                postNode.setProperty(BLOG_USERID_PROPERTY, userid);
             }
             postNode.setProperty(BLOG_DESCRIPTION, post.description);
-            postNode.setProperty(BLOG_DATE_CREATED, Calendar.getInstance());
+            postNode.setProperty(BLOG_DATE_CREATED_PROPERTY, Calendar.getInstance());
             if ( post.categories != null )
             {
                 postNode.setProperty(BLOG_CATEGORY, post.categories);
@@ -686,7 +685,7 @@ public final class MetaWeblogImp implements MetaWeblog
         {
 
             session = loader.openSession(repositoryName, username, password);
-            Query query = session.getWorkspace().getQueryManager().createQuery("//blog/category[blog:name='" + name + "']", Query.XPATH);
+            Query query = session.getWorkspace().getQueryManager().createQuery("//blog/category["+BLOG_MODEL_PREFIX+":name='" + name + "']", Query.XPATH);
             QueryResult result = query.execute();
             NodeIterator nodeIterator = result.getNodes();
             CategoryInfo category = new CategoryInfo();
@@ -698,18 +697,18 @@ public final class MetaWeblogImp implements MetaWeblog
             else
             {
                 Node nodeBlog = session.getNodeByUUID(blogid);
-                categoryNode = nodeBlog.addNode("category", "blognode:categoryType");
-                categoryNode.setProperty(BLOG_NAME, name);
+                categoryNode = nodeBlog.addNode("category", BLOG_MODEL_PREFIX+"categoryType");
+                categoryNode.setProperty(BLOG_NAME_PROPERTY, name);
                 categoryNode.setProperty(BLOG_DESCRIPTION, description);
-                categoryNode.setProperty(BLOG_HTMLURL, getHtmlUrlForCategories(nodeBlog));
-                categoryNode.setProperty(BLOG_RSSURL, getRssUrlForCategories(nodeBlog));
+                categoryNode.setProperty(BLOG_HTMLURL_PROPERTY, getHtmlUrlForCategories(nodeBlog));
+                categoryNode.setProperty(BLOG_RSSURL_PROPERTY, getRssUrlForCategories(nodeBlog));
                 session.save();
             }
             category.categoryId = repositoryName + ID_SEPARATOR + categoryNode.getUUID();
-            category.categoryName = categoryNode.getProperty(BLOG_NAME).getString();
+            category.categoryName = categoryNode.getProperty(BLOG_NAME_PROPERTY).getString();
             category.description = categoryNode.getProperty(BLOG_DESCRIPTION).getString();
-            category.htmlUrl = categoryNode.getProperty(BLOG_HTMLURL).getString();
-            category.rssUrl = categoryNode.getProperty(BLOG_RSSURL).getString();
+            category.htmlUrl = categoryNode.getProperty(BLOG_HTMLURL_PROPERTY).getString();
+            category.rssUrl = categoryNode.getProperty(BLOG_RSSURL_PROPERTY).getString();
             return category;
         }
         catch ( Exception ex )
@@ -750,10 +749,10 @@ public final class MetaWeblogImp implements MetaWeblog
                 Node categoryNode = nodeIterator.nextNode();
                 CategoryInfo category = new CategoryInfo();
                 category.categoryId = repositoryName + ID_SEPARATOR + categoryNode.getUUID();
-                category.categoryName = categoryNode.getProperty(BLOG_NAME).getString();
+                category.categoryName = categoryNode.getProperty(BLOG_NAME_PROPERTY).getString();
                 category.description = categoryNode.getProperty(BLOG_DESCRIPTION).getString();
-                category.htmlUrl = categoryNode.getProperty(BLOG_HTMLURL).getString();
-                category.rssUrl = categoryNode.getProperty(BLOG_RSSURL).getString();
+                category.htmlUrl = categoryNode.getProperty(BLOG_HTMLURL_PROPERTY).getString();
+                category.rssUrl = categoryNode.getProperty(BLOG_RSSURL_PROPERTY).getString();
                 categories.add(category);
             }
 
