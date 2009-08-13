@@ -1,5 +1,7 @@
 package org.semanticwb.portal.community;
 
+import org.semanticwb.SWBPlatform;
+
 
 public class MicroSiteElement extends org.semanticwb.portal.community.base.MicroSiteElementBase 
 {
@@ -7,6 +9,17 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
     public static int VIS_MEMBERS_ONLY=1;
     public static int VIS_FRIENDS=2;
     public static int VIS_JUST_ME=3;
+
+    private long views=0;
+    private long timer;                     //valores de sincronizacion de views, hits
+    private static long time;               //tiempo en milisegundos por cada actualizacion
+    private boolean viewed = false;
+
+    static
+    {
+        time = 1000L * Long.parseLong((String) SWBPlatform.getEnv("swb/accessLogTime","600"));
+    }
+
 
     public MicroSiteElement(org.semanticwb.platform.SemanticObject base)
     {
@@ -74,6 +87,45 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         return true;
     }
 
+    @Override
+    public long getViews()
+    {
+        if(views==0)views=super.getViews();
+        return views;
+    }
 
+    public boolean incViews()
+    {
+        //System.out.println("incViews:"+views);
+        viewed = true;
+        if(views==0)views=getViews();
+        views+=1;
+        long t = System.currentTimeMillis() - timer;
+        if (t > time || t < -time)
+        {
+            //TODO: evalDate4Views();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void setViews(long views)
+    {
+        //System.out.println("setViews:"+views);
+        super.setViews(views);
+        this.views=views;
+    }
+
+    public void updateViews()
+    {
+        //System.out.println("updateViews:"+views);
+        if(viewed)
+        {
+            timer = System.currentTimeMillis();
+            if(views>0)setViews(views);
+            viewed = false;
+        }
+    }
 
 }
