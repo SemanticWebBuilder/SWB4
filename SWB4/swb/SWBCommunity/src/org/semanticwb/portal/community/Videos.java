@@ -50,11 +50,10 @@ public class Videos extends org.semanticwb.portal.community.base.VideosBase
     {
         String act=request.getParameter("act");
         if(act==null)act="view";
-        String path="/swbadmin/jsp/microsite/VideosView.jsp";
-
-        if(act.equals("add"))path="/swbadmin/jsp/microsite/VideosAddVideo.jsp";
-        if(act.equals("edit"))path="/swbadmin/jsp/microsite/VideosEditVideo.jsp";
-        if(act.equals("detail"))path="/swbadmin/jsp/microsite/VideosDetailVideo.jsp";
+        String path="/swbadmin/jsp/microsite/videos/videosView.jsp";
+        if(act.equals("add"))path="/swbadmin/jsp/microsite/videos/videosAdd.jsp";
+        if(act.equals("edit"))path="/swbadmin/jsp/microsite/videos/videosEdit.jsp";
+        if(act.equals("detail"))path="/swbadmin/jsp/microsite/videos/videosDetail.jsp";
 
         RequestDispatcher dis=request.getRequestDispatcher(path);
         try
