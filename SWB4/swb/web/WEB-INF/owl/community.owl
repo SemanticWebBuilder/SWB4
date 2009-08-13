@@ -300,12 +300,30 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="smallPhoto">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_smallPhoto">
+        <rdfs:label xml:lang="es">Foto chica</rdfs:label>
+        <rdfs:label xml:lang="en">Small Photo</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
     <rdfs:domain rdf:resource="#ProductElement"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="bigPhoto">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_bigPhoto">
+        <rdfs:label xml:lang="es">Foto grande</rdfs:label>
+        <rdfs:label xml:lang="en">Big Photo</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
     <rdfs:domain rdf:resource="#ProductElement"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
@@ -391,6 +409,14 @@
     <rdfs:domain rdf:resource="#MicroSiteElement"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="promotion">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_promotion">
+        <rdfs:label xml:lang="es">Promoción</rdfs:label>
+        <rdfs:label xml:lang="en">promotion</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
     <rdfs:domain rdf:resource="#ProductElement"/>
