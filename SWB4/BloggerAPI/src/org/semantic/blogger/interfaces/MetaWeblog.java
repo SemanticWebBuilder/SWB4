@@ -1,23 +1,23 @@
 /**
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integraciÃ³n,
+* colaboraciÃ³n y conocimiento, que gracias al uso de tecnologÃ­a semÃ¡ntica puede generar contextos de
+* informaciÃ³n alrededor de algÃºn tema de interÃ©s o bien integrar informaciÃ³n y aplicaciones de diferentes
+* fuentes, donde a la informaciÃ³n se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creaciÃ³n original del Fondo de InformaciÃ³n y DocumentaciÃ³n
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trÃ¡mite.
 *
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* INFOTEC pone a su disposiciÃ³n la herramienta SemanticWebBuilder a travÃ©s de su licenciamiento abierto al pÃºblico (â€˜open sourceâ€™),
+* en virtud del cual, usted podrÃ¡ usarlo en las mismas condiciones con que INFOTEC lo ha diseÃ±ado y puesto a su disposiciÃ³n;
+* aprender de Ã©l; distribuirlo a terceros; acceder a su cÃ³digo fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los tÃ©rminos y condiciones de la LICENCIA ABIERTA AL PÃšBLICO que otorga INFOTEC para la utilizaciÃ³n
 * del SemanticWebBuilder 4.0.
 *
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* INFOTEC no otorga garantÃ­a sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implÃ­cita ni explÃ­cita,
+* siendo usted completamente responsable de la utilizaciÃ³n que le dÃ© y asumiendo la totalidad de los riesgos que puedan derivar
 * de la misma.
 *
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
-* dirección electrónica:
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposiciÃ³n la siguiente
+* direcciÃ³n electrÃ³nica:
 *  http://www.semanticwebbuilder.org
 **/ 
 package org.semantic.blogger.interfaces;
