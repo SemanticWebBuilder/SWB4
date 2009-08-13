@@ -8,11 +8,11 @@
 %>
 <table border="0" width="100%">
 <%
-    Iterator<Video> it=Video.listVideoByWebPage(wpage,wpage.getWebSite());
+    Iterator<VideoElement> it=VideoElement.listVideoElementByWebPage(wpage,wpage.getWebSite());
     int i=0;
     while(it.hasNext())
     {
-        Video video=it.next();
+        VideoElement video=it.next();
         SWBResourceURL viewurl=paramRequest.getRenderUrl().setParameter("act","detail").setParameter("uri",video.getURI());
         if(video.canView(member))
         {
