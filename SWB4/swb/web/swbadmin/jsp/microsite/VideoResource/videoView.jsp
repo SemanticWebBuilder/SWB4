@@ -4,6 +4,7 @@
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
     WebPage wpage=paramRequest.getWebPage();
+    MicroSiteWebPageUtil wputil=MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
     Member member=Member.getMember(user,wpage);
 %>
 <table border="0" width="100%">
@@ -47,5 +48,22 @@
 %>
 <center>
     <a href="<%=paramRequest.getRenderUrl().setParameter("act","add").toString()%>">Agregar Video</a>
+<%
+    if(wputil!=null && member.canView())
+    {
+        if(!wputil.isSubscribed(member))
+        {
+%>
+    <a href="<%=paramRequest.getActionUrl().setParameter("act","subcribe").toString()%>">Suscribirse a este elemento</a>
+<%
+        }else
+        {
+%>
+    <a href="<%=paramRequest.getActionUrl().setParameter("act","unsubcribe").toString()%>">Cancelar suscripción</a>
+<%
+        }
+
+    }
+%>
 </center>
 <%  }%>
