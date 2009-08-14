@@ -15,6 +15,9 @@ public class MicroSite extends org.semanticwb.portal.community.base.MicroSiteBas
         if(page instanceof MicroSiteWebPageUtil)
         {
             return ((MicroSiteWebPageUtil)page).getMicroSite();
+        }else if(page instanceof MicroSite)
+        {
+            return ((MicroSite)page);
         }
         return null;
     }

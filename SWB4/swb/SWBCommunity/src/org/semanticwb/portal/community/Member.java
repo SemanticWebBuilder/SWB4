@@ -25,7 +25,7 @@ public class Member extends org.semanticwb.portal.community.base.MemberBase
         Member ret=null;
         if(page instanceof MicroSite)
         {
-            Iterator<Member> it=Member.listMemberByUser(user);
+            Iterator<Member> it=Member.listMemberByUser(user,page.getWebSite());
             while(it.hasNext())
             {
                 Member mem=it.next();
@@ -40,7 +40,7 @@ public class Member extends org.semanticwb.portal.community.base.MemberBase
                 ret.setMicroSite((MicroSite)page);
                 ret.setUser(user);
                 //TODO: Comentar esto cuando se tengan miembros
-                ret.setAccessLevel(LEVEL_ADMIN);
+                //ret.setAccessLevel(LEVEL_ADMIN);
             }
         }else if(page instanceof MicroSiteWebPageUtil)
         {
