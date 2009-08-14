@@ -74,7 +74,12 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
      */
     public boolean canView(Member mem)
     {
-        return true;
+        boolean ret=false;
+        int vis=getVisibility();
+        if(vis==VIS_ALL)ret=true;
+        else if(vis==VIS_MEMBERS_ONLY && mem.canView())ret=true;
+        else if(vis==VIS_JUST_ME && getCreator().equals(mem.getUser()))ret=true;
+        return ret;
     }
 
     /**
@@ -85,7 +90,11 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
      */
     public boolean canComment(Member mem)
     {
-        return true;
+        boolean ret=false;
+        int vis=getVisibility();
+        if(vis==VIS_MEMBERS_ONLY && mem.canView())ret=true;
+        else if(vis==VIS_JUST_ME && getCreator().equals(mem.getUser()))ret=true;
+        return ret;
     }
 
     /**
@@ -96,7 +105,11 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
      */
     public boolean canModify(Member mem)
     {
-        return true;
+        boolean ret=false;
+        int vis=getVisibility();
+        if(mem.getAccessLevel()>=mem.LEVEL_ADMIN)ret=true;
+        else if(vis==VIS_JUST_ME && getCreator().equals(mem.getUser()))ret=true;
+        return ret;
     }
 
     @Override
