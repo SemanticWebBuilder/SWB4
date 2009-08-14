@@ -112,7 +112,7 @@ public class MostrarPanorama extends GenericResource
                 out.write("<tr>" + NL);
                 for (int i_td = 1; i_td <= i_parte; i_td++)
                 {
-                    if (i_td == 0)
+                    if (i_td == 1)
                     {
                         out.write("<td id=\"page" + i_td + "\" class=\"activePage\"><a onClick=\"SWB_gotoPage(" + (i_td - 1) + ")\" href=\"#\">1</a></td>" + NL);
                     }
