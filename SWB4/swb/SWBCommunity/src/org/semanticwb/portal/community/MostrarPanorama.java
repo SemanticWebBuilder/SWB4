@@ -16,7 +16,6 @@ import org.semanticwb.model.ResourceSubType;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.portal.api.*;
 
-
 /**
  *
  * @author victor.lorenzana
@@ -59,12 +58,12 @@ public class MostrarPanorama extends GenericResource
                 }
             }
         }
-        
+
         if (!promos.isEmpty())
         {
             PrintWriter out = response.getWriter();
-            out.write("<div id=\"panorama\">"+NL);
-            out.write("<h2 class=\"tituloPrincipal\">Panorama del mes</h2>"+NL);
+            out.write("<div id=\"panorama\">" + NL);
+            out.write("<h2 class=\"tituloPrincipal\">Panorama del mes</h2>" + NL);
             int i_parte = 1;
             {
                 int i = 1;
@@ -72,7 +71,7 @@ public class MostrarPanorama extends GenericResource
                 {
                     if (i == 1)
                     {
-                        if (i_parte > 1)
+                        if (i_parte == 1)
                         {
                             out.write("<div id=\"parte" + i_parte + "\">" + NL);
                         }
@@ -104,34 +103,36 @@ public class MostrarPanorama extends GenericResource
                 }
             }
 
-            
-            out.write("<div id=\"paginador\">"+NL);
-            out.write("<div id=\"backIttems\"><p><a href=\"#\" onClick=\"SWB_previous()\"><img border=\"0\" src=\"images/anteriorBTN.jpg\" alt=\"Anterior\" width=\"19\" height=\"19\"></a> Anterior</p></div>"+NL);
-            out.write("<div id=\"noPaginas\">"+NL);
-            out.write("<table width=\"100\" border=\"0\" cellspacing=\"5\" cellpadding=\"0\">"+NL);
-            out.write("<tr>"+NL);
-            for (int i_td = 1; i_td <= i_parte; i_td++)
+            if (i_parte > 1)
             {
-                if (i_td == 0)
+                out.write("<div id=\"paginador\">" + NL);
+                out.write("<div id=\"backIttems\"><p><a href=\"#\" onClick=\"SWB_previous()\"><img border=\"0\" src=\"images/anteriorBTN.jpg\" alt=\"Anterior\" width=\"19\" height=\"19\"></a> Anterior</p></div>" + NL);
+                out.write("<div id=\"noPaginas\">" + NL);
+                out.write("<table width=\"100\" border=\"0\" cellspacing=\"5\" cellpadding=\"0\">" + NL);
+                out.write("<tr>" + NL);
+                for (int i_td = 1; i_td <= i_parte; i_td++)
                 {
-                    out.write("<td id=\"page" + i_td + "\" class=\"activePage\"><a onClick=\"SWB_gotoPage(" + (i_td - 1) + ")\" href=\"#\">1</a></td>"+NL);
+                    if (i_td == 0)
+                    {
+                        out.write("<td id=\"page" + i_td + "\" class=\"activePage\"><a onClick=\"SWB_gotoPage(" + (i_td - 1) + ")\" href=\"#\">1</a></td>" + NL);
+                    }
+                    else
+                    {
+                        out.write("<td id=\"page" + i_td + "\"><a onClick=\"SWB_gotoPage(" + (i_td - 1) + ")\" href=\"#\">1</a></td>" + NL);
+                    }
                 }
-                else
-                {
-                    out.write("<td id=\"page" + i_td + "\"><a onClick=\"SWB_gotoPage(" + (i_td - 1) + ")\" href=\"#\">1</a></td>"+NL);
-                }
-            }
-            
 
-            out.write("</tr>"+NL);
-            out.write("</table>"+NL);
-            out.write("</div>"+NL);
-            out.write("<div id=\"nextIttems\"><p>Siguiente <a href=\"#\" onClick=\"SWB_next()\"><img border=\"0\" src=\"images/siguienteBTN.jpg\" alt=\"Siguiente\" width=\"19\" height=\"19\"></a></p></div>"+NL);
-            out.write("</div>"+NL);
-            out.write("</div>"+NL);
+
+                out.write("</tr>" + NL);
+                out.write("</table>" + NL);
+                out.write("</div>" + NL);
+                out.write("<div id=\"nextIttems\"><p>Siguiente <a href=\"#\" onClick=\"SWB_next()\"><img border=\"0\" src=\"images/siguienteBTN.jpg\" alt=\"Siguiente\" width=\"19\" height=\"19\"></a></p></div>" + NL);
+                out.write("</div>" + NL);
+            }
+            out.write("</div>" + NL);
 
             out.write("<script type=\"text/javascript\" >" + NL);
-            out.write("var numpages="+ i_parte +";" + NL);
+            out.write("var numpages=" + i_parte + ";" + NL);
             out.write("var current=0;" + NL);
             out.write("<!--" + NL);
             out.write("function SWB_next() { " + NL);
@@ -190,6 +191,7 @@ public class MostrarPanorama extends GenericResource
         }
     }
 }
+
 class Promo
 {
 
