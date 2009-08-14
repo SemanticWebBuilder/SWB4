@@ -60,29 +60,29 @@ public class BlogBase extends org.semanticwb.model.SWBClass implements org.seman
         return (getBlog(id, model)!=null);
     }
 
-    public void setBlogWebPage(org.semanticwb.model.WebPage webpage)
+    public void setWebPage(org.semanticwb.model.WebPage webpage)
     {
         getSemanticObject().setObjectProperty(swbcomm_blogWebPage, webpage.getSemanticObject());
     }
 
-    public void removeBlogWebPage()
+    public void removeWebPage()
     {
         getSemanticObject().removeProperty(swbcomm_blogWebPage);
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.Blog> listBlogByBlogWebPage(org.semanticwb.model.WebPage blogwebpage,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.Blog> listBlogByWebPage(org.semanticwb.model.WebPage blogwebpage,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Blog> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_blogWebPage, blogwebpage.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.Blog> listBlogByBlogWebPage(org.semanticwb.model.WebPage blogwebpage)
+   public static java.util.Iterator<org.semanticwb.portal.community.Blog> listBlogByWebPage(org.semanticwb.model.WebPage blogwebpage)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Blog> it=new org.semanticwb.model.GenericIterator(blogwebpage.getSemanticObject().getModel().listSubjects(swbcomm_blogWebPage,blogwebpage.getSemanticObject()));
        return it;
    }
 
-    public org.semanticwb.model.WebPage getBlogWebPage()
+    public org.semanticwb.model.WebPage getWebPage()
     {
          org.semanticwb.model.WebPage ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_blogWebPage);

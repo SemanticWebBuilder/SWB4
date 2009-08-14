@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class MembershipResourceBase extends org.semanticwb.portal.community.CommunityResource 
+public class MembershipResourceBase extends org.semanticwb.portal.community.MembersResource 
 {
     public static final org.semanticwb.platform.SemanticClass swbcomm_MembershipResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MembershipResource");
 
