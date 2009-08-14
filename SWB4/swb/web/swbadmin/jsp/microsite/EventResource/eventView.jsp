@@ -7,8 +7,9 @@
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
 %>
-<h1>Vista de eventos</h1>
+<h1>Eventos</h1>
 <table>
     <tbody>
         <%
@@ -21,7 +22,7 @@
         <tr>
             <td>
                 <a href="<%=viewUrl%>"><%=event.getTitle()%></a><BR>
-                <%=(event.getStartDate()==null?"":dateFormat.format(event.getStartDate()))%> - <%=event.getStartTime()%><BR>
+                <%=(event.getStartDate()==null?"":dateFormat.format(event.getStartDate()))%> - <%=(event.getStartTime()==null?"":timeFormat.format(event.getStartTime()))%><BR>
                 <%=event.getPlace()%><BR>
             </td>
         </tr>
