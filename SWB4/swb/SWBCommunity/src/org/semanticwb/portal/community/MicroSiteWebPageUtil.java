@@ -28,9 +28,10 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
 
     public boolean sendNotification(MicroSiteElement element)
     {
+        System.out.println("sendNotification:"+element);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm");
         boolean sended = Boolean.FALSE;
-        MicroSiteWebPageUtil mswpu = null;
+        MicroSiteWebPageUtil mswpu = this;
         if(null!= element)
         {
             User creator = element.getModifiedBy();
@@ -90,7 +91,6 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
             mail.setData(data.toString());
 
             ArrayList memberlist = new ArrayList();
-            mswpu = this;
             Iterator<Member> itm = mswpu.listSubscribedMembers();
             while(itm.hasNext())
             {
@@ -103,6 +103,7 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
                 mail.setBccEmail(memberlist);
 
                 try {
+                    System.out.println("SendMail:"+memberlist);
                     SWBUtils.EMAIL.sendBGEmail(mail);
                     sended = Boolean.TRUE;
                 } catch (Exception e) {
@@ -116,10 +117,12 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
 
     public void subscribeToElement(Member member)
     {
-        if(member!=null && !member.getSemanticObject().isVirtual())
+        System.out.println("subscribeToElement1:"+member);
+        if(member!=null)
         {
             if(!isSubscribed(member))
             {
+                System.out.println("subscribeToElement2");
                 member.addSubscriptions(this);
             }
         }
@@ -127,8 +130,10 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
 
     public void unSubscribeFromElement(Member member)
     {
-        if(member!=null && !member.getSemanticObject().isVirtual())
+        System.out.println("unSubscribeFromElement1:"+member);
+        if(member!=null)
         {
+            System.out.println("unSubscribeFromElement2");
             member.removeSubscriptions(this);
         }
     }

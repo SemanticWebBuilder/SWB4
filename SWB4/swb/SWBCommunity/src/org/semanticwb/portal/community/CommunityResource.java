@@ -30,15 +30,15 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         WebPage page=response.getWebPage();
-        Member mem=Member.getMember(response.getUser(),response.getWebPage());
+        Member mem=Member.getMember(response.getUser(),page);
         if(!mem.canView())return;                                       //si el usuario no pertenece a la red sale;
 
         String action=request.getParameter("act");
         System.out.println("act:"+action);
-        if("suscribe".equals(action))
+        if("subscribe".equals(action))
         {
             if(page instanceof MicroSiteWebPageUtil)((MicroSiteWebPageUtil)page).subscribeToElement(mem);
-        }else if("unsuscribe".equals(action))
+        }else if("unsubscribe".equals(action))
         {
             if(page instanceof MicroSiteWebPageUtil)((MicroSiteWebPageUtil)page).unSubscribeFromElement(mem);
         }
