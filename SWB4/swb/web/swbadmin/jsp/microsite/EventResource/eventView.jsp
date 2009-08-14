@@ -20,8 +20,7 @@
         <tr>
             <td>
                 <a href="<%=viewUrl%>"><%=event.getTitle()%></a><BR>
-                <%=event.getStartDate()%><BR>
-                <%=event.getStartTime()%><BR>
+                <%=event.getStartDate()%> - <%=event.getStartTime()%><BR>
                 <%=event.getPlace()%><BR>
             </td>
         </tr>
