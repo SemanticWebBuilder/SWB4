@@ -4,7 +4,7 @@
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
-            MicroSiteWebPageUtil wputil=MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
+            MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Member member = Member.getMember(user, wpage);
 %>
 <h1>Vista de eventos</h1>
@@ -32,23 +32,23 @@
     </tbody>
 </table>
 <%
-    if (member.canAdd()) {
+            if (member.canAdd()) {
 %>
 <center>
     <a href="<%=paramRequest.getRenderUrl().setParameter("act", "add").toString()%>">Agregar Evento</a>
     <%
-            if (wputil != null && member.canView()) {
-                if (!wputil.isSubscribed(member)) {
+        if (wputil != null && member.canView()) {
+            if (!wputil.isSubscribed(member)) {
     %>
     <a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe").toString()%>">Suscribirse a este elemento</a>
     <%
-            } else {
+                } else {
     %>
     <a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe").toString()%>">Cancelar suscripción</a>
     <%
-                }
-
             }
+
+        }
     %>
 </center>
 <%  }%>
