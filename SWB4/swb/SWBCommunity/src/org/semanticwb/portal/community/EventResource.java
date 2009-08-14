@@ -22,7 +22,9 @@
  **/
 package org.semanticwb.portal.community;
 
+import com.sun.org.omg.CORBA.ParDescriptionSeqHelper;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,7 +42,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
 
     private static Logger log = SWBUtils.getLogger(EventResource.class);
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private static SimpleDateFormat timeFormat = new SimpleDateFormat("'T'HH:mm:ss");
+    private static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
 
     public EventResource() {
@@ -55,38 +57,39 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         String action = request.getParameter("act");
         WebPage page = response.getWebPage();
         Member mem = Member.getMember(response.getUser(), response.getWebPage());
-        
+
         if (!mem.canView()) {
             return;                                       //si el usuario no pertenece a la red sale;
         }
         
-        if (action.equals("add") && mem.canAdd()) {
-            String title = request.getParameter("event_title");
-            title = (title==null?"":title);
-            String desc = request.getParameter("event_description");
-            desc = (desc==null?"":desc);
-            String aud = request.getParameter("event_audience");
-            aud = (aud==null?"":aud);
-            String startDate = request.getParameter("event_startDate");
-            startDate = (startDate==null?"":startDate);
-            String endDate = request.getParameter("event_endDate");
-            endDate = (endDate==null?"":endDate);
-            String startTime = request.getParameter("event_startTime");
-            startTime = (startTime==null?"":startTime);            
-            String endTime = request.getParameter("event_endTime");
-            endTime = (endTime==null?"":endTime);
-            String place = request.getParameter("event_place");
-            place = (place==null?"":place);
-            String tags = request.getParameter("event_tags");
+        String title = request.getParameter("event_title");
+        title = (title==null?"":title);
+        String desc = request.getParameter("event_description");
+        desc = (desc==null?"":desc);
+        String aud = request.getParameter("event_audience");
+        aud = (aud==null?"":aud);
+        String startDate = request.getParameter("event_startDate");
+        startDate = (startDate==null?"":startDate);
+        String endDate = request.getParameter("event_endDate");
+        endDate = (endDate==null?"":endDate);
+        String startTime = request.getParameter("event_startTime");
+        startTime = (startTime==null?"":startTime.replace("T", "").trim());
+        String endTime = request.getParameter("event_endTime");
+        endTime = (endTime==null?"":endTime.replace("T", "").trim());
+        String place = request.getParameter("event_place");
+        place = (place==null?"":place);
+        String tags = request.getParameter("event_tags");
+        tags = (tags==null?"":tags);
+        
+        if (action.equals("add") && mem.canAdd()) {            
             tags = (tags==null?"":tags);
             try {
-                System.out.println(">>>>>>>>>>Time start " + startTime + "--" + timeFormat.parse(startTime).getTime());
-                System.out.println(">>>>>>>>>>Time end " + endTime + "--" + timeFormat.parse(endTime).getTime());
+                System.out.println(">>>>>>>>>>Time start " + startTime + "--" + timeFormat.parse(startTime));
+                System.out.println(">>>>>>>>>>Time end " + endTime + "--" + timeFormat.parse(endTime));
             } catch (Exception e) {
                 log.error(e);
             }
             
-
             EventElement rec = EventElement.createEventElement(getResourceBase().getWebSite());
             rec.setTitle(title);
             rec.setDescription(desc);
@@ -94,8 +97,8 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             try {
                 rec.setStartDate(dateFormat.parse(startDate.trim()));
                 rec.setEndDate(dateFormat.parse(endDate.trim()));
-                rec.setStartTime(new Timestamp(timeFormat.parse(startTime.trim()).getTime()));
-                rec.setEndTime(new Timestamp(timeFormat.parse(endTime.trim()).getTime()));
+                rec.setStartTime(new Timestamp(timeFormat.parse(startTime).getTime()));
+                rec.setEndTime(new Timestamp(timeFormat.parse(endTime).getTime()));
             } catch (Exception e) {
                 log.error("Error en ADD - " + e);
             }
@@ -116,19 +119,19 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
             
             if (rec != null && rec.canModify(mem)) {
-                rec.setTitle(request.getParameter("event_title"));
-                rec.setDescription(request.getParameter("event_description"));
-                rec.setAudienceType(request.getParameter("event_audience"));
+                rec.setTitle(title);
+                rec.setDescription(desc);
+                rec.setAudienceType(aud);
                 try {
-                    rec.setStartDate(dateFormat.parse(request.getParameter("event_startDate")));
-                    rec.setEndDate(dateFormat.parse(request.getParameter("event_endDate")));
-                    rec.setStartTime(dateFormat.parse(request.getParameter("event_startTime")));
-                    rec.setEndTime(dateFormat.parse(request.getParameter("event_endTime")));
+                    rec.setStartDate(dateFormat.parse(startDate));
+                    rec.setEndDate(dateFormat.parse(endDate));
+                    rec.setStartTime(new Timestamp(timeFormat.parse(startTime).getTime()));
+                    rec.setEndTime(new Timestamp(timeFormat.parse(endTime).getTime()));
                 } catch (Exception e) {
                     log.error("Error en EDIT - " + e);
                 }
-                rec.setPlace(request.getParameter("event_place"));
-                rec.setTags(request.getParameter("event_tags"));
+                rec.setPlace(place);
+                rec.setTags(tags);
                 rec.setVisibility(Integer.parseInt(request.getParameter("level")));   //hace convercion a int en automatico
 
                 if (page instanceof MicroSiteWebPageUtil) {
@@ -141,6 +144,13 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
 
             if (rec != null && rec.canModify(mem)) {
                 rec.remove();                                       //elimina el registro
+            }
+        } else if (action.equals("attend")) {
+            String uri = request.getParameter("uri");
+            EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+
+            if (rec != null && rec.canModify(mem)) {
+                rec.addAttendant(mem);
             }
         } else {
             super.processAction(request, response);
