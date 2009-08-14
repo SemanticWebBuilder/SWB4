@@ -22,13 +22,9 @@
  **/
 package org.semanticwb.portal.community;
 
-import com.sun.org.omg.CORBA.ParDescriptionSeqHelper;
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.logging.Level;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
@@ -57,7 +53,6 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         String action = request.getParameter("act");
         WebPage page = response.getWebPage();
         Member mem = Member.getMember(response.getUser(), page);
-
         if (!mem.canView()) {
             return;                                       //si el usuario no pertenece a la red sale;
         }
