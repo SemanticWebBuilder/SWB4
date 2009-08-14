@@ -23,6 +23,7 @@
 package org.semanticwb.portal.community;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
@@ -35,6 +36,8 @@ import org.semanticwb.portal.api.*;
 public class EventResource extends org.semanticwb.portal.community.base.EventResourceBase {
 
     private static Logger log = SWBUtils.getLogger(EventResource.class);
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 
     public EventResource() {
     }
@@ -53,19 +56,38 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             return;                                       //si el usuario no pertenece a la red sale;
         }
         
-        //System.out.println("act:" + action);
         if (action.equals("add") && mem.canAdd()) {
             String title = request.getParameter("event_title");
+            title = (title==null?"":title);
             String desc = request.getParameter("event_description");
+            desc = (desc==null?"":desc);
+            String aud = request.getParameter("event_audience");
+            aud = (aud==null?"":aud);
+            String startDate = request.getParameter("event_startDate");
+            startDate = (startDate==null?"":startDate);
+            String endDate = request.getParameter("event_endDate");
+            endDate = (endDate==null?"":endDate);
+            String startTime = request.getParameter("event_startTime");
+            startTime = (startTime==null?"":startTime);
+            System.out.println(">>>>>>>>>>Time start " + startTime);
+            String endTime = request.getParameter("event_endTime");
+            endTime = (endTime==null?"":endTime);
             String place = request.getParameter("event_place");
+            place = (place==null?"":place);
 
             EventElement rec = EventElement.createEventElement(getResourceBase().getWebSite());
             rec.setTitle(title);
             rec.setDescription(desc);
+            rec.setAudienceType(aud);
+            try {
+                rec.setStartDate(dateFormat.parse(startDate.trim()));
+                rec.setEndDate(dateFormat.parse(endDate.trim()));
+            } catch (Exception e) {
+                log.error(e);
+            }
             rec.setEventWebPage(page);
             rec.setPlace(place);
 
-            //addVideoElement(rec);
             try {
                 response.setRenderParameter("act", "edit");
                 response.setRenderParameter("uri", rec.getURI());
@@ -74,6 +96,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                 response.setRenderParameter("act", "add");               //regresa a agregar codigo
                 response.setRenderParameter("err", "true");              //envia parametro de error
             }
+            response.setMode("view");
         } else if (action.equals("edit")) {
             String uri = request.getParameter("uri");
             EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
