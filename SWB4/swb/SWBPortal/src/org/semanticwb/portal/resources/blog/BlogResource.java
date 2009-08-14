@@ -240,7 +240,7 @@ public class BlogResource extends GenericResource
     @Override
     public void install(ResourceType recobj) throws SWBResourceException {
         String dbname=SWBUtils.DB.getDatabaseName();
-        if(dbname.startsWith("MySQL") && dbname.indexOf("")!=-1)
+        if(dbname.startsWith("MySQL"))
         {
             this.installMySql(recobj);
         }
