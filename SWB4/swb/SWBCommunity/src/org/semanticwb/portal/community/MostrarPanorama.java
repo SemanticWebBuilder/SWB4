@@ -97,7 +97,7 @@ public class MostrarPanorama extends GenericResource
                     if (i == 3)
                     {
                         i_parte++;
-                        i = 0;
+                        i = 1;
                         out.write("</div>" + NL);
                     }
                 }
