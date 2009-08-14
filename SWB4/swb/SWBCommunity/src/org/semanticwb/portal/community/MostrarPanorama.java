@@ -43,18 +43,21 @@ public class MostrarPanorama extends GenericResource
                 while (resources.hasNext())
                 {
                     Resource resource = resources.next();
-                    Promo o_promo = new Promo();
-                    o_promo.title = resource.getAttribute("title");
-                    o_promo.imgfile = resource.getAttribute("imgfile");
-                    String webWorkPath = (String) SWBPlatform.getWebWorkPath() + resource.getWorkPath();
-                    o_promo.imgfile = webWorkPath + "/" + o_promo.imgfile;
-                    o_promo.text = resource.getAttribute("text");
-                    o_promo.url = resource.getAttribute("url");
-                    if ("1".equalsIgnoreCase(resource.getAttribute("target", "0").trim()))
+                    if (resource.isActive())
                     {
-                        o_promo.target = "_blank";
+                        Promo o_promo = new Promo();
+                        o_promo.title = resource.getAttribute("title");
+                        o_promo.imgfile = resource.getAttribute("imgfile");
+                        String webWorkPath = (String) SWBPlatform.getWebWorkPath() + resource.getWorkPath();
+                        o_promo.imgfile = webWorkPath + "/" + o_promo.imgfile;
+                        o_promo.text = resource.getAttribute("text");
+                        o_promo.url = resource.getAttribute("url");
+                        if ("1".equalsIgnoreCase(resource.getAttribute("target", "0").trim()))
+                        {
+                            o_promo.target = "_blank";
+                        }
+                        promos.add(o_promo);
                     }
-                    promos.add(o_promo);
                 }
             }
         }
