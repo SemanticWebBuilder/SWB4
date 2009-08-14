@@ -6,7 +6,7 @@
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");            
 %>
 <%
             String uri = request.getParameter("uri");
@@ -23,7 +23,17 @@
                 Inicia: <%=dateFormat.format(rec.getStartDate())%> - <%=timeFormat.format(rec.getStartTime())%><BR>
                 Termina: <%=dateFormat.format(rec.getEndDate())%> - <%=timeFormat.format(rec.getEndTime())%><BR>
                 Lugar: <%=rec.getPlace()%> <BR>
-                <%=rec.getViews()%> vistas<BR>
+                Asistentes:
+                <%
+                Iterator<Member> members = rec.listAttendants();
+                while (members.hasNext()) {
+                    Member m = members.next();
+                    %>
+                    <%=m.getUser().getFullName()%>
+                <%
+                }
+                %>
+                <br><%=rec.getViews()%> vistas<BR>
         </td>
     </tr>
 </table>
@@ -32,6 +42,7 @@
 %>
 <center>
     <a href="<%=paramRequest.getRenderUrl()%>">Regresar</a>
+    <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getRenderUrl().setParameter("act", "attend").setParameter("uri", rec.getURI())%>">Asistir al evento</a><%}%>
     <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", rec.getURI())%>">Editar Información</a><%}%>
     <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", rec.getURI())%>">Eliminar Evento</a><%}%>
 </center>
