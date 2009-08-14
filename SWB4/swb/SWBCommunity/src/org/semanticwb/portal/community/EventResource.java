@@ -56,12 +56,13 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = request.getParameter("act");
         WebPage page = response.getWebPage();
-        Member mem = Member.getMember(response.getUser(), response.getWebPage());
+        Member mem = Member.getMember(response.getUser(), page);
 
         if (!mem.canView()) {
             return;                                       //si el usuario no pertenece a la red sale;
         }
-        
+
+        //Gather event data
         String title = request.getParameter("event_title");
         title = (title==null?"":title);
         String desc = request.getParameter("event_description");
@@ -81,31 +82,28 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         String tags = request.getParameter("event_tags");
         tags = (tags==null?"":tags);
         
-        if (action.equals("add") && mem.canAdd()) {            
-            tags = (tags==null?"":tags);
-            try {
-                System.out.println(">>>>>>>>>>Time start " + startTime + "--" + timeFormat.parse(startTime));
-                System.out.println(">>>>>>>>>>Time end " + endTime + "--" + timeFormat.parse(endTime));
-            } catch (Exception e) {
-                log.error(e);
-            }
-            
+        if (action.equals("add") && mem.canAdd()) {
+            //Create event object
             EventElement rec = EventElement.createEventElement(getResourceBase().getWebSite());
+
+            //Set event properties
             rec.setTitle(title);
             rec.setDescription(desc);
             rec.setAudienceType(aud);
+
             try {
                 rec.setStartDate(dateFormat.parse(startDate.trim()));
                 rec.setEndDate(dateFormat.parse(endDate.trim()));
                 rec.setStartTime(new Timestamp(timeFormat.parse(startTime).getTime()));
                 rec.setEndTime(new Timestamp(timeFormat.parse(endTime).getTime()));
             } catch (Exception e) {
-                log.error("Error en ADD - " + e);
+                log.error(e);
             }
             rec.setEventWebPage(page);
             rec.setPlace(place);
             rec.setTags(tags);
 
+            //Set render parameters
             try {
                 response.setRenderParameter("act", "edit");
                 response.setRenderParameter("uri", rec.getURI());
@@ -115,20 +113,23 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                 response.setRenderParameter("err", "true");              //envia parametro de error
             }
         } else if (action.equals("edit")) {
+            //Get event object
             String uri = request.getParameter("uri");
             EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
             
             if (rec != null && rec.canModify(mem)) {
+                //Set new event properties
                 rec.setTitle(title);
                 rec.setDescription(desc);
                 rec.setAudienceType(aud);
+
                 try {
                     rec.setStartDate(dateFormat.parse(startDate));
                     rec.setEndDate(dateFormat.parse(endDate));
                     rec.setStartTime(new Timestamp(timeFormat.parse(startTime).getTime()));
                     rec.setEndTime(new Timestamp(timeFormat.parse(endTime).getTime()));
                 } catch (Exception e) {
-                    log.error("Error en EDIT - " + e);
+                    log.error(e);
                 }
                 rec.setPlace(place);
                 rec.setTags(tags);
@@ -139,16 +140,20 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                 }
             }
         } else if (action.equals("remove")) {
+            //Get event object
             String uri = request.getParameter("uri");
             EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 
+            //Remove event object
             if (rec != null && rec.canModify(mem)) {
                 rec.remove();                                       //elimina el registro
             }
         } else if (action.equals("attend")) {
+            //Get event object
             String uri = request.getParameter("uri");
             EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 
+            //Add attendant member
             if (rec != null && rec.canModify(mem)) {
                 rec.addAttendant(mem);
             }
