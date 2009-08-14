@@ -54,12 +54,12 @@
         if(!wputil.isSubscribed(member))
         {
 %>
-    <a href="<%=paramRequest.getActionUrl().setParameter("act","subcribe").toString()%>">Suscribirse a este elemento</a>
+    <a href="<%=paramRequest.getActionUrl().setParameter("act","subscribe").toString()%>">Suscribirse a este elemento</a>
 <%
         }else
         {
 %>
-    <a href="<%=paramRequest.getActionUrl().setParameter("act","unsubcribe").toString()%>">Cancelar suscripción</a>
+    <a href="<%=paramRequest.getActionUrl().setParameter("act","unsubscribe").toString()%>">Cancelar suscripción</a>
 <%
         }
 
