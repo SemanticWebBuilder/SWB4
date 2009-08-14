@@ -29,6 +29,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
@@ -90,6 +91,7 @@ public class VideoResource extends org.semanticwb.portal.community.base.VideoRes
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
+        WebPage page=response.getWebPage();
         Member mem=Member.getMember(response.getUser(),response.getWebPage());
         if(!mem.canView())return;                                       //si el usuario no pertenece a la red sale;
 
@@ -101,7 +103,7 @@ public class VideoResource extends org.semanticwb.portal.community.base.VideoRes
             VideoElement rec=VideoElement.createVideoElement(getResourceBase().getWebSite());
             rec.setCode(code);
             rec.setPreview(getPreview(code));
-            rec.setWebPage(response.getWebPage());
+            rec.setWebPage(page);
             //addVideoElement(rec);
             try
             {
@@ -123,6 +125,7 @@ public class VideoResource extends org.semanticwb.portal.community.base.VideoRes
                 rec.setDescription(request.getParameter("video_description"));
                 rec.setTags(request.getParameter("video_tags"));
                 rec.setVisibility(Integer.parseInt(request.getParameter("level")));   //hace convercion a int en automatico
+                if(page instanceof MicroSiteWebPageUtil)((MicroSiteWebPageUtil)page).sendNotification(rec);
             }
         }else if("remove".equals(action))
         {
@@ -134,6 +137,7 @@ public class VideoResource extends org.semanticwb.portal.community.base.VideoRes
                 rec.remove();                                       //elimina el registro
             }
         }
+        else super.processAction(request, response);
     }
 
 }

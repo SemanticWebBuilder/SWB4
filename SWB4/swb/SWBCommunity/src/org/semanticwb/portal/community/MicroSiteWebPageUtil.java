@@ -17,12 +17,21 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
         super(base);
     }
 
-    public boolean sendNotification(WebPage util, MicroSiteElement element)
+    public static MicroSiteWebPageUtil getMicroSiteWebPageUtil(WebPage page)
+    {
+        if(page instanceof MicroSiteWebPageUtil)
+        {
+            return (MicroSiteWebPageUtil)page;
+        }
+        return null;
+    }
+
+    public boolean sendNotification(MicroSiteElement element)
     {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm");
         boolean sended = Boolean.FALSE;
         MicroSiteWebPageUtil mswpu = null;
-        if(util instanceof MicroSiteWebPageUtil && null!= element)
+        if(null!= element)
         {
             User creator = element.getModifiedBy();
             String title = element.getDisplayTitle(null);
@@ -81,7 +90,7 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
             mail.setData(data.toString());
 
             ArrayList memberlist = new ArrayList();
-            mswpu = (MicroSiteWebPageUtil)util;
+            mswpu = this;
             Iterator<Member> itm = mswpu.listSubscribedMembers();
             while(itm.hasNext())
             {
@@ -105,19 +114,33 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
         return sended;
     }
 
-    public boolean subscribeToElement(Member member)
+    public void subscribeToElement(Member member)
     {
-        return Boolean.TRUE;
+        if(member!=null && !member.getSemanticObject().isVirtual())
+        {
+            if(!isSubscribed(member))
+            {
+                member.addSubscriptions(this);
+            }
+        }
     }
 
-    public boolean unSubscribeFromElement(Member member)
+    public void unSubscribeFromElement(Member member)
     {
-        return Boolean.TRUE;
+        if(member!=null && !member.getSemanticObject().isVirtual())
+        {
+            member.removeSubscriptions(this);
+        }
     }
 
 
     public boolean isSubscribed(Member member)
     {
-        return Boolean.TRUE;
+        boolean ret=false;
+        if(member!=null && !member.getSemanticObject().isVirtual())
+        {
+            ret=member.hasSubscriptions(this);
+        }
+        return ret;
     }
 }
