@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page import="java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
@@ -10,6 +10,7 @@
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
 %>
 <h1>Eventos</h1>
+<%=getDaysInMonth(2000, 1)%>-<%=getFirstDay(2000, 1)%>
 <table>
     <tbody>
         <%
@@ -54,3 +55,21 @@
     %>
 </center>
 <%  }%>
+
+<%!
+private long getDaysInMonth(int year, int month) {
+    long aDay = 1000 * 60 * 60 * 24;
+    Calendar thisMonth = new GregorianCalendar(year, month, 1);
+    Calendar nextMonth = new GregorianCalendar(year, month + 1, 1);
+    double len = Math.ceil((nextMonth.getTimeInMillis() - thisMonth.getTimeInMillis()) / aDay);
+
+    return (long)len;
+}
+%>
+
+<%!
+private int getFirstDay(int year, int month) {
+    Calendar thisMonth = new GregorianCalendar(year, month, 1);
+    return thisMonth.DAY_OF_MONTH;
+}
+%>
