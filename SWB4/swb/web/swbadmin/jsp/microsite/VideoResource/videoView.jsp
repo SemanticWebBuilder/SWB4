@@ -28,7 +28,9 @@
         </td><td valign="top" align="left"><small>
         <b><%=video.getTitle()%></b> <BR>
         <%=video.getDescription()%> <BR>
+        <%=video.getCreator().getFullName()%> <BR>
         <%=video.getCreated()%> <BR>
+        <%=video.getRank()%> <BR>
         <!--</small></td><td valign="top"><small>-->
         <%=video.getViews()%> vistas<BR>
         </small></td></tr>
