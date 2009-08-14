@@ -25,13 +25,16 @@ public class Member extends org.semanticwb.portal.community.base.MemberBase
         Member ret=null;
         if(page instanceof MicroSite)
         {
-            Iterator<Member> it=Member.listMemberByUser(user,page.getWebSite());
-            while(it.hasNext())
+            if(user.isRegistered())
             {
-                Member mem=it.next();
-                if(mem.getMicroSite().equals(page))
+                Iterator<Member> it=Member.listMemberByUser(user,page.getWebSite());
+                while(it.hasNext())
                 {
-                   ret=mem;
+                    Member mem=it.next();
+                    if(mem.getMicroSite().equals(page))
+                    {
+                       ret=mem;
+                    }
                 }
             }
             if(ret==null)
