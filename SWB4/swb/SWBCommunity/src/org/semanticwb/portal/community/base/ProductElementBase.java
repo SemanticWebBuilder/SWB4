@@ -1,11 +1,11 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ProductElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class ProductElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_smallPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#smallPhoto");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_prodDescription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#prodDescription");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_promotion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#promotion");
-    public static final org.semanticwb.platform.SemanticProperty swbcomm_bigPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#bigPhoto");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_productWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#productWebPage");
     public static final org.semanticwb.platform.SemanticClass swbcomm_ProductElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ProductElement");
@@ -64,6 +64,16 @@ public class ProductElementBase extends org.semanticwb.portal.community.MicroSit
         getSemanticObject().setProperty(swbcomm_smallPhoto, smallPhoto);
     }
 
+    public String getProdDescription()
+    {
+        return getSemanticObject().getProperty(swbcomm_prodDescription);
+    }
+
+    public void setProdDescription(String prodDescription)
+    {
+        getSemanticObject().setProperty(swbcomm_prodDescription, prodDescription);
+    }
+
     public boolean isPromotion()
     {
         return getSemanticObject().getBooleanProperty(swbcomm_promotion);
@@ -72,16 +82,6 @@ public class ProductElementBase extends org.semanticwb.portal.community.MicroSit
     public void setPromotion(boolean promotion)
     {
         getSemanticObject().setBooleanProperty(swbcomm_promotion, promotion);
-    }
-
-    public String getBigPhoto()
-    {
-        return getSemanticObject().getProperty(swbcomm_bigPhoto);
-    }
-
-    public void setBigPhoto(String bigPhoto)
-    {
-        getSemanticObject().setProperty(swbcomm_bigPhoto, bigPhoto);
     }
 
     public void setWebPage(org.semanticwb.model.WebPage webpage)
