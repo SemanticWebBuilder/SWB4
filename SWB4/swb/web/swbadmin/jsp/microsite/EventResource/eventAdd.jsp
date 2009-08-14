@@ -40,13 +40,13 @@
                     <tr>
                         <td align="right" valign="center"><label for="event_startDate">Fecha de inicio:</label></td>
                         <td>
-                            <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" onchange="dijit.byId('event_endDate').constraints.min = arguments[0];"/><br>
+                            <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" constraints="{datePattern:'yyyy/MM/dd'}" onchange="dijit.byId('event_endDate').constraints.min = arguments[0];"/><br>
                         </td>
                     </tr>
                     <tr>
                         <td align="right" valign="center"><label for="event_endDate">Fecha de término:</label></td>
                         <td>
-                            <input class="tundra" dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" onchange="dijit.byId('event_startDate').constraints.max = arguments[0];"/><br>
+                            <input class="tundra" dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" constraints="{datePattern:'yyyy/MM/dd'}" onchange="dijit.byId('event_startDate').constraints.max = arguments[0];"/><br>
                         </td>
                     </tr>
                     <tr>
