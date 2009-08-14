@@ -92,7 +92,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="MembershipResource">
-    <rdfs:subClassOf rdf:resource="#CommunityResource"/>
+    <rdfs:subClassOf rdf:resource="#MembersResource"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
   </owl:Class>
   <owl:Class rdf:ID="ChatResource">
@@ -102,6 +102,8 @@
   <owl:ObjectProperty rdf:ID="hasAttendant">
     <rdfs:range>
       <swb:Class rdf:ID="Member">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
@@ -118,12 +120,16 @@
   <owl:ObjectProperty rdf:ID="hasPostElement">
     <rdfs:range>
       <swb:Class rdf:ID="PostElement">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="#MicroSiteElement"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:range>
     <rdfs:domain>
       <swb:Class rdf:ID="Blog">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
