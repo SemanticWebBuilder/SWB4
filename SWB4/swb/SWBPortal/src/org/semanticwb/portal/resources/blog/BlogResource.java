@@ -244,7 +244,7 @@ public class BlogResource extends GenericResource
         {
             this.installMySql(recobj);
         }
-        if(dbname.startsWith("HSQL"))
+        else if(dbname.startsWith("HSQL"))
         {
             this.installHyperSonic(recobj);
         }
