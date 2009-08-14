@@ -23,7 +23,10 @@
 package org.semanticwb.portal.community;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.logging.Level;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
@@ -37,6 +40,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
 
     private static Logger log = SWBUtils.getLogger(EventResource.class);
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat timeFormat = new SimpleDateFormat("'T'HH:mm:ss");
 
 
     public EventResource() {
@@ -68,12 +72,20 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             String endDate = request.getParameter("event_endDate");
             endDate = (endDate==null?"":endDate);
             String startTime = request.getParameter("event_startTime");
-            startTime = (startTime==null?"":startTime);
-            System.out.println(">>>>>>>>>>Time start " + startTime);
+            startTime = (startTime==null?"":startTime);            
             String endTime = request.getParameter("event_endTime");
             endTime = (endTime==null?"":endTime);
             String place = request.getParameter("event_place");
             place = (place==null?"":place);
+            String tags = request.getParameter("event_tags");
+            tags = (tags==null?"":tags);
+            try {
+                System.out.println(">>>>>>>>>>Time start " + startTime + "--" + timeFormat.parse(startTime).getTime());
+                System.out.println(">>>>>>>>>>Time end " + endTime + "--" + timeFormat.parse(endTime).getTime());
+            } catch (Exception e) {
+                log.error(e);
+            }
+            
 
             EventElement rec = EventElement.createEventElement(getResourceBase().getWebSite());
             rec.setTitle(title);
@@ -82,11 +94,14 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             try {
                 rec.setStartDate(dateFormat.parse(startDate.trim()));
                 rec.setEndDate(dateFormat.parse(endDate.trim()));
+                rec.setStartTime(new Timestamp(timeFormat.parse(startTime.trim()).getTime()));
+                rec.setEndTime(new Timestamp(timeFormat.parse(endTime.trim()).getTime()));
             } catch (Exception e) {
-                log.error(e);
+                log.error("Error en ADD - " + e);
             }
             rec.setEventWebPage(page);
             rec.setPlace(place);
+            rec.setTags(tags);
 
             try {
                 response.setRenderParameter("act", "edit");
@@ -96,7 +111,6 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                 response.setRenderParameter("act", "add");               //regresa a agregar codigo
                 response.setRenderParameter("err", "true");              //envia parametro de error
             }
-            response.setMode("view");
         } else if (action.equals("edit")) {
             String uri = request.getParameter("uri");
             EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
@@ -104,7 +118,17 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             if (rec != null && rec.canModify(mem)) {
                 rec.setTitle(request.getParameter("event_title"));
                 rec.setDescription(request.getParameter("event_description"));
+                rec.setAudienceType(request.getParameter("event_audience"));
+                try {
+                    rec.setStartDate(dateFormat.parse(request.getParameter("event_startDate")));
+                    rec.setEndDate(dateFormat.parse(request.getParameter("event_endDate")));
+                    rec.setStartTime(dateFormat.parse(request.getParameter("event_startTime")));
+                    rec.setEndTime(dateFormat.parse(request.getParameter("event_endTime")));
+                } catch (Exception e) {
+                    log.error("Error en EDIT - " + e);
+                }
                 rec.setPlace(request.getParameter("event_place"));
+                rec.setTags(request.getParameter("event_tags"));
                 rec.setVisibility(Integer.parseInt(request.getParameter("level")));   //hace convercion a int en automatico
 
                 if (page instanceof MicroSiteWebPageUtil) {
