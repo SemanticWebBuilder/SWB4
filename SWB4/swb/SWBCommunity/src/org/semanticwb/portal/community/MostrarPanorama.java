@@ -45,7 +45,8 @@ public class MostrarPanorama extends GenericAdmResource
             Iterator  resources=SWBPortal.getResourceMgr().getResources(promo, subresource, paramRequest.getUser(), paramRequest.getWebPage(), new HashMap(), null);
             while (resources.hasNext())
             {
-                Resource resource = (Resource)resources.next();
+                SWBResource sWBResource = (SWBResource)resources.next();
+                Resource resource=sWBResource.getResourceBase();
                 webWorkPath = (String) SWBPlatform.getWebWorkPath() + resource.getWorkPath();
                 if (resource.isActive())
                 {
