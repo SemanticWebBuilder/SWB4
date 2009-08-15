@@ -29,9 +29,9 @@ public class MostrarPanorama extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String webWorkPath=null;
-        String type=this.getResourceBase().getAttribute("type", "Promo");
-        String subtype=this.getResourceBase().getAttribute("subtype", "promohome");
+        String webWorkPath = null;
+        String type = this.getResourceBase().getAttribute("type", "Promo");
+        String subtype = this.getResourceBase().getAttribute("subtype", "promohome");
         ResourceType promo = ResourceType.getResourceType(type, paramRequest.getWebPage().getWebSite());
         Iterator<ResourceSubType> subtypes = ResourceSubType.listResourceSubTypeByType(promo, paramRequest.getWebPage().getWebSite());
         HashSet<Promo> promos = new HashSet<Promo>();
@@ -50,7 +50,7 @@ public class MostrarPanorama extends GenericAdmResource
                     {
                         Promo o_promo = new Promo();
                         o_promo.title = resource.getAttribute("title");
-                        o_promo.imgfile = resource.getAttribute("imgfile");                        
+                        o_promo.imgfile = resource.getAttribute("imgfile");
                         o_promo.imgfile = webWorkPath + "/" + o_promo.imgfile;
                         o_promo.text = resource.getAttribute("text");
                         o_promo.url = resource.getAttribute("url");
@@ -109,19 +109,34 @@ public class MostrarPanorama extends GenericAdmResource
                             out.write("<h3 class=\"titulo\">" + o_promo.title + "</h3>" + NL);
                             if (o_promo.text.length() > 300)
                             {
-                                o_promo.text = o_promo.text.substring(0, 297)+"...";
+                                o_promo.text = o_promo.text.substring(0, 297) + "...";
                             }
+                            out.write("<div style=\"height:150px;\">" + NL);
                             out.write("<p>" + o_promo.text + "</p>" + NL);
+                            out.write("</div>" + NL);
                             if (o_promo.url != null)
                             {
-                                String target = "";
                                 if (o_promo.target != null)
                                 {
-                                    target = "target=\"" + o_promo.target + "\"";
+                                    String target = "target=\"" + o_promo.target + "\"";
+                                    out.write("<div style=\"height:30px;\">" + NL);
+                                    out.write("<p class=\"vermas\"><a " + target + " href=\"" + o_promo.url + "\">Ver m&aacute;s</a></p>" + NL);
+                                    out.write("</div>" + NL);
                                 }
-                                out.write("<p class=\"vermas\"><a " + target + " href=\"" + o_promo.url + "\">Ver m&aacute;s</a></p>" + NL);
+                                else
+                                {
+                                    out.write("<div style=\"height:30px;\">" + NL);
+                                    out.write("<p class=\"vermas\"><a href=\"" + o_promo.url + "\">Ver m&aacute;s</a></p>" + NL);
+                                    out.write("</div>" + NL);
+                                }
+                            }
+                            else
+                            {
+                                    out.write("<div style=\"height:30px;\">" + NL);
+                                    out.write("<p>&nbsp;</p>" + NL);
+                                    out.write("</div>" + NL);
                             }                            
-                            out.write("</div>" + NL);                            
+                            out.write("</div>" + NL);
                         }
                     }
                 }
@@ -131,12 +146,12 @@ public class MostrarPanorama extends GenericAdmResource
             {
                 webWorkPath = (String) SWBPlatform.getWebWorkPath() + this.getResourceBase().getWorkPath();
                 out.write("<div id=\"paginador\">" + NL);
-                String siguiente=this.getResourceBase().getAttribute("siguiente");
-                String anterior=this.getResourceBase().getAttribute("anterior");
-                if(siguiente!=null && anterior!=null)
+                String siguiente = this.getResourceBase().getAttribute("siguiente");
+                String anterior = this.getResourceBase().getAttribute("anterior");
+                if (siguiente != null && anterior != null)
                 {
-                    anterior=webWorkPath+"/"+anterior;
-                    out.write("<div id=\"backIttems\"><p><a href=\"#\" onClick=\"SWB_previous()\"><img border=\"0\" src=\""+anterior+"\" alt=\"Anterior\" width=\"19\" height=\"19\"></a> Anterior</p></div>" + NL);
+                    anterior = webWorkPath + "/" + anterior;
+                    out.write("<div id=\"backIttems\"><p><a href=\"#\" onClick=\"SWB_previous()\"><img border=\"0\" src=\"" + anterior + "\" alt=\"Anterior\" width=\"19\" height=\"19\"></a> Anterior</p></div>" + NL);
                 }
                 else
                 {
@@ -161,11 +176,11 @@ public class MostrarPanorama extends GenericAdmResource
                 out.write("</tr>" + NL);
                 out.write("</table>" + NL);
                 out.write("</div>" + NL);
-                
-                if(siguiente!=null && anterior!=null)
+
+                if (siguiente != null && anterior != null)
                 {
-                    siguiente=webWorkPath+"/"+siguiente;
-                    out.write("<div id=\"nextIttems\"><p>Siguiente <a href=\"#\" onClick=\"SWB_next()\"><img border=\"0\" src=\""+siguiente+"\" alt=\"Siguiente\" width=\"19\" height=\"19\"></a></p></div>" + NL);
+                    siguiente = webWorkPath + "/" + siguiente;
+                    out.write("<div id=\"nextIttems\"><p>Siguiente <a href=\"#\" onClick=\"SWB_next()\"><img border=\"0\" src=\"" + siguiente + "\" alt=\"Siguiente\" width=\"19\" height=\"19\"></a></p></div>" + NL);
                 }
                 else
                 {
