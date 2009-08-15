@@ -253,8 +253,11 @@ public class SWBResourceMgr
         log.debug("getResource:");
         log.debug(" -->topic:"+topic.getTitle());
         log.debug("  -->name:"+params.get("name"));
-        log.debug("  -->template:"+tpl.getId());
-        log.debug("  -->templateMap:"+tpl.getWebSiteId());
+        if(tpl!=null)
+        {
+            log.debug("  -->template:"+tpl.getId());
+            log.debug("  -->templateMap:"+tpl.getWebSiteId());
+        }
         log.debug("  -->type:"+type);
         log.debug("  -->stype:"+stype);
         log.debug("  -->params:"+params);
