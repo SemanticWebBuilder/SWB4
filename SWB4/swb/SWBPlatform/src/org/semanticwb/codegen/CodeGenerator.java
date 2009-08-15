@@ -1368,11 +1368,11 @@ public class CodeGenerator
             javaClassContent.append(ENTER);
             if (type.equals("java.io.InputStream"))
             {
-                javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + propertyName + ",String name) throws Exception" + ENTER);
+                javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + "value" + ",String name) throws Exception" + ENTER);
             }
             else
             {
-                javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + propertyName + ")" + ENTER);
+                javaClassContent.append(PUBLIC + "void set" + methodName + "(" + type + " " + "value" + ")" + ENTER);
             }
             javaClassContent.append(OPEN_BLOCK + ENTER);
             if (tpp.isExternalInvocation())
@@ -1384,18 +1384,18 @@ public class CodeGenerator
                 }
                 else
                 {
-                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + propertyName + ",false);" + ENTER);
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ",false);" + ENTER);
                 }
             }
             else
             {
                 if (type.equals("java.io.InputStream"))
                 {
-                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + propertyName + ",name);" + ENTER);
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ",name);" + ENTER);
                 }
                 else
                 {
-                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + propertyName + ");" + ENTER);
+                    javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ");" + ENTER);
                 }
             }
             javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -1432,8 +1432,7 @@ public class CodeGenerator
                 if (tpp.isExternalInvocation())
                 {
 
-                    javaClassContent.append("        //Override this method in " + toUpperCase(tpc.getClassCodeName()) + " object" + ENTER);
-                    //javaClassContent.append("        throw new org.semanticwb.SWBMethodImplementationRequiredException();" + ENTER);
+                    javaClassContent.append("        //Override this method in " + toUpperCase(tpc.getClassCodeName()) + " object" + ENTER);                    
                     javaClassContent.append("        " + setMethod + "(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpp.getName() + ", lang,false);" + ENTER);
 
                 }
@@ -1487,9 +1486,9 @@ public class CodeGenerator
                 if (!tpp.hasInverse())
                 {
                     javaClassContent.append(ENTER);
-                    javaClassContent.append("    public void add" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + tpcToReturn.getClassCodeName().toLowerCase() + ")" + ENTER);
+                    javaClassContent.append("    public void add" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + "value" + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        get" + semanticObject + "().addObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpcToReturn.getClassCodeName().toLowerCase() + ".getSemanticObject());" + ENTER);
+                    javaClassContent.append("        get" + semanticObject + "().addObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject());" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                     javaClassContent.append(ENTER);
@@ -1508,9 +1507,9 @@ public class CodeGenerator
             else
             {
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public void set" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + tpcToReturn.getClassCodeName().toLowerCase() + ")" + ENTER);
+                javaClassContent.append("    public void set" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + "value" + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        get" + semanticObject + "().setObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + tpcToReturn.getClassCodeName().toLowerCase() + ".getSemanticObject());" + ENTER);
+                javaClassContent.append("        get" + semanticObject + "().setObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject());" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                 javaClassContent.append(ENTER);
@@ -1573,9 +1572,9 @@ public class CodeGenerator
                 if (!tpp.hasInverse())
                 {
                     javaClassContent.append(ENTER);
-                    javaClassContent.append("    public void add" + objectName + "(" + pack + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ")" + ENTER);
+                    javaClassContent.append("    public void add" + objectName + "(" + pack + "." + valueToReturn + " " + "value" + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        get" + semanticObject + "().addObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + valueToReturn.toLowerCase() + ");" + ENTER);
+                    javaClassContent.append("        get" + semanticObject + "().addObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ");" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                     javaClassContent.append(ENTER);
@@ -1594,9 +1593,9 @@ public class CodeGenerator
             else
             {
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public void set" + objectName + "(" + pack + "." + toUpperCase(valueToReturn) + " " + valueToReturn.toLowerCase() + ")" + ENTER);
+                javaClassContent.append("    public void set" + objectName + "(" + pack + "." + toUpperCase(valueToReturn) + " " + "value" + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        get" + semanticObject + "().setObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + valueToReturn.toLowerCase() + ");" + ENTER);
+                javaClassContent.append("        get" + semanticObject + "().setObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ");" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                 javaClassContent.append(ENTER);
