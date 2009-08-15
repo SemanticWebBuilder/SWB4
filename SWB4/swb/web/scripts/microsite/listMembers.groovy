@@ -36,7 +36,7 @@ User user = paramRequest.getUser()
 WebPage wpage=paramRequest.getWebPage()
 Member member = Member.getMember(user,wpage)
 MicroSite microsite = ((MicroSiteWebPageUtil)wpage).getMicroSite()
-System.out.println "Pagina:"+wpage+" microsite:"+microsite
+
 String perfil = "/swb/sitio/perfilpage"
 
 def lista = Member.listMemberByMicroSite(microsite, (SWBModel)wpage.getWebSite())
@@ -49,6 +49,7 @@ lista.each(){
     {
         def uri = mem_usr.getEncodedURI()
         def nombre = mem_usr.getFullName()
+        def img = mem_usr.getPhoto()
         println "<li><img src=\"$img\"/><a href=\"${perfil}?uri=$uri\">$nombre</a></li>"
     }
 }
