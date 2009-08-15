@@ -417,12 +417,10 @@
     <rdfs:domain rdf:resource="#PhotoElement"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="smallPhoto">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#ProductElement"/>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
-    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:canUsedAsName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_smallPhoto">
         <rdfs:label xml:lang="en">Small Photo</rdfs:label>
@@ -432,20 +430,6 @@
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="bigPhoto">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_bigPhoto">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
-        <rdfs:label xml:lang="en">Big Photo</rdfs:label>
-        <rdfs:label xml:lang="es">Foto grande</rdfs:label>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >60</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:canUsedAsName>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="imageURL">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -461,21 +445,8 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#Comment"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="name">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="description">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="citation">
     <rdfs:domain rdf:resource="#NewsElement"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="keyWords">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="latitude">
@@ -547,12 +518,10 @@
     </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="promotion">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#ProductElement"/>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
-    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:canUsedAsName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_promotion">
         <rdfs:label xml:lang="en">promotion</rdfs:label>
@@ -608,6 +577,13 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_bigPhoto">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
+    <rdfs:label xml:lang="en">Big Photo</rdfs:label>
+    <rdfs:label xml:lang="es">Foto grande</rdfs:label>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >60</swb:index>
+  </swbxf:DisplayProperty>
   <swbxf:HerarquicalNode rdf:ID="hn_MicroSiteTypes">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >90</swb:index>
