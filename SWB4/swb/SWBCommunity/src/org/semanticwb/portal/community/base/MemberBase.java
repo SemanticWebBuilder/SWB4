@@ -148,13 +148,13 @@ public class MemberBase extends org.semanticwb.model.SWBClass
         getSemanticObject().removeObjectProperty(swbcomm_hasSubscriptions,micrositewebpageutil.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.Member> listMemberByHasSubscriptions(org.semanticwb.portal.community.MicroSiteWebPageUtil hassubscriptions,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.Member> listMemberBySubscriptions(org.semanticwb.portal.community.MicroSiteWebPageUtil hassubscriptions,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Member> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasSubscriptions, hassubscriptions.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.Member> listMemberByHasSubscriptions(org.semanticwb.portal.community.MicroSiteWebPageUtil hassubscriptions)
+   public static java.util.Iterator<org.semanticwb.portal.community.Member> listMemberBySubscriptions(org.semanticwb.portal.community.MicroSiteWebPageUtil hassubscriptions)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Member> it=new org.semanticwb.model.GenericIterator(hassubscriptions.getSemanticObject().getModel().listSubjects(swbcomm_hasSubscriptions,hassubscriptions.getSemanticObject()));
        return it;

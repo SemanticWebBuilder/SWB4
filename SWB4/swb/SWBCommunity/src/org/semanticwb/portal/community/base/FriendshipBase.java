@@ -71,13 +71,13 @@ public class FriendshipBase extends org.semanticwb.portal.community.UserRelation
         getSemanticObject().removeObjectProperty(swbcomm_hasFriend,user.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.Friendship> listFriendshipByHasFriend(org.semanticwb.model.User hasfriend,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.Friendship> listFriendshipByFriend(org.semanticwb.model.User hasfriend,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Friendship> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasFriend, hasfriend.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.Friendship> listFriendshipByHasFriend(org.semanticwb.model.User hasfriend)
+   public static java.util.Iterator<org.semanticwb.portal.community.Friendship> listFriendshipByFriend(org.semanticwb.model.User hasfriend)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Friendship> it=new org.semanticwb.model.GenericIterator(hasfriend.getSemanticObject().getModel().listSubjects(swbcomm_hasFriend,hasfriend.getSemanticObject()));
        return it;

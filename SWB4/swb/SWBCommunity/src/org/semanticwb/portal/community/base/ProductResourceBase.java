@@ -43,13 +43,13 @@ public class ProductResourceBase extends org.semanticwb.portal.community.Communi
         getSemanticObject().removeObjectProperty(swbcomm_hasProduct,productelement.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.ProductResource> listProductResourceByHasProduct(org.semanticwb.portal.community.ProductElement hasproduct,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.ProductResource> listProductResourceByProduct(org.semanticwb.portal.community.ProductElement hasproduct,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ProductResource> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasProduct, hasproduct.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.ProductResource> listProductResourceByHasProduct(org.semanticwb.portal.community.ProductElement hasproduct)
+   public static java.util.Iterator<org.semanticwb.portal.community.ProductResource> listProductResourceByProduct(org.semanticwb.portal.community.ProductElement hasproduct)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.ProductResource> it=new org.semanticwb.model.GenericIterator(hasproduct.getSemanticObject().getModel().listSubjects(swbcomm_hasProduct,hasproduct.getSemanticObject()));
        return it;

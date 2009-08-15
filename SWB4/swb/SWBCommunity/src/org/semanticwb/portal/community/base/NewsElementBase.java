@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class NewsElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Rankable,org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable
+public class NewsElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_citation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#citation");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_newsPicture=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#newsPicture");

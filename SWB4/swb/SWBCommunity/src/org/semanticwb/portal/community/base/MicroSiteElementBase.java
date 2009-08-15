@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Rankable,org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable
+public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_visibility=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#visibility");
     public static final org.semanticwb.platform.SemanticProperty swb_reviews=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#reviews");
@@ -268,13 +268,13 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         getSemanticObject().removeObjectProperty(swbcomm_hasComment,comment.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteElement> listMicroSiteElementByHasComment(org.semanticwb.portal.community.Comment hascomment,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteElement> listMicroSiteElementByComment(org.semanticwb.portal.community.Comment hascomment,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasComment, hascomment.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteElement> listMicroSiteElementByHasComment(org.semanticwb.portal.community.Comment hascomment)
+   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteElement> listMicroSiteElementByComment(org.semanticwb.portal.community.Comment hascomment)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteElement> it=new org.semanticwb.model.GenericIterator(hascomment.getSemanticObject().getModel().listSubjects(swbcomm_hasComment,hascomment.getSemanticObject()));
        return it;

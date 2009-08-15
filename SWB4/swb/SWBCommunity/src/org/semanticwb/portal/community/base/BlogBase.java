@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class BlogBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class BlogBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
@@ -129,13 +129,13 @@ public class BlogBase extends org.semanticwb.model.SWBClass implements org.seman
         getSemanticObject().removeObjectProperty(swbcomm_hasPostElement,postelement.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.Blog> listBlogByHasPostElement(org.semanticwb.portal.community.PostElement haspostelement,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.Blog> listBlogByPostElement(org.semanticwb.portal.community.PostElement haspostelement,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Blog> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasPostElement, haspostelement.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.Blog> listBlogByHasPostElement(org.semanticwb.portal.community.PostElement haspostelement)
+   public static java.util.Iterator<org.semanticwb.portal.community.Blog> listBlogByPostElement(org.semanticwb.portal.community.PostElement haspostelement)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Blog> it=new org.semanticwb.model.GenericIterator(haspostelement.getSemanticObject().getModel().listSubjects(swbcomm_hasPostElement,haspostelement.getSemanticObject()));
        return it;

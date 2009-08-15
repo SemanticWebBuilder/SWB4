@@ -43,13 +43,13 @@ public class BlogResourceBase extends org.semanticwb.portal.community.CommunityR
         getSemanticObject().removeObjectProperty(swbcomm_hasBlog,blog.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.BlogResource> listBlogResourceByHasBlog(org.semanticwb.portal.community.Blog hasblog,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.BlogResource> listBlogResourceByBlog(org.semanticwb.portal.community.Blog hasblog,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.BlogResource> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasBlog, hasblog.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.BlogResource> listBlogResourceByHasBlog(org.semanticwb.portal.community.Blog hasblog)
+   public static java.util.Iterator<org.semanticwb.portal.community.BlogResource> listBlogResourceByBlog(org.semanticwb.portal.community.Blog hasblog)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.BlogResource> it=new org.semanticwb.model.GenericIterator(hasblog.getSemanticObject().getModel().listSubjects(swbcomm_hasBlog,hasblog.getSemanticObject()));
        return it;
