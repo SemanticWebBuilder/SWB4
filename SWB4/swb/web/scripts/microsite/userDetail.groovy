@@ -21,26 +21,23 @@
 *  http://www.semanticwebbuilder.org
 **/
 
-import org.semanticwb.portal.api.SWBParamRequest
 import org.semanticwb.model.User
 import org.semanticwb.model.WebPage
-import org.semanticwb.portal.community.Member
-import org.semanticwb.portal.community.MicroSite
-
-
 
 def paramRequest=request.getAttribute("paramRequest")
+def proUser = request.getAttribute("profUser")
 User user = paramRequest.getUser()
+if (null!=proUser) user = proUser
 WebPage wpage=paramRequest.getWebPage()
-Member member = Member.getMember(user,wpage)
-def lista = Member.listMemberByUser(user,wpage.getWebSite())
 
-println "Mis Comunidades:<ul>"
-lista.each(){
-    Member mem_curr = it
-    MicroSite mem_mcs = mem_curr.getMicroSite()
-    def titulo = mem_mcs.getDisplayName()
-    def url = mem_mcs.getUrl()
-    println "<li><a href=\"${url}\">$titulo</a></li>"
-}
-println "</ul>"
+def full_name = (user.getFullName()==null?"":user.getFullName())
+def mail = (user.getEmail()==null?"":user.getEmail())
+def img = (user.getPhoto()==null?"":user.getPhoto())
+
+println """
+
+<table><tr><td rowspan=2><img src="$img" width="150" height="150"></td>
+<td>$full_name</td></tr>
+<tr><td>$mail</td></tr></table>
+
+"""
