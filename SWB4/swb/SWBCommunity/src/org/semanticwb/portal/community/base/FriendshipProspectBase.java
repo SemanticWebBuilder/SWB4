@@ -4,7 +4,8 @@ package org.semanticwb.portal.community.base;
 public class FriendshipProspectBase extends org.semanticwb.portal.community.UserRelationship 
 {
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
-    public static final org.semanticwb.platform.SemanticProperty swbcomm_hasFriendProspect=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasFriendProspect");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_friendShipRequester=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#friendShipRequester");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_friendShipRequested=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#friendShipRequested");
     public static final org.semanticwb.platform.SemanticClass swbcomm_FriendshipProspect=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#FriendshipProspect");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#FriendshipProspect");
 
@@ -45,48 +46,65 @@ public class FriendshipProspectBase extends org.semanticwb.portal.community.User
         return (getFriendshipProspect(id, model)!=null);
     }
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.User> listFriendProspects()
+    public void setFriendShipRequester(org.semanticwb.model.User value)
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.User>(getSemanticObject().listObjectProperties(swbcomm_hasFriendProspect));
+        getSemanticObject().setObjectProperty(swbcomm_friendShipRequester, value.getSemanticObject());
     }
 
-    public boolean hasFriendProspect(org.semanticwb.model.User user)
+    public void removeFriendShipRequester()
     {
-        if(user==null)return false;
-        return getSemanticObject().hasObjectProperty(swbcomm_hasFriendProspect,user.getSemanticObject());
+        getSemanticObject().removeProperty(swbcomm_friendShipRequester);
     }
 
-    public void addFriendProspect(org.semanticwb.model.User value)
-    {
-        getSemanticObject().addObjectProperty(swbcomm_hasFriendProspect, value.getSemanticObject());
-    }
-
-    public void removeAllFriendProspect()
-    {
-        getSemanticObject().removeProperty(swbcomm_hasFriendProspect);
-    }
-
-    public void removeFriendProspect(org.semanticwb.model.User user)
-    {
-        getSemanticObject().removeObjectProperty(swbcomm_hasFriendProspect,user.getSemanticObject());
-    }
-
-   public static java.util.Iterator<org.semanticwb.portal.community.FriendshipProspect> listFriendshipProspectByHasFriendProspect(org.semanticwb.model.User hasfriendprospect,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.FriendshipProspect> listFriendshipProspectByFriendShipRequester(org.semanticwb.model.User friendshiprequester,org.semanticwb.model.SWBModel model)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.FriendshipProspect> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasFriendProspect, hasfriendprospect.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.FriendshipProspect> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_friendShipRequester, friendshiprequester.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.FriendshipProspect> listFriendshipProspectByHasFriendProspect(org.semanticwb.model.User hasfriendprospect)
+   public static java.util.Iterator<org.semanticwb.portal.community.FriendshipProspect> listFriendshipProspectByFriendShipRequester(org.semanticwb.model.User friendshiprequester)
    {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.FriendshipProspect> it=new org.semanticwb.model.GenericIterator(hasfriendprospect.getSemanticObject().getModel().listSubjects(swbcomm_hasFriendProspect,hasfriendprospect.getSemanticObject()));
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.FriendshipProspect> it=new org.semanticwb.model.GenericIterator(friendshiprequester.getSemanticObject().getModel().listSubjects(swbcomm_friendShipRequester,friendshiprequester.getSemanticObject()));
        return it;
    }
 
-    public org.semanticwb.model.User getFriendProspect()
+    public org.semanticwb.model.User getFriendShipRequester()
     {
          org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_hasFriendProspect);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_friendShipRequester);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public void setFriendShipRequested(org.semanticwb.model.User value)
+    {
+        getSemanticObject().setObjectProperty(swbcomm_friendShipRequested, value.getSemanticObject());
+    }
+
+    public void removeFriendShipRequested()
+    {
+        getSemanticObject().removeProperty(swbcomm_friendShipRequested);
+    }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.FriendshipProspect> listFriendshipProspectByFriendShipRequested(org.semanticwb.model.User friendshiprequested,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.FriendshipProspect> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_friendShipRequested, friendshiprequested.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.FriendshipProspect> listFriendshipProspectByFriendShipRequested(org.semanticwb.model.User friendshiprequested)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.FriendshipProspect> it=new org.semanticwb.model.GenericIterator(friendshiprequested.getSemanticObject().getModel().listSubjects(swbcomm_friendShipRequested,friendshiprequested.getSemanticObject()));
+       return it;
+   }
+
+    public org.semanticwb.model.User getFriendShipRequested()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_friendShipRequested);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();

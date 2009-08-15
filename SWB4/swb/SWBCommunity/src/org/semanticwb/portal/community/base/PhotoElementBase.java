@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable
+public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Rankable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_width=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#width");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_imageURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#imageURL");
