@@ -1,7 +1,7 @@
 <%@page import="org.semanticwb.*,java.text.*,org.semanticwb.portal.community.*,java.util.*" %>
 <%
     String webpath=SWBPlatform.getWebWorkPath()+"/swbadmin/jsp/LastMicrositeElements/";
-    String defaultFormat = "dd 'de' MMMM 'del' yyyy";
+    String defaultFormat = "dd 'de' MMMM 'del' yyyy HH:mm";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
     ArrayList<MicroSiteElement> elements=(ArrayList<MicroSiteElement>)request.getAttribute("elements");
     if(elements.size()>0)
