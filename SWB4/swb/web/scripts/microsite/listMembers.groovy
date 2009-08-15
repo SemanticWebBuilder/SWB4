@@ -45,9 +45,12 @@ println "Miembros de la comunidad:<ul>"
 lista.each(){
     Member mem_curr = it
     User mem_usr = mem_curr.getUser()
-    def uri = mem_usr.getEncodedURI()
-    def nombre = mem_usr.getFullName()
-    println "<li><img src=\"$img\"/><a href=\"${perfil}?uri=$uri\">$nombre</a></li>"
+    if (null!=mem_usr)
+    {
+        def uri = mem_usr.getEncodedURI()
+        def nombre = mem_usr.getFullName()
+        println "<li><img src=\"$img\"/><a href=\"${perfil}?uri=$uri\">$nombre</a></li>"
+    }
 }
 println "</ul>"
 
