@@ -39,13 +39,14 @@ public class MostrarPanorama extends GenericAdmResource
         String subtype = this.getResourceBase().getAttribute("subtype", "promohome");
         ResourceType promo = ResourceType.getResourceType(type, paramRequest.getWebPage().getWebSite());
         ResourceSubType subresource = ResourceSubType.getResourceSubType(subtype, paramRequest.getWebPage().getWebSite());
+
         if (subresource != null && promo != null)
         {
             HashSet<Promo> promos = new HashSet<Promo>();
             Iterator  resources=SWBPortal.getResourceMgr().getResources(promo, subresource, paramRequest.getUser(), paramRequest.getWebPage(), new HashMap(), null);
             while (resources.hasNext())
             {
-                SWBResource sWBResource = (SWBResource)resources.next();
+                SWBResource sWBResource = (SWBResource)resources.next();                
                 Resource resource=sWBResource.getResourceBase();
                 webWorkPath = (String) SWBPlatform.getWebWorkPath() + resource.getWorkPath();
                 if (resource.isActive())
