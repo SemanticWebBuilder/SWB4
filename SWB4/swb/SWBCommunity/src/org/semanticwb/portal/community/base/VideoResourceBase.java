@@ -43,13 +43,13 @@ public class VideoResourceBase extends org.semanticwb.portal.community.Community
         getSemanticObject().removeObjectProperty(swbcomm_hasVideo,videoelement.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.VideoResource> listVideoResourceByHasVideo(org.semanticwb.portal.community.VideoElement hasvideo,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.VideoResource> listVideoResourceByVideo(org.semanticwb.portal.community.VideoElement hasvideo,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.VideoResource> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasVideo, hasvideo.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.VideoResource> listVideoResourceByHasVideo(org.semanticwb.portal.community.VideoElement hasvideo)
+   public static java.util.Iterator<org.semanticwb.portal.community.VideoResource> listVideoResourceByVideo(org.semanticwb.portal.community.VideoElement hasvideo)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.VideoResource> it=new org.semanticwb.model.GenericIterator(hasvideo.getSemanticObject().getModel().listSubjects(swbcomm_hasVideo,hasvideo.getSemanticObject()));
        return it;

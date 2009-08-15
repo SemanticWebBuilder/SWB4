@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable,org.semanticwb.model.Sortable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
+public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Sortable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Resourceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
@@ -135,13 +135,13 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
         getSemanticObject().removeObjectProperty(swb_hasResource,resource.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByHasResource(org.semanticwb.model.Resource hasresource,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByResource(org.semanticwb.model.Resource hasresource,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteUtil> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasResource, hasresource.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByHasResource(org.semanticwb.model.Resource hasresource)
+   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByResource(org.semanticwb.model.Resource hasresource)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteUtil> it=new org.semanticwb.model.GenericIterator(hasresource.getSemanticObject().getModel().listSubjects(swb_hasResource,hasresource.getSemanticObject()));
        return it;
@@ -247,13 +247,13 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().hasObjectProperty(swbcomm_hasCommSiteUtilsInv,micrositewebpageutil.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByHasCommSiteUtil(org.semanticwb.portal.community.MicroSiteWebPageUtil hascommsiteutilsinv,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByCommSiteUtil(org.semanticwb.portal.community.MicroSiteWebPageUtil hascommsiteutilsinv,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteUtil> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasCommSiteUtilsInv, hascommsiteutilsinv.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByHasCommSiteUtil(org.semanticwb.portal.community.MicroSiteWebPageUtil hascommsiteutilsinv)
+   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteUtil> listMicroSiteUtilByCommSiteUtil(org.semanticwb.portal.community.MicroSiteWebPageUtil hascommsiteutilsinv)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteUtil> it=new org.semanticwb.model.GenericIterator(hascommsiteutilsinv.getSemanticObject().getModel().listSubjects(swbcomm_hasCommSiteUtilsInv,hascommsiteutilsinv.getSemanticObject()));
        return it;

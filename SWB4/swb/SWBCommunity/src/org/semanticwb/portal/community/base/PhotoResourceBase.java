@@ -43,13 +43,13 @@ public class PhotoResourceBase extends org.semanticwb.portal.community.Community
         getSemanticObject().removeObjectProperty(swbcomm_hasPhoto,photoelement.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.PhotoResource> listPhotoResourceByHasPhoto(org.semanticwb.portal.community.PhotoElement hasphoto,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.PhotoResource> listPhotoResourceByPhoto(org.semanticwb.portal.community.PhotoElement hasphoto,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoResource> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasPhoto, hasphoto.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.PhotoResource> listPhotoResourceByHasPhoto(org.semanticwb.portal.community.PhotoElement hasphoto)
+   public static java.util.Iterator<org.semanticwb.portal.community.PhotoResource> listPhotoResourceByPhoto(org.semanticwb.portal.community.PhotoElement hasphoto)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.PhotoResource> it=new org.semanticwb.model.GenericIterator(hasphoto.getSemanticObject().getModel().listSubjects(swbcomm_hasPhoto,hasphoto.getSemanticObject()));
        return it;
