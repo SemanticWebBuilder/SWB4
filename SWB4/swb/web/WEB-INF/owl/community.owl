@@ -376,6 +376,10 @@
     <rdfs:domain rdf:resource="#PhotoElement"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasComment">
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
     <owl:inverseOf rdf:resource="#comMicroSiteElementInv"/>
     <rdfs:range rdf:resource="#Comment"/>
     <rdfs:domain rdf:resource="#MicroSiteElement"/>
