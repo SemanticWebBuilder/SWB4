@@ -79,9 +79,9 @@ public class MicroSiteBase extends org.semanticwb.model.WebPage implements org.s
         return getSemanticObject().getBooleanProperty(swbcomm_private);
     }
 
-    public void setPrivate(boolean private)
+    public void setPrivate(boolean cprivate)
     {
-        getSemanticObject().setBooleanProperty(swbcomm_private, private);
+        getSemanticObject().setBooleanProperty(swbcomm_private, cprivate);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteWebPageUtil> listMicroSiteUtils()
