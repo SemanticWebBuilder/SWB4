@@ -64,10 +64,51 @@ public class MostrarPanorama extends GenericResource
 
         if (!promos.isEmpty())
         {
+            int i_partes = promos.size() / 3;
+            if (promos.size() % 3 != 0)
+            {
+                i_partes++;
+            }
             PrintWriter out = response.getWriter();
             out.write("<div id=\"panorama\">" + NL);
             out.write("<h2 class=\"tituloPrincipal\">Panorama del mes</h2>" + NL);
-            int i_parte = 1;
+            for (int i_parte = 0; i_parte < i_partes; i_parte++)
+            {
+                if (i_parte == 0)
+                {
+                    out.write("<div id=\"parte" + i_parte + "\">" + NL);
+                }
+                else
+                {
+                    out.write("<div id=\"parte" + i_parte + "\" style=\"display:none;\">" + NL);
+                }
+                Promo[] arrayPromos = promos.toArray(new Promo[promos.size()]);
+                for (int i_element = 0; i_element < 3; i_element++)
+                {
+                    Promo o_promo = arrayPromos[(i_parte * 3) + i_element];
+                    if (o_promo != null)
+                    {
+                        out.write("<div class=\"panoramaEnrty\">" + NL);
+                        out.write("<p><img border=\"0\" src=\"" + o_promo.imgfile + "\" alt=\"" + o_promo.title + "\" width=\"222\" height=\"149\"></p>" + NL);
+                        out.write("<h3 class=\"titulo\">" + o_promo.title + "</h3>" + NL);
+                        out.write("<p>" + o_promo.text + "</p>" + NL);
+                        String target = "";
+                        if (o_promo.target != null)
+                        {
+                            target = "target=\"" + o_promo.target + "\"";
+                        }
+                        out.write("<p class=\"vermas\"><a " + target + " href=\"" + o_promo.url + "\">Ver m&aacute;s</a></p>" + NL);
+                        out.write("</div>" + NL);
+                        out.write("</div>" + NL);
+                    }
+                }
+
+                out.write("</div>" + NL);
+
+            }
+
+
+            /*int i_parte = 1;
             {
                 int i = 1;
                 for (Promo o_promo : promos)
@@ -80,6 +121,7 @@ public class MostrarPanorama extends GenericResource
                         }
                         else
                         {
+                            out.write("</div>" + NL);
                             out.write("<div id=\"parte" + i_parte + "\" style=\"display:none;\">" + NL);
                         }
                     }
@@ -96,24 +138,17 @@ public class MostrarPanorama extends GenericResource
                     out.write("<p class=\"vermas\"><a " + target + " href=\"" + o_promo.url + "\">Ver m&aacute;s</a></p>" + NL);
                     out.write("</div>" + NL);
                     out.write("</div>" + NL);
-                    i++;
-                    if (i == 3)
-                    {
-                        i_parte++;
-                        i = 1;
-                        out.write("</div>" + NL);
-                    }
                 }
-            }
+            }*/
 
-            if (i_parte > 1)
+            if (i_partes > 0)
             {
                 out.write("<div id=\"paginador\">" + NL);
                 out.write("<div id=\"backIttems\"><p><a href=\"#\" onClick=\"SWB_previous()\"><img border=\"0\" src=\"images/anteriorBTN.jpg\" alt=\"Anterior\" width=\"19\" height=\"19\"></a> Anterior</p></div>" + NL);
                 out.write("<div id=\"noPaginas\">" + NL);
                 out.write("<table width=\"100\" border=\"0\" cellspacing=\"5\" cellpadding=\"0\">" + NL);
                 out.write("<tr>" + NL);
-                for (int i_td = 1; i_td <= i_parte; i_td++)
+                for (int i_td = 1; i_td <= i_partes; i_td++)
                 {
                     if (i_td == 1)
                     {
@@ -135,7 +170,7 @@ public class MostrarPanorama extends GenericResource
             out.write("</div>" + NL);
 
             out.write("<script type=\"text/javascript\" >" + NL);
-            out.write("var numpages=" + i_parte + ";" + NL);
+            out.write("var numpages=" + i_partes + ";" + NL);
             out.write("var current=0;" + NL);
             out.write("<!--" + NL);
             out.write("function SWB_next() { " + NL);
