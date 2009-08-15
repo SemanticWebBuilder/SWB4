@@ -76,30 +76,35 @@ public class MostrarPanorama extends GenericResource
             {
                 if (i_parte == 0)
                 {
-                    out.write("<div id=\"parte" + (i_parte+1) + "\">" + NL);
+                    out.write("<div id=\"parte" + (i_parte + 1) + "\">" + NL);
                 }
                 else
                 {
-                    out.write("<div id=\"parte" + (i_parte+1) + "\" style=\"display:none;\">" + NL);
+                    out.write("<div id=\"parte" + (i_parte + 1) + "\" style=\"display:none;\">" + NL);
                 }
                 Promo[] arrayPromos = promos.toArray(new Promo[promos.size()]);
+
                 for (int i_element = 0; i_element < 3; i_element++)
                 {
-                    Promo o_promo = arrayPromos[(i_parte * 3) + i_element];
-                    if (o_promo != null)
+                    int element = (i_parte * 3) + i_element;
+                    if (element < arrayPromos.length)
                     {
-                        out.write("<div class=\"panoramaEnrty\">" + NL);
-                        out.write("<p><img border=\"0\" src=\"" + o_promo.imgfile + "\" alt=\"" + o_promo.title + "\" width=\"222\" height=\"149\"></p>" + NL);
-                        out.write("<h3 class=\"titulo\">" + o_promo.title + "</h3>" + NL);
-                        out.write("<p>" + o_promo.text + "</p>" + NL);
-                        String target = "";
-                        if (o_promo.target != null)
+                        Promo o_promo = arrayPromos[element];
+                        if (o_promo != null)
                         {
-                            target = "target=\"" + o_promo.target + "\"";
+                            out.write("<div class=\"panoramaEnrty\">" + NL);
+                            out.write("<p><img border=\"0\" src=\"" + o_promo.imgfile + "\" alt=\"" + o_promo.title + "\" width=\"222\" height=\"149\"></p>" + NL);
+                            out.write("<h3 class=\"titulo\">" + o_promo.title + "</h3>" + NL);
+                            out.write("<p>" + o_promo.text + "</p>" + NL);
+                            String target = "";
+                            if (o_promo.target != null)
+                            {
+                                target = "target=\"" + o_promo.target + "\"";
+                            }
+                            out.write("<p class=\"vermas\"><a " + target + " href=\"" + o_promo.url + "\">Ver m&aacute;s</a></p>" + NL);
+                            out.write("</div>" + NL);
+                            out.write("</div>" + NL);
                         }
-                        out.write("<p class=\"vermas\"><a " + target + " href=\"" + o_promo.url + "\">Ver m&aacute;s</a></p>" + NL);
-                        out.write("</div>" + NL);
-                        out.write("</div>" + NL);
                     }
                 }
 
@@ -110,35 +115,35 @@ public class MostrarPanorama extends GenericResource
 
             /*int i_parte = 1;
             {
-                int i = 1;
-                for (Promo o_promo : promos)
-                {
-                    if (i == 1)
-                    {
-                        if (i_parte == 1)
-                        {
-                            out.write("<div id=\"parte" + i_parte + "\">" + NL);
-                        }
-                        else
-                        {
-                            out.write("</div>" + NL);
-                            out.write("<div id=\"parte" + i_parte + "\" style=\"display:none;\">" + NL);
-                        }
-                    }
+            int i = 1;
+            for (Promo o_promo : promos)
+            {
+            if (i == 1)
+            {
+            if (i_parte == 1)
+            {
+            out.write("<div id=\"parte" + i_parte + "\">" + NL);
+            }
+            else
+            {
+            out.write("</div>" + NL);
+            out.write("<div id=\"parte" + i_parte + "\" style=\"display:none;\">" + NL);
+            }
+            }
 
-                    out.write("<div class=\"panoramaEnrty\">" + NL);
-                    out.write("<p><img border=\"0\" src=\"" + o_promo.imgfile + "\" alt=\"" + o_promo.title + "\" width=\"222\" height=\"149\"></p>" + NL);
-                    out.write("<h3 class=\"titulo\">" + o_promo.title + "</h3>" + NL);
-                    out.write("<p>" + o_promo.text + "</p>" + NL);
-                    String target = "";
-                    if (o_promo.target != null)
-                    {
-                        target = "target=\"" + o_promo.target + "\"";
-                    }
-                    out.write("<p class=\"vermas\"><a " + target + " href=\"" + o_promo.url + "\">Ver m&aacute;s</a></p>" + NL);
-                    out.write("</div>" + NL);
-                    out.write("</div>" + NL);
-                }
+            out.write("<div class=\"panoramaEnrty\">" + NL);
+            out.write("<p><img border=\"0\" src=\"" + o_promo.imgfile + "\" alt=\"" + o_promo.title + "\" width=\"222\" height=\"149\"></p>" + NL);
+            out.write("<h3 class=\"titulo\">" + o_promo.title + "</h3>" + NL);
+            out.write("<p>" + o_promo.text + "</p>" + NL);
+            String target = "";
+            if (o_promo.target != null)
+            {
+            target = "target=\"" + o_promo.target + "\"";
+            }
+            out.write("<p class=\"vermas\"><a " + target + " href=\"" + o_promo.url + "\">Ver m&aacute;s</a></p>" + NL);
+            out.write("</div>" + NL);
+            out.write("</div>" + NL);
+            }
             }*/
 
             if (i_partes > 0)
