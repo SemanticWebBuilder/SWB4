@@ -9,6 +9,7 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
     public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteElement");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_comMicroSiteElementInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#comMicroSiteElementInv");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_comSpam=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#comSpam");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticClass swbcomm_Comment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Comment");
@@ -29,6 +30,12 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Comment>(it, true);
+    }
+
+    public static org.semanticwb.portal.community.Comment createComment(org.semanticwb.model.SWBModel model)
+    {
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
+        return org.semanticwb.portal.community.Comment.createComment(String.valueOf(id), model);
     }
 
     public static org.semanticwb.portal.community.Comment getComment(String id, org.semanticwb.model.SWBModel model)
@@ -135,6 +142,16 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
              ret=(org.semanticwb.portal.community.MicroSiteElement)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public boolean isSpam()
+    {
+        return getSemanticObject().getBooleanProperty(swbcomm_comSpam);
+    }
+
+    public void setSpam(boolean comSpam)
+    {
+        getSemanticObject().setBooleanProperty(swbcomm_comSpam, comSpam);
     }
 
     public java.util.Date getUpdated()
