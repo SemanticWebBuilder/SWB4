@@ -41,13 +41,16 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
 
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
-        super.process(request, obj, prop);
+        //super.process(request, obj, prop);
         System.out.println("Process...");
         System.out.println("Prop:"+prop);
         System.out.println("obj:"+obj);
-        System.out.println("request:"+request.getParameterValues(prop.getName()));
+        String vals[]=request.getParameterValues(prop.getName());
+        for(int x=0;x<vals.length;x++)
+        {
+            System.out.println("val"+x+":"+vals[x]);
+        }
     }
-
 
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
@@ -132,7 +135,7 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
             if(mode.equals("edit") || mode.equals("create") )
             {
                 ret.append("<select name=\""+name+"\" MULTIPLE");
-                if(DOJO)ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""+imsg+"\"");
+                if(DOJO)ret.append(" dojoType_=\"dijit.form.FilteringSelect\" autoComplete_=\"true\" invalidMessage=\""+imsg+"\"");
                 ret.append(" "+ext+">");
                 //onChange="dojo.byId('oc1').value=arguments[0]"
                 SemanticClass cls=prop.getRangeClass();
