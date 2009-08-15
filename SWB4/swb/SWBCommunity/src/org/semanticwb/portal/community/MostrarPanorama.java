@@ -6,6 +6,9 @@ package org.semanticwb.portal.community;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,7 +19,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceSubType;
 import org.semanticwb.model.ResourceType;
-import org.semanticwb.model.Template;
 import org.semanticwb.portal.api.*;
 
 /**
@@ -53,6 +55,7 @@ public class MostrarPanorama extends GenericAdmResource
                     o_promo.imgfile = webWorkPath + "/" + o_promo.imgfile;
                     o_promo.text = resource.getAttribute("text");
                     o_promo.url = resource.getAttribute("url");
+                    o_promo.created=resource.getCreated();
                     if ("1".equalsIgnoreCase(resource.getAttribute("target", "0").trim()))
                     {
                         o_promo.target = "_blank";
@@ -81,7 +84,7 @@ public class MostrarPanorama extends GenericAdmResource
                         out.write("<div id=\"parte" + (i_parte + 1) + "\" style=\"display:none;\">" + NL);
                     }
                     Promo[] arrayPromos = promos.toArray(new Promo[promos.size()]);
-
+                    Arrays.sort(arrayPromos, new PromoComparator());
                     for (int i_element = 0; i_element < 3; i_element++)
                     {
                         int element = (i_parte * 3) + i_element;
@@ -252,4 +255,14 @@ class Promo
 {
 
     public String title, imgfile, text, url, target;
+    public Date created;
+}
+class PromoComparator implements Comparator<Promo>
+{
+
+    public int compare(Promo o1, Promo o2)
+    {
+        return o1.created.compareTo(o2.created);
+    }
+
 }
