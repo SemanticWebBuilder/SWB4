@@ -170,7 +170,7 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("vote");
         url.setMode(paramRequest.getMode());
-        url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        //url.setCallMethod(SWBResourceURL.Call_DIRECT);
         sb.append("\n<script language=\"javascript\" type=\"text/javascript\">");
         sb.append("  dojo.require(\"dojo.parser\");");
         sb.append("\nvar request = false;");
