@@ -3,8 +3,6 @@ package org.semanticwb.portal.community.base;
 
 public class BlogBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
-    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
-    public static final org.semanticwb.platform.SemanticProperty swbcomm_blogWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#blogWebPage");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
@@ -12,6 +10,8 @@ public class BlogBase extends org.semanticwb.model.SWBClass implements org.seman
     public static final org.semanticwb.platform.SemanticProperty swbcomm_hasPostElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasPostElement");
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_blogWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#blogWebPage");
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
     public static final org.semanticwb.platform.SemanticClass swbcomm_Blog=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Blog");
@@ -58,39 +58,6 @@ public class BlogBase extends org.semanticwb.model.SWBClass implements org.seman
     public static boolean hasBlog(String id, org.semanticwb.model.SWBModel model)
     {
         return (getBlog(id, model)!=null);
-    }
-
-    public void setWebPage(org.semanticwb.model.WebPage webpage)
-    {
-        getSemanticObject().setObjectProperty(swbcomm_blogWebPage, webpage.getSemanticObject());
-    }
-
-    public void removeWebPage()
-    {
-        getSemanticObject().removeProperty(swbcomm_blogWebPage);
-    }
-
-   public static java.util.Iterator<org.semanticwb.portal.community.Blog> listBlogByWebPage(org.semanticwb.model.WebPage blogwebpage,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Blog> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_blogWebPage, blogwebpage.getSemanticObject()));
-       return it;
-   }
-
-   public static java.util.Iterator<org.semanticwb.portal.community.Blog> listBlogByWebPage(org.semanticwb.model.WebPage blogwebpage)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Blog> it=new org.semanticwb.model.GenericIterator(blogwebpage.getSemanticObject().getModel().listSubjects(swbcomm_blogWebPage,blogwebpage.getSemanticObject()));
-       return it;
-   }
-
-    public org.semanticwb.model.WebPage getWebPage()
-    {
-         org.semanticwb.model.WebPage ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_blogWebPage);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
-         }
-         return ret;
     }
 
     public java.util.Date getCreated()
@@ -218,6 +185,39 @@ public class BlogBase extends org.semanticwb.model.SWBClass implements org.seman
     public void setUpdated(java.util.Date updated)
     {
         getSemanticObject().setDateProperty(swb_updated, updated);
+    }
+
+    public void setWebPage(org.semanticwb.model.WebPage webpage)
+    {
+        getSemanticObject().setObjectProperty(swbcomm_blogWebPage, webpage.getSemanticObject());
+    }
+
+    public void removeWebPage()
+    {
+        getSemanticObject().removeProperty(swbcomm_blogWebPage);
+    }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.Blog> listBlogByWebPage(org.semanticwb.model.WebPage blogwebpage,org.semanticwb.model.SWBModel model)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Blog> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_blogWebPage, blogwebpage.getSemanticObject()));
+       return it;
+   }
+
+   public static java.util.Iterator<org.semanticwb.portal.community.Blog> listBlogByWebPage(org.semanticwb.model.WebPage blogwebpage)
+   {
+       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Blog> it=new org.semanticwb.model.GenericIterator(blogwebpage.getSemanticObject().getModel().listSubjects(swbcomm_blogWebPage,blogwebpage.getSemanticObject()));
+       return it;
+   }
+
+    public org.semanticwb.model.WebPage getWebPage()
+    {
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_blogWebPage);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public void setCreator(org.semanticwb.model.User user)

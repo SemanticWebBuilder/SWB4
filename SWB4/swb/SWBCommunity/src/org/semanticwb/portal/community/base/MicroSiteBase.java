@@ -1,8 +1,11 @@
 package org.semanticwb.portal.community.base;
 
 
-public class MicroSiteBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Indexable,org.semanticwb.model.Rankable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Viewable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable,org.semanticwb.model.RoleRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Expirable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable
+public class MicroSiteBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Viewable,org.semanticwb.model.Activeable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Expirable,org.semanticwb.model.Indexable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_moderate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#moderate");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_photo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#photo");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_private=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#private");
     public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteWebPageUtil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteWebPageUtil");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_hasMicroSiteUtilsInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasMicroSiteUtilsInv");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
@@ -49,6 +52,36 @@ public class MicroSiteBase extends org.semanticwb.model.WebPage implements org.s
     public static boolean hasMicroSite(String id, org.semanticwb.model.SWBModel model)
     {
         return (getMicroSite(id, model)!=null);
+    }
+
+    public boolean isModerate()
+    {
+        return getSemanticObject().getBooleanProperty(swbcomm_moderate);
+    }
+
+    public void setModerate(boolean moderate)
+    {
+        getSemanticObject().setBooleanProperty(swbcomm_moderate, moderate);
+    }
+
+    public String getPhoto()
+    {
+        return getSemanticObject().getProperty(swbcomm_photo);
+    }
+
+    public void setPhoto(String photo)
+    {
+        getSemanticObject().setProperty(swbcomm_photo, photo);
+    }
+
+    public boolean isPrivate()
+    {
+        return getSemanticObject().getBooleanProperty(swbcomm_private);
+    }
+
+    public void setPrivate(boolean private)
+    {
+        getSemanticObject().setBooleanProperty(swbcomm_private, private);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteWebPageUtil> listMicroSiteUtils()
