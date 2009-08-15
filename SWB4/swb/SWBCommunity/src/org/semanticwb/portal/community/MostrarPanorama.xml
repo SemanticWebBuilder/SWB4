@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmPromo" action="true" method="post" enctype="multipart/form-data">
+		<admdbconnmgr defconn="true"/>
+        <fieldset legend="Forma y estilo">
+            <input type="FILE" name="siguiente" label="Imagen Siguiente (bmp, gif, jpg, jpeg, png):" showfile="true" filetype="bmp|jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
+            <input type="FILE" name="anterior" label="Imagen Anterior (bmp, gif, jpg, jpeg, png):" showfile="true" filetype="bmp|jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
+        </fieldset>
+
+        
+
+        <fieldset>
+            <statictext name="b">
+            <![CDATA[
+            <button id="btnSave" dojoType="dijit.form.Button">Guardar</button>
+            <button id="btnReset" dojoType="dijit.form.Button">Reestablecer</button>
+            ]]>
+            </statictext>
+        </fieldset>
+    </form>
+    <statictext name="txtNote">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				* Datos requeridos.
+			</font>
+		]]>
+	</statictext>
+
+	<script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.form.Button");
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnSave"), "onClick",
+                function() {
+                    if(jsValida(dojo.byId("frmPromo"))) {
+                        dojo.byId("frmPromo").submit();
+                    }
+                }
+            );
+        });
+
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnReset"), "onClick",
+                function() {
+                    dojo.byId("frmPromo").reset();
+                }
+            );
+        });
+        ]]>
+    </script>
+    <script language="JavaScript">
+            <![CDATA[
+                if(!document.frmPromo.uline[0].checked && !document.frmPromo.uline[1].checked)
+                        document.frmPromo.uline[1].checked=true;
+                if(!document.frmPromo.target[0].checked && !document.frmPromo.target[1].checked)
+                        document.frmPromo.target[1].checked=true;
+                function jsValida(frm)
+                {
+                    /*if(frm.textcolor.value==null || frm.textcolor.value=='' || frm.textcolor.value==' ') {
+                        frm.textcolor.value='#'+ document.wbcolor.getColor();
+                    }else {
+                        frm.textcolor.value=frm.textcolor.value;
+                    }*/
+
+                    if(frm.imgPos.value==null || frm.imgPos.value=='' || frm.imgPos.value==' ')
+                    {
+                            if(frm.imgfile.value!=null && frm.imgfile.value!='' && frm.imgfile.value!=' ')
+                            {
+                                    alert('Indique la posición de la imagen.');
+                                    frm.pos.focus();
+                                    return false;
+                            }
+                    }
+                    if(frm.textcolor.value!=null && frm.textcolor.value!='' && frm.textcolor.value!=' ' && !isFormat(frm.textcolor)) {
+                        return false;
+                    }
+                    replaceChars(frm.text);
+                    return true;
+                }
+                function isFormat(pIn)
+                {
+                    var swFormat="0123456789ABCDEF";
+                    pIn.value=pIn.value.toUpperCase();
+                    if(pIn.value.length<7)
+                    {
+                            alert('La longitud del campo no corresponde al formato.');
+                            if(pIn.type=="text") pIn.focus();
+                            return false;
+                    }
+                    if(!setPrefix(pIn, '#')) {
+                        return false;
+                    }
+
+                    for(var i=1; i < pIn.value.length; i++)
+                    {
+                            swOk= pIn.value.substring(i, i+1);
+                            if (swFormat.indexOf(swOk, 0)==-1)
+                            {
+                                    alert('El valor definido no corresponde al formato hexadecimal.');
+                                    if(pIn.type=="text") pIn.focus();
+                                    return false;
+                            }
+                    }
+                    return true;
+                }
+                function setPrefix(pIn, pPx)
+                {
+                        if(pIn.type=="text" || pIn.type=="hidden")
+                        {
+                                if (pIn.value.substring(0, pPx.length).indexOf(pPx)==-1)
+                                {
+                                        alert('El valor definido no corresponde al formato: ' + pPx);
+                                        pIn.value=pPx+pIn.value;
+                                        if(pIn.type=="text") pIn.focus();
+                                        return false;
+                                }
+                        }
+                        if(pIn.type=="select-one" || pIn.type=="select-multiple")
+                        {
+                                for(var i=0; i<pIn.length; i++)
+                                {
+                                        if (pIn.options[i].value.substring(0, pPx.length).indexOf(pPx)==-1)
+                                        {
+                                                alert('El valor definido no corresponde al formato: ' + pPx);
+                                                pIn.focus();
+                                                return false;
+                                        }
+                                }
+                        }
+                        return true;
+                }
+                function replaceChars(pIn)
+                {
+                        out = "\r"; // replace this
+                        add = "<br/>"; // with this
+                        temp = "" + pIn.value; // temporary holder
+                        while (temp.indexOf(out)>-1)
+                        {
+                                pos= temp.indexOf(out);
+                                temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+                        }
+                        out = "\n"; // replace this
+                        add = " "; // with this
+                        temp = "" + temp; // temporary holder
+                        while (temp.indexOf(out)>-1)
+                        {
+                                pos= temp.indexOf(out);
+                                temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
+                        }
+                        pIn.value = temp;
+                }
+            ]]>
+	</script>
+</admresource>
