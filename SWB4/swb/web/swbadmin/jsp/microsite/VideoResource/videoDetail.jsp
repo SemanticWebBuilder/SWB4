@@ -13,6 +13,7 @@
         if(rec!=null)
         {
 %>
+    <div>
       <table border="0" width="100%" cellspacing="10">
         <tr><td valign="top">
         <%=rec.getCode()%>
@@ -24,6 +25,7 @@
         <%=rec.getViews()%> vistas<BR>
         </small></td></tr>
       </table>
+    </div><br/>
 <%
         }
 %>        
@@ -33,3 +35,6 @@
     <%if(rec.canModify(member)){%><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",rec.getURI())%>">Editar Información</a><%}%>
     <%if(rec.canModify(member)){%><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",rec.getURI())%>">Eliminar Video</a><%}%>
 </center>
+<%
+rec.renderGenericElements(request, response.getWriter(), rec, paramRequest);
+%>
