@@ -1,8 +1,11 @@
-<%@page import="org.semanticwb.portal.community.*,java.util.*" %>
+<%@page import="org.semanticwb.*,java.text.*,org.semanticwb.portal.community.*,java.util.*" %>
 <%
+    String webpath=SWBPlatform.getWebWorkPath()+"/swbadmin/jsp/LastMicrositeElements/";
+    String defaultFormat = "dd 'de' MMMM 'del' yyyy";
+    SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
     ArrayList<MicroSiteElement> elements=(ArrayList<MicroSiteElement>)request.getAttribute("elements");
     if(elements.size()>0)
-        {
+    {
     
 %>
 <div id="recentEntries">
@@ -12,8 +15,10 @@
     <%
         for(MicroSiteElement element : elements)
         {
+            String src="ico_sound.gif";
             String title=element.getTitle();
             String description=element.getDescription();
+            String created=iso8601dateFormat.format(element.getCreated());
             if(description==null)
             {
                 description="";
@@ -22,16 +27,24 @@
             {
                 description=description.substring(0, 97)+" ...";
             }
+            if(element.getSemanticObject().getSemanticClass().equals(PostElement.sclass))
+            {
+                src="ico_mensaje.gif";
+            }
+            if(element.getSemanticObject().getSemanticClass().equals(PhotoElement.sclass))
+            {
+                src="ico_foto.gif";
+            }
+            src=webpath+src;
             %>
               <div class="entry">
-              <p><img src="/swb/work/models/demo2/Template/1/1/images/ico_sound.gif" alt="Nota reciente" width="57" height="55" ></p>
-              <h3 class="titulo"><%=title%></h3>
+              <p><img src="<%=src%>" alt="Nota reciente" width="57" height="55" ></p>
+              <h3 class="titulo"><%=title%> (<%=created%>)</h3>
               <p><%=description%></p>
               </div>
             <%
         }
     %>
-
     <p class="vermas"><a href="#" >Ver m&aacute;s</a></p>
   </div>
 </div>
