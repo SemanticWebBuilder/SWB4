@@ -30,8 +30,9 @@ public class MostrarPanorama extends GenericAdmResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String webWorkPath=null;
+        String type=this.getResourceBase().getAttribute("type", "Promo");
         String subtype=this.getResourceBase().getAttribute("subtype", "promohome");
-        ResourceType promo = ResourceType.getResourceType("Promo", paramRequest.getWebPage().getWebSite());
+        ResourceType promo = ResourceType.getResourceType(type, paramRequest.getWebPage().getWebSite());
         Iterator<ResourceSubType> subtypes = ResourceSubType.listResourceSubTypeByType(promo, paramRequest.getWebPage().getWebSite());
         HashSet<Promo> promos = new HashSet<Promo>();
         while (subtypes.hasNext())
