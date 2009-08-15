@@ -367,8 +367,8 @@ public class Print extends GenericResource
                             String file = admResUtils.getFileName(base, value);
                             if (file != null && !file.trim().equals(""))
                             {
-                                if (!admResUtils.isFileType(file, "bmp|jpg|jpeg|gif")){
-                                    msg=paramRequest.getLocaleString("msgErrFileType") +" <i>bmp, jpg, jpeg, gif</i>: " + file;
+                                if (!admResUtils.isFileType(file, "bmp|jpg|jpeg|gif|png")){
+                                    msg=paramRequest.getLocaleString("msgErrFileType") +" <i>bmp, jpg, jpeg, gif, png</i>: " + file;
                                 }
                                 else
                                 {
@@ -502,9 +502,9 @@ public class Print extends GenericResource
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgImage")+" (bmp, gif, jpg, jpeg):</td> \n");
+            ret.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgImage")+" (bmp, gif, jpg, jpeg, png):</td> \n");
             ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"file\" name=\"img\" size=\"40\" onClick=\"this.form.btntexto.value=''; this.form.lnktexto.value=''\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
+            ret.append("<input type=\"file\" name=\"img\" size=\"40\" onClick=\"this.form.btntexto.value=''; this.form.lnktexto.value=''\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif|png');\"/>");
             if (!"".equals(base.getAttribute("img", "").trim())) {
                 ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("img").trim(), "img") +"<input type=checkbox name=noimg value=1>" + paramsRequest.getLocaleString("msgCutImage") + " <i>" + base.getAttribute("img").trim() + "</i></p>");
             }
@@ -593,7 +593,7 @@ public class Print extends GenericResource
             ret.append("\n      pForm.template.focus();");
             ret.append("\n      return false;");
             ret.append("\n   }");
-            ret.append("\n   if(!isFileType(pForm.img, 'bmp|jpg|jpeg|gif')) return false;");
+            ret.append("\n   if(!isFileType(pForm.img, 'bmp|jpg|jpeg|gif|png')) return false;");
             ret.append("\n   if(!isNumber(pForm.width)) return false;");
             ret.append("\n   if(!isNumber(pForm.height)) return false;");
             ret.append("\n   if(!isNumber(pForm.top)) return false;");
