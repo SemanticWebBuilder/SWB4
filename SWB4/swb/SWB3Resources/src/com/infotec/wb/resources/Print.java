@@ -29,7 +29,7 @@
  * Created on 24 de septiembre de 2002, 03:02 AM
  */
 
-package org.semanticwb.portal.resources;
+package com.infotec.wb.resources;
 
 import java.io.IOException;
 import java.util.Iterator;
