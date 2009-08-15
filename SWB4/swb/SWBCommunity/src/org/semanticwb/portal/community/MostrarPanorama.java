@@ -76,11 +76,11 @@ public class MostrarPanorama extends GenericResource
             {
                 if (i_parte == 0)
                 {
-                    out.write("<div id=\"parte" + i_parte + "\">" + NL);
+                    out.write("<div id=\"parte" + (i_parte+1) + "\">" + NL);
                 }
                 else
                 {
-                    out.write("<div id=\"parte" + i_parte + "\" style=\"display:none;\">" + NL);
+                    out.write("<div id=\"parte" + (i_parte+1) + "\" style=\"display:none;\">" + NL);
                 }
                 Promo[] arrayPromos = promos.toArray(new Promo[promos.size()]);
                 for (int i_element = 0; i_element < 3; i_element++)
