@@ -70,7 +70,7 @@ public class LastMicrositeElements extends GenericAdmResource
                 }
             }
         }
-        String path = "/swbadmin/jsp/LastMicrositeElements/LastMicrositeElementsView.jsp";
+        String path = "/swbadmin/jsp/microsite/LastMicrositeElements/LastMicrositeElementsView.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
