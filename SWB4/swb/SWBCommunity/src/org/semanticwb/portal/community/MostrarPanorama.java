@@ -65,7 +65,7 @@ public class MostrarPanorama extends GenericResource
         if (!promos.isEmpty())
         {
             int i_partes = promos.size() / 3;
-            if (promos.size() % 3 != 0)
+            if (promos.size() % 3 != 0 && promos.size()>0)
             {
                 i_partes++;
             }
@@ -103,49 +103,12 @@ public class MostrarPanorama extends GenericResource
                             }
                             out.write("<p class=\"vermas\"><a " + target + " href=\"" + o_promo.url + "\">Ver m&aacute;s</a></p>" + NL);
                             out.write("</div>" + NL);
-                            out.write("</div>" + NL);
+                            //out.write("</div>" + NL);
                         }
                     }
                 }
-
                 out.write("</div>" + NL);
-
             }
-
-
-            /*int i_parte = 1;
-            {
-            int i = 1;
-            for (Promo o_promo : promos)
-            {
-            if (i == 1)
-            {
-            if (i_parte == 1)
-            {
-            out.write("<div id=\"parte" + i_parte + "\">" + NL);
-            }
-            else
-            {
-            out.write("</div>" + NL);
-            out.write("<div id=\"parte" + i_parte + "\" style=\"display:none;\">" + NL);
-            }
-            }
-
-            out.write("<div class=\"panoramaEnrty\">" + NL);
-            out.write("<p><img border=\"0\" src=\"" + o_promo.imgfile + "\" alt=\"" + o_promo.title + "\" width=\"222\" height=\"149\"></p>" + NL);
-            out.write("<h3 class=\"titulo\">" + o_promo.title + "</h3>" + NL);
-            out.write("<p>" + o_promo.text + "</p>" + NL);
-            String target = "";
-            if (o_promo.target != null)
-            {
-            target = "target=\"" + o_promo.target + "\"";
-            }
-            out.write("<p class=\"vermas\"><a " + target + " href=\"" + o_promo.url + "\">Ver m&aacute;s</a></p>" + NL);
-            out.write("</div>" + NL);
-            out.write("</div>" + NL);
-            }
-            }*/
-
             if (i_partes > 0)
             {
                 out.write("<div id=\"paginador\">" + NL);
@@ -157,11 +120,11 @@ public class MostrarPanorama extends GenericResource
                 {
                     if (i_td == 1)
                     {
-                        out.write("<td id=\"page" + i_td + "\" class=\"activePage\"><a onClick=\"SWB_gotoPage(" + (i_td - 1) + ")\" href=\"#\">1</a></td>" + NL);
+                        out.write("<td id=\"page" + i_td + "\" class=\"activePage\"><a onClick=\"SWB_gotoPage(" + (i_td - 1) + ")\" href=\"#\">"+ i_td + "</a></td>" + NL);
                     }
                     else
                     {
-                        out.write("<td id=\"page" + i_td + "\"><a onClick=\"SWB_gotoPage(" + (i_td - 1) + ")\" href=\"#\">1</a></td>" + NL);
+                        out.write("<td id=\"page" + i_td + "\"><a onClick=\"SWB_gotoPage(" + (i_td - 1) + ")\" href=\"#\">"+ i_td +"</a></td>" + NL);
                     }
                 }
 
