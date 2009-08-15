@@ -28,6 +28,17 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
     }
 
     @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        if (paramRequest.getMode().equals("returnRank")) {
+            returnRank(request, response);
+        } else if (paramRequest.getMode().equals("returnAbusedState")) {
+            returnAbusedState(request, response, paramRequest);
+        } else {
+            super.processRequest(request, response, paramRequest);
+        }
+    }
+
+    @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         WebPage page=response.getWebPage();
@@ -43,7 +54,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
         {
             if(page instanceof MicroSiteWebPageUtil)((MicroSiteWebPageUtil)page).unSubscribeFromElement(mem);
         } else if ("vote".equals(action)) {
-            vote(request, response);
+            rank(request, response);
         } else if ("abuseReport".equals(action)) {
             abusedStateChange(request, response);
         } else if ("addComment".equals(action)) {
@@ -51,7 +62,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
         }
     }
 
-    private void vote(HttpServletRequest request, SWBActionResponse response) {
+    private void rank(HttpServletRequest request, SWBActionResponse response) {
 
         String suri = request.getParameter("uri");
         SemanticObject so = null;
@@ -76,11 +87,13 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
             mse.setRank(rank);
             mse.setReviews(rev);
         }
+        response.setMode("returnRank");
     }
 
     private void abusedStateChange(HttpServletRequest request,
             SWBActionResponse response) {
 
+        String message = null;
         String suri = request.getParameter("uri");
         SemanticObject so = null;
         if (null != suri) {
@@ -93,7 +106,11 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
             } else {
                 mse.setAbused(true);
             }
+            message = Boolean.toString(mse.isAbused());
         }
+        response.setMode("returnAbusedState");
+        response.setRenderParameter("message",
+                                    message != null ? message : "Not OK");
     }
 
     private void addComment(HttpServletRequest request,
@@ -117,9 +134,38 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
                     comment.setDescription(desc);
                     mse.addComment(comment);
                 }
-                response.setRenderParameter("uri", suri);
             }
         }
+        response.setRenderParameter("uri", suri);
+        response.setRenderParameter("act", "detail");
+        response.setMode(SWBParamRequest.Mode_VIEW);
+    }
+
+    private void returnRank(HttpServletRequest request,
+            HttpServletResponse response) {
+
+        String message = null;
+        String suri = request.getParameter("uri");
+        SemanticObject so = null;
+        if (null != suri) {
+            so = SemanticObject.createSemanticObject(suri);
+        }
+        if (so.getGenericInstance() instanceof MicroSiteElement) {
+            MicroSiteElement mse = (MicroSiteElement) so.getGenericInstance();
+            message = mse.getRank() + "," + mse.getReviews();
+        }
+        try {
+            response.getWriter().print(message != null ? message : "Not OK");
+        } catch (IOException ioe) {}
+    }
+
+    private void returnAbusedState(HttpServletRequest request,
+            HttpServletResponse response, SWBParamRequest paramRequest) {
+
+        String message = request.getParameter("message");
+        try {
+            response.getWriter().print(message != null ? message : "Not OK");
+        } catch (IOException ioe) {}
     }
 
 }

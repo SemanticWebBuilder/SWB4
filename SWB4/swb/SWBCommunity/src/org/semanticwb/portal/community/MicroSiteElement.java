@@ -169,93 +169,102 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         url.setAction("vote");
         url.setMode(paramRequest.getMode());
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
-        out.println("\n<script language=\"javascript\" type=\"text/javascript\">");
-        out.println("\nvar request = false;");
-        out.println("\ntry {");
-        out.println("\n  request = new XMLHttpRequest();");
-        out.println("\n} " +
+        sb.append("\n<script language=\"javascript\" type=\"text/javascript\">");
+        sb.append("  dojo.require(\"dojo.parser\");");
+        sb.append("\nvar request = false;");
+        sb.append("\ntry {");
+        sb.append("\n  request = new XMLHttpRequest();");
+        sb.append("\n} " +
                 "catch (trymicrosoft) {");
-        out.println("\n  try {");
-        out.println("\n    request = new ActiveXObject(\"Msxml2.XMLHTTP\");");
-        out.println("\n  } catch (othermicrosoft) {");
-        out.println("\n    try {");
-        out.println("\n      request = new ActiveXObject(\"Microsoft.XMLHTTP\");");
-        out.println("\n    } catch (failed) {");
-        out.println("\n      request = false;");
-        out.println("\n    }");
-        out.println("\n  }");
-        out.println("\n}");
-        out.println("\nif (!request)");
-        out.println("\n  alert(\"Error al inicializar XMLHttpRequest!\");");
-        out.println("\n\nfunction vote(val) {");
-        out.println("\n    if (!invoke) return;");
-        out.println("\n    var url = \"" + url + "?value=\"+escape(val)+\"&" + tmpUrl + ";\n" +
+        sb.append("\n  try {");
+        sb.append("\n    request = new ActiveXObject(\"Msxml2.XMLHTTP\");");
+        sb.append("\n  } catch (othermicrosoft) {");
+        sb.append("\n    try {");
+        sb.append("\n      request = new ActiveXObject(\"Microsoft.XMLHTTP\");");
+        sb.append("\n    } catch (failed) {");
+        sb.append("\n      request = false;");
+        sb.append("\n    }");
+        sb.append("\n  }");
+        sb.append("\n}");
+        sb.append("\nif (!request)");
+        sb.append("\n  alert(\"Error al inicializar XMLHttpRequest!\");");
+        sb.append("\nvar invoke = true;");
+        sb.append("\nvar count = 0;");
+        sb.append("\n\nfunction vote(val) {");
+        sb.append("\n    if (!invoke) return;");
+        sb.append("\n    var url = \"" + url + "?act=vote&value=\"+escape(val)+\"&" + tmpUrl + ";\n" +
                 "    request.open(\"GET\", url, true);");
-        out.println("\n    request.onreadystatechange = votedPage;");
-        out.println("\n    request.send(null);");
-        out.println("\n}");
-        out.println("\n\nfunction votedPage() {");
-        out.println("\n    var response = request.responseText;");
-        out.println("\n    if ('OK'==response)");
-        out.println("\n        alert('Voto contabilizado, muchas gracias por tu opinión!');");
-        out.println("\n    invoke = false;");
-        out.println("\n}");
-        out.println("\nvar invoke = true;");
+        sb.append("\n    request.onreadystatechange = ranked;");
+        sb.append("\n    request.send(null);");
+        sb.append("\n}");
+        sb.append("\n\nfunction ranked() {");
+        sb.append("\n    var response = request.responseText;");
+        sb.append("\n    if (count == 0) {");
+        sb.append("\n      if ('Not OK'!=response) {");
+        sb.append("\n          alert('Calificación contabilizada, muchas gracias por tu opinión!');");
+        sb.append("\n          invoke = false;");
+        sb.append("\n      } else {");
+        sb.append("\n          alert('Lo sentimos, ha ocurrido un problema al contabilizar la calificación!');");
+        sb.append("\n      } ");
+        sb.append("\n      count++;");
+        sb.append("\n    } ");
+        sb.append("\n}");
+
         url.setAction("abuseReport");
-        out.println("\nvar invokeAbused = true;");
-
-        out.println("\n\nfunction changeAbusedState() {");
-        out.println("\n    if (!invoke) return;");
-        out.println("\n    var url = \"" + url + "?" + tmpUrl + ";\n" +
+        sb.append("\nvar invokeAbused = true;");
+        sb.append("\n\nfunction changeAbusedState() {");
+        sb.append("\n    if (!invokeAbused) return;");
+        sb.append("\n    var url = \"" + url + "?act=abuseReport&" + tmpUrl + ";\n" +
                 "    request.open(\"GET\", url, true);");
-        out.println("\n    request.onreadystatechange = abuseStateChanged;");
-        out.println("\n    request.send(null);");
-        out.println("\n}");
-        out.println("\n\nfunction abuseStateChanged() {");
-        out.println("\n    var response = request.responseText;");
-        out.println("\n    if ('OK' == response) {");
-        out.println("\n      var etiqueta = document.getElementById(\"abused\").innerHTML;");
-        out.println("\n      if (etiqueta == 'Apropiado') {");
-        out.println("\n        document.getElementById(\"abused\").innerHTML == 'Inapropiado'");
-        out.println("\n      } else {");
-        out.println("\n        document.getElementById(\"abused\").innerHTML == 'Apropiado'");
-        out.println("\n      } ");
-        out.println("\n      invoke = false;");
-        out.println("\n    }");
-        out.println("\n}");
-        out.println("\n\nfunction addComment() {");
-/*        out.println("\n    if (document.getElementById(\"addComment\").style.visibility==\"visible\") {");
-        out.println("\n      document.getElementById(\"addComment\").style.visibility=\"hidden\";");
-        out.println("\n    } else {");*/
-        out.println("\n      document.getElementById(\"addComment\").style.display=\"inline\";");
-/*        out.println("\n    }");*/
-        out.println("\n}");
-        out.println("\n</script>\n");
-
-        //TODO: Cambiar los out.println de arriba por sb.append
+        sb.append("\n    request.onreadystatechange = abusedStateChanged;");
+        sb.append("\n    request.send(null);");
+        sb.append("\n}");
+        sb.append("\n\nfunction abusedStateChanged() {");
+        sb.append("\n    var response = request.responseText;");
+        sb.append("\n    if ('' != response && 'Not OK' != response) {");
+        sb.append("\n      var etiqueta = document.getElementById(\"abused\").innerHTML;");
+        sb.append("\n      //alert('response:'+response+', etiqueta:'+etiqueta);");
+        sb.append("\n      if (response == 'true') {");
+        sb.append("\n        document.getElementById(\"abused\").innerHTML = 'Inapropiado';");
+        sb.append("\n      } else {");
+        sb.append("\n        document.getElementById(\"abused\").innerHTML = 'Apropiado';");
+        sb.append("\n      } ");
+        sb.append("\n      invokeAbused = false;");
+        sb.append("\n    }");
+        sb.append("\n}");
+        sb.append("\n\nfunction addComment() {");
+/*        sb.append("\n    if (document.getElementById(\"addComment\").style.visibility==\"visible\") {");
+        sb.append("\n      document.getElementById(\"addComment\").style.visibility=\"hidden\";");
+        sb.append("\n    } else {");*/
+        sb.append("\n      document.getElementById(\"addComment\").style.display=\"inline\";");
+/*        sb.append("\n    }");*/
+        sb.append("\n}");
+        sb.append("\n</script>\n");
 
         sb.append("\n<div>");
-        sb.append("\n  <span>Calificar");
+        sb.append("\n  <span style=\"float:left; width:200px;\">");
         sb.append("\n    <table boder=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
+        sb.append("\n    <td>Calificar:</td>");
         for (int i = 1; i <= 5; i++) {
             sb.append(printStar(i, rank));
         }
         sb.append("\n      </tr>\n    </table>");
         sb.append("\n  </span>");
-        sb.append("\n  <div>" + mse.getReviews() + " calificaciones</div>");
-        sb.append("\n  <span><a href=\"javascript:changeAbusedState();\">P&uacute;blicamente</a> <span id=\"abused\">"
+        sb.append("\n  <div style=\"float:left; width:200px;\">" + mse.getReviews() + " calificaciones</div>");
+        sb.append("\n  <span style=\"float:left\"><a href=\"javascript:changeAbusedState();\">P&uacute;blicamente</a> <span id=\"abused\">"
                 + abusedDesc + "</span></span>");
-        sb.append("\n</div>");
+        sb.append("\n</div><br/><br/>");
         sb.append("\n<div>");
-        sb.append("\n  <span>Comentarios</span>");
-        sb.append("\n  <div>&nbsp;</div>");
+        sb.append("\n  <span style=\"float:left; width:300px;\">Comentarios</span>");
+        //sb.append("\n  <div>&nbsp;</div>");
         url.setAction("addComment");
-        sb.append("\n  <span><a href=\"javascript:addComment();\">Publicar comentario</a></span>");
-        sb.append("\n</div>");
+        sb.append("\n  <span style=\"float:left; width:300px;\"><a href=\"javascript:addComment();\">Escribir comentario</a></span>");
+        sb.append("\n</div><br/><br/>");
         sb.append("\n<div id=\"addComment\" style=\"display:none\">");
         sb.append("\n  <br/>Comentario");
         sb.append("\n  <form name=\"addCommentForm\" action=\"" + url + "\">");
         sb.append("\n    <input type=\"hidden\" name=\"uri\" value=\"" + suri + "\">");
+        sb.append("\n    <input type=\"hidden\" name=\"act\" value=\"addComment\">");
         sb.append("\n    <textarea name=\"comentario\" cols=\"40\" rows=\"\"></textarea>");
         sb.append("\n    <input type=\"submit\" value=\"Publicar comentario\">");
         sb.append("\n  </form>");
