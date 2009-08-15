@@ -10,7 +10,7 @@
 %>
 <div id="recentEntries">
   <div class="recentEntry">
-    <h2 class="titulo">Lo último</h2>
+    <h2 class="titulo">Ultimos elementos agregados</h2>
 
     <%
         for(MicroSiteElement element : elements)
@@ -38,7 +38,7 @@
             src=webpath+src;
             %>
               <div class="entry">
-              <p><img src="<%=src%>" alt="Nota reciente" width="57" height="55" ></p>
+              <p><img src="<%=src%>" alt="<%=title%>" width="57" height="55" ></p>
               <h3 class="titulo"><%=title%> (<%=created%>)</h3>
               <p><%=description%></p>
               </div>
