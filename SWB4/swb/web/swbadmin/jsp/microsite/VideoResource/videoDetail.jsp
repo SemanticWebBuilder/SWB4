@@ -36,5 +36,5 @@
     <%if(rec.canModify(member)){%><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",rec.getURI())%>">Eliminar Video</a><%}%>
 </center>
 <%
-rec.renderGenericElements(request, response.getWriter(), rec, paramRequest);
+rec.renderGenericElements(request, out, rec, paramRequest);
 %>
