@@ -182,7 +182,7 @@ public class MostrarPanorama extends GenericResource
             out.write("function SWB_previous() { " + NL);
             out.write("if(current>=1)" + NL);
             out.write("{" + NL);
-            out.write("SWB_gotoPage(current+-1);" + NL);
+            out.write("SWB_gotoPage(current-1);" + NL);
             out.write("}" + NL);
             out.write("}");
             out.write("function SWB_gotoPage(page)" + NL);
