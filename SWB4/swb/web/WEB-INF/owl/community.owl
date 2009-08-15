@@ -431,6 +431,16 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="photo">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Imagen</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_photo">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#MicroSite"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="imageURL">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#PhotoElement"/>
@@ -444,6 +454,14 @@
     >spam</swb:propertyCodeName>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#Comment"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="private">
+    <rdfs:label>Privado</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_private"/>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#MicroSite"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="citation">
     <rdfs:domain rdf:resource="#NewsElement"/>
@@ -502,6 +520,14 @@
     >preview</swb:propertyCodeName>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#VideoElement"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="moderate">
+    <rdfs:label>Moderado</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_moderate"/>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#MicroSite"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="abused">
     <rdfs:domain rdf:resource="#MicroSiteElement"/>
