@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_visibility=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#visibility");
     public static final org.semanticwb.platform.SemanticProperty swb_reviews=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#reviews");
@@ -64,9 +64,9 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         return getSemanticObject().getIntProperty(swbcomm_visibility);
     }
 
-    public void setVisibility(int visibility)
+    public void setVisibility(int value)
     {
-        getSemanticObject().setIntProperty(swbcomm_visibility, visibility);
+        getSemanticObject().setIntProperty(swbcomm_visibility, value);
     }
 
     public long getReviews()
@@ -74,9 +74,9 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         return getSemanticObject().getLongProperty(swb_reviews);
     }
 
-    public void setReviews(long reviews)
+    public void setReviews(long value)
     {
-        getSemanticObject().setLongProperty(swb_reviews, reviews);
+        getSemanticObject().setLongProperty(swb_reviews, value);
     }
 
     public double getRank()
@@ -84,9 +84,9 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         return getSemanticObject().getDoubleProperty(swb_rank);
     }
 
-    public void setRank(double rank)
+    public void setRank(double value)
     {
-        getSemanticObject().setDoubleProperty(swb_rank, rank);
+        getSemanticObject().setDoubleProperty(swb_rank, value);
     }
 
     public String getTags()
@@ -94,9 +94,9 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         return getSemanticObject().getProperty(swb_tags);
     }
 
-    public void setTags(String tags)
+    public void setTags(String value)
     {
-        getSemanticObject().setProperty(swb_tags, tags);
+        getSemanticObject().setProperty(swb_tags, value);
     }
 
     public boolean isAbused()
@@ -104,9 +104,9 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         return getSemanticObject().getBooleanProperty(swbcomm_abused);
     }
 
-    public void setAbused(boolean abused)
+    public void setAbused(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbcomm_abused, abused);
+        getSemanticObject().setBooleanProperty(swbcomm_abused, value);
     }
 
     public long getMaxViews()
@@ -114,9 +114,9 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         return getSemanticObject().getLongProperty(swb_maxViews);
     }
 
-    public void setMaxViews(long maxViews)
+    public void setMaxViews(long value)
     {
-        getSemanticObject().setLongProperty(swb_maxViews, maxViews);
+        getSemanticObject().setLongProperty(swb_maxViews, value);
     }
 
     public java.util.Date getCreated()
@@ -124,14 +124,14 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(java.util.Date created)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
-    public void setModifiedBy(org.semanticwb.model.User user)
+    public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -167,9 +167,9 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         return getSemanticObject().getProperty(swb_title);
     }
 
-    public void setTitle(String title)
+    public void setTitle(String value)
     {
-        getSemanticObject().setProperty(swb_title, title);
+        getSemanticObject().setProperty(swb_title, value);
     }
 
     public String getTitle(String lang)
@@ -192,9 +192,9 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(java.util.Date updated)
+    public void setUpdated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
     public long getViews()
@@ -203,15 +203,15 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         return getSemanticObject().getLongProperty(swb_views,false);
     }
 
-    public void setViews(long views)
+    public void setViews(long value)
     {
         //Override this method in MicroSiteElement object
-        getSemanticObject().setLongProperty(swb_views, views,false);
+        getSemanticObject().setLongProperty(swb_views, value,false);
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
     }
 
     public void removeCreator()
@@ -253,9 +253,9 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         return getSemanticObject().hasObjectProperty(swbcomm_hasComment,comment.getSemanticObject());
     }
 
-    public void addComment(org.semanticwb.portal.community.Comment comment)
+    public void addComment(org.semanticwb.portal.community.Comment value)
     {
-        getSemanticObject().addObjectProperty(swbcomm_hasComment, comment.getSemanticObject());
+        getSemanticObject().addObjectProperty(swbcomm_hasComment, value.getSemanticObject());
     }
 
     public void removeAllComment()
@@ -296,9 +296,9 @@ public class MicroSiteElementBase extends org.semanticwb.model.SWBClass implemen
         return getSemanticObject().getProperty(swb_description);
     }
 
-    public void setDescription(String description)
+    public void setDescription(String value)
     {
-        getSemanticObject().setProperty(swb_description, description);
+        getSemanticObject().setProperty(swb_description, value);
     }
 
     public String getDescription(String lang)

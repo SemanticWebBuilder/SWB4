@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class MicroSiteBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Viewable,org.semanticwb.model.Activeable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Expirable,org.semanticwb.model.Indexable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable
+public class MicroSiteBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Expirable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Viewable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Trashable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Rankable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_moderate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#moderate");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_photo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#photo");
@@ -59,9 +59,9 @@ public class MicroSiteBase extends org.semanticwb.model.WebPage implements org.s
         return getSemanticObject().getBooleanProperty(swbcomm_moderate);
     }
 
-    public void setModerate(boolean moderate)
+    public void setModerate(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbcomm_moderate, moderate);
+        getSemanticObject().setBooleanProperty(swbcomm_moderate, value);
     }
 
     public String getPhoto()
@@ -69,9 +69,9 @@ public class MicroSiteBase extends org.semanticwb.model.WebPage implements org.s
         return getSemanticObject().getProperty(swbcomm_photo);
     }
 
-    public void setPhoto(String photo)
+    public void setPhoto(String value)
     {
-        getSemanticObject().setProperty(swbcomm_photo, photo);
+        getSemanticObject().setProperty(swbcomm_photo, value);
     }
 
     public boolean isPrivate()
@@ -79,9 +79,9 @@ public class MicroSiteBase extends org.semanticwb.model.WebPage implements org.s
         return getSemanticObject().getBooleanProperty(swbcomm_private);
     }
 
-    public void setPrivate(boolean cprivate)
+    public void setPrivate(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbcomm_private, cprivate);
+        getSemanticObject().setBooleanProperty(swbcomm_private, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteWebPageUtil> listMicroSiteUtils()
@@ -118,9 +118,9 @@ public class MicroSiteBase extends org.semanticwb.model.WebPage implements org.s
          return ret;
     }
 
-    public void setAbout(org.semanticwb.model.WebPage webpage)
+    public void setAbout(org.semanticwb.model.WebPage value)
     {
-        getSemanticObject().setObjectProperty(swbcomm_about, webpage.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbcomm_about, value.getSemanticObject());
     }
 
     public void removeAbout()
@@ -185,9 +185,9 @@ public class MicroSiteBase extends org.semanticwb.model.WebPage implements org.s
          return ret;
     }
 
-    public void setType(org.semanticwb.portal.community.MicroSiteType micrositetype)
+    public void setType(org.semanticwb.portal.community.MicroSiteType value)
     {
-        getSemanticObject().setObjectProperty(swbcomm_type, micrositetype.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbcomm_type, value.getSemanticObject());
     }
 
     public void removeType()

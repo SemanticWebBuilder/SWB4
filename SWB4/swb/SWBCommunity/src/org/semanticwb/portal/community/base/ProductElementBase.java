@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ProductElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class ProductElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_smallPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#smallPhoto");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_prodDescription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#prodDescription");
@@ -59,9 +59,9 @@ public class ProductElementBase extends org.semanticwb.portal.community.MicroSit
         return getSemanticObject().getProperty(swbcomm_smallPhoto);
     }
 
-    public void setSmallPhoto(String smallPhoto)
+    public void setSmallPhoto(String value)
     {
-        getSemanticObject().setProperty(swbcomm_smallPhoto, smallPhoto);
+        getSemanticObject().setProperty(swbcomm_smallPhoto, value);
     }
 
     public String getProdDescription()
@@ -69,9 +69,9 @@ public class ProductElementBase extends org.semanticwb.portal.community.MicroSit
         return getSemanticObject().getProperty(swbcomm_prodDescription);
     }
 
-    public void setProdDescription(String prodDescription)
+    public void setProdDescription(String value)
     {
-        getSemanticObject().setProperty(swbcomm_prodDescription, prodDescription);
+        getSemanticObject().setProperty(swbcomm_prodDescription, value);
     }
 
     public boolean isPromotion()
@@ -79,14 +79,14 @@ public class ProductElementBase extends org.semanticwb.portal.community.MicroSit
         return getSemanticObject().getBooleanProperty(swbcomm_promotion);
     }
 
-    public void setPromotion(boolean promotion)
+    public void setPromotion(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbcomm_promotion, promotion);
+        getSemanticObject().setBooleanProperty(swbcomm_promotion, value);
     }
 
-    public void setWebPage(org.semanticwb.model.WebPage webpage)
+    public void setWebPage(org.semanticwb.model.WebPage value)
     {
-        getSemanticObject().setObjectProperty(swbcomm_productWebPage, webpage.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbcomm_productWebPage, value.getSemanticObject());
     }
 
     public void removeWebPage()

@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class MicroSiteWebPageUtilBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Viewable,org.semanticwb.model.Activeable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Expirable,org.semanticwb.model.Indexable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable
+public class MicroSiteWebPageUtilBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Expirable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Viewable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Trashable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Rankable
 {
     public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteUtil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteUtil");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_microSiteUtil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#microSiteUtil");
@@ -49,9 +49,9 @@ public class MicroSiteWebPageUtilBase extends org.semanticwb.model.WebPage imple
         return (getMicroSiteWebPageUtil(id, model)!=null);
     }
 
-    public void setMicroSiteUtil(org.semanticwb.portal.community.MicroSiteUtil micrositeutil)
+    public void setMicroSiteUtil(org.semanticwb.portal.community.MicroSiteUtil value)
     {
-        getSemanticObject().setObjectProperty(swbcomm_microSiteUtil, micrositeutil.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbcomm_microSiteUtil, value.getSemanticObject());
     }
 
     public void removeMicroSiteUtil()
@@ -116,9 +116,9 @@ public class MicroSiteWebPageUtilBase extends org.semanticwb.model.WebPage imple
          return ret;
     }
 
-    public void setMicroSite(org.semanticwb.portal.community.MicroSite microsite)
+    public void setMicroSite(org.semanticwb.portal.community.MicroSite value)
     {
-        getSemanticObject().setObjectProperty(swbcomm_microSite, microsite.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbcomm_microSite, value.getSemanticObject());
     }
 
     public void removeMicroSite()

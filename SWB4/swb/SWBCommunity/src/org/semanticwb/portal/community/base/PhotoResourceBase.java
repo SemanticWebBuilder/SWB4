@@ -28,9 +28,9 @@ public class PhotoResourceBase extends org.semanticwb.portal.community.Community
         return getSemanticObject().hasObjectProperty(swbcomm_hasPhoto,photoelement.getSemanticObject());
     }
 
-    public void addPhoto(org.semanticwb.portal.community.PhotoElement photoelement)
+    public void addPhoto(org.semanticwb.portal.community.PhotoElement value)
     {
-        getSemanticObject().addObjectProperty(swbcomm_hasPhoto, photoelement.getSemanticObject());
+        getSemanticObject().addObjectProperty(swbcomm_hasPhoto, value.getSemanticObject());
     }
 
     public void removeAllPhoto()

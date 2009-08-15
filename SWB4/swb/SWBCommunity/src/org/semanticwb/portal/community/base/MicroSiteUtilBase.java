@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Resourceable,org.semanticwb.model.Sortable,org.semanticwb.model.Traceable
+public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Sortable,org.semanticwb.model.Resourceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
@@ -61,9 +61,9 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().getIntProperty(swb_index);
     }
 
-    public void setIndex(int index)
+    public void setIndex(int value)
     {
-        getSemanticObject().setIntProperty(swb_index, index);
+        getSemanticObject().setIntProperty(swb_index, value);
     }
 
     public java.util.Date getCreated()
@@ -71,14 +71,14 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(java.util.Date created)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
-    public void setModifiedBy(org.semanticwb.model.User user)
+    public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -120,9 +120,9 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().hasObjectProperty(swb_hasResource,resource.getSemanticObject());
     }
 
-    public void addResource(org.semanticwb.model.Resource resource)
+    public void addResource(org.semanticwb.model.Resource value)
     {
-        getSemanticObject().addObjectProperty(swb_hasResource, resource.getSemanticObject());
+        getSemanticObject().addObjectProperty(swb_hasResource, value.getSemanticObject());
     }
 
     public void removeAllResource()
@@ -163,9 +163,9 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().getProperty(swb_title);
     }
 
-    public void setTitle(String title)
+    public void setTitle(String value)
     {
-        getSemanticObject().setProperty(swb_title, title);
+        getSemanticObject().setProperty(swb_title, value);
     }
 
     public String getTitle(String lang)
@@ -188,9 +188,9 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(java.util.Date updated)
+    public void setUpdated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
     public boolean isActive()
@@ -198,14 +198,14 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().getBooleanProperty(swb_active);
     }
 
-    public void setActive(boolean active)
+    public void setActive(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swb_active, active);
+        getSemanticObject().setBooleanProperty(swb_active, value);
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
     }
 
     public void removeCreator()
@@ -275,9 +275,9 @@ public class MicroSiteUtilBase extends org.semanticwb.model.SWBClass implements 
         return getSemanticObject().getProperty(swb_description);
     }
 
-    public void setDescription(String description)
+    public void setDescription(String value)
     {
-        getSemanticObject().setProperty(swb_description, description);
+        getSemanticObject().setProperty(swb_description, value);
     }
 
     public String getDescription(String lang)

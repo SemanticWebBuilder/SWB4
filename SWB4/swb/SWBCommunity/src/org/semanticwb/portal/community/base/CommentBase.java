@@ -63,9 +63,9 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
         return getSemanticObject().getProperty(swbcomm_comDescription);
     }
 
-    public void setDescription(String comDescription)
+    public void setDescription(String value)
     {
-        getSemanticObject().setProperty(swbcomm_comDescription, comDescription);
+        getSemanticObject().setProperty(swbcomm_comDescription, value);
     }
 
     public java.util.Date getCreated()
@@ -73,14 +73,14 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
         return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public void setCreated(java.util.Date created)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_created, created);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
-    public void setModifiedBy(org.semanticwb.model.User user)
+    public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
     }
 
     public void removeModifiedBy()
@@ -111,9 +111,9 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
          return ret;
     }
 
-    public void setMicroSiteElement(org.semanticwb.portal.community.MicroSiteElement micrositeelement)
+    public void setMicroSiteElement(org.semanticwb.portal.community.MicroSiteElement value)
     {
-        getSemanticObject().setObjectProperty(swbcomm_comMicroSiteElementInv, micrositeelement.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbcomm_comMicroSiteElementInv, value.getSemanticObject());
     }
 
     public void removeMicroSiteElement()
@@ -149,9 +149,9 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
         return getSemanticObject().getBooleanProperty(swbcomm_comSpam);
     }
 
-    public void setSpam(boolean comSpam)
+    public void setSpam(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbcomm_comSpam, comSpam);
+        getSemanticObject().setBooleanProperty(swbcomm_comSpam, value);
     }
 
     public java.util.Date getUpdated()
@@ -159,14 +159,14 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public void setUpdated(java.util.Date updated)
+    public void setUpdated(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_updated, updated);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
-    public void setCreator(org.semanticwb.model.User user)
+    public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
     }
 
     public void removeCreator()
