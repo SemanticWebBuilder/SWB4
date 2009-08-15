@@ -130,15 +130,12 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
         try {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
             HashMap<String,String> params = new HashMap<String,String>();
-            // Create a factory for disk-based file items
             File tmpwrk = new File(SWBPlatform.getWorkPath()+"/tmp");
             if (!tmpwrk.exists()) {
                 tmpwrk.mkdirs();
             }
             FileItemFactory factory = new DiskFileItemFactory(1*1024*1024, tmpwrk);
-            // Create a new file upload handler
             ServletFileUpload upload = new ServletFileUpload(factory);
-            //Create a progress listener
             ProgressListener progressListener = new ProgressListener() {
                 private long kBytes = -1;
                 public void update(long pBytesRead, long pContentLength, int pItems) {
@@ -151,10 +148,8 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                 }
             };
             upload.setProgressListener(progressListener);
-            // Parse the request
             List items = upload.parseRequest(request); /* FileItem */
             FileItem currentFile = null;
-            // Process the uploaded items
             Iterator iter = items.iterator();
             while (iter.hasNext()) {
                 FileItem item = (FileItem) iter.next();
