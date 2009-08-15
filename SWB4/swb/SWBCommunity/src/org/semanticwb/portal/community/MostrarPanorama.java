@@ -125,8 +125,9 @@ public class MostrarPanorama extends GenericAdmResource
                 }
                 out.write("</div>" + NL);
             }
-            if (i_partes > 0 && webWorkPath!=null)
+            if (i_partes > 0)
             {
+                webWorkPath = (String) SWBPlatform.getWebWorkPath() + this.getResourceBase().getWorkPath();
                 out.write("<div id=\"paginador\">" + NL);
                 String siguiente=this.getResourceBase().getAttribute("siguiente");
                 String anterior=this.getResourceBase().getAttribute("anterior");
