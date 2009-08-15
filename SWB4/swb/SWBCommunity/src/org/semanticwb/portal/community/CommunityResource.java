@@ -4,6 +4,8 @@ package org.semanticwb.portal.community;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.*;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
@@ -118,22 +120,20 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
 
         String suri = request.getParameter("uri");
         String desc = request.getParameter("comentario");
-        SemanticObject so = null;
-        if (null != suri) {
-            so = SemanticObject.createSemanticObject(suri);
-        }
-        if (desc != null) {
+
+        GenericObject gen=SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+
+        if (desc == null) {
             desc = "";
         }
-        if (so.getGenericInstance() instanceof MicroSiteElement) {
-            MicroSiteElement mse = (MicroSiteElement) so.getGenericInstance();
-            if (mse.canComment(mem) && desc.length() > 0) {
-                SemanticObject semObj = MicroSiteElement.swbcomm_Comment.newInstance(MicroSiteElement.swbcomm_Comment.getURI());
-                if (semObj.getGenericInstance() instanceof Comment) {
-                    Comment comment = (Comment) semObj.getGenericInstance();
-                    comment.setDescription(desc);
-                    mse.addComment(comment);
-                }
+        if (gen!=null && gen instanceof MicroSiteElement)
+        {
+            MicroSiteElement mse = (MicroSiteElement) gen;
+            if (mse.canComment(mem) && desc.length() > 0) 
+            {
+                Comment comment=Comment.createComment(response.getWebPage().getWebSite());
+                comment.setDescription(desc);
+                mse.addComment(comment);
             }
         }
         response.setRenderParameter("uri", suri);

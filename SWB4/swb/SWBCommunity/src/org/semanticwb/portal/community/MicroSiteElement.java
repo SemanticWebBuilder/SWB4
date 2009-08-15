@@ -1,6 +1,8 @@
 package org.semanticwb.portal.community;
 
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
@@ -151,8 +153,8 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
     }
 
     public void renderGenericElements(HttpServletRequest request,
-            PrintWriter out, MicroSiteElement mse, SWBParamRequest paramRequest)
-            throws SWBResourceException {
+            Writer out, MicroSiteElement mse, SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException {
 
         String suri = request.getParameter("uri");
         StringBuilder sb = new StringBuilder(500);
@@ -271,7 +273,7 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         sb.append("\n</div>");
         sb.append(renderListComments(mse));
 
-        out.println(sb.toString());
+        out.write(sb.toString());
     }
 
     /**
