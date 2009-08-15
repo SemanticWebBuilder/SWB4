@@ -451,6 +451,12 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#EventElement"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="comSpam">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >spam</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#Comment"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="name">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
