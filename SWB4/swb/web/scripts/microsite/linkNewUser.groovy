@@ -20,27 +20,26 @@
 * dirección electrónica:
 *  http://www.semanticwebbuilder.org
 **/
-
-import org.semanticwb.portal.api.SWBParamRequest
 import org.semanticwb.model.User
 import org.semanticwb.model.WebPage
-import org.semanticwb.portal.community.Member
-import org.semanticwb.portal.community.MicroSite
-
+import org.semanticwb.portal.api.SWBResourceURL
 
 
 def paramRequest=request.getAttribute("paramRequest")
 User user = paramRequest.getUser()
 WebPage wpage=paramRequest.getWebPage()
-Member member = Member.getMember(user,wpage)
-def lista = Member.listMemberByUser(user,wpage.getWebSite())
+def url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("act", "add")
 
-println "Mis Comunidades:<ul>"
-lista.each(){
-    Member mem_curr = it
-    MicroSite mem_mcs = mem_curr.getMicroSite()
-    def titulo = mem_mcs.getDisplayName()
-    def url = mem_mcs.getUrl()
-    println "<li><a href=\"${url}\">$titulo</a></li>"
-}
-println "</ul>"
+
+println """<style type="text/css">
+            @import "/swbadmin/js/dojo/dojo/resources/dojo.css";
+            @import "/swbadmin/js/dojo/dijit/themes/soria/soria.css";
+            @import "/swbadmin/css/swb.css";
+            </style>
+           <script type="text/javascript">
+           dojo.require("dijit.layout.ContentPane");
+           dojo.require("dojox.layout.ContentPane");
+           dojo.require("dijit.Dialog");
+           dojo.require("dojo.parser");
+           </script><a href="javascript:showDialog('$url','Agregar usuario');">Agregar usuario</a>"""
+
