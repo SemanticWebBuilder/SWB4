@@ -20,7 +20,7 @@ import org.semanticwb.portal.api.*;
  *
  * @author victor.lorenzana
  */
-public class MostrarPanorama extends GenericResource
+public class MostrarPanorama extends GenericAdmResource
 {
 
     private static final String NL = "\r\n";
@@ -29,6 +29,7 @@ public class MostrarPanorama extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        String webWorkPath=null;
         ResourceType promo = ResourceType.getResourceType("Promo", paramRequest.getWebPage().getWebSite());
         Iterator<ResourceSubType> subtypes = ResourceSubType.listResourceSubTypeByType(promo, paramRequest.getWebPage().getWebSite());
         HashSet<Promo> promos = new HashSet<Promo>();
@@ -38,17 +39,16 @@ public class MostrarPanorama extends GenericResource
             if (subresource.getId().equals("promohome"))
             {
 
-
                 Iterator<Resource> resources = Resource.listResourceByResourceSubType(subresource);
                 while (resources.hasNext())
                 {
                     Resource resource = resources.next();
+                    webWorkPath = (String) SWBPlatform.getWebWorkPath() + resource.getWorkPath();
                     if (resource.isActive())
                     {
                         Promo o_promo = new Promo();
                         o_promo.title = resource.getAttribute("title");
-                        o_promo.imgfile = resource.getAttribute("imgfile");
-                        String webWorkPath = (String) SWBPlatform.getWebWorkPath() + resource.getWorkPath();
+                        o_promo.imgfile = resource.getAttribute("imgfile");                        
                         o_promo.imgfile = webWorkPath + "/" + o_promo.imgfile;
                         o_promo.text = resource.getAttribute("text");
                         o_promo.url = resource.getAttribute("url");
@@ -97,8 +97,18 @@ public class MostrarPanorama extends GenericResource
                             {
                                 o_promo.title = "";
                             }
+                            if (o_promo.text == null)
+                            {
+                                o_promo.text = "";
+                            }
+
+
                             out.write("<p><img border=\"0\" src=\"" + o_promo.imgfile + "\" alt=\"" + o_promo.title + "\" width=\"222\" height=\"149\"></p>" + NL);
                             out.write("<h3 class=\"titulo\">" + o_promo.title + "</h3>" + NL);
+                            if (o_promo.text.length() > 300)
+                            {
+                                o_promo.text = o_promo.text.substring(0, 297)+"...";
+                            }
                             out.write("<p>" + o_promo.text + "</p>" + NL);
                             if (o_promo.url != null)
                             {
@@ -108,18 +118,27 @@ public class MostrarPanorama extends GenericResource
                                     target = "target=\"" + o_promo.target + "\"";
                                 }
                                 out.write("<p class=\"vermas\"><a " + target + " href=\"" + o_promo.url + "\">Ver m&aacute;s</a></p>" + NL);
-                            }
-                            out.write("</div>" + NL);
-                            //out.write("</div>" + NL);
+                            }                            
+                            out.write("</div>" + NL);                            
                         }
                     }
                 }
                 out.write("</div>" + NL);
             }
-            if (i_partes > 0)
+            if (i_partes > 0 && webWorkPath!=null)
             {
                 out.write("<div id=\"paginador\">" + NL);
-                out.write("<div id=\"backIttems\"><p><a href=\"#\" onClick=\"SWB_previous()\"><img border=\"0\" src=\"images/anteriorBTN.jpg\" alt=\"Anterior\" width=\"19\" height=\"19\"></a> Anterior</p></div>" + NL);
+                String siguiente=this.getResourceBase().getAttribute("siguiente");
+                String anterior=this.getResourceBase().getAttribute("anterior");
+                if(siguiente!=null && anterior!=null)
+                {
+                    anterior=webWorkPath+"/"+anterior;
+                    out.write("<div id=\"backIttems\"><p><a href=\"#\" onClick=\"SWB_previous()\"><img border=\"0\" src=\""+anterior+"\" alt=\"Anterior\" width=\"19\" height=\"19\"></a> Anterior</p></div>" + NL);
+                }
+                else
+                {
+                    out.write("<div id=\"backIttems\"><p><a href=\"#\" onClick=\"SWB_previous()\">Anterior</a> </p></div>" + NL);
+                }
                 out.write("<div id=\"noPaginas\">" + NL);
                 out.write("<table width=\"100\" border=\"0\" cellspacing=\"5\" cellpadding=\"0\">" + NL);
                 out.write("<tr>" + NL);
@@ -139,7 +158,16 @@ public class MostrarPanorama extends GenericResource
                 out.write("</tr>" + NL);
                 out.write("</table>" + NL);
                 out.write("</div>" + NL);
-                out.write("<div id=\"nextIttems\"><p>Siguiente <a href=\"#\" onClick=\"SWB_next()\"><img border=\"0\" src=\"images/siguienteBTN.jpg\" alt=\"Siguiente\" width=\"19\" height=\"19\"></a></p></div>" + NL);
+                
+                if(siguiente!=null && anterior!=null)
+                {
+                    siguiente=webWorkPath+"/"+siguiente;
+                    out.write("<div id=\"nextIttems\"><p>Siguiente <a href=\"#\" onClick=\"SWB_next()\"><img border=\"0\" src=\""+siguiente+"\" alt=\"Siguiente\" width=\"19\" height=\"19\"></a></p></div>" + NL);
+                }
+                else
+                {
+                    out.write("<div id=\"nextIttems\"><p><a href=\"#\" onClick=\"SWB_next()\">Siguiente</a></p></div>" + NL);
+                }
                 out.write("</div>" + NL);
             }
             out.write("</div>" + NL);
