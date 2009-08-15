@@ -28,9 +28,9 @@ public class VideoResourceBase extends org.semanticwb.portal.community.Community
         return getSemanticObject().hasObjectProperty(swbcomm_hasVideo,videoelement.getSemanticObject());
     }
 
-    public void addVideo(org.semanticwb.portal.community.VideoElement videoelement)
+    public void addVideo(org.semanticwb.portal.community.VideoElement value)
     {
-        getSemanticObject().addObjectProperty(swbcomm_hasVideo, videoelement.getSemanticObject());
+        getSemanticObject().addObjectProperty(swbcomm_hasVideo, value.getSemanticObject());
     }
 
     public void removeAllVideo()

@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class VideoElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class VideoElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_videoType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#videoType");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
@@ -61,14 +61,14 @@ public class VideoElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getProperty(swbcomm_videoType);
     }
 
-    public void setType(String videoType)
+    public void setType(String value)
     {
-        getSemanticObject().setProperty(swbcomm_videoType, videoType);
+        getSemanticObject().setProperty(swbcomm_videoType, value);
     }
 
-    public void setWebPage(org.semanticwb.model.WebPage webpage)
+    public void setWebPage(org.semanticwb.model.WebPage value)
     {
-        getSemanticObject().setObjectProperty(swbcomm_videoWebPage, webpage.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbcomm_videoWebPage, value.getSemanticObject());
     }
 
     public void removeWebPage()
@@ -104,9 +104,9 @@ public class VideoElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getIntProperty(swbcomm_videoDuration);
     }
 
-    public void setDuration(int videoDuration)
+    public void setDuration(int value)
     {
-        getSemanticObject().setIntProperty(swbcomm_videoDuration, videoDuration);
+        getSemanticObject().setIntProperty(swbcomm_videoDuration, value);
     }
 
     public String getCode()
@@ -114,9 +114,9 @@ public class VideoElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getProperty(swbcomm_videoCode);
     }
 
-    public void setCode(String videoCode)
+    public void setCode(String value)
     {
-        getSemanticObject().setProperty(swbcomm_videoCode, videoCode);
+        getSemanticObject().setProperty(swbcomm_videoCode, value);
     }
 
     public String getPreview()
@@ -124,9 +124,9 @@ public class VideoElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getProperty(swbcomm_videoPreview);
     }
 
-    public void setPreview(String videoPreview)
+    public void setPreview(String value)
     {
-        getSemanticObject().setProperty(swbcomm_videoPreview, videoPreview);
+        getSemanticObject().setProperty(swbcomm_videoPreview, value);
     }
 
     public int getSize()
@@ -134,8 +134,8 @@ public class VideoElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getIntProperty(swbcomm_videoSize);
     }
 
-    public void setSize(int videoSize)
+    public void setSize(int value)
     {
-        getSemanticObject().setIntProperty(swbcomm_videoSize, videoSize);
+        getSemanticObject().setIntProperty(swbcomm_videoSize, value);
     }
 }

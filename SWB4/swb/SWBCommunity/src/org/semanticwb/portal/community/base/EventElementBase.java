@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class EventElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class EventElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_endTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#endTime");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_audienceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#audienceType");
@@ -67,9 +67,9 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getDateProperty(swbcomm_endTime);
     }
 
-    public void setEndTime(java.util.Date endTime)
+    public void setEndTime(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swbcomm_endTime, endTime);
+        getSemanticObject().setDateProperty(swbcomm_endTime, value);
     }
 
     public String getAudienceType()
@@ -77,9 +77,9 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getProperty(swbcomm_audienceType);
     }
 
-    public void setAudienceType(String audienceType)
+    public void setAudienceType(String value)
     {
-        getSemanticObject().setProperty(swbcomm_audienceType, audienceType);
+        getSemanticObject().setProperty(swbcomm_audienceType, value);
     }
 
     public java.util.Date getEndDate()
@@ -87,9 +87,9 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getDateProperty(swbcomm_endDate);
     }
 
-    public void setEndDate(java.util.Date endDate)
+    public void setEndDate(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swbcomm_endDate, endDate);
+        getSemanticObject().setDateProperty(swbcomm_endDate, value);
     }
 
     public String getLatitude()
@@ -97,9 +97,9 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getProperty(swbcomm_latitude);
     }
 
-    public void setLatitude(String latitude)
+    public void setLatitude(String value)
     {
-        getSemanticObject().setProperty(swbcomm_latitude, latitude);
+        getSemanticObject().setProperty(swbcomm_latitude, value);
     }
 
     public java.util.Date getStartDate()
@@ -107,14 +107,14 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getDateProperty(swbcomm_startDate);
     }
 
-    public void setStartDate(java.util.Date startDate)
+    public void setStartDate(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swbcomm_startDate, startDate);
+        getSemanticObject().setDateProperty(swbcomm_startDate, value);
     }
 
-    public void setEventWebPage(org.semanticwb.model.WebPage webpage)
+    public void setEventWebPage(org.semanticwb.model.WebPage value)
     {
-        getSemanticObject().setObjectProperty(swbcomm_eventWebPage, webpage.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbcomm_eventWebPage, value.getSemanticObject());
     }
 
     public void removeEventWebPage()
@@ -150,9 +150,9 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getProperty(swbcomm_eventImage);
     }
 
-    public void setEventImage(String eventImage)
+    public void setEventImage(String value)
     {
-        getSemanticObject().setProperty(swbcomm_eventImage, eventImage);
+        getSemanticObject().setProperty(swbcomm_eventImage, value);
     }
 
     public String getLongitude()
@@ -160,9 +160,9 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getProperty(swbcomm_longitude);
     }
 
-    public void setLongitude(String longitude)
+    public void setLongitude(String value)
     {
-        getSemanticObject().setProperty(swbcomm_longitude, longitude);
+        getSemanticObject().setProperty(swbcomm_longitude, value);
     }
 
     public java.util.Date getStartTime()
@@ -170,9 +170,9 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getDateProperty(swbcomm_startTime);
     }
 
-    public void setStartTime(java.util.Date startTime)
+    public void setStartTime(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swbcomm_startTime, startTime);
+        getSemanticObject().setDateProperty(swbcomm_startTime, value);
     }
 
     public String getPlace()
@@ -180,9 +180,9 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getProperty(swbcomm_place);
     }
 
-    public void setPlace(String place)
+    public void setPlace(String value)
     {
-        getSemanticObject().setProperty(swbcomm_place, place);
+        getSemanticObject().setProperty(swbcomm_place, value);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Member> listAttendants()
@@ -196,9 +196,9 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().hasObjectProperty(swbcomm_hasAttendant,member.getSemanticObject());
     }
 
-    public void addAttendant(org.semanticwb.portal.community.Member member)
+    public void addAttendant(org.semanticwb.portal.community.Member value)
     {
-        getSemanticObject().addObjectProperty(swbcomm_hasAttendant, member.getSemanticObject());
+        getSemanticObject().addObjectProperty(swbcomm_hasAttendant, value.getSemanticObject());
     }
 
     public void removeAllAttendant()

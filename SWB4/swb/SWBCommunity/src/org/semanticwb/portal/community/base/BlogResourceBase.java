@@ -28,9 +28,9 @@ public class BlogResourceBase extends org.semanticwb.portal.community.CommunityR
         return getSemanticObject().hasObjectProperty(swbcomm_hasBlog,blog.getSemanticObject());
     }
 
-    public void addBlog(org.semanticwb.portal.community.Blog blog)
+    public void addBlog(org.semanticwb.portal.community.Blog value)
     {
-        getSemanticObject().addObjectProperty(swbcomm_hasBlog, blog.getSemanticObject());
+        getSemanticObject().addObjectProperty(swbcomm_hasBlog, value.getSemanticObject());
     }
 
     public void removeAllBlog()

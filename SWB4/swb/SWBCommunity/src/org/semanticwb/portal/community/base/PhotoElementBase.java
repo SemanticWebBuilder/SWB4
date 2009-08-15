@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_width=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#width");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_imageURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#imageURL");
@@ -61,9 +61,9 @@ public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getIntProperty(swbcomm_width);
     }
 
-    public void setWidth(int width)
+    public void setWidth(int value)
     {
-        getSemanticObject().setIntProperty(swbcomm_width, width);
+        getSemanticObject().setIntProperty(swbcomm_width, value);
     }
 
     public String getImageURL()
@@ -71,9 +71,9 @@ public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getProperty(swbcomm_imageURL);
     }
 
-    public void setImageURL(String imageURL)
+    public void setImageURL(String value)
     {
-        getSemanticObject().setProperty(swbcomm_imageURL, imageURL);
+        getSemanticObject().setProperty(swbcomm_imageURL, value);
     }
 
     public int getThumbHeight()
@@ -81,9 +81,9 @@ public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getIntProperty(swbcomm_thumbHeight);
     }
 
-    public void setThumbHeight(int thumbHeight)
+    public void setThumbHeight(int value)
     {
-        getSemanticObject().setIntProperty(swbcomm_thumbHeight, thumbHeight);
+        getSemanticObject().setIntProperty(swbcomm_thumbHeight, value);
     }
 
     public int getHeight()
@@ -91,14 +91,14 @@ public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getIntProperty(swbcomm_height);
     }
 
-    public void setHeight(int height)
+    public void setHeight(int value)
     {
-        getSemanticObject().setIntProperty(swbcomm_height, height);
+        getSemanticObject().setIntProperty(swbcomm_height, value);
     }
 
-    public void setPhotoWebPage(org.semanticwb.model.WebPage webpage)
+    public void setPhotoWebPage(org.semanticwb.model.WebPage value)
     {
-        getSemanticObject().setObjectProperty(swbcomm_photoWebPage, webpage.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbcomm_photoWebPage, value.getSemanticObject());
     }
 
     public void removePhotoWebPage()
@@ -134,8 +134,8 @@ public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteE
         return getSemanticObject().getIntProperty(swbcomm_thumbWidth);
     }
 
-    public void setThumbWidth(int thumbWidth)
+    public void setThumbWidth(int value)
     {
-        getSemanticObject().setIntProperty(swbcomm_thumbWidth, thumbWidth);
+        getSemanticObject().setIntProperty(swbcomm_thumbWidth, value);
     }
 }

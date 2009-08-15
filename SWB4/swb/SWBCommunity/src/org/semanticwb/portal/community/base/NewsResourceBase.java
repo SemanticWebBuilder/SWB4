@@ -28,9 +28,9 @@ public class NewsResourceBase extends org.semanticwb.portal.community.CommunityR
         return getSemanticObject().hasObjectProperty(swbcomm_hasNews,newselement.getSemanticObject());
     }
 
-    public void addNews(org.semanticwb.portal.community.NewsElement newselement)
+    public void addNews(org.semanticwb.portal.community.NewsElement value)
     {
-        getSemanticObject().addObjectProperty(swbcomm_hasNews, newselement.getSemanticObject());
+        getSemanticObject().addObjectProperty(swbcomm_hasNews, value.getSemanticObject());
     }
 
     public void removeAllNews()

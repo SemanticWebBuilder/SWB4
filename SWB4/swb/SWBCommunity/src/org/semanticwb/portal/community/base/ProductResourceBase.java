@@ -28,9 +28,9 @@ public class ProductResourceBase extends org.semanticwb.portal.community.Communi
         return getSemanticObject().hasObjectProperty(swbcomm_hasProduct,productelement.getSemanticObject());
     }
 
-    public void addProduct(org.semanticwb.portal.community.ProductElement productelement)
+    public void addProduct(org.semanticwb.portal.community.ProductElement value)
     {
-        getSemanticObject().addObjectProperty(swbcomm_hasProduct, productelement.getSemanticObject());
+        getSemanticObject().addObjectProperty(swbcomm_hasProduct, value.getSemanticObject());
     }
 
     public void removeAllProduct()

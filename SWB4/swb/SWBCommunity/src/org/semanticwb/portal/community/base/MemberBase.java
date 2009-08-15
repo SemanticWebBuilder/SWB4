@@ -56,9 +56,9 @@ public class MemberBase extends org.semanticwb.model.SWBClass
         return (getMember(id, model)!=null);
     }
 
-    public void setMicroSite(org.semanticwb.portal.community.MicroSite microsite)
+    public void setMicroSite(org.semanticwb.portal.community.MicroSite value)
     {
-        getSemanticObject().setObjectProperty(swbcomm_memMicroSite, microsite.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbcomm_memMicroSite, value.getSemanticObject());
     }
 
     public void removeMicroSite()
@@ -89,9 +89,9 @@ public class MemberBase extends org.semanticwb.model.SWBClass
          return ret;
     }
 
-    public void setUser(org.semanticwb.model.User user)
+    public void setUser(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swbcomm_memUser, user.getSemanticObject());
+        getSemanticObject().setObjectProperty(swbcomm_memUser, value.getSemanticObject());
     }
 
     public void removeUser()
@@ -133,9 +133,9 @@ public class MemberBase extends org.semanticwb.model.SWBClass
         return getSemanticObject().hasObjectProperty(swbcomm_hasSubscriptions,micrositewebpageutil.getSemanticObject());
     }
 
-    public void addSubscriptions(org.semanticwb.portal.community.MicroSiteWebPageUtil micrositewebpageutil)
+    public void addSubscriptions(org.semanticwb.portal.community.MicroSiteWebPageUtil value)
     {
-        getSemanticObject().addObjectProperty(swbcomm_hasSubscriptions, micrositewebpageutil.getSemanticObject());
+        getSemanticObject().addObjectProperty(swbcomm_hasSubscriptions, value.getSemanticObject());
     }
 
     public void removeAllSubscriptions()
@@ -176,8 +176,8 @@ public class MemberBase extends org.semanticwb.model.SWBClass
         return getSemanticObject().getIntProperty(swbcomm_memAccessLevel);
     }
 
-    public void setAccessLevel(int memAccessLevel)
+    public void setAccessLevel(int value)
     {
-        getSemanticObject().setIntProperty(swbcomm_memAccessLevel, memAccessLevel);
+        getSemanticObject().setIntProperty(swbcomm_memAccessLevel, value);
     }
 }

@@ -28,9 +28,9 @@ public class EventResourceBase extends org.semanticwb.portal.community.Community
         return getSemanticObject().hasObjectProperty(swbcomm_hasEvent,eventelement.getSemanticObject());
     }
 
-    public void addEvent(org.semanticwb.portal.community.EventElement eventelement)
+    public void addEvent(org.semanticwb.portal.community.EventElement value)
     {
-        getSemanticObject().addObjectProperty(swbcomm_hasEvent, eventelement.getSemanticObject());
+        getSemanticObject().addObjectProperty(swbcomm_hasEvent, value.getSemanticObject());
     }
 
     public void removeAllEvent()
