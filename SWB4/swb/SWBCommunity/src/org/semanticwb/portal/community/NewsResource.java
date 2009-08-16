@@ -66,6 +66,8 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
         if(abstr==null) abstr="";
         String fulltext = request.getParameter("new_fulltext");
         if(fulltext==null) fulltext="";
+        String citation = request.getParameter("new_citation");
+        if(citation==null) citation="";
         String tags = request.getParameter("new_tags");
         tags = (tags==null?"":tags);
 
@@ -80,6 +82,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
             rec.setAbstr(abstr);
             rec.setTags(tags);
             rec.setFullText(fulltext);
+            rec.setCitation(citation);
             rec.setTags(tags);
             rec.setNewsWebPage(page);
             
@@ -105,6 +108,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                 rec.setAbstr(abstr);
                 rec.setTags(tags);
                 rec.setFullText(fulltext);
+                rec.setCitation(citation);
                 rec.setTags(tags);
                 rec.setVisibility(Integer.parseInt(request.getParameter("level")));   //hace convercion a int en automatico
 
