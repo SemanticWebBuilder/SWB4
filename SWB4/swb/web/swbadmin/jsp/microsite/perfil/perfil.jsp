@@ -7,10 +7,10 @@
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
-<%@page import="org.semanticwb.portal.community.util.CommUtil"%>
+
 
      <%
-        CommUtil commUtil=new CommUtil();
+        boolean areFriends=false;
         SWBResourceURL urlAction=paramRequest.getActionUrl();
         User owner=paramRequest.getUser();
         User user=owner;
@@ -20,52 +20,49 @@
             user=(User)semObj.createGenericInstance();
         }
         if(!owner.isRegistered() || !user.isRegistered()) return;
+        if(!owner.getURI().equals(user.getURI())
+                && Friendship.areFriends(owner, user, paramRequest.getWebPage().getWebSite())) areFriends=true;
+
+
         if(paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
         {
-          if(!owner.getURI().equals(user.getURI())){ //Si el usuario que esta en session(owner) es diferente que el que vino por parametro (user)
+          if(areFriends){ //Si el usuario que esta en session(owner) es diferente que el que vino por parametro (user)
               urlAction.setAction("remFriendRelship");
               urlAction.setParameter("user", user.getURI());
-              if(commUtil.areFriends(owner, user, paramRequest.getWebPage().getWebSite())){
               %>
                     <a href="<%=urlAction%>">Eliminar como amigo</a>
               <%
-              }
           }
         }else {
              String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
              if(user.getPhoto()!=null) photo=user.getPhoto();
-             String userFirstName="", userLastName="", secondName="";
+             String userFirstName="", userLastName="", secondName="", email="";
 
              if(user.getFirstName()!=null) userFirstName=user.getFirstName();
              if(user.getLastName()!=null) userLastName=user.getLastName();
              if(user.getSecondLastName()!=null) secondName=user.getSecondLastName();
-     %>
+             if(user.getEmail()!=null) email=user.getEmail();
+             %>
 
-     <table>
-         <tr>
-             <td>
-                 <img src="<%=photo%>" valign="top"/>
-             </td>
-             <td>
-                 <table>
-                 <tr><td>
-                 <%=userFirstName%> <%=userLastName%> <%=secondName%><br/>
-                 </td></tr>
-                 </table>
-             </td>
-         </tr>
-         <%
-            if(commUtil.areFriends(owner, user, paramRequest.getWebPage().getWebSite())){ //Agregar datos privados (email, sexo, fotos, etc)
-                %>
-                    <tr>
-                        <td>
-                            email:<%=user.getEmail()%>
-                        </td>
-                    </tr>
-                <%
+             <table>
+                 <tr>
+                     <td>
+                         <img src="<%=photo%>" valign="top"/><br>
+                         <%=userFirstName%> <%=userLastName%> <%=secondName%><br/>
+                     </td>
+                 </tr>
+                 <%
+                    if(owner==user || areFriends){ //Agregar datos privados (email, sexo, fotos, etc)
+                        %>
+                            <tr>
+                                <td>
+                                    <%=email%>
+                                </td>
+                            </tr>
+                        <%
+                    }
+                 %>
+              </table>
+              <%
             }
-         %>
-     </table>
-     <%
-     }
-    %>
+        %>
