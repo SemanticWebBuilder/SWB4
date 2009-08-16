@@ -153,20 +153,20 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
     }
 
     public void renderGenericElements(HttpServletRequest request,
-            Writer out, MicroSiteElement mse, SWBParamRequest paramRequest)
+            Writer out, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
 
         String suri = request.getParameter("uri");
         StringBuilder sb = new StringBuilder(500);
         String tmpUrl = "";
-        String abusedDesc = mse.isAbused() ? "Inapropiado" : "Apropiado";
+        String abusedDesc = this.isAbused() ? "Inapropiado" : "Apropiado";
         int rank = 0;
 
-        if (suri == null && mse != null) {
-            suri = mse.getURI();
+        if (suri == null && this != null) {
+            suri = this.getURI();
         }
         tmpUrl = "uri=\"+escape('" + suri + "')";
-        rank = (int) Math.round(Math.floor(mse.getRank() * 10));
+        rank = (int) Math.round(Math.floor(this.getRank() * 10));
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("vote");
         url.setMode(paramRequest.getMode());
@@ -252,7 +252,7 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         }
         sb.append("\n      </tr>\n    </table>");
         sb.append("\n  </span>");
-        sb.append("\n  <div style=\"float:left; width:200px;\">" + mse.getReviews() + " calificaciones</div>");
+        sb.append("\n  <div style=\"float:left; width:200px;\">" + this.getReviews() + " calificaciones</div>");
         sb.append("\n  <span style=\"float:left\"><a href=\"javascript:changeAbusedState();\">P&uacute;blicamente</a> <span id=\"abused\">"
                 + abusedDesc + "</span></span>");
         sb.append("\n</div><br/><br/>");
@@ -271,7 +271,7 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         sb.append("\n    <input type=\"submit\" value=\"Publicar comentario\">");
         sb.append("\n  </form>");
         sb.append("\n</div>");
-        sb.append(renderListComments(mse));
+        sb.append(renderListComments(this));
 
         out.write(sb.toString());
     }
