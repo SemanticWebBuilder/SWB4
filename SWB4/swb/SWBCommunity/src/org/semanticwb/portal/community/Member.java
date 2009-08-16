@@ -47,7 +47,8 @@ public class Member extends org.semanticwb.portal.community.base.MemberBase
             }
         }else if(page instanceof MicroSiteWebPageUtil)
         {
-            ret=getMember(user,((MicroSiteWebPageUtil)page).getMicroSite());
+            MicroSite site=MicroSite.getMicroSite(page);
+            ret=getMember(user,site);
         }
         return ret;
     }
