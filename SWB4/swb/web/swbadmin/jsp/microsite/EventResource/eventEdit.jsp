@@ -89,7 +89,7 @@ Error: Elemento no encontrado...
                 </table>
             </fieldset>
                         <fieldset>
-                        <legend><strong>¿Quién puede ver este video?</strong></legend>
+                        <legend><strong>¿Quién puede ver este evento?</strong></legend>
                         <ul class="options">
                             <%String chk="checked=\"checked\"";%>
                             <li><label><input dojoType="dijit.form.RadioButton" type="radio" class="radio" name="level" value="0" <%if(rec.getVisibility()==0)out.println(chk);%>/> Cualquiera</label></li>
