@@ -10,8 +10,7 @@
     dojo.require("dijit._editor.plugins.LinkDialog");
     dojo.require("dijit._editor.plugins.FontChoice");
     dojo.require("dijit._editor.plugins.TextColor");
-    dojo.require("dojo.parser");
-    dojo.require("dojo.io");
+    dojo.require("dojo.parser");    
     dojo.require("dojox.xml.parser");
 </script>
 
