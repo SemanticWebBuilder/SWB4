@@ -25,8 +25,9 @@ package org.semanticwb.portal.community;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
@@ -170,6 +171,8 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             path = "/swbadmin/jsp/microsite/EventResource/eventEdit.jsp";
         } else if (action.equals("detail")) {
             path = "/swbadmin/jsp/microsite/EventResource/eventDetail.jsp";
+        } else if (action.equals("daily")) {
+            path = "/swbadmin/jsp/microsite/EventResource/eventDailyView.jsp";
         }
 
         RequestDispatcher dis = request.getRequestDispatcher(path);
@@ -181,13 +184,89 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         }
     }
 
-    public String renderCalendar(int year, int month, int day) {
-        Calendar thisMonth = new GregorianCalendar(year, month, 1);
-        Calendar nextMonth = new GregorianCalendar(year, month + 1, 1);
+    public Iterator<EventElement> listEventElementsByDate(Date date) {
+        ArrayList<EventElement> res = new ArrayList<EventElement>();
+        Iterator <EventElement> eit = listEvents();
+        while (eit.hasNext()) {
+            EventElement ev = eit.next();
+            //If event starts at, is carried out, or ends in date, add it to the list
+            if (ev.getStartDate().equals(date) || ev.getEndDate().equals(date)
+                    || (ev.getStartDate().after(date) && ev.getEndDate().before(date))) {
+                res.add(ev);
+            }
+        }
 
-        //Find out when this mont starts and ends
+        return res.iterator();
+    }
+
+    public String renderCalendar(Date current, SWBParamRequest paramRequest) {
+        StringBuffer sbf = new StringBuffer();
         
+        //If no date specified, get current date
+        if (current == null) current = new Date(System.currentTimeMillis());
+        
+        int day = current.getDate();
+        int month = current.getMonth();
+        int year = current.getYear();
 
-        return "";
+        String [] months = {"Enero", "Febrero", "Marzo", "Abril", 
+                            "Mayo", "Junio", "Julio", "Agosto",
+                            "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+
+        Date thisMonth = new Date(year, month, 1);
+        Date nextMonth = new Date(year, month + 1, 1);
+        
+        //Find out when this mont starts and ends
+        int firstWeekDay = thisMonth.getDay();
+        long daysInMonth = Math.round((nextMonth.getTime() - thisMonth.getTime()) / (1000 * 60 * 60 * 24));
+
+        sbf.append("<table class=\"calendar\">\n" +
+                "  <tr>\n" +
+                "    <td class=\"calendar-head\" colspan=\"7\">" +
+                months[month] + " " + year +
+                "</td>\n  </tr>\n" +
+                "  <tr>\n");
+
+        //Fill the first week in the month with the appropiate day offset
+        for (int i = 0; i < firstWeekDay; i++) {
+            sbf.append("    <td class=\"calendar-empty\"> </td>\n");
+        }
+
+        int weekDay = firstWeekDay;
+        for (int i = 1; i <= daysInMonth; i++) {
+            weekDay %= 7;
+            if (weekDay == 0) {
+                sbf.append("</tr><tr>");
+            }
+            
+            //Today?
+            if (day == i) {
+                //Are there events today?
+                if (listEventElementsByDate(new Date(year, month, i)).hasNext()) {
+                    SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "daily");
+                    viewUrl.setParameter("year", String.valueOf(year));
+                    viewUrl.setParameter("month", String.valueOf(month));
+                    viewUrl.setParameter("day", String.valueOf(day));
+                    sbf.append("    <td class=\"calendar-dated\" onclick=\"window.location='" + viewUrl + "';\">\n" +
+                            "<div class=\"calendar-daylabel\">" + i + "</div>\n" +
+                            "    </td>\n");
+                }  else {
+                    //There aren't events today
+                    sbf.append("    <td class=\"calendar-today\" >\n" +
+                            "<div class=\"calendar-daylabel\">" + i + "</div>\n" +
+                            "    </td>\n");
+                }
+            } else {
+                //Not today
+                sbf.append("    <td class=\"calendar-day\" >\n" +
+                            "<div class=\"calendar-daylabel\">" + i + "</div>\n" +
+                            "    </td>\n");
+            }
+            weekDay++;
+        }
+        sbf.append("  </tr>\n" +
+                "</table>");
+
+        return sbf.toString();
     }
 }
