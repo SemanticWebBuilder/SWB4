@@ -86,6 +86,32 @@ public class SWBFormMgr
     private HashMap<PropertyGroup, TreeSet> groups=null;
 
     private boolean submitByAjax=false;
+
+    public static String DOJO_REQUIRED=
+        "    <script type=\"text/javascript\">"+"\n"+
+        "      // scan page for widgets and instantiate them"+"\n"+
+        "      dojo.require(\"dojo.parser\");"+"\n"+
+        "      dojo.require(\"dijit._Calendar\");"+"\n"+
+        "      dojo.require(\"dijit.ProgressBar\");"+"\n"+
+        ""+"\n"+
+        "      // editor:"+"\n"+
+        "      dojo.require(\"dijit.Editor\");"+"\n"+
+        ""+"\n"+
+        "      // various Form elemetns"+"\n"+
+        "      dojo.require(\"dijit.form.Form\");"+"\n"+
+        "      dojo.require(\"dijit.form.CheckBox\");"+"\n"+
+        "      dojo.require(\"dijit.form.Textarea\");"+"\n"+
+        "      dojo.require(\"dijit.form.FilteringSelect\");"+"\n"+
+        "      dojo.require(\"dijit.form.TextBox\");"+"\n"+
+        "      dojo.require(\"dijit.form.DateTextBox\");"+"\n"+
+        "      dojo.require(\"dijit.form.TimeTextBox\");"+"\n"+
+        "      dojo.require(\"dijit.form.Button\");"+"\n"+
+        "      dojo.require(\"dijit.form.NumberSpinner\");"+"\n"+
+        "      dojo.require(\"dijit.form.Slider\");"+"\n"+
+        "      dojo.require(\"dojox.form.BusyButton\");"+"\n"+
+        "      dojo.require(\"dojox.form.TimeSpinner\");"+"\n"+
+        "    </script>"+"\n";
+
     
     public SWBFormMgr(SemanticObject obj, String frmview, String mode)
     {
@@ -256,6 +282,8 @@ public class SWBFormMgr
         if(m_onsubmit!=null)onsubmit=" onsubmit=\""+m_onsubmit+"\"";
         //si es dojo por default se manda por ajax
         if(m_onsubmit==null && submitByAjax)onsubmit="  onsubmit=\"submitForm('"+frmname+"');return false;\"";
+
+        if(DOJO)ret.append(DOJO_REQUIRED);
 
         if(DOJO)ret.append("<form id=\""+frmname+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""+m_action+"\""+onsubmit+" method=\""+m_method.toLowerCase()+"\">\n");
         else ret.append("<form id=\""+frmname+"\" class=\"swbform\" action=\""+m_action+"\""+onsubmit+" method=\""+m_method.toLowerCase()+"\">\n");
