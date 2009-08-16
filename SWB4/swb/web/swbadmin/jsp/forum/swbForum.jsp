@@ -79,10 +79,12 @@
                 String userCreated = "";
                 String threadCreator = "";
                 User userThread = null;
+                String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
                 if (thread.getCreator() != null) {
                     userThread = thread.getCreator();
                     userCreated = "" + userThread.getCreated();
                     threadCreator = userThread.getName();
+                    if(userThread.getPhoto()!=null) photo=userThread.getPhoto();
                 }
                 %>
                 <!-- start topic.thtml -->
@@ -140,14 +142,9 @@
 
                         </div>
                         <div>
-
-                            <div style="padding-top:3px;"><br>EStatus: offline</div>
-                            <p />
+                            <img src="<%=photo%>" valign="top" width="80" height="80"/><br>
                             Registrado: <%=userCreated%>
-                            <br>
-                            Mensajes: 5<br>
-
-                        </div>
+                         </div>
                         <div style="background:transparent; width:110px; height:1px;"></div>
                     </td>
                     <td width="100%" style="vertical-align:top; padding:6px;" class="pluginRow1">
@@ -274,16 +271,13 @@
                 <tr class="<%=rowClass%>">
                     <td style="vertical-align:top; padding:6px;" nowrap>
                         <div>
-                            <IMG src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/rank3.gif" ALT="Forum - Usuario regular" TITLE="Forum - Usuario regular"><br>
-                            - Usuario regular
-                        </div>
-                        <div>
 
-                            <div style="padding-top:3px;"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/ascariote.jpg" alt="" class="userphoto"><br>EStatus: offline</div>
+                            <div style="padding-top:3px;">
+                                <img src="<%=photo%>" valign="top" width="80" height="80"/><br>
+                            </div>
                             <p />
                             Registrado: <%=postCreated%><br>
-                            Mensajes: 90<br>
-
+                     
                         </div>
                         <div style="background:transparent; width:110px; height:1px;"></div>
                     </td>
@@ -504,7 +498,7 @@
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
                     Post post = Post.getPost(semObject.getId(), paramRequest.getWebPage().getWebSite());
             %>
-            <table width="100%">
+            <table border="0" cellspacing="1" cellpadding="2" width="100%">
                 <tr><td>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pluginCellTitle alignleft">
                             <tr>
@@ -663,28 +657,16 @@
                     <tr>
                         <td>
                             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="pluginCellTitle alignleft">
-                                <tr>
-                                    <td class="pluginBreadCrumbs alignleft" style="padding-left:5px;" nowrap><div class="pagenav">Primero | Anterior | <b>1</b> <a href="">2</a> | <a href="">Siguiente</a> | <a href="">Ultimo</a></div></td>
-                                    <td width="80%" class="pluginBreadCrumbs alignright" style="padding-right:5px;" nowrap>&nbsp;<!-- start subscribe_forum.thtml -->
-
-                                        <a href=""><%=paramRequest.getLocaleString("track")%></a>
-                                        <!--   Alternative layout to use Images -->
-<!--
-<a href="http://www.linuxparatodos.net/portal/forum/index.php?op=subscribe&amp;forum=27"><img src="http://www.linuxparatodos.net/portal/layout/FactorEvolucion2008/forum/image_set/forumnotify_on.gif" border="0" align="absmiddle" alt="Track this forum" TITLE="Track this forum"></a>
--->
-
-                                    <!-- end subscribe_forum.thtml --></td>
-                                </tr>
                             </table>
                             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="alignleft">
                                 <tr>
                                     <td>
                                         <table width="100%" border="0" cellspacing="1" cellpadding="2" class="pluginSolidOutline">
                                             <tr>
-                                                <td colspan="2" class="aligncenter pluginCellSubTitle">&nbsp;   &nbsp;<%=paramRequest.getLocaleString("thread")%><br><a href=""><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/asc.gif" border="0"></a>&nbsp;<a href=""><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/desc.gif" border="0"></a></td>
-                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("views")%><br><a href="index.php?forum=27&amp;order=0&amp;sort=2"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/asc.gif" border="0"></a>&nbsp;<a href="index.php?forum=27&amp;order=1&amp;sort=2"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/desc.gif" border="0"></a></td>
-                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("replies")%><br><a href="index.php?forum=27&amp;order=0&amp;sort=3"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/asc.gif" border="0"></a>&nbsp;<a href="index.php?forum=27&amp;order=1&amp;sort=3"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/desc.gif" border="0"></a></td>
-                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("lastMsg")%><br><a href="index.php?forum=27&amp;order=0&amp;sort=5"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/asc.gif" border="0"></a>&nbsp;<a href="index.php?forum=27&amp;order=1&amp;sort=5"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/desc_on.gif" border="0"></a></td>
+                                                <td colspan="2" class="aligncenter pluginCellSubTitle">&nbsp;   &nbsp;<%=paramRequest.getLocaleString("thread")%></td>
+                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("views")%></td>
+                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("replies")%></td>
+                                                <td class="aligncenter pluginCellSubTitle"><%=paramRequest.getLocaleString("lastMsg")%></td>
                                             </tr>
                                             <%
                 String autor = "";
@@ -703,7 +685,7 @@
                                             %>
                                             <tr class="pluginRollOut" onMouseOver="className='pluginRollOver';" onMouseOut="className='pluginRollOut pluginLinks';">
                                                 <td width="25" class="aligncenter pluginCol"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/newposts.png" border="0" align="absmiddle" alt="<%=paramRequest.getLocaleString("replyPost")%>" TITLE="P<%=paramRequest.getLocaleString("replyPost")%>">
-                                                <td width="65%" onMouseOver="this.style.cursor='pointer';" onclick="window.location.href='<%=url.toString()%>'">
+                                                <td width="200" onMouseOver="this.style.cursor='pointer';" onclick="window.location.href='<%=url.toString()%>'">
                                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                         <tr class="pluginLinks">
                                                             <td nowrap width="50%"><a class="tooltip" style="text-decoration:none;" href="<%=url.toString()%>"><%=thread.getTitle()%><span style="left:50px;"><b>Started by:<%=autor%>, <%=thread.getCreated()%>&nbsp;</b><br /><%=thread.getBody()%>
@@ -714,13 +696,13 @@
                                                 </td>
                                                 <td class="aligncenter pluginCol" width="45" nowrap><%=thread.getViewCount()%></td>
                                                 <td class="aligncenter pluginCol" width="45" nowrap><%=thread.getReplyCount()%></td>
-                                                <td width="25%" onMouseOver="this.style.cursor='pointer';" onclick="window.location.href='<%=url.toString()%>'" TITLE="Click to go directly to last post">
+                                                <td onMouseOver="this.style.cursor='pointer';" onclick="window.location.href='<%=url.toString()%>'" TITLE="Click to go directly to last post">
                                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                         <tr>
                                                             <td nowrap style="padding-left:2px;" class="pluginLinks">By:<%=autor%></td>
                                                         </tr>
                                                         <tr>
-                                                            <td style="padding-left:2px" class="pluginLinks"><%=thread.getCreated()%>&nbsp;</td>
+                                                            <td nowrap style="padding-left:2px" class="pluginLinks"><%=thread.getCreated()%>&nbsp;</td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -735,10 +717,7 @@
                             </table>
                         </td>
                     </tr>
-
                 </table>
-
-
             </form>
             <%
             }
