@@ -7,14 +7,24 @@
 <%@page import="org.semanticwb.SWBPlatform"%>
 
      <%
-        User user=paramRequest.getUser();
+        User owner=paramRequest.getUser();
+        User user=owner;
         if(request.getParameter("user")!=null) 
         {
             SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
             user=(User)semObj.createGenericInstance();
         }
         WebPage wpage=paramRequest.getWebPage();
-        if(user!=null && user.isRegistered()){
+        if(!owner.isRegistered() || !user.isRegistered()) return;
+
+        if(paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
+        {
+          if(!owner.getURI().equals(user.getURI())){ //Si el usuario que esta en session(owner) es diferente que el que vino por parametro (user)
+              %>
+                <a href="<%=wpage.getUrl()%>?remFriendRelship=<%=user.getEncodedURI()%>&user=<%=owner.getEncodedURI()%>">Eliminar como amigo</a>
+              <%
+          }
+        }else {
          String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
          if(user.getPhoto()!=null) photo=user.getPhoto();
          String userFirstName="", userLastName="", secondName="";
@@ -41,6 +51,24 @@
      </table>
 
      <%
+      }
+      if(request.getParameter("remFriendRelship")!=null)
+      {
+         SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("remFriendRelship"));
+         User user2rem=(User)semObj.createGenericInstance();
+
+         Iterator<Friendship> itMyFriends=Friendship.listFriendshipByFriend(owner,wpage.getWebSite());
+         while(itMyFriends.hasNext()){
+             Friendship friendShip=itMyFriends.next();
+             Iterator<User> itfriendUser=friendShip.listFriends();
+             while(itfriendUser.hasNext()){
+                 User friendUser=itfriendUser.next();
+                 if(friendUser.getURI().equals(user2rem.getURI()))
+                 {
+                     friendShip.remove();
+                 }
+              }
+          }
       }
      %>
 
