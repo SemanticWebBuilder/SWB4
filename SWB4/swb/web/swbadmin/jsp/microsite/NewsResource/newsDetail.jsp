@@ -29,8 +29,11 @@
 <%
             }
 %>
+<%
+rec.renderGenericElements(request, out, paramRequest);
+%>
 <center>
     <a href="<%=paramRequest.getRenderUrl()%>">Regresar</a>
     <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", rec.getURI())%>">Editar Información</a><%}%>
-    <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", rec.getURI())%>">Eliminar Evento</a><%}%>
+    <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", rec.getURI())%>">Eliminar Noticia</a><%}%>
 </center>
