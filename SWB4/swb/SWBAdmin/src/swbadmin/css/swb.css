@@ -434,8 +434,9 @@ _form.swbform fieldset li {
 	font-size: 11px;
 }
 
-.WBWikiTextbox{
+#WBWikiTextbox{
     width: 100%;
+    height: 300px;
 }
 
 /*------------------- select tree  ----*/
