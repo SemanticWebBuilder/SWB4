@@ -5,7 +5,6 @@
 package org.semanticwb.portal.community;
 
 import java.io.IOException;
-import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
