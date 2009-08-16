@@ -43,19 +43,16 @@ public class MyFriendRequest extends GenericResource {
         User owner=response.getUser();
         WebSite website=response.getWebPage().getWebSite();
         String action = response.getAction();
-        System.out.println("entra a MyFriendRequest/processAction");
-
+        
         if(action.equals("removeRequest")){
             try{
-                System.out.println("entra a MyFriendRequest/processAction-2");
                 String user = request.getParameter("user");
                 SemanticObject semObj = SemanticObject.createSemanticObject(user);
                 User user2Friend = (User) semObj.createGenericInstance();
 
-                System.out.println(FriendshipProspect.removeFriendshipProspectByRequester(owner, user2Friend, website));
+                FriendshipProspect.removeFriendshipProspectByRequester(owner, user2Friend, website);
             }catch(Exception e){
                 log.error(e);
-                e.printStackTrace();
             }
         }
     }
