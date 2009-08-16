@@ -12,6 +12,7 @@
     WebPage wpage=paramRequest.getWebPage();
     Member member=Member.getMember(user,wpage);
     PostElement post=(PostElement)request.getAttribute("post");
+    post.incViews();
     String defaultFormat = "dd 'de' MMMM 'del' yyyy";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
     String updated = iso8601dateFormat.format(post.getUpdated());
