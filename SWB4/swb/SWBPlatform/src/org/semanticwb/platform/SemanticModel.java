@@ -131,6 +131,11 @@ public class SemanticModel
     {
         return m_model;
     }
+
+    public OntModel getRDFOntModel()
+    {
+        return m_ont;
+    }
     
 //    public SemanticClass getSemanticObjectClass(Resource res)
 //    {
