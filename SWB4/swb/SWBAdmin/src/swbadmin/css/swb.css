@@ -434,7 +434,9 @@ _form.swbform fieldset li {
 	font-size: 11px;
 }
 
-
+.WBWikiTextbox{
+    width: 100%;
+}
 
 /*------------------- select tree  ----*/
 div.sitesectiontree a.treeres:link {
