@@ -220,23 +220,26 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         int firstWeekDay = thisMonth.getDay();
         long daysInMonth = Math.round((nextMonth.getTime() - thisMonth.getTime()) / (1000 * 60 * 60 * 24));
 
-        sbf.append("<table class=\"calendar\">\n" +
-                "  <tr>\n" +
-                "    <td class=\"calendar-head\" colspan=\"7\">" +
+        sbf.append("<div class=\"calendar\">\n" +
+                "  <table>\n" +
+                "    <tr>\n" +
+                "      <td class=\"head\" colspan=\"7\">" +
                 months[month] + " " + year +
-                "</td>\n  </tr>\n" +
-                "  <tr>\n");
+                "</td>\n" +
+                "    </tr>\n" +
+                "    <tr>\n");
 
         //Fill the first week in the month with the appropiate day offset
         for (int i = 0; i < firstWeekDay; i++) {
-            sbf.append("    <td class=\"calendar-empty\"> </td>\n");
+            sbf.append("      <td class=\"empty\"> </td>\n");
         }
 
         int weekDay = firstWeekDay;
         for (int i = 1; i <= daysInMonth; i++) {
             weekDay %= 7;
             if (weekDay == 0) {
-                sbf.append("</tr><tr>");
+                sbf.append("    </tr>\n" +
+                        "    <tr>");
             }
             
             //Today?
@@ -247,25 +250,26 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                     viewUrl.setParameter("year", String.valueOf(year));
                     viewUrl.setParameter("month", String.valueOf(month));
                     viewUrl.setParameter("day", String.valueOf(day));
-                    sbf.append("    <td class=\"calendar-dated\" onclick=\"window.location='" + viewUrl + "';\">\n" +
-                            "<div class=\"calendar-daylabel\">" + i + "</div>\n" +
-                            "    </td>\n");
+                    sbf.append("      <td class=\"dated\" onclick=\"window.location='" + viewUrl + "';\">\n" +
+                            "<        div class=\"daylabel\">" + i + "</div>\n" +
+                            "      </td>\n");
                 }  else {
                     //There aren't events today
-                    sbf.append("    <td class=\"calendar-today\" >\n" +
-                            "<div class=\"calendar-daylabel\">" + i + "</div>\n" +
-                            "    </td>\n");
+                    sbf.append("      <td class=\"today\">\n" +
+                            "<div class=\"daylabel\">" + i + "</div>\n" +
+                            "      </td>\n");
                 }
             } else {
                 //Not today
-                sbf.append("    <td class=\"calendar-day\" >\n" +
-                            "<div class=\"calendar-daylabel\">" + i + "</div>\n" +
-                            "    </td>\n");
+                sbf.append("      <td class=\"day\" >\n" +
+                            "        <div class=\"daylabel\">" + i + "</div>\n" +
+                            "      </td>\n");
             }
             weekDay++;
         }
-        sbf.append("  </tr>\n" +
-                "</table>");
+        sbf.append("    </tr>\n" +
+                "  </table>\n" +
+                "</div>\n");
 
         return sbf.toString();
     }
