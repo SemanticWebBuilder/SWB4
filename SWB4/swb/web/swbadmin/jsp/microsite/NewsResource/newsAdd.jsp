@@ -25,6 +25,13 @@
                         <td>
                             <input dojoType="dijit.form.TextBox" type="text" id="new_title" name="new_title"/><br>
                         </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="center"><label for="new_image">Im&aacute;gen de la noticia&nbsp;<em>*</em></label></td>
+                        <td>
+                            <input dojoType="dijit.form.TextBox" type="text" id="new_image" name="new_image"/><br>
+                        </td>
+                    </tr>
                     <tr>
                         <td align="right" valign="center"><label for="new_author">Autor de la noticia&nbsp;<em>*</em></label></td>
                         <td>
@@ -34,13 +41,13 @@
                     <tr>
                         <td align="right" valign="center"><label for="new_abstract">Resumen de la noticia&nbsp;<em>*</em></label></td>
                         <td>
-                            <textarea type="text" style="width:200px" dojoType="dijit.form.Textarea" id="new_abstract" name="new_abstract"></textarea><br>
+                            <textarea style="width:244px" dojoType="dijit.form.Textarea" id="new_abstract" name="new_abstract"></textarea><br>
                         </td>
                     </tr>
                     <tr>
-                        <td align="right" valign="center"><label for="new_fulltext">Texto de la noticia&nbsp;<em>*</em></label></td>
+                        <td align="right" valign="center"><label for="new_fulltext">Texto completo&nbsp;<em>*</em></label></td>
                         <td>
-                            <input dojoType="dijit.form.Textarea" type="text" id="new_fulltext" name="new_fulltext" /><br>
+                            <input style="width:244px" dojoType="dijit.form.Textarea" id="new_fulltext" name="new_fulltext" /><br>
                         </td>
                     </tr>                    
                     <tr>
