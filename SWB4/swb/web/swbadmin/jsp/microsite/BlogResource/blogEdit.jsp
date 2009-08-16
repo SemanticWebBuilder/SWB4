@@ -1,5 +1,20 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+
+<script type="text/javascript">
+                    dojo.require("dojox.layout.FloatingPane");
+                    dojo.require("dijit.form.Button");
+                    dojo.require("dijit.form.TextBox");
+
+                    dojo.require("dijit.Editor");
+                    dojo.require("dijit._editor.plugins.LinkDialog");
+                    dojo.require("dijit._editor.plugins.FontChoice");
+                    dojo.require("dijit._editor.plugins.TextColor");
+                    dojo.require("dojo.parser");
+                    dojo.require("dojo.io");
+                    dojo.require("dojox.xml.parser");
+                </script>
+
 <%
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
@@ -28,7 +43,7 @@
                         <p>
                             <label for="title">Título</label><input id="title" name="title" value="<%=post.getTitle()%>"><br>
                             <label for="description">Contenido de entrada</label>                            
-                            <textarea id="description" rows="5" cols="23" name="description"><%=post.getDescription()%></textarea>
+                            <textarea plugins="['bold','italic','underline', 'strikethrough','|','insertUnorderedList','insertOrderedList','|','createLink','unlink']" dojoType="dijit.Editor" id="description" rows="5" cols="23" name="description"><%=post.getDescription()%></textarea>
                         </p>
                     </div>
                 </fieldset>
