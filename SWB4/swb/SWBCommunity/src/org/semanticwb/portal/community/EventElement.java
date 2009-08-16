@@ -25,6 +25,8 @@ package org.semanticwb.portal.community;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 
 public class EventElement extends org.semanticwb.portal.community.base.EventElementBase 
@@ -39,12 +41,15 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
         Iterator<EventElement> eit = listEventElements();
         while (eit.hasNext()) {
             EventElement ev = eit.next();
+            //System.out.println(">>>>Evento " + ev.getTitle() + " - " + ev.getStartDate());
             //If event starts at, is carried out, or ends in date, add it to the list
-            if (ev.getStartDate().equals(date) || ev.getEndDate().equals(date)
-                    || (ev.getStartDate().after(date) && ev.getEndDate().before(date))) {
+            if (ev.getStartDate().compareTo(date) == 0 || ev.getEndDate().compareTo(date) == 0) {
+                System.out.println("Agregando " + ev.getTitle());
                 res.add(ev);
             }
         }
         return res.iterator();
     }
+
+
 }
