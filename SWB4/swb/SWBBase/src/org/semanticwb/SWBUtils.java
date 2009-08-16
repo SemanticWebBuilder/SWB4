@@ -749,6 +749,145 @@ public class SWBUtils {
             return ret;
         }
 
+        public static String getTimeAgo(Date CreationDate, String lang)
+        {
+            return getTimeAgo(new Date(), CreationDate, lang);
+        }
+
+        public static String getTimeAgo(Date CurrentDate, Date CreationDate, String lang)
+        {
+            String ret="";
+            int second, secondCurrent, secondCreation, minute, minuteCurrent, minuteCreation, hour, hourCurrent, hourCreation;
+            int day, dayCurrent, dayCreation, month, monthCurrent, monthCreation, year, yearCurrent, yearCreation, dayMonth;
+
+            secondCurrent = CurrentDate.getSeconds();
+            secondCreation = CreationDate.getSeconds();
+            minuteCurrent = CurrentDate.getMinutes();
+            minuteCreation = CreationDate.getMinutes();
+            hourCurrent = CurrentDate.getHours();
+            hourCreation = CreationDate.getHours();
+            dayCurrent = CurrentDate.getDay();
+            dayCreation = CreationDate.getDay();
+            monthCurrent = CurrentDate.getMonth();
+            monthCreation = CreationDate.getMonth();
+            yearCurrent = CurrentDate.getYear();
+            yearCreation = CreationDate.getYear();
+
+            boolean leapYear = (yearCurrent % 4 == 0) && (yearCurrent % 100 != 0 || yearCurrent % 400 == 0);
+            dayMonth = 0;
+            day = 0;
+            switch (monthCreation) {
+                case 0:
+                    dayMonth = 31;
+                    break;
+                case 1:
+                    if (leapYear) {
+                        dayMonth = 29;
+                    } else {
+                        dayMonth = 28;
+                    }
+                    break;
+                case 2:
+                    dayMonth = 31;
+                    break;
+                case 3:
+                    dayMonth = 30;
+                    break;
+                case 4:
+                    dayMonth = 31;
+                    break;
+                case 5:
+                    dayMonth = 30;
+                    break;
+                case 6:
+                    dayMonth = 31;
+                    break;
+                case 7:
+                    dayMonth = 31;
+                    break;
+                case 8:
+                    dayMonth = 30;
+                    break;
+                case 9:
+                    dayMonth = 31;
+                    break;
+                case 10:
+                    dayMonth = 30;
+                    break;
+                case 11:
+                    dayMonth = 31;
+                    break;
+            }
+            if (secondCurrent >= secondCreation) {
+                second = secondCurrent - secondCreation;
+            } else {
+                second = (60 - secondCreation) + secondCurrent;
+                minuteCurrent = minuteCurrent - 1;
+            }
+            if (minuteCurrent >= minuteCreation) {
+                minute = minuteCurrent - minuteCreation;
+            } else {
+                minute = (60 - minuteCreation) + minuteCurrent;
+                hourCurrent = hourCurrent - 1;
+            }
+            if (hourCurrent >= hourCreation) {
+                hour = hourCurrent - hourCreation;
+            } else {
+                hour = (24 - hourCreation) + hourCurrent;
+                dayCurrent = dayCurrent - 1;
+            }
+            if (leapYear) {
+                dayCurrent = dayCurrent + 1;
+            }
+            if (dayCurrent >= dayCreation) {
+                day = day + (dayCurrent - dayCreation);
+            } else {
+                day = day + ((dayMonth - dayCreation) + dayCurrent);
+                monthCurrent = monthCurrent - 1;
+            }
+            if (monthCurrent >= monthCreation) {
+                month = monthCurrent - monthCreation;
+            } else {
+                month = (12 - monthCreation) + monthCurrent;
+                yearCurrent = yearCurrent - 1;
+            }
+
+            year = yearCurrent - yearCreation;
+            if("en".equals(lang))
+            {
+                if (year > 0) {
+                    ret=(year + " years ago");
+                } else if (month > 0) {
+                    ret=(month + " month ago");
+                } else if (day > 0) {
+                    ret=(day + " days ago");
+                } else if (hour > 0) {
+                    ret=(hour + " hours ago");
+                } else if (minute > 0) {
+                    ret=(minute + " minutes ago");
+                } else {
+                    ret=(second + " second ago");
+                }
+            }else
+            {
+                if (year > 0) {
+                    ret=(year + " año(s) atrás");
+                } else if (month > 0) {
+                    ret=(month + " mese(s) atrás");
+                } else if (day > 0) {
+                    ret=(day + " día(s) atrás");
+                } else if (hour > 0) {
+                    ret=(hour + " hora(s) atrás");
+                } else if (minute > 0) {
+                    ret=(minute + " minuto(s) atrás");
+                } else {
+                    ret=(second + " segundo(s) atrás");
+                }
+            }
+            return ret;
+        }
+
+
         private static String dateCeroComp(int num) {
             String ret = "" + num;
             if (ret.length() == 1) {
