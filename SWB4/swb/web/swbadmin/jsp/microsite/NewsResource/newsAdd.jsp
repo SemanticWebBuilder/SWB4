@@ -18,6 +18,8 @@
     <form class="swbform" method="post" action="<%=paramRequest.getActionUrl()%>">
         <div>
             <h3>Agregar noticia nueva</h3>
+        </div>
+        <div>
             <fieldset>
                 <table>
                     <tr>
