@@ -29,7 +29,7 @@
         <b><%=video.getTitle()%></b> <BR>
         <%=video.getDescription()%> <BR>
         <%=video.getCreator().getFullName()%> <BR>
-        <%=video.getCreated()%> <BR>
+        <%=SWBUtils.TEXT.getTimeAgo(video.getCreated(),user.getLanguage())%> <BR>
         <%=video.getRank()%> <BR>
         <!--</small></td><td valign="top"><small>-->
         <%=video.getViews()%> vistas<BR>
