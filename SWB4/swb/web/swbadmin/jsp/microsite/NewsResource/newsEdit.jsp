@@ -39,7 +39,7 @@ Error: Elemento no encontrado...
                     <tr>
                         <td align="right" valign="center"><label for="new_image">Imagen de la noticia&nbsp;<em>*</em></label></td>
                         <td>
-                            <input type="text" dojoType="dijit.form.TexBox" id="new_image" name="new_image" value="<%=(rec.getNewsPicture()==null?"":rec.getNewsPicture())%>"/><br>
+                            <input type="text" dojoType="dijit.form.TextBox" id="new_image" name="new_image" value="<%=(rec.getNewsPicture()==null?"":rec.getNewsPicture())%>"/><br>
                         </td>
                     </tr>
                     <tr>
@@ -51,13 +51,13 @@ Error: Elemento no encontrado...
                     <tr>
                         <td align="right" valign="center"><label for="new_abstract">Resumen&nbsp;<em>*</em></label></td>
                         <td>
-                            <textarea dojoType="dijit.form.Textarea" style="width:250px;" id="new_abstract" name="new_abstract"><%=(rec.getAbstr()==null?"":rec.getAbstr())%></textarea><br>
+                            <textarea dojoType="dijit.form.Textarea" style="width:244px" id="new_abstract" name="new_abstract"><%=(rec.getAbstr()==null?"":rec.getAbstr())%></textarea><br>
                         </td>
                     </tr>
                     <tr>
                         <td align="right" valign="center"><label for="new_fulltext">Texto completo&nbsp;<em>*</em></label></td>
                         <td>
-                            <textarea dojoType="dijit.form.Textarea" style="width:250px" id="new_fulltext" name="new_fulltext"><%=(rec.getFullText()==null?"":rec.getFullText())%></textarea><br>
+                            <textarea dojoType="dijit.form.Textarea" style="width:244px" id="new_fulltext" name="new_fulltext"><%=(rec.getFullText()==null?"":rec.getFullText())%></textarea><br>
                         </td>
                     </tr>
                     <tr>
