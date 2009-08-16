@@ -34,6 +34,6 @@
 %>        
 
 <%
-rec.renderGenericElements(request, out, rec, paramRequest);
+rec.renderGenericElements(request, out, paramRequest);
 %>
 <center><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></center>
