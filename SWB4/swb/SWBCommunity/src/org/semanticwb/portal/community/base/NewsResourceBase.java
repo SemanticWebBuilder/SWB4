@@ -43,13 +43,13 @@ public class NewsResourceBase extends org.semanticwb.portal.community.CommunityR
         getSemanticObject().removeObjectProperty(swbcomm_hasNews,newselement.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.NewsResource> listNewsResourceByNews(org.semanticwb.portal.community.NewsElement hasnews,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.NewsResource> listNewsResourceByHasNews(org.semanticwb.portal.community.NewsElement hasnews,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsResource> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasNews, hasnews.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.NewsResource> listNewsResourceByNews(org.semanticwb.portal.community.NewsElement hasnews)
+   public static java.util.Iterator<org.semanticwb.portal.community.NewsResource> listNewsResourceByHasNews(org.semanticwb.portal.community.NewsElement hasnews)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.NewsResource> it=new org.semanticwb.model.GenericIterator(hasnews.getSemanticObject().getModel().listSubjects(swbcomm_hasNews,hasnews.getSemanticObject()));
        return it;
