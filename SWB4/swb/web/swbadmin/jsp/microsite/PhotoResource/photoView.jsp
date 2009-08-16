@@ -114,6 +114,7 @@
 </td></tr>
 </table>
 <%
+    System.out.println(member);
     if(member.canAdd())
     {
 %>
