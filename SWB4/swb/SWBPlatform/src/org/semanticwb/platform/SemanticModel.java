@@ -30,6 +30,7 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -37,16 +38,20 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import java.io.File;
 import java.io.OutputStream;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.rdf.RemoteGraph;
 
@@ -57,6 +62,7 @@ import org.semanticwb.rdf.RemoteGraph;
 public class SemanticModel 
 {
     private Model m_model;
+    OntModel m_ont;
     private String m_name;
     private String m_nameSpace;
     private SemanticObject m_modelObject;
@@ -71,7 +77,18 @@ public class SemanticModel
 
     private void init()
     {
-        
+        m_ont=ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF);
+        //Load Ontology from file
+        String owls=SWBPlatform.getEnv("swb/ontologyFiles","/WEB-INF/owl/swb.owl");
+        StringTokenizer st=new StringTokenizer(owls,",;");
+        while(st.hasMoreTokens())
+        {
+            String file=st.nextToken();
+            String swbowl="file:"+SWBUtils.getApplicationPath()+file;
+            Model model=SWBPlatform.getSemanticMgr().loadRDFFileModel(swbowl);
+            m_ont.add(model);
+        }
+        m_ont.addSubModel(m_model,true);
     }
 
     /**
@@ -470,5 +487,16 @@ public class SemanticModel
         }
         return ret;
     }
+    
+    public QueryExecution sparQLOntologyQuery(String queryString)
+    {    
+        Query query = QueryFactory.create(queryString);
+        return QueryExecutionFactory.create(query, m_ont);
+    }
+
+
+
+
+    
 
 }
