@@ -34,7 +34,7 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
         super(base);
     }
 
-    public Iterator<EventElement> listEventElementsByDate(Date date) {
+    public static Iterator<EventElement> listEventElementsByDate(Date date) {
         ArrayList<EventElement> res = new ArrayList<EventElement>();
         Iterator<EventElement> eit = listEventElements();
         while (eit.hasNext()) {
