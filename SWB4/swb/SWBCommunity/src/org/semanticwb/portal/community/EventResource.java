@@ -25,6 +25,8 @@ package org.semanticwb.portal.community;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
@@ -39,7 +41,6 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
     private static Logger log = SWBUtils.getLogger(EventResource.class);
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-
 
     public EventResource() {
     }
@@ -150,7 +151,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
 
             //Add attendant member
             if (rec != null && rec.canModify(mem)) {
-                rec.addAttendant(mem);
+                rec.addAttendant(mem.getUser());
             }
         } else {
             super.processAction(request, response);
@@ -178,5 +179,15 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         } catch (Exception e) {
             log.error(e);
         }
+    }
+
+    public String renderCalendar(int year, int month, int day) {
+        Calendar thisMonth = new GregorianCalendar(year, month, 1);
+        Calendar nextMonth = new GregorianCalendar(year, month + 1, 1);
+
+        //Find out when this mont starts and ends
+        
+
+        return "";
     }
 }
