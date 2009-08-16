@@ -10,9 +10,9 @@
             Member member = Member.getMember(user, wpage);
 %>
 <%
-            //String defaultFormat = "dd 'de' MMMM  'del' yyyy";
-            //SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
-            String created = SWBUtils.TEXT.getTimeAgo(blog.getCreated(), user.getLanguage());//iso8601dateFormat.format(blog.getCreated());
+            String defaultFormat = "dd 'de' MMMM  'del' yyyy";
+            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
+            String created = iso8601dateFormat.format(blog.getCreated()); //SWBUtils.TEXT.(blog.getCreated(), user.getLanguage());//iso8601dateFormat.format(blog.getCreated());
             
             
             %>
