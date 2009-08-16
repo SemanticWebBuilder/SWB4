@@ -10,17 +10,10 @@
             Member member = Member.getMember(user, wpage);
 %>
 <%
-            String defaultFormat = "dd/MM/yyyy";
+            String defaultFormat = "dd 'de' MMMM  'del' yyyy";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
             String created = iso8601dateFormat.format(blog.getCreated());
-            if(member.canAdd())
-    {
-        %>
-        <center>
-            <a href="<%=paramRequest.getRenderUrl().setParameter("act","add")%>">Agregar Entrada</a>
-        </center>
-        <%
-    }
+            
             
             %>
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -100,7 +93,7 @@
                 </td>
               
                 <td>
-                    Escrito por: <%=postAuthor%> (<%=updated%>)
+                    Escrito por: <%=postAuthor%> el día <%=updated%>
                 </td>
             
                 
