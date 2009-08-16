@@ -24,7 +24,10 @@
                 <a href="<%=viewUrl%>"><%=anew.getTitle()%></a>(<%=anew.getCreated()%>)<BR>
                 Por:&nbsp;<b><%=(anew.getAuthor()==null?"":anew.getAuthor())%></b><BR>
                 <%=(anew.getAbstr()==null?"":anew.getAbstr())%><BR>
-                En:&nbsp;<b><%=(anew.getCitation()==null?"":anew.getCitation())%></b><BR>
+                En:&nbsp;<%=(anew.getCitation()==null?"":anew.getCitation())%><BR>
+                Enlace:&nbsp;<%=(anew.getFullText()==null?"":anew.getFullText())%><BR>
+                Puntuación:&nbsp;<%=anew.getRank()%><BR>
+                <%=anew.getViews()%> vistas.
             </td>
         </tr>
         <%
