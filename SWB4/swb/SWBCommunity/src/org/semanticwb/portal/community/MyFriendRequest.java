@@ -18,7 +18,6 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.community.util.CommUtil;
 
 /**
  *
@@ -53,7 +52,7 @@ public class MyFriendRequest extends GenericResource {
                 SemanticObject semObj = SemanticObject.createSemanticObject(user);
                 User user2Friend = (User) semObj.createGenericInstance();
 
-                System.out.println(new CommUtil().removeFriendshipProspectByRequester(owner, user2Friend, website));
+                System.out.println(FriendshipProspect.removeFriendshipProspectByRequester(owner, user2Friend, website));
             }catch(Exception e){
                 log.error(e);
                 e.printStackTrace();
