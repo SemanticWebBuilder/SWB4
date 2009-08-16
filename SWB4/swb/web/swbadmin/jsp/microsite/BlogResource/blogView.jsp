@@ -10,12 +10,26 @@
             Member member = Member.getMember(user, wpage);
 %>
 <%
-            String defaultFormat = "dd 'de' MMMM 'del' yyyy";
+            String defaultFormat = "dd/MM/yyyy";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
-            //String updatedBlog = iso8601dateFormat.format(blog.getUpdated());
-            %>            
-            <h1><%=blog.getTitle()%>
-            <%
+            String created = iso8601dateFormat.format(blog.getCreated());
+            if(member.canAdd())
+    {
+        %>
+        <center>
+            <a href="<%=paramRequest.getRenderUrl().setParameter("act","add")%>">Agregar Entrada</a>
+        </center>
+        <%
+    }
+            
+            %>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td>
+                        <h1><%=blog.getTitle()%></h1>
+                    </td>
+                    <td>
+                        <%
                 if(member.getAccessLevel()==member.LEVEL_OWNER)
                 {
                     SWBResourceURL url=paramRequest.getRenderUrl();
@@ -27,34 +41,39 @@
                     <%
                 }
             %>
-            </h1>            
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <%=created%>
+                    </td>
+                </tr>
+            </table>
+                    <hr>
+            
+            
+                  <table width="100%" cellpadding="2" cellspacing="2" border="0">
             <%
             Iterator<PostElement> posts = blog.listPostElements();
             while (posts.hasNext())
             {
                 PostElement post = posts.next();
                 String postAuthor = post.getCreator().getFirstName();
-                String updated = iso8601dateFormat.format(post.getUpdated());                
+                String updated = iso8601dateFormat.format(post.getUpdated());
+                SWBResourceURL url=paramRequest.getRenderUrl();
+                url.setParameter("act", "detail");
+                url.setParameter("uri", post.getURI());
+
+
                 %>
 
-                <table>
-                <tr>
-                    <%if(user.getPhoto()!=null)
-                    {
-                        %>
-                <td>
-                    <img src="<%=user.getPhoto()%>">
-                </td>
-                <%
-                   }
-                %>
-                <td>
-                    <%=postAuthor%>&nbsp;&nbsp;&nbsp;<%=updated%>
-                </td>
-                </tr>
-
-            </table>
-                <%
+                
+                    <tr>
+                    <td colspan="3">
+                        <a href="<%=url%>"><%=post.getTitle()%></a>
+                    </td>
+                    <td>
+                     <%
                     if (post.canModify(member) && post.getCreator().getLogin().equals(user.getLogin()))
                     {
                         SWBResourceURL sWBResourceURL=paramRequest.getRenderUrl();
@@ -67,14 +86,29 @@
                         <%
                     }
                 %>
-                </p>
-                <h3><%=post.getTitle()%></h3>
-                <h4><%=post.getDescription()%></h4>
-                <hr>
+                </td>
+                </tr>
+                <tr>                   
+                <td>
+                    <%if(user.getPhoto()!=null)
+                    {
+                        %>
+                    <img src="<%=user.getPhoto()%>">
+                      <%
+                   }
+                %>
+                </td>
+              
+                <td>
+                    Escrito por: <%=postAuthor%> (<%=updated%>)
+                </td>
+            
+                
+                
                 <%
             }
 %>
-
+</table>                                            
 <%
     if(member.canAdd())
     {
