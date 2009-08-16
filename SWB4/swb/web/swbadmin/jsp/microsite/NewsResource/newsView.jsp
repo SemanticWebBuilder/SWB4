@@ -7,7 +7,6 @@
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
 %>
 <h1>Noticias</h1>
 <table>
@@ -21,11 +20,10 @@
         %>
         <tr>
             <td>
-                <a href="<%=viewUrl%>"><%=anew.getTitle()%></a>(<%=anew.getCreated()%>)<BR>
+                <a href="<%=viewUrl%>"><%=anew.getTitle()%></a><%=(anew.getCitation()==null?"":"(" + anew.getCitation() + ")")%><BR>
                 Por:&nbsp;<b><%=(anew.getAuthor()==null?"":anew.getAuthor())%></b><BR>
-                <%=(anew.getAbstr()==null?"":anew.getAbstr())%><BR>
-                En:&nbsp;<%=(anew.getCitation()==null?"":anew.getCitation())%><BR>
-                Enlace:&nbsp;<%=(anew.getFullText()==null?"":anew.getFullText())%><BR>
+                <b><%=(anew.getCreated()==null?"":dateFormat.format(anew.getCreated()))%>.</b><%=(anew.getAbstr()==null?"":anew.getAbstr())%><BR>
+                Texto completo:&nbsp;<%=(anew.getFullText()==null?"":anew.getFullText())%><BR>
                 Puntuación:&nbsp;<%=anew.getRank()%><BR>
                 <%=anew.getViews()%> vistas.
             </td>
