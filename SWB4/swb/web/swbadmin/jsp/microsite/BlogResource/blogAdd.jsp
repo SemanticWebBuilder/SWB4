@@ -23,6 +23,15 @@
                 </p>
             </div>
         </fieldset>
+                    <fieldset>
+                        <legend><strong>¿Quién puede ver este video?</strong></legend>
+                        <ul class="options">
+                            <%String chk="checked=\"checked\"";%>
+                            <li><label><input type="radio" class="radio" name="level" value="0" /> Cualquiera</label></li>
+                            <li><label><input type="radio" class="radio" name="level" value="1" /> Sólo los miembros</label></li>
+                            <li><label><input type="radio" class="radio" name="level" value="3" /> Sólo yo</label></li>
+                        </ul>
+                    </fieldset>
         <p class="pad5 last-child clear right">
             <strong><input type="submit" value="Guardar cambios" class="button"/></strong>
             <a class="button" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>

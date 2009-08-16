@@ -67,7 +67,7 @@
                     </td>
                     <td>
                      <%
-                    if (post.canModify(member) && post.getCreator().getLogin().equals(user.getLogin()))
+                    if (post.canModify(member))
                     {
                         SWBResourceURL sWBResourceURL=paramRequest.getRenderUrl();
                         sWBResourceURL.setParameter("act", "edit");
