@@ -14,7 +14,7 @@
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
-                <foreign-project>DragDrop</foreign-project>
+                <foreign-project>SWBAplBar</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -22,7 +22,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>EditFilters</foreign-project>
+                <foreign-project>SWBAplCommons</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -30,7 +30,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>GenericTree</foreign-project>
+                <foreign-project>SWBAplDragDrop</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -38,7 +38,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>Modeler</foreign-project>
+                <foreign-project>SWBAplEditFilters</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -46,7 +46,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>Rules</foreign-project>
+                <foreign-project>SWBAplFilterSection</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -54,7 +54,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>WBABar</foreign-project>
+                <foreign-project>SWBAplFtp</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -62,7 +62,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>WBCommons</foreign-project>
+                <foreign-project>SWBAplGenericTree</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -70,7 +70,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>WBGraph</foreign-project>
+                <foreign-project>SWBAplGraph</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -78,7 +78,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>WorkFlowAdmin</foreign-project>
+                <foreign-project>SWBAplHtmlEditor</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -86,7 +86,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>filterSection</foreign-project>
+                <foreign-project>SWBAplModeler</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -94,7 +94,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>ftp</foreign-project>
+                <foreign-project>SWBAplRules</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
@@ -102,7 +102,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>htmleditor</foreign-project>
+                <foreign-project>SWBAplWorkFlowAdmin</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>

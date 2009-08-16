@@ -337,18 +337,18 @@ is divided into following sections:
                 ===================
             -->
     <target depends="init" name="deps-jar" unless="no.deps">
-        <ant antfile="${project.DragDrop}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.EditFilters}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.GenericTree}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.Modeler}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.Rules}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.WBABar}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.WBCommons}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.WBGraph}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.WorkFlowAdmin}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.filterSection}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.ftp}/build.xml" inheritall="false" target="jar"/>
-        <ant antfile="${project.htmleditor}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplBar}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplCommons}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplDragDrop}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplEditFilters}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplFilterSection}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplFtp}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplGenericTree}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplGraph}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplHtmlEditor}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplModeler}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplRules}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.SWBAplWorkFlowAdmin}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init,-check-automatic-build,-clean-after-automatic-build" name="-verify-automatic-build"/>
     <target depends="init" name="-check-automatic-build">
@@ -701,18 +701,18 @@ is divided into following sections:
                 ===============
             -->
     <target depends="init" name="deps-clean" unless="no.deps">
-        <ant antfile="${project.DragDrop}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.EditFilters}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.GenericTree}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.Modeler}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.Rules}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.WBABar}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.WBCommons}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.WBGraph}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.WorkFlowAdmin}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.filterSection}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.ftp}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.htmleditor}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplBar}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplCommons}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplDragDrop}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplEditFilters}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplFilterSection}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplFtp}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplGenericTree}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplGraph}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplHtmlEditor}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplModeler}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplRules}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBAplWorkFlowAdmin}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="-do-clean">
         <delete dir="${build.dir}"/>
