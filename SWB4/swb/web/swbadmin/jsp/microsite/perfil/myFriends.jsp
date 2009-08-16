@@ -5,8 +5,10 @@
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
+<%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 
      <%
+        SWBResourceURL urlAction=paramRequest.getActionUrl();
         User user=paramRequest.getUser();
         if(request.getParameter("user")!=null) 
         {
@@ -47,14 +49,16 @@
                          cont++;
                          contTot++;
                          %>
-                         <td align="right">
+                         <td align="center">
                             <a href="<%=wpage.getParent().getUrl()%>?user=<%=friendUser.getEncodedURI()%>"><img src="<%=photo%>" <%=imgSize%> title="<%=firstName%> <%=lastName%>">
                             <%if(!isStrategy){%>
                                 <br>
                                 <%=firstName%>
                                 <%=lastName%>
                             <%}%>
-                            </a>
+                            </a><br>
+                            <%urlAction.setAction("removeFriend");urlAction.setParameter("user", friendUser.getURI());%>
+                            <a href="<%=urlAction%>">Elimir amistad</a>
                          </td>
                          <%
                          if(cont==4) {
