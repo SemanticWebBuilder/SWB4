@@ -22,11 +22,29 @@
 **/
 package org.semanticwb.portal.community;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+
 
 public class EventElement extends org.semanticwb.portal.community.base.EventElementBase 
 {
     public EventElement(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public Iterator<EventElement> listEventElementsByDate(Date date) {
+        ArrayList<EventElement> res = new ArrayList<EventElement>();
+        Iterator<EventElement> eit = listEventElements();
+        while (eit.hasNext()) {
+            EventElement ev = eit.next();
+            //If event starts at, is carried out, or ends in date, add it to the list
+            if (ev.getStartDate().equals(date) || ev.getEndDate().equals(date)
+                    || (ev.getStartDate().after(date) && ev.getEndDate().before(date))) {
+                res.add(ev);
+            }
+        }
+        return res.iterator();
     }
 }
