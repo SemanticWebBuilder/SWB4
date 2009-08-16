@@ -14,10 +14,13 @@
         {
 %>
     <div>
-      <table border="0" width="100%" cellspacing="10">
+      <table border="0">
         <tr><td valign="top">
         <%=rec.getCode()%>
-        </td><td valign="top"><small>
+            </td><td valign="top" align="left">
+        <%if(rec.canModify(member)){%><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",rec.getURI())%>">Editar Información</a><BR/><%}%>
+        <%if(rec.canModify(member)){%><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",rec.getURI())%>">Eliminar Video</a><BR/><%}%>
+        <small>
         <%=rec.getTitle()%> <BR>
         <%=rec.getDescription()%> <BR>
         <%=rec.getCreated()%> <BR>
@@ -30,11 +33,7 @@
         }
 %>        
 
-<center>
-    <a href="<%=paramRequest.getRenderUrl()%>">Regresar</a>
-    <%if(rec.canModify(member)){%><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",rec.getURI())%>">Editar Información</a><%}%>
-    <%if(rec.canModify(member)){%><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",rec.getURI())%>">Eliminar Video</a><%}%>
-</center>
 <%
 rec.renderGenericElements(request, out, rec, paramRequest);
 %>
+<center><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></center>
