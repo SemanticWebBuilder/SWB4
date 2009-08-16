@@ -25,6 +25,12 @@ public class FriendshipBase extends org.semanticwb.portal.community.UserRelation
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Friendship>(it, true);
     }
 
+    public static org.semanticwb.portal.community.Friendship createFriendship(org.semanticwb.model.SWBModel model)
+    {
+        long id=model.getSemanticObject().getModel().getCounter(sclass);
+        return org.semanticwb.portal.community.Friendship.createFriendship(String.valueOf(id), model);
+    }
+
     public static org.semanticwb.portal.community.Friendship getFriendship(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.portal.community.Friendship)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
