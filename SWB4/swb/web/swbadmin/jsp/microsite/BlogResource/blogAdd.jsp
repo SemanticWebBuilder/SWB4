@@ -8,6 +8,7 @@
     
 %>
 <form method="post" action="<%=paramRequest.getActionUrl()%>">
+    <input type="hidden" name="act" value="<%=request.getParameter("act")%>">
     <div>
         <h3>Agregar una nueva entrada al Blog</h3>
     </div>
@@ -15,9 +16,8 @@
         <fieldset><legend></legend>
             <div>
                 <p>
-                    <label for="title">Título</label><br/>
-                    <label for="description">Contenido de entrada</label><br/>
-                    <input id="title" name="title" value="">
+                    <label for="title">Título</label><input id="title" name="title" value=""><br>
+                    <label for="description">Contenido de entrada</label>                    
                     <textarea id="description" style="width: 98%" rows="5" cols="23" name="description"></textarea>
                 </p>
             </div>
