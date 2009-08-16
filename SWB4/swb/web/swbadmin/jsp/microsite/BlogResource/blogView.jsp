@@ -10,9 +10,9 @@
             Member member = Member.getMember(user, wpage);
 %>
 <%
-            String defaultFormat = "dd 'de' MMMM  'del' yyyy";
-            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
-            String created = iso8601dateFormat.format(blog.getCreated());
+            //String defaultFormat = "dd 'de' MMMM  'del' yyyy";
+            //SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
+            String created = SWBUtils.TEXT.getTimeAgo(blog.getCreated(), user.getLanguage());//iso8601dateFormat.format(blog.getCreated());
             
             
             %>
@@ -52,7 +52,7 @@
             {
                 PostElement post = posts.next();
                 String postAuthor = post.getCreator().getFirstName();
-                String updated = iso8601dateFormat.format(post.getUpdated());
+                String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());//iso8601dateFormat.format(post.getUpdated());
                 SWBResourceURL url=paramRequest.getRenderUrl();
                 url.setParameter("act", "detail");
                 url.setParameter("uri", post.getURI());
@@ -93,7 +93,7 @@
                 </td>
               
                 <td>
-                    Escrito por: <%=postAuthor%> el día <%=updated%>
+                    Escrito por: <%=postAuthor%>, <%=updated%>
                 </td>
             
                 
