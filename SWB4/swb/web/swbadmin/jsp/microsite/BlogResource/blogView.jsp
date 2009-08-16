@@ -5,6 +5,8 @@
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             Blog blog = (Blog) request.getAttribute("blog");
+            if(blog!=null)
+                {
             Member member = Member.getMember(user, wpage);
 %>
 <%
@@ -15,16 +17,16 @@
             <p><%=updatedBlog%></p>
             <h1><%=blog.getTitle()%></h1>
             <%
-                if(member.getAccessLevel()==member.LEVEL_OWNER)
-                    {
+                //if(member.getAccessLevel()==member.LEVEL_OWNER)
+                //    {
                     SWBResourceURL url=paramRequest.getRenderUrl();
                     url.setParameter("act", "edit");
                     url.setParameter("uri", blog.getURI());
                     url.setParameter("mode", "editblog");
                     %>
-                    &nbsp;&nbsp;&nbsp;<a href="<%=url%>Editar</a>
+                    &nbsp;&nbsp;&nbsp;<a href="<%=url%>">Editar</a>
                     <%
-                    }
+                //}
             %>
 
             <h2><%=blog.getDescription()%></h2>
@@ -40,7 +42,7 @@
                 <table>
                 <tr>
                 <td>
-                    <img src="<%=member.getUser().getPhoto()%>">
+                    <img src="<%=user.getPhoto()%>">
                 </td>
                 <td>
                     <%=postAuthor%>&nbsp;&nbsp;&nbsp;<%=updated%>
@@ -51,12 +53,12 @@
                 <%
                     if (post.canModify(member) && post.getCreator().getLogin().equals(user.getLogin()))
                     {
-                        SWBResourceURL url=paramRequest.getRenderUrl();
-                        url.setParameter("act", "edit");
-                        url.setParameter("uri",post.getURI());
-                        url.setParameter("mode","editpost");
+                        SWBResourceURL sWBResourceURL=paramRequest.getRenderUrl();
+                        sWBResourceURL.setParameter("act", "edit");
+                        sWBResourceURL.setParameter("uri",post.getURI());
+                        sWBResourceURL.setParameter("mode","editpost");
                         %>
-                        &nbsp;&nbsp;&nbsp;<a href="<%=url%>">Editar</a>
+                        &nbsp;&nbsp;&nbsp;<a href="<%=sWBResourceURL%>">Editar</a>
                         &nbsp;&nbsp;&nbsp;<a href="<%=paramRequest.getRenderUrl().setParameter("act", "remove").setParameter("uri",post.getURI())%>">Borrar</a>
                         <%
                     }
@@ -68,11 +70,13 @@
 %>
 
 <%
-    if(member.canAdd())
-    {
+    //if(member.canAdd())
+    //{
         %>
         <center>
             <a href="<%=paramRequest.getRenderUrl().setParameter("act","add")%>">Agregar Entrada</a>
         </center>
         <%
-    }%>
+    //}
+            }
+    %>

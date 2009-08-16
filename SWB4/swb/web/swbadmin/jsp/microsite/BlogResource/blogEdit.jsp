@@ -16,17 +16,17 @@
             PostElement post = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
         %>
         <form method="post" action="<%=paramRequest.getActionUrl()%>">
+            <input type="hidden" name="act" value="<%=request.getParameter("act")%>">
             <div>
                 <h3>Editar una nueva entrada al Blog</h3>
             </div>
             <div>
-                <fieldset><legend></legend>
+                <fieldset><legend>Editar entrada</legend>
                     <div>
                         <p>
-                            <label for="title">Título</label><br/>
-                            <label for="description">Contenido de entrada</label><br/>
-                            <input id="title" name="title" value="<%=post.getTitle()%>">
-                            <textarea id="description" style="width: 98%" rows="5" cols="23" name="description">
+                            <label for="title">Título</label><input id="title" name="title" value="<%=post.getTitle()%>"><br>
+                            <label for="description">Contenido de entrada</label>                            
+                            <textarea id="description" rows="5" cols="23" name="description">
                             <%=post.getDescription()%>
                             </textarea>
                         </p>
@@ -42,7 +42,7 @@
         <%
         }
         }
-    else if("editpost".equals(request.getParameter("mode")))
+    else if("editblog".equals(request.getParameter("mode")))
         {
         %>
                  <div>
@@ -52,10 +52,10 @@
                 <fieldset><legend></legend>
                     <div>
                         <p>
-                            <label for="title">Título</label><br/>
-                            <label for="description">Contenido de entrada</label><br/>
-                            <input id="title" name="title" value="<%=blog.getTitle()%>">
-                            <textarea id="description" style="width: 98%" rows="5" cols="23" name="description">
+                            <label for="title">Título</label>                            
+                            <input id="title" name="title" value="<%=blog.getTitle()%>"><br>
+                            <label for="description">Contenido de entrada</label>
+                            <textarea id="description" rows="5" cols="23" name="description">
                             <%=blog.getDescription()%>
                             </textarea>
                         </p>
