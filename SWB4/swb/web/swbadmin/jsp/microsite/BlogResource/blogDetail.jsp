@@ -74,4 +74,7 @@ if(email!=null)
     <%if(post.canModify(member)){%><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",post.getURI())%>">Eliminar Entrada</a><%}%>
 </center>
 
+<%
+post.renderGenericElements(request, out, paramRequest);
+%>
 
