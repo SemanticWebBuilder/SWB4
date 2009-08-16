@@ -1,7 +1,7 @@
 package org.semanticwb.portal.community.base;
 
 
-public class EventElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable
+public class EventElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Rankable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_endTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#endTime");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_audienceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#audienceType");
@@ -14,7 +14,7 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
     public static final org.semanticwb.platform.SemanticProperty swbcomm_longitude=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#longitude");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_startTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#startTime");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_place=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#place");
-    public static final org.semanticwb.platform.SemanticClass swbcomm_Member=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Member");
+    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_hasAttendant=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasAttendant");
     public static final org.semanticwb.platform.SemanticClass swbcomm_EventElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#EventElement");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#EventElement");
@@ -185,18 +185,18 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         getSemanticObject().setProperty(swbcomm_place, value);
     }
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Member> listAttendants()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.User> listAttendants()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.Member>(getSemanticObject().listObjectProperties(swbcomm_hasAttendant));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.User>(getSemanticObject().listObjectProperties(swbcomm_hasAttendant));
     }
 
-    public boolean hasAttendant(org.semanticwb.portal.community.Member member)
+    public boolean hasAttendant(org.semanticwb.model.User user)
     {
-        if(member==null)return false;
-        return getSemanticObject().hasObjectProperty(swbcomm_hasAttendant,member.getSemanticObject());
+        if(user==null)return false;
+        return getSemanticObject().hasObjectProperty(swbcomm_hasAttendant,user.getSemanticObject());
     }
 
-    public void addAttendant(org.semanticwb.portal.community.Member value)
+    public void addAttendant(org.semanticwb.model.User value)
     {
         getSemanticObject().addObjectProperty(swbcomm_hasAttendant, value.getSemanticObject());
     }
@@ -206,30 +206,30 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
         getSemanticObject().removeProperty(swbcomm_hasAttendant);
     }
 
-    public void removeAttendant(org.semanticwb.portal.community.Member member)
+    public void removeAttendant(org.semanticwb.model.User user)
     {
-        getSemanticObject().removeObjectProperty(swbcomm_hasAttendant,member.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swbcomm_hasAttendant,user.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.EventElement> listEventElementByAttendant(org.semanticwb.portal.community.Member hasattendant,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.EventElement> listEventElementByHasAttendant(org.semanticwb.model.User hasattendant,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.EventElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasAttendant, hasattendant.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.EventElement> listEventElementByAttendant(org.semanticwb.portal.community.Member hasattendant)
+   public static java.util.Iterator<org.semanticwb.portal.community.EventElement> listEventElementByHasAttendant(org.semanticwb.model.User hasattendant)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.EventElement> it=new org.semanticwb.model.GenericIterator(hasattendant.getSemanticObject().getModel().listSubjects(swbcomm_hasAttendant,hasattendant.getSemanticObject()));
        return it;
    }
 
-    public org.semanticwb.portal.community.Member getAttendant()
+    public org.semanticwb.model.User getAttendant()
     {
-         org.semanticwb.portal.community.Member ret=null;
+         org.semanticwb.model.User ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swbcomm_hasAttendant);
          if(obj!=null)
          {
-             ret=(org.semanticwb.portal.community.Member)obj.createGenericInstance();
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
