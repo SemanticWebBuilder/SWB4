@@ -18,19 +18,54 @@
     String postAuthor = post.getCreator().getFirstName();
     String email=post.getCreator().getEmail();
 %>
-
-<%=postAuthor%>&nbsp;&nbsp;&nbsp;
-<%
+<table width="100%">
+    <tr>
+        <td>
+            <h1><%=post.getTitle()%></h1>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+            <%
 if(email!=null)
     {
     %>
-    <%=email%>
+    <a href="mailto:<%=email%>"><%=postAuthor%></a>
     <%
     }
+    else
+        {
+        %>
+        <p><%=postAuthor%></p>
+        <%
+        }
 %>
-<br>
-<%=post.getTitle()%> &nbsp;&nbsp;&nbsp;<%=updated%><br><br>
-<%=post.getDescription()%>
+
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p><%=updated%></p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;
+        </td>
+
+    </tr>
+    <tr>
+        <td>
+            <%=post.getDescription()%>
+        </td>
+
+    </tr>
+
+</table>
+
+
 <br>
 <br>
 <center>
