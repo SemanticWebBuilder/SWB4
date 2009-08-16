@@ -66,12 +66,12 @@ public class LastMicrositeElements extends GenericAdmResource
         }
         ArrayList<MicroSiteElement> elements = new ArrayList<MicroSiteElement>();
         StringBuilder prefixStatement = new StringBuilder();
-        prefixStatement.append(" PREFIX swb: <http://www.semanticwebbuilder.org/swb4/ontology>" + NL);
+        prefixStatement.append(" PREFIX swb: <http://www.semanticwebbuilder.org/swb4/ontology#>" + NL);
         prefixStatement.append(" PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>" + NL);
         prefixStatement.append(" PREFIX rdf: <" + SemanticVocabulary.RDF_URI + "> " + NL);
         prefixStatement.append(" PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + "> " + NL);
-        prefixStatement.append("SELECT ?x ?date WHERE {?x swb:created ?date . ?x rdf:type swbcomm:MicroSiteElement} ORDER BY ?date LIMIT "+limit);
-        QueryExecution qe = paramRequest.getWebPage().getSemanticObject().getModel().sparQLQuery(prefixStatement.toString());
+        prefixStatement.append("SELECT ?x ?date WHERE {?x swb:created ?date . ?x rdf:type swbcomm:MicroSiteElement} ORDER BY DESC(?date) LIMIT "+limit);
+        QueryExecution qe = paramRequest.getWebPage().getSemanticObject().getModel().sparQLOntologyQuery(prefixStatement.toString());
         ResultSet rs = qe.execSelect();
         while (rs.hasNext())
         {
