@@ -62,7 +62,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
         if (image==null) image="";
         String author = request.getParameter("new_author");
         if(author==null) author="";
-        String abstr = request.getParameter("new_abstr");
+        String abstr = request.getParameter("new_abstract");
         if(abstr==null) abstr="";
         String fulltext = request.getParameter("new_fulltext");
         if(fulltext==null) fulltext="";
@@ -81,6 +81,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
             rec.setTags(tags);
             rec.setFullText(fulltext);
             rec.setTags(tags);
+            rec.setNewsWebPage(page);
             
             //Set render parameters
             try {
