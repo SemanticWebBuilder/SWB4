@@ -98,7 +98,6 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
 
             if (rec != null && rec.canModify(mem)) {
                 //Set new news properties
-                //Set event properties
                 rec.setTitle(title);
                 rec.setNewsPicture(image);
                 rec.setAuthor(author);
@@ -113,11 +112,11 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                 }
             }
         } else if (action.equals("remove")) {
-            //Get event object
+            //Get news object
             String uri = request.getParameter("uri");
             NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 
-            //Remove event object
+            //Remove news object
             if (rec != null && rec.canModify(mem)) {
                 rec.remove();                                       //elimina el registro
             }        
