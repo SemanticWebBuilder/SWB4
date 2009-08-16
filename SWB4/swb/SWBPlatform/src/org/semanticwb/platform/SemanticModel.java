@@ -79,6 +79,7 @@ public class SemanticModel
     {
         m_ont=ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF);
         //Load Ontology from file
+        //TODO:extraer es de un modelo ya existente
         String owls=SWBPlatform.getEnv("swb/ontologyFiles","/WEB-INF/owl/swb.owl");
         StringTokenizer st=new StringTokenizer(owls,",;");
         while(st.hasMoreTokens())
