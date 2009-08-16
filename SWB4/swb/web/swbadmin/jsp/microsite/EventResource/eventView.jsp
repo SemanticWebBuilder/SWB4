@@ -10,7 +10,6 @@
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
 %>
 <h1>Eventos</h1>
-<%=getDaysInMonth(2000, 1)%>-<%=getFirstDay(2000, 1)%>
 <table>
     <tbody>
         <%
@@ -26,6 +25,8 @@
                 Inicio:&nbsp;<b><%=(event.getStartDate()==null?"":dateFormat.format(event.getStartDate()))%></b> a las <b><%=(event.getStartTime()==null?"":timeFormat.format(event.getStartTime()))%></b><BR>
                 Fin:&nbsp;<b><%=(event.getEndDate()==null?"":dateFormat.format(event.getEndDate()))%></b> a las <b><%=(event.getEndTime()==null?"":timeFormat.format(event.getEndTime()))%></b><BR>
                 Lugar:&nbsp;<%=event.getPlace()%><BR>
+                Puntuación:&nbsp;<%=event.getRank()%><BR>
+                <%=event.getViews()%> vistas.
             </td>
         </tr>
         <%
@@ -57,19 +58,3 @@
 <%  }%>
 
 <%!
-private long getDaysInMonth(int year, int month) {
-    long aDay = 1000 * 60 * 60 * 24;
-    Calendar thisMonth = new GregorianCalendar(year, month, 1);
-    Calendar nextMonth = new GregorianCalendar(year, month + 1, 1);
-    double len = Math.ceil((nextMonth.getTimeInMillis() - thisMonth.getTimeInMillis()) / aDay);
-
-    return (long)len;
-}
-%>
-
-<%!
-private int getFirstDay(int year, int month) {
-    Calendar thisMonth = new GregorianCalendar(year, month, 1);
-    return thisMonth.DAY_OF_MONTH;
-}
-%>
