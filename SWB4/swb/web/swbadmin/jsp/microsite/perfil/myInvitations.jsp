@@ -2,62 +2,41 @@
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.model.*"%>
-<%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="java.util.*"%>
+<%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 
 <table>
 <%
 User user=paramRequest.getUser();
 WebPage wpage=paramRequest.getWebPage();
-WebSite website=wpage.getWebSite();
+SWBResourceURL urlAction=paramRequest.getActionUrl();
+
+String firstName="", lastName="";
 Iterator<FriendshipProspect> itFriendshipProspect=FriendshipProspect.listFriendshipProspectByFriendShipRequested(user, wpage.getWebSite());
 while(itFriendshipProspect.hasNext()){
     FriendshipProspect friendshipProspect=itFriendshipProspect.next();
     User userRequester=friendshipProspect.getFriendShipRequester();
     String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
     if(userRequester.getPhoto()!=null) photo=userRequester.getPhoto();
+    if(userRequester.getFirstName()!=null) firstName=userRequester.getFirstName();
+    if(userRequester.getLastName()!=null) lastName=userRequester.getLastName();
+    urlAction.setParameter("user", userRequester.getURI());
 %>
     <tr>
-        <td>
-            <a href="/swb/Ciudad_Digital/Perfil?user=<%=userRequester.getURI()%>"><img src="<%=photo%>"></a>
+        <td align="rigth">
+            <a href="<%=wpage.getParent().getUrl()%>?user=<%=userRequester.getEncodedURI()%>"><img src="<%=photo%>" title="<%=firstName%> <%=lastName%>">
+                <br>
+                <%=firstName%>
+                <%=lastName%>
+            </a>
+            <br>
+            <%urlAction.setAction("acceptfriend");%>
+            <a href="<%=urlAction%>">Aceptar</a>|
+            <%urlAction.setAction("noacceptfriend");%><a href="<%=urlAction%>">No aceptar</a>
         </td>
-        <td><a href="<%=wpage.getUrl()%>?acceptfriend=<%=userRequester.getEncodedURI()%>">Aceptar</a>|<a href="<%=wpage.getUrl()%>?noacceptfriend=<%=userRequester.getEncodedURI()%>">No aceptar</a></td>
     </tr>
 <%
 }
 %>
 </table>
-    <%
-        if(request.getParameter("acceptfriend")!=null){
-            String userProsp=request.getParameter("acceptfriend");
-            SemanticObject semObj=SemanticObject.createSemanticObject(userProsp);
-            User user2Friend=(User)semObj.createGenericInstance();
-            Friendship newFriendShip=Friendship.createFriendship(website);
-            newFriendShip.addFriend(user);
-            newFriendShip.addFriend(user2Friend);
-            removeFriendshipProspect(user, user2Friend, website);
-        }
-
-        if(request.getParameter("noacceptfriend")!=null){
-            String userProsp=request.getParameter("noacceptfriend");
-            SemanticObject semObj=SemanticObject.createSemanticObject(userProsp);
-            User user2Friend=(User)semObj.createGenericInstance();
-            removeFriendshipProspect(user, user2Friend, website);
-        }
-    %>
-
-    <%!
-        private boolean removeFriendshipProspect(User user, User user2Friend, WebSite website){
-            Iterator<FriendshipProspect> itFriendshipProspect=FriendshipProspect.listFriendshipProspectByFriendShipRequested(user, website);
-            while(itFriendshipProspect.hasNext()){
-                FriendshipProspect friendshipProspect=itFriendshipProspect.next();
-                User userRequester=friendshipProspect.getFriendShipRequester();
-                if(userRequester.getURI().equals(user2Friend.getURI())){
-                    friendshipProspect.remove();
-                    return true;
-                }
-            }
-            return false;
-        }
-    %>

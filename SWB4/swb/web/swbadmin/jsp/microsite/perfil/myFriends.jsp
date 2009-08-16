@@ -13,6 +13,7 @@
             SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
             user=(User)semObj.createGenericInstance();
         }
+        if(!user.isRegistered()) return;
         WebPage wpage=paramRequest.getWebPage();
         String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
         String imgSize="";
@@ -47,11 +48,11 @@
                          contTot++;
                          %>
                          <td align="right">
-                            <a href="/swb/Ciudad_Digital/Perfil?user=<%=friendUser.getEncodedURI()%>"><img src="<%=photo%>" <%=imgSize%> title="<%=firstName%> <%=lastName%>">
+                            <a href="<%=wpage.getParent().getUrl()%>?user=<%=friendUser.getEncodedURI()%>"><img src="<%=photo%>" <%=imgSize%> title="<%=firstName%> <%=lastName%>">
                             <%if(!isStrategy){%>
                                 <br>
-                                <%if(friendUser.getFirstName()!=null)%> <%=friendUser.getFirstName()%>
-                                <%if(friendUser.getLastName()!=null)%> <%=friendUser.getLastName()%>
+                                <%=firstName%>
+                                <%=lastName%>
                             <%}%>
                             </a>
                          </td>
