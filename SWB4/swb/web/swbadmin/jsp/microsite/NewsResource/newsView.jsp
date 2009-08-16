@@ -20,10 +20,10 @@
         %>
         <tr>
             <td>
-                <a href="<%=viewUrl%>"><%=anew.getTitle()%></a><%=(anew.getCitation()==null?"":"(" + anew.getCitation() + ")")%><BR>
-                Por:&nbsp;<b><%=(anew.getAuthor()==null?"":anew.getAuthor())%></b><BR>
-                <b><%=(anew.getCreated()==null?"":dateFormat.format(anew.getCreated()))%>.</b><%=(anew.getAbstr()==null?"":anew.getAbstr())%><BR>
-                Texto completo:&nbsp;<%=(anew.getFullText()==null?"":anew.getFullText())%><BR>
+                <a href="<%=viewUrl%>"><%=anew.getTitle()%></a><%=(anew.getCitation() == null ? "" : "(" + anew.getCitation() + ")")%><BR>
+                Por:&nbsp;<b><%=(anew.getAuthor() == null ? "" : anew.getAuthor())%></b><BR>
+                <b><%=(anew.getCreated() == null ? "" : dateFormat.format(anew.getCreated()))%>.</b><%=(anew.getAbstr() == null ? "" : anew.getAbstr())%><BR>
+                Texto completo:&nbsp;<%=(anew.getFullText() == null ? "" : anew.getFullText())%><BR>
                 Puntuación:&nbsp;<%=anew.getRank()%><BR>
                 <%=anew.getViews()%> vistas.
             </td>
@@ -40,18 +40,20 @@
 <center>
     <a href="<%=paramRequest.getRenderUrl().setParameter("act", "add").toString()%>">Agregar Noticia</a>
     <%
-        if (wputil != null && member.canView()) {
-            if (!wputil.isSubscribed(member)) {
+                if (wputil != null && member.canView()) {
+                    if (!wputil.isSubscribed(member)) {
     %>
     <a href="<%=paramRequest.getActionUrl().setParameter("act", "subcribe").toString()%>">Suscribirse a este elemento</a>
     <%
-                } else {
+                    } else {
     %>
     <a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubcribe").toString()%>">Cancelar suscripción</a>
     <%
-            }
+                    }
 
-        }
+                }
     %>
 </center>
-<%  }%>
+<%
+            }
+%>
