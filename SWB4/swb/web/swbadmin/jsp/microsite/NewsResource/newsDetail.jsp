@@ -1,19 +1,36 @@
-<%-- 
-    Document   : newsDetail
-    Created on : 14/08/2009, 07:14:45 PM
-    Author     : hasdai
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
-
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+<%@page contentType="text/html"%>
+<%@page import="java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%
+            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            User user = paramRequest.getUser();
+            WebPage wpage = paramRequest.getWebPage();
+            Member member = Member.getMember(user, wpage);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+%>
+<%
+            String uri = request.getParameter("uri");
+            NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+            if (rec != null) {
+                rec.incViews();                             //Incrementar apariciones
+%>
+<table border="0" width="100%" cellspacing="10">
+    <tr>
+        <td valign="top">
+                <h2><%=rec.getTitle()%></h2>
+                Por:<%=rec.getAuthor()%> <BR>
+                En: <%=rec.getCitation()%>
+                <hr>
+                <%=rec.getFullText()%>
+                <hr>
+                <%=rec.getViews()%> vistas<BR>
+        </td>
+    </tr>
+</table>
+<%
+            }
+%>
+<center>
+    <a href="<%=paramRequest.getRenderUrl()%>">Regresar</a>
+    <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", rec.getURI())%>">Editar Información</a><%}%>
+    <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", rec.getURI())%>">Eliminar Evento</a><%}%>
+</center>
