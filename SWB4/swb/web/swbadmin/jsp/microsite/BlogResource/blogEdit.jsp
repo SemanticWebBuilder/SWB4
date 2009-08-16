@@ -17,6 +17,8 @@
         %>
         <form method="post" action="<%=paramRequest.getActionUrl()%>">
             <input type="hidden" name="act" value="<%=request.getParameter("act")%>">
+            <input type="hidden" name="mode" value="<%=request.getParameter("mode")%>">
+            <input type="hidden" name="uri" value="<%=request.getParameter("uri")%>">
             <div>
                 <h3>Editar una nueva entrada al Blog</h3>
             </div>
@@ -26,9 +28,7 @@
                         <p>
                             <label for="title">Título</label><input id="title" name="title" value="<%=post.getTitle()%>"><br>
                             <label for="description">Contenido de entrada</label>                            
-                            <textarea id="description" rows="5" cols="23" name="description">
-                            <%=post.getDescription()%>
-                            </textarea>
+                            <textarea id="description" rows="5" cols="23" name="description"><%=post.getDescription()%></textarea>
                         </p>
                     </div>
                 </fieldset>
@@ -55,9 +55,7 @@
                             <label for="title">Título</label>                            
                             <input id="title" name="title" value="<%=blog.getTitle()%>"><br>
                             <label for="description">Contenido de entrada</label>
-                            <textarea id="description" rows="5" cols="23" name="description">
-                            <%=blog.getDescription()%>
-                            </textarea>
+                            <textarea id="description" rows="5" cols="23" name="description"><%=blog.getDescription()%></textarea>
                         </p>
                     </div>
                 </fieldset>
