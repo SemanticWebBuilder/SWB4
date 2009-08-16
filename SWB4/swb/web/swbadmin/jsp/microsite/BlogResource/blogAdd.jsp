@@ -7,6 +7,7 @@
     Member member=Member.getMember(user,wpage);
     
 %>
+
 <form method="post" action="<%=paramRequest.getActionUrl()%>">
     <input type="hidden" name="act" value="<%=request.getParameter("act")%>">
     <div>
@@ -29,3 +30,4 @@
     </div>
     <input type="hidden" name="act" value="add"/>
 </form>
+        

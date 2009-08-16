@@ -12,13 +12,12 @@
 <%
             String defaultFormat = "dd 'de' MMMM 'del' yyyy";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
-            String updatedBlog = iso8601dateFormat.format(blog.getUpdated());
-            %>
-            <p><%=updatedBlog%></p>
-            <h1><%=blog.getTitle()%></h1>
+            //String updatedBlog = iso8601dateFormat.format(blog.getUpdated());
+            %>            
+            <h1><%=blog.getTitle()%>
             <%
-                //if(member.getAccessLevel()==member.LEVEL_OWNER)
-                //    {
+                if(member.getAccessLevel()==member.LEVEL_OWNER)
+                {
                     SWBResourceURL url=paramRequest.getRenderUrl();
                     url.setParameter("act", "edit");
                     url.setParameter("uri", blog.getURI());
@@ -26,10 +25,9 @@
                     %>
                     &nbsp;&nbsp;&nbsp;<a href="<%=url%>">Editar</a>
                     <%
-                //}
+                }
             %>
-
-            <h2><%=blog.getDescription()%></h2>
+            </h1>            
             <%
             Iterator<PostElement> posts = blog.listPostElements();
             while (posts.hasNext())
@@ -41,9 +39,15 @@
 
                 <table>
                 <tr>
+                    <%if(user.getPhoto()!=null)
+                    {
+                        %>
                 <td>
                     <img src="<%=user.getPhoto()%>">
                 </td>
+                <%
+                   }
+                %>
                 <td>
                     <%=postAuthor%>&nbsp;&nbsp;&nbsp;<%=updated%>
                 </td>
@@ -59,24 +63,26 @@
                         sWBResourceURL.setParameter("mode","editpost");
                         %>
                         &nbsp;&nbsp;&nbsp;<a href="<%=sWBResourceURL%>">Editar</a>
-                        &nbsp;&nbsp;&nbsp;<a href="<%=paramRequest.getRenderUrl().setParameter("act", "remove").setParameter("uri",post.getURI())%>">Borrar</a>
+                        &nbsp;&nbsp;&nbsp;<a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri",post.getURI())%>">Borrar</a>
                         <%
                     }
                 %>
-                </p><hr>
+                </p>
                 <h3><%=post.getTitle()%></h3>
+                <h4><%=post.getDescription()%></h4>
+                <hr>
                 <%
             }
 %>
 
 <%
-    //if(member.canAdd())
-    //{
+    if(member.canAdd())
+    {
         %>
         <center>
             <a href="<%=paramRequest.getRenderUrl().setParameter("act","add")%>">Agregar Entrada</a>
         </center>
         <%
-    //}
+    }
             }
     %>
