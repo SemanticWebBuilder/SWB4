@@ -91,7 +91,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         }
     }
 
-    private void add(String title, String description, WebPage page, User user, Blog blog)
+    private void add(String title, String description, WebPage page, User user, Blog blog,int level)
     {
         PostElement rec = PostElement.createPostElement(getResourceBase().getWebSite());
         rec.setTitle(title);
@@ -100,6 +100,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         rec.setCreated(date);
         rec.setCreator(user);
         rec.setUpdated(date);
+        rec.setVisibility(level);
         blog.addPostElement(rec);
 
     }
@@ -125,7 +126,15 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                 if (blogs.hasNext())
                 {
                     blog = blogs.next();
-                    add(title, description, response.getWebPage(), response.getUser(), blog);
+                    try
+                    {
+                        int level= Integer.parseInt(request.getParameter("level"));
+                        add(title, description, response.getWebPage(), response.getUser(), blog,level);
+                    }
+                    catch(Exception e)
+                    {
+                        log.error(e);
+                    }
                 }
 
             }
@@ -139,12 +148,21 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                 PostElement rec = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
                 String title = request.getParameter("title");
                 String description = request.getParameter("description");
-                if (rec != null && rec.canModify(mem) && title != null && description != null && user.getLogin().equals(rec.getCreator().getLogin()))                
+                try
                 {
-                    rec.setTitle(title);
-                    rec.setDescription(description);
-                    Date date = new Date(System.currentTimeMillis());
-                    rec.setUpdated(date);
+                    int level= Integer.parseInt(request.getParameter("level"));
+                    if (rec != null && rec.canModify(mem) && title != null && description != null && user.getLogin().equals(rec.getCreator().getLogin()))
+                    {
+                        rec.setTitle(title);
+                        rec.setVisibility(level);
+                        rec.setDescription(description);
+                        Date date = new Date(System.currentTimeMillis());
+                        rec.setUpdated(date);
+                    }
+                }
+                catch(Exception e)
+                {
+                    log.error(e);
                 }
             }
         }
