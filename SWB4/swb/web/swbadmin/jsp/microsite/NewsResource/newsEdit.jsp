@@ -61,6 +61,12 @@ Error: Elemento no encontrado...
                         </td>
                     </tr>
                     <tr>
+                        <td align="right" valign="center"><label for="new_citation">Fuente&nbsp;<em>*</em></label></td>
+                        <td>
+                            <input type="text" dojoType="dijit.form.TexBox" id="new_citation" name="new_citation" value="<%=(rec.getCitation()==null?"":rec.getCitation())%>"/><br>
+                        </td>
+                    </tr>
+                    <tr>
                         <td align="right" valign="center"><label for="new_tags">Etiquetas&nbsp;<em>*</em></label></td>
                         <td>
                             <input dojoType="dijit.form.TextBox" type="text" id="new_tags" name="new_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>"/><br>
