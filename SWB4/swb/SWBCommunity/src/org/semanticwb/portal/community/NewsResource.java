@@ -74,7 +74,6 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
         if (action.equals("add") && mem.canAdd()) {
             //Create news object
             NewsElement rec = NewsElement.createNewsElement(getResourceBase().getWebSite());
-
             //Set news properties
             rec.setTitle(title);
             rec.setNewsPicture(image);
