@@ -60,6 +60,7 @@ public class SWBActionResponseImp implements SWBActionResponse
     private String action=null;    
     private boolean secure=false;   
     private Resource resource=null;
+    private Resource virtResource=null;
     private int callMethod=0;
 
     private Locale locale=null;
@@ -200,6 +201,7 @@ public class SWBActionResponseImp implements SWBActionResponse
         else
         {
             SWBResourceURLImp url=new SWBResourceURLImp(null,resource,topic,UrlType_RENDER);
+            if(resource!=virtResource)url.setVirtualResource(virtResource);
             url.setParameters(map);
             if(haveVirtTP)url.setAdminTopic(adminTopic);
             url.setOnlyContent(onlyContent);
@@ -455,6 +457,25 @@ public class SWBActionResponseImp implements SWBActionResponse
             }
         }catch(Exception e){log.error(e);}
         this.resource = resource;
+        this.virtResource=resource;
+    }
+
+    /**
+     * Getter for property virtResource.
+     * @return Value of property virtResource.
+     */
+    public Resource getVirtualResource()
+    {
+        return virtResource;
+    }
+
+    /**
+     * Setter for property virtResource.
+     * @param virtResource New value of property virtResource.
+     */
+    public void setVirtualResource(Resource virtResource)
+    {
+        this.virtResource = virtResource;
     }
     
     public int getCallMethod()
