@@ -40,6 +40,10 @@
 <%
             }
 %>
+<%
+rec.renderGenericElements(request, out, paramRequest);
+%>
+
 <center>
     <a href="<%=paramRequest.getRenderUrl()%>">Regresar</a>
     <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getRenderUrl().setParameter("act", "attend").setParameter("uri", rec.getURI())%>">Asistir al evento</a><%}%>
