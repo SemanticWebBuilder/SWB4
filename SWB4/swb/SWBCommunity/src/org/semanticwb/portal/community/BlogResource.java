@@ -51,7 +51,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         }
         if (blog == null)
         {
-            blog=createBlog("Blog", "Descripción del blog", paramRequest.getWebPage().getWebSite(), paramRequest.getWebPage(), paramRequest.getUser());
+            blog = createBlog("Blog", "Descripción del blog", paramRequest.getWebPage().getWebSite(), paramRequest.getWebPage(), paramRequest.getUser());
         }
         String act = request.getParameter("act");
         if (act == null)
@@ -69,8 +69,8 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         }
         if (act.equals("detail"))
         {
-            String uri=request.getParameter("uri");
-            if(uri!=null)
+            String uri = request.getParameter("uri");
+            if (uri != null)
             {
                 path = "/swbadmin/jsp/microsite/BlogResource/blogDetail.jsp";
                 PostElement post = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
@@ -91,7 +91,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         }
     }
 
-    private void add(String title, String description, WebPage page, User user)
+    private void add(String title, String description, WebPage page, User user, Blog blog)
     {
         PostElement rec = PostElement.createPostElement(getResourceBase().getWebSite());
         rec.setTitle(title);
@@ -100,26 +100,34 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         rec.setCreated(date);
         rec.setCreator(user);
         rec.setUpdated(date);
+        blog.addPostElement(rec);
+
     }
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-        //Member mem = Member.getMember(response.getUser(), response.getWebPage());
-        /*if (!mem.canView())
+        Member mem = Member.getMember(response.getUser(), response.getWebPage());
+        if (!mem.canView())
         {
-            return;
-        }*/
+        return;
+        }
         String action = request.getParameter("act");
         System.out.println("act:" + action);
-        //if ("add".equals(action) && mem.canAdd())
-        if ("add".equals(action))
+        if ("add".equals(action) && mem.canAdd())        
         {
             String title = request.getParameter("title");
             String description = request.getParameter("description");
             if (title != null && description != null)
             {
-                add(title, description, response.getWebPage(), response.getUser());
+                Iterator<Blog> blogs = Blog.listBlogByWebPage(response.getWebPage());
+                Blog blog = null;
+                if (blogs.hasNext())
+                {
+                    blog = blogs.next();
+                    add(title, description, response.getWebPage(), response.getUser(), blog);
+                }
+
             }
         }
         else if ("edit".equals(action) && "editpost".equals(request.getParameter("mode")))
@@ -131,8 +139,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                 PostElement rec = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
                 String title = request.getParameter("title");
                 String description = request.getParameter("description");
-                //if (rec != null && rec.canModify(mem) && title != null && description != null && user.getLogin().equals(rec.getCreator().getLogin()))
-                if (rec != null && title != null && description != null && user.getLogin().equals(rec.getCreator().getLogin()))
+                if (rec != null && rec.canModify(mem) && title != null && description != null && user.getLogin().equals(rec.getCreator().getLogin()))                
                 {
                     rec.setTitle(title);
                     rec.setDescription(description);
@@ -165,8 +172,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
             if (uri != null)
             {
                 PostElement rec = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                //if (rec != null && rec.canModify(mem))
-                if (rec != null)
+                if (rec != null && rec.canModify(mem))                
                 {
                     rec.remove();                                       //elimina el registro
                 }
