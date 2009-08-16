@@ -47,13 +47,19 @@
                     <tr>
                         <td align="right" valign="center"><label for="new_fulltext">Texto completo&nbsp;<em>*</em></label></td>
                         <td>
-                            <input style="width:244px" dojoType="dijit.form.Textarea" id="new_fulltext" name="new_fulltext" /><br>
+                            <textarea style="width:244px" dojoType="dijit.form.Textarea" id="new_fulltext" name="new_fulltext"></textarea><br>
                         </td>
-                    </tr>                    
+                    </tr>
                     <tr>
-                        <td align="right" valign="center"><label for="event_tags">Etiquetas&nbsp;<em>*</em></label></td>
+                        <td align="right" valign="center"><label for="new_citation">Fuente&nbsp;<em>*</em></label></td>
                         <td>
-                            <input dojoType="dijit.form.TextBox" type="text" id="event_tags" name="event_tags"/><br>
+                            <input type="text" dojoType="dijit.form.TexBox" id="new_citation" name="new_citation"/><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="center"><label for="new_tags">Etiquetas&nbsp;<em>*</em></label></td>
+                        <td>
+                            <input dojoType="dijit.form.TextBox" type="text" id="new_tags" name="new_tags"/><br>
                         </td>
                     </tr>
                 </table>
