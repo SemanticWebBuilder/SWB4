@@ -43,13 +43,13 @@ public class EventResourceBase extends org.semanticwb.portal.community.Community
         getSemanticObject().removeObjectProperty(swbcomm_hasEvent,eventelement.getSemanticObject());
     }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.EventResource> listEventResourceByEvent(org.semanticwb.portal.community.EventElement hasevent,org.semanticwb.model.SWBModel model)
+   public static java.util.Iterator<org.semanticwb.portal.community.EventResource> listEventResourceByHasEvent(org.semanticwb.portal.community.EventElement hasevent,org.semanticwb.model.SWBModel model)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.EventResource> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasEvent, hasevent.getSemanticObject()));
        return it;
    }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.EventResource> listEventResourceByEvent(org.semanticwb.portal.community.EventElement hasevent)
+   public static java.util.Iterator<org.semanticwb.portal.community.EventResource> listEventResourceByHasEvent(org.semanticwb.portal.community.EventElement hasevent)
    {
        org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.EventResource> it=new org.semanticwb.model.GenericIterator(hasevent.getSemanticObject().getModel().listSubjects(swbcomm_hasEvent,hasevent.getSemanticObject()));
        return it;
