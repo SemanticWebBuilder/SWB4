@@ -1,19 +1,42 @@
-<%-- 
-    Document   : myFriendRequests
-    Created on : 16/08/2009, 12:24:15 AM
-    Author     : jorge.jimenez
---%>
+<jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
+<%@page import="org.semanticwb.model.User"%>
+<%@page import="org.semanticwb.portal.community.*"%>
+<%@page import="org.semanticwb.model.*"%>
+<%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="java.util.*"%>
+<%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
 
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+<table>
+<%
+User user=paramRequest.getUser();
+WebPage wpage=paramRequest.getWebPage();
+SWBResourceURL urlAction=paramRequest.getActionUrl();
+
+String firstName="", lastName="";
+Iterator<FriendshipProspect> itFriendshipProspect=FriendshipProspect.listFriendshipProspectByFriendShipRequester(user, wpage.getWebSite());
+while(itFriendshipProspect.hasNext()){
+    FriendshipProspect friendshipProspect=itFriendshipProspect.next();
+    User userRequested=friendshipProspect.getFriendShipRequested();
+    String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
+    if(userRequested.getPhoto()!=null) photo=userRequested.getPhoto();
+    if(userRequested.getFirstName()!=null) firstName=userRequested.getFirstName();
+    if(userRequested.getLastName()!=null) lastName=userRequested.getLastName();
+    urlAction.setParameter("user", userRequested.getURI());
+%>
+    <tr>
+        <td align="rigth">
+            <a href="<%=wpage.getParent().getUrl()%>?user=<%=userRequested.getEncodedURI()%>"><img src="<%=photo%>" title="<%=firstName%> <%=lastName%>">
+                <br>
+                <%=firstName%>
+                <%=lastName%>
+            </a>
+            <br>
+            <%urlAction.setAction("removeRequest");%>
+            <a href="<%=urlAction%>">Eliminar Solicitud</a>
+        </td>
+    </tr>
+<%
+}
+%>
+</table>
