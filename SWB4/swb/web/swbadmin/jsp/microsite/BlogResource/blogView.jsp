@@ -73,9 +73,22 @@
                         sWBResourceURL.setParameter("act", "edit");
                         sWBResourceURL.setParameter("uri",post.getURI());
                         sWBResourceURL.setParameter("mode","editpost");
+
+                        SWBResourceURL removeUrl=paramRequest.getActionUrl();
+                        removeUrl.setParameter("act", "remove");//.setParameter("uri",post.getURI());
                         %>
                         &nbsp;&nbsp;&nbsp;<a href="<%=sWBResourceURL%>">Editar</a>
-                        &nbsp;&nbsp;&nbsp;<a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri",post.getURI())%>">Borrar</a>
+                        &nbsp;&nbsp;&nbsp;<a href="javascript:validateremove('<%=removeUrl%>','<%=post.getTitle()%>','<%=post.getURI()%>')">Borrar</a>
+                        <script>
+                            function validateremove(url, title,uri)
+                            {
+                                if(confirm('¿Esta seguro de borrar la entrada '+title+'?'))
+                                    {                                        
+                                        var url=url+'&uri='+escape(uri);                                     
+                                        document.URL=url;
+                                    }
+                            }
+                        </script>
                         <%
                     }
                 %>
