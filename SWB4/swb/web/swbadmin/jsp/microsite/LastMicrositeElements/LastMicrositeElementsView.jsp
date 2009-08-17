@@ -1,4 +1,4 @@
-<%@page import="org.semanticwb.*,java.text.*,org.semanticwb.portal.community.*,java.util.*" %>
+<%@page import="java.net.URLEncoder,org.semanticwb.*,java.text.*,org.semanticwb.portal.community.*,java.util.*" %>
 <%
     String webpath=SWBPlatform.getContextPath()+"/swbadmin/jsp/microsite/LastMicrositeElements/";
     String defaultFormat = "dd 'de' MMMM 'del' yyyy 'a las' HH:mm";
@@ -28,6 +28,7 @@
                 description=description.substring(0, 97)+" ...";
             }
             String url=null;
+            String uri=null;
             if(element instanceof PostElement)
             {
                 PostElement post=(PostElement)element;
@@ -35,21 +36,25 @@
                 {
                     url=post.getBlog().getWebPage().getUrl();
                 }
+                uri=post.getURI();
                 src="ico_mensaje.gif";
             }
             else if(element instanceof PhotoElement)
             {
                 url=((PhotoElement)element).getPhotoWebPage().getUrl();
+                uri=((PhotoElement)element).getURI();
                 src="ico_foto.gif";
             }
             else if(element instanceof VideoElement)
             {
                 url=((VideoElement)element).getWebPage().getUrl();
+                uri=((VideoElement)element).getURI();
                 src="ico_foto.gif";
             }
             src=webpath+src;
-            if(url!=null)
+            if(url!=null && uri!=null)
             {
+                url+="?&act=detail&uri="+URLEncoder.encode(uri);;
                 %>
                   <div class="entry">
                   <p><img src="<%=src%>" alt="<%=title%>" width="57" height="55" ></p>
