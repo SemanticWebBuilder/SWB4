@@ -39,11 +39,15 @@ public class PerfilData extends GenericResource {
         User owner=response.getUser();
         WebSite website=response.getWebPage().getWebSite();
         String user=request.getParameter("user");
+        String action=response.getAction();
 
         SemanticObject semObj = SemanticObject.createSemanticObject(user);
-        User user2rem = (User) semObj.createGenericInstance();
+        User user2Action = (User) semObj.createGenericInstance();
 
-        Friendship.removeFriendRelationShip(owner, user2rem, website);
-
+        if(action.equals("remFriendRelship")){
+            Friendship.removeFriendRelationShip(owner, user2Action, website);
+        }else if(action.equals("addFriendRelship")){
+            FriendshipProspect.createFriendshipProspect(owner, user2Action, website);
+        }
     }
 }
