@@ -15,30 +15,23 @@
                 rec.incViews();                             //Incrementar apariciones
 %>
 <div class="news">
-    <table border="0" width="100%" cellspacing="10">
-        <tr>
-            <td>
-                <img src="<%=path + rec.getNewsPicture()%>" alt="<%=rec.getDescription()%>" width="110" height="150" />
-            </td>
-            <td valign="top">
-                <div class="newsbody">
-                    <h2><%=rec.getTitle()%> (<%=rec.getCitation()%>)</h2>
-                    <%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%><br>
-                    Por&nbsp;<%=rec.getAuthor()%><BR><br>
-                    <%=rec.getFullText()%><br>
-                    <hr>
-                    <%=rec.getViews()%> vistas<BR>
-                </div>
-            </td>
-        </tr>
-    </table>
+    <div class="newsimage">
+        <img src="<%=path + rec.getNewsPicture()%>" alt="<%=rec.getDescription()%>" width="110" height="150" />
+    </div>
+    <div class="newsbody">
+        <h2><%=rec.getTitle()%> (<%=rec.getCitation()%>)</h2>
+        <%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%><br>
+        Por&nbsp;<%=rec.getAuthor()%><BR><br>
+        <%=rec.getFullText()%><br>
+        <hr>
+        <%=rec.getViews()%> vistas<BR>
+    </div>
     <%
             }
-    %>
-    <%
             rec.renderGenericElements(request, out, paramRequest);
     %>
-    <div class="menuoptions"><center>
+    <div class="menuoptions">
+        <center>
             <a href="<%=paramRequest.getRenderUrl()%>">Regresar</a>
             <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", rec.getURI())%>">Editar Información</a><%}%>
             <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", rec.getURI())%>">Eliminar Noticia</a><%}%>
