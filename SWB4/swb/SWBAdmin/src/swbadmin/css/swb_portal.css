@@ -44,6 +44,11 @@ body {
 	font-size: 100.1%;
 }
 
+#WBWikiTextbox{
+    width: 100%;
+    height: 300px;
+}
+
 /*------------------- Menu ---------*/
 
 #swb-menu {
