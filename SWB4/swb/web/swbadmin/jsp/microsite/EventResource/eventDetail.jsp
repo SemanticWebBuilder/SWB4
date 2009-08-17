@@ -12,6 +12,7 @@
 <%
     String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
     String uri = request.getParameter("uri");
+
     EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
     if (rec != null) {
         rec.incViews();                             //Incrementar apariciones
@@ -22,7 +23,7 @@
             <img src="<%=path+rec.getEventImage()%>" alt="<%=rec.getDescription()%>" />
         </td>
         <td valign="top">
-                <%=rec.getTitle()%> <BR>
+                <%=rec.getTitle()%> (<%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%>)<BR>
                 <hr>
                 <%=rec.getDescription()%> <BR>
                 Inicia: <%=dateFormat.format(rec.getStartDate())%> - <%=timeFormat.format(rec.getStartTime())%><BR>
