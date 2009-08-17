@@ -1,7 +1,7 @@
 <%@page import="org.semanticwb.*,java.text.*,org.semanticwb.portal.community.*,java.util.*" %>
 <%
-    String webpath=SWBPlatform.getWebWorkPath()+"/swbadmin/jsp/LastMicrositeElements/";
-    String defaultFormat = "dd 'de' MMMM 'del' yyyy HH:mm";
+    String webpath=SWBPlatform.getContextPath()+"/swbadmin/jsp/microsite/LastMicrositeElements/";
+    String defaultFormat = "dd 'de' MMMM 'del' yyyy 'a las' HH:mm";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
     ArrayList<MicroSiteElement> elements=(ArrayList<MicroSiteElement>)request.getAttribute("elements");
     if(elements.size()>0)
@@ -31,7 +31,7 @@
             {
                 src="ico_mensaje.gif";
             }
-            if(element.getSemanticObject().getSemanticClass().equals(PhotoElement.sclass))
+            if(element.getSemanticObject().getSemanticClass().equals(PhotoElement.sclass) || (element.getSemanticObject().getSemanticClass().equals(VideoElement.sclass)))
             {
                 src="ico_foto.gif";
             }
