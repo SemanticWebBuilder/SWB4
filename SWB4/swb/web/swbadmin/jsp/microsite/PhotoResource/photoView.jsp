@@ -14,7 +14,6 @@
 
 <script type="text/javascript">
     function thumbnailizeImage(idImg) {
-        alert('thumbnailizeImage');
         var image = document.getElementById(idImg);
         if(image.width > image.height) {
             var nw = 130;
@@ -96,22 +95,26 @@
                     var mc = document.getElementById('photoc_<%= base.getId()%>');
                     <%
                             int i = 0;
-                            while (it.hasNext()) {
+                            while (it.hasNext())
+                            {
                                 PhotoElement photo = it.next();
-                                SWBResourceURL viewurl = paramRequest.getRenderUrl();
-                                viewurl.setParameter("act", "detail");
-                                viewurl.setParameter("uri", photo.getURI());
-                    %>
-                        photoContainer = createImageContainer('ic_'+ '<%= i%>' +'<%= base.getId()%>');
-                        img = createThumbnail('img_'+'<%= i%>'+'<%= base.getId()%>', '<%= path+photo.getImageURL()%>');
-                        a = document.createElement('a');
-                        a.href = '<%= viewurl %>';
-                        a.appendChild(img);
-                        photoContainer.appendChild(a);
-                        createTextInfo(photoContainer, 'p_'+'<%= i%>'+'<%= base.getId()%>', '<%= photo.getTitle()%>', '<%= photo.getCreator().getFirstName()%>', '<%= photo.getCreated()%>', '<%= photo.getDescription()%>');
-                        mc.appendChild(photoContainer);
-                    <%
-                                i++;
+                                if(photo.canView(member))
+                                {
+                                    SWBResourceURL viewurl = paramRequest.getRenderUrl();
+                                    viewurl.setParameter("act", "detail");
+                                    viewurl.setParameter("uri", photo.getURI());
+%>
+    photoContainer = createImageContainer('ic_'+ '<%= i%>' +'<%= base.getId()%>');
+    img = createThumbnail('img_'+'<%= i%>'+'<%= base.getId()%>', '<%= path+photo.getImageURL()%>');
+    a = document.createElement('a');
+    a.href = '<%= viewurl %>';
+    a.appendChild(img);
+    photoContainer.appendChild(a);
+    createTextInfo(photoContainer, 'p_'+'<%= i%>'+'<%= base.getId()%>', '<%= photo.getTitle()%>', '<%= photo.getCreator().getFirstName()%>', '<%= SWBUtils.TEXT.getTimeAgo(photo.getCreated(),user.getLanguage())%>', '<%= photo.getDescription()%>');
+    mc.appendChild(photoContainer);
+<%
+                                    i++;
+                                }
                             }
                     %>
                 </script>
