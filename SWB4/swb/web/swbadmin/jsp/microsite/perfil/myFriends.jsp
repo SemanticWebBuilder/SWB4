@@ -66,6 +66,8 @@
                     <p class="vermas"><a href="<%=friendsPath%>" >Ver todos</a></p>
                  </div>
              <%}else if(contTot==0){%>
-                Aún no tienes amigos
+               <div class="clear">
+                <p class="vermas">Aún no tienes amigos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+               </div>
              <%}%>
         </div>
