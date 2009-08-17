@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <%
     //SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
@@ -13,6 +13,11 @@
             for(NewsElement element : elements)
             {
                 String href=null;
+                if(element.getNewsWebPage()!=null && element.getNewsWebPage().getUrl()!=null)
+                {
+                    href=element.getNewsWebPage().getUrl();
+                    href+="?&act=detail&uri="+URLEncoder.encode(href);
+                }
                 String src=null;
                 String title=element.getTitle();
                 if(title==null)
