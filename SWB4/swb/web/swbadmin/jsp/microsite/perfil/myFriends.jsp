@@ -33,7 +33,7 @@
           <h2 class="titulo">Mis Amigos</h2>
              <%
              String firstName="", lastName="";
-
+             int contTot=0;
              Iterator<Friendship> itMyFriends=Friendship.listFriendshipByFriend(user,wpage.getWebSite());
              while(itMyFriends.hasNext()){
                  Friendship friendShip=itMyFriends.next();
@@ -55,13 +55,17 @@
                             <%}%>
                             </a>
                          </div>
-                         <%                         
+                         <%
+                         contTot++;
+                         if(isStrategy && contTot==12) break;
                      }
                  }
              }
-             if(isStrategy){%>
+             if(isStrategy && contTot>=12){%>
                  <div class="clear">
                     <p class="vermas"><a href="<%=friendsPath%>" >Ver todos</a></p>
                  </div>
-             <%}%>          
+             <%}else if(contTot==0){%>
+                Aún no tienes amigos
+             <%}%>
         </div>
