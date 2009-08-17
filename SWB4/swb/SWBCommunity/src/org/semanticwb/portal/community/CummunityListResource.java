@@ -30,6 +30,7 @@ public class CummunityListResource extends GenericAdmResource {
         WebPage wpgs = null;
 
         int numcomm = 0;
+        int nums = 0;
         String nummsg = "";
         User user = paramsRequest.getUser();
         Iterator<WebPage> itwp = wpp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
@@ -38,6 +39,7 @@ public class CummunityListResource extends GenericAdmResource {
             wpch = itwp.next();
             if(wpch.isActive()&&!wpch.isDeleted())
             {
+                nums++;
                 out.println("<div class=\"groupInteres\">");
                 out.println("<h3 class=\"titulo\">"+wpch.getDisplayTitle(user.getLanguage())+"</h3>");
                 Iterator<WebPage> itwpch = wpch.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
@@ -52,7 +54,7 @@ public class CummunityListResource extends GenericAdmResource {
                             numcomm= getExistingCommunities(wpgs,user);
                             nummsg = "";
                             if(numcomm>0)  nummsg = "("+numcomm+")";
-                            out.println("<li><a href=\""+wpgs.getUrl()+"\">"+wpgs.getDisplayTitle(user.getLanguage())+"</a>"+nummsg+"</li>");
+                            out.println("<li><a href=\""+wpgs.getUrl()+"\">"+wpgs.getDisplayTitle(user.getLanguage())+"&nbsp;"+nummsg+"</a></li>");
                         }
                         numcomm=0;
 
@@ -62,6 +64,11 @@ public class CummunityListResource extends GenericAdmResource {
                     //out.println("<p class=\"vermas\"><a href=\""+wpch.getUrl()+"\">Ver todos</a></p>");
                 }
                 out.println("</div>");
+                if(nums==3)
+                {
+                    out.println("<br/>");
+                    nums=0;
+                }
             }
         }
     }
