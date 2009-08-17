@@ -11,35 +11,6 @@
 %>
 <h1>Eventos</h1>
 <%=renderCalendar(new Date(System.currentTimeMillis()), paramRequest)%>
-<table>
-    <tbody>
-        <%
-            String day = request.getParameter("day");
-            String month = request.getParameter("month");
-            String year = request.getParameter("year");
-
-            Iterator<EventElement> eit = EventElement.listEventElementsByDate(new Date(2009, 7, 17));
-            while (eit.hasNext()) {
-                EventElement event = eit.next();
-                SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
-                if (event.canView(member)) {
-        %>
-        <tr>
-            <td>
-                <a href="<%=viewUrl%>"><%=event.getTitle()%></a><BR>
-                Inicio:&nbsp;<b><%=(event.getStartDate()==null?"":dateFormat.format(event.getStartDate()))%></b> a las <b><%=(event.getStartTime()==null?"":timeFormat.format(event.getStartTime()))%></b><BR>
-                Fin:&nbsp;<b><%=(event.getEndDate()==null?"":dateFormat.format(event.getEndDate()))%></b> a las <b><%=(event.getEndTime()==null?"":timeFormat.format(event.getEndTime()))%></b><BR>
-                Lugar:&nbsp;<%=event.getPlace()%><BR>
-                Puntuación:&nbsp;<%=event.getRank()%><BR>
-                <%=event.getViews()%> vistas.
-            </td>
-        </tr>
-        <%
-                }
-            }
-        %>
-    </tbody>
-</table>
 <%
             if (member.canAdd()) {
 %>
@@ -120,7 +91,7 @@
                 //Are there events today?
                 if (EventElement.listEventElementsByDate(new Date(year, month, i)).hasNext()) {
                     SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "daily");
-                    viewUrl.setParameter("year", String.valueOf(year));
+                    viewUrl.setParameter("year", String.valueOf(year + 1900));
                     viewUrl.setParameter("month", String.valueOf(month));
                     viewUrl.setParameter("day", String.valueOf(day));
 
@@ -137,7 +108,7 @@
                 //Not today
                 if (EventElement.listEventElementsByDate(new Date(year, month, i)).hasNext()) {
                     SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "daily");
-                    viewUrl.setParameter("year", String.valueOf(year));
+                    viewUrl.setParameter("year", String.valueOf(year + 1900));
                     viewUrl.setParameter("month", String.valueOf(month));
                     viewUrl.setParameter("day", String.valueOf(day));
 
