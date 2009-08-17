@@ -3,6 +3,9 @@ package org.semanticwb.portal.community;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.sql.*;
+import javax.mail.internet.InternetAddress;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBMail;
@@ -12,6 +15,7 @@ import org.semanticwb.model.WebPage;
 
 public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.MicroSiteWebPageUtilBase 
 {
+    private static Logger log = SWBUtils.getLogger(MicroSiteWebPageUtil.class);
     public MicroSiteWebPageUtil(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -32,6 +36,7 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm");
         boolean sended = Boolean.FALSE;
         MicroSiteWebPageUtil mswpu = this;
+
         if(null!= element)
         {
             User creator = element.getModifiedBy();
@@ -47,6 +52,7 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
 
             String txtSubject = "Cambios en la comunidad "+commTitle+" de la utilería "+utilName;
 
+            addCommunityLog(mswpu.getMicroSite(), creator, element);
 
             StringBuffer data = new StringBuffer();
             data.append("\n<html>\n<head>\n<title>Notificación de cambios</title>");
@@ -84,19 +90,40 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
             data.append("\n</html>");
 
             SWBMail mail = new SWBMail();
-            mail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
+
+            String webbuilderemail = SWBPlatform.getEnv("af/adminEmail");
+            String smtpserver = SWBPlatform.getEnv("swb/smtpServer");
+
+            mail.setHostName(smtpserver);
+
+            InternetAddress emailaddr = new InternetAddress();
+            emailaddr.setAddress(webbuilderemail);
+
+            mail.setFromEmail(webbuilderemail);
             mail.setFromName("Administrador");
             mail.setSubject(txtSubject);
             mail.setContentType("text/html");
             mail.setData(data.toString());
 
             ArrayList memberlist = new ArrayList();
+            memberlist.add(emailaddr);
+
+            mail.setToEmail(memberlist);
+
+            memberlist = new ArrayList();
+
             Iterator<Member> itm = mswpu.listSubscribedMembers();
             while(itm.hasNext())
             {
                 Member member = itm.next();
                 String emailmember = member.getUser().getEmail();
-                memberlist.add(emailmember);
+                if(emailmember!=null)
+                {
+                    emailaddr = new InternetAddress();
+                    emailaddr.setAddress(emailmember);
+                    memberlist.add(emailaddr);
+                }
+                
             }
             if(memberlist.size()>0)
             {
@@ -107,13 +134,43 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
                     SWBUtils.EMAIL.sendBGEmail(mail);
                     sended = Boolean.TRUE;
                 } catch (Exception e) {
+                    System.out.println("Error al enviar notificacion por correo.");
+                    e.printStackTrace(System.out);
                     sended = Boolean.FALSE;
                 }
             }
 
         }
+
         return sended;
     }
+
+    private void addCommunityLog(MicroSite community, User usr, MicroSiteElement element)
+    {
+        String commURI = community.getURI();
+        String usrURI = usr.getURI();
+        String elementURI = element.getURI();
+        Connection conn = null;
+        PreparedStatement pst = null;
+
+        try {
+            conn = SWBUtils.DB.getDefaultConnection("MicroSiteWebPageUtil.addComminityLog");
+            pst = conn.prepareStatement("insert into swb_commlog (commuri, usruri, elementuri) values (?,?,?)");
+            pst.setString(1,commURI);
+            pst.setString(2,usrURI);
+            pst.setString(3,elementURI);
+            int nerec=pst.executeUpdate();
+            pst.close();
+            conn.close();
+        } catch (Exception e) {
+            log.error("Error al insertar el log de la comunidad.",e);
+        } finally
+        {
+            try { pst.close(); } catch (Exception e) { }
+            try { conn.close(); } catch (Exception e) { }
+        }
+
+    }  
 
     public void subscribeToElement(Member member)
     {
