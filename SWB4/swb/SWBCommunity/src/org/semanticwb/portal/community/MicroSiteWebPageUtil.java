@@ -184,10 +184,11 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
 
         try {
             conn = SWBUtils.DB.getDefaultConnection("MicroSiteWebPageUtil.addComminityLog");
-            pst = conn.prepareStatement("insert into swb_commlog (commuri, usruri, elementuri) values (?,?,?)");
+            pst = conn.prepareStatement("insert into swb_commlog (commuri, usruri, elementuri, modified) values (?,?,?,?)");
             pst.setString(1,commURI);
             pst.setString(2,usrURI);
             pst.setString(3,elementURI);
+            pst.setDate(4, new Date(System.currentTimeMillis()));
             int nerec=pst.executeUpdate();
             pst.close();
             conn.close();
