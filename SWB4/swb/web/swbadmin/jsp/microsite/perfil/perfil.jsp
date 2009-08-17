@@ -32,7 +32,7 @@
               %>
                 <p class="addOn"><a href="<%=urlAction%>">Eliminar como amigo</a></p>
               <%
-          }else{
+          }else if(!owner.getURI().equals(user.getURI())){
               urlAction.setAction("addFriendRelship");
               urlAction.setParameter("user", user.getURI());
               %>
