@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!--
-    Document   : swb_commlog.xml
-    Created on : 17 de agosto de 2009, 11:14 AM
-    Author     : juan.fernandez
-    Description:
-        XML de definición para la tabla swb_commlog.
-        En esta tabla se guarda la bitacora de actividades en las comunidades.
--->
 <db xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <table name="swb_commlog">
             <column id="commuri" type="VARCHAR" size="250" acceptNulls="false"/>
@@ -21,10 +12,5 @@
     <index name="commlog_indexUSR" table="swb_commlog" >
 		<colindex id="usruri"/>
     </index>
-    <!--
-    <index name="commlog_index1" table="swb_commlog" >
-		<colindex id="elementuri"/>
-    </index>
-    -->
 </db>
 
