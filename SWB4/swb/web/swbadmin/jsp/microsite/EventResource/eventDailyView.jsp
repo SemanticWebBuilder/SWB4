@@ -33,7 +33,7 @@
                 <img src="<%=path + event.getEventImage()%>" alt="<%=event.getDescription()%>" />
             </td>
             <td valign="top">
-                <a href="<%=viewUrl%>"><%=event.getTitle()%></a><BR>
+                <a href="<%=viewUrl%>"><%=event.getTitle()%> (<%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%>) </a><BR>
                 Inicio:&nbsp;<b><%=(event.getStartDate() == null ? "" : dateFormat.format(event.getStartDate()))%></b> a las <b><%=(event.getStartTime() == null ? "" : timeFormat.format(event.getStartTime()))%></b><BR>
                 Fin:&nbsp;<b><%=(event.getEndDate() == null ? "" : dateFormat.format(event.getEndDate()))%></b> a las <b><%=(event.getEndTime() == null ? "" : timeFormat.format(event.getEndTime()))%></b><BR>
                 Lugar:&nbsp;<%=event.getPlace()%><BR>
