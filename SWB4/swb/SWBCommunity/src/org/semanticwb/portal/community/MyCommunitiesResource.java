@@ -48,7 +48,7 @@ public class MyCommunitiesResource extends org.semanticwb.portal.community.base.
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
 
-        String path="/scripts/microsite/listCommunities.groovy";
+        String path="/swbadmin/jsp/microsite/MyCommunitiesResource/listCommunities.groovy";
 
 
         RequestDispatcher dis=request.getRequestDispatcher(path);

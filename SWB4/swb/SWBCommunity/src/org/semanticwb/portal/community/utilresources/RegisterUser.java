@@ -39,6 +39,7 @@ import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -67,11 +68,11 @@ public class RegisterUser extends GenericResource {
             act="view";
             if (paramRequest.getUser().isSigned()) act = "edit";
         }
-        
-        String path="/scripts/microsite/linkNewUser.groovy";
-        if(act.equals("add"))path="/scripts/microsite/newUser.groovy";
-        if(act.equals("edit"))path="/scripts/microsite/userEditForm.groovy";
-        if(act.equals("detail"))path="/scripts/microsite/userDetail.groovy";
+
+        String path="/swbadmin/jsp/microsite/RegisterUser/linkNewUser.groovy";
+        if(act.equals("add"))path="/swbadmin/jsp/microsite/RegisterUser/newUser.groovy";
+        if(act.equals("edit"))path="/swbadmin/jsp/microsite/RegisterUser/userEditForm.groovy";
+        if(act.equals("detail"))path="/swbadmin/jsp/microsite/RegisterUser/userDetail.groovy";
 
         RequestDispatcher dis=request.getRequestDispatcher(path);
         try
@@ -109,6 +110,14 @@ public class RegisterUser extends GenericResource {
             user.setLastName(request.getParameter("usrLastName"));
             user.setSecondLastName(request.getParameter("usrSecondLastName"));
             user.setEmail(request.getParameter("usrEmail"));
+            try {
+                user.setExtendedAttribute("userAge", request.getParameter("userAge"));
+                user.setExtendedAttribute("userSex", request.getParameter("userSex"));
+                user.setExtendedAttribute("userStatus", request.getParameter("userStatus"));
+                user.setExtendedAttribute("userInterest", request.getParameter("userInterest"));
+                user.setExtendedAttribute("userHobbies", request.getParameter("userHobbies"));
+                user.setExtendedAttribute("userInciso", request.getParameter("userInciso"));
+            } catch (SWBException nex) {log.error(nex);}
             response.sendRedirect(response.getWebPage().getRealUrl()+"?act=detail");
             return;
         }

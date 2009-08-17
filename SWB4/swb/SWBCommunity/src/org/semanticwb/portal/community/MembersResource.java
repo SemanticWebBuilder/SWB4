@@ -24,7 +24,7 @@ public class MembersResource extends org.semanticwb.portal.community.base.Member
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String path="/scripts/microsite/listMembers.groovy";
+        String path="/swbadmin/jsp/microsite/MembersResource/listMembers.groovy";
 
         RequestDispatcher dis=request.getRequestDispatcher(path);
         try
