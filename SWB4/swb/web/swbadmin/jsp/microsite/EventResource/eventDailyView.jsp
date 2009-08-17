@@ -9,7 +9,7 @@
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");            
 %>
-<h1>Eventos</h1>
+<h1>Eventos Diario</h1>
 <table>
     <tbody>
         <%
@@ -17,8 +17,9 @@
             String month = request.getParameter("month");
             String year = request.getParameter("year");
 
-            Date dNow = new Date(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day));
+            Date dNow = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
 
+            System.out.println(dNow);
             Iterator<EventElement> eit = EventElement.listEventElementsByDate(dNow);
             while (eit.hasNext()) {
                 EventElement event = eit.next();
@@ -45,6 +46,13 @@
             if (member.canAdd()) {
 %>
 <center>
+    <%
+    SWBResourceURL back = paramRequest.getRenderUrl();
+    back.setParameter("year", year);
+    back.setParameter("month", month);
+    back.setParameter("day", day);
+    %>
+    <a href="<%=back%>">Regresar</a>
     <a href="<%=paramRequest.getRenderUrl().setParameter("act", "add").toString()%>">Agregar Evento</a>
     <%
         if (wputil != null && member.canView()) {
