@@ -36,7 +36,7 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
 
     public static Iterator<EventElement> listEventElementsByDate(Date date) {
         ArrayList<EventElement> res = new ArrayList<EventElement>();
-        Iterator<EventElement> eit = listEventElements();        
+        Iterator<EventElement> eit = listEventElements();
         while (eit.hasNext()) {
             EventElement ev = eit.next();
             //If event starts at, is carried out, or ends in date, add it to the list
