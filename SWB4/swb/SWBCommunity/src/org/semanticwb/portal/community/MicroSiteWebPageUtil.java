@@ -20,25 +20,20 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
 
     static
     {
-        System.out.println("Creando tabla de SWB_COMMLOG");
         try {
             Connection con = SWBUtils.DB.getDefaultConnection("Revisión si existe tabla swb_commlog. MicroSiteWebPageUtil (static)");
             Statement st = con.createStatement();
             try {
-                System.out.println("Revisando tabla de SWB_COMMLOG");
                 ResultSet rs = st.executeQuery("select count(*) from swb_commlog");
                 if (rs.next()) {
                     int x = rs.getInt(1);
                 }
                 rs.close();
             } catch (SQLException ne) {
-                //ne.printStackTrace();
-                log.event("Creating Community Log Table...");
-                System.out.println("Catch Creando tabla de SWB_COMMLOG");
-                GenericDB db = new GenericDB();
+                System.out.println("Creating Community Log Table.");
+                GenericDB db = new GenericDB();                
                 String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_commlog.xml");
                 db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), SWBPlatform.getEnv("wb/db/nameconn","swb"));
-                System.out.println("Tabla de SWB_COMMLOG creada....");
             }
             st.close();
             con.close();
@@ -192,7 +187,7 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
             pst.setString(1,commURI);
             pst.setString(2,usrURI);
             pst.setString(3,elementURI);
-            pst.setDate(4, new Date(System.currentTimeMillis()));
+            pst.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
             int nerec=pst.executeUpdate();
             pst.close();
             conn.close();

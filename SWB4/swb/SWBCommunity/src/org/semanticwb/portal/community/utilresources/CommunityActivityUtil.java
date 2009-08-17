@@ -8,8 +8,8 @@ package org.semanticwb.portal.community.utilresources;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -42,8 +42,8 @@ public class CommunityActivityUtil {
                 String commURI = rs.getString("commuri");
                 String usrURI = rs.getString("usruri");
                 String elementURI = rs.getString("elementuri");
-                Date modified = rs.getDate("modified");
-                al.add(new CommunityActivity(commURI, usrURI, elementURI,modified)); 
+                Timestamp modified = rs.getTimestamp("modified");
+                al.add(new CommunityActivity(commURI, usrURI, elementURI, modified));
             }
             rs.close();
             pst.close();
@@ -77,7 +77,7 @@ public class CommunityActivityUtil {
                 String commURI = rs.getString("commuri");
                 String usrURI = rs.getString("usruri");
                 String elementURI = rs.getString("elementuri");
-                Date modified = rs.getDate("modified");
+                Timestamp modified = rs.getTimestamp("modified");
                 al.add(new CommunityActivity(commURI, usrURI, elementURI,modified));
             }
             rs.close();
