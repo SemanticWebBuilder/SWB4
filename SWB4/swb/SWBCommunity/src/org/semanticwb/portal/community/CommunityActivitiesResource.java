@@ -38,8 +38,10 @@ public class CommunityActivitiesResource extends GenericAdmResource {
             MicroSite ms = (MicroSite)wp;
             CommunityActivityUtil cau = new CommunityActivityUtil();
             Iterator<CommunityActivity> itca = cau.getCommunityActivities(ms);
-            out.println("<div id=\"CommunityActivitiesResource\">");
-            out.println("<p>");
+            out.println("<div id=\"actividades\">");
+            out.println("<h2>Actividades</h2>");
+
+            out.println("<ul>");
             CommunityActivity ca = null;
             User user = null;
             MicroSiteElement mse = null;
@@ -56,19 +58,16 @@ public class CommunityActivitiesResource extends GenericAdmResource {
                     ca = itca.next();
                     user = ca.getUser();
                     mse = ca.getElement();
-                    out.println("El elemento <strong>" + mse.getDisplayTitle(null) + "</strong>");
+                    out.println("<li>El elemento " + mse.getDisplayTitle(null) );
                     out.println(" fué modificado por ");
-                    out.println("<strong>" + user.getFullName() + "</strong>");
-                    out.println(" el día <strong>" + sdf.format(mse.getUpdated()) + "</strong>");
-                    if (itca.hasNext() && num <= numrec) {
-                        out.println("<br/>");
-                    }
+                    out.println("" + user.getFullName() + "");
+                    out.println(" el día " + sdf.format(mse.getUpdated()) + "</li>");
                     
                 }
             }
             else
-                out.println("No hay actividades");
-            out.println("</p>");
+                out.println("<li>No hay actividades.</li>");
+            out.println("</ul>");
             out.println("</div>");
         }
 
