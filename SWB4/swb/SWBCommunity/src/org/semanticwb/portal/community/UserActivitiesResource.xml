@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmUsrActRes" action="true" method="POST">
+		<admdbconnmgr defconn="true"/>
+		<input type="TEXT" name="numrec" label="Número de registros a mostrar:" size="4" jsrequired="true" maxlength="4" jsvaltype="js_numbers" />
+		<input type="SUBMIT" name="btnSave"  value="Guardar" class="boton"/>
+		<input type="RESET"  name="btnReset" value="Cancelar" class="boton"/>
+	</form>
+</admresource>
+
+
