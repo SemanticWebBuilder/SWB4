@@ -25,8 +25,6 @@ package org.semanticwb.portal.community;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import org.semanticwb.portal.api.SWBParamRequest;
-import org.semanticwb.portal.api.SWBResourceURL;
 
 
 public class EventElement extends org.semanticwb.portal.community.base.EventElementBase 
@@ -38,18 +36,20 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
 
     public static Iterator<EventElement> listEventElementsByDate(Date date) {
         ArrayList<EventElement> res = new ArrayList<EventElement>();
-        Iterator<EventElement> eit = listEventElements();
+        Iterator<EventElement> eit = listEventElements();        
         while (eit.hasNext()) {
             EventElement ev = eit.next();
-            //System.out.println(">>>>Evento " + ev.getTitle() + " - " + ev.getStartDate());
             //If event starts at, is carried out, or ends in date, add it to the list
-            if (ev.getStartDate().compareTo(date) == 0 || ev.getEndDate().compareTo(date) == 0) {
-                System.out.println("Agregando " + ev.getTitle());
+            if(isEqual(ev.getStartDate(), date) || isEqual(ev.getEndDate(), date)) {
+                res.add(ev);
+            } else if (ev.getStartDate().before(date) && !ev.getEndDate().before(date)) {
                 res.add(ev);
             }
         }
         return res.iterator();
     }
 
-
+    public static boolean isEqual(Date date1, Date date2) {
+        return (date1.getYear() == date2.getYear() && date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate());
+    }
 }
