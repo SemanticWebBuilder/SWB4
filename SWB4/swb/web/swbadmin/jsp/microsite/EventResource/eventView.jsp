@@ -27,15 +27,14 @@
     dojo.require("dijit.form.FilteringSelect");
     dojo.require("dojo.parser");
 </script>
-<h1>Eventos</h1>
 <div>
     <div>
     <form action="<%=paramRequest.getRenderUrl()%>" method="post">
         <fieldset><legend>Elige una fecha</legend>
             <label for="year">Año:</label>
-            <input type="text" regExp="\d{4}" dojoType="dijit.form.ValidationTextBox" name="year" id="year" value="<%=current.getYear() + 1900%>"/>
+            <input type="text" style="width:70px;" regExp="\d{4}" dojoType="dijit.form.ValidationTextBox" name="year" id="year" value="<%=current.getYear() + 1900%>"/>
             <label for="month">Mes:</label>
-            <select dojoType="dijit.form.FilteringSelect" name ="month" id="month" value="<%=current.getMonth()%>">
+            <select dojoType="dijit.form.FilteringSelect" style="width:150px;" name ="month" id="month" value="<%=current.getMonth()%>">
                 <option value="0">Enero</option>
                 <option value="1">Febrero</option>
                 <option value="2">Marzo</option>
@@ -81,7 +80,6 @@
     private String renderCalendar(Date current, WebPage wpage, SWBParamRequest paramRequest) {
         StringBuffer sbf = new StringBuffer();
 
-        System.out.println("Current: " + current);
         //If no date specified, get current date
         if (current == null) current = new Date(System.currentTimeMillis());
 
