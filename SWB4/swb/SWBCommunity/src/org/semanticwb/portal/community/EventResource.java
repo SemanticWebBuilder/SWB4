@@ -150,7 +150,8 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
 
             //Add attendant member
             if (rec != null && rec.canModify(mem)) {
-                rec.addAttendant(mem.getUser());
+                System.out.println("Agregando a " + response.getUser().getFullName() + "en processAction");
+                rec.addAttendant(response.getUser());
             }
         } else {
             super.processAction(request, response);
