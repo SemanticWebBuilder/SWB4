@@ -51,5 +51,6 @@
             <strong><input type="submit" value="Enviar" class="button"/></strong>
             <a class="button" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
         </p>
+        <input type="hidden" name="act" value="add"/>
     </div>
 </form>
