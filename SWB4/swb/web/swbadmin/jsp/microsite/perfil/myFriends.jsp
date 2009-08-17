@@ -1,5 +1,5 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
-<%@page import="org.semanticwb.model.User"%>
+<%@page import="org.semanticwb.model.*"%>
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="java.util.*"%>
@@ -9,6 +9,9 @@
 
      <%
         SWBResourceURL urlAction=paramRequest.getActionUrl();
+        Resource base=paramRequest.getResourceBase();
+        String perfilPath=base.getAttribute("perfilPath","/swb/Ciudad_Digital/Perfil");
+        String friendsPath=base.getAttribute("friendsPath","/swb/Ciudad_Digital/Mis_amigos");
         User user=paramRequest.getUser();
         if(request.getParameter("user")!=null) 
         {
@@ -23,16 +26,14 @@
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) 
         {
             isStrategy=true;
-            imgSize="width=\"40\" height=\"40\"";
+            imgSize="width=\"39\" height=\"39\"";
         }
      %>
-         <table>
+          <div class="miembros">
+          <h2 class="titulo">Mis Amigos</h2>
              <%
              String firstName="", lastName="";
 
-             boolean flag=false;
-             int cont=0;
-             int contTot=0;
              Iterator<Friendship> itMyFriends=Friendship.listFriendshipByFriend(user,wpage.getWebSite());
              while(itMyFriends.hasNext()){
                  Friendship friendShip=itMyFriends.next();
@@ -44,31 +45,23 @@
                          if(friendUser.getPhoto()!=null) photo=friendUser.getPhoto();
                          if(friendUser.getFirstName()!=null) firstName=friendUser.getFirstName();
                          if(friendUser.getLastName()!=null) lastName=friendUser.getLastName();
-
-                         if(!flag && cont==0) out.println("<tr>");
-                         cont++;
-                         contTot++;
                          %>
-                         <td align="center">
-                            <a href="<%=wpage.getParent().getUrl()%>?user=<%=friendUser.getEncodedURI()%>"><img src="<%=photo%>" <%=imgSize%> title="<%=firstName%> <%=lastName%>">
+                            <div class="moreUser">
+                            <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img src="<%=photo%>" <%=imgSize%> title="<%=firstName%> <%=lastName%>">
                             <%if(!isStrategy){%>
                                 <br>
                                 <%=firstName%>
                                 <%=lastName%>
                             <%}%>
-                            </a><br>
-                            <%urlAction.setAction("removeFriend");urlAction.setParameter("user", friendUser.getURI());%>
-                            <a href="<%=urlAction%>">Elimir amistad</a>
-                         </td>
-                         <%
-                         if(cont==4) {
-                            out.println("</tr>");
-                            cont=0;
-                            flag=false;
-                         }
-                         if(isStrategy && contTot==12) break;
+                            </a>
+                         </div>
+                         <%                         
                      }
                  }
              }
-             %>
-         </table>
+             if(isStrategy){%>
+                 <div class="clear">
+                    <p class="vermas"><a href="<%=friendsPath%>" >Ver todos</a></p>
+                 </div>
+             <%}%>          
+        </div>
