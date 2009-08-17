@@ -25,7 +25,8 @@
                 String src=null;
                 if(element.getNewsPicture()!=null)
                 {
-                    src=element.getNewsPicture();
+
+                    src=element.getWorkPath()+element.getNewsPicture();
                 }
                 String title=element.getTitle();
                 if(title==null)
