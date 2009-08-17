@@ -83,7 +83,7 @@ public class LastMicrositeElements extends GenericAdmResource
                 {
                     Resource res = rb.getResource(name.toString());
                     SemanticObject obj= SemanticObject.createSemanticObject(res.getURI());
-                    MicroSiteElement element=new MicroSiteElement(obj);
+                    MicroSiteElement element=(MicroSiteElement)obj.createGenericInstance();
                     elements.add(element);
                 }
             }
