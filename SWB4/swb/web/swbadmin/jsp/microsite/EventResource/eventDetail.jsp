@@ -50,11 +50,22 @@
 %>
 <%
 rec.renderGenericElements(request, out, paramRequest);
+SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "daily");
+back.setParameter("year", request.getParameter("year"));
+back.setParameter("month", request.getParameter("month"));
+back.setParameter("day", request.getParameter("day"));
 %>
 
 <center>
-    <a href="<%=paramRequest.getRenderUrl()%>">Regresar</a>
+    <a href="<%=back%>">Regresar</a>
+    <%
+            back = paramRequest.getRenderUrl().setParameter("act", "edit");
+            back.setParameter("year", request.getParameter("year"));
+            back.setParameter("month", request.getParameter("month"));
+            back.setParameter("day", request.getParameter("day"));
+            back.setParameter("uri", rec.getURI());
+    %>
     <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", rec.getURI())%>">Asistir al evento</a><%}%>
-    <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", rec.getURI())%>">Editar Información</a><%}%>
+    <%if (rec.canModify(member)) {%><a href="<%=back%>">Editar Información</a><%}%>
     <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", rec.getURI())%>">Eliminar Evento</a><%}%>
 </center>
