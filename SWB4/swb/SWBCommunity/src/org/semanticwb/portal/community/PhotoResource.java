@@ -24,10 +24,10 @@
 package org.semanticwb.portal.community;
 
 import java.io.*;
-import java.util.Date;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.math.BigInteger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
@@ -41,24 +41,39 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
 public class PhotoResource extends org.semanticwb.portal.community.base.PhotoResourceBase {
+    private BigInteger serial;
+
     private static Logger log=SWBUtils.getLogger(PhotoResource.class);
 
     public PhotoResource() {
+        serial = BigInteger.ZERO;
     }
 
     public PhotoResource(org.semanticwb.platform.SemanticObject base) {
         super(base);
+        serial = BigInteger.ZERO;
     }
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String act=request.getParameter("act");
-        if(act==null)act="view";
+        System.out.println("1...act="+act);
+        if(act==null) {
+            act = (String)request.getSession(true).getAttribute("act");
+            request.getSession(true).setAttribute("act", null);
+            request.getSession(true).removeAttribute("act");
+            System.out.println("2...act="+act);
+        }
+        if(act==null) {
+            act = "view";
+            System.out.println("3...act="+act);
+        }        
+
         String path="/swbadmin/jsp/microsite/PhotoResource/photoView.jsp";
         if(act.equals("add"))path="/swbadmin/jsp/microsite/PhotoResource/photoAdd.jsp";
         if(act.equals("edit"))path="/swbadmin/jsp/microsite/PhotoResource/photoEdit.jsp";
@@ -72,112 +87,129 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
-    {
-        WebPage page=response.getWebPage();
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        WebPage page = response.getWebPage();
         Member mem=Member.getMember(response.getUser(),response.getWebPage());
-        if(!mem.canView())return;                                       //si el usuario no pertenece a la red sale;
+        if(!mem.canView())return;  //si el usuario no pertenece a la red sale;
 
         String action=request.getParameter("act");
-        System.out.println("************ act:"+action);
-        
-        //if("add".equals(action) && mem.canAdd()) {        
-        if( action==null ) {
-            System.out.println("******** iniciamoos add...");
-            //String code = request.getParameter("video_code");
-            PhotoElement rec = PhotoElement.createPhotoElement(getResourceBase().getWebSite());
-
-            String filename = uploadPhoto(request);
-            //rec.setImageURL(code);
-            System.out.println("******** fullfilename="+filename);
-            rec.setImageURL(filename);
-            rec.setPhotoWebPage(page);
-            System.out.println("***webworkpath="+SWBPlatform.getWebWorkPath());
-
-            try {
-                response.setRenderParameter("act","view");
-                response.setRenderParameter("uri",rec.getURI());
-            }catch(Exception e) {
-                log.error(e);
-                response.setRenderParameter("act","add");               //regresa a agregar codigo
-                response.setRenderParameter("err","true");              //envia parametro de error
+//        if(act==null) {
+//        }else
+        if("edit".equals(action)) {
+            String uri=request.getParameter("uri");
+            PhotoElement rec = (PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
+            if(rec!=null && rec.canModify(mem)) {
+                rec.setTitle(request.getParameter("title"));
+                rec.setDescription(request.getParameter("description"));
+                rec.setTags(request.getParameter("tags"));
+                rec.setVisibility(Integer.parseInt(request.getParameter("level")));
+                if(page instanceof MicroSiteWebPageUtil) {
+                    ((MicroSiteWebPageUtil)page).sendNotification(rec);
+                }
             }
-        }else if("edit".equals(action)) {
-            /*String uri=request.getParameter("uri");
-            VideoElement rec=(VideoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
-            if(rec!=null && rec.canModify(mem))
-            {
-                rec.setTitle(request.getParameter("video_title"));
-                rec.setDescription(request.getParameter("video_description"));
-                rec.setTags(request.getParameter("video_tags"));
-                rec.setVisibility(Integer.parseInt(request.getParameter("level")));   //hace convercion a int en automatico
-                if(page instanceof MicroSiteWebPageUtil)((MicroSiteWebPageUtil)page).sendNotification(rec);
-            }*/
+            response.setRenderParameter("act", "view");
         }else if("remove".equals(action)) {
-            /*String uri=request.getParameter("uri");
-            VideoElement rec=(VideoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
-
-            if(rec!=null && rec.canModify(mem))
-            {
-                rec.remove();                                       //elimina el registro
-            }*/
-        }
-        else
+            String uri = request.getParameter("uri");
+            PhotoElement rec = (PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
+            if(rec!=null && rec.canModify(mem)) {
+                rec.remove();  //elimina el registro
+            }
+        }else {
             super.processAction(request, response);
+        }
     }
 
-    private String uploadPhoto(HttpServletRequest request){
+    @Override
+    public void doAdminHlp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        Member mem=Member.getMember(paramRequest.getUser(), paramRequest.getWebPage());
+
+        if(mem.canAdd()) {
+            HashMap<String,String> params = uploadPhoto(request);
+
+            WebPage page = paramRequest.getWebPage();
+            PhotoElement rec = PhotoElement.createPhotoElement(getResourceBase().getWebSite());
+            rec.setImageURL(params.get("filename"));
+
+
+            rec.setTitle(params.get("title"));
+            rec.setDescription(params.get("description"));
+            rec.setTags(params.get("tags"));
+            rec.setVisibility(Integer.parseInt(params.get("level")));
+            if(page instanceof MicroSiteWebPageUtil) {
+                ((MicroSiteWebPageUtil)page).sendNotification(rec);
+            }
+
+            rec.setPhotoWebPage(page);
+
+            //doView(request, response, paramRequest);
+        }
+    }
+
+    private HashMap<String,String> uploadPhoto(HttpServletRequest request) {
+        String path = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath();
+        HashMap<String,String> params = new HashMap<String,String>();
         try {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            HashMap<String,String> params = new HashMap<String,String>();
-            File tmpwrk = new File(SWBPlatform.getWorkPath()+"/tmp");
-            if (!tmpwrk.exists()) {
-                tmpwrk.mkdirs();
-            }
-            FileItemFactory factory = new DiskFileItemFactory(1*1024*1024, tmpwrk);
-            ServletFileUpload upload = new ServletFileUpload(factory);
-            ProgressListener progressListener = new ProgressListener() {
-                private long kBytes = -1;
-                public void update(long pBytesRead, long pContentLength, int pItems) {
-                    long mBytes = pBytesRead / 10000;
-                    if (kBytes == mBytes) {
-                    return;
+            if(isMultipart) {
+                File tmpwrk = new File(SWBPlatform.getWorkPath()+"/tmp");
+                if (!tmpwrk.exists()) {
+                    tmpwrk.mkdirs();
+                }
+                FileItemFactory factory = new DiskFileItemFactory(1*1024*1024, tmpwrk);
+                ServletFileUpload upload = new ServletFileUpload(factory);
+                ProgressListener progressListener = new ProgressListener() {
+                    private long kBytes = -1;
+                    public void update(long pBytesRead, long pContentLength, int pItems) {
+                        long mBytes = pBytesRead / 10000;
+                        if (kBytes == mBytes) {
+                        return;
+                        }
+                        kBytes = mBytes;
+                        int percent = (int)(pBytesRead * 100 / pContentLength);
                     }
-                    kBytes = mBytes;
-                    int percent = (int)(pBytesRead * 100 / pContentLength);
-                }
-            };
-            upload.setProgressListener(progressListener);
-            List items = upload.parseRequest(request); /* FileItem */
-            FileItem currentFile = null;
-            Iterator iter = items.iterator();
-            while (iter.hasNext()) {
-                FileItem item = (FileItem) iter.next();
+                };
+                upload.setProgressListener(progressListener);
+                List items = upload.parseRequest(request); /* FileItem */
+                FileItem currentFile = null;
+                Iterator iter = items.iterator();
+                while(iter.hasNext()) {
+                    FileItem item = (FileItem) iter.next();
 
-                if (item.isFormField()) {
-                    String name = item.getFieldName();
-                    String value = item.getString();
-                    params.put(name, value);
-                } else {
-                    currentFile = item;
-                    System.out.println("un fileitem...");
+                    if(item.isFormField()) {
+                        String name = item.getFieldName();
+                        String value = item.getString();
+                        params.put(name, value);
+                    }else {
+                        currentFile = item;
+                        File file = new File(path);
+                        if(!file.exists()) {
+                            file.mkdirs();
+                        }
+                        synchronized(serial) {
+                            serial.add(BigInteger.ONE);
+                        }
+                        String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+                        currentFile.write(new File(path+"/"+name));
+                        params.put("filename", name);
+                    }
                 }
+                /*if(currentFile != null) {
+                    File file = new File(path);
+                    if(!file.exists()) {
+                        file.mkdirs();
+                    }
+//                    Date now = new Date();
+//                    String name = now.getTime()+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+                    String name = (++serial)+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+                    currentFile.write(new File(path+"/"+name));
+                    params.put("filename", name);
+                    return params;
+                }*/
             }
-            String path = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath();
-            File file = new File(path);
-            if(!file.exists()) {
-                file.mkdirs();
-            }
-            Date now = new Date();
-            String name = now.getTime()+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
-            System.out.println("name="+name);
-            currentFile.write(new File(path+"/"+name));
-            return name;
-        }catch (Exception ex)  {
-            System.out.println("error...."+ex);
-            System.out.println("\n");
+        }catch(Exception ex)  {
             ex.printStackTrace();
         }
-        return null;
+//        return null;
+        return params;
     }
 }
