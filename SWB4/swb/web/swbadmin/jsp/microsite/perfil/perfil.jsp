@@ -30,7 +30,13 @@
               urlAction.setAction("remFriendRelship");
               urlAction.setParameter("user", user.getURI());
               %>
-                    <a href="<%=urlAction%>">Eliminar como amigo</a>
+                <p class="addOn"><a href="<%=urlAction%>">Eliminar como amigo</a></p>
+              <%
+          }else{
+              urlAction.setAction("addFriendRelship");
+              urlAction.setParameter("user", user.getURI());
+              %>
+                <p class="addOn"><a href="<%=urlAction%>">Agregar como amigo</a></p>
               <%
           }
         }else {
