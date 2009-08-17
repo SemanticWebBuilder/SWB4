@@ -92,6 +92,7 @@ public class LastNews extends GenericAdmResource{
         try
         {
             request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("elements", elements);
             dis.include(request, response);
         }
         catch (Exception e)
