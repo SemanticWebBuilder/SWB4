@@ -33,9 +33,10 @@
             if(element instanceof PostElement)
             {
                 PostElement post=(PostElement)element;
-                if(post.getBlog()!=null)
+                Iterator<Blog> blogs=Blog.listBlogByPostElement(post);
+                if(blogs.hasNext())
                 {
-                    url=post.getBlog().getWebPage().getUrl();
+                    url=blogs.next().getWebPage().getUrl();
                 }
                 uri=post.getURI();
                 src="ico_mensaje.gif";
