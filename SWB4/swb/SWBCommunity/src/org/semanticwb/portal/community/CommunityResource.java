@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.*;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
@@ -33,8 +34,8 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("returnRank")) {
             returnRank(request, response);
-        } else if (paramRequest.getMode().equals("returnAbusedState")) {
-            returnAbusedState(request, response, paramRequest);
+        } else if (paramRequest.getMode().equals("returnStateMessage")) {
+            returnStateMessage(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -61,6 +62,8 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
             abusedStateChange(request, response);
         } else if ("addComment".equals(action)) {
             addComment(request, response, mem);
+        } else if ("spamReport".equals(action)) {
+            spamStateChange(request, response);
         }
     }
 
@@ -110,7 +113,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
             }
             message = Boolean.toString(mse.isAbused());
         }
-        response.setMode("returnAbusedState");
+        response.setMode("returnStateMessage");
         response.setRenderParameter("message",
                                     message != null ? message : "Not OK");
     }
@@ -141,6 +144,44 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
         response.setMode(SWBParamRequest.Mode_VIEW);
     }
 
+    private void spamStateChange(HttpServletRequest request,
+            SWBActionResponse response) {
+
+        String message = null;
+        String suri = request.getParameter("uri");
+        String commentId = request.getParameter("commentId");
+        SemanticObject so = null;
+        System.out.println("suri:" + suri + ", id:" + commentId );
+        if (commentId == null) {
+            return;
+        }
+        if (null != suri) {
+            so = SemanticObject.createSemanticObject(suri);
+        }
+        if (so.getGenericInstance() instanceof MicroSiteElement) {
+            MicroSiteElement mse = (MicroSiteElement) so.getGenericInstance();
+            GenericIterator<Comment> iterator =  mse.listComments();
+            while (iterator.hasNext()) {
+                Comment comment = iterator.next();
+                System.out.println("comment.Id:" + comment.getId() + ", comparacion:" + comment.getId().equals(commentId));
+                if (comment.getId().equals(commentId)) {
+                    if (comment.isSpam()) {
+                        comment.setSpam(false);
+                    } else {
+                        comment.setSpam(true);
+                    }
+                    message = Boolean.toString(comment.isSpam());
+                    System.out.println("message:" + message);
+                    break;
+                }
+            }
+        }
+        response.setMode("returnStateMessage");
+        response.setRenderParameter("message",
+                                    message != null || "".equals(message)
+                                    ? message : "Not OK");
+    }
+
     private void returnRank(HttpServletRequest request,
             HttpServletResponse response) {
 
@@ -159,10 +200,11 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
         } catch (IOException ioe) {}
     }
 
-    private void returnAbusedState(HttpServletRequest request,
+    private void returnStateMessage(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramRequest) {
 
         String message = request.getParameter("message");
+        System.out.println("message en returnStateMessage:" + message);
         try {
             response.getWriter().print(message != null ? message : "Not OK");
         } catch (IOException ioe) {}
