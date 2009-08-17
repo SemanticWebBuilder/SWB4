@@ -93,8 +93,21 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
         if(!mem.canView())return;  //si el usuario no pertenece a la red sale;
 
         String action=request.getParameter("act");
-//        if(act==null) {
-//        }else
+        if(action==null) {
+            if(mem.canAdd()) {
+                HashMap<String,String> params = uploadPhoto(request);
+                PhotoElement rec = PhotoElement.createPhotoElement(getResourceBase().getWebSite());
+                rec.setImageURL(params.get("filename"));
+                rec.setTitle(params.get("title"));
+                rec.setDescription(params.get("description"));
+                rec.setTags(params.get("tags"));
+                rec.setVisibility(Integer.parseInt(params.get("level")));
+                if(page instanceof MicroSiteWebPageUtil) {
+                    ((MicroSiteWebPageUtil)page).sendNotification(rec);
+                }
+                rec.setPhotoWebPage(page);
+            }
+        }else
         if("edit".equals(action)) {
             String uri=request.getParameter("uri");
             PhotoElement rec = (PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
@@ -186,8 +199,9 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                             file.mkdirs();
                         }
                         synchronized(serial) {
-                            serial.add(BigInteger.ONE);
+                            serial = serial.add(BigInteger.ONE);
                         }
+                        System.out.println("\n***********serial="+serial.toString()+"\n");
                         String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
                         currentFile.write(new File(path+"/"+name));
                         params.put("filename", name);
