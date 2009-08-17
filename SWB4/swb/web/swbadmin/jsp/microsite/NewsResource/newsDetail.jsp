@@ -21,9 +21,8 @@
         </td>
         <td valign="top">
                 <h2><%=rec.getTitle()%> (<%=rec.getCitation()%>)</h2>
-                SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage());
-                <hr>
-                Por&nbsp;<%=rec.getAuthor()%><BR>
+                <%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%><br>
+                Por&nbsp;<%=rec.getAuthor()%><BR><br>
                 <%=rec.getFullText()%><br>
                 <hr>
                 <%=rec.getViews()%> vistas<BR>
