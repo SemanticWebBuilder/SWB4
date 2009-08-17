@@ -171,6 +171,9 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         url.setAction("vote");
         url.setMode(paramRequest.getMode());
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        sb.append("\n<link rel='stylesheet' type='text/css' href='"
+                + SWBPlatform.getContextPath()
+                + "/swbadmin/jsp/microsite/css/ciudad_digital.css' />");
         sb.append("\n<script type=\"text/javascript\" src=\""
                 + SWBPlatform.getContextPath()
                 + "/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>");
