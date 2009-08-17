@@ -35,7 +35,7 @@ public class UserActivitiesResource extends GenericAdmResource {
 
         CommunityActivityUtil cau = new CommunityActivityUtil();
         Iterator<CommunityActivity> itca = cau.getMemberActivities(user);
-        out.println("<div id=\"UserActivitiesResource\">");
+        out.println("<div id=\"actividades\">");
         out.println("<h2>Actividades</h2>");
         out.println("<ul>");
         CommunityActivity ca = null;
