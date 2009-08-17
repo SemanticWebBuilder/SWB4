@@ -20,9 +20,13 @@
                     title="";
                 }
                 String description=element.getDescription();
-                 if(description==null)
+                if(description==null)
                 {
                     description="";
+                }
+                if(description.length()>200)
+                {
+                    description=description.substring(0, 197)+" ...";
                 }
                 %>
                   <div class="entry">
