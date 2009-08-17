@@ -31,12 +31,14 @@
                 Lugar: <%=rec.getPlace()%> <BR>
                 Asistentes:
                 <%
-                Iterator<Member> members = rec.listAttendants();
-                while (members.hasNext()) {
-                    Member m = members.next();
+                Iterator<User> users = rec.listAttendants();
+                while (users.hasNext()) {
+                    User m = users.next();
                     %>
-                    <%=m.getUser().getFullName()%>
-                <%
+                    <%=m.getFullName()%>
+                    <%if(users.hasNext()) {
+                    %>,&nbsp;<%
+                    }                
                 }
                 %>
                 <br><%=rec.getViews()%> vistas<BR>
@@ -52,7 +54,7 @@ rec.renderGenericElements(request, out, paramRequest);
 
 <center>
     <a href="<%=paramRequest.getRenderUrl()%>">Regresar</a>
-    <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getRenderUrl().setParameter("act", "attend").setParameter("uri", rec.getURI())%>">Asistir al evento</a><%}%>
+    <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", rec.getURI())%>">Asistir al evento</a><%}%>
     <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getRenderUrl().setParameter("act", "edit").setParameter("uri", rec.getURI())%>">Editar Información</a><%}%>
     <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", rec.getURI())%>">Eliminar Evento</a><%}%>
 </center>
