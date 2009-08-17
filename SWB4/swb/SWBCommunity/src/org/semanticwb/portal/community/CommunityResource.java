@@ -89,6 +89,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
             rank = rank + vote;
             rank = rank / rev;
 
+            System.out.println("rank a almacenar:" + rank);
             mse.setRank(rank);
             mse.setReviews(rev);
         }
@@ -151,7 +152,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
         String suri = request.getParameter("uri");
         String commentId = request.getParameter("commentId");
         SemanticObject so = null;
-        System.out.println("suri:" + suri + ", id:" + commentId );
+        //System.out.println("suri:" + suri + ", id:" + commentId );
         if (commentId == null) {
             return;
         }
@@ -163,7 +164,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
             GenericIterator<Comment> iterator =  mse.listComments();
             while (iterator.hasNext()) {
                 Comment comment = iterator.next();
-                System.out.println("comment.Id:" + comment.getId() + ", comparacion:" + comment.getId().equals(commentId));
+                //System.out.println("comment.Id:" + comment.getId() + ", comparacion:" + comment.getId().equals(commentId));
                 if (comment.getId().equals(commentId)) {
                     if (comment.isSpam()) {
                         comment.setSpam(false);
@@ -171,7 +172,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
                         comment.setSpam(true);
                     }
                     message = Boolean.toString(comment.isSpam());
-                    System.out.println("message:" + message);
+                    //System.out.println("message:" + message);
                     break;
                 }
             }
@@ -193,9 +194,10 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
         }
         if (so.getGenericInstance() instanceof MicroSiteElement) {
             MicroSiteElement mse = (MicroSiteElement) so.getGenericInstance();
-            message = mse.getRank() + "," + mse.getReviews();
+            message = mse.getRank() + "|" + mse.getReviews();
         }
         try {
+            //System.out.println("message:"+message);
             response.getWriter().print(message != null ? message : "Not OK");
         } catch (IOException ioe) {}
     }
@@ -204,7 +206,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
             HttpServletResponse response, SWBParamRequest paramRequest) {
 
         String message = request.getParameter("message");
-        System.out.println("message en returnStateMessage:" + message);
+        //System.out.println("message en returnStateMessage:" + message);
         try {
             response.getWriter().print(message != null ? message : "Not OK");
         } catch (IOException ioe) {}
