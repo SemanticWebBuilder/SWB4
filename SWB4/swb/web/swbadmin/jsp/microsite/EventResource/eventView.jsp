@@ -12,7 +12,7 @@
             String month = request.getParameter("month");
             String day = request.getParameter("day");
             Date current = new Date(System.currentTimeMillis());
-
+            
             if(day != null && month != null && day != null) {
                 current = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
             }
@@ -53,7 +53,7 @@
         </fieldset>
     </form>
     </div>
-    <%=renderCalendar(current, paramRequest)%>
+    <%=renderCalendar(current, wpage, paramRequest)%>
     <%
                 if (member.canAdd()) {
     %>
@@ -77,7 +77,7 @@
     <%  }%>
 </div>
 <%!
-    private String renderCalendar(Date current, SWBParamRequest paramRequest) {
+    private String renderCalendar(Date current, WebPage wpage, SWBParamRequest paramRequest) {
         StringBuffer sbf = new StringBuffer();
 
         System.out.println("Current: " + current);
@@ -141,7 +141,7 @@
                         "    <tr>\n");
             }
 
-            Iterator<EventElement> evsNow = EventElement.listEventElementsByDate(new Date(year, month, i));
+            Iterator<EventElement> evsNow = EventElement.listEventElementsByDate(new Date(year, month, i), wpage, wpage.getWebSite());
             String eventTitles = "";
 
             while (evsNow.hasNext()) {
@@ -169,7 +169,7 @@
                 }
             } else {
                 //Not today
-                evsNow = EventElement.listEventElementsByDate(new Date(year, month, i));
+                evsNow = EventElement.listEventElementsByDate(new Date(year, month, i), wpage, wpage.getWebSite());
                 if (!eventTitles.equals("")) {
                     SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "daily");
                     viewUrl.setParameter("year", String.valueOf(year + 1900));
