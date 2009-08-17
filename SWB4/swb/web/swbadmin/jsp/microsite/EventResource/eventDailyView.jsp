@@ -30,7 +30,7 @@
         %>
         <tr>
             <td valign="top">
-                <img src="<%=path + event.getEventImage()%>" alt="<%=event.getDescription()%>" />
+                <img src="<%=path + event.getEventImage()%>" alt="<%=event.getDescription()%>" width="90" height="150" />
             </td>
             <td valign="top">
                 <a href="<%=viewUrl%>"><%=event.getTitle()%> (<%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%>) </a><BR>
