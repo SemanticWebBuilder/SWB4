@@ -8,7 +8,7 @@
     {
     
 %>
-<div id="recentEntries">
+
   <div class="recentEntry">
     <h2 class="titulo">Ultimos elementos agregados</h2>
 
@@ -45,9 +45,9 @@
             <%
         }
     %>
-    <p class="vermas"><a href="#" >Ver m&aacute;s</a></p>
+    <!-- <p class="vermas"><a href="#" >Ver m&aacute;s</a></p> -->
   </div>
-</div>
+
 <%
 }
 %>
