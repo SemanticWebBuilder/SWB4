@@ -1590,7 +1590,8 @@ public class SWBUtils {
             Enumeration e = archive.entries();
             while (e.hasMoreElements()) {
                 ZipEntry entry = (ZipEntry) e.nextElement();
-                File file = new File(extractTo, entry.getName());
+                File file = new File(extractTo, entry.getName().replace("\\", "/")); //TODO:Pienso que con esto se soluciona el problema de creación de rutas en linux
+                //File file = new File(extractTo, entry.getName());
                 if (entry.isDirectory() && !file.exists()) {
                     file.mkdirs();
                 } else {
