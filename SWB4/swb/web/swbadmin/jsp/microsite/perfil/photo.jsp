@@ -27,8 +27,6 @@ String attributes=base.getAttribute("attributes","");
  if(user.getPhoto()!=null) photo=user.getPhoto();
  %>
  <img src="<%=photo%>" valign="top"/><br>
- <p class="vermas">
-     <a href="<%=registryPath%>" <%=attributes%>>Cambiar imagen</a>
- </p>
+ <a href="<%=registryPath%>" <%=attributes%>>Cambiar imagen</a>
                       
           
