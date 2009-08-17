@@ -101,7 +101,7 @@ Error: Elemento no encontrado...
                     </fieldset>
             <p class="pad5 last-child clear right">
                 <strong><input class="button" value="Guardar" label="Guardar" dojoType="dijit.form.Button" type="submit"/></strong>
-                <input type="button" class="button" value="Cancelar" label="Cancelar" dojoType="dijit.form.Button" onclick="window.location='<%=paramRequest.getRenderUrl()%>';"/>
+                <input type="button" class="button" value="Cancelar" label="Cancelar" dojoType="dijit.form.Button" onclick="window.location='<%=paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", uri)%>';"/>
             </p>
             <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
             <input type="hidden" name="act" value="edit"/>
