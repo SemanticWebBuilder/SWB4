@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -45,18 +44,19 @@ public class UserActivitiesResource extends GenericAdmResource {
             int num = 0;
             while (itca.hasNext()) {
                 num++;
-                if (num <= numrec) {
-                    ca = itca.next();
-                    user = ca.getUser();
-                    mse = ca.getElement();
-                    ms = ca.getCommunity();
-                    out.println("El elemento <strong>" + mse.getDisplayTitle(null) + "</strong>");
-                    out.println(" de la comunidad ");
-                    out.println("<strong>" + ms.getDisplayTitle(null) + "</strong>");
-                    out.println(" fue modificado el día <strong>" + sdf.format(mse.getUpdated()) + "</strong>");
-                    if (itca.hasNext() && num <= numrec) {
-                        out.println("<br/>");
-                    }
+                if (num > numrec) {
+                    break;
+                }
+                ca = itca.next();
+                user = ca.getUser();
+                mse = ca.getElement();
+                ms = ca.getCommunity();
+                out.println("El elemento <strong>" + mse.getDisplayTitle(null) + "</strong>");
+                out.println(" de la comunidad ");
+                out.println("<strong>" + ms.getDisplayTitle(null) + "</strong>");
+                out.println(" fue modificado el día <strong>" + sdf.format(mse.getUpdated()) + "</strong>");
+                if (itca.hasNext() && num <= numrec) {
+                    out.println("<br/>");
                 }
             }
         } else {

@@ -49,18 +49,21 @@ public class CommunityActivitiesResource extends GenericAdmResource {
                 while(itca.hasNext())
                 {
                     num++;
-                    if(num<=numrec)
-                    {
-                       ca = itca.next();
-                       user = ca.getUser();
-                       mse = ca.getElement();
-                       out.println("El elemento <strong>"+mse.getDisplayTitle(null)+"</strong>");
-                       out.println(" fué modificado por ");
-                       out.println("<strong>"+user.getFullName()+"</strong>");
-                       out.println(" el día <strong>"+sdf.format(mse.getUpdated())+"</strong>");
-                       if(itca.hasNext()&&num<=numrec)
+                    if (num > numrec) {
+                        break;
+                    }
+
+                    ca = itca.next();
+                    user = ca.getUser();
+                    mse = ca.getElement();
+                    out.println("El elemento <strong>" + mse.getDisplayTitle(null) + "</strong>");
+                    out.println(" fué modificado por ");
+                    out.println("<strong>" + user.getFullName() + "</strong>");
+                    out.println(" el día <strong>" + sdf.format(mse.getUpdated()) + "</strong>");
+                    if (itca.hasNext() && num <= numrec) {
                         out.println("<br/>");
                     }
+                    
                 }
             }
             else
