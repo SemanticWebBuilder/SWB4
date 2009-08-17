@@ -3,6 +3,7 @@
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="java.util.*"%>
+<%@page import="org.semanticwb.model.*"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.platform.*"%>
@@ -18,10 +19,16 @@ if(request.getParameter("user")!=null)
     user=(User)semObj.createGenericInstance();
 }
 if(!owner.isRegistered() || !user.isRegistered()) return;
+Resource base=paramRequest.getResourceBase();
+String registryPath=base.getAttribute("registryPath","");
+String attributes=base.getAttribute("attributes","");
 
  String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
  if(user.getPhoto()!=null) photo=user.getPhoto();
  %>
- <img src="<%=photo%>" valign="top"/>
+ <img src="<%=photo%>" valign="top"/><br>
+ <p class="vermas">
+     <a href="<%=registryPath%>" <%=attributes%>>Cambiar imagen</a>
+ </p>
                       
           
