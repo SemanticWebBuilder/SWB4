@@ -108,7 +108,14 @@ Error: Elemento no encontrado...
                     </fieldset>
             <p class="pad5 last-child clear right">
                 <strong><input class="button" value="Guardar" label="Guardar" dojoType="dijit.form.Button" type="submit"/></strong>
-                <input type="button" class="button" value="Cancelar" label="Cancelar" dojoType="dijit.form.Button" onclick="window.location='<%=paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", uri)%>';"/>
+                <%
+                SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "detail");
+                back.setParameter("uri", uri);
+                back.setParameter("day", request.getParameter("day"));
+                back.setParameter("month", request.getParameter("month"));
+                back.setParameter("year", request.getParameter("year"));
+                %>
+                <input type="button" class="button" value="Cancelar" label="Cancelar" dojoType="dijit.form.Button" onclick="window.location='<%=back%>';"/>
             </p>
             <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
             <input type="hidden" name="act" value="edit"/>
