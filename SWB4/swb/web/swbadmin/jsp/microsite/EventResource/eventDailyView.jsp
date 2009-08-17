@@ -25,6 +25,9 @@
             while (eit.hasNext()) {
                 EventElement event = eit.next();
                 SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", event.getURI());
+                viewUrl.setParameter("year", year);
+                viewUrl.setParameter("month", month);
+                viewUrl.setParameter("day", day);
                 if (event.canView(member)) {
         %>
         <tr>
