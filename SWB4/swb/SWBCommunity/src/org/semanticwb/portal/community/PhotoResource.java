@@ -62,16 +62,13 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String act=request.getParameter("act");
-        System.out.println("1...act="+act);
         if(act==null) {
             act = (String)request.getSession(true).getAttribute("act");
             request.getSession(true).setAttribute("act", null);
             request.getSession(true).removeAttribute("act");
-            System.out.println("2...act="+act);
         }
         if(act==null) {
             act = "view";
-            System.out.println("3...act="+act);
         }        
 
         String path="/swbadmin/jsp/microsite/PhotoResource/photoView.jsp";
@@ -201,7 +198,6 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         synchronized(serial) {
                             serial = serial.add(BigInteger.ONE);
                         }
-                        System.out.println("\n***********serial="+serial.toString()+"\n");
                         String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
                         currentFile.write(new File(path+"/"+name));
                         params.put("filename", name);
