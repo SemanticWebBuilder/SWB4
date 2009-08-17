@@ -35,12 +35,14 @@ WebPage wpage=paramRequest.getWebPage()
 Member member = Member.getMember(user,wpage)
 def lista = Member.listMemberByUser(user,wpage.getWebSite())
 
-println "Mis Comunidades:<ul>"
+println """<div id="comunidades">
+<h2>Mis Comunidades</h2>
+<ul>"""
 lista.each(){
     Member mem_curr = it
     MicroSite mem_mcs = mem_curr.getMicroSite()
     def titulo = mem_mcs.getDisplayName()
     def url = mem_mcs.getUrl()
-    println "<li><a href=\"${url}\">$titulo</a></li>"
+    println """<li><a class="contactos_nombre" href="${url}">$titulo</a></li>"""
 }
-println "</ul>"
+println """</ul></div>"""

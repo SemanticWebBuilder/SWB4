@@ -39,8 +39,21 @@ def usr_lname = (user.getLastName()==null?"":user.getLastName())
 def usr_sname = (user.getSecondLastName()==null?"":user.getSecondLastName())
 def usr_mail = (user.getEmail()==null?"":user.getEmail())
 def usr_login = user.getLogin()
+def usr_age = user.getExtendedAttribute("userAge")
+def usr_sex = user.getExtendedAttribute("userSex")
+def usr_sexM = ""
+def usr_sexF = ""
+if ("M".equals(usr_sex)) usr_sexM = "selected=\"selected\""
+if ("F".equals(usr_sex)) usr_sexF = "selected=\"selected\""
+def usr_status = user.getExtendedAttribute("userStatus")
+if (null==usr_status) usr_status = ""
+def usr_interest = user.getExtendedAttribute("userInterest")
+if (null==usr_interest) usr_interest = ""
+def usr_hobbies = user.getExtendedAttribute("userHobbies")
+if (null==usr_hobbies) usr_hobbies = ""
+def usr_inciso = user.getExtendedAttribute("userInciso")
+if (null==usr_inciso) usr_inciso = ""
 
-//onsubmit="submitForm('http://www.semanticwb.org/uradm#swb_User:$id/form');return false;"
 
 println """
 <script language="javascript" type="text/javascript" src="/swbadmin/js/upload.js"></script>
@@ -85,7 +98,7 @@ println """
                    dojo.require("dijit.form.Button");
                    dojo.require("dijit.Dialog");
         </script>
-<form id="http://www.semanticwb.org/uradm#swb_User:$id/form" dojoType="dijit.form.Form" class="swbform"
+<form id="form_$id" dojoType="dijit.form.Form" class="swbform"
 action="$acc_url"   method="post">
     <input type="hidden" name="suri" value="$uri"/>
     <input type="hidden" name="scls" value="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
@@ -105,17 +118,37 @@ action="$acc_url"   method="post">
                 <tr><td width="200px" align="right"><label for="usrEmail">Correo Electr&oacute;nico &nbsp;</label></td>
                 <td><input _id="usrEmail" name="usrEmail" value="$usr_mail" dojoType="dijit.form.ValidationTextBox"
                 required="false" promptMessage="Captura Correo Electr&oacute;nico" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
+                <tr><td width="200px" align="right"><label for="usrAge">Edad &nbsp;</label></td>
+                <td><input _id="usrAge" name="usrAge" value="$usr_age" dojoType="dijit.form.ValidationTextBox"
+                required="false" promptMessage="Captura Edad" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
+                <tr><td width="200px" align="right"><label for="usrSex">Correo Electr&oacute;nico &nbsp;</label></td>
+                <td><select dojoType="dijit.form.FilteringSelect" autocomplete="false" _id="usrSex" name="usrSex" value="$usr_sex"
+                required="false" promptMessage="Elige Sexo" invalidMessage="Dato Invalido" >
+                <option value=""></option>
+                <option value="M" $usr_sexM>Hombre</option>
+                <option value="F" $usr_sexF>Mujer</option>
+                </select></td></tr>
                 </table></fieldset>
-<fieldset><span align="center">
-    <button dojoType="dijit.form.Button" type="submit">Guardar</button>
-</span></fieldset>
-</form>
-<fieldset>
+                <fieldset>
+	    <legend>Informaci&oacute;n complementaria</legend>
+	    <table>
+            <tr><td width="200px" align="right">Estado Civil &nbsp;</td>
+            <td><input _id="usrStatus" name="usrStatus" value="$usr_status" dojoType="dijit.form.ValidationTextBox"
+                required="false" promptMessage="Captura Estado Civil" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
+            <tr><td width="200px" align="right">Intereses &nbsp;</td>
+            <td><textarea name="usrInterest" rows=10 cols=80>$usr_interest</textarea></td></tr>
+            <tr><td width="200px" align="right">Pasatiempos &nbsp;</td>
+            <td><textarea name="usrHobbies" rows=10 cols=80>$usr_hobbies</textarea></td></tr>
+            <tr><td width="200px" align="right">Incisos &nbsp;</td>
+            <td><textarea name="usrInciso" rows=10 cols=80>$usr_inciso</textarea></td></tr>
+            </table>
+                </form>
+                <fieldset>
 	    <legend>Fotograf&iacute;a</legend>
 	    <table>
             <tr><td width="200px" align="right"><label for="picture">Fotograf&iacute;a &nbsp;</label></td>
                     <td><iframe id="pictureTransferFrame" name="pictureTransferFrame" src="" style="display:none" ></iframe>
-                        <form id="fupload" name="fupload" enctype="multipart/form-data"
+                        <form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform"
                         action="$url_actPic"
                         method="post" target="pictureTransferFrame" >
                         <input type="file" name="picture"
@@ -125,4 +158,10 @@ action="$acc_url"   method="post">
                     </td></tr>
 	    </table>
 	</fieldset>
+<fieldset><span align="center">
+    <button dojoType="dijit.form.Button" type="button" onclick="var x=document.getElementById(\"form_$id\"); x.submit(); ">Guardar</button>
+</span></fieldset>
+
+
 """
+
