@@ -23,6 +23,10 @@
                     href+="?&act=detail&uri="+URLEncoder.encode(href);
                 }
                 String src=null;
+                if(element.getNewsPicture()!=null)
+                {
+                    src=element.getNewsPicture();
+                }
                 String title=element.getTitle();
                 if(title==null)
                 {
