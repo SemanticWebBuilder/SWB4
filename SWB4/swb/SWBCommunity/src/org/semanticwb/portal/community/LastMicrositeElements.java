@@ -70,7 +70,7 @@ public class LastMicrositeElements extends GenericAdmResource
         prefixStatement.append(" PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>" + NL);
         prefixStatement.append(" PREFIX rdf: <" + SemanticVocabulary.RDF_URI + "> " + NL);
         prefixStatement.append(" PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + "> " + NL);
-        prefixStatement.append("SELECT ?x ?date WHERE {?x swb:created ?date . ?x rdf:type swbcomm:MicroSiteElement} ORDER BY DESC(?date) LIMIT "+limit);
+        prefixStatement.append("SELECT ?x ?date WHERE {?x swb:created ?date . ?x rdf:type swbcomm:MicroSiteElement} ORDER BY ?date LIMIT "+limit);
         QueryExecution qe = paramRequest.getWebPage().getSemanticObject().getModel().sparQLOntologyQuery(prefixStatement.toString());
         ResultSet rs = qe.execSelect();
         while (rs.hasNext())
@@ -82,9 +82,10 @@ public class LastMicrositeElements extends GenericAdmResource
                 if (rb.get(name.toString()).isResource())
                 {
                     Resource res = rb.getResource(name.toString());
-                    SemanticObject obj = SemanticObject.createSemanticObject(res);
-                    MicroSiteElement microSite = new MicroSiteElement(obj);
-                    elements.add(microSite);
+                    SemanticObject obj= paramRequest.getWebPage().getWebSite().getSemanticObject().getSemanticObject(res.getURI());
+                    //SemanticObject obj=SemanticObject.getSemanticObject(res.getURI());
+                    MicroSiteElement element=new MicroSiteElement(obj);
+                    elements.add(element);
                 }
             }
         }
