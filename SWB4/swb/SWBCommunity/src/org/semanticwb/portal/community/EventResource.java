@@ -42,6 +42,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
@@ -150,9 +151,18 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
 
             //Add attendant member
             if (rec != null && rec.canModify(mem)) {
-                System.out.println("Agregando a " + response.getUser().getFullName() + "en processAction");
-                rec.addAttendant(response.getUser());
+                boolean found = false;
+                Iterator<User> uit = rec.listAttendants();
+                while (uit.hasNext() && !found) {
+                    User u = uit.next();
+                    if (u.getFullName().equals(response.getUser().getFullName())) {
+                        found = true;
+                    }
+                }
+                if (!found) rec.addAttendant(response.getUser());
             }
+            response.setRenderParameter("uri", uri);
+            response.setRenderParameter("act", "detail");
         } else {
             super.processAction(request, response);
         }
