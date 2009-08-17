@@ -27,8 +27,8 @@
         <fieldset><legend></legend>
             <div>
                 <p>
-                    <label for="title">Título</label><input id="title" name="title" value=""><br>
-                    <label for="description">Contenido de la entrada</label>
+                    <label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input id="title" name="title" value=""><br>
+                    <label for="description">Contenido de la entrada:&nbsp;&nbsp;&nbsp;</label>
                     <textarea id="description" plugins="['bold','italic','underline', 'strikethrough','|','insertUnorderedList','insertOrderedList','|','createLink','unlink']" dojoType="dijit.Editor" rows="5" cols="23" name="description"></textarea>
                     <script>
                         function validaForma(forma)
