@@ -18,8 +18,10 @@
     <div class="newsimage">
         <img src="<%=path + rec.getNewsPicture()%>" alt="<%=rec.getDescription()%>" width="110" height="150" />
     </div>
-    <div class="newsbody">
+    <div class="newstitle">
         <h2><%=rec.getTitle()%> (<%=rec.getCitation()%>)</h2>
+    </div>
+    <div class="newsbody">
         <%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%><br>
         Por&nbsp;<%=rec.getAuthor()%><BR><br>
         <%=rec.getFullText()%><br>
