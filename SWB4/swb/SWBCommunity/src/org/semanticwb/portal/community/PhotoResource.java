@@ -91,8 +91,8 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
 
         String action=request.getParameter("act");
         if(action==null) {
-            if(mem.canAdd()) {
-                HashMap<String,String> params = uploadPhoto(request);
+            HashMap<String,String> params = uploadPhoto(request);
+            if(mem.canAdd() && params.containsValue("add")) {
                 PhotoElement rec = PhotoElement.createPhotoElement(getResourceBase().getWebSite());
                 rec.setImageURL(params.get("filename"));
                 rec.setTitle(params.get("title"));
