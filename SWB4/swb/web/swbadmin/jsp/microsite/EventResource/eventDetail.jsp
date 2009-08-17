@@ -8,8 +8,6 @@
     Member member = Member.getMember(user, wpage);
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
     SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
-%>
-<%
     String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
     String uri = request.getParameter("uri");
 
