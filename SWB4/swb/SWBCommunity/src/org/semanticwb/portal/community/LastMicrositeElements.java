@@ -77,23 +77,13 @@ public class LastMicrositeElements extends GenericAdmResource
         {
             QuerySolution rb = rs.nextSolution();
             //List resultVars = rs.getResultVars();
-            if (rb.get("x").isResource())
+            if (rb.get("?x")!=null && rb.get("?x").isResource())
             {
-                Resource res = rb.getResource("x");
+                Resource res = rb.getResource("?x");
                 SemanticObject obj = SemanticObject.createSemanticObject(res.getURI());
                 MicroSiteElement element = (MicroSiteElement) obj.createGenericInstance();
                 elements.add(element);
-            }
-            /*for (Object name : resultVars)
-            {
-            if (rb.get(name.toString()).isResource())
-            {
-            Resource res = rb.getResource(name.toString());
-            SemanticObject obj= SemanticObject.createSemanticObject(res.getURI());
-            MicroSiteElement element=(MicroSiteElement)obj.createGenericInstance();
-            elements.add(element);
-            }
-            }*/
+            }            
         }
         String path = "/swbadmin/jsp/microsite/LastMicrositeElements/LastMicrositeElementsView.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
