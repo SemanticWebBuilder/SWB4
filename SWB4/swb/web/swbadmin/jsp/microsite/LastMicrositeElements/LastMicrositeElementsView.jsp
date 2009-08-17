@@ -1,4 +1,7 @@
 <%@page import="java.net.URLEncoder,org.semanticwb.*,java.text.*,org.semanticwb.portal.community.*,java.util.*" %>
+
+    <div class="recentEntry">
+    <h2 class="titulo">Lo último en la ciudad digital</h2>
 <%
     String webpath=SWBPlatform.getContextPath()+"/swbadmin/jsp/microsite/LastMicrositeElements/";
     String defaultFormat = "dd 'de' MMMM 'del' yyyy 'a las' HH:mm";
@@ -6,16 +9,6 @@
     ArrayList<MicroSiteElement> elements=(ArrayList<MicroSiteElement>)request.getAttribute("elements");
     if(elements.size()>0)
     {
-    
-%>
-
-  <div class="recentEntry">
-
-    <h2 class="titulo">Lo último en la ciudad digital</h2>
-
-    <%
-        if(elements.size()>0)
-            {
         for(MicroSiteElement element : elements)
         {
             String src="ico_sound.gif";
@@ -68,18 +61,21 @@
                   </div>
                 <%
             }
-        }
-        }
-        }else
+            else
             {
+                %>
+                <p>No hay blogs, videos, fotos, etc, publicados en el sitio</p>
+                <%
+            }
+       }   
+}
+else
+{
         %>
         <p>No hay blogs, videos, fotos, etc, publicados en el sitio</p>
         <%
-        }
-    %>
-    
-  </div>
-
-<%
 }
+
 %>
+
+</div>
