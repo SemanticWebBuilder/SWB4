@@ -85,11 +85,7 @@
                                     </form>
                                 </td></tr>
                     </table>
-                    </fieldset>
-                    <fieldset><span align="center">
-                        <button dojoType="dijit.form.Button" type="button" onclick="enviar()">Guardar</button>
-                    </span></fieldset>
-
+                    </fieldset>                    
                <%
               }
             }
