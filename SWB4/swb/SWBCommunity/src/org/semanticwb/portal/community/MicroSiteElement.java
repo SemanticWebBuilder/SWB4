@@ -166,7 +166,7 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
             suri = this.getURI();
         }
         tmpUrl = "uri=\"+escape('" + suri + "')";
-        rank = (int) Math.round(Math.floor(this.getRank() * 10));  //this.getRank() * 10
+        rank = (int) Math.round(Math.floor(this.getRank()));  //this.getRank() * 10
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("vote");
         url.setMode(paramRequest.getMode());
@@ -206,22 +206,31 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         sb.append("\nvar count = 0;");
         sb.append("\n\nfunction vote(val) {");
         sb.append("\n    if (!invoke) return;");
-        sb.append("\n    var url = \"" + url + "?act=vote&value=\"+escape(val)+\"&" + tmpUrl + ";\n" +
-                "    request.open(\"GET\", url, true);");
+        sb.append("\n    //alert('En funcion para votar');");
+        sb.append("\n    var url = \"" + url + "?act=vote&value=\"+escape(val)+\"&" + tmpUrl + ";");
+        sb.append("\n    request.open(\"GET\", url, true);");
         sb.append("\n    request.onreadystatechange = ranked;");
         sb.append("\n    request.send(null);");
         sb.append("\n}");
         sb.append("\n\nfunction ranked() {");
-        sb.append("\n    var response = request.responseText;");
-        sb.append("\n    if (count == 0) {");
-        sb.append("\n      if ('Not OK'!=response) {");
-        sb.append("\n          alert('Calificación contabilizada, muchas gracias por tu opinión!');");
+        sb.append("\n  var response = request.responseText;");
+        sb.append("\n  if (count == 0) {");
+        sb.append("\n    if(request.readyState!=4) return;");
+        sb.append("\n    if(request.status==200) {");
+        sb.append("\n      if ('Not OK'!=response && ''!=response) {");
+//        sb.append("\n          //alert('Calificación contabilizada, muchas gracias por tu opinión!');");
+        sb.append("\n          var ranking = Math.floor(response.split('|')[0]);");
+        sb.append("\n          var votes = response.split('|')[1];");
+//        sb.append("\n          alert('response:' + response+', rank:'+ranking+', votos:'+votes);");
+        sb.append("\n          document.getElementById(\"reviews\").innerHTML = votes;");
+//        sb.append("\n          dojo.query('#rating1Value')[0].innerHTML = ranking;");
         sb.append("\n          invoke = false;");
         sb.append("\n      } else {");
         sb.append("\n          alert('Lo sentimos, ha ocurrido un problema al contabilizar la calificación!');");
         sb.append("\n      } ");
         sb.append("\n      count++;");
         sb.append("\n    } ");
+        sb.append("\n  } ");
         sb.append("\n}");
 
         url.setAction("abuseReport");
@@ -245,7 +254,7 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         sb.append("\n      } else {");
         sb.append("\n        document.getElementById(\"abused\").innerHTML = 'Apropiado';");
         sb.append("\n      } ");
-//        sb.append("\n      invokeAbused = false;");
+        sb.append("\n      invokeAbused = false;");
         sb.append("\n    }");
         sb.append("\n  }");
         sb.append("\n}");
@@ -302,7 +311,10 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
 //                + "<script type=\"dojo/event\" event=\"onChange\">alert(\"valor:\"+this.value);vote(this.value);/*dojo.query('#rating1Value')[0].innerHTML = this.value;*/</script></div>");
         //sb.append("\n      </tr>\n    </table>");
         sb.append("\n  </span>");
-        sb.append("\n  <div style=\"float:left; width:200px;\">" + this.getReviews() + " calificaciones</div>");
+        sb.append("\n  <div style=\"float:left; width:200px;\">");
+        sb.append("\n    <div style=\"float:left;\" id=\"reviews\">" + this.getReviews() + "</div>");
+        sb.append("\n    <div style=\"float:left;\"> calificaciones</div>");
+        sb.append("\n  </div>");
         sb.append("\n  <span style=\"float:left\"><a href=\"javascript:changeAbusedState();\">P&uacute;blicamente</a> <span id=\"abused\">"
                 + abusedDesc + "</span></span>");
         sb.append("\n</div><br/><br/>");
@@ -337,7 +349,7 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
     private String renderListComments(MicroSiteElement mse, User user) {
 
         StringBuilder ret = new StringBuilder(200);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");
+        //SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");
         int ordinal = 1;
 
         GenericIterator<Comment> iterator = mse.listComments();
