@@ -75,8 +75,7 @@ public class LastMicrositeElements extends GenericAdmResource
         ResultSet rs = qe.execSelect();
         while (rs.hasNext())
         {
-            QuerySolution rb = rs.nextSolution();
-            //List resultVars = rs.getResultVars();
+            QuerySolution rb = rs.nextSolution();            
             if (rb.get("?x")!=null && rb.get("?x").isResource())
             {
                 Resource res = rb.getResource("?x");
