@@ -141,10 +141,18 @@
                         "    <tr>\n");
             }
 
+            Iterator<EventElement> evsNow = EventElement.listEventElementsByDate(new Date(year, month, i));
+            String eventTitles = "";
+
+            while (evsNow.hasNext()) {
+                EventElement eve = evsNow.next();
+                eventTitles = eventTitles + "* " + eve.getTitle().trim() + "&#10;";
+            }
+            
             //Today?
             if (day == i - 1) {
                 //Are there events today?
-                if (EventElement.listEventElementsByDate(new Date(year, month, i)).hasNext()) {
+                if (!eventTitles.equals("")) {
                     SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "daily");
                     viewUrl.setParameter("year", String.valueOf(year + 1900));
                     viewUrl.setParameter("month", String.valueOf(month));
@@ -155,13 +163,14 @@
                             "      </td>\n");
                 }  else {
                     //There aren't events today
-                    sbf.append("      <td class=\"today\">\n" +
+                    sbf.append("      <td class=\"day\">\n" +
                             "<div class=\"daylabel\">" + i + "</div>\n" +
                             "      </td>\n");
                 }
             } else {
                 //Not today
-                if (EventElement.listEventElementsByDate(new Date(year, month, i)).hasNext()) {
+                evsNow = EventElement.listEventElementsByDate(new Date(year, month, i));
+                if (!eventTitles.equals("")) {
                     SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "daily");
                     viewUrl.setParameter("year", String.valueOf(year + 1900));
                     viewUrl.setParameter("month", String.valueOf(month));
