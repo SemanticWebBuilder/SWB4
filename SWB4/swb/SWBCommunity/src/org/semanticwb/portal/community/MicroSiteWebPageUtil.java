@@ -11,11 +11,40 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBMail;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.util.db.GenericDB;
 
 
 public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.MicroSiteWebPageUtilBase 
 {
     private static Logger log = SWBUtils.getLogger(MicroSiteWebPageUtil.class);
+
+    static
+    {
+        try {
+            Connection con = SWBUtils.DB.getDefaultConnection("Revisión si existe tabla swb_commlog. MicroSiteWebPageUtil (static)");
+            Statement st = con.createStatement();
+            try {
+                ResultSet rs = st.executeQuery("select count(*) from swb_commlog");
+                if (rs.next()) {
+                    int x = rs.getInt(1);
+                }
+                rs.close();
+            } catch (SQLException ne) {
+                //ne.printStackTrace();
+                log.event("Creating Community Log Table...");
+                GenericDB db = new GenericDB();
+                String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_commlog.xml");
+                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
+            }
+            st.close();
+            con.close();
+        } catch (SQLException e) {
+            log.error(e);
+        }
+    }
+
+
+
     public MicroSiteWebPageUtil(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
