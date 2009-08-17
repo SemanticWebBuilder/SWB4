@@ -14,6 +14,8 @@
     <h2 class="titulo">Lo último en la ciudad digital</h2>
 
     <%
+        if(elements.size()>0)
+            {
         for(MicroSiteElement element : elements)
         {
             String src="ico_sound.gif";
@@ -67,8 +69,15 @@
                 <%
             }
         }
+        }
+        }else
+            {
+        %>
+        <p>No hay blogs, videos, fotos, etc, publicados en el sitio</p>
+        <%
+        }
     %>
-    <!-- <p class="vermas"><a href="#" >Ver m&aacute;s</a></p> -->
+    
   </div>
 
 <%
