@@ -29,7 +29,7 @@
                 <a href="<%=viewUrl%>"><%=anew.getTitle()%></a><%=(anew.getCitation() == null ? "" : "(" + anew.getCitation() + ")")%><BR>
                 Por:&nbsp;<b><%=(anew.getAuthor() == null ? "" : anew.getAuthor())%></b> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%><BR>
                 <b><%=(anew.getCreated() == null ? "" : dateFormat.format(anew.getCreated()))%>.</b><%=(anew.getAbstr() == null ? "" : anew.getAbstr())%><BR>
-                Texto completo:&nbsp;<%=(anew.getFullText() == null ? "" : anew.getFullText())%><BR>
+                <a href="<%=viewUrl%>">Ver m&aacute;s</a><BR>
                 Puntuación:&nbsp;<%=anew.getRank()%><BR>
                 <%=anew.getViews()%> vistas.
             </td>
