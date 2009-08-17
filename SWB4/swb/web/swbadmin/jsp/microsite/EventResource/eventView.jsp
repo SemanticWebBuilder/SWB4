@@ -112,7 +112,7 @@
         sbf.append("<div class=\"calendar\">\n" +
                 "  <table>\n" +
                 "    <tr>\n" +
-                "      <td class=\"head\" colspan=\"7\">" +
+                "      <td class=\"month-head\" colspan=\"7\">" +
                 "<a href=\"" + pml + "\">&lt;</a>    " +
                 months[month] + " " + (year + 1900) +
                 "    <a href=\"" + nml + "\">&gt;</a>" +
@@ -122,7 +122,7 @@
 
         //Render day labels
         for (int i = 0; i < 7; i++) {
-            sbf.append("      <td class=\"head\">" + days[i] + "</td>\n");
+            sbf.append("      <td class=\"day-head\">" + days[i] + "</td>\n");
         }
 
         sbf.append("    </tr>\n" +
