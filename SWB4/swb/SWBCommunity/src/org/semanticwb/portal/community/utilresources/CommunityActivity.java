@@ -5,7 +5,7 @@
 
 package org.semanticwb.portal.community.utilresources;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -25,9 +25,9 @@ public class CommunityActivity {
     private String commURI = null;
     private String usrURI = null;
     private String elementURI = null;
-    private Date modified = null;
+    private Timestamp modified = null;
 
-    public CommunityActivity(String commURI, String usrURI, String elementURI, Date modified)
+    public CommunityActivity(String commURI, String usrURI, String elementURI, Timestamp modified)
     {
 
         if(commURI!=null && usrURI!=null && elementURI!=null && modified!=null)
@@ -116,7 +116,7 @@ public class CommunityActivity {
     /**
      * @return the modified
      */
-    public Date getModified() {
+    public Timestamp getModified() {
         return modified;
     }
 
