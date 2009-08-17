@@ -96,7 +96,11 @@
     SWBFormMgr mgr=new SWBFormMgr(MicroSite.sclass, wpage.getSemanticObject(), null);
     mgr.setType(mgr.TYPE_DOJO);
     mgr.setAction(paramRequest.getActionUrl().toString());
-    mgr.setFilterRequired(false);
+    mgr.addProperty(WebPage.swb_description);
+    mgr.addProperty(WebPage.swb_tags);
+    mgr.addProperty(MicroSite.swbcomm_private);
+    mgr.addProperty(MicroSite.swbcomm_moderate);
+    //mgr.setFilterRequired(false);
     out.println(mgr.renderForm(request));
 
 %>
