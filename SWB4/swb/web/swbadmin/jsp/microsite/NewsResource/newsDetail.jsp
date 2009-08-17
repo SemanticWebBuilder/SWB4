@@ -17,7 +17,7 @@
     <tr>
         <td valign="top">
                 <h2><%=rec.getTitle()%></h2>
-                Por:<%=rec.getAuthor()%> <BR>
+                Por:<%=rec.getAuthor()%> - <%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%><BR>
                 En: <%=rec.getCitation()%>
                 <hr>
                 <%=rec.getFullText()%>
