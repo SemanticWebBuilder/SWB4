@@ -10,7 +10,8 @@
 %>
 
   <div class="recentEntry">
-    <h2 class="titulo">Ultimos elementos agregados</h2>
+
+    <h2 class="titulo">Lo último en la ciudad digital</h2>
 
     <%
         for(MicroSiteElement element : elements)
