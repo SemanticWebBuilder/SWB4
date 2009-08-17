@@ -154,7 +154,7 @@ public class SWBFormMgr
         {
             SemanticProperty prop=it.next();
             //System.out.println("add:"+prop);
-            addProperty(prop);
+            addProperty(prop,filterRequired);
         }
     }
 
@@ -162,8 +162,13 @@ public class SWBFormMgr
     {
         return groups;
     }
-    
+
     public void addProperty(SemanticProperty prop)
+    {
+        addProperty(prop, false);
+    }
+    
+    public void addProperty(SemanticProperty prop, boolean filterRequired)
     {
         //System.out.println("prop:"+prop);
         boolean createGroup=false;
@@ -264,7 +269,31 @@ public class SWBFormMgr
 
     public void setType(String type) {
         this.m_type = type;
-    }      
+    }
+
+
+    private String getIdentifierElement()
+    {
+        boolean DOJO=false;
+        boolean IPHONE=false;
+        boolean XHTML=false;
+        if(m_type.equals(TYPE_XHTML))XHTML=true;
+        if(m_type.equals(TYPE_DOJO))DOJO=true;
+        if(m_type.equals(TYPE_IPHONE))IPHONE=true;
+
+        StringBuffer ret=new StringBuffer();
+        String sid="Identificador";
+        if(m_lang.equals("en"))sid="Identifier";
+        String model=m_ref.getModel().getName();
+        String clsid=m_cls.getClassId();
+        ret.append("	    <tr><td align=\"right\">\n");
+        ret.append("                <label>"+sid+" <em>*</em></label>\n");
+        ret.append("        </td><td>\n");
+        if(DOJO)ret.append("                <input type=\"text\" id=\"swb_create_id\" name=\""+PRM_ID+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject('"+model+"','"+clsid+"',this.textbox.value);\" invalidMessage=\"Identificador invalido.\" style=\"width:300px;\" trim=\"true\"/>\n");
+        else ret.append("                <input type=\"text\" id=\"swb_create_id\" style=\"width:300px;\" name=\""+PRM_ID+"\"/>\n");
+        ret.append("	    </td></tr>\n");
+        return ret.toString();
+    }
     
     public String renderForm(HttpServletRequest request)
     {
@@ -350,6 +379,7 @@ public class SWBFormMgr
 
         }else
         {
+            boolean idinsert=false;
             ret.append("	<fieldset>\n");
             //ret.append("	    <legend>"+group.getSemanticObject().getDisplayName(m_lang)+"</legend>");
             ret.append("	    <table>\n");
@@ -362,6 +392,13 @@ public class SWBFormMgr
                 while(it.hasNext())
                 {
                     SemanticProperty prop=it.next();
+
+                    if(!m_cls.isAutogenId() && !idinsert && !prop.isRequired())
+                    {
+                        idinsert=true;
+                        ret.append(getIdentifierElement());
+                    }
+
                     FormElement ele=getFormElement(prop);
                     if(DOJO && !m_cls.isAutogenId() && prop.equals(m_cls.getDisplayNameProperty()))
                     {
@@ -370,18 +407,9 @@ public class SWBFormMgr
                     renderProp(request, ret, prop, ele);
                 }
             }
-            if(!m_cls.isAutogenId())
+            if(!idinsert && !m_cls.isAutogenId())
             {
-                String sid="Identificador";
-                if(m_lang.equals("en"))sid="Identifier";
-                String model=m_ref.getModel().getName();
-                String clsid=m_cls.getClassId();
-                ret.append("	    <tr><td align=\"right\">\n");
-                ret.append("                <label>"+sid+" <em>*</em></label>\n");
-                ret.append("        </td><td>\n");
-                if(DOJO)ret.append("                <input type=\"text\" id=\"swb_create_id\" name=\""+PRM_ID+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject('"+model+"','"+clsid+"',this.textbox.value);\" invalidMessage=\"Identificador invalido.\" style=\"width:300px;\" trim=\"true\"/>\n");
-                else ret.append("                <input type=\"text\" id=\"swb_create_id\" style=\"width:300px;\" name=\""+PRM_ID+"\"/>\n");
-                ret.append("	    </td></tr>\n");
+                ret.append(getIdentifierElement());
             }
             //ret.append("        <tr><td align=\"center\" colspan=\"2\"><hr/></td></tr>");
             ret.append("        <tr><td align=\"center\" colspan=\"2\">\n");
