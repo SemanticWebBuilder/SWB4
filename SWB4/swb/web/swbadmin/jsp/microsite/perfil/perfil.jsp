@@ -46,8 +46,7 @@
 
              <table>
                  <tr>
-                     <td>
-                         <img src="<%=photo%>" valign="top"/><br>
+                     <td><br/><br/>
                          <%=userFirstName%> <%=userLastName%> <%=secondName%><br/>
                      </td>
                  </tr>
