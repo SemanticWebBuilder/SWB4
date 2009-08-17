@@ -13,6 +13,7 @@
             <column id="commuri" type="VARCHAR" size="250" acceptNulls="false"/>
             <column id="usruri" type="VARCHAR" size="250" acceptNulls="false"/>
             <column id="elementuri" type="VARCHAR" size="250" acceptNulls="false"/>
+            <column id="modified" type="TIMESTAMP" size="14" acceptNulls="false"/>
     </table>
     <index name="commlog_indexCOMM" table="swb_commlog" >
 		<colindex id="commuri"/>
