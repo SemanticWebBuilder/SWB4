@@ -40,6 +40,7 @@ def usr_sname = (user.getSecondLastName()==null?"":user.getSecondLastName())
 def usr_mail = (user.getEmail()==null?"":user.getEmail())
 def usr_login = user.getLogin()
 def usr_age = user.getExtendedAttribute("userAge")
+if (null==usr_age) usr_status = ""
 def usr_sex = user.getExtendedAttribute("userSex")
 def usr_sexM = ""
 def usr_sexF = ""
@@ -97,6 +98,11 @@ println """
                    dojo.require("dijit.form.ValidationTextBox");
                    dojo.require("dijit.form.Button");
                    dojo.require("dijit.Dialog");
+ function enviar(){
+    var x=document.getElementById(\"form_$id\");
+    alert(x.id);
+    x.submit();
+ }
         </script>
 <form id="form_$id" dojoType="dijit.form.Form" class="swbform"
 action="$acc_url"   method="post">
@@ -121,7 +127,7 @@ action="$acc_url"   method="post">
                 <tr><td width="200px" align="right"><label for="usrAge">Edad &nbsp;</label></td>
                 <td><input _id="userAge" name="userAge" value="$usr_age" dojoType="dijit.form.ValidationTextBox"
                 required="false" promptMessage="Captura Edad" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
-                <tr><td width="200px" align="right"><label for="usrSex">Correo Electr&oacute;nico &nbsp;</label></td>
+                <tr><td width="200px" align="right"><label for="usrSex">Sexo &nbsp;</label></td>
                 <td><select dojoType="dijit.form.FilteringSelect" autocomplete="false" _id="userSex" name="userSex" value="$usr_sex"
                 required="false" promptMessage="Elige Sexo" invalidMessage="Dato Invalido" >
                 <option value=""></option>
@@ -132,7 +138,7 @@ action="$acc_url"   method="post">
                 <fieldset>
 	    <legend>Informaci&oacute;n complementaria</legend>
 	    <table>
-            <tr><td width="200px" align="right">Estado Civil &nbsp;</td>
+            <tr><td width="200px" align="right"><label for="userStatus">Estado Civil &nbsp;</label></td>
             <td><input _id="userStatus" name="userStatus" value="$usr_status" dojoType="dijit.form.ValidationTextBox"
                 required="false" promptMessage="Captura Estado Civil" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
             <tr><td width="200px" align="right">Intereses &nbsp;</td>
@@ -159,7 +165,7 @@ action="$acc_url"   method="post">
 	    </table>
 	</fieldset>
 <fieldset><span align="center">
-    <button dojoType="dijit.form.Button" type="button" onclick="var x=document.getElementById(\"form_$id\"); x.submit(); ">Guardar</button>
+    <button dojoType="dijit.form.Button" type="button" onclick="enviar()">Guardar</button>
 </span></fieldset>
 
 
