@@ -1,0 +1,187 @@
+/* 
+    Document   : ciudad_digital
+    Created on : 17/08/2009, 09:57:04 PM
+    Author     : jose.jimenez
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+.comment-entry {
+border-top:1px solid #EFEFEF;
+clear:both;
+font-size:13px;
+margin-top:6px;
+padding:7px 0 4px 15px;
+}
+html > body .comment-entry {
+padding-bottom:0;
+}
+.comment-head, .comment-head-hidden {
+background-color:white;
+padding:0 4px 4px;
+}
+.comment-info {
+float:left;
+}
+.comment-time {
+color:#666666;
+}
+.comment-spam {
+float:left;
+}
+.comment-body {
+margin-left:4px;
+margin-top:4px;
+overflow:hidden;
+width:75%;
+}
+.clearL {
+clear:left;
+}
+
+.comment-entry-reply {
+border-left:3px solid #E6E6E6;
+margin-left:10px;
+padding-left:2px;
+}
+.comment-head-link {
+font-size:11px;
+margin-left:8px;
+visibility:hidden;
+}
+.comment-auth {
+font-weight:bold;
+text-decoration:none;
+}
+.comment-auth:hover {
+text-decoration:underline;
+}
+.comment-voting, .comment-voting-off {
+float:right;
+text-align:right;
+width:75px;
+}
+.comment-auth-head {
+background-color:#FFFFCC;
+padding:4px;
+}
+.comment-marked-spam {
+border-top:1px solid #C1C1C1;
+margin-top:7px;
+padding-top:10px;
+}
+.comment-spam {
+background-color:#FFFFEE;
+padding:4px;
+}
+.comment-retracted {
+color:#666666;
+font-style:italic;
+}
+.comment-action {
+float:right;
+font-size:11px;
+margin-top:0;
+padding-bottom:1px;
+padding-top:3px;
+text-align:right;
+}
+.comment-voting a {
+color:#0033CC;
+cursor:pointer;
+}
+.comment-action a, .comment-head-link {
+border-bottom:1px dotted #0033CC;
+color:#0033CC;
+cursor:pointer;
+text-decoration:none;
+}
+.comment-score {
+font-size:11px;
+font-weight:bold;
+}
+.comment-msg {
+color:#666666;
+float:right;
+font-size:11px;
+}
+.comment-green {
+color:green;
+}
+.comment-gray {
+color:gray;
+}
+.comment-red {
+color:#FF3333;
+}
+.comment-spam-bug {
+border-bottom:1px dotted #CC0000;
+border-top:1px dotted #CC0000;
+color:#CC0000;
+display:none;
+float:right;
+font-weight:bold;
+margin-left:0;
+padding:1px 3px;
+text-align:left;
+}
+#comment-limit-box {
+margin-bottom:30px;
+}
+#comment-limit-box .header {
+background-color:#F8F3D6;
+padding:5px;
+}
+#comment-limit-box .body {
+background-color:#FBF9E8;
+padding:5px;
+}
+#comment-captcha {
+margin:0 auto;
+text-align:center;
+width:400px;
+}
+#comment-captcha .captcha-input {
+float:left;
+padding-top:15px;
+width:260px;
+}
+#comment-captcha .verification-image {
+float:left;
+text-align:center;
+width:120px;
+}
+.comment-pagination {
+background-color:#DEDEDE;
+font-size:11px;
+font-weight:bold;
+margin-top:20px;
+padding:1px;
+text-align:center;
+}
+.comment-pnum {
+padding:0 4px;
+}
+.comment-char-count {
+border:0 none;
+width:50px;
+}
+.comment-reply-form-actions {
+clear:left;
+float:left;
+}
+.comment-reply-form-actions input {
+margin-right:10px;
+}
+#comment-view-all {
+font-weight:bold;
+margin-top:10px;
+}
+#comment-post {
+margin-top:12px;
+}
