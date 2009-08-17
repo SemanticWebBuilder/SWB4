@@ -80,6 +80,7 @@
     private String renderCalendar(Date current, SWBParamRequest paramRequest) {
         StringBuffer sbf = new StringBuffer();
 
+        System.out.println("Current: " + current);
         //If no date specified, get current date
         if (current == null) current = new Date(System.currentTimeMillis());
 
@@ -147,7 +148,7 @@
                     SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "daily");
                     viewUrl.setParameter("year", String.valueOf(year + 1900));
                     viewUrl.setParameter("month", String.valueOf(month));
-                    viewUrl.setParameter("day", String.valueOf(current.getDate()));
+                    viewUrl.setParameter("day", String.valueOf(i));
 
                     sbf.append("      <td class=\"dated\" onclick=\"window.location='" + viewUrl + "';\">\n" +
                             "        <div class=\"daylabel\">" + i + "</div>\n" +
@@ -164,7 +165,7 @@
                     SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "daily");
                     viewUrl.setParameter("year", String.valueOf(year + 1900));
                     viewUrl.setParameter("month", String.valueOf(month));
-                    viewUrl.setParameter("day", String.valueOf(day));
+                    viewUrl.setParameter("day", String.valueOf(i));
 
                     sbf.append("      <td class=\"dated\" onclick=\"window.location='" + viewUrl + "';\">\n" +
                             "        <div class=\"daylabel\">" + i + "</div>\n" +
