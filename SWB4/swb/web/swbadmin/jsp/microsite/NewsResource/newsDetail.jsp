@@ -2,25 +2,29 @@
 <%@page import="java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            Resource base = paramRequest.getResourceBase();
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-%>
-<%
+
             String uri = request.getParameter("uri");
+            String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
             NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
             if (rec != null) {
                 rec.incViews();                             //Incrementar apariciones
 %>
 <table border="0" width="100%" cellspacing="10">
     <tr>
+        <td>
+            <img src="<%=path+rec.getNewsPicture()%>" alt="<%=rec.getDescription()%>" width="110" height="150" />
+        </td>
         <td valign="top">
-                <h2><%=rec.getTitle()%></h2>
-                Por:<%=rec.getAuthor()%> - <%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%><BR>
-                En: <%=rec.getCitation()%>
+                <h2><%=rec.getTitle()%> (<%=rec.getCitation()%>)</h2>
+                SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage());
                 <hr>
-                <%=rec.getFullText()%>
+                Por&nbsp;<%=rec.getAuthor()%><BR>
+                <%=rec.getFullText()%><br>
                 <hr>
                 <%=rec.getViews()%> vistas<BR>
         </td>
