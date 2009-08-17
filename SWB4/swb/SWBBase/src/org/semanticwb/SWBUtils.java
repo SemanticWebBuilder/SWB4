@@ -328,14 +328,21 @@ public class SWBUtils {
             if (replace == null) {
                 replace = "";
             }
+            if(match.equals(replace))return str;
+            StringBuffer ret=new StringBuffer();
             int i = str.indexOf(match);
             int y = 0;
-            while (i >= 0) {
-                str = str.substring(0, i) + replace + str.substring(i + match.length());
-                y = i + replace.length();
-                i = str.indexOf(match);
+            while (i >= 0) 
+            {
+                //System.out.println("i:"+i+" y:"+y);
+                ret.append(str.substring(y, i));
+                ret.append(replace);
+                //str = str.substring(y, i) + replace + str.substring(i + match.length());
+                y = i + match.length();
+                i = str.indexOf(match,y);
             }
-            return str;
+            ret.append(str.substring(y));
+            return ret.toString();
         }
 
         /**
@@ -1590,7 +1597,7 @@ public class SWBUtils {
             Enumeration e = archive.entries();
             while (e.hasMoreElements()) {
                 ZipEntry entry = (ZipEntry) e.nextElement();
-                File file = new File(extractTo, entry.getName().replace("\\", "/")); //TODO:Pienso que con esto se soluciona el problema de creación de rutas en linux
+                File file = new File(extractTo, TEXT.replaceAll(entry.getName(),"\\", "/")); //TODO:Pienso que con esto se soluciona el problema de creación de rutas en linux
                 //File file = new File(extractTo, entry.getName());
                 if (entry.isDirectory() && !file.exists()) {
                     file.mkdirs();
