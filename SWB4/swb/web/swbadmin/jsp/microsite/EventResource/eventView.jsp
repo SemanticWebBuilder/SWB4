@@ -158,8 +158,8 @@
                     viewUrl.setParameter("month", String.valueOf(month));
                     viewUrl.setParameter("day", String.valueOf(i));
 
-                    sbf.append("      <td class=\"dated\" onclick=\"window.location='" + viewUrl + "';\">\n" +
-                            "        <div class=\"daylabel\">" + i + "</div>\n" +
+                    sbf.append("      <td class=\"dated\">\n" +
+                            "        <div class=\"daylabel\"><a href=\"" + viewUrl + "\">" + i + "</a></div>\n" +
                             "      </td>\n");
                 }  else {
                     //There aren't events today
@@ -176,8 +176,8 @@
                     viewUrl.setParameter("month", String.valueOf(month));
                     viewUrl.setParameter("day", String.valueOf(i));
 
-                    sbf.append("      <td class=\"dated\" onclick=\"window.location='" + viewUrl + "';\">\n" +
-                            "        <div class=\"daylabel\">" + i + "</div>\n" +
+                    sbf.append("      <td class=\"dated\">\n" +
+                            "        <div class=\"daylabel\"><a href=\"" + viewUrl + "\">" + i + "</a></div>\n" +
                             "      </td>\n");
                 } else {
                     sbf.append("      <td class=\"day\" >\n" +
