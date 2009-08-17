@@ -60,13 +60,7 @@
                   <p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
                   </div>
                 <%
-            }
-            else
-            {
-                %>
-                <p>No hay blogs, videos, fotos, etc, publicados en el sitio</p>
-                <%
-            }
+            }            
        }   
 }
 else
