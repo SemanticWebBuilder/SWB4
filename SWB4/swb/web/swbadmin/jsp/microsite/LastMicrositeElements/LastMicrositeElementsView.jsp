@@ -54,7 +54,7 @@
             src=webpath+src;
             if(url!=null && uri!=null)
             {
-                url+="?&act=detail&uri="+URLEncoder.encode(uri);;
+                url+="?&act=detail&uri="+URLEncoder.encode(uri);
                 %>
                   <div class="entry">
                   <p><img src="<%=src%>" alt="<%=title%>" width="57" height="55" ></p>
