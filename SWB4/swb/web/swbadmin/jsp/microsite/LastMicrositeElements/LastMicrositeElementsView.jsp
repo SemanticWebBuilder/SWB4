@@ -27,22 +27,38 @@
             {
                 description=description.substring(0, 97)+" ...";
             }
-            if(element.getSemanticObject().getSemanticClass().equals(PostElement.sclass))
+            String url=null;
+            if(element instanceof PostElement)
             {
+                PostElement post=(PostElement)element;
+                if(post.getBlog()!=null)
+                {
+                    url=post.getBlog().getWebPage().getUrl();
+                }
                 src="ico_mensaje.gif";
             }
-            if(element.getSemanticObject().getSemanticClass().equals(PhotoElement.sclass) || (element.getSemanticObject().getSemanticClass().equals(VideoElement.sclass)))
+            else if(element instanceof PhotoElement)
             {
+                url=((PhotoElement)element).getPhotoWebPage().getUrl();
+                src="ico_foto.gif";
+            }
+            else if(element instanceof VideoElement)
+            {
+                url=((VideoElement)element).getWebPage().getUrl();
                 src="ico_foto.gif";
             }
             src=webpath+src;
-            %>
-              <div class="entry">
-              <p><img src="<%=src%>" alt="<%=title%>" width="57" height="55" ></p>
-              <h3 class="titulo"><%=title%> (<%=created%>)</h3>
-              <p><%=description%></p>
-              </div>
-            <%
+            if(url!=null)
+            {
+                %>
+                  <div class="entry">
+                  <p><img src="<%=src%>" alt="<%=title%>" width="57" height="55" ></p>
+                  <h3 class="titulo"><%=title%> (<%=created%>)</h3>
+                  <p><%=description%></p>
+                  <p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
+                  </div>
+                <%
+            }
         }
     %>
     <!-- <p class="vermas"><a href="#" >Ver m&aacute;s</a></p> -->
