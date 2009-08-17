@@ -25,6 +25,8 @@ package org.semanticwb.portal.community;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.WebPage;
 
 
 public class EventElement extends org.semanticwb.portal.community.base.EventElementBase 
@@ -34,11 +36,12 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
         super(base);
     }
 
-    public static Iterator<EventElement> listEventElementsByDate(Date date) {
+    public static Iterator<EventElement> listEventElementsByDate(Date date, WebPage wpage, SWBModel model) {
+        Iterator<EventElement> evs = listEventElementByEventWebPage(wpage, model);
         ArrayList<EventElement> res = new ArrayList<EventElement>();
-        Iterator<EventElement> eit = listEventElements();
-        while (eit.hasNext()) {
-            EventElement ev = eit.next();
+        
+        while(evs.hasNext()) {
+            EventElement ev = evs.next();
             //If event starts at, is carried out, or ends in date, add it to the list
             if(isEqual(ev.getStartDate(), date) || isEqual(ev.getEndDate(), date)) {
                 res.add(ev);
@@ -46,8 +49,8 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
                 res.add(ev);
             }
         }
-        return res.iterator();
-    }
+        return res.iterator();        
+    }    
 
     public static boolean isEqual(Date date1, Date date2) {
         return (date1.getYear() == date2.getYear() && date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate());
