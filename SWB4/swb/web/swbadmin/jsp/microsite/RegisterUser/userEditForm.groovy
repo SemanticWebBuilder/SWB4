@@ -23,10 +23,18 @@
 import org.semanticwb.model.User
 import org.semanticwb.model.WebPage
 import org.semanticwb.portal.api.SWBResourceURL
+import org.semanticwb.platform.SemanticProperty
 
 def paramRequest=request.getAttribute("paramRequest")
 User user = paramRequest.getUser()
 WebPage wpage=paramRequest.getWebPage()
+def mapa = new HashMap()
+Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
+                list.each{
+                    def sp = it
+                    mapa.put(sp.getName(),sp)
+                }
+
 
 def uri = ""
 try {uri = user.getEncodedURI()} catch (Exception e) {}
@@ -39,20 +47,20 @@ def usr_lname = (user.getLastName()==null?"":user.getLastName())
 def usr_sname = (user.getSecondLastName()==null?"":user.getSecondLastName())
 def usr_mail = (user.getEmail()==null?"":user.getEmail())
 def usr_login = user.getLogin()
-def usr_age = user.getExtendedAttribute("userAge")
+def usr_age = user.getExtendedAttribute(mapa.get("userAge"))
 if (null==usr_age) usr_status = ""
-def usr_sex = user.getExtendedAttribute("userSex")
+def usr_sex = user.getExtendedAttribute(mapa.get("userSex"))
 def usr_sexM = ""
 def usr_sexF = ""
 if ("M".equals(usr_sex)) usr_sexM = "selected=\"selected\""
 if ("F".equals(usr_sex)) usr_sexF = "selected=\"selected\""
-def usr_status = user.getExtendedAttribute("userStatus")
+def usr_status = user.getExtendedAttribute(mapa.get("userStatus"))
 if (null==usr_status) usr_status = ""
-def usr_interest = user.getExtendedAttribute("userInterest")
+def usr_interest = user.getExtendedAttribute(mapa.get("userInterest"))
 if (null==usr_interest) usr_interest = ""
-def usr_hobbies = user.getExtendedAttribute("userHobbies")
+def usr_hobbies = user.getExtendedAttribute(mapa.get("userHobbies"))
 if (null==usr_hobbies) usr_hobbies = ""
-def usr_inciso = user.getExtendedAttribute("userInciso")
+def usr_inciso = user.getExtendedAttribute(mapa.get("userInciso"))
 if (null==usr_inciso) usr_inciso = ""
 
 
@@ -98,9 +106,11 @@ println """
                    dojo.require("dijit.form.ValidationTextBox");
                    dojo.require("dijit.form.Button");
                    dojo.require("dijit.Dialog");
+                   dojo.require("dijit.form.FilteringSelect");
+                   dojo.require("dijit.form.Textarea");
+
  function enviar(){
     var x=document.getElementById(\"form_$id\");
-    alert(x.id);
     x.submit();
  }
         </script>
@@ -142,28 +152,28 @@ action="$acc_url"   method="post">
             <td><input _id="userStatus" name="userStatus" value="$usr_status" dojoType="dijit.form.ValidationTextBox"
                 required="false" promptMessage="Captura Estado Civil" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
             <tr><td width="200px" align="right">Intereses &nbsp;</td>
-            <td><textarea name="userInterest" rows=10 cols=80>$usr_interest</textarea></td></tr>
+            <td><textarea name="userInterest" rows="10" cols="80" dojoType="dijit.form.Textarea">$usr_interest</textarea></td></tr>
             <tr><td width="200px" align="right">Pasatiempos &nbsp;</td>
-            <td><textarea name="userHobbies" rows=10 cols=80>$usr_hobbies</textarea></td></tr>
+            <td><textarea name="userHobbies" rows="10" cols="80" dojoType="dijit.form.Textarea">$usr_hobbies</textarea></td></tr>
             <tr><td width="200px" align="right">Incisos &nbsp;</td>
-            <td><textarea name="userInciso" rows=10 cols=80>$usr_inciso</textarea></td></tr>
-            </table>
-                </form>
-                <fieldset>
+            <td><textarea name="userInciso" rows="10" cols="80" dojoType="dijit.form.Textarea">$usr_inciso</textarea></td></tr>
+            </table></fieldset></form>
+             <form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform" dojoType="dijit.form.Form"
+                        action="$url_actPic"
+                        method="post" target="pictureTransferFrame" >
+            <fieldset>
 	    <legend>Fotograf&iacute;a</legend>
 	    <table>
             <tr><td width="200px" align="right"><label for="picture">Fotograf&iacute;a &nbsp;</label></td>
                     <td><iframe id="pictureTransferFrame" name="pictureTransferFrame" src="" style="display:none" ></iframe>
-                        <form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform"
-                        action="$url_actPic"
-                        method="post" target="pictureTransferFrame" >
-                        <input type="file" name="picture"
+                        
+                        <input type="file" name="picture" 
                         onchange="beginAsyncUpload(this,'picture');" />
                         <div class="progresscontainer" style="display: none;"><div class="progressbar" id="picture_progress"></div></div>
-                        </form>
                     </td></tr>
 	    </table>
 	</fieldset>
+        </form>
 <fieldset><span align="center">
     <button dojoType="dijit.form.Button" type="button" onclick="enviar()">Guardar</button>
 </span></fieldset>
