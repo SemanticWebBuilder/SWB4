@@ -6,7 +6,8 @@
     WebPage wpage=paramRequest.getWebPage();
     Member member=Member.getMember(user,wpage);
 %>
-<form enctype="multipart/form-data" method="post" action="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP).setCallMethod(SWBResourceURL.Call_DIRECT)%>">
+<%--<form enctype="multipart/form-data" method="post" action="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP).setCallMethod(SWBResourceURL.Call_DIRECT)%>">--%>
+<form enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <h3>Agrega una foto</h3>
     </div>
@@ -38,7 +39,7 @@
                         <legend><strong>¿Quién puede ver este video?</strong></legend>
                         <ul class="options">
                             <%String chk="checked=\"checked\"";%>
-                            <li><label><input type="radio" class="radio" name="level" value="0" /> Cualquiera</label></li>
+                            <li><label><input type="radio" class="radio" name="level" value="0" checked="checked" /> Cualquiera</label></li>
                             <li><label><input type="radio" class="radio" name="level" value="1" /> Sólo los miembros</label></li>
                             <li><label><input type="radio" class="radio" name="level" value="3" /> Sólo yo</label></li>
                         </ul>

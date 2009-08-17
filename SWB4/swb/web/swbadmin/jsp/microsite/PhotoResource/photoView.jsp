@@ -14,6 +14,7 @@
 
 <script type="text/javascript">
     function thumbnailizeImage(idImg) {
+        alert('thumbnailizeImage');
         var image = document.getElementById(idImg);
         if(image.width > image.height) {
             var nw = 130;
@@ -41,6 +42,9 @@
         var img = document.createElement('img');
         img.id = imgId;
         img.src = imgUrl;
+        /*var w = img.width;
+        var h = img.height;*/
+
         if(img.width > img.height) {
             img.width = 130;
             img.height = 95;
