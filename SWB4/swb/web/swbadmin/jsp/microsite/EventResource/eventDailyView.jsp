@@ -21,7 +21,6 @@
 
             Date dNow = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
 
-            System.out.println(dNow);
             Iterator<EventElement> eit = EventElement.listEventElementsByDate(dNow, wpage, wpage.getWebSite());
             while (eit.hasNext()) {
                 EventElement event = eit.next();
