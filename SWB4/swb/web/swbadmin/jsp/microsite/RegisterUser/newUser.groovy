@@ -42,7 +42,8 @@ println """<script type="text/javascript">
 
         </script>
 <form id="org.semanticwb.community.User/com/create" dojoType="dijit.form.Form" class="swbform"
-action="$url" onSubmit="submitForm('org.semanticwb.community.User/com/create');return false;" method="POST">
+action="$url" 
+method="POST">
 <fieldset>
 	<table>
 		<tr>
@@ -66,7 +67,7 @@ action="$url" onSubmit="submitForm('org.semanticwb.community.User/com/create');r
 		</tr>
 	<tr>
 		<td align="center" colspan="2"><button dojoType='dijit.form.Button' type="submit">Guardar</button>
-<button dojoType='dijit.form.Button' onclick="dijit.byId('swbDialog').hide();">Cancelar</button>
+
 
 			</td>
 		</tr>
