@@ -19,6 +19,7 @@
 %>
 <script type="text/javascript">
     dojo.require("dijit.form.TextBox");
+    dojo.require("dijit.form.ValidationTextBox");
     dojo.require("dijit.form.Textarea");
     dojo.require("dijit.form.DateTextBox");
     dojo.require("dijit.form.TimeTextBox");
@@ -32,7 +33,7 @@
     <form action="<%=paramRequest.getRenderUrl()%>" method="post">
         <fieldset><legend>Elige una fecha</legend>
             <label for="year">Año:</label>
-            <input type="text" dojoType="dijit.form.TextBox" name="year" id="year" value="<%=current.getYear() + 1900%>"/>
+            <input type="text" regExp="\d{4}" dojoType="dijit.form.ValidationTextBox" name="year" id="year" value="<%=current.getYear() + 1900%>"/>
             <label for="month">Mes:</label>
             <select dojoType="dijit.form.FilteringSelect" name ="month" id="month" value="<%=current.getMonth()%>">
                 <option value="0">Enero</option>
