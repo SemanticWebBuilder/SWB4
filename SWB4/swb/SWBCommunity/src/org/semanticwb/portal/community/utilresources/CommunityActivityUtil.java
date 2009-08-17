@@ -25,7 +25,7 @@ public class CommunityActivityUtil {
 
     public CommunityActivityUtil(){}
     
-    public Iterator<CommunityActivity> getComminityActivities(MicroSite community)
+    public Iterator<CommunityActivity> getCommunityActivities(MicroSite community)
     {
         ArrayList al = new ArrayList();
         Connection conn = null;
