@@ -4,11 +4,15 @@
 <%
     //SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     ArrayList<NewsElement> elements=(ArrayList<NewsElement>)request.getAttribute("elements");
+    %>
+    <div class="recentEntry_last">
+        <h2 class="titulo">Noticias recientes</h2>
+
+    <%
     if(elements.size()>0)
     {
 %>
-    <div class="recentEntry_last">
-        <h2 class="titulo">Noticias recientes</h2>
+    
         <%
             for(NewsElement element : elements)
             {
@@ -58,8 +62,11 @@
                 </div>
                 <%
             }
-        %>
-      </div>
-<%
     }
-%>
+    else
+        {
+        %>
+        <p>No hay noticias publicadas</p>
+        <%
+        }
+%></div>
