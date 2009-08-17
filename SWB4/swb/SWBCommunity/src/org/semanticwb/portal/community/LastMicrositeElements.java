@@ -82,8 +82,7 @@ public class LastMicrositeElements extends GenericAdmResource
                 if (rb.get(name.toString()).isResource())
                 {
                     Resource res = rb.getResource(name.toString());
-                    SemanticObject obj= paramRequest.getWebPage().getWebSite().getSemanticObject().getSemanticObject(res.getURI());
-                    //SemanticObject obj=SemanticObject.getSemanticObject(res.getURI());
+                    SemanticObject obj= SemanticObject.createSemanticObject(res.getURI());
                     MicroSiteElement element=new MicroSiteElement(obj);
                     elements.add(element);
                 }
