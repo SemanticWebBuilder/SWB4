@@ -20,7 +20,7 @@
 <table border="0" cellspacing="10">
     <tr>
         <td valign="top">
-            <img src="<%=path+rec.getEventImage()%>" alt="<%=rec.getDescription()%>" />
+            <img src="<%=path+rec.getEventImage()%>" alt="<%=rec.getDescription()%>" width="90" height="150" />
         </td>
         <td valign="top">
                 <%=rec.getTitle()%> (<%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%>)<BR>
