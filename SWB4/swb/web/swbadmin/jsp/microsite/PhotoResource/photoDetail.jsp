@@ -7,6 +7,7 @@
     WebPage wpage=paramRequest.getWebPage();
     Member member=Member.getMember(user,wpage);
 
+    String lang = user.getLanguage();
     String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
 %>
 <%
@@ -26,10 +27,12 @@
                 <%if(rec.canModify(member)){%><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",rec.getURI())%>">Editar Información</a><BR/><%}%>
                 <%if(rec.canModify(member)){%><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",rec.getURI())%>">Eliminar foto</a><BR/><%}%>
                 <small>
-                    <%=rec.getTitle()%> <br />
-                    <%=rec.getDescription()%> <br />
-                    <%=rec.getCreated()%> <br />
-                    <%=rec.getViews()%> vistas <br />
+                    <p style="line-height:3px;"><%= rec.getTitle() %> </p>
+                    <p style="line-height:3px;"><%= rec.getCreator().getFirstName() %> </p>
+                    <%--<p style="line-height:3px;"><%= SWBUtils.TEXT.getStrDate(rec.getCreated(), lang, "dd/mm/yy") %> </p>--%>
+                    <p style="line-height:3px;"><%= rec.getDescription() %> </p>
+                    <p style="line-height:3px;"><%= rec.getRank() %> </p>
+                    <p style="line-height:3px;"><%= rec.getViews() %> vistas </p>
                 </small>
             </td>
         </tr>
