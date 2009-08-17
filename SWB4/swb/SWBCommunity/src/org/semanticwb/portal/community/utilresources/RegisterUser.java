@@ -45,6 +45,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -62,7 +63,8 @@ public class RegisterUser extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        
+        Iterator<SemanticProperty> list = paramRequest.getUser().getUserRepository().listExtendedAttributes();
+        while (list.hasNext()) {System.out.println(list.next().getURI());}
         String act=request.getParameter("act");
         if(act==null) {
             act="view";
