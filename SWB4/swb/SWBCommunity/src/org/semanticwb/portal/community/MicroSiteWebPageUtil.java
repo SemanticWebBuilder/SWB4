@@ -34,7 +34,7 @@ public class MicroSiteWebPageUtil extends org.semanticwb.portal.community.base.M
                 log.event("Creating Community Log Table...");
                 GenericDB db = new GenericDB();
                 String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_commlog.xml");
-                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
+                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), SWBPlatform.getEnv("wb/db/nameconn","swb"));
             }
             st.close();
             con.close();
