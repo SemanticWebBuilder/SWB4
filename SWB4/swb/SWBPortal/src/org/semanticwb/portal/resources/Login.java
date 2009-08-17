@@ -155,7 +155,7 @@ public class Login extends GenericAdmResource
         out.println("	</font>");
         out.println("</fieldset>");
         out.println("<fieldset>");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submit/btnSend\" >" + paramsRequest.getLocaleString("send") + "</button>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submit/btnSend\" >Enviar</button>");
         out.println("</fieldset>");
         out.println("</form>");
         out.println("</div>");
