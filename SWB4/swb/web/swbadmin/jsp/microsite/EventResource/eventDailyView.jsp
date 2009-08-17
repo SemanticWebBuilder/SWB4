@@ -1,13 +1,15 @@
 <%@page contentType="text/html"%>
 <%@page import="java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
-            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-            User user = paramRequest.getUser();
-            WebPage wpage = paramRequest.getWebPage();
-            MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
-            Member member = Member.getMember(user, wpage);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");            
+    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+    Resource base = paramRequest.getResourceBase();
+    User user = paramRequest.getUser();
+    WebPage wpage = paramRequest.getWebPage();
+    MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
+    Member member = Member.getMember(user, wpage);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
+    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
 %>
 <h1>Eventos Diario</h1>
 <table>
@@ -27,7 +29,10 @@
                 if (event.canView(member)) {
         %>
         <tr>
-            <td>
+            <td valign="top">
+                <img src="<%=path+event.getEventImage()%>" alt="<%=event.getDescription()%>" />
+            </td>
+            <td valign="top">
                 <a href="<%=viewUrl%>"><%=event.getTitle()%></a><BR>
                 Inicio:&nbsp;<b><%=(event.getStartDate()==null?"":dateFormat.format(event.getStartDate()))%></b> a las <b><%=(event.getStartTime()==null?"":timeFormat.format(event.getStartTime()))%></b><BR>
                 Fin:&nbsp;<b><%=(event.getEndDate()==null?"":dateFormat.format(event.getEndDate()))%></b> a las <b><%=(event.getEndTime()==null?"":timeFormat.format(event.getEndTime()))%></b><BR>

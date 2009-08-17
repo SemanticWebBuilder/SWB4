@@ -28,13 +28,20 @@ Error: Elemento no encontrado...
     dojo.require("dojo.parser");
 </script>
 <div class="soria">
-    <form class="swbform" method="post" action="<%=paramRequest.getActionUrl()%>">
+    <form class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
         <div>
             <h3>Editar evento</h3>
         </div>
         <div>
-            <fieldset>
+            <fieldset><legend></legend>
                 <table>
+                    <tr>
+                        <td align="right" valign="center"><label for="foto">Imagen del evento&nbsp;:</label></td>
+                        <td>
+                            <%--<input dojoType="dijit.form.TextBox" type="text" required="true" id="event_title" name="event_title"/><br>--%>
+                            <input id="foto" type="file" name="foto" />
+                        </td>
+                    </tr>
                     <tr>
                         <td align="right" valign="center"><label for="event_title">Título del evento&nbsp;<em>*</em></label></td>
                         <td>

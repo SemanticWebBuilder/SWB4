@@ -1,21 +1,26 @@
 <%@page contentType="text/html"%>
 <%@page import="java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
-            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-            User user = paramRequest.getUser();
-            WebPage wpage = paramRequest.getWebPage();
-            Member member = Member.getMember(user, wpage);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");            
+    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+    Resource base = paramRequest.getResourceBase();
+    User user = paramRequest.getUser();
+    WebPage wpage = paramRequest.getWebPage();
+    Member member = Member.getMember(user, wpage);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
 %>
 <%
-            String uri = request.getParameter("uri");
-            EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-            if (rec != null) {
-                rec.incViews();                             //Incrementar apariciones
+    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
+    String uri = request.getParameter("uri");
+    EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+    if (rec != null) {
+        rec.incViews();                             //Incrementar apariciones
 %>
-<table border="0" width="100%" cellspacing="10">
+<table border="0" cellspacing="10">
     <tr>
+        <td valign="top">
+            <img src="<%=path+rec.getEventImage()%>" alt="<%=rec.getDescription()%>" />
+        </td>
         <td valign="top">
                 <%=rec.getTitle()%> <BR>
                 <hr>
