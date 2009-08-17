@@ -41,7 +41,9 @@ String perfil = "/swb/sitio/perfilpage"
 
 def lista = Member.listMemberByMicroSite(microsite, (SWBModel)wpage.getWebSite())
 
-println "Miembros de la comunidad:<ul>"
+println """<div id="miembros">
+<h2>Miembros de la comunidad</h2>
+<ul>"""
 lista.each(){
     Member mem_curr = it
     User mem_usr = mem_curr.getUser()
@@ -50,8 +52,9 @@ lista.each(){
         def uri = mem_usr.getEncodedURI()
         def nombre = mem_usr.getFullName()
         def img = mem_usr.getPhoto()
-        println "<li><img src=\"$img\"/><a href=\"${perfil}?uri=$uri\">$nombre</a></li>"
+        println """<li><img src="$img"/><a class="contactos_nombre" href="${perfil}?uri=$uri">$nombre</a></li>"""
     }
 }
-println "</ul>"
+println "</ul></div>"
+
 
