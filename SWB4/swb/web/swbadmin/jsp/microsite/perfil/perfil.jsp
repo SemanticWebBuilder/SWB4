@@ -69,5 +69,28 @@
                  %>
               </table>
               <%
+              if(request.getParameter("changePhoto")!=null && request.getParameter("changePhoto").equals("1")){
+               %>
+                    <fieldset>
+                    <legend>Fotograf&iacute;a</legend>
+                    <table>
+                        <tr><td width="200px" align="right"><label for="picture">Fotograf&iacute;a &nbsp;</label></td>
+                                <td><iframe id="pictureTransferFrame" name="pictureTransferFrame" src="" style="display:none" ></iframe>
+                                    <form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform"
+                                    action="/swb/Ciudad_Digital/Registro_de_Usuarios/_aid/46/_mto/3/_act/upload?changePhoto=0"
+                                    method="post" target="pictureTransferFrame" >
+                                    <input type="file" name="picture"
+                                    onchange="beginAsyncUpload(this,'picture');" />
+                                    <div class="progresscontainer" style="display: none;"><div class="progressbar" id="picture_progress"></div></div>
+                                    </form>
+                                </td></tr>
+                    </table>
+                    </fieldset>
+                    <fieldset><span align="center">
+                        <button dojoType="dijit.form.Button" type="button" onclick="enviar()">Guardar</button>
+                    </span></fieldset>
+
+               <%
+              }
             }
         %>

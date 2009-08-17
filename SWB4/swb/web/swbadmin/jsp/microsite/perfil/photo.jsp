@@ -13,6 +13,7 @@
 <%
 User owner=paramRequest.getUser();
 User user=owner;
+WebPage wpage=paramRequest.getWebPage();
 if(request.getParameter("user")!=null)
 {
     SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
@@ -27,6 +28,9 @@ String attributes=base.getAttribute("attributes","");
  if(user.getPhoto()!=null) photo=user.getPhoto();
  %>
  <img src="<%=photo%>" valign="top"/><br>
- <a href="<%=registryPath%>" <%=attributes%>>Cambiar imagen</a>
+ <%if(owner.equals(user)){%>
+    <a href="<%=wpage.getUrl()%>?changePhoto=1">Cambiar imagen</a><br>
+    <a href="<%=registryPath%>" <%=attributes%>>Registro de usuarios</a>
+ <%}%>
                       
           
