@@ -4,28 +4,27 @@
         <%@page import="org.semanticwb.model.WebPage"%>
         <%@page import="java.util.*"%>
         <%@page import="org.semanticwb.platform.SemanticObject"%>
+        <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
+        <%@page import="org.semanticwb.SWBPlatform"%>
 
+        <div class="miembros">
+          <h2 class="titulo">Usuarios del portal</h2>
         <%
-        User user=paramRequest.getUser();
-        WebPage wpage=paramRequest.getWebPage();
+        SWBResourceURL urlAction=paramRequest.getActionUrl();
+        String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
 
         Iterator<User> itUsers=paramRequest.getWebPage().getWebSite().getUserRepository().listUsers();
         while(itUsers.hasNext())
         {
             User userprosp=itUsers.next();
+            urlAction.setAction("createProspect");
+            urlAction.setParameter("user", userprosp.getURI());
+            if(userprosp.getPhoto()!=null) photo=userprosp.getPhoto();
             %>
-                <ul>
-                    <li><a href="<%=wpage.getUrl()%>?userprosp=<%=userprosp.getEncodedURI()%>"><%=userprosp.getFullName()%></a></li>
-                </ul>
+                <div class="moreUser">
+                    <a href="<%=urlAction%>"><img src="<%=photo%>" valign="top"/><br><%=userprosp.getFullName()%></a>
+                </div>
             <%
-        }
-        if(request.getParameter("userprosp")!=null){
-            String userProsp=request.getParameter("userprosp");
-            SemanticObject semObj=SemanticObject.createSemanticObject(userProsp);
-            User user2Friend=(User)semObj.createGenericInstance();
-            FriendshipProspect newFriendShip=FriendshipProspect.createFriendshipProspect(wpage.getWebSite());
-            newFriendShip.setFriendShipRequester(user);
-            newFriendShip.setFriendShipRequested(user2Friend);
-            System.out.println("propuesta de relación creada entre los usuarios:"+user.getURI()+",y :"+user2Friend.getURI());
-        }
+        }                
      %>
+     </div>
