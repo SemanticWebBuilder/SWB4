@@ -23,8 +23,7 @@
             {
                 description=description.substring(0, 97)+" ...";
             }
-            String url=element.getURL();
-            String uri=element.getURI();
+            String url=element.getURL();            
             if(element instanceof PostElement)
             {
                 src="ico_mensaje.gif";
@@ -38,15 +37,15 @@
             %>
               <div class="entry">
               <p><img src="<%=src%>" alt="<%=title%>" width="57" height="55" ></p>
-              <h3 class="titulo"><%=title%></h3>
-              <p class="titulo"><%=created%></p>
-              <p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
-              <!-- <p><%=description%></p> -->
-
+              <h3 class="titulo"><a href="<%=url%>"><%=title%></a></h3>
+              <p class="titulo"><%=created%></p>              
+              <p><%=description%></p>
               </div>
-            <%
-                        
-       }   
+            <%                        
+       }
+        %>
+        <p class="vermas"><a href="#" >Ver m&aacute;s</a></p>
+          <%
 }
 else
 {
