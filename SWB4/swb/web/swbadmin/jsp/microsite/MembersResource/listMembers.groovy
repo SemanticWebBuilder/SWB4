@@ -47,7 +47,7 @@ if (null!=microsite){
     String perfil = wpage.getWebSite().getWebPage("perfil").getRealUrl()
 
     Iterator<Member> lista = Member.listMemberByMicroSite(microsite, (SWBModel)wpage.getWebSite())
-    if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY){
+    if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY && (!paramRequest.getArgument("virtualcontent").equals("true"))){
         println """<div id="contactos">
 <h2>Miembros de la comunidad</h2>
 <ul>"""
@@ -75,14 +75,14 @@ if (null!=microsite){
 <h1>Miembros de la comunidad</h1>
 <ul>"""
         lista.each(){
-            Member mem_curr = lista.next()
+            Member mem_curr = it
             User mem_usr = mem_curr.getUser()
             if (null!=mem_usr)
             {
                 def uri = mem_usr.getEncodedURI()
                 def nombre = mem_usr.getFullName()
                 def img = mem_usr.getPhoto()
-                println """<li><img src="$img" alt="Foto de $nombre"><a class="contactos_nombre" href="${perfil}?user=$uri" alt="Ir al perfil de $nombre" >$nombre</a></li>"""
+                println """<li><img src="$img" alt="Foto de $nombre" /><a class="contactos_nombre" href="${perfil}?user=$uri" alt="Ir al perfil de $nombre" >$nombre</a></li>"""
             }
         }
         println """</ul></div>"""
