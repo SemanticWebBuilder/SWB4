@@ -66,7 +66,7 @@ public class CommunityActivity {
         try {
             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
             GenericObject obj = ont.getGenericObject(this.commURI);
-            if(obj instanceof MicroSite) return (MicroSite)obj;
+            if(obj!=null && obj instanceof MicroSite) return (MicroSite)obj;
         } catch (Exception e) {
             log.error("Error al obtener la comunidad.",e);
         }
@@ -78,7 +78,7 @@ public class CommunityActivity {
         try {
             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
             GenericObject obj = ont.getGenericObject(this.usrURI);
-            if(obj instanceof User) return (User)obj;
+            if(obj!=null && obj instanceof User) return (User)obj;
         } catch (Exception e) {
             log.error("Error al obtener el usuario de la comunidad.",e);
         }
@@ -90,7 +90,8 @@ public class CommunityActivity {
         Member member = null;
         try {
                 MicroSite ms = getCommunity();
-                member = Member.getMember(getUser(), ms);
+                if(ms!=null&&getUser()!=null)
+                    member = Member.getMember(getUser(), ms);
             
         } catch (Exception e) {
             log.error("Error al obtener el miembro de la comunidad.",e);
@@ -104,7 +105,8 @@ public class CommunityActivity {
             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
             GenericObject obj = ont.getGenericObject(this.elementURI);
 
-            if(obj instanceof MicroSiteElement) return (MicroSiteElement)obj;
+
+            if(obj!=null && obj instanceof MicroSiteElement) return (MicroSiteElement)obj;
             
         } catch (Exception e) {
             log.error("Error al obtener el elemento de la comunidad.",e);

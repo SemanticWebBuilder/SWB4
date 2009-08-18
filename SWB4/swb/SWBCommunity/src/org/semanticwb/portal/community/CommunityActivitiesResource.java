@@ -59,10 +59,13 @@ public class CommunityActivitiesResource extends GenericAdmResource {
                     user = ca.getUser();
                     mse = ca.getElement();
 
-                    out.println("<li><a href=\""+mse.getURL()+"\">" + mse.getDisplayTitle(user.getLanguage()) );
-                    out.println("("+mse.getSemanticObject().getSemanticClass().getDisplayName(user.getLanguage())+")</a>, ");
-                    out.println("" + user.getFullName() + ", ");
-                    out.println("<a class=\"contactos_nombre\" href=\"#\">"+SWBUtils.TEXT.getTimeAgo(mse.getUpdated(),user.getLanguage()) + "</a></li>");
+                    if(mse!=null&&user!=null&&ms!=null)
+                    {
+                        out.println("<li><a href=\""+mse.getURL()+"\">" + mse.getDisplayTitle(user.getLanguage()) );
+                        out.println("("+mse.getSemanticObject().getSemanticClass().getDisplayName(user.getLanguage())+")</a>, ");
+                        out.println("" + user.getFullName() + ", ");
+                        out.println("<a class=\"contactos_nombre\" href=\"#\">"+SWBUtils.TEXT.getTimeAgo(mse.getUpdated(),user.getLanguage()) + "</a></li>");
+                    }
                 }
             }
             else
