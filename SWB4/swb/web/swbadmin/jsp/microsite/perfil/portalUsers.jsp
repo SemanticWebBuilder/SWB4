@@ -10,12 +10,16 @@
 
         <div class="miembros">
           <h2 class="titulo">Usuarios del portal</h2>
+          <table>
         <%
         Resource base=paramRequest.getResourceBase();
         String perfilPath=base.getAttribute("perfilPath","");
 
         SWBResourceURL urlAction=paramRequest.getActionUrl();
         String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
+
+        boolean flag=false;
+        int cont=0;
 
         Iterator<User> itUsers=paramRequest.getWebPage().getWebSite().getUserRepository().listUsers();
         while(itUsers.hasNext())
@@ -24,11 +28,23 @@
             urlAction.setAction("createProspect");
             urlAction.setParameter("user", userprosp.getURI());
             if(userprosp.getPhoto()!=null) photo=userprosp.getPhoto();
+
+            if(!flag && cont==0) {%><tr><%}
+            cont++;
             %>
-                <div class="moreUser">
-                    <a href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=photo%>" valign="top" width="80" height="70"/><br><%=userprosp.getFullName()%></a>
-                </div>
+                <td>
+                    <div class="moreUser">
+                        <p class="titulo"><a href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=photo%>" valign="top" width="80" height="70"/><br><%=userprosp.getFullName()%></a></p>
+                    </div>
+               </td>
             <%
-        }                
+            if(cont==4) {
+                %></tr><%
+                cont=0;
+                flag=false;
+            }
+         }
+        if(flag) {%></tr><%}
      %>
+     </table>
      </div>
