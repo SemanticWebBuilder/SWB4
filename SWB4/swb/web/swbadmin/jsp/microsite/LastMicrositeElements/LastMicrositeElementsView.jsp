@@ -44,10 +44,13 @@
               </div>
             <%                        
        }
-        String path=paramRequest.getWebPage().getWebSite().getWebPage("Lo_ultimo").getUrl();
-        %>
-        <p class="vermas"><a href="<%=path%>" >Ver m&aacute;s</a></p>
-          <%
+       if(paramRequest.getWebPage().getWebSite().getWebPage("Lo_ultimo")!=null)
+       {
+            String path=paramRequest.getWebPage().getWebSite().getWebPage("Lo_ultimo").getUrl();
+            %>
+            <p class="vermas"><a href="<%=path%>" >Ver m&aacute;s</a></p>
+            <%
+        }
 }
 else
 {
