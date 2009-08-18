@@ -45,6 +45,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
+import org.semanticwb.portal.community.utilresources.ImageResizer;
 
 public class NewsResource extends org.semanticwb.portal.community.base.NewsResourceBase {
     private static Logger log = SWBUtils.getLogger(NewsResource.class);
@@ -112,12 +113,11 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
             }
             else if(params.containsValue("edit"))
             {
-                System.out.println("********** act="+params.get("act"));
-                System.out.println("********** uri="+params.get("uri"));
                 String uri = params.get("uri");
                 NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
                 if(rec != null && rec.canModify(mem)) {
-                    rec.setNewsPicture(params.get("filename"));
+                    if(params.containsKey("filename"))
+                        rec.setNewsPicture(params.get("filename"));
                     rec.setTitle(params.get("new_title"));
                     rec.setAuthor(params.get("new_author"));
                     rec.setAbstr(params.get("new_abstract"));
@@ -183,12 +183,19 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                         if(!file.exists()) {
                             file.mkdirs();
                         }
-                        long serial = (new Date()).getTime();
                         try {
-                            String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
-                            currentFile.write(new File(path+"/"+name));
-                            params.put("filename", name);
-                        }catch(StringIndexOutOfBoundsException iobe) {}
+                            long serial = (new Date()).getTime();
+                            String filename = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+
+                            File image = new File(path+"/"+filename);
+                            File thumbnail = new File(path+"/"+"thumbn_"+filename);
+                            currentFile.write(image);
+
+                            ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
+
+                            params.put("filename", filename);
+                        }catch(StringIndexOutOfBoundsException iobe) {
+                        }
                     }
                 }
             }
