@@ -8,7 +8,7 @@
     Member member=Member.getMember(user,wpage);
 
     String lang = user.getLanguage();
-    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
+    //String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
 %>
 <%
         String uri=request.getParameter("uri");
@@ -21,7 +21,7 @@
       <table border="0">
         <tr>
             <td valign="top">
-                <img id="img_<%=photo.getId()%>" src="<%= path+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" />
+                <img id="img_<%=photo.getId()%>" src="<%= photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" />
             </td>
             <td valign="top" align="left">
                 <%if(photo.canModify(member)){%><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",photo.getURI())%>">Editar Información</a><BR/><%}%>

@@ -39,7 +39,7 @@ Error: Elemento no encontrado...
                     <tr>
                         <td align="right" valign="center"><label for="new_image">Imagen de la noticia&nbsp;<em>*</em></label></td>
                         <td valign="top">
-                            <img src="<%= path+rec.getNewsPicture() %>" alt="<%= rec.getTitle() %>"/>
+                            <img src="<%= rec.getNewsImage() %>" alt="<%= rec.getTitle() %>"/>
                             <input id="foto" type="file" style="width: 90%;" class="textfield tags" size="22" name="foto" />
                         </td>
                     </tr>

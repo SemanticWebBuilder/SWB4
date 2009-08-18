@@ -8,8 +8,6 @@
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
 
-            String path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
-
             String uri = request.getParameter("uri");            
             NewsElement anew = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
 
@@ -24,7 +22,7 @@
         <p><%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
         <p>Por:&nbsp;<%=anew.getAuthor()%></p>
         <div>
-            <img id="img_<%=anew.getId()%>" src="<%= path+anew.getNewsPicture() %>" alt="<%= anew.getTitle() %>"/>
+            <img id="img_<%=anew.getId()%>" src="<%= anew.getNewsImage() %>" alt="<%= anew.getTitle() %>"/>
             <strong><%=dateFormat.format(anew.getCreated())%>.</strong>
             <%=anew.getFullText()%>
         </div>

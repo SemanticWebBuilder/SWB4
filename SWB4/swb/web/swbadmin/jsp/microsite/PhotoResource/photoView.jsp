@@ -8,8 +8,6 @@
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Member member = Member.getMember(user, wpage);
-
-            String path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
 %>
 
 <table border="0" width="90%">
@@ -28,7 +26,7 @@
 %>
             <div style="float:left; margin-top:30px; margin-left:30px; margin-right:30px; text-align:center">
                 <a href="<%=viewurl%>">
-                    <img id="img_<%=i+base.getId()%>" src="<%=path+"thumbn_"+photo.getImageURL()%>" alt="<%= photo.getDescription()%>" />
+                    <img id="img_<%=i+base.getId()%>" src="<%=photo.getPhotoThumbnail()%>" alt="<%= photo.getDescription()%>" />
                     <p style="line-height:2px;"><%= photo.getTitle()%></p>
                     <p style="line-height:2px;"><%= photo.getCreator().getFirstName()%></p>
                     <p style="line-height:2px;"><%= photo.getDescription()%></p>
