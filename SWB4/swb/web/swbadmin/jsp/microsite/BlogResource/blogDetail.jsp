@@ -13,7 +13,7 @@
     Member member=Member.getMember(user,wpage);
     PostElement post=(PostElement)request.getAttribute("post");
     post.incViews();
-    String defaultFormat = "dd 'de' MMMM 'del' yyyy";
+    String defaultFormat = "dd/MM/yyyy HH:mm";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
     String updated = iso8601dateFormat.format(post.getUpdated());
     String postAuthor = post.getCreator().getFirstName();
@@ -22,7 +22,7 @@
 <table width="100%">
     <tr>
         <td>
-            <h1><%=post.getTitle()%></h1>
+            <h1 class="titulo"><%=post.getTitle()%></h1>
         </td>
     </tr>
     
@@ -38,30 +38,22 @@ if(email!=null)
     else
         {
         %>
-        <p><%=postAuthor%></p>
+        <p class="titulo"><%=postAuthor%></p>
         <%
         }
 %>
-
-
         </td>
     </tr>
     <tr>
         <td>
             <p><%=updated%></p>
+            <hr>
         </td>
-    </tr>
+    </tr>    
     <tr>
         <td>
-            &nbsp;
+            <p><%=post.getDescription()%></p>
         </td>
-
-    </tr>
-    <tr>
-        <td>
-            <%=post.getDescription()%>
-        </td>
-
     </tr>
 
 </table>
