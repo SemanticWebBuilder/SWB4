@@ -48,11 +48,6 @@ Error: Elemento no encontrado...
                         <td>
                             <input dojoType="dijit.form.TextBox" type="text" id="new_title" name="new_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>"/><br>
                         </td>
-                    <tr>
-                        <td align="right" valign="center"><label for="new_image">Imagen de la noticia&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input type="text" dojoType="dijit.form.TextBox" id="new_image" name="new_image" value="<%=(rec.getNewsPicture()==null?"":rec.getNewsPicture())%>"/><br>
-                        </td>
                     </tr>
                     <tr>
                         <td align="right" valign="center"><label for="new_author">Autor de la noticia&nbsp;<em>*</em></label></td>
