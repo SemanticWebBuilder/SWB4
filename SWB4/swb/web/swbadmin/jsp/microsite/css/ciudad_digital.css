@@ -197,3 +197,18 @@ margin-top:10px;
 #comment-post {
 margin-top:12px;
 }
+.rec_votes {
+    float:left;
+    width:200px;
+}
+.rec_votes_num {
+    float:left;
+    width:30px;
+    padding:4px;
+    text-align:right;
+}
+.rec_votes_label {
+    float:left;
+    width:90px;
+    padding:4px;
+    }
