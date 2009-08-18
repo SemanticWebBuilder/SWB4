@@ -52,9 +52,12 @@ public class UserActivitiesResource extends GenericAdmResource {
                 user = ca.getUser();
                 mse = ca.getElement();
                 ms = ca.getCommunity();
-                out.println("<li><a class=\"contactos_nombre\" href=\""+mse.getURL()+"\">" + mse.getDisplayTitle(user.getLanguage()) + "");
-                out.println("("+mse.getSemanticObject().getSemanticClass().getDisplayName(user.getLanguage())+")</a>");
-                out.println("<a class=\"contactos_nombre\" href=\"#\">"+SWBUtils.TEXT.getTimeAgo(mse.getUpdated(),user.getLanguage()) + "</a></li>");
+                if(mse!=null&&user!=null&&ms!=null)
+                {
+                    out.println("<li><a class=\"contactos_nombre\" href=\""+mse.getURL()+"\">" + mse.getDisplayTitle(user.getLanguage()) + "");
+                    out.println("("+mse.getSemanticObject().getSemanticClass().getDisplayName(user.getLanguage())+")</a>");
+                    out.println("<a class=\"contactos_nombre\" href=\"#\">"+SWBUtils.TEXT.getTimeAgo(mse.getUpdated(),user.getLanguage()) + "</a></li>");
+                }
             }
         } else {
             out.println("<li>No hay actividades que reportar.</li>");
