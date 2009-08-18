@@ -262,6 +262,8 @@ public class Resource extends org.semanticwb.model.base.ResourceBase
     @Override
     public void setXml(String xml)
     {
+        //Garantiza que se borren las propiedades
+        getSemanticObject().getRDFResource().removeAll(swb_xml.getRDFProperty());
         super.setXml(xml);
         m_dom=null;
     }
