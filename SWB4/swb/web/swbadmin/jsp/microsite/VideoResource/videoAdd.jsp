@@ -25,7 +25,7 @@
                     <tr>
                         <td align="right" valign="center"><label for="video_code">Código youTube&nbsp;<em>*</em></label></td>
                         <td>
-                            <textarea id="video_code" style="width: 98%" rows="2" cols="23" name="video_code"></textarea>
+                            <textarea id="video_code" style_="width: 98%" rows="2" cols="23" name="video_code"></textarea>
                         </td>
                     </tr>
                 </table>
