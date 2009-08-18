@@ -44,7 +44,7 @@ println """<script type="text/javascript">
 <form id="org.semanticwb.community.User/com/create" dojoType="dijit.form.Form" class="swbform"
 action="$url" 
 method="POST">
-<fieldset>
+<fieldset><legend>Registro de Nuevo Usuario</legend>
 	<table>
 		<tr>
 			<td align="right">
