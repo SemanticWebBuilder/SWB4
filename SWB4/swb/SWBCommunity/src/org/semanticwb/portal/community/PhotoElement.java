@@ -7,4 +7,11 @@ public class PhotoElement extends org.semanticwb.portal.community.base.PhotoElem
     {
         super(base);
     }
+    @Override
+    public String getURL()
+    {
+        String url = "#";
+        url=this.getPhotoWebPage().getUrl();
+        return url;
+    }
 }

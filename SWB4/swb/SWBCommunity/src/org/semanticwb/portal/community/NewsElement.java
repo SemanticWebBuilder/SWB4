@@ -7,4 +7,11 @@ public class NewsElement extends org.semanticwb.portal.community.base.NewsElemen
     {
         super(base);
     }
+    @Override
+    public String getURL()
+    {
+        String url = "#";
+        url=this.getNewsWebPage().getUrl();
+        return url;
+    }
 }
