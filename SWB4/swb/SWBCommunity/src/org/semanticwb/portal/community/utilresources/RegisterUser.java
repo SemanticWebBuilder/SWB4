@@ -263,9 +263,12 @@ public class RegisterUser extends GenericResource
                 per.setPercentage(100);
                 File f = new File(photoName);
 
-                BufferedImage bi = ImageIO.read(f);
+/*                BufferedImage bi = ImageIO.read(f);
                 int calcHeight = (150 * bi.getHeight() / bi.getWidth());
-                ImageIO.write(createResizedCopy(bi, 150, calcHeight), name.substring(name.lastIndexOf(".")+1), f);
+                ImageIO.write(createResizedCopy(bi, 150, calcHeight), name.substring(name.lastIndexOf(".")+1), f);*/
+
+                ImageResizer.resize(f, 150, true, f, name.substring(name.lastIndexOf(".")+1).toLowerCase());
+
 
             } catch (Exception ex)
             {
