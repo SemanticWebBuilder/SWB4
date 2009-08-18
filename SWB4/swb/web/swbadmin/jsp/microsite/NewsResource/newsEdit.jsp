@@ -2,9 +2,12 @@
 <%@page import="java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            Resource base = paramRequest.getResourceBase();
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
+
+            String path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
 %>
 <%
             String uri = request.getParameter("uri");
@@ -31,8 +34,15 @@ Error: Elemento no encontrado...
             <h3>Editar noticia</h3>
         </div>
         <div>
-            <fieldset>
+            <fieldset><legend></legend>
                 <table>
+                    <tr>
+                        <td align="right" valign="center"><label for="new_image">Imagen de la noticia&nbsp;<em>*</em></label></td>
+                        <td valign="top">
+                            <img src="<%= path+rec.getNewsPicture() %>" alt="<%= rec.getTitle() %>"/>
+                            <input id="foto" type="file" style="width: 90%;" class="textfield tags" size="22" name="foto" />
+                        </td>
+                    </tr>
                     <tr>
                         <td align="right" valign="center"><label for="new_title">Título de la noticia&nbsp;<em>*</em></label></td>
                         <td>
