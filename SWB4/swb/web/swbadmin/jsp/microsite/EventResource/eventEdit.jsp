@@ -2,11 +2,14 @@
 <%@page import="java.text.SimpleDateFormat, org.semanticwb.platform.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            Resource base = paramRequest.getResourceBase();
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+
+            String path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
 %>
 <%
             String uri = request.getParameter("uri");
@@ -37,8 +40,8 @@ Error: Elemento no encontrado...
                 <table>
                     <tr>
                         <td align="right" valign="center"><label for="foto">Imagen del evento&nbsp;:</label></td>
-                        <td>
-                            <%--<input dojoType="dijit.form.TextBox" type="text" required="true" id="event_title" name="event_title"/><br>--%>
+                        <td valign="top">
+                            <img src="<%= path+rec.getEventImage() %>" alt="<%= rec.getTitle() %>"/>
                             <input id="foto" type="file" name="foto" />
                         </td>
                     </tr>
