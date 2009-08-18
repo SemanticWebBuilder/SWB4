@@ -35,7 +35,7 @@ WebPage wpage=paramRequest.getWebPage()
 Member member = Member.getMember(user,wpage)
 def lista = Member.listMemberByUser(user,wpage.getWebSite())
 
-println """<div id="comunidades">
+println """<div id="contactos">
 <h2>Mis Comunidades</h2>
 <ul>"""
 lista.each(){
