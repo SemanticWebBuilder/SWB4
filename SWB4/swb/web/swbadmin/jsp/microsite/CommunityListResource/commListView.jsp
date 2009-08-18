@@ -32,6 +32,10 @@
         int nums = 0;
         String nummsg = "";
 
+%>
+<table>
+<%
+
         Iterator<WebPage> itwp = wpp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
         while(itwp.hasNext())
         {
@@ -40,20 +44,21 @@
             {
                 if(nums==0) {
 %>
-<div class="groupInteres">
+    <tr>
 <%
                 }
 
                 nums++;
 %>
-<div class="groupInteres">
-    <h3 class=\"titulo\"><%=wpch.getDisplayTitle(user.getLanguage())%></h3>
+        <td>
+            <div class="groupInteres">
+            <h3 class=\"titulo\"><%=wpch.getDisplayTitle(user.getLanguage())%></h3>
 <%
                 Iterator<WebPage> itwpch = wpch.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
                 if(itwpch.hasNext())
                 {
 %>
-    <ul>
+            <ul>
 <%
                     while(itwpch.hasNext())
                     {
@@ -64,7 +69,7 @@
                             nummsg = "";
                             if(numcomm>0)  nummsg = "("+numcomm+")";
 %>
-        <li><a href="<%=wpgs.getUrl()%>"><%=wpgs.getDisplayTitle(user.getLanguage())%>&nbsp;<%=nummsg%></a></li>
+                <li><a href="<%=wpgs.getUrl()%>"><%=wpgs.getDisplayTitle(user.getLanguage())%>&nbsp;<%=nummsg%></a></li>
 <%
                         }
                         numcomm=0;
@@ -72,30 +77,49 @@
                     }
 
 %>
-    </ul>
+            </ul>
 <%
 
                     //out.println("<p class=\"vermas\"><a href=\""+wpch.getUrl()+"\">Ver todos</a></p>");
                 }
 %>
-</div>
+        </div>
+    </td>
 <%
                 if(nums==3)
                 {
 %>
-</div>
+   </tr>
 <%
                     nums=0;
                 }
             }
 
         }
-        if(nums%3>0)
+
+                 if(nums<3)
+                {
+                    if(nums==2)
+                    {
+%>
+                        <td></td>
+<%
+                    }
+                    else if(nums==1)
+                    {
+%>
+                        <td></td><td></td>
+<%
+                    }
+%>
+   </tr>
+<%                }
+
+        if(nums<3)
         {
 %>
-</div>
+
 <%
         }
 %>
-
-
+</table>
