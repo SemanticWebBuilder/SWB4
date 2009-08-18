@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <%
     //SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
@@ -14,8 +14,11 @@
 %>
     
         <%
+            String defaultFormat = "dd/MM/yyyy HH:mm";
+            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
             for(NewsElement element : elements)
             {
+                String created=iso8601dateFormat.format(element.getCreated());
                 String href=element.getURL();                
                 String src=element.getNewsPicture();
                 if(element.getNewsPicture()!=null)
@@ -47,20 +50,15 @@
                         }                
                       %>
                   
-                  <h3 class="titulo"><%=title%></h3>
+                  <h3 class="titulo"><a href="<%=href%>"><%=title%></a></h3>
+                  <p class="titulo"><%=created%></p>
                   <p><%=description%></p>
-                  <%
-                    if(href!=null)
-                    {
-                        %>
-                        <p class="vermas"><a href="<%=href%>" >Ver m&aacute;s</a></p>
-                        <%
-                    }
-                  %>
-                  
                 </div>
                 <%
             }
+            %>
+            <p class="vermas"><a href="#" >Ver m&aacute;s</a></p>
+            <%
     }
     else
         {
