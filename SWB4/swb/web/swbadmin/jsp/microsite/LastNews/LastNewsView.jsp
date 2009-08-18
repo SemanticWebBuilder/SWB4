@@ -2,7 +2,8 @@
 <%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <%
-    SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
+    SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");    
+    String pathIamge = SWBPlatform.getWebWorkPath();
     ArrayList<NewsElement> elements=(ArrayList<NewsElement>)request.getAttribute("elements");
     %>
     <div class="recentEntry_last">
@@ -16,14 +17,16 @@
         <%
             String defaultFormat = "dd/MM/yyyy HH:mm";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
+            
+            
             for(NewsElement element : elements)
             {
                 String created=iso8601dateFormat.format(element.getCreated());
                 String href=element.getURL();                
-                String src=element.getNewsPicture();
+                String src=pathIamge+element.getNewsPicture();
                 if(element.getNewsPicture()!=null)
                 {
-                    src=element.getWorkPath()+element.getNewsPicture();
+                    src=pathIamge+element.getNewsPicture();
                 }
                 String title=element.getTitle();
                 if(title==null)
