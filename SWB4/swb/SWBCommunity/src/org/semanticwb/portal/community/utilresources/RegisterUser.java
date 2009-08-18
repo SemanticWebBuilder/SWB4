@@ -22,7 +22,9 @@
  **/
 package org.semanticwb.portal.community.utilresources;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -179,7 +181,7 @@ public class RegisterUser extends GenericResource
                 log.error(nex);
             }
 
-            response.sendRedirect(response.getWebPage().getWebSite().getWebPage("perfil").getRealUrl()); 
+            response.sendRedirect(response.getWebPage().getWebSite().getWebPage("perfil").getRealUrl());
             //response.sendRedirect(response.getWebPage().getRealUrl()+"?act=detail");
             return;
         }
@@ -260,25 +262,26 @@ public class RegisterUser extends GenericResource
                 user.setPhoto(photoName);
                 per.setPercentage(100);
                 File f = new File(photoName);
+
                 BufferedImage bi = ImageIO.read(f);
-                int w = bi.getWidth();
-                int h = bi.getHeight();
-                if (h>w) {h=150;w=-1;} else {w=150; h=-1;}
-                Image img = bi.getScaledInstance(w, h, Image.SCALE_SMOOTH);
-                bi = new BufferedImage(150, 150, bi.getType());
-                Graphics g = bi.createGraphics();
-                h = img.getHeight(null);
-                w = img.getWidth(null);
-                h = (150 - h)/2;
-                w = (150 - w)/2;
-                g.drawImage(img, h, w, null);
-                g.dispose();
-                ImageIO.write(bi, name, f);
+                int calcHeight = (150 * bi.getHeight() / bi.getWidth());
+                ImageIO.write(createResizedCopy(bi, 150, calcHeight), name.substring(name.lastIndexOf(".")+1), f);
+
             } catch (Exception ex)
             {
                 log.error(ex);
             }
         }
+    }
+
+    private BufferedImage createResizedCopy(Image originalImage, int scaledWidth, int scaledHeight)
+    {
+        BufferedImage scaledBI = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = scaledBI.createGraphics();
+        g.setComposite(AlphaComposite.Src);
+        g.drawImage(originalImage, 0, 0, scaledWidth, scaledHeight, null);
+        g.dispose();
+        return scaledBI;
     }
 
     @Override
