@@ -387,6 +387,11 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         return ret.toString();
     }
 
+    public String getURL()
+    {
+        return "#";
+    }
+
     private String printStar(int current, int rank) {
 
         String url = "javascript:vote(" + current + ");";
