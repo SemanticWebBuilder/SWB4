@@ -43,9 +43,6 @@ float:left;
 .comment-time {
 color:#666666;
 }
-.comment-spam {
-float:left;
-}
 .comment-body {
 margin-left:4px;
 margin-top:4px;
@@ -204,11 +201,38 @@ margin-top:12px;
 .rec_votes_num {
     float:left;
     width:30px;
-    padding:4px;
+    padding:2px;
     text-align:right;
 }
 .rec_votes_label {
     float:left;
     width:90px;
-    padding:4px;
+    padding:2px;
     }
+.rank_label {
+    float:left;
+    padding:4px;
+}
+.rank_stars {
+    padding:4px;
+}
+.common_funcs {
+    
+}
+.abused {
+    float:left
+}
+.comments_head {
+
+}
+.comments_title {
+     float:left;
+     width:300px;
+}
+.comments_write {
+     float:left;
+     width:300px;
+}
+#addComment {
+     display:none;
+}
