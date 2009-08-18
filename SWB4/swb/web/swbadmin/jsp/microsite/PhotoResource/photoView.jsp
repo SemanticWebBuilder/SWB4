@@ -12,114 +12,36 @@
             String path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
 %>
 
-<script type="text/javascript">
-    function thumbnailizeImage(idImg) {
-        var image = document.getElementById(idImg);
-        if(image.width > image.height) {
-            var nw = 130;
-            var nh = 95;
-        }else {
-            var nw = 95;
-            var nh = 130;
-        }
-        image.width = nw;
-        image.height = nh;
-    }
-
-    function createImageContainer(containerId) {
-        var container = document.createElement('div');
-        container.style.styleFloat = 'left';
-        container.style.cssFloat = 'left'
-        container.style.marginTop = '30px';
-        container.style.marginLeft = '30px';
-        container.style.marginRight = '30px';
-        container.style.textAlign = 'center';
-        return container;
-    }
-
-    function createThumbnail(imgId, imgUrl) {
-        var img = document.createElement('img');
-        img.id = imgId;
-        img.src = imgUrl;
-        /*var w = img.width;
-        var h = img.height;*/
-
-        if(img.width > img.height) {
-            img.width = 130;
-            img.height = 95;
-        }else {
-            img.width = 95;
-            img.height = 130;
-        }
-        return img;
-    }
-
-    function createTextInfo(c, id, title, author, date, desc) {
-        var p = document.createElement('p');
-        p.innerText = title;
-        p.textContent = title;
-        p.style.lineHeight = '2px';
-        c.appendChild(p);
-
-        p = document.createElement('p');
-        p.innerText = author;
-        p.textContent = author;
-        p.style.lineHeight = '2px';
-        c.appendChild(p);
-
-        p = document.createElement('p');
-        p.innerText = desc;
-        p.textContent = desc;
-        p.style.lineHeight = '2px';
-        c.appendChild(p);
-
-        p = document.createElement('p');
-        p.innerText = date;
-        p.textContent = date;
-        p.style.lineHeight = '2px';
-        c.appendChild(p);
-    }
-</script>
-
-<%
-            Iterator<PhotoElement> it = PhotoElement.listPhotoElementByPhotoWebPage(wpage, wpage.getWebSite());
-%>
-
 <table border="0" width="90%">
-    <tr><td>
-            <div id="photoc_<%= base.getId()%>">
-                <script type="text/javascript">
-                    var photoContainer;
-                    var img;
-                    var a;
-                    var mc = document.getElementById('photoc_<%= base.getId()%>');
-                    <%
-                            int i = 0;
-                            while (it.hasNext())
-                            {
-                                PhotoElement photo = it.next();
-                                if(photo.canView(member))
-                                {
-                                    SWBResourceURL viewurl = paramRequest.getRenderUrl();
-                                    viewurl.setParameter("act", "detail");
-                                    viewurl.setParameter("uri", photo.getURI());
-%>
-    photoContainer = createImageContainer('ic_'+ '<%= i%>' +'<%= base.getId()%>');
-    img = createThumbnail('img_'+'<%= i%>'+'<%= base.getId()%>', '<%= path+photo.getImageURL()%>');
-    a = document.createElement('a');
-    a.href = '<%= viewurl %>';
-    a.appendChild(img);
-    photoContainer.appendChild(a);
-    createTextInfo(photoContainer, 'p_'+'<%= i%>'+'<%= base.getId()%>', '<%= photo.getTitle()%>', '<%= photo.getCreator().getFirstName()%>', '<%= SWBUtils.TEXT.getTimeAgo(photo.getCreated(),user.getLanguage())%>', '<%= photo.getDescription()%>');
-    mc.appendChild(photoContainer);
+    <tr>
+    <td>
+        <div id="photoc_<%= base.getId()%>">
 <%
-                                    i++;
-                                }
-                            }
-                    %>
-                </script>
-            </div>
-        </td></tr>
+        Iterator<PhotoElement> it = PhotoElement.listPhotoElementByPhotoWebPage(wpage, wpage.getWebSite());
+        int i = 0;
+        while (it.hasNext())
+        {
+            PhotoElement photo = it.next();
+            if(photo.canView(member))
+            {
+                SWBResourceURL viewurl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", photo.getURI());
+%>
+            <div style="float:left; margin-top:30px; margin-left:30px; margin-right:30px; text-align:center">
+                <a href="<%=viewurl%>">
+                    <img id="img_<%=i+base.getId()%>" src="<%=path+"thumbn_"+photo.getImageURL()%>" alt="<%= photo.getDescription()%>" />
+                    <p style="line-height:2px;"><%= photo.getTitle()%></p>
+                    <p style="line-height:2px;"><%= photo.getCreator().getFirstName()%></p>
+                    <p style="line-height:2px;"><%= photo.getDescription()%></p>
+                    <p style="line-height:2px;"><%= SWBUtils.TEXT.getTimeAgo(photo.getCreated(),user.getLanguage())%></p>
+                </a>
+            </div><%
+                i++;
+            }
+        }
+%>                
+        </div>
+    </td>
+    </tr>
 </table>
 <%
     if (member.canAdd()) {
