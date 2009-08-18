@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 
 
@@ -37,8 +38,13 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
         super(base);
     }
 
-    public static Iterator<EventElement> listEventElementsByDate(Date date, WebPage wpage, SWBModel model) {
-        Iterator<EventElement> evs = listEventElementByEventWebPage(wpage, model);
+    public static Iterator<EventElement> listEventElementsByDate(User user, Date date, WebPage wpage, SWBModel model) {
+        Iterator<EventElement> evs;
+        if (user == null) {
+             evs = listEventElementByEventWebPage(wpage, model);
+        } else {
+            evs = listEventElementByAttendant(user);
+        }
         ArrayList<EventElement> res = new ArrayList<EventElement>();
         
         while(evs.hasNext()) {
