@@ -523,12 +523,12 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
         sbf.append("<div class=\"swb-bkm-container\">\n" +
                 "  <div class=\"swb-bkm-header\">\n" +
-                "    <h1>" + paramRequest.getLocaleString("lblManage") + "</h1>\n" +
                 "    <div class=\"swb-bkm-navmenu\">\n");
 
         //Set aUrl action to ORDER
         aUrl.setAction("SORT");
         aUrl.setParameter("oType", String.valueOf(SORT_BYNAME));
+        sbf.append(paramRequest.getLocaleString("lblBy") + ":&nbsp;[");
         sbf.append((sType == SORT_BYNAME) ? "      <b>" : "      <a href=\"" + aUrl + "\">");
         sbf.append(paramRequest.getLocaleString("lblByname"));
         sbf.append((sType == SORT_BYNAME) ? "</b> |" : "</a> |");
@@ -539,13 +539,12 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         aUrl.setParameter("oType", String.valueOf(SORT_BYTAGS));
         sbf.append((sType == SORT_BYTAGS) ? "<b>" : "<a href=\"" + aUrl + "\">");
         sbf.append(paramRequest.getLocaleString("lblBytag"));
-        sbf.append((sType == SORT_BYTAGS) ? "</b> |" : "</a> |");
+        sbf.append((sType == SORT_BYTAGS) ? "</b> |" : "</a>]");
 
         BookmarkGroup generalGp = getUserBookmarkGroupByName(paramRequest.getUser(), "general");
         //Set url mode to VIEW
         rUrl.setMode(rUrl.Mode_VIEW);
-        sbf.append("<a href=\"#\" onClick=\"window.close();\">" + paramRequest.getLocaleString("lblExit") + "</a>\n" +
-                "    </div>\n" +
+        sbf.append("    </div>\n" +
                 "  </div>\n" +
                 "  <div class=\"swb-bkm-wrapper\">\n" +
                 "    <div class=\"swb-bkm-content\" id=\"" +
@@ -554,9 +553,6 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 "    </div>\n" +
                 "  </div>\n" +
                 renderMenu(paramRequest) +
-                "</div>\n" +
-                "<div class=\"swb-bkm-footer\">\n" +
-                "  <p><br></p>\n" +
                 "</div>\n");
         out.print(sbf.toString());
     }
