@@ -12,6 +12,7 @@
      <%
         boolean areFriends=false;
         SWBResourceURL urlAction=paramRequest.getActionUrl();
+        WebPage wpage=paramRequest.getWebPage();
         User owner=paramRequest.getUser();
         User user=owner;
         if(request.getParameter("user")!=null) 
@@ -55,7 +56,7 @@
                   %>
                     <p class="addOn"><a href="<%=urlAction%>">Eliminar como amigo</a></p>
                   <%
-              }else if(!owner.getURI().equals(user.getURI())){
+              }else if(!owner.getURI().equals(user.getURI()) && !FriendshipProspect.findFriendProspectedByRequester(owner, user, wpage.getWebSite())){
                   urlAction.setAction("addFriendRelship");
                   urlAction.setParameter("user", user.getURI());
                   %>
