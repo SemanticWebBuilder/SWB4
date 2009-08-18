@@ -57,6 +57,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        System.out.println("path="+SWBPlatform.getWebWorkPath()+getResourceBase().getWorkPath()+"/");
         String act=request.getParameter("act");
         if(act==null) {
             act = (String)request.getSession(true).getAttribute("act");
@@ -91,6 +92,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
             if(mem.canAdd() && params.containsValue("add")) {
                 PhotoElement rec = PhotoElement.createPhotoElement(getResourceBase().getWebSite());
                 rec.setImageURL(params.get("filename"));
+                rec.setPhotoThumbnail(params.get("thumbnail"));
                 rec.setTitle(params.get("title"));
                 rec.setDescription(params.get("description"));
                 rec.setTags(params.get("tags"));
@@ -150,7 +152,9 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
     }
 
     private HashMap<String,String> upload(HttpServletRequest request) {
-        String path = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath();
+        final String realpath = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath()+"/";
+        final String path = SWBPlatform.getWebWorkPath()+getResourceBase().getWorkPath()+"/";
+        
         HashMap<String,String> params = new HashMap<String,String>();
         try {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -194,13 +198,13 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                             long serial = (new Date()).getTime();
                             String filename = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
 
-                            File image = new File(path+"/"+filename);
-                            File thumbnail = new File(path+"/"+"thumbn_"+filename);
+                            File image = new File(realpath+filename);
+                            File thumbnail = new File(realpath+"thumbn_"+filename);
                             currentFile.write(image);
-
                             ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
                             
-                            params.put("filename", filename);
+                            params.put("filename", path+filename);
+                            params.put("thumbnail", path+"thumbn_"+filename);
                         }catch(StringIndexOutOfBoundsException iobe) {
                         }
                     }

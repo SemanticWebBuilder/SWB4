@@ -95,6 +95,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
             if(mem.canAdd() && params.containsValue("add")) {
                 NewsElement rec = NewsElement.createNewsElement(getResourceBase().getWebSite());
                 rec.setNewsImage(params.get("filename"));
+                rec.setNewsThumbnail(params.get("thumbnail"));
                 rec.setTitle(params.get("new_title"));
                 rec.setAuthor(params.get("new_author"));
                 rec.setAbstr(params.get("new_abstract"));
@@ -118,6 +119,8 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                 if(rec != null && rec.canModify(mem)) {
                     if(params.containsKey("filename"))
                         rec.setNewsImage(params.get("filename"));
+                    if(params.containsKey("thumbnail"))
+                        rec.setNewsThumbnail(params.get("thumbnail"));
                     rec.setTitle(params.get("new_title"));
                     rec.setAuthor(params.get("new_author"));
                     rec.setAbstr(params.get("new_abstract"));
@@ -144,7 +147,9 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
     }
 
     private HashMap<String,String> upload(HttpServletRequest request) {
-        String path = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath();
+        final String realpath = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath()+"/";
+        final String path = SWBPlatform.getWebWorkPath()+getResourceBase().getWorkPath()+"/";
+        
         HashMap<String,String> params = new HashMap<String,String>();
         try {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -187,13 +192,13 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                             long serial = (new Date()).getTime();
                             String filename = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
 
-                            File image = new File(path+"/"+filename);
-                            File thumbnail = new File(path+"/"+"thumbn_"+filename);
+                            File image = new File(realpath+"/"+filename);
+                            File thumbnail = new File(realpath+"/"+"thumbn_"+filename);
                             currentFile.write(image);
-
                             ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
 
                             params.put("filename", filename);
+                            params.put("thumbnail", path+"thumbn_"+filename);
                         }catch(StringIndexOutOfBoundsException iobe) {
                         }
                     }
