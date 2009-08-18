@@ -8,8 +8,6 @@
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-
-            String path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
 %>
 <h1>Noticias</h1>
 <table>
@@ -23,7 +21,7 @@
 %>
         <tr>
             <td valign="top">
-                <a href="<%= viewUrl%>"><img src="<%= path+"thumbn_"+anew.getNewsPicture() %>" alt="" border="0" /></a>
+                <a href="<%= viewUrl%>"><img src="<%= anew.getNewsThumbnail() %>" alt="" border="0" /></a>
             </td>
             <td valign="top">
                 <p><%= anew.getTitle()%>&nbsp;(<%= anew.getCitation()%>)</p>
