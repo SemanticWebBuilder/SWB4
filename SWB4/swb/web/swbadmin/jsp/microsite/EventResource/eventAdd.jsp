@@ -44,7 +44,7 @@
                     <tr>
                         <td align="right" valign="center"><label for="event_audience">Dirigido a&nbsp;<em>*</em></label></td>
                         <td>
-                            <input type="text" dojoType="dijit.form.TextBox" id="event_audience" name="event_audience"/><br>
+                            <input type="text" dojoType="dijit.form.TextBox" id="event_audience" name="event_audience" value="Todos"/><br>
                         </td>
                     </tr>
                     <tr>
