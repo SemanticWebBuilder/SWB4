@@ -29,8 +29,8 @@ public class FriendshipProspect extends org.semanticwb.portal.community.base.Fri
         }
     }
 
-    public static boolean removeFriendshipProspectByRequested(User requested, User requester, WebSite website) {
-        Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequested(requested, website);
+    public static boolean removeFriendshipProspectByRequested(User requested, User requester, SWBModel model) {
+        Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequested(requested, model);
         while (itFriendshipProspect.hasNext()) {
             FriendshipProspect friendshipProspect = itFriendshipProspect.next();
             User userRequester = friendshipProspect.getFriendShipRequester();
@@ -43,13 +43,25 @@ public class FriendshipProspect extends org.semanticwb.portal.community.base.Fri
     }
 
 
-    public static boolean removeFriendshipProspectByRequester(User requester, User requested, WebSite website) {
-        Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequester(requester, website);
+    public static boolean removeFriendshipProspectByRequester(User requester, User requested,  SWBModel model) {
+        Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequester(requester, model);
         while (itFriendshipProspect.hasNext()) {
             FriendshipProspect friendshipProspect = itFriendshipProspect.next();
             User userRequested = friendshipProspect.getFriendShipRequested();
             if (userRequested.getURI().equals(requested.getURI())) {
                 friendshipProspect.remove();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean findFriendProspectedByRequester(User requester, User requested, SWBModel model) {
+        Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.listFriendshipProspectByFriendShipRequester(requester, model);
+        while (itFriendshipProspect.hasNext()) {
+            FriendshipProspect friendshipProspect = itFriendshipProspect.next();
+            User userRequested = friendshipProspect.getFriendShipRequested();
+            if (userRequested.getURI().equals(requested.getURI())) {
                 return true;
             }
         }
