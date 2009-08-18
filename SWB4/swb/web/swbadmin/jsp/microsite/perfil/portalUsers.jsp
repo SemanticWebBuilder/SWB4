@@ -6,10 +6,14 @@
         <%@page import="org.semanticwb.platform.SemanticObject"%>
         <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
         <%@page import="org.semanticwb.SWBPlatform"%>
+        <%@page import="org.semanticwb.model.*"%>
 
         <div class="miembros">
           <h2 class="titulo">Usuarios del portal</h2>
         <%
+        Resource base=paramRequest.getResourceBase();
+        String perfilPath=base.getAttribute("perfilPath","");
+
         SWBResourceURL urlAction=paramRequest.getActionUrl();
         String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
 
@@ -22,7 +26,7 @@
             if(userprosp.getPhoto()!=null) photo=userprosp.getPhoto();
             %>
                 <div class="moreUser">
-                    <a href="<%=urlAction%>"><img src="<%=photo%>" valign="top" width="80" height="70"/><br><%=userprosp.getFullName()%></a>
+                    <a href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=photo%>" valign="top" width="80" height="70"/><br><%=userprosp.getFullName()%></a>
                 </div>
             <%
         }                
