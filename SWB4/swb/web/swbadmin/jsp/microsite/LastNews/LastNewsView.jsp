@@ -16,12 +16,10 @@
         <%
             for(NewsElement element : elements)
             {
-                String href=element.getURL();
-                //href+="?&act=detail&uri="+URLEncoder.encode(element.getURI());
-                String src=null;
+                String href=element.getURL();                
+                String src=element.getNewsPicture();
                 if(element.getNewsPicture()!=null)
                 {
-
                     src=element.getWorkPath()+element.getNewsPicture();
                 }
                 String title=element.getTitle();
@@ -46,7 +44,7 @@
                             %>
                             <p><img src="<%=src%>" alt="<%=title%>" width="49" height="49" ></p>
                             <%
-                        }
+                        }                
                       %>
                   
                   <h3 class="titulo"><%=title%></h3>
