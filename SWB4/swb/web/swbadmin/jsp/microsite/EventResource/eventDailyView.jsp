@@ -9,7 +9,6 @@
     Member member = Member.getMember(user, wpage);
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
     SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
-    String path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/thumbn_";
 %>
 <h1>Eventos Diario</h1>
 <table>
@@ -33,7 +32,7 @@
         <tr>
             <td valign="top">
                 <a href="<%=viewUrl%>">
-                    <img src="<%=path+event.getEventImage()%>" alt="<%=event.getDescription()%>" border="0" />
+                    <img src="<%=event.getEventThumbnail()%>" alt="<%=event.getDescription()%>" border="0" />
                 </a>
             </td>
             <td valign="top">

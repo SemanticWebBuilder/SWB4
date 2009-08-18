@@ -10,8 +10,6 @@
     String uri = request.getParameter("uri");
     EventElement event = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
     if(event!=null && event.canView(member)) {
-        String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");        
         
@@ -20,7 +18,7 @@
 <table border="0" cellspacing="10">
     <tr>
         <td valign="top">
-            <img src="<%=path+event.getEventImage()%>" alt="<%=event.getDescription()%>" border="0" />
+            <img src="<%=event.getEventImage()%>" alt="<%=event.getDescription()%>" border="0" />
         </td>
         <td valign="top">
                 <%=event.getTitle()%> (<%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%>)<BR>

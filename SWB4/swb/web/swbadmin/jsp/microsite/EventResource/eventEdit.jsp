@@ -8,8 +8,6 @@
             Member member = Member.getMember(user, wpage);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-
-            String path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
 %>
 <%
             String uri = request.getParameter("uri");
@@ -41,7 +39,7 @@ Error: Elemento no encontrado...
                     <tr>
                         <td align="right" valign="center"><label for="foto">Imagen del evento&nbsp;:</label></td>
                         <td valign="top">
-                            <img src="<%= path+rec.getEventImage() %>" alt="<%= rec.getTitle() %>"/>
+                            <img src="<%= rec.getEventImage() %>" alt="<%= rec.getTitle() %>"/>
                             <input id="foto" type="file" name="foto" />
                         </td>
                     </tr>
