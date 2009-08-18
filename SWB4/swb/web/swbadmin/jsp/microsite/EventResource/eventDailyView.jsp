@@ -7,7 +7,7 @@
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Member member = Member.getMember(user, wpage);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
             String path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
 %>
