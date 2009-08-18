@@ -68,14 +68,14 @@
         c.appendChild(p);
 
         p = document.createElement('p');
-        p.innerText = date;
-        p.textContent = date;
+        p.innerText = desc;
+        p.textContent = desc;
         p.style.lineHeight = '2px';
         c.appendChild(p);
 
         p = document.createElement('p');
-        p.innerText = desc;
-        p.textContent = desc;
+        p.innerText = date;
+        p.textContent = date;
         p.style.lineHeight = '2px';
         c.appendChild(p);
     }
@@ -122,26 +122,24 @@
         </td></tr>
 </table>
 <%
-            System.out.println(member);
-            if (member.canAdd()) {
+    if (member.canAdd()) {
 %>
 <center>
     <a href="<%=paramRequest.getRenderUrl().setParameter("act", "add").toString()%>">Agregar foto</a>
     <%
-            if (wputil != null && member.canView()) {
-                if (!wputil.isSubscribed(member)) {
+        if (wputil != null && member.canView()) {
+            if(!wputil.isSubscribed(member)) {
     %>
     <a href="<%=paramRequest.getActionUrl().setParameter("act", "subscribe").toString()%>">Suscribirse a este elemento</a>
     <%
-            } else {
+            }else {
     %>
     <a href="<%=paramRequest.getActionUrl().setParameter("act", "unsubscribe").toString()%>">Cancelar suscripción</a>
     <%
-                }
-
             }
+        }
     %>
 </center>
-<%  } else {%>
+<%  }else {%>
 <p>no puedes ver el menu</p>
-<%    }%>
+<%  }%>

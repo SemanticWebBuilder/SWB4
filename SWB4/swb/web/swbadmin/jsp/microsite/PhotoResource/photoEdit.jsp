@@ -7,12 +7,7 @@
     Member member=Member.getMember(user,wpage);
 %>
 <%
-        String uri=request.getParameter("uri");
-        if(uri==null) {
-            uri = (String)request.getSession(true).getAttribute("uri");
-            request.getSession(true).setAttribute("uri", null);
-            request.getSession(true).removeAttribute("uri");
-        }
+        String uri=request.getParameter("uri");        
         PhotoElement rec= (PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
         if(rec==null)
         {
