@@ -140,7 +140,7 @@
                         "    <tr>\n");
             }
 
-            Iterator<EventElement> evsNow = EventElement.listEventElementsByDate(new Date(year, month, i), wpage, wpage.getWebSite());
+            Iterator<EventElement> evsNow = EventElement.listEventElementsByDate(null, new Date(year, month, i), wpage, wpage.getWebSite());
             String eventTitles = "";
 
             while (evsNow.hasNext()) {
@@ -168,7 +168,7 @@
                 }
             } else {
                 //Not today
-                evsNow = EventElement.listEventElementsByDate(new Date(year, month, i), wpage, wpage.getWebSite());
+                evsNow = EventElement.listEventElementsByDate(null, new Date(year, month, i), wpage, wpage.getWebSite());
                 if (!eventTitles.equals("")) {
                     SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "daily");
                     viewUrl.setParameter("year", String.valueOf(year + 1900));
