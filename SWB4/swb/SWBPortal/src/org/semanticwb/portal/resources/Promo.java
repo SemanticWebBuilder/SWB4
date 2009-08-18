@@ -45,6 +45,8 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * This class displays and administrate a promocional text with an optional image
  * under criteria like configuration. This resource comes from WebBuilder 2 and can
  * be installed as content resource or a strategy resource.
+ *
+ * @Autor:Jorge Jiménez
  * 
  * @modified by Carlos Ramos (CIRI)
  */
@@ -82,12 +84,8 @@ public class Promo extends GenericAdmResource {
             out = render();
         }
         
-        //System.out.println("out");
         PrintWriter pw = response.getWriter();
-        //pw.println("-ini-");
-        pw.println(out);
-        //pw.println("-end-");
-        pw.flush();
+        pw.print(out);        
     }
 
     private String renderWithStyle() {
