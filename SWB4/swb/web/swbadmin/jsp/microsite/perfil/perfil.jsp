@@ -10,6 +10,13 @@
 
 
      <%
+        HashMap <String, SemanticProperty> mapa = new HashMap();
+        Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
+        while(list.hasNext()){
+            SemanticProperty sp=list.next();
+            mapa.put(sp.getName(),sp);
+        }
+
         boolean areFriends=false;
         SWBResourceURL urlAction=paramRequest.getActionUrl();
         WebPage wpage=paramRequest.getWebPage();
@@ -64,12 +71,18 @@
                   <%
               }
             }else {
-                 String userFirstName="", userLastName="", secondName="", email="";
+                 String userFirstName="", userLastName="", secondName="", email="", age="", sex="", userStatus="",userInterest="",userHobbies="",userInciso="";
 
                  if(user.getFirstName()!=null) userFirstName=user.getFirstName();
                  if(user.getLastName()!=null) userLastName=user.getLastName();
                  if(user.getSecondLastName()!=null) secondName=user.getSecondLastName();
                  if(user.getEmail()!=null) email=user.getEmail();
+                 if(user.getExtendedAttribute(mapa.get("userAge"))!=null) age=""+user.getExtendedAttribute(mapa.get("userAge"));
+                 if(user.getExtendedAttribute(mapa.get("userSex"))!=null) sex=""+user.getExtendedAttribute(mapa.get("userSex"));
+                 if(user.getExtendedAttribute(mapa.get("userStatus"))!=null) userStatus=""+user.getExtendedAttribute(mapa.get("userStatus"));
+                 if(user.getExtendedAttribute(mapa.get("userInterest"))!=null) userInterest=""+user.getExtendedAttribute(mapa.get("userInterest"));
+                 if(user.getExtendedAttribute(mapa.get("userHobbies"))!=null) userHobbies=""+user.getExtendedAttribute(mapa.get("userHobbies"));
+                 if(user.getExtendedAttribute(mapa.get("userInciso"))!=null) userInciso=""+user.getExtendedAttribute(mapa.get("userInciso"));
                  %>
 
                  <table>
@@ -81,11 +94,13 @@
                      <%
                         if(owner==user || areFriends){ //Agregar datos privados (email, sexo, fotos, etc)
                             %>
-                                <tr>
-                                    <td>
-                                        <%=email%>
-                                    </td>
-                                </tr>
+                                <tr><td>Email:<%=email%></td></tr>
+                                <tr><td>Edad:<%=age%></td></tr>
+                                <tr><td>Sexo:<%=sex%></td></tr>
+                                <tr><td>Estatus:<%=userStatus%></td></tr>
+                                <tr><td>Interes:<%=userInterest%></td></tr>
+                                <tr><td>Hobbies<%=userHobbies%></td></tr>
+                                <tr><td>Inciso:<%=userInciso%></td></tr>
                             <%
                         }
                      %>
