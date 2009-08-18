@@ -14,30 +14,33 @@
 <h1>Noticias</h1>
 <table>
     <tbody>
-        <%
-            Iterator<NewsElement> eit = NewsElement.listNewsElementByNewsWebPage(wpage, wpage.getWebSite());
-            while (eit.hasNext()) {
-                NewsElement anew = eit.next();
-                SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());
-                if (anew.canView(member)) {
-        %>
+<%
+    Iterator<NewsElement> eit = NewsElement.listNewsElementByNewsWebPage(wpage, wpage.getWebSite());
+    while (eit.hasNext()) {
+        NewsElement anew = eit.next();
+        if(anew.canView(member)) {
+            SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("uri", anew.getURI());
+%>
         <tr>
             <td valign="top">
-                <img src="<%= path+anew.getNewsPicture() %>" alt="" />
+                <a href="<%= viewUrl%>"><img src="<%= path+"thumbn_"+anew.getNewsPicture() %>" alt="" border="0" /></a>
             </td>
             <td valign="top">
-                <a href="<%=viewUrl%>"><%=anew.getTitle()%></a><%=(anew.getCitation() == null ? "" : "(" + anew.getCitation() + ")")%><BR>
-                Por:&nbsp;<b><%=(anew.getAuthor() == null ? "" : anew.getAuthor())%></b> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%><BR>
-                <b><%=(anew.getCreated() == null ? "" : dateFormat.format(anew.getCreated()))%>.</b>&nbsp;<%=(anew.getAbstr() == null ? "" : anew.getAbstr())%><BR>
-                <a href="<%=viewUrl%>">Ver m&aacute;s</a><BR>
-                Puntuación:&nbsp;<%=anew.getRank()%><BR>
-                <%=anew.getViews()%> vistas.
+                <p><%= anew.getTitle()%>&nbsp;(<%= anew.getCitation()%>)</p>
+                <p>Por:&nbsp;<%= anew.getAuthor()%> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
+                <p>
+                    <strong><%= dateFormat.format(anew.getCreated()) %></strong>&nbsp;
+                    <%= anew.getAbstr()%>&nbsp;|&nbsp;
+                    <a href="<%=viewUrl%>">Ver m&aacute;s</a>
+                </p>                
+                <p>Puntuación:&nbsp;<%= anew.getRank()%></p>
+                <p><%= anew.getViews()%> vistas.</p>
             </td>
         </tr>
-        <%
-                }
-            }
-        %>
+<%
+        }
+    }
+%>
     </tbody>
 </table>
 <%
