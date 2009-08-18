@@ -42,7 +42,7 @@ else if (wpage instanceof MicroSite)
 microsite = wpage
 
 if (null!=microsite){
-String perfil = "perfil"
+String perfil = wpage.getWebSite().getWebPage("perfil").getRealUrl()
 
 Iterator<Member> lista = Member.listMemberByMicroSite(microsite, (SWBModel)wpage.getWebSite())
 
