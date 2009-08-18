@@ -38,16 +38,17 @@ public class PerfilData extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         User owner=response.getUser();
         WebSite website=response.getWebPage().getWebSite();
-        String user=request.getParameter("user");
         String action=response.getAction();
 
-        SemanticObject semObj = SemanticObject.createSemanticObject(user);
-        User user2Action = (User) semObj.createGenericInstance();
+        SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("user"));
+        User user = (User) semObj.createGenericInstance();
 
         if(action.equals("remFriendRelship")){
-            Friendship.removeFriendRelationShip(owner, user2Action, website);
+            Friendship.removeFriendRelationShip(owner, user, website);
         }else if(action.equals("addFriendRelship")){
-            FriendshipProspect.createFriendshipProspect(owner, user2Action, website);
+            if(!owner.getURI().equals(user.getURI()) && !FriendshipProspect.findFriendProspectedByRequester(owner, user, website)){
+                FriendshipProspect.createFriendshipProspect(owner, user, website);
+            }
         }
     }
 }
