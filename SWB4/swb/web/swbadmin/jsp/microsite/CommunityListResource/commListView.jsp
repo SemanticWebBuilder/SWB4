@@ -31,9 +31,17 @@
         int numcomm = 0;
         int nums = 0;
         String nummsg = "";
+        int wplevel=wpp.getLevel();
 
+            if(wplevel==3)
+                {
 %>
-<table>
+            <h2 class="tituloInteres">Comunidades de <%=wpp.getDisplayTitle(user.getLanguage())%></h2>
+<%
+                }
+%>
+
+<table width="100%">
 <%
 
         Iterator<WebPage> itwp = wpp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
@@ -47,13 +55,33 @@
     <tr>
 <%
                 }
-
+                String cssClass1 = "class=\"groupInteres\"";
                 nums++;
+
 %>
-        <td>
-            <div class="groupInteres">
-            <h3 class=\"titulo\"><%=wpch.getDisplayTitle(user.getLanguage())%></h3>
+        <td style="vertical-align:top;">
 <%
+            if(wplevel==3)
+                {
+                    cssClass1 = "id=\"gruposInteres\"";
+                }
+%>
+            <div "<%=cssClass1%>">
+<%
+
+            if(wplevel==3)
+                {
+%>
+                <ul>
+<%
+                }
+            if(wplevel<3)
+                {
+%>
+            <h3 class="titulo"><%=wpch.getDisplayTitle(user.getLanguage())%></h3>
+<%
+
+                
                 Iterator<WebPage> itwpch = wpch.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
                 if(itwpch.hasNext())
                 {
@@ -79,12 +107,36 @@
 %>
             </ul>
 <%
-
+                   }
                     //out.println("<p class=\"vermas\"><a href=\""+wpch.getUrl()+"\">Ver todos</a></p>");
+                
+                }
+                else
+                {
+%>
+                <li><a href="<%=wpch.getUrl()%>"><%=wpch.getDisplayTitle(user.getLanguage())%>&nbsp;</a></li>
+<%
+
+                }
+
+            if(wplevel==3)
+                {
+%>
+                </ul>
+                <div id="clear">&nbsp;</div>
+<%
                 }
 %>
-        </div>
-    </td>
+            </div>
+<%
+            if(wplevel==3)
+                {
+%>
+            <div id="bottomInteres">&nbsp;</div>
+<%
+                }
+%>
+                   </td> 
 <%
                 if(nums==3)
                 {
@@ -113,13 +165,8 @@
                     }
 %>
    </tr>
-<%                }
-
-        if(nums<3)
-        {
-%>
-
 <%
-        }
+                }
+
 %>
 </table>
