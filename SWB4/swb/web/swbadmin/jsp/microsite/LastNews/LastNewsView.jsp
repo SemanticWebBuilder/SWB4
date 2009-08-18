@@ -17,7 +17,7 @@
             for(NewsElement element : elements)
             {
                 String href=element.getURL();
-                href+="?&act=detail&uri="+URLEncoder.encode(element.getURI());
+                //href+="?&act=detail&uri="+URLEncoder.encode(element.getURI());
                 String src=null;
                 if(element.getNewsPicture()!=null)
                 {
