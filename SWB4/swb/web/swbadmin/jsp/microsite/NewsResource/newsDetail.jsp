@@ -14,19 +14,16 @@
             if (rec != null) {
                 rec.incViews();                             //Incrementar apariciones
 %>
-<div class="news">
-    <div class="newsimage">
-        <img src="<%=path + rec.getNewsPicture()%>" alt="<%=rec.getDescription()%>" width="110" height="150" />
-    </div>
+<div class="news">    
     <div class="newstitle">
         <h2><%=rec.getTitle()%> (<%=rec.getCitation()%>)</h2>
     </div>
     <div class="newsbody">
-        <%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%><br>
-        Por&nbsp;<%=rec.getAuthor()%><BR><br>
-        <%=rec.getFullText()%><br>
+        <p><%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%></p>
+        <p>Por&nbsp;<%=rec.getAuthor()%></p>
+        <div><img src="<%= path+rec.getNewsPicture() %>" alt="<%= rec.getTitle() %>"/><%=rec.getFullText()%></div>
         <hr>
-        <%=rec.getViews()%> vistas<BR>
+        <p><%=rec.getViews()%> vistas</p>
     </div>
     <%
             }
