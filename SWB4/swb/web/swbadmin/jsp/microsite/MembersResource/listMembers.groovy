@@ -46,7 +46,7 @@ String perfil = "perfil"
 
 Iterator<Member> lista = Member.listMemberByMicroSite(microsite, (SWBModel)wpage.getWebSite())
 
-println """<div id="miembros">
+println """<div id="contactos">
 <h2>Miembros de la comunidad</h2>
 <ul>"""
 
@@ -60,7 +60,7 @@ while (lista.hasNext() && i<5){
         def uri = mem_usr.getEncodedURI()
         def nombre = mem_usr.getFullName()
         def img = mem_usr.getPhoto()
-        println """<li><a class="contactos_nombre" href="${perfil}?user=$uri">$nombre</a></li>"""
+        println """<li><a class="contactos_nombre" href="${perfil}?user=$uri" alt="Ir al perfil de $nombre" >$nombre</a></li>"""
     }
 }
 
