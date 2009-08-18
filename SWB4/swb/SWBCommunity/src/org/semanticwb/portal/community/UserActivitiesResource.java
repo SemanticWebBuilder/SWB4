@@ -7,7 +7,6 @@ package org.semanticwb.portal.community;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +27,7 @@ public class UserActivitiesResource extends GenericAdmResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm");
+
         Resource base = getResourceBase();
         int numrec = Integer.parseInt(base.getAttribute("numrec","10"));
         PrintWriter out = response.getWriter();
@@ -54,7 +53,7 @@ public class UserActivitiesResource extends GenericAdmResource {
                 mse = ca.getElement();
                 ms = ca.getCommunity();
                 out.println("<li><a class=\"contactos_nombre\" href=\""+mse.getURL()+"\">" + mse.getDisplayTitle(user.getLanguage()) + "");
-                out.println("("+mse.getTitle()+")</a>");
+                out.println("("+mse.getSemanticObject().getSemanticClass().getName()+")</a>");
                 out.println("<a class=\"contactos_nombre\" href=\"#\">"+SWBUtils.TEXT.getTimeAgo(mse.getUpdated(),user.getLanguage()) + "</a></li>");
             }
         } else {
