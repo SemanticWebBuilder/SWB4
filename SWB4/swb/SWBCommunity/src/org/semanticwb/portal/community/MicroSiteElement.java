@@ -2,12 +2,12 @@ package org.semanticwb.portal.community;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -156,6 +156,8 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
             Writer out, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
 
+        WebPage page = paramRequest.getWebPage();
+        Member mem = Member.getMember(paramRequest.getUser(), page);
         String suri = request.getParameter("uri");
         StringBuilder sb = new StringBuilder(500);
         String tmpUrl = "";
@@ -300,16 +302,16 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
 
         sb.append("\n</script>\n");
 
-        sb.append("\n<div>");
+        sb.append("\n<div class=\"common_funcs\">");
         sb.append("\n  <span style=\"float:left; width:200px;\">");
 //        sb.append("\n    <table boder=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
 //        sb.append("\n      <td>Calificar:</td>");
 /*        for (int i = 1; i <= 5; i++) {
             sb.append(printStar(i, rank));
         }*/
-        sb.append("\n      <div>Calificar:</div>");
-        sb.append("\n      <div dojoType=\"dojox.form.Rating\" numStars=\"5\" value=\"" + rank + "\">"
-                + "<script type=\"dojo/event\" event=\"onChange\">vote(this.value);/*alert(\"valor:\"+this.value);dojo.query('#rating1Value')[0].innerHTML = this.value;*/</script></div>");
+        sb.append("\n      <div class=\"rank_label\">Calificar:</div>");
+        sb.append("\n      <div class=\"rank_stars\" dojoType=\"dojox.form.Rating\" numStars=\"5\" value=\"" + rank + "\">"
+                + "\n        <script type=\"dojo/event\" event=\"onChange\">vote(this.value);/*alert(\"valor:\"+this.value);dojo.query('#rating1Value')[0].innerHTML = this.value;*/</script></div>");
 //        sb.append("\n       Rating:<div dojoType=\"dojox.form.Rating\" numStars=\"5\" value=\"" + rank + "\">"
 //                + "<script type=\"dojo/event\" event=\"onChange\">alert(\"valor:\"+this.value);vote(this.value);/*dojo.query('#rating1Value')[0].innerHTML = this.value;*/</script></div>");
         //sb.append("\n      </tr>\n    </table>");
@@ -318,26 +320,37 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         sb.append("\n    <div class=\"rec_votes_num\" id=\"reviews\">" + this.getReviews() + "</div>");
         sb.append("\n    <div class=\"rec_votes_label\"> votos</div>");
         sb.append("\n  </div>");
-        sb.append("\n  <span style=\"float:left\"><a href=\"javascript:changeAbusedState();\">P&uacute;blicamente</a> <span id=\"abused\">"
-                + abusedDesc + "</span></span>");
+        if (mem.canView()) {
+            sb.append("\n  <span class=\"abused\"><a href=\"javascript:changeAbusedState();\">P&uacute;blicamente</a>");
+        } else {
+            sb.append("\n  <span class=\"abused\">P&uacute;blicamente");
+        }
+        sb.append("\n     <span id=\"abused\">" + abusedDesc + "</span></span>");
         sb.append("\n</div><br/><br/>");
-        sb.append("\n<div>");
-        sb.append("\n  <span style=\"float:left; width:300px;\">Comentarios</span>");
+        sb.append("\n<div class=\"comments_head\">");
+        sb.append("\n  <span class=\"comments_title\">Comentarios</span>");
         //sb.append("\n  <div>&nbsp;</div>");
         url.setAction("addComment");
         url.setCallMethod(SWBResourceURL.Call_CONTENT);
-        sb.append("\n  <span style=\"float:left; width:300px;\"><a href=\"javascript:addComment();\">Escribir comentario</a></span>");
-        sb.append("\n</div><br/><br/>");
-        sb.append("\n<div id=\"addComment\" style=\"display:none\">");
-        sb.append("\n  <br/>Comentario");
-        sb.append("\n  <form name=\"addCommentForm\" action=\"" + url + "\">");
-        sb.append("\n    <input type=\"hidden\" name=\"uri\" value=\"" + suri + "\">");
-        sb.append("\n    <input type=\"hidden\" name=\"act\" value=\"addComment\">");
-        sb.append("\n    <textarea name=\"comentario\" cols=\"40\" rows=\"\"></textarea>");
-        sb.append("\n    <input type=\"submit\" value=\"Publicar comentario\">");
-        sb.append("\n  </form>");
+        if (mem.canView()) {
+            sb.append("\n  <span class=\"comments_write\"><a href=\"javascript:addComment();\">Escribir comentario</a></span>");
+        } else {
+            sb.append("\n  <span class=\"comments_write\">&nbsp;</span>");
+        }
         sb.append("\n</div>");
-        sb.append(renderListComments(this, paramRequest.getUser()));
+        if (mem.canView()) {
+            sb.append("\n<div id=\"addComment\">");
+            sb.append("\n  <br/>Comentario");
+            sb.append("\n  <form name=\"addCommentForm\" action=\"" + url + "\">");
+            sb.append("\n    <input type=\"hidden\" name=\"uri\" value=\"" + suri + "\">");
+            sb.append("\n    <input type=\"hidden\" name=\"act\" value=\"addComment\">");
+            sb.append("\n    <textarea name=\"comentario\" cols=\"40\" rows=\"\"></textarea>");
+            sb.append("\n    <input type=\"submit\" value=\"Publicar comentario\">");
+            sb.append("\n  </form>");
+            sb.append("\n</div>");
+        }
+        sb.append("\n<div class=\"clearL\"></div>");
+        sb.append(renderListComments(this, mem));
 
         out.write(sb.toString());
     }
@@ -349,14 +362,14 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
      * @return
      * @throws org.semanticwb.portal.api.SWBResourceException
      */
-    private String renderListComments(MicroSiteElement mse, User user) {
+    private String renderListComments(MicroSiteElement mse, Member mem) {
 
         StringBuilder ret = new StringBuilder(200);
         //SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");
         int ordinal = 1;
 
         GenericIterator<Comment> iterator = mse.listComments();
-        ret.append("\n<table width=\"80%\"><tr><td>");
+        ret.append("\n<table width=\"450\"><tr><td>");
         ret.append("\n<div>");
         ret.append("\n  <div id=\"commentsList\">");
         while (iterator.hasNext()) {
@@ -370,17 +383,19 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
                        ? "Desconocido"
                        : comment.getCreator().getLogin())
                     + "</strong>\n        </div>");
-            ret.append("\n        <div class=\"comment-time\"> ("
-                    + SWBUtils.TEXT.getTimeAgo(comment.getCreated(), user.getLanguage()) + ")</div>");
-            ret.append("\n        <div class=\"comment-spam\"><a href=\"javascript:spam("
-                    + comment.getId() + ");\" id=\"spamMark"+ comment.getId() + "\">" + spamMark + "</a></div>");
-//            ret.append("\n        <div class=\"clearL\"></div>");
+            ret.append("\n        <span class=\"comment-time\"> ("
+                    + SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage()) + ")</span>");
+            if(mem.canView()) {
+                ret.append("\n        <span class=\"comment-spam\"><a href=\"javascript:spam("
+                        + comment.getId() + ");\" id=\"spamMark"+ comment.getId() + "\">" + spamMark + "</a></span>");
+            } else {
+                ret.append("\n        <span class=\"comment-spam\">" + spamMark + "</span>");
+            }
             ret.append("\n      </div>");
             ret.append("\n      <div id=\"comment_body_" + comment.getId() + "\">");
             ret.append("\n        <div class=\"comment-body\">");
             ret.append("\n          <div>" + comment.getDescription() + "</div>");
             ret.append("\n        </div>");
-//            ret.append("\n        <div id=\"div_comment_form_id_" + comment.getId() + "\"></div>");
             ret.append("\n      </div>");
             ret.append("\n    </div>");
         }
