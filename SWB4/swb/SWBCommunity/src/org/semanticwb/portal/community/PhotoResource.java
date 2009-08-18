@@ -43,6 +43,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
+import org.semanticwb.portal.community.utilresources.ImageResizer;
 
 public class PhotoResource extends org.semanticwb.portal.community.base.PhotoResourceBase {
     private static Logger log=SWBUtils.getLogger(PhotoResource.class);
@@ -188,12 +189,20 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         if(!file.exists()) {
                             file.mkdirs();
                         }
-                        long serial = (new Date()).getTime();
+
                         try {
-                            String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
-                            currentFile.write(new File(path+"/"+name));
-                            params.put("filename", name);
-                        }catch(StringIndexOutOfBoundsException iobe) {}
+                            long serial = (new Date()).getTime();
+                            String filename = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+
+                            File image = new File(path+"/"+filename);
+                            File thumbnail = new File(path+"/"+"thumbn_"+filename);
+                            currentFile.write(image);
+
+                            ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
+                            
+                            params.put("filename", filename);
+                        }catch(StringIndexOutOfBoundsException iobe) {
+                        }
                     }
                 }
             }
