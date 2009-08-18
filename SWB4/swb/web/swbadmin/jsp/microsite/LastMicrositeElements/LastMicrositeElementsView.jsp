@@ -34,7 +34,7 @@
                 src="ico_foto.gif";
             }
             src=webpath+src;            
-            url+="?&act=detail&uri="+URLEncoder.encode(uri);
+            //url+="?&act=detail&uri="+URLEncoder.encode(uri);
             %>
               <div class="entry">
               <p><img src="<%=src%>" alt="<%=title%>" width="57" height="55" ></p>
