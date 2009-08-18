@@ -22,7 +22,7 @@
             if(userprosp.getPhoto()!=null) photo=userprosp.getPhoto();
             %>
                 <div class="moreUser">
-                    <a href="<%=urlAction%>"><img src="<%=photo%>" valign="top"/><br><%=userprosp.getFullName()%></a>
+                    <a href="<%=urlAction%>"><img src="<%=photo%>" valign="top" width="80" height="70"/><br><%=userprosp.getFullName()%></a>
                 </div>
             <%
         }                
