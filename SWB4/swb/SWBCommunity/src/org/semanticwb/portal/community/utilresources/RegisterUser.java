@@ -259,7 +259,7 @@ public class RegisterUser extends GenericResource
                 currentFile.write(new File(photoName));
                 path = SWBPlatform.getWebWorkPath() + user.getWorkPath();
 
-                user.setPhoto(photoName);
+                user.setPhoto(path+"/"+name);
                 per.setPercentage(100);
                 File f = new File(photoName);
 
