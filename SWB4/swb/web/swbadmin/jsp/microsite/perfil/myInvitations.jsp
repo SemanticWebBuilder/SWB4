@@ -33,7 +33,7 @@ while(itFriendshipProspect.hasNext()){
     if(!isStrategy){
 %>
     <div class="moreUser">
-            <a href="<%=wpage.getParent().getUrl()%>?user=<%=userRequester.getEncodedURI()%>"><img src="<%=photo%>" title="<%=firstName%> <%=lastName%>">
+            <a href="<%=wpage.getParent().getUrl()%>?user=<%=userRequester.getEncodedURI()%>"><img src="<%=photo%>" title="<%=firstName%> <%=lastName%>" width="80" height="70">
                 <br>
                 <%=firstName%>
                 <%=lastName%>

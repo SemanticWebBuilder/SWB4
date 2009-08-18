@@ -21,7 +21,7 @@
         if(!user.isRegistered()) return;
         WebPage wpage=paramRequest.getWebPage();
         String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
-        String imgSize="";
+        String imgSize="width=\"80\" height=\"70\"";;
         boolean isStrategy=false;
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) 
         {
