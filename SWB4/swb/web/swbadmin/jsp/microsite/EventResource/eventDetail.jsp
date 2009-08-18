@@ -6,30 +6,33 @@
     User user = paramRequest.getUser();
     WebPage wpage = paramRequest.getWebPage();
     Member member = Member.getMember(user, wpage);
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
-    String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
-    String uri = request.getParameter("uri");
 
-    EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-    if (rec != null) {
-        rec.incViews();                             //Incrementar apariciones
+    String uri = request.getParameter("uri");
+    EventElement event = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+    if(event!=null && event.canView(member)) {
+        String path = SWBPlatform.getWebWorkPath()+base.getWorkPath()+"/";
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");        
+        
+        event.incViews();
 %>
 <table border="0" cellspacing="10">
     <tr>
         <td valign="top">
-            <img src="<%=path+rec.getEventImage()%>" alt="<%=rec.getDescription()%>" width="110" height="150" />
+            <img src="<%=path+event.getEventImage()%>" alt="<%=event.getDescription()%>" border="0" />
         </td>
         <td valign="top">
-                <%=rec.getTitle()%> (<%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%>)<BR>
+                <%=event.getTitle()%> (<%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%>)<BR>
                 <hr>
-                <%=rec.getDescription()%> <BR>
-                Inicia: <b><%=dateFormat.format(rec.getStartDate())%></b> a las <b><%=timeFormat.format(rec.getStartTime())%></b><BR>
-                Termina: <b><%=dateFormat.format(rec.getEndDate())%></b> a las <b><%=timeFormat.format(rec.getEndTime())%></b><BR>
-                Lugar: <%=rec.getPlace()%> <BR>
-                Asistentes:
+                <p><%=event.getDescription()%></p>
+                <p>Dirigido a: <%= event.getAudienceType()%></p>
+                <p>Inicia: <b><%= dateFormat.format(event.getStartDate())%></b> a las <b><%=timeFormat.format(event.getStartTime())%></b></p>
+                <p>Termina: <b><%= dateFormat.format(event.getEndDate())%></b> a las <b><%=timeFormat.format(event.getEndTime())%></b></p>
+                <p>Lugar: <%= event.getPlace()%></p>
+                <p>Asistentes:
                 <%
-                Iterator<User> users = rec.listAttendants();
+                Iterator<User> users = event.listAttendants();
                 while (users.hasNext()) {
                     User m = users.next();
                     %>
@@ -38,16 +41,28 @@
                     %>,&nbsp;<%
                     }                
                 }
-                %>
-                <br><%=rec.getViews()%> vistas<BR>
+                %></p>
+                <p><%=event.getViews()%> vistas</p>
         </td>
     </tr>
 </table>
+<script type="text/javascript">
+    var img = document.getElementById('img_<%=event.getId()%>');
+    if( img.width>img.height && img.width>450) {
+        img.width = 450;
+        img.height = 370;
+    }else {
+        if(img.height>370) {
+            img.width = 370;
+            img.height = 450;
+        }
+    }
+</script>
 <%
             }
 %>
 <%
-rec.renderGenericElements(request, out, paramRequest);
+event.renderGenericElements(request, out, paramRequest);
 SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "daily");
 back.setParameter("year", request.getParameter("year"));
 back.setParameter("month", request.getParameter("month"));
@@ -61,9 +76,9 @@ back.setParameter("day", request.getParameter("day"));
             back.setParameter("year", request.getParameter("year"));
             back.setParameter("month", request.getParameter("month"));
             back.setParameter("day", request.getParameter("day"));
-            back.setParameter("uri", rec.getURI());
+            back.setParameter("uri", event.getURI());
     %>
-    <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", rec.getURI())%>">Asistir al evento</a><%}%>
-    <%if (rec.canModify(member)) {%><a href="<%=back%>">Editar Información</a><%}%>
-    <%if (rec.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", rec.getURI())%>">Eliminar Evento</a><%}%>
+    <%if (event.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "attend").setParameter("uri", event.getURI())%>">Asistir al evento</a><%}%>
+    <%if (event.canModify(member)) {%><a href="<%=back%>">Editar Información</a><%}%>
+    <%if (event.canModify(member)) {%><a href="<%=paramRequest.getActionUrl().setParameter("act", "remove").setParameter("uri", event.getURI())%>">Eliminar Evento</a><%}%>
 </center>
