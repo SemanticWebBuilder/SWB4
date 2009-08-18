@@ -7,4 +7,11 @@ public class VideoElement extends org.semanticwb.portal.community.base.VideoElem
     {
         super(base);
     }
+    @Override
+    public String getURL()
+    {
+        String url = "#";
+        url=this.getWebPage().getUrl();
+        return url;
+    }
 }

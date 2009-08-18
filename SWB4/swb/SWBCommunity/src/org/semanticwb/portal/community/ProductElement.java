@@ -7,4 +7,11 @@ public class ProductElement extends org.semanticwb.portal.community.base.Product
     {
         super(base);
     }
+    @Override
+    public String getURL()
+    {
+        String url = "#";
+        url=this.getWebPage().getUrl();
+        return url;
+    }
 }
