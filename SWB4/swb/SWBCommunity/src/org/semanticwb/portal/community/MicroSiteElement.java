@@ -356,7 +356,8 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         int ordinal = 1;
 
         GenericIterator<Comment> iterator = mse.listComments();
-        ret.append("<div>\n");
+        ret.append("\n<table width=\"80%\"><tr><td>");
+        ret.append("\n<div>");
         ret.append("\n  <div id=\"commentsList\">");
         while (iterator.hasNext()) {
             Comment comment = iterator.next();
@@ -383,7 +384,8 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
             ret.append("\n      </div>");
             ret.append("\n    </div>");
         }
-        ret.append("\n  </div>\n<div>\n");
+        ret.append("\n  </div>\n<div>");
+        ret.append("\n  </td>\n</tr>\n</table>\n");
         return ret.toString();
     }
 
