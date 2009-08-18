@@ -310,8 +310,14 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
             sb.append(printStar(i, rank));
         }*/
         sb.append("\n      <div class=\"rank_label\">Calificar:</div>");
-        sb.append("\n      <div class=\"rank_stars\" dojoType=\"dojox.form.Rating\" numStars=\"5\" value=\"" + rank + "\">"
-                + "\n        <script type=\"dojo/event\" event=\"onChange\">vote(this.value);/*alert(\"valor:\"+this.value);dojo.query('#rating1Value')[0].innerHTML = this.value;*/</script></div>");
+        if (mem.canView()) {
+            sb.append("\n      <div class=\"rank_stars\" dojoType=\"dojox.form.Rating\" numStars=\"5\" value=\"" + rank + "\">"
+                    + "\n        <script type=\"dojo/event\" event=\"onChange\">vote(this.value);/*alert(\"valor:\"+this.value);dojo.query('#rating1Value')[0].innerHTML = this.value;*/</script></div>");
+        } else {
+            sb.append("\n      <div class=\"rank_stars\" dojoType=\"dojox.form.Rating\" numStars=\"5\" value=\"" + rank + "\">"
+                    + "\n        <script type=\"dojo/event\" event=\"_onMouse\">return;</script>"
+                    + "\n        <script type=\"dojo/event\" event=\"onStarClick\">return;</script></div>");
+        }
 //        sb.append("\n       Rating:<div dojoType=\"dojox.form.Rating\" numStars=\"5\" value=\"" + rank + "\">"
 //                + "<script type=\"dojo/event\" event=\"onChange\">alert(\"valor:\"+this.value);vote(this.value);/*dojo.query('#rating1Value')[0].innerHTML = this.value;*/</script></div>");
         //sb.append("\n      </tr>\n    </table>");
@@ -385,10 +391,10 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
                     + "</strong>\n        </div>");
             ret.append("\n        <span class=\"comment-time\"> ("
                     + SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage()) + ")</span>");
-            if(mem.canView()) {
+            if (mem.canView()) {
                 ret.append("\n        <span class=\"comment-spam\"><a href=\"javascript:spam("
                         + comment.getId() + ");\" id=\"spamMark"+ comment.getId() + "\">" + spamMark + "</a></span>");
-            } else {
+            } else if (comment.isSpam()) {
                 ret.append("\n        <span class=\"comment-spam\">" + spamMark + "</span>");
             }
             ret.append("\n      </div>");
