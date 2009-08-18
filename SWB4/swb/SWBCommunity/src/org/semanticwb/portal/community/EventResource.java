@@ -75,6 +75,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             if(mem.canAdd() && params.containsValue("add")) {
                 EventElement rec = EventElement.createEventElement(getResourceBase().getWebSite());
                 rec.setEventImage(params.get("filename"));
+                rec.setEventThumbnail(params.get("thumbnail"));
                 rec.setTitle(params.get("event_title"));
                 rec.setDescription(params.get("event_description"));
                 rec.setAudienceType(params.get("event_audience"));
@@ -106,6 +107,8 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                 if(rec != null && rec.canModify(mem)) {
                     if(params.get("filename")!=null)
                         rec.setEventImage(params.get("filename"));
+                    if(params.get("thumbnail")!=null)
+                        rec.setEventThumbnail(params.get("thumbnail"));
                     rec.setTitle(params.get("event_title"));
                     rec.setDescription(params.get("event_description"));
                     rec.setAudienceType(params.get("event_audience"));
@@ -164,7 +167,9 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
     }
 
     private HashMap<String,String> upload(HttpServletRequest request) {
-        String path = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath();
+        final String realpath = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath()+"/";
+        final String path = SWBPlatform.getWebWorkPath()+getResourceBase().getWorkPath()+"/";
+        
         HashMap<String,String> params = new HashMap<String,String>();
         try {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -208,13 +213,13 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                             long serial = (new Date()).getTime();
                             String filename = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
 
-                            File image = new File(path+"/"+filename);
-                            File thumbnail = new File(path+"/"+"thumbn_"+filename);
+                            File image = new File(realpath+filename);
+                            File thumbnail = new File(realpath+"thumbn_"+filename);
                             currentFile.write(image);
-
                             ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
 
                             params.put("filename", filename);
+                            params.put("thumbnail", path+"thumbn_"+filename);
                         }catch(StringIndexOutOfBoundsException iobe) {
                         }
                     }
