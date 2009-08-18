@@ -8,18 +8,14 @@
             if(blog!=null)
                 {
             Member member = Member.getMember(user, wpage);
-%>
-<%
             String defaultFormat = "dd 'de' MMMM  'del' yyyy";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
-            String created = iso8601dateFormat.format(blog.getCreated()); //SWBUtils.TEXT.(blog.getCreated(), user.getLanguage());//iso8601dateFormat.format(blog.getCreated());
-            
-            
+            String created = iso8601dateFormat.format(blog.getCreated()); //SWBUtils.TEXT.(blog.getCreated(), user.getLanguage());//iso8601dateFormat.format(blog.getCreated());                       
             %>
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                    <td>
-                        <h1><%=blog.getTitle()%></h1>
+                    <td>                        
+                        <p class="tituloPrincipal"><%=blog.getTitle()%></p>
                     </td>
                     <td>
                         <%
@@ -38,12 +34,11 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <%=created%>
+                        <p class="titulo"><%=created%></p>
                     </td>
                 </tr>
             </table>
-                    <hr>
-            
+                    <hr>      
             
                   <table width="100%" cellpadding="2" cellspacing="2" border="0">
             <%
@@ -62,8 +57,11 @@
 
                 
                     <tr>
-                    <td colspan="3">
-                        <a href="<%=url%>"><%=post.getTitle()%></a>
+                    <td colspan="2">
+                        <p><%=post.getTitle()%></p>                        
+                    </td>
+                    <td>
+                        <p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
                     </td>
                     <td>
                      <%
@@ -79,7 +77,7 @@
                         %>
                         &nbsp;&nbsp;&nbsp;<a href="<%=sWBResourceURL%>">Editar</a>
                         &nbsp;&nbsp;&nbsp;<a href="javascript:validateremove('<%=removeUrl%>','<%=post.getTitle()%>','<%=post.getURI()%>')">Borrar</a>
-                        <script>
+                        <script language="Javascript" type="text/javascript">
                             function validateremove(url, title,uri)
                             {
                                 if(confirm('¿Esta seguro de borrar la entrada '+title+'?'))
@@ -99,22 +97,20 @@
                     <%if(user.getPhoto()!=null)
                     {
                         %>
-                    <img src="<%=user.getPhoto()%>">
+                        <img alt="foto usuario" src="<%=user.getPhoto()%>">
                       <%
                    }
                 %>
                 </td>
               
                 <td>
-                    Escrito por: <%=postAuthor%>, <%=updated%>
+                    <p>Escrito por: <%=postAuthor%>, <%=updated%></p>
                 </td>
-            
-                
-                
                 <%
             }
 %>
-</table>                                            
+</table>
+<hr>
 <%
     if(member.canAdd())
     {
