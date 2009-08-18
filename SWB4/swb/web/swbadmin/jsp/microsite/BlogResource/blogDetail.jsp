@@ -17,6 +17,7 @@
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
     String updated = iso8601dateFormat.format(post.getUpdated());
     String postAuthor = post.getCreator().getFirstName();
+    postAuthor=post.getCreator().getFullName();
     String email=post.getCreator().getEmail();
 %>
 <table width="100%">
@@ -29,6 +30,7 @@
     <tr>
         <td>
             <%
+
 if(email!=null)
     {
     %>

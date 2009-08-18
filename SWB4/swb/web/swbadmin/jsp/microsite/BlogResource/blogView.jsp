@@ -40,13 +40,13 @@
             </table>
                     <hr>      
             
-                  <table width="100%" cellpadding="2" cellspacing="2" border="0">
+                  <table width="100%" cellpadding="2" cellspacing="2" border="2">
             <%
             Iterator<PostElement> posts = blog.listPostElements();
             while (posts.hasNext())
             {
                 PostElement post = posts.next();
-                String postAuthor = post.getCreator().getFirstName();
+                String postAuthor = post.getCreator().getFullName();
                 String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());//iso8601dateFormat.format(post.getUpdated());
                 SWBResourceURL url=paramRequest.getRenderUrl();
                 url.setParameter("act", "detail");
@@ -55,10 +55,26 @@
 
                 %>
 
-                
+                <tr>
+                    <td colspan="2" valign="top">
+                    <%if(post.getCreator().getPhoto()!=null)
+                    {
+                        %>
+                        <p><img width="50" height="50" alt="<%=postAuthor%>" src="<%=post.getCreator().getPhoto()%>">&nbsp;&nbsp;&nbsp;Escrito por: <%=postAuthor%>, <%=updated%></p>
+                      <%
+                   }
+                   else
+                   {
+                      %>
+                        <p>Escrito por: <%=postAuthor%>, <%=updated%></p>
+                        <%
+                   }
+                %>
+                </td>
+                </tr>
                     <tr>
-                    <td colspan="2">
-                        <p><%=post.getTitle()%></p>                        
+                    <td>
+                        <p class="titutlo"><%=post.getTitle()%></p>
                     </td>
                     <td>
                         <p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
@@ -92,20 +108,7 @@
                 %>
                 </td>
                 </tr>
-                <tr>                   
-                <td>
-                    <%if(user.getPhoto()!=null)
-                    {
-                        %>
-                        <img alt="foto usuario" src="<%=user.getPhoto()%>">
-                      <%
-                   }
-                %>
-                </td>
-              
-                <td>
-                    <p>Escrito por: <%=postAuthor%>, <%=updated%></p>
-                </td>
+                
                 <%
             }
 %>
