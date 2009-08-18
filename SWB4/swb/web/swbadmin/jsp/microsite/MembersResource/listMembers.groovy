@@ -35,9 +35,13 @@ def paramRequest=request.getAttribute("paramRequest")
 User user = paramRequest.getUser()
 WebPage wpage=paramRequest.getWebPage()
 Member member = Member.getMember(user,wpage)
-if (wpage instanceof MicroSiteWebPageUtil) {
-MicroSite microsite = ((MicroSiteWebPageUtil)wpage).getMicroSite()
+MicroSite microsite = null
+if (wpage instanceof MicroSiteWebPageUtil) 
+ microsite = ((MicroSiteWebPageUtil)wpage).getMicroSite()
+else if (wpage instanceof MicroSite)
+microsite = wpage
 
+if (null!=microsite){
 String perfil = "perfil"
 
 Iterator<Member> lista = Member.listMemberByMicroSite(microsite, (SWBModel)wpage.getWebSite())
