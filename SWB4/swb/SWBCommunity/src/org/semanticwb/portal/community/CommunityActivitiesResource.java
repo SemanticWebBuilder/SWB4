@@ -38,7 +38,7 @@ public class CommunityActivitiesResource extends GenericAdmResource {
             MicroSite ms = (MicroSite)wp;
             CommunityActivityUtil cau = new CommunityActivityUtil();
             Iterator<CommunityActivity> itca = cau.getCommunityActivities(ms);
-            out.println("<div id=\"actividades\">");
+            out.println("<div id=\"contactos\">");
             out.println("<h2>Actividades</h2>");
 
             out.println("<ul>");
