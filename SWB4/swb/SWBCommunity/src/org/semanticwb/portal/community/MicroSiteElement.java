@@ -314,9 +314,9 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
 //                + "<script type=\"dojo/event\" event=\"onChange\">alert(\"valor:\"+this.value);vote(this.value);/*dojo.query('#rating1Value')[0].innerHTML = this.value;*/</script></div>");
         //sb.append("\n      </tr>\n    </table>");
         sb.append("\n  </span>");
-        sb.append("\n  <div style=\"float:left; width:200px;\">");
-        sb.append("\n    <div style=\"float:left;\" id=\"reviews\">" + this.getReviews() + "</div>");
-        sb.append("\n    <div style=\"float:left;\"> calificaciones</div>");
+        sb.append("\n  <div class=\"rec_votes\">");
+        sb.append("\n    <div class=\"rec_votes_num\" id=\"reviews\">" + this.getReviews() + "</div>");
+        sb.append("\n    <div class=\"rec_votes_label\"> votos</div>");
         sb.append("\n  </div>");
         sb.append("\n  <span style=\"float:left\"><a href=\"javascript:changeAbusedState();\">P&uacute;blicamente</a> <span id=\"abused\">"
                 + abusedDesc + "</span></span>");
