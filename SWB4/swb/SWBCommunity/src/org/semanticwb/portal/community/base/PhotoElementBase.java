@@ -4,7 +4,7 @@ package org.semanticwb.portal.community.base;
 public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_width=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#width");
-    public static final org.semanticwb.platform.SemanticProperty swbcomm_photoTumbnail=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#photoTumbnail");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_photoThumbnail=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#photoThumbnail");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_imageURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#imageURL");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_thumbHeight=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#thumbHeight");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_height=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#height");
@@ -67,14 +67,14 @@ public class PhotoElementBase extends org.semanticwb.portal.community.MicroSiteE
         getSemanticObject().setIntProperty(swbcomm_width, value);
     }
 
-    public String getPhotoTumbnail()
+    public String getPhotoThumbnail()
     {
-        return getSemanticObject().getProperty(swbcomm_photoTumbnail);
+        return getSemanticObject().getProperty(swbcomm_photoThumbnail);
     }
 
-    public void setPhotoTumbnail(String value)
+    public void setPhotoThumbnail(String value)
     {
-        getSemanticObject().setProperty(swbcomm_photoTumbnail, value);
+        getSemanticObject().setProperty(swbcomm_photoThumbnail, value);
     }
 
     public String getImageURL()
