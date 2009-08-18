@@ -74,10 +74,11 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         }
 
         if(action==null) {
-            HashMap<String,String> params = uploadPhoto(request);
+            HashMap<String,String> params = upload(request);
             if(mem.canAdd() && params.containsValue("add")) {
                 EventElement rec = EventElement.createEventElement(getResourceBase().getWebSite());
-                rec.setEventImage(params.get("filename"));
+                if(params.get("filename")!=null)
+                    rec.setEventImage(params.get("filename"));
                 rec.setTitle(params.get("event_title"));
                 rec.setDescription(params.get("event_description"));
                 rec.setAudienceType(params.get("event_audience"));
@@ -95,6 +96,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                     rec.setStartTime(new Timestamp(timeFormat.parse(startTime).getTime()));
                     rec.setEndTime(new Timestamp(timeFormat.parse(endTime).getTime()));
                 }catch (Exception e) {
+                    System.out.println("\n\nerror..... "+e+"\n");
                     log.error(e);
                 }
                 rec.setPlace(params.get("event_place"));
@@ -109,8 +111,8 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                 String uri = params.get("uri");
                 EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
                 if(rec != null && rec.canModify(mem)) {
-                    //EventElement rec = EventElement.createEventElement(getResourceBase().getWebSite());
-                    rec.setEventImage(params.get("filename"));
+                    if(params.get("filename")!=null)
+                        rec.setEventImage(params.get("filename"));
                     rec.setTitle(params.get("event_title"));
                     rec.setDescription(params.get("event_description"));
                     rec.setAudienceType(params.get("event_audience"));
@@ -168,7 +170,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
         }
     }
 
-    private HashMap<String,String> uploadPhoto(HttpServletRequest request) {
+    private HashMap<String,String> upload(HttpServletRequest request) {
         String path = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath();
         HashMap<String,String> params = new HashMap<String,String>();
         try {
@@ -211,10 +213,11 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         synchronized(serial) {
                             serial = serial.add(BigInteger.ONE);
                         }
-                        String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
-                        currentFile.write(new File(path+"/"+name));
-                        params.put("filename", name);
-                        System.out.println("uploadPhoto.... filename,"+name);
+                        try {
+                            String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+                            currentFile.write(new File(path+"/"+name));
+                            params.put("filename", name);
+                        }catch(StringIndexOutOfBoundsException iobe) {}
                     }
                 }
             }
