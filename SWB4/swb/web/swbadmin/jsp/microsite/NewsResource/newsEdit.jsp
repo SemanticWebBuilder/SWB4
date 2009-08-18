@@ -75,7 +75,7 @@ Error: Elemento no encontrado...
                     <tr>
                         <td align="right" valign="center"><label for="new_citation">Fuente&nbsp;<em>*</em></label></td>
                         <td>
-                            <input type="text" dojoType="dijit.form.TexBox" id="new_citation" name="new_citation" value="<%=(rec.getCitation()==null?"":rec.getCitation())%>"/><br>
+                            <input type="text" dojoType="dijit.form.TextBox" id="new_citation" name="new_citation" value="<%=(rec.getCitation()==null?"":rec.getCitation())%>"/><br>
                         </td>
                     </tr>
                     <tr>
