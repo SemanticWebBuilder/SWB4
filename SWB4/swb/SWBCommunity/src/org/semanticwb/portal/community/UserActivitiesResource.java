@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -52,10 +53,9 @@ public class UserActivitiesResource extends GenericAdmResource {
                 user = ca.getUser();
                 mse = ca.getElement();
                 ms = ca.getCommunity();
-                out.println("<li>El elemento " + mse.getDisplayTitle(null) + "");
-                out.println(" de la comunidad ");
-                out.println("" + ms.getDisplayTitle(null) + "");
-                out.println(" fue modificado el día " + sdf.format(mse.getUpdated()) + "</li>");
+                out.println("<li><a class=\"contactos_nombre\" href=\""+mse.getURL()+"\">" + mse.getDisplayTitle(user.getLanguage()) + "");
+                out.println("("+mse.getTitle()+")</a>");
+                out.println("<a class=\"contactos_nombre\" href=\"#\">"+SWBUtils.TEXT.getTimeAgo(mse.getUpdated(),user.getLanguage()) + "</a></li>");
             }
         } else {
             out.println("<li>No hay actividades que reportar.</li>");
