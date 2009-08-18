@@ -53,7 +53,7 @@ public class UserActivitiesResource extends GenericAdmResource {
                 mse = ca.getElement();
                 ms = ca.getCommunity();
                 out.println("<li><a class=\"contactos_nombre\" href=\""+mse.getURL()+"\">" + mse.getDisplayTitle(user.getLanguage()) + "");
-                out.println("("+mse.getSemanticObject().getSemanticClass().getName()+")</a>");
+                out.println("("+mse.getSemanticObject().getSemanticClass().getDisplayName(user.getLanguage())+")</a>");
                 out.println("<a class=\"contactos_nombre\" href=\"#\">"+SWBUtils.TEXT.getTimeAgo(mse.getUpdated(),user.getLanguage()) + "</a></li>");
             }
         } else {
