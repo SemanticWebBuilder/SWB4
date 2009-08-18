@@ -16,12 +16,8 @@
         <%
             for(NewsElement element : elements)
             {
-                String href=null;
-                if(element.getNewsWebPage()!=null && element.getNewsWebPage().getUrl()!=null)
-                {
-                    href=element.getNewsWebPage().getUrl();
-                    href+="?&act=detail&uri="+URLEncoder.encode(href);
-                }
+                String href=element.getURL();
+                href+="?&act=detail&uri="+URLEncoder.encode(element.getURI());
                 String src=null;
                 if(element.getNewsPicture()!=null)
                 {
