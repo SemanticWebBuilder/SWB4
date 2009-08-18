@@ -14,7 +14,8 @@ public class ProductElement extends org.semanticwb.portal.community.base.Product
     {
         String url = "#";
         url=this.getWebPage().getUrl();
+        url+="?&act=detail&uri="+URLEncoder.encode(this.getURI());
         return url;
-        //url+="?&act=detail&uri="+URLEncoder.encode(this.getURI());
+        
     }
 }
