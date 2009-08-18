@@ -60,14 +60,14 @@ while (lista.hasNext() && i<5){
         def uri = mem_usr.getEncodedURI()
         def nombre = mem_usr.getFullName()
         def img = mem_usr.getPhoto()
-        println """<li><img src="$img"/><a class="contactos_nombre" href="${perfil}?user=$uri">$nombre</a></li>"""
+        println """<li><a class="contactos_nombre" href="${perfil}?user=$uri">$nombre</a></li>"""
     }
 }
 
 def url_mas = wpage.getRealUrl()
 
 println """</ul>
-<p class="vermas"><a href="${url_mas}_Member" >Ver todos</a></p>
+<p class="vermas"><a href="${url_mas}_Members" >Ver todos</a></p>
 </div>"""
 
 }
