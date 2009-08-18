@@ -22,6 +22,7 @@
 **/
 package org.semanticwb.portal.community;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -60,6 +61,7 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
     {
         String url = "#";
         url=this.getEventWebPage().getUrl();
+        url+="?&act=detail&uri="+URLEncoder.encode(this.getURI());
         return url;
     }
 }
