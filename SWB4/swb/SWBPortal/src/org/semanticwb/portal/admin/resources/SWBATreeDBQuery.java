@@ -21,7 +21,7 @@
 *  http://www.semanticwebbuilder.org
 **/ 
  
-
+package org.semanticwb.portal.admin.resources;
 
 /*
  * WBTreeDBQuery.java
