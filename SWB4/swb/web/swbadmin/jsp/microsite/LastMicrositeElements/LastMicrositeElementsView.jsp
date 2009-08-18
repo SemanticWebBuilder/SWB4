@@ -1,8 +1,9 @@
-<%@page import="java.net.URLEncoder,org.semanticwb.*,java.text.*,org.semanticwb.portal.community.*,java.util.*" %>
+<%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*" %>
 
     <div class="recentEntry">
     <h2 class="titulo">Lo último en la ciudad digital</h2>
 <%
+    SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     String webpath=SWBPlatform.getContextPath()+"/swbadmin/jsp/microsite/LastMicrositeElements/";
     String defaultFormat = "dd/MM/yyyy HH:mm";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
@@ -43,8 +44,9 @@
               </div>
             <%                        
        }
+        String path=paramRequest.getWebPage().getWebSite().getWebPage("Lo_ultimo").getUrl();
         %>
-        <p class="vermas"><a href="#" >Ver m&aacute;s</a></p>
+        <p class="vermas"><a href="<%=path%>" >Ver m&aacute;s</a></p>
           <%
 }
 else
