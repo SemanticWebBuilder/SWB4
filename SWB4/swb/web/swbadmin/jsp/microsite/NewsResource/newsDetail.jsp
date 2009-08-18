@@ -21,7 +21,7 @@
     <div class="newsbody">
         <p><%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%></p>
         <p>Por&nbsp;<%=rec.getAuthor()%></p>
-        <div><img src="<%= path+rec.getNewsPicture() %>" alt="<%= rec.getTitle() %>"/><%=rec.getFullText()%></div>
+        <div><img src="<%= path+rec.getNewsPicture() %>" alt="<%= rec.getTitle() %>"/><b><%=dateFormat.format(rec.getCreated())%>.</b><%=rec.getFullText()%></div>
         <hr>
         <p><%=rec.getViews()%> vistas</p>
     </div>
