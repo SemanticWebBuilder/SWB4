@@ -1,16 +1,19 @@
 package org.semanticwb.portal.community.base;
 
 
-public class NewsElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class NewsElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_newsImage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#newsImage");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_citation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#citation");
-    public static final org.semanticwb.platform.SemanticProperty swbcomm_newsPicture=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#newsPicture");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_author=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#author");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_newsThumbnail=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#newsThumbnail");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_newsWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#newsWebPage");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_newsplace=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#newsplace");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_infoLink=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#infoLink");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_abstr=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#abstr");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_fullText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#fullText");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_subtitle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#subtitle");
     public static final org.semanticwb.platform.SemanticClass swbcomm_NewsElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#NewsElement");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#NewsElement");
 
@@ -57,6 +60,16 @@ public class NewsElementBase extends org.semanticwb.portal.community.MicroSiteEl
         return (getNewsElement(id, model)!=null);
     }
 
+    public String getNewsImage()
+    {
+        return getSemanticObject().getProperty(swbcomm_newsImage);
+    }
+
+    public void setNewsImage(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_newsImage, value);
+    }
+
     public String getCitation()
     {
         return getSemanticObject().getProperty(swbcomm_citation);
@@ -67,16 +80,6 @@ public class NewsElementBase extends org.semanticwb.portal.community.MicroSiteEl
         getSemanticObject().setProperty(swbcomm_citation, value);
     }
 
-    public String getNewsPicture()
-    {
-        return getSemanticObject().getProperty(swbcomm_newsPicture);
-    }
-
-    public void setNewsPicture(String value)
-    {
-        getSemanticObject().setProperty(swbcomm_newsPicture, value);
-    }
-
     public String getAuthor()
     {
         return getSemanticObject().getProperty(swbcomm_author);
@@ -85,6 +88,16 @@ public class NewsElementBase extends org.semanticwb.portal.community.MicroSiteEl
     public void setAuthor(String value)
     {
         getSemanticObject().setProperty(swbcomm_author, value);
+    }
+
+    public String getNewsThumbnail()
+    {
+        return getSemanticObject().getProperty(swbcomm_newsThumbnail);
+    }
+
+    public void setNewsThumbnail(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_newsThumbnail, value);
     }
 
     public void setNewsWebPage(org.semanticwb.model.WebPage value)
@@ -120,6 +133,16 @@ public class NewsElementBase extends org.semanticwb.portal.community.MicroSiteEl
          return ret;
     }
 
+    public String getNewsplace()
+    {
+        return getSemanticObject().getProperty(swbcomm_newsplace);
+    }
+
+    public void setNewsplace(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_newsplace, value);
+    }
+
     public String getInfoLink()
     {
         return getSemanticObject().getProperty(swbcomm_infoLink);
@@ -148,5 +171,15 @@ public class NewsElementBase extends org.semanticwb.portal.community.MicroSiteEl
     public void setFullText(String value)
     {
         getSemanticObject().setProperty(swbcomm_fullText, value);
+    }
+
+    public String getSubtitle()
+    {
+        return getSemanticObject().getProperty(swbcomm_subtitle);
+    }
+
+    public void setSubtitle(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_subtitle, value);
     }
 }
