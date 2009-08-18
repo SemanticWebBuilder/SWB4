@@ -35,6 +35,7 @@ def paramRequest=request.getAttribute("paramRequest")
 User user = paramRequest.getUser()
 WebPage wpage=paramRequest.getWebPage()
 Member member = Member.getMember(user,wpage)
+if (wpage instanceof MicroSiteWebPageUtil) {
 MicroSite microsite = ((MicroSiteWebPageUtil)wpage).getMicroSite()
 
 String perfil = "perfil"
@@ -65,4 +66,4 @@ println """</ul>
 <p class="vermas"><a href="${url_mas}_Member" >Ver todos</a></p>
 </div>"""
 
-
+}
