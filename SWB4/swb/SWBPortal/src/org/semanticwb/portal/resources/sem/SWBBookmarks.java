@@ -642,6 +642,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
         //If user is signed, show options and bookmark list
         if (user.isSigned()) {
+            sbf.append("          <p>\n");
             sbf.append("          <a class=\"titulo\" href=\"#\" onclick=\"showDialog('" + rUrl +
                     "', '" + paramRequest.getLocaleString("lblAdd") +
                     " " + BookmarkEntry.sclass.getDisplayName(lang) +
@@ -649,7 +650,8 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                     paramRequest.getLocaleString("lblMark") + "</a> \n" +
                     "          <a class=\"titulo\" href=\"#\" onClick=\"openWindow('" +
                     getAdmUrl() + "','')\">" +
-                    paramRequest.getLocaleString("lblManage") + "</a>\n");
+                    paramRequest.getLocaleString("lblManage") + "</a>\n" +
+                    "</p>");
 
             //Get general bookmarks group
             BookmarkGroup generalGp = getUserBookmarkGroupByName(user, "general");
@@ -660,6 +662,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 rUrl = paramRequest.getRenderUrl();
                 rUrl.setCallMethod(rUrl.Call_DIRECT).setMode("RLIST");
 
+                sbf.append("<p>");
                         sbf.append("            <form>\n" +
                         "              <select id=\"" + createId("swb-bkm-select") + "\" " +
                         "onChange=\"refreshContent('" + rUrl + "');\">\n");
@@ -684,6 +687,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 }
                 sbf.append("              </select>\n" +
                         "            </form>\n" +
+                        "</p>\n" +
                         "            <div id=\"" + createId("bookmarksList") + "\">\n" +
                         renderEntriesByUserGroup(generalGp.getSemanticObject().getId(), getSortType(), paramRequest) +
                         "            </div>\n");
