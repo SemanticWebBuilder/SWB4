@@ -49,12 +49,12 @@ import org.semanticwb.portal.community.utilresources.ImageResizer;
 
 public class NewsResource extends org.semanticwb.portal.community.base.NewsResourceBase {
     private static Logger log = SWBUtils.getLogger(NewsResource.class);
-    
-    public NewsResource() {        
+
+    public NewsResource() {
     }
 
     public NewsResource(org.semanticwb.platform.SemanticObject base) {
-        super(base);        
+        super(base);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
             HashMap<String,String> params = upload(request);
             if(mem.canAdd() && params.containsValue("add")) {
                 NewsElement rec = NewsElement.createNewsElement(getResourceBase().getWebSite());
-                rec.setNewsPicture(params.get("filename"));
+                rec.setNewsImage(params.get("filename"));
                 rec.setTitle(params.get("new_title"));
                 rec.setAuthor(params.get("new_author"));
                 rec.setAbstr(params.get("new_abstract"));
@@ -117,7 +117,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                 NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
                 if(rec != null && rec.canModify(mem)) {
                     if(params.containsKey("filename"))
-                        rec.setNewsPicture(params.get("filename"));
+                        rec.setNewsImage(params.get("filename"));
                     rec.setTitle(params.get("new_title"));
                     rec.setAuthor(params.get("new_author"));
                     rec.setAbstr(params.get("new_abstract"));
@@ -127,8 +127,8 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                     rec.setNewsWebPage(page);
                 }
             }
-        }       
-        else if (action.equals("remove")) 
+        }
+        else if (action.equals("remove"))
         {
             //Get news object
             String uri = request.getParameter("uri");
@@ -137,7 +137,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
             //Remove news object
             if (rec != null && rec.canModify(mem)) {
                 rec.remove();                                       //elimina el registro
-            }        
+            }
         } else {
             super.processAction(request, response);
         }
