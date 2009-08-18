@@ -16,6 +16,8 @@
             SemanticProperty sp=list.next();
             mapa.put(sp.getName(),sp);
         }
+        boolean isStrategy=false;
+        if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) isStrategy=true;
 
         boolean areFriends=false;
         SWBResourceURL urlAction=paramRequest.getActionUrl();
@@ -29,24 +31,24 @@
         }
         if(!owner.isRegistered() || !user.isRegistered()) return;
 
-        if(request.getParameter("changePhoto")!=null && request.getParameter("changePhoto").equals("1")){
+        if(request.getParameter("changePhoto")!=null && request.getParameter("changePhoto").equals("1") && !isStrategy){
            %>
-                <fieldset>
-                <legend>Fotograf&iacute;a</legend>
-                <table>
-                    <tr><td width="200px" align="right"><label for="picture">Fotograf&iacute;a &nbsp;</label></td>
-                            <td><iframe id="pictureTransferFrame" name="pictureTransferFrame" src="" style="display:none" ></iframe>
-                                <form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform"
-                                action="/swb/Ciudad_Digital/Registro_de_Usuarios/_aid/46/_mto/3/_act/upload?changePhoto=0"
-                                method="post" target="pictureTransferFrame" >
-                                <input type="file" name="picture"
-                                onchange="beginAsyncUpload(this,'picture');" />
-                                <div class="progresscontainer" style="display: none;"><div class="progressbar" id="picture_progress"></div></div>
-                                </form>
-                            </td></tr>
-                            <tr><td><a href="javascript:history.back(-1)">regresar</a></td></tr>
-                </table>
-                </fieldset>
+                <form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform" dojoType="dijit.form.Form"
+                        action="/swb/Ciudad_Digital/Registro_de_Usuarios/_aid/46/_mto/3/_act/upload"
+                        method="post" target="pictureTransferFrame" >
+                        <fieldset>
+                            <legend>Cambiar fotograf&iacute;a de perfil</legend>
+                            <br/><br/>
+                            <table>
+                                <tr><td width="80px" align="right"><label for="picture">Fotograf&iacute;a &nbsp;</label></td>
+                                    <td><iframe id="pictureTransferFrame" name="pictureTransferFrame" src="" style="display:none" ></iframe>
+                                        <input type="file" name="picture" onchange="beginAsyncUpload(this,'picture');" size="30"/>
+                                        <div class="progresscontainer" style="display: none;"><div class="progressbar" id="picture_progress"></div></div>
+                                    </td></tr>
+                                    <tr><td colspan="2" align="center"><br/><br/><input type="submit" value="enviar"></td></tr>
+                            </table>
+                        </fieldset>
+                </form>
            <%
           }else{
 
@@ -55,7 +57,7 @@
                     && Friendship.areFriends(owner, user, paramRequest.getWebPage().getWebSite())) areFriends=true;
 
 
-            if(paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
+            if(isStrategy)
             {
               if(areFriends){ //Si el usuario que esta en session(owner) es diferente que el que vino por parametro (user)
                   urlAction.setAction("remFriendRelship");
@@ -94,13 +96,17 @@
                      <%
                         if(owner==user || areFriends){ //Agregar datos privados (email, sexo, fotos, etc)
                             %>
-                                <tr><td>Email:<%=email%></td></tr>
-                                <tr><td>Edad:<%=age%></td></tr>
-                                <tr><td>Sexo:<%=sex%></td></tr>
-                                <tr><td>Estatus:<%=userStatus%></td></tr>
-                                <tr><td>Interes:<%=userInterest%></td></tr>
-                                <tr><td>Hobbies<%=userHobbies%></td></tr>
-                                <tr><td>Inciso:<%=userInciso%></td></tr>
+                                <tr><td><br/><br/></br>
+                                <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                    <tr><td>Email</td><td><p><%=email%></p></td></tr>
+                                    <tr><td>Edad</td><td><p><%=age%></p></td></tr>
+                                    <tr><td>Sexo</td><td><p><%=sex%></p></td></tr>
+                                    <tr><td>Estatus</td><td><p><%=userStatus%></p></td></tr>
+                                    <tr><td>Interes</td><td><p><%=userInterest%></p></td></tr>
+                                    <tr><td>Hobbies</td><td><p><%=userHobbies%></p></td></tr>
+                                    <tr><td>Inciso</td><td><p><%=userInciso%></p></td></tr>
+                               </table>
+                               </td></tr>
                             <%
                         }
                      %>

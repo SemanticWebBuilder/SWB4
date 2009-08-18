@@ -13,11 +13,12 @@
         String perfilPath=base.getAttribute("perfilPath","/swb/Ciudad_Digital/Perfil");
         String friendsPath=base.getAttribute("friendsPath","/swb/Ciudad_Digital/Mis_amigos");
         User user=paramRequest.getUser();
+        /*
         if(request.getParameter("user")!=null) 
         {
             SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
             user=(User)semObj.createGenericInstance();
-        }
+        }*/
         if(!user.isRegistered()) return;
         WebPage wpage=paramRequest.getWebPage();
         String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
@@ -63,11 +64,11 @@
              }
              if(isStrategy && contTot>=12){%>
                  <div class="clear">
-                    <p class="vermas"><a href="<%=friendsPath%>" >Ver todos</a></p>
+                    <p class="titulo"><a href="<%=friendsPath%>" >Ver todos</a></p>
                  </div>
              <%}else if(contTot==0){%>
                <div class="clear">
-                <p class="vermas">Aún no tienes amigos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                <p class="titulo">Aún no tienes amigos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
                </div>
              <%}%>
         </div>

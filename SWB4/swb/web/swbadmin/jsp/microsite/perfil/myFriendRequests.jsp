@@ -48,9 +48,9 @@ while(itFriendshipProspect.hasNext()){
   }
   if(isStrategy && contTot>0){%>
      <div class="clear">
-        <p class="vermas"><a href="<%=requestedPath%>" >Tienes <%=contTot%> Solicitud(es) de amistad</a></p>
+        <p class="titulo"><a href="<%=requestedPath%>" >Tienes <%=contTot%> Solicitud(es) de amistad</a></p>
      </div>
   <%}else if(contTot==0){%>
-     <p class="vermas">No tienes solicitudes de amistad &nbsp;</p>
+     <p class="titulo">No tienes solicitudes de amistad &nbsp;</p>
   <%}%>
 </div>

@@ -29,8 +29,8 @@ String attributes=base.getAttribute("attributes","");
  %>
  <img src="<%=photo%>" valign="top" width="100" height="90"/><br>
  <%if(owner.equals(user)){%>
-    <a href="<%=wpage.getUrl()%>?changePhoto=1">Cambiar imagen</a><br>
-    <a href="<%=registryPath%>" <%=attributes%>>Registro de usuarios</a>
+    <p class="addOn"><a href="<%=wpage.getUrl()%>?changePhoto=1">Cambiar imagen</a></p>
+    <p class="addOn"><a href="<%=registryPath%>" <%=attributes%>>Registro de usuarios</p></a>
  <%}%>
                       
           
