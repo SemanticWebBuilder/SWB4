@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -58,10 +59,11 @@ public class CommunityActivitiesResource extends GenericAdmResource {
                     ca = itca.next();
                     user = ca.getUser();
                     mse = ca.getElement();
-                    out.println("<li>El elemento " + mse.getDisplayTitle(null) );
-                    out.println(" fué modificado por ");
-                    out.println("" + user.getFullName() + "");
-                    out.println(" el día " + sdf.format(mse.getUpdated()) + "</li>");
+
+                    out.println("<li><a href=\""+mse.getURL()+"\">" + mse.getDisplayTitle(user.getLanguage()) );
+                    out.println("("+mse.getTitle()+")</a>, ");
+                    out.println("" + user.getFullName() + ", ");
+                    out.println("<a class=\"contactos_nombre\" href=\"#\">"+SWBUtils.TEXT.getTimeAgo(mse.getUpdated(),user.getLanguage()) + "</a></li>");
                     
                 }
             }
