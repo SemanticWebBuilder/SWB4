@@ -7,7 +7,7 @@
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
             Member member = Member.getMember(user, wpage);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
 
             String path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
 %>
@@ -28,7 +28,7 @@
             <td valign="top">
                 <a href="<%=viewUrl%>"><%=anew.getTitle()%></a><%=(anew.getCitation() == null ? "" : "(" + anew.getCitation() + ")")%><BR>
                 Por:&nbsp;<b><%=(anew.getAuthor() == null ? "" : anew.getAuthor())%></b> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%><BR>
-                <b><%=(anew.getCreated() == null ? "" : dateFormat.format(anew.getCreated()))%>.</b><%=(anew.getAbstr() == null ? "" : anew.getAbstr())%><BR>
+                <b><%=(anew.getCreated() == null ? "" : dateFormat.format(anew.getCreated()))%>.</b>&nbsp;<%=(anew.getAbstr() == null ? "" : anew.getAbstr())%><BR>
                 <a href="<%=viewUrl%>">Ver m&aacute;s</a><BR>
                 Puntuación:&nbsp;<%=anew.getRank()%><BR>
                 <%=anew.getViews()%> vistas.
