@@ -39,6 +39,7 @@ public class CummunityListResource extends GenericAdmResource {
             wpch = itwp.next();
             if(wpch.isActive()&&!wpch.isDeleted())
             {
+                if(nums==0) out.println("<div>");
                 nums++;
                 out.println("<div class=\"groupInteres\">");
                 out.println("<h3 class=\"titulo\">"+wpch.getDisplayTitle(user.getLanguage())+"</h3>");
@@ -66,7 +67,7 @@ public class CummunityListResource extends GenericAdmResource {
                 out.println("</div>");
                 if(nums==3)
                 {
-                    out.println("<br/>");
+                    out.println("</div>");
                     nums=0;
                 }
             }
