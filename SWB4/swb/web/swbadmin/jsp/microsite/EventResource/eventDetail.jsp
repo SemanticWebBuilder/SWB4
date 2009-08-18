@@ -24,8 +24,8 @@
                 <%=rec.getTitle()%> (<%=SWBUtils.TEXT.getTimeAgo(rec.getCreated(), user.getLanguage())%>)<BR>
                 <hr>
                 <%=rec.getDescription()%> <BR>
-                Inicia: <%=dateFormat.format(rec.getStartDate())%> - <%=timeFormat.format(rec.getStartTime())%><BR>
-                Termina: <%=dateFormat.format(rec.getEndDate())%> - <%=timeFormat.format(rec.getEndTime())%><BR>
+                Inicia: <b><%=dateFormat.format(rec.getStartDate())%></b> a las <b><%=timeFormat.format(rec.getStartTime())%></b><BR>
+                Termina: <b><%=dateFormat.format(rec.getEndDate())%></b> a las <b><%=timeFormat.format(rec.getEndTime())%></b><BR>
                 Lugar: <%=rec.getPlace()%> <BR>
                 Asistentes:
                 <%
