@@ -37,24 +37,32 @@ WebPage wpage=paramRequest.getWebPage()
 Member member = Member.getMember(user,wpage)
 MicroSite microsite = ((MicroSiteWebPageUtil)wpage).getMicroSite()
 
-String perfil = "/swb/sitio/perfilpage"
+String perfil = "perfil"
 
-def lista = Member.listMemberByMicroSite(microsite, (SWBModel)wpage.getWebSite())
+Iterator<Member> lista = Member.listMemberByMicroSite(microsite, (SWBModel)wpage.getWebSite())
 
 println """<div id="miembros">
 <h2>Miembros de la comunidad</h2>
 <ul>"""
-lista.each(){
-    Member mem_curr = it
+
+
+def i = 0;
+while (lista.hasNext() && i<5){
+    Member mem_curr = lista.next()
     User mem_usr = mem_curr.getUser()
     if (null!=mem_usr)
     {
         def uri = mem_usr.getEncodedURI()
         def nombre = mem_usr.getFullName()
         def img = mem_usr.getPhoto()
-        println """<li><img src="$img"/><a class="contactos_nombre" href="${perfil}?uri=$uri">$nombre</a></li>"""
+        println """<li><img src="$img"/><a class="contactos_nombre" href="${perfil}?user=$uri">$nombre</a></li>"""
     }
 }
-println "</ul></div>"
+
+def url_mas = wpage.getRealUrl()
+
+println """</ul>
+<p class="vermas"><a href="${url_mas}_Member" >Ver todos</a></p>
+</div>"""
 
 
