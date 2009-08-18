@@ -6,7 +6,7 @@
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             Member member = Member.getMember(user, wpage);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
 
             String uri = request.getParameter("uri");
             String path = SWBPlatform.getWebWorkPath() + base.getWorkPath() + "/";
