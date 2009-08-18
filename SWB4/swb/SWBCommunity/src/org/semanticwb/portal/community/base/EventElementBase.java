@@ -1,9 +1,10 @@
 package org.semanticwb.portal.community.base;
 
 
-public class EventElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Viewable,org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public class EventElementBase extends org.semanticwb.portal.community.MicroSiteElement implements org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable
 {
     public static final org.semanticwb.platform.SemanticProperty swbcomm_endTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#endTime");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_eventThumbnail=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#eventThumbnail");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_audienceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#audienceType");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_endDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#endDate");
     public static final org.semanticwb.platform.SemanticProperty swbcomm_latitude=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#latitude");
@@ -70,6 +71,16 @@ public class EventElementBase extends org.semanticwb.portal.community.MicroSiteE
     public void setEndTime(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swbcomm_endTime, value);
+    }
+
+    public String getEventThumbnail()
+    {
+        return getSemanticObject().getProperty(swbcomm_eventThumbnail);
+    }
+
+    public void setEventThumbnail(String value)
+    {
+        getSemanticObject().setProperty(swbcomm_eventThumbnail, value);
     }
 
     public String getAudienceType()
