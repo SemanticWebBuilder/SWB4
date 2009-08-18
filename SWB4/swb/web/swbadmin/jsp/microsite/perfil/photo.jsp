@@ -27,7 +27,7 @@ String attributes=base.getAttribute("attributes","");
  String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
  if(user.getPhoto()!=null) photo=user.getPhoto();
  %>
- <img src="<%=photo%>" valign="top"/><br>
+ <img src="<%=photo%>" valign="top" width="100" height="90"/><br>
  <%if(owner.equals(user)){%>
     <a href="<%=wpage.getUrl()%>?changePhoto=1">Cambiar imagen</a><br>
     <a href="<%=registryPath%>" <%=attributes%>>Registro de usuarios</a>
