@@ -56,10 +56,13 @@
                 </div>
                 <%
             }
-            String path=paramRequest.getWebPage().getWebSite().getWebPage("Ultimas_Noticias").getUrl();
-            %>
-            <p class="vermas"><a href="<%=path%>" >Ver m&aacute;s</a></p>
-            <%
+            if(paramRequest.getWebPage().getWebSite().getWebPage("Ultimas_Noticias")!=null)
+            {
+                String path=paramRequest.getWebPage().getWebSite().getWebPage("Ultimas_Noticias").getUrl();
+                %>
+                <p class="vermas"><a href="<%=path%>" >Ver m&aacute;s</a></p>
+                <%
+            }
     }
     else
         {
