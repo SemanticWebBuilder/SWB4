@@ -364,22 +364,22 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
             ret.append("\n    <div id=\"comment" + comment.getId() + "\" class=\"comment-entry\">");
             ret.append("\n      <div class=\"comment-head\">");
             ret.append("\n        <div class=\"comment-info\">");
-            ret.append("\n         " + (ordinal++) + ". <strong>"
+            ret.append("\n          " + (ordinal++) + ". <strong>"
                     + (comment.getCreator().getLogin().equalsIgnoreCase("")
                        ? "Desconocido"
                        : comment.getCreator().getLogin())
-                    + "</strong></div>");
-            ret.append("          <div class=\"comment-time\"> ("
+                    + "</strong>\n        </div>");
+            ret.append("\n        <div class=\"comment-time\"> ("
                     + SWBUtils.TEXT.getTimeAgo(comment.getCreated(), user.getLanguage()) + ")</div>");
-            ret.append("          <span class=\"comment-spam\"><a href=\"javascript:spam("
-                    + comment.getId() + ");\" id=\"spamMark"+ comment.getId() + "\">" + spamMark + "</a></spam>");
-            ret.append("\n        <div class=\"clearL\"></div>");
+            ret.append("\n        <div class=\"comment-spam\"><a href=\"javascript:spam("
+                    + comment.getId() + ");\" id=\"spamMark"+ comment.getId() + "\">" + spamMark + "</a></div>");
+//            ret.append("\n        <div class=\"clearL\"></div>");
             ret.append("\n      </div>");
             ret.append("\n      <div id=\"comment_body_" + comment.getId() + "\">");
             ret.append("\n        <div class=\"comment-body\">");
             ret.append("\n          <div>" + comment.getDescription() + "</div>");
             ret.append("\n        </div>");
-            ret.append("\n        <div id=\"div_comment_form_id_" + comment.getId() + "\"></div>");
+//            ret.append("\n        <div id=\"div_comment_form_id_" + comment.getId() + "\"></div>");
             ret.append("\n      </div>");
             ret.append("\n    </div>");
         }
