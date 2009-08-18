@@ -196,5 +196,8 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                 }
             }
         }
+        else {
+            super.processAction(request, response);
+        }
     }
 }
