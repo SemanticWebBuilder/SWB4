@@ -46,6 +46,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
+import org.semanticwb.portal.community.utilresources.ImageResizer;
 
  /** @author Hasdai Pacheco {haxdai@gmail.com} */
 public class EventResource extends org.semanticwb.portal.community.base.EventResourceBase {
@@ -73,8 +74,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             HashMap<String,String> params = upload(request);
             if(mem.canAdd() && params.containsValue("add")) {
                 EventElement rec = EventElement.createEventElement(getResourceBase().getWebSite());
-                if(params.get("filename")!=null)
-                    rec.setEventImage(params.get("filename"));
+                rec.setEventImage(params.get("filename"));
                 rec.setTitle(params.get("event_title"));
                 rec.setDescription(params.get("event_description"));
                 rec.setAudienceType(params.get("event_audience"));
@@ -101,9 +101,6 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             }
             else if(params.containsValue("edit"))
             {
-                System.out.println("********** act="+params.get("act"));
-                System.out.println("********** uri="+params.get("uri"));
-                //Get event object
                 String uri = params.get("uri");
                 EventElement rec = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
                 if(rec != null && rec.canModify(mem)) {
@@ -206,12 +203,20 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         if(!file.exists()) {
                             file.mkdirs();
                         }
-                        long serial = (new Date()).getTime();
+
                         try {
-                            String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
-                            currentFile.write(new File(path+"/"+name));
-                            params.put("filename", name);
-                        }catch(StringIndexOutOfBoundsException iobe) {}
+                            long serial = (new Date()).getTime();
+                            String filename = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+
+                            File image = new File(path+"/"+filename);
+                            File thumbnail = new File(path+"/"+"thumbn_"+filename);
+                            currentFile.write(image);
+
+                            ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
+
+                            params.put("filename", filename);
+                        }catch(StringIndexOutOfBoundsException iobe) {
+                        }
                     }
                 }
             }
