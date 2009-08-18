@@ -24,9 +24,9 @@ package org.semanticwb.portal.community;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -49,19 +49,15 @@ import org.semanticwb.portal.api.*;
 
  /** @author Hasdai Pacheco {haxdai@gmail.com} */
 public class EventResource extends org.semanticwb.portal.community.base.EventResourceBase {
-    private BigInteger serial;
-
     private static Logger log = SWBUtils.getLogger(EventResource.class);
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
     public EventResource() {
-        serial = BigInteger.ZERO;
     }
 
     public EventResource(org.semanticwb.platform.SemanticObject base) {
         super(base);
-        serial = BigInteger.ZERO;
     }
 
     @Override
@@ -210,9 +206,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                         if(!file.exists()) {
                             file.mkdirs();
                         }
-                        synchronized(serial) {
-                            serial = serial.add(BigInteger.ONE);
-                        }
+                        long serial = (new Date()).getTime();
                         try {
                             String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
                             currentFile.write(new File(path+"/"+name));

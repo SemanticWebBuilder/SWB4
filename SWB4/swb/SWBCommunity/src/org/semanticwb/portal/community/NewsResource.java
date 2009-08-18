@@ -26,7 +26,7 @@ package org.semanticwb.portal.community;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
+import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import java.util.HashMap;
@@ -47,18 +47,13 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
 public class NewsResource extends org.semanticwb.portal.community.base.NewsResourceBase {
-    private BigInteger serial;
-
     private static Logger log = SWBUtils.getLogger(NewsResource.class);
     
-    public NewsResource() {
-        serial = BigInteger.ZERO;
+    public NewsResource() {        
     }
 
-    public NewsResource(org.semanticwb.platform.SemanticObject base)
-    {
-        super(base);
-        serial = BigInteger.ZERO;
+    public NewsResource(org.semanticwb.platform.SemanticObject base) {
+        super(base);        
     }
 
     @Override
@@ -93,47 +88,6 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
         if (!mem.canView()) {
             return;                                       //si el usuario no pertenece a la red sale;
         }
-
-        /*String title = request.getParameter("new_title");
-        if (title==null) title="";
-        String image = request.getParameter("new_image");
-        if (image==null) image="";
-        String author = request.getParameter("new_author");
-        if(author==null) author="";
-        String abstr = request.getParameter("new_abstract");
-        if(abstr==null) abstr="";
-        String fulltext = request.getParameter("new_fulltext");
-        if(fulltext==null) fulltext="";
-        String citation = request.getParameter("new_citation");
-        if(citation==null) citation="";
-        String tags = request.getParameter("new_tags");
-        tags = (tags==null?"":tags);*/
-
-        /*if (action.equals("add") && mem.canAdd()) {
-            //Create news object
-            NewsElement rec = NewsElement.createNewsElement(getResourceBase().getWebSite());
-            //Set news properties
-            rec.setTitle(title);
-            rec.setNewsPicture(image);
-            rec.setAuthor(author);
-            rec.setAbstr(abstr);
-            rec.setTags(tags);
-            rec.setFullText(fulltext);
-            rec.setCitation(citation);
-            rec.setTags(tags);
-            rec.setNewsWebPage(page);
-            
-            //Set render parameters
-            try {
-                response.setRenderParameter("act", "edit");
-                response.setRenderParameter("uri", rec.getURI());
-            } catch (Exception e) {
-                log.error(e);
-                response.setRenderParameter("act", "add");               //regresa a agregar codigo
-                response.setRenderParameter("err", "true");              //envia parametro de error
-            }
-        }*/
-
 
         if(action==null) {
             HashMap<String,String> params = upload(request);
@@ -173,27 +127,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                     rec.setNewsWebPage(page);
                 }
             }
-        }
-        /*else if (action.equals("edit")) {
-            String uri = request.getParameter("uri");
-            NewsElement rec = (NewsElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
-
-            if (rec != null && rec.canModify(mem)) {
-                rec.setTitle(title);
-                rec.setNewsPicture(image);
-                rec.setAuthor(author);
-                rec.setAbstr(abstr);
-                rec.setTags(tags);
-                rec.setFullText(fulltext);
-                rec.setCitation(citation);
-                rec.setTags(tags);
-                rec.setVisibility(Integer.parseInt(request.getParameter("level")));   //hace convercion a int en automatico
-
-                if (page instanceof MicroSiteWebPageUtil) {
-                    ((MicroSiteWebPageUtil) page).sendNotification(rec);
-                }
-            }
-        }*/ 
+        }       
         else if (action.equals("remove")) 
         {
             //Get news object
@@ -249,13 +183,12 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                         if(!file.exists()) {
                             file.mkdirs();
                         }
-                        synchronized(serial) {
-                            serial = serial.add(BigInteger.ONE);
-                        }
-                        String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
-                        currentFile.write(new File(path+"/"+name));
-                        params.put("filename", name);
-                        System.out.println("uploadPhoto.... filename,"+name);
+                        long serial = (new Date()).getTime();
+                        try {
+                            String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+                            currentFile.write(new File(path+"/"+name));
+                            params.put("filename", name);
+                        }catch(StringIndexOutOfBoundsException iobe) {}
                     }
                 }
             }

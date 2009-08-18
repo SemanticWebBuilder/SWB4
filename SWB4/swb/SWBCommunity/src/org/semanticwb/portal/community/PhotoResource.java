@@ -27,8 +27,7 @@ import java.io.*;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.math.BigInteger;
-
+import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 
@@ -46,17 +45,13 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
 public class PhotoResource extends org.semanticwb.portal.community.base.PhotoResourceBase {
-    private BigInteger serial;
-
     private static Logger log=SWBUtils.getLogger(PhotoResource.class);
 
     public PhotoResource() {
-        serial = BigInteger.ZERO;
     }
 
     public PhotoResource(org.semanticwb.platform.SemanticObject base) {
         super(base);
-        serial = BigInteger.ZERO;
     }
 
     @Override
@@ -91,7 +86,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
 
         String action=request.getParameter("act");
         if(action==null) {
-            HashMap<String,String> params = uploadPhoto(request);
+            HashMap<String,String> params = upload(request);
             if(mem.canAdd() && params.containsValue("add")) {
                 PhotoElement rec = PhotoElement.createPhotoElement(getResourceBase().getWebSite());
                 rec.setImageURL(params.get("filename"));
@@ -104,8 +99,8 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                 }
                 rec.setPhotoWebPage(page);
             }
-        }else
-        if("edit".equals(action)) {
+        }
+        else if("edit".equals(action)) {
             String uri=request.getParameter("uri");
             PhotoElement rec = (PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
             if(rec!=null && rec.canModify(mem)) {
@@ -118,7 +113,8 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                 }
             }
             response.setRenderParameter("act", "view");
-        }else if("remove".equals(action)) {
+        }
+        else if("remove".equals(action)) {
             String uri = request.getParameter("uri");
             PhotoElement rec = (PhotoElement)SemanticObject.createSemanticObject(uri).createGenericInstance();
             if(rec!=null && rec.canModify(mem)) {
@@ -134,7 +130,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
         Member mem=Member.getMember(paramRequest.getUser(), paramRequest.getWebPage());
 
         if(mem.canAdd()) {
-            HashMap<String,String> params = uploadPhoto(request);
+            HashMap<String,String> params = upload(request);
 
             WebPage page = paramRequest.getWebPage();
             PhotoElement rec = PhotoElement.createPhotoElement(getResourceBase().getWebSite());
@@ -148,14 +144,11 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
             if(page instanceof MicroSiteWebPageUtil) {
                 ((MicroSiteWebPageUtil)page).sendNotification(rec);
             }
-
             rec.setPhotoWebPage(page);
-
-            //doView(request, response, paramRequest);
         }
     }
 
-    private HashMap<String,String> uploadPhoto(HttpServletRequest request) {
+    private HashMap<String,String> upload(HttpServletRequest request) {
         String path = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath();
         HashMap<String,String> params = new HashMap<String,String>();
         try {
@@ -195,26 +188,14 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                         if(!file.exists()) {
                             file.mkdirs();
                         }
-                        synchronized(serial) {
-                            serial = serial.add(BigInteger.ONE);
-                        }
-                        String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
-                        currentFile.write(new File(path+"/"+name));
-                        params.put("filename", name);
+                        long serial = (new Date()).getTime();
+                        try {
+                            String name = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+                            currentFile.write(new File(path+"/"+name));
+                            params.put("filename", name);
+                        }catch(StringIndexOutOfBoundsException iobe) {}
                     }
                 }
-                /*if(currentFile != null) {
-                    File file = new File(path);
-                    if(!file.exists()) {
-                        file.mkdirs();
-                    }
-//                    Date now = new Date();
-//                    String name = now.getTime()+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
-                    String name = (++serial)+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
-                    currentFile.write(new File(path+"/"+name));
-                    params.put("filename", name);
-                    return params;
-                }*/
             }
         }catch(Exception ex)  {
             ex.printStackTrace();
