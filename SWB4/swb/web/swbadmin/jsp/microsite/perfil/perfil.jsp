@@ -63,8 +63,6 @@
                   <%
               }
             }else {
-                 String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
-                 if(user.getPhoto()!=null) photo=user.getPhoto();
                  String userFirstName="", userLastName="", secondName="", email="";
 
                  if(user.getFirstName()!=null) userFirstName=user.getFirstName();
@@ -94,3 +92,4 @@
                 }
          }
         %>
+        
