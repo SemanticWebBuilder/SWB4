@@ -29,7 +29,7 @@ Error: Elemento no encontrado...
     dojo.require("dojo.parser");
 </script>
 <div class="soria">
-    <form class="swbform" method="post" action="<%=paramRequest.getActionUrl()%>">
+    <form class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
         <div>
             <h3>Editar noticia</h3>
         </div>
