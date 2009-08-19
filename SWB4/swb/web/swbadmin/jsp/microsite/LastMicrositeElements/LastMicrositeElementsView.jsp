@@ -22,7 +22,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
     classAtt="panorama";
 }
     %>
-    <div class="recentEntry">
+    <div class="<%=classAtt%">
     <h2 class="titulo">Lo último en la ciudad digital</h2>
     <%
     
