@@ -1,6 +1,6 @@
 <%@page import="java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
-<div id="contactos">  
+<div id="contactos" align="center">
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 User user=paramRequest.getUser();
@@ -8,6 +8,9 @@ String lang="es";
 WebPage wpage = paramRequest.getWebPage();
 if(user.getLanguage()!=null) lang=user.getLanguage();
 %><%=renderCalendar(user, new Date(System.currentTimeMillis()), wpage, paramRequest)%>
+<p class="vermas">
+    <a href ="<%=paramRequest.getRenderUrl()%>">Ver todos</a>
+</p>
 </div>
 <%!
     private String renderCalendar(User user, Date current, WebPage wpage, SWBParamRequest paramRequest) {
@@ -85,7 +88,7 @@ if(user.getLanguage()!=null) lang=user.getLanguage();
             if (day == i - 1) {
                 //Are there events today?
                 if (!eventTitles.equals("")) {
-                    SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "daily");
+                    SWBResourceURL viewUrl = paramRequest.getRenderUrl();//.setParameter("act", "daily");
                     viewUrl.setParameter("year", String.valueOf(year + 1900));
                     viewUrl.setParameter("month", String.valueOf(month));
                     viewUrl.setParameter("day", String.valueOf(i));
@@ -103,7 +106,7 @@ if(user.getLanguage()!=null) lang=user.getLanguage();
                 //Not today
                 evsNow = EventElement.listEventElementsByDate(user, new Date(year, month, i), wpage, wpage.getWebSite());
                 if (!eventTitles.equals("")) {
-                    SWBResourceURL viewUrl = paramRequest.getRenderUrl().setParameter("act", "daily");
+                    SWBResourceURL viewUrl = paramRequest.getRenderUrl();//.setParameter("act", "daily");
                     viewUrl.setParameter("year", String.valueOf(year + 1900));
                     viewUrl.setParameter("month", String.valueOf(month));
                     viewUrl.setParameter("day", String.valueOf(i));
@@ -118,6 +121,10 @@ if(user.getLanguage()!=null) lang=user.getLanguage();
                 }
             }
             weekDay++;
+        }
+        for(int i = 0; i < (7-weekDay); i++) {
+            sbf.append("      <td class=\"empty\" >\n" +
+                            "      </td>\n");
         }
         sbf.append("    </tr>\n" +
                 "  </table>\n" +
