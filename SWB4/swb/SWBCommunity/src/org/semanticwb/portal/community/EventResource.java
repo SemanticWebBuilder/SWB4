@@ -99,6 +99,14 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                 rec.setPlace(params.get("event_place"));
                 rec.setTags(params.get("event_tags"));
                 rec.setEventWebPage(page);
+                try {
+                    response.setRenderParameter("act", "edit");
+                    response.setRenderParameter("uri", rec.getURI());
+                } catch (Exception e) {
+                    log.error(e);
+                    response.setRenderParameter("act", "add");
+                    response.setRenderParameter("err", "true");
+                }
             }
             else if(params.containsValue("edit"))
             {
