@@ -192,12 +192,12 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                             long serial = (new Date()).getTime();
                             String filename = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
 
-                            File image = new File(realpath+"/"+filename);
-                            File thumbnail = new File(realpath+"/"+"thumbn_"+filename);
+                            File image = new File(realpath+filename);
+                            File thumbnail = new File(realpath+"thumbn_"+filename);
                             currentFile.write(image);
                             ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
 
-                            params.put("filename", filename);
+                            params.put("filename", path+filename);
                             params.put("thumbnail", path+"thumbn_"+filename);
                         }catch(StringIndexOutOfBoundsException iobe) {
                         }
