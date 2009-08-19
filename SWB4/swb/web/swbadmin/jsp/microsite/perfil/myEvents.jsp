@@ -21,6 +21,5 @@ while(itEvents.hasNext()){
     <%
 }
 %>
-  </ul>
-  <a class="title" href="<%=paramRequest.getRenderUrl().setParameter("act", "calendar")%>">Ver calendario</a>
+  </ul>  
 </div>
