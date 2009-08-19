@@ -27,8 +27,6 @@
  */
 package org.semanticwb.portal.social.facebook.resources;
 
-import org.semanticwb.portal.social.facebook.*;
-import org.semanticwb.portal.resources.*;
 import com.google.code.facebookapi.FacebookXmlRestClient;
 import com.google.code.facebookapi.IFacebookRestClient;
 import com.google.code.facebookapi.ProfileField;
