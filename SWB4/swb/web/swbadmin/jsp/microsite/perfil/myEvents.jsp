@@ -1,8 +1,8 @@
-<jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.portal.community.*"%>
 <%@page import="org.semanticwb.model.*"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 
@@ -10,18 +10,21 @@
   <h2>Mis Subscripciones</h2>
   <ul>
 <%
-User user=paramRequest.getUser();
+SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+User user = paramRequest.getUser();
 WebPage wpage = paramRequest.getWebPage();
+Member member = Member.getMember(user, wpage);
 String lang="es";
-String year = request.getParameter("year");
-String month = request.getParameter("month");
-String day = request.getParameter("day");
+String year = request.getParameter("y");
+String month = request.getParameter("m");
+String day = request.getParameter("d");
 Date current = null;
 
 if (day != null && month != null && year != null) {
-    current = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
+    current = new Date(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day));
 }
 
+System.out.println(current);
 if(user.getLanguage()!=null) lang=user.getLanguage();
 Iterator<EventElement> itEvents;
 
@@ -35,7 +38,7 @@ while(itEvents.hasNext()){
     %>
         <li><a href="<%=event.getEventWebPage().getUrl()%>?act=detail&uri=<%=event.getEncodedURI()%>"><%=event.getTitle()%></a></li>
     <%
-}
+    }
 %>
   </ul>  
 </div>
