@@ -39,7 +39,9 @@ Error: Elemento no encontrado...
                     <tr>
                         <td align="right" valign="center"><label for="new_image">Imagen de la noticia&nbsp;<em>*</em></label></td>
                         <td valign="top">
-                            <img src="<%= rec.getNewsImage() %>" alt="<%= rec.getTitle() %>"/>
+                            <a href="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage()%>" target="_self">
+                            <img src="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                            </a>
                             <input id="foto" type="file" style="width: 90%;" class="textfield tags" size="22" name="foto" />
                         </td>
                     </tr>

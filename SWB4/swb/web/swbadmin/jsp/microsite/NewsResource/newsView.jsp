@@ -21,7 +21,9 @@
 %>
         <tr>
             <td valign="top">
-                <a href="<%= viewUrl%>"><img src="<%= anew.getNewsThumbnail() %>" alt="" border="0" /></a>
+                <a href="<%= viewUrl%>">
+                    <img src="<%= SWBPlatform.getWebWorkPath()+anew.getNewsThumbnail() %>" alt="<%= anew.getTitle()%>" border="0" />
+                </a>
             </td>
             <td valign="top">
                 <p><%= anew.getTitle()%>&nbsp;(<%= anew.getCitation()%>)</p>

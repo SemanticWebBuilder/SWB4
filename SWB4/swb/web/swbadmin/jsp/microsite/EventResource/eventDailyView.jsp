@@ -32,7 +32,7 @@
         <tr>
             <td valign="top">
                 <a href="<%=viewUrl%>">
-                    <img src="<%=event.getEventThumbnail()%>" alt="<%=event.getDescription()%>" border="0" />
+                    <img src="<%= SWBPlatform.getWebWorkPath()+event.getEventThumbnail()%>" alt="<%=event.getDescription()%>" border="0" />
                 </a>
             </td>
             <td valign="top">

@@ -39,7 +39,9 @@ Error: Elemento no encontrado...
                     <tr>
                         <td align="right" valign="center"><label for="foto">Imagen del evento&nbsp;:</label></td>
                         <td valign="top">
-                            <img id="img_<%=rec.getId()%>" src="<%= rec.getEventImage() %>" alt="<%= rec.getTitle() %>"/>
+                            <a href="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage()%>" target="_self">
+                            <img id="img_<%=rec.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                            </a>
                             <input id="foto" type="file" name="foto" />
                         </td>
                     </tr>

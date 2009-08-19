@@ -26,7 +26,7 @@
 %>
             <div style="float:left; margin-top:30px; margin-left:30px; margin-right:30px; text-align:center">
                 <a href="<%=viewurl%>">
-                    <img id="img_<%=i+base.getId()%>" src="<%=photo.getPhotoThumbnail()%>" alt="<%= photo.getDescription()%>" />
+                    <img id="img_<%=i+base.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getPhotoThumbnail()%>" alt="<%= photo.getTitle()%>" border="0" />
                     <p style="line-height:2px;"><%= photo.getTitle()%></p>
                     <p style="line-height:2px;"><%= photo.getCreator().getFirstName()%></p>
                     <p style="line-height:2px;"><%= photo.getDescription()%></p>
