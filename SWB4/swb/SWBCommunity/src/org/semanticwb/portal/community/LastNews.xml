@@ -5,6 +5,7 @@
 		<admdbconnmgr defconn="true"/>
         <fieldset legend="Forma y estilo">
             <input type="TEXT" name="limit" label="Número máximo de elementos*:" size="4" maxlength="4" jsvaltype="js_numbers"/>
+            <input type="TEXT" name="columns" label="Número de columnas *:" size="4" maxlength="4" jsvaltype="js_numbers"/>
         </fieldset>
 
 
