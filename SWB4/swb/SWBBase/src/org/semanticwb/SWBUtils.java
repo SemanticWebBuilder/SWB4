@@ -773,14 +773,16 @@ public class SWBUtils {
             minuteCreation = CreationDate.getMinutes();
             hourCurrent = CurrentDate.getHours();
             hourCreation = CreationDate.getHours();
-            dayCurrent = CurrentDate.getDay();
-            dayCreation = CreationDate.getDay();
+            dayCurrent = CurrentDate.getDate();
+            dayCreation = CreationDate.getDate();
             monthCurrent = CurrentDate.getMonth();
             monthCreation = CreationDate.getMonth();
             yearCurrent = CurrentDate.getYear();
             yearCreation = CreationDate.getYear();
 
-            boolean leapYear = (yearCurrent % 4 == 0) && (yearCurrent % 100 != 0 || yearCurrent % 400 == 0);
+            boolean leapYear=false;
+            if(monthCurrent>1||(dayCreation==29&&monthCreation==1))
+                leapYear=(yearCreation%4==0)&&(yearCreation%100!=0 || yearCreation%400==0);
             dayMonth = 0;
             day = 0;
             switch (monthCreation) {
@@ -842,9 +844,6 @@ public class SWBUtils {
             } else {
                 hour = (24 - hourCreation) + hourCurrent;
                 dayCurrent = dayCurrent - 1;
-            }
-            if (leapYear) {
-                dayCurrent = dayCurrent + 1;
             }
             if (dayCurrent >= dayCreation) {
                 day = day + (dayCurrent - dayCreation);
