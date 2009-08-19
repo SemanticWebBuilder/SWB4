@@ -2,63 +2,118 @@
 <%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <%
-    SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");    
-    String pathIamge = SWBPlatform.getWebWorkPath();
-    ArrayList<NewsElement> elements=(ArrayList<NewsElement>)request.getAttribute("elements");
+    SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
+
+    int columnas=1;
+
+try
+{
+    columnas=Integer.parseInt(paramRequest.getResourceBase().getAttribute("columns", "1"));
+}
+catch(Exception e)
+{
+
+}
+if(columnas<=0)
+{
+    columnas=1;
+}
+    if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
+{
+    %>
+    <div class="panorama">
+    <h1 class="tituloPrincipal">Noticias recientes</h1>
+    <%
+}
+else
+    {
     %>
     <div class="recentEntry_last">
-        <h2 class="titulo">Noticias recientes</h2>
-
+    <h2 class="titulo">Noticias recientes</h2>
     <%
+    }
+    String pathIamge = SWBPlatform.getWebWorkPath();
+    ArrayList<NewsElement> elements=(ArrayList<NewsElement>)request.getAttribute("elements");
     if(elements.size()>0)
     {
-%>
-    
-        <%
+
             String defaultFormat = "dd/MM/yyyy HH:mm";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
-            
-            
-            for(NewsElement element : elements)
+            int renglones=elements.size() / columnas;
+            if((elements.size() % columnas) !=0 )
             {
-                String created=iso8601dateFormat.format(element.getCreated());
-                String href=element.getURL();                
-                String src=pathIamge+element.getNewsImage();
-                if(element.getNewsImage()!=null)
+                renglones++;
+            }
+             %>
+            <table width="100%" border="1">
+            <%
+            NewsElement[] elementsArray=elements.toArray(new NewsElement[elements.size()]);
+            for(int iRenglon=0;iRenglon<renglones;iRenglon++)
+            {
+                %>
+                <tr>
+                <%
+                for(int col=0;col<columnas;col++)
                 {
-                    src=pathIamge+element.getNewsImage();
-                }
-                String title=element.getTitle();
-                if(title==null)
-                {
-                    title="";
-                }
-                String description=element.getDescription();
-                if(description==null)
-                {
-                    description="";
-                }
-                if(description.length()>200)
-                {
-                    description=description.substring(0, 197)+" ...";
+                    int iElement=(iRenglon*columnas)+col;
+                    if(iElement<elementsArray.length)
+                    {
+                        NewsElement element=elementsArray[iElement];
+                        String created=iso8601dateFormat.format(element.getCreated());
+                        String href=element.getURL();
+                        String src=pathIamge+element.getNewsImage();
+                        if(element.getNewsImage()!=null)
+                        {
+                            src=pathIamge+element.getNewsImage();
+                        }
+                        String title=element.getTitle();
+                        if(title==null)
+                        {
+                            title="";
+                        }
+                        String description=element.getDescription();
+                        if(description==null)
+                        {
+                            description="";
+                        }
+                        if(description.length()>200)
+                        {
+                            description=description.substring(0, 197)+" ...";
+                        }
+                        %>
+                        <td>
+                              <div class="entry">
+                              <%
+                                if(src!=null)
+                                {
+                                    %>
+                                    <p><img src="<%=src%>" alt="<%=title%>" width="49" height="49" ></p>
+                                    <%
+                                }
+                              %>
+                              <h3 class="titulo"><a href="<%=href%>"><%=title%></a></h3>
+                              <p class="titulo"><%=created%></p>
+                              <p><%=description%></p>
+                              </div>
+                        </td>
+                        <%
+                    }
+                    else
+                    {
+                        %>
+                        <td>&nbsp;</td>
+                        <%
+                    }
                 }
                 %>
-                  <div class="entry">
-                      <%
-                        if(src!=null)
-                        {
-                            %>
-                            <p><img src="<%=src%>" alt="<%=title%>" width="49" height="49" ></p>
-                            <%
-                        }                
-                      %>
-                  
-                  <h3 class="titulo"><a href="<%=href%>"><%=title%></a></h3>
-                  <p class="titulo"><%=created%></p>
-                  <p><%=description%></p>
-                </div>
-                <%
+                </tr>
+            <%
             }
+             %>
+            </table>
+            <%
+            
+           
             if(paramRequest.getWebPage().getWebSite().getWebPage("Ultimas_Noticias")!=null && paramRequest.getCallMethod()!=paramRequest.Call_CONTENT)
             {
                 String path=paramRequest.getWebPage().getWebSite().getWebPage("Ultimas_Noticias").getUrl();
