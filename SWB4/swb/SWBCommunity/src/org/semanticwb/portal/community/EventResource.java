@@ -218,7 +218,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                             currentFile.write(image);
                             ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
 
-                            params.put("filename", filename);
+                            params.put("filename", path+filename);
                             params.put("thumbnail", path+"thumbn_"+filename);
                         }catch(StringIndexOutOfBoundsException iobe) {
                         }
