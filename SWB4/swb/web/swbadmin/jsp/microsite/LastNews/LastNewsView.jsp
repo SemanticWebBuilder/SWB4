@@ -25,7 +25,7 @@ if(columnas<=0)
     }
     %>
     <div class="<%=classAtt%>">
-    <h1 class="titulo">Noticias recientes</h1>
+    <h2 class="titulo">Noticias recientes</h2>
     <%
     String pathIamge = SWBPlatform.getWebWorkPath();
     ArrayList<NewsElement> elements=(ArrayList<NewsElement>)request.getAttribute("elements");
