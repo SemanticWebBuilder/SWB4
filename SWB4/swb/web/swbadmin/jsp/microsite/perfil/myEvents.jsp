@@ -13,13 +13,14 @@
 User user=paramRequest.getUser();
 String lang="es";
 if(user.getLanguage()!=null) lang=user.getLanguage();
-Iterator<EventElement> itEvents=EventElement.listEventElementByHasAttendant(user);
+Iterator<EventElement> itEvents=EventElement.listEventElementByAttendant(user, paramRequest.getWebPage().getWebSite());
 while(itEvents.hasNext()){
-    EventElement event=itEvents.next();
+    EventElement event=itEvents.next();    
     %>
-        <li><a href="<%=event.getEventWebPage().getUrl()%>?act=detail&uri=<%=event.getEncodedURI()%>">event.getTitle()</a></li>
+        <li><a href="<%=event.getEventWebPage().getUrl()%>?act=detail&uri=<%=event.getEncodedURI()%>"><%=event.getTitle()%></a></li>
     <%
 }
 %>
   </ul>
+  <a class="title" href="<%=paramRequest.getRenderUrl().setParameter("act", "calendar")%>">Ver calendario</a>
 </div>
