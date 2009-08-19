@@ -46,19 +46,6 @@ public class MyEvents extends GenericResource {
             rd.include(request, response);
         } catch (Exception e) {
             log.error("MyEvents say " + e);
-        }
-
-        /*try {
-            request.setAttribute("paramRequest", paramRequest);
-            if (mode != null && mode.equals("calendar")) {
-                path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEventsCalendar.jsp";
-            } else if (action.equals("dayli")) {
-                path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myDailyEvents.jsp";
-            }
-            RequestDispatcher rd = request.getRequestDispatcher(path);
-            rd.include(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
+        }        
     }
 }
