@@ -1,9 +1,21 @@
 <%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*" %>
 
+<%
+SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
+if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
+{
+    %>
+    <div class="panorama">
+    <h1 class="tituloPrincipal">Lo último en la ciudad digital completo</h1>
+    <%
+}
+else
+    {
+    %>
     <div class="recentEntry">
     <h2 class="titulo">Lo último en la ciudad digital</h2>
-<%
-    SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
+    <%
+    }
     String webpath=SWBPlatform.getContextPath()+"/swbadmin/jsp/microsite/LastMicrositeElements/";
     String defaultFormat = "dd/MM/yyyy HH:mm";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
@@ -44,7 +56,7 @@
               </div>
             <%                        
        }
-       if(paramRequest.getWebPage().getWebSite().getWebPage("Lo_ultimo")!=null)
+       if(paramRequest.getWebPage().getWebSite().getWebPage("Lo_ultimo")!=null && paramRequest.getCallMethod()!=paramRequest.Call_CONTENT)
        {
             String path=paramRequest.getWebPage().getWebSite().getWebPage("Lo_ultimo").getUrl();
             %>
