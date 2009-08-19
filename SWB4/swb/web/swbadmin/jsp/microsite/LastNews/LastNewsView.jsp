@@ -3,21 +3,19 @@
 
 <%
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
-
     int columnas=1;
+    try
+    {
+        columnas=Integer.parseInt(paramRequest.getResourceBase().getAttribute("columns", "1"));
+    }
+    catch(Exception e)
+    {
 
-try
-{
-    columnas=Integer.parseInt(paramRequest.getResourceBase().getAttribute("columns", "1"));
-}
-catch(Exception e)
-{
-
-}
-if(columnas<=0)
-{
-    columnas=1;
-}
+    }
+    if(columnas<=0)
+    {
+        columnas=1;
+    }
     String classAtt="recentEntry_last";
     if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
     {
