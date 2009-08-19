@@ -186,6 +186,10 @@
             }
             weekDay++;
         }
+        for(int i = 0; i < (7-weekDay); i++) {
+            sbf.append("      <td class=\"empty\" >\n" +
+                            "      </td>\n");
+        }
         sbf.append("    </tr>\n" +
                 "  </table>\n" +
                 "</div>\n");
