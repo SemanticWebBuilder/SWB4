@@ -18,20 +18,15 @@ if(columnas<=0)
 {
     columnas=1;
 }
+    String classAtt="recentEntry_last";
     if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
-{
-    %>
-    <div class="panorama">
-    <h1 class="tituloPrincipal">Noticias recientes</h1>
-    <%
-}
-else
     {
-    %>
-    <div class="recentEntry_last">
-    <h2 class="titulo">Noticias recientes</h2>
-    <%
+        classAtt="panorama";
     }
+    %>
+    <div class="<%=classAtt%>">
+    <h1 class="titulo">Noticias recientes</h1>
+    <%
     String pathIamge = SWBPlatform.getWebWorkPath();
     ArrayList<NewsElement> elements=(ArrayList<NewsElement>)request.getAttribute("elements");
     if(elements.size()>0)
@@ -45,7 +40,7 @@ else
                 renglones++;
             }
              %>
-            <table width="100%" border="1">
+            <table width="100%" border="0">
             <%
             NewsElement[] elementsArray=elements.toArray(new NewsElement[elements.size()]);
             for(int iRenglon=0;iRenglon<renglones;iRenglon++)
