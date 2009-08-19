@@ -59,7 +59,7 @@
                 </div>
                 <%
             }
-            if(paramRequest.getWebPage().getWebSite().getWebPage("Ultimas_Noticias")!=null)
+            if(paramRequest.getWebPage().getWebSite().getWebPage("Ultimas_Noticias")!=null && paramRequest.getCallMethod()!=paramRequest.Call_CONTENT)
             {
                 String path=paramRequest.getWebPage().getWebSite().getWebPage("Ultimas_Noticias").getUrl();
                 %>
