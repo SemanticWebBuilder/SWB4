@@ -23,7 +23,7 @@
     }
     %>
     <div class="<%=classAtt%>">
-    <h2 class="titulo">Noticias recientes</h2>
+    <h1 class="titulo">Noticias recientes</h1>
     <%
     String pathIamge = SWBPlatform.getWebWorkPath();
     ArrayList<NewsElement> elements=(ArrayList<NewsElement>)request.getAttribute("elements");
