@@ -57,7 +57,6 @@ public class FacebookUtils {
 
     public ArrayList getPhotos(Document dom) {
         ArrayList aAlbums = new ArrayList();
-        System.out.println("Xml photo:"+SWBUtils.XML.domToXml(dom));
         NodeList nList = dom.getElementsByTagName("photo");
         for (int i = 0; i < nList.getLength(); i++) {
             NodeList nPhotosNodes = nList.item(i).getChildNodes();
