@@ -23,10 +23,10 @@
             {
                 String created=iso8601dateFormat.format(element.getCreated());
                 String href=element.getURL();                
-                String src=pathIamge+element.getNewsPicture();
-                if(element.getNewsPicture()!=null)
+                String src=pathIamge+element.getNewsImage();
+                if(element.getNewsImage()!=null)
                 {
-                    src=pathIamge+element.getNewsPicture();
+                    src=pathIamge+element.getNewsImage();
                 }
                 String title=element.getTitle();
                 if(title==null)
