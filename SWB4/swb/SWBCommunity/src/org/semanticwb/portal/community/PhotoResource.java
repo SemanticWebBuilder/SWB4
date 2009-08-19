@@ -153,7 +153,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
 
     private HashMap<String,String> upload(HttpServletRequest request) {
         final String realpath = SWBPlatform.getWorkPath()+getResourceBase().getWorkPath()+"/";
-        final String path = SWBPlatform.getWebWorkPath()+getResourceBase().getWorkPath()+"/";
+        final String path = getResourceBase().getWorkPath()+"/";
         
         HashMap<String,String> params = new HashMap<String,String>();
         try {
