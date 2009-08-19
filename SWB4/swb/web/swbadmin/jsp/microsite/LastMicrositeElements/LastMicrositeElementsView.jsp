@@ -23,7 +23,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
 }
     %>
     <div class="<%=classAtt%>">
-    <h2 class="titulo">Lo último en la ciudad digital</h2>
+    <h1 class="titulo">Lo último en la ciudad digital</h1>
     <%
     
     String webpath=SWBPlatform.getContextPath()+"/swbadmin/jsp/microsite/LastMicrositeElements/";
