@@ -22,8 +22,8 @@
         <p><%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
         <p>Por:&nbsp;<%=anew.getAuthor()%></p>
         <div>
-            <a href="<%= anew.getNewsImage()%>" target="_self">
-                <img id="img_<%=anew.getId()%>" src="<%= anew.getNewsImage() %>" alt="<%= anew.getTitle() %>" border="0"/>
+            <a href="<%= SWBPlatform.getWebWorkPath()+anew.getNewsImage()%>" target="_self">
+                <img id="img_<%=anew.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+anew.getNewsImage() %>" alt="<%= anew.getTitle() %>" border="0" />
             </a>
             <strong><%=dateFormat.format(anew.getCreated())%>.</strong>
             <%=anew.getFullText()%>

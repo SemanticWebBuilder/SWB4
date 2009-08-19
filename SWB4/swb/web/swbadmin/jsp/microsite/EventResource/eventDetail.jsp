@@ -18,8 +18,8 @@
 <table border="0" cellspacing="10">
     <tr>
         <td valign="top">
-            <a href="<%= event.getEventImage()%>" target="_self">
-            <img id="img_<%=event.getId()%>" src="<%=event.getEventImage()%>" alt="<%=event.getDescription()%>" border="0" />
+            <a href="<%= SWBPlatform.getWebWorkPath()+event.getEventImage()%>" target="_self">
+            <img id="img_<%=event.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+event.getEventImage()%>" alt="<%=event.getTitle()%>" border="0" />
             </a>
         </td>
         <td valign="top">

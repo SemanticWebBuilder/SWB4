@@ -21,7 +21,9 @@
       <table border="0">
         <tr>
             <td valign="top">
-                <img id="img_<%=photo.getId()%>" src="<%= photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" />
+                <a href="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL()%>" target="_self">
+                <img id="img_<%=photo.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+photo.getImageURL() %>" alt="<%= photo.getTitle() %>" border="0" />
+                </a>
             </td>
             <td valign="top" align="left">
                 <%if(photo.canModify(member)){%><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",photo.getURI())%>">Editar Información</a><BR/><%}%>
