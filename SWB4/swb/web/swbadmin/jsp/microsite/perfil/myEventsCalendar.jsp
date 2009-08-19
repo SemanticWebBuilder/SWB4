@@ -1,7 +1,6 @@
 <%@page import="java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
-<div id="contactos">
-  <h2>Mis Subscripciones</h2>
+<div id="contactos">  
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 User user=paramRequest.getUser();
@@ -9,7 +8,6 @@ String lang="es";
 WebPage wpage = paramRequest.getWebPage();
 if(user.getLanguage()!=null) lang=user.getLanguage();
 %><%=renderCalendar(user, new Date(System.currentTimeMillis()), wpage, paramRequest)%>
-<a href="<%=paramRequest.getRenderUrl().setParameter("act", "view")%>">Regresar</a>
 </div>
 <%!
     private String renderCalendar(User user, Date current, WebPage wpage, SWBParamRequest paramRequest) {
