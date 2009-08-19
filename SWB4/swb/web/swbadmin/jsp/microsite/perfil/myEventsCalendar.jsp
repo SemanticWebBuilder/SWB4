@@ -7,7 +7,17 @@ User user=paramRequest.getUser();
 String lang="es";
 WebPage wpage = paramRequest.getWebPage();
 if(user.getLanguage()!=null) lang=user.getLanguage();
-%><%=renderCalendar(user, new Date(System.currentTimeMillis()), wpage, paramRequest)%>
+
+String year = request.getParameter("y");
+String month = request.getParameter("m");
+String day = request.getParameter("d");
+Date current = new Date(System.currentTimeMillis());
+
+if (year != null && month != null && day != null) {
+    current = new Date(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day));
+}
+
+%><%=renderCalendar(user, current, wpage, paramRequest)%>
 <p class="vermas">
     <a href ="<%=paramRequest.getRenderUrl()%>">Ver todos</a>
 </p>
@@ -35,14 +45,14 @@ if(user.getLanguage()!=null) lang=user.getLanguage();
         int firstWeekDay = thisMonth.getDay();
         long daysInMonth = Math.round((nextMonth.getTime() - thisMonth.getTime()) / (1000 * 60 * 60 * 24));
         SWBResourceURL nml = paramRequest.getRenderUrl();
-        nml.setParameter("year", String.valueOf(year + 1900));
-        nml.setParameter("month", String.valueOf(month + 1));
-        nml.setParameter("day", "1");
+        nml.setParameter("y", String.valueOf(year));
+        nml.setParameter("m", String.valueOf(month + 1));
+        nml.setParameter("d", "1");
 
         SWBResourceURL pml = paramRequest.getRenderUrl();
-        pml.setParameter("year", String.valueOf(year + 1900));
-        pml.setParameter("month", String.valueOf(month - 1));
-        pml.setParameter("day", "1");
+        pml.setParameter("y", String.valueOf(year));
+        pml.setParameter("m", String.valueOf(month - 1));
+        pml.setParameter("d", "1");
 
         sbf.append("<div class=\"calendar\">\n" +
                 "  <table>\n" +
@@ -89,9 +99,9 @@ if(user.getLanguage()!=null) lang=user.getLanguage();
                 //Are there events today?
                 if (!eventTitles.equals("")) {
                     SWBResourceURL viewUrl = paramRequest.getRenderUrl();//.setParameter("act", "daily");
-                    viewUrl.setParameter("year", String.valueOf(year + 1900));
-                    viewUrl.setParameter("month", String.valueOf(month));
-                    viewUrl.setParameter("day", String.valueOf(i));
+                    viewUrl.setParameter("y", String.valueOf(year));
+                    viewUrl.setParameter("m", String.valueOf(month));
+                    viewUrl.setParameter("d", String.valueOf(i));
 
                     sbf.append("      <td class=\"dated\">\n" +
                             "        <div class=\"daylabel\"><a href=\"" + viewUrl + "\">" + i + "</a></div>\n" +
@@ -107,9 +117,9 @@ if(user.getLanguage()!=null) lang=user.getLanguage();
                 evsNow = EventElement.listEventElementsByDate(user, new Date(year, month, i), wpage, wpage.getWebSite());
                 if (!eventTitles.equals("")) {
                     SWBResourceURL viewUrl = paramRequest.getRenderUrl();//.setParameter("act", "daily");
-                    viewUrl.setParameter("year", String.valueOf(year + 1900));
-                    viewUrl.setParameter("month", String.valueOf(month));
-                    viewUrl.setParameter("day", String.valueOf(i));
+                    viewUrl.setParameter("y", String.valueOf(year));
+                    viewUrl.setParameter("m", String.valueOf(month));
+                    viewUrl.setParameter("d", String.valueOf(i));
 
                     sbf.append("      <td class=\"dated\">\n" +
                             "        <div class=\"daylabel\"><a href=\"" + viewUrl + "\">" + i + "</a></div>\n" +
