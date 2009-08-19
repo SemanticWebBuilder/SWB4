@@ -11,9 +11,25 @@
   <ul>
 <%
 User user=paramRequest.getUser();
+WebPage wpage = paramRequest.getWebPage();
 String lang="es";
+String year = request.getParameter("year");
+String month = request.getParameter("month");
+String day = request.getParameter("day");
+Date current = null;
+
+if (day != null && month != null && year != null) {
+    current = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
+}
+
 if(user.getLanguage()!=null) lang=user.getLanguage();
-Iterator<EventElement> itEvents=EventElement.listEventElementByAttendant(user, paramRequest.getWebPage().getWebSite());
+Iterator<EventElement> itEvents;
+
+if (current == null) {
+    itEvents = EventElement.listEventElementByAttendant(user, paramRequest.getWebPage().getWebSite());
+} else {
+    itEvents = EventElement.listEventElementsByDate(user, current, wpage, wpage.getWebSite());
+}
 while(itEvents.hasNext()){
     EventElement event=itEvents.next();    
     %>
