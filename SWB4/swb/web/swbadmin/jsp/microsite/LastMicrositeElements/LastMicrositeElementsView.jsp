@@ -2,11 +2,25 @@
 
 <%
 SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
+int columnas=1;
+
+try
+{
+    columnas=Integer.parseInt(paramRequest.getResourceBase().getAttribute("columns", "1"));
+}
+catch(Exception e)
+{
+    
+}
+if(columnas<=0)
+{
+    columnas=1;
+}
 if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
 {
     %>
     <div class="panorama">
-    <h1 class="tituloPrincipal">Lo último en la ciudad digital completo</h1>
+    <h1 class="tituloPrincipal">Lo último en la ciudad digital</h1>
     <%
 }
 else
@@ -22,40 +36,74 @@ else
     ArrayList<MicroSiteElement> elements=(ArrayList<MicroSiteElement>)request.getAttribute("elements");
     if(elements.size()>0)
     {
-        for(MicroSiteElement element : elements)
+        %>
+        <table width="100%" border="1">
+        <%        
+        int renglones=elements.size() / columnas;
+        if((elements.size() % columnas) !=0 )
         {
-            String src="ico_sound.gif";
-            String title=element.getTitle();
-            String description=element.getDescription();
-            String created=iso8601dateFormat.format(element.getCreated());
-            if(description==null)
-            {
-                description="";
-            }
-            if(description.length()>150)
-            {
-                description=description.substring(0, 97)+" ...";
-            }
-            String url=element.getURL();            
-            if(element instanceof PostElement)
-            {
-                src="ico_mensaje.gif";
-            }
-            else if(element instanceof VideoElement || element instanceof PhotoElement)
-            {
-                src="ico_foto.gif";
-            }
-            src=webpath+src;            
-            //url+="?&act=detail&uri="+URLEncoder.encode(uri);
+            renglones++;
+        }        
+        MicroSiteElement[] elementsArray=elements.toArray(new MicroSiteElement[elements.size()]);
+        for(int iRenglon=0;iRenglon<renglones;iRenglon++)
+        {
             %>
-              <div class="entry">
-              <p><img src="<%=src%>" alt="<%=title%>" width="57" height="55" ></p>
-              <h3 class="titulo"><a href="<%=url%>"><%=title%></a></h3>
-              <p class="titulo"><%=created%></p>              
-              <p><%=description%></p>
-              </div>
-            <%                        
-       }
+            <tr>
+            <%
+            for(int col=0;col<columnas;col++)
+            {
+                int iElement=(iRenglon*columnas)+col;
+                if(iElement<elementsArray.length)
+                {
+                    MicroSiteElement element=elementsArray[iElement];
+                    String src="ico_sound.gif";
+                    String title=element.getTitle();
+                    String description=element.getDescription();
+                    String created=iso8601dateFormat.format(element.getCreated());
+                    if(description==null)
+                    {
+                        description="";
+                    }
+                    if(description.length()>150)
+                    {
+                        description=description.substring(0, 97)+" ...";
+                    }
+                    String url=element.getURL();
+                    if(element instanceof PostElement)
+                    {
+                        src="ico_mensaje.gif";
+                    }
+                    else if(element instanceof VideoElement || element instanceof PhotoElement)
+                    {
+                        src="ico_foto.gif";
+                    }
+                    src=webpath+src;
+
+                    %>
+                      <td>
+                      <div class="entry">
+                      <p><img src="<%=src%>" alt="<%=title%>" width="57" height="55" ></p>
+                      <h3 class="titulo"><a href="<%=url%>"><%=title%></a></h3>
+                      <p class="titulo"><%=created%></p>
+                      <p><%=description%></p>
+                      </div>
+                      </td>
+                    <%                    
+                }
+                else
+                {
+                    %>
+                    <td>&nbsp;</td>
+                    <%
+                }
+            }
+            %>
+            </tr>
+            <%
+        }
+        %>
+        </table>
+        <%
        if(paramRequest.getWebPage().getWebSite().getWebPage("Lo_ultimo")!=null && paramRequest.getCallMethod()!=paramRequest.Call_CONTENT)
        {
             String path=paramRequest.getWebPage().getWebSite().getWebPage("Lo_ultimo").getUrl();
