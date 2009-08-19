@@ -39,16 +39,17 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
     }
 
     public static Iterator<EventElement> listEventElementsByDate(User user, Date date, WebPage wpage, SWBModel model) {
-        Iterator<EventElement> evs;
+        Iterator<EventElement> evs;        
         if (user == null) {
              evs = listEventElementByEventWebPage(wpage, model);
         } else {
-            evs = listEventElementByAttendant(user);
+            evs = listEventElementByAttendant(user, model);
         }
         ArrayList<EventElement> res = new ArrayList<EventElement>();
         
         while(evs.hasNext()) {
             EventElement ev = evs.next();
+            //System.out.println("----" + ev.getTitle() + " : " + ev.getStartDate());
             //If event starts at, is carried out, or ends in date, add it to the list
             if(isEqual(ev.getStartDate(), date) || isEqual(ev.getEndDate(), date)) {
                 res.add(ev);
