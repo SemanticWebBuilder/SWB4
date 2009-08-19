@@ -25,7 +25,7 @@
     <div class="<%=classAtt%>">
     <h1 class="titulo">Noticias recientes</h1>
     <%
-    String pathIamge = "";//SWBPlatform.getWebWorkPath();
+    String pathIamge = SWBPlatform.getWebWorkPath();
     ArrayList<NewsElement> elements=(ArrayList<NewsElement>)request.getAttribute("elements");
     if(elements.size()>0)
     {
