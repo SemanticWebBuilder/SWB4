@@ -18,7 +18,9 @@
 <table border="0" cellspacing="10">
     <tr>
         <td valign="top">
-            <img src="<%=event.getEventImage()%>" alt="<%=event.getDescription()%>" border="0" />
+            <a href="<%= event.getEventImage()%>" target="_self">
+            <img id="img_<%=event.getId()%>" src="<%=event.getEventImage()%>" alt="<%=event.getDescription()%>" border="0" />
+            </a>
         </td>
         <td valign="top">
                 <%=event.getTitle()%> (<%=SWBUtils.TEXT.getTimeAgo(event.getCreated(), user.getLanguage())%>)<BR>
@@ -47,12 +49,12 @@
 <script type="text/javascript">
     var img = document.getElementById('img_<%=event.getId()%>');
     if( img.width>img.height && img.width>450) {
-        img.width = 450;
-        img.height = 370;
+        img.width = 350;
+        img.height = 270;
     }else {
-        if(img.height>370) {
-            img.width = 370;
-            img.height = 450;
+        if(img.height>270) {
+            img.width = 270;
+            img.height = 350;
         }
     }
 </script>

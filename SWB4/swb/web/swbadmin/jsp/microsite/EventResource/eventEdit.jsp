@@ -39,7 +39,7 @@ Error: Elemento no encontrado...
                     <tr>
                         <td align="right" valign="center"><label for="foto">Imagen del evento&nbsp;:</label></td>
                         <td valign="top">
-                            <img src="<%= rec.getEventImage() %>" alt="<%= rec.getTitle() %>"/>
+                            <img id="img_<%=rec.getId()%>" src="<%= rec.getEventImage() %>" alt="<%= rec.getTitle() %>"/>
                             <input id="foto" type="file" name="foto" />
                         </td>
                     </tr>
@@ -123,3 +123,15 @@ Error: Elemento no encontrado...
         </div>
     </form>
 </div>
+<script type="text/javascript">
+    var img = document.getElementById('img_<%=rec.getId()%>');
+    if( img.width>img.height && img.width>350) {
+        img.width = 350;
+        img.height = 270;
+    }else {
+        if(img.height>270) {
+            img.width = 270;
+            img.height = 350;
+        }
+    }
+</script>

@@ -22,7 +22,9 @@
         <p><%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
         <p>Por:&nbsp;<%=anew.getAuthor()%></p>
         <div>
-            <img id="img_<%=anew.getId()%>" src="<%= anew.getNewsImage() %>" alt="<%= anew.getTitle() %>"/>
+            <a href="<%= anew.getNewsImage()%>" target="_self">
+                <img id="img_<%=anew.getId()%>" src="<%= anew.getNewsImage() %>" alt="<%= anew.getTitle() %>" border="0"/>
+            </a>
             <strong><%=dateFormat.format(anew.getCreated())%>.</strong>
             <%=anew.getFullText()%>
         </div>
