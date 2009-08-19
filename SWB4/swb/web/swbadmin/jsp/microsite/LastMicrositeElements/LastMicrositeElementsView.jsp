@@ -16,20 +16,16 @@ if(columnas<=0)
 {
     columnas=1;
 }
+String classAtt="recentEntry";
 if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
 {
-    %>
-    <div class="panorama">
-    <h1 class="tituloPrincipal">Lo último en la ciudad digital</h1>
-    <%
+    classAtt="panorama";
 }
-else
-    {
     %>
     <div class="recentEntry">
     <h2 class="titulo">Lo último en la ciudad digital</h2>
     <%
-    }
+    
     String webpath=SWBPlatform.getContextPath()+"/swbadmin/jsp/microsite/LastMicrositeElements/";
     String defaultFormat = "dd/MM/yyyy HH:mm";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
