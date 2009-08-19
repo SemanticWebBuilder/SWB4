@@ -26,9 +26,16 @@ public class MyEvents extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String action = request.getParameter("act");
+        if (action == null) action = "view";
+        String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEvents.jsp";
+        
         try {
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEvents.jsp");
+            if (action.equals("calendar")) {
+                path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEventsCalendar.jsp";
+            }
+            RequestDispatcher rd = request.getRequestDispatcher(path);
             rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
