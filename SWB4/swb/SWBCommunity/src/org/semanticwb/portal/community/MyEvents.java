@@ -26,12 +26,29 @@ public class MyEvents extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String mode = paramRequest.getArgument("mode");
+        //String mode = paramRequest.getArgument("mode");
         String action = request.getParameter("act");
-        if (action == null) action = "view";
+        String mode = request.getParameter("mode");
         String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEvents.jsp";
+        if (action == null) action = "view";
+        
+        if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) {
+            path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEventsCalendar.jsp";
+        } else if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
+            if (mode != null && mode.equals("calendar")) {
+                path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEventsCalendar.jsp";
+            }
+        }
         
         try {
+            request.setAttribute("paramRequest", paramRequest);
+            RequestDispatcher rd = request.getRequestDispatcher(path);
+            rd.include(request, response);
+        } catch (Exception e) {
+            log.error("MyEvents say " + e);
+        }
+
+        /*try {
             request.setAttribute("paramRequest", paramRequest);
             if (mode != null && mode.equals("calendar")) {
                 path = SWBPlatform.getContextPath() + "/swbadmin/jsp/microsite/perfil/myEventsCalendar.jsp";
@@ -42,6 +59,6 @@ public class MyEvents extends GenericResource {
             rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }
