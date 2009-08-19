@@ -22,7 +22,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
     classAtt="panorama";
 }
     %>
-    <div class="<%=classAtt%">
+    <div class="<%=classAtt%>">
     <h2 class="titulo">Lo último en la ciudad digital</h2>
     <%
     
@@ -33,7 +33,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
     if(elements.size()>0)
     {
         %>
-        <table width="100%" border="1">
+        <table width="100%" border="0">
         <%        
         int renglones=elements.size() / columnas;
         if((elements.size() % columnas) !=0 )
