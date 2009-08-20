@@ -1,13 +1,22 @@
-<%@page import="java.text.*,java.net.*,org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.User,org.semanticwb.model.WebPage,java.util.*"%>
 <%
-    SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
-    User user=paramRequest.getUser();
-    if(user.isSigned() && paramRequest.getWebPage().getWebSite().getWebPage("perfil")!=null)
+
+    User user=(User)request.getAttribute("user");
+    WebPage webpage=(WebPage)request.getAttribute("webpage");
+    if(webpage!=null && user!=null && user.isSigned())
     {
-        String path=paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+        String path=webpage.getUrl()+"/../perfil";
         %>
         <li><%=user.getFullName()%></li>
         <li><a href="<%=path%>">Ver perfil</a></li>
         <%
     }
+    /*if(user.isSigned() && webpage.getWebPage().getWebSite().getWebPage("perfil")!=null)
+    {
+        String path=webpage.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+        %>
+        <li><%=user.getFullName()%></li>
+        <li><a href="<%=path%>">Ver perfil</a></li>
+        <%
+    }*/
 %>
