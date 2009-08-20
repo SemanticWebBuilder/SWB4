@@ -27,8 +27,8 @@
         <fieldset><legend></legend>
             <div>
                 <p>
-                    <label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input id="title" name="title" value=""><br>
-                    <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input id="description" name="description" value=""><br>
+                    <label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input id="title" size="20" maxlength="50" name="title" value=""><br>
+                    <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input size="20" maxlength="50" id="description" name="description" value=""><br>
                     <label for="content">Contenido de la entrada:&nbsp;&nbsp;&nbsp;</label>
 
                     <textarea id="content" plugins="['bold','italic','underline', 'strikethrough','|','insertUnorderedList','insertOrderedList','|','createLink','unlink']" dojoType="dijit.Editor" rows="5" cols="23" name="content"></textarea>
