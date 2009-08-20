@@ -14,7 +14,7 @@ public class NewsElement extends org.semanticwb.portal.community.base.NewsElemen
     {
         String url = "#";
         url=this.getNewsWebPage().getUrl();
-        url+="?&act=detail&uri="+URLEncoder.encode(this.getURI());
+        url+="?act=detail&uri="+URLEncoder.encode(this.getURI());
         return url;
     }
 }
