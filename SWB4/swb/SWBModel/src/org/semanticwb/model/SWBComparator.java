@@ -153,6 +153,46 @@ public class SWBComparator implements Comparator
 
     }
 
+    public static Iterator sortByCreated(Iterator<Traceable> it)
+    {
+        return sortByCreated(it,true);
+    }
+
+    public static Iterator sortByCreated(Iterator<Traceable> it, boolean ascendente)
+    {
+        TreeSet set=null;
+        if(ascendente)
+        {
+            set=new TreeSet(new Comparator()
+            {
+                public int compare(Object o1, Object o2)
+                {
+                    Traceable ob1=(Traceable)(o1);
+                    Traceable ob2=(Traceable)(o2);
+                    int ret=ob1.getCreated().after(ob2.getCreated())?1:-1;
+                    return ret;
+                }
+            });
+        }else
+        {
+            set=new TreeSet(new Comparator()
+            {
+                public int compare(Object o1, Object o2)
+                {
+                    Traceable ob1=(Traceable)(o1);
+                    Traceable ob2=(Traceable)(o2);
+                    int ret=ob1.getCreated().after(ob2.getCreated())?-1:1;
+                    return ret;
+                }
+            });
+        }
+        while(it.hasNext())
+        {
+            set.add(it.next());
+        }
+        return set.iterator();
+    }
+
 
     public int compareSortable(Object o1, Object o2)
     {
