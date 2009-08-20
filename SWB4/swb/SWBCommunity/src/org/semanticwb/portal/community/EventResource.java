@@ -243,10 +243,12 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String action = request.getParameter("act");
-        action = (action == null ? "view" : action);
+        if (action == null) action = "view";
 
         String path = "/swbadmin/jsp/microsite/EventResource/eventView.jsp";
-        if (action.equals("add")) {
+        if (action.equals("calendar")) {
+            path = "/swbadmin/jsp/microsite/EventResource/eventsCalendar.jsp";
+        } else if (action.equals("add")) {
             path = "/swbadmin/jsp/microsite/EventResource/eventAdd.jsp";
         } else if (action.equals("edit")) {
             path = "/swbadmin/jsp/microsite/EventResource/eventEdit.jsp";
