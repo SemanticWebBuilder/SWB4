@@ -9,15 +9,14 @@
         String step=(String)request.getAttribute("step");
         if(step.equals("1")){
             %>
-            <div id="user"><fb:login-button onlogin="update_user_box();"></fb:login-button></div>
+                <div id="user"><fb:login-button onlogin="update_user_box();"></fb:login-button></div>
+                <%=getScript(API_KEY, reditect, paramRequest)%>
             <%
-            out.println(getScript(API_KEY, reditect, paramRequest));
         }else if(step.equals("2")){
             %>
                 <div id="user"></div>
-            <%
-                out.println(getScript(API_KEY, reditect, paramRequest));
-            %>
+                <%=getScript(API_KEY, reditect, paramRequest)%>
+                <script type="text/javascript">update_user_box();</script>
                 <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/XdCommReceiver.js" type="text/javascript"></script>
             <%
         }else if(step.equals("3")){
