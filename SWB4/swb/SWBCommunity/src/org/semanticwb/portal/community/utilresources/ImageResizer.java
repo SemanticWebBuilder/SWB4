@@ -48,7 +48,8 @@ public class ImageResizer
         int offH = 0; if (centered) offH = (topsize - scaledHeight) /2;
         int offW = 0; if (centered) offW = (topsize - scaledWidth) /2;
         Graphics2D g = scaledBI.createGraphics();
-        g.setBackground(Color.WHITE);
+        g.setColor(Color.WHITE);
+        g.drawRect(0, 0, topsize, topsize);
         g.setComposite(AlphaComposite.Src);
         g.drawImage(originalImage, 0+offW, 0+offH, scaledWidth, scaledHeight, null);
         g.dispose();
