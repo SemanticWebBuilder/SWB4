@@ -55,7 +55,7 @@
                         String created="Sin fecha";
                         if(element.getCreated()!=null)
                         {
-                            iso8601dateFormat.format(element.getCreated());
+                            created=iso8601dateFormat.format(element.getCreated());
                         }
                         String href=element.getURL();
                         String src=pathIamge+element.getNewsImage();
