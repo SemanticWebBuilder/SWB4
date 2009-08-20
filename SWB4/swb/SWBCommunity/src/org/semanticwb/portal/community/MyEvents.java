@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -20,7 +20,7 @@ import org.semanticwb.portal.api.SWBResourceException;
  *
  * @author jorge.jimenez
  */
-public class MyEvents extends GenericResource {
+public class MyEvents extends GenericAdmResource {
 
     private static Logger log = SWBUtils.getLogger(MyEvents.class);
 
