@@ -25,15 +25,16 @@
         content=post.getContent();
     }
 %>
-<table width="100%">
+<div id="blog">
+<table width="100%" cellpadding="2" cellspacing="2" border="1">
     <tr>
         <td>
-            <h1 class="titulo"><%=post.getTitle()%></h1>
+            <h1><%=post.getTitle()%></h1>
         </td>
     </tr>
     
     <tr>
-        <td>
+        <td>            
             <%
 
 if(email!=null)
@@ -45,31 +46,32 @@ if(email!=null)
     else
         {
         %>
-        <p class="titulo"><%=postAuthor%></p>
+        <p id="author"><%=postAuthor%></p>
         <%
         }
 %>
+
         </td>
     </tr>
     <tr>
         <td>
-            <p><%=updated%></p>
+            <p id="date"><%=updated%></p>
             <hr>
         </td>
     </tr>    
     <tr>
         <td>
-            <p><%=post.getDescription()%></p>
+            <p id="description"><%=post.getDescription()%></p>
         </td>
     </tr>
     <tr>
-        <td>
-            <p><%=content%></p>
+        <td>            
+            <p id="content"><%=content%></p>
         </td>
     </tr>
 
 </table>
-
+</div>
 
 <br>
 <br>
