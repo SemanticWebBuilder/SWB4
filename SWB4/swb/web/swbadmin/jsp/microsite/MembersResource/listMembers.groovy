@@ -49,8 +49,8 @@ if (null!=microsite){
 
     Iterator<Member> lista = Member.listMemberByMicroSite(microsite, (SWBModel)wpage.getWebSite())
     if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY && (!paramRequest.getArgument("virtualcontent").equals("true"))){
-        println """<div id="contactos">
-<h2>Miembros de la comunidad</h2>
+        println """<div id="contactos" class="miembros">
+<h2>Miembros de la comunidad</h2><div>
 """
 
 
@@ -69,8 +69,8 @@ if (null!=microsite){
 
         def url_mas = wpage.getRealUrl()
 
-        println """
-<p class="vermas"><a href="${url_mas}_Members" >Ver todos</a></p>
+        println """</div><br /><div>
+<p class="vermas"><a href="${url_mas}_Members" >Ver todos</a></p></div>
 </div>"""
     } else {
         println """<div id="cuerpo">
