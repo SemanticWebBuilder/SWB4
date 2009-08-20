@@ -20,7 +20,7 @@ public class PostElement extends org.semanticwb.portal.community.base.PostElemen
         {
             url = blogs.next().getWebPage().getUrl();
         }
-        url+="?&act=detail&uri="+URLEncoder.encode(this.getURI());
+        url+="?act=detail&uri="+URLEncoder.encode(this.getURI());
         return url;
     }
 }
