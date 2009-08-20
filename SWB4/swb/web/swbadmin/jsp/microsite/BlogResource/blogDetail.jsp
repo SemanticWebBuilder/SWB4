@@ -19,6 +19,11 @@
     String postAuthor = post.getCreator().getFirstName();
     postAuthor=post.getCreator().getFullName();
     String email=post.getCreator().getEmail();
+    String content="Sin contenido";
+    if(post.getContent()!=null)
+    {
+        content=post.getContent();
+    }
 %>
 <table width="100%">
     <tr>
@@ -55,6 +60,11 @@ if(email!=null)
     <tr>
         <td>
             <p><%=post.getDescription()%></p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p><%=content%></p>
         </td>
     </tr>
 
