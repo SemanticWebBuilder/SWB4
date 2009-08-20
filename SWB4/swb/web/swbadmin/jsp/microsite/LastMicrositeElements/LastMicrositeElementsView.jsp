@@ -55,7 +55,11 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                     String src="ico_sound.gif";
                     String title=element.getTitle();
                     String description=element.getDescription();
-                    String created=iso8601dateFormat.format(element.getCreated());
+                    String created="Sin fecha";
+                    if(element.getCreated()!=null)
+                    {
+                        iso8601dateFormat.format(element.getCreated());
+                    }
                     if(description==null)
                     {
                         description="";
