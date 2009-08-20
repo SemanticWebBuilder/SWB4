@@ -23,9 +23,8 @@ Date current = null;
 if (day != null && month != null && year != null) {
     current = new Date(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day));
 }
-
-System.out.println(current);
 if(user.getLanguage()!=null) lang=user.getLanguage();
+
 Iterator<EventElement> itEvents;
 
 if (current == null) {
@@ -34,10 +33,10 @@ if (current == null) {
     itEvents = EventElement.listEventElementsByDate(user, current, wpage, wpage.getWebSite());
 }
 while(itEvents.hasNext()){
-    EventElement event=itEvents.next();    
-    %>
+    EventElement event=itEvents.next();
+        %>
         <li><a href="<%=event.getEventWebPage().getUrl()%>?act=detail&uri=<%=event.getEncodedURI()%>"><%=event.getTitle()%></a></li>
-    <%
+    <%    
     }
 %>
   </ul>  
