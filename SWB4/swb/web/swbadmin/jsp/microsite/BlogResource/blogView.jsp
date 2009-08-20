@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.platform.*,java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
+            String pathIamge = SWBPlatform.getWebWorkPath();
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
@@ -51,16 +52,15 @@
                 SWBResourceURL url=paramRequest.getRenderUrl();
                 url.setParameter("act", "detail");
                 url.setParameter("uri", post.getURI());
-
-
                 %>
 
                 <tr>
                     <td colspan="2" valign="top">
                     <%if(post.getCreator().getPhoto()!=null)
                     {
+                        String src=pathIamge+post.getCreator().getPhoto();
                         %>
-                        <p><img width="50" height="50" alt="<%=postAuthor%>" src="<%=post.getCreator().getPhoto()%>">&nbsp;&nbsp;&nbsp;Escrito por: <%=postAuthor%>, <%=updated%></p>
+                        <p><img width="50" height="50" alt="<%=postAuthor%>" src="<%=src%>">&nbsp;&nbsp;&nbsp;Escrito por: <%=postAuthor%>, <%=updated%></p>
                       <%
                    }
                    else
