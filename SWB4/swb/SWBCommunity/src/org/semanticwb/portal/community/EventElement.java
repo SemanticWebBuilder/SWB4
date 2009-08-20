@@ -69,7 +69,7 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
     {
         String url = "#";
         url=this.getEventWebPage().getUrl();
-        url+="?&act=detail&uri="+URLEncoder.encode(this.getURI());
+        url+="?act=detail&uri="+URLEncoder.encode(this.getURI());
         return url;
     }
 }
