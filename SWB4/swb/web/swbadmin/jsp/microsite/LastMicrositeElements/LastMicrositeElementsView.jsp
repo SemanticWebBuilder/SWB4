@@ -52,7 +52,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                 if(iElement<elementsArray.length)
                 {
                     MicroSiteElement element=elementsArray[iElement];
-                    String src="blog.gif";
+                    String src="blog.jpg";
                     String title=element.getTitle();
                     String description=element.getDescription();
                     String created="Sin fecha";
@@ -75,15 +75,15 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                     }
                     else if(element instanceof VideoElement)
                     {
-                        src="video.gif";
+                        src="video.jpg";
                     }
                     else if(element instanceof ProductElement)
                     {
-                        src="producto.gif";
+                        src="producto.jpg";
                     }
                     else if(element instanceof PhotoElement)
                     {
-                        src="foto.gif";
+                        src="foto.jpg";
                     }
                     else if(element instanceof EventElement)
                     {
