@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>WBMenuMap</resource-name>
+        <display-name xml:lang="es">Menu Map</display-name>
+        <display-name xml:lang="en">Map Menu</display-name>
+        <description xml:lang="es">Recurso que permite desplegar todos los niveles tipo mapa del sitio</description>
+        <description xml:lang="en">Resource that allows to show all levels like a site map</description>
+        <resource-class>org.semanticwb.portal.resources.WBMenuMap</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>org.semanticwb.portal.resources.WBMenuMap</resource-bundle>
+        <resource-type>2</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
