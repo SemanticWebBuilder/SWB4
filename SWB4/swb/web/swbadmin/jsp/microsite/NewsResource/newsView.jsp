@@ -30,7 +30,7 @@
                 <p>Por:&nbsp;<%= anew.getAuthor()%> - <%=SWBUtils.TEXT.getTimeAgo(anew.getCreated(), user.getLanguage())%></p>
                 <p>
                     <strong><%= dateFormat.format(anew.getCreated()) %></strong>&nbsp;
-                    <%= anew.getAbstr()%>&nbsp;|&nbsp;
+                    <%= anew.getDescription()%>&nbsp;|&nbsp;
                     <a href="<%=viewUrl%>">Ver m&aacute;s</a>
                 </p>                
                 <p>Puntuación:&nbsp;<%= anew.getRank()%></p>
