@@ -6,15 +6,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
-import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
 
-public class MicroSiteElement extends org.semanticwb.portal.community.base.MicroSiteElementBase 
-{
+public class MicroSiteElement 
+        extends org.semanticwb.portal.community.base.MicroSiteElementBase {
+    
+    
     public static int VIS_ALL=0;
     public static int VIS_MEMBERS_ONLY=1;
     public static int VIS_FRIENDS=2;
@@ -24,19 +25,19 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
     private long timer;                     //valores de sincronizacion de views, hits
     private static long time;               //tiempo en milisegundos por cada actualizacion
     private boolean viewed = false;
-    private final String fullStarPath = "/swbadmin/resources/ranking/fullstar.png";
-    private final String halfStarPath = "/swbadmin/resources/ranking/halfstar.png";
-    private final String emptyStarPath = "/swbadmin/resources/ranking/emptystar.png";
+//    private final String fullStarPath = "/swbadmin/resources/ranking/fullstar.png";
+//    private final String halfStarPath = "/swbadmin/resources/ranking/halfstar.png";
+//    private final String emptyStarPath = "/swbadmin/resources/ranking/emptystar.png";
+    private static final int COMMENTS_IN_PAGE = 5;
+    private static final int PAGE_INDEXES_TO_SHOW = 5;
 
-    static
-    {
-        time = 1000L * Long.parseLong((String) SWBPlatform.getEnv("swb/accessLogTime","600"));
+    
+    static {
+        time = 1000L * Long.parseLong(
+                (String) SWBPlatform.getEnv("swb/accessLogTime", "600"));
     }
 
-
-
-    public MicroSiteElement(org.semanticwb.platform.SemanticObject base)
-    {
+    public MicroSiteElement(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
@@ -69,89 +70,133 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
 //    }
 
     /**
-     * Solo Ver el elemento
+     * Indica si el <code>Member</code> recibido puede ver el elemento
      * @param ele
      * @param mem
-     * @return
+     * @return <code>true</code> si el miembro tiene derecho a ver el elemento, <code>false</code>
+     * de lo contrario.
      */
-    public boolean canView(Member mem)
-    {
-        boolean ret=false;
-        int vis=getVisibility();
-        if(vis==VIS_ALL)ret=true;
-        else if(vis==VIS_MEMBERS_ONLY && mem.canView())ret=true;
-        else if(vis==VIS_JUST_ME && getCreator().equals(mem.getUser()))ret=true;
+    public boolean canView(Member mem) {
+        
+        boolean ret = false;
+        int vis = getVisibility();
+        if (vis == VIS_ALL) {
+            ret = true;
+        } else if (vis == VIS_MEMBERS_ONLY && mem.canView()) {
+            ret = true;
+        } else if (vis == VIS_JUST_ME && getCreator().equals(mem.getUser())) {
+            ret = true;
+        }
         return ret;
     }
 
     /**
-     * Solo ver y agregar comentarios
+     * Indica si el <code>Member</code> recibido puede ver y agregar comentarios
      * @param ele
      * @param mem
-     * @return
+     * @return <code>true</code> si el miembro tiene derecho a ver y agregar el elemento, 
+     * <code>false</code> de lo contrario.
      */
-    public boolean canComment(Member mem)
-    {
-        boolean ret=false;
-        if(mem.canView())ret=true;
+    public boolean canComment(Member mem) {
+        
+        boolean ret = false;
+        if (mem.canView()) {
+            ret = true;
+        }
         return ret;
     }
 
     /**
-     * Ver, Agregar comentarios y modificar (modificarr, eliminar) el elemento
+     * Indica si el <code>Member</code> recibido puede ver, agregar comentarios 
+     * y modificar (modificar o eliminar) el elemento
      * @param ele
      * @param mem
-     * @return
+     * @return <code>true</code> si el miembro tiene derecho a ver, agregar comentarios 
+     * y modificar (modificar o eliminar) el elemento
      */
-    public boolean canModify(Member mem)
-    {
-        boolean ret=false;
-        if(mem.getAccessLevel()>=mem.LEVEL_ADMIN)ret=true;
-        else if(mem.getUser().equals(getCreator()))ret=true;
+    public boolean canModify(Member mem) {
+        
+        boolean ret = false;
+        if (mem.getAccessLevel() >= mem.LEVEL_ADMIN) {
+            ret = true;
+        } else if (mem.getUser().equals(getCreator())) {
+            ret = true;
+        }
         return ret;
     }
 
+    /**
+     * Obtiene el n&uacute;mero de veces que este elemento ha sido desplegado.
+     * @return el n&uacute;mero de veces que este elemento ha sido desplegado.
+     */
     @Override
-    public long getViews()
-    {
-        if(views==0)views=super.getViews();
+    public long getViews() {
+        
+        if (views == 0) {
+            views = super.getViews();
+        }
         return views;
     }
 
-    public boolean incViews()
-    {
+    /**
+     * Incrementa en uno, el n&uacute;mero de veces que ha sido desplegado este elemento.
+     * @return <code>true</code> si el elemento fue desplegado por última vez hace <code>time</code>
+     * milisegundos; <code>false</code> de lo contrario.
+     */
+    public boolean incViews() {
+        
         //System.out.println("incViews:"+views);
         viewed = true;
-        if(views==0)views=getViews();
-        views+=1;
+        if (views == 0) {
+            views = getViews();
+        }
+        views += 1;
         long t = System.currentTimeMillis() - timer;
-        if (t > time || t < -time)
-        {
+        if (t > time || t < -time) {
             //TODO: evalDate4Views();
             return true;
         }
         return false;
     }
 
+    /**
+     * Fija el valor de las veces que se ha mostrado este elemento.
+     * @param views n&uacute;mero de veces que se ha mostrado el elemento.
+     */
     @Override
-    public void setViews(long views)
-    {
+    public void setViews(long views) {
+
         //System.out.println("setViews:"+views);
         super.setViews(views);
-        this.views=views;
+        this.views = views;
     }
 
-    public void updateViews()
-    {
+    /**
+     * Actualiza el estado del n&uacute;mero de veces que se ha mostrado el elemento. En
+     * base al estado de <code>viewed</code>
+     */
+    public void updateViews() {
+
         //System.out.println("updateViews:"+views);
-        if(viewed)
-        {
+        if (viewed) {
             timer = System.currentTimeMillis();
-            if(views>0)setViews(views);
+            if (views > 0) {
+                setViews(views);
+            }
             viewed = false;
         }
     }
 
+    /**
+     * Muestra la información utilizada por las herramientas o recursos generales para
+     * los elementos de comunidades, como calificar y reporte de abuso sobre el elemento
+     * o comentarios relacionados al mismo.
+     * @param request petición del usuario a atender
+     * @param out para agregar los datos a desplegar
+     * @param paramRequest para obtener referencias a objetos internos
+     * @throws org.semanticwb.portal.api.SWBResourceException
+     * @throws java.io.IOException
+     */
     public void renderGenericElements(HttpServletRequest request,
             Writer out, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
@@ -163,12 +208,21 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         String tmpUrl = "";
         String abusedDesc = this.isAbused() ? "Inapropiado" : "Apropiado";
         int rank = 0;
+        long pageNumber = 0;
+        boolean showComments = false;
+
+        try {
+            pageNumber = Long.parseLong(request.getParameter("pn"));
+            showComments = true;
+        } catch (Exception e) {
+            pageNumber = 1;
+        }
 
         if (suri == null && this != null) {
             suri = this.getURI();
         }
         tmpUrl = "uri=\"+escape('" + suri + "')";
-        rank = (int) Math.round(Math.floor(this.getRank()));  //this.getRank() * 10
+        rank = (int) Math.round(Math.floor(this.getRank()));
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("vote");
         url.setMode(paramRequest.getMode());
@@ -184,8 +238,9 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
                 + SWBPlatform.getContextPath()
                 + "/swbadmin/js/dojo/dojox/form/resources/Rating.css' />");
         sb.append("\n<script type=\"text/javascript\">");
-        sb.append("\n  dojo.require(\"dojo.parser\"); // scan page for widgets and instantiate them");
-        sb.append("\n  dojo.require(\"dojox.form.Rating\"); // scan page for widgets and instantiate them");
+         // scan page for widgets and instantiate them
+        sb.append("\n  dojo.require(\"dojo.parser\");");
+        sb.append("\n  dojo.require(\"dojox.form.Rating\");");
         sb.append("\n</script>");
 
         sb.append("\n<script language=\"javascript\" type=\"text/javascript\">");
@@ -223,12 +278,9 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         sb.append("\n    if(request.readyState!=4) return;");
         sb.append("\n    if(request.status==200) {");
         sb.append("\n      if ('Not OK'!=response && ''!=response) {");
-//        sb.append("\n          //alert('Calificación contabilizada, muchas gracias por tu opinión!');");
         sb.append("\n          var ranking = Math.floor(response.split('|')[0]);");
         sb.append("\n          var votes = response.split('|')[1];");
-//        sb.append("\n          alert('response:' + response+', rank:'+ranking+', votos:'+votes);");
         sb.append("\n          document.getElementById(\"reviews\").innerHTML = votes;");
-//        sb.append("\n          dojo.query('#rating1Value')[0].innerHTML = ranking;");
         sb.append("\n          invoke = false;");
         sb.append("\n      } else {");
         sb.append("\n          alert('Lo sentimos, ha ocurrido un problema al contabilizar la calificación!');");
@@ -242,18 +294,18 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         sb.append("\nvar invokeAbused = true;");
         sb.append("\n\nfunction changeAbusedState() {");
         sb.append("\n    if (!invokeAbused) return;");
-        sb.append("\n    var url = \"" + url + "?act=abuseReport&" + tmpUrl + ";\n" +
-                "    request.open(\"GET\", url, true);");
+        sb.append("\n    var url = \"" + url + "?act=abuseReport&" + tmpUrl + ";" +
+                  "\n    request.open(\"GET\", url, true);");
         sb.append("\n    request.onreadystatechange = abusedStateChanged;");
         sb.append("\n    request.send(null);");
         sb.append("\n}");
         sb.append("\n\nfunction abusedStateChanged() {");
-        sb.append("\n  if(request.readyState!=4) return;");
-        sb.append("\n  if(request.status==200) {");
+        sb.append("\n  if (request.readyState != 4) return;");
+        sb.append("\n  if (request.status == 200) {");
         sb.append("\n    var response = request.responseText;");
         sb.append("\n    if ('' != response && 'Not OK' != response) {");
         sb.append("\n      var etiqueta = document.getElementById(\"abused\").innerHTML;");
-        sb.append("\n      //alert('response:'+response+', etiqueta:'+etiqueta);");
+//        sb.append("\n      alert('response:'+response+', etiqueta:'+etiqueta);");
         sb.append("\n      if (response == 'true') {");
         sb.append("\n        document.getElementById(\"abused\").innerHTML = 'Inapropiado';");
         sb.append("\n      } else {");
@@ -264,30 +316,36 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         sb.append("\n  }");
         sb.append("\n}");
         sb.append("\n\nfunction addComment() {");
-/*        sb.append("\n    if (document.getElementById(\"addComment\").style.visibility==\"visible\") {");
-        sb.append("\n      document.getElementById(\"addComment\").style.visibility=\"hidden\";");
-        sb.append("\n    } else {");*/
-        sb.append("\n      document.getElementById(\"addComment\").style.display=\"inline\";");
-/*        sb.append("\n    }");*/
+        sb.append("\n    document.getElementById(\"addComment\").style.display=\"inline\";");
+        sb.append("\n}");
+        sb.append("\nfunction showComments() {");
+        sb.append("\n    var x = document.getElementById(\"commentsList\").style.display;");
+        sb.append("\n    if (x == 'none') {");
+        sb.append("\n      document.getElementById(\"commentsList\").style.display=\"inline\";");
+        sb.append("\n      document.getElementById(\"ctrlComments\").innerHTML=\"(Esconder)\";");
+        sb.append("\n    } else {");
+        sb.append("\n      document.getElementById(\"commentsList\").style.display=\"none\";");
+        sb.append("\n      document.getElementById(\"ctrlComments\").innerHTML=\"(Mostrar)\";");
+        sb.append("\n    }");
         sb.append("\n}");
 
-        sb.append("\nvar invokeSpam = true;");
+        sb.append("\n\nvar invokeSpam = true;");
         sb.append("\nvar spamId = 0;");
         sb.append("\n\nfunction spam(commentId) {");
         sb.append("\n    spamId = commentId;");
         sb.append("\n    if (!invokeSpam) return;");
-        sb.append("\n    var url = \"" + url + "?act=spamReport&commentId=\"+commentId+\"&" + tmpUrl + ";\n" +
-                "    request.open(\"GET\", url, true);");
+        sb.append("\n    var url = \"" + url + "?act=spamReport&commentId=\"+commentId+\"&" + tmpUrl + ";" +
+                  "\n    request.open(\"GET\", url, true);");
         sb.append("\n    request.onreadystatechange = spamStateChanged;");
         sb.append("\n    request.send(null);");
         sb.append("\n}");
         sb.append("\n\nfunction spamStateChanged() {");
-        sb.append("\n  if(request.readyState!=4) return;");
-        sb.append("\n  if(request.status==200) {");
+        sb.append("\n  if (request.readyState != 4) return;");
+        sb.append("\n  if (request.status == 200) {");
         sb.append("\n    var response = request.responseText;");
         sb.append("\n    if ('' != response && 'Not OK' != response) {");
         sb.append("\n      var etiqueta = document.getElementById(\"spamMark\"+spamId).innerHTML;");
-        sb.append("\n      //alert('response:'+response+', comentario:'+spamId+', etiqueta act:'+etiqueta);");
+//        sb.append("\n      alert('response:'+response+', comentario:'+spamId+', etiqueta act:'+etiqueta);");
         sb.append("\n      if (response == 'false') {");
         sb.append("\n        document.getElementById(\"spamMark\"+spamId).innerHTML = 'Marcar como spam';");
         sb.append("\n      } else {");
@@ -298,29 +356,19 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         sb.append("\n  }");
         sb.append("\n  invokeSpam = true;");
         sb.append("\n}");
-
-
         sb.append("\n</script>\n");
 
         sb.append("\n<div class=\"common_funcs\">");
         sb.append("\n  <span style=\"float:left; width:200px;\">");
-//        sb.append("\n    <table boder=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
-//        sb.append("\n      <td>Calificar:</td>");
-/*        for (int i = 1; i <= 5; i++) {
-            sb.append(printStar(i, rank));
-        }*/
         sb.append("\n      <div class=\"rank_label\">Calificar:</div>");
         if (mem.canView()) {
             sb.append("\n      <div class=\"rank_stars\" dojoType=\"dojox.form.Rating\" numStars=\"5\" value=\"" + rank + "\">"
-                    + "\n        <script type=\"dojo/event\" event=\"onChange\">vote(this.value);/*alert(\"valor:\"+this.value);dojo.query('#rating1Value')[0].innerHTML = this.value;*/</script></div>");
+                    + "\n        <script type=\"dojo/event\" event=\"onChange\">vote(this.value);</script></div>");
         } else {
             sb.append("\n      <div class=\"rank_stars\" dojoType=\"dojox.form.Rating\" numStars=\"5\" value=\"" + rank + "\">"
                     + "\n        <script type=\"dojo/event\" event=\"_onMouse\">return;</script>"
                     + "\n        <script type=\"dojo/event\" event=\"onStarClick\">return;</script></div>");
         }
-//        sb.append("\n       Rating:<div dojoType=\"dojox.form.Rating\" numStars=\"5\" value=\"" + rank + "\">"
-//                + "<script type=\"dojo/event\" event=\"onChange\">alert(\"valor:\"+this.value);vote(this.value);/*dojo.query('#rating1Value')[0].innerHTML = this.value;*/</script></div>");
-        //sb.append("\n      </tr>\n    </table>");
         sb.append("\n  </span>");
         sb.append("\n  <div class=\"rec_votes\">");
         sb.append("\n    <div class=\"rec_votes_num\" id=\"reviews\">" + this.getReviews() + "</div>");
@@ -334,6 +382,9 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
         sb.append("\n     <span id=\"abused\">" + abusedDesc + "</span></span>");
         sb.append("\n</div><br/><br/>");
         sb.append("\n<div class=\"comments_head\">");
+        sb.append("\n  <span class=\"comments_title_link\">"
+                + "<a href=\"javascript:showComments();\" id=\"ctrlComments\">"
+                + (showComments ? "(Esconder)" : "(Mostrar)") + "</a></span>");
         sb.append("\n  <span class=\"comments_title\">Comentarios</span>");
         //sb.append("\n  <div>&nbsp;</div>");
         url.setAction("addComment");
@@ -356,35 +407,146 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
             sb.append("\n</div>");
         }
         sb.append("\n<div class=\"clearL\"></div>");
-        sb.append(renderListComments(this, mem));
+        sb.append(renderListComments(this, mem, pageNumber,
+                  paramRequest.getRenderUrl(), suri, showComments));
 
         out.write(sb.toString());
     }
 
     /**
-     * Genera listado de comentarios asociados al MicroSiteElement
-     * @param paramRequest
-     * @param uri
-     * @return
-     * @throws org.semanticwb.portal.api.SWBResourceException
+     * Genera listado de comentarios asociados a este <code>MicroSiteElement</code>
+     * @param mse elemento al que est&aacute;n asociados los comentarios
+     * @param mem <code>Member</code> que realiza la consulta
+     * @param page n&uacute;mero de la p&aacute;gina de comentarios a desplegar
+     * @param url la utilizada en las ligas del paginado de comentarios
+     * @param uri correspondiente al elemento de micrositio en cuesti&oacute;n
+     * @param showComments indica si mostrar el listado de comentarios al cargar la p&aacute;gina
+     * @return los datos de los comentarios correspondientes a la p&aacute;gina seleccionada
      */
-    private String renderListComments(MicroSiteElement mse, Member mem) {
+    private String renderListComments(MicroSiteElement mse, Member mem,
+            long page, SWBResourceURL url, String uri, boolean showComments) {
 
-        StringBuilder ret = new StringBuilder(200);
-        //SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");
-        int ordinal = 1;
+        //System.out.println("En renderListComments");
+        StringBuilder ret = new StringBuilder(800);
+        long totalPages = totalPagesNumber(mse);
 
-        GenericIterator<Comment> iterator = mse.listComments();
         ret.append("\n<table width=\"450\"><tr><td>");
         ret.append("\n<div>");
-        ret.append("\n  <div id=\"commentsList\">");
+        ret.append("\n  <div id=\"commentsList\""
+                + (showComments ? " style=\"display:inline;\"" : "") + ">");
+        ret.append(getCommentsByPage(mse, page, mem));
+
+        if (totalPages > 1) {
+            ret.append("<div class=\"clearL\"></div>");
+            ret.append("\n    <div id=\"commentsIndex\">");
+            ret.append("\n      <div class=\"commentsIndexContainer\">");
+            url.setCallMethod(SWBResourceURL.Call_CONTENT);
+            url.setParameter("act", "detail");
+            //TODO: colocar el uri codificado para que sea un parametro valido
+            url.setParameter("uri", uri);
+            if (page > 1) {
+                ret.append("<span class=\"commentPageLink\"><a href=\""
+                        + url.toString() + "&pn=" + (page - 1)
+                        + "\" title=\"P&aacute;gina anterior\">&lt;&lt;</a></span>");
+            }
+            long ini = 1L;
+            long fin = MicroSiteElement.PAGE_INDEXES_TO_SHOW;
+            long dif = 0;
+            if ((totalPages < MicroSiteElement.PAGE_INDEXES_TO_SHOW)) {
+                fin = totalPages;
+            }
+            if (totalPages > MicroSiteElement.PAGE_INDEXES_TO_SHOW && page > 1) {
+                dif = page - 1;
+                if (totalPages >= (MicroSiteElement.PAGE_INDEXES_TO_SHOW + dif)) {
+                    fin = MicroSiteElement.PAGE_INDEXES_TO_SHOW + dif;
+                    ini = 1 + dif;
+                } else {
+                    fin = totalPages;
+                    ini = totalPages - MicroSiteElement.PAGE_INDEXES_TO_SHOW + 1;
+                }
+            }
+
+            for (long i = ini; i <= fin; i++) {
+                if (i != page) {
+                    ret.append("<span class=\"commentPageLink\"><a href=\""
+                            + url.toString() + "&pn=" + i + "\">"
+                            + String.valueOf(i) + "</a></span>");
+                } else {
+                    ret.append("<span class=\"currentPage\">" + String.valueOf(i)
+                               + "</span>");
+                }
+            }
+            if (page < totalPages) {
+                ret.append("<span class=\"commentPageLink\"><a href=\""
+                        + url.toString() + "&pn=" + (page + 1)
+                        + "\" title=\"P&aacute;gina siguiente\">&gt;&gt;</a></span>");
+            }
+            ret.append("\n        </div>");
+            ret.append("\n      </div>");
+        }
+
+        ret.append("\n  </div>\n<div>");
+        ret.append("\n  </td>\n</tr>\n</table>\n");
+        return ret.toString();
+    }
+
+    public String getURL()
+    {
+        return "#";
+    }
+
+    /**
+     * Calcula el n&uacute;mero total de p&aacute;ginas a desplegar
+     * @param mse
+     * @return
+     */
+    private long totalPagesNumber(MicroSiteElement mse) {
+
+        //System.out.println("Cuenta los elementos para determinar las paginas.");
+        long totalPages = 1L;
+        long comments = 0L;
+        GenericIterator<Comment> iterator = mse.listComments();
+
+        while (iterator.hasNext()) {
+            iterator.next();
+            comments++;
+        }
+        if (comments > MicroSiteElement.COMMENTS_IN_PAGE) {
+            totalPages = comments / MicroSiteElement.COMMENTS_IN_PAGE;
+            if (comments % MicroSiteElement.COMMENTS_IN_PAGE > 0) {
+                totalPages++;
+            }
+        }
+
+        //System.out.println("Ya sabe cuantas paginas:" + totalPages);
+        return totalPages;
+    }
+
+    private String getCommentsByPage(MicroSiteElement mse, long page, Member mem) {
+
+        //System.out.println("En getCommentsByPage");
+        GenericIterator<Comment> iterator = mse.listComments();
+        StringBuilder ret = new StringBuilder(400);
+        int ordinal = 0;
+        long firstInPage = ((page - 1) * MicroSiteElement.COMMENTS_IN_PAGE) + 1;
+        long lastInPage = page * MicroSiteElement.COMMENTS_IN_PAGE;
+
         while (iterator.hasNext()) {
             Comment comment = iterator.next();
+            ordinal++;
+
+            //System.out.println("Pasa por comentario: " + ordinal);
+            if (ordinal < firstInPage) {
+                continue;
+            } else if (ordinal > lastInPage) {
+                break;
+            }
+
             String spamMark = (comment.isSpam() ? "Es spam" : "Marcar como spam");
             ret.append("\n    <div id=\"comment" + comment.getId() + "\" class=\"comment-entry\">");
             ret.append("\n      <div class=\"comment-head\">");
             ret.append("\n        <div class=\"comment-info\">");
-            ret.append("\n          " + (ordinal++) + ". <strong>"
+            ret.append("\n          " + ordinal + ". <strong>"
                     + (comment.getCreator().getLogin().equalsIgnoreCase("")
                        ? "Desconocido"
                        : comment.getCreator().getLogin())
@@ -405,33 +567,6 @@ public class MicroSiteElement extends org.semanticwb.portal.community.base.Micro
             ret.append("\n      </div>");
             ret.append("\n    </div>");
         }
-        ret.append("\n  </div>\n<div>");
-        ret.append("\n  </td>\n</tr>\n</table>\n");
         return ret.toString();
     }
-
-    public String getURL()
-    {
-        return "#";
-    }
-
-    private String printStar(int current, int rank) {
-
-        String url = "javascript:vote(" + current + ");";
-        int midl = (current * 10) - 7;
-        int midt = (current * 10) - 2;
-        String imgRank = emptyStarPath;
-        if (rank >= midl && rank <= midt) {
-            imgRank = halfStarPath;
-        }
-        if (rank > midt) {
-            imgRank = fullStarPath;
-        }
-        return ("<td><a href=\"" + url + "\" title=\"Asigna " + current
-                + " estrella" + (current > 1 ? "s" : "") + "\"><img border=\"0\" src=\""
-                + SWBPlatform.getContextPath() + imgRank + "\" alt=\"has "
-                + ((0.0f + rank) / 10.0f) + " star(s)\"/></a></td>");
-
-    }
-
 }
