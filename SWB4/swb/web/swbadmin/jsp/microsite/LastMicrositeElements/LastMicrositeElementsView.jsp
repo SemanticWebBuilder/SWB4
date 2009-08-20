@@ -52,7 +52,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                 if(iElement<elementsArray.length)
                 {
                     MicroSiteElement element=elementsArray[iElement];
-                    String src="ico_sound.gif";
+                    String src="blog.gif";
                     String title=element.getTitle();
                     String description=element.getDescription();
                     String created="Sin fecha";
@@ -71,11 +71,23 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                     String url=element.getURL();
                     if(element instanceof PostElement)
                     {
-                        src="ico_mensaje.gif";
+                        src="blog.jpg";
                     }
-                    else if(element instanceof VideoElement || element instanceof PhotoElement)
+                    else if(element instanceof VideoElement)
                     {
-                        src="ico_foto.gif";
+                        src="video.gif";
+                    }
+                    else if(element instanceof ProductElement)
+                    {
+                        src="producto.gif";
+                    }
+                    else if(element instanceof PhotoElement)
+                    {
+                        src="foto.gif";
+                    }
+                    else if(element instanceof EventElement)
+                    {
+                        src="eventos.gif";
                     }
                     src=webpath+src;
 
