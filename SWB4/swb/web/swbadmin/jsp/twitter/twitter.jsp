@@ -22,7 +22,7 @@
        String userPass=userData.substring(pos+1);
        Twitter twitter = new Twitter(userLogin, userPass);
        Iterator<Status> itStatuses = (twitter.getFriendsTimeline()).iterator();
-       url.setAction("send2Twitter");
+       url.setAction("send2Twitter");       
 %>
         <a href="http://twitter.com"><img src="<%=imgPath%>twitter_logo.png" valign="top"/></a>
         <form action="<%=url.toString()%>">
@@ -53,7 +53,7 @@
                 cont++;
                 if(cont>=10) break;
             }
-        }
+         }
      }else { //Forma para que el usuario proporcione login y password de twitter
        url.setAction("saveUserData");
        %>
@@ -66,7 +66,7 @@
                 <td>Login:</td><td><input type="text" name="twitterLogin" size="25"/></td>
             </tr>
             <tr>
-                <td>Password:</td><td><input type="text" name="twitterPass" size="25"/></td>
+                <td>Password:</td><td><input type="password" name="twitterPass" size="25"/></td>
             </tr>
             <tr>
                 <td colspan="2" align="center"><input type="submit" value="enviar"></td>
