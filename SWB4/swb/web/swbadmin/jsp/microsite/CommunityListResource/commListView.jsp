@@ -66,7 +66,7 @@
                     cssClass1 = "id=\"gruposInteres\"";
                 }
 %>
-            <div "<%=cssClass1%>">
+            <div <%=cssClass1%>>
 <%
 
             if(wplevel==3)
