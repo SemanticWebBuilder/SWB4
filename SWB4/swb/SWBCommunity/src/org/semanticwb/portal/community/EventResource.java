@@ -75,14 +75,8 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             HashMap<String,String> params = upload(request);
             if(mem.canAdd() && params.containsValue("add")) {
                 EventElement rec = EventElement.createEventElement(getResourceBase().getWebSite());
-                if(params.containsKey("filename"))
-                    rec.setEventImage(params.get("filename"));
-                /*else
-                    rec.setEventImage(auximg);*/
-                if(params.containsKey("thumbnail"))
-                    rec.setEventThumbnail(params.get("thumbnail"));
-                /*else
-                    rec.setEventImage(auximg);*/
+                rec.setEventImage(params.get("filename"));
+                rec.setEventThumbnail(params.get("thumbnail"));
                 rec.setTitle(params.get("event_title"));
                 rec.setDescription(params.get("event_description"));
                 rec.setAudienceType(params.get("event_audience"));
