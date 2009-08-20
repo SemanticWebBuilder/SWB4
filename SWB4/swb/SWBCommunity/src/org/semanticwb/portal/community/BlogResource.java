@@ -91,7 +91,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         }
     }
 
-    private void add(String title, String description, WebPage page, User user, Blog blog,int level)
+    private void addPost(String title, String description,String content,WebPage page, User user, Blog blog,int level)
     {
         PostElement rec = PostElement.createPostElement(getResourceBase().getWebSite());
         rec.setTitle(title);
@@ -100,6 +100,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         rec.setCreated(date);
         rec.setCreator(user);
         rec.setUpdated(date);
+        rec.setContent(content);
         rec.setVisibility(level);
         blog.addPostElement(rec);
 
@@ -119,6 +120,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         {
             String title = request.getParameter("title");
             String description = request.getParameter("description");
+            String content = request.getParameter("content");
             if (title != null && description != null)
             {
                 Iterator<Blog> blogs = Blog.listBlogByWebPage(response.getWebPage());
@@ -129,7 +131,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                     try
                     {
                         int level= Integer.parseInt(request.getParameter("level"));
-                        add(title, description, response.getWebPage(), response.getUser(), blog,level);
+                        addPost(title, description,content, response.getWebPage(), response.getUser(), blog,level);
                     }
                     catch(Exception e)
                     {
@@ -148,6 +150,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                 PostElement rec = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
                 String title = request.getParameter("title");
                 String description = request.getParameter("description");
+                String content = request.getParameter("content");
                 try
                 {
                     int level= Integer.parseInt(request.getParameter("level"));
@@ -156,6 +159,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                         rec.setTitle(title);
                         rec.setVisibility(level);
                         rec.setDescription(description);
+                        rec.setContent(content);
                         Date date = new Date(System.currentTimeMillis());
                         rec.setUpdated(date);
                     }
