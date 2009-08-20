@@ -62,7 +62,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                     }
                     if(description==null)
                     {
-                        description="";
+                        description="Sin descripción";
                     }
                     if(description.length()>150)
                     {
