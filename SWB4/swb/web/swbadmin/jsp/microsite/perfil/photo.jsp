@@ -25,7 +25,7 @@ String registryPath=base.getAttribute("registryPath","");
 String attributes=base.getAttribute("attributes","");
 
  String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
- if(user.getPhoto()!=null) photo=user.getPhoto();
+ if(user.getPhoto()!=null) photo=SWBPlatform.getWebWorkPath()+user.getPhoto();
  %>
  <img src="<%=photo%>" valign="top" width="100" height="90"/><br>
  <%if(owner.equals(user)){%>
