@@ -58,7 +58,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                     String created="Sin fecha";
                     if(element.getCreated()!=null)
                     {
-                        iso8601dateFormat.format(element.getCreated());
+                        created=iso8601dateFormat.format(element.getCreated());
                     }
                     if(description==null)
                     {
