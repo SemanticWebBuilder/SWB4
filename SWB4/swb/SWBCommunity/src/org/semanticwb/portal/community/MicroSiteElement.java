@@ -2,10 +2,13 @@ package org.semanticwb.portal.community;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.Traceable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -117,7 +120,7 @@ public class MicroSiteElement
     public boolean canModify(Member mem) {
         
         boolean ret = false;
-        if (mem.getAccessLevel() >= mem.LEVEL_ADMIN) {
+        if (mem.getAccessLevel() >= Member.LEVEL_ADMIN) {
             ret = true;
         } else if (mem.getUser().equals(getCreator())) {
             ret = true;
@@ -322,10 +325,10 @@ public class MicroSiteElement
         sb.append("\n    var x = document.getElementById(\"commentsList\").style.display;");
         sb.append("\n    if (x == 'none') {");
         sb.append("\n      document.getElementById(\"commentsList\").style.display=\"inline\";");
-        sb.append("\n      document.getElementById(\"ctrlComments\").innerHTML=\"(Esconder)\";");
+        sb.append("\n      document.getElementById(\"ctrlComments\").innerHTML=\"[-]\";");
         sb.append("\n    } else {");
         sb.append("\n      document.getElementById(\"commentsList\").style.display=\"none\";");
-        sb.append("\n      document.getElementById(\"ctrlComments\").innerHTML=\"(Mostrar)\";");
+        sb.append("\n      document.getElementById(\"ctrlComments\").innerHTML=\"[+]\";");
         sb.append("\n    }");
         sb.append("\n}");
 
@@ -384,7 +387,7 @@ public class MicroSiteElement
         sb.append("\n<div class=\"comments_head\">");
         sb.append("\n  <span class=\"comments_title_link\">"
                 + "<a href=\"javascript:showComments();\" id=\"ctrlComments\">"
-                + (showComments ? "(Esconder)" : "(Mostrar)") + "</a></span>");
+                + "[-]</a></span>");
         sb.append("\n  <span class=\"comments_title\">Comentarios</span>");
         //sb.append("\n  <div>&nbsp;</div>");
         url.setAction("addComment");
@@ -407,9 +410,12 @@ public class MicroSiteElement
             sb.append("\n</div>");
         }
         sb.append("\n<div class=\"clearL\"></div>");
+        try {
         sb.append(renderListComments(this, mem, pageNumber,
-                  paramRequest.getRenderUrl(), suri, showComments));
-
+                  paramRequest.getRenderUrl(), suri));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         out.write(sb.toString());
     }
 
@@ -424,7 +430,7 @@ public class MicroSiteElement
      * @return los datos de los comentarios correspondientes a la p&aacute;gina seleccionada
      */
     private String renderListComments(MicroSiteElement mse, Member mem,
-            long page, SWBResourceURL url, String uri, boolean showComments) {
+            long page, SWBResourceURL url, String uri) {
 
         //System.out.println("En renderListComments");
         StringBuilder ret = new StringBuilder(800);
@@ -432,8 +438,7 @@ public class MicroSiteElement
 
         ret.append("\n<table width=\"450\"><tr><td>");
         ret.append("\n<div>");
-        ret.append("\n  <div id=\"commentsList\""
-                + (showComments ? " style=\"display:inline;\"" : "") + ">");
+        ret.append("\n  <div id=\"commentsList\">");
         ret.append(getCommentsByPage(mse, page, mem));
 
         if (totalPages > 1) {
@@ -525,14 +530,16 @@ public class MicroSiteElement
     private String getCommentsByPage(MicroSiteElement mse, long page, Member mem) {
 
         //System.out.println("En getCommentsByPage");
-        GenericIterator<Comment> iterator = mse.listComments();
+        Iterator iterator = mse.listComments();
         StringBuilder ret = new StringBuilder(400);
         int ordinal = 0;
         long firstInPage = ((page - 1) * MicroSiteElement.COMMENTS_IN_PAGE) + 1;
         long lastInPage = page * MicroSiteElement.COMMENTS_IN_PAGE;
 
+        iterator = SWBComparator.sortByCreated(iterator, false);
+
         while (iterator.hasNext()) {
-            Comment comment = iterator.next();
+            Comment comment = (Comment) iterator.next();
             ordinal++;
 
             //System.out.println("Pasa por comentario: " + ordinal);
@@ -546,11 +553,23 @@ public class MicroSiteElement
             ret.append("\n    <div id=\"comment" + comment.getId() + "\" class=\"comment-entry\">");
             ret.append("\n      <div class=\"comment-head\">");
             ret.append("\n        <div class=\"comment-info\">");
-            ret.append("\n          " + ordinal + ". <strong>"
-                    + (comment.getCreator().getLogin().equalsIgnoreCase("")
-                       ? "Desconocido"
-                       : comment.getCreator().getLogin())
-                    + "</strong>\n        </div>");
+            ret.append("\n          " + ordinal + ". ");
+            try {
+                if (!comment.getCreator().getPhoto().equals("")) {
+                    ret.append("<img src=\"" + SWBPlatform.getWebWorkPath() + comment.getCreator().getPhoto() + "\" alt=\"foto\" border=\"0\">");
+                }
+            } catch (NullPointerException npe) {}
+            ret.append("<strong>");
+            try {
+                if (!comment.getCreator().getFullName().equalsIgnoreCase("")) {
+                    ret.append(comment.getCreator().getFullName());
+                } else {
+                    ret.append("Desconocido");
+                }
+            } catch (NullPointerException npe) {
+                ret.append("Desconocido");
+            }
+            ret.append("</strong>\n        </div>");
             ret.append("\n        <span class=\"comment-time\"> ("
                     + SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage()) + ")</span>");
             if (mem.canView()) {
