@@ -20,7 +20,7 @@
     outline-style:none;
     outline-width:0;
     padding:0;
-    display:none;
+    display:inline;
 }
 .comment-entry {
     border-top:1px solid #EFEFEF;
@@ -29,17 +29,19 @@
     margin-top:6px;
     padding:7px 0 4px 15px;
     float:left;
-    width:70%
+    width:100%;
+    background-color:#FFFFEE;
 }
 html > body .comment-entry {
     padding-bottom:0;
 }
 .comment-head, .comment-head-hidden {
-    background-color:white;
+    background-color:#FFFFEE;
     padding:0 4px 4px;
 }
 .comment-info {
     float:left;
+    width:45%;
 }
 .comment-time {
     color:#666666;
@@ -49,6 +51,7 @@ html > body .comment-entry {
     margin-top:4px;
     overflow:hidden;
     width:75%;
+    /*background-color:#FFFFEE*/
 }
 .clearL {
     clear:left;
