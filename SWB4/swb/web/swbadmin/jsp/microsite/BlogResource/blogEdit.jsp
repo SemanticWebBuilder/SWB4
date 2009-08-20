@@ -37,8 +37,8 @@
                 <fieldset><legend>Editar entrada</legend>
                     <div>
                         <p>
-                            <label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;</label><input id="title" name="title" value="<%=post.getTitle()%>"><br>
-                            <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;</label><input id="description" name="description" value="<%=post.getDescription()%>"><br>
+                            <label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;</label><input size="20" id="title" name="title" value="<%=post.getTitle()%>" maxlength="50"><br>
+                            <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;</label><input size="20" id="description" name="description" maxlength="50" value="<%=post.getDescription()%>"><br>
                             <label for="content">Contenido de entrada:&nbsp;&nbsp;&nbsp;</label>
                             <textarea plugins="['bold','italic','underline', 'strikethrough','|','insertUnorderedList','insertOrderedList','|','createLink','unlink']" dojoType="dijit.Editor" id="content" rows="5" cols="23" name="content"><%=post.getContent()%></textarea>
                         </p>
@@ -104,7 +104,7 @@
                     <div>
                         <p>
                             <label for="title">Título</label>                            
-                            <input id="title" name="title" value="<%=blog.getTitle()%>"><br>
+                            <input id="title" name="title" value="<%=blog.getTitle()%>" size="20" maxlength="50"><br>
                             <label for="description">Contenido de entrada</label>
                             <textarea id="description" rows="5" cols="23" name="description"><%=blog.getDescription()%></textarea>
                         </p>
