@@ -71,7 +71,7 @@
                         String description=element.getDescription();
                         if(description==null)
                         {
-                            description="";
+                            description="Sin descripción";
                         }
                         if(description.length()>200)
                         {
