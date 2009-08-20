@@ -119,65 +119,66 @@ action="$acc_url"   method="post">
     <input type="hidden" name="suri" value="$uri"/>
     <input type="hidden" name="scls" value="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
     <input type="hidden" name="smode" value="edit"/>
-	<fieldset>
-	    <legend>Datos Personales</legend>
-	    <table>
-                <tr><td width="200px" align="right">Identificador &nbsp;</td>
+    <fieldset>
+    <legend>Datos Personales</legend>
+        <table>
+            <tr><td width="200px" align="right">Identificador &nbsp;</td>
                 <td>$usr_login</td></tr>
-                <tr><td width="200px" align="right"><label for="usrFirstName">Nombre(s) &nbsp;</label></td>
+            <tr><td width="200px" align="right"><label for="usrFirstName">Nombre(s) &nbsp;</label></td>
                 <td><input _id="usrFirstName" name="usrFirstName" value="$usr_name" dojoType="dijit.form.ValidationTextBox"
-                required="false" promptMessage="Captura Nombre(s)" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
-                <tr><td width="200px" align="right"><label for="usrLastName">Primer Apellido &nbsp;</label></td>
+                    required="false" promptMessage="Captura Nombre(s)" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
+            <tr><td width="200px" align="right"><label for="usrLastName">Primer Apellido &nbsp;</label></td>
                 <td><input _id="usrLastName" name="usrLastName" value="$usr_lname" dojoType="dijit.form.ValidationTextBox" required="false" promptMessage="Captura Primer Apellido" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
-                <tr><td width="200px" align="right"><label for="usrSecondLastName">Segundo Apellido &nbsp;</label></td>
+            <tr><td width="200px" align="right"><label for="usrSecondLastName">Segundo Apellido &nbsp;</label></td>
                 <td><input _id="usrSecondLastName" name="usrSecondLastName" value="$usr_sname" dojoType="dijit.form.ValidationTextBox" required="false" promptMessage="Captura Segundo Apellido" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
-                <tr><td width="200px" align="right"><label for="usrEmail">Correo Electr&oacute;nico &nbsp;</label></td>
+            <tr><td width="200px" align="right"><label for="usrEmail">Correo Electr&oacute;nico &nbsp;</label></td>
                 <td><input _id="usrEmail" name="usrEmail" value="$usr_mail" dojoType="dijit.form.ValidationTextBox"
-                required="false" promptMessage="Captura Correo Electr&oacute;nico" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
-                <tr><td width="200px" align="right"><label for="usrAge">Edad &nbsp;</label></td>
+                    required="false" promptMessage="Captura Correo Electr&oacute;nico" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
+            <tr><td width="200px" align="right"><label for="usrAge">Edad &nbsp;</label></td>
                 <td><input _id="userAge" name="userAge" value="$usr_age" dojoType="dijit.form.ValidationTextBox"
-                required="false" promptMessage="Captura Edad" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
-                <tr><td width="200px" align="right"><label for="usrSex">Sexo &nbsp;</label></td>
+                    required="false" promptMessage="Captura Edad" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
+            <tr><td width="200px" align="right"><label for="usrSex">Sexo &nbsp;</label></td>
                 <td><select dojoType="dijit.form.FilteringSelect" autocomplete="false" _id="userSex" name="userSex" value="$usr_sex"
-                required="false" promptMessage="Elige Sexo" invalidMessage="Dato Invalido" >
-                <option value=""></option>
-                <option value="M" $usr_sexM>Hombre</option>
-                <option value="F" $usr_sexF>Mujer</option>
-                </select></td></tr>
-                </table></fieldset>
-                <fieldset>
-	    <legend>Informaci&oacute;n complementaria</legend>
-	    <table>
+                    required="false" promptMessage="Elige Sexo" invalidMessage="Dato Invalido" >
+                    <option value=""></option>
+                    <option value="M" $usr_sexM>Hombre</option>
+                    <option value="F" $usr_sexF>Mujer</option>
+                    </select></td></tr>
+        </table>
+    </fieldset>
+    <fieldset>
+    <legend>Informaci&oacute;n complementaria</legend>
+	<table>
             <tr><td width="200px" align="right"><label for="userStatus">Estado Civil &nbsp;</label></td>
-            <td><input _id="userStatus" name="userStatus" value="$usr_status" dojoType="dijit.form.ValidationTextBox"
-                required="false" promptMessage="Captura Estado Civil" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
+                <td><input _id="userStatus" name="userStatus" value="$usr_status" dojoType="dijit.form.ValidationTextBox"
+                    required="false" promptMessage="Captura Estado Civil" invalidMessage="Dato Invalido" style="width:300px;"  trim="true"/></td></tr>
             <tr><td width="200px" align="right">Intereses &nbsp;</td>
-            <td><textarea name="userInterest" rows="10" cols="80" dojoType="dijit.form.Textarea">$usr_interest</textarea></td></tr>
+                <td><textarea name="userInterest" rows="10" cols="50" dojoType="dijit.form.Textarea">$usr_interest</textarea></td></tr>
             <tr><td width="200px" align="right">Pasatiempos &nbsp;</td>
-            <td><textarea name="userHobbies" rows="10" cols="80" dojoType="dijit.form.Textarea">$usr_hobbies</textarea></td></tr>
+                <td><textarea name="userHobbies" rows="10" cols="50" dojoType="dijit.form.Textarea">$usr_hobbies</textarea></td></tr>
             <tr><td width="200px" align="right">Incisos &nbsp;</td>
-            <td><textarea name="userInciso" rows="10" cols="80" dojoType="dijit.form.Textarea">$usr_inciso</textarea></td></tr>
-            </table></fieldset></form>
-             <form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform" dojoType="dijit.form.Form"
-                        action="$url_actPic"
-                        method="post" target="pictureTransferFrame" >
-            <fieldset>
-	    <legend>Fotograf&iacute;a</legend>
-	    <table>
+                <td><textarea name="userInciso" rows="10" cols="50" dojoType="dijit.form.Textarea">$usr_inciso</textarea></td></tr>
+        </table>
+    </fieldset>
+</form>
+<form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform" dojoType="dijit.form.Form"
+    action="$url_actPic"
+    method="post" target="pictureTransferFrame" >
+    <fieldset>
+    <legend>Fotograf&iacute;a</legend>
+        <table>
             <tr><td width="200px" align="right"><label for="picture">Fotograf&iacute;a &nbsp;</label></td>
-                    <td><iframe id="pictureTransferFrame" name="pictureTransferFrame" src="" style="display:none" ></iframe>
-                        
-                        <input type="file" name="picture" 
+                <td><iframe id="pictureTransferFrame" name="pictureTransferFrame" src="" style="display:none" ></iframe>
+                    <input type="file" name="picture"
                         onchange="beginAsyncUpload(this,'picture');" />
-                        <div class="progresscontainer" style="display: none;"><div class="progressbar" id="picture_progress"></div></div>
-                    </td></tr>
-	    </table>
-	</fieldset>
-        </form>
+                   <div class="progresscontainer" style="display: none;"><div class="progressbar" id="picture_progress"></div></div>
+                </td></tr>
+	</table>
+    </fieldset>
+</form>
 <fieldset><span align="center">
     <button dojoType="dijit.form.Button" type="button" onclick="enviar()">Guardar</button>
 </span></fieldset>
-
 
 """
 
