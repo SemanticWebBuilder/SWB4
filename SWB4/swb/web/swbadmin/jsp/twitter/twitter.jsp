@@ -57,7 +57,7 @@
      }else { //Forma para que el usuario proporcione login y password de twitter
        url.setAction("saveUserData");
        %>
-       <form action="<%=url.toString()%>">
+       <form action="<%=url.toString()%>" method="post">
         <table>
             <tr>
                 <td colspan="2" align="center">Proporciona tus datos de tu cuenta de twitter</td>
