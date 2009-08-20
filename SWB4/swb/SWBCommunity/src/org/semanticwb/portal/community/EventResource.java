@@ -63,7 +63,6 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        String auximg = SWBPlatform.getWebWorkPath()+"swbadmin/images/community/eventres/event.jpg";
         String action = request.getParameter("act");
         WebPage page = response.getWebPage();
         Member mem = Member.getMember(response.getUser(), page);
