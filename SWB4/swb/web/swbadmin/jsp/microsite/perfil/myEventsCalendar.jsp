@@ -1,7 +1,10 @@
 <%@page import="java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<script type="text/javascript">
+    dojo.require("dijit.Tooltip");
+    dojo.require("dojo.parser");    
+</script>
 
-<div id="contactos" align="center">
-<%
+    <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 User user=paramRequest.getUser();
 String lang="es";
@@ -17,8 +20,8 @@ if (year != null && month != null && day != null) {
     current = new Date(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day));
 }
 
-%><%=renderCalendar(user, current, wpage, paramRequest)%>
-<p class="vermas">
+%><div align="center"><%=renderCalendar(user, current, wpage, paramRequest)%>
+    <p class="vermas">
     <a href ="<%=paramRequest.getRenderUrl()%>">Ver todos</a>
 </p>
 </div>
