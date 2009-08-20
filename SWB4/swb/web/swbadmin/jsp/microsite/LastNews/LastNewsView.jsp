@@ -52,7 +52,11 @@
                     if(iElement<elementsArray.length)
                     {
                         NewsElement element=elementsArray[iElement];
-                        String created=iso8601dateFormat.format(element.getCreated());
+                        String created="Sin fecha";
+                        if(element.getCreated()!=null)
+                        {
+                            iso8601dateFormat.format(element.getCreated());
+                        }
                         String href=element.getURL();
                         String src=pathIamge+element.getNewsImage();
                         if(element.getNewsImage()!=null)
