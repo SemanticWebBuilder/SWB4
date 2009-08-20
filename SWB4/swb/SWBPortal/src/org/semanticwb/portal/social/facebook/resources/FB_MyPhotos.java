@@ -27,22 +27,22 @@
  */
 package org.semanticwb.portal.social.facebook.resources;
 
-import org.semanticwb.portal.social.facebook.*;
 import com.google.code.facebookapi.FacebookXmlRestClient;
 import com.google.code.facebookapi.IFacebookRestClient;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.social.facebook.Photo;
+import org.semanticwb.portal.social.facebook.Fb_Photo;
 import org.semanticwb.portal.social.facebook.util.FacebookUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -52,7 +52,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Jorge Jiménez
  */
-public class FB_MyPhotos extends GenericAdmResource {
+public class FB_MyPhotos extends GenericResource {
 
     private static Logger log = SWBUtils.getLogger(FB_MyPhotos.class);
     private static final String FACEBOOK_USER_CLIENT = "facebook.user.client";
@@ -60,23 +60,21 @@ public class FB_MyPhotos extends GenericAdmResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
-            PrintWriter out = response.getWriter();
             FacebookUtils facebookUtils = new FacebookUtils();
             HttpSession session = request.getSession(true);
             IFacebookRestClient<Document> userClient = getUserClient(session);
             if (userClient != null) {
                 long facebookUserID = userClient.users_getLoggedInUser();
-
-                ArrayList<Photo> aPhotos = new ArrayList();
+                
+                ArrayList<Fb_Photo> aPhotos = new ArrayList();
                 Iterator<String> itAlbums = facebookUtils.getAlbums(userClient.photos_getAlbums(facebookUserID)).iterator();
                 while (itAlbums.hasNext()) {
                     String aid = itAlbums.next();
-
                     Document domPhotos = userClient.photos_getByAlbum(new Long(aid).longValue());
                     
                     NodeList nListPhotos = domPhotos.getElementsByTagName("photo");
                     for (int a = 0; a < nListPhotos.getLength(); a++) {
-                        Photo photo = new Photo();
+                        Fb_Photo photo = new Fb_Photo();
                         NodeList nPhotoChilds = nListPhotos.item(a).getChildNodes();
                         for(int b=0;b<nPhotoChilds.getLength();b++)
                         {
@@ -106,33 +104,9 @@ public class FB_MyPhotos extends GenericAdmResource {
                         aPhotos.add(photo);
                     }
                 }
-                boolean flag = false;
-                int cont = 0;
-                out.println("<table>");
-                Iterator<Photo> itusers = aPhotos.iterator();
-                while (itusers.hasNext()) {
-                    Photo photo = itusers.next();
-                    if (!flag && cont == 0) {
-                        out.println("<tr>");
-                    }
-                    cont++;
-                    out.println("<td>");
-
-                    out.println("<a href=\""+photo.getLink()+"\" target=\"_new\" text-decoration:none><img src=\"" + photo.getSrc() + "\"/></a><br>");
-                    if (photo.getCaption() != null) {
-                        out.println(photo.getCaption() + "<br>");
-                    }
-                    out.println("</td>");
-                    if (cont == 4) {
-                        out.println("</tr>");
-                        cont = 0;
-                        flag = false;
-                    }
-                }
-                if (flag) {
-                    out.println("</tr>");
-                }
-                out.println("</table>");
+                request.setAttribute("aPhotos", aPhotos);
+                RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath()+"/swbadmin/jsp/facebook/fb_MyPhotos.jsp");
+                rd.include(request, response);
             }
         } catch (Exception e) {
             log.error(e);
