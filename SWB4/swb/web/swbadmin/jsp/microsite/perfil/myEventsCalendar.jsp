@@ -47,6 +47,8 @@ if (year != null && month != null && day != null) {
         //Find out when this mont starts and ends
         int firstWeekDay = thisMonth.getDay();
         long daysInMonth = Math.round((nextMonth.getTime() - thisMonth.getTime()) / (1000 * 60 * 60 * 24));
+
+        //TODO:eliminar el día de la fecha, obviarlo a 1 para mostrar todos los eventos del mes
         SWBResourceURL nml = paramRequest.getRenderUrl();
         nml.setParameter("y", String.valueOf(year));
         nml.setParameter("m", String.valueOf(month + 1));
@@ -101,10 +103,12 @@ if (year != null && month != null && day != null) {
             if (day == i - 1) {
                 //Are there events today?
                 if (!eventTitles.equals("")) {
-                    SWBResourceURL viewUrl = paramRequest.getRenderUrl();//.setParameter("act", "daily");
-                    viewUrl.setParameter("y", String.valueOf(year));
-                    viewUrl.setParameter("m", String.valueOf(month));
-                    viewUrl.setParameter("d", String.valueOf(i));
+                    String viewUrl = paramRequest.getResourceBase().getAttribute("eventsPath", "#");
+                    viewUrl = viewUrl + "?y=" + String.valueOf(year) + "&m=" +String.valueOf(month) + "&d=" + String.valueOf(i);
+                    //SWBResourceURL viewUrl = paramRequest.getRenderUrl();//.setParameter("act", "daily");
+                    //viewUrl.setParameter("y", String.valueOf(year));
+                    //viewUrl.setParameter("m", String.valueOf(month));
+                    //viewUrl.setParameter("d", String.valueOf(i));
 
                     sbf.append("      <td class=\"dated\">\n" +
                             "        <div class=\"daylabel\"><a href=\"" + viewUrl + "\">" + i + "</a></div>\n" +
@@ -119,10 +123,12 @@ if (year != null && month != null && day != null) {
                 //Not today
                 evsNow = EventElement.listEventElementsByDate(user, new Date(year, month, i), wpage, wpage.getWebSite());
                 if (!eventTitles.equals("")) {
-                    SWBResourceURL viewUrl = paramRequest.getRenderUrl();//.setParameter("act", "daily");
+                    /*SWBResourceURL viewUrl = paramRequest.getRenderUrl();//.setParameter("act", "daily");
                     viewUrl.setParameter("y", String.valueOf(year));
                     viewUrl.setParameter("m", String.valueOf(month));
-                    viewUrl.setParameter("d", String.valueOf(i));
+                    viewUrl.setParameter("d", String.valueOf(i));*/
+                    String viewUrl = paramRequest.getResourceBase().getAttribute("eventsPath", "#");
+                    viewUrl = viewUrl + "?y=" + String.valueOf(year) + "&m=" +String.valueOf(month) + "&d=" + String.valueOf(i);
 
                     sbf.append("      <td class=\"dated\">\n" +
                             "        <div class=\"daylabel\"><a href=\"" + viewUrl + "\">" + i + "</a></div>\n" +
