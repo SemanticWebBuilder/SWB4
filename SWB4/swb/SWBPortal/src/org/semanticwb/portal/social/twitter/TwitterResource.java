@@ -34,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resource;
+import org.semanticwb.model.User;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -62,8 +64,28 @@ public class TwitterResource extends GenericAdmResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         try {
-            Twitter twitter = new Twitter("george190475@hotmail.com", "george24");
-            twitter.updateStatus(request.getParameter("status"));
+            Resource base=response.getResourceBase();
+            User user=response.getUser();
+            String action=response.getAction();
+            if(action.equals("saveUserData"))
+            {
+                if(request.getParameter("twitterLogin")!=null && request.getParameter("twitterPass")!=null){
+                    base.setData(user,request.getParameter("twitterLogin")+"|"+request.getParameter("twitterPass"));
+                    base.updateAttributesToDB();
+                }
+            }else if(action.equals("send2Twitter")){
+                String status=request.getParameter("status");
+                String userData=base.getData(user);
+                if(userData!=null && status!=null && status.trim().length()>0){
+                    int pos=userData.indexOf("|");
+                    if(pos>-1){
+                        String userLogin=userData.substring(0,pos);
+                        String userPass=userData.substring(pos+1);
+                        Twitter twitter = new Twitter(userLogin, userPass);
+                        twitter.updateStatus(request.getParameter("status"));
+                    }
+                }
+            }
         } catch (Exception e) {
             log.error(e);
         }
