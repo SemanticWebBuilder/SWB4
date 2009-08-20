@@ -60,7 +60,7 @@ Error: Elemento no encontrado...
                     <tr>
                         <td align="right" valign="center"><label for="new_abstract">Resumen&nbsp;<em>*</em></label></td>
                         <td>
-                            <textarea dojoType="dijit.form.Textarea" style="width:244px" id="new_abstract" name="new_abstract"><%=(rec.getAbstr()==null?"":rec.getAbstr())%></textarea><br>
+                            <textarea dojoType="dijit.form.Textarea" style="width:244px" id="new_abstract" name="new_abstract"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea><br>
                         </td>
                     </tr>
                     <tr>
