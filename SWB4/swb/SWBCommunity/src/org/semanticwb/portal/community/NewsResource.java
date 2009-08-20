@@ -98,7 +98,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                 rec.setNewsThumbnail(params.get("thumbnail"));
                 rec.setTitle(params.get("new_title"));
                 rec.setAuthor(params.get("new_author"));
-                rec.setAbstr(params.get("new_abstract"));
+                rec.setDescription(params.get("new_abstract"));
                 rec.setFullText(params.get("new_fulltext"));
                 rec.setCitation(params.get("new_citation"));
                 rec.setTags(params.get("new_tags"));
@@ -123,7 +123,7 @@ public class NewsResource extends org.semanticwb.portal.community.base.NewsResou
                         rec.setNewsThumbnail(params.get("thumbnail"));
                     rec.setTitle(params.get("new_title"));
                     rec.setAuthor(params.get("new_author"));
-                    rec.setAbstr(params.get("new_abstract"));
+                    rec.setDescription(params.get("new_abstract"));
                     rec.setFullText(params.get("new_fulltext"));
                     rec.setCitation(params.get("new_citation"));
                     rec.setTags(params.get("new_tags"));
