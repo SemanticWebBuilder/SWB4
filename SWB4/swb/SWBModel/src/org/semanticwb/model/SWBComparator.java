@@ -153,12 +153,12 @@ public class SWBComparator implements Comparator
 
     }
 
-    public static Iterator sortByCreated(Iterator<Traceable> it)
+    public static Iterator sortByCreated(Iterator it)
     {
         return sortByCreated(it,true);
     }
 
-    public static Iterator sortByCreated(Iterator<Traceable> it, boolean ascendente)
+    public static Iterator sortByCreated(Iterator it, boolean ascendente)
     {
         TreeSet set=null;
         if(ascendente)
