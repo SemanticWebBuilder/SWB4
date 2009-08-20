@@ -28,28 +28,35 @@
             <div>
                 <p>
                     <label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input id="title" name="title" value=""><br>
-                    <label for="description">Contenido de la entrada:&nbsp;&nbsp;&nbsp;</label>
-                    <textarea id="description" plugins="['bold','italic','underline', 'strikethrough','|','insertUnorderedList','insertOrderedList','|','createLink','unlink']" dojoType="dijit.Editor" rows="5" cols="23" name="description"></textarea>
+                    <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input id="description" name="description" value=""><br>
+                    <label for="content">Contenido de la entrada:&nbsp;&nbsp;&nbsp;</label>
+
+                    <textarea id="content" plugins="['bold','italic','underline', 'strikethrough','|','insertUnorderedList','insertOrderedList','|','createLink','unlink']" dojoType="dijit.Editor" rows="5" cols="23" name="content"></textarea>
                     <script>
                         function validaForma(forma)
-                        {
-                            //content = dijit.byId('title').getValue(false);
+                        {                            
                             var title = forma.title.value;
                             if(!title)
                             {
                                 alert('Debe ingresar el título de la entrada');
                                 return;
                             }
-                            content = dijit.byId('description').getValue(false);
+                            var description = forma.description.value;
+                            if(!description)
+                            {
+                                alert('Debe ingresar la descripción de la entrada');
+                                return;
+                            }
+                            content = dijit.byId('content').getValue(false);
                             if(!content)
                             {
-                                alert('Debe ingresar la entrada del blog');
+                                alert('Debe ingresar la entrada del post');
                                 return;
                             }
                             var msg='¿Estan los datos correctos de la entrada del blog?';
                             if(confirm(msg))
                             {
-                                dojo.byId('description').value=content;
+                                dojo.byId('content').value=content;
                                 //dojo.byId('frmaddpost').action=urladd;
                                 dojo.byId('frmaddpost').submit();
                             }
