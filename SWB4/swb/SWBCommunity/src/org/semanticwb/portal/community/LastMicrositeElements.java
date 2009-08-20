@@ -69,19 +69,20 @@ public class LastMicrositeElements extends GenericAdmResource
         prefixStatement.append(" PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>" + NL);
         prefixStatement.append(" PREFIX rdf: <" + SemanticVocabulary.RDF_URI + "> " + NL);
         prefixStatement.append(" PREFIX rdfs: <" + SemanticVocabulary.RDFS_URI + "> " + NL);
-        prefixStatement.append("SELECT ?x ?date WHERE {?x swb:created ?date . ?x rdf:type swbcomm:MicroSiteElement} ORDER BY DESC(?date) LIMIT " + limit);
+        //prefixStatement.append("SELECT ?x ?date WHERE {?x swb:created ?date . ?x rdf:type swbcomm:MicroSiteElement} ORDER BY DESC(?date) LIMIT " + limit);
+        prefixStatement.append("SELECT DISTINCT ?x ?date WHERE { ?x swb:created ?date ; a swbcomm:MicroSiteElement .FILTER(!regex(str(?x),\"^" + NewsElement.sclass.getURI() + "\")) } ORDER BY DESC(?date) LIMIT " + limit);
         QueryExecution qe = paramRequest.getWebPage().getSemanticObject().getModel().sparQLOntologyQuery(prefixStatement.toString());
         ResultSet rs = qe.execSelect();
         while (rs.hasNext())
         {
-            QuerySolution rb = rs.nextSolution();            
-            if (rb.get("?x")!=null && rb.get("?x").isResource())
+            QuerySolution rb = rs.nextSolution();
+            if (rb.get("?x") != null && rb.get("?x").isResource())
             {
                 Resource res = rb.getResource("?x");
                 SemanticObject obj = SemanticObject.createSemanticObject(res.getURI());
                 MicroSiteElement element = (MicroSiteElement) obj.createGenericInstance();
                 elements.add(element);
-            }            
+            }
         }
         String path = "/swbadmin/jsp/microsite/LastMicrositeElements/LastMicrositeElementsView.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
