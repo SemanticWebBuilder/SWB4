@@ -23,7 +23,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
 }
     %>
     <div class="<%=classAtt%>">
-    <h1 class="titulo">Lo último en la ciudad digital</h1>
+    <h2 class="titulo">Lo último en la ciudad digital</h2>
     <%
     
     String webpath=SWBPlatform.getContextPath()+"/swbadmin/jsp/microsite/LastMicrositeElements/";
@@ -120,5 +120,4 @@ else
 }
 
 %>
-
-</div>
+    </div>
