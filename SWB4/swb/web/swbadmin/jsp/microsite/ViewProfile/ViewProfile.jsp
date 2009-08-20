@@ -8,7 +8,6 @@
         %>
         <li><%=user.getFullName()%></li>
         <li><a href="<%=path%>">Ver perfil</a></li>
-
         <%
     }
 %>
