@@ -23,7 +23,7 @@
     }
     %>
     <div class="<%=classAtt%>">
-    <h1 class="titulo">Noticias recientes</h1>
+    <h2 class="titulo">Noticias recientes</h2>
     <%
     String pathIamge = SWBPlatform.getWebWorkPath();
     ArrayList<NewsElement> elements=(ArrayList<NewsElement>)request.getAttribute("elements");
@@ -78,7 +78,7 @@
                             description=description.substring(0, 197)+" ...";
                         }
                         %>
-                        <td>
+                        <td valign="top">
                               <div class="entry">
                               <%
                                 if(src!=null)
@@ -125,4 +125,5 @@
         <p>No hay noticias publicadas</p>
         <%
         }
-%></div>
+%>
+    </div>
