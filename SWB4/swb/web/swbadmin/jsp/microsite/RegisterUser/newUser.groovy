@@ -74,5 +74,3 @@ method="POST">
 	</table>
 	</fieldset>
 </form>"""
-
-System.out.println("OK!!!")

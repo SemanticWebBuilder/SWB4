@@ -28,6 +28,7 @@ import org.semanticwb.portal.community.Member
 import org.semanticwb.portal.community.MicroSite
 import org.semanticwb.portal.community.MicroSiteWebPageUtil
 import org.semanticwb.model.SWBModel
+import org.semanticwb.SWBPlatform
 
 
 
@@ -50,24 +51,25 @@ if (null!=microsite){
     if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY && (!paramRequest.getArgument("virtualcontent").equals("true"))){
         println """<div id="contactos">
 <h2>Miembros de la comunidad</h2>
-<ul>"""
+"""
 
 
         def i = 0;
-        while (lista.hasNext() && i<5){
+        while (lista.hasNext() && i<18){
             Member mem_curr = lista.next()
             User mem_usr = mem_curr.getUser()
             if (null!=mem_usr)
             {
                 def uri = mem_usr.getEncodedURI()
                 def nombre = mem_usr.getFullName()
-                println """<li><a class="contactos_nombre" href="${perfil}?user=$uri" alt="Ir al perfil de $nombre" >$nombre</a></li>"""
+                def img = SWBPlatform.getWebWorkPath()+mem_usr.getPhoto()
+                println """<div class="moreUser"><a href="${perfil}?user=$uri"><img src="$img" width="39" height="39" alt="Ir al perfil de $nombre" /></a></div>"""
             }
         }
 
         def url_mas = wpage.getRealUrl()
 
-        println """</ul>
+        println """
 <p class="vermas"><a href="${url_mas}_Members" >Ver todos</a></p>
 </div>"""
     } else {
@@ -81,7 +83,7 @@ if (null!=microsite){
             {
                 def uri = mem_usr.getEncodedURI()
                 def nombre = mem_usr.getFullName()
-                def img = mem_usr.getPhoto()
+                def img = SWBPlatform.getWebWorkPath()+mem_usr.getPhoto()
                 println """<li><img src="$img" alt="Foto de $nombre" /><a class="contactos_nombre" href="${perfil}?user=$uri" alt="Ir al perfil de $nombre" >$nombre</a></li>"""
             }
         }
