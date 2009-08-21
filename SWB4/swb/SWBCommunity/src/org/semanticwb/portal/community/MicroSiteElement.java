@@ -588,4 +588,8 @@ public class MicroSiteElement
         }
         return ret.toString();
     }
+    public WebPage getWebPage()
+    {
+        return null;
+    }
 }
