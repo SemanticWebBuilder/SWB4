@@ -84,11 +84,13 @@ if(email!=null)
 <br>
 <br>
 <center>
-    <a href="<%=paramRequest.getRenderUrl()%>">Regresar</a>
-    <%if(post.canModify(member)){%><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",post.getURI()).setParameter("mode","editpost")%>">Editar Información</a><%}%>
-    <%if(post.canModify(member)){%><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",post.getURI())%>">Eliminar Entrada</a><%}%>
+    <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>
+    <%if(post.canModify(member)){%><div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",post.getURI()).setParameter("mode","editpost")%>">Editar Información</a></p></div><%}%>
+    <%if(post.canModify(member)){%><div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",post.getURI())%>">Eliminar Entrada</a></p></div><%}%>
 </center>
-
+    <br>
+    <br>
+    <br>
 <%
 post.renderGenericElements(request, out, paramRequest);
 %>
