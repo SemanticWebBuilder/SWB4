@@ -11,7 +11,18 @@
             Member member = Member.getMember(user, wpage);
             String defaultFormat = "dd 'de' MMMM  'del' yyyy";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
-            String created = iso8601dateFormat.format(blog.getCreated()); //SWBUtils.TEXT.(blog.getCreated(), user.getLanguage());//iso8601dateFormat.format(blog.getCreated());                       
+            String created = iso8601dateFormat.format(blog.getCreated()); //SWBUtils.TEXT.(blog.getCreated(), user.getLanguage());//iso8601dateFormat.format(blog.getCreated());
+            boolean showbr=false;
+            Iterator<PostElement> posts2 = blog.listPostElements();
+            while (posts2.hasNext())
+            {
+                PostElement post = posts2.next();
+                if(post.canView(member))
+                {
+                    showbr=true;
+                    break;
+                }
+            }
             %>
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
@@ -39,7 +50,15 @@
                     </td>
                 </tr>
             </table>
-                    <hr><br>
+                    <%
+                    if(showbr)
+                    {
+                        %>
+                         <hr><br>
+                        <%
+                    }
+                    %>
+                    
             
                   <table width="100%" cellpadding="2" cellspacing="2" border="0">
             <%
@@ -49,74 +68,83 @@
                 PostElement post = posts.next();
                 if(post.canView(member))
                 {
-                String postAuthor = post.getCreator().getFullName();
-                String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
-                SWBResourceURL url=paramRequest.getRenderUrl();
-                url.setParameter("act", "detail");
-                url.setParameter("uri", post.getURI());
-                %>
+                    String postAuthor = post.getCreator().getFullName();
+                    String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
+                    SWBResourceURL url=paramRequest.getRenderUrl();
+                    url.setParameter("act", "detail");
+                    url.setParameter("uri", post.getURI());
+                    %>
 
-                <tr>
-                    <td colspan="2" valign="top">
-                    <%if(post.getCreator().getPhoto()!=null)
-                    {
-                        String src=pathIamge+post.getCreator().getPhoto();
-                        %>
-                        <p><img width="50" height="50" alt="<%=postAuthor%>" src="<%=src%>">&nbsp;&nbsp;&nbsp;Escrito por: <%=postAuthor%>, <%=updated%></p>
-                      <%
-                   }
-                   else
-                   {
-                      %>
-                        <p>Escrito por: <%=postAuthor%>, <%=updated%></p>
-                        <%
-                   }
-                %>
-                </td>
-                </tr>
                     <tr>
-                    <td>
-                        <p class="titutlo"><%=post.getTitle()%></p>
+                        <td colspan="2" valign="top">
+                        <%if(post.getCreator().getPhoto()!=null)
+                        {
+                            String src=pathIamge+post.getCreator().getPhoto();
+                            %>
+                            <p><img width="50" height="50" alt="<%=postAuthor%>" src="<%=src%>">&nbsp;&nbsp;&nbsp;Escrito por: <%=postAuthor%>, <%=updated%></p>
+                          <%
+                       }
+                       else
+                       {
+                          %>
+                            <p>Escrito por: <%=postAuthor%>, <%=updated%></p>
+                            <%
+                       }
+                    %>
                     </td>
-                    <td>
-                        <p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
-                    </td>
-                    <td>
-                     <%
-                    if (post.canModify(member))
-                    {
-                        SWBResourceURL sWBResourceURL=paramRequest.getRenderUrl();
-                        sWBResourceURL.setParameter("act", "edit");
-                        sWBResourceURL.setParameter("uri",post.getURI());
-                        sWBResourceURL.setParameter("mode","editpost");
+                    </tr>
+                        <tr>
+                        <td>
+                            <p class="titutlo"><%=post.getTitle()%></p>
+                        </td>
+                        <td>
+                            <p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
+                        </td>
+                        <td>
+                         <%
+                        if (post.canModify(member))
+                        {
+                            SWBResourceURL sWBResourceURL=paramRequest.getRenderUrl();
+                            sWBResourceURL.setParameter("act", "edit");
+                            sWBResourceURL.setParameter("uri",post.getURI());
+                            sWBResourceURL.setParameter("mode","editpost");
 
-                        SWBResourceURL removeUrl=paramRequest.getActionUrl();
-                        removeUrl.setParameter("act", "remove");//.setParameter("uri",post.getURI());
-                        %>
-                        &nbsp;&nbsp;&nbsp;<a href="<%=sWBResourceURL%>">Editar</a>
-                        &nbsp;&nbsp;&nbsp;<a href="javascript:validateremove('<%=removeUrl%>','<%=post.getTitle()%>','<%=post.getURI()%>')">Borrar</a>
-                        <script language="Javascript" type="text/javascript">
-                            function validateremove(url, title,uri)
-                            {
-                                if(confirm('¿Esta seguro de borrar la entrada '+title+'?'))
-                                    {                                        
-                                        var url=url+'&uri='+escape(uri);                                     
-                                        document.URL=url;
-                                    }
-                            }
-                        </script>
-                        <%
-                    }
-                %>
-                </td>
-                </tr>
-                
-                <%
+                            SWBResourceURL removeUrl=paramRequest.getActionUrl();
+                            removeUrl.setParameter("act", "remove");//.setParameter("uri",post.getURI());
+                            %>
+                            &nbsp;&nbsp;&nbsp;<a href="<%=sWBResourceURL%>">Editar</a>
+                            &nbsp;&nbsp;&nbsp;<a href="javascript:validateremove('<%=removeUrl%>','<%=post.getTitle()%>','<%=post.getURI()%>')">Borrar</a>
+                            <script language="Javascript" type="text/javascript">
+                                function validateremove(url, title,uri)
+                                {
+                                    if(confirm('¿Esta seguro de borrar la entrada '+title+'?'))
+                                        {
+                                            var url=url+'&uri='+escape(uri);
+                                            document.URL=url;
+                                        }
+                                }
+                            </script>
+                            <%
+                        }
+                    %>
+                    </td>
+                    </tr>
+
+                    <%
                 }
             }
 %>
 </table>
-<hr>
+
+                    <%
+                    if(showbr)
+                    {
+                        %>
+                         <hr>
+                        <%
+                    }
+                    %>
+
 <%
     if(member.canAdd())
     {
