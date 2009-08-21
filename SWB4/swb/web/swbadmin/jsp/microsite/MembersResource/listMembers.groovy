@@ -29,6 +29,7 @@ import org.semanticwb.portal.community.MicroSite
 import org.semanticwb.portal.community.MicroSiteWebPageUtil
 import org.semanticwb.model.SWBModel
 import org.semanticwb.SWBPlatform
+import org.semanticwb.platform.SemanticProperty
 
 
 
@@ -63,7 +64,8 @@ if (null!=microsite){
                 def uri = mem_usr.getEncodedURI()
                 def nombre = mem_usr.getFullName()
                 def img = SWBPlatform.getWebWorkPath()+mem_usr.getPhoto()
-                println """<div class="moreUser"><a href="${perfil}?user=$uri"><img src="$img" width="39" height="39" alt="Ir al perfil de $nombre" /></a></div>"""
+                if (null==img) img = "/ruta/a/foto/defecto"
+                println """<div class="moreUser"><a href="${perfil}?user=$uri" alt="Ir al perfil de $nombre"><img src="$img" width="39" height="39"  /></a></div>"""
             }
         }
 
@@ -73,9 +75,15 @@ if (null!=microsite){
 <p class="vermas"><a href="${url_mas}_Members" >Ver todos</a></p></div>
 </div>"""
     } else {
+        def mapa = new HashMap()
+Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
+                list.each{
+                    def sp = it
+                    mapa.put(sp.getName(),sp)
+                }
         println """<div id="cuerpo">
 <h1>Miembros de la comunidad</h1>
-<ul>"""
+<div>"""
         lista.each(){
             Member mem_curr = it
             User mem_usr = mem_curr.getUser()
@@ -84,10 +92,23 @@ if (null!=microsite){
                 def uri = mem_usr.getEncodedURI()
                 def nombre = mem_usr.getFullName()
                 def img = SWBPlatform.getWebWorkPath()+mem_usr.getPhoto()
-                println """<li><img src="$img" alt="Foto de $nombre" /><a class="contactos_nombre" href="${perfil}?user=$uri" alt="Ir al perfil de $nombre" >$nombre</a></li>"""
+                if (null==img) img = "/ruta/a/foto/defecto"
+                def usr_age = mem_usr.getExtendedAttribute(mapa.get("userAge"))
+                if (null==usr_age) usr_age = ""
+                def usr_sex = mem_usr.getExtendedAttribute(mapa.get("userSex"))
+                if ("M".equals(usr_sex)) usr_sex = "Hombre"
+                if ("F".equals(usr_sex)) usr_sex = "Mujer"
+                def usr_status = mem_usr.getExtendedAttribute(mapa.get("userStatus"))
+                if (null==usr_status) usr_status = ""
+                println """
+<div><table cellspacing="4" border="0"><tr><td><img src="$img" width="150" height="150" alt="Foto de $nombre" /></td><td><a class="contactos_nombre" href="${perfil}?user=$uri" alt="Ir al perfil de $nombre" >$nombre</a><br />
+Edad: $usr_age<br />
+Sexo: $usr_sex<br />
+Tipo: $usr_status
+</td></tr></table></div>"""
             }
         }
-        println """</ul></div>"""
+        println """</div></div>"""
     }
 
 }
