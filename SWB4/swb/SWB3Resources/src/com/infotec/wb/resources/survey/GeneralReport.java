@@ -150,17 +150,19 @@ public class GeneralReport
             ret.append("	  </tr>");
             
             con = SWBUtils.DB.getDefaultConnection();
-            int i_review = 0;
+            int i_review = -1;
             
-            strSql = new String("select * from sr_responseuser where sr_responseuser.surveyid = ? and idtm=? and sr_responseuser.review = ? ");
+            strSql = new String("select * from sr_responseuser where sr_responseuser.surveyid = ? and idtm=?  ");
             
             if (tipo_revisar.equals("revisados"))
             { 
                 i_review=1;
+                strSql += "and sr_responseuser.review = ? ";
             }
             else if(tipo_revisar.equals("no revisados"))
             {
                 i_review=0;
+                strSql += "and sr_responseuser.review = ? ";
             }
             
             java.sql.Timestamp tempIni = new java.sql.Timestamp(new java.util.Date().getTime());
@@ -169,18 +171,17 @@ public class GeneralReport
             if(request.getParameter("fecha_ini").length()>0)
             {
                 String fecha_ini = request.getParameter("fecha_ini");
+                //System.out.println("Fecha inicial:"+fecha_ini);
                 int year_i;
                 int month_i;
                 int day_i;
-                month_i=Integer.parseInt(fecha_ini.substring(0,fecha_ini.indexOf("/")));
-                day_i=Integer.parseInt(fecha_ini.substring(fecha_ini.indexOf("/")+1,fecha_ini.lastIndexOf("/")));
-                year_i= Integer.parseInt(fecha_ini.substring(fecha_ini.lastIndexOf("/")+1,fecha_ini.length()));
-                
+
+                year_i= Integer.parseInt(fecha_ini.substring(0,fecha_ini.indexOf("-")));
+                month_i=Integer.parseInt(fecha_ini.substring(fecha_ini.indexOf("-")+1,fecha_ini.lastIndexOf("-")));
+                day_i=Integer.parseInt(fecha_ini.substring(fecha_ini.lastIndexOf("-")+1,fecha_ini.length()));
+
                 Calendar calendario = Calendar.getInstance();
                 calendario.set(year_i,month_i-1,day_i,0,0,0);
-                
-                
-                //java.util.GregorianCalendar calendario = new java.util.GregorianCalendar(year_i,month_i-1,day_i,0,0,0);
                 java.sql.Date fecha_ini_D = new java.sql.Date(calendario.getTimeInMillis());
                 tempIni  =  new java.sql.Timestamp(fecha_ini_D.getTime()) ;
                 strSql =strSql+(" and sr_responseuser.created >= ? ");
@@ -189,35 +190,49 @@ public class GeneralReport
             if(request.getParameter("fecha_fin").length()>0)
             {
                 String fecha_fin = request.getParameter("fecha_fin");
+                //System.out.println("Fecha final:"+fecha_fin);
                 int year_f;
                 int month_f;
                 int day_f;
-                month_f=Integer.parseInt(fecha_fin.substring(0,fecha_fin.indexOf("/")));
-                day_f=Integer.parseInt(fecha_fin.substring(fecha_fin.indexOf("/")+1,fecha_fin.lastIndexOf("/")));
-                year_f= Integer.parseInt(fecha_fin.substring(fecha_fin.lastIndexOf("/")+1,fecha_fin.length()));
-                
+
+                year_f= Integer.parseInt(fecha_fin.substring(0,fecha_fin.indexOf("-")));
+                month_f=Integer.parseInt(fecha_fin.substring(fecha_fin.indexOf("-")+1,fecha_fin.lastIndexOf("-")));
+                day_f=Integer.parseInt(fecha_fin.substring(fecha_fin.lastIndexOf("-")+1,fecha_fin.length()));
+
                 Calendar calendariof = Calendar.getInstance();
                 calendariof.set(year_f,month_f-1,day_f,23,59,59);
-                
-                //java.util.GregorianCalendar calendariof = new java.util.GregorianCalendar(year_f,month_f-1,day_f,23,59,59);
                 java.sql.Date fecha_fin_D = new java.sql.Date(calendariof.getTimeInMillis());
                 tempFin  =   new java.sql.Timestamp(fecha_fin_D.getTime()) ;
                 strSql =strSql+(" and sr_responseuser.created <= ? ");
             }
-            int i_param=4;
+            int i_param=3;
             st = con.prepareStatement(strSql);
             st.setLong(1,encuesta);
             st.setString(2,idtm);
-            st.setInt(3,i_review);
+            if(i_review!=-1)
+            {
+                st.setInt(i_param,i_review);
+                i_param++;
+            }
             if(request.getParameter("fecha_ini").length()>0)
             {
-             st.setTimestamp(4,tempIni);
+             st.setTimestamp(i_param,tempIni);
              i_param++;
             }
             if(request.getParameter("fecha_fin").length()>0)
             {
                 st.setTimestamp(i_param,tempFin);
             }
+
+//            System.out.println("strSql:"+strSql);
+//
+//            System.out.println(" surveyid: "+encuesta);
+//            System.out.println("     idtm: "+idtm);
+//            System.out.println("   review:"+i_review);
+//            System.out.println("fecha ini:"+tempIni);
+//            System.out.println("fecha fin:"+tempFin);
+//            System.out.println("  revisar:"+tipo_revisar);
+
             rs = st.executeQuery();
             
             while(rs.next())

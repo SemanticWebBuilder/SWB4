@@ -73,6 +73,10 @@ public class GroupAnswer
         SWBResourceURL url = paramsRequest.getRenderUrl();
         url.setAction("edit_ga");
 
+        response.setContentType("text/html");
+
+        ret.append("\n<link href=\"/swbadmin/css/swb.css\" rel=\"stylesheet\" type=\"text/css\" />");
+
         if (accion.equalsIgnoreCase("eliminar_ga"))
         {
             try
@@ -131,7 +135,7 @@ public class GroupAnswer
                 //ret.append("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=" + urlega + "\">");
                 accion="edit_ga";
             }
-            else ret.append("<br>"+paramsRequest.getLocaleString("usrmsg_GroupAnswer_getAdmHtml_msgNoAgregarRegistroCatalogo")+" <a class=link href=\""+url+"\">"+paramsRequest.getLocaleString("usrmsg_GroupAnswer_getAdmHtml_msgRegresar")+"</a>");
+            else ret.append("<br>"+paramsRequest.getLocaleString("usrmsg_GroupAnswer_getAdmHtml_msgNoAgregarRegistroCatalogo")+" <a  href=\""+url+"\">"+paramsRequest.getLocaleString("usrmsg_GroupAnswer_getAdmHtml_msgRegresar")+"</a>");
             log.error(paramsRequest.getLocaleString("usrmsg_GroupAnswer_getAdmHtml_msgAdministradorId")+": "+user.getId()+" "+paramsRequest.getLocaleString("usrmsg_GroupAnswer_getAdmHtml_msgAgregoGrupoRespuestasId")+": "+objGAnswer.getGroupaid());
         }
         
@@ -163,9 +167,9 @@ public class GroupAnswer
         
         
         //if (accion.equalsIgnoreCase("edit_cc")) {
-        response.setContentType("text/html");
+        //response.setContentType("text/html");
 
-        ret.append("\n<link href=\"/swbadmin/css/swb.css\" rel=\"stylesheet\" type=\"text/css\" />");
+        //ret.append("\n<link href=\"/swbadmin/css/swb.css\" rel=\"stylesheet\" type=\"text/css\" />");
         ret.append("\n<div class=\"swbform\">");
         ret.append("\n<fieldset>");
         ret.append("\n<table border=0 width=100% cellpadding=2 cellspacing=0>");

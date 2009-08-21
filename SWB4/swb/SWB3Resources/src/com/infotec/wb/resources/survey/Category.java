@@ -175,7 +175,7 @@ public class Category
             {
                 if(request.getSession().getAttribute("regreso")!=null)
                 {
-                    ret.append("\n<script type=\"javascript\">");
+                    ret.append("\n<script type=\"text/javascript\">");
                     ret.append("\n    window.opener.regreso('groupqid="+objCategory.getCategoryid()+"');");
                     ret.append("\n    window.close();");
                     ret.append("</script>");

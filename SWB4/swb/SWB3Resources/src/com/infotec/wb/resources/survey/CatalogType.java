@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
@@ -72,6 +73,7 @@ public class CatalogType
      */    
     public String doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm");
         String accion = paramsRequest.getAction();
         User user = paramsRequest.getUser();
         StringBuffer ret = new StringBuffer();
@@ -112,7 +114,7 @@ public class CatalogType
         if (accion.equalsIgnoreCase("update_ct")||accion.equalsIgnoreCase("updatecatalogtype_ct"))
         {
             // secci�n de actualizaci�n
-            ret.append("\n       <script language=\"javascript\">     ");
+            ret.append("\n       <script type=\"text/javascript\">     ");
             ret.append("\n            function valida(forma){     ");
             ret.append("\n                      ");
             ret.append("\n                 var tmp = forma.titulo.value;     ");
@@ -179,20 +181,23 @@ public class CatalogType
                 SWBResourceURL url = paramsRequest.getRenderUrl();
                 url.setAction("updatecatalogtype_ct");
                 ret.append("\n<div class=\"swbform\">");
-                ret.append("\n<fieldset>");
                 ret.append("\n<form action=\""+url+"\" method=\"GET\" name=\"forma\" onsubmit=\"return valida(forma);\">");
-                ret.append("\n<table border=0 cellspacing=0 width=100% cellpadding=2>");
-                ret.append("\n<tr><td colspan=2 >"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgInfoTipoSeleccionado")  +"</td></tr>");
-                ret.append("\n<input type=hidden name=id value=\""+objG.getCodeid()+"\">");
-                ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgTitulo")  +":</a></td><td><input class=campos type=\"text\" name=\"titulo\" value=\""+objG.getTitle()+"\" size=\"60\" maxlength=50></td></tr>");
-                ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgDescripcion")  +":</a></td><td><input class=campos type=\"text\" name=\"descripcion\" value=\""+objG.getDescription()+"\" size=\"60\" maxlength=255></td></tr>");
-                ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgCodigoValidacion")  +":</a></td><td><textarea name=\"validacion\" rows=15 cols=50 style=\"FONT-WEIGHT:normal; FONT-SIZE:10pt; COLOR:#000000; FONT-FAMILY:verdana,arial,helvetica,sans-serif; BACKGROUND-COLOR:#ffffff\" maxlength=4000>"+objG.getValidationcode()+"</textarea></td></tr>");
-                ret.append("\n<tr><td colspan=2 align=right><hr noshade size=1><input type=\"submit\" name=\"enviar\" value=\""+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_btnActualizar")  +"\" class=boton>");
+                ret.append("\n<fieldset>");
+                ret.append("\n<table border=\"0\" cellspacing=0 width=100% cellpadding=2>");
+                ret.append("\n<tr><td colspan=\"2\" >"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgInfoTipoSeleccionado")  +"</td></tr>");
+                ret.append("\n<input type=\"hidden\" name=\"id\" value=\""+objG.getCodeid()+"\">");
+                ret.append("\n<tr><td  width=\"200\" align=\"right\">"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgTitulo")  +":</a></td><td><input  type=\"text\" name=\"titulo\" value=\""+objG.getTitle()+"\" size=\"60\" maxlength=50></td></tr>");
+                ret.append("\n<tr><td  width=\"200\" align=\"right\">"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgDescripcion")  +":</a></td><td><input  type=\"text\" name=\"descripcion\" value=\""+objG.getDescription()+"\" size=\"60\" maxlength=255></td></tr>");
+                ret.append("\n<tr><td  width=\"200\" align=\"right\">"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgCodigoValidacion")  +":</a></td><td><textarea name=\"validacion\" rows=\"15\" cols=\"50\" style=\"FONT-WEIGHT:normal; FONT-SIZE:10pt; COLOR:#000000; FONT-FAMILY:verdana,arial,helvetica,sans-serif; BACKGROUND-COLOR:#ffffff\" maxlength=\"4000\">"+objG.getValidationcode()+"</textarea></td></tr>");
+                ret.append("</table>");
+                ret.append("\n</fieldset>");
+                ret.append("\n<fieldset>");
+                ret.append("\n<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"enviar\" >"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_btnActualizar")  +"</button>");
                 SWBResourceURL urla = paramsRequest.getRenderUrl();
                 urla.setAction("select_ct");
-                ret.append("&nbsp;<input type=\"button\" name=\"cancel\" value=\""+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_btnCancelar")  +"\" onclick=\"javascript:window.location='"+urla+"';\" class=boton></td></tr>");
-                ret.append("</table></form>");
+                ret.append("&nbsp;<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"cancel\" onclick=\"javascript:window.location='"+urla+"';\" >"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_btnCancelar")  +"</button>");
                 ret.append("\n</fieldset>");
+                ret.append("\n</form>");
                 ret.append("\n</div>");
             }
         }
@@ -215,7 +220,7 @@ public class CatalogType
             }
             if(request.getSession().getAttribute("regreso")!=null)
             {
-                ret.append("\n<script language=javascript>");
+                ret.append("\n<script type=\"text/javascript\">");
                 ret.append("\n    window.opener.regreso('textid="+objG.getCodeid()+"');");
                 ret.append("\n    window.close();");
                 ret.append("</script>");
@@ -225,7 +230,7 @@ public class CatalogType
         if (accion.equalsIgnoreCase("add_ct"))
         {
             // secci�n de agregar catalog type
-            ret.append("\n       <script language=\"javascript\">     ");
+            ret.append("\n       <script type=\"text/javascript\">     ");
             ret.append("\n            function valida(forma){     ");
             ret.append("\n                      ");
             ret.append("\n                 var tmp = forma.titulo.value;     ");
@@ -285,25 +290,28 @@ public class CatalogType
             SWBResourceURL url = paramsRequest.getRenderUrl();
             url.setAction("agregar_ct");
             ret.append("\n<div class=\"swbform\">");
-            ret.append("\n<fieldset>");
             ret.append("\n<form action=\""+url+"\" method=\"GET\" name=\"forma\" onsubmit=\"return valida(forma);\">");
+            ret.append("\n<fieldset>");
             ret.append("\n<table border=0 cellspacing=1 width=100%>");
-            ret.append("\n<tr><td colspan=2 >"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgNuevoTipoValidacion")  +"</td></tr>");
-            ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgTitulo")  +":</td><td><input type=\"text\" name=\"titulo\" value=\"T�tulo\" size=\"60\" maxlength=50 class=campos></td></tr>");
-            ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgDescripcion")  +":</td><td><input type=\"text\" name=\"descripcion\" value=\"\"  size=\"60\" maxlength=255 class=campos></td></tr>");
-            ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgCodigoValidacion")  +":</td><td><textarea name=\"validacion\" rows=15 cols=50 style=\"FONT-WEIGHT:normal; FONT-SIZE:10pt; COLOR:#000000; FONT-FAMILY:verdana,arial,helvetica,sans-serif; BACKGROUND-COLOR:#ffffff\" maxlength=4000></textarea></td></tr>");
-            ret.append("\n<tr><td colspan=2 align=right><hr noshade size=1><input type=\"submit\" name=\"enviar\" value=\""+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_btnEnviar")  +"\" class=boton>");
+            ret.append("\n<tr><td colspan=\"2\" >"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgNuevoTipoValidacion")  +"</td></tr>");
+            ret.append("\n<tr><td  width=\"200\" align=\"right\">"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgTitulo")  +":</td><td><input type=\"text\" name=\"titulo\" value=\"Título\" size=\"60\" maxlength=\"50\" ></td></tr>");
+            ret.append("\n<tr><td  width=\"200\" align=\"right\">"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgDescripcion")  +":</td><td><input type=\"text\" name=\"descripcion\" value=\"\"  size=\"60\" maxlength=\"255\" ></td></tr>");
+            ret.append("\n<tr><td  width=\"200\" align=\"right\">"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgCodigoValidacion")  +":</td><td><textarea name=\"validacion\" rows=\"15\" cols=\"50\" style=\"FONT-WEIGHT:normal; FONT-SIZE:10pt; COLOR:#000000; FONT-FAMILY:verdana,arial,helvetica,sans-serif; BACKGROUND-COLOR:#ffffff\" maxlength=\"4000\"></textarea></td></tr>");
+            ret.append("\n</table>");
+            ret.append("\n</fieldset>");
+            ret.append("\n<fieldset>");
+            ret.append("\n<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"enviar\">"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_btnEnviar")  +"</button>");
             if(request.getSession().getAttribute("regreso")!=null)
             {
-                ret.append("&nbsp;<input type=\"button\" name=\"cancel\" value=\""+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_btnCancelar")  +"\" onclick=\"javascript:window.close();\" class=boton>"); //window.opener.regreso();
+                ret.append("&nbsp;<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"cancel\" onclick=\"javascript:window.close();\" >"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_btnCancelar")  +"</button>"); //window.opener.regreso();
             }
             else
             {
                 SWBResourceURL urla = paramsRequest.getRenderUrl();
                 urla.setAction("select_ct");
-                ret.append("&nbsp;<input type=\"button\" name=\"cancel\" value=\""+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_btnCancelar")  +"\" onclick=\"javascript:window.location='"+urla+"';\" class=boton>");
+                ret.append("&nbsp;<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"cancel\" onclick=\"javascript:window.location='"+urla+"';\">"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_btnCancelar")  +"</button>");
             }
-            ret.append("</td></tr></table></form>");
+            ret.append("\n</form>");
             ret.append("\n</fieldset>");
             ret.append("\n</div>");
         }
@@ -353,20 +361,22 @@ public class CatalogType
             urla.setAction("add_ct");
             // secci�n de selecci�n de grupo a editar
             ret.append("\n<div class=\"swbform\">");
-            ret.append("\n<fieldset>");
             ret.append("\n<form action=\""+urla+"\" method=\"GET\">");
-            ret.append("\n<table border=0 cellspacing=0 cellpadding=2 width=100%>");
-            ret.append("\n<tr ><td>");
+            ret.append("\n<fieldset>");
+            ret.append("\n<table border=\"0\" cellspacing=\"0\" cellpadding=\"2\" width=\"100%\">");
+            ret.append("\n<thead>");
+            ret.append("\n<tr ><th>");
             ret.append(paramsRequest.getLocaleString("usrmsg_Survey_getAdmHtml_msgAction"));
-            ret.append("\n</td><td>");
+            ret.append("\n</th><th>");
             ret.append("\nid");
-            ret.append("\n</td><td>");
+            ret.append("\n</th><th>");
             ret.append(paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgTitulo"));
-            ret.append("\n</td><td>");
+            ret.append("\n</th><th>");
             ret.append(paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgDescripcion"));
-            ret.append("\n</td><td>");
+            ret.append("\n</th><th>");
             ret.append(paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_msgUltimaModificacion"));
-            ret.append("\n</td></tr>");
+            ret.append("\n</th></tr>");
+            ret.append("\n</thead>");
             try
             {
                 con = SWBUtils.DB.getDefaultConnection();
@@ -382,17 +392,17 @@ public class CatalogType
                     rvc.setCodeid(textid);
                     rvc.setIdtm(idtm);
                     rvc.load();
-                    rowColor="#EFEDEC";
-                    if(!cambiaColor) rowColor="#FFFFFF";
+                    rowColor="bgcolor=\"#EFEDEC\"";
+                    if(!cambiaColor) rowColor="";
                     cambiaColor = !(cambiaColor);
-                    ret.append("\n<tr  bgcolor=\""+rowColor+"\"><td>");
+                    ret.append("\n<tr  "+rowColor+"><td>");
                     SWBResourceURL urlu = paramsRequest.getRenderUrl();
                     urlu.setAction("update_ct");
                     urlu.setParameter("id",Integer.toString(rvc.getCodeid()));
                     SWBResourceURL urle = paramsRequest.getRenderUrl();
                     urle.setAction("delete_ct");
                     urle.setParameter("id",Integer.toString(rvc.getCodeid()));
-                    ret.append("\n<a href=\""+urle+"\" onclick=\"if(confirm('"+paramsRequest.getLocaleString("usrmsg_ShureEraseValidationCode")+"?')){ return (true);} else { return (false);}\" ><img src=\"/swbadmin/images/delete.gif\" border=0></a><a href=\""+urlu+"\" ><img src=\"/swbadmin/icons/editar_1.gif\" border=0></a>");
+                    ret.append("\n<a href=\""+urle+"\" onclick=\"if(confirm('"+paramsRequest.getLocaleString("usrmsg_ShureEraseValidationCode")+"?')){ return (true);} else { return (false);}\" ><img src=\"/swbadmin/images/delete.gif\" border=\"0\" /></a><a href=\""+urlu+"\" ><img src=\"/swbadmin/icons/editar_1.gif\" border=\"0\" /></a>");
                     ret.append("\n</td><td>");
                     ret.append("\n"+textid);
                     ret.append("\n</td><td>");
@@ -400,7 +410,7 @@ public class CatalogType
                     ret.append("\n</td><td>");
                     ret.append("\n"+rvc.getDescription());
                     ret.append("\n</td><td>");
-                    ret.append("\n"+SWBUtils.TEXT.getStrDate(rvc.getLastupdate(),user.getLanguage()));
+                    ret.append("\n"+sdf.format(rvc.getLastupdate()));
                     ret.append("\n</td></tr>");
                 }
                 if(rs != null) rs.close();
@@ -417,8 +427,11 @@ public class CatalogType
                 st = null;
                 con = null;
             }
-            ret.append("<tr><td colspan=5 align=right><hr noshade size=1><input type=\"submit\" name=\"enviar\" value=\""+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgAgregar")+"\" class=boton></td></tr>");
-            ret.append("</table></form>");
+            ret.append("</table>");
+            ret.append("\n</fieldset>");
+            ret.append("\n<fieldset>");
+            ret.append("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"enviar\" >"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgAgregar")+"</button>");
+            ret.append("\n</form>");
             ret.append("\n</fieldset>");
             ret.append("\n</div>");
         }
