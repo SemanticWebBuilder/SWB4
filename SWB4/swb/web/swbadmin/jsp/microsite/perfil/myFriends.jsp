@@ -6,7 +6,6 @@
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
-
      <%
         SWBResourceURL urlAction=paramRequest.getActionUrl();
         Resource base=paramRequest.getResourceBase();
@@ -30,15 +29,16 @@
             isStrategy=true;
             imgSize="width=\"39\" height=\"39\"";            
         }else user2Show=user;
-
+/*
         if(isStrategy){
             System.out.println("user2Show-Estrategia:"+user2Show.getFullName());
         }else{
             System.out.println("user2Show-Contenido:"+user2Show.getFullName());
         }
+*/
      %>
-          <p class="miembros">
-          <h2 class="titulo">Mis Amigos</h2>
+          <div class="miembros">
+          <h2>Mis Amigos</h2>
              <%
              String firstName="", lastName="";
              int contTot=0;
@@ -78,4 +78,5 @@
                 <p class="titulo">Aún no tienes amigos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
                </div>
              <%}%>
-        </p>
+             <div class="clear"></div>
+          </div>
