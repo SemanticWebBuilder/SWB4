@@ -101,7 +101,7 @@
                                   else
                                   {
                                         %>
-                                        <%=title%> (Privado)
+                                        <%=title%> (No se tiene acceso)
                                         <%
                                   }
                                   %>
