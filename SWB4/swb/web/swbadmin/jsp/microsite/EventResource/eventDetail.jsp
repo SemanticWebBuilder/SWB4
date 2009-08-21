@@ -10,9 +10,14 @@
     String uri = request.getParameter("uri");
     EventElement event = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
     if(event!=null && event.canView(member)) {
+<<<<<<< .mine
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
+=======
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");        
-        
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
+
+>>>>>>> .r7807
         event.incViews();
 %>
 <table border="0" cellspacing="10">
@@ -39,7 +44,7 @@
                     <%=m.getFullName()%>
                     <%if(users.hasNext()) {
                     %>,&nbsp;<%
-                    }                
+                    }
                 }
                 %></p>
                 <p><%=event.getViews()%> vistas</p>
@@ -63,10 +68,7 @@
 %>
 <%
 event.renderGenericElements(request, out, paramRequest);
-SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "daily");
-back.setParameter("year", request.getParameter("year"));
-back.setParameter("month", request.getParameter("month"));
-back.setParameter("day", request.getParameter("day"));
+SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "view");
 %>
 
 <center>
