@@ -85,7 +85,7 @@
                 if(post.canView(member))
                 {
                     String postAuthor = post.getCreator().getFullName();
-                    String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
+                    String updated = SWBUtils.TEXT.getTimeAgo(post.getCreated(), user.getLanguage());
                     SWBResourceURL url=paramRequest.getRenderUrl();
                     url.setParameter("act", "detail");
                     url.setParameter("uri", post.getURI());
