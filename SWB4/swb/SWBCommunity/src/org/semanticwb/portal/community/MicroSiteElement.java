@@ -555,8 +555,8 @@ public class MicroSiteElement
             ret.append("\n        <div class=\"comment-info\">");
             ret.append("\n          " + ordinal + ". ");
             try {
-                if (!comment.getCreator().getPhoto().equals("")) {
-                    ret.append("<img src=\"" + SWBPlatform.getWebWorkPath() + comment.getCreator().getPhoto() + "\" alt=\"foto\" border=\"0\">");
+                if (comment.getCreator().getPhoto()!=null) {
+                    ret.append("<img src=\"" + SWBPlatform.getWebWorkPath() + comment.getCreator().getPhoto() + "\" alt=\"foto\" width=\"50px\" height=\"50px\" border=\"0\">");
                 }
             } catch (NullPointerException npe) {}
             ret.append("<strong>");
