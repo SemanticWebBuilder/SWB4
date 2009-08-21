@@ -13,11 +13,11 @@
             <legend>Agrega una foto</legend>
             <div>
                 <p>
-                    <label for="foto">Archivo: </label>
+                    <label for="foto">Archivo:&nbsp;</label>
                     <input id="foto" type="file" size="22" name="foto" />
                 </p>
                 <p>
-                    <label for="title">Título:</label>
+                    <label for="title">Título:&nbsp;</label>
                     <input id="title" type="text" size="25" name="title" maxlength="200" />
                 </p>
                 <p>
@@ -25,7 +25,7 @@
                     <textarea id="description" cols="30" rows="5" name="description"></textarea>
                  </p>
                  <p>
-                    <label for="tags">Etiquetas:</label>
+                    <label for="tags">Etiquetas:&nbsp;</label>
                     <input id="tags" type="text" size="22" name="tags" maxlength="2000" />
                 </p>
             </div>
@@ -34,13 +34,13 @@
             <legend>¿Quién puede ver este video?</legend>
             <div>
                 <p>
-                    <label for="level"><input type="radio" name="level" value="0" checked="checked" /> Cualquiera</label>
+                    <label for="level"><input type="radio" name="level" value="0" checked="checked" />&nbsp;Cualquiera</label>
                 </p>
                 <p>
-                    <label for="level"><input type="radio" name="level" value="1" /> Sólo los miembros</label>
+                    <label for="level"><input type="radio" name="level" value="1" />&nbsp;Sólo los miembros</label>
                 </p>
                 <p>
-                    <label for="level"><input type="radio" name="level" value="3" /> Sólo yo</label>
+                    <label for="level"><input type="radio" name="level" value="3" />&nbsp;Sólo yo</label>
                 </p>
             </div>
         </fieldset>

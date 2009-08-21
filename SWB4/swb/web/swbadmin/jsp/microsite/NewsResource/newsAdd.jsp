@@ -20,31 +20,31 @@
             <legend>Agregar noticia nueva</legend>
             <div>
                 <p>
-                    <label for="new_image">Imagen de la noticia&nbsp;</label>
+                    <label for="new_image">Imagen de la noticia:&nbsp;</label>
                     <input type="file" id="foto" name="foto" />
                 </p>
                 <p>
-                    <label for="new_title">Título de la noticia&nbsp;</label>
+                    <label for="new_title">Título de la noticia:&nbsp;</label>
                     <input type="text" id="new_title" name="new_title"/>
                 </p>
                 <p>
-                    <label for="new_author">Autor de la noticia&nbsp;</label>
+                    <label for="new_author">Autor de la noticia:&nbsp;</label>
                     <input type="text" id="new_author" name="new_author"/>
                 </p>
                 <p>
-                    <label for="new_abstract">Resumen de la noticia&nbsp;</label>
+                    <label for="new_abstract">Resumen de la noticia:&nbsp;</label>
                     <textarea id="new_abstract" name="new_abstract" cols="30" rows="5"></textarea>
                 </p>
                 <p>
-                    <label for="new_fulltext">Texto completo&nbsp;</label>
+                    <label for="new_fulltext">Texto completo:&nbsp;</label>
                     <textarea id="new_fulltext" name="new_fulltext" cols="30" rows="5"></textarea>
                 </p>
                 <p>
-                    <label for="new_citation">Fuente&nbsp;</label>
+                    <label for="new_citation">Fuente:&nbsp;</label>
                     <input type="text" id="new_citation" name="new_citation"/>
                 </p>
                 <p>
-                    <label for="new_tags">Etiquetas&nbsp;</label>
+                    <label for="new_tags">Etiquetas:&nbsp;</label>
                     <input type="text" id="new_tags" name="new_tags"/>
                 </p>
             </div>
