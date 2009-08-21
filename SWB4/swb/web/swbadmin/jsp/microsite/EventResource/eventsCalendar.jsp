@@ -31,7 +31,7 @@
 </script>
 <div>
     <div>
-    <form action="<%=paramRequest.getRenderUrl()%>" method="post">
+    <form action="<%=paramRequest.getRenderUrl().setParameter("act", "calendar")%>" method="post">
         <fieldset><legend>Elige una fecha</legend>
             <label for="year">Año:</label>
             <input type="text" style="width:70px;" regExp="\d{4}" dojoType="dijit.form.ValidationTextBox" name="year" id="year" value="<%=current.getYear() + 1900%>"/>
