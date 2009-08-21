@@ -52,6 +52,8 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                 if(iElement<elementsArray.length)
                 {
                     MicroSiteElement element=elementsArray[iElement];
+                    User user = paramRequest.getUser();
+                    boolean canview=element.canView(Member.getMember(user, element.getWebPage()));
                     String src="blog.jpg";
                     String title=element.getTitle();
                     String description=element.getDescription();
@@ -95,7 +97,22 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                       <td>
                       <div class="entry">
                       <p><img src="<%=src%>" alt="<%=title%>" width="57" height="55" ></p>
-                      <h3 class="titulo"><a href="<%=url%>"><%=title%></a></h3>
+                      <h3 class="titulo">
+                          <%
+                          if(canview)
+                          {
+                              %>
+                              <a href="<%=url%>"><%=title%></a>
+                              <%
+                          }
+                          else
+                          {%>
+                              <%=title%> (Privado)
+                              <%
+
+                          }
+                          %>
+                      </h3>
                       <p class="titulo"><%=created%></p>
                       <p><%=description%></p>
                       </div>
