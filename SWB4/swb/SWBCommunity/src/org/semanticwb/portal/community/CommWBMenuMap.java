@@ -220,7 +220,7 @@ public class CommWBMenuMap extends GenericAdmResource
                     Element ele = dom.createElement("node");
                     ele.setAttribute("id", tpurl);
                     if(isOwner)
-                        ele.setAttribute("name", tp.getDisplayName(lang));
+                        ele.setAttribute("name", "Mis " +tp.getDisplayName(lang));
                     else {
                         ele.setAttribute("name", tp.getDisplayName(lang)+ " de "+userComm.getFirstName());
                     }
