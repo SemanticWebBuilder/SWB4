@@ -228,11 +228,18 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
                             long serial = (new Date()).getTime();
                             String filename = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
 
-                            File image = new File(realpath+filename);
-                            File thumbnail = new File(realpath+"thumbn_"+filename);
-                            currentFile.write(image);
-                            ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
 
+                            File image = new File(realpath);
+                            if (!image.exists()) {
+                                image.mkdir();
+                            }
+                            image = new File(realpath+filename);
+                            File thumbnail = new File(realpath+"thumbn_"+filename);
+                            //System.out.println("----------write"+realpath+filename);
+                            currentFile.write(image);
+                            //System.out.println("----------despuesWrite"+realpath+"thumbn_"+filename);
+                            ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
+                            //System.out.println("----------OK");
                             params.put("filename", path+filename);
                             params.put("thumbnail", path+"thumbn_"+filename);
                         }catch(StringIndexOutOfBoundsException iobe) {
