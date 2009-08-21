@@ -143,6 +143,12 @@
                          <hr>
                         <%
                     }
+                    else
+                    {
+                        %>
+                        <hr><br><p>No hay entradas visibles para usted</p>
+                        <%
+                    }
                     %>
 
 <%
