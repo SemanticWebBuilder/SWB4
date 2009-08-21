@@ -37,7 +37,7 @@
             System.out.println("user2Show-Contenido:"+user2Show.getFullName());
         }
      %>
-          <div class="miembros">
+          <p class="miembros">
           <h2 class="titulo">Mis Amigos</h2>
              <%
              String firstName="", lastName="";
@@ -55,7 +55,7 @@
                          if(friendUser.getLastName()!=null) lastName=friendUser.getLastName();
                          %>
                             <div class="moreUser">
-                            <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img src="<%=photo%>" <%=imgSize%> title="<%=firstName%> <%=lastName%>">
+                            <a href="<%=perfilPath%>?user=<%=friendUser.getEncodedURI()%>"><img src="<%=SWBPlatform.getWebWorkPath()+photo%>" <%=imgSize%> title="<%=firstName%> <%=lastName%>">
                             <%if(!isStrategy){%>
                                 <br>
                                 <%=firstName%>
@@ -78,4 +78,4 @@
                 <p class="titulo">Aún no tienes amigos &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
                </div>
              <%}%>
-        </div>
+        </p>
