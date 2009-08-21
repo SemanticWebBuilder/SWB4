@@ -10,8 +10,8 @@
     String uri = request.getParameter("uri");
     EventElement event = (EventElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
     if(event!=null && event.canView(member)) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");        
         
         event.incViews();
 %>
