@@ -91,7 +91,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         }
     }
 
-    private void addPost(String title, String description,String content,WebPage page, User user, Blog blog,int level)
+    private void addPost(String title, String description,String content, User user, Blog blog,int level)
     {
         PostElement rec = PostElement.createPostElement(getResourceBase().getWebSite());
         rec.setTitle(title);
@@ -131,7 +131,7 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
                     try
                     {
                         int level= Integer.parseInt(request.getParameter("level"));
-                        addPost(title, description,content, response.getWebPage(), response.getUser(), blog,level);
+                        addPost(title, description,content, response.getUser(), blog,level);
                     }
                     catch(Exception e)
                     {
