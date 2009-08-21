@@ -53,7 +53,23 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                 {
                     MicroSiteElement element=elementsArray[iElement];
                     User user = paramRequest.getUser();
-                    boolean canview=false;//element.canView(Member.getMember(user, element.getWebPage()));
+                    boolean canview=false;
+                    try
+                    {
+                        if(element.getWebPage()==null)
+                        {
+                        %>
+                        <%=element.getURI()%>
+                        <%
+                        return;
+                        }
+                        Member member=Member.getMember(user, element.getWebPage());
+                        canview=member.canView();
+                    }
+                    catch(Exception e)
+                    {                        
+                    }
+                    
                     String src="blog.jpg";
                     String title=element.getTitle();
                     String description=element.getDescription();
