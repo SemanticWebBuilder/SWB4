@@ -69,7 +69,6 @@ public class CommWBMenuMap extends GenericAdmResource
      */
     public void setResourceBase(Resource base)
     {
-        //System.out.println("WBMenuMap");
         try
         {
             super.setResourceBase(base);
@@ -131,6 +130,14 @@ public class CommWBMenuMap extends GenericAdmResource
         WebPage basetp = paramRequest.getWebPage().getWebSite().getHomePage();
         WebPage topic = paramRequest.getWebPage();
 
+        String suserComm="";
+        if(request.getParameter("user")!=null)
+        {
+            SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
+            User userComm=(User)semObj.createGenericInstance();
+            suserComm="?user="+userComm.getEncodedURI();
+        }
+
         String basetopic = base.getAttribute("basetopic","_home");
         try
         {
@@ -157,7 +164,7 @@ public class CommWBMenuMap extends GenericAdmResource
             int max=getLimits(basetp,topic,1,user);
             //System.out.println("max:"+max);
 
-            getChilds(dom, el, basetp, topic, lang, 1, 1, user, max, request);
+            getChilds(dom, el, basetp, topic, lang, 1, 1, user, max, suserComm);
 
             return dom;
         }catch (Exception e)
@@ -192,15 +199,8 @@ public class CommWBMenuMap extends GenericAdmResource
     }
 
 
-    public boolean getChilds(Document dom, Element nodo, WebPage aux, WebPage topic, String lang, int level, int rlevel, User user, int max, HttpServletRequest request)
+    public boolean getChilds(Document dom, Element nodo, WebPage aux, WebPage topic, String lang, int level, int rlevel, User user, int max, String  suserComm)
     {
-        String suserComm="";
-        if(request.getParameter("user")!=null)
-        {
-            SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
-            User userComm=(User)semObj.createGenericInstance();
-            suserComm="?user="+userComm.getEncodedURI();
-        }
         //System.out.println("****************** enter"+level+":"+aux.getId()+" ***********************");
         boolean childs=false;
         Iterator <WebPage>it=aux.listVisibleChilds(lang);  //CHECAR
@@ -249,7 +249,7 @@ public class CommWBMenuMap extends GenericAdmResource
                     if(tp.isParentof(topic) || tp==topic)
                     {
                         ele.setAttribute("open","true");
-                        if(getChilds(dom,ele, tp, topic, lang, level+auxl, rlevel+1, user,max, request))
+                        if(getChilds(dom,ele, tp, topic, lang, level+auxl, rlevel+1, user,max, suserComm))
                         {
                             ele.setAttribute("childs","true");
                         }else
