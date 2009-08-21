@@ -30,7 +30,7 @@ String firstName="", lastName="";
 int contTot=0;
 %>
    <div class="miembros">
-    <h2 class="titulo">Mis Solicitudes</h2>
+    <p class="addOn">Mis Solicitudes</p>
 <%
 Iterator<FriendshipProspect> itFriendshipProspect=FriendshipProspect.listFriendshipProspectByFriendShipRequester(owner, wpage.getWebSite());
 while(itFriendshipProspect.hasNext()){
