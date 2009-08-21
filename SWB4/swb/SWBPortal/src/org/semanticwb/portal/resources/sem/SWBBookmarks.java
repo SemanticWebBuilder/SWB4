@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.portal.resources.sem;
 
 import java.io.IOException;
@@ -516,10 +515,10 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
         sbf.append("<div dojoType=\"dijit.Dialog\" class=\"soria\" style=\"display:none;\" id=\"swbDialog\" " +
                 "title=\"Agregar\" onFocus=\"hideApplet(true);\" onBlur=\"if(!this.open)hideApplet(false);\" >\n" +
-                 "  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"swbDialogImp\" executeScripts=\"true\">\n" +
+                "  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"swbDialogImp\" executeScripts=\"true\">\n" +
                 "    Cargando...\n" +
-            "  </div>\n" +
-        "</div>\n");
+                "  </div>\n" +
+                "</div>\n");
 
         sbf.append("<div class=\"swb-bkm-container\">\n" +
                 "  <div class=\"swb-bkm-header\">\n" +
@@ -583,8 +582,8 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         }
 
         //Add necesary scripting
-        //sbf.append("<script type=\"text/javascript\" charset=\"utf-8\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb.js\"></script>\n");
-        //sbf.append("<script type=\"text/javascript\" charset=\"utf-8\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb_admin.js\"></script>\n");
+        sbf.append("<script type=\"text/javascript\" charset=\"utf-8\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb.js\"></script>\n");
+        sbf.append("<script type=\"text/javascript\" charset=\"utf-8\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/js/swb_admin.js\"></script>\n");
 
         sbf.append("    <script type=\"text/javascript\">\n" +
                 "      dojo.require(\"dijit.form.Form\");\n" +
@@ -631,23 +630,24 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
 
         sbf.append("<div dojoType=\"dijit.Dialog\" class=\"soria\" style=\"display:none;\" id=\"swbDialog\" " +
                 "title=\"Agregar\" onFocus=\"hideApplet(true);\" onBlur=\"if(!this.open)hideApplet(false);\" >\n" +
-                 "  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"swbDialogImp\" executeScripts=\"true\">\n" +
+                "  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"swbDialogImp\" executeScripts=\"true\">\n" +
                 "    Cargando...\n" +
-            "  </div>\n" +
-        "</div>\n");
+                "  </div>\n" +
+                "</div>\n");
 
         //If user is signed, show options and bookmark list
         if (user.isSigned()) {
-            sbf.append("          <p>\n");
-            sbf.append("          <a class=\"titulo\" href=\"#\" onclick=\"showDialog('" + rUrl +
-                    "', '" + paramRequest.getLocaleString("lblAdd") +
+            sbf.append("<div class=\"bookmarks\">");
+            ///-------Inicia bloque de controles
+            sbf.append("  <p>\n" +
+                    "    <a href=\"#\" onclick=\"showDialog('" + rUrl + "', '" + paramRequest.getLocaleString("lblAdd") +
                     " " + BookmarkEntry.sclass.getDisplayName(lang) +
                     "'); return false;\">" +
                     paramRequest.getLocaleString("lblMark") + "</a> \n" +
-                    "          <a class=\"titulo\" href=\"#\" onClick=\"openWindow('" +
-                    getAdmUrl() + "','')\">" +
+                    "  <a href=\"#\" onClick=\"openWindow('" + getAdmUrl() + "','')\">" +
                     paramRequest.getLocaleString("lblManage") + "</a>\n" +
-                    "</p>");
+                    "  </p>\n");
+            ////-------Termina bloque de controles
 
             //Get general bookmarks group
             BookmarkGroup generalGp = getUserBookmarkGroupByName(user, "general");
@@ -658,21 +658,21 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                 rUrl = paramRequest.getRenderUrl();
                 rUrl.setCallMethod(rUrl.Call_DIRECT).setMode("RLIST");
 
-                sbf.append("<p>");
-                        sbf.append("            <form>\n" +
-                        "              <select id=\"" + createId("swb-bkm-select") + "\" " +
+                ////-------Inicia formulario con select
+                sbf.append("<p>\n" +
+                        "  <form>\n" +
+                        "    <select id=\"" + createId("swb-bkm-select") + "\" " +
                         "onChange=\"refreshContent('" + rUrl + "');\">\n");
 
                 //Display group names in select element
                 ArrayList<BookmarkGroup> groups = getUserBookmarkGroups(user);
                 for (BookmarkGroup group : groups) {
+                    sbf.append("<option ");
                     if (group.getTitle().equals("general")) {
-                        sbf.append("                <option selected value=\"" +
-                                group.getSemanticObject().getId() + "\">" +
+                        sbf.append("selected value=\"" + group.getSemanticObject().getId() + "\">" +
                                 paramRequest.getLocaleString("lblShowAll") + "</option>\n");
                     } else if (group.getEntryCount() > 0) {
-                        sbf.append("                <option value=\"" +
-                                group.getSemanticObject().getId() + "\">");
+                        sbf.append("value=\"" + group.getSemanticObject().getId() + "\">");
                         if (group.getTitle().equals("untagged")) {
                             sbf.append(paramRequest.getLocaleString("lblNotags") +
                                     "</option>\n");
@@ -681,20 +681,25 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                         }
                     }
                 }
-                sbf.append("              </select>\n" +
-                        "            </form>\n" +
-                        "</p>\n" +
-                        "            <div id=\"" + createId("bookmarksList") + "\">\n" +
+                sbf.append("    </select>\n" +
+                        "  </form>\n" +
+                        "</p>\n");
+                ////-------Termina formulario con select
+                ////-------Inicia lista de marcadores
+                sbf.append("  <div id=\"" + createId("bookmarksList") + "\">\n" +
                         renderEntriesByUserGroup(generalGp.getSemanticObject().getId(), getSortType(), paramRequest) +
-                        "            </div>\n");
+                        "  </div>\n");
+
+                ////-------Termina lista de marcadores*/
             }
+            sbf.append("</div>");
         } else {
             sbf.append(paramRequest.getLocaleString("msgNotLogged"));
-        }       
+        }
         out.print(sbf.toString());
     }
 
-    public String renderEntriesByUserGroup (String groupId, int sortType, SWBParamRequest paramRequest) throws SWBResourceException {
+    public String renderEntriesByUserGroup(String groupId, int sortType, SWBParamRequest paramRequest) throws SWBResourceException {
         ArrayList<BookmarkEntry> sEntries = new ArrayList<BookmarkEntry>();
         Format formatter = new SimpleDateFormat("dd MMM");
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
@@ -732,15 +737,15 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             Collections.sort(sEntries, NAME_ORDER_DESC);
         }
 
-        sbf.append("<ul>\n");
+        sbf.append("  <ul>\n");
         //Print bookmarks list
         entries = sEntries.iterator();
         for (BookmarkEntry entry : sEntries) {
-            sbf.append("  <li>\n" +
-                    "    <a class=\"titulo\" href=\"" + entry.getBookmarkURL() + "\">" + entry.getTitle() + "</a>\n" +
-                    "  </li>\n");
+            sbf.append("    <li>\n" +
+                    "      <a href=\"" + entry.getBookmarkURL() + "\">" + entry.getTitle() + "</a>\n" +
+                    "    </li>\n");
         }
-        sbf.append("</ul>\n");
+        sbf.append("  </ul>\n");
         return sbf.toString();
     }
 
@@ -782,7 +787,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
             Collections.sort(sEntries, NAME_ORDER_DESC);
         }
 
-                sbf.append("                <table border=\"0\" cellpadding=\"0\" " +
+        sbf.append("                <table border=\"0\" cellpadding=\"0\" " +
                 "cellspacing=\"10\" width=\"100%\">\n" +
                 "                  <tbody>\n");
 
@@ -953,7 +958,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
                                 "onclick=\"dojo.query('.swb-bkm-menuOpt').removeClass('swb-bkm-boldElement');" +
                                 "dojo.addClass(dojo.byId('" + createId(gid) + "'), 'swb-bkm-boldElement');" +
                                 "getHtml('" + rUrl + "', '" + createId("swb-bkm-content") + "');\">" +
-                                (group.getTitle().equals("untagged")?paramRequest.getLocaleString("lblNotags"):group.getTitle()) +
+                                (group.getTitle().equals("untagged") ? paramRequest.getLocaleString("lblNotags") : group.getTitle()) +
                                 "(" + group.getEntryCount() + ")</a><br>\n");
                     }
                 } else if (group.getEntryCount() > 0) {
