@@ -14,19 +14,19 @@
             <div>
                 <p>
                     <label for="foto">Archivo: </label>
-                    <input id="foto" type="file" style="width: 90%;" class="textfield tags" size="22" name="foto" />
+                    <input id="foto" type="file" size="22" name="foto" />
                 </p>
                 <p>
-                    <label for="title">Título:</label><br />
-                    <input id="title" style="width: 90%;" type="text" class="textfield" size="25" name="title" maxlength="200" />
+                    <label for="title">Título:</label>
+                    <input id="title" type="text" size="25" name="title" maxlength="200" />
                 </p>
                 <p>
-                    <label for="description">Descripción</label><br/>
-                    <textarea id="description" style="width: 90%" rows="5" cols="23" name="description"></textarea>
+                    <label for="description">Descripción</label>
+                    <textarea id="description" cols="30" rows="5" name="description"></textarea>
                  </p>
                  <p>
-                    <label for="tags">Etiquetas:</label><br />
-                    <input id="tags" type="text" style="width: 90%;" class="textfield tags" size="22" name="tags" maxlength="2000" />
+                    <label for="tags">Etiquetas:</label>
+                    <input id="tags" type="text" size="22" name="tags" maxlength="2000" />
                 </p>
             </div>
         </fieldset>
@@ -48,8 +48,8 @@
             <legend></legend>
             <div>
             <p>
-                <input type="submit" value="Enviar" class="button"/>
-                <a class="button" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
+                <input type="submit" value="Enviar" />
+                <input type="button" value="Cancelar" onclick="window.location='<%= paramRequest.getRenderUrl()%>'"/>
             </p>
             </div>
         </fieldset>
