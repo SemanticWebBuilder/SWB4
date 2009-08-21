@@ -53,7 +53,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                 {
                     MicroSiteElement element=elementsArray[iElement];
                     User user = paramRequest.getUser();
-                    boolean canview=element.canView(Member.getMember(user, element.getWebPage()));
+                    boolean canview=false;//element.canView(Member.getMember(user, element.getWebPage()));
                     String src="blog.jpg";
                     String title=element.getTitle();
                     String description=element.getDescription();
@@ -107,7 +107,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                           }
                           else
                           {%>
-                              <%=title%> (Privado)
+                              <%=title%> (No se tiene acceso)
                               <%
 
                           }
