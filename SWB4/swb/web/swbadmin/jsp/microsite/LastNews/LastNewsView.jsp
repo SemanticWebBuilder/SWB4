@@ -52,6 +52,8 @@
                     if(iElement<elementsArray.length)
                     {
                         NewsElement element=elementsArray[iElement];
+                        User user = paramRequest.getUser();
+                        boolean canview=element.canView(Member.getMember(user, element.getWebPage()));
                         String created="Sin fecha";
                         if(element.getCreated()!=null)
                         {
@@ -88,7 +90,22 @@
                                     <%
                                 }
                               %>
-                              <h3 class="titulo"><a href="<%=href%>"><%=title%></a></h3>
+                              <h3 class="titulo">
+                                  <%
+                                  if(canview)
+                                  {
+                                      %>
+                                      <a href="<%=href%>"><%=title%></a>
+                                      <%
+                                  }
+                                  else
+                                  {
+                                        %>
+                                        <%=title%> (Privado)
+                                        <%
+                                  }
+                                  %>
+                                  </h3>
                               <p class="titulo"><%=created%></p>
                               <p><%=description%></p>
                               </div>
