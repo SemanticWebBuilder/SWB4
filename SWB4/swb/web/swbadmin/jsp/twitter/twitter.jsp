@@ -7,12 +7,19 @@
 <%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.platform.SemanticObject"%>
 
 
 <%
    String imgPath=SWBPlatform.getContextPath()+"/swbadmin/images/";
    SWBResourceURL url = paramRequest.getActionUrl();
-   User user=paramRequest.getUser();
+   User owner=paramRequest.getUser();
+   User user=owner;
+   if(request.getParameter("user")!=null){
+        SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
+        user=(User)semObj.createGenericInstance();
+   }
+
    Resource base=paramRequest.getResourceBase();
    if(base.getData(user)!=null){
        String userData=base.getData(user);
@@ -54,7 +61,7 @@
                 if(cont>=10) break;
             }
          }
-     }else { //Forma para que el usuario proporcione login y password de twitter
+     }else if(owner.getURI().equals(user.getURI())){ //Forma para que el usuario proporcione login y password de twitter
        url.setAction("saveUserData");
        %>
        <form action="<%=url.toString()%>" method="post">
@@ -74,5 +81,9 @@
         </table>
         </form>
       <%
+     }else{%>
+        <%=user.getFirstName()%><%=user.getLastName()%><br>
+                No tiene una cuenta de twitter configuarada en este portal
+       <%
      }
      %>

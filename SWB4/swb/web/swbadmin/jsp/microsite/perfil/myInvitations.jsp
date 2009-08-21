@@ -5,24 +5,34 @@
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
+<%@page import="org.semanticwb.platform.SemanticObject"%>
 
-<div class="miembros">
-<h2 class="titulo">Invitaciones</h2>
 <%
-User user=paramRequest.getUser();
+User owner=paramRequest.getUser();
+User user=owner;
+if(request.getParameter("user")!=null){
+    SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
+    user=(User)semObj.createGenericInstance();
+}
+String userParam="";
+if(owner!=user) userParam="?user="+user.getEncodedURI();
+
 WebPage wpage=paramRequest.getWebPage();
 SWBResourceURL urlAction=paramRequest.getActionUrl();
 
 Resource base=paramRequest.getResourceBase();
 String requesterPath=base.getAttribute("requesterPath","/swb/Ciudad_Digital/Mis_invitaciones");
+String perfilPath=base.getAttribute("perfilPath","/swb/Ciudad_Digital/Perfil");
 String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
 boolean isStrategy=false;
 if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) isStrategy=true;
-
 String firstName="", lastName="";
 int contTot=0;
-
-Iterator<FriendshipProspect> itFriendshipProspect=FriendshipProspect.listFriendshipProspectByFriendShipRequested(user, wpage.getWebSite());
+%>
+   <div class="miembros">
+    <h2 class="titulo">Invitaciones</h2>
+<%
+Iterator<FriendshipProspect> itFriendshipProspect=FriendshipProspect.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
 while(itFriendshipProspect.hasNext()){
     FriendshipProspect friendshipProspect=itFriendshipProspect.next();
     User userRequester=friendshipProspect.getFriendShipRequester();
@@ -33,7 +43,7 @@ while(itFriendshipProspect.hasNext()){
     if(!isStrategy){
 %>
     <div class="moreUser">
-            <a href="<%=wpage.getParent().getUrl()%>?user=<%=userRequester.getEncodedURI()%>"><img src="<%=photo%>" title="<%=firstName%> <%=lastName%>" width="80" height="70">
+            <a href="<%=perfilPath%>?user=<%=userRequester.getEncodedURI()%>"><img src="<%=photo%>" title="<%=firstName%> <%=lastName%>" width="80" height="70">
                 <br>
                 <%=firstName%>
                 <%=lastName%>
@@ -49,9 +59,9 @@ while(itFriendshipProspect.hasNext()){
   }
 if(isStrategy && contTot>0){%>
      <div class="clear">
-        <p class="titulo"><a href="<%=requesterPath%>" >Tienes <%=contTot%> invitacion(es) de amistad</a></p>
-     </div>
+        <p class="titulo"><a href="<%=requesterPath%><%=userParam%>" >Tienes <%=contTot%> invitacion(es) de amistad</a></p>
+     </div>     
   <%}else if(contTot==0){%>
      <p class="titulo">No tienes invitaciones de amistad</p>
-  <%}%>
+  <%}%>  
 </div>
