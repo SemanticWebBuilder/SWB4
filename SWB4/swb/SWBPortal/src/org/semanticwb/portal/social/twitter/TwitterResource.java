@@ -69,18 +69,29 @@ public class TwitterResource extends GenericAdmResource {
             String action=response.getAction();
             if(action.equals("saveUserData"))
             {
-                if(request.getParameter("twitterLogin")!=null && request.getParameter("twitterPass")!=null){
-                    base.setData(user,request.getParameter("twitterLogin")+"|"+request.getParameter("twitterPass"));
-                    base.updateAttributesToDB();
+                if(request.getParameter("twitterLogin")!=null && request.getParameter("twitterPass")!=null)
+                {
+                   String data=request.getParameter("twitterLogin")+"|"+request.getParameter("twitterPass");
+                   String twitterConf=base.getAttribute("twitterConf","1");
+                   if(twitterConf.equals("1"))base.setData(data);
+                   if(twitterConf.equals("2"))base.setData(user,data);
+                   if(twitterConf.equals("3"))base.setData(response.getWebPage(),data);
+                   base.updateAttributesToDB();
                 }
             }else if(action.equals("send2Twitter")){
                 String status=request.getParameter("status");
-                String userData=base.getData(user);
-                if(userData!=null && status!=null && status.trim().length()>0){
-                    int pos=userData.indexOf("|");
+
+               String data=null;
+               String twitterConf=base.getAttribute("twitterConf","1");
+               if(twitterConf.equals("1"))data=base.getData();
+               if(twitterConf.equals("2"))data=base.getData(user);
+               if(twitterConf.equals("3"))data=base.getData(response.getWebPage());
+
+                if(data!=null && status!=null && status.trim().length()>0){
+                    int pos=data.indexOf("|");
                     if(pos>-1){
-                        String userLogin=userData.substring(0,pos);
-                        String userPass=userData.substring(pos+1);
+                        String userLogin=data.substring(0,pos);
+                        String userPass=data.substring(pos+1);
                         Twitter twitter = new Twitter(userLogin, userPass);
                         twitter.updateStatus(request.getParameter("status"));
                     }
