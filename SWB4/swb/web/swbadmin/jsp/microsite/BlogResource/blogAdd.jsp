@@ -1,6 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
-
 <script type="text/javascript">
     dojo.require("dojox.layout.FloatingPane");
     dojo.require("dijit.form.Button");
@@ -33,7 +32,6 @@
                     <label for="title">Título:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input id="title" size="20" maxlength="50" name="title" value=""><br>
                     <label for="description">Descripción:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input size="20" maxlength="50" id="description" name="description" value=""><br>
                     <label for="content">Contenido de la entrada:&nbsp;&nbsp;&nbsp;</label>
-
                     <textarea id="content" plugins="['bold','italic','underline', 'strikethrough','|','insertUnorderedList','insertOrderedList','|','createLink','unlink']" dojoType="dijit.Editor" rows="5" cols="23" name="content"></textarea>
                     <script>
                         function validaForma()
