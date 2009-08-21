@@ -73,10 +73,20 @@
                %>
                   <table width="100%" cellpadding="2" cellspacing="2" border="0">
             <%
+            ArrayList<PostElement> elements=new ArrayList();
             Iterator<PostElement> posts = SWBComparator.sortByCreated(blog.listPostElements(),false);
+            int i=0;
             while (posts.hasNext())
             {
-                PostElement post = posts.next();
+                elements.add(posts.next());
+                i++;
+                if(i==10) // sólo muestra hasta 10 últimas entradas
+                {
+                    break;
+                }
+            }
+            for(PostElement post : elements)
+            {                
                 if(post.canView(member))
                 {
                     String postAuthor = post.getCreator().getFullName();
