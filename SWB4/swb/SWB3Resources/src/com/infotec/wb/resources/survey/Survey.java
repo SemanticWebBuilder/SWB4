@@ -531,7 +531,7 @@ public class Survey
         }
         else
         {
-            ret.append("\n    <script type=\"javascript\">     ");
+            ret.append("\n    <script type=\"text/javascript\">     ");
             ret.append("\n            ");
             ret.append("\n    function jsValida(pForm){      ");
             ret.append("\n            ");
@@ -876,14 +876,14 @@ public class Survey
                     ret.append("</td></tr>");
 
                     tempS=base.getAttribute("template","");
-                    ret.append("\n<tr><td class=\"valores\" width=\"200\" align=\"right\">&nbsp;</td>");
+                    ret.append("\n<tr><td  width=\"200\" align=\"right\">&nbsp;</td>");
                     if (base.getAttribute("path").indexOf(base.getWorkPath()) !=-1){
-                        ret.append("<td class=\"valores\">"+paramsRequest.getLocaleString("usrmsg_Survey_getAdmHtml_msgActual")+" <a href=\"" + base.getAttribute("path") + tempS +"\">"+tempS+"</a></tr>");
+                        ret.append("<td >"+paramsRequest.getLocaleString("usrmsg_Survey_getAdmHtml_msgActual")+" <a href=\"" + base.getAttribute("path") + tempS +"\">"+tempS+"</a></tr>");
                     }
                     else{
-                        ret.append("<td class=\"valores\">"+paramsRequest.getLocaleString("usrmsg_Survey_getAdmHtml_msgPlantillaDefecto")+" <a href=\""+ base.getAttribute("path") + "MainSurvey.xsl\">MainSurvey.xsl</a></tr>");
+                        ret.append("<td >"+paramsRequest.getLocaleString("usrmsg_Survey_getAdmHtml_msgPlantillaDefecto")+" <a href=\""+ base.getAttribute("path") + "MainSurvey.xsl\">MainSurvey.xsl</a></tr>");
                     }
-                    ret.append("\n<tr><td class=\"valores\" width=\"200\" align=\"right\">" +paramsRequest.getLocaleString("usrmsg_Survey_getAdmHtml_msgTemplate")+":</td>");
+                    ret.append("\n<tr><td  width=\"200\" align=\"right\">" +paramsRequest.getLocaleString("usrmsg_Survey_getAdmHtml_msgTemplate")+":</td>");
                     ret.append("<td><input type=\"file\" name=\"ftemplate\" size=\"37\"><input type=\"hidden\" name=\"ptemplate\" value=0><input type=\"hidden\" name=\"current_template\" value=\""+tempS+"\"></td></tr>");
 
                     tempS=base.getAttribute("url_response","");
@@ -942,7 +942,7 @@ public class Survey
                     ret.append("</table>");
                     ret.append("\n</fieldset>");
                     ret.append("\n<fieldset>");
-                    ret.append("\n<input type=\"button\" name=\"enviar\" value=\""+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_btnActualizar")+"\" onclick=\"javascript: if(jsValida(forma)){this.form.submit();}\"/>");
+                    ret.append("\n<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"enviar\"  onclick=\"javascript: if(jsValida(forma)){forma.submit();}\">"+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_btnActualizar")+"</button>");
                     ret.append("\n</fieldset>");
                     ret.append("</form>");
                     ret.append("\n</div>");
@@ -993,7 +993,7 @@ public class Survey
                 ret.append("\n</fieldset>");
                 ret.append("\n<fieldset>");
                 ret.append("\n<input type=\"button\" name=\"enviar\" value=\""+paramsRequest.getLocaleString("usrmsg_CatalogType_getAdmHtml_msgAgregar")+"\" onclick=\"javascript: if(jsValida(forma)){ window.document.forma.submit();}\">");
-                ret.append("<input type=\"hidden\" name=\"topic\" value=\""+request.getParameter("topic") +"\"><input type=\"hidden\" name=\"tm\" value=\""+request.getParameter("tm") +"\">");
+                ret.append("<input type=\"hidden\" name=\"topic\" value=\""+paramsRequest.getWebPage().getId() +"\"><input type=\"hidden\" name=\"tm\" value=\""+idtm +"\">"); //request.getParameter("topic") request.getParameter("tm")
                 ret.append("\n</fieldset>");
                 ret.append("</form>");
                 ret.append("\n</div>");
@@ -1006,7 +1006,7 @@ public class Survey
                 //ret.append("<font size=2><b>Preguntas Relacionadas</b></font><hr>");
                 if(request.getParameter("idp")!=null )
                 {
-                    ret.append("\n    <script type=\"javascript\">    ");
+                    ret.append("\n    <script type=\"text/javascript\">    ");
                     ret.append("\n        ");
                     ret.append("\n    function valida(forma){    ");
                     ret.append("\n     var error=0;    ");
@@ -1175,7 +1175,7 @@ public class Survey
                     ret.append("\n    </script>    ");
                 }
 
-                ret.append("\n<script type=\"javascript\">");
+                ret.append("\n<script type=\"text/javascript\">");
                 ret.append("\n    function validaIndice(forma){");
                 ret.append("\n     var tempo = forma.indice.value;");
                 ret.append("\n     trim(forma.indice);");
