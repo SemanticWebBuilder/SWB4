@@ -46,7 +46,7 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <p class="titulo"><%=created%></p>
+                        <p class="titulo">Blog creado el: <%=created%></p>
                     </td>
                 </tr>
             </table>
