@@ -18,8 +18,7 @@
         <p>No tiene permisos para ver esta entrada, o la entrada ya no existe</p>
         <%
         return;
-    }
-    post.incViews();
+    }    
     String defaultFormat = "dd/MM/yyyy HH:mm";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
     String updated = iso8601dateFormat.format(post.getUpdated());
