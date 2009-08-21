@@ -82,6 +82,7 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        final String path="/../swbadmin/jsp/microsite/PhotoResource/sinfoto.png";
         WebPage page = response.getWebPage();
         Member mem=Member.getMember(response.getUser(),response.getWebPage());
         if(!mem.canView())return;  //si el usuario no pertenece a la red sale;
@@ -91,8 +92,14 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
             HashMap<String,String> params = upload(request);
             if(mem.canAdd() && params.containsValue("add")) {
                 PhotoElement rec = PhotoElement.createPhotoElement(getResourceBase().getWebSite());
-                rec.setImageURL(params.get("filename"));
-                rec.setPhotoThumbnail(params.get("thumbnail"));
+                if(params.containsKey("filename"))
+                    rec.setImageURL(params.get("filename"));
+                else
+                    rec.setImageURL(path);
+                if(params.containsKey("thumbnail"))
+                    rec.setPhotoThumbnail(params.get("thumbnail"));
+                else
+                    rec.setPhotoThumbnail(path);
                 rec.setTitle(params.get("title"));
                 rec.setDescription(params.get("description"));
                 rec.setTags(params.get("tags"));
