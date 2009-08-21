@@ -61,13 +61,13 @@
                             {
                                 canview=element.canView(member);                                
                             }                            
-                        }                        
+                        }
                         String created="Sin fecha";
                         if(element.getCreated()!=null)
                         {
                             created=iso8601dateFormat.format(element.getCreated());
                         }
-       ;                 String href=element.getURL();
+                        String href=element.getURL();
                         String src=pathIamge+element.getNewsImage();
                         if(element.getNewsImage()!=null)
                         {
