@@ -27,13 +27,17 @@ package org.semanticwb.portal.community;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.*;
 
 public class MembershipResource extends org.semanticwb.portal.community.base.MembershipResourceBase 
 {
+    private static Logger log=SWBUtils.getLogger(MembershipResource.class);
 
     public MembershipResource()
     {
@@ -47,36 +51,35 @@ public class MembershipResource extends org.semanticwb.portal.community.base.Mem
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        PrintWriter out=response.getWriter();
-        User user=paramRequest.getUser();
-        WebPage page=paramRequest.getWebPage();
-        MicroSite site=MicroSite.getMicroSite(paramRequest.getWebPage());
         
-        Member member=getMember(user, site);
 
-        out.println("User:"+user.getFullName());
-        if(user.isRegistered())
+        String act=request.getParameter("act");
+        if(act==null)act="view";
+        String path="/swbadmin/jsp/microsite/MembershipResource/membershipResView.jsp";
+//        if(act.equals("add"))path="/swbadmin/jsp/microsite/MembershipResource/membershipResAdd.jsp";
+//        if(act.equals("edit"))path="/swbadmin/jsp/microsite/MembershipResource/membershipResEdit.jsp";
+//        if(act.equals("detail"))path="/swbadmin/jsp/microsite/MembershipResource/membershipResDetail.jsp";
+
+        RequestDispatcher dis=request.getRequestDispatcher(path);
+        try
         {
-            if(member==null)
-            {
-                out.println("<a href=\""+paramRequest.getActionUrl().setParameter("act", "subscribe")+"\">Suscribirse a la comunidad...</a>");
-            }else
-            {
-                out.println("<a href=\""+paramRequest.getActionUrl().setParameter("act", "unsubscribe")+"\">Eliminar Suscripción de la comunidad...</a>");
-            }
-        }
+            request.setAttribute("paramRequest", paramRequest);
+            dis.include(request, response);
+        }catch(Exception e){log.error(e);}
+
+        
     }
 
     private Member getMember(User user, MicroSite site)
     {
-        System.out.println("getMember:"+user+" "+site);
+        //System.out.println("getMember:"+user+" "+site);
         if(site!=null)
         {
             Iterator<Member> it=Member.listMemberByUser(user,site.getWebSite());
             while(it.hasNext())
             {
                 Member mem=it.next();
-                System.out.println("mem:"+mem+" "+mem.getMicroSite());
+                //System.out.println("mem:"+mem+" "+mem.getMicroSite());
                 if(mem.getMicroSite().equals(site))
                 {
                    return mem;
@@ -91,16 +94,16 @@ public class MembershipResource extends org.semanticwb.portal.community.base.Mem
     {
         WebPage page=response.getWebPage();
         User user=response.getUser();
-        System.out.println("user:"+user);
+        //System.out.println("user:"+user);
         String action=request.getParameter("act");
-        System.out.println("act:"+action);
+        //System.out.println("act:"+action);
         if("subscribe".equals(action))
         {
             Member member=Member.createMember(page.getWebSite());
             member.setAccessLevel(Member.LEVEL_EDIT);
             member.setUser(user);
             member.setMicroSite(MicroSite.getMicroSite(page));
-            System.out.println("member:"+member);
+            //System.out.println("member:"+member);
         }else if("unsubscribe".equals(action))
         {
             Member member=Member.getMember(user, page);
