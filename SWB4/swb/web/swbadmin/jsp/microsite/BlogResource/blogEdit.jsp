@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+g<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.platform.SemanticObject,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <script type="text/javascript">
@@ -53,18 +53,19 @@
                             <li><label><input type="radio" class="radio" name="level" value="3" <%if(post.getVisibility()==3)out.println(chk);%>/> Sólo yo</label></li>
                         </ul>
                     </fieldset>
-                <p class="pad5 last-child clear right">
-                    <strong><input onclick="validaForma(this.form)" type="button" value="Guardar cambios" class="button"/></strong>
+                        <br>
+                <div class="editarInfo"><p><a onclick="validaForma()" href="#">Guardar</a></p></div>
+                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>                    
                     <script>
-                        function validaForma(forma)
+                        function validaForma()
                         {                            
-                            var title = forma.title.value;
+                            var title = frmaddpost.title.value;
                             if(!title)
                             {
                                 alert('Debe ingresar el título de la entrada');
                                 return;
                             }
-                            var description = forma.description.value;
+                            var description = frmaddpost.description.value;
                             if(!description)
                             {
                                 alert('Debe ingresar la descripción de la entrada');
@@ -79,14 +80,11 @@
                             var msg='¿Estan los datos correctos de la entrada del blog?';
                             if(confirm(msg))
                             {
-                                dojo.byId('content').value=content;
-                                //dojo.byId('frmaddpost').action=urladd;
+                                dojo.byId('content').value=content;                                
                                 dojo.byId('frmaddpost').submit();
                             }
                         }
                     </script>
-                    <a class="button" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
-                </p>
             </div>
             <input type="hidden" name="act" value="add"/>
         </form>
