@@ -27,13 +27,14 @@ public class PostElement extends org.semanticwb.portal.community.base.PostElemen
     @Override
     public WebPage getWebPage()
     {
-        if(super.getBlog()!=null)
+        if(super.getBlog()==null)
         {
-            return super.getBlog().getWebPage();
+            return null;
         }
         else
         {
-            return null;
+            return super.getBlog().getWebPage();
+            
         }
     }
 }
