@@ -21,43 +21,43 @@
             <legend>Agregar evento nuevo</legend>
             <div>
                 <p>
-                    <label for="foto">Imagen del evento&nbsp;:</label>
+                    <label for="foto">Imagen del evento:&nbsp;</label>
                     <input type="file" id="foto" name="foto" />
                 </p>
                 <p>
-                    <label for="event_title">Título del evento&nbsp;</label>
+                    <label for="event_title">Título del evento:&nbsp;</label>
                     <input type="text" id="event_title" name="event_title"/>
                 </p>
                 <p style="vertical-align:top">
-                    <label for="event_description">Descripción del evento&nbsp;</label>
+                    <label for="event_description">Descripción del evento:&nbsp;</label>
                     <textarea id="event_description" name="event_description" cols="30" rows="5"></textarea>
                 </p>
                 <p>
-                    <label for="event_audience">Dirigido a&nbsp;</label>
+                    <label for="event_audience">Dirigido a:&nbsp;</label>
                     <input type="text" id="event_audience" name="event_audience" value="Todos"/>
                 </p>
                 <p>
-                    <label for="event_startDate">Fecha de inicio&nbsp;</label>
+                    <label for="event_startDate">Fecha de inicio:&nbsp;</label>
                     <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" constraints="{datePattern:'yyyy/MM/dd'}" onchange="dijit.byId('event_endDate').constraints.min = arguments[0];"/>
                 </p>
                 <p>
-                    <label for="event_endDate">Fecha de término&nbsp;</label>
+                    <label for="event_endDate">Fecha de término:&nbsp;</label>
                     <input dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" constraints="{datePattern:'yyyy/MM/dd'}" onchange="dijit.byId('event_startDate').constraints.max = arguments[0];"/>
                 </p>
                 <p>
-                    <label for="event_startTime">Hora de inicio&nbsp;</label>
+                    <label for="event_startTime">Hora de inicio:&nbsp;</label>
                     <input dojoType="dijit.form.TimeTextBox" type="text" id="event_startTime" name="event_startTime" constraints="{timePattern:'hh:mm a', visibleRange:'T01:30:00'}" />
                 </p>
                 <p>
-                    <label for="event_endTime">Hora de término&nbsp;</label>
+                    <label for="event_endTime">Hora de término:&nbsp;</label>
                     <input dojoType="dijit.form.TimeTextBox" type="text" id="event_endTime" name="event_endTime" constraints="{timePattern:'hh:mm a', visibleRange:'T01:30:00'}" />
                 </p>
                 <p>
-                    <label for="event_place">Lugar del evento&nbsp;</label>
+                    <label for="event_place">Lugar del evento:&nbsp;</label>
                     <input type="text" id="event_place" name="event_place"/>
                 </p>
                 <p>
-                    <label for="event_tags">Etiquetas&nbsp;</label>
+                    <label for="event_tags">Etiquetas:&nbsp;</label>
                     <input type="text" id="event_tags" name="event_tags"/>
                 </p>
             </div>
