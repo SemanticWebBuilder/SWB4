@@ -205,7 +205,11 @@ public class PhotoResource extends org.semanticwb.portal.community.base.PhotoRes
                             long serial = (new Date()).getTime();
                             String filename = serial+"_"+currentFile.getFieldName()+currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
 
-                            File image = new File(realpath+filename);
+                            File image = new File(realpath);
+                            if(!image.exists()) {
+                                image.mkdir();
+                            }
+                            image = new File(realpath+filename);
                             File thumbnail = new File(realpath+"thumbn_"+filename);
                             currentFile.write(image);
                             ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
