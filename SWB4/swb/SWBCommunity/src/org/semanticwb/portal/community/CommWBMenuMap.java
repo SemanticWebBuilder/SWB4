@@ -130,13 +130,16 @@ public class CommWBMenuMap extends GenericAdmResource
         WebPage basetp = paramRequest.getWebPage().getWebSite().getHomePage();
         WebPage topic = paramRequest.getWebPage();
 
+        boolean isOwner=true;
+        User userComm=user;
         String suserComm="";
         if(request.getParameter("user")!=null)
         {
             SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
-            User userComm=(User)semObj.createGenericInstance();
+            userComm=(User)semObj.createGenericInstance();
             suserComm="?user="+userComm.getEncodedURI();
         }
+        if(!user.getURI().equals(userComm.getURI())) isOwner=false;
 
         String basetopic = base.getAttribute("basetopic","_home");
         try
@@ -164,7 +167,7 @@ public class CommWBMenuMap extends GenericAdmResource
             int max=getLimits(basetp,topic,1,user);
             //System.out.println("max:"+max);
 
-            getChilds(dom, el, basetp, topic, lang, 1, 1, user, max, suserComm);
+            getChilds(dom, el, basetp, topic, lang, 1, 1, user, max, suserComm, isOwner, userComm);
 
             return dom;
         }catch (Exception e)
@@ -199,7 +202,7 @@ public class CommWBMenuMap extends GenericAdmResource
     }
 
 
-    public boolean getChilds(Document dom, Element nodo, WebPage aux, WebPage topic, String lang, int level, int rlevel, User user, int max, String  suserComm)
+    public boolean getChilds(Document dom, Element nodo, WebPage aux, WebPage topic, String lang, int level, int rlevel, User user, int max, String  suserComm, boolean isOwner, User userComm)
     {
         //System.out.println("****************** enter"+level+":"+aux.getId()+" ***********************");
         boolean childs=false;
@@ -216,7 +219,11 @@ public class CommWBMenuMap extends GenericAdmResource
                     String tpurl = tp.getUrl();
                     Element ele = dom.createElement("node");
                     ele.setAttribute("id", tpurl);
-                    ele.setAttribute("name", tp.getDisplayName(lang));
+                    if(isOwner)
+                        ele.setAttribute("name", tp.getDisplayName(lang));
+                    else {
+                        ele.setAttribute("name", tp.getDisplayName(lang)+ " de "+userComm.getFirstName());
+                    }
                     ele.setAttribute("path", tpurl+suserComm);
                     ele.setAttribute("realLevel", ""+rlevel);
                     ele.setAttribute("level", ""+level);
@@ -249,7 +256,7 @@ public class CommWBMenuMap extends GenericAdmResource
                     if(tp.isParentof(topic) || tp==topic)
                     {
                         ele.setAttribute("open","true");
-                        if(getChilds(dom,ele, tp, topic, lang, level+auxl, rlevel+1, user,max, suserComm))
+                        if(getChilds(dom,ele, tp, topic, lang, level+auxl, rlevel+1, user,max, suserComm, isOwner, userComm))
                         {
                             ele.setAttribute("childs","true");
                         }else
