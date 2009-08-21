@@ -89,7 +89,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                     }
                     else if(element instanceof EventElement)
                     {
-                        src="eventos.gif";
+                        src="eventos.jpg";
                     }
                     src=webpath+src;
 
