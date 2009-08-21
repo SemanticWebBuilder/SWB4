@@ -9,10 +9,6 @@
             if(blog!=null)
             {
             Member member = Member.getMember(user, wpage);
-
-           
-           
-    
             String defaultFormat = "dd 'de' MMMM  'del' yyyy";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
             String created = iso8601dateFormat.format(blog.getCreated()); //SWBUtils.TEXT.(blog.getCreated(), user.getLanguage());//iso8601dateFormat.format(blog.getCreated());
@@ -28,9 +24,6 @@
                 }
             }
             %>
-
-            <hr>
-
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                     <td>                        
@@ -58,19 +51,21 @@
                 </tr>
             </table>
             <%
-            if(showbr)
+            /*if(showbr)
             {
                 %>
-                 <hr><br>
+                 <p><img src="images/solidLine.jpg" alt="" width="700" height="1" ></p><br>
                 <%
-            }
+            }*/
              if(member.canAdd())
             {
                 %>
-                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","add")%>">Agregar Entrada</a></p></div><hr>
+                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","add")%>">Agregar Entrada</a></p></div>
+                
                 <%
             }
                %>
+               <p><br><img src="images/solidLine.jpg" alt="" width="680" height="1" ></p>
                   <table width="100%" cellpadding="2" cellspacing="2" border="0">
             <%
             ArrayList<PostElement> elements=new ArrayList();
@@ -148,13 +143,13 @@
                         </td>                                                
                     </tr>
                     <tr>
-                        <td colspan="3">
+                        <td colspan="5">
                             <p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="3">
-                            <hr>
+                        <td colspan="5">
+                            <p><img src="images/solidLine.jpg" alt="" width="680" height="1" ></p>
                         </td>
                     </tr>
 
