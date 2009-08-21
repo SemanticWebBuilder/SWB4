@@ -15,7 +15,7 @@
 %>
 
 <div id="leftProfile">
-    <p><img src="userIMG.jpg" alt="Usuario" width="174" height="174" ></p>
+    <p><img src="/swbadmin/jsp/microsite/MembershipResource/userIMG.jpg" alt="Usuario" width="174" height="174" ></p>
     <p class="addOn"><a href="#">Cambiar imagen de la comunidad</a></p>
 <%
     if(user.isRegistered())
@@ -28,6 +28,8 @@
             out.println("<p class=\"addOn\"><a href=\""+paramRequest.getActionUrl().setParameter("act", "unsubscribe")+"\">Cancelar suscripción de esta comunidad</a></p>");
         }
     }
+
+    site.
 %>
 </div>
 
@@ -36,8 +38,11 @@
         <div class="clear">&nbsp;</div>
 <%
         out.println("<h2 class=\"tituloGrande\">"+site.getDisplayName()+"</h2>");
-        out.println("<p class=\"tituloGrande\"><img src=\"solidLine.jpg\" alt=\"\" width=\"495\" height=\"1\" ></p>");
-        out.println("<p>Descripción: "+site.getDescription()+"</p>");
+        out.println("<p class=\"tituloGrande\"><img src=\"/swbadmin/jsp/microsite/MembershipResource/solidLine.jpg\" alt=\"\" width=\"495\" height=\"1\" ></p>");
+        if(site.getDescription()!=null)
+        {
+            out.println("<p>Descripción: "+site.getDescription()+"</p>");
+        }
         out.println("<p>Creador: "+site.getCreator().getFullName()+"</p>");
         out.println("<p>Creada: "+SWBUtils.TEXT.getTimeAgo(site.getCreated(),user.getLanguage())+"</p>");
         out.println("<p>Modificada: "+SWBUtils.TEXT.getTimeAgo(site.getUpdated(),user.getLanguage())+"</p>");
