@@ -62,7 +62,7 @@
             
                   <table width="100%" cellpadding="2" cellspacing="2" border="0">
             <%
-            Iterator<PostElement> posts = blog.listPostElements();
+            Iterator<PostElement> posts = SWBComparator.sortByCreated(blog.listPostElements(),false);
             while (posts.hasNext())
             {
                 PostElement post = posts.next();
