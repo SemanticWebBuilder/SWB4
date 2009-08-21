@@ -1,9 +1,7 @@
 <%@page contentType="text/html"%>
 <%@page import="java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
-
-            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-            
+            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");            
             User user = paramRequest.getUser();
             WebPage wpage = paramRequest.getWebPage();
             MicroSiteWebPageUtil wputil = MicroSiteWebPageUtil.getMicroSiteWebPageUtil(wpage);
@@ -19,6 +17,7 @@
                 current = new Date(Integer.valueOf(year) - 1900, Integer.valueOf(month), Integer.valueOf(day));
             }            
 %>
+
 <script type="text/javascript">
     dojo.require("dijit.form.TextBox");
     dojo.require("dijit.form.ValidationTextBox");
@@ -28,6 +27,26 @@
     dojo.require("dijit.form.Button");
     dojo.require("dijit.form.FilteringSelect");
     dojo.require("dojo.parser");
+
+    function openTooltip(oid, ttid, tip) {
+        var o = document.getElementById(oid);
+        var coords = dojo.coords(o);
+
+        var tt = document.createElement('div');
+        tt.setAttribute('id', ttid);
+	tt.setAttribute("style", "position: absolute;font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;line-height: 3px;color: #000000;background-color: #FFFF99;padding-right: 5px;padding-left: 5px;position: absolute;border: 1px solid #AAAAAA;");
+	tt.style.top = (coords.y)+'px';
+	tt.style.left = (coords.x+coords.w+2)+'px';
+        tt.innerHTML = tip;
+        document.body.appendChild(tt);
+    }
+
+    function closeTooltip(ttid) {
+        var tt = document.getElementById(ttid);
+        document.body.removeChild(tt);
+    }
+
+
 </script>
 <div>
     <div>
@@ -81,7 +100,8 @@
 </div>
 <%!
     private String renderCalendar(Date current, WebPage wpage, SWBParamRequest paramRequest) {
-        StringBuffer sbf = new StringBuffer();
+        String resId = paramRequest.getResourceBase().getId();
+        StringBuilder sbf = new StringBuilder();
 
         //If no date specified, get current date
         if (current == null) current = new Date(System.currentTimeMillis());
@@ -144,11 +164,11 @@
             }
 
             Iterator<EventElement> evsNow = EventElement.listEventElementsByDate(null, new Date(year, month, i), wpage, wpage.getWebSite());
-            String eventTitles = "";
 
+            String eventTitles = "";
             while (evsNow.hasNext()) {
                 EventElement eve = evsNow.next();
-                eventTitles = eventTitles + "* " + eve.getTitle().trim() + "&#10;";
+                eventTitles = eventTitles + "<p>" + eve.getTitle().trim() + "</p>";
             }
 
             //Today?
@@ -160,14 +180,14 @@
                     viewUrl.setParameter("month", String.valueOf(month));
                     viewUrl.setParameter("day", String.valueOf(i));
 
-                    sbf.append("      <td class=\"dated\">\n" +
-                            "        <div class=\"daylabel\"><a href=\"" + viewUrl + "\">" + i + "</a></div>\n" +
-                            "      </td>\n");
+                    sbf.append("<td id=\"td_"+i+resId+"\" class=\"dated\">\n");
+                    sbf.append("  <div class=\"daylabel\"><a href=\""+viewUrl+"\" onmouseover=\"openTooltip('td_"+i+resId+"','tt_"+i+resId+"','"+eventTitles+"')\" onmouseout=\"closeTooltip('tt_"+i+resId+"')\">" + i + "</a></div>\n");
+                    sbf.append("</td>\n");
                 }  else {
                     //There aren't events today
-                    sbf.append("      <td class=\"day\">\n" +
-                            "<div class=\"daylabel\">" + i + "</div>\n" +
-                            "      </td>\n");
+                    sbf.append("<td class=\"day\">\n");
+                    sbf.append("  <div class=\"daylabel\">" + i + "</div>\n");
+                    sbf.append("</td>\n");
                 }
             } else {
                 //Not today
@@ -178,24 +198,23 @@
                     viewUrl.setParameter("month", String.valueOf(month));
                     viewUrl.setParameter("day", String.valueOf(i));
 
-                    sbf.append("      <td class=\"dated\">\n" +
-                            "        <div class=\"daylabel\"><a href=\"" + viewUrl + "\">" + i + "</a></div>\n" +
-                            "      </td>\n");
+                    sbf.append("<td id=\"td_"+i+resId+"\" class=\"dated\">\n");
+                    sbf.append("  <div class=\"daylabel\"><a href=\""+viewUrl+"\"  onmouseover=\"openTooltip('td_"+i+resId+"','tt_"+i+resId+"','"+eventTitles+"')\" onmouseout=\"closeTooltip('tt_"+i+resId+"')\">" + i + "</a></div>\n");
+                    sbf.append("</td>\n");
                 } else {
-                    sbf.append("      <td class=\"day\" >\n" +
-                            "        <div class=\"daylabel\">" + i + "</div>\n" +
-                            "      </td>\n");
+                    sbf.append("<td class=\"day\" >\n");
+                    sbf.append("  <div class=\"daylabel\">" + i + "</div>\n");
+                    sbf.append("</td>\n");
                 }
             }
             weekDay++;
         }
         for(int i = 0; i < (7-weekDay); i++) {
-            sbf.append("      <td class=\"empty\" >\n" +
-                            "      </td>\n");
+            sbf.append("<td class=\"empty\" ></td>\n");
         }
-        sbf.append("    </tr>\n" +
-                "  </table>\n" +
-                "</div>\n");
+        sbf.append("</tr>\n");
+        sbf.append("</table>\n");
+        sbf.append("</div>\n");
 
         return sbf.toString();
     }
