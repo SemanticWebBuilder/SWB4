@@ -60,8 +60,8 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                         if(member!=null)
                         {
                             canview=element.canView(member);
-                        }
-                    }
+                        }                        
+                    }                    
                     String src="blog.jpg";
                     String title=element.getTitle();
                     String description=element.getDescription();
