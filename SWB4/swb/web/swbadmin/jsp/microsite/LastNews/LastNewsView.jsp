@@ -53,7 +53,15 @@
                     {
                         NewsElement element=elementsArray[iElement];
                         User user = paramRequest.getUser();
-                        boolean canview=element.canView(Member.getMember(user, element.getWebPage()));
+                        boolean canview=false;
+                        if(element.getWebPage()!=null && user!=null)
+                        {
+                            Member member=Member.getMember(user, element.getWebPage());
+                            if(member!=null)
+                            {
+                                canview=member.canView();
+                            }
+                        }
                         String created="Sin fecha";
                         if(element.getCreated()!=null)
                         {
