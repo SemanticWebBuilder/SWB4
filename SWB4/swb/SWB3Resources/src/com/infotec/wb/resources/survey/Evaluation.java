@@ -242,7 +242,7 @@ public class Evaluation
             UserRepository usrRep = paramsRequest.getUser().getUserRepository();
             if(email!=null&&!email.equals("Anonimo")&&!email.equals("Anónimo")&&!email.startsWith("0_"))
             {
-                user = usrRep.getUserByLogin(email);
+                user = usrRep.getUser(email);
                 tmpName=user.getName();
                 email = user.getEmail();
             }
@@ -323,7 +323,7 @@ public class Evaluation
                     float tes = finalscore / prenum;
                     finalscore = java.lang.Math.round(tes);
                 }
-                ret.append("\n<tr><td width=\"10\">&nbsp;</td><td colspan=3 align=right >"+paramsRequest.getLocaleString("usrmsg_Evaluation_getEvaluation_msgCalificacionTotalEvaluacion")  +":&nbsp;<input type=\"text\" name=\"sum\" size=\"3\" maxlength=\"3\" value=\""+ finalscore +"\" onblur=\"javascript: ValidNumber(this)\">&nbsp;<input type=\"button\" name=\"btnSum\" value=\""+paramsRequest.getLocaleString("usrmsg_Evaluation_getEvaluation_msgCalcular")  +"\" onClick=\"getSum()\" class=boton></td></tr>");
+                ret.append("\n<tr><td width=\"10\">&nbsp;</td><td colspan=3 align=right >"+paramsRequest.getLocaleString("usrmsg_Evaluation_getEvaluation_msgCalificacionTotalEvaluacion")  +":&nbsp;<input type=\"text\" name=\"sum\" size=\"3\" maxlength=\"3\" value=\""+ finalscore +"\" onblur=\"javascript: ValidNumber(this)\">&nbsp;<input type=\"button\" name=\"btnSum\" value=\""+paramsRequest.getLocaleString("usrmsg_Evaluation_getEvaluation_msgCalcular")  +"\" onClick=\"getSum()\" ></td></tr>");
             }
             ret.append("\n<tr><td colspan=4 align=right ><hr noshade size=1><input type=\"button\" name=\"btnExit\" value=\""+paramsRequest.getLocaleString("usrmsg_Evaluation_getEvaluation_msgSalir")  +"\" onClick=\"DoExit()\" >&nbsp;<input type=\"button\" name=\"btnSave\" value=\""+paramsRequest.getLocaleString("usrmsg_Evaluation_getEvaluation_msgSiguiente")  +"\" onClick=\"DoNext()\" >&nbsp;");
 

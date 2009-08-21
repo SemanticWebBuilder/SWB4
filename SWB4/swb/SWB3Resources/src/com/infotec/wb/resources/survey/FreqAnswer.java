@@ -113,6 +113,7 @@ public class FreqAnswer
         accion = paramsRequest.getAction();
         response.setContentType("text/html");
 
+        ret.append("\n<link href=\"/swbadmin/css/swb.css\" rel=\"stylesheet\" type=\"text/css\" />");
         if (accion.equalsIgnoreCase("agregar_fa"))
         {
             try
@@ -123,6 +124,9 @@ public class FreqAnswer
                 opcion.appendChild(dom.createTextNode(""));  // aqu� ir�a el texto de la opci�n
                 dom.appendChild(resource);
                 String strOption=request.getParameter("hdnOption");
+
+                System.out.println("opciones:"+strOption);
+
                 StringTokenizer strToken=new StringTokenizer(strOption,"|");
                 int i = 1;
                 while(strToken.hasMoreTokens())
@@ -147,7 +151,7 @@ public class FreqAnswer
                 {
                     if(request.getSession().getAttribute("regreso")!=null)
                     {
-                        ret.append("\n<script language=javascript>");
+                        ret.append("\n<script type=\"text/javascript\">");
                         ret.append("\n    window.opener.regreso('freqanswerid="+objFreq.getFreqanswerid()+"');");
                         ret.append("\n    window.close();");
                         ret.append("</script>");
@@ -195,6 +199,7 @@ public class FreqAnswer
                     opcion.appendChild(dom.createTextNode(""));  // aqu� ir�a el texto de la opci�n
                     dom.appendChild(resource);
                     String strOption=request.getParameter("hdnOption");
+                    System.out.println("opciones:"+strOption);
                     String strReuse="1";
                     if(request.getParameter("chkReuse") == null) strReuse="0";
                     StringTokenizer strToken=new StringTokenizer(strOption,"|");
@@ -297,7 +302,7 @@ public class FreqAnswer
                     }
                     if(request.getSession().getAttribute("regreso")!=null)
                     {
-                        ret.append("\n<script language=javascript>");
+                        ret.append("\n<script type=\"text/javascript\">");
                         ret.append("\n    window.opener.regreso('freqanswerid="+tempoSetid+"');");
                         ret.append("\n    window.close();");
                         ret.append("</script>");
@@ -364,8 +369,8 @@ public class FreqAnswer
             }
         }
 
-        ret.append("\n<link href=\"/swbadmin/css/swb.css\" rel=\"stylesheet\" type=\"text/css\" />");
-        ret.append("\n<div class=\"swbform\">");
+        
+        
         if(request.getSession().getAttribute("regreso")==null)
         {
             if (filter != null)
@@ -376,7 +381,7 @@ public class FreqAnswer
             {
                 SWBResourceURL urlefa = paramsRequest.getRenderUrl();
                 urlefa.setAction("edit_fa");
-                
+                ret.append("\n<div class=\"swbform\">");
                 ret.append("\n<fieldset>");
                 ret.append("\n<legend>"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgSelCategoriaRespuestas")  +"</legend>");
                 ret.append("\n<form action=\""+urlefa+"\" action=\"GET\">");
@@ -513,7 +518,7 @@ public class FreqAnswer
                     ret.append("\n<form action=\""+urlmfa+"\" action=\"GET\">");
                     ret.append("\n<input type=\"hidden\" name=\"hdnfilter\" value=\"0\">");
                     ret.append("\n<input type=\"hidden\" name=\"paramid\" value=\"" + paramid + "\">");
-                    ret.append("\n<button type=\"submit\" name=\"add\" >"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnNuevo")  +"</button>");
+                    ret.append("\n<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"add\" >"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnNuevo")  +"</button>");
                     ret.append("\n</form>");
                     ret.append("\n</fieldset>");
                     
@@ -547,11 +552,10 @@ public class FreqAnswer
                     urlu.setAction("update_fa");
                     urlu.setMode(SWBResourceURL.Mode_ADMIN);
                     ret.append("\n<div class=\"swbform\">");
+                    ret.append("\n<form action=\""+urlu+"\" action=\"GET\"><input type=\"hidden\" name=\"hdnfilter\" value=\"0\">");
                     ret.append("\n<fieldset>");
                     ret.append("\n<legend>"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgIntroduzcaInfoRequeridaRespuesta")  +"</legend>");
-                    ret.append("\n<form action=\""+urlu+"\" action=\"GET\"><input type=\"hidden\" name=\"hdnfilter\" value=\"0\">");
-                    ret.append("\n<table  border=0 cellpadding=2 cellspacing=0 width=100%>");
-                    
+                    ret.append("\n<table  border=0 cellpadding=2 cellspacing=0 width=100%>");                    
                     ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgTitulo")  +":</td>");
                     ret.append("\n<td><input type=\"text\" name=\"txtTitulo\" size=\"50\" value=\""+ objFreq.getTitle() +"\" maxlength=255></td></tr>");
                     ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgCategoria")  +":</td>");
@@ -667,9 +671,12 @@ public class FreqAnswer
                 SWBResourceURL urlafa = paramsRequest.getRenderUrl();
                 urlafa.setAction("agregar_fa");
                 urlafa.setMode(urlafa.Mode_ADMIN);
+                ret.append("\n<div class=\"swbform\">");
                 ret.append("\n<form action=\""+urlafa+"\" method=\"GET\"><input type=\"hidden\" name=\"hdnfilter\" value=\"0\">");
+                ret.append("\n<fieldset>");
+                ret.append("\n<legend>"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgIntroduzcaInfoRequeridaRespuesta.")  +"</legend>");
                 ret.append("\n<table border=0 width=100% cellspacing=0 cellpadding=2>");
-                ret.append("\n<tr><td  colspan=2 >"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgIntroduzcaInfoRequeridaRespuesta.")  +"</td></tr>");
+                //ret.append("\n<tr><td  colspan=2 >"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgIntroduzcaInfoRequeridaRespuesta.")  +"</td></tr>");
                 ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgTitulo")  +":</td>");
                 ret.append("\n<td><input type=\"text\" name=\"txtTitulo\" size=\"50\" value=\"\" maxlength=255></td></tr>");
                 ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgCategoria")  +":</td>");
@@ -721,22 +728,27 @@ public class FreqAnswer
                 ret.append("\n<td><textarea rows=5 cols=50 id=\"txtOption\" name=\"txtOption\"></textarea><input type=\"hidden\" name=\"hdnOption\"  value=\"\"></td></tr>");
                 ret.append("\n<tr><td colspan=2 align=center><input type=\"button\" name=\"btnAdd\" value=\""+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnAgregar")  +"\" onClick=\"jsAdd(this.form.selOption, this.form.txtOption)\" >&nbsp;&nbsp;<input type=\"button\" name=\"btnEdit\" value=\""+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnGuardarCambios")  +"\" onClick=\"jsUpdate(this.form.selOption, this.form.txtOption)\" >&nbsp;&nbsp;<input type=\"button\" name=\"btnDel\" value=\""+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnEliminar")  +"\"  onClick=\"jsDelete(this.form.selOption, this.form.txtOption)\" ></td></tr>");
                 ret.append("\n<tr>");
-                ret.append("\n<td   width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgOpciones")  +":</td>");
+                ret.append("\n<td width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgOpciones")  +":</td>");
                 ret.append("\n<td ><select name=\"selOption\" size=5 multiple onChange=\"jsEdit(this.form.selOption, this.form.txtOption)\" ></td></tr>");
-                ret.append("\n<tr><td colspan=2 align=right ><hr noshade size=1>");
+                ret.append("\n</table>");
+                ret.append("\n</fieldset>");
+                ret.append("\n<fieldset>");
+
+                //ret.append("\n<tr><td colspan=2 align=right ><hr noshade size=1>");
                 if(request.getSession().getAttribute("regreso")==null)
                 {
-                    ret.append("<input type=\"button\" name=\"btnCan\" value=\""+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnCancelar")  +"\"  onClick=\"jsCancel()\" >&nbsp;");
+                    ret.append("<button type=\"button\" name=\"btnCan\" onClick=\"jsCancel()\" >"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnCancelar")  +"</button>&nbsp;");
                 }else
                 {
-                    ret.append("<input type=\"button\" name=\"cancel\" value=\""+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnCerrarVentanaCancelar")  +"\" onclick=\"javascript:window.close();\" >&nbsp;"); //window.opener.regreso();
+                    ret.append("<button type=\"button\" name=\"cancel\" onclick=\"javascript:window.close();\" >"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnCerrarVentanaCancelar")  +"</button>&nbsp;"); //window.opener.regreso();
                 }
-                ret.append("&nbsp;<input type=submit name=btnSave value=\""+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnGuardarOpciones")  +"\" onClick=\"if(jsValida(this.form)) return true; else return false;\" >");
-                ret.append("</td></tr>");
-                ret.append("\n</table></form>");
+                ret.append("&nbsp;<button type=submit name=btnSave onClick=\"if(jsValida(this.form)) return true; else return false;\" >"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnGuardarOpciones")  +"</button>");
+                ret.append("\n</fieldset>");
+                ret.append("\n</form>");
+                ret.append("\n</div>");
             }
             /*C�digo de javascript*/
-            ret.append("\n<script>");
+            ret.append("\n<script type=\"text/javascript\">");
             ret.append("\n\nvar swOk=0, optionObj;");
             ret.append("\n\nfunction jsAdd(pInSel, pInTxt)");
             ret.append("\n{");
@@ -875,9 +887,8 @@ public class FreqAnswer
                     urlu.setAction("update_fa");
                     urlu.setMode(urlu.Mode_ADMIN);
                     ret.append("\n<form action=\""+urlu+"\" action=\"GET\">");
-                    ret.append("\n<table border=0 width=100% cellspacing=0 cellpadding=2>");
-                    ret.append("\n<tr><td >"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgDespliegueConjuntoOpcionesRespuesta")  +"</td></tr>");
-                    ret.append("\n</table>");
+                    ret.append("\n<fieldset>");
+                    ret.append("\n<legend>"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgDespliegueConjuntoOpcionesRespuesta")  +"</legend>");
                     ret.append("\n<table border=0 width=100% cellspacing=0 cellpadding=2>");
                     ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgTitulo")  +":</td>");
                     ret.append("\n<td  align=left>" + objFreq.getTitle().trim() + "</td></tr>");
@@ -899,14 +910,16 @@ public class FreqAnswer
                             }
                         }
                     }
-                    ret.append("\n</table></td></tr>");
-                    ret.append("\n<tr><td  align=right colspan=2><hr noshade size=1>");
+                    ret.append("\n</table></td></tr></table>");
+                    ret.append("\n</fieldset>");
+                    ret.append("\n<fieldset>");
                     ret.append("\n<input type=\"button\" name=btnContinue value=\""+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnContinuar")  +"\" onClick=\"jsContinue()\" >&nbsp;");
                     ret.append("\n<input type=\"button\" name=\"btnBack\" value=\""+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_btnRegresar")  +"\"  onClick=\"jsBack()\" ></td></tr>");
-                    ret.append("\n</table></form>");
+                    ret.append("\n</fieldset>");
+                    ret.append("\n</form>");
 
                     /*C�digo de javascript*/
-                    ret.append("\n<script>");
+                    ret.append("\n<script type=\"text/javascript\">");
                     ret.append("\n\nfunction jsBack()");
                     ret.append("\n{");
                     SWBResourceURL urlmfa = paramsRequest.getRenderUrl();

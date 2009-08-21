@@ -3662,7 +3662,7 @@ public class MainSurvey extends GenericResource
             rsub = new RecSubject();  //INSERT INTO sr_subject VALUES("1", "Grupo Generales", "Seccion para las preguntas generales de los formularios", now(), now())$
             rsub.setIdtm(idtm);
             rsub.setTitle( "Grupo Generales");
-            rsub.setDescription("Seccion para las preguntas generales de los formularios");
+            rsub.setDescription("Sección para las preguntas generales de los formularios");
             rsub.create(); 
             
             rsub=null;
@@ -3713,7 +3713,7 @@ public class MainSurvey extends GenericResource
             rga = new RecGroupAnswer();  //INSERT INTO sr_groupanswer VALUES("2","Respuestas Multiples","Sets con mas de una opcion de respuesta posible o correcta",now())$
             rga.setIdtm(idtm);
             rga.setTitle( "Respuestas Múltiples");
-            rga.setDescription("Sets con mas de una opción de respuesta posible o correcta");
+            rga.setDescription("Sets con más de una opción de respuesta posible o correcta");
             rga.setLastupdate(ahora);
             rga.create();
             
@@ -3721,7 +3721,7 @@ public class MainSurvey extends GenericResource
             
             rga = new RecGroupAnswer();  //INSERT INTO sr_groupanswer VALUES("3","Respuestas Unicas","Sets con solo una opci�n de respuesta posible o correcta",now())$
             rga.setIdtm(idtm);
-            rga.setTitle( "Respuestas unicas");
+            rga.setTitle( "Respuestas únicas");
             rga.setDescription("Sets con solo una opción de respuesta posible o correcta");
             rga.setLastupdate(ahora);
             rga.create();
@@ -3762,7 +3762,7 @@ public class MainSurvey extends GenericResource
             
             rfa = new RecFreqAnswer();  //INSERT INTO sr_freqanswer VALUES("3","D�as Semana","<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<resource><option id=\"1\">Lunes</option><option id=\"2\">Martes</option><option id=\"3\">Miercoles</option><option id=\"4\">Jueves</option><option id=\"5\">Viernes</option><option id=\"6\">Sabado</option><option id=\"7\">Domingo</option></resource>","2","1",now(),now())$
             rfa.setIdtm(idtm);
-            rfa.setTitle( "D�as Semana");
+            rfa.setTitle( "Días Semana");
             rfa.setStringxml("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<resource><option id=\"1\">Lunes</option><option id=\"2\">Martes</option><option id=\"3\">Miercoles</option><option id=\"4\">Jueves</option><option id=\"5\">Viernes</option><option id=\"6\">Sabado</option><option id=\"7\">Domingo</option></resource>");
             rfa.setGroupaid(2);
             rfa.setIsreuse(1);
