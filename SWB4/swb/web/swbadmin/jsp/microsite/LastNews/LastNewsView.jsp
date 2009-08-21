@@ -59,9 +59,9 @@
                             Member member=Member.getMember(user, element.getWebPage());
                             if(member!=null)
                             {
-                                canview=element.canView(member);
-                            }
-                        }
+                                canview=element.canView(member);                                
+                            }                            
+                        }                        
                         String created="Sin fecha";
                         if(element.getCreated()!=null)
                         {
