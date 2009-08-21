@@ -41,7 +41,7 @@
             </table>
                     <hr>      
             
-                  <table width="100%" cellpadding="2" cellspacing="2" border="2">
+                  <table width="100%" cellpadding="2" cellspacing="2" border="0">
             <%
             Iterator<PostElement> posts = blog.listPostElements();
             while (posts.hasNext())
