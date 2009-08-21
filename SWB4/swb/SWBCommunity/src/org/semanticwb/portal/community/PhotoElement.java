@@ -21,6 +21,6 @@ public class PhotoElement extends org.semanticwb.portal.community.base.PhotoElem
     @Override
     public WebPage getWebPage()
     {
-        return super.getWebPage();
+        return super.getPhotoWebPage();
     }
 }
