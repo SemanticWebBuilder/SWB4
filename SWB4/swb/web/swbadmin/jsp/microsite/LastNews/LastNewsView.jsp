@@ -59,7 +59,7 @@
                             Member member=Member.getMember(user, element.getWebPage());
                             if(member!=null)
                             {
-                                canview=member.canView();
+                                canview=element.canView(member);
                             }
                         }
                         String created="Sin fecha";
@@ -67,7 +67,7 @@
                         {
                             created=iso8601dateFormat.format(element.getCreated());
                         }
-                        String href=element.getURL();
+       ;                 String href=element.getURL();
                         String src=pathIamge+element.getNewsImage();
                         if(element.getNewsImage()!=null)
                         {
