@@ -9,6 +9,10 @@
             if(blog!=null)
             {
             Member member = Member.getMember(user, wpage);
+
+           
+           
+    
             String defaultFormat = "dd 'de' MMMM  'del' yyyy";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
             String created = iso8601dateFormat.format(blog.getCreated()); //SWBUtils.TEXT.(blog.getCreated(), user.getLanguage());//iso8601dateFormat.format(blog.getCreated());
@@ -24,6 +28,9 @@
                 }
             }
             %>
+
+            <hr>
+
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                     <td>                        
@@ -38,7 +45,7 @@
                     url.setParameter("uri", blog.getURI());
                     url.setParameter("mode", "editblog");
                     %>
-                    &nbsp;&nbsp;&nbsp;<a href="<%=url%>">Editar</a>
+                    &nbsp;&nbsp;&nbsp;<div class="editarInfo"><p><a href="<%=url%>">Editar</a></p></div>
                     <%
                 }
             %>
@@ -50,16 +57,20 @@
                     </td>
                 </tr>
             </table>
-                    <%
-                    if(showbr)
-                    {
-                        %>
-                         <hr><br>
-                        <%
-                    }
-                    %>
-                    
-            
+            <%
+            if(showbr)
+            {
+                %>
+                 <hr><br>
+                <%
+            }
+             if(member.canAdd())
+            {
+                %>
+                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","add")%>">Agregar Entrada</a></p></div><hr>
+                <%
+            }
+               %>
                   <table width="100%" cellpadding="2" cellspacing="2" border="0">
             <%
             Iterator<PostElement> posts = SWBComparator.sortByCreated(blog.listPostElements(),false);
@@ -81,13 +92,13 @@
                         {
                             String src=pathIamge+post.getCreator().getPhoto();
                             %>
-                            <p><img width="50" height="50" alt="<%=postAuthor%>" src="<%=src%>">&nbsp;&nbsp;&nbsp;Escrito por: <%=postAuthor%>, <%=updated%> , visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
+                            <p><img width="50" height="50" alt="<%=postAuthor%>" src="<%=src%>">&nbsp;&nbsp;&nbsp;Escrito por: <%=postAuthor%>, <%=updated%> , visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p><p class="vermas"><a  href="<%=url%>" >Ver m&aacute;s</a></p>
                           <%
                        }
                        else
                        {
                           %>
-                            <p>Escrito por: <%=postAuthor%>, <%=updated%> , visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
+                            <p>Escrito por: <%=postAuthor%>, <%=updated%> , visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p><p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
                           <%
                        }
                     %>
@@ -96,10 +107,7 @@
                         <tr>
                         <td>
                             <p class="titutlo"><%=post.getTitle()%></p>
-                        </td>
-                        <td>
-                            <p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
-                        </td>
+                        </td>                        
                         <td>
                          <%
                         if (post.canModify(member))
@@ -110,10 +118,10 @@
                             sWBResourceURL.setParameter("mode","editpost");
 
                             SWBResourceURL removeUrl=paramRequest.getActionUrl();
-                            removeUrl.setParameter("act", "remove");//.setParameter("uri",post.getURI());
+                            removeUrl.setParameter("act", "remove");
                             %>
-                            &nbsp;&nbsp;&nbsp;<a href="<%=sWBResourceURL%>">Editar</a>
-                            &nbsp;&nbsp;&nbsp;<a href="javascript:validateremove('<%=removeUrl%>','<%=post.getTitle()%>','<%=post.getURI()%>')">Borrar</a>
+                            &nbsp;&nbsp;&nbsp;<div class="editarInfo"><p><a href="<%=sWBResourceURL%>">Editar</a></p></div>
+                            &nbsp;&nbsp;&nbsp;<div class="editarInfo"><p><a href="javascript:validateremove('<%=removeUrl%>','<%=post.getTitle()%>','<%=post.getURI()%>')">Borrar</a><p></div>
                             <script language="Javascript" type="text/javascript">
                                 function validateremove(url, title,uri)
                                 {
@@ -128,7 +136,7 @@
                         }
                     %>
                     </td>
-                    </tr>
+                    </tr>                   
 
                     <%
                 }
@@ -149,16 +157,7 @@
                         <hr><br><p>No hay entradas visibles para usted</p>
                         <%
                     }
+            }
                     %>
 
-<%
-    if(member.canAdd())
-    {
-        %>
-        <center>
-            <a href="<%=paramRequest.getRenderUrl().setParameter("act","add")%>">Agregar Entrada</a>
-        </center>
-        <%
-    }
-            }
-    %>
+
