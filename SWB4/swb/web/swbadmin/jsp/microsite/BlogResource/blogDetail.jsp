@@ -12,7 +12,7 @@
     WebPage wpage=paramRequest.getWebPage();
     PostElement post=(PostElement)request.getAttribute("post");
     Member member=Member.getMember(user,wpage);
-    if(!member.canView() || post==null)
+    if(!post.canView(member) || post==null)
     {
         return;
     }
