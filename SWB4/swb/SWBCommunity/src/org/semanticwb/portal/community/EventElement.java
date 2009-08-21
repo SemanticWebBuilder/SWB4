@@ -75,6 +75,6 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
     @Override
     public WebPage getWebPage()
     {
-        return this.getWebPage();
+        return super.getEventWebPage();
     }
 }

@@ -22,6 +22,6 @@ public class ProductElement extends org.semanticwb.portal.community.base.Product
     @Override
     public WebPage getWebPage()
     {
-        return this.getWebPage();
+        return super.getWebPage();
     }
 }

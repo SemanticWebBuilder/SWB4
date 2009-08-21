@@ -21,6 +21,6 @@ public class VideoElement extends org.semanticwb.portal.community.base.VideoElem
     @Override
     public WebPage getWebPage()
     {
-        return this.getWebPage();
+        return super.getWebPage();
     }
 }
