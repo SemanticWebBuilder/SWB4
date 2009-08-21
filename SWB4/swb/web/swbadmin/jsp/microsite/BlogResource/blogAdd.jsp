@@ -18,7 +18,10 @@
     User user=paramRequest.getUser();
     WebPage wpage=paramRequest.getWebPage();
     Member member=Member.getMember(user,wpage);
-    
+    if(!member.canAdd())
+    {
+        return;
+    }
 %>
 
 <form name="frmaddpost" id="frmaddpost" method="post" action="<%=paramRequest.getActionUrl()%>">
