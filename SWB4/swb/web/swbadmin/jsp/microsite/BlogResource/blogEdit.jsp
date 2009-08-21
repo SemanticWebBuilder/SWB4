@@ -20,6 +20,7 @@ g<%@page contentType="text/html" pageEncoding="UTF-8"%>
     WebPage wpage=paramRequest.getWebPage();
     Member member=Member.getMember(user,wpage);
     Blog blog=(Blog)request.getAttribute("blog");
+
 %>
 <%
     if("editpost".equals(request.getParameter("mode")))
@@ -28,6 +29,10 @@ g<%@page contentType="text/html" pageEncoding="UTF-8"%>
         if(uri!=null)
             {
             PostElement post = (PostElement) SemanticObject.createSemanticObject(uri).createGenericInstance();
+            if(!post.canModify(member))
+            {
+                return;
+            }
         %>
         <form name="frmaddpost" id="frmaddpost" method="post" action="<%=paramRequest.getActionUrl()%>">
             <input type="hidden" name="act" value="<%=request.getParameter("act")%>">
