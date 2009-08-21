@@ -73,13 +73,13 @@ if(email!=null)
 </div>
 
 <br>
-<br>
+<p><img src="images/solidLine.jpg" alt="" width="680" height="1" ></p>
 <center>
     <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Regresar</a></p></div>
     <%if(post.canModify(member)){%><div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","edit").setParameter("uri",post.getURI()).setParameter("mode","editpost")%>">Editar Información</a></p></div><%}%>
     <%if(post.canModify(member)){%><div class="editarInfo"><p><a href="<%=paramRequest.getActionUrl().setParameter("act","remove").setParameter("uri",post.getURI())%>">Eliminar Entrada</a></p></div><%}%>
 </center>
-    <br>
+    <br>    
     <br>
     <br>
 <%
