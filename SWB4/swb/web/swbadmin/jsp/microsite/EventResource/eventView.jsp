@@ -26,7 +26,7 @@
         <table border="0" width="100%" cellspacing="10">
             <tr>
                 <td valign="top" width="130">
-                    <a href="<%=viewurl%>"><img src="<%=event.getEventThumbnail()%>" width="125"></a>
+                    <a href="<%=viewurl%>"><img src="<%=SWBPlatform.getWebWorkPath()+event.getEventThumbnail()%>" width="125"></a>
                 </td>
                 <td valign="top" align="left">
                     <small>
