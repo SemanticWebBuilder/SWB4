@@ -71,9 +71,12 @@ if (null!=microsite){
 
         def url_mas = wpage.getRealUrl()
 
-        println """</div><br /><div>
-<p class="vermas"><a href="${url_mas}_Members" >Ver todos</a></p></div>
-</div>"""
+        println """</div><div class="clear"></div>"""
+        if(i==18)
+        {
+            println """<div><p class="vermas"><a href="${url_mas}_Members" >Ver todos</a></p></div>"""
+        }
+        println """</div>"""
     } else {
         def mapa = new HashMap()
 Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#_ExtendedAttributes").listProperties();
