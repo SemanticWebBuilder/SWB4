@@ -22,7 +22,7 @@
 %>
 
 <form name="frmaddpost" id="frmaddpost" method="post" action="<%=paramRequest.getActionUrl()%>">
-    <input type="hidden" name="act" value="<%=request.getParameter("act")%>">    
+    <input type="hidden" name="act" value="<%=request.getParameter("act")%>">
     <div>
         <fieldset><legend></legend>
             <div>
@@ -33,15 +33,15 @@
 
                     <textarea id="content" plugins="['bold','italic','underline', 'strikethrough','|','insertUnorderedList','insertOrderedList','|','createLink','unlink']" dojoType="dijit.Editor" rows="5" cols="23" name="content"></textarea>
                     <script>
-                        function validaForma(forma)
+                        function validaForma()
                         {                            
-                            var title = forma.title.value;
+                            var title = frmaddpost.title.value;
                             if(!title)
                             {
                                 alert('Debe ingresar el título de la entrada');
                                 return;
                             }
-                            var description = forma.description.value;
+                            var description = frmaddpost.description.value;
                             if(!description)
                             {
                                 alert('Debe ingresar la descripción de la entrada');
@@ -57,7 +57,6 @@
                             if(confirm(msg))
                             {
                                 dojo.byId('content').value=content;
-                                //dojo.byId('frmaddpost').action=urladd;
                                 dojo.byId('frmaddpost').submit();
                             }
                         }
@@ -65,6 +64,7 @@
                 </p>
             </div>
         </fieldset>
+        <br>
                     <fieldset>
                         <legend><strong>¿Quién puede ver este video?</strong></legend>
                         <ul class="options">
@@ -74,11 +74,11 @@
                             <li><label><input type="radio" class="radio" name="level" value="3" /> Sólo yo</label></li>
                         </ul>
                     </fieldset>
-        <p class="pad5 last-child clear right">
-            <strong><input type="button" onclick="validaForma(this.form)" value="Guardar cambios" class="button"/></strong>
-            <a class="button"   href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
-        </p>
-    </div>
-    <input type="hidden" name="act" value="add"/>
+                            <br>
+            <div class="editarInfo"><p><a onclick="validaForma()" href="#">Guardar</a></p></div>            
+            <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>        
+    </div>    
 </form>
+    <br>
+    <br>
         
