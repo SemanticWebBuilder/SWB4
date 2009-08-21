@@ -22,13 +22,12 @@
         WebPage wpage=paramRequest.getWebPage();
         String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
         String imgSize="width=\"80\" height=\"70\"";;
-        User user2Show=owner;
         boolean isStrategy=false;
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) 
         {
             isStrategy=true;
             imgSize="width=\"39\" height=\"39\"";            
-        }else user2Show=user;
+        }
 /*
         if(isStrategy){
             System.out.println("user2Show-Estrategia:"+user2Show.getFullName());
@@ -38,11 +37,14 @@
 */
      %>
           <div class="miembros">
-          <h2>Mis Amigos</h2>
+          <%if(owner==user){%>
+            <h2>Mis Amigos</h2>
+          <%}else{%> <h2>Amigos de <%=user.getFirstName()%></h2> <%}%>
+
              <%
              String firstName="", lastName="";
              int contTot=0;
-             Iterator<Friendship> itMyFriends=Friendship.listFriendshipByFriend(user2Show,wpage.getWebSite());
+             Iterator<Friendship> itMyFriends=Friendship.listFriendshipByFriend(user,wpage.getWebSite());
              while(itMyFriends.hasNext()){
                  Friendship friendShip=itMyFriends.next();
                  Iterator<User> itfriendUser=friendShip.listFriends();
