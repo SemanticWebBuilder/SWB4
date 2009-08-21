@@ -106,7 +106,7 @@ public class Reports
             }
             ret.append("\n<option value=\"1\" "+temp1+">"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgOpinion")+"</option>");
             ret.append("\n<option value=\"2\" "+temp2+">"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgEvaluacion")+"</option>");
-            ret.append("\n</select></td><td><input type=\"submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnEnviar")+"\" name=\"btn_submit\" class=boton></td></tr></table></form>");
+            ret.append("\n</select></td><td><input type=\"submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnEnviar")+"\" name=\"btn_submit\" ></td></tr></table></form>");
             
             if(request.getParameter("tipo")!=null)
             {
@@ -172,7 +172,7 @@ public class Reports
                             oRStmp = null;
                         }
                         ret.append("\n</select>");
-                        ret.append("\n</td><td><input type=\"submit\" name=\"btn_submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnEnviar")+"\" class=boton>");
+                        ret.append("\n</td><td><input type=\"submit\" name=\"btn_submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnEnviar")+"\" >");
                         ret.append("\n</td></tr></table></form>");
                         ret.append("\n</fieldset>");
                         ret.append("\n</div>");
@@ -203,8 +203,11 @@ public class Reports
             oRSL.setIdtm(idtm);
             oRSL.setSurveyID(idRS);
             oRSL.load();
-            ret.append("\n<script language=\"JavaScript\" src=\""+SWBPlatform.getContextPath()+"swbadmin/js/calendar.js\"></script>");
-            ret.append("\n<script language=\"javascript\"> ");
+            //ret.append("\n<script language=\"JavaScript\" src=\""+SWBPlatform.getContextPath()+"swbadmin/js/calendar.js\"></script>");
+            ret.append("\n<script type=\"text/javascript\"> ");
+            ret.append("\n                                                         ");
+            ret.append("\n  dojo.require(\"dijit.form.DateTextBox\"); ");
+            ret.append("\n  dojo.require(\"dojo.parser\");  ");
             ret.append("\n                                                         ");
             ret.append("\nfunction habilita(valor){                 ");
             ret.append("\n                                                         ");
@@ -293,10 +296,13 @@ public class Reports
             ret.append("\n"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgPeriodoConsultar")+"");
             ret.append("</td></tr>");
             ret.append("<tr><td width=\"200\" align=right >");
-            ret.append("\n"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgFechaInicial")+": </td><td><input type=text name=\"fecha_ini\" size=15 readonly><a href=\"javascript:show_calendar('forma.fecha_ini');\" onmouseover=\"window.status='Selecciona fecha';return true;\" onmouseout=\"window.status='';return true;\"><img src=\""+SWBPlatform.getContextPath()+"swbadmin/images/show-calendar.gif\" border=\"0\"></a>");
+            ret.append("\n"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgFechaInicial")+": </td>");
+            ret.append("\n<td><input dojoType=\"dijit.form.DateTextBox\" type=text name=\"fecha_ini\" >"); //"<td><input dojoType=\"dijit.form.DateTextBox\" type=text name=\"fecha_ini\" size=15 readonly><a href=\"javascript:show_calendar('forma.fecha_ini');\" onmouseover=\"window.status='Selecciona fecha';return true;\" onmouseout=\"window.status='';return true;\"><img src=\""+SWBPlatform.getContextPath()+"swbadmin/images/show-calendar.gif\" border=\"0\"></a>");
             ret.append("</td></tr>");
             ret.append("<tr><td width=\"200\" align=right >");
-            ret.append("\n"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgFechaFinal")+": </td><td><input type=text name=\"fecha_fin\" size=15 readonly><a href=\"javascript:show_calendar('forma.fecha_fin');\" onmouseover=\"window.status='Selecciona fecha';return true;\" onmouseout=\"window.status='';return true;\"><img src=\""+SWBPlatform.getContextPath()+"swbadmin/images/show-calendar.gif\" border=\"0\"></a>");
+            //ret.append("\n"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgFechaFinal")+": </td><td><input type=text name=\"fecha_fin\" size=15 readonly><a href=\"javascript:show_calendar('forma.fecha_fin');\" onmouseover=\"window.status='Selecciona fecha';return true;\" onmouseout=\"window.status='';return true;\"><img src=\""+SWBPlatform.getContextPath()+"swbadmin/images/show-calendar.gif\" border=\"0\"></a>");
+            ret.append("\n"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgFechaFinal")+": </td>");
+            ret.append("\n<td><input dojoType=\"dijit.form.DateTextBox\" type=text name=\"fecha_fin\">");
             ret.append("</td></tr>");
             ret.append("<tr><td colspan=\"2\" >");
             ret.append("\n"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgVerFormularios"));
@@ -315,7 +321,7 @@ public class Reports
             SWBResourceURL urlsur = paramsRequest.getRenderUrl();
             urlsur.setMode(urlsur.Mode_ADMIN);
             urlsur.setAction("update_en");
-            ret.append("<input type=\"submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgRealizarConsulta")+"\" name=\"btn_submit\" class=boton>&nbsp;<input type=button value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgAtras")+"\" onclick=\"javascript:window.location='"+urlsur+"'\">");
+            ret.append("<input type=\"submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgRealizarConsulta")+"\" name=\"btn_submit\" >&nbsp;<input type=button value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgAtras")+"\" onclick=\"javascript:window.location='"+urlsur+"'\">");
             ret.append("</td></tr></table>");
             ret.append("\n<input type=\"hidden\" name=\"content_type\" value=\"\">");
             ret.append("\n</form>");
@@ -327,7 +333,7 @@ public class Reports
         if(accion.equals("re_consulta"))
         {
             
-            ret.append("\n<script language=\"javascript\"> ");
+            ret.append("\n<script type=\"text/javascript\"> ");
             ret.append("\n                                                         ");
             
             ret.append("\nfunction validar(forma){    ");
@@ -403,10 +409,14 @@ public class Reports
                 int year_i;
                 int month_i;
                 int day_i;
-                month_i=Integer.parseInt(fecha_ini.substring(0,fecha_ini.indexOf("/")));
-                day_i=Integer.parseInt(fecha_ini.substring(fecha_ini.indexOf("/")+1,fecha_ini.lastIndexOf("/")));
-                year_i= Integer.parseInt(fecha_ini.substring(fecha_ini.lastIndexOf("/")+1,fecha_ini.length()));
-                
+
+//                month_i=Integer.parseInt(fecha_ini.substring(0,fecha_ini.indexOf("/")));
+//                day_i=Integer.parseInt(fecha_ini.substring(fecha_ini.indexOf("/")+1,fecha_ini.lastIndexOf("/")));
+//                year_i= Integer.parseInt(fecha_ini.substring(fecha_ini.lastIndexOf("/")+1,fecha_ini.length()));
+
+                year_i= Integer.parseInt(fecha_ini.substring(0,fecha_ini.indexOf("-")));
+                month_i=Integer.parseInt(fecha_ini.substring(fecha_ini.indexOf("-")+1,fecha_ini.lastIndexOf("-")));
+                day_i=Integer.parseInt(fecha_ini.substring(fecha_ini.lastIndexOf("-")+1,fecha_ini.length()));
                 
                 Calendar calendario = Calendar.getInstance(local);
                 calendario.set(year_i,month_i-1,day_i,0,0,0);
@@ -427,10 +437,15 @@ public class Reports
                 int year_f;
                 int month_f;
                 int day_f;
-                month_f=Integer.parseInt(fecha_fin.substring(0,fecha_fin.indexOf("/")));
-                day_f=Integer.parseInt(fecha_fin.substring(fecha_fin.indexOf("/")+1,fecha_fin.lastIndexOf("/")));
-                year_f= Integer.parseInt(fecha_fin.substring(fecha_fin.lastIndexOf("/")+1,fecha_fin.length()));
-                
+
+//                month_f=Integer.parseInt(fecha_fin.substring(0,fecha_fin.indexOf("/")));
+//                day_f=Integer.parseInt(fecha_fin.substring(fecha_fin.indexOf("/")+1,fecha_fin.lastIndexOf("/")));
+//                year_f= Integer.parseInt(fecha_fin.substring(fecha_fin.lastIndexOf("/")+1,fecha_fin.length()));
+
+                year_f= Integer.parseInt(fecha_fin.substring(0,fecha_fin.indexOf("-")));
+                month_f=Integer.parseInt(fecha_fin.substring(fecha_fin.indexOf("-")+1,fecha_fin.lastIndexOf("-")));
+                day_f=Integer.parseInt(fecha_fin.substring(fecha_fin.lastIndexOf("-")+1,fecha_fin.length()));
+
                 Calendar calendariof = Calendar.getInstance();
                 calendariof.set(year_f,month_f-1,day_f,23,59,59);
                 java.sql.Date fecha_fin_D = new java.sql.Date(calendariof.getTimeInMillis());
@@ -579,7 +594,7 @@ public class Reports
                 urlrf.setMode(urlrf.Mode_ADMIN);
                 urlrf.setAction("re_formulario");
                 urlrf.setParameter("surveyid",request.getParameter("surveyid"));
-                ret.append("\n<tr><td  colspan=2 align=right><hr noshade size=1><input type=\"submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnVerResultado")+"\" name=\"btn_submit\" class=boton>&nbsp;<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgAtras")+"\" name=\"btn_back\" onClick=\"javascript:window.location='"+urlrf+"'\"></td></tr>");
+                ret.append("\n<tr><td  colspan=2 align=right><hr noshade size=1><input type=\"submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnVerResultado")+"\" name=\"btn_submit\" >&nbsp;<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgAtras")+"\" name=\"btn_back\" onClick=\"javascript:window.location='"+urlrf+"'\"></td></tr>");
             }
             ret.append("\n</table></form>");
             ret.append("\n</fieldset>");
@@ -602,9 +617,14 @@ public class Reports
                 int year_i;
                 int month_i;
                 int day_i;
-                month_i=Integer.parseInt(fecha_ini.substring(0,fecha_ini.indexOf("/")));
-                day_i=Integer.parseInt(fecha_ini.substring(fecha_ini.indexOf("/")+1,fecha_ini.lastIndexOf("/")));
-                year_i= Integer.parseInt(fecha_ini.substring(fecha_ini.lastIndexOf("/")+1,fecha_ini.length()));
+
+//                month_i=Integer.parseInt(fecha_ini.substring(0,fecha_ini.indexOf("/")));
+//                day_i=Integer.parseInt(fecha_ini.substring(fecha_ini.indexOf("/")+1,fecha_ini.lastIndexOf("/")));
+//                year_i= Integer.parseInt(fecha_ini.substring(fecha_ini.lastIndexOf("/")+1,fecha_ini.length()));
+
+                year_i= Integer.parseInt(fecha_ini.substring(0,fecha_ini.indexOf("-")));
+                month_i=Integer.parseInt(fecha_ini.substring(fecha_ini.indexOf("-")+1,fecha_ini.lastIndexOf("-")));
+                day_i=Integer.parseInt(fecha_ini.substring(fecha_ini.lastIndexOf("-")+1,fecha_ini.length()));
                 
                 Calendar calendario = Calendar.getInstance();
                 calendario.set(year_i,month_i-1,day_i,0,0,0);
@@ -622,10 +642,15 @@ public class Reports
                 int year_f;
                 int month_f;
                 int day_f;
-                month_f=Integer.parseInt(fecha_fin.substring(0,fecha_fin.indexOf("/")));
-                day_f=Integer.parseInt(fecha_fin.substring(fecha_fin.indexOf("/")+1,fecha_fin.lastIndexOf("/")));
-                year_f= Integer.parseInt(fecha_fin.substring(fecha_fin.lastIndexOf("/")+1,fecha_fin.length()));
-                
+
+//                month_f=Integer.parseInt(fecha_fin.substring(0,fecha_fin.indexOf("/")));
+//                day_f=Integer.parseInt(fecha_fin.substring(fecha_fin.indexOf("/")+1,fecha_fin.lastIndexOf("/")));
+//                year_f= Integer.parseInt(fecha_fin.substring(fecha_fin.lastIndexOf("/")+1,fecha_fin.length()));
+
+                year_f= Integer.parseInt(fecha_fin.substring(0,fecha_fin.indexOf("-")));
+                month_f=Integer.parseInt(fecha_fin.substring(fecha_fin.indexOf("-")+1,fecha_fin.lastIndexOf("-")));
+                day_f=Integer.parseInt(fecha_fin.substring(fecha_fin.lastIndexOf("-")+1,fecha_fin.length()));
+
                 Calendar calendariof = Calendar.getInstance();
                 calendariof.set(year_f,month_f-1,day_f,23,59,59);
                 java.sql.Date fecha_fin_D = new java.sql.Date(calendariof.getTimeInMillis());
@@ -1150,7 +1175,7 @@ public class Reports
                     "<option value=\"id\" "+strSelid+">Id</option>" +
                     "<option value=\"todos\" "+strSeltodos+">"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgTodos")+"</option>" +
                     "</select>" +
-                    "<input type=\"text\" name=\"query\" size=10 "+strVerQuery+" value=\""+strQuery+"\" maxlength=60><input type=\"submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnBuscar")+"\" name=\"btn_submit\" class=boton></td></tr>");
+                    "<input type=\"text\" name=\"query\" size=10 "+strVerQuery+" value=\""+strQuery+"\" maxlength=60><input type=\"submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnBuscar")+"\" name=\"btn_submit\" ></td></tr>");
             
             String strPeriodo="";
             if(request.getParameter("fecha_ini").length()>0&&request.getParameter("fecha_fin").length()>0)
@@ -1264,12 +1289,15 @@ public class Reports
                 if(request.getParameter("fecha_ini").length()>0)
                 {
                     String fecha_ini = request.getParameter("fecha_ini");
+                    
                     int year_i;
                     int month_i;
                     int day_i;
-                    month_i=Integer.parseInt(fecha_ini.substring(0,fecha_ini.indexOf("/")));
-                    day_i=Integer.parseInt(fecha_ini.substring(fecha_ini.indexOf("/")+1,fecha_ini.lastIndexOf("/")));
-                    year_i= Integer.parseInt(fecha_ini.substring(fecha_ini.lastIndexOf("/")+1,fecha_ini.length()));
+
+                    year_i= Integer.parseInt(fecha_ini.substring(0,fecha_ini.indexOf("-")));
+                    month_i=Integer.parseInt(fecha_ini.substring(fecha_ini.indexOf("-")+1,fecha_ini.lastIndexOf("-")));
+                    day_i=Integer.parseInt(fecha_ini.substring(fecha_ini.lastIndexOf("-")+1,fecha_ini.length()));
+
                     Calendar calendario = Calendar.getInstance();
                     calendario.set(year_i,month_i-1,day_i,0,0,0);
                     java.sql.Date fecha_ini_D = new java.sql.Date(calendario.getTimeInMillis());
@@ -1280,14 +1308,21 @@ public class Reports
                 if(request.getParameter("fecha_fin").length()>0)
                 {
                     String fecha_fin = request.getParameter("fecha_fin");
+                    
                     int year_f;
                     int month_f;
                     int day_f;
-                    month_f=Integer.parseInt(fecha_fin.substring(0,fecha_fin.indexOf("/")));
-                    day_f=Integer.parseInt(fecha_fin.substring(fecha_fin.indexOf("/")+1,fecha_fin.lastIndexOf("/")));
-                    year_f= Integer.parseInt(fecha_fin.substring(fecha_fin.lastIndexOf("/")+1,fecha_fin.length()));
+
+                    year_f= Integer.parseInt(fecha_fin.substring(0,fecha_fin.indexOf("-")));
+                    month_f=Integer.parseInt(fecha_fin.substring(fecha_fin.indexOf("-")+1,fecha_fin.lastIndexOf("-")));
+                    day_f=Integer.parseInt(fecha_fin.substring(fecha_fin.lastIndexOf("-")+1,fecha_fin.length()));
+
+//                    month_f=Integer.parseInt(fecha_fin.substring(0,fecha_fin.indexOf("/")));
+//                    day_f=Integer.parseInt(fecha_fin.substring(fecha_fin.indexOf("/")+1,fecha_fin.lastIndexOf("/")));
+//                    year_f= Integer.parseInt(fecha_fin.substring(fecha_fin.lastIndexOf("/")+1,fecha_fin.length()));
+                    
                     Calendar calendariof = Calendar.getInstance();
-                    calendariof.set(year_f,month_f-1,day_f,0,0,0);
+                    calendariof.set(year_f,month_f-1,day_f,23,59,59);
                     java.sql.Date fecha_fin_D = new java.sql.Date(calendariof.getTimeInMillis());
                     tempFin  =   new java.sql.Timestamp(fecha_fin_D.getTime()) ;
                     strFecha_fin = " and created <= ? ";
@@ -1504,7 +1539,7 @@ public class Reports
                             }
                             ret.append("\n<option value=\""+rs3.getInt("responseid")+"\" "+strSelected+" >"+rs3.getInt("responseid")+" - "+tmpCorreo+"</option>");
                         }
-                        ret.append("</select><input type=\"submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnRevisar")+"\" class=boton>");
+                        ret.append("</select><input type=\"submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnRevisar")+"\" >");
                         ret.append("</td></tr>");
                     }
                     rsCuenta=null;
@@ -1550,8 +1585,8 @@ public class Reports
                         strUser=paramsRequest.getLocaleString("usrmsg_MainSurvey_setResourceBase_msgAnonimo");
                     }
                     ret.append("\n<tr><td  align=right width=200>"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgUsuario")+": </td><td colspan=2 >"+strUser);
-                    if(enviarEmail) ret.append("\n&nbsp;&nbsp;<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnEnviarEmail")+"\" name=\"btn_email\" onclick=\"ventana('?created="+oRRU.getCreated()+"&comments='+comments.value+'&email="+oRUser.getEmail()+"','width=480, height=450')\" class=boton>");
-                    ret.append("\n&nbsp;<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnBorrarFormulario")+"\" name=\"btn_borrar\" onclick=\"if(confirm('�"+"Est�s seguro de eliminar este c�digo de validaci�n"+"?')){ borrar(this.form);} else { return (false);}\" class=boton></td></tr>");
+                    if(enviarEmail) ret.append("\n&nbsp;&nbsp;<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnEnviarEmail")+"\" name=\"btn_email\" onclick=\"ventana('?created="+oRRU.getCreated()+"&comments='+comments.value+'&email="+oRUser.getEmail()+"','width=480, height=450')\" >");
+                    ret.append("\n&nbsp;<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnBorrarFormulario")+"\" name=\"btn_borrar\" onclick=\"if(confirm('�"+"Est�s seguro de eliminar este c�digo de validaci�n"+"?')){ borrar(this.form);} else { return (false);}\" ></td></tr>");
                     temp_S="";
                     if(oRRU.getComments()!=null) temp_S=oRRU.getComments();
                     ret.append("\n<tr><td  align=right width=200>"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgComentario")+":</td><td colspan=2><textarea name=\"comments\" cols=40 rows=5 maxlength=4000>"+temp_S+"</textarea></td></tr>");
@@ -1614,7 +1649,7 @@ public class Reports
             ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgPara")+":</td><td >"+request.getParameter("email")+"</td></tr>");
             ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgAsunto")+":</td><td ><textarea name=\"asunto\" cols=40 rows=5 maxlength=500>"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgRetroFormularioContestado")+" "+request.getParameter("created")+"</textarea></td></tr>");
             ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgComentario")+":</td><td ><textarea name=\"comments\" cols=\"40\" rows=\"12\" maxlength=4000>"+request.getParameter("comments")+"</textarea></td></tr>");
-            ret.append("\n<tr><td colspan=2 align=right><hr noshade size=1><input type=\"submit\" name=\"btn_submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgEnviarEmail")+"\" class=boton><input type=\"button\" name=\"btn_cancelar\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnCancelar")+"\" onclick=\"window.close();\" class=boton></td></tr>");
+            ret.append("\n<tr><td colspan=2 align=right><hr noshade size=1><input type=\"submit\" name=\"btn_submit\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_msgEnviarEmail")+"\" ><input type=\"button\" name=\"btn_cancelar\" value=\""+paramsRequest.getLocaleString("usrmsg_Reports_getAdmHtml_btnCancelar")+"\" onclick=\"window.close();\" ></td></tr>");
             ret.append("\n</form>");
             ret.append("\n</fieldset>");
             ret.append("\n</div>");

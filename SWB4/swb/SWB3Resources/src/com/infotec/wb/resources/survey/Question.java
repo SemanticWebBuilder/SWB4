@@ -348,12 +348,12 @@ public class Question  {
         if (accion.equalsIgnoreCase("update_p")) {
             // secci�n de actualizaci�n
             if (request.getParameter("id")!=null){
-                int tmpOpciones = 27;
-                int tmpFinal = 4;
+                int tmpOpciones = 29;
+                int tmpFinal = 5;
                 if(request.getSession().getAttribute("regreso")!=null)request.getSession().setAttribute("regreso",null);
                 if(request.getSession().getAttribute("retq")!=null){
-                    tmpOpciones = 27;
-                    tmpFinal=4;
+                    tmpOpciones = 29;
+                    tmpFinal=5;
                 }
                 ret.append("\n    <script type=\"text/javascript\">    ");
                 ret.append("\n        ");
@@ -428,7 +428,7 @@ public class Question  {
                 ret.append("\n     forma.validoptions.value=tempo;    ");
 
                 ret.append("\n     //validacion opciones    ");
-                ret.append("\n     for (cnt = 23; cnt < forma.length-"+tmpFinal+"; cnt++){    ");
+                ret.append("\n     for (cnt = 24; cnt < forma.length-"+tmpFinal+"; cnt++){    ");
                 ret.append("\n       tempo=forma.elements[cnt].value;");
                 ret.append("\n       trim(forma.elements[cnt]);");
                 ret.append("\n      if(forma.elements[cnt].value==\"\"){    ");
@@ -625,8 +625,9 @@ public class Question  {
                 urluqp.setMode(urluqp.Mode_ADMIN);
                 urluqp.setAction("updatequestion_p");
                 ret.append("\n<div class=\"swbform\">");
-                ret.append("\n<fieldset>");
+                
                 ret.append("\n<form name=\"forma\" action=\""+urluqp+"\" method=\"GET\" onsubmit=\"return valida(forma);\">");
+                ret.append("\n<fieldset>");
                 ret.append("\n<table border=0 cellspacing=1 width=\"100%\">");
                 ret.append("\n<tr><td colspan=2 >"+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgEdicionPregunta")+"");
                 ret.append("<input type=\"hidden\" name=\"htextid\" value=\"-1\">");
@@ -642,7 +643,7 @@ public class Question  {
                     paramS=Integer.toString(oROQ.getOrdernum());
                 }
                 ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNumeroPregunta")+":</td>");
-                ret.append("\n<td ><input class=campos type=text size=3 name=\"indice\"  value=\""+paramS+"\" maxlength=4></td></tr>");
+                ret.append("\n<td ><input type=text size=3 name=\"indice\"  value=\""+paramS+"\" maxlength=4></td></tr>");
 
                 if (request.getParameter("description")!=null){
                     paramS=request.getParameter("description");
@@ -698,7 +699,7 @@ public class Question  {
                     if(request.getParameter("htextid")==null) paramI=(int)oRQ.getCodeID();
                 }
                 
-                ret.append("\n"+oRQ.getCatalogTypeList((int)paramI,tempTVal)+"<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"btn_textid\" "+tempTVal+" onclick=\"javascript:ventana('"+urlact+"?regreso=1','width=550, height=500');\">"+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_btnNuevaValidacion")+"</button></td></tr>");
+                ret.append("\n"+oRQ.getCatalogTypeList((int)paramI,tempTVal)+"<input type=\"button\" name=\"btn_textid\" "+tempTVal+" onclick=\"javascript:ventana('"+urlact+"?regreso=1','width=550, height=500');\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_btnNuevaValidacion")+"\"/></td></tr>");
                 paramI = 0;
                 if (request.getParameter("groupqid")!=null){
                     if (Integer.parseInt(request.getParameter("hgroupqid"))!=-1) paramI=Integer.parseInt(request.getParameter("hgroupqid"));
@@ -708,7 +709,7 @@ public class Question  {
                     paramI=oRQ.getCategoryID();
                 }
                 ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgCategoriaPregunta")+":</td>");
-                ret.append("\n<td >"+oRQ.getGroupQuestionList((int)paramI) +"<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"btn_groupq\" onclick=\"javascript:ventana('"+urlmgq+"?regreso=1','width=400, height=290');\">"+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_btnNuevaCategoria")+"</button></td></tr>");
+                ret.append("\n<td >"+oRQ.getGroupQuestionList((int)paramI) +"<input type=\"button\" name=\"btn_groupq\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_btnNuevaCategoria")+"\" onclick=\"javascript:ventana('"+urlmgq+"?regreso=1','width=400, height=290');\" /></td></tr>");
                 paramS = "";
                 if (request.getParameter("required")!=null){
                     paramS="checked";
@@ -717,7 +718,7 @@ public class Question  {
                     if(oRQ.getRequired()==1) paramS="checked";
                 }
                 ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgRequerida")+":</td>");
-                ret.append("\n<td ><input type=\"checkbox\" name=\"required\" value=\"1\" "+paramS+"></td></tr>");
+                ret.append("\n<td ><input type=\"checkbox\" name=\"required\" value=\"1\" "+paramS+" /></td></tr>");
                 paramS= "";
 
                 long tempControl = 1;
@@ -795,7 +796,7 @@ public class Question  {
                 String strTemp=" style=\"visibility:hidden\" ";
                 if(tmpFAnswer!=1 && tmpFAnswer!=0 ) strTemp = "  ";
                 ret.append("\n<tr><td  width=200 align=right>"+tempSet+"</td>");
-                ret.append("\n<td >"+oRQ.getFreqAnswerList((int)tmpFAnswer,"onchange=\"recarga(forma); \""+tempStrOp+"  ")+"<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNuevoSet")+"\" name=\"btn_set\" onclick=\"ventana('"+urlmfa+"?regreso=1','width=550, height=520');\" "+tempStrOp+" class=boton>&nbsp;<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_btnEditarSet")+"\" name=\"btn_eset\" onclick=\"ventana('"+urlmfa+"?regreso=1&questionid="+idP+"&id="+tmpFAnswer+"','width=550, height=500');\" "+strTemp+" class=boton></td></tr>");
+                ret.append("\n<td >"+oRQ.getFreqAnswerList((int)tmpFAnswer,"onchange=\"recarga(forma); \""+tempStrOp+"  ")+"<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNuevoSet")+"\" name=\"btn_set\" onclick=\"ventana('"+urlmfa+"?regreso=1','width=550, height=520');\" "+tempStrOp+" >&nbsp;<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_btnEditarSet")+"\" name=\"btn_eset\" onclick=\"ventana('"+urlmfa+"?regreso=1&questionid="+idP+"&id="+tmpFAnswer+"','width=550, height=500');\" "+strTemp+" ></td></tr>");
                 ret.append("\n<tr><td  width=200 align=right>"+tempOpciones+"</td>");
                 ret.append("\n<td ><input type=\"text\" name=\"validoptions\" value=\""+paramS+"\" title=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNumerico")+"\" "+tempStrOp+" maxlength=3></td></tr>");
                 paramS = "";
@@ -817,7 +818,7 @@ public class Question  {
                 }
                 ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgGrupo")+":</td>");
                 ret.append("\n<td >"+oRS.getSubjectList(paramI,"  ",idtm));
-                ret.append("<input  type=\"button\" name=\"btnnewsection\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNuevoGrupo")+"\" onclick=\"ventana('"+urlas+"?regreso=1','width=580, height=490');\" class=boton></td></tr>");
+                ret.append("<input  type=\"button\" name=\"btnnewsection\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNuevoGrupo")+"\" onclick=\"ventana('"+urlas+"?regreso=1','width=580, height=490');\" ></td></tr>");
                 ret.append("\n<tr><td colspan=2>");
 
                 ret.append("<table border=0 cellspacing=1 cellpadding=0 width=100%>");
@@ -905,9 +906,13 @@ public class Question  {
                 }
                 catch(Exception e){log.error(paramsRequest.getLocaleString("errormsg_Question_getAdmHtml_logErrorCargarDomSetRespuestas"),e);}
                 ret.append("\n</td></tr>");
-                ret.append("\n<tr><td colspan=2 align=right><hr noshade size=1><input type=\"submit\" name=\"Actualizar\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_btnEnviar")+"\" class=boton>");
+                ret.append("</table>");
+                ret.append("\n</fieldset>");
+                ret.append("\n<fieldset>");
+                //ret.append("\n<tr><td colspan=2 align=right><hr noshade size=1><input type=\"submit\" name=\"Actualizar\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_btnEnviar")+"\" >");
+                ret.append("\n<input type=\"submit\" name=\"Actualizar\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_btnEnviar")+"\" >");
                 if(request.getSession().getAttribute("retq")!=null){
-                   ret.append("&nbsp;<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_btnCancelar")+"\" onclick=\"window.close();\" class=boton>"); //window.opener.regresa();
+                   ret.append("&nbsp;<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_btnCancelar")+"\" onclick=\"window.close();\" >"); //window.opener.regresa();
                 }
                 else
                 {
@@ -915,9 +920,10 @@ public class Question  {
                     urlBack.setAction("select_p");
                     ret.append("&nbsp;<input type=\"button\" name=\"btn_cancelar\" value=\""+paramsRequest.getLocaleString("usrmsg_FreqAnswer_getAdmHtml_msgRegresar")+"\" onclick=\"javascript:window.location='"+urlBack+"'\">");
                 }
-                ret.append("</td></tr>");
-                ret.append("</table></form>");
+                //ret.append("</td></tr>");
                 ret.append("\n</fieldset>");
+                ret.append("</form>");
+                
                 ret.append("\n</div>");
                 
              }
@@ -926,12 +932,12 @@ public class Question  {
        
 
         if (accion.equalsIgnoreCase("add_p")) {
-            int tmpOpciones = 25; //24;
-            int tmpFinal = 3;
+            int tmpOpciones = 27; //24;
+            int tmpFinal = 4;
             if(request.getSession().getAttribute("regreso")!=null)request.getSession().setAttribute("regreso",null);
             if(request.getSession().getAttribute("retq")!=null){
-                tmpOpciones = 25;
-                tmpFinal=3;
+                tmpOpciones = 27;
+                tmpFinal=4;
             }
             RecQuestion objG = new RecQuestion();
             objG.setIdtm(idtm);
@@ -1008,7 +1014,7 @@ public class Question  {
             ret.append("\n     }    ");
             ret.append("\n     forma.validoptions.value=tempo;    ");
             ret.append("\n     //validacion opciones    ");
-            ret.append("\n     for (cnt = 22; cnt < forma.length-"+tmpFinal+"; cnt++){    ");
+            ret.append("\n     for (cnt = 23; cnt < forma.length-"+tmpFinal+"; cnt++){    ");
             ret.append("\n       tempo=forma.elements[cnt].value;");
             ret.append("\n       trim(forma.elements[cnt]);");
             ret.append("\n      if(forma.elements[cnt].value==\"\"){    ");
@@ -1211,7 +1217,7 @@ public class Question  {
                 if(Integer.parseInt(request.getParameter("htextid"))!=-1) paramI=Integer.parseInt(request.getParameter("htextid"));
                 else paramI=Integer.parseInt(request.getParameter("textid"));
             }
-            ret.append("\n"+objG.getCatalogTypeList(paramI,tempTVal)+"<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNuevaValidacion")+"\" name=\"btn_textid\" onclick=\"ventana('"+urlact+"?regreso=1','width=550, height=500');\" "+tempTVal+" class=boton></td></tr>");
+            ret.append("\n"+objG.getCatalogTypeList(paramI,tempTVal)+"<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNuevaValidacion")+"\" name=\"btn_textid\" onclick=\"ventana('"+urlact+"?regreso=1','width=550, height=500');\" "+tempTVal+" ></td></tr>");
 
             paramI = 0;
             if (request.getParameter("groupqid")!=null){
@@ -1219,7 +1225,7 @@ public class Question  {
                 else paramI=Integer.parseInt(request.getParameter("groupqid"));
             }
             ret.append("\n<tr><td width=200 align=right >"+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgCategoriaPregunta")+":</td>");
-            ret.append("\n<td >"+objG.getGroupQuestionList(paramI) +"<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNuevaCategoria")+"\" name=\"btn_groupq\" onclick=\"ventana('"+urlmgq+"?regreso=1','width=400, height=290');\" class=boton></td></tr>");
+            ret.append("\n<td >"+objG.getGroupQuestionList(paramI) +"<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNuevaCategoria")+"\" name=\"btn_groupq\" onclick=\"ventana('"+urlmgq+"?regreso=1','width=400, height=290');\" ></td></tr>");
 
             paramS = "";
             if (request.getParameter("required")!=null) paramS="checked";
@@ -1253,7 +1259,7 @@ public class Question  {
             String strTemp=" style=\"visibility:hidden\" ";
             if(tmpFAnswer!=1 && tmpFAnswer!=0) strTemp = " ";
             ret.append("\n<tr><td width=200 align=right >"+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgSetRespuestas")+":</td>");
-            ret.append("\n<td >"+objG.getFreqAnswerList((int)tmpFAnswer,"onchange=\"recarga(forma);\" "+bandera2)+"<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNuevoSet")+"\" name=\"btn_set\" onclick=\"ventana('"+urlmfa+"?regreso=1','width=580, height=520');\" "+bandera2+" class=boton>&nbsp;<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgEditarSet")+"\" name=\"btn_eset\" onclick=\"ventana('"+urlmfa+"?regreso=1&id="+tmpFAnswer+"','width=550, height=500');\" "+strTemp+" class=boton></td></tr>");
+            ret.append("\n<td >"+objG.getFreqAnswerList((int)tmpFAnswer,"onchange=\"recarga(forma);\" "+bandera2)+"<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNuevoSet")+"\" name=\"btn_set\" onclick=\"ventana('"+urlmfa+"?regreso=1','width=580, height=520');\" "+bandera2+" >&nbsp;<input type=\"button\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgEditarSet")+"\" name=\"btn_eset\" onclick=\"ventana('"+urlmfa+"?regreso=1&id="+tmpFAnswer+"','width=550, height=500');\" "+strTemp+" ></td></tr>");
 
             paramS= "0";
             if (request.getParameter("validoptions")!=null){
@@ -1281,7 +1287,7 @@ public class Question  {
             }
             ret.append("<tr><td width=200 align=right >"+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgGrupo")+":</td>");
             ret.append("\n<td >"+oRS.getSubjectList((int)paramI,"  ", idtm)); 
-            ret.append("<input   type=\"button\" name=\"btnnewsection\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNuevoGrupo")+"\" onclick=\"ventana('"+urlas+"?regreso=1','width=580, height=490');\" class=boton></td></tr>");
+            ret.append("<input type=\"button\" name=\"btnnewsection\" value=\""+paramsRequest.getLocaleString("usrmsg_Question_getAdmHtml_msgNuevoGrupo")+"\" onclick=\"ventana('"+urlas+"?regreso=1','width=580, height=490');\" ></td></tr>");
             ret.append("\n<tr><td colspan=2>");
             ret.append("\n<table border=0 cellspacing=1 cellpadding=1 width=100%>");
             strTemp=" style=\"visibility:hidden\" ";

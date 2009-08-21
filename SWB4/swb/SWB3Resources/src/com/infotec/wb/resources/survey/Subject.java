@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
@@ -64,6 +65,7 @@ public class Subject
     
     public String doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm");
         String idtm = base.getWebSiteId();
         StringBuffer ret = new StringBuffer();
         String accion = paramsRequest.getAction();
@@ -83,7 +85,9 @@ public class Subject
         SWBResourceURL urlds = paramsRequest.getRenderUrl();
         urlds.setAction("deleteselect_s");
         urlds.setMode(SWBResourceURL.Mode_ADMIN);
-        
+
+
+        ret.append("\n<link href=\"/swbadmin/css/swb.css\" rel=\"stylesheet\" type=\"text/css\" />");
         if (accion.equalsIgnoreCase("agregar_s"))
         {
             // secci�n de agregar grupo
@@ -147,7 +151,7 @@ public class Subject
                 objG.setIdtm(idtm);
                 objG.setSubjectid(Long.parseLong(idG));
                 objG.load();
-                ret.append("\n<script language=javascript>");
+                ret.append("\n<script type=\"text/javascript\">");
                 ret.append("\n    function jsValida(pForm){      ");
                 ret.append("\n       replaceChars(pForm.descripcion);");
                 ret.append("\n       return(true);     ");
@@ -176,18 +180,27 @@ public class Subject
                 SWBResourceURL urlus = paramsRequest.getRenderUrl();
                 urlus.setAction("updatesection_s");
                 urlus.setMode(SWBResourceURL.Mode_ADMIN);
-                
+                ret.append("\n<div class=\"swbform\">");
                 ret.append("\n<form name=\"forma\" action=\""+urlus+"\" method=\"GET\" onSubmit=\"if(jsValida(forma)) return true; else return false;\">");
+                ret.append("\n<fieldset>");
+                ret.append("\n<legend>"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_msgEdicionGrupo")+"</legend>");
                 ret.append("\n<input type=hidden name=id value=\""+objG.getSubjectid()+"\">");
-                ret.append("\n<table border=0 cellspacing=0 cellpadding=2 width=100%><tr><td colspan=2 >"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_msgEdicionGrupo")+"</td></tr>");
+                ret.append("\n<table border=0 cellspacing=0 cellpadding=2 width=100%>");
                 ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_msgTitulo")+":</td><td ><input type=\"text\" name=\"titulo\" size=60 value=\""+objG.getTitle()+"\" maxlength=50></td></tr>");
                 ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_msgDescripcion")+":</td><td ><textarea name=\"descripcion\" cols=50 rows=15 maxlength=255>"+objG.getDescription().replaceAll("<br>","\r")+"</textarea></td></tr>");
                 ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_msgCreado")+":</td><td ><input type=\"text\" name=\"creado\" readonly value=\""+objG.getCreated()+"\"></td></tr>");
                 ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_msgUltimaModificacion")+":</td><td ><input type=\"text\" name=\"modificado\" readonly value=\""+objG.getLastUpdate()+"\"></td></tr>");
-                ret.append("\n<tr><td colspan=2 align=right><hr noshade size=1><input type=\"submit\" name=\"enviar\" value=\""+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_btngActualizar")+"\" class=boton>");
-                ret.append("&nbsp;<input type=\"button\" name=\"cancel\" value=\""+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_btnCancelar")+"\" onclick=\"javascript:window.location='"+urlss+"';\" class=boton>"); //window.opener.regreso();
-                ret.append("\n</td></tr>");
-                ret.append("</tr></table></form>");
+
+                ret.append("\n</table>");
+
+                ret.append("\n</fieldset>");
+                ret.append("\n<fieldset>");
+
+                ret.append("\n<button type=\"submit\" name=\"enviar\" >"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_btngActualizar")+"</button>");
+                ret.append("&nbsp;<button type=\"button\" name=\"cancel\" onclick=\"javascript:window.location='"+urlss+"';\" >"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_btnCancelar")+"</button>"); //window.opener.regreso();
+                
+                ret.append("\n</form>");
+                ret.append("\n</div>");
             }
         }
  
@@ -195,7 +208,7 @@ public class Subject
         {
            
             // secci�n de agregar grupo
-            ret.append("\n<script language=javascript>");
+            ret.append("\n<script type=\"text/javascript\">");
             ret.append("\n    function jsValida(pForm){      ");
             ret.append("\n       replaceChars(pForm.descripcion);");
             ret.append("\n       return(true);     ");
@@ -224,24 +237,30 @@ public class Subject
             SWBResourceURL urlags = paramsRequest.getRenderUrl();
             urlags.setAction("agregar_s");
             urlags.setMode(SWBResourceURL.Mode_ADMIN);
-            
+            ret.append("\n<div class=\"swbform\">");
             ret.append("\n<form name=\"forma\" action=\""+urlags+"\" method=\"GET\" onSubmit=\"if(jsValida(forma)) return true; else return false;\">");
+            ret.append("\n<fieldset>");
+            ret.append("\n<legend>"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_msgNuevoGrupo")+"</legend>");
             ret.append("\n<table border=0 cellspacing=0 cellpadding=2 width=100%>");
-            ret.append("\n<tr><td colspan=2 >"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_msgNuevoGrupo")+"</td></tr>");
-            ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_msgTitulo")+":</td><td ><input type=\"text\" name=\"titulo\" value=\"T�tulo\" size=60 maxlength=50></td></tr>");
+            
+            ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_msgTitulo")+":</td><td ><input type=\"text\" name=\"titulo\" value=\"Título\" size=60 maxlength=50></td></tr>");
             ret.append("\n<tr><td  width=200 align=right>"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_msgDescripcion")+":</td><td ><textarea name=\"descripcion\" cols=50 rows=15 maxlength=255></textarea></td></tr>");
-            ret.append("\n<tr><td colspan=2 align=right ><hr noshade size=1><input type=\"submit\" name=\"enviar\" value=\""+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_btnEnviar")+"\" class=boton>");
+            ret.append("\n</table>");
+
+            ret.append("\n</fieldset>");
+            ret.append("\n<fieldset>");
+            ret.append("\n<input type=\"submit\" name=\"enviar\" value=\""+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_btnEnviar")+"\" >");
             if(request.getSession().getAttribute("regreso")!=null)
             {
-                ret.append("&nbsp;<input type=\"button\" name=\"cancel\" value=\""+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_btnCancelar")+"\" onclick=\"javascript:window.close();\" class=boton>"); //window.opener.regreso();
+                ret.append("&nbsp;<button type=\"button\" name=\"cancel\"  onclick=\"javascript:window.close();\" >"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_btnCancelar")+"</button>"); //window.opener.regreso(); //value=\""+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_btnCancelar")+"\"
             }      
             else
             {
-                ret.append("&nbsp;<input type=\"button\" name=\"cancel\" value=\""+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_btnCancelar")+"\" onclick=\"javascript:window.location='"+urlss+"';\" class=boton>"); //window.opener.regreso();
+                ret.append("&nbsp;<button type=\"button\" name=\"cancel\" onclick=\"javascript:window.location='"+urlss+"';\" >"+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_btnCancelar")+"</button>"); //window.opener.regreso();  //value=\""+paramsRequest.getLocaleString("usrmsg_Section_getAdmHtml_btnCancelar")+"\"
             }   
             
-            ret.append("</td></tr>");
-            ret.append("</tr></table></form>");
+            ret.append("\n</form>");
+            ret.append("\n<div>");
             
         }
         
@@ -296,9 +315,9 @@ public class Subject
 
             // secci�n de selecci�n de grupo a editar
             ret.append("\n<div class=\"swbform\">");
-            ret.append("\n<fieldset>");
             ret.append("\n<form action=\""+urlupt+"\" method=\"GET\">");
-            ret.append("<table border=0 cellspacing=0 cellpadding=2 width=100%>");
+            ret.append("\n<fieldset>");
+            ret.append("\n<table border=0 cellspacing=0 cellpadding=2 width=100%>");
             Connection con = null;
             PreparedStatement st =null;
             ResultSet rs =null;
@@ -315,7 +334,7 @@ public class Subject
             ret.append("\n<tbody>");
             try
             {
-                con = SWBUtils.DB.getDefaultConnection();
+                con = SWBUtils.DB.getDefaultConnection("Recurso Formulario.Subject.doAdmin()");
                 st = con.prepareStatement("select * from sr_subject where idtm=?");
                 st.setString(1,idtm);
                 rs = st.executeQuery();
@@ -347,8 +366,8 @@ public class Subject
                     ret.append("\n<td >"+rsub.getSubjectid()+"</td>");
                     ret.append("\n<td >"+rsub.getTitle()+"</td>");
                     ret.append("\n<td >"+rsub.getDescription()+"</td>");
-                    ret.append("\n<td >"+SWBUtils.TEXT.getStrDate(rsub.getCreated(),user.getLanguage())+"</td>");
-                    ret.append("\n<td >"+SWBUtils.TEXT.getStrDate(rsub.getLastUpdate(),user.getLanguage())+"</td>");
+                    ret.append("\n<td >"+sdf.format(rsub.getCreated())+"</td>");
+                    ret.append("\n<td >"+sdf.format(rsub.getLastUpdate())+"</td>");
                     ret.append("\n</tr>");
                 }
                 if(rs!=null)rs.close();
@@ -364,11 +383,12 @@ public class Subject
                 con=null;
             }
             ret.append("\n</tbody>");
-            ret.append("</table></form>");
+            ret.append("</table>");
             ret.append("\n</fieldset>");
             ret.append("\n<fieldset>");
             ret.append("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"enviar\">"+paramsRequest.getLocaleString("usrmsg_ControlCatalog_getAdmHtml_msgAgregar")+"</button>");
             ret.append("\n</fieldset>");
+            ret.append("\n</form>");
             ret.append("\n</div>");
         }
 
