@@ -10,8 +10,12 @@
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
     WebPage wpage=paramRequest.getWebPage();
-    Member member=Member.getMember(user,wpage);
     PostElement post=(PostElement)request.getAttribute("post");
+    Member member=Member.getMember(user,wpage);
+    if(!member.canView() || post==null)
+    {
+        return;
+    }
     post.incViews();
     String defaultFormat = "dd/MM/yyyy HH:mm";
     SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
@@ -20,6 +24,7 @@
     postAuthor=post.getCreator().getFullName();
     String email=post.getCreator().getEmail();
     String content="Sin contenido";
+    post.incViews();  //Incrementar apariciones
     if(post.getContent()!=null)
     {
         content=post.getContent();
