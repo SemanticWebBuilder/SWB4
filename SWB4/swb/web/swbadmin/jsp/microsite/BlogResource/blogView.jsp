@@ -7,7 +7,7 @@
             WebPage wpage = paramRequest.getWebPage();
             Blog blog = (Blog) request.getAttribute("blog");
             if(blog!=null)
-                {
+            {
             Member member = Member.getMember(user, wpage);
             String defaultFormat = "dd 'de' MMMM  'del' yyyy";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
@@ -47,8 +47,10 @@
             while (posts.hasNext())
             {
                 PostElement post = posts.next();
+                if(member.canView())
+                    {
                 String postAuthor = post.getCreator().getFullName();
-                String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());//iso8601dateFormat.format(post.getUpdated());
+                String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
                 SWBResourceURL url=paramRequest.getRenderUrl();
                 url.setParameter("act", "detail");
                 url.setParameter("uri", post.getURI());
@@ -110,6 +112,7 @@
                 </tr>
                 
                 <%
+                }
             }
 %>
 </table>
