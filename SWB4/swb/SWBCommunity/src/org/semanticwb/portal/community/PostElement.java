@@ -2,6 +2,7 @@ package org.semanticwb.portal.community;
 
 import java.net.URLEncoder;
 import java.util.Iterator;
+import org.semanticwb.model.WebPage;
 
 public class PostElement extends org.semanticwb.portal.community.base.PostElementBase
 {
@@ -22,5 +23,10 @@ public class PostElement extends org.semanticwb.portal.community.base.PostElemen
         }
         url+="?act=detail&uri="+URLEncoder.encode(this.getURI());
         return url;
+    }
+    @Override
+    public WebPage getWebPage()
+    {
+        return this.getWebPage();
     }
 }
