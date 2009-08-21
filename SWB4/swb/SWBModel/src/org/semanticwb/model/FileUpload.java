@@ -122,8 +122,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
                   //TODO:Haecer que esta linea solo sea puesta una vez, independientemente de cuantos fileuploads tiene mi forma
             ret += "<iframe id='target_upload_"+name+"' name='target_upload_"+name+"' src='' style='display: none'></iframe><br/>" +  //
                     attchMsg+
-                    "<input id=\""+name+"\" name=\""+name+"\" type=\"file\"> <br/>" +
-                    "<a href=\"#\" onClick=\"javascript:if(uploadjs_"+name+"(document.getElementById('"+formName+"'))) {return startUploadMonitoring('"+name+"');}\">Subir</a>\n" +
+                    "<input id=\""+name+"\" name=\""+name+"\" type=\"file\" onChange=\"javascript:if(uploadjs_"+name+"(document.getElementById('"+formName+"'))) {return startUploadMonitoring('"+name+"');}\"> <br/>" +
                     "<div id=\"uploadStatus_"+name+"\" style=\"width:230px\">\n" +
                     "   <div id=\"uploadProgressBar_"+name+"\" style=\"width:200px; height: 2px; border: 0px solid #BBB; text-align: center; float: left;\">\n" +
                     "       <div id=\"uploadIndicator_"+name+"\" style=\" height: 1px; position: relative; margin: 0px; padding: 1px; background: #9DC0F4; width: 0; float: left;\"></div>\n" +
