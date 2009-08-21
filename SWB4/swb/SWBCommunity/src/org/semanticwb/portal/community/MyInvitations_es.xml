@@ -5,6 +5,7 @@
         <admdbconnmgr defconn="true"/>
         <fieldset>
             <input type="TEXT" name="requesterPath" label="Ruta de invitaciones de Amigos:" size="50"/>
+            <input type="TEXT" name="perfilPath" label="Ruta de Perfil:" size="50" />
         </fieldset>
         <fieldset>
             <input type="SUBMIT" name="btnSave"  value="Guardar"/>
