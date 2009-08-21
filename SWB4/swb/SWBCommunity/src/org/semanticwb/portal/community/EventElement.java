@@ -72,4 +72,9 @@ public class EventElement extends org.semanticwb.portal.community.base.EventElem
         url+="?act=detail&uri="+URLEncoder.encode(this.getURI());
         return url;
     }
+    @Override
+    public WebPage getWebPage()
+    {
+        return this.getWebPage();
+    }
 }
