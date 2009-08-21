@@ -12,22 +12,29 @@
         Resource base=paramRequest.getResourceBase();
         String perfilPath=base.getAttribute("perfilPath","/swb/Ciudad_Digital/Perfil");
         String friendsPath=base.getAttribute("friendsPath","/swb/Ciudad_Digital/Mis_amigos");
-        User user=paramRequest.getUser();
-        /*
+        User owner=paramRequest.getUser();
+        User user=owner;
         if(request.getParameter("user")!=null) 
         {
             SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
             user=(User)semObj.createGenericInstance();
-        }*/
+        }
         if(!user.isRegistered()) return;
         WebPage wpage=paramRequest.getWebPage();
         String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
         String imgSize="width=\"80\" height=\"70\"";;
+        User user2Show=owner;
         boolean isStrategy=false;
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) 
         {
             isStrategy=true;
-            imgSize="width=\"39\" height=\"39\"";
+            imgSize="width=\"39\" height=\"39\"";            
+        }else user2Show=user;
+
+        if(isStrategy){
+            System.out.println("user2Show-Estrategia:"+user2Show.getFullName());
+        }else{
+            System.out.println("user2Show-Contenido:"+user2Show.getFullName());
         }
      %>
           <div class="miembros">
@@ -35,7 +42,7 @@
              <%
              String firstName="", lastName="";
              int contTot=0;
-             Iterator<Friendship> itMyFriends=Friendship.listFriendshipByFriend(user,wpage.getWebSite());
+             Iterator<Friendship> itMyFriends=Friendship.listFriendshipByFriend(user2Show,wpage.getWebSite());
              while(itMyFriends.hasNext()){
                  Friendship friendShip=itMyFriends.next();
                  Iterator<User> itfriendUser=friendShip.listFriends();
@@ -64,7 +71,7 @@
              }
              if(isStrategy && contTot>=12){%>
                  <div class="clear">
-                    <p class="titulo"><a href="<%=friendsPath%>" >Ver todos</a></p>
+                    <p class="vermas"><a href="<%=friendsPath%>" >Ver todos</a></p>
                  </div>
              <%}else if(contTot==0){%>
                <div class="clear">
