@@ -121,12 +121,12 @@
         //Find out when this mont starts and ends
         int firstWeekDay = thisMonth.getDay();
         long daysInMonth = Math.round((nextMonth.getTime() - thisMonth.getTime()) / (1000 * 60 * 60 * 24));
-        SWBResourceURL nml = paramRequest.getRenderUrl();
+        SWBResourceURL nml = paramRequest.getRenderUrl().setParameter("act", "calendar");
         nml.setParameter("year", String.valueOf(year + 1900));
         nml.setParameter("month", String.valueOf(month + 1));
         nml.setParameter("day", "1");
 
-        SWBResourceURL pml = paramRequest.getRenderUrl();
+        SWBResourceURL pml = paramRequest.getRenderUrl().setParameter("act", "calendar");
         pml.setParameter("year", String.valueOf(year + 1900));
         pml.setParameter("month", String.valueOf(month - 1));
         pml.setParameter("day", "1");
