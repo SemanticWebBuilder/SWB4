@@ -63,6 +63,7 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        final String path="/../swbadmin/jsp/microsite/EventResource/noevent.jpg";
         String action = request.getParameter("act");
         WebPage page = response.getWebPage();
         Member mem = Member.getMember(response.getUser(), page);
@@ -74,8 +75,14 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             HashMap<String,String> params = upload(request);
             if(mem.canAdd() && params.containsValue("add")) {
                 EventElement rec = EventElement.createEventElement(getResourceBase().getWebSite());
-                rec.setEventImage(params.get("filename"));
-                rec.setEventThumbnail(params.get("thumbnail"));
+                if(params.containsKey("filename"))
+                    rec.setEventImage(params.get("filename"));
+                else
+                    rec.setEventImage(path);
+                if(params.containsKey("thumbnail"))
+                    rec.setEventThumbnail(params.get("thumbnail"));
+                else
+                    rec.setEventThumbnail(path);
                 rec.setTitle(params.get("event_title"));
                 rec.setDescription(params.get("event_description"));
                 rec.setAudienceType(params.get("event_audience"));
