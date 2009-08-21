@@ -30,8 +30,9 @@
         content=post.getContent();
     }
 %>
+<br>
 <div id="blog">
-<table width="100%" cellpadding="2" cellspacing="2" border="1">
+<table width="100%" cellpadding="2" cellspacing="2" border="0">
     <tr>
         <td>
             <h1><%=post.getTitle()%></h1>
