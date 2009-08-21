@@ -19,14 +19,18 @@
         SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("user"));
         user=(User)semObj.createGenericInstance();
    }
-
+   String data=null;
    Resource base=paramRequest.getResourceBase();
-   if(base.getData(user)!=null){
-       String userData=base.getData(user);
-       int pos=userData.indexOf("|");
+   String twitterConf=base.getAttribute("twitterConf","1");
+   if(twitterConf.equals("1"))data=base.getData();
+   if(twitterConf.equals("2"))data=base.getData(user);
+   if(twitterConf.equals("3"))data=base.getData(paramRequest.getWebPage());
+
+   if(data!=null){
+       int pos=data.indexOf("|");
        if(pos>-1){
-       String userLogin=userData.substring(0,pos);
-       String userPass=userData.substring(pos+1);
+       String userLogin=data.substring(0,pos);
+       String userPass=data.substring(pos+1);
        Twitter twitter = new Twitter(userLogin, userPass);
        Iterator<Status> itStatuses = (twitter.getFriendsTimeline()).iterator();
        url.setAction("send2Twitter");       
