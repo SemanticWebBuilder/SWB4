@@ -38,15 +38,13 @@
                 <td>¿Que estas haciendo ahora?</td>
             </tr>
             <tr>
-                <td><textarea name="status" cols="50" rows="5"></textarea></td>
+                <td><textarea name="status" cols="40" rows="3"></textarea></td>
             </tr>
             <tr>
                 <td><input type="submit" value="enviar"></td>
             </tr>
         </table>
         </form>
-
-        <h2 class="titulo">Mi Twitter</h2>
         <%
             int cont=0;
             while(itStatuses.hasNext()){

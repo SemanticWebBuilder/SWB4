@@ -34,7 +34,7 @@
             %>
                 <td>
                     <div class="moreUser">
-                        <p class="titulo"><a href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=photo%>" valign="top" width="80" height="70"/><br><%=userprosp.getFullName()%></a></p>
+                        <p class="titulo"><a href="<%=perfilPath%>?user=<%=userprosp.getEncodedURI()%>"><img src="<%=SWBPlatform.getWebWorkPath()+photo%>" valign="top" width="80" height="70"/><br><%=userprosp.getFullName()%></a></p>
                     </div>
                </td>
             <%
