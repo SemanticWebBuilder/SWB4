@@ -20,8 +20,8 @@
         return;
     }    
     String defaultFormat = "dd/MM/yyyy HH:mm";
-    SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
-    String updated = iso8601dateFormat.format(post.getUpdated());
+    //SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
+    String updated = SWBUtils.TEXT.getTimeAgo(post.getUpdated(), user.getLanguage());
     String postAuthor = post.getCreator().getFirstName();
     postAuthor=post.getCreator().getFullName();
     String email=post.getCreator().getEmail();
@@ -37,7 +37,7 @@
 <table width="100%" cellpadding="2" cellspacing="2" border="0">
     <tr>
         <td>
-            <h1><%=post.getTitle()%></h1>
+            <h2 class="tituloGrande"><%=post.getTitle()%></h2>
         </td>
     </tr>
     
@@ -48,30 +48,21 @@
 if(email!=null)
     {
     %>
-    <a href="mailto:<%=email%>"><%=postAuthor%></a>
+    <p>Escrito por: <a href="mailto:<%=email%>"><%=postAuthor%></a> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
+    <p><img src="images/solidLine.jpg" alt="" width="680" height="1" ></p>
     <%
     }
     else
         {
         %>
-        <p id="author"><%=postAuthor%></p>
+        <p id="author">Escrito por: <%=postAuthor%></p> , <%=updated%>, visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
+        <p><img src="images/solidLine.jpg" alt="" width="680" height="1" ></p>
         <%
         }
 %>
 
         </td>
-    </tr>
-    <tr>
-        <td>
-            <p id="date"><%=updated%></p>
-            <hr>
-        </td>
-    </tr>    
-    <tr>
-        <td>
-            <p id="description"><%=post.getDescription()%></p>
-        </td>
-    </tr>
+    </tr>       
     <tr>
         <td>            
             <p id="content"><%=content%></p>
