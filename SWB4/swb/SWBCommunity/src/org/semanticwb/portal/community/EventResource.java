@@ -265,6 +265,8 @@ public class EventResource extends org.semanticwb.portal.community.base.EventRes
             path = "/swbadmin/jsp/microsite/EventResource/eventDailyView.jsp";
         }
 
+        System.out.println("act="+action);
+
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try {
             request.setAttribute("paramRequest", paramRequest);
