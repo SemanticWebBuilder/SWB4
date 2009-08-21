@@ -16,7 +16,7 @@
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                     <td>                        
-                        <p class="tituloPrincipal"><%=blog.getTitle()%></p>
+                        <%-- <h1><%=blog.getTitle()%></h1> --%>&nbsp;
                     </td>
                     <td>
                         <%
@@ -39,7 +39,7 @@
                     </td>
                 </tr>
             </table>
-                    <hr>      
+                    <hr><br>
             
                   <table width="100%" cellpadding="2" cellspacing="2" border="0">
             <%
