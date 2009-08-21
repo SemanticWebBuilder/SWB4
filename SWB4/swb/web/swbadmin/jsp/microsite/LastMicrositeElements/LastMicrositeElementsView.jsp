@@ -59,7 +59,7 @@ if(paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
                         Member member=Member.getMember(user, element.getWebPage());
                         if(member!=null)
                         {
-                            canview=member.canView();
+                            canview=element.canView(member);
                         }
                     }
                     String src="blog.jpg";
