@@ -1,6 +1,7 @@
 package org.semanticwb.portal.community;
 
 import java.net.URLEncoder;
+import org.semanticwb.model.WebPage;
 
 
 public class NewsElement extends org.semanticwb.portal.community.base.NewsElementBase 
@@ -16,5 +17,10 @@ public class NewsElement extends org.semanticwb.portal.community.base.NewsElemen
         url=this.getNewsWebPage().getUrl();
         url+="?act=detail&uri="+URLEncoder.encode(this.getURI());
         return url;
+    }
+    @Override
+    public WebPage getWebPage()
+    {
+        return this.getNewsWebPage();
     }
 }
