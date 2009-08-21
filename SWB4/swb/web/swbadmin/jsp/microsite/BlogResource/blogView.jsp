@@ -81,14 +81,14 @@
                         {
                             String src=pathIamge+post.getCreator().getPhoto();
                             %>
-                            <p><img width="50" height="50" alt="<%=postAuthor%>" src="<%=src%>">&nbsp;&nbsp;&nbsp;Escrito por: <%=postAuthor%>, <%=updated%></p>
+                            <p><img width="50" height="50" alt="<%=postAuthor%>" src="<%=src%>">&nbsp;&nbsp;&nbsp;Escrito por: <%=postAuthor%>, <%=updated%> , visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
                           <%
                        }
                        else
                        {
                           %>
-                            <p>Escrito por: <%=postAuthor%>, <%=updated%></p>
-                            <%
+                            <p>Escrito por: <%=postAuthor%>, <%=updated%> , visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
+                          <%
                        }
                     %>
                     </td>
