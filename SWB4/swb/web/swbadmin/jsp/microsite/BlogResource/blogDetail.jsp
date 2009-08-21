@@ -14,6 +14,9 @@
     Member member=Member.getMember(user,wpage);
     if(!post.canView(member) || post==null)
     {
+        %>
+        <p>No tiene permisos para ver esta entrada, o la entrada ya no existe</p>
+        <%
         return;
     }
     post.incViews();
