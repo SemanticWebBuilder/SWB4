@@ -92,23 +92,18 @@
                         {
                             String src=pathIamge+post.getCreator().getPhoto();
                             %>
-                            <p><img width="50" height="50" alt="<%=postAuthor%>" src="<%=src%>">&nbsp;&nbsp;&nbsp;Escrito por: <%=postAuthor%>, <%=updated%> , visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p><p class="vermas"><a  href="<%=url%>" >Ver m&aacute;s</a></p>
+                            <p><img width="50" height="50" alt="<%=postAuthor%>" src="<%=src%>">&nbsp;&nbsp;&nbsp;Escrito por: <%=postAuthor%>, <%=updated%> , visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>                             
                           <%
                        }
                        else
                        {
                           %>
-                            <p>Escrito por: <%=postAuthor%>, <%=updated%> , visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p><p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
+                            <p>Escrito por: <%=postAuthor%>, <%=updated%> , visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
                           <%
                        }
                     %>
                     </td>
-                    </tr>
-                        <tr>
-                        <td>
-                            <p class="titutlo"><%=post.getTitle()%></p>
-                        </td>                        
-                        <td>
+                    <td>
                          <%
                         if (post.canModify(member))
                         {
@@ -136,7 +131,22 @@
                         }
                     %>
                     </td>
-                    </tr>                   
+                    </tr>
+                        <tr>
+                        <td>
+                            <p class="titutlo"><%=post.getTitle()%></p>
+                        </td>                                                
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <hr>
+                        </td>
+                    </tr>
 
                     <%
                 }
