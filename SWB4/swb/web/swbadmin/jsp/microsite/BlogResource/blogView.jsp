@@ -26,8 +26,13 @@
             %>
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
+                    <td colspan="2">
+                        <p class="titulo">Blog creado el: <%=created%></p>
+                    </td>
+                </tr>
+                <tr>
                     <td>                        
-                        <%-- <h1><%=blog.getTitle()%></h1> --%>&nbsp;
+                        <p><%=blog.getDescription()%></p>
                     </td>
                     <td>
                         <%
@@ -44,11 +49,7 @@
             %>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="2">
-                        <p class="titulo">Blog creado el: <%=created%></p>
-                    </td>
-                </tr>
+                
             </table>
             <%
             /*if(showbr)
@@ -84,13 +85,23 @@
             {                
                 if(post.canView(member))
                 {
+                    String description=post.getDescription();
+                    if(description==null)
+                    {
+                        description="";
+                    }
                     String postAuthor = post.getCreator().getFullName();
                     String updated = SWBUtils.TEXT.getTimeAgo(post.getCreated(), user.getLanguage());
                     SWBResourceURL url=paramRequest.getRenderUrl();
                     url.setParameter("act", "detail");
                     url.setParameter("uri", post.getURI());
                     %>
-
+                    </tr>
+                        <tr>
+                        <td>
+                            <p class="tituloNaranja"><%=post.getTitle()%></p>
+                        </td>
+                    </tr>
                     <tr>
                         <td colspan="2" valign="top">
                         <%if(post.getCreator().getPhoto()!=null)
@@ -138,8 +149,8 @@
                     </td>
                     </tr>
                         <tr>
-                        <td>
-                            <p class="titutlo"><%=post.getTitle()%></p>
+                        <td colspan="3">
+                            <p><%=description%></p>
                         </td>                                                
                     </tr>
                     <tr>
