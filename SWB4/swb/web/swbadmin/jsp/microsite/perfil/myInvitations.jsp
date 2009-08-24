@@ -20,9 +20,8 @@ if(owner!=user) userParam="?user="+user.getEncodedURI();
 WebPage wpage=paramRequest.getWebPage();
 SWBResourceURL urlAction=paramRequest.getActionUrl();
 
-Resource base=paramRequest.getResourceBase();
-String requesterPath=base.getAttribute("requesterPath","/swb/Ciudad_Digital/Mis_invitaciones");
-String perfilPath=base.getAttribute("perfilPath","/swb/Ciudad_Digital/Perfil");
+String perfilPath=paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+String requesterPath=paramRequest.getWebPage().getWebSite().getWebPage("mis_invitaciones").getUrl();
 String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
 boolean isStrategy=false;
 if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) isStrategy=true;
