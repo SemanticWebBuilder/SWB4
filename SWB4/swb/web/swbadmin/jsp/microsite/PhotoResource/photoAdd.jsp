@@ -10,7 +10,7 @@
 <form enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
-            <legend>Agrega una foto</legend>
+            <legend>Agrega foto</legend>
             <div>
                 <p>
                     <label for="foto">Archivo:&nbsp;</label>

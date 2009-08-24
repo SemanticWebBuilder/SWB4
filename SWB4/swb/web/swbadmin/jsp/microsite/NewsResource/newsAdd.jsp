@@ -17,7 +17,7 @@
 <form class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
-            <legend>Agregar noticia nueva</legend>
+            <legend>Agregar noticia</legend>
             <div>
                 <p>
                     <label for="new_image">Imagen de la noticia:&nbsp;</label>

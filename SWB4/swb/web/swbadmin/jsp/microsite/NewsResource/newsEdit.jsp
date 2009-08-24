@@ -28,76 +28,69 @@ Error: Elemento no encontrado...
     dojo.require("dijit.form.Button");
     dojo.require("dojo.parser");
 </script>
-<div class="soria">
-    <form class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
+<form class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
+    <div>
+        <fieldset>
+        <legend>Editar noticia</legend>
         <div>
-            <h3>Editar noticia</h3>
-        </div>
-        <div>
-            <fieldset><legend></legend>
-                <table>
-                    <tr>
-                        <td align="right" valign="center"><label for="new_image">Imagen de la noticia&nbsp;<em>*</em></label></td>
-                        <td valign="top">
-                            <a href="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage()%>" target="_self">
-                            <img src="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
-                            </a>
-                            <input id="foto" type="file" style="width: 90%;" class="textfield tags" size="22" name="foto" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="new_title">Título de la noticia&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input dojoType="dijit.form.TextBox" type="text" id="new_title" name="new_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>"/><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="new_author">Autor de la noticia&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input type="text" dojoType="dijit.form.TextBox" id="new_author" name="new_author" value="<%=(rec.getAuthor()==null?"":rec.getAuthor())%>"/><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="new_abstract">Resumen&nbsp;<em>*</em></label></td>
-                        <td>
-                            <textarea dojoType="dijit.form.Textarea" style="width:244px" id="new_abstract" name="new_abstract"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="new_fulltext">Texto completo&nbsp;<em>*</em></label></td>
-                        <td>
-                            <textarea dojoType="dijit.form.Textarea" style="width:244px" id="new_fulltext" name="new_fulltext"><%=(rec.getFullText()==null?"":rec.getFullText())%></textarea><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="new_citation">Fuente&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input type="text" dojoType="dijit.form.TextBox" id="new_citation" name="new_citation" value="<%=(rec.getCitation()==null?"":rec.getCitation())%>"/><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="new_tags">Etiquetas&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input dojoType="dijit.form.TextBox" type="text" id="new_tags" name="new_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>"/><br>
-                        </td>
-                    </tr>
-                </table>
-            </fieldset>
-                        <fieldset>
-                        <legend><strong>¿Quién puede ver esta noticia?</strong></legend>
-                        <ul class="options">
-                            <%String chk="checked=\"checked\"";%>
-                            <li><label><input dojoType="dijit.form.RadioButton" type="radio" class="radio" name="level" value="0" <%if(rec.getVisibility()==0)out.println(chk);%>/> Cualquiera</label></li>
-                            <li><label><input dojoType="dijit.form.RadioButton" type="radio" class="radio" name="level" value="1" <%if(rec.getVisibility()==1)out.println(chk);%>/> Sólo los miembros</label></li>
-                            <li><label><input dojoType="dijit.form.RadioButton" type="radio" class="radio" name="level" value="3" <%if(rec.getVisibility()==3)out.println(chk);%>/> Sólo yo</label></li>
-                        </ul>
-                    </fieldset>
-            <p class="pad5 last-child clear right">
-                <strong><input class="button" value="Guardar" label="Guardar" dojoType="dijit.form.Button" type="submit"/></strong>
-                <input type="button" class="button" value="Cancelar" label="Cancelar" dojoType="dijit.form.Button" onclick="window.location='<%=paramRequest.getRenderUrl()%>';"/>
+            <p>
+                <label for="new_image">Imagen de la noticia:&nbsp;</label>
+                <a href="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage()%>" target="_self">
+                    <img src="<%= SWBPlatform.getWebWorkPath()+rec.getNewsImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                </a><br />
+                <input type="file" id="foto" name="foto" />
             </p>
-            <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
-            <input type="hidden" name="act" value="edit"/>
+            <p>
+                <label for="new_title">Título de la noticia:&nbsp;</label>
+                <input type="text" id="new_title" name="new_title"/>
+            </p>
+            <p>
+                <label for="new_author">Autor de la noticia:&nbsp;</label>
+                <input type="text" id="new_author" name="new_author"/>
+            </p>
+            <p>
+                <label for="new_abstract">Resumen de la noticia:&nbsp;</label>
+                <textarea id="new_abstract" name="new_abstract" cols="30" rows="5"></textarea>
+            </p>
+            <p>
+                <label for="new_fulltext">Texto completo:&nbsp;</label>
+                <textarea id="new_fulltext" name="new_fulltext" cols="30" rows="5"></textarea>
+            </p>
+            <p>
+                <label for="new_citation">Fuente:&nbsp;</label>
+                <input type="text" id="new_citation" name="new_citation"/>
+            </p>
+            <p>
+                <label for="new_tags">Etiquetas:&nbsp;</label>
+                <input type="text" id="new_tags" name="new_tags"/>
+            </p>
         </div>
-    </form>
-</div>
+        </fieldset>
+        <fieldset>
+            <legend>¿Quién puede ver este evento?</legend>
+            <%String chk = "checked=\"checked\"";%>
+            <div>
+                <p>
+                    <label for="level"><input type="radio" name="level" value="0" <%if(rec.getVisibility()==0)out.println(chk);%> />&nbsp;Cualquiera</label>
+                </p>
+                <p>
+                    <label for="level"><input type="radio" name="level" value="1" <%if(rec.getVisibility()==1)out.println(chk);%> />&nbsp;Sólo los miembros</label>
+                </p>
+                <p>
+                    <label for="level"><input type="radio" name="level" value="3" <%if(rec.getVisibility()==3)out.println(chk);%> />&nbsp;Sólo yo</label>
+                </p>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend></legend>
+            <div>
+            <p>
+                <input type="submit" value="Enviar" />
+                <input type="button" value="Cancelar" onclick="window.location='<%= paramRequest.getRenderUrl()%>'"/>
+            </p>
+            </div>
+        </fieldset>
+    </div>
+    <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
+    <input type="hidden" name="act" value="edit"/>
+</form>

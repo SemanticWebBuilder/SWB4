@@ -19,44 +19,51 @@
 %>
 <form method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
-        <h3>Editar</h3>
-    </div>
-    <div>
-        <fieldset><legend></legend>
+        <fieldset>
+            <legend>Editar foto</legend>
             <div>
-                <div>
-                    <p>
-                        <label for="title">Título:</label><br />
-                        <input id="title" style="width: 90%;" type="text" class="textfield" size="25" name="title" maxlength="200" value="<%=rec.getTitle()%>" />
-                    </p>
-                    <p>
-                        <label for="description">Descripción</label><br/>
-                        <textarea id="description" style="width: 90%" rows="5" cols="23" name="description"><%=rec.getDescription()%></textarea>
-                     </p>
-                     <p>
-                        <label for="tags">Etiquetas:</label><br />
-                        <input id="tags" type="text" style="width: 90%;" class="textfield tags" size="22" name="tags" value="<%=rec.getTags()%>" maxlength="2000" />
-                    </p>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <fieldset>
-                        <legend><strong>¿Quién puede ver este video?</strong></legend>
-                        <ul class="options">
-                            <%String chk="checked=\"checked\"";%>
-                            <li><label><input type="radio" class="radio" name="level" value="0" <%if(rec.getVisibility()==0)out.println(chk);%>/> Cualquiera</label></li>
-                            <li><label><input type="radio" class="radio" name="level" value="1" <%if(rec.getVisibility()==1)out.println(chk);%>/> Sólo los miembros</label></li>
-                            <li><label><input type="radio" class="radio" name="level" value="3" <%if(rec.getVisibility()==3)out.println(chk);%>/> Sólo yo</label></li>
-                        </ul>
-                    </fieldset>
-                </div>
+                <p>
+                    <label for="foto">Archivo:&nbsp;</label>
+                    <input id="foto" type="file" size="22" name="foto" />
+                </p>
+                <p>
+                    <label for="title">Título:&nbsp;</label>
+                    <input id="title" type="text" size="25" name="title" maxlength="200" />
+                </p>
+                <p>
+                    <label for="description">Descripción</label>
+                    <textarea id="description" cols="30" rows="5" name="description"></textarea>
+                 </p>
+                 <p>
+                    <label for="tags">Etiquetas:&nbsp;</label>
+                    <input id="tags" type="text" size="22" name="tags" maxlength="2000" />
+                </p>
             </div>
         </fieldset>
-        <p>
-            <strong><input type="submit" value="Guardar cambios" class="button"/></strong>
-            <a class="button" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
-        </p>
+        <fieldset>
+            <legend>¿Quién puede ver este evento?</legend>
+            <%String chk = "checked=\"checked\"";%>
+            <div>
+                <p>
+                    <label for="level"><input type="radio" name="level" value="0" <%if(rec.getVisibility()==0)out.println(chk);%> />&nbsp;Cualquiera</label>
+                </p>
+                <p>
+                    <label for="level"><input type="radio" name="level" value="1" <%if(rec.getVisibility()==1)out.println(chk);%> />&nbsp;Sólo los miembros</label>
+                </p>
+                <p>
+                    <label for="level"><input type="radio" name="level" value="3" <%if(rec.getVisibility()==3)out.println(chk);%> />&nbsp;Sólo yo</label>
+                </p>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend></legend>
+            <div>
+            <p>
+                <input type="submit" value="Enviar" />
+                <input type="button" value="Cancelar" onclick="window.location='<%= paramRequest.getRenderUrl()%>'"/>
+            </p>
+            </div>
+        </fieldset>
     </div>
     <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
     <input type="hidden" name="act" value="edit"/>

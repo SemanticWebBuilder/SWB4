@@ -18,7 +18,7 @@
 <form class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
     <div>
         <fieldset>
-            <legend>Agregar evento nuevo</legend>
+            <legend>Agregar evento</legend>
             <div>
                 <p>
                     <label for="foto">Imagen del evento:&nbsp;</label>
@@ -28,7 +28,7 @@
                     <label for="event_title">Título del evento:&nbsp;</label>
                     <input type="text" id="event_title" name="event_title"/>
                 </p>
-                <p style="vertical-align:top">
+                <p>
                     <label for="event_description">Descripción del evento:&nbsp;</label>
                     <textarea id="event_description" name="event_description" cols="30" rows="5"></textarea>
                 </p>
