@@ -113,24 +113,29 @@ public class SWBContext extends SWBContextBase
 
     public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites(boolean direct)
     {
-        if(SWBPlatform.getEnv("swb/adminShow","false").equals("false"))
-        {
-            ArrayList<org.semanticwb.model.WebSite> arr=new ArrayList();
+        boolean adminShow=!SWBPlatform.getEnv("swb/adminShow","false").equals("false");
 
-            Iterator<Entry<String,SemanticModel>> it=SWBPlatform.getSemanticMgr().getModels().iterator();
-            while(it.hasNext())
-            {
-                Entry<String,SemanticModel> entry=it.next();
-                SemanticModel model=entry.getValue();
-                GenericObject gen=model.getModelObject().createGenericInstance();
-                if(gen instanceof WebSite && !filtered.contains(gen.getId())) arr.add((WebSite)gen);
-            }
-            return arr.iterator();
-        }else
+        ArrayList<org.semanticwb.model.WebSite> arr=new ArrayList();
+
+        Iterator<Entry<String,SemanticModel>> it=SWBPlatform.getSemanticMgr().getModels().iterator();
+        while(it.hasNext())
         {
-            return (java.util.Iterator<org.semanticwb.model.WebSite>)swb_WebSite.listGenericInstances(direct);
-            //return SWBContextBase.listWebSites();
+            Entry<String,SemanticModel> entry=it.next();
+            SemanticModel model=entry.getValue();
+            GenericObject gen=model.getModelObject().createGenericInstance();
+            //System.out.println("gen:"+gen+" "+adminShow);
+            if(gen instanceof WebSite)
+            {
+                if(adminShow)
+                {
+                    arr.add((WebSite)gen);
+                }else if(!filtered.contains(gen.getId()))
+                {
+                    arr.add((WebSite)gen);
+                }
+            }
         }
+        return arr.iterator();
     }
 
     /**
