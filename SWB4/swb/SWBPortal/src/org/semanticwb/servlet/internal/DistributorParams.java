@@ -449,7 +449,6 @@ public class DistributorParams
         //MAPS74
         String ipuser = request.getRemoteAddr().toString();
         Iterator<IPFilter> it = webpage.getWebSite().listIPFilters();
-                //DBCatalogs.getInstance().getIpFilters(webpage.getMap().getId()).values().iterator();
         while (it.hasNext())
         {
             IPFilter ip =  it.next();
