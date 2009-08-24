@@ -30,7 +30,6 @@
 
 package org.semanticwb.base.db;
 
-import java.net.SocketException;
 import java.sql.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -42,6 +41,7 @@ import org.semanticwb.SWBUtils;
 public class AutoStatement implements java.sql.Statement
 {
     private static Logger log=SWBUtils.getLogger(AutoStatement.class);
+    private boolean debug=false;
 
     Statement st;
     AutoConnection aconn;
@@ -126,12 +126,18 @@ public class AutoStatement implements java.sql.Statement
 
     public int[] executeBatch() throws java.sql.SQLException
     {
+        if(debug)
+        {
+            System.out.println("*************************************");
+            System.out.println("s.executeBatch():");
+        }
         checkStatement();
         return st.executeBatch();
     }
 
     public java.sql.ResultSet executeQuery(String str) throws java.sql.SQLException
     {
+        if(debug)System.out.println("s.executeQuery:"+str);
         checkStatement();
         try
         {
@@ -151,6 +157,7 @@ public class AutoStatement implements java.sql.Statement
 
     public int executeUpdate(String str) throws java.sql.SQLException
     {
+        if(debug)System.out.println("s.executeUpdate:"+str);
         checkStatement();
         return st.executeUpdate(str);
     }
