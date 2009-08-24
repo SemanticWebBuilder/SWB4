@@ -28,103 +28,93 @@ Error: Elemento no encontrado...
     dojo.require("dijit.form.Button");
     dojo.require("dojo.parser");
 </script>
-<div class="soria">
-    <form class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
-        <div>
-            <h3>Editar evento</h3>
-        </div>
-        <div>
-            <fieldset><legend></legend>
-                <table>
-                    <tr>
-                        <td align="right" valign="center"><label for="foto">Imagen del evento&nbsp;:</label></td>
-                        <td valign="top">
-                            <a href="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage()%>" target="_self">
-                            <img id="img_<%=rec.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage() %>" alt="<%= rec.getTitle() %>" border="0" />
-                            </a>
-                            <input id="foto" type="file" name="foto" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="event_title">Título del evento&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input dojoType="dijit.form.TextBox" type="text" id="event_title" name="event_title" value="<%=(rec.getTitle()==null?"":rec.getTitle())%>"/><br>
-                        </td>
-                    <tr>
-                        <td align="right" valign="center"><label for="event_description">Descripción del evento&nbsp;<em>*</em></label></td>
-                        <td>
-                            <textarea dojoType="dijit.form.Textarea" id="event_description" name="event_description" style="width:200px;"><%=(rec.getDescription()==null?"":rec.getDescription())%></textarea><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="event_audience">Dirigido a&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input type="text" dojoType="dijit.form.TextBox" id="event_audience" name="event_audience" value="<%=(rec.getAudienceType()==null?"":rec.getAudienceType())%>"/><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="event_startDate">Fecha de inicio&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" value="<%=(rec.getStartDate()==null?"":dateFormat.format(rec.getStartDate()))%>" onchange="dijit.byId('event_endDate').constraints.min = arguments[0];"/><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="event_endDate">Fecha de término&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input class="tundra" dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" value="<%=(rec.getEndDate()==null?"":dateFormat.format(rec.getEndDate()))%>" onchange="dijit.byId('event_startDate').constraints.max = arguments[0];"/><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="event_startTime">Hora de inicio&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input dojoType="dijit.form.TimeTextBox" type="text" id="event_startTime" name="event_startTime" value="<%=(rec.getStartTime()==null?"":"T" + timeFormat.format(rec.getStartTime()))%>" constraints="{timePattern:'hh:mm a', visibleRange:'T01:30:00'}" /><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="event_endTime">Hora de término&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input dojoType="dijit.form.TimeTextBox" type="text" id="event_endTime" name="event_endTime" value="<%=(rec.getEndTime()==null?"":"T" + timeFormat.format(rec.getEndTime()))%>" constraints="{timePattern:'hh:mm a', visibleRange:'T01:30:00'}" /><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="event_place">Lugar del evento&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input dojoType="dijit.form.TextBox" type="text" id="event_place" name="event_place" value="<%=(rec.getPlace()==null?"":rec.getPlace())%>"/><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="center"><label for="event_tags">Etiquetas&nbsp;<em>*</em></label></td>
-                        <td>
-                            <input dojoType="dijit.form.TextBox" type="text" id="event_tags" name="event_tags" value="<%=(rec.getTags()==null?"":rec.getTags())%>"/><br>
-                        </td>
-                    </tr>
-                </table>
-            </fieldset>
-                        <fieldset>
-                        <legend><strong>¿Quién puede ver este evento?</strong></legend>
-                        <ul class="options">
-                            <%String chk="checked=\"checked\"";%>
-                            <li><label><input dojoType="dijit.form.RadioButton" type="radio" class="radio" name="level" value="0" <%if(rec.getVisibility()==0)out.println(chk);%>/> Cualquiera</label></li>
-                            <li><label><input dojoType="dijit.form.RadioButton" type="radio" class="radio" name="level" value="1" <%if(rec.getVisibility()==1)out.println(chk);%>/> Sólo los miembros</label></li>
-                            <li><label><input dojoType="dijit.form.RadioButton" type="radio" class="radio" name="level" value="3" <%if(rec.getVisibility()==3)out.println(chk);%>/> Sólo yo</label></li>
-                        </ul>
-                    </fieldset>
-            <p class="pad5 last-child clear right">
-                <strong><input class="button" value="Guardar" label="Guardar" dojoType="dijit.form.Button" type="submit"/></strong>
-                <%
-                SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "detail");
-                back.setParameter("uri", uri);
-                back.setParameter("day", request.getParameter("day"));
-                back.setParameter("month", request.getParameter("month"));
-                back.setParameter("year", request.getParameter("year"));
-                %>
-                <input type="button" class="button" value="Cancelar" label="Cancelar" dojoType="dijit.form.Button" onclick="window.location='<%=back%>';"/>
+<form class="swbform" enctype="multipart/form-data" method="post" action="<%=paramRequest.getActionUrl()%>">
+    <div>
+        <fieldset>
+            <legend>Editar evento</legend>
+            <div>
+                <p>
+                    <label for="foto">Imagen del evento:&nbsp;</label>
+                    <a href="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage()%>" target="_self">
+                        <img id="img_<%=rec.getId()%>" src="<%= SWBPlatform.getWebWorkPath()+rec.getEventImage() %>" alt="<%= rec.getTitle() %>" border="0" />
+                    </a><br />
+                    <input type="file" id="foto" name="foto" />
+                </p>
+                <p>
+                    <label for="event_title">Título del evento:&nbsp;</label>
+                    <input type="text" id="event_title" name="event_title"/>
+                </p>
+                <p>
+                    <label for="event_description">Descripción del evento:&nbsp;</label>
+                    <textarea id="event_description" name="event_description" cols="30" rows="5"></textarea>
+                </p>
+                <p>
+                    <label for="event_audience">Dirigido a:&nbsp;</label>
+                    <input type="text" id="event_audience" name="event_audience" value="Todos"/>
+                </p>
+                <p>
+                    <label for="event_startDate">Fecha de inicio:&nbsp;</label>
+                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_startDate" name="event_startDate" constraints="{datePattern:'yyyy/MM/dd'}" onchange="dijit.byId('event_endDate').constraints.min = arguments[0];"/>
+                </p>
+                <p>
+                    <label for="event_endDate">Fecha de término:&nbsp;</label>
+                    <input dojoType="dijit.form.DateTextBox" type="text" id="event_endDate" name="event_endDate" constraints="{datePattern:'yyyy/MM/dd'}" onchange="dijit.byId('event_startDate').constraints.max = arguments[0];"/>
+                </p>
+                <p>
+                    <label for="event_startTime">Hora de inicio:&nbsp;</label>
+                    <input dojoType="dijit.form.TimeTextBox" type="text" id="event_startTime" name="event_startTime" constraints="{timePattern:'hh:mm a', visibleRange:'T01:30:00'}" />
+                </p>
+                <p>
+                    <label for="event_endTime">Hora de término:&nbsp;</label>
+                    <input dojoType="dijit.form.TimeTextBox" type="text" id="event_endTime" name="event_endTime" constraints="{timePattern:'hh:mm a', visibleRange:'T01:30:00'}" />
+                </p>
+                <p>
+                    <label for="event_place">Lugar del evento:&nbsp;</label>
+                    <input type="text" id="event_place" name="event_place"/>
+                </p>
+                <p>
+                    <label for="event_tags">Etiquetas:&nbsp;</label>
+                    <input type="text" id="event_tags" name="event_tags"/>
+                </p>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>¿Quién puede ver este evento?</legend>
+            <%String chk = "checked=\"checked\"";%>
+            <div>
+                <p>
+                    <label for="level"><input type="radio" name="level" value="0" <%if(rec.getVisibility()==0)out.println(chk);%> />&nbsp;Cualquiera</label>
+                </p>
+                <p>
+                    <label for="level"><input type="radio" name="level" value="1" <%if(rec.getVisibility()==1)out.println(chk);%> />&nbsp;Sólo los miembros</label>
+                </p>
+                <p>
+                    <label for="level"><input type="radio" name="level" value="3" <%if(rec.getVisibility()==3)out.println(chk);%> />&nbsp;Sólo yo</label>
+                </p>
+            </div>
+        </fieldset>
+
+<%
+    SWBResourceURL back = paramRequest.getRenderUrl().setParameter("act", "detail");
+    back.setParameter("uri", uri);
+    back.setParameter("day", request.getParameter("day"));
+    back.setParameter("month", request.getParameter("month"));
+    back.setParameter("year", request.getParameter("year"));
+%>
+        <fieldset>
+            <legend></legend>
+            <div>
+            <p>
+                <input type="submit" value="Enviar" />
+                <input type="button" value="Cancelar" onclick="window.location='<%= back%>'"/>
             </p>
-            <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
-            <input type="hidden" name="act" value="edit"/>
-        </div>
-    </form>
-</div>
+            </div>
+        </fieldset>
+    </div>
+    <input type="hidden" name="uri" value="<%=rec.getURI()%>"/>
+    <input type="hidden" name="act" value="edit"/>
+</form>
+
 <script type="text/javascript">
     var img = document.getElementById('img_<%=rec.getId()%>');
     if( img.width>img.height && img.width>350) {
