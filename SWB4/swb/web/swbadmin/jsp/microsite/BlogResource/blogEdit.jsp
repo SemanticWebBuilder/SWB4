@@ -97,7 +97,11 @@
         }
         }
     else if("editblog".equals(request.getParameter("mode")))
+    {
+        if(member.getAccessLevel()!=Member.LEVEL_OWNER)
         {
+            return;
+        }
         %>
                  <div>
                 <h3>Editar título y descripción del blog</h3>
