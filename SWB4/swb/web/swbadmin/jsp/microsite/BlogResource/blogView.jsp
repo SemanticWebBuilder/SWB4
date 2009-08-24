@@ -1,126 +1,100 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.platform.*,java.text.*,org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<script language="Javascript" type="text/javascript">
+        function validateremove(url, title,uri)
+        {
+            if(confirm('¿Esta seguro de borrar la entrada '+title+'?'))
+                {
+                    var url=url+'&uri='+escape(uri);
+                    document.URL=url;
+                }
+        }
+    </script>
+<div id="centerProfile">            
 <%
-            String pathIamge = SWBPlatform.getWebWorkPath();
-            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-            User user = paramRequest.getUser();
-            WebPage wpage = paramRequest.getWebPage();
-            Blog blog = (Blog) request.getAttribute("blog");
-            if(blog!=null)
-            {
+        String pathIamge = SWBPlatform.getWebWorkPath();
+        SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+        User user = paramRequest.getUser();
+        WebPage wpage = paramRequest.getWebPage();
+        Blog blog = (Blog) request.getAttribute("blog");
+        if(blog!=null)
+        {
             Member member = Member.getMember(user, wpage);
             String defaultFormat = "dd 'de' MMMM  'del' yyyy";
             SimpleDateFormat iso8601dateFormat = new SimpleDateFormat(defaultFormat);
-            String created = iso8601dateFormat.format(blog.getCreated()); //SWBUtils.TEXT.(blog.getCreated(), user.getLanguage());//iso8601dateFormat.format(blog.getCreated());
-            boolean showbr=false;
-            Iterator<PostElement> posts2 = blog.listPostElements();
-            while (posts2.hasNext())
+            String created = iso8601dateFormat.format(blog.getCreated());
+            if(member.getAccessLevel()==member.LEVEL_OWNER)
             {
-                PostElement post = posts2.next();
-                if(post.canView(member))
-                {
-                    showbr=true;
-                    break;
-                }
-            }
-            %>
-            <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                    <td colspan="2">
-                        <p class="titulo">Blog creado el: <%=created%></p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>                        
-                        <p><%=blog.getDescription()%></p>
-                    </td>
-                    <td>
-                        <%
-                if(member.getAccessLevel()==member.LEVEL_OWNER)
-                {
-                    SWBResourceURL url=paramRequest.getRenderUrl();
-                    url.setParameter("act", "edit");
-                    url.setParameter("uri", blog.getURI());
-                    url.setParameter("mode", "editblog");
-                    %>
-                    &nbsp;&nbsp;&nbsp;<div class="editarInfo"><p><a href="<%=url%>">Editar</a></p></div>
-                    <%
-                }
-            %>
-                    </td>
-                </tr>
-                
-            </table>
-            <%
-            /*if(showbr)
-            {
+                SWBResourceURL urleditar=paramRequest.getRenderUrl();
+                urleditar.setParameter("act", "edit");
+                urleditar.setParameter("uri", blog.getURI());
+                urleditar.setParameter("mode", "editblog");
                 %>
-                 <p><img src="images/solidLine.jpg" alt="" width="700" height="1" ></p><br>
-                <%
-            }*/
-             if(member.canAdd())
-            {
-                %>
-                <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl().setParameter("act","add")%>">Agregar Entrada</a></p></div>
-                
+                <div class="editarInfo"><p><a href="<%=urleditar%>">Editar información</a></p></div>
                 <%
             }
-               %>
-               <p><br><img src="images/solidLine.jpg" alt="" width="680" height="1" ></p>
-                  <table width="100%" cellpadding="2" cellspacing="2" border="0">
-            <%
-            ArrayList<PostElement> elements=new ArrayList();
-            Iterator<PostElement> posts = SWBComparator.sortByCreated(blog.listPostElements(),false);
-            int i=0;
-            while (posts.hasNext())
+            if(member.canAdd())
             {
-                elements.add(posts.next());
-                i++;
-                if(i==10) // sólo muestra hasta 10 últimas entradas
-                {
-                    break;
-                }
+                SWBResourceURL urlAdd=paramRequest.getRenderUrl();
+                urlAdd.setParameter("act","add");
+                %>
+                <div class="editarInfo"><p><a href="<%=urlAdd%>">Agregar Entrada</a></p></div>
+                <%
             }
-            for(PostElement post : elements)
-            {                
-                if(post.canView(member))
+            %>
+            <div class="clear">&nbsp;</div>
+            <h2 class="tituloGrande"><%=blog.getTitle()%></h2>
+            <p>Creado el: <%=created%></p>
+            <p><img src="images/solidLine.jpg" alt="" width="495" height="1" ></p>            
+            <p><%=blog.getDescription()%></p>
+            <p>&nbsp;</p>
+            <div id="blog">
+            <%
+                ArrayList<PostElement> elements=new ArrayList();
+                Iterator<PostElement> posts = SWBComparator.sortByCreated(blog.listPostElements(),false);
+                int i=0;
+                while (posts.hasNext())
                 {
-                    String description=post.getDescription();
-                    if(description==null)
+                    PostElement post=posts.next();                    
+                    if(post.canView(member))
                     {
-                        description="";
-                    }
-                    String postAuthor = post.getCreator().getFullName();
-                    String updated = SWBUtils.TEXT.getTimeAgo(post.getCreated(), user.getLanguage());
-                    SWBResourceURL url=paramRequest.getRenderUrl();
-                    url.setParameter("act", "detail");
-                    url.setParameter("uri", post.getURI());
-                    %>
-                    </tr>
-                        <tr>
-                        <td>
-                            <p class="tituloNaranja"><%=post.getTitle()%></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" valign="top">
-                        <%if(post.getCreator().getPhoto()!=null)
+                        elements.add(post);
+                        i++;
+                        if(i==10) // sólo muestra hasta 10 últimas entradas
                         {
-                            String src=pathIamge+post.getCreator().getPhoto();
-                            %>
-                            <p><img width="50" height="50" alt="<%=postAuthor%>" src="<%=src%>">&nbsp;&nbsp;&nbsp;Escrito por: <%=postAuthor%>, <%=updated%> , visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>                             
-                          <%
-                       }
-                       else
-                       {
-                          %>
-                            <p>Escrito por: <%=postAuthor%>, <%=updated%> , visitas: <%=post.getViews()%> , calificación: <%=post.getRank()%></p>
-                          <%
-                       }
-                    %>
-                    </td>
-                    <td>
-                         <%
+                            break;
+                        }
+                    }
+                }
+                for(PostElement post : elements)
+                {
+                    if(post.canView(member))
+                    {
+                        String description=post.getDescription();
+                        if(description==null)
+                        {
+                            description="";
+                        }
+                        String postAuthor = post.getCreator().getFullName();
+                        String createdPost = SWBUtils.TEXT.getTimeAgo(post.getCreated(), user.getLanguage());
+                        SWBResourceURL urlDetail=paramRequest.getRenderUrl();
+                        urlDetail.setParameter("act", "detail");
+                        urlDetail.setParameter("uri", post.getURI());
+
+                        String srcImageUsuario="";
+                        if(post.getCreator().getPhoto()!=null)
+                        {
+                            srcImageUsuario=pathIamge+post.getCreator().getPhoto();
+                        }
+                        %>
+                        <div class="entryBlog">
+                        <p><img src="<%=srcImageUsuario%>" alt="<%=postAuthor%>" width="90" height="90" ></p>
+                        <p class="tituloNaranja"><%=post.getTitle()%></p>
+                        <p>Creado por: <%=postAuthor%> , <%=createdPost%></p>
+                        <p>Visitas: <%=post.getViews()%>, Calificación: <%=post.getRank()%></p>
+                        <p><%=description%></p>
+                        <div class="vermasFloat"><p class="vermas"><a href="<%=urlDetail%>">Ver más</a></p></div>
+                        <%
                         if (post.canModify(member))
                         {
                             SWBResourceURL sWBResourceURL=paramRequest.getRenderUrl();
@@ -131,59 +105,19 @@
                             SWBResourceURL removeUrl=paramRequest.getActionUrl();
                             removeUrl.setParameter("act", "remove");
                             %>
-                            &nbsp;&nbsp;&nbsp;<div class="editarInfo"><p><a href="<%=sWBResourceURL%>">Editar</a></p></div>
-                            &nbsp;&nbsp;&nbsp;<div class="editarInfo"><p><a href="javascript:validateremove('<%=removeUrl%>','<%=post.getTitle()%>','<%=post.getURI()%>')">Borrar</a><p></div>
-                            <script language="Javascript" type="text/javascript">
-                                function validateremove(url, title,uri)
-                                {
-                                    if(confirm('¿Esta seguro de borrar la entrada '+title+'?'))
-                                        {
-                                            var url=url+'&uri='+escape(uri);
-                                            document.URL=url;
-                                        }
-                                }
-                            </script>
+                            <div class="editarInfo"><p><a href="<%=sWBResourceURL%>">Editar información</a></p></div>
+                            <div class="editarInfo"><p><a href="javascript:validateremove('<%=removeUrl%>','<%=post.getTitle()%>','<%=post.getURI()%>')">Eliminar</a><p></div>
                             <%
                         }
-                    %>
-                    </td>
-                    </tr>
-                        <tr>
-                        <td colspan="3">
-                            <p><%=description%></p>
-                        </td>                                                
-                    </tr>
-                    <tr>
-                        <td colspan="5">
-                            <p class="vermas"><a href="<%=url%>" >Ver m&aacute;s</a></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="5">
-                            <p><img src="images/solidLine.jpg" alt="" width="680" height="1" ></p>
-                        </td>
-                    </tr>
-
-                    <%
+                        %>
+                        <div class="clear">&nbsp;</div>
+                        </div> <!-- fin blogentry -->
+                        <%
+                    }
                 }
-            }
-%>
-</table>
-
-                    <%
-                    if(showbr)
-                    {
-                        %>
-                         <hr>
-                        <%
-                    }
-                    else
-                    {
-                        %>
-                        <hr><br><p>No hay entradas visibles para usted</p>
-                        <%
-                    }
-            }
-                    %>
-
-
+                %>
+                </div> <!-- fin blog div -->
+            <%
+        }
+%>                
+</div> <!-- fin  centerProfile -->
