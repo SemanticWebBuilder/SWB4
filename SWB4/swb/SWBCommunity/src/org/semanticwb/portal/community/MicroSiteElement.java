@@ -404,18 +404,15 @@ public class MicroSiteElement
             sb.append("\n  <form name=\"addCommentForm\" action=\"" + url + "\">");
             sb.append("\n    <input type=\"hidden\" name=\"uri\" value=\"" + suri + "\">");
             sb.append("\n    <input type=\"hidden\" name=\"act\" value=\"addComment\">");
-            sb.append("\n    <textarea name=\"comentario\" cols=\"40\" rows=\"\"></textarea>");
+            sb.append("\n    <textarea name=\"comentario\" cols=\"40\" rows=\"4\"></textarea>");
             sb.append("\n    <input type=\"submit\" value=\"Publicar comentario\">");
             sb.append("\n  </form>");
             sb.append("\n</div>");
         }
         sb.append("\n<div class=\"clearL\"></div>");
-        try {
         sb.append(renderListComments(this, mem, pageNumber,
                   paramRequest.getRenderUrl(), suri));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        sb.append("\n<div class=\"clearL\"></div>");
         out.write(sb.toString());
     }
 
@@ -436,13 +433,13 @@ public class MicroSiteElement
         StringBuilder ret = new StringBuilder(800);
         long totalPages = totalPagesNumber(mse);
 
-        ret.append("\n<table width=\"450\"><tr><td>");
+//        ret.append("\n<table width=\"450\"><tr><td>");
         ret.append("\n<div>");
         ret.append("\n  <div id=\"commentsList\">");
         ret.append(getCommentsByPage(mse, page, mem));
 
         if (totalPages > 1) {
-            ret.append("<div class=\"clearL\"></div>");
+            ret.append("\n    <div class=\"clearL\"></div>");
             ret.append("\n    <div id=\"commentsIndex\">");
             ret.append("\n      <div class=\"commentsIndexContainer\">");
             url.setCallMethod(SWBResourceURL.Call_CONTENT);
@@ -450,7 +447,7 @@ public class MicroSiteElement
             //TODO: colocar el uri codificado para que sea un parametro valido
             url.setParameter("uri", uri);
             if (page > 1) {
-                ret.append("<span class=\"commentPageLink\"><a href=\""
+                ret.append("\n        <span class=\"commentPageLink\"><a href=\""
                         + url.toString() + "&pn=" + (page - 1)
                         + "\" title=\"P&aacute;gina anterior\">&lt;&lt;</a></span>");
             }
@@ -473,25 +470,25 @@ public class MicroSiteElement
 
             for (long i = ini; i <= fin; i++) {
                 if (i != page) {
-                    ret.append("<span class=\"commentPageLink\"><a href=\""
+                    ret.append("\n        <span class=\"commentPageLink\"><a href=\""
                             + url.toString() + "&pn=" + i + "\">"
                             + String.valueOf(i) + "</a></span>");
                 } else {
-                    ret.append("<span class=\"currentPage\">" + String.valueOf(i)
+                    ret.append("\n        <span class=\"currentPage\">" + String.valueOf(i)
                                + "</span>");
                 }
             }
             if (page < totalPages) {
-                ret.append("<span class=\"commentPageLink\"><a href=\""
+                ret.append("\n        <span class=\"commentPageLink\"><a href=\""
                         + url.toString() + "&pn=" + (page + 1)
                         + "\" title=\"P&aacute;gina siguiente\">&gt;&gt;</a></span>");
             }
-            ret.append("\n        </div>");
             ret.append("\n      </div>");
+            ret.append("\n    </div>");
         }
 
         ret.append("\n  </div>\n<div>");
-        ret.append("\n  </td>\n</tr>\n</table>\n");
+//        ret.append("\n  </td>\n</tr>\n</table>\n");
         return ret.toString();
     }
 
@@ -556,10 +553,10 @@ public class MicroSiteElement
             ret.append("\n          " + ordinal + ". ");
             try {
                 if (comment.getCreator().getPhoto()!=null) {
-                    ret.append("<img src=\"" + SWBPlatform.getWebWorkPath() + comment.getCreator().getPhoto() + "\" alt=\"foto\" width=\"50px\" height=\"50px\" border=\"0\">");
+                    ret.append("<img src=\"" + SWBPlatform.getWebWorkPath() + comment.getCreator().getPhoto() + "\" alt=\"foto\" width=\"50px\" height=\"50px\" border=\"0\">&nbsp;");
                 }
             } catch (NullPointerException npe) {}
-            ret.append("<strong>");
+            ret.append("<span class=\"comment-auth\">");
             try {
                 if (!comment.getCreator().getFullName().equalsIgnoreCase("")) {
                     ret.append(comment.getCreator().getFullName());
@@ -569,7 +566,7 @@ public class MicroSiteElement
             } catch (NullPointerException npe) {
                 ret.append("Desconocido");
             }
-            ret.append("</strong>\n        </div>");
+            ret.append("</span>\n        </div>");
             ret.append("\n        <span class=\"comment-time\"> ("
                     + SWBUtils.TEXT.getTimeAgo(comment.getCreated(), mem.getUser().getLanguage()) + ")</span>");
             if (mem.canView()) {
