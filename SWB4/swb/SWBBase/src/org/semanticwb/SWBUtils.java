@@ -1661,7 +1661,7 @@ public class SWBUtils {
             return itFiles.iterator();
         }
 
-        public static final String readFileFromZip(String zipName, String file2Read) {
+        public static final String readFileFromZipAsString(String zipName, String file2Read) {
             String content = null;
             try {
                 ZipFile zip = new ZipFile(new File(zipName));
@@ -1669,14 +1669,7 @@ public class SWBUtils {
                     ZipEntry entry = (ZipEntry) e.nextElement();
                     if (entry.getName() != null && entry.getName().equals(file2Read)) {
                         InputStream is = zip.getInputStream(entry);
-                        InputStreamReader isr = new InputStreamReader(is);
-
-                        char[] buffer = new char[1024];
-                        while (isr.read(buffer, 0, buffer.length) != -1) {
-                            String s = new String(buffer);
-                            content = s.trim();
-                            break;
-                        }
+                        content=readInputStream(is);
                     }
                 }
             } catch (Exception e) {
