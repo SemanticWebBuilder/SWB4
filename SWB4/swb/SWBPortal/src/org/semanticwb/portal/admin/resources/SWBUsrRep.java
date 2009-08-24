@@ -382,7 +382,7 @@ public class SWBUsrRep extends GenericResource {
                 log.debug(e);
             }
         }else if (response.getAction().equals("install")) {
-            String siteInfo = SWBUtils.IO.readFileFromZip(request.getParameter("zipName"), "siteInfo.xml");
+            String siteInfo = SWBUtils.IO.readFileFromZipAsString(request.getParameter("zipName"), "siteInfo.xml");
             String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
             Document dom = SWBUtils.XML.xmlToDom(siteInfo);
             Node nodeModel = dom.getFirstChild();
