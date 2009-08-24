@@ -110,7 +110,10 @@ public class SWBResourceTraceMgr extends TimerTask
                 type.setName(res.getWBResource().getResourceBase().getResourceType().getTitle());
                 getTypesMeter().put(res.getType(), type);
             }
-            type.addTime(fin-res.getTime());
+            long time=fin-res.getTime();
+            type.addTime(time);
+            log.trace(res.getType()+" "+time);
+            System.out.println(res.getType()+" "+time);
         }
     }
     
