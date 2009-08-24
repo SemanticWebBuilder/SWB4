@@ -23,6 +23,7 @@
  
 package org.semanticwb.model;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
@@ -31,6 +32,8 @@ import org.semanticwb.platform.SemanticObject;
 
 public class WebSite extends WebSiteBase 
 {
+    private ArrayList<IPFilter> ipfilters=null;
+
     public WebSite(SemanticObject base)
     {
         super(base);
@@ -132,6 +135,28 @@ public class WebSite extends WebSiteBase
     public String getNameSpace()
     {
         return getSemanticObject().getModel().getNameSpace();
+    }
+
+    @Override
+    public Iterator<IPFilter> listIPFilters()
+    {
+        if(ipfilters==null)
+        {
+            ipfilters=new ArrayList();
+            Iterator<IPFilter> it=super.listIPFilters();
+            while (it.hasNext())
+            {
+                IPFilter iPFilter = it.next();
+                ipfilters.add(iPFilter);
+            }
+        }
+        return ipfilters.iterator();
+    }
+
+    public void clearCache()
+    {
+        //TODO: revisar e invocar desde servicios cuando se crean ipfilters
+        ipfilters=null;
     }
     
 }

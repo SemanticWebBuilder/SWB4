@@ -25,11 +25,13 @@ package org.semanticwb.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.SWBContextBase;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticVocabulary;
 
@@ -98,7 +100,7 @@ public class SWBContext extends SWBContextBase
             {
                 view=(FormView)obj.createGenericInstance();
             }
-            System.out.println("id:"+id+" obj:"+obj);
+            //System.out.println("id:"+id+" obj:"+obj);
         }
         return view;
     }
@@ -114,14 +116,14 @@ public class SWBContext extends SWBContextBase
         if(SWBPlatform.getEnv("swb/adminShow","false").equals("false"))
         {
             ArrayList<org.semanticwb.model.WebSite> arr=new ArrayList();
-            Iterator<org.semanticwb.model.WebSite> it=swb_WebSite.listGenericInstances(direct);
+
+            Iterator<Entry<String,SemanticModel>> it=SWBPlatform.getSemanticMgr().getModels().iterator();
             while(it.hasNext())
             {
-                WebSite ws=it.next();
-                if(!filtered.contains(ws.getId()))
-                {
-                    arr.add(ws);
-                }
+                Entry<String,SemanticModel> entry=it.next();
+                SemanticModel model=entry.getValue();
+                GenericObject gen=model.getModelObject().createGenericInstance();
+                if(gen instanceof WebSite && !filtered.contains(gen.getId())) arr.add((WebSite)gen);
             }
             return arr.iterator();
         }else
