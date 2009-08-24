@@ -11,6 +11,11 @@
    Syntax recommendation http://www.w3.org/TR/REC-CSS2/
 */
 
+textarea, input[type="button"] {
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:0.8em;
+    border:silver;
+}
 #commentsList {
     background:transparent none repeat scroll 0 0;
     border:0 none;
@@ -27,12 +32,12 @@
     clear:both;
     font-size:13px;
     margin-top:6px;
-    padding:7px 0 4px 15px;
+    padding:7px 2px 4px 10px;
     float:left;
     width:100%;
     background-color:#FFFFEE;
 }
-html > body .comment-entry {
+html > body {
     padding-bottom:0;
 }
 .comment-head, .comment-head-hidden {
