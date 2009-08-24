@@ -61,7 +61,7 @@
                         <br>
                 <div class="editarInfo"><p><a onclick="validaForma()" href="#">Guardar</a></p></div>
                 <div class="editarInfo"><p><a href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>                    
-                    <script>
+                    <script type="text/javascript">
                         function validaForma()
                         {                            
                             var title = frmaddpost.title.value;
@@ -103,26 +103,52 @@
             return;
         }
         %>
-                 <div>
+        <form name="frmaddpost" id="frmaddpost" method="post" action="<%=paramRequest.getActionUrl()%>">
+            <input type="hidden" name="act" value="<%=request.getParameter("act")%>">
+            <input type="hidden" name="mode" value="<%=request.getParameter("mode")%>">
+            <input type="hidden" name="uri" value="<%=request.getParameter("uri")%>">            
+        <div>
                 <h3>Editar título y descripción del blog</h3>
             </div>
             <div>
+
                 <fieldset><legend></legend>
                     <div>
                         <p>
-                            <label for="title">Título</label>                            
-                            <input id="title" name="title" value="<%=blog.getTitle()%>" size="20" maxlength="50"><br>
-                            <label for="description">Contenido de entrada</label>
-                            <textarea id="description" rows="5" cols="23" name="description"><%=blog.getDescription()%></textarea>
+                            <label for="title">Título del blog:</label><br>
+                            <input id="title" name="title" value="<%=blog.getTitle()%>" size="20" maxlength="50"><br><br>
+                            <label for="description">Descripción del blog:</label><br>
+                            <textarea id="description" rows="5" cols="23"  name="description"><%=blog.getDescription()%></textarea>
                         </p>
                     </div>
                 </fieldset>
-                <p class="pad5 last-child clear right">
-                    <strong><input type="submit" value="Guardar cambios" class="button"/></strong>
-                    <a class="button" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
-                </p>
+                        <br>
+                    <div class="editarInfo"><p><a onclick="validaFormaBlog()" href="<%=paramRequest.getRenderUrl()%>">Guardar</a></p></div>
+                    <div class="editarInfo"><p><a class="button" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a></p></div>
+                    <script type="text/javascript">
+                        function validaFormaBlog()
+                        {
+                            var title = frmaddpost.title.value;
+                            if(!title)
+                            {
+                                alert('Debe ingresar el título de la entrada');
+                                return;
+                            }
+                            var description = frmaddpost.description.value;
+                            if(!description)
+                            {
+                                alert('Debe ingresar la descripción de la entrada');
+                                return;
+                            }
+                            var msg='¿Estan los datos correctos?';
+                            if(confirm(msg))
+                            {
+                                dojo.byId('frmaddpost').submit();
+                            }
+                        }
+                    </script>
             </div>
-            <input type="hidden" name="act" value="add"/>
+            
         </form>
         <%
         }
