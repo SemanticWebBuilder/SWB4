@@ -173,13 +173,14 @@ public class BlogResource extends org.semanticwb.portal.community.base.BlogResou
         else if ("edit".equals(action) && "editblog".equals(request.getParameter("mode")))
         {
             User user = response.getUser();
+            Member member = Member.getMember(user, response.getWebPage());
             String uri = request.getParameter("uri");
             if (uri != null)
             {
                 Blog rec = (Blog) SemanticObject.createSemanticObject(uri).createGenericInstance();
                 String title = request.getParameter("title");
                 String description = request.getParameter("description");
-                if (rec != null && title != null && description != null && user.getLogin().equals(rec.getCreator().getLogin()))
+                if (rec != null && title != null && description != null && member.getAccessLevel()==Member.LEVEL_OWNER)
                 {
                     rec.setTitle(title);
                     rec.setDescription(description);
