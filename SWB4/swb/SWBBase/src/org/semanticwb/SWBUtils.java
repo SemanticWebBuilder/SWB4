@@ -1606,8 +1606,6 @@ public class SWBUtils {
                     }
 
                     InputStream in = archive.getInputStream(entry);
-                    String content = readInputStream(in);
-
                     //Parse file content
                     if (!fext2parse.isEmpty()) {
                         String ext = null;
@@ -1616,14 +1614,16 @@ public class SWBUtils {
                             ext = file.getName().substring(pos + 1);
                         }
                         if (fext2parse.contains(ext)) {
+                            String content = readInputStream(in);
                             content = content.replaceAll(parse, parse2);
+                            in=getStreamFromString(content);
                         }
                     }
 
                     //Writes content
                     try {
                         FileOutputStream out = new FileOutputStream(file);
-                        copyStream(getStreamFromString(content), out);
+                        copyStream(in, out);
                         out.close();
                         in.close();
                     } catch (Exception ex) {
