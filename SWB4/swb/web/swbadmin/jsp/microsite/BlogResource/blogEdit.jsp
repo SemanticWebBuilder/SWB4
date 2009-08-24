@@ -35,8 +35,8 @@
             }
         %>
         <form name="frmaddpost" id="frmaddpost" method="post" action="<%=paramRequest.getActionUrl()%>">
-            <input type="hidden" name="act" value="<%=request.getParameter("act")%>">
-            <input type="hidden" name="mode" value="<%=request.getParameter("mode")%>">
+            <input type="hidden" name="act" value="edit">
+            <input type="hidden" name="mode" value="editpost">
             <input type="hidden" name="uri" value="<%=request.getParameter("uri")%>">            
             <div>
                 <fieldset><legend>Editar entrada</legend>
@@ -101,12 +101,11 @@
         if(member.getAccessLevel()!=Member.LEVEL_OWNER)
         {
             return;
-        }
+        }        
         %>
         <form name="frmaddpost" id="frmaddpost" method="post" action="<%=paramRequest.getActionUrl()%>">
-            <input type="hidden" name="act" value="<%=request.getParameter("act")%>">
-            <input type="hidden" name="mode" value="<%=request.getParameter("mode")%>">
-            <input type="hidden" name="uri" value="<%=request.getParameter("uri")%>">            
+            <input type="hidden" name="act" value="edit">
+            <input type="hidden" name="mode" value="editblog">            
         <div>
                 <h3>Editar título y descripción del blog</h3>
             </div>
@@ -116,9 +115,9 @@
                     <div>
                         <p>
                             <label for="title">Título del blog:</label><br>
-                            <input id="title" name="title" value="<%=blog.getTitle()%>" size="20" maxlength="50"><br><br>
+                            <input id="title" name="title" value="<%=blog.getTitle()%>" size="40" maxlength="50"><br><br>
                             <label for="description">Descripción del blog:</label><br>
-                            <textarea id="description" rows="5" cols="23"  name="description"><%=blog.getDescription()%></textarea>
+                            <textarea id="description" rows="10" cols="80"  name="description"><%=blog.getDescription()%></textarea>
                         </p>
                     </div>
                 </fieldset>
