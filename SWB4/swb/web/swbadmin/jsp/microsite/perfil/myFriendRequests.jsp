@@ -20,9 +20,10 @@ if(owner!=user) userParam="?user="+user.getEncodedURI();
 
 WebPage wpage=paramRequest.getWebPage();
 SWBResourceURL urlAction=paramRequest.getActionUrl();
-Resource base=paramRequest.getResourceBase();
-String requestedPath=base.getAttribute("requestedPath","/swb/Ciudad_Digital/Mis_Solicitudes");
-String perfilPath=base.getAttribute("perfilPath","/swb/Ciudad_Digital/Perfil");
+
+String perfilPath=paramRequest.getWebPage().getWebSite().getWebPage("perfil").getUrl();
+String requestedPath=paramRequest.getWebPage().getWebSite().getWebPage("mis_solicitudes").getUrl();
+
 String photo=SWBPlatform.getContextPath()+"/swbadmin/images/defaultPhoto.jpg";
 boolean isStrategy=false;
 if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY) isStrategy=true;
