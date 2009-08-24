@@ -32,9 +32,10 @@
         if(!owner.isRegistered() || !user.isRegistered()) return;
 
         if(request.getParameter("changePhoto")!=null && request.getParameter("changePhoto").equals("1") && !isStrategy){
+            String registryPath=paramRequest.getWebPage().getWebSite().getWebPage("Registro_de_Usuarios").getUrl();
            %>
                 <form id="fupload" name="fupload" enctype="multipart/form-data" class="swbform" dojoType="dijit.form.Form"
-                        action="/swb/Ciudad_Digital/Registro_de_Usuarios/_aid/46/_mto/3/_act/upload"
+                        action="<%=registryPath%>/_aid/46/_mto/3/_act/upload"
                         method="post" target="pictureTransferFrame" >
                         <fieldset>
                             <legend>Cambiar fotograf&iacute;a de perfil</legend>
